@@ -19,7 +19,7 @@ dependencies:
 compile:
   pre:
     - ./gradlew --version
-  ovverride:
+  override:
     - ./gradlew assembleDebug
   post:
     - mv app/build/outputs/apk/app-debug.apk $CIRCLE_ARTIFACTS
