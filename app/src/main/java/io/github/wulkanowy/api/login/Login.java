@@ -12,7 +12,9 @@ import io.github.wulkanowy.api.Vulcan;
 public class Login extends Vulcan {
 
     private String loginPageUrl = "https://cufs.vulcan.net.pl/{locationID}/Account/LogOn";
+
     private String certificatePageUrl = "https://cufs.vulcan.net.pl/{locationID}/FS/LS?wa=wsignin1.0&wtrealm=https://uonetplus.vulcan.net.pl/{locationID}/LoginEndpoint.aspx&wctx=https://uonetplus.vulcan.net.pl/{locationID}/LoginEndpoint.aspx";
+
     private String loginEndpointPageUrl = "https://uonetplus.vulcan.net.pl/{locationID}/LoginEndpoint.aspx";
 
     public Login(Cookies cookies) {
