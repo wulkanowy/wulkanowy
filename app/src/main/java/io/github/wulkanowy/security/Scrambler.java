@@ -1,12 +1,14 @@
 package io.github.wulkanowy.security;
 
 
-
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.security.KeyPairGeneratorSpec;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
 import android.util.Base64;
-
+import android.util.Log;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -15,7 +17,6 @@ import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
-import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,25 +31,26 @@ public class Scrambler {
 
     public KeyStore keyStore;
     public static final String ANDROID_KEYSTORE = "AndroidKeyStore";
+    public final static String DEBUG_TAG = "KeyStoreSecurity";
     public Context context;
 
     public Scrambler(Context context){
         this.context = context;
     }
 
-    public void loadKeyStore(){
+    public void loadKeyStore() throws CryptoException{
 
         try{
             keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
             keyStore.load(null);
         }
         catch (Exception e){
-            e.printStackTrace();
+            throw new CryptoException(e.getMessage());
         }
 
     }
 
-    public ArrayList<String> getAllAliases(){
+    public ArrayList<String> getAllAliases() throws CryptoException{
 
         ArrayList<String> keyAliases = new ArrayList<>();
         try {
@@ -58,105 +60,147 @@ public class Scrambler {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            throw new CryptoException(e.getMessage());
         }
 
         return keyAliases;
     }
 
     @TargetApi(18)
-    public void generateNewKey(String alias){
+    public void generateNewKey(String alias) throws CryptoException{
 
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
 
-        end.add(Calendar.YEAR, 1);
+        end.add(Calendar.YEAR, 10);
+        if(!alias.isEmpty()) {
+            try {
+                if (!keyStore.containsAlias(alias)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        KeyGenParameterSpec spec = new KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
+                                .setDigests(KeyProperties.DIGEST_SHA256)
+                                .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
+                                .setCertificateNotBefore(start.getTime())
+                                .setCertificateNotAfter(end.getTime())
+                                .build();
 
-        try{
-            if (!keyStore.containsAlias(alias)){
+                        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", ANDROID_KEYSTORE);
+                        keyPairGenerator.initialize(spec);
+                        keyPairGenerator.generateKeyPair();
 
-                KeyPairGeneratorSpec spec = new KeyPairGeneratorSpec.Builder(context)
-                        .setAlias(alias)
-                        .setSubject(new X500Principal("CN=" + alias))
-                        .setSerialNumber(BigInteger.TEN)
-                        .setStartDate(start.getTime())
-                        .setEndDate(end.getTime())
-                        .build();
+                    } else {
+                        KeyPairGeneratorSpec spec = new KeyPairGeneratorSpec.Builder(context)
+                                .setAlias(alias)
+                                .setSubject(new X500Principal("CN=" + alias))
+                                .setSerialNumber(BigInteger.TEN)
+                                .setStartDate(start.getTime())
+                                .setEndDate(end.getTime())
+                                .build();
 
-                KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", ANDROID_KEYSTORE);
-                keyPairGenerator.initialize(spec);
-                keyPairGenerator.generateKeyPair();
+                        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", ANDROID_KEYSTORE);
+                        keyPairGenerator.initialize(spec);
+                        keyPairGenerator.generateKeyPair();
+
+                    }
+                }
+                else {
+                    Log.w(DEBUG_TAG,"GenerateNewKey - " + alias + " is exist");
+                }
+            } catch (Exception e) {
+                throw new CryptoException(e.getMessage());
             }
         }
-        catch (Exception e){
-            e.printStackTrace();
+        else{
+            throw new CryptoException("GenerateNewKey - String is empty");
         }
+
+        Log.d(DEBUG_TAG,"Key pair are create");
 
     }
 
-    public void deleteKey(String alias){
+    public void deleteKey(String alias) throws CryptoException{
 
-        try{
-            keyStore.deleteEntry(alias);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public String encryptString(String alias, String text){
-
-        try{
-            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(alias, null);
-            RSAPublicKey publicKey = (RSAPublicKey) privateKeyEntry.getCertificate().getPublicKey();
-
-            Cipher input = Cipher.getInstance("RSA/ECB/PKCS1Padding", "AndroidOpenSSL");
-            input.init(Cipher.ENCRYPT_MODE, publicKey);
-
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            CipherOutputStream cipherOutputStream = new CipherOutputStream(
-                    outputStream, input);
-            cipherOutputStream.write(text.getBytes("UTF-8"));
-            cipherOutputStream.close();
-
-            byte [] vals = outputStream.toByteArray();
-            return Base64.encodeToString(vals, Base64.DEFAULT);
-        }
-        catch (Exception e){
-
-            e.printStackTrace();
-            return text;
-        }
-    }
-
-    public String decryptString(String alias, String text){
-
-        try{
-            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(alias, null);
-            RSAPrivateKey privateKey = (RSAPrivateKey) privateKeyEntry.getPrivateKey();
-
-            Cipher output = Cipher.getInstance("RSA/ECB/PKCS1Padding", "AndroidOpenSSL");
-            output.init(Cipher.DECRYPT_MODE, privateKey);
-
-            CipherInputStream cipherInputStream = new CipherInputStream(
-                    new ByteArrayInputStream(Base64.decode(text, Base64.DEFAULT)), output);
-
-            ArrayList<Byte> values = new ArrayList<>();
-
-            int nextByte;
-
-            while ((nextByte = cipherInputStream.read()) != -1) {
-                values.add((byte)nextByte);
+        if(!alias.isEmpty()) {
+            try {
+                keyStore.deleteEntry(alias);
+                Log.d(DEBUG_TAG,"Key" + alias + "is delete");
+            } catch (Exception e) {
+                Log.e(DEBUG_TAG, e.getMessage());
             }
-
-            Byte[] bytes = values.toArray(new Byte[values.size()]);
-
-            return new String(ArrayUtils.toPrimitive(bytes), 0, bytes.length, "UTF-8");
-
         }
-        catch (Exception e){
-            e.printStackTrace();
-            return text;
+        else
+        {
+            throw new CryptoException("DeleteKey - String is empty");
+        }
+    }
+
+    public String encryptString(String alias, String text) throws CryptoException{
+
+        if(!alias.isEmpty() || !text.isEmpty()) {
+            try {
+                KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(alias, null);
+                RSAPublicKey publicKey = (RSAPublicKey) privateKeyEntry.getCertificate().getPublicKey();
+
+                Cipher input = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+                input.init(Cipher.ENCRYPT_MODE, publicKey);
+
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                CipherOutputStream cipherOutputStream = new CipherOutputStream(
+                        outputStream, input);
+                cipherOutputStream.write(text.getBytes("UTF-8"));
+                cipherOutputStream.close();
+
+                Log.d(DEBUG_TAG,"String is encrypt");
+
+                byte[] vals = outputStream.toByteArray();
+
+                String encryptedText = Base64.encodeToString(vals, Base64.DEFAULT);
+                Log.d(DEBUG_TAG,encryptedText);
+                return encryptedText;
+
+            } catch (Exception e) {
+                throw new  CryptoException(e.getMessage());
+            }
+        }
+        else{
+            throw new CryptoException("EncryptString - String is empty");
+        }
+    }
+
+    public String decryptString (String alias, String text) throws CryptoException{
+
+        if(!alias.isEmpty() || !text.isEmpty()) {
+            try {
+                KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(alias, null);
+
+                Cipher output = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+                output.init(Cipher.DECRYPT_MODE, privateKeyEntry.getPrivateKey());
+
+                CipherInputStream cipherInputStream = new CipherInputStream(
+                        new ByteArrayInputStream(Base64.decode(text, Base64.DEFAULT)), output);
+
+                ArrayList<Byte> values = new ArrayList<>();
+
+                int nextByte;
+
+                while ((nextByte = cipherInputStream.read()) != -1) {
+                    values.add((byte) nextByte);
+                }
+
+                Byte[] bytes = values.toArray(new Byte[values.size()]);
+
+                Log.d(DEBUG_TAG,"String is decrypt");
+
+                return new String(ArrayUtils.toPrimitive(bytes), 0, bytes.length, "UTF-8");
+
+            } catch (Exception e) {
+                throw new CryptoException(e.getMessage());
+            }
+        }
+        else {
+            throw new CryptoException("EncryptString - String is empty");
+
         }
     }
 }

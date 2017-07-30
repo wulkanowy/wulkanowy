@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.SQLException;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -16,6 +17,8 @@ import io.github.wulkanowy.activity.main.LoginTask;
 import io.github.wulkanowy.activity.main.MainActivity;
 import io.github.wulkanowy.database.accounts.AccountData;
 import io.github.wulkanowy.database.accounts.DatabaseAccount;
+import io.github.wulkanowy.security.CryptoException;
+import io.github.wulkanowy.security.Safety;
 
 public class LoadingTask extends AsyncTask<Void, Void, Void> {
 
@@ -81,9 +84,12 @@ public class LoadingTask extends AsyncTask<Void, Void, Void> {
                     databaseAccount.close();
 
                     if (accountData != null) {
+
+                        Safety safety = new Safety(activity);
+
                         new LoginTask(activity, false).execute(
                                 accountData.getEmail(),
-                                accountData.getPassword(),
+                                safety.decrypt(accountData.getEmail(),accountData.getPassword()),
                                 accountData.getCounty()
                         );
 
@@ -92,6 +98,8 @@ public class LoadingTask extends AsyncTask<Void, Void, Void> {
                 } catch (SQLException e) {
                     Toast.makeText(activity, R.string.SQLite_ioError_text,
                             Toast.LENGTH_LONG).show();
+                }catch (CryptoException e){
+                    Log.e("LoadingTask","",e);
                 }
             }
         }

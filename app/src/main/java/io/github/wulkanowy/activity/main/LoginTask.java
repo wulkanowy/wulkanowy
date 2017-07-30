@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.SQLException;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.FileOutputStream;
@@ -22,6 +23,8 @@ import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.PersonalData;
 import io.github.wulkanowy.database.accounts.AccountData;
 import io.github.wulkanowy.database.accounts.DatabaseAccount;
+import io.github.wulkanowy.security.CryptoException;
+import io.github.wulkanowy.security.Safety;
 
 public class LoginTask extends AsyncTask<String, Integer, Integer> {
 
@@ -80,10 +83,12 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
                 PersonalData personalData = userInfo.getPersonalData();
                 String firstAndLastName = personalData.getFirstAndLastName();
 
+                Safety safety = new Safety(activity);
+
                 AccountData accountData = new AccountData()
                         .setName(firstAndLastName)
                         .setEmail(credentials[0])
-                        .setPassword(credentials[1])
+                        .setPassword(safety.encrypt(credentials[0], credentials[1]))
                         .setCounty(credentials[2]);
 
                 DatabaseAccount databaseAccount = new DatabaseAccount(activity);
@@ -95,6 +100,8 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
                 return R.string.SQLite_ioError_text;
             } catch (IOException | LoginErrorException e) {
                 return R.string.login_denied;
+            }catch (CryptoException e){
+                Log.e("LoginTask","",e);
             }
         }
         //Map<String, String> cookiesList = login.getJar();
