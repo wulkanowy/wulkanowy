@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.SQLException;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
