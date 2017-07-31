@@ -12,7 +12,7 @@ public class Safety extends Scrambler {
         super(context);
     }
 
-    public String encrypt(String email, String plainText) throws CryptoException {
+    public String encrypt(String email, String plainText) throws CryptoException, UnsupportedOperationException {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
 
@@ -24,7 +24,7 @@ public class Safety extends Scrambler {
             if (!RootUtilities.isRooted()) {
                 return new String(Base64.encode(plainText.getBytes(), Base64.DEFAULT));
             } else {
-                throw new CryptoException("Password store in this devices isn't safe because is rooted");
+                throw new UnsupportedOperationException("Password store in this devices isn't safe because is rooted");
             }
         }
     }

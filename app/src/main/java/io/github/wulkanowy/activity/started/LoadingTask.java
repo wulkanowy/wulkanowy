@@ -33,12 +33,10 @@ public class LoadingTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
 
-        if (!SAVE_DATA) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         isOnline = isOnline();
@@ -89,7 +87,7 @@ public class LoadingTask extends AsyncTask<Void, Void, Void> {
 
                         new LoginTask(activity, false).execute(
                                 accountData.getEmail(),
-                                safety.decrypt(accountData.getEmail(),accountData.getPassword()),
+                                safety.decrypt(accountData.getEmail(), accountData.getPassword()),
                                 accountData.getCounty()
                         );
 
@@ -98,8 +96,8 @@ public class LoadingTask extends AsyncTask<Void, Void, Void> {
                 } catch (SQLException e) {
                     Toast.makeText(activity, R.string.SQLite_ioError_text,
                             Toast.LENGTH_LONG).show();
-                }catch (CryptoException e){
-                    Log.e("LoadingTask","",e);
+                } catch (CryptoException e) {
+                    Toast.makeText(activity, R.string.decrypt_failed, Toast.LENGTH_LONG).show();
                 }
             }
         }
