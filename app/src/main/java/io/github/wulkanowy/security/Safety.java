@@ -3,43 +3,39 @@ package io.github.wulkanowy.security;
 import android.content.Context;
 import android.os.Build;
 import android.util.Base64;
-import android.util.Log;
 
 import io.github.wulkanowy.utilities.RootUtilities;
 
 public class Safety extends Scrambler {
 
-    public Safety (Context context){
+    public Safety(Context context) {
         super(context);
     }
 
-    public String encrypt(String email, String plainText) throws CryptoException{
+    public String encrypt(String email, String plainText) throws CryptoException {
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
 
             loadKeyStore();
             generateNewKey(email);
             return encryptString(email, plainText);
-        }
-        else{
+        } else {
 
-            if(!RootUtilities.isRooted()) {
+            if (!RootUtilities.isRooted()) {
                 return new String(Base64.encode(plainText.getBytes(), Base64.DEFAULT));
-            }
-            else{
+            } else {
                 throw new CryptoException("Password store in this devices isn't safe because is rooted");
             }
         }
     }
 
-    public String decrypt(String email, String encryptedText) throws CryptoException{
+    public String decrypt(String email, String encryptedText) throws CryptoException {
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
 
             loadKeyStore();
             return decryptString(email, encryptedText);
-        }
-        else{
+        } else {
             return new String(Base64.decode(encryptedText, Base64.DEFAULT));
         }
 

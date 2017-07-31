@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
@@ -29,28 +30,27 @@ import javax.security.auth.x500.X500Principal;
 
 public class Scrambler {
 
-    public KeyStore keyStore;
-    public static final String ANDROID_KEYSTORE = "AndroidKeyStore";
+    private KeyStore keyStore;
+    private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
     public final static String DEBUG_TAG = "KeyStoreSecurity";
     public Context context;
 
-    public Scrambler(Context context){
+    public Scrambler(Context context) {
         this.context = context;
     }
 
-    public void loadKeyStore() throws CryptoException{
+    public void loadKeyStore() throws CryptoException {
 
-        try{
+        try {
             keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
             keyStore.load(null);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new CryptoException(e.getMessage());
         }
 
     }
 
-    public ArrayList<String> getAllAliases() throws CryptoException{
+    public ArrayList<String> getAllAliases() throws CryptoException {
 
         ArrayList<String> keyAliases = new ArrayList<>();
         try {
@@ -58,8 +58,7 @@ public class Scrambler {
             while (aliases.hasMoreElements()) {
                 keyAliases.add(aliases.nextElement());
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             throw new CryptoException(e.getMessage());
         }
 
@@ -67,17 +66,19 @@ public class Scrambler {
     }
 
     @TargetApi(18)
-    public void generateNewKey(String alias) throws CryptoException{
+    public void generateNewKey(String alias) throws CryptoException {
 
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
 
+        AlgorithmParameterSpec spec;
+
         end.add(Calendar.YEAR, 10);
-        if(!alias.isEmpty()) {
+        if (!alias.isEmpty()) {
             try {
                 if (!keyStore.containsAlias(alias)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        KeyGenParameterSpec spec = new KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                        spec = new KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
                                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
                                 .setDigests(KeyProperties.DIGEST_SHA256)
                                 .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
@@ -85,59 +86,52 @@ public class Scrambler {
                                 .setCertificateNotAfter(end.getTime())
                                 .build();
 
-                        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", ANDROID_KEYSTORE);
-                        keyPairGenerator.initialize(spec);
-                        keyPairGenerator.generateKeyPair();
-
                     } else {
-                        KeyPairGeneratorSpec spec = new KeyPairGeneratorSpec.Builder(context)
+                        spec = new KeyPairGeneratorSpec.Builder(context)
                                 .setAlias(alias)
                                 .setSubject(new X500Principal("CN=" + alias))
                                 .setSerialNumber(BigInteger.TEN)
                                 .setStartDate(start.getTime())
                                 .setEndDate(end.getTime())
                                 .build();
-
-                        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", ANDROID_KEYSTORE);
-                        keyPairGenerator.initialize(spec);
-                        keyPairGenerator.generateKeyPair();
-
                     }
-                }
-                else {
-                    Log.w(DEBUG_TAG,"GenerateNewKey - " + alias + " is exist");
+
+                    KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", ANDROID_KEYSTORE);
+                    keyPairGenerator.initialize(spec);
+                    keyPairGenerator.generateKeyPair();
+
+                } else {
+                    Log.w(DEBUG_TAG, "GenerateNewKey - " + alias + " is exist");
                 }
             } catch (Exception e) {
                 throw new CryptoException(e.getMessage());
             }
-        }
-        else{
+        } else {
             throw new CryptoException("GenerateNewKey - String is empty");
         }
 
-        Log.d(DEBUG_TAG,"Key pair are create");
+
+        Log.d(DEBUG_TAG, "Key pair are create");
 
     }
 
-    public void deleteKey(String alias) throws CryptoException{
+    public void deleteKey(String alias) throws CryptoException {
 
-        if(!alias.isEmpty()) {
+        if (!alias.isEmpty()) {
             try {
                 keyStore.deleteEntry(alias);
-                Log.d(DEBUG_TAG,"Key" + alias + "is delete");
+                Log.d(DEBUG_TAG, "Key" + alias + "is delete");
             } catch (Exception e) {
                 Log.e(DEBUG_TAG, e.getMessage());
             }
-        }
-        else
-        {
+        } else {
             throw new CryptoException("DeleteKey - String is empty");
         }
     }
 
-    public String encryptString(String alias, String text) throws CryptoException{
+    public String encryptString(String alias, String text) throws CryptoException {
 
-        if(!alias.isEmpty() || !text.isEmpty()) {
+        if (!alias.isEmpty() && !text.isEmpty()) {
             try {
                 KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(alias, null);
                 RSAPublicKey publicKey = (RSAPublicKey) privateKeyEntry.getCertificate().getPublicKey();
@@ -151,26 +145,25 @@ public class Scrambler {
                 cipherOutputStream.write(text.getBytes("UTF-8"));
                 cipherOutputStream.close();
 
-                Log.d(DEBUG_TAG,"String is encrypt");
+                Log.d(DEBUG_TAG, "String is encrypt");
 
                 byte[] vals = outputStream.toByteArray();
 
                 String encryptedText = Base64.encodeToString(vals, Base64.DEFAULT);
-                Log.d(DEBUG_TAG,encryptedText);
+                Log.d(DEBUG_TAG, encryptedText);
                 return encryptedText;
 
             } catch (Exception e) {
-                throw new  CryptoException(e.getMessage());
+                throw new CryptoException(e.getMessage());
             }
-        }
-        else{
+        } else {
             throw new CryptoException("EncryptString - String is empty");
         }
     }
 
-    public String decryptString (String alias, String text) throws CryptoException{
+    public String decryptString(String alias, String text) throws CryptoException {
 
-        if(!alias.isEmpty() || !text.isEmpty()) {
+        if (!alias.isEmpty() && !text.isEmpty()) {
             try {
                 KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(alias, null);
 
@@ -190,15 +183,14 @@ public class Scrambler {
 
                 Byte[] bytes = values.toArray(new Byte[values.size()]);
 
-                Log.d(DEBUG_TAG,"String is decrypt");
+                Log.d(DEBUG_TAG, "String is decrypt");
 
                 return new String(ArrayUtils.toPrimitive(bytes), 0, bytes.length, "UTF-8");
 
             } catch (Exception e) {
                 throw new CryptoException(e.getMessage());
             }
-        }
-        else {
+        } else {
             throw new CryptoException("EncryptString - String is empty");
 
         }
