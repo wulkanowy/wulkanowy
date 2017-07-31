@@ -3,6 +3,7 @@ package io.github.wulkanowy.database.accounts;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.SQLException;
 import android.util.Log;
 
@@ -19,7 +20,7 @@ public class DatabaseAccount extends AccountAdapter {
         super(context);
     }
 
-    public void put(AccountData accountData) throws SQLException {
+    public long put(AccountData accountData) throws SQLException {
 
         ContentValues newAccount = new ContentValues();
         newAccount.put(name, accountData.getName());
@@ -30,8 +31,11 @@ public class DatabaseAccount extends AccountAdapter {
         Log.d(DatabaseHelper.DEBUG_TAG, "Put account into database");
 
         if (!database.isReadOnly()) {
-            database.insertOrThrow(accounts, null, newAccount);
+            return database.insertOrThrow(accounts, null, newAccount);
         }
+
+        Log.e(DatabaseHelper.DEBUG_TAG, "Attempt to write on read-only database");
+        throw new SQLException("Attempt to write on read-only database");
     }
 
     public long update(AccountData accountData) {
@@ -46,10 +50,15 @@ public class DatabaseAccount extends AccountAdapter {
 
         Log.d(DatabaseHelper.DEBUG_TAG, "Update account into database");
 
-        return database.update(accounts, updateAccount, "id=?", args);
+        if (!database.isReadOnly()) {
+            return database.update(accounts, updateAccount, "id=?", args);
+        }
+
+        Log.e(DatabaseHelper.DEBUG_TAG, "Attempt to write on read-only database");
+        throw new SQLException("Attempt to write on read-only database");
     }
 
-    public AccountData getAccount(int id) throws SQLException {
+    public AccountData getAccount(long id) throws SQLException {
 
         AccountData accountData = new AccountData();
 
@@ -71,6 +80,10 @@ public class DatabaseAccount extends AccountAdapter {
 
             Log.e(DatabaseHelper.DEBUG_TAG, e.getMessage());
             throw e;
+        } catch (CursorIndexOutOfBoundsException e) {
+
+            Log.e(DatabaseHelper.DEBUG_TAG, e.getMessage());
+            throw new SQLException(e.getMessage());
         }
 
         Log.d(DatabaseHelper.DEBUG_TAG, "Extract account from base");

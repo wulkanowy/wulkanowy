@@ -3,6 +3,7 @@ package io.github.wulkanowy.activity.main;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.SQLException;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -96,8 +97,14 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
                 DatabaseAccount databaseAccount = new DatabaseAccount(activity);
 
                 databaseAccount.open();
-                databaseAccount.put(accountData);
+                long idUser = databaseAccount.put(accountData);
                 databaseAccount.close();
+
+                SharedPreferences sharedPreferences = activity.getSharedPreferences("LoginData", activity.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putLong("isLogin", idUser);
+                editor.apply();
+
             } catch (SQLException e) {
                 return R.string.SQLite_ioError_text;
             } catch (IOException | LoginErrorException e) {

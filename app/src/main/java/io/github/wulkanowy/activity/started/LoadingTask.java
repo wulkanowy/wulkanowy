@@ -77,7 +77,7 @@ public class LoadingTask extends AsyncTask<Void, Void, Void> {
 
             if (databaseAccount.checkExist()) {
                 try {
-                    AccountData accountData = databaseAccount.getAccount(1);
+                    AccountData accountData = databaseAccount.getAccount(activity.getSharedPreferences("LoginData", activity.MODE_PRIVATE).getLong("isLogin", 0));
                     databaseAccount.close();
 
                     if (accountData != null) {
