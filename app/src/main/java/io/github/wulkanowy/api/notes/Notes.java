@@ -15,7 +15,7 @@ public class Notes extends Vulcan {
     private StudentAndParent snp = null;
 
     private String notesPageUrl =
-            "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}/Uczen.mvc/DanePodstawowe";
+            "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}/UwagiOsiagniecia.mvc/Wszystkie";
 
     public Notes(Cookies cookies, StudentAndParent snp) {
         this.cookies = cookies;
