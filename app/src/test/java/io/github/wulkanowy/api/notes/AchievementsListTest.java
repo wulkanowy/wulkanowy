@@ -2,7 +2,6 @@ package io.github.wulkanowy.api.notes;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.wulkanowy.api.FixtureHelper;
-import io.github.wulkanowy.api.StudentAndParent;
-
 
 public class AchievementsListTest {
 
@@ -28,11 +25,8 @@ public class AchievementsListTest {
 
         Notes notes = Mockito.mock(Notes.class);
         Mockito.when(notes.getNotesPageDocument()).thenReturn(notesPageDocument);
-        StudentAndParent snp = Mockito.mock(StudentAndParent.class);
-        Mockito.when(snp.getRowDataChildValue(Mockito.any(Element.class),
-                Mockito.anyInt())).thenCallRealMethod();
 
-        return new AchievementsList(notes, snp);
+        return new AchievementsList(notes);
     }
 
     @Test
