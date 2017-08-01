@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.login.LoginErrorException;
 
 public class AchievementsList {
