@@ -28,7 +28,8 @@ public class NotesListTest {
         Notes notes = Mockito.mock(Notes.class);
         Mockito.when(notes.getNotesPageDocument()).thenReturn(notesPageDocument);
         StudentAndParent snp = Mockito.mock(StudentAndParent.class);
-        Mockito.when(snp.getRowDataChildValue(Mockito.any(Element.class), Mockito.anyInt())).thenCallRealMethod();
+        Mockito.when(snp.getRowDataChildValue(Mockito.any(Element.class),
+                Mockito.anyInt())).thenCallRealMethod();
 
         return new NotesList(notes, snp);
     }
