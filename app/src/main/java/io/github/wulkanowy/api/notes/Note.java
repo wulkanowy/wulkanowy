@@ -2,13 +2,13 @@ package io.github.wulkanowy.api.notes;
 
 public class Note {
 
-    String date;
+    private String date;
 
-    String teacher;
+    private String teacher;
 
-    String category;
+    private String category;
 
-    String content;
+    private String content;
 
     public String getDate() {
         return date;
