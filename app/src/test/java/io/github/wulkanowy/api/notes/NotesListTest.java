@@ -45,14 +45,14 @@ public class NotesListTest {
         expectedList.add(new Note()
                 .setDate("01.12.2016")
                 .setTeacher("Ochocka Zofia [PZ]")
-                .setCategory("Zaangażowanie społeczne")
-                .setContent("Pomoc przy czymś")
+                .setCategory("Reprezentowanie szkoły")
+                .setContent("Udział w przygotowaniu spektaklu")
         );
         expectedList.add(new Note()
                 .setDate("01.10.2016")
                 .setTeacher("Kochański Leszek [KL]")
-                .setCategory("Zaangażowanie społeczne")
-                .setContent("Pomoc przy czymś innym")
+                .setCategory("Zachowanie na lekcji")
+                .setContent("Przeszkadzanie w prowadzeniu lekcji")
         );
 
         List<Note> actualList = getSetUpNotesList(fixtureFilledFileName).getAllNotes();
