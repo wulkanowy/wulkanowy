@@ -85,13 +85,13 @@ public class MarksFragment extends Fragment {
                 Cookies cookies = new Cookies();
                 cookies.setItems(loginCookies);
                 StudentAndParent snp = new StudentAndParent(cookies, "powiatjaroslawski").setUp();
-                SubjectsList subjectsList = new SubjectsList(cookies, snp);
+                SubjectsList subjectsList = new SubjectsList(snp.getCookiesObject(), snp);
                 List<Subject> subjects = subjectsList.getAll();
                 for (Subject item : subjects) {
                     subject.add(item.getName());
                 }
 
-                GradesList gradesList = new GradesList(cookies, snp);
+                GradesList gradesList = new GradesList(snp.getCookiesObject(), snp);
                 List<Grade> grades = gradesList.getAll();
                 for (Grade item : grades) {
                     Log.d("MarksFragment", item.getSubject() + ": " + item.getValue());
