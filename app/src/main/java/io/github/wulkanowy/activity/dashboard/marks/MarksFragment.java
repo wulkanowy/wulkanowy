@@ -24,6 +24,8 @@ import io.github.wulkanowy.api.grades.Grade;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.Subject;
 import io.github.wulkanowy.api.grades.SubjectsList;
+import io.github.wulkanowy.database.accounts.AccountData;
+import io.github.wulkanowy.database.accounts.DatabaseAccount;
 
 public class MarksFragment extends Fragment {
 
@@ -84,7 +86,11 @@ public class MarksFragment extends Fragment {
             try {
                 Cookies cookies = new Cookies();
                 cookies.setItems(loginCookies);
-                StudentAndParent snp = new StudentAndParent(cookies, "powiatjaroslawski").setUp();
+                DatabaseAccount databaseAccount = new DatabaseAccount(mContext);
+                databaseAccount.open();
+                AccountData accountData = databaseAccount.getAccount(1);
+                databaseAccount.close();
+                StudentAndParent snp = new StudentAndParent(cookies, accountData.getCounty()).setUp();
                 SubjectsList subjectsList = new SubjectsList(snp.getCookiesObject(), snp);
                 List<Subject> subjects = subjectsList.getAll();
                 for (Subject item : subjects) {
