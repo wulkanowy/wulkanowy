@@ -7,7 +7,10 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.database.SQLException;
 import android.util.Log;
 
-public class DatabaseAccount extends AccountAdapter {
+import io.github.wulkanowy.database.DatabaseAdapter;
+import io.github.wulkanowy.database.DatabaseHelper;
+
+public class AccountsDatabase extends DatabaseAdapter {
 
     private String name = "name";
     private String email = "email";
@@ -16,51 +19,50 @@ public class DatabaseAccount extends AccountAdapter {
     private String idText = "id";
     private String accounts = "accounts";
 
-    public DatabaseAccount(Context context) {
+    public AccountsDatabase(Context context) {
         super(context);
     }
 
-    public long put(AccountData accountData) throws SQLException {
+    public long put(Account account) throws SQLException {
 
         ContentValues newAccount = new ContentValues();
-        newAccount.put(name, accountData.getName());
-        newAccount.put(email, accountData.getEmail());
-        newAccount.put(password, accountData.getPassword());
-        newAccount.put(county, accountData.getCounty());
-
-        Log.d(DatabaseHelper.DEBUG_TAG, "Put account into database");
+        newAccount.put(name, account.getName());
+        newAccount.put(email, account.getEmail());
+        newAccount.put(password, account.getPassword());
+        newAccount.put(county, account.getCounty());
 
         if (!database.isReadOnly()) {
-            return database.insertOrThrow(accounts, null, newAccount);
+            long newId = database.insertOrThrow(accounts, null, newAccount);
+            Log.d(DatabaseHelper.DEBUG_TAG, "Put account " + newId + " into database");
+            return newId;
         }
 
         Log.e(DatabaseHelper.DEBUG_TAG, "Attempt to write on read-only database");
         throw new SQLException("Attempt to write on read-only database");
     }
 
-    public long update(AccountData accountData) {
+    public long update(Account account) throws SQLException {
 
         ContentValues updateAccount = new ContentValues();
-
-        updateAccount.put(name, accountData.getName());
-        updateAccount.put(email, accountData.getEmail());
-        updateAccount.put(password, accountData.getPassword());
-        updateAccount.put(county, accountData.getCounty());
-        String args[] = {accountData.getId() + ""};
-
-        Log.d(DatabaseHelper.DEBUG_TAG, "Update account into database");
+        updateAccount.put(name, account.getName());
+        updateAccount.put(email, account.getEmail());
+        updateAccount.put(password, account.getPassword());
+        updateAccount.put(county, account.getCounty());
+        String args[] = {account.getId() + ""};
 
         if (!database.isReadOnly()) {
-            return database.update(accounts, updateAccount, "id=?", args);
+            long updateId = database.update(accounts, updateAccount, "id=?", args);
+            Log.d(DatabaseHelper.DEBUG_TAG, "Update account " + updateId + " into database");
+            return updateId;
         }
 
         Log.e(DatabaseHelper.DEBUG_TAG, "Attempt to write on read-only database");
         throw new SQLException("Attempt to write on read-only database");
     }
 
-    public AccountData getAccount(long id) throws SQLException {
+    public Account getAccount(long id) throws SQLException {
 
-        AccountData accountData = new AccountData();
+        Account account = new Account();
 
         String[] columns = {idText, name, email, password, county};
         String args[] = {id + ""};
@@ -69,11 +71,11 @@ public class DatabaseAccount extends AccountAdapter {
             Cursor cursor = database.query(accounts, columns, "id=?", args, null, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
-                accountData.setId(cursor.getInt(0));
-                accountData.setName(cursor.getString(1));
-                accountData.setEmail(cursor.getString(2));
-                accountData.setPassword(cursor.getString(3));
-                accountData.setCounty(cursor.getString(4));
+                account.setId(cursor.getInt(0));
+                account.setName(cursor.getString(1));
+                account.setEmail(cursor.getString(2));
+                account.setPassword(cursor.getString(3));
+                account.setCounty(cursor.getString(4));
                 cursor.close();
             }
         } catch (SQLException e) {
@@ -86,8 +88,8 @@ public class DatabaseAccount extends AccountAdapter {
             throw new SQLException(e.getMessage());
         }
 
-        Log.d(DatabaseHelper.DEBUG_TAG, "Extract account from base");
+        Log.d(DatabaseHelper.DEBUG_TAG, "Extract account " + id + " from database");
 
-        return accountData;
+        return account;
     }
 }

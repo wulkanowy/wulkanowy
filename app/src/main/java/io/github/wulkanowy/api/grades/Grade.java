@@ -1,6 +1,11 @@
 package io.github.wulkanowy.api.grades;
 
 public class Grade {
+    private int id;
+
+    private int userID;
+
+    private int subjectID;
 
     private String subject;
 
@@ -15,6 +20,36 @@ public class Grade {
     private String date;
 
     private String teacher;
+
+    public int getId() {
+        return id;
+    }
+
+    public Grade setId(int id) {
+        this.id = id;
+
+        return this;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public Grade setUserID(int userID) {
+        this.userID = userID;
+
+        return this;
+    }
+
+    public int getSubjectID() {
+        return subjectID;
+    }
+
+    public Grade setSubjectID(int subjectID) {
+        this.subjectID = subjectID;
+
+        return this;
+    }
 
     public String getSubject() {
         return subject;

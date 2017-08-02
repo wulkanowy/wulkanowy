@@ -23,8 +23,8 @@ import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.PersonalData;
 import io.github.wulkanowy.api.user.User;
-import io.github.wulkanowy.database.accounts.AccountData;
-import io.github.wulkanowy.database.accounts.DatabaseAccount;
+import io.github.wulkanowy.database.accounts.Account;
+import io.github.wulkanowy.database.accounts.AccountsDatabase;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.security.Safety;
 
@@ -88,17 +88,17 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
 
                 Safety safety = new Safety(activity);
 
-                AccountData accountData = new AccountData()
+                Account account = new Account()
                         .setName(firstAndLastName)
                         .setEmail(credentials[0])
                         .setPassword(safety.encrypt(credentials[0], credentials[1]))
                         .setCounty(credentials[2]);
 
-                DatabaseAccount databaseAccount = new DatabaseAccount(activity);
+                AccountsDatabase accountsDatabase = new AccountsDatabase(activity);
 
-                databaseAccount.open();
-                long idUser = databaseAccount.put(accountData);
-                databaseAccount.close();
+                accountsDatabase.open();
+                long idUser = accountsDatabase.put(account);
+                accountsDatabase.close();
 
                 SharedPreferences sharedPreferences = activity.getSharedPreferences("LoginData", activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
