@@ -54,6 +54,33 @@ public class GradesDatabase extends DatabaseAdapter {
         throw new SQLException("Attempt to write on read-only database");
     }
 
+    public List<Long> put(List<Grade> gradeList) throws SQLException {
+
+        List<Long> newIdList = new ArrayList<>();
+
+        if (!database.isReadOnly()) {
+            for (Grade grade : gradeList) {
+                ContentValues newGrade = new ContentValues();
+                newGrade.put(userID, grade.getUserID());
+                newGrade.put(subjectID, grade.getSubjectID());
+                newGrade.put(value, grade.getValue());
+                newGrade.put(color, grade.getColor());
+                newGrade.put(decription, grade.getDescription());
+                newGrade.put(weight, grade.getWeight());
+                newGrade.put(date, grade.getDate());
+                newGrade.put(teacher, grade.getTeacher());
+
+                long newId = database.insertOrThrow(grades, null, newGrade);
+                Log.d(DatabaseHelper.DEBUG_TAG, "Put subject " + newId + " into database");
+                newIdList.add(newId);
+            }
+        }
+
+        return newIdList;
+
+        //TODO: End this
+    }
+
     public long update(Grade grade) throws SQLException {
 
         ContentValues updateGrade = new ContentValues();
@@ -117,11 +144,28 @@ public class GradesDatabase extends DatabaseAdapter {
 
     public List<Grade> getSubjectGrades(long userId, long subjectId) throws SQLException{
 
+        String whereExec = "SELECT * FROM " + grades + " WHERE " + userId + "=? AND " + subjectId + "=?";
+
         List<Grade> grades = new ArrayList<>();
 
-        return grades;
+        Cursor cursor = database.rawQuery(whereExec, new String[] {String.valueOf(userId), String.valueOf(subjectId)});
 
-        //TODO: Finish it
+        while (cursor.moveToNext()){
+            Grade grade = new Grade();
+            grade.setId(cursor.getInt(0));
+            grade.setUserID(cursor.getInt(1));
+            grade.setSubjectID(cursor.getInt(2));
+            grade.setValue(cursor.getString(3));
+            grade.setColor(cursor.getString(4));
+            grade.setDescription(cursor.getString(5));
+            grade.setWeight(cursor.getString(6));
+            grade.setDate(cursor.getString(7));
+            grade.setTeacher(cursor.getString(8));
+            cursor.close();
+            grades.add(grade);
+        }
+
+        return grades;
 
     }
 }

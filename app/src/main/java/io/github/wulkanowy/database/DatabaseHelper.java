@@ -53,6 +53,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE + "subjects");
         db.execSQL(DROP_TABLE + "grades");
         onCreate(db);
-        Log.d(DEBUG_TAG, "Upgrade database");
+        Log.d(DEBUG_TAG, "Database upgrade from ver." + oldVersion +" to ver." + newVersion);
     }
 }
