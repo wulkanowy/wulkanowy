@@ -74,11 +74,11 @@ public class GradesDatabase extends DatabaseAdapter {
                 Log.d(DatabaseHelper.DEBUG_TAG, "Put subject " + newId + " into database");
                 newIdList.add(newId);
             }
+
+            return newIdList;
         }
-
-        return newIdList;
-
-        //TODO: End this
+        Log.e(DatabaseHelper.DEBUG_TAG, "Attempt to write on read-only database");
+        throw new SQLException("Attempt to write on read-only database");
     }
 
     public long update(Grade grade) throws SQLException {
@@ -142,15 +142,15 @@ public class GradesDatabase extends DatabaseAdapter {
         return grade;
     }
 
-    public List<Grade> getSubjectGrades(long userId, long subjectId) throws SQLException{
+    public List<Grade> getSubjectGrades(long userId, long subjectId) throws SQLException {
 
         String whereExec = "SELECT * FROM " + grades + " WHERE " + userId + "=? AND " + subjectId + "=?";
 
-        List<Grade> grades = new ArrayList<>();
+        List<Grade> gradesList = new ArrayList<>();
 
-        Cursor cursor = database.rawQuery(whereExec, new String[] {String.valueOf(userId), String.valueOf(subjectId)});
+        Cursor cursor = database.rawQuery(whereExec, new String[]{String.valueOf(userId), String.valueOf(subjectId)});
 
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             Grade grade = new Grade();
             grade.setId(cursor.getInt(0));
             grade.setUserID(cursor.getInt(1));
@@ -161,11 +161,11 @@ public class GradesDatabase extends DatabaseAdapter {
             grade.setWeight(cursor.getString(6));
             grade.setDate(cursor.getString(7));
             grade.setTeacher(cursor.getString(8));
-            cursor.close();
-            grades.add(grade);
+            gradesList.add(grade);
         }
 
-        return grades;
+        cursor.close();
+        return gradesList;
 
     }
 }

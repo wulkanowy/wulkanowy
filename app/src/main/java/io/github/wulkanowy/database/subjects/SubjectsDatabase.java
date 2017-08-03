@@ -117,11 +117,28 @@ public class SubjectsDatabase extends DatabaseAdapter {
         return subject;
     }
 
+    public List<Subject> getAllSubject() {
+
+        List<Subject> subjectsList = new ArrayList<>();
+
+        String exec = "SELECT " + name + " FROM " + subjects;
+
+        Cursor cursor = database.rawQuery(exec, null);
+
+        while (cursor.moveToNext()) {
+            Subject subject = new Subject();
+            subject.setName(cursor.getString(0));
+            subjectsList.add(subject);
+        }
+        cursor.close();
+        return subjectsList;
+    }
+
     public long getSubjectId(String nameSubject) throws SQLException {
 
         String whereExec = "SELECT " + idText + " FROM " + subjects + " WHERE " + name + " =?";
 
-        Cursor cursor = database.rawQuery(whereExec, new String[] {nameSubject});
+        Cursor cursor = database.rawQuery(whereExec, new String[]{nameSubject});
         int idSubject = cursor.getInt(0);
         cursor.close();
         return idSubject;

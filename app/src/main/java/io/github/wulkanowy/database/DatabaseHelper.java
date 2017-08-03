@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "date TEXT, " +
             "teacher TEXT );";
 
-    private final String DROP_TABLE = "DROP TABLE IF EXISTS";
+    private final String DROP_TABLE = "DROP TABLE IF EXISTS ";
 
     public DatabaseHelper(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -53,6 +53,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE + "subjects");
         db.execSQL(DROP_TABLE + "grades");
         onCreate(db);
-        Log.d(DEBUG_TAG, "Database upgrade from ver." + oldVersion +" to ver." + newVersion);
+        Log.d(DEBUG_TAG, "Database upgrade from ver." + oldVersion + " to ver." + newVersion);
     }
 }
