@@ -92,36 +92,50 @@ public class Table extends Vulcan {
         lesson.setTeacher(spans.get(1).text());
         lesson.setRoom(spans.get(2).text());
 
-        if ((4 == spans.size() && (spans.first().attr("class").equals(""))
-                || (5 == spans.size()
-                && spans.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED)))
-                ) {
+        lesson = getLessonGroupDivisionInfo(lesson, spans);
+        lesson = getLessonTypeInfo(lesson, spans);
+        lesson = getLessonDescriptionInfo(lesson, spans);
+
+        return lesson;
+    }
+
+    public Lesson getLessonGroupDivisionInfo(Lesson lesson, Elements e) {
+        if ((4 == e.size() && (e.first().attr("class").equals("")) ||
+                (5 == e.size() && e.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED)))) {
             lesson.setDivisionIntoGroups(true);
             String[] subjectNameArray = lesson.getSubject().split(" ");
             String groupName = subjectNameArray[subjectNameArray.length - 1];
             lesson.setSubject(lesson.getSubject().replace(" " + groupName, ""));
             lesson.setGroupName(StringUtils.substringBetween(groupName, "[", "]"));
-            lesson.setTeacher(spans.get(2).text());
-            lesson.setRoom(spans.get(3).text());
+            lesson.setTeacher(e.get(2).text());
+            lesson.setRoom(e.get(3).text());
         }
 
-        if (spans.first().hasClass(Lesson.CLASS_MOVED_OR_CANCELED)) {
+        return lesson;
+    }
+
+    public Lesson getLessonTypeInfo(Lesson lesson, Elements e) {
+        if (e.first().hasClass(Lesson.CLASS_MOVED_OR_CANCELED)) {
             lesson.setMovedOrCanceled(true);
-        } else if (spans.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED)) {
+        } else if (e.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED)) {
             lesson.setNewMovedInOrChanged(true);
-        } else if (spans.first().hasClass(Lesson.CLASS_PLANNING)) {
+        } else if (e.first().hasClass(Lesson.CLASS_PLANNING)) {
             lesson.setPlanning(true);
         }
 
-        if (spans.last().hasClass(Lesson.CLASS_REALIZED)
-                || spans.first().attr("class").equals("")) {
+        if (e.last().hasClass(Lesson.CLASS_REALIZED)
+                || e.first().attr("class").equals("")) {
             lesson.setRealized(true);
         }
 
-        if ((4 == spans.size() || 5 == spans.size())
-                && (spans.first().hasClass(Lesson.CLASS_MOVED_OR_CANCELED)
-                || spans.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED))) {
-            lesson.setDescription(StringUtils.substringBetween(spans.last().text(), "(", ")"));
+        return lesson;
+    }
+
+    public Lesson getLessonDescriptionInfo(Lesson lesson, Elements e) {
+        if ((4 == e.size() || 5 == e.size())
+                && (e.first().hasClass(Lesson.CLASS_MOVED_OR_CANCELED)
+                || e.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED))) {
+            lesson.setDescription(StringUtils.substringBetween(e.last().text(), "(", ")"));
         }
 
         return lesson;
