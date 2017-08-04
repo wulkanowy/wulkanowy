@@ -17,13 +17,13 @@ import io.github.wulkanowy.database.DatabaseHelper;
 
 public class SubjectsDatabase extends DatabaseAdapter {
 
-    private String idText = "id";
-    private String name = "name";
-    private String predictedRating1 = "predictedRating1";
-    private String finalRating1 = "finalRating1";
-    private String predictedRating2 = "predictedRating2";
-    private String finalRating2 = "finalRating2";
-    private String subjects = "subjects";
+    private static String idText = "id";
+    private static String name = "name";
+    private static String predictedRating1 = "predictedRating1";
+    private static String finalRating1 = "finalRating1";
+    private static String predictedRating2 = "predictedRating2";
+    private static String finalRating2 = "finalRating2";
+    private static String subjects = "subjects";
 
     public SubjectsDatabase(Context context) {
         super(context);
@@ -50,21 +50,12 @@ public class SubjectsDatabase extends DatabaseAdapter {
 
         List<Long> newIdList = new ArrayList<>();
 
-        if (!database.isReadOnly()) {
-            for (Subject subject : subjectList) {
-                ContentValues newSubject = new ContentValues();
-                newSubject.put(name, subject.getName());
-                newSubject.put(predictedRating1, subject.getPredictedRating());
-                newSubject.put(finalRating1, subject.getFinalRating());
-
-                long newId = database.insertOrThrow(subjects, null, newSubject);
-                Log.d(DatabaseHelper.DEBUG_TAG, "Put subject " + newId + " into database");
-                newIdList.add(newId);
+        for (Subject subject : subjectList) {
+            if (!checkExist(subjects, name, subject.getName())) {
+                newIdList.add(put(subject));
             }
-            return newIdList;
         }
-        Log.e(DatabaseHelper.DEBUG_TAG, "Attempt to write on read-only database");
-        throw new SQLException("Attempt to write on read-only database");
+        return newIdList;
     }
 
     public long update(Subject subject) throws SQLException {
@@ -117,7 +108,7 @@ public class SubjectsDatabase extends DatabaseAdapter {
         return subject;
     }
 
-    public List<Subject> getAllSubject() {
+    public List<Subject> getAllSubjectsNames() {
 
         List<Subject> subjectsList = new ArrayList<>();
 
@@ -134,11 +125,12 @@ public class SubjectsDatabase extends DatabaseAdapter {
         return subjectsList;
     }
 
-    public long getSubjectId(String nameSubject) throws SQLException {
+    public static long getSubjectId(String nameSubject) throws SQLException {
 
         String whereExec = "SELECT " + idText + " FROM " + subjects + " WHERE " + name + " =?";
 
         Cursor cursor = database.rawQuery(whereExec, new String[]{nameSubject});
+        cursor.moveToFirst();
         int idSubject = cursor.getInt(0);
         cursor.close();
         return idSubject;

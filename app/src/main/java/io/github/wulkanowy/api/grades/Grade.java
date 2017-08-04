@@ -13,6 +13,8 @@ public class Grade {
 
     private String color;
 
+    private String symbol;
+
     private String description;
 
     private String weight;
@@ -20,6 +22,22 @@ public class Grade {
     private String date;
 
     private String teacher;
+
+    private boolean isNew;
+
+    @Override
+    public String toString() {
+        return "Grade{" +
+                "subject='" + subject + '\'' +
+                ", value='" + value + '\'' +
+                ", color='" + color + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", description='" + description + '\'' +
+                ", weight='" + weight + '\'' +
+                ", date='" + date + '\'' +
+                ", teacher='" + teacher + '\'' +
+                '}';
+    }
 
     public int getId() {
         return id;
@@ -81,6 +99,16 @@ public class Grade {
         return this;
     }
 
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public Grade setSymbol(String symbol) {
+        this.symbol = symbol;
+
+        return this;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -118,6 +146,15 @@ public class Grade {
     public Grade setTeacher(String teacher) {
         this.teacher = teacher;
 
+        return this;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public Grade setIsNew(boolean isNew) {
+        this.isNew = isNew;
         return this;
     }
 }

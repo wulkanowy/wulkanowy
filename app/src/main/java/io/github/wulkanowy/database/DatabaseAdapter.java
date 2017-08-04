@@ -10,7 +10,7 @@ public class DatabaseAdapter {
 
     private final String DATABASE_NAME = "accountdatabase.db";
     private final int DATABASE_VERSION = 2;
-    public SQLiteDatabase database;
+    public static SQLiteDatabase database;
     private DatabaseHelper databaseHelper;
     public Context context;
 
@@ -40,19 +40,18 @@ public class DatabaseAdapter {
         Log.d(DatabaseHelper.DEBUG_TAG, "Close database");
     }
 
-    public boolean checkExist(String nameTable) {
-
-        open();
-
-        Log.d(DatabaseHelper.DEBUG_TAG, "Check exist table");
+    public boolean checkExist(String tableName, String dbfield, String fieldValue) {
 
         Cursor cursor;
 
-        if(nameTable == null) {
-            cursor = database.rawQuery("SELECT COUNT(*) FROM accounts", null);
-        }
-        else{
-            cursor = database.rawQuery("SELECT COUNT(*) FROM " + nameTable, null);
+        if (dbfield == null && fieldValue == null && tableName != null) {
+            cursor = database.rawQuery("SELECT COUNT(*) FROM " + tableName, null);
+            Log.d(DatabaseHelper.DEBUG_TAG, "Check exist " + tableName + " table");
+        } else if (dbfield != null && fieldValue != null && tableName != null) {
+            cursor = database.rawQuery("SELECT COUNT(*) FROM " + tableName + " WHERE " + dbfield + "=?", new String[]{fieldValue});
+            Log.d(DatabaseHelper.DEBUG_TAG, "Check exist " + fieldValue + " row");
+        } else {
+            cursor = null;
         }
 
         if (cursor != null) {
@@ -65,9 +64,19 @@ public class DatabaseAdapter {
             }
 
             cursor.close();
-            close();
         }
 
         return false;
+    }
+
+    public void deleteAndCreate(String tableName) {
+
+        database.execSQL(databaseHelper.DROP_TABLE + tableName);
+        database.execSQL(databaseHelper.SUBJECT_TABLE);
+        database.execSQL(databaseHelper.ACCOUNT_TABLE);
+        database.execSQL(databaseHelper.GRADE_TABLE);
+
+        Log.d(DatabaseHelper.DEBUG_TAG, "Recreate table " + tableName);
+
     }
 }

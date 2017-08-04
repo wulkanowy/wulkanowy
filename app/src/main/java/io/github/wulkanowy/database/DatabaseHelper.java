@@ -8,32 +8,35 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public final static String DEBUG_TAG = "SQLiteAccountsDatabase";
-    private final String ACCOUNT_TABLE = "CREATE TABLE accounts( " +
+    public final static String DEBUG_TAG = "SQLiteWulkanowyDatabase";
+    public final String ACCOUNT_TABLE = "CREATE TABLE IF NOT EXISTS accounts( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "name TEXT, " +
             "email TEXT," +
             "password TEXT, " +
             "county TEXT );";
-    private final String SUBJECT_TABLE = "CREATE TABLE subjects( " +
+    public final String SUBJECT_TABLE = "CREATE TABLE IF NOT EXISTS subjects( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "name TEXT, " +
             "predictedRating1 TEXT, " +
             "finalRating1 TEXT, " +
             "predictedRating2 TEXT, " +
             "finalRating2 TEXT );";
-    private final String GRADE_TABLE = "CREATE TABLE grades( " +
+    public final String GRADE_TABLE = "CREATE TABLE IF NOT EXISTS grades( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "userID INTEGER, " +
             "subjectID INTEGER, " +
+            "subject TEXT, " +
             "value TEXT, " +
             "color TEXT, " +
+            "symbol TEXT, " +
             "description TEXT, " +
             "weight TEXT, " +
             "date TEXT, " +
-            "teacher TEXT );";
+            "teacher TEXT, " +
+            "isNew INTEGER );";
 
-    private final String DROP_TABLE = "DROP TABLE IF EXISTS ";
+    public final String DROP_TABLE = "DROP TABLE IF EXISTS ";
 
     public DatabaseHelper(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +19,9 @@ import java.util.Map;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.api.Cookies;
 import io.github.wulkanowy.api.StudentAndParent;
-import io.github.wulkanowy.api.grades.Grade;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.Subject;
 import io.github.wulkanowy.api.grades.SubjectsList;
-import io.github.wulkanowy.database.DatabaseAdapter;
 import io.github.wulkanowy.database.accounts.Account;
 import io.github.wulkanowy.database.accounts.AccountsDatabase;
 import io.github.wulkanowy.database.grades.GradesDatabase;
@@ -101,18 +98,19 @@ public class MarksFragment extends Fragment {
                 SubjectsDatabase subjectsDatabase = new SubjectsDatabase(mContext);
                 subjectsDatabase.open();
                 subjectsDatabase.put(subjectsList.getAll());
-                List<Subject> subjects = subjectsDatabase.getAllSubject();
+                List<Subject> subjects = subjectsDatabase.getAllSubjectsNames();
                 subjectsDatabase.close();
 
                 for (Subject subject : subjects) {
                     subjectsName.add(subject.getName());
                 }
-                
+
                 GradesList gradesList = new GradesList(snp.getCookiesObject(), snp);
-                List<Grade> grades = gradesList.getAll();
-                for (Grade item : grades) {
-                    Log.d("MarksFragment", item.getSubject() + ": " + item.getValue());
-                }
+                GradesDatabase gradesDatabase = new GradesDatabase(mContext);
+                gradesDatabase.open();
+                gradesDatabase.put(gradesList.getAll());
+                gradesDatabase.close();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

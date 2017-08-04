@@ -74,8 +74,9 @@ public class LoadingTask extends AsyncTask<Void, Void, Void> {
 
         if (SAVE_DATA) {
             AccountsDatabase accountsDatabase = new AccountsDatabase(activity);
+            accountsDatabase.open();
 
-            if (accountsDatabase.checkExist(null)) {
+            if (accountsDatabase.checkExist("accounts", null, null)) {
                 try {
                     Account account = accountsDatabase.getAccount(activity.getSharedPreferences("LoginData", activity.MODE_PRIVATE).getLong("isLogin", 0));
                     accountsDatabase.close();
@@ -99,6 +100,7 @@ public class LoadingTask extends AsyncTask<Void, Void, Void> {
                     Toast.makeText(activity, R.string.decrypt_failed, Toast.LENGTH_LONG).show();
                 }
             }
+            accountsDatabase.close();
         }
 
         Intent intent = new Intent(activity, MainActivity.class);
