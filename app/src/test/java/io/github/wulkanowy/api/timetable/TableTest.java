@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import io.github.wulkanowy.api.FixtureHelper;
-import io.github.wulkanowy.api.StudentAndParent;
 
 public class TableTest {
 
@@ -22,9 +21,8 @@ public class TableTest {
 
         Timetable timetable = Mockito.mock(Timetable.class);
         Mockito.when(timetable.getTablePageDocument(tick)).thenReturn(tablePageDocument);
-        StudentAndParent snp = Mockito.mock(StudentAndParent.class);
 
-        return new Table(timetable, snp);
+        return new Table(timetable);
     }
 
     @Test

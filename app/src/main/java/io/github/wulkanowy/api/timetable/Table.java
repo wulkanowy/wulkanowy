@@ -8,18 +8,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.LoginErrorException;
 
 public class Table extends Vulcan {
 
     private Timetable timetable;
-    private StudentAndParent snp;
 
-    public Table(Timetable timetable, StudentAndParent snp) {
+    public Table(Timetable timetable) {
         this.timetable = timetable;
-        this.snp = snp;
     }
 
     public Week getWeekTable() throws IOException, LoginErrorException {
@@ -96,8 +93,9 @@ public class Table extends Vulcan {
         lesson.setRoom(spans.get(2).text());
 
         if ((4 == spans.size() && (spans.first().attr("class").equals(""))
-                || 5 == spans.size()
-                && spans.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED))) {
+                || (5 == spans.size()
+                && spans.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED)))
+                ) {
             lesson.setDivisionIntoGroups(true);
             String[] subjectNameArray = lesson.getSubject().split(" ");
             String groupName = subjectNameArray[subjectNameArray.length - 1];
