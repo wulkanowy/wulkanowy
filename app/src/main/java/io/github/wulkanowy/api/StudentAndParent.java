@@ -18,7 +18,8 @@ public class StudentAndParent extends Vulcan {
 
     private String startPageUrl = "https://uonetplus.vulcan.net.pl/{locationID}/Start.mvc/Index";
 
-    private String gradesPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}/Oceny/Wszystkie";
+    private String gradesPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}/"
+            + "Oceny/Wszystkie";
 
     private String locationID = "";
 
@@ -28,6 +29,7 @@ public class StudentAndParent extends Vulcan {
         this.cookies = cookies;
         this.locationID = locID;
     }
+
     public String getGradesPageUrl() {
         return gradesPageUrl;
     }
@@ -101,9 +103,10 @@ public class StudentAndParent extends Vulcan {
         return semesters;
     }
 
-    public Semester getCurrentSemester(List<Semester> semesterList) throws IOException, LoginErrorException {
+    public Semester getCurrentSemester(List<Semester> semesterList)
+            throws IOException, LoginErrorException {
         Semester current = null;
-        for (Semester s: semesterList) {
+        for (Semester s : semesterList) {
             if (s.isCurrent()) {
                 current = s;
                 break;
