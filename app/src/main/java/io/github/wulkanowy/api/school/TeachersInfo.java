@@ -8,18 +8,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.LoginErrorException;
 
 public class TeachersInfo extends Vulcan {
 
     private School school = null;
-    private StudentAndParent snp = null;
 
-    public TeachersInfo(School school, StudentAndParent snp) {
+    public TeachersInfo(School school) {
         this.school = school;
-        this.snp = snp;
     }
 
     public TeachersData getTeachersData() throws IOException, LoginErrorException {
