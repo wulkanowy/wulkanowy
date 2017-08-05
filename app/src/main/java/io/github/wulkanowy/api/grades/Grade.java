@@ -1,5 +1,8 @@
 package io.github.wulkanowy.api.grades;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class Grade {
     private int id;
 
@@ -159,34 +162,36 @@ public class Grade {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+
         if (o == null || getClass() != o.getClass()) return false;
 
         Grade grade = (Grade) o;
 
-        if (subject != null ? !subject.equals(grade.subject) : grade.subject != null) return false;
-        if (value != null ? !value.equals(grade.value) : grade.value != null) return false;
-        if (color != null ? !color.equals(grade.color) : grade.color != null) return false;
-        if (symbol != null ? !symbol.equals(grade.symbol) : grade.symbol != null) return false;
-        if (description != null ? !description.equals(grade.description) : grade.description != null)
-            return false;
-        if (weight != null ? !weight.equals(grade.weight) : grade.weight != null) return false;
-        if (date != null ? !date.equals(grade.date) : grade.date != null) return false;
-        if (teacher != null ? !teacher.equals(grade.teacher) : grade.teacher != null) return false;
-        return semester != null ? semester.equals(grade.semester) : grade.semester == null;
-
+        return new EqualsBuilder()
+                .append(subject, grade.subject)
+                .append(value, grade.value)
+                .append(color, grade.color)
+                .append(symbol, grade.symbol)
+                .append(description, grade.description)
+                .append(weight, grade.weight)
+                .append(date, grade.date)
+                .append(teacher, grade.teacher)
+                .append(semester, grade.semester)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = subject != null ? subject.hashCode() : 0;
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        result = 31 * result + (color != null ? color.hashCode() : 0);
-        result = 31 * result + (symbol != null ? symbol.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (weight != null ? weight.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (teacher != null ? teacher.hashCode() : 0);
-        result = 31 * result + (semester != null ? semester.hashCode() : 0);
-        return result;
+        return new HashCodeBuilder(17, 37)
+                .append(subject)
+                .append(value)
+                .append(color)
+                .append(symbol)
+                .append(description)
+                .append(weight)
+                .append(date)
+                .append(teacher)
+                .append(semester)
+                .toHashCode();
     }
 }
