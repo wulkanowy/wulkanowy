@@ -19,7 +19,6 @@ import java.util.Map;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.api.Cookies;
 import io.github.wulkanowy.api.StudentAndParent;
-import io.github.wulkanowy.api.grades.Grade;
 import io.github.wulkanowy.api.grades.Grades;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.Subject;
