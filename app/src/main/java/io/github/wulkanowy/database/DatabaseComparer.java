@@ -1,6 +1,8 @@
 package io.github.wulkanowy.database;
 
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,24 +12,14 @@ public class DatabaseComparer {
 
     public static List<Grade> compareGradesLists(List<Grade> newLists, List<Grade> oldLists) {
 
-        List<Grade> updatedLists = new ArrayList<>();
+        List<Grade> addedOrUpdatedGradesList = new ArrayList<>(CollectionUtils.removeAll(newLists, oldLists));
+        newLists = new ArrayList<>(CollectionUtils.removeAll(newLists, addedOrUpdatedGradesList));
 
-        for (Grade newGrade : newLists) {
-
-            boolean isNewGrade = true;
-
-            for (Grade oldGrade : oldLists) {
-                if (newGrade.toString().equals(oldGrade.toString())) {
-
-                    updatedLists.add(newGrade);
-                    isNewGrade = false;
-                }
-            }
-            if (isNewGrade) {
-                newGrade.setIsNew(true);
-                updatedLists.add(newGrade);
-            }
+        for (Grade grade : addedOrUpdatedGradesList) {
+            grade.setIsNew(true);
+            newLists.add(grade);
         }
-        return updatedLists;
+
+        return newLists;
     }
 }

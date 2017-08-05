@@ -1,5 +1,8 @@
 package io.github.wulkanowy.api.grades;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class Grade {
     private int id;
 
@@ -24,20 +27,6 @@ public class Grade {
     private String teacher;
 
     private boolean isNew;
-
-    @Override
-    public String toString() {
-        return "Grade{" +
-                "subject='" + subject + '\'' +
-                ", value='" + value + '\'' +
-                ", color='" + color + '\'' +
-                ", symbol='" + symbol + '\'' +
-                ", description='" + description + '\'' +
-                ", weight='" + weight + '\'' +
-                ", date='" + date + '\'' +
-                ", teacher='" + teacher + '\'' +
-                '}';
-    }
 
     public int getId() {
         return id;
@@ -156,5 +145,39 @@ public class Grade {
     public Grade setIsNew(boolean isNew) {
         this.isNew = isNew;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Grade grade = (Grade) o;
+
+        return new EqualsBuilder()
+                .append(subject, grade.subject)
+                .append(value, grade.value)
+                .append(color, grade.color)
+                .append(symbol, grade.symbol)
+                .append(description, grade.description)
+                .append(weight, grade.weight)
+                .append(date, grade.date)
+                .append(teacher, grade.teacher)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(subject)
+                .append(value)
+                .append(color)
+                .append(symbol)
+                .append(description)
+                .append(weight)
+                .append(date)
+                .append(teacher)
+                .toHashCode();
     }
 }
