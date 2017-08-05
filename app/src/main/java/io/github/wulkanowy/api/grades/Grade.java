@@ -10,23 +10,15 @@ public class Grade {
 
     private int subjectID;
 
-    private String subject;
-
-    private String value;
-
-    private String color;
-
-    private String symbol;
-
-    private String description;
-
-    private String weight;
-
-    private String date;
-
-    private String teacher;
-
-    private String semester;
+    private String subject = "";
+    private String value = "";
+    private String color = "";
+    private String symbol = "";
+    private String description = "";
+    private String weight = "";
+    private String date = "";
+    private String teacher = "";
+    private String semester = "";
 
     private boolean isNew;
 
@@ -156,6 +148,7 @@ public class Grade {
 
     public Grade setIsNew(boolean isNew) {
         this.isNew = isNew;
+
         return this;
     }
 
