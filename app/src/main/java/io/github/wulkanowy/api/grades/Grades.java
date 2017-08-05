@@ -20,9 +20,9 @@ public class Grades extends Vulcan {
 
     //TODO: move to snp
     public Document getGradesPageDocument(String url) throws IOException, LoginErrorException {
-        url = url.replace("{locationID}", snp.getLocationID());
-        url = url.replace("{ID}", snp.getID());
-
-        return getPageByUrl(url);
+        return getPageByUrl(url
+                .replace("{locationID}", snp.getLocationID())
+                .replace("{ID}", snp.getID())
+        );
     }
 }
