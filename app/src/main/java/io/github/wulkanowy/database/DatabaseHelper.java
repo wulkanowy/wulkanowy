@@ -34,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "weight TEXT, " +
             "date TEXT, " +
             "teacher TEXT, " +
+            "semester INTEGER, " +
             "isNew INTEGER );";
 
     public final String DROP_TABLE = "DROP TABLE IF EXISTS ";

@@ -10,16 +10,16 @@ import io.github.wulkanowy.api.grades.Grade;
 
 public class DatabaseComparer {
 
-    public static List<Grade> compareGradesLists(List<Grade> newLists, List<Grade> oldLists) {
+    public static List<Grade> compareGradesLists(List<Grade> newList, List<Grade> oldList) {
 
-        List<Grade> addedOrUpdatedGradesList = new ArrayList<>(CollectionUtils.removeAll(newLists, oldLists));
-        newLists = new ArrayList<>(CollectionUtils.removeAll(newLists, addedOrUpdatedGradesList));
+        List<Grade> addedOrUpdatedGradesList = new ArrayList<>(CollectionUtils.removeAll(newList, oldList));
+        List<Grade> updatedList = new ArrayList<>(CollectionUtils.removeAll(newList, addedOrUpdatedGradesList));
 
         for (Grade grade : addedOrUpdatedGradesList) {
             grade.setIsNew(true);
-            newLists.add(grade);
+            updatedList.add(grade);
         }
 
-        return newLists;
+        return updatedList;
     }
 }

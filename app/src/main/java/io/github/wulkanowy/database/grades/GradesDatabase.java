@@ -31,6 +31,7 @@ public class GradesDatabase extends DatabaseAdapter {
     private String date = "date";
     private String teacher = "teacher";
     private String isNew = "isNew";
+    private String semester = "semester";
     private String grades = "grades";
 
     public GradesDatabase(Context context) {
@@ -50,6 +51,7 @@ public class GradesDatabase extends DatabaseAdapter {
         newGrade.put(weight, grade.getWeight());
         newGrade.put(date, grade.getDate());
         newGrade.put(teacher, grade.getTeacher());
+        newGrade.put(semester, grade.getSemester());
         newGrade.put(isNew, grade.isNew() ? 1 : 0);
 
         if (!database.isReadOnly()) {
@@ -94,6 +96,7 @@ public class GradesDatabase extends DatabaseAdapter {
         updateGrade.put(weight, grade.getWeight());
         updateGrade.put(date, grade.getDate());
         updateGrade.put(teacher, grade.getTeacher());
+        updateGrade.put(semester, grade.getSemester());
         updateGrade.put(isNew, grade.isNew() ? 1 : 0);
         String args[] = {grade.getId() + ""};
 
@@ -130,7 +133,8 @@ public class GradesDatabase extends DatabaseAdapter {
                 grade.setWeight(cursor.getString(8));
                 grade.setDate(cursor.getString(9));
                 grade.setTeacher(cursor.getString(10));
-                grade.setIsNew(cursor.getInt(11) != 0);
+                grade.setSemester(cursor.getString(11));
+                grade.setIsNew(cursor.getInt(12) != 0);
                 cursor.close();
             }
         } catch (SQLException e) {
@@ -169,7 +173,8 @@ public class GradesDatabase extends DatabaseAdapter {
             grade.setWeight(cursor.getString(8));
             grade.setDate(cursor.getString(9));
             grade.setTeacher(cursor.getString(10));
-            grade.setIsNew(cursor.getInt(11) != 0);
+            grade.setSemester(cursor.getString(11));
+            grade.setIsNew(cursor.getInt(12) != 0);
             gradesList.add(grade);
         }
 
@@ -195,7 +200,8 @@ public class GradesDatabase extends DatabaseAdapter {
             grade.setWeight(cursor.getString(8));
             grade.setDate(cursor.getString(9));
             grade.setTeacher(cursor.getString(10));
-            grade.setIsNew(cursor.getInt(11) != 0);
+            grade.setSemester(cursor.getString(11));
+            grade.setIsNew(cursor.getInt(12) != 0);
             gradesList.add(grade);
         }
         cursor.close();
