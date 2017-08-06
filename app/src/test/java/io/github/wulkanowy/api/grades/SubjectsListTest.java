@@ -1,33 +1,18 @@
 package io.github.wulkanowy.api.grades;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.util.List;
 
-import io.github.wulkanowy.api.FixtureHelper;
-import io.github.wulkanowy.api.Semester;
-import io.github.wulkanowy.api.StudentAndParent;
-
-public class SubjectsListTest {
+public class SubjectsListTest extends GradesTest {
 
     private String fixtureStdFileName = "OcenyWszystkie-subjects.html";
 
     private String fixtureAverageFileName = "OcenyWszystkie-subjects-average.html";
 
     public SubjectsList getSetUpSubjectsList(String fixtureFileName) throws Exception {
-        String input = FixtureHelper.getAsString(getClass().getResourceAsStream(fixtureFileName));
-        Document gradesPageDocument = Jsoup.parse(input);
-
-        StudentAndParent snp = Mockito.mock(StudentAndParent.class);
-        Mockito.when(snp.getSnPPageDocument(Mockito.anyString()))
-                .thenReturn(gradesPageDocument);
-        Mockito.when(snp.getSemesters(Mockito.any(Document.class))).thenCallRealMethod();
-        Mockito.when(snp.getCurrentSemester(Mockito.anyListOf(Semester.class)))
-                .thenCallRealMethod();
+        super.setUp(fixtureFileName);
 
         return new SubjectsList(snp);
     }
