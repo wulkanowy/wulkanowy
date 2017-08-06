@@ -26,7 +26,7 @@ public class StudentAndParentTest {
         PowerMockito.whenNew(StudentAndParent.class)
                 .withArguments(Mockito.any(Cookies.class), Mockito.anyString()).thenReturn(snp);
 
-        Mockito.when(snp.getPageByUrl(Mockito.anyString())).thenReturn(gradesPageDocument);
+        Mockito.when(snp.getSnPPageDocument(Mockito.anyString())).thenReturn(gradesPageDocument);
         Mockito.when(snp.getGradesPageUrl()).thenReturn("http://example.null");
         Mockito.when(snp.getLocationID()).thenReturn("symbol");
         Mockito.when(snp.getID()).thenReturn("123456");

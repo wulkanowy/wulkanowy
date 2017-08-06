@@ -75,17 +75,20 @@ public class StudentAndParent extends Vulcan {
     }
 
     public String getRowDataChildValue(Element e, int index) {
-        return e.select(".daneWiersz .wartosc").get(index - 1).text();
+        Elements es = e.select(".daneWiersz .wartosc");
+
+        return es.get(index - 1).text();
+    }
+
+    public Document getSnPPageDocument(String url) throws IOException, LoginErrorException {
+        return getPageByUrl(url
+                .replace("{locationID}", getLocationID())
+                .replace("{ID}", getID())
+        );
     }
 
     public List<Semester> getSemesters() throws IOException, LoginErrorException {
-        String url = getGradesPageUrl();
-        url = url.replace("{locationID}", getLocationID());
-        url = url.replace("{ID}", getID());
-
-        Document gradesPage = getPageByUrl(url);
-
-        return getSemesters(gradesPage);
+        return getSemesters(getSnPPageDocument(getGradesPageUrl()));
     }
 
     public List<Semester> getSemesters(Document gradesPage) {

@@ -8,19 +8,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.LoginErrorException;
 
 public class TeachersInfo extends Vulcan {
 
-    private School school = null;
+    private StudentAndParent snp = null;
 
-    public TeachersInfo(School school) {
-        this.school = school;
+    private String schoolPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
+            + "/Szkola.mvc/Nauczyciele";
+
+    public TeachersInfo(StudentAndParent snp) {
+        this.snp = snp;
+    }
+
+    public String getSchoolPageUrl() {
+        return schoolPageUrl;
     }
 
     public TeachersData getTeachersData() throws IOException, LoginErrorException {
-        Document doc = school.getSchoolPageDocument();
+        Document doc = snp.getSnPPageDocument(getSchoolPageUrl());
         Elements rows = doc.select(".mainContainer > table tbody tr");
         String description = doc.select(".mainContainer > p").first().text();
 

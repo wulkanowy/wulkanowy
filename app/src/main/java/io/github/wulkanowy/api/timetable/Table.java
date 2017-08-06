@@ -8,15 +8,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.LoginErrorException;
 
 public class Table extends Vulcan {
 
-    private Timetable timetable;
+    private StudentAndParent snp;
 
-    public Table(Timetable timetable) {
-        this.timetable = timetable;
+    private String timetablePageurl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
+            + "/Lekcja.mvc/PlanLekcji?data=";
+
+    public Table(StudentAndParent snp) {
+        this.snp = snp;
+    }
+
+    public String getTimetablePageurl() {
+        return timetablePageurl;
     }
 
     public Week getWeekTable() throws IOException, LoginErrorException {
@@ -24,7 +32,7 @@ public class Table extends Vulcan {
     }
 
     public Week getWeekTable(String tick) throws IOException, LoginErrorException {
-        Element table = timetable.getTablePageDocument(tick)
+        Element table = snp.getSnPPageDocument(getTimetablePageurl() + tick)
                 .select(".mainContainer .presentData").first();
 
         Elements tableHeaderCells = table.select("thead th");

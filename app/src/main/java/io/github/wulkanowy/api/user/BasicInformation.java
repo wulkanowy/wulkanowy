@@ -10,32 +10,50 @@ import io.github.wulkanowy.api.login.LoginErrorException;
 
 public class BasicInformation {
 
+    private static Document studentDataPageDocument;
+
     private StudentAndParent snp = null;
 
-    private Document studentDataPageDocument;
+    private String studentDataPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
+            + "/Uczen.mvc/DanePodstawowe";
 
-    public BasicInformation(User user, StudentAndParent snp)
-            throws IOException, LoginErrorException {
+    public BasicInformation(StudentAndParent snp) throws IOException, LoginErrorException {
         this.snp = snp;
-
-        studentDataPageDocument = user.getPage();
     }
 
-    public PersonalData getPersonalData() {
-        Element e = studentDataPageDocument.select(".mainContainer > article").get(0);
+    public String getStudentDataPageUrl() {
+        return studentDataPageUrl;
+    }
+
+    public Document getStudentDataPageDocument() throws IOException, LoginErrorException {
+        if (null == studentDataPageDocument) {
+            studentDataPageDocument = snp.getSnPPageDocument(getStudentDataPageUrl());
+        }
+
+        return studentDataPageDocument;
+    }
+
+    public PersonalData getPersonalData() throws IOException, LoginErrorException {
+        Element e = getStudentDataPageDocument().select(".mainContainer > article").get(0);
+
+        String name = snp.getRowDataChildValue(e, 1);
+        String[] names = name.split(" ");
 
         return new PersonalData()
-                .setNames(snp.getRowDataChildValue(e, 1))
+                .setName(name)
+                .setFirstName(names[0])
+                .setSurname(names[names.length - 1])
+                .setFirstAndLastName(names[0] + " " + names[names.length - 1])
                 .setDateAndBirthPlace(snp.getRowDataChildValue(e, 2))
                 .setPesel(snp.getRowDataChildValue(e, 3))
                 .setGender(snp.getRowDataChildValue(e, 4))
-                .setPolishCitizenship(snp.getRowDataChildValue(e, 5))
+                .setPolishCitizenship("Tak".equals(snp.getRowDataChildValue(e, 5)))
                 .setFamilyName(snp.getRowDataChildValue(e, 6))
                 .setParentsNames(snp.getRowDataChildValue(e, 7));
     }
 
-    public AddressData getAddresData() {
-        Element e = studentDataPageDocument.select(".mainContainer > article").get(1);
+    public AddressData getAddresData() throws IOException, LoginErrorException {
+        Element e = getStudentDataPageDocument().select(".mainContainer > article").get(1);
 
         return new AddressData()
                 .setAddress(snp.getRowDataChildValue(e, 1))
@@ -44,8 +62,8 @@ public class BasicInformation {
 
     }
 
-    public ContactDetails getContactDetails() {
-        Element e = studentDataPageDocument.select(".mainContainer > article").get(2);
+    public ContactDetails getContactDetails() throws IOException, LoginErrorException {
+        Element e = getStudentDataPageDocument().select(".mainContainer > article").get(2);
 
         return new ContactDetails()
                 .setPhoneNumber(snp.getRowDataChildValue(e, 1))

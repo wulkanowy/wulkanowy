@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 
 import java.util.List;
 
@@ -26,21 +25,13 @@ public class GradesListTest {
         Document gradesPageDocument = Jsoup.parse(input);
 
         StudentAndParent snp = Mockito.mock(StudentAndParent.class);
-        PowerMockito.whenNew(StudentAndParent.class).withAnyArguments().thenReturn(snp);
-        Mockito.when(snp.getLocationID()).thenReturn("symbol");
-        Mockito.when(snp.getID()).thenReturn("123456");
-        Mockito.when(snp.getGradesPageUrl()).thenReturn("http://example.null");
-        Mockito.when(snp.getSemesters()).thenCallRealMethod();
+        Mockito.when(snp.getSnPPageDocument(Mockito.anyString()))
+                .thenReturn(gradesPageDocument);
         Mockito.when(snp.getSemesters(Mockito.any(Document.class))).thenCallRealMethod();
         Mockito.when(snp.getCurrentSemester(Mockito.anyListOf(Semester.class)))
                 .thenCallRealMethod();
 
-        Grades grades = Mockito.mock(Grades.class);
-        PowerMockito.whenNew(Grades.class).withAnyArguments().thenReturn(grades);
-        Mockito.when(grades.getGradesPageDocument(Mockito.anyString()))
-                .thenReturn(gradesPageDocument);
-
-        gradesList = new GradesList(grades, snp);
+        gradesList = new GradesList(snp);
     }
 
     @Test

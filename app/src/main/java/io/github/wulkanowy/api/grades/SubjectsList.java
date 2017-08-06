@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.api.Cookies;
 import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.LoginErrorException;
@@ -17,29 +16,29 @@ public class SubjectsList extends Vulcan {
 
     private StudentAndParent snp = null;
 
-    private String subjectsPageUrl =
-            "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}/Oceny/Wszystkie?details=1";
+    private String subjectsPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
+            + "/Oceny/Wszystkie?details=1";
 
     private List<Subject> subjects = new ArrayList<>();
 
-    public SubjectsList(Cookies cookies, StudentAndParent snp) {
-        this.cookies = cookies;
+    public SubjectsList(StudentAndParent snp) {
         this.snp = snp;
     }
 
-    public List<Subject> getAll() throws IOException, LoginErrorException {
-        subjectsPageUrl = subjectsPageUrl.replace("{locationID}", snp.getLocationID());
-        subjectsPageUrl = subjectsPageUrl.replace("{ID}", snp.getID());
+    public String getSubjectsPageUrl() {
+        return subjectsPageUrl;
+    }
 
-        Document subjectPage = getPageByUrl(subjectsPageUrl);
+    public List<Subject> getAll() throws IOException, LoginErrorException {
+        Document subjectPage = snp.getSnPPageDocument(getSubjectsPageUrl());
 
         Elements rows = subjectPage.select(".ocenyZwykle-table > tbody > tr");
 
         for (Element subjectRow : rows) {
             subjects.add(new Subject()
                     .setName(subjectRow.select("td:nth-child(1)").text())
-                    .setPredictedRating(subjectRow.select("td:nth-child(3)").text())
-                    .setFinalRating(subjectRow.select("td:nth-child(4)").text())
+                    .setPredictedRating(subjectRow.select("td:nth-last-child(2)").text())
+                    .setFinalRating(subjectRow.select("td:nth-last-child(1)").text())
             );
         }
 

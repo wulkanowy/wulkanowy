@@ -19,7 +19,6 @@ import java.util.Map;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.api.Cookies;
 import io.github.wulkanowy.api.StudentAndParent;
-import io.github.wulkanowy.api.grades.Grades;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.Subject;
 import io.github.wulkanowy.api.grades.SubjectsList;
@@ -94,7 +93,7 @@ public class MarksFragment extends Fragment {
                 accountsDatabase.close();
 
                 StudentAndParent snp = new StudentAndParent(cookies, account.getCounty()).setUp();
-                SubjectsList subjectsList = new SubjectsList(snp.getCookiesObject(), snp);
+                SubjectsList subjectsList = new SubjectsList(snp);
 
                 SubjectsDatabase subjectsDatabase = new SubjectsDatabase(mContext);
                 subjectsDatabase.open();
@@ -106,8 +105,7 @@ public class MarksFragment extends Fragment {
                     subjectsName.add(subject.getName());
                 }
 
-                Grades gradesObject = new Grades(snp.getCookiesObject(), snp);
-                GradesList gradesList = new GradesList(gradesObject, snp);
+                GradesList gradesList = new GradesList(snp);
                 GradesDatabase gradesDatabase = new GradesDatabase(mContext);
                 gradesDatabase.open();
                 gradesDatabase.put(gradesList.getAll());
