@@ -99,8 +99,7 @@ public class StudentAndParent extends Vulcan {
         return semesters;
     }
 
-    public Semester getCurrentSemester(List<Semester> semesterList)
-            throws IOException, LoginErrorException {
+    public Semester getCurrentSemester(List<Semester> semesterList) {
         Semester current = null;
         for (Semester s : semesterList) {
             if (s.isCurrent()) {

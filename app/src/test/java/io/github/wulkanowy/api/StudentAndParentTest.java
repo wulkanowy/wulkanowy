@@ -81,4 +81,11 @@ public class StudentAndParentTest {
         Assert.assertEquals("2", snp.getCurrentSemester(semesters).getId());
         Assert.assertEquals("1500100901", snp.getCurrentSemester(semesters).getNumber());
     }
+
+    @Test
+    public void getCurrentSemesterFromEmptyTest() throws Exception {
+        List<Semester> semesters = new ArrayList<>();
+
+        Assert.assertNull(snp.getCurrentSemester(semesters));
+    }
 }
