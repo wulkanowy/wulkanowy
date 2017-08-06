@@ -25,5 +25,5 @@
     <string name="root_failed">To urządzenie posiada posiada podwyższone uprawnienia (root). Automatyczne logowanie zosatło wyłączone.</string>
     <string name="encrypt_failed">Szyfrowanie nie powiodło się. Automatyczne logowanie zostało wyłączone</string>
     <string name="decrypt_failed">Deszyfrowanie nie powiodło się. Automatyczne logowanie zostało wyłączone</string>
-    <string name="version_text">Wersja</string>
+    <string name="version_text">Wersja\u0020</string>
 </resources>
