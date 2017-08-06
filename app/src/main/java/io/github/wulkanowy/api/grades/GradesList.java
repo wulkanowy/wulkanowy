@@ -50,7 +50,7 @@ public class GradesList extends Vulcan {
 
             String descriptions = row.select("td:nth-child(3)").text();
             String symbol = descriptions.split(", ")[0];
-            String description = descriptions.replace(symbol + ", ", "");
+            String description = descriptions.replace(symbol, "").replace(", ", "");
 
             Pattern pattern = Pattern.compile("#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})");
             Matcher matcher = pattern.matcher(row.select("td:nth-child(2) span.ocenaCzastkowa")
