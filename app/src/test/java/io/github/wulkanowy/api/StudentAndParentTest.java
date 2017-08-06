@@ -11,6 +11,8 @@ import org.powermock.api.mockito.PowerMockito;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.wulkanowy.api.login.LoginErrorException;
+
 public class StudentAndParentTest {
 
     private String fixtureFileName = "OcenyWszystkie-semester.html";
@@ -27,12 +29,31 @@ public class StudentAndParentTest {
                 .withArguments(Mockito.any(Cookies.class), Mockito.anyString()).thenReturn(snp);
 
         Mockito.when(snp.getSnPPageDocument(Mockito.anyString())).thenReturn(gradesPageDocument);
+        Mockito.when(snp.getCalculatedID(Mockito.anyString())).thenCallRealMethod();
         Mockito.when(snp.getLocationID()).thenReturn("symbol");
         Mockito.when(snp.getID()).thenReturn("123456");
         Mockito.when(snp.getSemesters()).thenCallRealMethod();
         Mockito.when(snp.getSemesters(Mockito.any(Document.class))).thenCallRealMethod();
         Mockito.when(snp.getCurrentSemester(Mockito.anyListOf(Semester.class)))
                 .thenCallRealMethod();
+    }
+
+    @Test
+    public void getCalculatedIDStandardTest() throws Exception {
+        Assert.assertEquals("123456", snp.getCalculatedID("https://uonetplus-opiekun"
+                + ".vulcan.net.pl/powiat/123456/Start/Index/"));
+    }
+
+    @Test
+    public void getCalculatedIDDemoTest() throws Exception {
+        Assert.assertEquals("demo12345", snp.getCalculatedID("https://uonetplus-opiekundemo"
+                + ".vulcan.net.pl/demoupowiat/demo12345/Start/Index/"));
+    }
+
+    @Test(expected = LoginErrorException.class)
+    public void getCalculatedIDNotLoggedTest() throws Exception {
+        Assert.assertEquals("123", snp.getCalculatedID("https://uonetplus"
+                + ".vulcan.net.pl/powiat/"));
     }
 
     @Test

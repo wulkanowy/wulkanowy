@@ -79,7 +79,7 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
         if (save) {
             try {
                 StudentAndParent snp = new StudentAndParent(login.getCookiesObject(),
-                        credentials[2]).setUp();
+                        credentials[2]);
                 BasicInformation userInfo = new BasicInformation(snp);
                 PersonalData personalData = userInfo.getPersonalData();
                 String firstAndLastName = personalData.getFirstAndLastName();

@@ -92,7 +92,7 @@ public class MarksFragment extends Fragment {
                 Account account = accountsDatabase.getAccount(mContext.getSharedPreferences("LoginData", mContext.MODE_PRIVATE).getLong("isLogin", 0));
                 accountsDatabase.close();
 
-                StudentAndParent snp = new StudentAndParent(cookies, account.getCounty()).setUp();
+                StudentAndParent snp = new StudentAndParent(cookies, account.getCounty());
                 SubjectsList subjectsList = new SubjectsList(snp);
 
                 SubjectsDatabase subjectsDatabase = new SubjectsDatabase(mContext);

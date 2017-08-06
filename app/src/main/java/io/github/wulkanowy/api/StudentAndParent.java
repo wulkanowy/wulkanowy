@@ -9,8 +9,6 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import io.github.wulkanowy.api.login.LoginErrorException;
 
@@ -26,22 +24,14 @@ public class StudentAndParent extends Vulcan {
 
     private String id = "";
 
-    public StudentAndParent(Cookies cookies, String locID) throws IOException {
+    public StudentAndParent(Cookies cookies, String locID) throws IOException, LoginErrorException {
         this.cookies = cookies;
         this.locationID = locID;
-    }
-
-    public StudentAndParent setUp() throws IOException, LoginErrorException {
-        startPageUrl = startPageUrl.replace("{locationID}", locationID);
 
         // get link to uonetplus-opiekun.vulcan.net.pl module
-        Document startPage = Jsoup.connect(startPageUrl)
-                .followRedirects(true)
-                .cookies(getCookies())
-                .get();
+        Document startPage = getPageByUrl(startPageUrl.replace("{locationID}", locationID));
         Element studentTileLink = startPage.select(".panel.linkownia.pracownik.klient > a").first();
         String uonetPlusOpiekunUrl = studentTileLink.attr("href");
-        id = calculateID(uonetPlusOpiekunUrl);
 
         //get context module cookie
         Connection.Response res = Jsoup.connect(uonetPlusOpiekunUrl)
@@ -51,7 +41,10 @@ public class StudentAndParent extends Vulcan {
 
         cookies.addItems(res.cookies());
 
-        return this;
+        this.id = getCalculatedID(uonetPlusOpiekunUrl);
+        this.baseUrl = baseUrl
+                .replace("{locationID}", getLocationID())
+                .replace("{ID}", getID());
     }
 
     public String getLocationID() {
@@ -62,16 +55,14 @@ public class StudentAndParent extends Vulcan {
         return id;
     }
 
-    public String calculateID(String uonetPlusOpiekunUrl) throws LoginErrorException {
-        Pattern pattern = Pattern.compile("([0-9]{6})");
-        Matcher matcher = pattern.matcher(uonetPlusOpiekunUrl);
+    public String getCalculatedID(String uonetPlusOpiekunUrl) throws LoginErrorException {
+        String[] path = uonetPlusOpiekunUrl.split("vulcan.net.pl/")[1].split("/");
 
-        // Finds all the matches until found by moving the `matcher` forward
-        if (!matcher.find()) {
+        if (4 != path.length) {
             throw new LoginErrorException();
         }
 
-        return matcher.group(1);
+        return path[1];
     }
 
     public String getRowDataChildValue(Element e, int index) {
@@ -80,14 +71,11 @@ public class StudentAndParent extends Vulcan {
         return es.get(index - 1).text();
     }
 
-    public Document getSnPPageDocument(String url) throws IOException, LoginErrorException {
-        return getPageByUrl(baseUrl + url
-                .replace("{locationID}", getLocationID())
-                .replace("{ID}", getID())
-        );
+    public Document getSnPPageDocument(String url) throws IOException {
+        return getPageByUrl(baseUrl + url);
     }
 
-    public List<Semester> getSemesters() throws IOException, LoginErrorException {
+    public List<Semester> getSemesters() throws IOException {
         return getSemesters(getSnPPageDocument(gradesPageUrl));
     }
 
