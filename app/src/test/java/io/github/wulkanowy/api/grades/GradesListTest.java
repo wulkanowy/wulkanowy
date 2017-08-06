@@ -46,7 +46,7 @@ public class GradesListTest {
     @Test
     public void getAllTest() throws Exception {
         List<Grade> grades = gradesList.getAll();
-        Assert.assertEquals(5, grades.size()); // 2 items are skipped
+        Assert.assertEquals(6, grades.size()); // 2 items are skipped
 
         Grade grade1 = grades.get(0);
         Assert.assertEquals("Zajęcia z wychowawcą", grade1.getSubject());
@@ -80,5 +80,16 @@ public class GradesListTest {
         Assert.assertEquals("02.04.2017", grade3.getDate());
         Assert.assertEquals("Klaudia Dziedzic", grade3.getTeacher());
         Assert.assertEquals("7654321", grade3.getSemester());
+
+        Grade grade4 = grades.get(5);
+        Assert.assertEquals("Język polski", grade4.getSubject());
+        Assert.assertEquals("1", grade4.getValue());
+        Assert.assertEquals("6ECD07", grade4.getColor());
+        Assert.assertEquals("K", grade4.getSymbol());
+        Assert.assertEquals("Kordian", grade4.getDescription());
+        Assert.assertEquals("5,00", grade4.getWeight());
+        Assert.assertEquals("06.02.2017", grade4.getDate());
+        Assert.assertEquals("Amelia Stępień", grade4.getTeacher());
+        Assert.assertEquals("7654321", grade4.getSemester());
     }
 }
