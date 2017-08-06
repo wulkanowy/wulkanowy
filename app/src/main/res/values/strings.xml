@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Wulkanowy</string>
-    <string name="under_logo">Raw version</string>
     <string name="login_title">Login</string>
     <string name="pass_hint">Password</string>
     <string name="email_hint">E-mail</string>
@@ -26,4 +25,5 @@
     <string name="root_failed">This device is rooted. Automatic login has been disabled</string>
     <string name="encrypt_failed">Encryption failed. Automatic login has been disabled</string>
     <string name="decrypt_failed">Decrypt is failed. Automatic login has been disable</string>
+    <string name="version_text">Version\u0020</string>
 </resources>
