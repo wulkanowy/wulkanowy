@@ -12,6 +12,7 @@
         <item name="android:textColorTertiaryInverse">@android:color/primary_text_dark</item>
         <item name="titleTextColor">@android:color/primary_text_dark</item>
         <item name="subtitleTextColor">@android:color/primary_text_dark</item>
+        <item name="android:colorBackground">@color/white</item>
     </style>
 
     <style name="WulkanowyTheme.noActionBar" parent="WulkanowyTheme">

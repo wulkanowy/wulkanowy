@@ -3,5 +3,6 @@
     <color name="colorPrimary">#d32f2f</color>
     <color name="colorPrimaryDark">#9a0007</color>
     <color name="colorPrimaryLight">#ff6659</color>
-    <color name="colorBackgroundBottomNavi">#dddddd</color>
+    <color name="colorBackgroundBottomNavi">#f0f0f0</color>
+    <color name="white">#ffffff</color>
 </resources>
