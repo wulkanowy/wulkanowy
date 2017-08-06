@@ -15,6 +15,7 @@ import io.github.wulkanowy.api.StudentAndParent;
 public class SubjectsListTest {
 
     private String fixtureStdFileName = "OcenyWszystkie-subjects.html";
+
     private String fixtureAverageFileName = "OcenyWszystkie-subjects-average.html";
 
     public SubjectsList getSetUpSubjectsList(String fixtureFileName) throws Exception {

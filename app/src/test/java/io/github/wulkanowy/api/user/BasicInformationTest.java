@@ -32,7 +32,7 @@ public class BasicInformationTest extends UserTest {
 
     @Test
     public void getAddressData() throws Exception {
-        AddressData data = basicInformation.getAddresData();
+        AddressData data = basicInformation.getAddressData();
 
         Assert.assertEquals("ul. Sportowa 16, 00-123 Warszawa", data.getAddress());
         Assert.assertEquals("ul. Sportowa 17, 00-123 Warszawa", data.getRegisteredAddress());

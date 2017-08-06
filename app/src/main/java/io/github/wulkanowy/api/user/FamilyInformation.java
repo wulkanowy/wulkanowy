@@ -25,13 +25,9 @@ public class FamilyInformation extends Vulcan {
         this.snp = snp;
     }
 
-    public String getStudentDataPageUrl() {
-        return studentDataPageUrl;
-    }
-
     public Document getStudentDataPageDocument() throws IOException, LoginErrorException {
         if (null == studentDataPageDocument) {
-            studentDataPageDocument = snp.getSnPPageDocument(getStudentDataPageUrl());
+            studentDataPageDocument = snp.getSnPPageDocument(studentDataPageUrl);
         }
 
         return studentDataPageDocument;

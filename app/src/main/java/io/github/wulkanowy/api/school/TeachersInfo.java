@@ -23,12 +23,8 @@ public class TeachersInfo extends Vulcan {
         this.snp = snp;
     }
 
-    public String getSchoolPageUrl() {
-        return schoolPageUrl;
-    }
-
     public TeachersData getTeachersData() throws IOException, LoginErrorException {
-        Document doc = snp.getSnPPageDocument(getSchoolPageUrl());
+        Document doc = snp.getSnPPageDocument(schoolPageUrl);
         Elements rows = doc.select(".mainContainer > table tbody tr");
         String description = doc.select(".mainContainer > p").first().text();
 

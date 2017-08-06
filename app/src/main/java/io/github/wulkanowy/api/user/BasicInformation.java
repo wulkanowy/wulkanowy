@@ -21,13 +21,9 @@ public class BasicInformation {
         this.snp = snp;
     }
 
-    public String getStudentDataPageUrl() {
-        return studentDataPageUrl;
-    }
-
     public Document getStudentDataPageDocument() throws IOException, LoginErrorException {
         if (null == studentDataPageDocument) {
-            studentDataPageDocument = snp.getSnPPageDocument(getStudentDataPageUrl());
+            studentDataPageDocument = snp.getSnPPageDocument(studentDataPageUrl);
         }
 
         return studentDataPageDocument;
@@ -52,7 +48,7 @@ public class BasicInformation {
                 .setParentsNames(snp.getRowDataChildValue(e, 7));
     }
 
-    public AddressData getAddresData() throws IOException, LoginErrorException {
+    public AddressData getAddressData() throws IOException, LoginErrorException {
         Element e = getStudentDataPageDocument().select(".mainContainer > article").get(1);
 
         return new AddressData()
