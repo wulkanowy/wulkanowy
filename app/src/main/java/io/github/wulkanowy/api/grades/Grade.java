@@ -11,13 +11,21 @@ public class Grade {
     private int subjectID;
 
     private String subject = "";
+
     private String value = "";
+
     private String color = "";
+
     private String symbol = "";
+
     private String description = "";
+
     private String weight = "";
+
     private String date = "";
+
     private String teacher = "";
+
     private String semester = "";
 
     private boolean isNew;
