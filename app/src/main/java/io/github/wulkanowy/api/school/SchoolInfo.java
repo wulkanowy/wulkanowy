@@ -19,12 +19,8 @@ public class SchoolInfo extends Vulcan {
         this.snp = snp;
     }
 
-    public String getSchoolPageUrl() {
-        return schoolPageUrl;
-    }
-
     public SchoolData getSchoolData() throws IOException, LoginErrorException {
-        Element e = snp.getSnPPageDocument(getSchoolPageUrl())
+        Element e = snp.getSnPPageDocument(schoolPageUrl)
                 .select(".mainContainer > article").get(0);
 
         return new SchoolData()

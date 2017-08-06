@@ -23,12 +23,8 @@ public class NotesList {
         this.snp = snp;
     }
 
-    public String getNotesPageUrl() {
-        return notesPageUrl;
-    }
-
     public List<Note> getAllNotes() throws LoginErrorException, IOException {
-        Element pageFragment = snp.getSnPPageDocument(getNotesPageUrl())
+        Element pageFragment = snp.getSnPPageDocument(notesPageUrl)
                 .select(".mainContainer > div").get(0);
         Elements items = pageFragment.select("article");
         Elements dates = pageFragment.select("h2");

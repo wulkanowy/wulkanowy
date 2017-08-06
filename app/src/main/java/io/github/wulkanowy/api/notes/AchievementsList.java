@@ -23,12 +23,8 @@ public class AchievementsList {
         this.snp = snp;
     }
 
-    public String getNotesPageUrl() {
-        return notesPageUrl;
-    }
-
     public List<String> getAllAchievements() throws LoginErrorException, IOException {
-        Element pageFragment = snp.getSnPPageDocument(getNotesPageUrl())
+        Element pageFragment = snp.getSnPPageDocument(notesPageUrl)
                 .select(".mainContainer > div").get(1);
         Elements items = pageFragment.select("article");
 
