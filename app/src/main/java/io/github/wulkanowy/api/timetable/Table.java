@@ -16,8 +16,7 @@ public class Table extends Vulcan {
 
     private StudentAndParent snp;
 
-    private String timetablePageurl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
-            + "/Lekcja.mvc/PlanLekcji?data=";
+    private String timetablePageurl = "Lekcja.mvc/PlanLekcji?data=";
 
     public Table(StudentAndParent snp) {
         this.snp = snp;

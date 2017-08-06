@@ -16,8 +16,7 @@ public class SubjectsList extends Vulcan {
 
     private StudentAndParent snp = null;
 
-    private String subjectsPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
-            + "/Oceny/Wszystkie?details=1";
+    private String subjectsPageUrl = "Oceny/Wszystkie?details=1";
 
     private List<Subject> subjects = new ArrayList<>();
 
@@ -25,12 +24,8 @@ public class SubjectsList extends Vulcan {
         this.snp = snp;
     }
 
-    public String getSubjectsPageUrl() {
-        return subjectsPageUrl;
-    }
-
     public List<Subject> getAll() throws IOException, LoginErrorException {
-        Document subjectPage = snp.getSnPPageDocument(getSubjectsPageUrl());
+        Document subjectPage = snp.getSnPPageDocument(subjectsPageUrl);
 
         Elements rows = subjectPage.select(".ocenyZwykle-table > tbody > tr");
 

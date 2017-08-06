@@ -19,8 +19,7 @@ public class GradesList extends Vulcan {
 
     private StudentAndParent snp = null;
 
-    private String gradesPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
-            + "/Oceny/Wszystkie?details=2&okres=";
+    private String gradesPageUrl = "Oceny/Wszystkie?details=2&okres=";
 
     private List<Grade> grades = new ArrayList<>();
 

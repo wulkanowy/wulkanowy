@@ -18,23 +18,20 @@ public class StudentAndParent extends Vulcan {
 
     private String startPageUrl = "https://uonetplus.vulcan.net.pl/{locationID}/Start.mvc/Index";
 
-    private String gradesPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}/"
-            + "Oceny/Wszystkie";
+    private String baseUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}/";
+
+    private String gradesPageUrl = baseUrl + "Oceny/Wszystkie";
 
     private String locationID = "";
 
-    private String uonetPlusOpiekunUrl = "";
+    private String id = "";
 
     public StudentAndParent(Cookies cookies, String locID) throws IOException {
         this.cookies = cookies;
         this.locationID = locID;
     }
 
-    public String getGradesPageUrl() {
-        return gradesPageUrl;
-    }
-
-    public StudentAndParent setUp() throws IOException {
+    public StudentAndParent setUp() throws IOException, LoginErrorException {
         startPageUrl = startPageUrl.replace("{locationID}", locationID);
 
         // get link to uonetplus-opiekun.vulcan.net.pl module
@@ -43,7 +40,8 @@ public class StudentAndParent extends Vulcan {
                 .cookies(getCookies())
                 .get();
         Element studentTileLink = startPage.select(".panel.linkownia.pracownik.klient > a").first();
-        uonetPlusOpiekunUrl = studentTileLink.attr("href");
+        String uonetPlusOpiekunUrl = studentTileLink.attr("href");
+        id = calculateID(uonetPlusOpiekunUrl);
 
         //get context module cookie
         Connection.Response res = Jsoup.connect(uonetPlusOpiekunUrl)
@@ -60,7 +58,11 @@ public class StudentAndParent extends Vulcan {
         return locationID;
     }
 
-    public String getID() throws LoginErrorException {
+    public String getID() {
+        return id;
+    }
+
+    public String calculateID(String uonetPlusOpiekunUrl) throws LoginErrorException {
         Pattern pattern = Pattern.compile("([0-9]{6})");
         Matcher matcher = pattern.matcher(uonetPlusOpiekunUrl);
 
@@ -69,9 +71,7 @@ public class StudentAndParent extends Vulcan {
             throw new LoginErrorException();
         }
 
-        String match = matcher.group(1);
-
-        return match;
+        return matcher.group(1);
     }
 
     public String getRowDataChildValue(Element e, int index) {
@@ -81,14 +81,14 @@ public class StudentAndParent extends Vulcan {
     }
 
     public Document getSnPPageDocument(String url) throws IOException, LoginErrorException {
-        return getPageByUrl(url
+        return getPageByUrl(baseUrl + url
                 .replace("{locationID}", getLocationID())
                 .replace("{ID}", getID())
         );
     }
 
     public List<Semester> getSemesters() throws IOException, LoginErrorException {
-        return getSemesters(getSnPPageDocument(getGradesPageUrl()));
+        return getSemesters(getSnPPageDocument(gradesPageUrl));
     }
 
     public List<Semester> getSemesters(Document gradesPage) {

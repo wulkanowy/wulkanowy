@@ -12,12 +12,11 @@ public class BasicInformation {
 
     private static Document studentDataPageDocument;
 
-    private StudentAndParent snp = null;
+    private StudentAndParent snp;
 
-    private String studentDataPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
-            + "/Uczen.mvc/DanePodstawowe";
+    private String studentDataPageUrl = "Uczen.mvc/DanePodstawowe";
 
-    public BasicInformation(StudentAndParent snp) throws IOException, LoginErrorException {
+    public BasicInformation(StudentAndParent snp) {
         this.snp = snp;
     }
 

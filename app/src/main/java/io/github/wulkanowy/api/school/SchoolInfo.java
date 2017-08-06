@@ -12,8 +12,7 @@ public class SchoolInfo extends Vulcan {
 
     private StudentAndParent snp = null;
 
-    private String schoolPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
-            + "/Szkola.mvc/Nauczyciele";
+    private String schoolPageUrl = "Szkola.mvc/Nauczyciele";
 
     public SchoolInfo(StudentAndParent snp) {
         this.snp = snp;

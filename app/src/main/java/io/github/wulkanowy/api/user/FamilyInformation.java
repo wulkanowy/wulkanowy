@@ -1,6 +1,5 @@
 package io.github.wulkanowy.api.user;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -14,27 +13,16 @@ import io.github.wulkanowy.api.login.LoginErrorException;
 
 public class FamilyInformation extends Vulcan {
 
-    private static Document studentDataPageDocument;
+    private StudentAndParent snp;
 
-    private StudentAndParent snp = null;
-
-    private String studentDataPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
-            + "/Uczen.mvc/DanePodstawowe";
+    private String studentDataPageUrl = "Uczen.mvc/DanePodstawowe";
 
     public FamilyInformation(StudentAndParent snp) throws IOException, LoginErrorException {
         this.snp = snp;
     }
 
-    public Document getStudentDataPageDocument() throws IOException, LoginErrorException {
-        if (null == studentDataPageDocument) {
-            studentDataPageDocument = snp.getSnPPageDocument(studentDataPageUrl);
-        }
-
-        return studentDataPageDocument;
-    }
-
     public List<FamilyMember> getFamilyMembers() throws IOException, LoginErrorException {
-        Elements membersElements = getStudentDataPageDocument()
+        Elements membersElements = snp.getSnPPageDocument(studentDataPageUrl)
                 .select(".mainContainer > article:nth-of-type(n+4)");
 
         List<FamilyMember> familyMembers = new ArrayList<>();

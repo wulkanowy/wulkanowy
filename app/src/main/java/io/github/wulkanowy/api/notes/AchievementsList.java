@@ -16,8 +16,7 @@ public class AchievementsList {
 
     private List<String> achievementsList = new ArrayList<>();
 
-    private String notesPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
-            + "/UwagiOsiagniecia.mvc/Wszystkie";
+    private String notesPageUrl = "UwagiOsiagniecia.mvc/Wszystkie";
 
     public AchievementsList(StudentAndParent snp) {
         this.snp = snp;

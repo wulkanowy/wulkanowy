@@ -16,8 +16,7 @@ public class NotesList {
 
     private List<Note> notesList = new ArrayList<>();
 
-    private String notesPageUrl = "https://uonetplus-opiekun.vulcan.net.pl/{locationID}/{ID}"
-            + "/UwagiOsiagniecia.mvc/Wszystkie";
+    private String notesPageUrl = "UwagiOsiagniecia.mvc/Wszystkie";
 
     public NotesList(StudentAndParent snp) {
         this.snp = snp;
