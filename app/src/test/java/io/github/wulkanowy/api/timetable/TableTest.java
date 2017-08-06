@@ -12,7 +12,9 @@ import io.github.wulkanowy.api.StudentAndParent;
 public class TableTest {
 
     private String fixtureStdFileName = "PlanLekcji-std.html";
+
     private String fixtureHolidaysFileName = "PlanLekcji-holidays.html";
+
     private String fixtureFullFileName = "PlanLekcji-full.html";
 
     private Table getSetUpTable(String fixtureFileName) throws Exception {
