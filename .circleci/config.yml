@@ -45,7 +45,6 @@ jobs:
           <<: *general_cache_key
           paths:
             - "~/.gradle"
-            - "/opt/android-sdk-linux/licenses/"
 
   lint:
     <<: *container_config
