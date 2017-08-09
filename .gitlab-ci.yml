@@ -12,6 +12,7 @@ before_script:
 build:
   stage: build
   script:
+    - rm -rf .gradle gradle-3.3
     - ./gradlew --no-daemon --stacktrace dependencies || true
     - ./gradlew --no-daemon --stacktrace assembleDebug
     - mv app/build/outputs/apk/app-debug.apk .
