@@ -1,7 +1,6 @@
 image: circleci/android:api-25-alpha
 
 cache:
-  key: "$CI_COMMIT_REF_NAME"
   paths:
      - .gradle
      - gradle-3.3
