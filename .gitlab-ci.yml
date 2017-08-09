@@ -1,12 +1,12 @@
-image: registry.gitlab.com/showcheap/android-ci:T25-B25.0.2
+image: registry.gitlab.com/showcheap/android-ci:T25-B25.0.3
 
 before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
 
 cache:
   paths:
-     - .gradle/wrapper
-     - .gradle/caches
+     - .gradle
+  key: "$CI_COMMIT_REF_NAME"
 
 build:
   stage: build
