@@ -87,7 +87,7 @@ workflows:
   build_check_tests:
     jobs:
       - build
-      - check:
+      - lint:
           requires:
             - build
       - test:
