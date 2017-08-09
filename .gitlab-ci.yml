@@ -6,7 +6,7 @@ before_script:
 build:
   stage: build
   cache:
-    key: "$CI_COMMIT_REF_NAME/v1"
+    key: "v1-$CI_COMMIT_REF_NAME"
     paths:
      - .gradle
   script:
@@ -21,7 +21,7 @@ build:
 tests:
   stage: test
   cache:
-    key: "$CI_COMMIT_REF_NAME/v1"
+    key: "v1-$CI_COMMIT_REF_NAME"
     paths:
      - .gradle
     policy: pull
@@ -34,7 +34,7 @@ tests:
 lint:
   stage: test
   cache:
-    key: "$CI_COMMIT_REF_NAME/v1"
+    key: "v1-$CI_COMMIT_REF_NAME"
     paths:
      - .gradle
     policy: pull
