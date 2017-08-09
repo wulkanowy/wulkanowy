@@ -1,15 +1,14 @@
 image: circleci/android:api-25-alpha
 
-cache:
-  paths:
-     - .gradle
-     - gradle-3.3
-
 before_script:
     - export GRADLE_USER_HOME=`pwd`/gradle-3.3
 
 build:
   stage: build
+  cache:
+    paths:
+     - .gradle
+     - gradle-3.3
   script:
     - ./gradlew --no-daemon --stacktrace dependencies || true
     - ./gradlew --no-daemon --stacktrace assembleDebug
@@ -22,6 +21,9 @@ build:
 tests:
   stage: test
   cache:
+    paths:
+     - .gradle
+     - gradle-3.3
     policy: pull
   script:
     - ./gradlew --no-daemon --stacktrace test
@@ -32,6 +34,9 @@ tests:
 lint:
   stage: test
   cache:
+    paths:
+     - .gradle
+     - gradle-3.3
     policy: pull
   script:
     - ./gradlew --no-daemon --stacktrace lint
