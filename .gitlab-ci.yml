@@ -1,5 +1,11 @@
 image: circleci/android:api-25-alpha
 
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+     - .gradle
+     - gradle-3.3
+
 before_script:
     - export GRADLE_USER_HOME=`pwd`/gradle-3.3
 
@@ -18,7 +24,14 @@ tests:
   stage: test
   script:
     - ./gradlew --no-daemon --stacktrace test
-    - ./gradlew --no-daemon --stacktrace check
+  artifacts:
+    paths:
+    - app/build/reports/tests
+
+lint:
+  stage: test
+  script:
+    - ./gradlew --no-daemon --stacktrace lint
   artifacts:
     paths:
     - app/build/reports
