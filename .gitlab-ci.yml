@@ -6,8 +6,6 @@ before_script:
 build:
   stage: build
   script:
-    - wget https://downloads.gradle.org/distributions/gradle-3.3-bin.zip
-    - unzip gradle-3.3-bin.zip
     - ./gradlew --no-daemon --stacktrace dependencies || true
     - ./gradlew --no-daemon --stacktrace assembleDebug
     - mv app/build/outputs/apk/app-debug.apk .
@@ -19,8 +17,8 @@ build:
 tests:
   stage: test
   script:
-    - ./gradlew --no-daemon --stacktrace --debug test
-    - ./gradlew --no-daemon --stacktrace --debug check
+    - ./gradlew --no-daemon --stacktrace test
+    - ./gradlew --no-daemon --stacktrace check
   artifacts:
     paths:
     - app/build/reports
