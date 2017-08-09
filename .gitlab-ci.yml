@@ -5,31 +5,24 @@ before_script:
 
 cache:
   paths:
-     - .gradle
+     - .gradle/
   key: "$CI_COMMIT_REF_NAME"
 
 build:
   stage: build
   script:
-    - ./gradlew assembleDebug
+    - ./gradlew --no-daemon --stacktrace assembleDebug
     - mv app/build/outputs/apk/app-debug.apk .
   artifacts:
     name: "${CI_PROJECT_NAME}_${CI_BUILD_REF_NAME}-${CI_BUILD_ID}"
     paths:
     - app-debug.apk
 
-unitTests:
+tests:
   stage: test
   script:
-    - ./gradlew test
-  artifacts:
-    paths:
-    - app/build/reports
-
-functionalTests:
-  stage: test
-  script:
-     - ./gradlew check
+    - ./gradlew --no-daemon --stacktrace test
+    - ./gradlew --no-daemon --stacktrace check
   artifacts:
     paths:
     - app/build/reports
