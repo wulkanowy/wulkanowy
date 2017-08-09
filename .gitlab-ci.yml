@@ -9,6 +9,7 @@ build:
     paths:
      - .gradle
      - gradle-3.3
+     - /opt/android-sdk-linux/licenses/
   script:
     - ./gradlew --no-daemon --stacktrace dependencies || true
     - ./gradlew --no-daemon --stacktrace assembleDebug
@@ -24,6 +25,7 @@ tests:
     paths:
      - .gradle
      - gradle-3.3
+     - /opt/android-sdk-linux/licenses/
     policy: pull
   script:
     - ./gradlew --no-daemon --stacktrace test
@@ -37,6 +39,7 @@ lint:
     paths:
      - .gradle
      - gradle-3.3
+     - /opt/android-sdk-linux/licenses/
     policy: pull
   script:
     - ./gradlew --no-daemon --stacktrace lint
