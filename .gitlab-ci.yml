@@ -33,8 +33,8 @@ tests:
 
 lint:
   stage: test
-    key: "$CI_COMMIT_REF_NAME/v1"
   cache:
+    key: "$CI_COMMIT_REF_NAME/v1"
     paths:
      - .gradle
     policy: pull
