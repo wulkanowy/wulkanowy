@@ -6,10 +6,10 @@ before_script:
 build:
   stage: build
   cache:
+    key: "$CI_COMMIT_REF_NAME/v1"
     paths:
      - .gradle
   script:
-    - sudo rm -rf .gradle
     - ./gradlew --no-daemon --stacktrace dependencies || true
     - ./gradlew --no-daemon --stacktrace assembleDebug
     - mv app/build/outputs/apk/app-debug.apk .
@@ -21,6 +21,7 @@ build:
 tests:
   stage: test
   cache:
+    key: "$CI_COMMIT_REF_NAME/v1"
     paths:
      - .gradle
     policy: pull
@@ -32,6 +33,7 @@ tests:
 
 lint:
   stage: test
+    key: "$CI_COMMIT_REF_NAME/v1"
   cache:
     paths:
      - .gradle
