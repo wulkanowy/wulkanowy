@@ -12,7 +12,6 @@ before_script:
 build:
   stage: build
   script:
-    - sudo rm -rf .gradle gradle-3.3
     - ./gradlew --no-daemon --stacktrace dependencies || true
     - ./gradlew --no-daemon --stacktrace assembleDebug
     - mv app/build/outputs/apk/app-debug.apk .
@@ -23,6 +22,8 @@ build:
 
 tests:
   stage: test
+  cache:
+    policy: pull
   script:
     - ./gradlew --no-daemon --stacktrace test
   artifacts:
@@ -31,6 +32,8 @@ tests:
 
 lint:
   stage: test
+  cache:
+    policy: pull
   script:
     - ./gradlew --no-daemon --stacktrace lint
   artifacts:
