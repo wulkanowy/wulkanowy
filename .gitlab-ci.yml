@@ -1,4 +1,4 @@
-image: registry.gitlab.com/showcheap/android-ci:T25-B25.0.3
+image: circleci/android:api-25-alpha
 
 before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -6,11 +6,13 @@ before_script:
 cache:
   paths:
      - .gradle/
+     - /opt/android-sdk-linux/licenses/
   key: "$CI_COMMIT_REF_NAME"
 
 build:
   stage: build
   script:
+    - ./gradlew --no-daemon --stacktrace dependencies || true
     - ./gradlew --no-daemon --stacktrace assembleDebug
     - mv app/build/outputs/apk/app-debug.apk .
   artifacts:
@@ -21,8 +23,8 @@ build:
 tests:
   stage: test
   script:
-    - ./gradlew --no-daemon --stacktrace test
-    - ./gradlew --no-daemon --stacktrace check
+    - ./gradlew --no-daemon --stacktrace --debug test
+    - ./gradlew --no-daemon --stacktrace --debug check
   artifacts:
     paths:
     - app/build/reports
