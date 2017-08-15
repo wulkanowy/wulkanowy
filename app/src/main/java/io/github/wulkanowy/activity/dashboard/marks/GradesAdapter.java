@@ -14,25 +14,25 @@ import java.util.ArrayList;
 
 import io.github.wulkanowy.R;
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
+public class GradesAdapter extends RecyclerView.Adapter<GradesAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<String> list;
 
-    public ImageAdapter(Context context, ArrayList<String> list) {
+    public GradesAdapter(Context context, ArrayList<String> list) {
         this.list = list;
         this.context = context;
     }
 
     @Override
-    public ImageAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_layout,
+    public GradesAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.subject_item,
                 viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ImageAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(GradesAdapter.ViewHolder viewHolder, int i) {
 
         viewHolder.tv_android.setText(list.get(i));
         Picasso.with(context)

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +29,7 @@ import io.github.wulkanowy.database.subjects.SubjectsDatabase;
 public class MarksFragment extends Fragment {
 
     private ArrayList<String> subjectsName = new ArrayList<>();
+    private List<SubjectParent> subjectParentList;
 
     private View view;
 
@@ -54,13 +54,9 @@ public class MarksFragment extends Fragment {
 
     public void createGrid() {
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.card_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(view.getContext(), 2);
-        recyclerView.setLayoutManager(layoutManager);
-
-        ImageAdapter adapter = new ImageAdapter(view.getContext(), subjectsName);
-        recyclerView.setAdapter(adapter);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.subject_grade_recycler);
+        SubjectGradeAdapter subjectGradeAdapter = new SubjectGradeAdapter(subjectParentList, view.getContext());
+        recyclerView.setAdapter(subjectGradeAdapter);
     }
 
     public class MarksTask extends AsyncTask<Void, Void, Void> {
@@ -75,6 +71,7 @@ public class MarksFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             String cookiesPath = mContext.getFilesDir().getPath() + "/cookies.txt";
+            long userId = mContext.getSharedPreferences("LoginData", mContext.MODE_PRIVATE).getLong("isLogin", 0);
 
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(cookiesPath));
@@ -89,7 +86,7 @@ public class MarksFragment extends Fragment {
 
                 AccountsDatabase accountsDatabase = new AccountsDatabase(mContext);
                 accountsDatabase.open();
-                Account account = accountsDatabase.getAccount(mContext.getSharedPreferences("LoginData", mContext.MODE_PRIVATE).getLong("isLogin", 0));
+                Account account = accountsDatabase.getAccount(userId);
                 accountsDatabase.close();
 
                 StudentAndParent snp = new StudentAndParent(cookies, account.getCounty());
@@ -99,17 +96,21 @@ public class MarksFragment extends Fragment {
                 subjectsDatabase.open();
                 subjectsDatabase.put(subjectsList.getAll());
                 List<Subject> subjects = subjectsDatabase.getAllSubjectsNames();
-                subjectsDatabase.close();
-
-                for (Subject subject : subjects) {
-                    subjectsName.add(subject.getName());
-                }
 
                 GradesList gradesList = new GradesList(snp);
                 GradesDatabase gradesDatabase = new GradesDatabase(mContext);
-                gradesDatabase.open();
                 gradesDatabase.put(gradesList.getAll());
-                gradesDatabase.close();
+
+                for (Subject subject : subjects) {
+                    SubjectParent subjectParent = new SubjectParent()
+                            .setName(subject.getName())
+                            .setChildItemList(gradesDatabase.getSubjectGrades(userId, subjectsDatabase.getSubjectId(subject.getName())));
+                    subjectParentList.add(subjectParent);
+
+                }
+
+
+
 
             } catch (Exception e) {
                 e.printStackTrace();
