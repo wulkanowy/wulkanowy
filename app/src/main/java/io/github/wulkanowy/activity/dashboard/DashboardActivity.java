@@ -10,12 +10,12 @@ import android.view.MenuItem;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.dashboard.attendance.AttendanceFragment;
 import io.github.wulkanowy.activity.dashboard.board.BoardFragment;
+import io.github.wulkanowy.activity.dashboard.grades.GradesFragment;
 import io.github.wulkanowy.activity.dashboard.lessonplan.LessonPlanFragment;
-import io.github.wulkanowy.activity.dashboard.marks.MarksFragment;
 
 public class DashboardActivity extends AppCompatActivity {
 
-    private MarksFragment marksFragment = new MarksFragment();
+    private GradesFragment gradesFragment = new GradesFragment();
     private AttendanceFragment attendanceFragment = new AttendanceFragment();
     private BoardFragment boardFragment = new BoardFragment();
     private LessonPlanFragment lessonPlanFragment = new LessonPlanFragment();
@@ -31,7 +31,7 @@ public class DashboardActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_marks:
                     setTitle(R.string.title_marks);
-                    transaction.replace(R.id.fragment_container, marksFragment);
+                    transaction.replace(R.id.fragment_container, gradesFragment);
                     transaction.commit();
                     return true;
 

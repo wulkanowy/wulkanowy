@@ -18,7 +18,7 @@ public class SubjectsList extends Vulcan {
 
     private String subjectsPageUrl = "Oceny/Wszystkie?details=1";
 
-    private List<Subject> subjects = new ArrayList<>();
+    private List<Subject> subjects;
 
     public SubjectsList(StudentAndParent snp) {
         this.snp = snp;
@@ -28,6 +28,8 @@ public class SubjectsList extends Vulcan {
         Document subjectPage = snp.getSnPPageDocument(subjectsPageUrl);
 
         Elements rows = subjectPage.select(".ocenyZwykle-table > tbody > tr");
+
+        subjects = new ArrayList<>();
 
         for (Element subjectRow : rows) {
             subjects.add(new Subject()

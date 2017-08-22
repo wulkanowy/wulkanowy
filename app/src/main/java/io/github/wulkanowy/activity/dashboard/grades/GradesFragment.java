@@ -1,9 +1,10 @@
-package io.github.wulkanowy.activity.dashboard.marks;
+package io.github.wulkanowy.activity.dashboard.grades;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,14 +27,14 @@ import io.github.wulkanowy.database.accounts.AccountsDatabase;
 import io.github.wulkanowy.database.grades.GradesDatabase;
 import io.github.wulkanowy.database.subjects.SubjectsDatabase;
 
-public class MarksFragment extends Fragment {
+public class GradesFragment extends Fragment {
 
-    private ArrayList<String> subjectsName = new ArrayList<>();
-    private List<SubjectParent> subjectParentList;
+    List<Subject> subjectList = new ArrayList<>();
+    List<SubjectWithGrades> subjectWithGradesList = new ArrayList<>();
 
     private View view;
 
-    public MarksFragment() {
+    public GradesFragment() {
     }
 
     @Override
@@ -42,12 +43,7 @@ public class MarksFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_marks, container, false);
 
-        if (subjectsName.size() == 0) {
-            new MarksTask(container.getContext()).execute();
-        } else if (subjectsName.size() > 1) {
-            createGrid();
-            view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-        }
+        new MarksTask(container.getContext()).execute();
 
         return view;
     }
@@ -55,8 +51,9 @@ public class MarksFragment extends Fragment {
     public void createGrid() {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.subject_grade_recycler);
-        SubjectGradeAdapter subjectGradeAdapter = new SubjectGradeAdapter(subjectParentList, view.getContext());
-        recyclerView.setAdapter(subjectGradeAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setAdapter(new GradesAdapter(subjectWithGradesList));
+
     }
 
     public class MarksTask extends AsyncTask<Void, Void, Void> {
@@ -95,21 +92,21 @@ public class MarksFragment extends Fragment {
                 SubjectsDatabase subjectsDatabase = new SubjectsDatabase(mContext);
                 subjectsDatabase.open();
                 subjectsDatabase.put(subjectsList.getAll());
-                List<Subject> subjects = subjectsDatabase.getAllSubjectsNames();
+                subjectList = subjectsList.getAll();
+                subjectsDatabase.close();
+
 
                 GradesList gradesList = new GradesList(snp);
                 GradesDatabase gradesDatabase = new GradesDatabase(mContext);
+                gradesDatabase.open();
                 gradesDatabase.put(gradesList.getAll());
 
-                for (Subject subject : subjects) {
-                    SubjectParent subjectParent = new SubjectParent()
-                            .setName(subject.getName())
-                            .setChildItemList(gradesDatabase.getSubjectGrades(userId, subjectsDatabase.getSubjectId(subject.getName())));
-                    subjectParentList.add(subjectParent);
-
+                for (Subject subject : subjectList) {
+                    subjectWithGradesList.add(new SubjectWithGrades(subject.getName(),
+                            gradesDatabase.getSubjectGradesChild(userId, SubjectsDatabase.getSubjectId(subject.getName()))));
                 }
 
-
+                gradesDatabase.close();
 
 
             } catch (Exception e) {

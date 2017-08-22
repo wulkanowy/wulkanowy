@@ -11,6 +11,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.wulkanowy.activity.dashboard.grades.GradeChild;
 import io.github.wulkanowy.api.grades.Grade;
 import io.github.wulkanowy.database.DatabaseAdapter;
 import io.github.wulkanowy.database.DatabaseComparer;
@@ -162,6 +163,36 @@ public class GradesDatabase extends DatabaseAdapter {
 
         while (cursor.moveToNext()) {
             Grade grade = new Grade();
+            grade.setId(cursor.getInt(0));
+            grade.setUserID(cursor.getInt(1));
+            grade.setSubjectID(cursor.getInt(2));
+            grade.setSubject(cursor.getString(3));
+            grade.setValue(cursor.getString(4));
+            grade.setColor(cursor.getString(5));
+            grade.setSymbol(cursor.getString(6));
+            grade.setDescription(cursor.getString(7));
+            grade.setWeight(cursor.getString(8));
+            grade.setDate(cursor.getString(9));
+            grade.setTeacher(cursor.getString(10));
+            grade.setSemester(cursor.getString(11));
+            grade.setIsNew(cursor.getInt(12) != 0);
+            gradesList.add(grade);
+        }
+
+        cursor.close();
+        return gradesList;
+    }
+
+    public List<GradeChild> getSubjectGradesChild(long userId, long subjectId) throws SQLException {
+
+        String whereExec = "SELECT * FROM " + grades + " WHERE " + userIdText + "=? AND " + subjectIdText + "=?";
+
+        List<GradeChild> gradesList = new ArrayList<>();
+
+        Cursor cursor = database.rawQuery(whereExec, new String[]{String.valueOf(userId), String.valueOf(subjectId)});
+
+        while (cursor.moveToNext()) {
+            GradeChild grade = new GradeChild();
             grade.setId(cursor.getInt(0));
             grade.setUserID(cursor.getInt(1));
             grade.setSubjectID(cursor.getInt(2));
