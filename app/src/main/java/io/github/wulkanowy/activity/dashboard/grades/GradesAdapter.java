@@ -4,6 +4,8 @@ package io.github.wulkanowy.activity.dashboard.grades;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
@@ -14,7 +16,8 @@ import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 import java.util.List;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.api.grades.Grade;
+
+import static android.view.animation.Animation.RELATIVE_TO_SELF;
 
 public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.SubjectViewHolder, GradesAdapter.GradeViewHolder> {
 
@@ -41,20 +44,40 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
     @Override
     public void onBindChildViewHolder(GradeViewHolder holder, int flatPosition, ExpandableGroup group, int childIndex) {
-        holder.bind((Grade) group.getItems().get(childIndex));
+        holder.bind((GradeItem) group.getItems().get(childIndex));
     }
 
     public class SubjectViewHolder extends GroupViewHolder {
 
         private TextView textView;
+        private ImageView imageView;
 
         public SubjectViewHolder(View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.subject_text);
+            imageView = (ImageView) itemView.findViewById(R.id.list_item_arrow);
         }
 
         public void bind(ExpandableGroup group) {
             textView.setText(group.getTitle());
+        }
+
+        @Override
+        public void expand() {
+            RotateAnimation rotate =
+                    new RotateAnimation(360, 180, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
+            rotate.setDuration(300);
+            rotate.setFillAfter(true);
+            imageView.setAnimation(rotate);
+        }
+
+        @Override
+        public void collapse() {
+            RotateAnimation rotate =
+                    new RotateAnimation(180, 360, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
+            rotate.setDuration(300);
+            rotate.setFillAfter(true);
+            imageView.setAnimation(rotate);
         }
     }
 
@@ -67,8 +90,9 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             textView = (TextView) itemView.findViewById(R.id.grade_text);
         }
 
-        public void bind(Grade grade) {
+        public void bind(GradeItem grade) {
             textView.setText(grade.getValue());
+            textView.setBackgroundResource(grade.getValueColor());
         }
     }
 }

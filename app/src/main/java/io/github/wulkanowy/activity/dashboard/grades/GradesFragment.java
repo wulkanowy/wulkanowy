@@ -103,7 +103,7 @@ public class GradesFragment extends Fragment {
 
                 for (Subject subject : subjectList) {
                     subjectWithGradesList.add(new SubjectWithGrades(subject.getName(),
-                            gradesDatabase.getSubjectGradesChild(userId, SubjectsDatabase.getSubjectId(subject.getName()))));
+                            gradesDatabase.getSubjectGrades(userId, SubjectsDatabase.getSubjectId(subject.getName()))));
                 }
 
                 gradesDatabase.close();
