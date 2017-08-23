@@ -50,12 +50,13 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
     public class SubjectViewHolder extends GroupViewHolder {
 
         private TextView textView;
+
         private ImageView imageView;
 
         public SubjectViewHolder(View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.subject_text);
-            imageView = (ImageView) itemView.findViewById(R.id.list_item_arrow);
+            imageView = (ImageView) itemView.findViewById(R.id.group_indicator);
         }
 
         public void bind(ExpandableGroup group) {

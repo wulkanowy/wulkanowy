@@ -29,13 +29,9 @@ import io.github.wulkanowy.database.subjects.SubjectsDatabase;
 
 public class GradesFragment extends Fragment {
 
-    List<Subject> subjectList = new ArrayList<>();
-    List<SubjectWithGrades> subjectWithGradesList = new ArrayList<>();
+    private List<SubjectWithGrades> subjectWithGradesList = new ArrayList<>();
 
     private View view;
-
-    public GradesFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,7 +88,6 @@ public class GradesFragment extends Fragment {
                 SubjectsDatabase subjectsDatabase = new SubjectsDatabase(mContext);
                 subjectsDatabase.open();
                 subjectsDatabase.put(subjectsList.getAll());
-                subjectList = subjectsList.getAll();
                 subjectsDatabase.close();
 
 
@@ -101,9 +96,11 @@ public class GradesFragment extends Fragment {
                 gradesDatabase.open();
                 gradesDatabase.put(gradesList.getAll());
 
-                for (Subject subject : subjectList) {
-                    subjectWithGradesList.add(new SubjectWithGrades(subject.getName(),
-                            gradesDatabase.getSubjectGrades(userId, SubjectsDatabase.getSubjectId(subject.getName()))));
+                for (Subject subject : subjectsList.getAll()) {
+                    List<GradeItem> gradeItems = gradesDatabase.getSubjectGrades(userId, SubjectsDatabase.getSubjectId(subject.getName()));
+                    if (gradeItems.size() > 0) {
+                        subjectWithGradesList.add(new SubjectWithGrades(subject.getName(), gradeItems));
+                    }
                 }
 
                 gradesDatabase.close();

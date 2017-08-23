@@ -18,22 +18,21 @@ public class GradeItem extends Grade implements Parcelable {
     }
 
     public int getValueColor() {
-        if (value.equals("6") || value.equals("6-") || value.equals("6+")) {
+        if ("6".equals(value) || "6-".equals(value) || "6+".equals(value)) {
             return R.color.six_grade;
-        } else if (value.equals("5") || value.equals("5-") || value.equals("5+")) {
+        } else if ("5".equals(value) || "5-".equals(value) || "5+".equals(value)) {
             return R.color.five_grade;
-        } else if (value.equals("4") || value.equals("4-") || value.equals("4+")) {
+        } else if ("4".equals(value) || "4-".equals(value) || "4+".equals(value)) {
             return R.color.four_grade;
-        } else if (value.equals("3") || value.equals("3-") || value.equals("3+")) {
+        } else if ("3".equals(value) || "3-".equals(value) || "3+".equals(value)) {
             return R.color.three_grade;
-        } else if (value.equals("2") || value.equals("2-") || value.equals("2+")) {
+        } else if ("2".equals(value) || "2-".equals(value) || "2+".equals(value)) {
             return R.color.two_grade;
-        } else if (value.equals("1") || value.equals("1-") || value.equals("1+")) {
+        } else if ("1".equals(value) || "1-".equals(value) || "1+".equals(value)) {
             return R.color.one_grade;
         } else {
             return R.color.default_grade;
         }
-
     }
 
     @Override
