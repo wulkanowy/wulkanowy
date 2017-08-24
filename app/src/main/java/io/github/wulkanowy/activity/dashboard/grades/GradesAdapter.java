@@ -49,18 +49,18 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
     public class SubjectViewHolder extends GroupViewHolder {
 
-        private TextView textView;
+        private TextView subjectName;
 
-        private ImageView imageView;
+        private ImageView indicator;
 
         public SubjectViewHolder(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.subject_text);
-            imageView = (ImageView) itemView.findViewById(R.id.group_indicator);
+            subjectName = (TextView) itemView.findViewById(R.id.subject_text);
+            indicator = (ImageView) itemView.findViewById(R.id.group_indicator);
         }
 
         public void bind(ExpandableGroup group) {
-            textView.setText(group.getTitle());
+            subjectName.setText(group.getTitle());
         }
 
         @Override
@@ -69,7 +69,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
                     new RotateAnimation(360, 180, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
             rotate.setDuration(300);
             rotate.setFillAfter(true);
-            imageView.setAnimation(rotate);
+            indicator.setAnimation(rotate);
         }
 
         @Override
@@ -78,22 +78,34 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
                     new RotateAnimation(180, 360, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
             rotate.setDuration(300);
             rotate.setFillAfter(true);
-            imageView.setAnimation(rotate);
+            indicator.setAnimation(rotate);
         }
     }
 
     public class GradeViewHolder extends ChildViewHolder {
 
-        private TextView textView;
+        private TextView gradeValue;
+        private TextView descriptionGrade;
+        private TextView dateGrade;
 
         public GradeViewHolder(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.grade_text);
+            gradeValue = (TextView) itemView.findViewById(R.id.grade_text);
+            descriptionGrade = (TextView) itemView.findViewById(R.id.description_grade_text);
+            dateGrade = (TextView) itemView.findViewById(R.id.grade_date_text);
         }
 
         public void bind(GradeItem grade) {
-            textView.setText(grade.getValue());
-            textView.setBackgroundResource(grade.getValueColor());
+            gradeValue.setText(grade.getValue());
+            gradeValue.setBackgroundResource(grade.getValueColor());
+            dateGrade.setText(grade.getDate());
+
+            if (grade.getDescription().equals("") || grade.getDescription() == null) {
+                descriptionGrade.setText(grade.getSymbol());
+            } else {
+                descriptionGrade.setText(grade.getDescription());
+            }
+
         }
     }
 }
