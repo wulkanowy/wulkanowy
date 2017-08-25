@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.thoughtbot.expandablerecyclerview.listeners.GroupExpandCollapseListener;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.io.FileInputStream;
@@ -61,7 +60,7 @@ public class GradesFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.subject_grade_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         gradesAdapter = new GradesAdapter(subjectWithGradesList);
-        gradesAdapter.setOnGroupExpandCollapseListener(new GroupExpandCollapseListener() {
+        /*gradesAdapter.setOnGroupExpandCollapseListener(new GroupExpandCollapseListener() {
             @Override
             public void onGroupExpanded(ExpandableGroup group) {
                 if (expandableGroup == null) {
@@ -79,7 +78,7 @@ public class GradesFragment extends Fragment {
                 }
 
             }
-        });
+        });*/
         recyclerView.setAdapter(gradesAdapter);
 
     }

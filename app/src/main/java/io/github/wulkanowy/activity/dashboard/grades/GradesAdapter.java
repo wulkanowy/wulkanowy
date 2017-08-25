@@ -4,6 +4,7 @@ package io.github.wulkanowy.activity.dashboard.grades;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,34 +52,75 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
         private TextView subjectName;
 
-        private ImageView indicator;
+        private ImageView indicatorDown;
+        private ImageView indicatorUp;
 
         public SubjectViewHolder(View itemView) {
             super(itemView);
             subjectName = (TextView) itemView.findViewById(R.id.subject_text);
-            indicator = (ImageView) itemView.findViewById(R.id.group_indicator);
+            indicatorDown = (ImageView) itemView.findViewById(R.id.group_indicator_down);
+            indicatorUp = (ImageView) itemView.findViewById(R.id.group_indicator_up);
+
         }
 
         public void bind(ExpandableGroup group) {
             subjectName.setText(group.getTitle());
+
+            if (isGroupExpanded(group)) {
+                indicatorDown.setVisibility(View.INVISIBLE);
+                indicatorUp.setVisibility(View.VISIBLE);
+            } else {
+                indicatorDown.setVisibility(View.VISIBLE);
+                indicatorUp.setVisibility(View.INVISIBLE);
+            }
         }
 
         @Override
         public void expand() {
             RotateAnimation rotate =
-                    new RotateAnimation(360, 180, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
+                    new RotateAnimation(-360, -180, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
             rotate.setDuration(300);
-            rotate.setFillAfter(true);
-            indicator.setAnimation(rotate);
+            rotate.setFillAfter(false);
+            rotate.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    indicatorDown.setVisibility(View.INVISIBLE);
+                    indicatorUp.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+            indicatorDown.setAnimation(rotate);
         }
 
         @Override
         public void collapse() {
             RotateAnimation rotate =
-                    new RotateAnimation(180, 360, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
+                    new RotateAnimation(360, 180, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
             rotate.setDuration(300);
-            rotate.setFillAfter(true);
-            indicator.setAnimation(rotate);
+            rotate.setFillAfter(false);
+            rotate.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    indicatorDown.setVisibility(View.VISIBLE);
+                    indicatorUp.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+            indicatorUp.setAnimation(rotate);
         }
     }
 
