@@ -1,6 +1,9 @@
 package io.github.wulkanowy.activity.dashboard.grades;
 
 
+import android.app.Activity;
+import android.app.DialogFragment;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +25,11 @@ import static android.view.animation.Animation.RELATIVE_TO_SELF;
 
 public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.SubjectViewHolder, GradesAdapter.GradeViewHolder> {
 
-    public GradesAdapter(List<? extends ExpandableGroup> groups) {
+    private Activity activity;
+
+    public GradesAdapter(List<? extends ExpandableGroup> groups, Context context) {
         super(groups);
+        activity = (Activity) context;
     }
 
     @Override
@@ -130,20 +136,36 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
         private TextView descriptionGrade;
         private TextView dateGrade;
 
-        public GradeViewHolder(View itemView) {
+        private GradeItem grade;
+
+        public GradeViewHolder(final View itemView) {
             super(itemView);
             gradeValue = (TextView) itemView.findViewById(R.id.grade_text);
             descriptionGrade = (TextView) itemView.findViewById(R.id.description_grade_text);
             dateGrade = (TextView) itemView.findViewById(R.id.grade_date_text);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    GradesDialogFragment gradesDialogFragment = GradesDialogFragment.newInstance(grade);
+                    gradesDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+                    gradesDialogFragment.show(activity.getFragmentManager(), grade.toString());
+                }
+            });
         }
 
         public void bind(GradeItem grade) {
+            this.grade = grade;
             gradeValue.setText(grade.getValue());
             gradeValue.setBackgroundResource(grade.getValueColor());
             dateGrade.setText(grade.getDate());
 
             if (grade.getDescription().equals("") || grade.getDescription() == null) {
-                descriptionGrade.setText(grade.getSymbol());
+                if (!grade.getSymbol().equals("")) {
+                    descriptionGrade.setText(grade.getSymbol());
+                } else {
+                    descriptionGrade.setText(R.string.noDescription_text);
+                }
             } else {
                 descriptionGrade.setText(grade.getDescription());
             }

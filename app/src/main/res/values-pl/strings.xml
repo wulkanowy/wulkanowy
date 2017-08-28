@@ -26,4 +26,16 @@
     <string name="encrypt_failed">Szyfrowanie nie powiodło się. Automatyczne logowanie zostało wyłączone</string>
     <string name="decrypt_failed">Deszyfrowanie nie powiodło się. Automatyczne logowanie zostało wyłączone</string>
     <string name="version_text">Wersja\u0020</string>
+    <string name="dialog_description_text">Opis</string>
+    <string name="dialog_weight_text">Waga</string>
+    <string name="noDescription_text">Brak opisu</string>
+    <string name="dialog_teacher_text">Nauczyciel</string>
+    <string name="dialog_date_text">Data</string>
+    <string name="dialog_color_text">Kolor</string>
+    <string name="color_black_text">Czarny</string>
+    <string name="color_red_text">Czerwony</string>
+    <string name="color_blue_text">Niebieski</string>
+    <string name="color_green_text">Zielony</string>
+    <string name="noColor_text">Brak koloru</string>
+    <string name="ok_text">OK</string>
 </resources>

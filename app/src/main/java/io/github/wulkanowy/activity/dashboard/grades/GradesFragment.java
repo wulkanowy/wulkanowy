@@ -59,7 +59,7 @@ public class GradesFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.subject_grade_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        gradesAdapter = new GradesAdapter(subjectWithGradesList);
+        gradesAdapter = new GradesAdapter(subjectWithGradesList, view.getContext());
         /*gradesAdapter.setOnGroupExpandCollapseListener(new GroupExpandCollapseListener() {
             @Override
             public void onGroupExpanded(ExpandableGroup group) {
