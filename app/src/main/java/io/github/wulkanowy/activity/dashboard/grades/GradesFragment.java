@@ -33,50 +33,27 @@ public class GradesFragment extends Fragment {
 
     private View view;
 
-    //private ExpandableGroup expandableGroup = null;
-
-    //private GradesAdapter gradesAdapter;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_marks, container, false);
+        view = inflater.inflate(R.layout.fragment_grades, container, false);
 
         if (subjectWithGradesList.size() == 0) {
             new MarksTask(container.getContext()).execute();
         } else if (subjectWithGradesList.size() > 1) {
-            createGrid();
+            createExpListView();
             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
 
         return view;
     }
 
-    public void createGrid() {
+    public void createExpListView() {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.subject_grade_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         GradesAdapter gradesAdapter = new GradesAdapter(subjectWithGradesList, view.getContext());
-        /*gradesAdapter.setOnGroupExpandCollapseListener(new GroupExpandCollapseListener() {
-            @Override
-            public void onGroupExpanded(ExpandableGroup group) {
-                if (expandableGroup == null) {
-                    expandableGroup = group;
-                } else if (!expandableGroup.equals(group)) {
-                    gradesAdapter.toggleGroup(expandableGroup);
-                    expandableGroup = group;
-                }
-            }
-
-            @Override
-            public void onGroupCollapsed(ExpandableGroup group) {
-                if (group.equals(expandableGroup)) {
-                    expandableGroup = null;
-                }
-
-            }
-        });*/
         recyclerView.setAdapter(gradesAdapter);
 
     }
@@ -143,7 +120,7 @@ public class GradesFragment extends Fragment {
         }
 
         protected void onPostExecute(Void result) {
-            createGrid();
+            createExpListView();
 
             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
