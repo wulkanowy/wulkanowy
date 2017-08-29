@@ -35,9 +35,9 @@ public class GradesFragment extends Fragment {
 
     private View view;
 
-    ExpandableGroup expandableGroup = null;
+    private ExpandableGroup expandableGroup = null;
 
-    GradesAdapter gradesAdapter;
+    private GradesAdapter gradesAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

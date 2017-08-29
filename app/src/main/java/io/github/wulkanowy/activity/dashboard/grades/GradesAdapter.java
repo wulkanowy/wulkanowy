@@ -59,6 +59,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
         private TextView subjectName;
 
         private ImageView indicatorDown;
+
         private ImageView indicatorUp;
 
         public SubjectViewHolder(View itemView) {
@@ -133,7 +134,9 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
     public class GradeViewHolder extends ChildViewHolder {
 
         private TextView gradeValue;
+
         private TextView descriptionGrade;
+
         private TextView dateGrade;
 
         private GradeItem grade;

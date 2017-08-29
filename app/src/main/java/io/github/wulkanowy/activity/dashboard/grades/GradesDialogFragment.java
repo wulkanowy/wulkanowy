@@ -14,9 +14,6 @@ public class GradesDialogFragment extends DialogFragment {
 
     private GradeItem grade;
 
-    public GradesDialogFragment() {
-    }
-
     public static final GradesDialogFragment newInstance(GradeItem grade) {
         return new GradesDialogFragment().setGrade(grade);
     }

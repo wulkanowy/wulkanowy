@@ -6,51 +6,73 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="400dp"
-        android:minWidth="350dp"
+        android:minHeight="350dp"
+        android:minWidth="300dp"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:layout_marginTop="15dp">
 
-        <TextView
-            android:id="@+id/dialog_grade_text"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:gravity="center"
-            android:text="@string/app_name"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/description_dialog_text"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/dialog_description_text"
-            android:textSize="17sp" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/description_dialog_text_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:maxLines="3"
-            android:text="@string/noDescription_text"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/dialog_grade_text"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textSize="30sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
-        <TextView
-            android:id="@+id/weight_dialog_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/dialog_weight_text"
-            android:textSize="17sp" />
+            <TextView
+                android:id="@+id/description_dialog_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_description_text"
+                android:textSize="17sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
-        <TextView
-            android:id="@+id/weight_dialog_text_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:text="@string/title_marks"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/description_dialog_text_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:text="@string/noDescription_text"
+                android:layout_marginTop="3dp"
+                android:textSize="12sp"
+                android:layout_below="@+id/description_dialog_text"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:id="@+id/weight_dialog_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/description_dialog_text_value"
+                android:text="@string/dialog_weight_text"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/weight_dialog_text_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:text="@string/grades_text"
+                android:layout_marginTop="3dp"
+                android:layout_below="@+id/weight_dialog_text"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/teacher_dialog_text"
@@ -65,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="@string/title_marks"
+            android:text="@string/grades_text"
             android:textSize="12sp" />
 
         <TextView
@@ -81,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="@string/title_marks"
+            android:text="@string/grades_text"
             android:textSize="12sp" />
 
         <TextView
@@ -97,7 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="@string/title_marks"
+            android:text="@string/grades_text"
             android:textSize="12sp" />
 
         <RelativeLayout
@@ -108,14 +130,14 @@
 
             <TextView
                 android:id="@+id/OK_dialog"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:gravity="center"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginEnd="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:text="@string/ok_text"

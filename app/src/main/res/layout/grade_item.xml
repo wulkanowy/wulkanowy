@@ -8,6 +8,7 @@
     android:layout_marginRight="5dp"
     android:layout_marginStart="5dp"
     android:layout_marginTop="5dp"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
     card_view:cardElevation="0dp">
 
     <RelativeLayout
@@ -51,7 +52,7 @@
             android:layout_alignBottom="@+id/grade_text"
             android:layout_alignLeft="@+id/description_grade_text"
             android:layout_alignStart="@+id/description_grade_text"
-            android:text="@string/title_marks"
+            android:text="@string/grades_text"
             android:textSize="13sp" />
 
     </RelativeLayout>

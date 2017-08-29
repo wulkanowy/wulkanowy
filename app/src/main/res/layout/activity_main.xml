@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:hint="@string/email_hint"
+            android:hint="@string/email_hint_text"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -38,7 +38,7 @@
             android:layout_marginTop="10dp"
             android:ems="10"
             android:fontFamily="sans-serif"
-            android:hint="@string/pass_hint"
+            android:hint="@string/pass_hint_text"
             android:inputType="textPassword"
             tools:ignore="UnusedAttribute" />
 
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:hint="@string/county_hint"
+            android:hint="@string/county_hint_text"
             android:imeOptions="actionDone"
             android:inputType="text" />
 
@@ -59,7 +59,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:onClick="login"
-            android:text="@string/login_button" />
+            android:text="@string/login_button_text" />
 
     </LinearLayout>
 </ScrollView>
