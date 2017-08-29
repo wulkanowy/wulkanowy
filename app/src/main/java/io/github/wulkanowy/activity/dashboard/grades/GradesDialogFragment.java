@@ -28,6 +28,7 @@ public class GradesDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.grades_dialog, container, false);
 
         TextView gradeText = (TextView) view.findViewById(R.id.dialog_grade_text);
+        TextView subjectText = (TextView) view.findViewById(R.id.subject_dialog_text_value);
         TextView descriptionText = (TextView) view.findViewById(R.id.description_dialog_text_value);
         TextView weightText = (TextView) view.findViewById(R.id.weight_dialog_text_value);
         TextView teacherText = (TextView) view.findViewById(R.id.teacher_dialog_text_value);
@@ -37,6 +38,7 @@ public class GradesDialogFragment extends DialogFragment {
 
         gradeText.setText(grade.getValue());
         gradeText.setBackgroundResource(grade.getValueColor());
+        subjectText.setText(grade.getSubject());
         weightText.setText(grade.getWeight());
         dateText.setText(grade.getDate());
         colorText.setText(colorHexToColorName(grade.getColor()));

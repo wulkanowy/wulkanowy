@@ -91,6 +91,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             rotate.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
+                    //Empty method definition
                 }
 
                 @Override
@@ -101,6 +102,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
                 @Override
                 public void onAnimationRepeat(Animation animation) {
+                    //Empty method definition
                 }
             });
             indicatorDown.setAnimation(rotate);
@@ -115,6 +117,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             rotate.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
+                    //Empty method definition
                 }
 
                 @Override
@@ -125,6 +128,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
                 @Override
                 public void onAnimationRepeat(Animation animation) {
+                    //Empty method definition
                 }
             });
             indicatorUp.setAnimation(rotate);

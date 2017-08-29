@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
-
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -35,9 +33,9 @@ public class GradesFragment extends Fragment {
 
     private View view;
 
-    private ExpandableGroup expandableGroup = null;
+    //private ExpandableGroup expandableGroup = null;
 
-    private GradesAdapter gradesAdapter;
+    //private GradesAdapter gradesAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,7 +57,7 @@ public class GradesFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.subject_grade_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        gradesAdapter = new GradesAdapter(subjectWithGradesList, view.getContext());
+        GradesAdapter gradesAdapter = new GradesAdapter(subjectWithGradesList, view.getContext());
         /*gradesAdapter.setOnGroupExpandCollapseListener(new GroupExpandCollapseListener() {
             @Override
             public void onGroupExpanded(ExpandableGroup group) {
