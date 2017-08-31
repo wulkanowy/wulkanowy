@@ -107,7 +107,7 @@ public class GradesFragment extends Fragment {
                 gradesDatabase.open();
                 gradesDatabase.put(gradesList.getAll());
 
-                for (Subject subject : subjectsList.getAll()) {
+                for (Subject subject : subjectsDatabase.getAllSubjectsNames()) {
                     List<GradeItem> gradeItems = gradesDatabase.getSubjectGrades(userId, SubjectsDatabase.getSubjectId(subject.getName()));
                     if (gradeItems.size() > 0) {
                         subjectWithGradesList.add(new SubjectWithGrades(subject.getName(), gradeItems));
