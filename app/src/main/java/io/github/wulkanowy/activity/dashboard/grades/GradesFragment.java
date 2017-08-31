@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +64,7 @@ public class GradesFragment extends Fragment {
     public class MarksTask extends AsyncTask<Void, Void, Void> {
 
         private Context mContext;
-        private Map<String, String> loginCookies;
+        private Map<String, String> loginCookies = new HashMap<>();
 
         MarksTask(Context context) {
             mContext = context;
@@ -71,14 +72,14 @@ public class GradesFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            long userId = mContext.getSharedPreferences("LoginData", mContext.MODE_PRIVATE).getLong("isLogin", 0);
+            long userId = mContext.getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("isLogin", 0);
 
             try {
                 Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
                         .setPrettyPrinting().create();
                 CookiesDatabase cookiesDatabase = new CookiesDatabase(mContext);
                 cookiesDatabase.open();
-                loginCookies = (Map<String, String>) gson.fromJson(cookiesDatabase.getCookies(), Map.class);
+                loginCookies = gson.fromJson(cookiesDatabase.getCookies(), loginCookies.getClass());
                 cookiesDatabase.close();
             } catch (Exception e) {
                 e.printStackTrace();
