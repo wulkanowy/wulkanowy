@@ -36,6 +36,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "teacher TEXT, " +
             "semester INTEGER, " +
             "isNew INTEGER );";
+    public final String COOKIES_TABLE = "CREATE TABLE IF NOT EXISTS cookies( " +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "cookies TEXT );";
 
     public final String DROP_TABLE = "DROP TABLE IF EXISTS ";
 
@@ -48,6 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(ACCOUNT_TABLE);
         db.execSQL(SUBJECT_TABLE);
         db.execSQL(GRADE_TABLE);
+        db.execSQL(COOKIES_TABLE);
         Log.d(DEBUG_TAG, "Create database");
     }
 
@@ -56,6 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DROP_TABLE + "accounts");
         db.execSQL(DROP_TABLE + "subjects");
         db.execSQL(DROP_TABLE + "grades");
+        db.execSQL(DROP_TABLE + "cookies");
         onCreate(db);
         Log.d(DEBUG_TAG, "Database upgrade from ver." + oldVersion + " to ver." + newVersion);
     }
