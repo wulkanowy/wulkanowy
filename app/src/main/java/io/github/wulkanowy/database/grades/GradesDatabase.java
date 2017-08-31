@@ -19,7 +19,6 @@ import io.github.wulkanowy.database.subjects.SubjectsDatabase;
 
 public class GradesDatabase extends DatabaseAdapter {
 
-    private String idText = "id";
     private String userIdText = "userID";
     private String subjectIdText = "subjectID";
     private String subject = "subject";
