@@ -9,9 +9,13 @@ import android.util.Log;
 public class DatabaseAdapter {
 
     private final String DATABASE_NAME = "accountdatabase.db";
+
     private final int DATABASE_VERSION = 3;
+
     public static SQLiteDatabase database;
+
     private DatabaseHelper databaseHelper;
+
     public Context context;
 
     public DatabaseAdapter(Context context) {

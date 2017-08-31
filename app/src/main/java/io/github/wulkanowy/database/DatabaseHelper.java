@@ -9,12 +9,14 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public final static String DEBUG_TAG = "SQLiteWulkanowyDatabase";
+
     public final String ACCOUNT_TABLE = "CREATE TABLE IF NOT EXISTS accounts( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "name TEXT, " +
             "email TEXT," +
             "password TEXT, " +
             "county TEXT );";
+
     public final String SUBJECT_TABLE = "CREATE TABLE IF NOT EXISTS subjects( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "name TEXT, " +
@@ -22,6 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "finalRating1 TEXT, " +
             "predictedRating2 TEXT, " +
             "finalRating2 TEXT );";
+
     public final String GRADE_TABLE = "CREATE TABLE IF NOT EXISTS grades( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "userID INTEGER, " +
@@ -36,6 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "teacher TEXT, " +
             "semester INTEGER, " +
             "isNew INTEGER );";
+
     public final String COOKIES_TABLE = "CREATE TABLE IF NOT EXISTS cookies( " +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "cookies TEXT );";
