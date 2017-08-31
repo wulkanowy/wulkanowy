@@ -64,6 +64,7 @@ public class GradesFragment extends Fragment {
     public class MarksTask extends AsyncTask<Void, Void, Void> {
 
         private Context mContext;
+        
         private Map<String, String> loginCookies = new HashMap<>();
 
         MarksTask(Context context) {
