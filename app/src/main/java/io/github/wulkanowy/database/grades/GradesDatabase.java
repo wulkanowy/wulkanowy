@@ -96,7 +96,7 @@ public class GradesDatabase extends DatabaseAdapter {
 
     public List<GradeItem> getSubjectGrades(long userId, long subjectId) throws SQLException {
 
-        String exec = "SELECT " + grades + ".*, strftime('%d-%m-%Y', " + date + ") " +
+        String exec = "SELECT " + grades + ".*, strftime('%d.%m.%Y', " + date + ") " +
                 "FROM " + grades + " WHERE " + userIdText + "=? AND "
                 + subjectIdText + "=? ORDER BY " + date + " DESC";
 
@@ -130,7 +130,7 @@ public class GradesDatabase extends DatabaseAdapter {
 
         List<Grade> gradesList = new ArrayList<>();
 
-        String exec = "SELECT " + grades + ".*, strftime('%d-%m-%Y', " + date + ") " +
+        String exec = "SELECT " + grades + ".*, strftime('%d.%m.%Y', " + date + ") " +
                 " FROM " + grades + " WHERE " + userIdText + "=? ORDER BY " + date + " DESC";
 
         Cursor cursor = database.rawQuery(exec, new String[]{String.valueOf(context.getSharedPreferences("LoginData", context.MODE_PRIVATE).getLong("isLogin", 0))});
