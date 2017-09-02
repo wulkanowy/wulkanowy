@@ -1,4 +1,4 @@
-package io.github.wulkanowy.activity.services;
+package io.github.wulkanowy.services;
 
 public class NoTableException extends Exception {
 }

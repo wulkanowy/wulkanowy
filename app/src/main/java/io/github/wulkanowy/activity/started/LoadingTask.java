@@ -15,8 +15,8 @@ import java.net.SocketAddress;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.activity.main.MainActivity;
-import io.github.wulkanowy.activity.services.NoTableException;
-import io.github.wulkanowy.activity.services.SyncData;
+import io.github.wulkanowy.services.NoTableException;
+import io.github.wulkanowy.services.SyncData;
 
 public class LoadingTask extends AsyncTask<Void, Void, Integer> {
 

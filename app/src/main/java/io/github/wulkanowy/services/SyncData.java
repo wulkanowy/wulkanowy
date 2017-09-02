@@ -1,4 +1,4 @@
-package io.github.wulkanowy.activity.services;
+package io.github.wulkanowy.services;
 
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +46,8 @@ public class SyncData {
     }
 
     public void syncGradesAndSubjects() {
+
+        userId = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("isLogin", 0);
 
         try {
             Gson gson = new GsonBuilder().enableComplexMapKeySerialization()

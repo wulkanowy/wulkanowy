@@ -8,13 +8,16 @@ import android.widget.Toast;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
-import io.github.wulkanowy.activity.services.SyncData;
+import io.github.wulkanowy.services.SyncData;
+import io.github.wulkanowy.services.SyncReceiver;
 
 public class LoginTask extends AsyncTask<String, Integer, Integer> {
 
     private Context context;
 
     private ProgressDialog progress;
+
+    private SyncData syncData;
 
     public LoginTask(Context context) {
         this.context = context;
@@ -34,12 +37,16 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     @Override
     protected Integer doInBackground(String... credentials) {
 
-        SyncData syncData = new SyncData(context);
-        return syncData.loginNewUser(credentials[0], credentials[1], credentials[2]);
+        syncData = new SyncData(context);
+        Integer messageID = syncData.loginNewUser(credentials[0], credentials[1], credentials[2]);
+        return messageID;
     }
 
     protected void onPostExecute(Integer messageID) {
         super.onPostExecute(messageID);
+
+        SyncReceiver syncReceiver = new SyncReceiver();
+        syncReceiver.setAlarm(context);
 
         progress.dismiss();
 
