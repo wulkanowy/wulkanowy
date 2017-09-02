@@ -1,9 +1,10 @@
 package io.github.wulkanowy.activity.started;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.database.SQLException;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -12,25 +13,34 @@ import java.net.Socket;
 import java.net.SocketAddress;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.activity.main.LoginTask;
+import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.activity.main.MainActivity;
-import io.github.wulkanowy.database.accounts.Account;
-import io.github.wulkanowy.database.accounts.AccountsDatabase;
-import io.github.wulkanowy.security.CryptoException;
-import io.github.wulkanowy.security.Safety;
+import io.github.wulkanowy.activity.services.NoTableException;
+import io.github.wulkanowy.activity.services.SyncData;
 
-public class LoadingTask extends AsyncTask<Void, Void, Void> {
+public class LoadingTask extends AsyncTask<Void, Void, Integer> {
 
-    private final boolean SAVE_DATA = true;
-    private Activity activity;
-    private boolean isOnline;
+    private Context context;
 
-    LoadingTask(Activity main) {
-        activity = main;
+    private ProgressDialog progress;
+
+    LoadingTask(Context context) {
+        this.context = context;
+        this.progress = new ProgressDialog(context);
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        progress.setTitle(context.getText(R.string.login_text));
+        progress.setMessage(context.getText(R.string.please_wait_text));
+        progress.setCancelable(false);
+        progress.show();
+    }
+
+    @Override
+    protected Integer doInBackground(Void... voids) {
 
         try {
             Thread.sleep(500);
@@ -38,20 +48,38 @@ public class LoadingTask extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
 
-        isOnline = isOnline();
+        if (isOnline()) {
 
-        return null;
+            SyncData syncData = new SyncData(context);
+
+            try {
+                return syncData.loginCurrentUser();
+            } catch (NoTableException e) {
+                Log.d("SignIn", "No table accounts");
+                return 0;
+            }
+        } else {
+            return -1;
+        }
     }
 
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(Integer result) {
+        super.onPostExecute(result);
 
-        if (isOnline) {
-            signIn();
-        } else {
-            Intent intent = new Intent(activity, MainActivity.class);
-            activity.startActivity(intent);
+        progress.dismiss();
 
-            Toast.makeText(activity, R.string.noInternet_text, Toast.LENGTH_SHORT).show();
+        if (result == -1) {
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+            Toast.makeText(context, R.string.noInternet_text, Toast.LENGTH_SHORT).show();
+        } else if (result != 0) {
+            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+
+            if (result == R.string.login_accepted_text || result == R.string.root_failed_text) {
+                Intent intent = new Intent(context, DashboardActivity.class);
+                context.startActivity(intent);
+            }
         }
     }
 
@@ -68,44 +96,5 @@ public class LoadingTask extends AsyncTask<Void, Void, Void> {
         } catch (IOException e) {
             return false;
         }
-    }
-
-    private boolean signIn() {
-
-        if (SAVE_DATA) {
-            AccountsDatabase accountsDatabase = new AccountsDatabase(activity);
-            accountsDatabase.open();
-
-            if (accountsDatabase.checkExist("accounts")) {
-                try {
-                    Account account = accountsDatabase.getAccount(activity.getSharedPreferences("LoginData", activity.MODE_PRIVATE).getLong("isLogin", 0));
-                    accountsDatabase.close();
-
-                    if (account != null) {
-
-                        Safety safety = new Safety(activity);
-
-                        new LoginTask(activity, false).execute(
-                                account.getEmail(),
-                                safety.decrypt(account.getEmail(), account.getPassword()),
-                                account.getSymbol()
-                        );
-
-                        return true;
-                    }
-                } catch (SQLException e) {
-                    Toast.makeText(activity, R.string.SQLite_ioError_text,
-                            Toast.LENGTH_LONG).show();
-                } catch (CryptoException e) {
-                    Toast.makeText(activity, R.string.decrypt_failed_text, Toast.LENGTH_LONG).show();
-                }
-            }
-            accountsDatabase.close();
-        }
-
-        Intent intent = new Intent(activity, MainActivity.class);
-        activity.startActivity(intent);
-
-        return false;
     }
 }

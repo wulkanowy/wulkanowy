@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!email.isEmpty() && !password.isEmpty() && !symbol.isEmpty()) {
-            new LoginTask(this, true).execute(email, password, symbol);
+            new LoginTask(this).execute(email, password, symbol);
         } else {
             Toast.makeText(this, R.string.data_text, Toast.LENGTH_SHORT).show();
         }
