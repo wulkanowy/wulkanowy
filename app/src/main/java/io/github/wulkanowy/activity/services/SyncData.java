@@ -67,7 +67,7 @@ public class SyncData {
             Account account = accountsDatabase.getAccount(userId);
             accountsDatabase.close();
 
-            StudentAndParent snp = new StudentAndParent(cookies, account.getCounty());
+            StudentAndParent snp = new StudentAndParent(cookies, account.getSymbol());
             SubjectsList subjectsList = new SubjectsList(snp);
 
             SubjectsDatabase subjectsDatabase = new SubjectsDatabase(context);
@@ -102,7 +102,7 @@ public class SyncData {
                 login.login(
                         account.getEmail(),
                         safety.decrypt(account.getEmail(), account.getPassword()),
-                        account.getCounty()
+                        account.getSymbol()
                 );
             } catch (BadCredentialsException e) {
                 return R.string.login_bad_credentials_text;
@@ -182,7 +182,7 @@ public class SyncData {
                     .setName(firstAndLastName)
                     .setEmail(email)
                     .setPassword(safety.encrypt(email, password))
-                    .setCounty(symbol);
+                    .setSymbol(symbol);
 
             accountsDatabase.open();
             long idUser = accountsDatabase.put(account);
