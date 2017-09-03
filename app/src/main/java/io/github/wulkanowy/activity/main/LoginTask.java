@@ -6,10 +6,18 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.Constraint;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.RetryStrategy;
+import com.firebase.jobdispatcher.Trigger;
+
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.services.SyncData;
-import io.github.wulkanowy.services.SyncReceiver;
+import io.github.wulkanowy.services.SyncJob;
 
 public class LoginTask extends AsyncTask<String, Integer, Integer> {
 
@@ -38,15 +46,28 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     protected Integer doInBackground(String... credentials) {
 
         syncData = new SyncData(context);
-        Integer messageID = syncData.loginNewUser(credentials[0], credentials[1], credentials[2]);
-        return messageID;
+        int messageId = syncData.loginNewUser(credentials[0], credentials[1], credentials[2]);
+        syncData.syncGradesAndSubjects();
+        return messageId;
     }
 
     protected void onPostExecute(Integer messageID) {
         super.onPostExecute(messageID);
 
-        SyncReceiver syncReceiver = new SyncReceiver();
-        syncReceiver.setAlarm(context);
+        FirebaseJobDispatcher firebaseJobDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+
+        Job job = firebaseJobDispatcher.newJobBuilder()
+                .setService(SyncJob.class)
+                .setTag(SyncJob.UNIQE_TAG)
+                .setRecurring(true)
+                .setLifetime(Lifetime.FOREVER)
+                .setTrigger(Trigger.executionWindow(20, 30))
+                .setReplaceCurrent(true)
+                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
+                .setConstraints(Constraint.ON_ANY_NETWORK)
+                .build();
+
+        firebaseJobDispatcher.mustSchedule(job);
 
         progress.dismiss();
 

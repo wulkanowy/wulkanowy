@@ -82,6 +82,7 @@ public class SyncData {
             GradesDatabase gradesDatabase = new GradesDatabase(context);
             gradesDatabase.open();
             gradesDatabase.put(gradesList.getAll());
+            gradesDatabase.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

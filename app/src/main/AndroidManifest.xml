@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-sdk tools:overrideLibrary="com.thoughtbot.expandablerecyclerview" />
 
@@ -40,15 +39,12 @@
             android:label="@string/activity_dashboard_text" />
 
         <service
-            android:name=".services.SyncService"
-            android:exported="false" />
-
-        <receiver android:name=".services.SyncReceiver" />
-        <receiver android:name=".services.BootReciver">
+            android:name=".services.SyncJob"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
-        </receiver>
+        </service>
     </application>
 
 </manifest>
