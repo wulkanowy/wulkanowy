@@ -7,14 +7,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.firebase.jobdispatcher.Constraint;
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
-import com.firebase.jobdispatcher.Lifetime;
-import com.firebase.jobdispatcher.RetryStrategy;
-import com.firebase.jobdispatcher.Trigger;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -23,9 +15,9 @@ import java.net.SocketAddress;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.activity.main.MainActivity;
+import io.github.wulkanowy.services.JobHelper;
 import io.github.wulkanowy.services.NoTableException;
 import io.github.wulkanowy.services.SyncData;
-import io.github.wulkanowy.services.SyncJob;
 
 public class LoadingTask extends AsyncTask<Void, Void, Integer> {
 
@@ -75,20 +67,8 @@ public class LoadingTask extends AsyncTask<Void, Void, Integer> {
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
 
-        FirebaseJobDispatcher firebaseJobDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
-
-        Job job = firebaseJobDispatcher.newJobBuilder()
-                .setService(SyncJob.class)
-                .setTag(SyncJob.UNIQE_TAG)
-                .setRecurring(false)
-                .setLifetime(Lifetime.FOREVER)
-                .setTrigger(Trigger.executionWindow(20, 30))
-                .setReplaceCurrent(true)
-                .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
-                .setConstraints(Constraint.ON_ANY_NETWORK)
-                .build();
-
-        firebaseJobDispatcher.mustSchedule(job);
+        JobHelper jobHelper = new JobHelper();
+        jobHelper.scheduledJob(context);
 
         progress.dismiss();
 
