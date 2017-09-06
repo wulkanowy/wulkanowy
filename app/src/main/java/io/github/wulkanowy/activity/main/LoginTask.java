@@ -46,8 +46,7 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     protected void onPostExecute(Integer messageID) {
         super.onPostExecute(messageID);
 
-        JobHelper jobHelper = new JobHelper();
-        jobHelper.scheduledJob(context);
+        JobHelper.scheduledJob(context);
 
         progress.dismiss();
 

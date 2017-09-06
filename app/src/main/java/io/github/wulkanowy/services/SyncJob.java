@@ -17,8 +17,6 @@ public class SyncJob extends JobService {
 
     public static final int DEFAULT_INTERVAL_END = DEFAULT_INTERVAL_START + (5 * 60);
 
-    private int i = 0;
-
     SyncTask syncTask = new SyncTask();
 
     @Override
@@ -36,17 +34,20 @@ public class SyncJob extends JobService {
         return true;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
     private void sendNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
-                .setContentTitle("DEBUG NOTIFICATION " + String.valueOf(i))
+                .setContentTitle("DEBUG NOTIFICATION ")
                 .setContentText("DEBUG TEST")
                 .setSmallIcon(android.R.drawable.ic_dialog_alert);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         notificationManager.notify(123, builder.build());
-        i++;
     }
 
     private class SyncTask extends AsyncTask<JobParameters, Void, Void> {

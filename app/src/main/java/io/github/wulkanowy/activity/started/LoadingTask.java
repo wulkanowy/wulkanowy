@@ -67,8 +67,7 @@ public class LoadingTask extends AsyncTask<Void, Void, Integer> {
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
 
-        JobHelper jobHelper = new JobHelper();
-        jobHelper.scheduledJob(context);
+        JobHelper.scheduledJob(context);
 
         progress.dismiss();
 

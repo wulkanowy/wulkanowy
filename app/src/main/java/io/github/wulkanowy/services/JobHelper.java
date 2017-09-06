@@ -15,18 +15,18 @@ public class JobHelper {
 
     public static final String DEBUG_TAG = "SyncJob";
 
-    public void scheduledJob(Context context) {
+    public static void scheduledJob(Context context) {
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
-        dispatcher.schedule(createJob(dispatcher));
+        dispatcher.mustSchedule(createJob(dispatcher));
     }
 
-    private Job createJob(FirebaseJobDispatcher dispatcher) {
+    private static Job createJob(FirebaseJobDispatcher dispatcher) {
         return dispatcher.newJobBuilder()
                 .setLifetime(Lifetime.FOREVER)
                 .setService(SyncJob.class)
                 .setTag(SyncJob.UNIQE_TAG)
                 .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(20, 30))
+                .setTrigger(Trigger.executionWindow(SyncJob.DEFAULT_INTERVAL_START, SyncJob.DEFAULT_INTERVAL_END))
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setReplaceCurrent(true)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
