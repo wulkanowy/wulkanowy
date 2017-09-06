@@ -17,7 +17,7 @@ public class SyncJob extends JobService {
 
     public static final int DEFAULT_INTERVAL_END = DEFAULT_INTERVAL_START + (5 * 60);
 
-    SyncTask syncTask = new SyncTask();
+    private SyncTask syncTask = new SyncTask();
 
     @Override
     public boolean onStartJob(JobParameters params) {

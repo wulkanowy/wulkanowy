@@ -20,6 +20,7 @@ import io.github.wulkanowy.R;
 public class MainActivity extends AppCompatActivity {
 
     private float mTouchPosition;
+
     private float mReleasePosition;
 
     @Override
