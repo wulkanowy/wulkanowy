@@ -10,14 +10,13 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.services.JobHelper;
 import io.github.wulkanowy.services.SyncData;
+import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 public class LoginTask extends AsyncTask<String, Integer, Integer> {
 
     private Context context;
 
     private ProgressDialog progress;
-
-    private SyncData syncData;
 
     public LoginTask(Context context) {
         this.context = context;
@@ -37,10 +36,14 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     @Override
     protected Integer doInBackground(String... credentials) {
 
-        syncData = new SyncData(context);
-        int messageId = syncData.loginNewUser(credentials[0], credentials[1], credentials[2]);
-        syncData.syncGradesAndSubjects();
-        return messageId;
+        if (ConnectionUtilities.isOnline(context)) {
+            SyncData syncData = new SyncData(context);
+            int messageId = syncData.loginNewUser(credentials[0], credentials[1], credentials[2]);
+            syncData.syncGradesAndSubjects();
+            return messageId;
+        } else {
+            return R.string.noInternet_text;
+        }
     }
 
     protected void onPostExecute(Integer messageID) {
