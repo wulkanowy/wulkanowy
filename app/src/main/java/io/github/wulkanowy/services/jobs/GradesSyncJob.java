@@ -1,4 +1,4 @@
-package io.github.wulkanowy.services;
+package io.github.wulkanowy.services.jobs;
 
 
 import android.os.AsyncTask;
@@ -7,9 +7,13 @@ import android.util.Log;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
-public class SyncJob extends JobService {
+import io.github.wulkanowy.services.JobHelper;
+import io.github.wulkanowy.services.synchronisation.DataSynchronisation;
+import io.github.wulkanowy.services.synchronisation.VulcanSynchronisation;
 
-    public static final String UNIQUE_TAG = "SyncJob12345";
+public class GradesSyncJob extends JobService {
+
+    public static final String UNIQUE_TAG = "GradesSyncJob34512";
 
     public static final int DEFAULT_INTERVAL_START = 60 * 60;
 
@@ -35,12 +39,13 @@ public class SyncJob extends JobService {
 
         @Override
         protected Void doInBackground(JobParameters... params) {
-            SyncData syncData = new SyncData(getApplicationContext());
+            DataSynchronisation dataSynchronisation = new DataSynchronisation(getApplicationContext());
+            VulcanSynchronisation vulcanSynchronisation = new VulcanSynchronisation();
             try {
-                syncData.loginCurrentUser();
-                syncData.syncGradesAndSubjects();
-            } catch (NoTableException e) {
-                Log.d(JobHelper.DEBUG_TAG, "No table account");
+                vulcanSynchronisation.loginCurrentUser(getApplicationContext());
+                dataSynchronisation.syncGrades(vulcanSynchronisation);
+            } catch (Exception e) {
+                Log.e(JobHelper.DEBUG_TAG, "User logging in the background failed", e);
             } finally {
                 jobFinished(params[0], false);
             }

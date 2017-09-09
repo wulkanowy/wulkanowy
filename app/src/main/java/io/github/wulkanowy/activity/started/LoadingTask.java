@@ -7,7 +7,8 @@ import android.widget.Toast;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
-import io.github.wulkanowy.services.JobHelper;
+import io.github.wulkanowy.activity.main.MainActivity;
+import io.github.wulkanowy.services.jobs.GradesSync;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 public class LoadingTask extends AsyncTask<Void, Void, Boolean> {
@@ -33,13 +34,21 @@ public class LoadingTask extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean result) {
         super.onPostExecute(result);
 
-        JobHelper.scheduledJob(context);
-
         if (!result) {
             Toast.makeText(context, R.string.noInternet_text, Toast.LENGTH_LONG).show();
         }
 
-        Intent intent = new Intent(context, DashboardActivity.class);
-        context.startActivity(intent);
+        if (context.getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("isLogin", 0) == 0) {
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+        } else {
+            GradesSync gradesSync = new GradesSync();
+            gradesSync.scheduledJob(context);
+
+            Intent intent = new Intent(context, DashboardActivity.class);
+            context.startActivity(intent);
+        }
+
+
     }
 }

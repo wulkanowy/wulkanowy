@@ -11,7 +11,7 @@
     <uses-sdk tools:overrideLibrary="com.thoughtbot.expandablerecyclerview" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -39,7 +39,7 @@
             android:label="@string/activity_dashboard_text" />
 
         <service
-            android:name=".services.SyncJob"
+            android:name=".services.jobs.GradesSyncJob"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE">
             <intent-filter>

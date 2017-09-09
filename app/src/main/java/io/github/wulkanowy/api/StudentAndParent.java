@@ -1,7 +1,5 @@
 package io.github.wulkanowy.api;
 
-import android.util.Log;
-
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -33,7 +31,6 @@ public class StudentAndParent extends Vulcan {
         // get link to uonetplus-opiekun.vulcan.net.pl module
         Document startPage = getPageByUrl(startPageUrl.replace("{symbol}", symbol));
         Element studentTileLink = startPage.select(".panel.linkownia.pracownik.klient > a").first();
-        Log.w("TEST CRITICAL", studentTileLink.toString());
         String uonetPlusOpiekunUrl = studentTileLink.attr("href");
 
         //get context module cookie
