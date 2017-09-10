@@ -3,7 +3,7 @@ package io.github.wulkanowy.services.synchronisation;
 import android.content.Context;
 import android.util.Log;
 
-import io.github.wulkanowy.services.JobHelper;
+import io.github.wulkanowy.services.jobs.JobHelper;
 
 public class DataSynchronisation {
 

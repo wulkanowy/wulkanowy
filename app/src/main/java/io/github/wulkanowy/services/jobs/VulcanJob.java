@@ -6,17 +6,14 @@ import android.util.Log;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
-import io.github.wulkanowy.services.JobHelper;
-import io.github.wulkanowy.services.synchronisation.DataSynchronisation;
-import io.github.wulkanowy.services.synchronisation.VulcanSynchronisation;
+import java.io.IOException;
 
-public class SubjectsSyncJob extends JobService {
+import io.github.wulkanowy.api.login.AccountPermissionException;
+import io.github.wulkanowy.api.login.BadCredentialsException;
+import io.github.wulkanowy.api.login.LoginErrorException;
+import io.github.wulkanowy.security.CryptoException;
 
-    public static final String UNIQUE_TAG = "SubjectsSyncJobs34512";
-
-    public static final int DEFAULT_INTERVAL_START = 10;
-
-    public static final int DEFAULT_INTERVAL_END = DEFAULT_INTERVAL_START + 20;
+public abstract class VulcanJob extends JobService {
 
     private SyncTask syncTask = new SyncTask();
 
@@ -34,21 +31,20 @@ public class SubjectsSyncJob extends JobService {
         return true;
     }
 
+    public abstract void workToBePerformed() throws CryptoException, BadCredentialsException,
+            LoginErrorException, AccountPermissionException, IOException;
+
     private class SyncTask extends AsyncTask<JobParameters, Void, Void> {
 
         @Override
         protected Void doInBackground(com.firebase.jobdispatcher.JobParameters... params) {
-            DataSynchronisation dataSynchronisation = new DataSynchronisation(getApplicationContext());
-            VulcanSynchronisation vulcanSynchronisation = new VulcanSynchronisation();
             try {
-                vulcanSynchronisation.loginCurrentUser(getApplicationContext());
-                dataSynchronisation.syncSubjects(vulcanSynchronisation);
+                workToBePerformed();
             } catch (Exception e) {
                 Log.e(JobHelper.DEBUG_TAG, "User logging in the background failed", e);
             } finally {
                 jobFinished(params[0], false);
             }
-
             return null;
         }
     }

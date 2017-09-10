@@ -1,4 +1,4 @@
-package io.github.wulkanowy.services;
+package io.github.wulkanowy.services.jobs;
 
 
 import android.content.Context;

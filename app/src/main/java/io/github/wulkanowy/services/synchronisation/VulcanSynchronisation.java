@@ -19,7 +19,7 @@ import io.github.wulkanowy.database.accounts.Account;
 import io.github.wulkanowy.database.accounts.AccountsDatabase;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.security.Safety;
-import io.github.wulkanowy.services.JobHelper;
+import io.github.wulkanowy.services.jobs.JobHelper;
 
 public class VulcanSynchronisation {
 
