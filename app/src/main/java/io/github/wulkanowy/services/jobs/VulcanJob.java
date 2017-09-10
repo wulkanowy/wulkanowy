@@ -37,7 +37,7 @@ public abstract class VulcanJob extends JobService {
     private class SyncTask extends AsyncTask<JobParameters, Void, Void> {
 
         @Override
-        protected Void doInBackground(com.firebase.jobdispatcher.JobParameters... params) {
+        protected Void doInBackground(JobParameters... params) {
             try {
                 workToBePerformed();
             } catch (Exception e) {
