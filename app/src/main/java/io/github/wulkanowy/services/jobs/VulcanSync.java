@@ -7,7 +7,7 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 
-public abstract class JobHelper {
+public abstract class VulcanSync {
 
     public static final String DEBUG_TAG = "SynchronizationService";
 

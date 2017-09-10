@@ -16,7 +16,7 @@ import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.services.synchronisation.DataSynchronisation;
 import io.github.wulkanowy.services.synchronisation.VulcanSynchronisation;
 
-public class SubjectsSync extends JobHelper {
+public class SubjectsSync extends VulcanSync {
 
     public static final String UNIQUE_TAG = "SubjectsSync34512";
 

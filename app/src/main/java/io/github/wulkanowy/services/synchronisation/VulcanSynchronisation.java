@@ -19,7 +19,7 @@ import io.github.wulkanowy.database.accounts.Account;
 import io.github.wulkanowy.database.accounts.AccountsDatabase;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.security.Safety;
-import io.github.wulkanowy.services.jobs.JobHelper;
+import io.github.wulkanowy.services.jobs.VulcanSync;
 
 public class VulcanSynchronisation {
 
@@ -43,7 +43,7 @@ public class VulcanSynchronisation {
 
             getAndSetStudentAndParentFromApi(account.getSymbol(), login.getCookies());
         } else {
-            Log.wtf(JobHelper.DEBUG_TAG, "loginCurrentUser - USERID IS EMPTY");
+            Log.wtf(VulcanSync.DEBUG_TAG, "loginCurrentUser - USERID IS EMPTY");
         }
     }
 

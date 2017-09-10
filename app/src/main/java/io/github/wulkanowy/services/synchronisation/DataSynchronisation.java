@@ -3,7 +3,7 @@ package io.github.wulkanowy.services.synchronisation;
 import android.content.Context;
 import android.util.Log;
 
-import io.github.wulkanowy.services.jobs.JobHelper;
+import io.github.wulkanowy.services.jobs.VulcanSync;
 
 public class DataSynchronisation {
 
@@ -19,7 +19,7 @@ public class DataSynchronisation {
         try {
             gradesSynchronisation.sync(vulcanSynchronisation, context);
         } catch (Exception e) {
-            Log.e(JobHelper.DEBUG_TAG, "Synchronisation of grades failed", e);
+            Log.e(VulcanSync.DEBUG_TAG, "Synchronisation of grades failed", e);
         }
     }
 
@@ -29,7 +29,7 @@ public class DataSynchronisation {
         try {
             subjectsSynchronisation.sync(vulcanSynchronisation, context);
         } catch (Exception e) {
-            Log.e(JobHelper.DEBUG_TAG, "Synchronisation of subjects failed", e);
+            Log.e(VulcanSync.DEBUG_TAG, "Synchronisation of subjects failed", e);
         }
     }
 

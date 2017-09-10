@@ -16,7 +16,7 @@ import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.services.synchronisation.DataSynchronisation;
 import io.github.wulkanowy.services.synchronisation.VulcanSynchronisation;
 
-public class GradesSync extends JobHelper {
+public class GradesSync extends VulcanSync {
 
     public static final String UNIQUE_TAG = "GradesSync34512";
 
@@ -31,7 +31,7 @@ public class GradesSync extends JobHelper {
                 .setService(GradeJob.class)
                 .setTag(UNIQUE_TAG)
                 .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(20, 30))
+                .setTrigger(Trigger.executionWindow(DEFAULT_INTERVAL_START, DEFAULT_INTERVAL_END))
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setReplaceCurrent(true)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)

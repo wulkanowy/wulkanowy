@@ -19,14 +19,14 @@ public abstract class VulcanJob extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        Log.d(JobHelper.DEBUG_TAG, "Start job");
+        Log.d(VulcanSync.DEBUG_TAG, "Start job");
         syncTask.execute(params);
         return true;
     }
 
     @Override
     public boolean onStopJob(JobParameters params) {
-        Log.d(JobHelper.DEBUG_TAG, "Stop job");
+        Log.d(VulcanSync.DEBUG_TAG, "Stop job");
         syncTask.cancel(true);
         return true;
     }
@@ -41,7 +41,7 @@ public abstract class VulcanJob extends JobService {
             try {
                 workToBePerformed();
             } catch (Exception e) {
-                Log.e(JobHelper.DEBUG_TAG, "User logging in the background failed", e);
+                Log.e(VulcanSync.DEBUG_TAG, "User logging in the background failed", e);
             } finally {
                 jobFinished(params[0], false);
             }
