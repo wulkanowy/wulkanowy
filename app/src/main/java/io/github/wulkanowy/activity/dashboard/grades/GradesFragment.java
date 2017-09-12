@@ -42,7 +42,7 @@ public class GradesFragment extends Fragment {
 
     public void createExpListView() {
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.subject_grade_recycler);
+        RecyclerView recyclerView = view.findViewById(R.id.subject_grade_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         GradesAdapter gradesAdapter = new GradesAdapter(subjectWithGradesList, view.getContext());
         recyclerView.setAdapter(gradesAdapter);

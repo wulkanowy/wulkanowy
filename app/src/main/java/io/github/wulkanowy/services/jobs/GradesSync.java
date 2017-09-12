@@ -9,6 +9,7 @@ import com.firebase.jobdispatcher.Trigger;
 
 import java.io.IOException;
 
+import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.LoginErrorException;
@@ -31,7 +32,8 @@ public class GradesSync extends VulcanSync {
                 .setService(GradeJob.class)
                 .setTag(UNIQUE_TAG)
                 .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(DEFAULT_INTERVAL_START, DEFAULT_INTERVAL_END))
+                .setTrigger(Trigger.executionWindow(20, 30))
+                //.setTrigger(Trigger.executionWindow(DEFAULT_INTERVAL_START, DEFAULT_INTERVAL_END))
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setReplaceCurrent(true)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
@@ -46,7 +48,7 @@ public class GradesSync extends VulcanSync {
 
             VulcanSynchronisation vulcanSynchronisation = new VulcanSynchronisation();
             DataSynchronisation dataSynchronisation = new DataSynchronisation(getApplicationContext());
-            vulcanSynchronisation.loginCurrentUser(getApplicationContext());
+            vulcanSynchronisation.loginCurrentUser(getApplicationContext(), ((WulkanowyApp) getApplication()).getDaoSession());
             dataSynchronisation.syncGrades(vulcanSynchronisation);
         }
     }

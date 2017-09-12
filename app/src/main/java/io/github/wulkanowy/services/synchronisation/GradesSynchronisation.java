@@ -11,7 +11,8 @@ import io.github.wulkanowy.database.grades.GradesDatabase;
 
 public class GradesSynchronisation {
 
-    public void sync(VulcanSynchronisation vulcanSynchronisation, Context context) throws IOException, ParseException, LoginErrorException {
+    public void sync(VulcanSynchronisation vulcanSynchronisation, Context context) throws IOException,
+            ParseException, LoginErrorException {
 
         GradesList gradesList = new GradesList(vulcanSynchronisation.getStudentAndParent());
 

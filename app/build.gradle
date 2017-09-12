@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco-android'
 apply plugin: "io.github.ddimtirov.codacy"
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 26
@@ -25,6 +26,10 @@ android {
     }
 }
 
+greendao {
+    schemaVersion 2
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -43,6 +48,10 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.6'
     compile 'org.apache.commons:commons-collections4:4.1'
     compile 'org.jsoup:jsoup:1.10.3'
+    compile 'org.greenrobot:greendao:3.2.2'
+
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
+    debugCompile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
     
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.9.0'

@@ -11,7 +11,8 @@ import io.github.wulkanowy.database.subjects.SubjectsDatabase;
 
 public class SubjectsSynchronisation {
 
-    public void sync(VulcanSynchronisation vulcanSynchronisation, Context context) throws IOException, ParseException, LoginErrorException {
+    public void sync(VulcanSynchronisation vulcanSynchronisation, Context context) throws IOException,
+            ParseException, LoginErrorException {
 
         SubjectsList subjectsList = new SubjectsList(vulcanSynchronisation.getStudentAndParent());
 

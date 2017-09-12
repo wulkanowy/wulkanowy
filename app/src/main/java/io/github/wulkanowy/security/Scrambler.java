@@ -21,7 +21,6 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Enumeration;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -52,22 +51,6 @@ public class Scrambler {
             throw new CryptoException(e.getMessage());
         }
 
-    }
-
-    public ArrayList<String> getAllAliases() throws CryptoException {
-
-        ArrayList<String> keyAliases = new ArrayList<>();
-        try {
-            Enumeration<String> aliases = keyStore.aliases();
-            while (aliases.hasMoreElements()) {
-                keyAliases.add(aliases.nextElement());
-            }
-        } catch (Exception e) {
-            Log.e(DEBUG_TAG, e.getMessage());
-            throw new CryptoException(e.getMessage());
-        }
-
-        return keyAliases;
     }
 
     @TargetApi(18)
@@ -120,21 +103,6 @@ public class Scrambler {
 
         Log.d(DEBUG_TAG, "Key pair are create");
 
-    }
-
-    public void deleteKey(String alias) throws CryptoException {
-
-        if (!alias.isEmpty()) {
-            try {
-                keyStore.deleteEntry(alias);
-                Log.d(DEBUG_TAG, "Key" + alias + "is delete");
-            } catch (Exception e) {
-                Log.e(DEBUG_TAG, e.getMessage());
-            }
-        } else {
-            Log.e(DEBUG_TAG, "DeleteKey - String is empty");
-            throw new CryptoException("DeleteKey - String is empty");
-        }
     }
 
     public String encryptString(String alias, String text) throws CryptoException {
