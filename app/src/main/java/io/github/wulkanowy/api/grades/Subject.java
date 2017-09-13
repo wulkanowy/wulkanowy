@@ -2,13 +2,13 @@ package io.github.wulkanowy.api.grades;
 
 public class Subject {
 
-    protected int id;
+    private int id;
 
-    protected String name;
+    private String name;
 
-    protected String predictedRating;
+    private String predictedRating;
 
-    protected String finalRating;
+    private String finalRating;
 
     public int getId() {
         return id;

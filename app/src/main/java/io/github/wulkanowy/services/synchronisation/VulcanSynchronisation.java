@@ -1,5 +1,6 @@
 package io.github.wulkanowy.services.synchronisation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.Map;
 
+import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.api.Cookies;
 import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.login.AccountPermissionException;
@@ -34,6 +36,8 @@ public class VulcanSynchronisation {
         long userId = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("isLogin", 0);
 
         if (userId != 0) {
+
+            Log.d(VulcanSync.DEBUG_TAG, "Login current user id=" + String.valueOf(userId));
 
             Safety safety = new Safety(context);
             Account account = accountDao.load(userId);
@@ -67,10 +71,17 @@ public class VulcanSynchronisation {
 
         long idNewUser = accountDao.insert(account);
 
+        Log.d(VulcanSync.DEBUG_TAG, "Login and save new user id=" + String.valueOf(idNewUser));
+
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong("isLogin", idNewUser);
         editor.apply();
+    }
+
+    public void loginNewUser(String email, String password, String symbol, Activity activity)
+            throws BadCredentialsException, LoginErrorException, AccountPermissionException, IOException, CryptoException {
+        loginNewUser(email, password, symbol, activity, ((WulkanowyApp) activity.getApplication()).getDaoSession());
     }
 
     public StudentAndParent getStudentAndParent() {

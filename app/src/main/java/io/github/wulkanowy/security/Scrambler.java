@@ -33,7 +33,7 @@ public class Scrambler {
 
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
 
-    public final static String DEBUG_TAG = "KeyStoreSecurity";
+    public final static String DEBUG_TAG = "WulkanowySecurity";
 
     public Context context;
 
@@ -121,13 +121,9 @@ public class Scrambler {
                 cipherOutputStream.write(text.getBytes("UTF-8"));
                 cipherOutputStream.close();
 
-                Log.d(DEBUG_TAG, "String is encrypt");
-
                 byte[] vals = outputStream.toByteArray();
 
-                String encryptedText = Base64.encodeToString(vals, Base64.DEFAULT);
-                Log.d(DEBUG_TAG, encryptedText);
-                return encryptedText;
+                return Base64.encodeToString(vals, Base64.DEFAULT);
 
             } catch (Exception e) {
                 Log.e(DEBUG_TAG, e.getMessage());
@@ -160,8 +156,6 @@ public class Scrambler {
                 }
 
                 Byte[] bytes = values.toArray(new Byte[values.size()]);
-
-                Log.d(DEBUG_TAG, "String is decrypt");
 
                 return new String(ArrayUtils.toPrimitive(bytes), 0, bytes.length, "UTF-8");
 

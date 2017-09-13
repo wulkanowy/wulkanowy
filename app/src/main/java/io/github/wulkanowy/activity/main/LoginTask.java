@@ -9,7 +9,6 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
@@ -47,7 +46,7 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
         if (ConnectionUtilities.isOnline(activity)) {
             VulcanSynchronisation vulcanSynchronisation = new VulcanSynchronisation();
             try {
-                vulcanSynchronisation.loginNewUser(credentials[0], credentials[1], credentials[2], activity, ((WulkanowyApp) activity.getApplication()).getDaoSession());
+                vulcanSynchronisation.loginNewUser(credentials[0], credentials[1], credentials[2], activity);
             } catch (BadCredentialsException e) {
                 return R.string.login_bad_credentials_text;
             } catch (AccountPermissionException e) {

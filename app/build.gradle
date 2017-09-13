@@ -27,7 +27,7 @@ android {
 }
 
 greendao {
-    schemaVersion 2
+    schemaVersion 3
 }
 
 dependencies {
@@ -54,5 +54,5 @@ dependencies {
     debugCompile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
     
     testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.9.0'
+    testCompile 'org.mockito:mockito-core:2.10.0'
 }
