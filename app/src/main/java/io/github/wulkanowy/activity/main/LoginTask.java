@@ -58,7 +58,7 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
             }
 
             DataSynchronisation dataSynchronisation = new DataSynchronisation(activity);
-            dataSynchronisation.syncGradesAndSubjects(vulcanSynchronisation);
+            dataSynchronisation.syncSubjectsAndGrades(vulcanSynchronisation);
 
             return R.string.login_accepted_text;
 

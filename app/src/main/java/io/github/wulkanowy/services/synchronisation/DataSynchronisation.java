@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import io.github.wulkanowy.activity.WulkanowyApp;
-import io.github.wulkanowy.dao.DaoSession;
+import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.services.jobs.VulcanSync;
 
 public class DataSynchronisation {
@@ -23,24 +23,20 @@ public class DataSynchronisation {
         GradesSynchronisation gradesSynchronisation = new GradesSynchronisation();
 
         try {
-            // gradesSynchronisation.sync(vulcanSynchronisation, daoSession);
+            gradesSynchronisation.sync(vulcanSynchronisation, daoSession);
         } catch (Exception e) {
             Log.e(VulcanSync.DEBUG_TAG, "Synchronisation of grades failed", e);
         }
     }
 
-    public void syncSubjects(VulcanSynchronisation vulcanSynchronisation) {
+    public void syncSubjectsAndGrades(VulcanSynchronisation vulcanSynchronisation) {
         SubjectsSynchronisation subjectsSynchronisation = new SubjectsSynchronisation();
 
         try {
             subjectsSynchronisation.sync(vulcanSynchronisation, daoSession);
+            syncGrades(vulcanSynchronisation);
         } catch (Exception e) {
             Log.e(VulcanSync.DEBUG_TAG, "Synchronisation of subjects failed", e);
         }
-    }
-
-    public void syncGradesAndSubjects(VulcanSynchronisation vulcanSynchronisation) {
-        syncSubjects(vulcanSynchronisation);
-        syncGrades(vulcanSynchronisation);
     }
 }

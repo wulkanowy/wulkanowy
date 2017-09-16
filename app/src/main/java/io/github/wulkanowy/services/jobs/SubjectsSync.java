@@ -13,7 +13,7 @@ import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.LoginErrorException;
-import io.github.wulkanowy.dao.DaoSession;
+import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.services.synchronisation.DataSynchronisation;
 import io.github.wulkanowy.services.synchronisation.VulcanSynchronisation;
@@ -51,7 +51,7 @@ public class SubjectsSync extends VulcanSync {
             VulcanSynchronisation vulcanSynchronisation = new VulcanSynchronisation();
             DataSynchronisation dataSynchronisation = new DataSynchronisation(daoSession);
             vulcanSynchronisation.loginCurrentUser(getApplicationContext(), daoSession);
-            dataSynchronisation.syncSubjects(vulcanSynchronisation);
+            dataSynchronisation.syncSubjectsAndGrades(vulcanSynchronisation);
 
         }
     }

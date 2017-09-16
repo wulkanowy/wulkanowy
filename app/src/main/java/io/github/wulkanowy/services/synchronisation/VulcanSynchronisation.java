@@ -17,9 +17,9 @@ import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.PersonalData;
-import io.github.wulkanowy.dao.Account;
-import io.github.wulkanowy.dao.AccountDao;
-import io.github.wulkanowy.dao.DaoSession;
+import io.github.wulkanowy.dao.entities.Account;
+import io.github.wulkanowy.dao.entities.AccountDao;
+import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.security.Safety;
 import io.github.wulkanowy.services.jobs.VulcanSync;
@@ -28,12 +28,14 @@ public class VulcanSynchronisation {
 
     private StudentAndParent studentAndParent;
 
+    private Long userId = 0L;
+
     public void loginCurrentUser(Context context, DaoSession daoSession) throws CryptoException,
             BadCredentialsException, LoginErrorException, AccountPermissionException, IOException {
 
         AccountDao accountDao = daoSession.getAccountDao();
 
-        long userId = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("isLogin", 0);
+        userId = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("isLogin", 0);
 
         if (userId != 0) {
 
@@ -69,27 +71,19 @@ public class VulcanSynchronisation {
                 .setPassword(safety.encrypt(email, password))
                 .setSymbol(symbol);
 
-        long idNewUser = accountDao.insert(account);
+        userId = accountDao.insert(account);
 
-        Log.d(VulcanSync.DEBUG_TAG, "Login and save new user id=" + String.valueOf(idNewUser));
+        Log.d(VulcanSync.DEBUG_TAG, "Login and save new user id=" + String.valueOf(userId));
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong("isLogin", idNewUser);
+        editor.putLong("isLogin", userId);
         editor.apply();
     }
 
     public void loginNewUser(String email, String password, String symbol, Activity activity)
             throws BadCredentialsException, LoginErrorException, AccountPermissionException, IOException, CryptoException {
         loginNewUser(email, password, symbol, activity, ((WulkanowyApp) activity.getApplication()).getDaoSession());
-    }
-
-    public StudentAndParent getStudentAndParent() {
-        return studentAndParent;
-    }
-
-    private void setStudentAndParent(StudentAndParent studentAndParent) {
-        this.studentAndParent = studentAndParent;
     }
 
     private Login loginUser(String email, String password, String symbol) throws BadCredentialsException,
@@ -100,6 +94,18 @@ public class VulcanSynchronisation {
         login.login(email, password, symbol);
         return login;
 
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public StudentAndParent getStudentAndParent() {
+        return studentAndParent;
+    }
+
+    private void setStudentAndParent(StudentAndParent studentAndParent) {
+        this.studentAndParent = studentAndParent;
     }
 
     private StudentAndParent getAndSetStudentAndParentFromApi(String symbol, Map<String, String> cookiesMap)

@@ -1,10 +1,12 @@
 package io.github.wulkanowy.utilities;
 
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.dao.Subject;
+import io.github.wulkanowy.dao.entities.Grade;
+import io.github.wulkanowy.dao.entities.Subject;
 
 public abstract class ConversionVulcanObject {
 
@@ -21,5 +23,26 @@ public abstract class ConversionVulcanObject {
         }
 
         return subjectEntityList;
+    }
+
+    public static List<Grade> gradesToGradeEntities(List<io.github.wulkanowy.api.grades.Grade> gradeList) throws ParseException {
+
+        List<Grade> gradeEntityList = new ArrayList<>();
+
+        for (io.github.wulkanowy.api.grades.Grade grade : gradeList) {
+            Grade gradeEntity = new Grade()
+                    .setSubject(grade.getSubject())
+                    .setValue(grade.getValue())
+                    .setColor(grade.getColor())
+                    .setSymbol(grade.getSymbol())
+                    .setDescription(grade.getDescription())
+                    .setWeight(grade.getWeight())
+                    .setDate(grade.getDate())
+                    .setTeacher(grade.getTeacher())
+                    .setSemester(grade.getSemester());
+
+            gradeEntityList.add(gradeEntity);
+        }
+        return gradeEntityList;
     }
 }
