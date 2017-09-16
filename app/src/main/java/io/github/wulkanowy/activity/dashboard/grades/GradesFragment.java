@@ -35,9 +35,9 @@ public class GradesFragment extends Fragment {
 
         DaoSession daoSession = ((WulkanowyApp) getActivity().getApplication()).getDaoSession();
 
-        if (subjectWithGradesList.size() == 0) {
+        if (subjectWithGradesList.equals(new ArrayList<>())) {
             new GradesTask(daoSession).execute();
-        } else if (subjectWithGradesList.size() > 1) {
+        } else if (subjectWithGradesList.size() > 0) {
             createExpListView();
             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
@@ -82,11 +82,11 @@ public class GradesFragment extends Fragment {
         }
 
         protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
             createExpListView();
 
             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-
-            super.onPostExecute(result);
         }
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.login.LoginErrorException;
-import io.github.wulkanowy.dao.EntitiesComparer;
+import io.github.wulkanowy.dao.EntitiesCompare;
 import io.github.wulkanowy.dao.entities.Account;
 import io.github.wulkanowy.dao.entities.AccountDao;
 import io.github.wulkanowy.dao.entities.DaoSession;
@@ -37,7 +37,7 @@ public class GradesSynchronisation {
 
         List<Grade> gradesFromDb = account.getGradeList();
         List<Grade> gradeEntitiesList = ConversionVulcanObject.gradesToGradeEntities(gradesList.getAll());
-        List<Grade> updatedList = EntitiesComparer.compareGradeList(gradeEntitiesList, gradesFromDb);
+        List<Grade> updatedList = EntitiesCompare.compareGradeList(gradeEntitiesList, gradesFromDb);
         List<Grade> lastList = new ArrayList<>();
 
         GradeDao.dropTable(gradeDao.getDatabase(), true);

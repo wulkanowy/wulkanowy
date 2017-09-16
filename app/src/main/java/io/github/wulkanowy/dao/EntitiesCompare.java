@@ -7,7 +7,7 @@ import java.util.List;
 
 import io.github.wulkanowy.dao.entities.Grade;
 
-public class EntitiesComparer {
+public class EntitiesCompare {
 
     public static List<Grade> compareGradeList(List<Grade> newList, List<Grade> oldList) {
 

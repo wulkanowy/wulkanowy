@@ -104,10 +104,6 @@ public class VulcanSynchronisation {
         return studentAndParent;
     }
 
-    private void setStudentAndParent(StudentAndParent studentAndParent) {
-        this.studentAndParent = studentAndParent;
-    }
-
     private StudentAndParent getAndSetStudentAndParentFromApi(String symbol, Map<String, String> cookiesMap)
             throws IOException, LoginErrorException {
 
@@ -117,7 +113,7 @@ public class VulcanSynchronisation {
 
             StudentAndParent snp = new StudentAndParent(cookies, symbol);
 
-            setStudentAndParent(snp);
+            studentAndParent = snp;
             return snp;
         } else {
             return studentAndParent;

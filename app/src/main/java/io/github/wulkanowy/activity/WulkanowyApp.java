@@ -34,7 +34,7 @@ public class WulkanowyApp extends Application {
             editor.apply();
         }
 
-        QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;
     }
 
     public DaoSession getDaoSession() {
