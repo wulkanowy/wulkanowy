@@ -13,7 +13,7 @@ public class Table {
 
     private StudentAndParent snp;
 
-    private String attendancePageUrl = "Frekwencja.mvc";
+    private String attendancePageUrl = "Frekwencja.mvc?data=";
 
     public Table(StudentAndParent snp) {
         this.snp = snp;
@@ -30,12 +30,10 @@ public class Table {
         Elements tableHeaderCells = table.select("thead th");
         List<Day> days = new ArrayList<>();
 
-        for (int i = 1; i < 6; i++) {
+        for (int i = 1; i < tableHeaderCells.size(); i++) {
             String[] dayHeaderCell = tableHeaderCells.get(i).html().split("<br>");
 
-            days.add(new Day()
-                    .setDate(dayHeaderCell[1])
-            );
+            days.add(new Day().setDate(dayHeaderCell[1]));
         }
 
         Elements hoursInDays = table.select("tbody tr");
