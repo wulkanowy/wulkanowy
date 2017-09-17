@@ -112,21 +112,26 @@ public class Grade implements Parcelable {
     };
 
     public int getValueColor() {
-        if ("6".equals(value) || "6-".equals(value) || "6+".equals(value)) {
-            return R.color.six_grade;
-        } else if ("5".equals(value) || "5-".equals(value) || "5+".equals(value)) {
-            return R.color.five_grade;
-        } else if ("4".equals(value) || "4-".equals(value) || "4+".equals(value)) {
-            return R.color.four_grade;
-        } else if ("3".equals(value) || "3-".equals(value) || "3+".equals(value)) {
-            return R.color.three_grade;
-        } else if ("2".equals(value) || "2-".equals(value) || "2+".equals(value)) {
-            return R.color.two_grade;
-        } else if ("1".equals(value) || "1-".equals(value) || "1+".equals(value)) {
-            return R.color.one_grade;
-        } else {
-            return R.color.default_grade;
+
+        String replacedString = value.replaceAll("[^0-9]", "");
+
+        if (!"".equals(replacedString)) {
+            switch (Integer.parseInt(replacedString)) {
+                case 6:
+                    return R.color.six_grade;
+                case 5:
+                    return R.color.five_grade;
+                case 4:
+                    return R.color.four_grade;
+                case 3:
+                    return R.color.three_grade;
+                case 2:
+                    return R.color.two_grade;
+                case 1:
+                    return R.color.one_grade;
+            }
         }
+        return R.color.default_grade;
     }
 
     @Override
