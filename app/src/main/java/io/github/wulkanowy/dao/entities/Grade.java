@@ -129,6 +129,8 @@ public class Grade implements Parcelable {
                     return R.color.two_grade;
                 case 1:
                     return R.color.one_grade;
+                default:
+                    return R.color.default_grade;
             }
         }
         return R.color.default_grade;
