@@ -66,7 +66,7 @@ public class GradesFragment extends Fragment {
         protected Void doInBackground(Void... params) {
 
             long userId = getActivity().getSharedPreferences("LoginData", Context.MODE_PRIVATE)
-                    .getLong("isLogin", 0);
+                    .getLong("userId", 0);
 
             AccountDao accountDao = daoSession.getAccountDao();
             Account account = accountDao.load(userId);

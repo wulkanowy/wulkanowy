@@ -29,7 +29,7 @@ public class WulkanowyApp extends Application {
         if (DaoMaster.SCHEMA_VERSION != schemaVersion) {
             SharedPreferences sharedPreferences = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong("isLogin", 0);
+            editor.putLong("userId", 0);
             editor.putInt("schemaVersion", DaoMaster.SCHEMA_VERSION);
             editor.apply();
         }

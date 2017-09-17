@@ -35,7 +35,7 @@ public class VulcanSynchronisation {
 
         AccountDao accountDao = daoSession.getAccountDao();
 
-        userId = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("isLogin", 0);
+        userId = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("userId", 0);
 
         if (userId != 0) {
 
@@ -77,7 +77,7 @@ public class VulcanSynchronisation {
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong("isLogin", userId);
+        editor.putLong("userId", userId);
         editor.apply();
     }
 
