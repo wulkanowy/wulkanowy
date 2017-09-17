@@ -80,6 +80,7 @@ public class Table {
 
                     default:
                         lesson.setEmpty(true);
+                        break;
                 }
 
                 days.get(i - 1).setLesson(lesson);
