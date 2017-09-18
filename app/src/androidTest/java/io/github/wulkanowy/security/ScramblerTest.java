@@ -12,24 +12,54 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class ScramblerTest {
 
-    private Scrambler scrambler = new Scrambler();
-
     private Context targetContext;
+
+    private Scrambler scramblerLoad = new Scrambler();
+
+    private Scrambler scramblerNoLoad = new Scrambler();
 
     @Before
     public void setUp() throws CryptoException {
         targetContext = InstrumentationRegistry.getTargetContext();
-        scrambler.loadKeyStore();
-        scrambler.generateNewKey("TEST", targetContext);
+        scramblerLoad.loadKeyStore();
     }
 
     @Test
-    public void decryptEncryptTest() throws CryptoException {
-        Assert.assertEquals("pass", scrambler.decryptString("TEST", scrambler.encryptString("TEST", "pass")));
+    public void decryptEncryptStringTest() throws CryptoException {
+        scramblerLoad.generateNewKey("TEST", targetContext);
+        Assert.assertEquals("pass",
+                scramblerLoad.decryptString("TEST", scramblerLoad.encryptString("TEST", "pass")));
+    }
+
+    @Test(expected = CryptoException.class)
+    public void decryptEmptyTest() throws CryptoException {
+        scramblerLoad.decryptString("", "");
+    }
+
+    @Test(expected = CryptoException.class)
+    public void decryptNoLoadKeyStoreTest() throws CryptoException {
+        scramblerNoLoad.decryptString("TEST", "TEST");
+    }
+
+    @Test(expected = CryptoException.class)
+    public void encryptEmptyTest() throws CryptoException {
+        scramblerLoad.encryptString("", "");
+    }
+
+    @Test(expected = CryptoException.class)
+    public void encryptNoLoadKeyStoreTest() throws CryptoException {
+        scramblerNoLoad.encryptString("TEST", "TEST");
     }
 
     @Test(expected = CryptoException.class)
     public void generateNewKeyEmptyTest() throws CryptoException {
-        scrambler.generateNewKey("", targetContext);
+        scramblerLoad.generateNewKey("", targetContext);
     }
+
+    @Test(expected = CryptoException.class)
+    public void generateNewKeyNoLoadKeyStoreTest() throws CryptoException {
+        scramblerNoLoad.generateNewKey("TEST", targetContext);
+    }
+
+
 }
