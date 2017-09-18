@@ -36,33 +36,28 @@ public class Statistics {
 
         Element table = mainContainer.select("table:nth-of-type(2)").first();
 
-        Elements tableHeaderCells = table.select("thead th");
-        List<Month> monthList = new ArrayList<>();
-
-        for (int i = 1; i < tableHeaderCells.size(); i++) {
-            monthList.add(new Month().setName(tableHeaderCells.get(i).text()));
-        }
-
+        Elements headerCells = table.select("thead th");
         List<Type> typeList = new ArrayList<>();
+
         Elements typesRows = table.select("tbody tr");
 
         // fill types with months
         for (Element row : typesRows) {
             Elements monthsCells = row.select("td");
 
-            List<Month> monthList1 = new ArrayList<>();
+            List<Month> monthList = new ArrayList<>();
 
-            // iterate over month in type
-            for (int i = 1; i < monthList.size(); i++) {
-                monthList1.add(new Month()
+            // iterate over month in type, first column is empty, last is `total`; <0, n-1>
+            for (int i = 1; i < monthsCells.size() - 1; i++) {
+                monthList.add(new Month()
                         .setValue(NumberUtils.toInt(monthsCells.get(i).text(), 0))
-                        .setName(monthList.get(i - 1).getName()));
+                        .setName(headerCells.get(i).text()));
             }
 
             typeList.add(new Type()
                     .setTotal(NumberUtils.toInt(monthsCells.last().text(), 0))
                     .setName(monthsCells.get(0).text())
-                    .setMonthList(monthList1));
+                    .setMonthList(monthList));
         }
 
         String total = mainContainer.select("h2").text().split(": ")[1];

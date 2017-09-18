@@ -78,6 +78,17 @@ public class StatisticsTest {
     }
 
     @Test
+    public void getTypeList() throws Exception {
+        List<Type> typesList1 = excellent.getTypesTable().getTypeList();
+        Assert.assertEquals(12, typesList1.get(0).getMonthList().size());
+        Assert.assertEquals(12, typesList1.get(5).getMonthList().size());
+
+        List<Type> typesList2 = full.getTypesTable().getTypeList();
+        Assert.assertEquals(12, typesList2.get(0).getMonthList().size());
+        Assert.assertEquals(12, typesList2.get(5).getMonthList().size());
+    }
+
+    @Test
     public void getMonthList() throws Exception {
         List<Type> typeList1 = excellent.getTypesTable().getTypeList();
         Assert.assertEquals(12, typeList1.get(0).getMonthList().size());
