@@ -6,6 +6,6 @@
 [![CircleCI](https://img.shields.io/circleci/project/github/wulkanowy/wulkanowy.svg?style=flat-square)](https://circleci.com/gh/wulkanowy/wulkanowy)
 [![Build Status](https://www.bitrise.io/app/daeff1893f3c8128.svg?token=Hjm1ACamk86JDeVVJHOeqQ&branch=master)](https://www.bitrise.io/app/daeff1893f3c8128)
 
-[Pobierz wersję rozwojową](https://www.bitrise.io/artifact/2280287/p/d79bc4af6825cb9f807b060d67a1c321)
+[Pobierz wersję rozwojową](https://bitrise-redirector.herokuapp.com/v0.1/apps/daeff1893f3c8128/builds/master/artifacts/app-debug.apk)
 
 Wulkanowy to projekt aplikacji na androida ułatwiającej używanie dziennika VULCANa.
