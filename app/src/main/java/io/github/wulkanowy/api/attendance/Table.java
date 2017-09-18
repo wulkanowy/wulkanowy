@@ -41,7 +41,8 @@ public class Table {
             Elements hours = row.select("td");
 
             // fill hours in day
-            for (int i = 1; i < hours.size(); i++) {
+            int size = hours.size();
+            for (int i = 1; i < size; i++) {
                 days.get(i - 1).setLesson(getNewLesson(hours.get(i)));
             }
         }
