@@ -20,8 +20,8 @@ public class StatisticsTest {
 
     @Before
     public void setUp() throws Exception {
-        excellent = getSetUpTable("Frekwencja-excellent.html");
-        full = getSetUpTable("Frekwencja-full.html");
+        this.excellent = getSetUpTable("Frekwencja-excellent.html");
+        this.full = getSetUpTable("Frekwencja-full.html");
     }
 
     private Statistics getSetUpTable(String fixtureFileName) throws Exception {
@@ -34,6 +34,36 @@ public class StatisticsTest {
                 .thenReturn(tablePageDocument);
 
         return new Statistics(timetable);
+    }
+
+    @Test
+    public void getSubjectList() throws Exception {
+        Assert.assertEquals(26, excellent.getSubjectList().size());
+        Assert.assertEquals(23, full.getSubjectList().size());
+    }
+
+    @Test
+    public void getSubjectListId() throws Exception {
+        Assert.assertEquals(-1, excellent.getSubjectList().get(0).getId());
+        Assert.assertEquals(63, excellent.getSubjectList().get(10).getId());
+        Assert.assertEquals(0, excellent.getSubjectList().get(25).getId());
+
+        Assert.assertEquals(-1, full.getSubjectList().get(0).getId());
+        Assert.assertEquals(108, full.getSubjectList().get(14).getId());
+        Assert.assertEquals(492, full.getSubjectList().get(21).getId());
+    }
+
+    @Test
+    public void getSubjectListName() throws Exception {
+        Assert.assertEquals("Wszystkie", excellent.getSubjectList().get(0).getName());
+        Assert.assertEquals("Fizyka", excellent.getSubjectList().get(8).getName());
+        Assert.assertEquals("Sieci komputerowe i administrowanie sieciami",
+                excellent.getSubjectList().get(21).getName());
+
+        Assert.assertEquals("Praktyka zawodowa", full.getSubjectList().get(11).getName());
+        Assert.assertEquals("Użytkowanie urządzeń peryferyjnych komputera",
+                full.getSubjectList().get(16).getName());
+        Assert.assertEquals("Brak opisu lekcji", full.getSubjectList().get(22).getName());
     }
 
     @Test

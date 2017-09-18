@@ -14,7 +14,7 @@ public class Statistics {
 
     private StudentAndParent snp;
 
-    private String attendancePageUrl = "Frekwencja.mvc?data={tick}&idPrzedmiot={subject}";
+    private String attendancePageUrl = "Frekwencja.mvc";
 
     public Statistics(StudentAndParent snp) {
         this.snp = snp;
@@ -28,8 +28,25 @@ public class Statistics {
         return getTypesTable(tick, -1);
     }
 
+    public List<Subject> getSubjectList() throws IOException {
+        Element mainContainer = snp.getSnPPageDocument(attendancePageUrl)
+                .select(".mainContainer #idPrzedmiot").first();
+
+        List<Subject> subjectList = new ArrayList<>();
+
+        for (Element subject : mainContainer.select("option")) {
+            subjectList.add(new Subject()
+                    .setId(Integer.parseInt(subject.attr("value")))
+                    .setName(subject.text())
+            );
+        }
+
+        return subjectList;
+    }
+
     public Types getTypesTable(String tick, Integer subjectId) throws IOException {
-        Element mainContainer = snp.getSnPPageDocument(attendancePageUrl
+        Element mainContainer = snp.getSnPPageDocument((attendancePageUrl
+                + "?data={tick}&idPrzedmiot={subject}")
                 .replace("{tick}", tick)
                 .replace("{subject}", subjectId.toString())
         ).select(".mainContainer").first();
