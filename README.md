@@ -1,10 +1,10 @@
 # Wulkanowy
 
-[![Codacy Grade Badge](https://api.codacy.com/project/badge/Grade/b0365aa6584a4c1abf36141204bc8de3)](https://www.codacy.com/app/wulkanowy/wulkanowy)
+[![Codacy grade](https://img.shields.io/codacy/grade/b0365aa6584a4c1abf36141204bc8de3.svg?style=flat-square)](https://www.codacy.com/app/wulkanowy/wulkanowy)
 [![Codecov](https://img.shields.io/codecov/c/github/wulkanowy/wulkanowy.svg?style=flat-square)](https://codecov.io/gh/wulkanowy/wulkanowy)
-[![Build Status](https://www.bitrise.io/app/daeff1893f3c8128.svg?token=Hjm1ACamk86JDeVVJHOeqQ&branch=master)](https://www.bitrise.io/app/daeff1893f3c8128)
 [![Dependency Status](https://www.versioneye.com/user/projects/5969ff0b0fb24f004f8c711b/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5969ff0b0fb24f004f8c711b)
-[![CircleCI](https://circleci.com/gh/wulkanowy/wulkanowy.svg?style=svg)](https://circleci.com/gh/wulkanowy/wulkanowy)
+[![CircleCI](https://img.shields.io/circleci/project/github/wulkanowy/wulkanowy.svg?style=flat-square)](https://circleci.com/gh/wulkanowy/wulkanowy)
+[![Build Status](https://www.bitrise.io/app/daeff1893f3c8128.svg?token=Hjm1ACamk86JDeVVJHOeqQ&branch=master)](https://www.bitrise.io/app/daeff1893f3c8128)
 
 [Pobierz wersję rozwojową](https://www.bitrise.io/artifact/2280287/p/d79bc4af6825cb9f807b060d67a1c321)
 
