@@ -64,7 +64,7 @@ public class Statistics {
 
             List<Month> monthList = new ArrayList<>();
 
-            // iterate over month in type, first column is empty, last is `total`; <0, n-1>
+            // iterate over month in type, first column is empty, last is `total`; (0, n-1)
             for (int i = 1; i < monthsCells.size() - 1; i++) {
                 monthList.add(new Month()
                         .setValue(NumberUtils.toInt(monthsCells.get(i).text(), 0))
