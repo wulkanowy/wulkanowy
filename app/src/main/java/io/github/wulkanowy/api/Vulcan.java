@@ -20,9 +20,13 @@ import io.github.wulkanowy.api.user.FamilyInformation;
 
 public class Vulcan {
 
+    private String id;
+
     private String symbol;
 
     private Cookies cookies = new Cookies();
+
+    private StudentAndParent snp;
 
     public Vulcan(String email, String password, String symbol)
             throws BadCredentialsException, AccountPermissionException, LoginErrorException {
@@ -33,7 +37,21 @@ public class Vulcan {
         this.cookies = login.getCookiesObject();
     }
 
+    public Vulcan(String email, String password, String symbol, String id)
+            throws BadCredentialsException, AccountPermissionException, LoginErrorException {
+        this(email, password, symbol);
+        this.id = id;
+    }
+
     public StudentAndParent getStudentAndParent() throws IOException, LoginErrorException {
+        if (null != snp) {
+            return snp;
+        }
+
+        if (null != id) {
+            return new StudentAndParent(cookies, symbol, id);
+        }
+
         return new StudentAndParent(cookies, symbol);
     }
 
