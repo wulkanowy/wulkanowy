@@ -11,13 +11,13 @@ import java.util.List;
 import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.login.LoginErrorException;
 
-public class Table {
+public class Timetable {
 
     private StudentAndParent snp;
 
     private String timetablePageUrl = "Lekcja.mvc/PlanLekcji?data=";
 
-    public Table(StudentAndParent snp) {
+    public Timetable(StudentAndParent snp) {
         this.snp = snp;
     }
 

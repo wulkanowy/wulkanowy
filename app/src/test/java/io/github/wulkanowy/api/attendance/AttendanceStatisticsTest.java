@@ -12,11 +12,11 @@ import java.util.List;
 import io.github.wulkanowy.api.FixtureHelper;
 import io.github.wulkanowy.api.StudentAndParent;
 
-public class StatisticsTest {
+public class AttendanceStatisticsTest {
 
-    private Statistics excellent;
+    private AttendanceStatistics excellent;
 
-    private Statistics full;
+    private AttendanceStatistics full;
 
     @Before
     public void setUp() throws Exception {
@@ -24,7 +24,7 @@ public class StatisticsTest {
         this.full = getSetUpTable("Frekwencja-full.html");
     }
 
-    private Statistics getSetUpTable(String fixtureFileName) throws Exception {
+    private AttendanceStatistics getSetUpTable(String fixtureFileName) throws Exception {
         String input = FixtureHelper.getAsString(getClass().getResourceAsStream(fixtureFileName));
 
         Document tablePageDocument = Jsoup.parse(input);
@@ -33,7 +33,7 @@ public class StatisticsTest {
         Mockito.when(timetable.getSnPPageDocument(Mockito.anyString()))
                 .thenReturn(tablePageDocument);
 
-        return new Statistics(timetable);
+        return new AttendanceStatistics(timetable);
     }
 
     @Test

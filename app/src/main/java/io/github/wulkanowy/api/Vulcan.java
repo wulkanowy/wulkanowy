@@ -2,7 +2,8 @@ package io.github.wulkanowy.api;
 
 import java.io.IOException;
 
-import io.github.wulkanowy.api.attendance.Statistics;
+import io.github.wulkanowy.api.attendance.AttendanceStatistics;
+import io.github.wulkanowy.api.attendance.AttendanceTable;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.SubjectsList;
 import io.github.wulkanowy.api.login.AccountPermissionException;
@@ -13,7 +14,7 @@ import io.github.wulkanowy.api.notes.AchievementsList;
 import io.github.wulkanowy.api.notes.NotesList;
 import io.github.wulkanowy.api.school.SchoolInfo;
 import io.github.wulkanowy.api.school.TeachersInfo;
-import io.github.wulkanowy.api.timetable.Table;
+import io.github.wulkanowy.api.timetable.Timetable;
 import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.FamilyInformation;
 
@@ -36,13 +37,12 @@ public class Vulcan {
         return new StudentAndParent(cookies, symbol);
     }
 
-    public Statistics getAttendanceStatistics() throws IOException, LoginErrorException {
-        return new Statistics(getStudentAndParent());
+    public AttendanceStatistics getAttendanceStatistics() throws IOException, LoginErrorException {
+        return new AttendanceStatistics(getStudentAndParent());
     }
 
-    public io.github.wulkanowy.api.attendance.Table getAttendance() throws IOException,
-            LoginErrorException {
-        return new io.github.wulkanowy.api.attendance.Table(getStudentAndParent());
+    public AttendanceTable getAttendanceTable() throws IOException, LoginErrorException {
+        return new AttendanceTable(getStudentAndParent());
     }
 
     public GradesList getGradesList() throws IOException, LoginErrorException {
@@ -69,8 +69,8 @@ public class Vulcan {
         return new TeachersInfo(getStudentAndParent());
     }
 
-    public Table getTimetable() throws IOException, LoginErrorException {
-        return new Table(getStudentAndParent());
+    public Timetable getTimetable() throws IOException, LoginErrorException {
+        return new Timetable(getStudentAndParent());
     }
 
     public BasicInformation getBasicInformation() throws IOException, LoginErrorException {

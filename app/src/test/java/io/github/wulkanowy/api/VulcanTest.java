@@ -6,14 +6,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import io.github.wulkanowy.api.attendance.Statistics;
-import io.github.wulkanowy.api.attendance.Table;
+import io.github.wulkanowy.api.attendance.AttendanceStatistics;
+import io.github.wulkanowy.api.attendance.AttendanceTable;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.SubjectsList;
 import io.github.wulkanowy.api.notes.AchievementsList;
 import io.github.wulkanowy.api.notes.NotesList;
 import io.github.wulkanowy.api.school.SchoolInfo;
 import io.github.wulkanowy.api.school.TeachersInfo;
+import io.github.wulkanowy.api.timetable.Timetable;
 import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.FamilyInformation;
 
@@ -31,16 +32,16 @@ public class VulcanTest {
 
     @Test
     public void getAttendanceTest() throws Exception {
-        Mockito.when(vulcan.getAttendance()).thenCallRealMethod();
-        Assert.assertThat(vulcan.getAttendance(),
-                CoreMatchers.instanceOf(Table.class));
+        Mockito.when(vulcan.getAttendanceTable()).thenCallRealMethod();
+        Assert.assertThat(vulcan.getAttendanceTable(),
+                CoreMatchers.instanceOf(AttendanceTable.class));
     }
 
     @Test
     public void getAttendanceStatisticTest() throws Exception {
         Mockito.when(vulcan.getAttendanceStatistics()).thenCallRealMethod();
         Assert.assertThat(vulcan.getAttendanceStatistics(),
-                CoreMatchers.instanceOf(Statistics.class));
+                CoreMatchers.instanceOf(AttendanceStatistics.class));
     }
 
     @Test
@@ -89,7 +90,7 @@ public class VulcanTest {
     public void getTimetableTest() throws Exception {
         Mockito.when(vulcan.getTimetable()).thenCallRealMethod();
         Assert.assertThat(vulcan.getTimetable(),
-                CoreMatchers.instanceOf(io.github.wulkanowy.api.timetable.Table.class));
+                CoreMatchers.instanceOf(Timetable.class));
     }
 
     @Test

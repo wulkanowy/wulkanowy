@@ -10,11 +10,11 @@ import org.mockito.Mockito;
 import io.github.wulkanowy.api.FixtureHelper;
 import io.github.wulkanowy.api.StudentAndParent;
 
-public class TableTest {
+public class AttendanceTableTest {
 
-    private Table excellent;
+    private AttendanceTable excellent;
 
-    private Table full;
+    private AttendanceTable full;
 
     @Before
     public void setUp() throws Exception {
@@ -22,7 +22,7 @@ public class TableTest {
         full = getSetUpTable("Frekwencja-full.html");
     }
 
-    public Table getSetUpTable(String fixtureFileName) throws Exception {
+    public AttendanceTable getSetUpTable(String fixtureFileName) throws Exception {
         String input = FixtureHelper.getAsString(getClass().getResourceAsStream(fixtureFileName));
 
         Document tablePageDocument = Jsoup.parse(input);
@@ -31,7 +31,7 @@ public class TableTest {
         Mockito.when(timetable.getSnPPageDocument(Mockito.anyString()))
                 .thenReturn(tablePageDocument);
 
-        return new Table(timetable);
+        return new AttendanceTable(timetable);
     }
 
     @Test
