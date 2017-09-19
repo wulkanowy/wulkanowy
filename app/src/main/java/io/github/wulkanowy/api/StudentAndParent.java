@@ -12,7 +12,7 @@ import java.util.List;
 
 import io.github.wulkanowy.api.login.LoginErrorException;
 
-public class StudentAndParent extends Vulcan {
+public class StudentAndParent extends Api {
 
     private String startPageUrl = "https://uonetplus.vulcan.net.pl/{symbol}/Start.mvc/Index";
 

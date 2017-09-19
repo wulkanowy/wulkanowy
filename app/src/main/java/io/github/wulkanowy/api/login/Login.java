@@ -6,10 +6,10 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 
+import io.github.wulkanowy.api.Api;
 import io.github.wulkanowy.api.Cookies;
-import io.github.wulkanowy.api.Vulcan;
 
-public class Login extends Vulcan {
+public class Login extends Api {
 
     private String loginPageUrl = "https://cufs.vulcan.net.pl/{symbol}/Account/LogOn";
 
