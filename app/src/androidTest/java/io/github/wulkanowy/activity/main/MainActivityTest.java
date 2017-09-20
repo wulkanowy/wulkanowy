@@ -120,7 +120,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void autoCompleteTextView_twoSuggestions() {
+    public void autoCompleteTextViewTwoSuggestions() {
         okClick();
 
         onView(withId(R.id.symbolText))
@@ -137,7 +137,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void autoCompleteTextView_oneSuggestions() {
+    public void autoCompleteTextViewOneSuggestions() {
         okClick();
 
         onView(withId(R.id.symbolText))
