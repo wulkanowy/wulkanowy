@@ -10,6 +10,7 @@ import io.github.wulkanowy.api.attendance.AttendanceStatistics;
 import io.github.wulkanowy.api.attendance.AttendanceTable;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.SubjectsList;
+import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.notes.AchievementsList;
 import io.github.wulkanowy.api.notes.NotesList;
 import io.github.wulkanowy.api.school.SchoolInfo;
@@ -18,7 +19,7 @@ import io.github.wulkanowy.api.timetable.Timetable;
 import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.FamilyInformation;
 
-public class VulcanTest {
+public class VulcanTest extends Vulcan {
 
     private Vulcan vulcan;
 
@@ -28,6 +29,20 @@ public class VulcanTest {
         vulcan = Mockito.mock(Vulcan.class);
         Mockito.when(vulcan.getStudentAndParent())
                 .thenReturn(snp);
+    }
+
+    @Test(expected = NotLoggedInErrorException.class)
+    public void getStudentAndParentTest() throws Exception {
+        Mockito.when(vulcan.getStudentAndParent()).thenCallRealMethod();
+        vulcan.getStudentAndParent();
+    }
+
+    @Test(expected = NotLoggedInErrorException.class)
+    public void getAttendanceExceptionText() throws Exception {
+        Mockito.when(vulcan.getAttendanceTable()).thenCallRealMethod();
+        Mockito.when(vulcan.getStudentAndParent()).thenThrow(NotLoggedInErrorException.class);
+
+        vulcan.getAttendanceTable();
     }
 
     @Test

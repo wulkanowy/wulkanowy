@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.wulkanowy.api.login.LoginErrorException;
+import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 
 public class StudentAndParentTest {
 
@@ -37,24 +38,46 @@ public class StudentAndParentTest {
     }
 
     @Test
-    public void getUonetPlusOpiekunUrlWithIdTest() throws Exception {
-        Mockito.when(snp.getUonetPlusOpiekunUrl()).thenCallRealMethod();
-        Assert.assertEquals("https://uonetplus-opiekun.vulcan.net.pl/symbol/123456/",
-                snp.getUonetPlusOpiekunUrl());
+    public void snpTest() throws Exception {
+        StudentAndParent snp = new StudentAndParent(new Cookies(), "demo123", "id123");
+        Assert.assertEquals("demo123", snp.getSymbol());
+        Assert.assertEquals("id123", snp.getId());
     }
 
     @Test
-    public void getUonetPlusOpiekunUrlWithoutIdTest() throws Exception {
+    public void getSnpPageUrlWithIdTest() throws Exception {
+        Mockito.when(snp.getSnpPageUrl()).thenCallRealMethod();
+        Assert.assertEquals("https://uonetplus-opiekun.vulcan.net.pl/symbol/123456/",
+                snp.getSnpPageUrl());
+    }
+
+    @Test
+    public void getSnpPageUrlWithoutIdTest() throws Exception {
         String input = FixtureHelper.getAsString(getClass().getResourceAsStream("Start.html"));
         Document startPageDocument = Jsoup.parse(input);
 
         Mockito.when(snp.getPageByUrl(Mockito.anyString())).thenReturn(startPageDocument);
         Mockito.when(snp.getStartPageUrl()).thenReturn("http://wulkan.io");
-        Mockito.when(snp.getId()).thenReturn(null);
+        Mockito.when(snp.getId()).thenCallRealMethod();
 
-        Mockito.when(snp.getUonetPlusOpiekunUrl()).thenCallRealMethod();
+        Mockito.when(snp.getSnpPageUrl()).thenCallRealMethod();
         Assert.assertEquals("https://uonetplus-opiekun.vulcan.net.pl/symbol/534213/Start/Index/",
-                snp.getUonetPlusOpiekunUrl());
+                snp.getSnpPageUrl());
+    }
+
+    @Test(expected = NotLoggedInErrorException.class)
+    public void getSnpPageUrlWithWrongPage() throws Exception {
+        Document wrongPageDocument = Jsoup.parse(
+                FixtureHelper.getAsString(getClass().getResourceAsStream("OcenyWszystkie-semester.html"))
+        );
+
+        Mockito.when(snp.getPageByUrl(Mockito.anyString())).thenReturn(wrongPageDocument);
+        Mockito.when(snp.getStartPageUrl()).thenReturn("http://wulkan.io");
+        Mockito.when(snp.getId()).thenCallRealMethod();
+
+        Mockito.when(snp.getSnpPageUrl()).thenCallRealMethod();
+
+        snp.getSnpPageUrl();
     }
 
     @Test
@@ -69,7 +92,7 @@ public class StudentAndParentTest {
                 + ".vulcan.net.pl/demoupowiat/demo12345/Start/Index/"));
     }
 
-    @Test(expected = LoginErrorException.class)
+    @Test(expected = NotLoggedInErrorException.class)
     public void getExtractedIDNotLoggedTest() throws Exception {
         Assert.assertEquals("123", snp.getExtractedIdFromUrl("https://uonetplus"
                 + ".vulcan.net.pl/powiat/"));

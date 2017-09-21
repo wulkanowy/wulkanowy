@@ -15,6 +15,7 @@ import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.login.LoginErrorException;
+import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.PersonalData;
 import io.github.wulkanowy.dao.entities.Account;
@@ -31,7 +32,7 @@ public class VulcanSynchronisation {
     private Long userId = 0L;
 
     public void loginCurrentUser(Context context, DaoSession daoSession) throws CryptoException,
-            BadCredentialsException, LoginErrorException, AccountPermissionException, IOException {
+            BadCredentialsException, NotLoggedInErrorException, AccountPermissionException, IOException {
 
         AccountDao accountDao = daoSession.getAccountDao();
 
@@ -55,7 +56,7 @@ public class VulcanSynchronisation {
     }
 
     public void loginNewUser(String email, String password, String symbol, Context context, DaoSession daoSession)
-            throws BadCredentialsException, LoginErrorException, AccountPermissionException, IOException, CryptoException {
+            throws BadCredentialsException, NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException {
 
         AccountDao accountDao = daoSession.getAccountDao();
 
@@ -82,7 +83,7 @@ public class VulcanSynchronisation {
     }
 
     public void loginNewUser(String email, String password, String symbol, Activity activity)
-            throws BadCredentialsException, LoginErrorException, AccountPermissionException, IOException, CryptoException {
+            throws BadCredentialsException, NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException {
         loginNewUser(email, password, symbol, activity, ((WulkanowyApp) activity.getApplication()).getDaoSession());
     }
 
@@ -105,13 +106,14 @@ public class VulcanSynchronisation {
     }
 
     private StudentAndParent getAndSetStudentAndParentFromApi(String symbol, Map<String, String> cookiesMap)
-            throws IOException, LoginErrorException {
+            throws IOException, NotLoggedInErrorException {
 
         if (studentAndParent == null) {
             Cookies cookies = new Cookies();
             cookies.setItems(cookiesMap);
 
             StudentAndParent snp = new StudentAndParent(cookies, symbol);
+            snp.storeContextCookies();
 
             studentAndParent = snp;
             return snp;

@@ -13,6 +13,7 @@ import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.LoginErrorException;
+import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.services.jobs.GradesSync;
 import io.github.wulkanowy.services.synchronisation.DataSynchronisation;
@@ -53,7 +54,7 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
                 return R.string.login_bad_account_permission_text;
             } catch (CryptoException e) {
                 return R.string.encrypt_failed_text;
-            } catch (LoginErrorException | IOException e) {
+            } catch (NotLoggedInErrorException | IOException e) {
                 return R.string.login_denied_text;
             }
 

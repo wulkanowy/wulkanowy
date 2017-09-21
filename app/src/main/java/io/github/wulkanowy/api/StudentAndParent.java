@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.api.login.LoginErrorException;
+import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 
 public class StudentAndParent extends Api {
 
@@ -23,47 +23,6 @@ public class StudentAndParent extends Api {
     private String symbol;
 
     private String id;
-
-    public StudentAndParent(Cookies cookies, String symbol) throws IOException, LoginErrorException {
-        this.cookies = cookies;
-        this.symbol = symbol;
-
-        storeContextCookies();
-    }
-
-    public StudentAndParent(Cookies cookies, String symbol, String id)
-            throws IOException, LoginErrorException {
-        this.cookies = cookies;
-        this.symbol = symbol;
-        this.id = id;
-
-        storeContextCookies();
-    }
-
-    public void storeContextCookies() throws IOException, LoginErrorException {
-        //get context module cookie
-        Connection.Response res = Jsoup.connect(getUonetPlusOpiekunUrl())
-                .followRedirects(true)
-                .cookies(getCookies())
-                .execute();
-
-        cookies.addItems(res.cookies());
-    }
-
-    public String getUonetPlusOpiekunUrl() throws IOException, LoginErrorException {
-        if (null != getId()) {
-            return getBaseUrl().replace("{symbol}", getSymbol()).replace("{ID}", getId());
-        }
-
-        // get link to uonetplus-opiekun.vulcan.net.pl module
-        Document startPage = getPageByUrl(getStartPageUrl().replace("{symbol}", getSymbol()));
-        Element studentTileLink = startPage.select(".panel.linkownia.pracownik.klient > a").first();
-        String uonetPlusOpiekunUrl = studentTileLink.attr("href");
-
-        this.id = getExtractedIdFromUrl(uonetPlusOpiekunUrl);
-
-        return uonetPlusOpiekunUrl;
-    }
 
     public String getGradesPageUrl() {
         return gradesPageUrl;
@@ -85,11 +44,51 @@ public class StudentAndParent extends Api {
         return id;
     }
 
-    public String getExtractedIdFromUrl(String uonetPlusOpiekunUrl) throws LoginErrorException {
-        String[] path = uonetPlusOpiekunUrl.split("vulcan.net.pl/")[1].split("/");
+    public StudentAndParent(Cookies cookies, String symbol) {
+        this.cookies = cookies;
+        this.symbol = symbol;
+    }
+
+    public StudentAndParent(Cookies cookies, String symbol, String id) {
+        this(cookies, symbol);
+        this.id = id;
+    }
+
+    public void storeContextCookies() throws IOException, NotLoggedInErrorException {
+        //get context cookie
+        Connection.Response res = Jsoup.connect(getSnpPageUrl())
+                .followRedirects(true)
+                .cookies(getCookies())
+                .execute();
+
+        cookies.addItems(res.cookies());
+    }
+
+    public String getSnpPageUrl() throws IOException, NotLoggedInErrorException {
+        if (null != getId()) {
+            return getBaseUrl().replace("{symbol}", getSymbol()).replace("{ID}", getId());
+        }
+
+        // get url to uonetplus-opiekun.vulcan.net.pl
+        Document startPage = getPageByUrl(getStartPageUrl().replace("{symbol}", getSymbol()));
+        Element studentTileLink = startPage.select(".panel.linkownia.pracownik.klient > a").first();
+
+        if (null == studentTileLink) {
+            throw new NotLoggedInErrorException();
+        }
+
+        String snpPageUrl = studentTileLink.attr("href");
+
+        this.id = getExtractedIdFromUrl(snpPageUrl);
+
+        return snpPageUrl;
+    }
+
+    public String getExtractedIdFromUrl(String snpPageUrl) throws NotLoggedInErrorException {
+        String[] path = snpPageUrl.split("vulcan.net.pl/")[1].split("/");
 
         if (4 != path.length) {
-            throw new LoginErrorException();
+            throw new NotLoggedInErrorException();
         }
 
         return path[1];
