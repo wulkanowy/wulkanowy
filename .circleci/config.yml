@@ -101,13 +101,14 @@ jobs:
             circle-android wait-for-boot
             # unlock the emulator screen
             sleep 30
-            adb shell input keyevent 82
+            fb-adb shell input keyevent 82
+            fb-adb rcmd screencap -p > $CIRCLE_ARTIFACTS/screen-$(date +"%T").png
       - run:
           name: Clean project
-          command: ./gradlew clean --stacktrace -PdisablePreDex
+          command: ./gradlew clean --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Run instrumented tests
-          command: ./gradlew connectedAndroidTest --stacktrace -PdisablePreDex
+          command: ./gradlew connectedAndroidTest --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Upload code covarage to codecov
           command: bash <(curl -s https://codecov.io/bash) -F instrumented
