@@ -84,7 +84,6 @@ jobs:
           path: ./app/build/test-results
 
   instrumented:
-    <<: *container_config
     steps:
       - *attach_workspace
       - run:
@@ -127,5 +126,3 @@ workflows:
           requires:
             - build
       - instrumented:
-          requires:
-            - build
