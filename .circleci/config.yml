@@ -84,6 +84,7 @@ jobs:
           path: ./app/build/test-results
 
   instrumented:
+    <<: *container_config
     steps:
       - *attach_workspace
       - run:
@@ -102,8 +103,11 @@ jobs:
             sleep 30
             adb shell input keyevent 82
       - run:
+          name: Clean project
+          command: ./gradlew clean --stacktrace -PdisablePreDex
+      - run:
           name: Run instrumented tests
-          command: ./gradlew connectedAndroidTest -PdisablePreDex
+          command: ./gradlew connectedAndroidTest --stacktrace -PdisablePreDex
       - run:
           name: Upload code covarage to codecov
           command: bash <(curl -s https://codecov.io/bash) -F instrumented
