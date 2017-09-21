@@ -2,6 +2,7 @@ package io.github.wulkanowy.security;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.filters.SdkSuppress;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -11,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @SmallTest
+@SdkSuppress(minSdkVersion = 18)
 @RunWith(AndroidJUnit4.class)
 public class ScramblerTest {
 

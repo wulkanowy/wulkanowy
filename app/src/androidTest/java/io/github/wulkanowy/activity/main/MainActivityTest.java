@@ -167,7 +167,7 @@ public class MainActivityTest {
     private void okClick() {
         ViewInteraction appCompatButton = onView(
                 allOf(withId(android.R.id.button1), withText("OK")));
-        appCompatButton.perform(scrollTo(), click());
+        appCompatButton.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
