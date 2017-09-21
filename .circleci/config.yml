@@ -130,3 +130,5 @@ workflows:
           requires:
             - build
       - instrumented:
+          requires:
+            - build
