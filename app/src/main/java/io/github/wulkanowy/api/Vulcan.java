@@ -21,11 +21,11 @@ import io.github.wulkanowy.api.user.FamilyInformation;
 
 public class Vulcan extends Api {
 
+    protected Cookies cookies;
+
     private String id;
 
     private String symbol;
-
-    protected Cookies cookies;
 
     private StudentAndParent snp;
 

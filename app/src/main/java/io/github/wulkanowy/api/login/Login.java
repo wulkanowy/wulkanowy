@@ -14,9 +14,9 @@ public class Login extends Api {
     private String loginPageUrl = "https://cufs.vulcan.net.pl/{symbol}/Account/LogOn";
 
     private String certificatePageUrl = "https://cufs.vulcan.net.pl/{symbol}"
-                    + "/FS/LS?wa=wsignin1.0&wtrealm=https://uonetplus.vulcan.net.pl/{symbol}"
-                    + "/LoginEndpoint.aspx&wctx=https://uonetplus.vulcan.net.pl/{symbol}"
-                    + "/LoginEndpoint.aspx";
+            + "/FS/LS?wa=wsignin1.0&wtrealm=https://uonetplus.vulcan.net.pl/{symbol}"
+            + "/LoginEndpoint.aspx&wctx=https://uonetplus.vulcan.net.pl/{symbol}"
+            + "/LoginEndpoint.aspx";
 
     private String loginEndpointPageUrl =
             "https://uonetplus.vulcan.net.pl/{symbol}/LoginEndpoint.aspx";

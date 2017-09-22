@@ -24,6 +24,16 @@ public class StudentAndParent extends Api {
 
     private String id;
 
+    public StudentAndParent(Cookies cookies, String symbol) {
+        this.cookies = cookies;
+        this.symbol = symbol;
+    }
+
+    public StudentAndParent(Cookies cookies, String symbol, String id) {
+        this(cookies, symbol);
+        this.id = id;
+    }
+
     public String getGradesPageUrl() {
         return gradesPageUrl;
     }
@@ -42,16 +52,6 @@ public class StudentAndParent extends Api {
 
     public String getId() {
         return id;
-    }
-
-    public StudentAndParent(Cookies cookies, String symbol) {
-        this.cookies = cookies;
-        this.symbol = symbol;
-    }
-
-    public StudentAndParent(Cookies cookies, String symbol, String id) {
-        this(cookies, symbol);
-        this.id = id;
     }
 
     public void storeContextCookies() throws IOException, NotLoggedInErrorException {

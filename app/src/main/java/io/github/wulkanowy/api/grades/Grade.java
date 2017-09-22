@@ -2,10 +2,8 @@ package io.github.wulkanowy.api.grades;
 
 public class Grade {
 
-    private String subject = "";
-
     protected String value = "";
-
+    private String subject = "";
     private String color = "";
 
     private String symbol = "";
