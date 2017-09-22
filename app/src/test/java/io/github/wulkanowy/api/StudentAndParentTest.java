@@ -10,18 +10,16 @@ import org.mockito.Mockito;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 
 public class StudentAndParentTest {
-
-    private String fixtureFileName = "OcenyWszystkie-semester.html";
 
     private StudentAndParent snp;
 
     @Before
     public void setUp() throws Exception {
-        String input = FixtureHelper.getAsString(getClass().getResourceAsStream(fixtureFileName));
+        String input = FixtureHelper.getAsString(
+                getClass().getResourceAsStream("OcenyWszystkie-semester.html"));
         Document gradesPageDocument = Jsoup.parse(input);
 
         snp = Mockito.mock(StudentAndParent.class);

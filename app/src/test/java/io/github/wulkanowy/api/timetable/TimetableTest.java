@@ -1,222 +1,195 @@
 package io.github.wulkanowy.api.timetable;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import io.github.wulkanowy.api.FixtureHelper;
-import io.github.wulkanowy.api.StudentAndParent;
+import io.github.wulkanowy.api.StudentAndParentTestCase;
 
-public class TimetableTest {
+public class TimetableTest extends StudentAndParentTestCase {
 
-    private String fixtureStdFileName = "PlanLekcji-std.html";
+    private Timetable std;
 
-    private String fixtureHolidaysFileName = "PlanLekcji-holidays.html";
+    private Timetable full;
 
-    private String fixtureFullFileName = "PlanLekcji-full.html";
+    private Timetable holidays;
 
-    private Timetable getSetUpTable(String fixtureFileName) throws Exception {
-        String input = FixtureHelper.getAsString(getClass().getResourceAsStream(fixtureFileName));
+    @Before
+    public void setUp() throws Exception {
+        std = new Timetable(getSnp("PlanLekcji-std.html"));
+        full = new Timetable(getSnp("PlanLekcji-full.html"));
+        holidays = new Timetable(getSnp("PlanLekcji-holidays.html"));
+    }
 
-        Document tablePageDocument = Jsoup.parse(input);
+    // Week
 
-        StudentAndParent timetable = Mockito.mock(StudentAndParent.class);
-        Mockito.when(timetable.getSnPPageDocument(Mockito.anyString()))
-                .thenReturn(tablePageDocument);
-
-        return new Timetable(timetable);
+    @Test
+    public void getWeekTableTest() throws Exception {
+        Assert.assertEquals(5, std.getWeekTable().getDays().size());
+        Assert.assertEquals(5, full.getWeekTable().getDays().size());
+        Assert.assertEquals(5, holidays.getWeekTable().getDays().size());
     }
 
     @Test
-    public void getWeekTableStandardTest() throws Exception {
-        Timetable table = getSetUpTable(fixtureStdFileName);
-        Week week = table.getWeekTable();
+    public void getStartDayDateTest() throws Exception {
+        Assert.assertEquals("19.06.2017", std.getWeekTable().getStartDayDate());
+        Assert.assertEquals("19.06.2017", full.getWeekTable().getStartDayDate());
+        Assert.assertEquals("31.07.2017", holidays.getWeekTable().getStartDayDate());
+    }
 
-        Assert.assertEquals(5, week.getDays().size());
-        Assert.assertEquals("19.06.2017", week.getStartDayDate());
+    // Day
 
-        Assert.assertEquals("19.06.2017", week.getDay(0).getDate());
-        Assert.assertEquals("23.06.2017", week.getDay(4).getDate());
-
-        Assert.assertFalse(week.getDay(4).isFreeDay());
+    @Test
+    public void getDayDateTest() throws Exception {
+        Assert.assertEquals("19.06.2017", std.getWeekTable().getDay(0).getDate());
+        Assert.assertEquals("23.06.2017", std.getWeekTable().getDay(4).getDate());
+        Assert.assertEquals("20.06.2017", full.getWeekTable().getDay(1).getDate());
+        Assert.assertEquals("22.06.2017", full.getWeekTable().getDay(3).getDate());
+        Assert.assertEquals("02.08.2017", holidays.getWeekTable().getDay(2).getDate());
     }
 
     @Test
-    public void getWeekTableStandardLessonStartEndEndTest() throws Exception {
-        Timetable tableStd = getSetUpTable(fixtureStdFileName);
-        Week stdWeek = tableStd.getWeekTable();
-
-        Assert.assertEquals("08:00", stdWeek.getDay(0).getLesson(0).getStartTime());
-        Assert.assertEquals("08:45", stdWeek.getDay(1).getLesson(0).getEndTime());
-        Assert.assertEquals("12:15", stdWeek.getDay(2).getLesson(4).getEndTime());
-        Assert.assertEquals("14:10", stdWeek.getDay(3).getLesson(7).getStartTime());
-
-        Timetable tableFull = getSetUpTable(fixtureFullFileName);
-        Week fullWeek = tableFull.getWeekTable();
-
-        Assert.assertEquals("07:10", fullWeek.getDay(0).getLesson(0).getStartTime());
-        Assert.assertEquals("07:55", fullWeek.getDay(1).getLesson(0).getEndTime());
-        Assert.assertEquals("12:20", fullWeek.getDay(2).getLesson(6).getStartTime());
-        Assert.assertEquals("19:00", fullWeek.getDay(3).getLesson(13).getEndTime());
-
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void getWeekTableStandardOutOfBoundsIndex() throws Exception {
-        Timetable table = getSetUpTable(fixtureStdFileName);
-        Week week = table.getWeekTable();
-
-        week.getDay(5);
+    public void getDayIsFreeTest() throws Exception {
+        Assert.assertFalse(std.getWeekTable().getDay(0).isFreeDay());
+        Assert.assertFalse(full.getWeekTable().getDay(2).isFreeDay());
+        Assert.assertTrue(holidays.getWeekTable().getDay(4).isFreeDay());
     }
 
     @Test
-    public void getWeekTableHolidaysTest() throws Exception {
-        Timetable table = getSetUpTable(fixtureHolidaysFileName);
-        Week week = table.getWeekTable();
-
-        Assert.assertTrue(week.getDay(1).isFreeDay());
-
-        Assert.assertNotEquals("Wakacje", week.getDay(2).getFreeDayName());
-
-        Assert.assertEquals("Ferie letnie", week.getDay(3).getFreeDayName());
-        Assert.assertEquals("31.07.2017", week.getStartDayDate());
-        Assert.assertEquals(5, week.getDays().size());
-        Assert.assertEquals(14, week.getDay(4).getLessons().size());
+    public void getDayFreeDayName() throws Exception {
+        Assert.assertNotEquals("Wakacje", std.getWeekTable().getDay(0).getFreeDayName());
+        Assert.assertNotEquals("Ferie letnie", full.getWeekTable().getDay(1).getFreeDayName());
+        Assert.assertNotEquals("Wakacje", holidays.getWeekTable().getDay(2).getFreeDayName());
+        Assert.assertEquals("Ferie letnie", holidays.getWeekTable().getDay(4).getFreeDayName());
     }
 
     @Test
-    public void getWeekTableHolidaysWithEmptyLessonsTest() throws Exception {
-        Timetable table = getSetUpTable(fixtureHolidaysFileName);
-        Week week = table.getWeekTable();
+    public void getDayLessonsTest() throws Exception {
+        Assert.assertEquals(8, std.getWeekTable().getDay(0).getLessons().size());
+        Assert.assertEquals(14, full.getWeekTable().getDay(2).getLessons().size());
+        Assert.assertEquals(14, holidays.getWeekTable().getDay(4).getLessons().size());
+    }
 
-        Assert.assertEquals(5, week.getDays().size());
+    // Lesson
 
-        Assert.assertTrue(week.getDay(0).getLesson(5).isEmpty());
-        Assert.assertTrue(week.getDay(2).getLesson(13).isEmpty());
-        Assert.assertTrue(week.getDay(3).getLesson(0).isEmpty());
-        Assert.assertTrue(week.getDay(4).getLesson(13).isEmpty());
+    @Test
+    public void getLessonSubjectTest() throws Exception {
+        Assert.assertEquals("Historia", std.getWeekTable().getDay(0).getLesson(1).getSubject());
+        Assert.assertEquals("Zajęcia techniczne", std.getWeekTable().getDay(2).getLesson(4).getSubject());
+        Assert.assertEquals("Język angielski", full.getWeekTable().getDay(0).getLesson(1).getSubject());
+        Assert.assertEquals("Uroczyste zakończenie roku szkolnego", full.getWeekTable().getDay(4).getLesson(0).getSubject());
+        Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getSubject());
     }
 
     @Test
-    public void getWeekTableFullTest() throws Exception {
-        Timetable table = getSetUpTable(fixtureFullFileName);
-        Week week = table.getWeekTable();
-
-        Assert.assertFalse(week.getDay(1).getLesson(2).isEmpty());
+    public void getLessonTeacherTest() throws Exception {
+        Assert.assertEquals("Bogatka Katarzyna", std.getWeekTable().getDay(0).getLesson(1).getTeacher());
+        Assert.assertEquals("Chlebowski Stanisław", std.getWeekTable().getDay(2).getLesson(4).getTeacher());
+        Assert.assertEquals("Kobczyk Iwona", full.getWeekTable().getDay(0).getLesson(1).getTeacher());
+        Assert.assertEquals("Bączek Grzegorz", full.getWeekTable().getDay(0).getLesson(7).getTeacher());
+        Assert.assertEquals("Baran Małgorzata", full.getWeekTable().getDay(4).getLesson(0).getTeacher());
+        Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getTeacher());
     }
 
     @Test
-    public void getWeekTableFullLessonsGroupsDivisionTest() throws Exception {
-        Timetable table = getSetUpTable(fixtureFullFileName);
-        Week week = table.getWeekTable();
-
-        // class="", span*4
-        Lesson lesson1 = week.getDay(0).getLesson(1);
-        Assert.assertTrue(lesson1.isDivisionIntoGroups());
-        Assert.assertEquals("J1", lesson1.getGroupName());
-
-        // class="", span*3
-        Lesson lesson2 = week.getDay(0).getLesson(7);
-        Assert.assertFalse(lesson2.isDivisionIntoGroups());
-        Assert.assertEquals("", lesson2.getGroupName());
-
-        // div*3 (2), class="x-treelabel-zas", span*4
-        Lesson lesson3 = week.getDay(1).getLesson(2);
-        Assert.assertFalse(lesson3.isDivisionIntoGroups());
-        Assert.assertEquals("", lesson3.getGroupName());
-
-        // div*3 (2), class="x-treelabel-zas", span*5
-        Lesson lesson4 = week.getDay(1).getLesson(3);
-        Assert.assertTrue(lesson4.isDivisionIntoGroups());
-        Assert.assertEquals("wf2", lesson4.getGroupName());
-
-        // class="x-treelabel-ppl", span*3
-        Lesson lesson5 = week.getDay(4).getLesson(0);
-        Assert.assertFalse(lesson5.isDivisionIntoGroups());
-        Assert.assertEquals("", lesson5.getGroupName());
+    public void getLessonRoomTest() throws Exception {
+        Assert.assertEquals("", std.getWeekTable().getDay(3).getLesson(3).getRoom());
+        Assert.assertEquals("33", full.getWeekTable().getDay(0).getLesson(7).getRoom());
+        Assert.assertEquals("32", full.getWeekTable().getDay(1).getLesson(8).getRoom());
+        Assert.assertEquals("37", full.getWeekTable().getDay(4).getLesson(0).getRoom());
+        Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getRoom());
     }
 
     @Test
-    public void getWeekTableFullLessonsTypesTest() throws Exception {
-        Timetable table = getSetUpTable(fixtureFullFileName);
-        Week week = table.getWeekTable();
-
-        // class="", span*4
-        Lesson lesson1 = week.getDay(0).getLesson(1);
-        Assert.assertFalse(lesson1.isPlanning());
-        Assert.assertTrue(lesson1.isRealized());
-        Assert.assertFalse(lesson1.isMovedOrCanceled());
-        Assert.assertFalse(lesson1.isNewMovedInOrChanged());
-
-        // class="", span*3
-        Lesson lesson2 = week.getDay(0).getLesson(7);
-        Assert.assertFalse(lesson2.isPlanning());
-        Assert.assertTrue(lesson2.isRealized());
-        Assert.assertTrue(lesson2.isMovedOrCanceled());
-        Assert.assertFalse(lesson2.isNewMovedInOrChanged());
-
-        // div*3 (2), class="x-treelabel-zas", span*4
-        Lesson lesson3 = week.getDay(1).getLesson(2);
-        Assert.assertFalse(lesson3.isPlanning());
-        Assert.assertTrue(lesson3.isRealized());
-        Assert.assertFalse(lesson3.isMovedOrCanceled());
-        Assert.assertTrue(lesson3.isNewMovedInOrChanged());
-
-        // div*3 (2), class="x-treelabel-zas", span*5
-        Lesson lesson4 = week.getDay(1).getLesson(3);
-        Assert.assertFalse(lesson4.isPlanning());
-        Assert.assertTrue(lesson4.isRealized());
-        Assert.assertFalse(lesson4.isMovedOrCanceled());
-        Assert.assertTrue(lesson4.isNewMovedInOrChanged());
-
-        // class="x-treelabel-ppl", span*3
-        Lesson lesson5 = week.getDay(4).getLesson(0);
-        Assert.assertTrue(lesson5.isPlanning());
-        Assert.assertFalse(lesson5.isRealized());
-        Assert.assertFalse(lesson5.isMovedOrCanceled());
-        Assert.assertFalse(lesson5.isNewMovedInOrChanged());
+    public void getLessonDescriptionTest() throws Exception {
+        Assert.assertEquals("", std.getWeekTable().getDay(3).getLesson(3).getDescription());
+        Assert.assertEquals("okienko dla uczniów", full.getWeekTable().getDay(0).getLesson(7).getDescription());
+        Assert.assertEquals("przeniesiona z lekcji 7, 20.06.2017", full.getWeekTable().getDay(1).getLesson(2).getDescription());
+        Assert.assertEquals("przeniesiona z lekcji 4, 20.06.2017", full.getWeekTable().getDay(1).getLesson(3).getDescription());
+        Assert.assertEquals("", full.getWeekTable().getDay(4).getLesson(0).getDescription());
+        Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getDescription());
     }
 
     @Test
-    public void getWeekTableFullLessonsBasicInfoTest() throws Exception {
-        Timetable table = getSetUpTable(fixtureFullFileName);
-        Week week = table.getWeekTable();
+    public void getLessonGroupNameTest() throws Exception {
+        Assert.assertEquals("CH", std.getWeekTable().getDay(0).getLesson(2).getGroupName());
+        Assert.assertEquals("JNPW", std.getWeekTable().getDay(4).getLesson(0).getGroupName());
+        Assert.assertEquals("", full.getWeekTable().getDay(0).getLesson(7).getGroupName());
+        Assert.assertEquals("wf2", full.getWeekTable().getDay(1).getLesson(3).getGroupName());
+        Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getGroupName());
+    }
 
-        // class="", span*4
-        Lesson lesson1 = week.getDay(0).getLesson(1);
-        Assert.assertEquals("Język angielski", lesson1.getSubject());
-        Assert.assertEquals("Kobczyk Iwona", lesson1.getTeacher());
-        Assert.assertEquals("", lesson1.getRoom());
-        Assert.assertEquals("", lesson1.getDescription());
+    @Test
+    public void getLessonStartTimeTest() throws Exception {
+        Assert.assertEquals("08:00", std.getWeekTable().getDay(0).getLesson(0).getStartTime());
+        Assert.assertEquals("14:10", std.getWeekTable().getDay(3).getLesson(7).getStartTime());
+        Assert.assertEquals("07:10", full.getWeekTable().getDay(0).getLesson(0).getStartTime());
+        Assert.assertEquals("12:20", full.getWeekTable().getDay(2).getLesson(6).getStartTime());
+        Assert.assertEquals("12:20", holidays.getWeekTable().getDay(2).getLesson(6).getStartTime());
+    }
 
-        // class="", span*3
-        Lesson lesson2 = week.getDay(0).getLesson(7);
-        Assert.assertEquals("Fizyka", lesson2.getSubject());
-        Assert.assertEquals("Bączek Grzegorz", lesson2.getTeacher());
-        Assert.assertEquals("33", lesson2.getRoom());
-        Assert.assertEquals("okienko dla uczniów", lesson2.getDescription());
+    @Test
+    public void getLessonEndTimeTest() throws Exception {
+        Assert.assertEquals("08:45", std.getWeekTable().getDay(1).getLesson(0).getEndTime());
+        Assert.assertEquals("12:15", std.getWeekTable().getDay(2).getLesson(4).getEndTime());
+        Assert.assertEquals("07:55", full.getWeekTable().getDay(1).getLesson(0).getEndTime());
+        Assert.assertEquals("19:00", full.getWeekTable().getDay(3).getLesson(13).getEndTime());
+        Assert.assertEquals("19:00", holidays.getWeekTable().getDay(3).getLesson(13).getEndTime());
+    }
 
-        // div*3 (2), class="x-treelabel-zas", span*4
-        Lesson lesson3 = week.getDay(1).getLesson(2);
-        Assert.assertEquals("Język polski", lesson3.getSubject());
-        Assert.assertEquals("Bocian Natalia", lesson3.getTeacher());
-        Assert.assertEquals("", lesson3.getRoom());
-        Assert.assertEquals("przeniesiona z lekcji 7, 20.06.2017", lesson3.getDescription());
+    @Test
+    public void getLessonIsEmptyTest() throws Exception {
+        Assert.assertFalse(std.getWeekTable().getDay(1).getLesson(4).isEmpty());
+        Assert.assertTrue(std.getWeekTable().getDay(3).getLesson(7).isEmpty());
+        Assert.assertFalse(full.getWeekTable().getDay(1).getLesson(2).isEmpty());
+        Assert.assertFalse(full.getWeekTable().getDay(0).getLesson(7).isEmpty());
+        Assert.assertTrue(full.getWeekTable().getDay(2).getLesson(9).isEmpty());
+        Assert.assertTrue(holidays.getWeekTable().getDay(0).getLesson(5).isEmpty());
+        Assert.assertTrue(holidays.getWeekTable().getDay(4).getLesson(13).isEmpty());
+    }
 
-        // div*3 (2), class="x-treelabel-zas", span*5
-        Lesson lesson4 = week.getDay(1).getLesson(3);
-        Assert.assertEquals("Wychowanie fizyczne", lesson4.getSubject());
-        Assert.assertEquals("Nowicka Irena", lesson4.getTeacher());
-        Assert.assertEquals("", lesson4.getRoom());
-        Assert.assertEquals("przeniesiona z lekcji 4, 20.06.2017", lesson4.getDescription());
+    @Test
+    public void getLessonIsDivisionIntoGroupsTest() throws Exception {
+        Assert.assertTrue(std.getWeekTable().getDay(0).getLesson(2).isDivisionIntoGroups());
+        Assert.assertTrue(std.getWeekTable().getDay(4).getLesson(0).isDivisionIntoGroups());
+        Assert.assertFalse(full.getWeekTable().getDay(0).getLesson(7).isDivisionIntoGroups());
+        Assert.assertTrue(full.getWeekTable().getDay(1).getLesson(3).isDivisionIntoGroups());
+        Assert.assertFalse(holidays.getWeekTable().getDay(3).getLesson(3).isDivisionIntoGroups());
+    }
 
-        // class="x-treelabel-ppl", span*3
-        Lesson lesson5 = week.getDay(4).getLesson(0);
-        Assert.assertEquals("Uroczyste zakończenie roku szkolnego", lesson5.getSubject());
-        Assert.assertEquals("Baran Małgorzata", lesson5.getTeacher());
-        Assert.assertEquals("37", lesson5.getRoom());
-        Assert.assertEquals("", lesson5.getDescription());
+    @Test
+    public void getLessonIsPlanningTest() throws Exception {
+        Assert.assertFalse(std.getWeekTable().getDay(4).getLesson(4).isPlanning());
+        Assert.assertFalse(full.getWeekTable().getDay(0).getLesson(1).isPlanning());
+        Assert.assertFalse(full.getWeekTable().getDay(1).getLesson(3).isPlanning());
+        Assert.assertTrue(full.getWeekTable().getDay(4).getLesson(0).isPlanning());
+        Assert.assertFalse(holidays.getWeekTable().getDay(3).getLesson(3).isPlanning());
+    }
+
+    @Test
+    public void getLessonIsRealizedTest() throws Exception {
+        Assert.assertTrue(std.getWeekTable().getDay(3).getLesson(3).isRealized());
+        Assert.assertTrue(full.getWeekTable().getDay(0).getLesson(1).isRealized());
+        Assert.assertTrue(full.getWeekTable().getDay(1).getLesson(3).isRealized());
+        Assert.assertFalse(full.getWeekTable().getDay(4).getLesson(0).isRealized());
+        Assert.assertFalse(holidays.getWeekTable().getDay(3).getLesson(3).isRealized());
+    }
+
+    @Test
+    public void getLessonIsMovedOrCanceledTest() throws Exception {
+        Assert.assertFalse(std.getWeekTable().getDay(3).getLesson(3).isMovedOrCanceled());
+        Assert.assertTrue(full.getWeekTable().getDay(0).getLesson(7).isMovedOrCanceled());
+        Assert.assertFalse(full.getWeekTable().getDay(1).getLesson(3).isMovedOrCanceled());
+        Assert.assertFalse(full.getWeekTable().getDay(4).getLesson(0).isMovedOrCanceled());
+        Assert.assertFalse(holidays.getWeekTable().getDay(3).getLesson(3).isMovedOrCanceled());
+    }
+
+    @Test
+    public void getLessonIsNewMovedInOrChangedTest() throws Exception {
+        Assert.assertFalse(std.getWeekTable().getDay(3).getLesson(3).isNewMovedInOrChanged());
+        Assert.assertFalse(full.getWeekTable().getDay(0).getLesson(1).isNewMovedInOrChanged());
+        Assert.assertTrue(full.getWeekTable().getDay(1).getLesson(2).isNewMovedInOrChanged());
+        Assert.assertTrue(full.getWeekTable().getDay(1).getLesson(3).isNewMovedInOrChanged());
+        Assert.assertFalse(holidays.getWeekTable().getDay(3).getLesson(3).isNewMovedInOrChanged());
     }
 }

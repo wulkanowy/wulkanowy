@@ -1,18 +1,14 @@
 package io.github.wulkanowy.api.attendance;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.util.List;
 
-import io.github.wulkanowy.api.FixtureHelper;
-import io.github.wulkanowy.api.StudentAndParent;
+import io.github.wulkanowy.api.StudentAndParentTestCase;
 
-public class AttendanceStatisticsTest {
+public class AttendanceStatisticsTest extends StudentAndParentTestCase {
 
     private AttendanceStatistics excellent;
 
@@ -20,20 +16,8 @@ public class AttendanceStatisticsTest {
 
     @Before
     public void setUp() throws Exception {
-        this.excellent = getSetUpTable("Frekwencja-excellent.html");
-        this.full = getSetUpTable("Frekwencja-full.html");
-    }
-
-    private AttendanceStatistics getSetUpTable(String fixtureFileName) throws Exception {
-        String input = FixtureHelper.getAsString(getClass().getResourceAsStream(fixtureFileName));
-
-        Document tablePageDocument = Jsoup.parse(input);
-
-        StudentAndParent timetable = Mockito.mock(StudentAndParent.class);
-        Mockito.when(timetable.getSnPPageDocument(Mockito.anyString()))
-                .thenReturn(tablePageDocument);
-
-        return new AttendanceStatistics(timetable);
+        this.excellent = new AttendanceStatistics(getSnp("Frekwencja-excellent.html"));
+        this.full = new AttendanceStatistics(getSnp("Frekwencja-full.html"));
     }
 
     @Test

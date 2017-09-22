@@ -94,6 +94,12 @@ public class Timetable {
         lesson.setTeacher(spans.get(1).text());
         lesson.setRoom(spans.get(2).text());
 
+        // okienko dla uczniów
+        if (5 == spans.size()) {
+            lesson.setTeacher(spans.get(2).text());
+            lesson.setRoom(spans.get(3).text());
+        }
+
         lesson = getLessonGroupDivisionInfo(lesson, spans);
         lesson = getLessonTypeInfo(lesson, spans);
         lesson = getLessonDescriptionInfo(lesson, spans);
