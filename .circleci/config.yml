@@ -70,7 +70,9 @@ jobs:
           command: ./gradlew --no-daemon --stacktrace test
       - run:
           name: Upload unit code coverage to codecov
-          command: ./gradlew --no-daemon --stacktrace jacocoTestReport && bash <(curl -s https://codecov.io/bash) -F unit
+          command: |
+            ./gradlew --no-daemon --stacktrace jacocoTestReport
+            bash <(curl -s https://codecov.io/bash) -F unit
       - run:
           name: Upload code coverage to codacy
           command: ./gradlew --no-daemon --stacktrace codacyUpload
@@ -114,8 +116,6 @@ jobs:
       - store_artifacts:
           path: app/build/reports
           destination: reports
-      - store_test_results:
-          path: app/build/test-results
 
 workflows:
   version: 2
