@@ -58,6 +58,8 @@ jobs:
       - store_artifacts:
           path: ./app/build/reports/
           destination: lint_reports/app/
+      - store_test_results:
+          path: ./app/build/reports/
 
   test:
     <<: *container_config
@@ -111,11 +113,16 @@ jobs:
           name: Run instrumented tests
           command: ./gradlew connectedAndroidTest --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
+          name: Collect logs from emulator
+          command: adb logcat -d > ./app/build/reports/logcat_emulator.txt
+      - run:
           name: Upload code covarage to codecov
           command: bash <(curl -s https://codecov.io/bash) -F instrumented
       - store_artifacts:
-          path: app/build/reports
+          path: ./app/build/reports
           destination: reports
+      - store_test_results:
+          path: ./app/build/outputs/androidTest-results/connected/
 
 workflows:
   version: 2
