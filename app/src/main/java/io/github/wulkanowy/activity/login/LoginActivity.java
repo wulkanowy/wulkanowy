@@ -1,4 +1,4 @@
-package io.github.wulkanowy.activity.main;
+package io.github.wulkanowy.activity.login;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -17,7 +17,7 @@ import java.util.LinkedHashMap;
 
 import io.github.wulkanowy.R;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private float mTouchPosition;
 
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         new AlertDialog.Builder(this)
                 .setTitle(R.string.warning_label_text)

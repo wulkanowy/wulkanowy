@@ -1,4 +1,4 @@
-package io.github.wulkanowy.activity.main;
+package io.github.wulkanowy.activity.login;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

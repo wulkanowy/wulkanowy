@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/WulkanowyTheme">
         <activity
-            android:name=".activity.started.StartedActivity"
+            android:name=".activity.splash.SplashActivity"
             android:configChanges="orientation|screenSize"
             android:noHistory="true"
             android:theme="@style/WulkanowyTheme.noActionBar">
@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.main.MainActivity"
+            android:name=".activity.login.LoginActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/login_text"
             android:windowSoftInputMode="adjustResize" />
