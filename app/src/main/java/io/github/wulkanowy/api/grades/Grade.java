@@ -3,7 +3,9 @@ package io.github.wulkanowy.api.grades;
 public class Grade {
 
     protected String value = "";
+
     private String subject = "";
+
     private String color = "";
 
     private String symbol = "";
