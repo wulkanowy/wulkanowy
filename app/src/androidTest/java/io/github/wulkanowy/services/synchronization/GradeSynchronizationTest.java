@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +24,6 @@ import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.dao.entities.Subject;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.synchronisation.GradesSynchronisation;
-
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 
 @RunWith(AndroidJUnit4.class)
 public class GradeSynchronizationTest {
@@ -56,16 +54,16 @@ public class GradeSynchronizationTest {
         List<Grade> gradeList = new ArrayList<>();
         gradeList.add(new Grade().setSubject("Matematyka").setValue("5"));
 
-        GradesList gradesListApi = mock(GradesList.class);
-        doReturn(gradeList).when(gradesListApi).getAll();
+        GradesList gradesListApi = Mockito.mock(GradesList.class);
+        Mockito.doReturn(gradeList).when(gradesListApi).getAll();
 
-        Vulcan vulcan = mock(Vulcan.class);
-        doReturn(gradesListApi).when(vulcan).getGradesList();
+        Vulcan vulcan = Mockito.mock(Vulcan.class);
+        Mockito.doReturn(gradesListApi).when(vulcan).getGradesList();
 
-        LoginSession loginSession = mock(LoginSession.class);
-        doReturn(vulcan).when(loginSession).getVulcan();
-        doReturn(daoSession).when(loginSession).getDaoSession();
-        doReturn(userId).when(loginSession).getUserId();
+        LoginSession loginSession = Mockito.mock(LoginSession.class);
+        Mockito.doReturn(vulcan).when(loginSession).getVulcan();
+        Mockito.doReturn(daoSession).when(loginSession).getDaoSession();
+        Mockito.doReturn(userId).when(loginSession).getUserId();
 
         GradesSynchronisation gradesSynchronisation = new GradesSynchronisation();
         gradesSynchronisation.sync(loginSession);

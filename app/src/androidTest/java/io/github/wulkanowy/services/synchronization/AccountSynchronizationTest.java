@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 
@@ -29,11 +30,6 @@ import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.security.Safety;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.synchronisation.AccountSynchronisation;
-
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-
 
 @RunWith(AndroidJUnit4.class)
 public class AccountSynchronizationTest {
@@ -85,8 +81,8 @@ public class AccountSynchronizationTest {
 
         setUserIdSharePreferences(userId);
 
-        Vulcan vulcan = mock(Vulcan.class);
-        doNothing().when(vulcan).login("TEST@TEST", "TEST", "");
+        Vulcan vulcan = Mockito.mock(Vulcan.class);
+        Mockito.doNothing().when(vulcan).login("TEST@TEST", "TEST", "");
 
         AccountSynchronisation accountSynchronisation = new AccountSynchronisation();
         LoginSession loginSession = accountSynchronisation.loginCurrentUser(targetContext, daoSession, vulcan);
@@ -99,15 +95,15 @@ public class AccountSynchronizationTest {
 
     @Test
     public void loginNewUserTest() throws Exception {
-        PersonalData personalData = mock(PersonalData.class);
-        doReturn("NAME-TEST").when(personalData).getFirstAndLastName();
+        PersonalData personalData = Mockito.mock(PersonalData.class);
+        Mockito.doReturn("NAME-TEST").when(personalData).getFirstAndLastName();
 
-        BasicInformation basicInformation = mock(BasicInformation.class);
-        doReturn(personalData).when(basicInformation).getPersonalData();
+        BasicInformation basicInformation = Mockito.mock(BasicInformation.class);
+        Mockito.doReturn(personalData).when(basicInformation).getPersonalData();
 
-        Vulcan vulcan = mock(Vulcan.class);
-        doNothing().when(vulcan).login("TEST@TEST", "TEST", "");
-        doReturn(basicInformation).when(vulcan).getBasicInformation();
+        Vulcan vulcan = Mockito.mock(Vulcan.class);
+        Mockito.doNothing().when(vulcan).login("TEST@TEST", "TEST", "");
+        Mockito.doReturn(basicInformation).when(vulcan).getBasicInformation();
 
         AccountSynchronisation accountSynchronisation = new AccountSynchronisation();
         LoginSession loginSession = accountSynchronisation

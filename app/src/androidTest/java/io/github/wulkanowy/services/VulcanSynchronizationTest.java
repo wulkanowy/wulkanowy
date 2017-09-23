@@ -1,6 +1,5 @@
 package io.github.wulkanowy.services;
 
-
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Assert;

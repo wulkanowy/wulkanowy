@@ -1,6 +1,5 @@
 package io.github.wulkanowy.services.synchronization;
 
-
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -11,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +22,6 @@ import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.dao.entities.Subject;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.synchronisation.SubjectsSynchronisation;
-
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 
 @RunWith(AndroidJUnit4.class)
 public class SubjectSynchronizationTest {
@@ -53,16 +50,16 @@ public class SubjectSynchronizationTest {
                 .setFinalRating("5")
                 .setPredictedRating("4"));
 
-        SubjectsList subjectsListApi = mock(SubjectsList.class);
-        doReturn(subjectList).when(subjectsListApi).getAll();
+        SubjectsList subjectsListApi = Mockito.mock(SubjectsList.class);
+        Mockito.doReturn(subjectList).when(subjectsListApi).getAll();
 
-        Vulcan vulcan = mock(Vulcan.class);
-        doReturn(subjectsListApi).when(vulcan).getSubjectsList();
+        Vulcan vulcan = Mockito.mock(Vulcan.class);
+        Mockito.doReturn(subjectsListApi).when(vulcan).getSubjectsList();
 
-        LoginSession loginSession = mock(LoginSession.class);
-        doReturn(vulcan).when(loginSession).getVulcan();
-        doReturn(2L).when(loginSession).getUserId();
-        doReturn(daoSession).when(loginSession).getDaoSession();
+        LoginSession loginSession = Mockito.mock(LoginSession.class);
+        Mockito.doReturn(vulcan).when(loginSession).getVulcan();
+        Mockito.doReturn(2L).when(loginSession).getUserId();
+        Mockito.doReturn(daoSession).when(loginSession).getDaoSession();
 
         SubjectsSynchronisation subjectsSynchronisation = new SubjectsSynchronisation();
         subjectsSynchronisation.sync(loginSession);

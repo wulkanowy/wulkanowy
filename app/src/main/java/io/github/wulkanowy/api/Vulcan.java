@@ -33,7 +33,7 @@ public class Vulcan extends Api {
         login.login(email, password, symbol);
 
         this.symbol = symbol;
-        cookies = login.getCookiesObject();
+        this.cookies = login.getCookiesObject();
     }
 
     public void login(String email, String password, String symbol, String id)
