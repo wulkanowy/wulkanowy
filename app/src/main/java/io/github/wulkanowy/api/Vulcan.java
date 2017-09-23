@@ -21,8 +21,6 @@ import io.github.wulkanowy.api.user.FamilyInformation;
 
 public class Vulcan extends Api {
 
-    protected Cookies cookies;
-
     private String id;
 
     private String symbol;
@@ -35,7 +33,7 @@ public class Vulcan extends Api {
         login.login(email, password, symbol);
 
         this.symbol = symbol;
-        this.cookies = login.getCookiesObject();
+        cookies = login.getCookiesObject();
     }
 
     public void login(String email, String password, String symbol, String id)

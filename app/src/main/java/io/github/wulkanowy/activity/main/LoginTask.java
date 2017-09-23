@@ -9,14 +9,17 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import io.github.wulkanowy.R;
+import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
+import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
+import io.github.wulkanowy.services.LoginSession;
+import io.github.wulkanowy.services.VulcanSynchronization;
 import io.github.wulkanowy.services.jobs.GradesSync;
-import io.github.wulkanowy.services.synchronisation.DataSynchronisation;
-import io.github.wulkanowy.services.synchronisation.VulcanSynchronisation;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 public class LoginTask extends AsyncTask<String, Integer, Integer> {
@@ -44,9 +47,11 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
     protected Integer doInBackground(String... credentials) {
 
         if (ConnectionUtilities.isOnline(activity)) {
-            VulcanSynchronisation vulcanSynchronisation = new VulcanSynchronisation();
+            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
+            DaoSession daoSession = ((WulkanowyApp) activity.getApplication()).getDaoSession();
             try {
-                vulcanSynchronisation.loginNewUser(credentials[0], credentials[1], credentials[2], activity);
+                vulcanSynchronization
+                        .loginNewUser(credentials[0], credentials[1], credentials[2], activity, daoSession, new Vulcan());
             } catch (BadCredentialsException e) {
                 return R.string.login_bad_credentials_text;
             } catch (AccountPermissionException e) {
@@ -57,8 +62,7 @@ public class LoginTask extends AsyncTask<String, Integer, Integer> {
                 return R.string.login_denied_text;
             }
 
-            DataSynchronisation dataSynchronisation = new DataSynchronisation(activity);
-            dataSynchronisation.syncSubjectsAndGrades(vulcanSynchronisation);
+            vulcanSynchronization.syncSubjectsAndGrades();
 
             return R.string.login_accepted_text;
 
