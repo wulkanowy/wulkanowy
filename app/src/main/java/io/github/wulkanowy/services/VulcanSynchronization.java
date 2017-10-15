@@ -25,6 +25,10 @@ public class VulcanSynchronization {
         this.loginSession = loginSession;
     }
 
+    public LoginSession getLoginSession() {
+        return loginSession;
+    }
+
     public void loginCurrentUser(Context context, DaoSession daoSession, Vulcan vulcan)
             throws CryptoException, BadCredentialsException, AccountPermissionException, IOException, LoginErrorException {
 

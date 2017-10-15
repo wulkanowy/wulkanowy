@@ -39,6 +39,8 @@ public class GradesFragment extends Fragment {
 
     private Fragment thisFragment = this;
 
+    private LoginSession loginSession = new LoginSession();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,41 +60,18 @@ public class GradesFragment extends Fragment {
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(view.getContext(), R.string.noInternet_text, Toast.LENGTH_SHORT).show();
                 } else {
-                    new AsyncTask<Void, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(Void... voids) {
-                            DaoSession daoSession = ((WulkanowyApp) getActivity().getApplication()).getDaoSession();
-                            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
-                            try {
-                                vulcanSynchronization.loginCurrentUser(getContext(), daoSession, new Vulcan());
-                                vulcanSynchronization.syncGrades();
-                                prepareSubjectsWithGradesList(daoSession);
-                            } catch (Exception e) {
-                                Log.e(VulcanSync.DEBUG_TAG, "There was a synchronization problem", e);
-                            }
-                            return null;
-                        }
-
-                        @Override
-                        protected void onPostExecute(Void aVoid) {
-                            super.onPostExecute(aVoid);
-
-                            getFragmentManager().beginTransaction().detach(thisFragment).attach(thisFragment).commit();
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    }.execute();
+                    new RefreshTask().execute(((WulkanowyApp) getActivity().getApplication()).getDaoSession());
                 }
             }
         });
 
         if (new ArrayList<>().equals(subjectWithGradesList)) {
             createExpListView();
-            new GradesTask(((WulkanowyApp) getActivity().getApplication()).getDaoSession()).execute();
+            new GradesTask().execute(((WulkanowyApp) getActivity().getApplication()).getDaoSession());
         } else if (subjectWithGradesList.size() > 0) {
             createExpListView();
             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
-
         return view;
     }
 
@@ -102,7 +81,6 @@ public class GradesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         GradesAdapter gradesAdapter = new GradesAdapter(subjectWithGradesList, view.getContext());
         recyclerView.setAdapter(gradesAdapter);
-
     }
 
     private void prepareSubjectsWithGradesList(DaoSession daoSession) {
@@ -123,25 +101,52 @@ public class GradesFragment extends Fragment {
         }
     }
 
-    private class GradesTask extends AsyncTask<Void, Void, Void> {
-
-        private DaoSession daoSession;
-
-        GradesTask(DaoSession daoSession) {
-            this.daoSession = daoSession;
-        }
+    private class GradesTask extends AsyncTask<DaoSession, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... params) {
-            prepareSubjectsWithGradesList(daoSession);
+        protected Void doInBackground(DaoSession... params) {
+            prepareSubjectsWithGradesList(params[0]);
             return null;
         }
 
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            createExpListView();
 
+            createExpListView();
             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        }
+    }
+
+    private class RefreshTask extends AsyncTask<DaoSession, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(DaoSession... params) {
+            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(loginSession);
+            try {
+                if (loginSession.equals(new LoginSession())) {
+                    vulcanSynchronization.loginCurrentUser(getContext(), params[0], new Vulcan());
+                    loginSession = vulcanSynchronization.getLoginSession();
+                }
+                vulcanSynchronization.syncGrades();
+                prepareSubjectsWithGradesList(params[0]);
+                return true;
+            } catch (Exception e) {
+                Log.e(VulcanSync.DEBUG_TAG, "There was a synchronization problem", e);
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            if (result) {
+                getFragmentManager().beginTransaction().detach(thisFragment).attach(thisFragment).commit();
+                swipeRefreshLayout.setRefreshing(false);
+            } else {
+                Toast.makeText(getContext(), R.string.refresh_error_text, Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
         }
     }
 }
