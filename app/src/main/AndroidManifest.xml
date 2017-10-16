@@ -32,7 +32,7 @@
         <activity
             android:name=".activity.login.LoginActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/login_text"
+            android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.dashboard.DashboardActivity"

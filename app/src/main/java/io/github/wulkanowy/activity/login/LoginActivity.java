@@ -1,63 +1,122 @@
 package io.github.wulkanowy.activity.login;
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.LinkedHashMap;
 
 import io.github.wulkanowy.R;
 
-public class LoginActivity extends AppCompatActivity {
+/**
+ * A login screen that offers login via email/password.
+ */
+public class LoginActivity extends Activity {
 
-    private float mTouchPosition;
+    private float touchPosition;
 
-    private float mReleasePosition;
+    private EditText emailView;
+
+    private EditText passwordView;
+
+    private AutoCompleteTextView symbolView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.warning_label_text)
-                .setMessage(R.string.warning_text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+        // Set up the login form.
+        emailView = findViewById(R.id.email);
+        passwordView = findViewById(R.id.password);
+        symbolView = findViewById(R.id.symbol);
+        populateAutoComplete();
 
-        autoComplete();
+        symbolView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.action_sign_in || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        Button signInButton = findViewById(R.id.action_sign_in);
+        signInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
     }
 
-    private void autoComplete() {
-
-        // Get a reference to the AutoCompleteTextView in the layout
-        AutoCompleteTextView textView = findViewById(R.id.symbolText);
+    private void populateAutoComplete() {
         // Get the string array
         String[] countries = getResources().getStringArray(R.array.symbols);
         // Create the adapter and set it to the AutoCompleteTextView
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
                 countries);
-        textView.setAdapter(adapter);
+        symbolView.setAdapter(adapter);
     }
 
-    public void login(View a) {
-        String password = ((EditText) findViewById(R.id.passwordText)).getText().toString();
-        String email = ((EditText) findViewById(R.id.emailText)).getText().toString();
-        String symbol = ((EditText) findViewById(R.id.symbolText)).getText().toString();
+    /**
+     * Attempts to sign in the account specified by the login form.
+     */
+    private void attemptLogin() {
+        // Reset errors.
+        emailView.setError(null);
+        passwordView.setError(null);
+
+        // Store values at the time of the login attempt.
+        String email = emailView.getText().toString();
+        String password = passwordView.getText().toString();
+        String symbol = symbolView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid password.
+        if (TextUtils.isEmpty(password)) {
+            passwordView.setError(getString(R.string.error_field_required));
+            focusView = passwordView;
+            cancel = true;
+        } else if (!isPasswordValid(password)) {
+            passwordView.setError(getString(R.string.error_invalid_password));
+            focusView = passwordView;
+            cancel = true;
+        }
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            emailView.setError(getString(R.string.error_field_required));
+            focusView = emailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            emailView.setError(getString(R.string.error_invalid_email));
+            focusView = emailView;
+            cancel = true;
+        }
+
+        // Check for a valid symbol.
+        if (TextUtils.isEmpty(symbol)) {
+            symbolView.setError(getString(R.string.error_field_required));
+            focusView = symbolView;
+            cancel = true;
+        }
 
         String[] keys = this.getResources().getStringArray(R.array.symbols);
         String[] values = this.getResources().getStringArray(R.array.symbols_values);
@@ -71,23 +130,37 @@ public class LoginActivity extends AppCompatActivity {
             symbol = map.get(symbol);
         }
 
-        if (!email.isEmpty() && !password.isEmpty() && !symbol.isEmpty()) {
-            new LoginTask(this).execute(email, password, symbol);
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
         } else {
-            Toast.makeText(this, R.string.data_text, Toast.LENGTH_SHORT).show();
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            UserLoginTask authTask = new UserLoginTask(this, email, password, symbol);
+            authTask.showProgress(true);
+            authTask.execute((Void) null);
         }
+    }
+
+    private boolean isEmailValid(String email) {
+        return email.contains("@");
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password.length() > 7;
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            mTouchPosition = ev.getY();
+            touchPosition = ev.getY();
         }
         if (ev.getAction() == MotionEvent.ACTION_UP) {
-            mReleasePosition = ev.getY();
+            float releasePosition = ev.getY();
 
-            if (mTouchPosition - mReleasePosition == 0) {
+            if (touchPosition - releasePosition == 0) {
                 View view = getCurrentFocus();
                 if (view != null && (ev.getAction() == MotionEvent.ACTION_UP
                         || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText
