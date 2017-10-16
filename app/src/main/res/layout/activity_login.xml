@@ -100,8 +100,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/action_create_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_create_account"
+                android:layout_marginBottom="24dp"
+                />
+
+            <TextView
+                android:id="@+id/action_forgot_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_forgot_password"
                 />
 
         </LinearLayout>

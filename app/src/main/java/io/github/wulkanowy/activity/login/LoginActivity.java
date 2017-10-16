@@ -2,7 +2,9 @@ package io.github.wulkanowy.activity.login;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -60,6 +62,30 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        TextView createAccount = findViewById(R.id.action_create_account);
+        createAccount.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://cufs.vulcan.net.pl/Default/AccountManage/CreateAccount";
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                CustomTabsIntent customTabsIntent = builder.build();
+                builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+                customTabsIntent.launchUrl(view.getContext(), Uri.parse(url));
+            }
+        });
+
+        TextView forgotPassword = findViewById(R.id.action_forgot_password);
+        forgotPassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://cufs.vulcan.net.pl/Default/AccountManage/UnlockAccount";
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                CustomTabsIntent customTabsIntent = builder.build();
+                builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+                customTabsIntent.launchUrl(view.getContext(), Uri.parse(url));
             }
         });
     }
