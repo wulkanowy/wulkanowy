@@ -30,9 +30,8 @@ public class Vulcan extends Api {
     public void login(String email, String password, String symbol)
             throws BadCredentialsException, AccountPermissionException, LoginErrorException {
         Login login = new Login(new Cookies());
-        login.login(email, password, symbol);
 
-        this.symbol = symbol;
+        this.symbol = login.login(email, password, symbol);
         this.cookies = login.getCookiesObject();
     }
 

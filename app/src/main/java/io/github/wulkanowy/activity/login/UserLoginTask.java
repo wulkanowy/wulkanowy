@@ -105,7 +105,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, Integer> {
 
             // if no permission
             case R.string.error_bad_account_permission:
-                EditText symbolView = activity.findViewById(R.id.symbol);
+                EditText symbolView = activity.findViewById(R.id.password);
                 symbolView.setError(activity.getString(R.string.error_bad_account_permission));
                 symbolView.requestFocus();
                 break;

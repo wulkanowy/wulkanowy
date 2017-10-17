@@ -12,13 +12,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.LinkedHashMap;
 
 import io.github.wulkanowy.R;
 
@@ -43,10 +40,10 @@ public class LoginActivity extends Activity {
         // Set up the login form.
         emailView = findViewById(R.id.email);
         passwordView = findViewById(R.id.password);
-        symbolView = findViewById(R.id.symbol);
-        populateAutoComplete();
+//        symbolView = findViewById(R.id.symbol);
+//        populateAutoComplete();
 
-        symbolView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.action_sign_in || id == EditorInfo.IME_NULL) {
@@ -90,14 +87,14 @@ public class LoginActivity extends Activity {
         });
     }
 
-    private void populateAutoComplete() {
-        // Get the string array
-        String[] countries = getResources().getStringArray(R.array.symbols);
-        // Create the adapter and set it to the AutoCompleteTextView
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
-                countries);
-        symbolView.setAdapter(adapter);
-    }
+//    private void populateAutoComplete() {
+//        // Get the string array
+//        String[] countries = getResources().getStringArray(R.array.symbols);
+//        // Create the adapter and set it to the AutoCompleteTextView
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+//                countries);
+//        symbolView.setAdapter(adapter);
+//    }
 
     /**
      * Attempts to sign in the account specified by the login form.
@@ -110,7 +107,7 @@ public class LoginActivity extends Activity {
         // Store values at the time of the login attempt.
         String email = emailView.getText().toString();
         String password = passwordView.getText().toString();
-        String symbol = symbolView.getText().toString();
+//        String symbol = symbolView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -137,24 +134,24 @@ public class LoginActivity extends Activity {
             cancel = true;
         }
 
-        // Check for a valid symbol.
-        if (TextUtils.isEmpty(symbol)) {
-            symbolView.setError(getString(R.string.error_field_required));
-            focusView = symbolView;
-            cancel = true;
-        }
+//        // Check for a valid symbol.
+//        if (TextUtils.isEmpty(symbol)) {
+//            symbolView.setError(getString(R.string.error_field_required));
+//            focusView = symbolView;
+//            cancel = true;
+//        }
 
-        String[] keys = this.getResources().getStringArray(R.array.symbols);
-        String[] values = this.getResources().getStringArray(R.array.symbols_values);
-        LinkedHashMap<String, String> map = new LinkedHashMap<>();
-
-        for (int i = 0; i < Math.min(keys.length, values.length); ++i) {
-            map.put(keys[i], values[i]);
-        }
-
-        if (map.containsKey(symbol)) {
-            symbol = map.get(symbol);
-        }
+//        String[] keys = this.getResources().getStringArray(R.array.symbols);
+//        String[] values = this.getResources().getStringArray(R.array.symbols_values);
+//        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+//
+//        for (int i = 0; i < Math.min(keys.length, values.length); ++i) {
+//            map.put(keys[i], values[i]);
+//        }
+//
+//        if (map.containsKey(symbol)) {
+//            symbol = map.get(symbol);
+//        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -163,7 +160,7 @@ public class LoginActivity extends Activity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            UserLoginTask authTask = new UserLoginTask(this, email, password, symbol);
+            UserLoginTask authTask = new UserLoginTask(this, email, password, "Default");
             authTask.showProgress(true);
             authTask.execute((Void) null);
         }

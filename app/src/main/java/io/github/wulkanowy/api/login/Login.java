@@ -3,6 +3,8 @@ package io.github.wulkanowy.api.login;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
@@ -11,11 +13,11 @@ import io.github.wulkanowy.api.Cookies;
 
 public class Login extends Api {
 
-    private String loginPageUrl = "https://cufs.vulcan.net.pl/{symbol}/Account/LogOn";
+    private String loginPageUrl = "https://cufs.vulcan.net.pl/Default/Account/LogOn";
 
-    private String certificatePageUrl = "https://cufs.vulcan.net.pl/{symbol}"
-            + "/FS/LS?wa=wsignin1.0&wtrealm=https://uonetplus.vulcan.net.pl/{symbol}"
-            + "/LoginEndpoint.aspx&wctx=https://uonetplus.vulcan.net.pl/{symbol}"
+    private String certificatePageUrl = "https://cufs.vulcan.net.pl/Default"
+            + "/FS/LS?wa=wsignin1.0&wtrealm=https://uonetplus.vulcan.net.pl/Default"
+            + "/LoginEndpoint.aspx&wctx=https://uonetplus.vulcan.net.pl/Default"
             + "/LoginEndpoint.aspx";
 
     private String loginEndpointPageUrl =
@@ -25,22 +27,23 @@ public class Login extends Api {
         this.cookies = cookies;
     }
 
-    public boolean login(String email, String password, String symbol)
+    public String login(String email, String password, String symbol)
             throws BadCredentialsException, LoginErrorException, AccountPermissionException {
+        String symbolWhoa;
+
         try {
-            sendCredentials(email, password, symbol);
-            String[] certificate = getCertificateData(symbol);
-            sendCertificate(certificate[0], certificate[1], symbol);
+            sendCredentials(email, password);
+            String[] certificate = getCertificateData();
+            symbolWhoa = sendCertificate(certificate[0], certificate[1]);
         } catch (IOException e) {
             throw new LoginErrorException();
         }
 
-        return true;
+        return symbolWhoa;
     }
 
-    private void sendCredentials(String email, String password, String symbol)
+    private void sendCredentials(String email, String password)
             throws IOException, BadCredentialsException {
-        loginPageUrl = loginPageUrl.replace("{symbol}", symbol);
 
         Connection.Response response = Jsoup.connect(loginPageUrl)
                 .data("LoginName", email)
@@ -56,9 +59,7 @@ public class Login extends Api {
         }
     }
 
-    private String[] getCertificateData(String symbol) throws IOException {
-        certificatePageUrl = certificatePageUrl.replace("{symbol}", symbol);
-
+    private String[] getCertificateData() throws IOException {
         Document certificatePage = getPageByUrl(certificatePageUrl);
 
         return new String[]{
@@ -67,11 +68,14 @@ public class Login extends Api {
         };
     }
 
-    private void sendCertificate(String protocolVersion, String certificate, String symbol)
+    private String sendCertificate(String protocolVersion, String certificate)
             throws IOException, LoginErrorException, AccountPermissionException {
-        loginEndpointPageUrl = loginEndpointPageUrl.replace("{symbol}", symbol);
+        Elements els = Jsoup.parse(certificate.replaceAll(":",""), "",
+                Parser.xmlParser()).select("[AttributeName=\"UserInstance\"] samlAttributeValue");
+        String symbol = els.get(1).text();
 
-        Connection.Response response = Jsoup.connect(loginEndpointPageUrl)
+        Connection.Response response = Jsoup.connect(loginEndpointPageUrl
+                .replace("{symbol}", symbol))
                 .data("wa", protocolVersion)
                 .data("wresult", certificate)
                 .cookies(getCookies())
@@ -89,5 +93,7 @@ public class Login extends Api {
         if (!html.select("title").text().equals("Uonet+")) {
             throw new LoginErrorException();
         }
+
+        return symbol;
     }
 }
