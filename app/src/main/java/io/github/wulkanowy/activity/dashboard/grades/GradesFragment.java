@@ -3,6 +3,7 @@ package io.github.wulkanowy.activity.dashboard.grades;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import java.util.List;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.api.Vulcan;
+import io.github.wulkanowy.dao.DatabaseAccess;
 import io.github.wulkanowy.dao.entities.Account;
 import io.github.wulkanowy.dao.entities.AccountDao;
 import io.github.wulkanowy.dao.entities.DaoSession;
@@ -26,7 +28,7 @@ import io.github.wulkanowy.dao.entities.Grade;
 import io.github.wulkanowy.dao.entities.Subject;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.VulcanSynchronization;
-import io.github.wulkanowy.services.jobs.VulcanSync;
+import io.github.wulkanowy.services.jobs.VulcanJobHelper;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 public class GradesFragment extends Fragment {
@@ -131,7 +133,7 @@ public class GradesFragment extends Fragment {
                 prepareSubjectsWithGradesList(params[0]);
                 return true;
             } catch (Exception e) {
-                Log.e(VulcanSync.DEBUG_TAG, "There was a synchronization problem", e);
+                Log.e(VulcanJobHelper.DEBUG_TAG, "There was a synchronization problem", e);
                 return false;
             }
         }
@@ -143,6 +145,18 @@ public class GradesFragment extends Fragment {
             if (result) {
                 getFragmentManager().beginTransaction().detach(thisFragment).attach(thisFragment).commit();
                 swipeRefreshLayout.setRefreshing(false);
+
+                int volumeGrades = DatabaseAccess.getNewGrades(((WulkanowyApp) getActivity().getApplication()).getDaoSession()).size();
+
+                if (volumeGrades == 0) {
+                    Snackbar.make(getActivity().findViewById(R.id.fragment_container),
+                            R.string.snackbar_no_grades,
+                            Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(getActivity().findViewById(R.id.fragment_container),
+                            getText(R.string.snackbar_new_grade).toString() + String.valueOf(volumeGrades),
+                            Snackbar.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(getContext(), R.string.refresh_error_text, Toast.LENGTH_SHORT).show();
                 swipeRefreshLayout.setRefreshing(false);

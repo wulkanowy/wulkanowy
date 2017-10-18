@@ -12,7 +12,7 @@ import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
-import io.github.wulkanowy.services.jobs.VulcanSync;
+import io.github.wulkanowy.services.jobs.VulcanJobHelper;
 import io.github.wulkanowy.services.synchronisation.AccountSynchronisation;
 import io.github.wulkanowy.services.synchronisation.GradesSynchronisation;
 import io.github.wulkanowy.services.synchronisation.SubjectsSynchronisation;
@@ -51,7 +51,7 @@ public class VulcanSynchronization {
             gradesSynchronisation.sync(loginSession);
             return true;
         } catch (Exception e) {
-            Log.e(VulcanSync.DEBUG_TAG, "Synchronisation of grades failed", e);
+            Log.e(VulcanJobHelper.DEBUG_TAG, "Synchronisation of grades failed", e);
             return false;
         }
     }
@@ -64,7 +64,7 @@ public class VulcanSynchronization {
             syncGrades();
             return true;
         } catch (Exception e) {
-            Log.e(VulcanSync.DEBUG_TAG, "Synchronisation of subjects failed", e);
+            Log.e(VulcanJobHelper.DEBUG_TAG, "Synchronisation of subjects failed", e);
             return false;
         }
     }
