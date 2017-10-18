@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 
 import java.io.IOException;
 
+import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
@@ -98,12 +99,16 @@ public class AccountSynchronizationTest {
         PersonalData personalData = Mockito.mock(PersonalData.class);
         Mockito.doReturn("NAME-TEST").when(personalData).getFirstAndLastName();
 
+        StudentAndParent snp = Mockito.mock(StudentAndParent.class);
+        Mockito.doReturn("0123").when(snp).getId();
+
         BasicInformation basicInformation = Mockito.mock(BasicInformation.class);
         Mockito.doReturn(personalData).when(basicInformation).getPersonalData();
 
         Vulcan vulcan = Mockito.mock(Vulcan.class);
         Mockito.doNothing().when(vulcan).login("TEST@TEST", "TEST", "");
         Mockito.doReturn(basicInformation).when(vulcan).getBasicInformation();
+        Mockito.doReturn(snp).when(vulcan).getStudentAndParent();
 
         AccountSynchronisation accountSynchronisation = new AccountSynchronisation();
         LoginSession loginSession = accountSynchronisation
