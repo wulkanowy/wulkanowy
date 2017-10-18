@@ -103,16 +103,20 @@ public class LoginTask extends AsyncTask<Void, Void, Integer> {
 
             // if no permission
             case R.string.error_bad_account_permission:
+                // Change to visible symbol input view
                 TextInputLayout symbolLayout = activity.findViewById(R.id.to_symbol_input_layout);
                 symbolLayout.setVisibility(View.VISIBLE);
+
                 EditText symbolView = activity.findViewById(R.id.symbol);
                 symbolView.setError(activity.getString(R.string.error_bad_account_permission));
                 symbolView.requestFocus();
                 break;
 
             default:
-                Snackbar snackbar = Snackbar.make(activity.findViewById(R.id.coordinatorLayout),
-                        messageID, Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(
+                        activity.findViewById(R.id.coordinatorLayout),
+                        messageID, Snackbar.LENGTH_LONG
+                );
                 snackbar.show();
         }
     }
@@ -128,19 +132,27 @@ public class LoginTask extends AsyncTask<Void, Void, Integer> {
     public void showProgress(final boolean show) {
         loginFormView = activity.findViewById(R.id.login_form);
         progressView = activity.findViewById(R.id.login_progress);
-        int shortAnimTime = activity.getResources().getInteger(android.R.integer.config_shortAnimTime);
 
+        int animTime = activity.getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+        changeLoginFormVisibility(show, animTime);
+        changeProgressVisibility(show, animTime);
+    }
+
+    private void changeLoginFormVisibility(final boolean show, final int animTime) {
         loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        loginFormView.animate().setDuration(shortAnimTime).alpha(
+        loginFormView.animate().setDuration(animTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
+    }
 
+    private void changeProgressVisibility(final boolean show, final int animTime) {
         progressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        progressView.animate().setDuration(shortAnimTime).alpha(
+        progressView.animate().setDuration(animTime).alpha(
                 show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {

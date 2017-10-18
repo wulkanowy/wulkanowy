@@ -72,11 +72,8 @@ public class Login extends Api {
 
     private String sendCertificate(String protocolVersion, String certificate, String symbol)
             throws IOException, LoginErrorException, AccountPermissionException {
-        Elements els = Jsoup.parse(certificate.replaceAll(":",""), "",
-                Parser.xmlParser()).select("[AttributeName=\"UserInstance\"] samlAttributeValue");
-
         if (symbol.equals("Default")) {
-            symbol = els.get(1).text();
+            symbol = findSymbolInCertificate(certificate);
         }
 
         loginEndpointPageUrl = loginEndpointPageUrl.replace("{symbol}", symbol);
@@ -101,5 +98,11 @@ public class Login extends Api {
         }
 
         return symbol;
+    }
+
+    private String findSymbolInCertificate(String certificate) {
+        Elements els = Jsoup.parse(certificate.replaceAll(":",""), "", Parser.xmlParser())
+                .select("[AttributeName=\"UserInstance\"] samlAttributeValue");
+        return els.get(1).text();
     }
 }
