@@ -42,6 +42,10 @@ public class Vulcan extends Api {
         this.id = id;
     }
 
+    public String getSymbol() {
+        return symbol;
+    }
+
     public StudentAndParent getStudentAndParent() throws IOException, NotLoggedInErrorException {
         if (null == getCookiesObject()) {
             throw new NotLoggedInErrorException();

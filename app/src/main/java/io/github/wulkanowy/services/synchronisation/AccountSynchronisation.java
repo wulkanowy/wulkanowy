@@ -38,7 +38,8 @@ public class AccountSynchronisation {
             vulcan.login(
                     account.getEmail(),
                     safety.decrypt(account.getEmail(), account.getPassword()),
-                    account.getSymbol()
+                    account.getSymbol(),
+                    account.getSnpId()
             );
 
             return new LoginSession()
@@ -66,7 +67,8 @@ public class AccountSynchronisation {
                 .setName(personalData.getFirstAndLastName())
                 .setEmail(email)
                 .setPassword(safety.encrypt(email, password, context))
-                .setSymbol(symbol);
+                .setSymbol(vulcan.getSymbol())
+                .setSnpId(vulcan.getStudentAndParent().getId());
 
         userId = accountDao.insert(account);
 

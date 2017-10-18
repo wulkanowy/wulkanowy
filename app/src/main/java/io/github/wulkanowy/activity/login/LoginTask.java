@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.EditText;
 
@@ -81,9 +82,6 @@ public class LoginTask extends AsyncTask<Void, Void, Integer> {
     @Override
     protected void onPostExecute(final Integer messageID) {
         showProgress(false);
-        Snackbar snackbar = Snackbar.make(activity.findViewById(R.id.coordinatorLayout),
-                messageID, Snackbar.LENGTH_LONG);
-        snackbar.show();
 
         switch (messageID) {
             // if success
@@ -105,12 +103,17 @@ public class LoginTask extends AsyncTask<Void, Void, Integer> {
 
             // if no permission
             case R.string.error_bad_account_permission:
-                EditText symbolView = activity.findViewById(R.id.password);
+                TextInputLayout symbolLayout = activity.findViewById(R.id.to_symbol_input_layout);
+                symbolLayout.setVisibility(View.VISIBLE);
+                EditText symbolView = activity.findViewById(R.id.symbol);
                 symbolView.setError(activity.getString(R.string.error_bad_account_permission));
                 symbolView.requestFocus();
                 break;
 
             default:
+                Snackbar snackbar = Snackbar.make(activity.findViewById(R.id.coordinatorLayout),
+                        messageID, Snackbar.LENGTH_LONG);
+                snackbar.show();
         }
     }
 

@@ -11,7 +11,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="error_bad_account_permission">No permission to open log. Check entered symbol</string>
+    <string name="error_bad_account_permission">No permission to open log. Check another symbol</string>
     <string name="login_accepted_text">Login is successful</string>
     <string name="login_bad_credentials_text">Bad e-mail or password</string>
     <string name="login_bad_account_permission_text">No permission to open log. Check entered symbol</string>

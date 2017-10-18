@@ -11,7 +11,7 @@
     <string name="error_invalid_password">To hasło jest za krótkie</string>
     <string name="error_incorrect_password">To hasło jest niepoprawne</string>
     <string name="error_field_required">To pole jest wymagane</string>
-    <string name="error_bad_account_permission">Brak dostępu do dziennika. Sprawdź wprowadzony symbol</string>
+    <string name="error_bad_account_permission">Brak dostępu do dziennika. Sprawdź inny symbol</string>
     <string name="login_accepted_text">Pomyślnie zalogowano</string>
     <string name="login_bad_credentials_text">Niepoprawny e-mail lub hasło</string>
     <string name="login_bad_account_permission_text">Brak uprawnień do otwarcia dziennika. Sprawdź wprowadzoną nazwę powiatu</string>

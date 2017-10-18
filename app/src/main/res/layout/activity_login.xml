@@ -73,6 +73,28 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/to_symbol_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
+
+                <AutoCompleteTextView
+                    android:id="@+id/symbol"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_symbol"
+                    android:inputType="textAutoComplete"
+                    android:maxLines="1"
+                    android:imeActionId="@+id/action_sign_in"
+                    android:imeActionLabel="@string/action_sign_in"
+                    android:imeOptions="actionUnspecified"
+                    android:importantForAutofill="noExcludeDescendants"
+                    />
+
+            </android.support.design.widget.TextInputLayout>
+
             <Button
                 android:id="@+id/action_sign_in"
                 style="?android:textAppearanceSmall"
