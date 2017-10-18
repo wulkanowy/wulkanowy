@@ -29,7 +29,7 @@ import io.github.wulkanowy.utilities.ConnectionUtilities;
  * Represents an asynchronous login/registration task used to authenticate
  * the user.
  */
-public class UserLoginTask extends AsyncTask<Void, Void, Integer> {
+public class LoginTask extends AsyncTask<Void, Void, Integer> {
 
     private final String email;
 
@@ -43,7 +43,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, Integer> {
 
     private View loginFormView;
 
-    public UserLoginTask(Activity activity, String email, String password, String symbol) {
+    public LoginTask(Activity activity, String email, String password, String symbol) {
         this.activity = activity;
         this.email = email;
         this.password = password;

@@ -160,7 +160,7 @@ public class LoginActivity extends Activity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            UserLoginTask authTask = new UserLoginTask(this, email, password, "Default");
+            LoginTask authTask = new LoginTask(this, email, password, "Default");
             authTask.showProgress(true);
             authTask.execute((Void) null);
         }
