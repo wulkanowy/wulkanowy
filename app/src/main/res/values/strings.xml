@@ -42,4 +42,8 @@
     <string name="refresh_error_text">An error occurred while refreshing the content.</string>
     <string name="snackbar_no_grades">No new grades</string>
     <string name="snackbar_new_grade">Number of new grades:\u0020</string>
+    <string name="info_one_grade">\u0020grade</string>
+    <string name="info_many_grade">\u0020grades</string>
+    <string name="info_many_grades_polish">grades</string>
+
 </resources>

@@ -8,7 +8,7 @@ import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.dao.entities.Grade;
 import io.github.wulkanowy.dao.entities.GradeDao;
 
-public class DatabaseAccess {
+public abstract class DatabaseAccess {
 
     public static List<Grade> getNewGrades(DaoSession daoSession) {
         Query<Grade> gradeQuery = daoSession.getGradeDao().queryBuilder()

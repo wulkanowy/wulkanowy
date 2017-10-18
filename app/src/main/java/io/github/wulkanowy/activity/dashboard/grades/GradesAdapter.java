@@ -54,14 +54,29 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
         private TextView subjectName;
 
+        private TextView numberOfGrades;
+
         public SubjectViewHolder(View itemView) {
             super(itemView);
             subjectName = itemView.findViewById(R.id.subject_text);
+            numberOfGrades = itemView.findViewById(R.id.subject_number_of_grades);
 
         }
 
         public void bind(ExpandableGroup group) {
             subjectName.setText(group.getTitle());
+
+            int volumeGrades = group.getItemCount();
+
+            if (volumeGrades == 1) {
+                numberOfGrades.setText(String.valueOf(volumeGrades) + activity.getText(R.string.info_one_grade).toString());
+            } else if (volumeGrades >= 2 && volumeGrades <= 4) {
+                numberOfGrades.setText(String.valueOf(volumeGrades) + activity.getText(R.string.info_many_grade).toString());
+            } else if (volumeGrades >= 5) {
+
+                //condition for the Polish variety of figures
+                numberOfGrades.setText(String.valueOf(volumeGrades) + activity.getText(R.string.info_many_grades_polish).toString());
+            }
         }
     }
 

@@ -2,14 +2,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/border"
-    android:foreground="?attr/selectableItemBackgroundBorderless">
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    android:padding="15dp">
 
     <TextView
         android:id="@+id/subject_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="@string/app_name"
-        android:textSize="19sp" />
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/subject_number_of_grades"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subject_text"
+        android:layout_marginTop="5dp"
+        android:text="@string/app_name"
+        android:textSize="12sp"
+        android:textColor="#4C4C4C" />
 
 </RelativeLayout>

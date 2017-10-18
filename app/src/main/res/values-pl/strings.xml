@@ -42,4 +42,7 @@
     <string name="refresh_error_text">"Podczas odświeżania zawartości wystąpił błąd. "</string>
     <string name="snackbar_no_grades">Brak nowych ocen</string>
     <string name="snackbar_new_grade">Ilość nowych ocen:\u0020</string>
+    <string name="info_one_grade">\u0020ocena</string>
+    <string name="info_many_grade">\u0020oceny</string>
+    <string name="info_many_grades_polish">ocen</string>
 </resources>
