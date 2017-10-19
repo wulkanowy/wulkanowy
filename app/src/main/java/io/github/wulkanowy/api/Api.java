@@ -1,5 +1,6 @@
 package io.github.wulkanowy.api;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -18,11 +19,6 @@ public abstract class Api {
         return cookies.getItems();
     }
 
-    public Cookies setCookies(Map<String, String> cookies) {
-        this.cookies.setItems(cookies);
-        return this.cookies;
-    }
-
     public Cookies addCookies(Map<String, String> cookies) {
         this.cookies.addItems(cookies);
         return this.cookies;
@@ -33,5 +29,22 @@ public abstract class Api {
                 .followRedirects(true)
                 .cookies(getCookies())
                 .get();
+    }
+
+    public Document postPageByUrl(String url, String[][] params) throws IOException {
+        Connection connection = Jsoup.connect(url);
+
+        for (String[] data : params) {
+            connection.data(data[0], data[1]);
+        }
+
+        Connection.Response response = connection.cookies(getCookies())
+                .followRedirects(true)
+                .method(Connection.Method.POST)
+                .execute();
+
+        addCookies(response.cookies());
+
+        return response.parse();
     }
 }
