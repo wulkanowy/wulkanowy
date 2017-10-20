@@ -46,6 +46,7 @@ public class LoginTest {
                 .thenCallRealMethod();
         Mockito.when(login.sendCredentials(Mockito.anyString(), Mockito.anyString(), Mockito.eq("Default")))
                 .thenReturn(getFixtureAsString("cert.xml"));
+        Mockito.when(login.findSymbol(Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
         Mockito.when(login.sendCertificate(Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
         Mockito.when(login.findSymbolInCertificate(Mockito.anyString())).thenCallRealMethod();
         Assert.assertEquals("demo12345", login.login("a@a", "pswd", "Default"));
@@ -76,6 +77,7 @@ public class LoginTest {
     @Test
     public void sendCertificateNotDefaultSymbolSuccessTest() throws Exception {
         Login login = getSetUpLogin("Logowanie-success.html");
+        Mockito.when(login.findSymbol(Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
         Mockito.when(login.sendCertificate(Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
         Assert.assertEquals("wulkanowyschool321", login.sendCertificate("", "wulkanowyschool321"));
     }
@@ -83,6 +85,7 @@ public class LoginTest {
     @Test
     public void sendCertificateDefaultSymbolSuccessTest() throws Exception {
         Login login = getSetUpLogin("Logowanie-success.html");
+        Mockito.when(login.findSymbol(Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
         Mockito.when(login.findSymbolInCertificate(Mockito.anyString())).thenCallRealMethod();
         Mockito.when(login.sendCertificate(Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
         Assert.assertEquals("demo12345",
@@ -92,6 +95,15 @@ public class LoginTest {
     @Test(expected = AccountPermissionException.class)
     public void sendCertificateAccountPermissionTest() throws Exception {
         Login login = getSetUpLogin("Logowanie-brak-dostepu.html");
+        Mockito.when(login.findSymbol(Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
+        Mockito.when(login.sendCertificate(Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
+        login.sendCertificate(getFixtureAsString("cert.xml"), "demo123");
+    }
+
+    @Test(expected = LoginErrorException.class)
+    public void sendCertificateLoginErrorTest() throws Exception {
+        Login login = getSetUpLogin("Logowanie-certyfikat.html"); // change to other document
+        Mockito.when(login.findSymbol(Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
         Mockito.when(login.sendCertificate(Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
         login.sendCertificate(getFixtureAsString("cert.xml"), "demo123");
     }
@@ -103,5 +115,12 @@ public class LoginTest {
         String certificate = getFixtureAsString("cert.xml");
 
         Assert.assertEquals("demo12345", login.findSymbolInCertificate(certificate));
+    }
+
+    @Test
+    public void findSymbolInInvalidCertificateTest() throws Exception {
+        Login login = new Login(new Cookies());
+
+        Assert.assertEquals("", login.findSymbolInCertificate("<xml></xml>")); // change to real cert with empty symbols
     }
 }

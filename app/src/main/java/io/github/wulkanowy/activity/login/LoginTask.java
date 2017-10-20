@@ -118,6 +118,7 @@ public class LoginTask extends AsyncTask<Void, Void, Integer> {
                         messageID, Snackbar.LENGTH_LONG
                 );
                 snackbar.show();
+                break;
         }
     }
 

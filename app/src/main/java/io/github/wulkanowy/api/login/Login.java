@@ -36,20 +36,18 @@ public class Login extends Api {
             throws BadCredentialsException, LoginErrorException, AccountPermissionException {
 
         try {
-            String certificate = sendCredentials(email, password, symbol);;
-            symbol = sendCertificate(certificate, symbol);
+            String certificate = sendCredentials(email, password, symbol);
+            return sendCertificate(certificate, symbol);
         } catch (IOException e) {
             throw new LoginErrorException();
         }
-
-        return symbol;
     }
 
     public String sendCredentials(String email, String password, String symbol)
             throws IOException, BadCredentialsException {
         loginPageUrl = getLoginPageUrl().replace("{symbol}", symbol);
 
-        Document html = postPageByUrl(loginPageUrl, new String[][] {
+        Document html = postPageByUrl(loginPageUrl, new String[][]{
                 {"LoginName", email},
                 {"Password", password}
         });
@@ -61,15 +59,14 @@ public class Login extends Api {
         return html.select("input[name=wresult]").attr("value");
     }
 
-    public String sendCertificate(String certificate, String symbol)
+    public String sendCertificate(String certificate, String defaultSymbol)
             throws IOException, LoginErrorException, AccountPermissionException {
-        if (symbol.equals("Default")) {
-            symbol = findSymbolInCertificate(certificate);
-        }
+        String symbol = findSymbol(defaultSymbol, certificate);
 
-        loginEndpointPageUrl = getLoginEndpointPageUrl().replace("{symbol}", symbol);
+        loginEndpointPageUrl = getLoginEndpointPageUrl()
+                .replace("{symbol}", symbol);
 
-        Document html = postPageByUrl(loginEndpointPageUrl, new String[][] {
+        Document html = postPageByUrl(loginEndpointPageUrl, new String[][]{
                 {"wa", "wsignin1.0"},
                 {"wresult", certificate}
         });
@@ -85,9 +82,22 @@ public class Login extends Api {
         return symbol;
     }
 
+    public String findSymbol(String symbol, String certificate) {
+        if ("Default".equals(symbol)) {
+            return findSymbolInCertificate(certificate);
+        }
+
+        return symbol;
+    }
+
     public String findSymbolInCertificate(String certificate) {
-        Elements els = Jsoup.parse(certificate.replaceAll(":",""), "", Parser.xmlParser())
+        Elements els = Jsoup.parse(certificate.replaceAll(":", ""), "", Parser.xmlParser())
                 .select("[AttributeName=\"UserInstance\"] samlAttributeValue");
+
+        if (0 == els.size()) {
+            return "";
+        }
+
         return els.get(1).text();
     }
 }
