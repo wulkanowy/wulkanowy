@@ -54,14 +54,18 @@ public class Grade implements Parcelable {
     @Property(nameInDb = "IS_NEW")
     private boolean isNew = false;
 
+    @Property(nameInDb = "READ")
+    private boolean read = true;
+
     protected Grade(Parcel source) {
         value = source.readString();
     }
 
-    @Generated(hash = 1154096520)
+    @Generated(hash = 568899968)
     public Grade(Long id, Long subjectId, Long userId, String subject, String value,
                  String color, String symbol, String description, String weight,
-                 String date, String teacher, String semester, boolean isNew) {
+                 String date, String teacher, String semester, boolean isNew,
+                 boolean read) {
         this.id = id;
         this.subjectId = subjectId;
         this.userId = userId;
@@ -75,6 +79,7 @@ public class Grade implements Parcelable {
         this.teacher = teacher;
         this.semester = semester;
         this.isNew = isNew;
+        this.read = read;
     }
 
     @Generated(hash = 2042976393)
@@ -95,8 +100,8 @@ public class Grade implements Parcelable {
         parcel.writeString(description);
         parcel.writeString(weight);
         parcel.writeString(date);
-        parcel.writeString(value);
-        parcel.writeString(value);
+        parcel.writeString(teacher);
+        parcel.writeString(semester);
     }
 
     public static final Creator<Grade> CREATOR = new Creator<Grade>() {
@@ -286,6 +291,15 @@ public class Grade implements Parcelable {
 
     public Grade setIsNew(boolean isNew) {
         this.isNew = isNew;
+        return this;
+    }
+
+    public boolean getRead() {
+        return this.read;
+    }
+
+    public Grade setRead(boolean read) {
+        this.read = read;
         return this;
     }
 }

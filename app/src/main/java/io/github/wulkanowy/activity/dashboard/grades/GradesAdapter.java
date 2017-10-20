@@ -7,6 +7,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
@@ -56,18 +57,34 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
         private TextView numberOfGrades;
 
+        private TextView averageGrades;
+
+        private ImageView alertNewGrades;
+
         public SubjectViewHolder(View itemView) {
             super(itemView);
             subjectName = itemView.findViewById(R.id.subject_text);
             numberOfGrades = itemView.findViewById(R.id.subject_number_of_grades);
+            alertNewGrades = itemView.findViewById(R.id.subject_new_grades_alert);
+            averageGrades = itemView.findViewById(R.id.subject_grades_average);
 
+            alertNewGrades.setVisibility(View.INVISIBLE);
         }
 
         public void bind(ExpandableGroup group) {
             int volumeGrades = group.getItemCount();
+            boolean noReadGrades = true;
 
             subjectName.setText(group.getTitle());
             numberOfGrades.setText(activity.getResources().getQuantityString(R.plurals.numberOfGrades, volumeGrades, volumeGrades));
+            // averageGrades.setText(String.valueOf(AverageCalculator.calculate(group.getItems())));
+            List<Grade> gradeList = group.getItems();
+
+            for (Grade grade : gradeList) {
+                if (grade.getRead()) {
+                    alertNewGrades.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 

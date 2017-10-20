@@ -18,6 +18,7 @@ public abstract class EntitiesCompare {
 
         for (Grade grade : addedOrUpdatedGradeList) {
             grade.setIsNew(true);
+            grade.setRead(false);
             updatedList.add(grade);
         }
 
