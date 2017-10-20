@@ -9,28 +9,24 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.IOException;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
-import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
-import io.github.wulkanowy.services.LoginSession;
-import io.github.wulkanowy.services.VulcanSynchronization;
-import io.github.wulkanowy.services.jobs.GradesSync;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 /**
  * Represents an asynchronous login/registration task used to authenticate
  * the user.
  */
-public class LoginTask extends AsyncTask<Void, Void, Integer> {
+public class LoginTask extends AsyncTask<Void, String, Integer> {
 
     private final String email;
 
@@ -44,6 +40,9 @@ public class LoginTask extends AsyncTask<Void, Void, Integer> {
 
     private View loginFormView;
 
+    private ProgressBar progressbar;
+    private TextView showText;
+
     public LoginTask(Activity activity, String email, String password, String symbol) {
         this.activity = activity;
         this.email = email;
@@ -52,14 +51,41 @@ public class LoginTask extends AsyncTask<Void, Void, Integer> {
     }
 
     @Override
+    protected void onPreExecute() {
+        progressbar = activity.findViewById(R.id.login_progress_horizontal);
+        showText = activity.findViewById(R.id.login_progress_text);
+    }
+
+    @Override
     protected Integer doInBackground(Void... params) {
         if (ConnectionUtilities.isOnline(activity)) {
-            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
-            DaoSession daoSession = ((WulkanowyApp) activity.getApplication()).getDaoSession();
-
+            LoginSteps loginSteps = new LoginSteps(activity, email, password, symbol);
             try {
-                vulcanSynchronization.loginNewUser(email, password, symbol,
-                        activity, daoSession, new Vulcan());
+                publishProgress("0", "Przygotowywanie");
+                loginSteps.prepare();
+
+                publishProgress("1", "Pobieranie certyfikatu");
+                loginSteps.getCertificate();
+
+                publishProgress("2", "Logowanie");
+                loginSteps.login();
+
+                publishProgress("3", "Pobieranie informacji o użytkowniku");
+                loginSteps.getUserInfo();
+                try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+
+                publishProgress("4", "Tworzenie lokalnego konta");
+                loginSteps.createLocalAccount();
+                try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+
+                publishProgress("5", "Ustawianie konta jako aktywnego");
+                loginSteps.setUpAccountAsActive();
+                try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+
+                publishProgress("6", "Ustawianie synchronizacji");
+                loginSteps.setUpSynchronization();
+                try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+
             } catch (BadCredentialsException e) {
                 return R.string.login_bad_credentials_text;
             } catch (AccountPermissionException e) {
@@ -70,13 +96,20 @@ public class LoginTask extends AsyncTask<Void, Void, Integer> {
                 return R.string.login_denied_text;
             }
 
-            vulcanSynchronization.syncSubjectsAndGrades();
-
+            publishProgress("7", "Synchronizacja ocen");
+            loginSteps.synchronizeGrades();
+            try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
             return R.string.login_accepted_text;
 
         } else {
             return R.string.noInternet_text;
         }
+    }
+
+    @Override
+    protected void onProgressUpdate(String... progress) {
+        progressbar.setProgress(Integer.parseInt(progress[0]) * 10);
+        showText.setText(progress[0] +"/7 - " + progress[1] + "...");
     }
 
     @Override
@@ -86,9 +119,6 @@ public class LoginTask extends AsyncTask<Void, Void, Integer> {
         switch (messageID) {
             // if success
             case R.string.login_accepted_text:
-                GradesSync gradesSync = new GradesSync();
-                gradesSync.scheduledJob(activity);
-
                 Intent intent = new Intent(activity, DashboardActivity.class);
                 activity.finish();
                 activity.startActivity(intent);

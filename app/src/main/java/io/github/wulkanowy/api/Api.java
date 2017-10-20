@@ -9,7 +9,7 @@ import java.util.Map;
 
 public abstract class Api {
 
-    protected Cookies cookies;
+    protected Cookies cookies = new Cookies();
 
     public Cookies getCookiesObject() {
         return cookies;
@@ -21,6 +21,10 @@ public abstract class Api {
 
     public Cookies addCookies(Map<String, String> cookies) {
         this.cookies.addItems(cookies);
+        return this.cookies;
+    }
+    public Cookies setCookies(Map<String, String> cookies) {
+        this.cookies.setItems(cookies);
         return this.cookies;
     }
 

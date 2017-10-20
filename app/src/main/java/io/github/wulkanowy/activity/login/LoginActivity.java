@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.LinkedHashMap;
@@ -166,7 +167,7 @@ public class LoginActivity extends Activity {
             // perform the user login attempt.
             LoginTask authTask = new LoginTask(this, email, password, symbol);
             authTask.showProgress(true);
-            authTask.execute((Void) null);
+            authTask.execute();
         }
     }
 

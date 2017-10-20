@@ -42,6 +42,16 @@ public class Vulcan extends Api {
         this.id = id;
     }
 
+    public Vulcan setSymbol(String symbol) {
+        this.symbol = symbol;
+        return this;
+    }
+
+    public Vulcan setId(String id) {
+        this.id = id;
+        return this;
+    }
+
     public String getSymbol() {
         return symbol;
     }
