@@ -59,13 +59,13 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
             UserFirstLogin userFirstLogin = new UserFirstLogin(activity, email, password, symbol);
 
             try {
-                publishProgress("1", "Łączenie z dziennikiem");
+                publishProgress("1", activity.getResources().getString(R.string.step_connecting));
                 userFirstLogin.connect();
 
-                publishProgress("2", "Logowanie");
+                publishProgress("2", activity.getResources().getString(R.string.step_login));
                 userFirstLogin.login();
 
-                publishProgress("3", "Synchronizacja");
+                publishProgress("3", activity.getResources().getString(R.string.step_synchronization));
                 userFirstLogin.setUpSynchronization();
 
             } catch (BadCredentialsException e) {

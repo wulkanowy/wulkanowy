@@ -8,6 +8,9 @@
     <string name="prompt_password">Password</string>
     <string name="prompt_symbol">Symbol</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="step_connecting">Connecting with log</string>
+    <string name="step_login">Login</string>
+    <string name="step_synchronization">Synchronization</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
