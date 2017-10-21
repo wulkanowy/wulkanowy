@@ -102,13 +102,18 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
         private TextView dateGrade;
 
+        private ImageView alertNewGrade;
+
         private Grade grade;
+
+        private boolean read = false;
 
         public GradeViewHolder(final View itemView) {
             super(itemView);
             gradeValue = itemView.findViewById(R.id.grade_text);
             descriptionGrade = itemView.findViewById(R.id.description_grade_text);
             dateGrade = itemView.findViewById(R.id.grade_date_text);
+            alertNewGrade = itemView.findViewById(R.id.grade_new_grades_alert);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -116,6 +121,8 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
                     GradesDialogFragment gradesDialogFragment = GradesDialogFragment.newInstance(grade);
                     gradesDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
                     gradesDialogFragment.show(activity.getFragmentManager(), grade.toString());
+
+                    read = true;
                 }
             });
         }
@@ -134,6 +141,12 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
                 }
             } else {
                 descriptionGrade.setText(grade.getDescription());
+            }
+
+            if (read) {
+                grade.setRead(true);
+                grade.update();
+                alertNewGrade.setVisibility(View.INVISIBLE);
             }
 
         }
