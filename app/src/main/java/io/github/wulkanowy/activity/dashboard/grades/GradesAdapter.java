@@ -19,6 +19,7 @@ import java.util.List;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.dao.entities.Grade;
+import io.github.wulkanowy.utilities.AverageCalculator;
 
 public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.SubjectViewHolder, GradesAdapter.GradeViewHolder> {
 
@@ -73,12 +74,17 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
         public void bind(ExpandableGroup group) {
             int volumeGrades = group.getItemCount();
-            boolean noReadGrades = true;
+            // boolean noReadGrades = true;
+            List<Grade> gradeList = group.getItems();
+            float average = AverageCalculator.calculate(gradeList);
 
+            if (average <= 0) {
+                averageGrades.setText(R.string.info_no_average);
+            } else {
+                averageGrades.setText(activity.getText(R.string.info_average_grades) + String.format("%.2f", average));
+            }
             subjectName.setText(group.getTitle());
             numberOfGrades.setText(activity.getResources().getQuantityString(R.plurals.numberOfGrades, volumeGrades, volumeGrades));
-            // averageGrades.setText(String.valueOf(AverageCalculator.calculate(group.getItems())));
-            List<Grade> gradeList = group.getItems();
 
             for (Grade grade : gradeList) {
                 if (grade.getRead()) {

@@ -16,14 +16,16 @@ public class AverageCalculatorTest extends AverageCalculator {
     @Before
     public void setUp() {
         gradeList.clear();
+        gradeList.add(new Grade().setValue("np.").setWeight("1,00"));
         gradeList.add(new Grade().setValue("-5").setWeight("10,00"));
         gradeList.add(new Grade().setValue("--5").setWeight("10,00"));
         gradeList.add(new Grade().setValue("=5").setWeight("10,00"));
         gradeList.add(new Grade().setValue("+5").setWeight("10,00"));
+        gradeList.add(new Grade().setValue("5").setWeight("10,00"));
     }
 
     @Test
     public void averageTest() {
-        Assert.assertEquals(4.75f, AverageCalculator.calculate(gradeList), 0.0f);
+        Assert.assertEquals(4.8f, AverageCalculator.calculate(gradeList), 0.0f);
     }
 }

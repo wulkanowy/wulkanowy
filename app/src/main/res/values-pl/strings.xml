@@ -49,4 +49,6 @@
         <item quantity="many">%d ocen</item>
         <item quantity="other">%d ocen</item>
     </plurals>
+    <string name="info_average_grades">Średnia:\u0020</string>
+    <string name="info_no_average">Brak średniej</string>
 </resources>

@@ -26,7 +26,7 @@ public abstract class AverageCalculator {
         if (counter > 0 && denominator == 0) {
             Log.wtf("AverageCalculatorWulkanowy", "DIVISION BY ZERO!!!");
             return -10f;
-        } else if (counter == 0) {
+        } else if (counter == 0f) {
             return -1f;
         }
 
@@ -34,16 +34,18 @@ public abstract class AverageCalculator {
     }
 
     private static float getMathematicalValueOfGrade(String valueOfGrade) {
-        if (valueOfGrade.matches("[-|+|=]{1,2}[0-6]")) {
-            if (valueOfGrade.matches("[-][^-]*")) {
+        if (valueOfGrade.matches("[-|+|=]{0,2}[0-6]") || valueOfGrade.matches("[0-6][-|+|=]{0,2}")) {
+            if (valueOfGrade.matches("[-][0-6]") || valueOfGrade.matches("[0-6][-]")) {
                 String replacedValue = valueOfGrade.replaceAll("[-]", "");
                 return Float.valueOf(replacedValue) - 0.25f;
-            } else if (valueOfGrade.matches("[+].*")) {
+            } else if (valueOfGrade.matches("[+][0-6]") || valueOfGrade.matches("[0-6][+]")) {
                 String replacedValue = valueOfGrade.replaceAll("[+]", "");
                 return Float.valueOf((replacedValue)) + 0.25f;
-            } else if (valueOfGrade.matches("[-|=]{1,2}.*")) {
+            } else if (valueOfGrade.matches("[-|=]{1,2}[0-6]") || valueOfGrade.matches("[0-6][-|=]{1,2}")) {
                 String replacedValue = valueOfGrade.replaceAll("[-|=]{1,2}", "");
                 return Float.valueOf((replacedValue)) - 0.5f;
+            } else if (valueOfGrade.matches("[0-6]")) {
+                return Float.valueOf(valueOfGrade);
             } else {
                 return -1;
             }

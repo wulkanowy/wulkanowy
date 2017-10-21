@@ -47,4 +47,6 @@
         <item quantity="one">%d grade</item>
         <item quantity="other">%d grades</item>
     </plurals>
+    <string name="info_average_grades">Average:\u0020</string>
+    <string name="info_no_average">No average</string>
 </resources>

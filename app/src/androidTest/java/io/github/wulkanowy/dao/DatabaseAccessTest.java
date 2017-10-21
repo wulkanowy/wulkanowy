@@ -3,6 +3,7 @@ package io.github.wulkanowy.dao;
 import android.support.test.InstrumentationRegistry;
 
 import org.greenrobot.greendao.database.Database;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -37,5 +38,13 @@ public class DatabaseAccessTest extends DatabaseAccess {
                 .setIsNew(true));
 
         Assert.assertEquals(1, DatabaseAccess.getNewGrades(daoSession).size());
+    }
+
+    @AfterClass
+    public static void cleanUp() {
+        daoSession.getAccountDao().deleteAll();
+        daoSession.getGradeDao().deleteAll();
+        daoSession.getSubjectDao().deleteAll();
+        daoSession.clear();
     }
 }
