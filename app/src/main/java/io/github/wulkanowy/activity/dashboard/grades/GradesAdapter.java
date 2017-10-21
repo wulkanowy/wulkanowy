@@ -78,7 +78,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             List<Grade> gradeList = group.getItems();
             float average = AverageCalculator.calculate(gradeList);
 
-            if (average <= 0) {
+            if (average < 0) {
                 averageGrades.setText(R.string.info_no_average);
             } else {
                 averageGrades.setText(activity.getText(R.string.info_average_grades) + String.format("%.2f", average));

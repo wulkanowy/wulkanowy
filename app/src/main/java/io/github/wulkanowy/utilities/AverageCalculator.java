@@ -1,7 +1,5 @@
 package io.github.wulkanowy.utilities;
 
-import android.util.Log;
-
 import java.util.List;
 
 import io.github.wulkanowy.dao.entities.Grade;
@@ -17,20 +15,17 @@ public abstract class AverageCalculator {
             int integerWeight = getIntegerForWeightOfGrade(grade.getWeight());
             float floatValue = getMathematicalValueOfGrade(grade.getValue());
 
-            if (floatValue != -1.0f) {
+            if (floatValue != -1f) {
                 counter += floatValue * integerWeight;
                 denominator += integerWeight;
             }
         }
 
-        if (counter > 0 && denominator == 0) {
-            Log.wtf("AverageCalculatorWulkanowy", "DIVISION BY ZERO!!!");
-            return -10f;
-        } else if (counter == 0f) {
+        if (counter == 0f) {
             return -1f;
+        } else {
+            return counter / denominator;
         }
-
-        return counter / denominator;
     }
 
     private static float getMathematicalValueOfGrade(String valueOfGrade) {
@@ -44,10 +39,8 @@ public abstract class AverageCalculator {
             } else if (valueOfGrade.matches("[-|=]{1,2}[0-6]") || valueOfGrade.matches("[0-6][-|=]{1,2}")) {
                 String replacedValue = valueOfGrade.replaceAll("[-|=]{1,2}", "");
                 return Float.valueOf((replacedValue)) - 0.5f;
-            } else if (valueOfGrade.matches("[0-6]")) {
-                return Float.valueOf(valueOfGrade);
             } else {
-                return -1;
+                return Float.valueOf(valueOfGrade);
             }
         } else {
             return -1;
