@@ -42,11 +42,6 @@ public class Vulcan extends Api {
         this.id = id;
     }
 
-    public Vulcan setSymbol(String symbol) {
-        this.symbol = symbol;
-        return this;
-    }
-
     public Vulcan setId(String id) {
         this.id = id;
         return this;
@@ -54,6 +49,11 @@ public class Vulcan extends Api {
 
     public String getSymbol() {
         return symbol;
+    }
+
+    public Vulcan setSymbol(String symbol) {
+        this.symbol = symbol;
+        return this;
     }
 
     public StudentAndParent getStudentAndParent() throws IOException, NotLoggedInErrorException {

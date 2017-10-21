@@ -14,7 +14,6 @@ import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.Login;
-import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.PersonalData;
@@ -26,9 +25,8 @@ import io.github.wulkanowy.security.Safety;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.VulcanSynchronization;
 import io.github.wulkanowy.services.jobs.GradesSync;
-import io.github.wulkanowy.services.jobs.VulcanSync;
 
-public class LoginSteps {
+public class UserFirstLogin {
 
     private Activity activity;
 
@@ -44,43 +42,37 @@ public class LoginSteps {
 
     private String certificate;
 
-    private String realSymbol;
-
-    private PersonalData personalData;
-
     private long userId;
 
     private StudentAndParent snp;
 
-    private VulcanSynchronization vulcanSynchronization;
-
-    public LoginSteps(Activity activity, String email, String password, String symbol) {
+    public UserFirstLogin(Activity activity, String email, String password, String symbol) {
         this.activity = activity;
         this.email = email;
         this.password = password;
         this.symbol = symbol;
     }
 
-    public void prepare() {
+    public void connect() throws BadCredentialsException, IOException {
         daoSession = ((WulkanowyApp) activity.getApplication()).getDaoSession();
         login = new Login(new Cookies());
-    }
-
-    public void getCertificate() throws BadCredentialsException, IOException {
         certificate = login.sendCredentials(email, password, symbol);
+
+        Log.d("UserFirstLogin", "Connected successfully");
     }
 
-    public void login() throws AccountPermissionException, LoginErrorException, IOException {
-        realSymbol = login.sendCertificate(certificate, symbol);
-    }
+    public void login() throws AccountPermissionException, NotLoggedInErrorException,
+            CryptoException, IOException {
+        String realSymbol = login.sendCertificate(certificate, symbol);
 
-    public void getUserInfo() throws NotLoggedInErrorException, IOException {
+        Log.d("UserFirstLogin", "Certificate sent");
+
         snp = new StudentAndParent(login.getCookiesObject(), realSymbol);
         snp.storeContextCookies();
-        personalData = new BasicInformation(snp).getPersonalData();
-    }
+        PersonalData personalData = new BasicInformation(snp).getPersonalData();
 
-    public void createLocalAccount() throws CryptoException {
+        Log.d("UserFirstLogin", "Successfully getting user first name");
+
         AccountDao accountDao = daoSession.getAccountDao();
         Safety safety = new Safety();
         Account account = new Account()
@@ -92,14 +84,14 @@ public class LoginSteps {
 
         userId = accountDao.insert(account);
 
-        Log.d(VulcanSync.DEBUG_TAG, "Login and save new user id=" + String.valueOf(userId));
-    }
+        Log.d("UserFirstLogin", "Local user id = " + String.valueOf(userId));
 
-    public void setUpAccountAsActive() {
         SharedPreferences sharedPreferences = activity.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong("userId", userId);
         editor.apply();
+
+        Log.d("UserFirstLogin", "Successfully setting user as active");
     }
 
     public void setUpSynchronization() {
@@ -107,14 +99,18 @@ public class LoginSteps {
         vulcan.setCookies(snp.getCookies());
         vulcan.setSymbol(snp.getSymbol());
         vulcan.setId(snp.getId());
-        vulcanSynchronization = new VulcanSynchronization(new LoginSession()
+
+        VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession()
                 .setVulcan(vulcan)
                 .setUserId(userId)
                 .setDaoSession(daoSession));
+
+        vulcanSynchronization.syncSubjectsAndGrades();
+
+        Log.d("UserFirstLogin", "First synchronization ended successfully");
     }
 
-    public void synchronizeGrades() {
-        vulcanSynchronization.syncSubjectsAndGrades();
+    public void scheduleSynchronization() {
         GradesSync gradesSync = new GradesSync();
         gradesSync.scheduledJob(activity);
     }

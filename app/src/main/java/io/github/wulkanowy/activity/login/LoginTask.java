@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -40,7 +39,6 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
     private View loginFormView;
 
-    private ProgressBar progressbar;
     private TextView showText;
 
     public LoginTask(Activity activity, String email, String password, String symbol) {
@@ -52,39 +50,23 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
     @Override
     protected void onPreExecute() {
-        progressbar = activity.findViewById(R.id.login_progress_horizontal);
         showText = activity.findViewById(R.id.login_progress_text);
     }
 
     @Override
     protected Integer doInBackground(Void... params) {
         if (ConnectionUtilities.isOnline(activity)) {
-            LoginSteps loginSteps = new LoginSteps(activity, email, password, symbol);
-            try {
-                publishProgress("0", "Przygotowywanie");
-                loginSteps.prepare();
+            UserFirstLogin userFirstLogin = new UserFirstLogin(activity, email, password, symbol);
 
-                publishProgress("1", "Pobieranie certyfikatu");
-                loginSteps.getCertificate();
+            try {
+                publishProgress("1", "Łączenie z dziennikiem");
+                userFirstLogin.connect();
 
                 publishProgress("2", "Logowanie");
-                loginSteps.login();
+                userFirstLogin.login();
 
-                publishProgress("3", "Pobieranie informacji o użytkowniku");
-                loginSteps.getUserInfo();
-                try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-
-                publishProgress("4", "Tworzenie lokalnego konta");
-                loginSteps.createLocalAccount();
-                try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-
-                publishProgress("5", "Ustawianie konta jako aktywnego");
-                loginSteps.setUpAccountAsActive();
-                try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
-
-                publishProgress("6", "Ustawianie synchronizacji");
-                loginSteps.setUpSynchronization();
-                try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+                publishProgress("3", "Synchronizacja");
+                userFirstLogin.setUpSynchronization();
 
             } catch (BadCredentialsException e) {
                 return R.string.login_bad_credentials_text;
@@ -96,9 +78,8 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 return R.string.login_denied_text;
             }
 
-            publishProgress("7", "Synchronizacja ocen");
-            loginSteps.synchronizeGrades();
-            try {Thread.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
+            userFirstLogin.scheduleSynchronization();
+
             return R.string.login_accepted_text;
 
         } else {
@@ -108,8 +89,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
     @Override
     protected void onProgressUpdate(String... progress) {
-        progressbar.setProgress(Integer.parseInt(progress[0]) * 10);
-        showText.setText(progress[0] +"/7 - " + progress[1] + "...");
+        showText.setText(progress[0] +"/3 - " + progress[1] + "...");
     }
 
     @Override

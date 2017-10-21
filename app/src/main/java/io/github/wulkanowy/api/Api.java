@@ -23,6 +23,7 @@ public abstract class Api {
         this.cookies.addItems(cookies);
         return this.cookies;
     }
+
     public Cookies setCookies(Map<String, String> cookies) {
         this.cookies.setItems(cookies);
         return this.cookies;
