@@ -3,7 +3,7 @@
 
     <!-- Strings related to login -->
     <string name="title_activity_login">Zaloguj się</string>
-    <string name="login_heading">Zaloguj się pomocą konta VULCAN</string>
+    <string name="login_heading">Zaloguj się za pomocą konta VULCAN</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Hasło</string>
     <string name="prompt_symbol">Symbol</string>
