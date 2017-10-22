@@ -1,7 +1,6 @@
 package io.github.wulkanowy.services.synchronisation;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.IOException;
@@ -10,8 +9,6 @@ import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.LoginErrorException;
-import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.api.user.PersonalData;
 import io.github.wulkanowy.dao.entities.Account;
 import io.github.wulkanowy.dao.entities.AccountDao;
 import io.github.wulkanowy.dao.entities.DaoSession;
@@ -50,38 +47,5 @@ public class AccountSynchronisation {
             Log.wtf(VulcanSync.DEBUG_TAG, "loginCurrentUser - USERID IS EMPTY");
             throw new IOException("Can't find user with index 0");
         }
-    }
-
-    public LoginSession loginNewUser(String email, String password, String symbol, Context context, DaoSession daoSession, Vulcan vulcan)
-            throws BadCredentialsException, NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException {
-
-        long userId;
-
-        vulcan.login(email, password, symbol);
-
-        PersonalData personalData = vulcan.getBasicInformation().getPersonalData();
-        AccountDao accountDao = daoSession.getAccountDao();
-        Safety safety = new Safety();
-
-        Account account = new Account()
-                .setName(personalData.getFirstAndLastName())
-                .setEmail(email)
-                .setPassword(safety.encrypt(email, password, context))
-                .setSymbol(vulcan.getSymbol())
-                .setSnpId(vulcan.getStudentAndParent().getId());
-
-        userId = accountDao.insert(account);
-
-        Log.d(VulcanSync.DEBUG_TAG, "Login and save new user id=" + String.valueOf(userId));
-
-        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong("userId", userId);
-        editor.apply();
-
-        return new LoginSession()
-                .setVulcan(vulcan)
-                .setUserId(userId)
-                .setDaoSession(daoSession);
     }
 }

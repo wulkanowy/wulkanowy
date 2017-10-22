@@ -94,54 +94,16 @@ public class AccountSynchronizationTest {
         Assert.assertEquals(loginSession.getVulcan(), vulcan);
     }
 
-    @Test
-    public void loginNewUserTest() throws Exception {
-        PersonalData personalData = Mockito.mock(PersonalData.class);
-        Mockito.doReturn("NAME-TEST").when(personalData).getFirstAndLastName();
-
-        StudentAndParent snp = Mockito.mock(StudentAndParent.class);
-        Mockito.doReturn("0123").when(snp).getId();
-
-        BasicInformation basicInformation = Mockito.mock(BasicInformation.class);
-        Mockito.doReturn(personalData).when(basicInformation).getPersonalData();
-
-        Vulcan vulcan = Mockito.mock(Vulcan.class);
-        Mockito.doNothing().when(vulcan).login("TEST@TEST", "TEST", "");
-        Mockito.doReturn(basicInformation).when(vulcan).getBasicInformation();
-        Mockito.doReturn(snp).when(vulcan).getStudentAndParent();
-
-        AccountSynchronisation accountSynchronisation = new AccountSynchronisation();
-        LoginSession loginSession = accountSynchronisation
-                .loginNewUser("TEST@TEST", "TEST", "", targetContext, daoSession, vulcan);
-
-        Long userId = targetContext.getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("userId", 0);
-
-        Assert.assertNotNull(loginSession);
-        Assert.assertNotEquals(0, userId.longValue());
-        Assert.assertEquals(loginSession.getUserId(), userId);
-        Assert.assertNotNull(loginSession.getDaoSession());
-        Assert.assertEquals(loginSession.getVulcan(), vulcan);
-
-        Safety safety = new Safety();
-        Account account = daoSession.getAccountDao().load(userId);
-
-        Assert.assertNotNull(account);
-        Assert.assertEquals("TEST@TEST", account.getEmail());
-        Assert.assertEquals("NAME-TEST", account.getName());
-        Assert.assertEquals("TEST", safety.decrypt("TEST@TEST", account.getPassword()));
-
+    private void setUserIdSharePreferences(long id) {
+        SharedPreferences sharedPreferences = targetContext.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("userId", id);
+        editor.apply();
     }
 
     @AfterClass
     public static void cleanUp() {
         daoSession.getAccountDao().deleteAll();
         daoSession.clear();
-    }
-
-    private void setUserIdSharePreferences(long id) {
-        SharedPreferences sharedPreferences = targetContext.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong("userId", id);
-        editor.apply();
     }
 }
