@@ -74,7 +74,6 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
         public void bind(ExpandableGroup group) {
             int volumeGrades = group.getItemCount();
-            // boolean noReadGrades = true;
             List<Grade> gradeList = group.getItems();
             float average = AverageCalculator.calculate(gradeList);
 
@@ -88,6 +87,8 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
             for (Grade grade : gradeList) {
                 if (grade.getRead()) {
+                    alertNewGrades.setVisibility(View.INVISIBLE);
+                } else {
                     alertNewGrades.setVisibility(View.VISIBLE);
                 }
             }
@@ -104,34 +105,24 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
         private ImageView alertNewGrade;
 
-        private Grade grade;
+        private View itemView;
 
-        private boolean read = false;
+        private Grade gradeItem;
 
-        public GradeViewHolder(final View itemView) {
+        public GradeViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             gradeValue = itemView.findViewById(R.id.grade_text);
             descriptionGrade = itemView.findViewById(R.id.description_grade_text);
             dateGrade = itemView.findViewById(R.id.grade_date_text);
             alertNewGrade = itemView.findViewById(R.id.grade_new_grades_alert);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    GradesDialogFragment gradesDialogFragment = GradesDialogFragment.newInstance(grade);
-                    gradesDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-                    gradesDialogFragment.show(activity.getFragmentManager(), grade.toString());
-
-                    read = true;
-                }
-            });
         }
 
         public void bind(Grade grade) {
-            this.grade = grade;
             gradeValue.setText(grade.getValue());
             gradeValue.setBackgroundResource(grade.getValueColor());
             dateGrade.setText(grade.getDate());
+            gradeItem = grade;
 
             if (grade.getDescription().equals("") || grade.getDescription() == null) {
                 if (!grade.getSymbol().equals("")) {
@@ -143,11 +134,24 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
                 descriptionGrade.setText(grade.getDescription());
             }
 
-            if (read) {
-                grade.setRead(true);
-                grade.update();
+            if (grade.getRead()) {
                 alertNewGrade.setVisibility(View.INVISIBLE);
-            }
+            } else
+                alertNewGrade.setVisibility(View.VISIBLE);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    GradesDialogFragment gradesDialogFragment = GradesDialogFragment.newInstance(gradeItem);
+                    gradesDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+                    gradesDialogFragment.show(activity.getFragmentManager(), gradeItem.toString());
+
+                    gradeItem.setRead(true);
+                    gradeItem.setIsNew(false);
+                    gradeItem.update();
+                    alertNewGrade.setVisibility(View.INVISIBLE);
+                }
+            });
 
         }
     }
