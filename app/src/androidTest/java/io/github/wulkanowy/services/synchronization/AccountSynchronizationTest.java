@@ -80,7 +80,7 @@ public class AccountSynchronizationTest {
         setUserIdSharePreferences(userId);
 
         Vulcan vulcan = Mockito.mock(Vulcan.class);
-        Mockito.doNothing().when(vulcan).login("TEST@TEST", "TEST", "");
+        Mockito.doNothing().when(vulcan).login("TEST@TEST", "TEST", "TEST_SYMBOL", "TEST_ID");
 
         AccountSynchronisation accountSynchronisation = new AccountSynchronisation();
         LoginSession loginSession = accountSynchronisation.loginCurrentUser(targetContext, daoSession, vulcan);

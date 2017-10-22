@@ -17,14 +17,11 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.api.Cookies;
-import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.api.user.BasicInformation;
-import io.github.wulkanowy.api.user.PersonalData;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
@@ -65,6 +62,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
     protected Integer doInBackground(Void... params) {
         if (ConnectionUtilities.isOnline(activity)) {
             Login login = new Login(new Cookies());
+            Vulcan vulcan = new Vulcan();
             DaoSession daoSession = ((WulkanowyApp) activity.getApplication()).getDaoSession();
             UserFirstLogin userFirstLogin = new UserFirstLogin(activity, login, email, password, symbol);
 
@@ -74,13 +72,11 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
                 publishProgress("2", activity.getResources().getString(R.string.step_login));
                 String realSymbol = userFirstLogin.sendCertificate(certificate);
-                StudentAndParent snp = new StudentAndParent(userFirstLogin.getLogin().getCookiesObject(), realSymbol);
-                snp.storeContextCookies();
-                PersonalData personalData = new BasicInformation(snp).getPersonalData();
-                userFirstLogin.login(daoSession, snp, personalData);
+                vulcan.login(userFirstLogin.getLogin().getCookiesObject(), realSymbol);
+                userFirstLogin.login(daoSession, vulcan);
 
                 publishProgress("3", activity.getResources().getString(R.string.step_synchronization));
-                userFirstLogin.setUpSynchronization(new Vulcan(), snp, daoSession);
+                userFirstLogin.setUpSynchronization(daoSession, vulcan);
 
             } catch (BadCredentialsException e) {
                 return R.string.login_bad_credentials_text;
@@ -103,7 +99,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
     @Override
     protected void onProgressUpdate(String... progress) {
-        showText.setText(progress[0] +"/3 - " + progress[1] + "...");
+        showText.setText(progress[0] + "/3 - " + progress[1] + "...");
     }
 
     @Override

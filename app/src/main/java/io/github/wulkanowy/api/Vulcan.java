@@ -27,12 +27,17 @@ public class Vulcan extends Api {
 
     private StudentAndParent snp;
 
+    public void login(Cookies cookies, String symbol) {
+        this.cookies = cookies;
+        this.symbol = symbol;
+    }
+
     public void login(String email, String password, String symbol)
             throws BadCredentialsException, AccountPermissionException, LoginErrorException, IOException {
         Login login = new Login(new Cookies());
+        String realSymbol = login.login(email, password, symbol);
 
-        this.symbol = login.login(email, password, symbol);
-        this.cookies = login.getCookiesObject();
+        login(login.getCookiesObject(), realSymbol);
     }
 
     public void login(String email, String password, String symbol, String id)
@@ -40,20 +45,6 @@ public class Vulcan extends Api {
         login(email, password, symbol);
 
         this.id = id;
-    }
-
-    public Vulcan setId(String id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public Vulcan setSymbol(String symbol) {
-        this.symbol = symbol;
-        return this;
     }
 
     public StudentAndParent getStudentAndParent() throws IOException, NotLoggedInErrorException {
@@ -65,17 +56,21 @@ public class Vulcan extends Api {
             return snp;
         }
 
-        if (null == id) {
-            snp = new StudentAndParent(cookies, symbol);
-        } else {
-            snp = new StudentAndParent(cookies, symbol, id);
-        }
+        snp = createSnp(cookies, symbol, id);
 
         snp.storeContextCookies();
 
         this.cookies = snp.getCookiesObject();
 
         return snp;
+    }
+
+    public StudentAndParent createSnp(Cookies cookies, String symbol, String id) {
+        if (null == id) {
+            return new StudentAndParent(cookies, symbol);
+        }
+
+        return new StudentAndParent(cookies, symbol, id);
     }
 
     public AttendanceStatistics getAttendanceStatistics() throws IOException, NotLoggedInErrorException {

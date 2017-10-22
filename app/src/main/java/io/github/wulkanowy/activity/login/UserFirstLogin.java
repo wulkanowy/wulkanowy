@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import java.io.IOException;
 
-import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
@@ -55,9 +54,10 @@ public class UserFirstLogin {
         return login.sendCertificate(certificate, symbol);
     }
 
-    public void login(DaoSession daoSession, StudentAndParent snp, PersonalData personalData)
+    public void login(DaoSession daoSession, Vulcan vulcan)
             throws AccountPermissionException, NotLoggedInErrorException,
             CryptoException, IOException {
+        PersonalData personalData = vulcan.getBasicInformation().getPersonalData();
 
         AccountDao accountDao = daoSession.getAccountDao();
         Safety safety = new Safety();
@@ -65,8 +65,8 @@ public class UserFirstLogin {
                 .setName(personalData.getFirstAndLastName())
                 .setEmail(email)
                 .setPassword(safety.encrypt(email, password, context))
-                .setSymbol(snp.getSymbol())
-                .setSnpId(snp.getId());
+                .setSymbol(vulcan.getStudentAndParent().getSymbol())
+                .setSnpId(vulcan.getStudentAndParent().getId());
 
         userId = accountDao.insert(account);
 
@@ -76,11 +76,7 @@ public class UserFirstLogin {
         editor.apply();
     }
 
-    public void setUpSynchronization(Vulcan vulcan, StudentAndParent snp, DaoSession daoSession) {
-        vulcan.setCookies(snp.getCookies());
-        vulcan.setSymbol(snp.getSymbol());
-        vulcan.setId(snp.getId());
-
+    public void setUpSynchronization(DaoSession daoSession, Vulcan vulcan) {
         VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession()
                 .setVulcan(vulcan)
                 .setUserId(userId)

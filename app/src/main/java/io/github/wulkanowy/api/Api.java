@@ -19,11 +19,6 @@ public abstract class Api {
         return cookies.getItems();
     }
 
-    public Cookies setCookies(Map<String, String> cookies) {
-        this.cookies.setItems(cookies);
-        return this.cookies;
-    }
-
     public Document getPageByUrl(String url) throws IOException {
         Connection.Response response = Jsoup.connect(url)
                 .followRedirects(true)

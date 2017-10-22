@@ -12,8 +12,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import io.github.wulkanowy.api.Cookies;
 import io.github.wulkanowy.api.StudentAndParent;
+import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.Login;
+import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.PersonalData;
 import io.github.wulkanowy.dao.entities.Account;
 import io.github.wulkanowy.dao.entities.DaoMaster;
@@ -35,6 +38,12 @@ public class UserFirstLoginTest {
         Database database = devOpenHelper.getWritableDb();
 
         daoSession = new DaoMaster(database).newSession();
+    }
+
+    @AfterClass
+    public static void cleanUp() {
+        daoSession.getAccountDao().deleteAll();
+        daoSession.clear();
     }
 
     @Before
@@ -75,18 +84,25 @@ public class UserFirstLoginTest {
 
     @Test
     public void loginTest() throws Exception {
-        StudentAndParent snp = Mockito.mock(StudentAndParent.class);
-        Mockito.when(snp.getId()).thenReturn("0123");
-        Mockito.when(snp.getSymbol()).thenReturn("symbol123");
-
         PersonalData personalData = Mockito.mock(PersonalData.class);
-        Mockito.when(personalData.getFirstAndLastName()).thenReturn("NAME-TEST");
+        Mockito.doReturn("NAME-TEST").when(personalData).getFirstAndLastName();
+
+        BasicInformation basicInformation = Mockito.mock(BasicInformation.class);
+        Mockito.doReturn(personalData).when(basicInformation).getPersonalData();
+
+        StudentAndParent snp = Mockito.mock(StudentAndParent.class);
+        Mockito.when(snp.getId()).thenReturn("TEST_ID");
+
+        Vulcan vulcan = Mockito.mock(Vulcan.class);
+        Mockito.doNothing().when(vulcan).login(Mockito.any(Cookies.class), Mockito.anyString());
+        Mockito.doReturn(basicInformation).when(vulcan).getBasicInformation();
+        Mockito.doReturn(snp).when(vulcan).getStudentAndParent();
 
         Login login = Mockito.mock(Login.class);
         Mockito.when(login.login(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn("symbol123");
 
         UserFirstLogin userFirstLogin = new UserFirstLogin(targetContext, login, "TEST@TEST", "TEST_PASS", "TEST_SYMBOL");
-        userFirstLogin.login(daoSession, snp, personalData);
+        userFirstLogin.login(daoSession, vulcan);
 
         SharedPreferences sharedPreferences = targetContext.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
         Long userId = sharedPreferences.getLong("userId", 0);
@@ -98,11 +114,5 @@ public class UserFirstLoginTest {
         Assert.assertEquals("TEST@TEST", account.getEmail());
         Assert.assertEquals("NAME-TEST", account.getName());
         Assert.assertEquals("TEST_PASS", safety.decrypt("TEST@TEST", account.getPassword()));
-    }
-
-    @AfterClass
-    public static void cleanUp() {
-        daoSession.getAccountDao().deleteAll();
-        daoSession.clear();
     }
 }
