@@ -95,6 +95,8 @@
                     android:hint="@string/prompt_password"
                     android:inputType="textPassword"
                     android:maxLines="1"
+                    android:imeActionId="@+id/action_sign_in"
+                    android:imeActionLabel="@string/action_sign_in"
                     android:fontFamily="sans-serif"
                     android:importantForAutofill="noExcludeDescendants"
                     />

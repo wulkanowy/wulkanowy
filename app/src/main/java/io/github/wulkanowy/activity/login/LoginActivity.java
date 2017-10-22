@@ -44,21 +44,11 @@ public class LoginActivity extends Activity {
         emailView = findViewById(R.id.email);
         passwordView = findViewById(R.id.password);
         symbolView = findViewById(R.id.symbol);
+
+        passwordView.setOnEditorActionListener(getTextViewSignInListener());
+        symbolView.setOnEditorActionListener(getTextViewSignInListener());
+
         populateAutoComplete();
-
-        TextView.OnEditorActionListener listener = new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.action_sign_in || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        };
-
-        passwordView.setOnEditorActionListener(listener);
-        symbolView.setOnEditorActionListener(listener);
 
         Button signInButton = findViewById(R.id.action_sign_in);
         signInButton.setOnClickListener(new OnClickListener() {
@@ -68,29 +58,38 @@ public class LoginActivity extends Activity {
             }
         });
 
-        TextView createAccount = findViewById(R.id.action_create_account);
-        createAccount.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String url = "https://cufs.vulcan.net.pl/Default/AccountManage/CreateAccount";
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                CustomTabsIntent customTabsIntent = builder.build();
-                builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
-                customTabsIntent.launchUrl(view.getContext(), Uri.parse(url));
-            }
-        });
+        findViewById(R.id.action_create_account).setOnClickListener(getButtonLinkListener(
+                "https://cufs.vulcan.net.pl/Default/AccountManage/CreateAccount"
+        ));
 
-        TextView forgotPassword = findViewById(R.id.action_forgot_password);
-        forgotPassword.setOnClickListener(new OnClickListener() {
+        findViewById(R.id.action_forgot_password).setOnClickListener(getButtonLinkListener(
+                "https://cufs.vulcan.net.pl/Default/AccountManage/UnlockAccount"
+        ));
+    }
+
+    private TextView.OnEditorActionListener getTextViewSignInListener() {
+        return new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.action_sign_in || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        };
+    }
+
+    private OnClickListener getButtonLinkListener(final String url) {
+        return new OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "https://cufs.vulcan.net.pl/Default/AccountManage/UnlockAccount";
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 CustomTabsIntent customTabsIntent = builder.build();
                 builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
                 customTabsIntent.launchUrl(view.getContext(), Uri.parse(url));
             }
-        });
+        };
     }
 
     private void populateAutoComplete() {

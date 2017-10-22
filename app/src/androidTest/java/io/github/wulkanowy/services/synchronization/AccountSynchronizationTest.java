@@ -16,13 +16,10 @@ import org.mockito.Mockito;
 
 import java.io.IOException;
 
-import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.LoginErrorException;
-import io.github.wulkanowy.api.user.BasicInformation;
-import io.github.wulkanowy.api.user.PersonalData;
 import io.github.wulkanowy.dao.entities.Account;
 import io.github.wulkanowy.dao.entities.AccountDao;
 import io.github.wulkanowy.dao.entities.DaoMaster;

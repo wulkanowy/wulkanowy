@@ -19,21 +19,20 @@ public abstract class Api {
         return cookies.getItems();
     }
 
-    public Cookies addCookies(Map<String, String> cookies) {
-        this.cookies.addItems(cookies);
-        return this.cookies;
-    }
-
     public Cookies setCookies(Map<String, String> cookies) {
         this.cookies.setItems(cookies);
         return this.cookies;
     }
 
     public Document getPageByUrl(String url) throws IOException {
-        return Jsoup.connect(url)
+        Connection.Response response = Jsoup.connect(url)
                 .followRedirects(true)
                 .cookies(getCookies())
-                .get();
+                .execute();
+
+        this.cookies.addItems(response.cookies());
+
+        return response.parse();
     }
 
     public Document postPageByUrl(String url, String[][] params) throws IOException {
@@ -48,7 +47,7 @@ public abstract class Api {
                 .method(Connection.Method.POST)
                 .execute();
 
-        addCookies(response.cookies());
+        this.cookies.addItems(response.cookies());
 
         return response.parse();
     }
