@@ -28,7 +28,7 @@ public class Vulcan extends Api {
     private StudentAndParent snp;
 
     public void login(String email, String password, String symbol)
-            throws BadCredentialsException, AccountPermissionException, LoginErrorException {
+            throws BadCredentialsException, AccountPermissionException, LoginErrorException, IOException {
         Login login = new Login(new Cookies());
 
         this.symbol = login.login(email, password, symbol);
@@ -36,7 +36,7 @@ public class Vulcan extends Api {
     }
 
     public void login(String email, String password, String symbol, String id)
-            throws BadCredentialsException, AccountPermissionException, LoginErrorException {
+            throws BadCredentialsException, AccountPermissionException, LoginErrorException, IOException {
         login(email, password, symbol);
 
         this.id = id;

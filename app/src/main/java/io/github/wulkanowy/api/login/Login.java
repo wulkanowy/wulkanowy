@@ -33,14 +33,10 @@ public class Login extends Api {
     }
 
     public String login(String email, String password, String symbol)
-            throws BadCredentialsException, LoginErrorException, AccountPermissionException {
+            throws BadCredentialsException, LoginErrorException, AccountPermissionException, IOException {
+        String certificate = sendCredentials(email, password, symbol);
 
-        try {
-            String certificate = sendCredentials(email, password, symbol);
-            return sendCertificate(certificate, symbol);
-        } catch (IOException e) {
-            throw new LoginErrorException();
-        }
+        return sendCertificate(certificate, symbol);
     }
 
     public String sendCredentials(String email, String password, String symbol)
