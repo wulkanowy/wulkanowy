@@ -133,11 +133,9 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 break;
 
             default:
-                Snackbar snackbar = Snackbar.make(
-                        activity.findViewById(R.id.coordinatorLayout),
-                        messageID, Snackbar.LENGTH_LONG
-                );
-                snackbar.show();
+                Snackbar
+                        .make(activity.findViewById(R.id.coordinatorLayout), messageID, Snackbar.LENGTH_LONG)
+                        .show();
                 break;
         }
     }
