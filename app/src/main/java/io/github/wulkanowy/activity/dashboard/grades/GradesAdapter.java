@@ -86,9 +86,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             numberOfGrades.setText(activity.getResources().getQuantityString(R.plurals.numberOfGrades, volumeGrades, volumeGrades));
 
             for (Grade grade : gradeList) {
-                if (grade.getRead()) {
-                    alertNewGrades.setVisibility(View.INVISIBLE);
-                } else {
+                if (!grade.getRead()) {
                     alertNewGrades.setVisibility(View.VISIBLE);
                 }
             }

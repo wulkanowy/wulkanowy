@@ -39,10 +39,6 @@ public class GradesFragment extends Fragment {
 
     private View view;
 
-    private Fragment thisFragment = this;
-
-    private LoginSession loginSession = new LoginSession();
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -80,15 +76,15 @@ public class GradesFragment extends Fragment {
     private void createExpListView() {
 
         RecyclerView recyclerView = view.findViewById(R.id.subject_grade_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        GradesAdapter gradesAdapter = new GradesAdapter(subjectWithGradesList, view.getContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        GradesAdapter gradesAdapter = new GradesAdapter(subjectWithGradesList, getContext());
         recyclerView.setAdapter(gradesAdapter);
     }
 
     private void prepareSubjectsWithGradesList(DaoSession daoSession) {
         subjectWithGradesList = new ArrayList<>();
 
-        long userId = getActivity().getSharedPreferences("LoginData", Context.MODE_PRIVATE)
+        long userId = getContext().getSharedPreferences("LoginData", Context.MODE_PRIVATE)
                 .getLong("userId", 0);
 
         AccountDao accountDao = daoSession.getAccountDao();
@@ -123,12 +119,9 @@ public class GradesFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(DaoSession... params) {
-            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(loginSession);
+            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
             try {
-                if (loginSession.equals(new LoginSession())) {
-                    vulcanSynchronization.loginCurrentUser(getContext(), params[0], new Vulcan());
-                    loginSession = vulcanSynchronization.getLoginSession();
-                }
+                vulcanSynchronization.loginCurrentUser(getContext(), params[0], new Vulcan());
                 vulcanSynchronization.syncGrades();
                 prepareSubjectsWithGradesList(params[0]);
                 return true;
@@ -143,8 +136,10 @@ public class GradesFragment extends Fragment {
             super.onPostExecute(result);
 
             if (result) {
-                getFragmentManager().beginTransaction().detach(thisFragment).attach(thisFragment).commit();
+                prepareSubjectsWithGradesList(((WulkanowyApp) getActivity().getApplication()).getDaoSession());
+                createExpListView();
                 swipeRefreshLayout.setRefreshing(false);
+
 
                 int volumeGrades = DatabaseAccess.getNewGrades(((WulkanowyApp) getActivity().getApplication()).getDaoSession()).size();
 
