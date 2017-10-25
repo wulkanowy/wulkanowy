@@ -27,10 +27,10 @@ import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.security.Safety;
 import io.github.wulkanowy.services.LoginSession;
-import io.github.wulkanowy.services.synchronisation.AccountSynchronisation;
+import io.github.wulkanowy.services.synchronisation.AccountAuthorization;
 
 @RunWith(AndroidJUnit4.class)
-public class AccountSynchronizationTest {
+public class AccountAuthorizationTest {
 
     private static DaoSession daoSession;
 
@@ -62,8 +62,8 @@ public class AccountSynchronizationTest {
     public void emptyUserIdTest() throws CryptoException, BadCredentialsException,
             AccountPermissionException, IOException, LoginErrorException {
 
-        AccountSynchronisation accountSynchronisation = new AccountSynchronisation();
-        accountSynchronisation.loginCurrentUser(context, daoSession, new Vulcan());
+        AccountAuthorization accountAuthorization = new AccountAuthorization(context, daoSession, new Vulcan());
+        accountAuthorization.loginCurrentUser();
     }
 
     @Test
@@ -82,8 +82,8 @@ public class AccountSynchronizationTest {
         Vulcan vulcan = Mockito.mock(Vulcan.class);
         Mockito.doNothing().when(vulcan).login("TEST@TEST", "TEST", "TEST_SYMBOL", "TEST_ID");
 
-        AccountSynchronisation accountSynchronisation = new AccountSynchronisation();
-        LoginSession loginSession = accountSynchronisation.loginCurrentUser(targetContext, daoSession, vulcan);
+        AccountAuthorization accountAuthorization = new AccountAuthorization(targetContext, daoSession, vulcan);
+        LoginSession loginSession = accountAuthorization.loginCurrentUser();
 
         Assert.assertNotNull(loginSession);
         Assert.assertEquals(loginSession.getUserId(), userId);

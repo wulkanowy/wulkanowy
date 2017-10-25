@@ -24,6 +24,9 @@ import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
+import io.github.wulkanowy.services.LoginSession;
+import io.github.wulkanowy.services.VulcanSynchronization;
+import io.github.wulkanowy.services.synchronisation.AccountRegistration;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 /**
@@ -61,22 +64,23 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
     @Override
     protected Integer doInBackground(Void... params) {
         if (ConnectionUtilities.isOnline(activity)) {
-            Login login = new Login(new Cookies());
-            Vulcan vulcan = new Vulcan();
+            AccountRegistration accountRegistration = new AccountRegistration(
+                    new Login(new Cookies()),
+                    new Vulcan(),
+                    email, password, symbol);
+
             DaoSession daoSession = ((WulkanowyApp) activity.getApplication()).getDaoSession();
-            UserFirstLogin userFirstLogin = new UserFirstLogin(activity, login, email, password, symbol);
 
             try {
                 publishProgress("1", activity.getResources().getString(R.string.step_connecting));
-                String certificate = userFirstLogin.connect();
+                String certificate = accountRegistration.connect();
 
                 publishProgress("2", activity.getResources().getString(R.string.step_login));
-                String realSymbol = userFirstLogin.sendCertificate(certificate);
-                vulcan.login(userFirstLogin.getLogin().getCookiesObject(), realSymbol);
-                userFirstLogin.login(daoSession, vulcan);
+                LoginSession loginSession = accountRegistration.login(activity, daoSession, certificate);
 
                 publishProgress("3", activity.getResources().getString(R.string.step_synchronization));
-                userFirstLogin.setUpSynchronization(daoSession, vulcan);
+                VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(loginSession);
+                vulcanSynchronization.syncSubjectsAndGrades();
 
             } catch (BadCredentialsException e) {
                 return R.string.login_bad_credentials_text;
@@ -88,7 +92,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 return R.string.login_denied_text;
             }
 
-            userFirstLogin.scheduleSynchronization();
+            accountRegistration.scheduleSynchronization(activity);
 
             return R.string.login_accepted_text;
 

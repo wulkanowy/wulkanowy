@@ -1,4 +1,4 @@
-package io.github.wulkanowy.activity.login;
+package io.github.wulkanowy.services.synchronization;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,7 +12,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import io.github.wulkanowy.api.Cookies;
 import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.Login;
@@ -22,42 +21,32 @@ import io.github.wulkanowy.dao.entities.Account;
 import io.github.wulkanowy.dao.entities.DaoMaster;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.Safety;
+import io.github.wulkanowy.services.LoginSession;
+import io.github.wulkanowy.services.synchronisation.AccountRegistration;
 
-public class UserFirstLoginTest {
+public class AccountRegistrationTest {
+
     private static DaoSession daoSession;
-
-    private Context context;
 
     private Context targetContext;
 
     @BeforeClass
     public static void setUpClass() {
 
-        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(
-                InstrumentationRegistry.getTargetContext(), "wulkanowyTest-database");
+        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-database");
         Database database = devOpenHelper.getWritableDb();
 
         daoSession = new DaoMaster(database).newSession();
     }
 
-    @AfterClass
-    public static void cleanUp() {
-        daoSession.getAccountDao().deleteAll();
-        daoSession.clear();
-    }
-
     @Before
     public void setUp() {
-        context = InstrumentationRegistry.getContext();
         targetContext = InstrumentationRegistry.getTargetContext();
 
         daoSession.getAccountDao().deleteAll();
         daoSession.clear();
 
-        SharedPreferences sharedPreferences = targetContext.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong("userId", 0);
-        editor.apply();
+        setUserIdSharePreferences(0);
     }
 
     @Test
@@ -66,53 +55,61 @@ public class UserFirstLoginTest {
         Login login = Mockito.mock(Login.class);
         Mockito.when(login.sendCredentials(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(certificate);
-        UserFirstLogin userFirstLogin = new UserFirstLogin(context, login, "TEST@TEST", "TEST_PASS", "TEST_SYMBOL");
+        AccountRegistration accountRegistration = new AccountRegistration(login, new Vulcan(), "TEST@TEST", "TEST_PASS", "TEST_SYMBOL");
 
-        Assert.assertEquals(certificate, userFirstLogin.connect());
-    }
-
-    @Test
-    public void sendCertificateTest() throws Exception {
-        String symbol = "DISCOVERED_SYMBOL";
-
-        Login login = Mockito.mock(Login.class);
-        Mockito.when(login.sendCertificate(Mockito.anyString(), Mockito.anyString())).thenReturn(symbol);
-        UserFirstLogin userFirstLogin = new UserFirstLogin(context, login, "TEST@TEST", "TEST_PASS", "TEST_SYMBOL");
-
-        Assert.assertEquals(symbol, userFirstLogin.sendCertificate("<xml></xml>"));
+        Assert.assertEquals(certificate, accountRegistration.connect());
     }
 
     @Test
     public void loginTest() throws Exception {
+        StudentAndParent snp = Mockito.mock(StudentAndParent.class);
+        Mockito.when(snp.getSymbol()).thenReturn("TEST-SYMBOL");
+        Mockito.when(snp.getId()).thenReturn("TEST-ID");
+
         PersonalData personalData = Mockito.mock(PersonalData.class);
         Mockito.doReturn("NAME-TEST").when(personalData).getFirstAndLastName();
 
         BasicInformation basicInformation = Mockito.mock(BasicInformation.class);
         Mockito.doReturn(personalData).when(basicInformation).getPersonalData();
 
-        StudentAndParent snp = Mockito.mock(StudentAndParent.class);
-        Mockito.when(snp.getId()).thenReturn("TEST_ID");
-
         Vulcan vulcan = Mockito.mock(Vulcan.class);
-        Mockito.doNothing().when(vulcan).login(Mockito.any(Cookies.class), Mockito.anyString());
         Mockito.doReturn(basicInformation).when(vulcan).getBasicInformation();
         Mockito.doReturn(snp).when(vulcan).getStudentAndParent();
 
         Login login = Mockito.mock(Login.class);
-        Mockito.when(login.login(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn("symbol123");
+        Mockito.when(login.sendCertificate(Mockito.anyString(), Mockito.anyString())).thenReturn("TEST-SYMBOL");
 
-        UserFirstLogin userFirstLogin = new UserFirstLogin(targetContext, login, "TEST@TEST", "TEST_PASS", "TEST_SYMBOL");
-        userFirstLogin.login(daoSession, vulcan);
+        AccountRegistration accountRegistration = new AccountRegistration(login, vulcan, "TEST@TEST", "TEST-PASS", "default");
+        LoginSession loginSession = accountRegistration.login(targetContext, daoSession, "<xml>cert</xml>");
 
-        SharedPreferences sharedPreferences = targetContext.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
-        Long userId = sharedPreferences.getLong("userId", 0);
+        Long userId = targetContext.getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("userId", 0);
 
-        Account account = daoSession.getAccountDao().load(userId);
+        Assert.assertNotNull(loginSession);
+        Assert.assertNotEquals(0, userId.longValue());
+        Assert.assertEquals(loginSession.getUserId(), userId);
+        Assert.assertNotNull(loginSession.getDaoSession());
+        Assert.assertEquals(loginSession.getVulcan(), vulcan);
 
         Safety safety = new Safety();
+        Account account = daoSession.getAccountDao().load(userId);
         Assert.assertNotNull(account);
         Assert.assertEquals("TEST@TEST", account.getEmail());
         Assert.assertEquals("NAME-TEST", account.getName());
-        Assert.assertEquals("TEST_PASS", safety.decrypt("TEST@TEST", account.getPassword()));
+        Assert.assertEquals("TEST-PASS", safety.decrypt("TEST@TEST", account.getPassword()));
+        Assert.assertEquals("TEST-SYMBOL", account.getSymbol());
+        Assert.assertEquals("TEST-ID", account.getSnpId());
+    }
+
+    private void setUserIdSharePreferences(long id) {
+        SharedPreferences sharedPreferences = targetContext.getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("userId", id);
+        editor.apply();
+    }
+
+    @AfterClass
+    public static void cleanUp() {
+        daoSession.getAccountDao().deleteAll();
+        daoSession.clear();
     }
 }

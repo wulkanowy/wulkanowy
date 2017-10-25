@@ -12,7 +12,7 @@ import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.services.jobs.VulcanSync;
-import io.github.wulkanowy.services.synchronisation.AccountSynchronisation;
+import io.github.wulkanowy.services.synchronisation.AccountAuthorization;
 import io.github.wulkanowy.services.synchronisation.GradesSynchronisation;
 import io.github.wulkanowy.services.synchronisation.SubjectsSynchronisation;
 
@@ -25,10 +25,10 @@ public class VulcanSynchronization {
     }
 
     public void loginCurrentUser(Context context, DaoSession daoSession, Vulcan vulcan)
-            throws CryptoException, BadCredentialsException, AccountPermissionException, IOException, LoginErrorException {
+            throws CryptoException, BadCredentialsException, AccountPermissionException, LoginErrorException, IOException {
 
-        AccountSynchronisation accountSynchronisation = new AccountSynchronisation();
-        loginSession = accountSynchronisation.loginCurrentUser(context, daoSession, vulcan);
+        AccountAuthorization accountAuthorization = new AccountAuthorization(context, daoSession, vulcan);
+        loginSession = accountAuthorization.loginCurrentUser();
     }
 
     public boolean syncGrades() {

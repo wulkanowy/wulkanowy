@@ -17,9 +17,21 @@ import io.github.wulkanowy.security.Safety;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.jobs.VulcanSync;
 
-public class AccountSynchronisation {
+public class AccountAuthorization {
 
-    public LoginSession loginCurrentUser(Context context, DaoSession daoSession, Vulcan vulcan) throws CryptoException,
+    private final Context context;
+
+    private final DaoSession daoSession;
+
+    private final Vulcan vulcan;
+
+    public AccountAuthorization(Context context, DaoSession daoSession, Vulcan vulcan) {
+        this.context = context;
+        this.daoSession = daoSession;
+        this.vulcan = vulcan;
+    }
+
+    public LoginSession loginCurrentUser() throws CryptoException,
             BadCredentialsException, AccountPermissionException, IOException, LoginErrorException {
 
         AccountDao accountDao = daoSession.getAccountDao();
