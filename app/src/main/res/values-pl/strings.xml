@@ -41,7 +41,7 @@
     <string name="dialog_subject_text">Przedmiot</string>
     <string name="refresh_error_text">"Podczas odświeżania zawartości wystąpił błąd. "</string>
     <string name="snackbar_no_grades">Brak nowych ocen</string>
-    <string name="snackbar_new_grade">Ilość nowych ocen:\u0020</string>
+    <string name="snackbar_new_grade">Ilość nowych ocen: %1$d</string>
 
     <plurals name="numberOfGrades">
         <item quantity="one">%d ocena</item>
@@ -49,6 +49,6 @@
         <item quantity="many">%d ocen</item>
         <item quantity="other">%d ocen</item>
     </plurals>
-    <string name="info_average_grades">Średnia:\u0020</string>
+    <string name="info_average_grades">Średnia: %1$.2f</string>
     <string name="info_no_average">Brak średniej</string>
 </resources>

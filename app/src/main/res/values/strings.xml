@@ -41,12 +41,12 @@
     <string name="dialog_subject_text">Subject</string>
     <string name="refresh_error_text">An error occurred while refreshing the content.</string>
     <string name="snackbar_no_grades">No new grades</string>
-    <string name="snackbar_new_grade">Number of new grades:\u0020</string>
+    <string name="snackbar_new_grade">Number of new grades: %1$d</string>
 
     <plurals name="numberOfGrades">
         <item quantity="one">%d grade</item>
         <item quantity="other">%d grades</item>
     </plurals>
-    <string name="info_average_grades">Average:\u0020</string>
+    <string name="info_average_grades">Average: %1$.2f</string>
     <string name="info_no_average">No average</string>
 </resources>

@@ -80,7 +80,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             if (average < 0) {
                 averageGrades.setText(R.string.info_no_average);
             } else {
-                averageGrades.setText(activity.getText(R.string.info_average_grades) + String.format("%.2f", average));
+                averageGrades.setText(activity.getResources().getString(R.string.info_average_grades, average));
             }
             subjectName.setText(group.getTitle());
             numberOfGrades.setText(activity.getResources().getQuantityString(R.plurals.numberOfGrades, volumeGrades, volumeGrades));

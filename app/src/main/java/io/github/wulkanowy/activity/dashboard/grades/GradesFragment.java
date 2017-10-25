@@ -39,6 +39,8 @@ public class GradesFragment extends Fragment {
 
     private View view;
 
+    private RefreshTask refreshTask;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,7 +60,8 @@ public class GradesFragment extends Fragment {
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(view.getContext(), R.string.noInternet_text, Toast.LENGTH_SHORT).show();
                 } else {
-                    new RefreshTask().execute(((WulkanowyApp) getActivity().getApplication()).getDaoSession());
+                    refreshTask = new RefreshTask();
+                    refreshTask.execute(((WulkanowyApp) getActivity().getApplication()).getDaoSession());
                 }
             }
         });
@@ -71,6 +74,14 @@ public class GradesFragment extends Fragment {
             view.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         }
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (refreshTask.getStatus() == AsyncTask.Status.RUNNING) {
+            refreshTask.cancel(true);
+        }
     }
 
     private void createExpListView() {
@@ -149,7 +160,7 @@ public class GradesFragment extends Fragment {
                             Snackbar.LENGTH_SHORT).show();
                 } else {
                     Snackbar.make(getActivity().findViewById(R.id.fragment_container),
-                            getText(R.string.snackbar_new_grade).toString() + String.valueOf(volumeGrades),
+                            getString(R.string.snackbar_new_grade, volumeGrades),
                             Snackbar.LENGTH_SHORT).show();
                 }
             } else {
