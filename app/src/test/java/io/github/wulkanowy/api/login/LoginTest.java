@@ -12,7 +12,7 @@ import io.github.wulkanowy.api.FixtureHelper;
 
 public class LoginTest {
 
-    public String getFixtureAsString(String fixtureFileName) throws Exception {
+    public String getFixtureAsString(String fixtureFileName) {
         return FixtureHelper.getAsString(getClass().getResourceAsStream(fixtureFileName));
     }
 
