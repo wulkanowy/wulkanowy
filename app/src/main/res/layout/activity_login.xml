@@ -95,8 +95,8 @@
                     android:hint="@string/prompt_password"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:imeActionId="@+id/action_sign_in"
                     android:imeActionLabel="@string/action_sign_in"
+                    android:imeOptions="actionDone"
                     android:fontFamily="sans-serif"
                     android:importantForAutofill="noExcludeDescendants"
                     />
@@ -117,9 +117,8 @@
                     android:hint="@string/prompt_symbol"
                     android:inputType="textAutoComplete"
                     android:maxLines="1"
-                    android:imeActionId="@+id/action_sign_in"
                     android:imeActionLabel="@string/action_sign_in"
-                    android:imeOptions="actionUnspecified"
+                    android:imeOptions="actionDone"
                     android:importantForAutofill="noExcludeDescendants"
                     />
 

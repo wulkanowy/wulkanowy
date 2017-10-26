@@ -71,7 +71,7 @@ public class LoginActivity extends Activity {
         return new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.action_sign_in || id == EditorInfo.IME_NULL) {
+                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                     attemptLogin();
                     return true;
                 }
