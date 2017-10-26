@@ -125,8 +125,8 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             dateGrade.setText(grade.getDate());
             gradeItem = grade;
 
-            if (grade.getDescription().equals("") || grade.getDescription() == null) {
-                if (!grade.getSymbol().equals("")) {
+            if (grade.getDescription() == null || "".equals(grade.getDescription())) {
+                if (!"".equals(grade.getSymbol())) {
                     descriptionGrade.setText(grade.getSymbol());
                 } else {
                     descriptionGrade.setText(R.string.noDescription_text);
