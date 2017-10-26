@@ -79,10 +79,8 @@ public class GradesFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (refreshTask != null) {
-            if (refreshTask.getStatus() == AsyncTask.Status.RUNNING) {
-                refreshTask.cancel(true);
-            }
+        if (refreshTask != null && refreshTask.getStatus() == AsyncTask.Status.RUNNING) {
+            refreshTask.cancel(true);
         }
     }
 
