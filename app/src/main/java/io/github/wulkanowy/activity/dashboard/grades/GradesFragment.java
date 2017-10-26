@@ -88,7 +88,7 @@ public class GradesFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.subject_grade_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        GradesAdapter gradesAdapter = new GradesAdapter(subjectWithGradesList, getContext());
+        GradesAdapter gradesAdapter = new GradesAdapter(subjectWithGradesList, getActivity());
         recyclerView.setAdapter(gradesAdapter);
     }
 

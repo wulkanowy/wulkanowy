@@ -3,7 +3,6 @@ package io.github.wulkanowy.activity.dashboard.grades;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +24,11 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
     private Activity activity;
 
-    public GradesAdapter(List<? extends ExpandableGroup> groups, Context context) {
+    private int numberOfNotReadGrade;
+
+    public GradesAdapter(List<? extends ExpandableGroup> groups, Activity activity) {
         super(groups);
-        activity = (Activity) context;
+        this.activity = activity;
     }
 
     @Override
@@ -60,22 +61,24 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
         private TextView averageGrades;
 
-        private ImageView alertNewGrades;
+        private ImageView subjectAlertNewGrades;
 
         public SubjectViewHolder(View itemView) {
             super(itemView);
             subjectName = itemView.findViewById(R.id.subject_text);
             numberOfGrades = itemView.findViewById(R.id.subject_number_of_grades);
-            alertNewGrades = itemView.findViewById(R.id.subject_new_grades_alert);
+            subjectAlertNewGrades = itemView.findViewById(R.id.subject_new_grades_alert);
             averageGrades = itemView.findViewById(R.id.subject_grades_average);
 
-            alertNewGrades.setVisibility(View.INVISIBLE);
+            subjectAlertNewGrades.setVisibility(View.INVISIBLE);
         }
 
         public void bind(ExpandableGroup group) {
             int volumeGrades = group.getItemCount();
             List<Grade> gradeList = group.getItems();
             float average = AverageCalculator.calculate(gradeList);
+
+            itemView.setTag(group.getTitle());
 
             if (average < 0) {
                 averageGrades.setText(R.string.info_no_average);
@@ -87,7 +90,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
             for (Grade grade : gradeList) {
                 if (!grade.getRead()) {
-                    alertNewGrades.setVisibility(View.VISIBLE);
+                    subjectAlertNewGrades.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -132,10 +135,12 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
                 descriptionGrade.setText(grade.getDescription());
             }
 
-            if (grade.getRead()) {
+            if (gradeItem.getRead()) {
                 alertNewGrade.setVisibility(View.INVISIBLE);
-            } else
+            } else {
                 alertNewGrade.setVisibility(View.VISIBLE);
+                numberOfNotReadGrade++;
+            }
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -143,6 +148,16 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
                     GradesDialogFragment gradesDialogFragment = GradesDialogFragment.newInstance(gradeItem);
                     gradesDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
                     gradesDialogFragment.show(activity.getFragmentManager(), gradeItem.toString());
+
+                    if (!gradeItem.getRead()) {
+                        numberOfNotReadGrade--;
+                    }
+
+                    if (numberOfNotReadGrade == 0) {
+                        View subjectView = activity.findViewById(R.id.subject_grade_recycler).findViewWithTag(gradeItem.getSubject());
+                        View subjectAlertNewGrade = subjectView.findViewById(R.id.subject_new_grades_alert);
+                        subjectAlertNewGrade.setVisibility(View.INVISIBLE);
+                    }
 
                     gradeItem.setRead(true);
                     gradeItem.setIsNew(false);
