@@ -39,7 +39,7 @@ android {
 }
 
 greendao {
-    schemaVersion 11
+    schemaVersion 14
     generateTests = true
 }
 
@@ -51,7 +51,7 @@ dependencies {
     compile 'com.android.support:support-v4:27.0.0'
     compile 'com.android.support:recyclerview-v7:27.0.0'
     compile 'com.android.support:cardview-v7:27.0.0'
-    compile 'com.firebase:firebase-jobdispatcher:0.8.3'
+    compile 'com.firebase:firebase-jobdispatcher:0.8.4'
     compile 'com.thoughtbot:expandablerecyclerview:1.3'
     compile 'org.apache.commons:commons-lang3:3.6'
     compile 'org.apache.commons:commons-collections4:4.1'

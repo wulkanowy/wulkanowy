@@ -15,7 +15,7 @@ import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.security.Safety;
 import io.github.wulkanowy.services.LoginSession;
-import io.github.wulkanowy.services.jobs.VulcanSync;
+import io.github.wulkanowy.services.jobs.VulcanJobHelper;
 
 public class AccountAuthorization {
 
@@ -40,7 +40,7 @@ public class AccountAuthorization {
 
         if (userId != 0) {
 
-            Log.d(VulcanSync.DEBUG_TAG, "Login current user id=" + String.valueOf(userId));
+            Log.d(VulcanJobHelper.DEBUG_TAG, "Login current user id=" + String.valueOf(userId));
 
             Safety safety = new Safety();
             Account account = accountDao.load(userId);
@@ -56,7 +56,7 @@ public class AccountAuthorization {
                     .setUserId(userId)
                     .setVulcan(vulcan);
         } else {
-            Log.wtf(VulcanSync.DEBUG_TAG, "loginCurrentUser - USERID IS EMPTY");
+            Log.wtf(VulcanJobHelper.DEBUG_TAG, "loginCurrentUser - USERID IS EMPTY");
             throw new IOException("Can't find user with index 0");
         }
     }

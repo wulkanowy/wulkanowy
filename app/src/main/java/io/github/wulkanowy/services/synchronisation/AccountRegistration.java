@@ -16,7 +16,7 @@ import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.security.Safety;
 import io.github.wulkanowy.services.LoginSession;
-import io.github.wulkanowy.services.jobs.GradesSync;
+import io.github.wulkanowy.services.jobs.GradeJob;
 
 public class AccountRegistration {
 
@@ -76,7 +76,7 @@ public class AccountRegistration {
     }
 
     public void scheduleSynchronization(Context context) {
-        GradesSync gradesSync = new GradesSync();
+        GradeJob gradesSync = new GradeJob();
         gradesSync.scheduledJob(context);
     }
 }
