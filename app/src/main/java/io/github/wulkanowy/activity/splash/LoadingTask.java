@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
+
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.activity.login.LoginActivity;
@@ -13,10 +15,10 @@ import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 public class LoadingTask extends AsyncTask<Void, Void, Boolean> {
 
-    private Context context;
+    private WeakReference<Context> weakContext;
 
     LoadingTask(Context context) {
-        this.context = context;
+        this.weakContext = new WeakReference<>(context);
     }
 
     @Override
@@ -28,11 +30,13 @@ public class LoadingTask extends AsyncTask<Void, Void, Boolean> {
             e.printStackTrace();
         }
 
-        return ConnectionUtilities.isOnline(context);
+        return ConnectionUtilities.isOnline(weakContext.get());
     }
 
     protected void onPostExecute(Boolean result) {
         super.onPostExecute(result);
+
+        Context context = weakContext.get();
 
         if (!result) {
             Toast.makeText(context, R.string.noInternet_text, Toast.LENGTH_LONG).show();

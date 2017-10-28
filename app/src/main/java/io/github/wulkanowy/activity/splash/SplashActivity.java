@@ -15,7 +15,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         TextView versionName = findViewById(R.id.rawText);
-        versionName.setText(getText(R.string.version_text) + BuildConfig.VERSION_NAME);
+        versionName.setText(getString(R.string.version_text, BuildConfig.VERSION_NAME));
 
         new LoadingTask(this).execute();
     }
