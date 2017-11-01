@@ -68,7 +68,7 @@ public class GradesDialogFragment extends DialogFragment {
         return view;
     }
 
-    public static int colorHexToColorName(String hexColor) {
+    private static int colorHexToColorName(String hexColor) {
         switch (hexColor) {
             case "000000": {
                 return R.string.color_black_text;
