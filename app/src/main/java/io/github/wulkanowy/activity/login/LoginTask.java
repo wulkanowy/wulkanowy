@@ -17,17 +17,14 @@ import java.lang.ref.WeakReference;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
-import io.github.wulkanowy.api.Cookies;
-import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
-import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.VulcanSynchronization;
-import io.github.wulkanowy.services.synchronisation.AccountRegistration;
+import io.github.wulkanowy.services.jobs.GradeJob;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 /**
@@ -65,22 +62,18 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
     @Override
     protected Integer doInBackground(Void... params) {
         if (ConnectionUtilities.isOnline(activity.get())) {
-            AccountRegistration accountRegistration = new AccountRegistration(
-                    new Login(new Cookies()),
-                    new Vulcan(),
-                    email, password, symbol);
+            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
 
             DaoSession daoSession = ((WulkanowyApp) activity.get().getApplication()).getDaoSession();
 
             try {
                 publishProgress("1", activity.get().getResources().getString(R.string.step_connecting));
-                String certificate = accountRegistration.connect();
+                vulcanSynchronization.firstLoginConnectStep(email, password, symbol);
 
                 publishProgress("2", activity.get().getResources().getString(R.string.step_login));
-                LoginSession loginSession = accountRegistration.login(activity.get(), daoSession, certificate);
+                vulcanSynchronization.firstLoginSignInStep(activity.get(), daoSession);
 
                 publishProgress("3", activity.get().getResources().getString(R.string.step_synchronization));
-                VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(loginSession);
                 vulcanSynchronization.syncSubjectsAndGrades();
 
             } catch (BadCredentialsException e) {
@@ -93,7 +86,8 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 return R.string.login_denied_text;
             }
 
-            accountRegistration.scheduleSynchronization(activity.get());
+            GradeJob gradeJob = new GradeJob();
+            gradeJob.scheduledJob(activity.get());
 
             return R.string.login_accepted_text;
 
@@ -138,9 +132,8 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 break;
 
             default:
-                Snackbar
-                        .make(activity.get().findViewById(R.id.coordinatorLayout), messageID, Snackbar.LENGTH_LONG)
-                        .show();
+                Snackbar.make(activity.get().findViewById(R.id.coordinatorLayout),
+                        messageID, Snackbar.LENGTH_LONG).show();
                 break;
         }
     }

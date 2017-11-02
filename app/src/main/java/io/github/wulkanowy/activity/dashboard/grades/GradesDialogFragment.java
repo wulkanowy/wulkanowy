@@ -49,7 +49,7 @@ public class GradesDialogFragment extends DialogFragment {
                 descriptionText.setText(grade.getSymbol());
             }
         } else if (!"".equals(grade.getSymbol())) {
-            descriptionText.setText(grade.getSymbol() + " - " + grade.getDescription());
+            descriptionText.setText(String.format("%1$s - %2$s", grade.getSymbol(), grade.getDescription()));
         } else {
             descriptionText.setText(grade.getDescription());
         }
