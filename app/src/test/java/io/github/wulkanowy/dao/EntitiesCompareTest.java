@@ -46,13 +46,13 @@ public class EntitiesCompareTest extends EntitiesCompare {
     }
 
     @Test
-    public void testCompareNewGradePositive() {
+    public void testCompareNewGradeEmptyOldList() {
 
         newList.add(grade1);
 
         List<Grade> updatedList = EntitiesCompare.compareGradeList(newList, oldList);
 
-        Assert.assertEquals(true, (updatedList.get(0)).getIsNew());
+        Assert.assertEquals(false, (updatedList.get(0)).getIsNew());
 
     }
 
