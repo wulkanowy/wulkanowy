@@ -42,6 +42,9 @@ public class VulcanSynchronization {
             throws NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException {
         if (firstAccountLogin != null && certificate != null) {
             loginSession = firstAccountLogin.login(context, daoSession, certificate);
+        } else {
+            Log.e(VulcanJobHelper.DEBUG_TAG, "Before first login, should call firstLoginConnectStep",
+                    new UnsupportedOperationException());
         }
     }
 
