@@ -1,6 +1,7 @@
 package io.github.wulkanowy.activity.dashboard.grades;
 
 
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,10 @@ public class GradesDialogFragment extends DialogFragment {
 
     public static final GradesDialogFragment newInstance(Grade grade) {
         return new GradesDialogFragment().setGrade(grade);
+    }
+
+    public GradesDialogFragment() {
+        setRetainInstance(true);
     }
 
     public GradesDialogFragment setGrade(Grade grade) {
@@ -68,6 +73,16 @@ public class GradesDialogFragment extends DialogFragment {
 
         return view;
     }
+
+    @Override
+    public void onDestroyView() {
+        Dialog dialog = getDialog();
+        if (dialog != null && getRetainInstance()) {
+            dialog.setDismissMessage(null);
+        }
+        super.onDestroyView();
+    }
+
 
     public static int colorHexToColorName(String hexColor) {
         switch (hexColor) {
