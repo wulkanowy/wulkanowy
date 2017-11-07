@@ -176,7 +176,7 @@ public class GradesFragment extends Fragment {
                     createExpList(mainView.get(), activity.get());
                 }
 
-                int volumeGrades = DatabaseAccess.getNewGrades(daoSession).size();
+                int volumeGrades = new DatabaseAccess().getNewGrades(daoSession).size();
 
                 if (volumeGrades == 0) {
                     Snackbar.make(activity.get().findViewById(R.id.fragment_container),
