@@ -1,22 +1,59 @@
 package io.github.wulkanowy.services.notifications;
 
 
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
+
+import io.github.wulkanowy.R;
 
 public class NotificationHelper extends ContextWrapper {
 
-    public static final String CHANNEL_ONE_ID = "io.github.wulkanowy.newItem";
+    private NotificationManager manager;
 
-    public static final String CHANNEL_ONE_NAME = "New Item Channel";
+    public static final String CHANNEL_ID = "io.github.wulkanowy.newItem";
 
-    public static final int NOTIFIACTION_IMPORTANCE = NotificationManager.IMPORTANCE_HIGH;
+    public static final String CHANNEL_NAME = "New Item Channel";
 
     public NotificationHelper(Context context) {
         super(context);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannel();
+        }
     }
 
-    public void createChannel() {
+    @TargetApi(26)
+    private void createChannel() {
+        NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_HIGH);
+        notificationChannel.enableLights(true);
+        notificationChannel.enableVibration(true);
+        notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+        getManager().createNotificationChannel(notificationChannel);
+    }
+
+    public NotificationCompat.Builder getNotifications(String title, String bodyText) {
+        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(bodyText)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round))
+                .setAutoCancel(true)
+                .setChannelId(CHANNEL_ID)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+    }
+
+    public NotificationManager getManager() {
+        if (manager == null) {
+            manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        return manager;
     }
 }
