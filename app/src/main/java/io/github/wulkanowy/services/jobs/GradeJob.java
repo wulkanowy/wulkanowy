@@ -11,7 +11,9 @@ import com.firebase.jobdispatcher.Trigger;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
+import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
@@ -61,11 +63,20 @@ public class GradeJob extends VulcanJobHelper {
 
             List<Grade> newGradeList = new DatabaseAccess().getNewGrades(daoSession);
 
-            if (newGradeList.size() > 0) {
-                NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-                NotificationCompat.Builder builder = notificationHelper.getNotifications("Nowa ocena", "Nowa ocena");
-                notificationHelper.getManager().notify(99, builder.build());
+            if (newGradeList.size() == 1) {
+                buildNotify(getResources().getQuantityString(R.plurals.newGradePlurals, 1),
+                        newGradeList.get(0).getSubject());
+            } else if (newGradeList.size() > 1) {
+                buildNotify(getResources().getQuantityString(R.plurals.newGradePlurals, 2),
+                        getResources().getQuantityString(R.plurals.receivedNewGradePlurals, newGradeList.size(), newGradeList.size()));
             }
+        }
+
+        private void buildNotify(String title, String bodyText) {
+            NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
+            NotificationCompat.Builder builder = notificationHelper
+                    .getNotifications(title, bodyText);
+            notificationHelper.getManager().notify(new Random().nextInt(10000), builder.build());
         }
     }
 }

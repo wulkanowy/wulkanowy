@@ -16,9 +16,9 @@ public class NotificationHelper extends ContextWrapper {
 
     private NotificationManager manager;
 
-    public static final String CHANNEL_ID = "io.github.wulkanowy.newItem";
+    public static final String CHANNEL_ID = "io.github.wulkanowy.grade";
 
-    public static final String CHANNEL_NAME = "New Item Channel";
+    public static final String CHANNEL_NAME = "New Grade Channel";
 
     public NotificationHelper(Context context) {
         super(context);
@@ -41,11 +41,12 @@ public class NotificationHelper extends ContextWrapper {
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(bodyText)
-                .setSmallIcon(R.drawable.ic_stat_iconmonstr_weather_103)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setAutoCancel(true)
                 .setChannelId(CHANNEL_ID)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setColor(getResources().getColor(R.color.colorPrimary));
     }
 
     public NotificationManager getManager() {
