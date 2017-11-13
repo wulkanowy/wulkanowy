@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Build;
@@ -37,12 +38,13 @@ public class NotificationHelper extends ContextWrapper {
         getManager().createNotificationChannel(notificationChannel);
     }
 
-    public NotificationCompat.Builder getNotifications(String title, String bodyText) {
+    public NotificationCompat.Builder getNotifications(String title, String bodyText, PendingIntent pendingIntent) {
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(bodyText)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
                 .setChannelId(CHANNEL_ID)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

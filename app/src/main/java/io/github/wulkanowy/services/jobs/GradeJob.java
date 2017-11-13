@@ -1,5 +1,7 @@
 package io.github.wulkanowy.services.jobs;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import com.firebase.jobdispatcher.Constraint;
@@ -15,6 +17,7 @@ import java.util.Random;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.WulkanowyApp;
+import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
@@ -73,9 +76,14 @@ public class GradeJob extends VulcanJobHelper {
         }
 
         private void buildNotify(String title, String bodyText) {
+            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+            intent.putExtra("cardID", 1);
+            PendingIntent pendingIntent = PendingIntent
+                    .getActivity(getApplicationContext(), 0, intent, 0);
+
             NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
             NotificationCompat.Builder builder = notificationHelper
-                    .getNotifications(title, bodyText);
+                    .getNotifications(title, bodyText, pendingIntent);
             notificationHelper.getManager().notify(new Random().nextInt(10000), builder.build());
         }
     }
