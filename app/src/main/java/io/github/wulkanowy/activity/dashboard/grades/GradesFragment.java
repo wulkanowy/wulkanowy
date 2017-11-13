@@ -46,6 +46,7 @@ public class GradesFragment extends Fragment {
         DaoSession daoSession;
 
         View view = inflater.inflate(R.layout.fragment_grades, container, false);
+        view.findViewById(R.id.fragment_no_grades).setVisibility(View.GONE);
 
         if (getActivity() != null) {
             daoSession = ((WulkanowyApp) getActivity().getApplication()).getDaoSession();
@@ -136,6 +137,9 @@ public class GradesFragment extends Fragment {
             super.onPostExecute(result);
             createExpList(mainView.get(), activity.get());
             mainView.get().findViewById(R.id.loadingPanel).setVisibility(View.INVISIBLE);
+            if (subjectWithGradesList.size() == 0) {
+                mainView.get().findViewById(R.id.fragment_no_grades).setVisibility(View.VISIBLE);
+            }
         }
     }
 

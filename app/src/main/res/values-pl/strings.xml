@@ -35,6 +35,8 @@
     <string name="attendance_text">Frekwencja</string>
     <string name="lessonplan_text">Plan lekcji</string>
     <string name="settings_text">Ustawienia</string>
+    <string name="activity_under_construction">Ta część aplikacji jest w budowie</string>
+    <string name="fragment_no_grades">Brak ocen</string>
 
     <string name="noInternet_text">Brak połączenia z internetem</string>
     <string name="root_failed_text">To urządzenie posiada posiada podwyższone uprawnienia (root). Automatyczne logowanie zosatło wyłączone.</string>
@@ -76,5 +78,4 @@
         <item quantity="many">Dostałeś %1$d ocen</item>
         <item quantity="other">Dostałeś %1$d ocen</item>
     </plurals>
-
 </resources>
