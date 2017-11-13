@@ -1,18 +1,28 @@
 <resources>
     <string name="app_name">Wulkanowy</string>
-    <string name="login_text">Logowanie</string>
-    <string name="pass_hint_text">Hasło</string>
-    <string name="email_hint_text">E-mail</string>
-    <string name="login_button_text">Zaloguj</string>
-    <string name="symbol_hint_text">Symbol</string>
-    <string name="warning_text">Aplikacja ta nie jest ukończona, więc mogą występować różnego rodzaju błędy lub dane funkcje nie bedą działać. Prosimy o cierpliwość i wyrozumiałość.</string>
-    <string name="warning_label_text">Ostrzeżenie</string>
-    <string name="data_text">Brak danych logowania</string>
+
+    <!-- Strings related to login -->
+    <string name="title_activity_login">Zaloguj się</string>
+    <string name="login_heading">Zaloguj się za pomocą konta VULCAN</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Hasło</string>
+    <string name="prompt_symbol">Symbol</string>
+    <string name="action_sign_in">Zaloguj</string>
+    <string name="step_connecting">Łączenie z dziennikiem</string>
+    <string name="step_login">Logowanie</string>
+    <string name="step_synchronization">Synchronizacja</string>
+    <string name="error_invalid_email">Ten adres email nie jest poprawny</string>
+    <string name="error_invalid_password">To hasło jest za krótkie</string>
+    <string name="error_incorrect_password">To hasło jest niepoprawne</string>
+    <string name="error_field_required">To pole jest wymagane</string>
+    <string name="error_bad_account_permission">Brak dostępu do dziennika. Sprawdź inny symbol</string>
     <string name="login_accepted_text">Pomyślnie zalogowano</string>
     <string name="login_bad_credentials_text">Niepoprawny e-mail lub hasło</string>
     <string name="login_bad_account_permission_text">Brak uprawnień do otwarcia dziennika. Sprawdź wprowadzoną nazwę powiatu</string>
-    <string name="login_denied_text">Logowanie nie powiodło się</string>
-    <string name="please_wait_text">Proszę czekać…</string>
+    <string name="login_denied_text">Logowanie nie powiodło się. Spróbuj zrestartować aplikację</string>
+    <string name="action_create_account">Nie masz jeszcze konta? Załóż je</string>
+    <string name="action_forgot_password">Zapomniałeś hasła?</string>
+
     <string name="activity_dashboard_text">Aktywność dashboard</string>
     <string name="dashboard_text">Dashboard</string>
     <string name="grades_text">Oceny</string>
@@ -20,12 +30,9 @@
     <string name="lessonplan_text">Plan lekcji</string>
     <string name="settings_text">Ustawienia</string>
     <string name="noInternet_text">Brak połączenia z internetem</string>
-    <string name="login_cookies_save_failed_text">Nie udało się zapisać sesji</string>
-    <string name="SQLite_ioError_text">W bazie danych wystąpił błąd. Zrestartuj aplikacje a także sprawdź iość wolnego miejsca w pamięci wewnętrznej</string>
     <string name="root_failed_text">To urządzenie posiada posiada podwyższone uprawnienia (root). Automatyczne logowanie zosatło wyłączone.</string>
     <string name="encrypt_failed_text">Szyfrowanie nie powiodło się. Automatyczne logowanie zostało wyłączone</string>
-    <string name="decrypt_failed_text">Deszyfrowanie nie powiodło się. Automatyczne logowanie zostało wyłączone</string>
-    <string name="version_text">Wersja\u0020</string>
+    <string name="version_text">Wersja %1$s</string>
     <string name="dialog_description_text">Opis</string>
     <string name="dialog_weight_text">Waga</string>
     <string name="noDescription_text">Brak opisu</string>
@@ -37,6 +44,17 @@
     <string name="color_blue_text">Niebieski</string>
     <string name="color_green_text">Zielony</string>
     <string name="noColor_text">Brak koloru</string>
-    <string name="ok_text">OK</string>
-    <string name="dialog_subject_text">Przedmiot</string>
+    <string name="dialog_close">Zamknij</string>
+    <string name="refresh_error_text">"Podczas odświeżania zawartości wystąpił błąd. "</string>
+    <string name="snackbar_no_grades">Brak nowych ocen</string>
+    <string name="snackbar_new_grade">Ilość nowych ocen: %1$d</string>
+
+    <plurals name="numberOfGrades">
+        <item quantity="one">%d ocena</item>
+        <item quantity="few">%d oceny</item>
+        <item quantity="many">%d ocen</item>
+        <item quantity="other">%d ocen</item>
+    </plurals>
+    <string name="info_average_grades">Średnia: %1$.2f</string>
+    <string name="info_no_average">Brak średniej</string>
 </resources>

@@ -1,11 +1,13 @@
 package io.github.wulkanowy.activity.dashboard.grades;
 
 
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import io.github.wulkanowy.R;
@@ -17,6 +19,10 @@ public class GradesDialogFragment extends DialogFragment {
 
     public static final GradesDialogFragment newInstance(Grade grade) {
         return new GradesDialogFragment().setGrade(grade);
+    }
+
+    public GradesDialogFragment() {
+        setRetainInstance(true);
     }
 
     public GradesDialogFragment setGrade(Grade grade) {
@@ -35,7 +41,7 @@ public class GradesDialogFragment extends DialogFragment {
         TextView teacherText = view.findViewById(R.id.teacher_dialog_text_value);
         TextView dateText = view.findViewById(R.id.date_dialog_text_value);
         TextView colorText = view.findViewById(R.id.color_dialog_text_value);
-        TextView okTextClick = view.findViewById(R.id.OK_dialog);
+        Button closeDialog = view.findViewById(R.id.close_dialog);
 
         subjectText.setText(grade.getSubject());
         gradeText.setText(grade.getValue());
@@ -49,7 +55,7 @@ public class GradesDialogFragment extends DialogFragment {
                 descriptionText.setText(grade.getSymbol());
             }
         } else if (!"".equals(grade.getSymbol())) {
-            descriptionText.setText(grade.getSymbol() + " - " + grade.getDescription());
+            descriptionText.setText(String.format("%1$s - %2$s", grade.getSymbol(), grade.getDescription()));
         } else {
             descriptionText.setText(grade.getDescription());
         }
@@ -58,7 +64,7 @@ public class GradesDialogFragment extends DialogFragment {
             teacherText.setText(grade.getTeacher());
         }
 
-        okTextClick.setOnClickListener(new View.OnClickListener() {
+        closeDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -67,6 +73,16 @@ public class GradesDialogFragment extends DialogFragment {
 
         return view;
     }
+
+    @Override
+    public void onDestroyView() {
+        Dialog dialog = getDialog();
+        if (dialog != null && getRetainInstance()) {
+            dialog.setDismissMessage(null);
+        }
+        super.onDestroyView();
+    }
+
 
     public static int colorHexToColorName(String hexColor) {
         switch (hexColor) {
