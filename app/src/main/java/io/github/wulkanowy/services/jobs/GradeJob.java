@@ -45,7 +45,7 @@ public class GradeJob extends VulcanJobHelper {
                 .setService(GradeService.class)
                 .setTag(UNIQUE_TAG)
                 .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(20, 30))
+                .setTrigger(Trigger.executionWindow(DEFAULT_INTERVAL_START, DEFAULT_INTERVAL_END))
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setReplaceCurrent(true)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
