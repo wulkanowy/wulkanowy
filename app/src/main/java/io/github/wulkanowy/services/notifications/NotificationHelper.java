@@ -17,7 +17,7 @@ public class NotificationHelper extends ContextWrapper {
 
     private NotificationManager manager;
 
-    public static final String CHANNEL_ID = "io.github.wulkanowy.grade";
+    public static final String CHANNEL_ID = "Wulkanowy_New_Grade_Channel";
 
     public static final String CHANNEL_NAME = "New Grade Channel";
 
