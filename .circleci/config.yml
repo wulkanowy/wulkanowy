@@ -159,7 +159,10 @@ workflows:
       - lint:
           requires:
             - build
-      - test:
+      - app-test:
+          requires:
+            - build
+      - api-test:
           requires:
             - build
       - instrumented:
