@@ -11,7 +11,6 @@ ext {
     PUBLISH_VERSION = '0.1.0'
 }
 
-
 test {
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
@@ -21,9 +20,9 @@ test {
 }
 
 dependencies {
-    compile 'org.jsoup:jsoup:1.10.3'
-    compile 'org.apache.commons:commons-lang3:3.6'
+    implementation 'org.jsoup:jsoup:1.10.3'
+    implementation 'org.apache.commons:commons-lang3:3.6'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.11.0'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.11.0'
 }
