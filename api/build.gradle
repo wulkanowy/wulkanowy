@@ -1,0 +1,29 @@
+apply plugin: 'java-library'
+apply plugin: 'jacoco'
+apply plugin: "io.github.ddimtirov.codacy"
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+ext {
+    PUBLISH_GROUP_ID = 'io.github.wulkanowy'
+    PUBLISH_ARTIFACT_ID = 'api'
+    PUBLISH_VERSION = '0.1.0'
+}
+
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        outputs.upToDateWhen {false}
+        showStandardStreams = true
+    }
+}
+
+dependencies {
+    compile 'org.jsoup:jsoup:1.10.3'
+    compile 'org.apache.commons:commons-lang3:3.6'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.11.0'
+}
