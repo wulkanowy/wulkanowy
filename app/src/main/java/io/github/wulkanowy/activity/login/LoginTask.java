@@ -139,12 +139,13 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 showSoftKeyboard(symbolView);
                 break;
 
+            // if rooted and SDK < 18
             case -1:
-                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity.get());
-                alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
-                alertDialog.setTitle(R.string.alert_dialog_blocked_app);
-                alertDialog.setMessage(R.string.alert_dialog_blocked_app_message);
-                alertDialog.setPositiveButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
+                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity.get())
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(R.string.alert_dialog_blocked_app)
+                        .setMessage(R.string.alert_dialog_blocked_app_message)
+                        .setPositiveButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
