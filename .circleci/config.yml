@@ -152,16 +152,16 @@ jobs:
       - store_test_results:
           path: ./app/build/outputs/androidTest-results/connected/
 
-    sonarcube:
-      <<: *container_config
-      steps:
-        - *attach_workspace
-        - run:
-          name: Run sonarqube runner
-          command: ./gradlew -x test -x lint sonarqube \
-                  -Dsonar.host.url=$SONAR_HOST \
-                  -Dsonar.organization=$SONAR_ORG \
-                  -Dsonar.login=$SONAR_KEY
+  sonarcube:
+    <<: *container_config
+    steps:
+      - *attach_workspace
+      - run:
+        name: Run sonarqube runner
+        command: ./gradlew -x test -x lint sonarqube \
+                -Dsonar.host.url=$SONAR_HOST \
+                -Dsonar.organization=$SONAR_ORG \
+                -Dsonar.login=$SONAR_KEY
 
 workflows:
   version: 2
