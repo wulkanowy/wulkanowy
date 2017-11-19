@@ -178,12 +178,12 @@ workflows:
       - api-test:
           requires:
             - build
-      - instrumented:
-          requires:
-            - build
+#      - instrumented:
+#          requires:
+#            - build
       - sonarcube:
           requires:
             - build
             - app-test
             - api-test
-            - instrumented
+#            - instrumented
