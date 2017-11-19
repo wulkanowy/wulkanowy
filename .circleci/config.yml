@@ -157,8 +157,8 @@ jobs:
     steps:
       - *attach_workspace
       - run:
-        name: Run sonarqube runner
-        command: ./gradlew -x test -x lint sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY
+          name: Run sonarqube runner
+          command: ./gradlew -x test -x lint sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY
 
 workflows:
   version: 2
