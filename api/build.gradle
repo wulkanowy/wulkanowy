@@ -1,6 +1,6 @@
 apply plugin: 'java-library'
+apply plugin: 'org.sonarqube'
 apply plugin: 'jacoco'
-apply plugin: "io.github.ddimtirov.codacy"
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
@@ -8,7 +8,7 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 ext {
-    PUBLISH_GROUP_ID = 'io.github.wulkanowy'
+    PUBLISH_GROUP_ID = GROUP_ID
     PUBLISH_ARTIFACT_ID = 'api'
     PUBLISH_VERSION = '0.1.0'
 }
@@ -29,9 +29,17 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:2.11.0'
 }
 
+version = '0.1.0'
+
+sonarqube {
+    properties {
+        property "sonar.projectName", GROUP_ID + ".api"
+        property "sonar.projectKey", GROUP_ID + ".api"
+    }
+}
+
 def siteUrl = 'https://github.com/wulkanowy/wulkanowy'
 def gitUrl = 'https://github.com/wulkanowy/wulkanowy.git'
-version = '0.1.0'
 
 bintray {
     user = System.getenv('BINTRAY_USER')

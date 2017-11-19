@@ -1,7 +1,8 @@
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco-android'
-apply plugin: "io.github.ddimtirov.codacy"
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'org.sonarqube'
+apply plugin: 'jacoco-android'
+apply from: '../android-sonarqube.gradle'
 
 android {
     compileSdkVersion 27
