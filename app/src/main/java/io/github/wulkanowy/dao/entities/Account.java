@@ -9,7 +9,10 @@ import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.List;
 
-@Entity(nameInDb = "Accounts")
+@Entity(
+        nameInDb = "Accounts",
+        active = true
+)
 public class Account {
 
     @Id(autoincrement = true)
@@ -50,7 +53,7 @@ public class Account {
 
     @Generated(hash = 735765217)
     public Account(Long id, String name, String email, String password, String symbol,
-            String snpId) {
+                   String snpId) {
         this.id = id;
         this.name = name;
         this.email = email;

@@ -48,6 +48,7 @@ public class Scrambler {
 
     }
 
+    @SuppressWarnings("deprecation")
     @TargetApi(18)
     protected void generateNewKey(String alias, Context context) throws CryptoException {
 
@@ -116,9 +117,9 @@ public class Scrambler {
                 cipherOutputStream.write(text.getBytes("UTF-8"));
                 cipherOutputStream.close();
 
-                byte[] vals = outputStream.toByteArray();
+                byte[] values = outputStream.toByteArray();
 
-                return Base64.encodeToString(vals, Base64.DEFAULT);
+                return Base64.encodeToString(values, Base64.DEFAULT);
 
             } catch (Exception e) {
                 Log.e(DEBUG_TAG, e.getMessage());

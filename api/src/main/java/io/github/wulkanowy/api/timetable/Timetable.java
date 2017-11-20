@@ -40,7 +40,7 @@ public class Timetable {
             day.setDate(dayHeaderCell[1]);
 
             if (isFreeDay) {
-                day.setFreeDay(isFreeDay);
+                day.setFreeDay(true);
                 day.setFreeDayName(dayHeaderCell[2]);
             }
 
@@ -94,7 +94,6 @@ public class Timetable {
         lesson.setTeacher(spans.get(1).text());
         lesson.setRoom(spans.get(2).text());
 
-        // okienko dla uczniów
         if (5 == spans.size()) {
             lesson.setTeacher(spans.get(2).text());
             lesson.setRoom(spans.get(3).text());

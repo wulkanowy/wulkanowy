@@ -10,31 +10,28 @@ import org.greenrobot.greendao.annotation.ToMany;
 import java.util.List;
 
 @Entity(
-        nameInDb = "Subjects",
+        nameInDb = "Days",
         active = true
 )
-public class Subject {
+public class Day {
 
     @Id(autoincrement = true)
     private Long id;
 
-    @Property(nameInDb = "USER_ID")
-    private Long userId;
+    @Property(nameInDb = "WEEK_ID")
+    private Long weekId;
 
-    @Property(nameInDb = "NAME")
-    private String name;
+    @Property(nameInDb = "DATE")
+    private String date = "";
 
-    @Property(nameInDb = "PREDICTED_RATING")
-    private String predictedRating;
+    @Property(nameInDb = "IS_FREE_DAY")
+    private boolean isFreeDay = false;
 
-    @Property(nameInDb = "FINAL_RATING")
-    private String finalRating;
+    @Property(nameInDb = "FREE_DAY_NAME")
+    private String freeDayName = "";
 
-    @Property(nameInDb = "SEMESTER")
-    private String semester;
-
-    @ToMany(referencedJoinProperty = "subjectId")
-    private List<Grade> gradeList;
+    @ToMany(referencedJoinProperty = "dayId")
+    private List<Lesson> lessons;
 
     /**
      * Used to resolve relations
@@ -45,106 +42,102 @@ public class Subject {
     /**
      * Used for active entity operations.
      */
-    @Generated(hash = 1644932788)
-    private transient SubjectDao myDao;
+    @Generated(hash = 312167767)
+    private transient DayDao myDao;
 
-    @Generated(hash = 396325764)
-    public Subject(Long id, Long userId, String name, String predictedRating,
-                   String finalRating, String semester) {
+    @Generated(hash = 1544615429)
+    public Day(Long id, Long weekId, String date, boolean isFreeDay,
+               String freeDayName) {
         this.id = id;
-        this.userId = userId;
-        this.name = name;
-        this.predictedRating = predictedRating;
-        this.finalRating = finalRating;
-        this.semester = semester;
+        this.weekId = weekId;
+        this.date = date;
+        this.isFreeDay = isFreeDay;
+        this.freeDayName = freeDayName;
     }
 
-    @Generated(hash = 1617906264)
-    public Subject() {
+    @Generated(hash = 866989762)
+    public Day() {
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public Day setDate(String date) {
+        this.date = date;
+        return this;
+    }
+
+    public boolean isFreeDay() {
+        return isFreeDay;
+    }
+
+    public Day setFreeDay(boolean freeDay) {
+        isFreeDay = freeDay;
+        return this;
+    }
+
+    public String getFreeDayName() {
+        return freeDayName;
+    }
+
+    public Day setFreeDayName(String freeDayName) {
+        this.freeDayName = freeDayName;
+        return this;
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
-    public Subject setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getWeekId() {
+        return this.weekId;
     }
 
-    public Subject setUserId(Long userId) {
-        this.userId = userId;
-        return this;
+    public void setWeekId(Long weekId) {
+        this.weekId = weekId;
     }
 
-    public String getName() {
-        return name;
+    public boolean getIsFreeDay() {
+        return this.isFreeDay;
     }
 
-    public Subject setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public String getPredictedRating() {
-        return predictedRating;
-    }
-
-    public Subject setPredictedRating(String predictedRating) {
-        this.predictedRating = predictedRating;
-        return this;
-    }
-
-    public String getFinalRating() {
-        return finalRating;
-    }
-
-    public Subject setFinalRating(String finalRating) {
-        this.finalRating = finalRating;
-        return this;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public Subject setSemester(String semester) {
-        this.semester = semester;
-        return this;
+    public void setIsFreeDay(boolean isFreeDay) {
+        this.isFreeDay = isFreeDay;
     }
 
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Generated(hash = 1358847893)
-    public List<Grade> getGradeList() {
-        if (gradeList == null) {
+    @Generated(hash = 1552857303)
+    public List<Lesson> getLessons() {
+        if (lessons == null) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            GradeDao targetDao = daoSession.getGradeDao();
-            List<Grade> gradeListNew = targetDao._querySubject_GradeList(id);
+            LessonDao targetDao = daoSession.getLessonDao();
+            List<Lesson> lessonsNew = targetDao._queryDay_Lessons(id);
             synchronized (this) {
-                if (gradeList == null) {
-                    gradeList = gradeListNew;
+                if (lessons == null) {
+                    lessons = lessonsNew;
                 }
             }
         }
-        return gradeList;
+        return lessons;
     }
 
     /**
      * Resets a to-many relationship, making the next get call to query for a fresh result.
      */
-    @Generated(hash = 1939990047)
-    public synchronized void resetGradeList() {
-        gradeList = null;
+    @Generated(hash = 1769801440)
+    public synchronized void resetLessons() {
+        lessons = null;
     }
 
     /**
@@ -183,10 +176,12 @@ public class Subject {
         myDao.update(this);
     }
 
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 937984622)
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
+    @Generated(hash = 1409317752)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getSubjectDao() : null;
+        myDao = daoSession != null ? daoSession.getDayDao() : null;
     }
 }
