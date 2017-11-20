@@ -30,6 +30,15 @@
             android:textSize="17sp"
             android:textAlignment="center"
             android:id="@+id/textView3" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="43dp"
+            android:text="SyncTest" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
