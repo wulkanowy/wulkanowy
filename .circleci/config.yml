@@ -33,7 +33,7 @@ jobs:
           command: ./gradlew --no-daemon --stacktrace dependencies || true
       - run:
           name: Initial build
-          command: ./gradlew --no-daemon --stacktrace assembleDebug -PdisablePreDex
+          command: ./gradlew --no-daemon --stacktrace build assembleDebug -PdisablePreDex
       - store_artifacts:
           path: ./app/build/outputs/apk/
           destination: apks/
@@ -114,6 +114,10 @@ jobs:
           destination: coverage_reports/
       - store_test_results:
           path: ./api/build/test-results
+      - save_cache:
+          <<: *general_cache_key
+          paths:
+            - "./build/jacoco"
 
   instrumented:
     <<: *container_config
@@ -156,6 +160,8 @@ jobs:
     <<: *container_config
     steps:
       - *attach_workspace
+      - restore_cache:
+          <<: *general_cache_key
       - run:
           name: Run sonarqube runner
           command: ./gradlew -x test -x lint sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY
@@ -181,6 +187,7 @@ workflows:
       - sonarcube:
           requires:
             - build
+            - lint
             - app-test
             - api-test
 #            - instrumented
