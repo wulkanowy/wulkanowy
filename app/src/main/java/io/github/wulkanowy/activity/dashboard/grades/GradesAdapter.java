@@ -69,8 +69,6 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             numberOfGrades = itemView.findViewById(R.id.subject_number_of_grades);
             subjectAlertNewGrades = itemView.findViewById(R.id.subject_new_grades_alert);
             averageGrades = itemView.findViewById(R.id.subject_grades_average);
-
-            subjectAlertNewGrades.setVisibility(View.INVISIBLE);
         }
 
         public void bind(ExpandableGroup group) {
@@ -91,6 +89,8 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             for (Grade grade : gradeList) {
                 if (!grade.getRead()) {
                     subjectAlertNewGrades.setVisibility(View.VISIBLE);
+                } else {
+                    subjectAlertNewGrades.setVisibility(View.INVISIBLE);
                 }
             }
         }
