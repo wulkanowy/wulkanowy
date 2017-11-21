@@ -1,8 +1,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="io.github.wulkanowy.activity.dashboard.lessonplan.LessonPlanFragment">
 
     <RelativeLayout
@@ -23,13 +23,13 @@
             app:srcCompat="@drawable/ic_wrench_construction" />
 
         <TextView
+            android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="46dp"
             android:text="@string/activity_under_construction"
-            android:textSize="17sp"
             android:textAlignment="center"
-            android:id="@+id/textView3" />
+            android:textSize="17sp" />
 
         <Button
             android:id="@+id/button"
@@ -38,6 +38,7 @@
             android:layout_above="@+id/textView3"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="43dp"
+            android:onClick="click"
             android:text="SyncTest" />
     </RelativeLayout>
 

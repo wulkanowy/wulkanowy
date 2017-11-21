@@ -19,6 +19,7 @@ import io.github.wulkanowy.services.synchronisation.CurrentAccountLogin;
 import io.github.wulkanowy.services.synchronisation.FirstAccountLogin;
 import io.github.wulkanowy.services.synchronisation.GradesSynchronisation;
 import io.github.wulkanowy.services.synchronisation.SubjectsSynchronisation;
+import io.github.wulkanowy.services.synchronisation.TimetableSynchronization;
 
 public class VulcanSynchronization {
 
@@ -81,6 +82,23 @@ public class VulcanSynchronization {
                 return true;
             } catch (Exception e) {
                 Log.e(VulcanJobHelper.DEBUG_TAG, "Synchronisation of subjects failed", e);
+                return false;
+            }
+        } else {
+            Log.e(VulcanJobHelper.DEBUG_TAG, "Before synchronization, should login user to log",
+                    new UnsupportedOperationException());
+            return false;
+        }
+    }
+
+    public boolean syncTimetable() {
+        if (loginSession != null) {
+            TimetableSynchronization timetableSynchronization = new TimetableSynchronization();
+            try {
+                timetableSynchronization.sync(loginSession);
+                return true;
+            } catch (Exception e) {
+                Log.e(VulcanJobHelper.DEBUG_TAG, "Synchronization of timetable failed", e);
                 return false;
             }
         } else {

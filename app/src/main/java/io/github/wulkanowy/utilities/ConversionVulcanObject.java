@@ -48,17 +48,8 @@ public abstract class ConversionVulcanObject {
         return gradeEntityList;
     }
 
-    public static List<Week> weeksToWeeksEntities(List<io.github.wulkanowy.api.timetable.Week> weekList) {
-
-        List<Week> weekEntityList = new ArrayList<>();
-
-        for (io.github.wulkanowy.api.timetable.Week week : weekList) {
-            Week weekEntity = new Week()
-                    .setStartDayDate(week.getStartDayDate());
-
-            weekEntityList.add(weekEntity);
-        }
-        return weekEntityList;
+    public static Week weeksToWeekEntities(io.github.wulkanowy.api.timetable.Week week) {
+        return new Week().setStartDayDate(week.getStartDayDate());
     }
 
     public static List<Day> daysToDaysEntities(List<io.github.wulkanowy.api.timetable.Day> dayList) {
