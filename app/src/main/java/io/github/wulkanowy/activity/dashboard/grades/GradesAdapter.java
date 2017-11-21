@@ -155,8 +155,10 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
                     if (numberOfNotReadGrade == 0) {
                         View subjectView = activity.findViewById(R.id.subject_grade_recycler).findViewWithTag(gradeItem.getSubject());
-                        View subjectAlertNewGrade = subjectView.findViewById(R.id.subject_new_grades_alert);
-                        subjectAlertNewGrade.setVisibility(View.INVISIBLE);
+                        if (subjectView != null) {
+                            View subjectAlertNewGrade = subjectView.findViewById(R.id.subject_new_grades_alert);
+                            subjectAlertNewGrade.setVisibility(View.INVISIBLE);
+                        }
                     }
 
                     gradeItem.setRead(true);
