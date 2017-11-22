@@ -73,6 +73,7 @@ public class Timetable {
                 String[] startEndEnd = hours.get(1).text().split(" ");
                 lesson.setStartTime(startEndEnd[0]);
                 lesson.setEndTime(startEndEnd[1]);
+                lesson.setDate(days.get(i - 2).getDate());
 
                 days.get(i - 2).setLesson(lesson);
             }

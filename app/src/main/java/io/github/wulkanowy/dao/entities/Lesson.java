@@ -39,6 +39,9 @@ public class Lesson {
     @Property(nameInDb = "END_TIME")
     private String endTime = "";
 
+    @Property(nameInDb = "DATE")
+    private String date = "";
+
     @Property(nameInDb = "IS_EMPTY")
     private boolean isEmpty = false;
 
@@ -69,12 +72,11 @@ public class Lesson {
     @Generated(hash = 610143130)
     private transient LessonDao myDao;
 
-    @Generated(hash = 211662995)
+    @Generated(hash = 877062493)
     public Lesson(Long id, Long dayId, String subject, String teacher, String room,
                   String description, String groupName, String startTime, String endTime,
-                  boolean isEmpty, boolean isDivisionIntoGroups, boolean isPlanning,
-                  boolean isRealized, boolean isMovedOrCanceled,
-                  boolean isNewMovedInOrChanged) {
+                  String date, boolean isEmpty, boolean isDivisionIntoGroups, boolean isPlanning,
+                  boolean isRealized, boolean isMovedOrCanceled, boolean isNewMovedInOrChanged) {
         this.id = id;
         this.dayId = dayId;
         this.subject = subject;
@@ -84,6 +86,7 @@ public class Lesson {
         this.groupName = groupName;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.date = date;
         this.isEmpty = isEmpty;
         this.isDivisionIntoGroups = isDivisionIntoGroups;
         this.isPlanning = isPlanning;
@@ -156,6 +159,15 @@ public class Lesson {
 
     public Lesson setEndTime(String endTime) {
         this.endTime = endTime;
+        return this;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public Lesson setDate(String date) {
+        this.date = date;
         return this;
     }
 

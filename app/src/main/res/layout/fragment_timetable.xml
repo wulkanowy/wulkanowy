@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.github.wulkanowy.activity.dashboard.lessonplan.LessonPlanFragment">
+    tools:context="io.github.wulkanowy.activity.dashboard.timetable.TimetableFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -38,7 +38,6 @@
             android:layout_above="@+id/textView3"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="43dp"
-            android:onClick="click"
             android:text="SyncTest" />
     </RelativeLayout>
 

@@ -24,6 +24,8 @@ public class Lesson {
 
     private String endTime = "";
 
+    private String date = "";
+
     private boolean isEmpty = false;
 
     private boolean isDivisionIntoGroups = false;
@@ -96,6 +98,15 @@ public class Lesson {
 
     public Lesson setEndTime(String endTime) {
         this.endTime = endTime;
+        return this;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public Lesson setDate(String date) {
+        this.date = date;
         return this;
     }
 

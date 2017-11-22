@@ -39,7 +39,7 @@ android {
 }
 
 greendao {
-    schemaVersion 15
+    schemaVersion 16
     generateTests = true
 }
 

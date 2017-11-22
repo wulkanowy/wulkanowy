@@ -8,7 +8,6 @@ import io.github.wulkanowy.dao.entities.Day;
 import io.github.wulkanowy.dao.entities.Grade;
 import io.github.wulkanowy.dao.entities.Lesson;
 import io.github.wulkanowy.dao.entities.Subject;
-import io.github.wulkanowy.dao.entities.Week;
 
 public abstract class ConversionVulcanObject {
 
@@ -48,10 +47,6 @@ public abstract class ConversionVulcanObject {
         return gradeEntityList;
     }
 
-    public static Week weeksToWeekEntities(io.github.wulkanowy.api.timetable.Week week) {
-        return new Week().setStartDayDate(week.getStartDayDate());
-    }
-
     public static List<Day> daysToDaysEntities(List<io.github.wulkanowy.api.timetable.Day> dayList) {
 
         List<Day> dayEntityList = new ArrayList<>();
@@ -80,6 +75,7 @@ public abstract class ConversionVulcanObject {
                     .setGroupName(lesson.getGroupName())
                     .setStartTime(lesson.getStartTime())
                     .setEndTime(lesson.getEndTime())
+                    .setDate(lesson.getDate())
                     .setEmpty(lesson.isEmpty())
                     .setDivisionIntoGroups(lesson.isDivisionIntoGroups())
                     .setPlanning(lesson.isPlanning())

@@ -12,7 +12,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.dashboard.attendance.AttendanceFragment;
 import io.github.wulkanowy.activity.dashboard.board.BoardFragment;
 import io.github.wulkanowy.activity.dashboard.grades.GradesFragment;
-import io.github.wulkanowy.activity.dashboard.lessonplan.LessonPlanFragment;
+import io.github.wulkanowy.activity.dashboard.timetable.TimetableFragment;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -24,7 +24,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private BoardFragment boardFragment = new BoardFragment();
 
-    private LessonPlanFragment lessonPlanFragment = new LessonPlanFragment();
+    private TimetableFragment timetableFragment = new TimetableFragment();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,7 +44,7 @@ public class DashboardActivity extends AppCompatActivity {
 
                 case R.id.navigation_lessonplan:
                     setTitle(R.string.lessonplan_text);
-                    currentFragment = lessonPlanFragment;
+                    currentFragment = timetableFragment;
                     break;
 
                 case R.id.navigation_dashboard:
