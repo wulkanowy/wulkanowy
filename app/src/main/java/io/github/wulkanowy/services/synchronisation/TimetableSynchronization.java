@@ -29,9 +29,20 @@ public class TimetableSynchronization {
         Week week = loginSession.getVulcan().getTimetable().getWeekTable();
 
         List<Day> dayList = week.getDays();
+        List<io.github.wulkanowy.dao.entities.Day> dayEntityList = ConversionVulcanObject
+                .daysToDaysEntities(dayList);
+        List<io.github.wulkanowy.dao.entities.Day> updatedDayEntityList = new ArrayList<>();
+
         DayDao.dropTable(dayDao.getDatabase(), true);
         DayDao.createTable(dayDao.getDatabase(), false);
-        dayDao.insertInTx(ConversionVulcanObject.daysToDaysEntities(dayList));
+
+        for (io.github.wulkanowy.dao.entities.Day day : dayEntityList) {
+            day.setUserId(loginSession.getUserId());
+            updatedDayEntityList.add(day);
+        }
+
+        dayDao.insertInTx(updatedDayEntityList);
+
 
         LessonDao.dropTable(lessonDao.getDatabase(), true);
         LessonDao.createTable(lessonDao.getDatabase(), false);

@@ -99,6 +99,22 @@ public class Lesson {
     public Lesson() {
     }
 
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getDayId() {
+        return this.dayId;
+    }
+
+    public void setDayId(Long dayId) {
+        this.dayId = dayId;
+    }
+
     public String getSubject() {
         return subject;
     }
@@ -223,22 +239,6 @@ public class Lesson {
     public Lesson setNewMovedInOrChanged(boolean newMovedInOrChanged) {
         isNewMovedInOrChanged = newMovedInOrChanged;
         return this;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getDayId() {
-        return this.dayId;
-    }
-
-    public void setDayId(Long dayId) {
-        this.dayId = dayId;
     }
 
     public boolean getIsEmpty() {

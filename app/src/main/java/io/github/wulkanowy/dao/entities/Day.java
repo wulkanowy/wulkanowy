@@ -18,6 +18,9 @@ public class Day {
     @Id(autoincrement = true)
     private Long id;
 
+    @Property(nameInDb = "USER_ID")
+    private Long userId;
+
     @Property(nameInDb = "DATE")
     private String date = "";
 
@@ -42,9 +45,10 @@ public class Day {
     @Generated(hash = 312167767)
     private transient DayDao myDao;
 
-    @Generated(hash = 1244276920)
-    public Day(Long id, String date, boolean isFreeDay, String freeDayName) {
+    @Generated(hash = 907307916)
+    public Day(Long id, Long userId, String date, boolean isFreeDay, String freeDayName) {
         this.id = id;
+        this.userId = userId;
         this.date = date;
         this.isFreeDay = isFreeDay;
         this.freeDayName = freeDayName;
@@ -52,6 +56,23 @@ public class Day {
 
     @Generated(hash = 866989762)
     public Day() {
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Day setUserId(Long userId) {
+        this.userId = userId;
+        return this;
     }
 
     public String getDate() {
@@ -79,14 +100,6 @@ public class Day {
     public Day setFreeDayName(String freeDayName) {
         this.freeDayName = freeDayName;
         return this;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public boolean getIsFreeDay() {
