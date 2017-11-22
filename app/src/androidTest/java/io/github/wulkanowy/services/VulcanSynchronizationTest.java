@@ -20,4 +20,10 @@ public class VulcanSynchronizationTest {
         VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
         Assert.assertFalse(vulcanSynchronization.syncGrades());
     }
+
+    @Test
+    public void syncNoLoginSessionTimetableTest() {
+        VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
+        Assert.assertFalse(vulcanSynchronization.syncTimetable());
+    }
 }
