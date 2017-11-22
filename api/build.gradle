@@ -21,6 +21,12 @@ test {
     }
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
 dependencies {
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'org.apache.commons:commons-lang3:3.6'
