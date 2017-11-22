@@ -29,7 +29,7 @@ sonarqube {
         property "sonar.java.test.binaries", "build/intermediates/classes/debug"
         property "sonar.java.test.libraries", libraries
         property "sonar.jacoco.reportPaths", "build/jacoco/testDebugUnitTest.exec"
-//        property "sonar.jacoco.itReportPath", "build/outputs/code-coverage/connected/*.ec"
+        property "sonar.jacoco.itReportPath", "build/outputs/code-coverage/connected/*.ec"
         property "sonar.android.lint.report", "build/outputs/lint-results.xml"
         property "sonar.java.coveragePlugin", "jacoco"
     }
