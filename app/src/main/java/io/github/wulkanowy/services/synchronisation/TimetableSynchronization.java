@@ -3,14 +3,17 @@ package io.github.wulkanowy.services.synchronisation;
 
 import android.util.Log;
 
+import org.greenrobot.greendao.query.Query;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.timetable.Day;
-import io.github.wulkanowy.api.timetable.Lesson;
 import io.github.wulkanowy.api.timetable.Week;
 import io.github.wulkanowy.dao.entities.DayDao;
+import io.github.wulkanowy.dao.entities.Lesson;
 import io.github.wulkanowy.dao.entities.LessonDao;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.jobs.VulcanJobHelper;
@@ -36,9 +39,21 @@ public class TimetableSynchronization {
         int amount = 0;
 
         for (Day day : dayList) {
-            List<Lesson> lessonList = day.getLessons();
-            lessonDao.insertInTx(ConversionVulcanObject.lessonsToLessonsEntities(lessonList));
-            amount += lessonList.size();
+
+            Query<io.github.wulkanowy.dao.entities.Day> dayQuery = dayDao.queryBuilder()
+                    .where(DayDao.Properties.Date.eq(day.getDate()))
+                    .build();
+
+            List<Lesson> lessonEntityList = ConversionVulcanObject.lessonsToLessonsEntities(day.getLessons());
+            List<Lesson> updatedLessonEntityList = new ArrayList<>();
+
+            for (Lesson lesson : lessonEntityList) {
+                lesson.setDayId(dayQuery.uniqueOrThrow().getId());
+                updatedLessonEntityList.add(lesson);
+            }
+
+            lessonDao.insertInTx(updatedLessonEntityList);
+            amount += updatedLessonEntityList.size();
         }
 
         Log.d(VulcanJobHelper.DEBUG_TAG, "Synchronization lessons (amount = " + String.valueOf(amount + ")"));
