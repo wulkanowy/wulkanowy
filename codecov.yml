@@ -3,20 +3,23 @@ coverage:
   status:
     project:
       default: off
-      unit:
+      api:
+        target: 80%
+        flags: api
+      app:
         target: 20%
-        flags: unit
+        flags: app
       instrumented:
         target: 20%
         flags: instrumented
 
 flags:
-  app:
-    paths:
-      - app/src/main/io/github/wulkanowy
   api:
     paths:
       - api/src/main/io/github/wulkanowy
+  app:
+    paths:
+      - app/src/main/io/github/wulkanowy
   instrumented:
     paths:
       - app/src/main/io/github/wulkanowy
