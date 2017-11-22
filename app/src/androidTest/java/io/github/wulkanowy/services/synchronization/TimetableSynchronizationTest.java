@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +57,10 @@ public class TimetableSynchronizationTest {
         Vulcan vulcan = mock(Vulcan.class);
         doReturn(timetable).when(vulcan).getTimetable();
 
-        LoginSession loginSession = Mockito.mock(LoginSession.class);
-        Mockito.doReturn(vulcan).when(loginSession).getVulcan();
-        Mockito.doReturn(daoSession).when(loginSession).getDaoSession();
-        Mockito.doReturn(userId).when(loginSession).getUserId();
+        LoginSession loginSession = mock(LoginSession.class);
+        doReturn(vulcan).when(loginSession).getVulcan();
+        doReturn(daoSession).when(loginSession).getDaoSession();
+        doReturn(userId).when(loginSession).getUserId();
 
         TimetableSynchronization timetableSynchronization = new TimetableSynchronization();
         timetableSynchronization.sync(loginSession);
