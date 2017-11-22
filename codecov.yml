@@ -11,9 +11,12 @@ coverage:
         flags: instrumented
 
 flags:
-  unit:
+  app:
     paths:
       - app/src/main/io/github/wulkanowy
+  api:
+    paths:
+      - api/src/main/io/github/wulkanowy
   instrumented:
     paths:
       - app/src/main/io/github/wulkanowy
