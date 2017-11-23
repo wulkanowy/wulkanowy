@@ -143,7 +143,7 @@ jobs:
           command: ./gradlew clean --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Run instrumented tests
-          command: ./gradlew connectedAndroidTest --no-daemon --stacktrace --console=plain -PdisablePreDex
+          command: ./gradlew createAppRaport --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Collect logs from emulator
           command: adb logcat -d > ./app/build/reports/logcat_emulator.txt
