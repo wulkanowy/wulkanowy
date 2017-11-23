@@ -63,7 +63,7 @@ jobs:
       - save_cache:
           <<: *general_cache_key
           paths:
-            - "./build/outputs/lint-results.xml"
+            - "./app/build/outputs/lint-results.xml"
 
   app-test:
     <<: *container_config
@@ -90,7 +90,8 @@ jobs:
       - save_cache:
           <<: *general_cache_key
           paths:
-            - "./build/jacoco"
+            - "./app/build/jacoco"
+            - "./app/build/test-results/testDebugUnitTest"
 
   api-test:
     <<: *container_config
@@ -117,7 +118,7 @@ jobs:
       - save_cache:
           <<: *general_cache_key
           paths:
-            - "./build/jacoco"
+            - "./api/build/jacoco"
 
   instrumented:
     <<: *container_config
@@ -158,7 +159,7 @@ jobs:
       - save_cache:
           <<: *general_cache_key
           paths:
-            - "./build/outputs/code-coverage/connected"
+            - "./app/build/outputs/code-coverage/connected"
 
   sonarcube:
     <<: *container_config
