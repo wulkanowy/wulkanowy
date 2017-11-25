@@ -36,11 +36,12 @@ dependencies {
 }
 
 version = '0.1.0'
+group = GROUP_ID
 
 sonarqube {
     properties {
-        property "sonar.projectName", GROUP_ID + ".api"
-        property "sonar.projectKey", GROUP_ID + ".api"
+        property "sonar.projectName", GROUP_ID + ":api"
+        property "sonar.projectKey", GROUP_ID + ":wulkanowy-api"
     }
 }
 
