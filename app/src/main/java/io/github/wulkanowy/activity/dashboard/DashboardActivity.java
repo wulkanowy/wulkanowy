@@ -74,7 +74,7 @@ public class DashboardActivity extends AppCompatActivity {
             setTitle(savedInstanceState.getString("activityTitle"));
         } else {
             currentFragment = gradesFragment;
-            setTitle(R.string.dashboard_text);
+            setTitle(R.string.grades_text);
         }
 
         int cardID = getIntent().getIntExtra("cardID", 0);

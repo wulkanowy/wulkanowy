@@ -37,6 +37,7 @@ public class Timetable {
             boolean isFreeDay = tableHeaderCells.get(i).hasClass("free-day");
 
             Day day = new Day();
+            day.setDayName(dayHeaderCell[0]);
             day.setDate(dayHeaderCell[1]);
 
             if (isFreeDay) {

@@ -60,7 +60,9 @@ public class TimetableSynchronization {
 
             for (Lesson lesson : lessonEntityList) {
                 lesson.setDayId(dayQuery.uniqueOrThrow().getId());
-                updatedLessonEntityList.add(lesson);
+                if (!"".equals(lesson.getSubject())) {
+                    updatedLessonEntityList.add(lesson);
+                }
             }
 
             lessonDao.insertInTx(updatedLessonEntityList);

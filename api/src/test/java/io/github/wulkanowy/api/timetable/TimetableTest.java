@@ -40,6 +40,15 @@ public class TimetableTest extends StudentAndParentTestCase {
     // Day
 
     @Test
+    public void getDayNameTest() throws Exception {
+        Assert.assertEquals("poniedziałek", std.getWeekTable().getDay(0).getDayName());
+        Assert.assertEquals("piątek", std.getWeekTable().getDay(4).getDayName());
+        Assert.assertEquals("wtorek", full.getWeekTable().getDay(1).getDayName());
+        Assert.assertEquals("czwartek", full.getWeekTable().getDay(3).getDayName());
+        Assert.assertEquals("środa", holidays.getWeekTable().getDay(2).getDayName());
+    }
+
+    @Test
     public void getDayDateTest() throws Exception {
         Assert.assertEquals("19.06.2017", std.getWeekTable().getDay(0).getDate());
         Assert.assertEquals("23.06.2017", std.getWeekTable().getDay(4).getDate());

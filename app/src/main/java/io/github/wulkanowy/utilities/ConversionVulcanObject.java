@@ -54,6 +54,7 @@ public abstract class ConversionVulcanObject {
         for (io.github.wulkanowy.api.timetable.Day day : dayList) {
             Day dayEntity = new Day()
                     .setDate(day.getDate())
+                    .setDayName(day.getDayName())
                     .setFreeDay(day.isFreeDay())
                     .setFreeDayName(day.getFreeDayName());
 

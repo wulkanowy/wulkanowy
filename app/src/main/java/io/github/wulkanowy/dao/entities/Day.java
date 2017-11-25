@@ -24,6 +24,9 @@ public class Day {
     @Property(nameInDb = "DATE")
     private String date = "";
 
+    @Property(nameInDb = "DAY_NAME")
+    private String dayName = "";
+
     @Property(nameInDb = "IS_FREE_DAY")
     private boolean isFreeDay = false;
 
@@ -45,11 +48,13 @@ public class Day {
     @Generated(hash = 312167767)
     private transient DayDao myDao;
 
-    @Generated(hash = 907307916)
-    public Day(Long id, Long userId, String date, boolean isFreeDay, String freeDayName) {
+    @Generated(hash = 1590481046)
+    public Day(Long id, Long userId, String date, String dayName, boolean isFreeDay,
+               String freeDayName) {
         this.id = id;
         this.userId = userId;
         this.date = date;
+        this.dayName = dayName;
         this.isFreeDay = isFreeDay;
         this.freeDayName = freeDayName;
     }
@@ -81,6 +86,15 @@ public class Day {
 
     public Day setDate(String date) {
         this.date = date;
+        return this;
+    }
+
+    public String getDayName() {
+        return dayName;
+    }
+
+    public Day setDayName(String dayName) {
+        this.dayName = dayName;
         return this;
     }
 

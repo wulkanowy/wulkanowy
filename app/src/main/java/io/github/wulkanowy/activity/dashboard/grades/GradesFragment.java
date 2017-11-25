@@ -40,16 +40,18 @@ public class GradesFragment extends Fragment {
 
     private static long userId;
 
+    public GradesFragment() {
+        //empty constructor for fragments
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        DaoSession daoSession;
-
         View view = inflater.inflate(R.layout.fragment_grades, container, false);
         view.findViewById(R.id.fragment_no_grades).setVisibility(View.GONE);
 
         if (getActivity() != null) {
-            daoSession = ((WulkanowyApp) getActivity().getApplication()).getDaoSession();
+            DaoSession daoSession = ((WulkanowyApp) getActivity().getApplication()).getDaoSession();
             userId = getActivity().getSharedPreferences("LoginData", Context.MODE_PRIVATE)
                     .getLong("userId", 0);
 
@@ -137,7 +139,7 @@ public class GradesFragment extends Fragment {
             super.onPostExecute(result);
             createExpList(mainView.get(), activity.get());
             mainView.get().findViewById(R.id.loadingPanel).setVisibility(View.INVISIBLE);
-            if (subjectWithGradesList.size() == 0) {
+            if (subjectWithGradesList.isEmpty()) {
                 mainView.get().findViewById(R.id.fragment_no_grades).setVisibility(View.VISIBLE);
             }
         }
@@ -163,6 +165,7 @@ public class GradesFragment extends Fragment {
             try {
                 vulcanSynchronization.loginCurrentUser(activity.get(), daoSession, new Vulcan());
                 vulcanSynchronization.syncGrades();
+                vulcanSynchronization.syncTimetable();
                 downloadGradesFormDatabase(daoSession);
                 return true;
             } catch (Exception e) {
