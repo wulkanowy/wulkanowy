@@ -44,32 +44,6 @@ greendao {
     generateTests = true
 }
 
-task mergeAppReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-
-    def fileFilter = [
-            '**/R.class',
-            '**/R$*.class',
-            '**/BuildConfig.*',
-            '**/Manifest*.*',
-            '**/*Test*.*',
-            'android/**/*.*'
-    ]
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
-
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree])
-    def connected = fileTree("${buildDir}/outputs/code-coverage/connected/").filter { it.isFile() }.files.name
-    executionData = fileTree(dir: "$buildDir", includes: [
-            "jacoco/testDebugUnitTest.exec",
-            "outputs/code-coverage/connected/" + connected[0]
-    ])
-}
-
 dependencies {
     implementation project(":api")
     implementation 'com.android.support:appcompat-v7:27.0.1'

@@ -5,8 +5,9 @@ sonarqube {
         def files = fileTree("${rootProject.projectDir}/api/build/libs/").filter { it.isFile() }.files.name
         def libraries = project.android.sdkDirectory.getPath() + "/platforms/android-27/android.jar," +
                 "${project.rootDir}/api/build/libs/" + files[0]
-        property "sonar.projectName", GROUP_ID + ".app"
-        property "sonar.projectKey", GROUP_ID + ".app"
+
+        property "sonar.projectName", "wulkanowy app"
+        property "sonar.projectKey", GROUP_ID + "-app"
 
         property "sonar.sources", "src/main/java, src/main/res"
 
