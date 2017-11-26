@@ -177,7 +177,7 @@ jobs:
           <<: *general_cache_key
       - run:
           name: Upload artifacts to bintray
-          command: BINTRAY_USER=$BINTRAY_USER BINTRAY_KEY=$BINTRAY_KEY GIT_TAG=$CIRCLE_TAG ./gradlew bintray
+          command: BINTRAY_USER=$BINTRAY_USER BINTRAY_KEY=$BINTRAY_KEY GIT_TAG=$CIRCLE_TAG ./gradlew bintray --no-daemon --stacktrace --console=plain -PdisablePreDex
 
 workflows:
   version: 2
@@ -194,9 +194,9 @@ workflows:
       - api-test:
           requires:
             - build
-      - instrumented:
-          requires:
-            - build
+#      - instrumented:
+#          requires:
+#            - build
       - bintray-tag:
           filters:
             tags:
@@ -209,4 +209,4 @@ workflows:
             - lint
             - app-test
             - api-test
-            - instrumented
+#            - instrumented
