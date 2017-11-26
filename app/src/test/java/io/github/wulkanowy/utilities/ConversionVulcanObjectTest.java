@@ -11,7 +11,7 @@ import io.github.wulkanowy.api.grades.Subject;
 import io.github.wulkanowy.api.timetable.Day;
 import io.github.wulkanowy.api.timetable.Lesson;
 
-public class ConversionVulcanObjectTest extends ConversionVulcanObject {
+public class ConversionVulcanObjectTest {
 
     @Test
     public void subjectConversionTest() {

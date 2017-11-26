@@ -108,7 +108,7 @@ public class GradesFragment extends Fragment {
 
         for (Subject subject : account.getSubjectList()) {
             List<Grade> gradeList = subject.getGradeList();
-            if (gradeList.size() != 0) {
+            if (!gradeList.isEmpty()) {
                 SubjectWithGrades subjectWithGrades = new SubjectWithGrades(subject.getName(), gradeList);
                 subjectWithGradesList.add(subjectWithGrades);
             }
@@ -135,6 +135,7 @@ public class GradesFragment extends Fragment {
             return null;
         }
 
+        @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             createExpList(mainView.get(), activity.get());

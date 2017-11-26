@@ -40,8 +40,7 @@ public class VulcanSynchronization {
     }
 
     public void firstLoginSignInStep(Context context, DaoSession daoSession)
-            throws NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException,
-            UnsupportedOperationException {
+            throws NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException {
         if (firstAccountLogin != null && certificate != null) {
             loginSession = firstAccountLogin.login(context, daoSession, certificate);
         } else {
