@@ -73,12 +73,10 @@ jobs:
           <<: *general_cache_key
       - run:
           name: Run app tests
-          command: ./gradlew :app:test --no-daemon --stacktrace --console=plain -PdisablePreDex
+          command: ./gradlew :app:test :app:jacocoTestReport --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Upload unit code coverage to codecov
-          command: |
-            ./gradlew :app:jacocoTestReport --no-daemon --stacktrace --console=plain -PdisablePreDex
-            bash <(curl -s https://codecov.io/bash) -F app
+          command: bash <(curl -s https://codecov.io/bash) -F app
       - store_artifacts:
           path: ./app/build/reports/tests/
           destination: tests_reports/
@@ -100,12 +98,10 @@ jobs:
           <<: *general_cache_key
       - run:
           name: Run api tests
-          command: ./gradlew :api:test --no-daemon --stacktrace --console=plain -PdisablePreDex
+          command: ./gradlew :api:test :api:jacocoTestReport --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
-          name: Upload unit code coverage to codecov
-          command: |
-            ./gradlew :api:jacocoTestReport --no-daemon --stacktrace --console=plain -PdisablePreDex
-            bash <(curl -s https://codecov.io/bash) -F api
+          name: Upload code coverage to codecov
+          command: bash <(curl -s https://codecov.io/bash) -F api
       - store_artifacts:
           path: ./api/build/reports/tests/
           destination: tests_reports/
