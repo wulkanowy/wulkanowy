@@ -171,11 +171,11 @@ jobs:
 
   bintray-tag:
     <<: *container_config
-      steps:
-        - *attach_workspace
-        - restore_cache:
-            <<: *general_cache_key
-        - run:
+    steps:
+      - *attach_workspace
+      - restore_cache:
+          <<: *general_cache_key
+      - run:
           name: Upload artifacts to bintray
           command: BINTRAY_USER=$BINTRAY_USER BINTRAY_KEY=$BINTRAY_KEY GIT_TAG=$CIRCLE_TAG ./gradlew bintray
 
