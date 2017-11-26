@@ -169,6 +169,16 @@ jobs:
           name: Run sonarqube runner
           command: ./gradlew -x test -x lint sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY --no-daemon --stacktrace --console=plain -PdisablePreDex
 
+  bintray-tag:
+    <<: *container_config
+      steps:
+        - *attach_workspace
+        - restore_cache:
+            <<: *general_cache_key
+        - run:
+          name: Upload artifacts to bintray
+          command: BINTRAY_USER=$BINTRAY_USER BINTRAY_KEY=$BINTRAY_KEY GIT_TAG=$CIRCLE_TAG ./gradlew bintray
+
 workflows:
   version: 2
 
@@ -185,6 +195,12 @@ workflows:
           requires:
             - build
       - instrumented:
+          requires:
+            - build
+      - bintray-tag:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - build
       - sonarcube:

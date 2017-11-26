@@ -10,7 +10,7 @@ targetCompatibility = "1.7"
 ext {
     PUBLISH_GROUP_ID = GROUP_ID
     PUBLISH_ARTIFACT_ID = 'api'
-    PUBLISH_VERSION = '0.1.0'
+    PUBLISH_VERSION = System.getenv('GIT_TAG')
 }
 
 test {
@@ -35,7 +35,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:2.11.0'
 }
 
-version = '0.1.0'
+version = PUBLISH_VERSION
 group = GROUP_ID
 
 sonarqube {
@@ -60,10 +60,11 @@ bintray {
         vcsUrl = gitUrl
         labels = ['aar', 'android', 'wulkanowy', 'api']
         publicDownloadNumbers = true
+        publish = true
 
         version {
-            name = '0.1.0'
-            vcsTag = '0.1.0'
+            name = PUBLISH_VERSION
+            vcsTag = PUBLISH_VERSION
             released  = new Date()
         }
     }
