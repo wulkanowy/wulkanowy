@@ -15,14 +15,14 @@ public class AchievementsList {
 
     private List<String> achievements = new ArrayList<>();
 
-    private static final String notesPageUrl = "UwagiOsiagniecia.mvc/Wszystkie";
+    private static final String NOTES_PAGE_URL = "UwagiOsiagniecia.mvc/Wszystkie";
 
     public AchievementsList(StudentAndParent snp) {
         this.snp = snp;
     }
 
     public List<String> getAllAchievements() throws IOException {
-        Element pageFragment = snp.getSnPPageDocument(notesPageUrl)
+        Element pageFragment = snp.getSnPPageDocument(NOTES_PAGE_URL)
                 .select(".mainContainer > div").get(1);
         Elements items = pageFragment.select("article");
 

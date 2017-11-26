@@ -15,14 +15,14 @@ public class NotesList {
 
     private List<Note> notes = new ArrayList<>();
 
-    private static final String notesPageUrl = "UwagiOsiagniecia.mvc/Wszystkie";
+    private static final String NOTES_PAGE_URL = "UwagiOsiagniecia.mvc/Wszystkie";
 
     public NotesList(StudentAndParent snp) {
         this.snp = snp;
     }
 
     public List<Note> getAllNotes() throws IOException {
-        Element pageFragment = snp.getSnPPageDocument(notesPageUrl)
+        Element pageFragment = snp.getSnPPageDocument(NOTES_PAGE_URL)
                 .select(".mainContainer > div").get(0);
         Elements items = pageFragment.select("article");
         Elements dates = pageFragment.select("h2");

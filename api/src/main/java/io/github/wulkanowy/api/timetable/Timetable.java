@@ -14,7 +14,7 @@ public class Timetable {
 
     private StudentAndParent snp;
 
-    private static final String timetablePageUrl = "Lekcja.mvc/PlanLekcji?data=";
+    private static final String TIMETABLE_PAGE_URL = "Lekcja.mvc/PlanLekcji?data=";
 
     public Timetable(StudentAndParent snp) {
         this.snp = snp;
@@ -25,7 +25,7 @@ public class Timetable {
     }
 
     public Week getWeekTable(String tick) throws IOException {
-        Element table = snp.getSnPPageDocument(timetablePageUrl + tick)
+        Element table = snp.getSnPPageDocument(TIMETABLE_PAGE_URL + tick)
                 .select(".mainContainer .presentData").first();
 
         Elements tableHeaderCells = table.select("thead th");

@@ -13,9 +13,9 @@ public class BasicInformation {
 
     private StudentAndParent snp;
 
-    private static final String studentDataPageUrl = "Uczen.mvc/DanePodstawowe";
+    private static final String STUDENT_DATA_PAGE_URL = "Uczen.mvc/DanePodstawowe";
 
-    private final String CONTENT_QUERY = ".mainContainer > article";
+    private static final String CONTENT_QUERY = ".mainContainer > article";
 
     public BasicInformation(StudentAndParent snp) {
         this.snp = snp;
@@ -23,7 +23,7 @@ public class BasicInformation {
 
     public Document getStudentDataPageDocument() throws IOException {
         if (null == studentDataPageDocument) {
-            studentDataPageDocument = snp.getSnPPageDocument(studentDataPageUrl);
+            studentDataPageDocument = snp.getSnPPageDocument(STUDENT_DATA_PAGE_URL);
         }
 
         return studentDataPageDocument;
