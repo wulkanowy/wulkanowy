@@ -63,7 +63,7 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - "./app/build/outputs/lint-results.xml"
+            - "./app/build/reports/lint-results.xml"
 
   app-test:
     <<: *container_config
