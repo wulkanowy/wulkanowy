@@ -79,6 +79,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
                 publishProgress("3", activity.get().getResources().getString(R.string.step_synchronization));
                 vulcanSynchronization.syncSubjectsAndGrades();
+                vulcanSynchronization.syncTimetable();
 
             } catch (BadCredentialsException e) {
                 return R.string.login_bad_credentials_text;
