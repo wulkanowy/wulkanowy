@@ -71,6 +71,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             averageGrades = itemView.findViewById(R.id.subject_grades_average);
         }
 
+        @SuppressWarnings("unchecked")
         public void bind(ExpandableGroup group) {
             int volumeGrades = group.getItemCount();
             List<Grade> gradeList = group.getItems();

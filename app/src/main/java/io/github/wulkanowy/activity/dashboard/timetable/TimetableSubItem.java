@@ -38,20 +38,48 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, SubItemViewHolder holder, int position, List payloads) {
         holder.getLessonName().setText(lesson.getSubject());
+        holder.getLessonTime().setText(String.format("%1$s - %2$s", lesson.getStartTime(), lesson.getEndTime()));
+        holder.getNumberOfLesson().setText(lesson.getNumber());
+        holder.getRoom().setText(lesson.getRoom());
+
+        if (!lesson.getRoom().isEmpty()) {
+            holder.getRoom().setText(holder.getContentView().getContext().getString(R.string.timetable_subitem_room, lesson.getRoom()));
+        }
     }
 
     public static class SubItemViewHolder extends FlexibleViewHolder {
 
         private TextView lessonName;
 
+        private TextView numberOfLesson;
+
+        private TextView lessonTime;
+
+        private TextView room;
+
         public SubItemViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
 
-            lessonName = view.findViewById(R.id.timetable_item_text);
+            lessonName = view.findViewById(R.id.timetable_subItem_lesson_text);
+            numberOfLesson = view.findViewById(R.id.timetable_subItem_number_of_lesson);
+            lessonTime = view.findViewById(R.id.timetable_subItem_time);
+            room = view.findViewById(R.id.timetable_subItem_room);
         }
 
         public TextView getLessonName() {
             return lessonName;
+        }
+
+        public TextView getNumberOfLesson() {
+            return numberOfLesson;
+        }
+
+        public TextView getLessonTime() {
+            return lessonTime;
+        }
+
+        public TextView getRoom() {
+            return room;
         }
     }
 }

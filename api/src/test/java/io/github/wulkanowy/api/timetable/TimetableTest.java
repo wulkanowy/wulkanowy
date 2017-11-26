@@ -82,6 +82,15 @@ public class TimetableTest extends StudentAndParentTestCase {
     // Lesson
 
     @Test
+    public void getLessonNumberTest() throws Exception {
+        Assert.assertEquals("2", std.getWeekTable().getDay(0).getLesson(1).getNumber());
+        Assert.assertEquals("5", std.getWeekTable().getDay(2).getLesson(4).getNumber());
+        Assert.assertEquals("0", full.getWeekTable().getDay(0).getLesson(0).getNumber());
+        Assert.assertEquals("13", full.getWeekTable().getDay(4).getLesson(13).getNumber());
+        Assert.assertEquals("3", holidays.getWeekTable().getDay(3).getLesson(3).getNumber());
+    }
+
+    @Test
     public void getLessonSubjectTest() throws Exception {
         Assert.assertEquals("Historia", std.getWeekTable().getDay(0).getLesson(1).getSubject());
         Assert.assertEquals("Zajęcia techniczne", std.getWeekTable().getDay(2).getLesson(4).getSubject());

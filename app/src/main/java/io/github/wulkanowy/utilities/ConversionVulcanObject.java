@@ -69,6 +69,7 @@ public abstract class ConversionVulcanObject {
 
         for (io.github.wulkanowy.api.timetable.Lesson lesson : lessonList) {
             Lesson lessonEntity = new Lesson()
+                    .setNumber(lesson.getNumber())
                     .setSubject(lesson.getSubject())
                     .setTeacher(lesson.getTeacher())
                     .setRoom(lesson.getRoom())

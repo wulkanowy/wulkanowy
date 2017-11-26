@@ -18,6 +18,9 @@ public class Lesson {
     @Property(nameInDb = "DAY_ID")
     private Long dayId;
 
+    @Property(nameInDb = "NUMBER_OF_LESSON")
+    private String number;
+
     @Property(nameInDb = "SUBJECT_NAME")
     private String subject = "";
 
@@ -72,13 +75,14 @@ public class Lesson {
     @Generated(hash = 610143130)
     private transient LessonDao myDao;
 
-    @Generated(hash = 877062493)
-    public Lesson(Long id, Long dayId, String subject, String teacher, String room,
-                  String description, String groupName, String startTime, String endTime,
-                  String date, boolean isEmpty, boolean isDivisionIntoGroups, boolean isPlanning,
-                  boolean isRealized, boolean isMovedOrCanceled, boolean isNewMovedInOrChanged) {
+    @Generated(hash = 140778287)
+    public Lesson(Long id, Long dayId, String number, String subject, String teacher, String room,
+                  String description, String groupName, String startTime, String endTime, String date,
+                  boolean isEmpty, boolean isDivisionIntoGroups, boolean isPlanning, boolean isRealized,
+                  boolean isMovedOrCanceled, boolean isNewMovedInOrChanged) {
         this.id = id;
         this.dayId = dayId;
+        this.number = number;
         this.subject = subject;
         this.teacher = teacher;
         this.room = room;
@@ -113,6 +117,15 @@ public class Lesson {
 
     public void setDayId(Long dayId) {
         this.dayId = dayId;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public Lesson setNumber(String number) {
+        this.number = number;
+        return this;
     }
 
     public String getSubject() {

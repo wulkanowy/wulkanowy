@@ -3,6 +3,8 @@ package io.github.wulkanowy.activity.dashboard.timetable;
 import android.view.View;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -37,12 +39,15 @@ public class TimetableHeaderItem
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, HeaderViewHolder holder, int position, List payloads) {
-        holder.getDayName().setText(day.getDayName());
+        holder.getDayName().setText(StringUtils.capitalize(day.getDayName()));
+        holder.getDate().setText(day.getDate());
     }
 
     public static class HeaderViewHolder extends ExpandableViewHolder {
 
-        TextView dayName;
+        private TextView dayName;
+
+        private TextView date;
 
         public HeaderViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
@@ -54,11 +59,16 @@ public class TimetableHeaderItem
                 }
             });
 
-            dayName = view.findViewById(R.id.timetable_header_text);
+            dayName = view.findViewById(R.id.timetable_header_dayName_text);
+            date = view.findViewById(R.id.timetable_header_date_text);
         }
 
         public TextView getDayName() {
             return dayName;
+        }
+
+        public TextView getDate() {
+            return date;
         }
     }
 }

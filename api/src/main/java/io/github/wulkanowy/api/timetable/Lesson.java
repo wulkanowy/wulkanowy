@@ -10,6 +10,8 @@ public class Lesson {
 
     public static final String CLASS_NEW_MOVED_IN_OR_CHANGED = "x-treelabel-zas";
 
+    private String number = "";
+
     private String subject = "";
 
     private String teacher = "";
@@ -37,6 +39,15 @@ public class Lesson {
     private boolean isMovedOrCanceled = false;
 
     private boolean isNewMovedInOrChanged = false;
+
+    public String getNumber() {
+        return number;
+    }
+
+    public Lesson setNumber(String number) {
+        this.number = number;
+        return this;
+    }
 
     public String getSubject() {
         return subject;

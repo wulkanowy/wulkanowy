@@ -38,7 +38,7 @@ public class Timetable {
 
             Day day = new Day();
             day.setDayName(dayHeaderCell[0]);
-            day.setDate(dayHeaderCell[1]);
+            day.setDate(dayHeaderCell[1].substring(1));
 
             if (isFreeDay) {
                 day.setFreeDay(true);
@@ -75,6 +75,7 @@ public class Timetable {
                 lesson.setStartTime(startEndEnd[0]);
                 lesson.setEndTime(startEndEnd[1]);
                 lesson.setDate(days.get(i - 2).getDate());
+                lesson.setNumber(hours.get(0).text());
 
                 days.get(i - 2).setLesson(lesson);
             }
