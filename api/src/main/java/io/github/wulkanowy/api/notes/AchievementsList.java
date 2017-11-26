@@ -13,9 +13,9 @@ public class AchievementsList {
 
     private StudentAndParent snp = null;
 
-    private List<String> achievementsList = new ArrayList<>();
+    private List<String> achievements = new ArrayList<>();
 
-    private String notesPageUrl = "UwagiOsiagniecia.mvc/Wszystkie";
+    private static final String notesPageUrl = "UwagiOsiagniecia.mvc/Wszystkie";
 
     public AchievementsList(StudentAndParent snp) {
         this.snp = snp;
@@ -27,9 +27,9 @@ public class AchievementsList {
         Elements items = pageFragment.select("article");
 
         for (Element item : items) {
-            achievementsList.add(item.text());
+            achievements.add(item.text());
         }
 
-        return achievementsList;
+        return achievements;
     }
 }

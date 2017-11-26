@@ -14,7 +14,7 @@ public class SubjectsList {
 
     private StudentAndParent snp = null;
 
-    private String subjectsPageUrl = "Oceny/Wszystkie?details=1";
+    private static final String subjectsPageUrl = "Oceny/Wszystkie?details=1";
 
     public SubjectsList(StudentAndParent snp) {
         this.snp = snp;

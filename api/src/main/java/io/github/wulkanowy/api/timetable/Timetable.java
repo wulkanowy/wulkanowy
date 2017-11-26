@@ -9,19 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.wulkanowy.api.StudentAndParent;
-import io.github.wulkanowy.api.login.LoginErrorException;
 
 public class Timetable {
 
     private StudentAndParent snp;
 
-    private String timetablePageUrl = "Lekcja.mvc/PlanLekcji?data=";
+    private static final String timetablePageUrl = "Lekcja.mvc/PlanLekcji?data=";
 
     public Timetable(StudentAndParent snp) {
         this.snp = snp;
     }
 
-    public Week getWeekTable() throws IOException, LoginErrorException {
+    public Week getWeekTable() throws IOException {
         return getWeekTable("");
     }
 
@@ -100,9 +99,9 @@ public class Timetable {
             lesson.setRoom(spans.get(3).text());
         }
 
-        lesson = getLessonGroupDivisionInfo(lesson, spans);
-        lesson = getLessonTypeInfo(lesson, spans);
-        lesson = getLessonDescriptionInfo(lesson, spans);
+        lesson = getLessonGroupDivisionInfo(
+                getLessonTypeInfo(
+                        getLessonDescriptionInfo(lesson, spans), spans), spans);
 
         return lesson;
     }

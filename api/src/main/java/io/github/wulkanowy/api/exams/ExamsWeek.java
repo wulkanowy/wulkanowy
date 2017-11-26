@@ -14,7 +14,7 @@ public class ExamsWeek {
 
     private final StudentAndParent snp;
 
-    private final String examsPageUrl = "Sprawdziany.mvc/Terminarz?rodzajWidoku=2&data=";
+    private static final String examsPageUrl = "Sprawdziany.mvc/Terminarz?rodzajWidoku=2&data=";
 
     public ExamsWeek(StudentAndParent snp) {
         this.snp = snp;

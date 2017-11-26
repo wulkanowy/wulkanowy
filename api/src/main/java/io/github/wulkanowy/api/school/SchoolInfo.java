@@ -10,7 +10,7 @@ public class SchoolInfo {
 
     private StudentAndParent snp = null;
 
-    private String schoolPageUrl = "Szkola.mvc/Nauczyciele";
+    private static final String schoolPageUrl = "Szkola.mvc/Nauczyciele";
 
     public SchoolInfo(StudentAndParent snp) {
         this.snp = snp;

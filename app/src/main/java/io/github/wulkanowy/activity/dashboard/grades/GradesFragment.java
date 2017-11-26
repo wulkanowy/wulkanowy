@@ -133,11 +133,12 @@ public class GradesFragment extends Fragment {
             return null;
         }
 
+        @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             createExpList(mainView.get(), activity.get());
             mainView.get().findViewById(R.id.loadingPanel).setVisibility(View.INVISIBLE);
-            if (subjectWithGradesList.size() == 0) {
+            if (subjectWithGradesList.isEmpty()) {
                 mainView.get().findViewById(R.id.fragment_no_grades).setVisibility(View.VISIBLE);
             }
         }

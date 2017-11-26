@@ -6,15 +6,16 @@ import org.jsoup.nodes.Element;
 import java.io.IOException;
 
 import io.github.wulkanowy.api.StudentAndParent;
-import io.github.wulkanowy.api.login.LoginErrorException;
 
 public class BasicInformation {
 
-    private static Document studentDataPageDocument;
+    private Document studentDataPageDocument;
 
     private StudentAndParent snp;
 
-    private String studentDataPageUrl = "Uczen.mvc/DanePodstawowe";
+    private static final String studentDataPageUrl = "Uczen.mvc/DanePodstawowe";
+
+    private final String CONTENT_QUERY = ".mainContainer > article";
 
     public BasicInformation(StudentAndParent snp) {
         this.snp = snp;
@@ -28,8 +29,8 @@ public class BasicInformation {
         return studentDataPageDocument;
     }
 
-    public PersonalData getPersonalData() throws IOException, LoginErrorException {
-        Element e = getStudentDataPageDocument().select(".mainContainer > article").get(0);
+    public PersonalData getPersonalData() throws IOException {
+        Element e = getStudentDataPageDocument().select(CONTENT_QUERY).get(0);
 
         String name = snp.getRowDataChildValue(e, 1);
         String[] names = name.split(" ");
@@ -47,8 +48,8 @@ public class BasicInformation {
                 .setParentsNames(snp.getRowDataChildValue(e, 7));
     }
 
-    public AddressData getAddressData() throws IOException, LoginErrorException {
-        Element e = getStudentDataPageDocument().select(".mainContainer > article").get(1);
+    public AddressData getAddressData() throws IOException {
+        Element e = getStudentDataPageDocument().select(CONTENT_QUERY).get(1);
 
         return new AddressData()
                 .setAddress(snp.getRowDataChildValue(e, 1))
@@ -57,8 +58,8 @@ public class BasicInformation {
 
     }
 
-    public ContactDetails getContactDetails() throws IOException, LoginErrorException {
-        Element e = getStudentDataPageDocument().select(".mainContainer > article").get(2);
+    public ContactDetails getContactDetails() throws IOException {
+        Element e = getStudentDataPageDocument().select(CONTENT_QUERY).get(2);
 
         return new ContactDetails()
                 .setPhoneNumber(snp.getRowDataChildValue(e, 1))

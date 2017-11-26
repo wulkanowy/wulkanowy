@@ -13,7 +13,7 @@ public class FamilyInformation {
 
     private StudentAndParent snp;
 
-    private String studentDataPageUrl = "Uczen.mvc/DanePodstawowe";
+    private static final String studentDataPageUrl = "Uczen.mvc/DanePodstawowe";
 
     public FamilyInformation(StudentAndParent snp) {
         this.snp = snp;

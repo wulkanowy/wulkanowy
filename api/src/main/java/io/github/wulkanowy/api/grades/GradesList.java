@@ -22,7 +22,7 @@ public class GradesList {
 
     private StudentAndParent snp = null;
 
-    private String gradesPageUrl = "Oceny/Wszystkie?details=2&okres=";
+    private static final String gradesPageUrl = "Oceny/Wszystkie?details=2&okres=";
 
     private List<Grade> grades = new ArrayList<>();
 
@@ -34,7 +34,7 @@ public class GradesList {
         return gradesPageUrl;
     }
 
-    public List<Grade> getAll() throws IOException, LoginErrorException, ParseException {
+    public List<Grade> getAll() throws IOException, ParseException {
         return getAll("");
     }
 
