@@ -12,7 +12,8 @@ sonarqube {
         property "sonar.projectKey", GROUP_ID + ":app"
 
         property "sonar.sources", "src/main/java"
-        property "sonar.exclusions", "build/**,**/*.png,*.iml, **/*generated*, src/**/dao/entities/*.java"
+        property "sonar.exclusions", "build/**,**/*.png,*.iml, **/*generated*," +
+                "src/**/entities/*.java, src/androidTest/**/entities/*.java"
         property "sonar.import_unknown_files", true
 
         // Defines where the java files are
