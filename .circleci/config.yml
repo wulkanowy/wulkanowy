@@ -30,10 +30,10 @@ jobs:
           <<: *general_cache_key
       - run:
           name: Setup environment
-          command: ./gradlew dependencies --no-daemon --stacktrace || true
+          command: ./gradlew dependencies --no-daemon --stacktrace --console=plain -PdisablePreDex || true
       - run:
           name: Initial build
-          command: ./gradlew -x test -x lint build assembleDebug --no-daemon --stacktrace -PdisablePreDex
+          command: ./gradlew -x test -x lint build assembleDebug --no-daemon --stacktrace --console=plain -PdisablePreDex
       - store_artifacts:
           path: ./app/build/outputs/apk/
           destination: apks/
@@ -54,7 +54,7 @@ jobs:
           <<: *general_cache_key
       - run:
           name: Run lint
-          command: ./gradlew lint --no-daemon --stacktrace
+          command: ./gradlew lint --no-daemon --stacktrace --console=plain -PdisablePreDex
       - store_artifacts:
           path: ./app/build/reports/
           destination: lint_reports/app/
@@ -73,11 +73,11 @@ jobs:
           <<: *general_cache_key
       - run:
           name: Run app tests
-          command: ./gradlew :app:test --no-daemon --stacktrace
+          command: ./gradlew :app:test --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Upload unit code coverage to codecov
           command: |
-            ./gradlew :app:jacocoTestReport --no-daemon --stacktrace
+            ./gradlew :app:jacocoTestReport --no-daemon --stacktrace --console=plain -PdisablePreDex
             bash <(curl -s https://codecov.io/bash) -F app
       - store_artifacts:
           path: ./app/build/reports/tests/
@@ -91,7 +91,6 @@ jobs:
           <<: *general_cache_key
           paths:
             - "./app/build/jacoco"
-            - "./app/build/test-results/testDebugUnitTest"
 
   api-test:
     <<: *container_config
@@ -101,11 +100,11 @@ jobs:
           <<: *general_cache_key
       - run:
           name: Run api tests
-          command: ./gradlew :api:test --no-daemon --stacktrace
+          command: ./gradlew :api:test --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Upload unit code coverage to codecov
           command: |
-            ./gradlew :api:jacocoTestReport --no-daemon --stacktrace
+            ./gradlew :api:jacocoTestReport --no-daemon --stacktrace --console=plain -PdisablePreDex
             bash <(curl -s https://codecov.io/bash) -F api
       - store_artifacts:
           path: ./api/build/reports/tests/
@@ -144,7 +143,7 @@ jobs:
           command: ./gradlew clean --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Run instrumented tests
-          command: ./gradlew mergeAppReport --no-daemon --stacktrace --console=plain -PdisablePreDex
+          command: ./gradlew createDebugCoverageReport --no-daemon --stacktrace --console=plain -PdisablePreDex
       - run:
           name: Collect logs from emulator
           command: adb logcat -d > ./app/build/reports/logcat_emulator.txt
@@ -168,8 +167,11 @@ jobs:
       - restore_cache:
           <<: *general_cache_key
       - run:
+          name: Prepare coverage report
+          command: ./gradlew jacocoTestReport --no-daemon --stacktrace --console=plain -PdisablePreDex
+      - run:
           name: Run sonarqube runner
-          command: ./gradlew -x test -x lint sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY
+          command: ./gradlew -x test -x lint sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY -Dsonar.branch.name=$CIRCLE_BRANCH --no-daemon --stacktrace --console=plain -PdisablePreDex
 
 workflows:
   version: 2

@@ -1,3 +1,5 @@
+apply plugin: 'org.sonarqube'
+
 sonarqube {
 
     //noinspection GroovyAssignabilityCheck
@@ -6,10 +8,12 @@ sonarqube {
         def libraries = project.android.sdkDirectory.getPath() + "/platforms/android-27/android.jar," +
                 "${project.rootDir}/api/build/libs/" + files[0]
 
-        property "sonar.projectName", "wulkanowy app"
-        property "sonar.projectKey", GROUP_ID + "-app"
+        property "sonar.projectName", GROUP_ID + ":app"
+        property "sonar.projectKey", GROUP_ID + ":app"
 
-        property "sonar.sources", "src/main/java, src/main/res"
+        property "sonar.sources", "src/main/java"
+        property "sonar.exclusions", "build/**,**/*.png,*.iml, **/*generated*, src/**/dao/entities/*.java"
+        property "sonar.import_unknown_files", true
 
         // Defines where the java files are
         property "sonar.binaries", "build/intermediates/classes/debug"
@@ -26,23 +30,6 @@ sonarqube {
 
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.android.lint.report", "build/reports/lint-results.xml"
-        property "sonar.jacoco.reportPaths", fileTree(dir: project.projectDir, includes: ['**/*.ec'])
-//        property "sonar.jacoco.reportPaths", fileTree(dir: project.projectDir, includes: ['**/*.exec'])
-    }
-}
-
-jacocoAndroidUnitTestReport {
-    csv.enabled false
-    html.enabled true
-    xml.enabled true
-}
-
-android {
-    testOptions {
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
-        }
+        property "sonar.jacoco.reportPaths", fileTree(dir: project.projectDir, includes: ['**/*.exec', '**/*.ec'])
     }
 }
