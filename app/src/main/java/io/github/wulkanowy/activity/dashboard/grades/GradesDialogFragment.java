@@ -4,6 +4,8 @@ package io.github.wulkanowy.activity.dashboard.grades;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +27,14 @@ public class GradesDialogFragment extends DialogFragment {
         setRetainInstance(true);
     }
 
-    public GradesDialogFragment setGrade(Grade grade) {
+    private GradesDialogFragment setGrade(Grade grade) {
         this.grade = grade;
         return this;
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.grades_dialog, container, false);
 
         TextView gradeText = view.findViewById(R.id.dialog_grade_text);

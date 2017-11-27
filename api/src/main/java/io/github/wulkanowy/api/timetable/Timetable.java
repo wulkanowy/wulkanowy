@@ -37,7 +37,7 @@ public class Timetable {
 
             Day day = new Day();
             day.setDayName(dayHeaderCell[0]);
-            day.setDate(dayHeaderCell[1]);
+            day.setDate(dayHeaderCell[1].trim());
 
             if (isFreeDay) {
                 day.setFreeDay(true);
