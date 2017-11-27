@@ -4,6 +4,10 @@ apply plugin: 'jacoco'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+
 ext {
     PUBLISH_GROUP_ID = GROUP_ID
     PUBLISH_ARTIFACT_ID = 'api'
