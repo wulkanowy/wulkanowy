@@ -101,6 +101,10 @@ public class Timetable {
             lesson.setRoom(spans.get(3).text());
         }
 
+        if (4 == spans.size() && !spans.last().hasClass("x-treelabel-rlz")) {
+            lesson.setRoom(spans.get(3).text());
+        }
+
         addGroupDivisionInfo(lesson, spans);
         adTypeInfo(lesson, spans);
         addDescriptionInfo(lesson, spans);
