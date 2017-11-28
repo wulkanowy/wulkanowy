@@ -12,6 +12,7 @@ import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.api.notes.AchievementsList;
 import io.github.wulkanowy.api.notes.NotesList;
 import io.github.wulkanowy.api.school.SchoolInfo;
@@ -34,7 +35,8 @@ public class Vulcan extends Api {
     }
 
     public void login(String email, String password, String symbol)
-            throws BadCredentialsException, AccountPermissionException, LoginErrorException, IOException {
+            throws BadCredentialsException, AccountPermissionException,
+            LoginErrorException, IOException, VulcanOfflineException {
         Login login = new Login(new Cookies());
         String realSymbol = login.login(email, password, symbol);
 
@@ -42,7 +44,8 @@ public class Vulcan extends Api {
     }
 
     public void login(String email, String password, String symbol, String id)
-            throws BadCredentialsException, AccountPermissionException, LoginErrorException, IOException {
+            throws BadCredentialsException, AccountPermissionException,
+            LoginErrorException, IOException, VulcanOfflineException {
         login(email, password, symbol);
 
         this.id = id;

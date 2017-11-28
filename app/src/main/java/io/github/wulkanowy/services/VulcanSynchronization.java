@@ -12,6 +12,7 @@ import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.services.jobs.VulcanJobHelper;
@@ -39,7 +40,7 @@ public class VulcanSynchronization {
     }
 
     public void firstLoginSignInStep(Context context, DaoSession daoSession)
-            throws NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException {
+            throws NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException, VulcanOfflineException {
         if (firstAccountLogin != null && certificate != null) {
             loginSession = firstAccountLogin.login(context, daoSession, certificate);
         } else {
@@ -49,7 +50,7 @@ public class VulcanSynchronization {
     }
 
     public void loginCurrentUser(Context context, DaoSession daoSession, Vulcan vulcan)
-            throws CryptoException, BadCredentialsException, AccountPermissionException, LoginErrorException, IOException {
+            throws CryptoException, BadCredentialsException, AccountPermissionException, LoginErrorException, IOException, VulcanOfflineException {
         CurrentAccountLogin currentAccountLogin = new CurrentAccountLogin(context, daoSession, vulcan);
         loginSession = currentAccountLogin.loginCurrentUser();
     }

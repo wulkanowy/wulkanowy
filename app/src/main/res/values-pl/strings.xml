@@ -58,6 +58,7 @@
 
     <string name="info_average_grades">Średnia: %1$.2f</string>
     <string name="info_no_average">Brak średniej</string>
+    <string name="error_host_offline">Przerwa techniczna. Spróbuj ponownie później</string>
 
     <plurals name="numberOfGradesPlurals">
         <item quantity="one">%d ocena</item>

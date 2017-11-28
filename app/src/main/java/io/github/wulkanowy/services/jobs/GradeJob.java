@@ -22,6 +22,7 @@ import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.dao.DatabaseAccess;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.dao.entities.Grade;
@@ -56,7 +57,7 @@ public class GradeJob extends VulcanJobHelper {
 
         @Override
         public void workToBePerformed() throws CryptoException, BadCredentialsException,
-                NotLoggedInErrorException, AccountPermissionException, IOException {
+                NotLoggedInErrorException, AccountPermissionException, IOException, VulcanOfflineException {
 
             DaoSession daoSession = ((WulkanowyApp) getApplication()).getDaoSession();
 

@@ -9,6 +9,7 @@ import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.LoginErrorException;
+import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.dao.entities.Account;
 import io.github.wulkanowy.dao.entities.AccountDao;
 import io.github.wulkanowy.dao.entities.DaoSession;
@@ -32,7 +33,7 @@ public class CurrentAccountLogin {
     }
 
     public LoginSession loginCurrentUser() throws CryptoException,
-            BadCredentialsException, AccountPermissionException, IOException, LoginErrorException {
+            BadCredentialsException, AccountPermissionException, IOException, LoginErrorException, VulcanOfflineException {
 
         AccountDao accountDao = daoSession.getAccountDao();
 

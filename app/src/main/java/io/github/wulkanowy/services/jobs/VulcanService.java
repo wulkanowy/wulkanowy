@@ -12,6 +12,7 @@ import java.lang.ref.WeakReference;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.security.CryptoException;
 
 public abstract class VulcanService extends JobService {
@@ -36,7 +37,7 @@ public abstract class VulcanService extends JobService {
     }
 
     public abstract void workToBePerformed() throws CryptoException, BadCredentialsException,
-            NotLoggedInErrorException, AccountPermissionException, IOException;
+            NotLoggedInErrorException, AccountPermissionException, IOException, VulcanOfflineException;
 
     private static class SyncTask extends AsyncTask<Void, Void, Void> {
 

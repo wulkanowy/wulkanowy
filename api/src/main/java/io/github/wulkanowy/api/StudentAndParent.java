@@ -42,6 +42,10 @@ public class StudentAndParent extends Api {
         this.protocolSchema = schema;
     }
 
+    public String getLogHost() {
+        return logHost;
+    }
+
     public void setLogHost(String hostname) {
         this.logHost = hostname;
     }
@@ -98,7 +102,7 @@ public class StudentAndParent extends Api {
     }
 
     public String getExtractedIdFromUrl(String snpPageUrl) throws NotLoggedInErrorException {
-        String[] path = snpPageUrl.split(logHost + "/")[1].split("/");
+        String[] path = snpPageUrl.split(getLogHost() + "/")[1].split("/");
 
         if (4 != path.length) {
             throw new NotLoggedInErrorException();

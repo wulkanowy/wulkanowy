@@ -10,6 +10,7 @@ import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.dao.entities.Account;
 import io.github.wulkanowy.dao.entities.AccountDao;
 import io.github.wulkanowy.dao.entities.DaoSession;
@@ -44,7 +45,7 @@ public class FirstAccountLogin {
     }
 
     public LoginSession login(Context context, DaoSession daoSession, String certificate)
-            throws NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException{
+            throws NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException, VulcanOfflineException {
 
         long userId;
 

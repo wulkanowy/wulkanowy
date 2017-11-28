@@ -46,7 +46,7 @@ public class Login extends Api {
     }
 
     public String getLoginEndpointPageUrl() {
-        String a =  loginEndpointPageUrl
+        String a = loginEndpointPageUrl
                 .replace("{schema}", protocolSchema)
                 .replace("{host}", logHost)
                 .replace("{symbol}", symbol);
@@ -55,7 +55,8 @@ public class Login extends Api {
     }
 
     public String login(String email, String password, String symbol)
-            throws BadCredentialsException, LoginErrorException, AccountPermissionException, IOException {
+            throws BadCredentialsException, LoginErrorException,
+            AccountPermissionException, IOException, VulcanOfflineException {
         String certificate = sendCredentials(email, password, symbol);
 
         return sendCertificate(certificate, symbol);
@@ -78,7 +79,7 @@ public class Login extends Api {
     }
 
     public String sendCertificate(String certificate, String defaultSymbol)
-            throws IOException, LoginErrorException, AccountPermissionException {
+            throws IOException, LoginErrorException, AccountPermissionException, VulcanOfflineException {
         this.symbol = findSymbol(defaultSymbol, certificate);
 
         Document html = postPageByUrl(getLoginEndpointPageUrl(), new String[][]{
@@ -88,6 +89,10 @@ public class Login extends Api {
 
         if (html.getElementsByTag("title").text().equals("Logowanie")) {
             throw new AccountPermissionException();
+        }
+
+        if (html.getElementsByTag("title").text().equals("Przerwa techniczna")) {
+            throw new VulcanOfflineException();
         }
 
         if (!html.select("title").text().equals("Uonet+")) {

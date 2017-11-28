@@ -58,6 +58,7 @@
 
     <string name="info_average_grades">Average: %1$.2f</string>
     <string name="info_no_average">No average</string>
+    <string name="error_host_offline">Technical break</string>
 
     <plurals name="numberOfGradesPlurals">
         <item quantity="one">%d grade</item>

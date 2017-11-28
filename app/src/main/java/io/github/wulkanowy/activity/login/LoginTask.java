@@ -24,6 +24,7 @@ import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.services.LoginSession;
@@ -88,6 +89,8 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 return R.string.encrypt_failed_text;
             } catch (NotLoggedInErrorException | IOException e) {
                 return R.string.login_denied_text;
+            } catch (VulcanOfflineException e) {
+                return R.string.error_host_offline;
             } catch (UnsupportedOperationException e) {
                 return -1;
             }
