@@ -146,7 +146,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle(R.string.alert_dialog_blocked_app)
                         .setMessage(R.string.alert_dialog_blocked_app_message)
-                        .setPositiveButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.generic_dialog_close, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();

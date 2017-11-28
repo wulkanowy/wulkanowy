@@ -7,168 +7,155 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="450dp"
+        android:minHeight="400dp"
         android:minWidth="300dp"
         android:orientation="vertical">
-
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
-            android:minHeight="450dp"
-            android:padding="20dp"
+            android:minHeight="400dp"
+            android:paddingBottom="20dp"
+            android:paddingEnd="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
             tools:ignore="UselessParent">
 
-
             <TextView
-                android:id="@+id/dialog_grade_text"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="end"
-                android:gravity="center"
-                android:text="@string/app_name"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/subject_dialog_text_value"
-                android:layout_width="match_parent"
+                android:id="@+id/timetable_dialog_details"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="start"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="90dp"
-                android:layout_marginRight="90dp"
                 android:gravity="center_vertical"
                 android:maxLines="5"
-                android:minHeight="80dp"
+                android:minHeight="70dp"
                 android:minLines="2"
-                android:text="@string/grades_text"
+                android:text="@string/generic_dialog_details"
                 android:textIsSelectable="true"
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/description_dialog_text"
+                android:id="@+id/timetable_dialog_lesson"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/subject_dialog_text_value"
-                android:text="@string/dialog_description_text"
+                android:layout_below="@+id/timetable_dialog_details"
+                android:text="@string/timetable_dialog_lesson"
                 android:textIsSelectable="true"
                 android:textSize="17sp" />
 
             <TextView
-                android:id="@+id/description_dialog_text_value"
+                android:id="@+id/timetable_dialog_lesson_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/description_dialog_text"
+                android:layout_below="@+id/timetable_dialog_lesson"
                 android:layout_marginTop="3dp"
-                android:text="@string/noDescription_text"
-                android:textIsSelectable="true"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/weight_dialog_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/description_dialog_text_value"
-                android:layout_marginTop="10dp"
-                android:text="@string/dialog_weight_text"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/weight_dialog_text_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/weight_dialog_text"
-                android:layout_marginTop="3dp"
-                android:text="@string/grades_text"
+                android:text="@string/generic_app_no_data"
                 android:textIsSelectable="true"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/teacher_dialog_text"
+                android:id="@+id/timetable_dialog_teacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/weight_dialog_text_value"
+                android:layout_below="@+id/timetable_dialog_lesson_value"
                 android:layout_marginTop="10dp"
-                android:text="@string/dialog_teacher_text"
+                android:text="@string/generic_dialog_teacher"
                 android:textSize="17sp" />
 
             <TextView
-                android:id="@+id/teacher_dialog_text_value"
+                android:id="@+id/timetable_dialog_teacher_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/teacher_dialog_text"
+                android:layout_below="@+id/timetable_dialog_teacher"
                 android:layout_marginTop="3dp"
-                android:text="@string/dialog_teacher_text"
+                android:text="@string/generic_app_no_data"
                 android:textIsSelectable="true"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/color_dialog_text"
+                android:id="@+id/timetable_dialog_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/teacher_dialog_text_value"
+                android:layout_below="@+id/timetable_dialog_teacher_value"
                 android:layout_marginTop="10dp"
-                android:text="@string/dialog_color_text"
+                android:text="@string/timetable_dialog_group"
                 android:textSize="17sp" />
 
             <TextView
-                android:id="@+id/color_dialog_text_value"
+                android:id="@+id/timetable_dialog_group_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/color_dialog_text"
+                android:layout_below="@+id/timetable_dialog_group"
                 android:layout_marginTop="3dp"
-                android:text="@string/dialog_color_text"
+                android:text="@string/generic_app_no_data"
                 android:textIsSelectable="true"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/date_dialog_text"
+                android:id="@+id/timetable_dialog_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/color_dialog_text_value"
+                android:layout_below="@+id/timetable_dialog_group_value"
                 android:layout_marginTop="10dp"
-                android:text="@string/dialog_date_text"
+                android:text="@string/timetable_dialog_room"
                 android:textSize="17sp" />
 
             <TextView
-                android:id="@+id/date_dialog_text_value"
+                android:id="@+id/timetable_dialog_room_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/date_dialog_text"
+                android:layout_below="@id/timetable_dialog_room"
                 android:layout_marginTop="3dp"
-                android:text="@string/dialog_date_text"
+                android:text="@string/generic_app_no_data"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/timetable_dialog_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/timetable_dialog_room_value"
+                android:layout_marginTop="10dp"
+                android:text="@string/timetable_dialog_time"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/timetable_dialog_time_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/timetable_dialog_time"
+                android:layout_marginTop="3dp"
+                android:text="@string/generic_app_no_data"
                 android:textIsSelectable="true"
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/close_dialog"
+                android:id="@+id/timetable_dialog_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -178,8 +165,7 @@
                 android:focusable="true"
                 android:text="@string/generic_dialog_close"
                 android:textAllCaps="true"
-                android:textSize="15sp"
-                />
+                android:textSize="15sp" />
 
         </RelativeLayout>
     </LinearLayout>

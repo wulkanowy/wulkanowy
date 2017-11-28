@@ -14,6 +14,7 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import io.github.wulkanowy.R;
@@ -24,7 +25,7 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
     private Activity activity;
 
-    private int numberOfNotReadGrade;
+    private static int numberOfNotReadGrade;
 
     public GradesAdapter(List<? extends ExpandableGroup> groups, Activity activity) {
         super(groups);
@@ -34,13 +35,13 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
     @Override
     public SubjectViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.subject_item, parent, false);
-        return new SubjectViewHolder(view);
+        return new SubjectViewHolder(view, activity);
     }
 
     @Override
     public GradeViewHolder onCreateChildViewHolder(ViewGroup child, int viewType) {
         View view = LayoutInflater.from(child.getContext()).inflate(R.layout.grade_item, child, false);
-        return new GradeViewHolder(view);
+        return new GradeViewHolder(view, activity);
     }
 
     @Override
@@ -53,7 +54,9 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
         holder.bind((Grade) group.getItems().get(childIndex));
     }
 
-    public class SubjectViewHolder extends GroupViewHolder {
+    public static class SubjectViewHolder extends GroupViewHolder {
+
+        private WeakReference<Activity> activity;
 
         private TextView subjectName;
 
@@ -63,8 +66,10 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
         private ImageView subjectAlertNewGrades;
 
-        public SubjectViewHolder(View itemView) {
+        public SubjectViewHolder(View itemView, Activity activity) {
             super(itemView);
+            this.activity = new WeakReference<>(activity);
+
             subjectName = itemView.findViewById(R.id.subject_text);
             numberOfGrades = itemView.findViewById(R.id.subject_number_of_grades);
             subjectAlertNewGrades = itemView.findViewById(R.id.subject_new_grades_alert);
@@ -82,10 +87,10 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
             if (average < 0) {
                 averageGrades.setText(R.string.info_no_average);
             } else {
-                averageGrades.setText(activity.getResources().getString(R.string.info_average_grades, average));
+                averageGrades.setText(activity.get().getResources().getString(R.string.info_average_grades, average));
             }
             subjectName.setText(group.getTitle());
-            numberOfGrades.setText(activity.getResources().getQuantityString(R.plurals.numberOfGradesPlurals, volumeGrades, volumeGrades));
+            numberOfGrades.setText(activity.get().getResources().getQuantityString(R.plurals.numberOfGradesPlurals, volumeGrades, volumeGrades));
 
             for (Grade grade : gradeList) {
                 if (!grade.getRead()) {
@@ -97,7 +102,9 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
         }
     }
 
-    public class GradeViewHolder extends ChildViewHolder {
+    public static class GradeViewHolder extends ChildViewHolder {
+
+        private WeakReference<Activity> activity;
 
         private TextView gradeValue;
 
@@ -111,9 +118,11 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
 
         private Grade gradeItem;
 
-        public GradeViewHolder(View itemView) {
+        public GradeViewHolder(View itemView, Activity activity) {
             super(itemView);
             this.itemView = itemView;
+            this.activity = new WeakReference<>(activity);
+
             gradeValue = itemView.findViewById(R.id.grade_text);
             descriptionGrade = itemView.findViewById(R.id.description_grade_text);
             dateGrade = itemView.findViewById(R.id.grade_date_text);
@@ -148,14 +157,14 @@ public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.S
                 public void onClick(View v) {
                     GradesDialogFragment gradesDialogFragment = GradesDialogFragment.newInstance(gradeItem);
                     gradesDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-                    gradesDialogFragment.show(activity.getFragmentManager(), gradeItem.toString());
+                    gradesDialogFragment.show(activity.get().getFragmentManager(), gradeItem.toString());
 
                     if (!gradeItem.getRead()) {
                         numberOfNotReadGrade--;
                     }
 
                     if (numberOfNotReadGrade == 0) {
-                        View subjectView = activity.findViewById(R.id.subject_grade_recycler).findViewWithTag(gradeItem.getSubject());
+                        View subjectView = activity.get().findViewById(R.id.subject_grade_recycler).findViewWithTag(gradeItem.getSubject());
                         if (subjectView != null) {
                             View subjectAlertNewGrade = subjectView.findViewById(R.id.subject_new_grades_alert);
                             subjectAlertNewGrade.setVisibility(View.INVISIBLE);

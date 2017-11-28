@@ -82,7 +82,7 @@ public class TimetableFragment extends Fragment {
             TimetableHeaderItem headerItem = new TimetableHeaderItem(day);
 
             for (Lesson lesson : day.getLessons()) {
-                TimetableSubItem subItem = new TimetableSubItem(headerItem, lesson);
+                TimetableSubItem subItem = new TimetableSubItem(headerItem, lesson, getActivity());
                 timetableSubItems.add(subItem);
             }
 

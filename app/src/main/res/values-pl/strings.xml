@@ -51,7 +51,17 @@
     <string name="dialog_teacher_text">Nauczyciel</string>
     <string name="dialog_date_text">Data</string>
     <string name="dialog_color_text">Kolor</string>
-    <string name="dialog_close">Zamknij</string>
+
+    <string name="timetable_dialog_lesson">Lekcja</string>
+    <string name="timetable_dialog_room">Sala</string>
+    <string name="timetable_dialog_group">Grupa</string>
+    <string name="timetable_dialog_time">Godziny</string>
+
+    <string name="generic_dialog_details">Szczegóły</string>
+    <string name="generic_dialog_close">Zamknij</string>
+    <string name="generic_dialog_teacher">Nauczyciel</string>
+
+    <string name="generic_app_no_data">Brak danych</string>
 
     <string name="snackbar_no_grades">Brak nowych ocen</string>
     <string name="snackbar_new_grade">Ilość nowych ocen: %1$d</string>

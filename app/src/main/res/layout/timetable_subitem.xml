@@ -3,7 +3,7 @@
     android:id="@+id/timetable_subItem_cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="0dp"
+    android:layout_marginBottom="7dp"
     android:layout_marginEnd="5dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
@@ -24,13 +24,13 @@
 
         <TextView
             android:id="@+id/timetable_subItem_number_of_lesson"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:maxLength="5"
-            android:text="2"
-            android:textSize="35sp" />
+            android:maxLength="1"
+            android:text="0"
+            android:textSize="32sp" />
 
         <TextView
             android:id="@+id/timetable_subItem_lesson_text"
@@ -46,7 +46,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/app_name"
-            android:textSize="18sp" />
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/timetable_subItem_time"
@@ -64,15 +64,33 @@
             android:id="@+id/timetable_subItem_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/timetable_subItem_time"
-            android:layout_toRightOf="@+id/timetable_subItem_time"
             android:layout_alignBottom="@+id/timetable_subItem_number_of_lesson"
-            android:maxLines="1"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/timetable_subItem_time"
+            android:layout_toRightOf="@+id/timetable_subItem_time"
+            android:maxLines="1"
             android:text="@string/grades_text"
-            android:textSize="12sp"
-            android:textColor="#4C4C4C" />
+            android:textColor="#4C4C4C"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/timetable_subItem_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/timetable_subItem_number_of_lesson"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toEndOf="@id/timetable_subItem_room"
+            android:layout_toRightOf="@+id/timetable_subItem_room"
+            android:gravity="end"
+            android:maxLines="1"
+            android:text="@string/grades_text"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="13sp" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>
