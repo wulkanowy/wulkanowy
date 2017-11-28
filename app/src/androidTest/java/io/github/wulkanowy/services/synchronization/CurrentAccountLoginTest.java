@@ -20,6 +20,7 @@ import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.LoginErrorException;
+import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.dao.entities.Account;
 import io.github.wulkanowy.dao.entities.AccountDao;
 import io.github.wulkanowy.dao.entities.DaoMaster;
@@ -60,7 +61,7 @@ public class CurrentAccountLoginTest {
 
     @Test(expected = IOException.class)
     public void emptyUserIdTest() throws CryptoException, BadCredentialsException,
-            AccountPermissionException, IOException, LoginErrorException {
+            AccountPermissionException, IOException, LoginErrorException, VulcanOfflineException {
 
         CurrentAccountLogin currentAccountLogin = new CurrentAccountLogin(context, daoSession, new Vulcan());
         currentAccountLogin.loginCurrentUser();
