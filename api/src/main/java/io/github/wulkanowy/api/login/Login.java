@@ -12,24 +12,46 @@ import io.github.wulkanowy.api.Cookies;
 
 public class Login extends Api {
 
-    private String loginPageUrl = "https://cufs.vulcan.net.pl/{symbol}/Account/LogOn" +
-            "?ReturnUrl=%2F{symbol}%2FFS%2FLS%3Fwa%3Dwsignin1.0%26wtrealm%3D" +
-            "https%253a%252f%252fuonetplus.vulcan.net.pl%252f{symbol}%252fLoginEndpoint.aspx%26wctx%3D" +
-            "https%253a%252f%252fuonetplus.vulcan.net.pl%252f{symbol}%252fLoginEndpoint.aspx";
+    private String protocolSchema = "https";
 
-    private String loginEndpointPageUrl =
-            "https://uonetplus.vulcan.net.pl/{symbol}/LoginEndpoint.aspx";
+    private String logHost = "vulcan.net.pl";
+
+    private String symbol = "Default";
+
+    private static final String loginPageUrl = "{schema}://cufs.{host}/{symbol}/Account/LogOn" +
+            "?ReturnUrl=%2F{symbol}%2FFS%2FLS%3Fwa%3Dwsignin1.0%26wtrealm%3D" +
+            "{schema}%253a%252f%252fuonetplus.{host}%252f{symbol}%252fLoginEndpoint.aspx%26wctx%3D" +
+            "{schema}%253a%252f%252fuonetplus.{host}%252f{symbol}%252fLoginEndpoint.aspx";
+
+    private static final String loginEndpointPageUrl =
+            "{schema}://uonetplus.{host}/{symbol}/LoginEndpoint.aspx";
 
     public Login(Cookies cookies) {
         this.cookies = cookies;
     }
 
+    public void setProtocolSchema(String schema) {
+        this.protocolSchema = schema;
+    }
+
+    public void setLogHost(String hostname) {
+        this.logHost = hostname;
+    }
+
     public String getLoginPageUrl() {
-        return loginPageUrl;
+        return loginPageUrl
+                .replace("{schema}", protocolSchema)
+                .replace("{host}", logHost.replace(":", "%253A"))
+                .replace("{symbol}", symbol);
     }
 
     public String getLoginEndpointPageUrl() {
-        return loginEndpointPageUrl;
+        String a =  loginEndpointPageUrl
+                .replace("{schema}", protocolSchema)
+                .replace("{host}", logHost)
+                .replace("{symbol}", symbol);
+
+        return a;
     }
 
     public String login(String email, String password, String symbol)
@@ -41,9 +63,9 @@ public class Login extends Api {
 
     public String sendCredentials(String email, String password, String symbol)
             throws IOException, BadCredentialsException {
-        loginPageUrl = getLoginPageUrl().replace("{symbol}", symbol);
+        this.symbol = symbol;
 
-        Document html = postPageByUrl(loginPageUrl, new String[][]{
+        Document html = postPageByUrl(getLoginPageUrl(), new String[][]{
                 {"LoginName", email},
                 {"Password", password}
         });
@@ -57,12 +79,9 @@ public class Login extends Api {
 
     public String sendCertificate(String certificate, String defaultSymbol)
             throws IOException, LoginErrorException, AccountPermissionException {
-        String symbol = findSymbol(defaultSymbol, certificate);
+        this.symbol = findSymbol(defaultSymbol, certificate);
 
-        loginEndpointPageUrl = getLoginEndpointPageUrl()
-                .replace("{symbol}", symbol);
-
-        Document html = postPageByUrl(loginEndpointPageUrl, new String[][]{
+        Document html = postPageByUrl(getLoginEndpointPageUrl(), new String[][]{
                 {"wa", "wsignin1.0"},
                 {"wresult", certificate}
         });
@@ -75,7 +94,7 @@ public class Login extends Api {
             throw new LoginErrorException();
         }
 
-        return symbol;
+        return this.symbol;
     }
 
     public String findSymbol(String symbol, String certificate) {

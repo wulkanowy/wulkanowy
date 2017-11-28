@@ -12,9 +12,13 @@ import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 
 public class StudentAndParent extends Api {
 
-    private String startPageUrl = "https://uonetplus.vulcan.net.pl/{symbol}/Start.mvc/Index";
+    private String protocolSchema = "https";
 
-    private String baseUrl = "https://uonetplus-opiekun.vulcan.net.pl/{symbol}/{ID}/";
+    private String logHost = "vulcan.net.pl";
+
+    private static final String startPageUrl = "{schema}://uonetplus.{host}/{symbol}/Start.mvc/Index";
+
+    private static final String baseUrl = "{schema}://uonetplus-opiekun.{host}/{symbol}/{ID}/";
 
     private static final String SYMBOL_PLACEHOLDER = "{symbol}";
 
@@ -34,16 +38,31 @@ public class StudentAndParent extends Api {
         this.id = id;
     }
 
-    public String getGradesPageUrl() {
-        return baseUrl + GRADES_PAGE_URL;
+    public void setProtocolSchema(String schema) {
+        this.protocolSchema = schema;
     }
 
-    public String getBaseUrl() {
-        return baseUrl;
+    public void setLogHost(String hostname) {
+        this.logHost = hostname;
     }
 
     public String getStartPageUrl() {
-        return startPageUrl;
+        return startPageUrl
+                .replace("{schema}", protocolSchema)
+                .replace("{host}", logHost)
+                .replace(SYMBOL_PLACEHOLDER, getSymbol());
+    }
+
+    public String getBaseUrl() {
+        return baseUrl
+                .replace("{schema}", protocolSchema)
+                .replace("{host}", logHost)
+                .replace(SYMBOL_PLACEHOLDER, getSymbol())
+                .replace("{ID}", getId());
+    }
+
+    public String getGradesPageUrl() {
+        return getBaseUrl() + GRADES_PAGE_URL;
     }
 
     public String getSymbol() {
@@ -60,11 +79,11 @@ public class StudentAndParent extends Api {
 
     public String getSnpPageUrl() throws IOException, NotLoggedInErrorException {
         if (null != getId()) {
-            return getBaseUrl().replace(SYMBOL_PLACEHOLDER, getSymbol()).replace("{ID}", getId());
+            return getBaseUrl();
         }
 
         // get url to uonetplus-opiekun.vulcan.net.pl
-        Document startPage = getPageByUrl(getStartPageUrl().replace(SYMBOL_PLACEHOLDER, getSymbol()));
+        Document startPage = getPageByUrl(getStartPageUrl());
         Element studentTileLink = startPage.select(".panel.linkownia.pracownik.klient > a").first();
 
         if (null == studentTileLink) {
@@ -79,7 +98,7 @@ public class StudentAndParent extends Api {
     }
 
     public String getExtractedIdFromUrl(String snpPageUrl) throws NotLoggedInErrorException {
-        String[] path = snpPageUrl.split("vulcan.net.pl/")[1].split("/");
+        String[] path = snpPageUrl.split(logHost + "/")[1].split("/");
 
         if (4 != path.length) {
             throw new NotLoggedInErrorException();
