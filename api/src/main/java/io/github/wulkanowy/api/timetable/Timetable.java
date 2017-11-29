@@ -94,6 +94,7 @@ public class Timetable {
 
         adTypeInfo(lesson, spans);
         addNormalLessonInfo(lesson, spans);
+        addChangesInfo(lesson, spans);
         addGroupLessonInfo(lesson, spans);
 
         return lesson;
@@ -117,37 +118,37 @@ public class Timetable {
         }
     }
 
-    private void addNormalLessonInfo(Lesson lesson, Elements spans) {
-        if (3 == spans.size()) {
-            lesson.setSubject(spans.get(0).text());
-            lesson.setTeacher(spans.get(1).text());
-            lesson.setRoom(spans.get(2).text());
-        }
-
+    private void addChangesInfo(Lesson lesson, Elements spans) {
         if (4 <= spans.size() && spans.last().hasClass(Lesson.CLASS_REALIZED)) {
-            lesson.setSubject(spans.first().text());
+            lesson.setSubject(spans.get(0).text());
             lesson.setTeacher(spans.get(1).text());
             lesson.setRoom(spans.get(2).text());
             lesson.setDescription(StringUtils.substringBetween(spans.last().text(), "(", ")"));
         }
     }
 
+    private void addNormalLessonInfo(Lesson lesson, Elements spans) {
+        if (3 == spans.size()) {
+            lesson.setSubject(spans.get(0).text());
+            lesson.setTeacher(spans.get(1).text());
+            lesson.setRoom(spans.get(2).text());
+        }
+    }
+
     private void addGroupLessonInfo(Lesson lesson, Elements spans) {
-        if (4 <= spans.size() && !spans.last().hasClass(Lesson.CLASS_REALIZED)) {
-            lesson.setDivisionIntoGroups(true);
-            lesson.setSubject(spans.first().text());
-            lesson.setTeacher(spans.get(2).text());
+        if (4 == spans.size() && !spans.last().hasClass(Lesson.CLASS_REALIZED)) {
             lesson.setRoom(spans.last().text());
         }
 
         if (5 == spans.size()) {
-            lesson.setDivisionIntoGroups(true);
-            lesson.setSubject(spans.first().text());
-            lesson.setTeacher(spans.get(2).text());
             lesson.setRoom(spans.get(3).text());
         }
 
         if ((4 == spans.size() && !spans.last().hasClass(Lesson.CLASS_REALIZED) || 5 == spans.size())) {
+            lesson.setDivisionIntoGroups(true);
+            lesson.setSubject(spans.get(0).text());
+            lesson.setTeacher(spans.get(2).text());
+
             String[] subjectNameArray = lesson.getSubject().split(" ");
             String groupName = subjectNameArray[subjectNameArray.length - 1];
             lesson.setSubject(lesson.getSubject().replace(" " + groupName, ""));

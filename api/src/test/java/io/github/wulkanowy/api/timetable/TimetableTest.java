@@ -114,9 +114,11 @@ public class TimetableTest extends StudentAndParentTestCase {
     @Test
     public void getLessonRoomTest() throws Exception {
         Assert.assertEquals("", std.getWeekTable().getDay(3).getLesson(3).getRoom());
-        Assert.assertEquals("32", full.getWeekTable().getDay(2).getLesson(8).getRoom());
         Assert.assertEquals("33", full.getWeekTable().getDay(0).getLesson(7).getRoom());
+        Assert.assertEquals("19", full.getWeekTable().getDay(0).getLesson(0).getRoom());
+        Assert.assertEquals("32", full.getWeekTable().getDay(1).getLesson(0).getRoom());
         Assert.assertEquals("32", full.getWeekTable().getDay(1).getLesson(8).getRoom());
+        Assert.assertEquals("32", full.getWeekTable().getDay(2).getLesson(8).getRoom());
         Assert.assertEquals("37", full.getWeekTable().getDay(4).getLesson(0).getRoom());
         Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getRoom());
     }
