@@ -29,17 +29,27 @@ public class Timetable {
                 .select(".mainContainer .presentData").first();
 
         Elements tableHeaderCells = table.select("thead th");
+
+        List<Day> days = getDays(tableHeaderCells);
+
+        setLessonToDays(table, days);
+
+        return new Week()
+                .setStartDayDate(tableHeaderCells.get(2).html().split("<br>")[1])
+                .setDays(days);
+    }
+
+    private List<Day> getDays(Elements tableHeaderCells) {
         List<Day> days = new ArrayList<>();
 
         for (int i = 2; i < 7; i++) {
             String[] dayHeaderCell = tableHeaderCells.get(i).html().split("<br>");
-            boolean isFreeDay = tableHeaderCells.get(i).hasClass("free-day");
 
             Day day = new Day();
             day.setDayName(dayHeaderCell[0]);
             day.setDate(dayHeaderCell[1].trim());
 
-            if (isFreeDay) {
+            if (tableHeaderCells.get(i).hasClass("free-day")) {
                 day.setFreeDay(true);
                 day.setFreeDayName(dayHeaderCell[2]);
             }
@@ -47,10 +57,11 @@ public class Timetable {
             days.add(day);
         }
 
-        Elements hoursInDays = table.select("tbody tr");
+        return days;
+    }
 
-        // fill days in week with lessons
-        for (Element row : hoursInDays) {
+    private void setLessonToDays(Element table, List<Day> days) {
+        for (Element row : table.select("tbody tr")) {
             Elements hours = row.select("td");
 
             // fill hours in day
@@ -73,33 +84,28 @@ public class Timetable {
                 String[] startEndEnd = hours.get(1).text().split(" ");
                 lesson.setStartTime(startEndEnd[0]);
                 lesson.setEndTime(startEndEnd[1]);
+
                 lesson.setDate(days.get(i - 2).getDate());
                 lesson.setNumber(hours.get(0).text());
 
                 days.get(i - 2).setLesson(lesson);
             }
         }
-
-        Element startDayCellHeader = tableHeaderCells.get(2);
-        String[] dayDescription = startDayCellHeader.html().split("<br>");
-
-        return new Week()
-                .setStartDayDate(dayDescription[1])
-                .setDays(days);
     }
 
     private Lesson getLessonFromElement(Element e) {
         Lesson lesson = new Lesson();
         Elements spans = e.select("span");
 
-        adTypeInfo(lesson, spans);
+        addTypeInfo(lesson, spans);
         addNormalLessonInfo(lesson, spans);
+        addChangesInfo(lesson, spans);
         addGroupLessonInfo(lesson, spans);
 
         return lesson;
     }
 
-    private void adTypeInfo(Lesson lesson, Elements spans) {
+    private void addTypeInfo(Lesson lesson, Elements spans) {
         if (spans.first().hasClass(Lesson.CLASS_PLANNING)) {
             lesson.setPlanning(true);
         }
@@ -123,9 +129,11 @@ public class Timetable {
             lesson.setTeacher(spans.get(1).text());
             lesson.setRoom(spans.get(2).text());
         }
+    }
 
+    private void addChangesInfo(Lesson lesson, Elements spans) {
         if (4 <= spans.size() && spans.last().hasClass(Lesson.CLASS_REALIZED)) {
-            lesson.setSubject(spans.first().text());
+            lesson.setSubject(spans.get(0).text());
             lesson.setTeacher(spans.get(1).text());
             lesson.setRoom(spans.get(2).text());
             lesson.setDescription(StringUtils.substringBetween(spans.last().text(), "(", ")"));
@@ -133,25 +141,23 @@ public class Timetable {
     }
 
     private void addGroupLessonInfo(Lesson lesson, Elements spans) {
-        if (4 <= spans.size() && !spans.last().hasClass(Lesson.CLASS_REALIZED)) {
-            lesson.setDivisionIntoGroups(true);
-            lesson.setSubject(spans.first().text());
-            lesson.setTeacher(spans.get(2).text());
+        if (4 == spans.size() && !spans.last().hasClass(Lesson.CLASS_REALIZED)) {
             lesson.setRoom(spans.last().text());
         }
 
         if (5 == spans.size()) {
-            lesson.setDivisionIntoGroups(true);
-            lesson.setSubject(spans.first().text());
-            lesson.setTeacher(spans.get(2).text());
             lesson.setRoom(spans.get(3).text());
         }
 
         if ((4 == spans.size() && !spans.last().hasClass(Lesson.CLASS_REALIZED) || 5 == spans.size())) {
-            String[] subjectNameArray = lesson.getSubject().split(" ");
+            String[] subjectNameArray = spans.get(0).text().split(" ");
             String groupName = subjectNameArray[subjectNameArray.length - 1];
-            lesson.setSubject(lesson.getSubject().replace(" " + groupName, ""));
+
+            lesson.setSubject(spans.get(0).text().replace(" " + groupName, ""));
             lesson.setGroupName(StringUtils.substringBetween(groupName, "[", "]"));
+
+            lesson.setTeacher(spans.get(2).text());
+            lesson.setDivisionIntoGroups(true);
         }
     }
 }
