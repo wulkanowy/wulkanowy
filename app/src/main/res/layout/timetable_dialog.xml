@@ -7,20 +7,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="400dp"
         android:minWidth="300dp"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:minHeight="400dp"
+            android:minHeight="450dp"
             android:paddingBottom="20dp"
             android:paddingEnd="20dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingStart="20dp"
             android:paddingTop="10dp"
+            android:id="@+id/timetable_dialog_relative_layout"
             tools:ignore="UselessParent">
 
             <TextView
@@ -154,6 +154,31 @@
                 android:textIsSelectable="true"
                 android:textSize="12sp" />
 
+            <TextView
+                android:id="@+id/timetable_dialog_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/timetable_dialog_time_value"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/timetable_dialog_description"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/timetable_dialog_description_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/timetable_dialog_description"
+                android:layout_marginTop="3dp"
+                android:text="@string/generic_app_no_data"
+                android:textColor="@color/colorPrimaryDark"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
+
             <Button
                 android:id="@+id/timetable_dialog_close"
                 android:layout_width="wrap_content"
@@ -161,6 +186,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_alignBottom="@id/timetable_dialog_description_value"
                 android:background="?attr/selectableItemBackground"
                 android:focusable="true"
                 android:text="@string/generic_dialog_close"

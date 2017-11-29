@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.dao.entities.Lesson;
 
@@ -42,6 +44,7 @@ public class TimetableDialogFragment extends DialogFragment {
         TextView groupText = view.findViewById(R.id.timetable_dialog_group_value);
         TextView roomText = view.findViewById(R.id.timetable_dialog_room_value);
         TextView timeText = view.findViewById(R.id.timetable_dialog_time_value);
+        TextView descriptionText = view.findViewById(R.id.timetable_dialog_description_value);
         Button closeButton = view.findViewById(R.id.timetable_dialog_close);
 
         if(!lesson.getSubject().isEmpty()) {
@@ -54,6 +57,9 @@ public class TimetableDialogFragment extends DialogFragment {
 
         if(!lesson.getGroupName().isEmpty()) {
             groupText.setText(lesson.getGroupName());
+        }else {
+            groupText.setVisibility(View.GONE);
+            view.findViewById(R.id.timetable_dialog_group).setVisibility(View.GONE);
         }
 
         if(!lesson.getRoom().isEmpty()) {
@@ -62,6 +68,13 @@ public class TimetableDialogFragment extends DialogFragment {
 
         if(!lesson.getEndTime().isEmpty() && !lesson.getStartTime().isEmpty()) {
             timeText.setText(String.format("%1$s - %2$s", lesson.getStartTime(), lesson.getEndTime()));
+        }
+
+        if(!lesson.getDescription().isEmpty()){
+            descriptionText.setText(StringUtils.capitalize(lesson.getDescription()));
+        }else {
+            descriptionText.setVisibility(View.GONE);
+            view.findViewById(R.id.timetable_dialog_description).setVisibility(View.GONE);
         }
 
         closeButton.setOnClickListener(new View.OnClickListener() {

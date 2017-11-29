@@ -3,6 +3,7 @@ package io.github.wulkanowy.activity.dashboard.timetable;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +28,10 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
         this.activity = activity;
     }
 
+    public Lesson getLesson() {
+        return lesson;
+    }
+
     @Override
     public boolean equals(Object o) {
         return this == o;
@@ -48,9 +53,14 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
         holder.getLessonTime().setText(String.format("%1$s - %2$s", lesson.getStartTime(), lesson.getEndTime()));
         holder.getNumberOfLesson().setText(lesson.getNumber());
         holder.getRoom().setText(lesson.getRoom());
-        holder.getDescription().setText(StringUtils.capitalize(lesson.getDescription()));
 
         holder.setDialog(lesson, activity);
+
+        if(lesson.getIsMovedOrCanceled() || lesson.getIsNewMovedInOrChanged()){
+            holder.getChange().setVisibility(View.VISIBLE);
+        }else {
+            holder.getChange().setVisibility(View.GONE);
+        }
 
         if (!lesson.getRoom().isEmpty()) {
             holder.getRoom().setText(holder.getContentView().getContext().getString(R.string.timetable_subitem_room, lesson.getRoom()));
@@ -67,16 +77,17 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
 
         private TextView room;
 
-        private TextView description;
+        private ImageView change;
 
         public SubItemViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
 
-            description = view.findViewById(R.id.timetable_subItem_description);
             lessonName = view.findViewById(R.id.timetable_subItem_lesson_text);
             numberOfLesson = view.findViewById(R.id.timetable_subItem_number_of_lesson);
             lessonTime = view.findViewById(R.id.timetable_subItem_time);
             room = view.findViewById(R.id.timetable_subItem_room);
+
+            change = view.findViewById(R.id.timetable_subItem_change_image);
         }
 
         public void setDialog(final Lesson lesson, final Activity activity) {
@@ -107,8 +118,8 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
             return room;
         }
 
-        public TextView getDescription() {
-            return description;
+        public ImageView getChange() {
+            return change;
         }
     }
 }

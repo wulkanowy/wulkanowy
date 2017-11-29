@@ -1,5 +1,6 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/timetable_subItem_cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -74,23 +75,14 @@
             android:textColor="#4C4C4C"
             android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/timetable_subItem_description"
+        <ImageView
+            android:id="@+id/timetable_subItem_change_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/timetable_subItem_number_of_lesson"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toEndOf="@id/timetable_subItem_room"
-            android:layout_toRightOf="@+id/timetable_subItem_room"
-            android:gravity="end"
-            android:maxLines="1"
-            android:text="@string/grades_text"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="13sp" />
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/ic_timetable_swap" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

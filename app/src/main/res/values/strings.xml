@@ -56,6 +56,7 @@
     <string name="timetable_dialog_room">Room</string>
     <string name="timetable_dialog_group">Group</string>
     <string name="timetable_dialog_time">Times</string>
+    <string name="timetable_dialog_description">Changes</string>
 
     <string name="generic_dialog_details">Details</string>
     <string name="generic_dialog_close">Close</string>

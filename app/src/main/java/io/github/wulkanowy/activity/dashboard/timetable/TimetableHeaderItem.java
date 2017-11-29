@@ -1,6 +1,7 @@
 package io.github.wulkanowy.activity.dashboard.timetable;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +42,21 @@ public class TimetableHeaderItem
     public void bindViewHolder(FlexibleAdapter adapter, HeaderViewHolder holder, int position, List payloads) {
         holder.getDayName().setText(StringUtils.capitalize(day.getDayName()));
         holder.getDate().setText(day.getDate());
+
+        boolean alertActive = false;
+
+        for (TimetableSubItem subItem : getSubItems()) {
+            if (subItem.getLesson().getIsMovedOrCanceled() ||
+                    subItem.getLesson().getIsNewMovedInOrChanged()) {
+                alertActive = true;
+            }
+        }
+
+        if (alertActive) {
+            holder.getAlert().setVisibility(View.VISIBLE);
+        } else {
+            holder.getAlert().setVisibility(View.GONE);
+        }
     }
 
     public static class HeaderViewHolder extends ExpandableViewHolder {
@@ -48,6 +64,8 @@ public class TimetableHeaderItem
         private TextView dayName;
 
         private TextView date;
+
+        private ImageView alert;
 
         public HeaderViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
@@ -61,6 +79,8 @@ public class TimetableHeaderItem
 
             dayName = view.findViewById(R.id.timetable_header_dayName_text);
             date = view.findViewById(R.id.timetable_header_date_text);
+
+            alert = view.findViewById(R.id.timetable_header_alert_image);
         }
 
         public TextView getDayName() {
@@ -69,6 +89,10 @@ public class TimetableHeaderItem
 
         public TextView getDate() {
             return date;
+        }
+
+        public ImageView getAlert() {
+            return alert;
         }
     }
 }
