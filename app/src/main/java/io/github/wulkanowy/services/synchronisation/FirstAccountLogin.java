@@ -20,16 +20,21 @@ import io.github.wulkanowy.services.LoginSession;
 
 public class FirstAccountLogin {
 
-
     private final Login login;
 
     private final Vulcan vulcan;
 
-    private final String email;
+    private String email;
 
     private final String password;
 
     private final String symbol;
+
+    private String creds;
+
+    private String logHost;
+
+    private String protocolSchema;
 
     public FirstAccountLogin(Login login, Vulcan vulcan, String email, String password, String symbol) {
         this.login = login;
@@ -37,10 +42,24 @@ public class FirstAccountLogin {
         this.email = email;
         this.password = password;
         this.symbol = symbol;
+
+        String[] creds = email.split("\\\\");
+
+        if (creds.length >= 2) {
+            String[] url = creds[0].split("://");
+            this.creds = creds[0];
+            this.protocolSchema = url[0];
+            this.logHost = url[1];
+            this.email = creds[2];
+        }
     }
 
-    public String connect()
-            throws BadCredentialsException, IOException {
+    public String connect() throws BadCredentialsException, IOException {
+        if (null != protocolSchema) {
+            login.setLogHost(logHost);
+            login.setProtocolSchema(protocolSchema);
+        }
+
         return login.sendCredentials(email, password, symbol);
     }
 
@@ -50,6 +69,11 @@ public class FirstAccountLogin {
         long userId;
 
         String realSymbol = login.sendCertificate(certificate, symbol);
+
+        if (null != creds) {
+            vulcan.setLogHost(logHost);
+            vulcan.setProtocolSchema(protocolSchema);
+        }
 
         vulcan.login(login.getCookiesObject(), realSymbol);
 
@@ -61,6 +85,10 @@ public class FirstAccountLogin {
                 .setPassword(safety.encrypt(email, password, context))
                 .setSymbol(vulcan.getStudentAndParent().getSymbol())
                 .setSnpId(vulcan.getStudentAndParent().getId());
+
+        if (null != creds) {
+            account.setLogHost(creds);
+        }
 
         userId = accountDao.insert(account);
 

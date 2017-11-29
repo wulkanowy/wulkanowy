@@ -30,6 +30,9 @@ public class Account {
     @Property(nameInDb = "SNPID")
     private String snpId;
 
+    @Property(nameInDb = "LOGHOST")
+    private String logHost;
+
     @ToMany(referencedJoinProperty = "userId")
     private List<Subject> subjectList;
 
@@ -48,15 +51,16 @@ public class Account {
     @Generated(hash = 335469827)
     private transient AccountDao myDao;
 
-    @Generated(hash = 735765217)
+    @Generated(hash = 502106837)
     public Account(Long id, String name, String email, String password, String symbol,
-            String snpId) {
+            String snpId, String logHost) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.symbol = symbol;
         this.snpId = snpId;
+        this.logHost = logHost;
     }
 
     @Generated(hash = 882125521)
@@ -211,6 +215,15 @@ public class Account {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.update(this);
+    }
+
+    public String getLogHost() {
+        return this.logHost;
+    }
+
+    public Account setLogHost(String logHost) {
+        this.logHost = logHost;
+        return this;
     }
 
     /** called by internal mechanisms, do not call yourself. */

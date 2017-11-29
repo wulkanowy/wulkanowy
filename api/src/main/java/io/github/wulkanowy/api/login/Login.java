@@ -6,6 +6,7 @@ import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import io.github.wulkanowy.api.Api;
 import io.github.wulkanowy.api.Cookies;
@@ -41,17 +42,16 @@ public class Login extends Api {
     public String getLoginPageUrl() {
         return loginPageUrl
                 .replace("{schema}", protocolSchema)
+                .replaceFirst(Pattern.quote("{host}"), logHost)
                 .replace("{host}", logHost.replace(":", "%253A"))
                 .replace("{symbol}", symbol);
     }
 
     public String getLoginEndpointPageUrl() {
-        String a = loginEndpointPageUrl
+        return loginEndpointPageUrl
                 .replace("{schema}", protocolSchema)
                 .replace("{host}", logHost)
                 .replace("{symbol}", symbol);
-
-        return a;
     }
 
     public String login(String email, String password, String symbol)
