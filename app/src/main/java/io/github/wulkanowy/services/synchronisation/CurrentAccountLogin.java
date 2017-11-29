@@ -46,7 +46,7 @@ public class CurrentAccountLogin {
             Safety safety = new Safety();
             Account account = accountDao.load(userId);
 
-            if (!account.getLogHost().isEmpty()) {
+            if (null != account.getLogHost()) {
                 String[] url = account.getLogHost().split("://");
                 vulcan.setProtocolSchema(url[0]);
                 vulcan.setLogHost(url[1]);
