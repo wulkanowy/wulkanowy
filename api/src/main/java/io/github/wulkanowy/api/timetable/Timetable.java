@@ -24,7 +24,7 @@ public class Timetable {
         return getWeekTable("");
     }
 
-    public Week getWeekTable(String tick) throws IOException {
+    public Week getWeekTable(final String tick) throws IOException {
         Element table = snp.getSnPPageDocument(TIMETABLE_PAGE_URL + tick)
                 .select(".mainContainer .presentData").first();
 
@@ -92,59 +92,66 @@ public class Timetable {
         Lesson lesson = new Lesson();
         Elements spans = e.select("span");
 
-        lesson.setSubject(spans.get(0).text());
-        lesson.setTeacher(spans.get(1).text());
-        lesson.setRoom(spans.get(2).text());
-
-        if (5 == spans.size()) {
-            lesson.setTeacher(spans.get(2).text());
-            lesson.setRoom(spans.get(3).text());
-        }
-
-        if (4 == spans.size() && !spans.last().hasClass("x-treelabel-rlz")) {
-            lesson.setRoom(spans.get(3).text());
-        }
-
-        addGroupDivisionInfo(lesson, spans);
         adTypeInfo(lesson, spans);
-        addDescriptionInfo(lesson, spans);
+        addNormalLessonInfo(lesson, spans);
+        addGroupLessonInfo(lesson, spans);
 
         return lesson;
     }
 
-    private void addGroupDivisionInfo(Lesson lesson, Elements e) {
-        if ((4 == e.size() && (e.first().attr("class").equals("")) ||
-                (5 == e.size() && e.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED)))) {
-            lesson.setDivisionIntoGroups(true);
-            String[] subjectNameArray = lesson.getSubject().split(" ");
-            String groupName = subjectNameArray[subjectNameArray.length - 1];
-            lesson.setSubject(lesson.getSubject().replace(" " + groupName, ""));
-            lesson.setGroupName(StringUtils.substringBetween(groupName, "[", "]"));
-            lesson.setTeacher(e.get(2).text());
-            lesson.setRoom(e.get(3).text());
-        }
-    }
-
-    private void adTypeInfo(Lesson lesson, Elements e) {
-        if (e.first().hasClass(Lesson.CLASS_MOVED_OR_CANCELED)) {
-            lesson.setMovedOrCanceled(true);
-        } else if (e.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED)) {
-            lesson.setNewMovedInOrChanged(true);
-        } else if (e.first().hasClass(Lesson.CLASS_PLANNING)) {
+    private void adTypeInfo(Lesson lesson, Elements spans) {
+        if (spans.first().hasClass(Lesson.CLASS_PLANNING)) {
             lesson.setPlanning(true);
         }
 
-        if (e.last().hasClass(Lesson.CLASS_REALIZED)
-                || e.first().attr("class").equals("")) {
+        if (spans.first().hasClass(Lesson.CLASS_MOVED_OR_CANCELED)) {
+            lesson.setMovedOrCanceled(true);
+        }
+
+        if (spans.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED)) {
+            lesson.setNewMovedInOrChanged(true);
+        }
+
+        if (spans.last().hasClass(Lesson.CLASS_REALIZED) || "".equals(spans.first().attr("class"))) {
             lesson.setRealized(true);
         }
     }
 
-    private void addDescriptionInfo(Lesson lesson, Elements e) {
-        if ((4 == e.size() || 5 == e.size())
-                && (e.first().hasClass(Lesson.CLASS_MOVED_OR_CANCELED)
-                || e.first().hasClass(Lesson.CLASS_NEW_MOVED_IN_OR_CHANGED))) {
-            lesson.setDescription(StringUtils.substringBetween(e.last().text(), "(", ")"));
+    private void addNormalLessonInfo(Lesson lesson, Elements spans) {
+        if (3 == spans.size()) {
+            lesson.setSubject(spans.get(0).text());
+            lesson.setTeacher(spans.get(1).text());
+            lesson.setRoom(spans.get(2).text());
+        }
+
+        if (4 <= spans.size() && spans.last().hasClass(Lesson.CLASS_REALIZED)) {
+            lesson.setSubject(spans.first().text());
+            lesson.setTeacher(spans.get(1).text());
+            lesson.setRoom(spans.get(2).text());
+            lesson.setDescription(StringUtils.substringBetween(spans.last().text(), "(", ")"));
+        }
+    }
+
+    private void addGroupLessonInfo(Lesson lesson, Elements spans) {
+        if (4 <= spans.size() && !spans.last().hasClass(Lesson.CLASS_REALIZED)) {
+            lesson.setDivisionIntoGroups(true);
+            lesson.setSubject(spans.first().text());
+            lesson.setTeacher(spans.get(2).text());
+            lesson.setRoom(spans.last().text());
+        }
+
+        if (5 == spans.size()) {
+            lesson.setDivisionIntoGroups(true);
+            lesson.setSubject(spans.first().text());
+            lesson.setTeacher(spans.get(2).text());
+            lesson.setRoom(spans.get(3).text());
+        }
+
+        if ((4 == spans.size() && !spans.last().hasClass(Lesson.CLASS_REALIZED) || 5 == spans.size())) {
+            String[] subjectNameArray = lesson.getSubject().split(" ");
+            String groupName = subjectNameArray[subjectNameArray.length - 1];
+            lesson.setSubject(lesson.getSubject().replace(" " + groupName, ""));
+            lesson.setGroupName(StringUtils.substringBetween(groupName, "[", "]"));
         }
     }
 }

@@ -96,6 +96,8 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertEquals("Zajęcia techniczne", std.getWeekTable().getDay(2).getLesson(4).getSubject());
         Assert.assertEquals("Język angielski", full.getWeekTable().getDay(0).getLesson(1).getSubject());
         Assert.assertEquals("Uroczyste zakończenie roku szkolnego", full.getWeekTable().getDay(4).getLesson(0).getSubject());
+        Assert.assertEquals("Fizyka", full.getWeekTable().getDay(0).getLesson(0).getSubject());
+        Assert.assertEquals("Metodologia programowania", full.getWeekTable().getDay(1).getLesson(0).getSubject());
         Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getSubject());
     }
 
@@ -134,6 +136,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertEquals("CH", std.getWeekTable().getDay(0).getLesson(2).getGroupName());
         Assert.assertEquals("JNPW", std.getWeekTable().getDay(4).getLesson(0).getGroupName());
         Assert.assertEquals("", full.getWeekTable().getDay(0).getLesson(7).getGroupName());
+        Assert.assertEquals("zaw2", full.getWeekTable().getDay(1).getLesson(0).getGroupName());
         Assert.assertEquals("wf2", full.getWeekTable().getDay(1).getLesson(3).getGroupName());
         Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getGroupName());
     }
@@ -180,7 +183,7 @@ public class TimetableTest extends StudentAndParentTestCase {
     public void getLessonIsPlanningTest() throws Exception {
         Assert.assertFalse(std.getWeekTable().getDay(4).getLesson(4).isPlanning());
         Assert.assertFalse(full.getWeekTable().getDay(0).getLesson(1).isPlanning());
-        Assert.assertFalse(full.getWeekTable().getDay(1).getLesson(3).isPlanning());
+        Assert.assertTrue(full.getWeekTable().getDay(1).getLesson(3).isPlanning());
         Assert.assertTrue(full.getWeekTable().getDay(4).getLesson(0).isPlanning());
         Assert.assertFalse(holidays.getWeekTable().getDay(3).getLesson(3).isPlanning());
     }
