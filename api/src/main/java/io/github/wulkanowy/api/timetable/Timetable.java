@@ -73,6 +73,9 @@ public class Timetable {
                     case 1:
                         lesson = getLessonFromElement(e.first());
                         break;
+                    case 2:
+                        lesson = getLessonFromElement(e.last());
+                        break;
                     case 3:
                         lesson = getLessonFromElement(e.get(1));
                         break;

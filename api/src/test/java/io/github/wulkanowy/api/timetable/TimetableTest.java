@@ -94,6 +94,7 @@ public class TimetableTest extends StudentAndParentTestCase {
     public void getLessonSubjectTest() throws Exception {
         Assert.assertEquals("Historia", std.getWeekTable().getDay(0).getLesson(1).getSubject());
         Assert.assertEquals("Zajęcia techniczne", std.getWeekTable().getDay(2).getLesson(4).getSubject());
+        Assert.assertEquals("Wychowanie fizyczne", std.getWeekTable().getDay(1).getLesson(1).getSubject());
         Assert.assertEquals("Język angielski", full.getWeekTable().getDay(0).getLesson(1).getSubject());
         Assert.assertEquals("Uroczyste zakończenie roku szkolnego", full.getWeekTable().getDay(4).getLesson(0).getSubject());
         Assert.assertEquals("Fizyka", full.getWeekTable().getDay(0).getLesson(0).getSubject());
@@ -126,6 +127,7 @@ public class TimetableTest extends StudentAndParentTestCase {
     @Test
     public void getLessonDescriptionTest() throws Exception {
         Assert.assertEquals("", std.getWeekTable().getDay(3).getLesson(3).getDescription());
+        Assert.assertEquals("przeniesiona z lekcji 7, 01.12.2017", full.getWeekTable().getDay(1).getLesson(1).getDescription());
         Assert.assertEquals("okienko dla uczniów", full.getWeekTable().getDay(0).getLesson(7).getDescription());
         Assert.assertEquals("przeniesiona z lekcji 7, 20.06.2017", full.getWeekTable().getDay(1).getLesson(2).getDescription());
         Assert.assertEquals("przeniesiona z lekcji 4, 20.06.2017", full.getWeekTable().getDay(1).getLesson(3).getDescription());
@@ -165,6 +167,7 @@ public class TimetableTest extends StudentAndParentTestCase {
     public void getLessonIsEmptyTest() throws Exception {
         Assert.assertFalse(std.getWeekTable().getDay(1).getLesson(4).isEmpty());
         Assert.assertTrue(std.getWeekTable().getDay(3).getLesson(7).isEmpty());
+        Assert.assertFalse(full.getWeekTable().getDay(1).getLesson(1).isEmpty());
         Assert.assertFalse(full.getWeekTable().getDay(1).getLesson(2).isEmpty());
         Assert.assertFalse(full.getWeekTable().getDay(0).getLesson(7).isEmpty());
         Assert.assertTrue(full.getWeekTable().getDay(2).getLesson(9).isEmpty());
