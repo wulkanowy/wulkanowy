@@ -1,80 +1,45 @@
 package io.github.wulkanowy.activity.dashboard.timetable;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.davidea.flexibleadapter.FlexibleAdapter;
-import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.activity.WulkanowyApp;
+import io.github.wulkanowy.activity.dashboard.AbstractFragment;
+import io.github.wulkanowy.activity.dashboard.AbstractRefreshTask;
+import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.dao.entities.Day;
 import io.github.wulkanowy.dao.entities.Lesson;
+import io.github.wulkanowy.services.LoginSession;
+import io.github.wulkanowy.services.VulcanSynchronization;
 
-public class TimetableFragment extends Fragment {
+public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
 
-    private List<TimetableHeaderItem> dayList = new ArrayList<>();
-
-    private long userId;
-
-    public TimetableFragment() {
-        //empty constructor for fragments
+    @Override
+    public int getLayout() {
+        return R.layout.fragment_timetable;
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_timetable, container, false);
-
-        if (getActivity() != null) {
-            DaoSession daoSession = ((WulkanowyApp) getActivity().getApplication()).getDaoSession();
-            userId = getActivity().getSharedPreferences("LoginData", Context.MODE_PRIVATE)
-                    .getLong("userId", 0);
-
-            if (dayList.isEmpty()) {
-                downloadTimetableFromDatabase(daoSession);
-                createViewWithAdapter(view);
-                setLoadingBarInvisible(view);
-            } else {
-                createViewWithAdapter(view);
-                setLoadingBarInvisible(view);
-            }
-        }
-
-
-        return view;
+    public int getRecyclerView() {
+        return R.id.timetable_recycler;
     }
 
-    private void setLoadingBarInvisible(View mainView) {
-        mainView.findViewById(R.id.timetable_progress_bar).setVisibility(View.INVISIBLE);
+    @Override
+    public int getLoadingBar() {
+        return R.id.timetable_progress_bar;
     }
 
-    private void createViewWithAdapter(View mainView) {
-        FlexibleAdapter<TimetableHeaderItem> flexibleAdapter = new FlexibleAdapter<>(dayList);
-        flexibleAdapter.setDisplayHeadersAtStartUp(true);
-        flexibleAdapter.setAutoCollapseOnExpand(false);
-        flexibleAdapter.setAutoScrollOnExpand(true);
-        flexibleAdapter.expandItemsAtStartUp();
+    @Override
+    public List<TimetableHeaderItem> getItems(DaoSession daoSession) {
+        List<Day> dayEntityList = daoSession.getAccountDao().load(getUserId()).getDayList();
 
-        RecyclerView recyclerView = mainView.findViewById(R.id.timetable_recycler);
-        recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(mainView.getContext()));
-        recyclerView.setAdapter(flexibleAdapter);
-    }
-
-    private void downloadTimetableFromDatabase(DaoSession daoSession) {
-
-        List<Day> dayEntityList = daoSession.getAccountDao().load(userId).getDayList();
-
-        dayList = new ArrayList<>();
+        List<TimetableHeaderItem> dayList = new ArrayList<>();
 
         for (Day day : dayEntityList) {
             List<TimetableSubItem> timetableSubItems = new ArrayList<>();
@@ -89,6 +54,37 @@ public class TimetableFragment extends Fragment {
             headerItem.setExpanded(false);
             headerItem.setSubItems(timetableSubItems);
             dayList.add(headerItem);
+        }
+        return dayList;
+    }
+
+
+    private static class RefreshTask extends AbstractRefreshTask {
+
+        public RefreshTask(View mainView, DaoSession daoSession) {
+            super(mainView, daoSession);
+        }
+
+        @Override
+        protected void executeInBackground() throws Exception {
+            VulcanSynchronization synchronization = new VulcanSynchronization(new LoginSession());
+            synchronization.loginCurrentUser(getContext(), getDaoSession(), new Vulcan());
+            synchronization.syncTimetable();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            if (result) {
+                Snackbar.make(getMainView().getRootView(), R.string.timetable_refresh_success,
+                        Snackbar.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), R.string.refresh_error_text, Toast.LENGTH_SHORT).show();
+            }
+
+            SwipeRefreshLayout swipeRefreshLayout = getMainView().findViewById(R.id.timetable_refresh_layout);
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 }
