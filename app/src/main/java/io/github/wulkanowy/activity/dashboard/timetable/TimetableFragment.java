@@ -31,6 +31,11 @@ public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
     }
 
     @Override
+    public int getRefreshLayout() {
+        return R.id.timetable_refresh_layout;
+    }
+
+    @Override
     public int getLoadingBar() {
         return R.id.timetable_progress_bar;
     }
