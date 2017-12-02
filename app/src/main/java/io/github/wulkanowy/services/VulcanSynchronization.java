@@ -55,55 +55,49 @@ public class VulcanSynchronization {
         loginSession = currentAccountLogin.loginCurrentUser();
     }
 
-    public boolean syncGrades() {
+    public void syncGrades() throws IOException {
         if (loginSession != null) {
             GradesSynchronisation gradesSynchronisation = new GradesSynchronisation();
             try {
                 gradesSynchronisation.sync(loginSession);
-                return true;
             } catch (Exception e) {
                 Log.e(VulcanJobHelper.DEBUG_TAG, "Synchronisation of grades failed", e);
-                return false;
+                throw new IOException(e.getCause());
             }
         } else {
             Log.e(VulcanJobHelper.DEBUG_TAG, "Before synchronization, should login user to log",
                     new UnsupportedOperationException());
-            return false;
         }
     }
 
-    public boolean syncSubjectsAndGrades() {
+    public void syncSubjectsAndGrades() throws IOException {
         if (loginSession != null) {
             SubjectsSynchronisation subjectsSynchronisation = new SubjectsSynchronisation();
             try {
                 subjectsSynchronisation.sync(loginSession);
                 syncGrades();
-                return true;
             } catch (Exception e) {
                 Log.e(VulcanJobHelper.DEBUG_TAG, "Synchronisation of subjects failed", e);
-                return false;
+                throw new IOException(e.getCause());
             }
         } else {
             Log.e(VulcanJobHelper.DEBUG_TAG, "Before synchronization, should login user to log",
                     new UnsupportedOperationException());
-            return false;
         }
     }
 
-    public boolean syncTimetable() {
+    public void syncTimetable() throws IOException {
         if (loginSession != null) {
             TimetableSynchronization timetableSynchronization = new TimetableSynchronization();
             try {
                 timetableSynchronization.sync(loginSession);
-                return true;
             } catch (Exception e) {
                 Log.e(VulcanJobHelper.DEBUG_TAG, "Synchronization of timetable failed", e);
-                return false;
+                throw new IOException(e.getCause());
             }
         } else {
             Log.e(VulcanJobHelper.DEBUG_TAG, "Before synchronization, should login user to log",
                     new UnsupportedOperationException());
-            return false;
         }
     }
 }

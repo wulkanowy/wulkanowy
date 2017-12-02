@@ -166,7 +166,6 @@ public class GradesFragment extends Fragment {
             try {
                 vulcanSynchronization.loginCurrentUser(activity.get(), daoSession, new Vulcan());
                 vulcanSynchronization.syncGrades();
-                vulcanSynchronization.syncTimetable();
                 downloadGradesFormDatabase(daoSession);
                 return true;
             } catch (Exception e) {
