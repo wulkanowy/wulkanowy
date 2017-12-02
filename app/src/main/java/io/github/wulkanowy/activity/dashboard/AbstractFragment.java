@@ -27,13 +27,13 @@ import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
-public abstract class AbstractFragment<K extends AbstractExpandableHeaderItem> extends Fragment {
+public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> extends Fragment {
 
-    private FlexibleAdapter<K> flexibleAdapter;
+    private FlexibleAdapter<T> flexibleAdapter;
 
     private DaoSession daoSession;
 
-    private List<K> itemList = new ArrayList<>();
+    private List<T> itemList = new ArrayList<>();
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -55,7 +55,7 @@ public abstract class AbstractFragment<K extends AbstractExpandableHeaderItem> e
         return daoSession;
     }
 
-    public void setItemList(List<K> itemList) {
+    public void setItemList(List<T> itemList) {
         this.itemList = itemList;
     }
 
@@ -67,7 +67,7 @@ public abstract class AbstractFragment<K extends AbstractExpandableHeaderItem> e
 
     public abstract int getRefreshLayoutId();
 
-    public abstract List<K> getItems();
+    public abstract List<T> getItems();
 
     public abstract void onRefresh() throws Exception;
 
