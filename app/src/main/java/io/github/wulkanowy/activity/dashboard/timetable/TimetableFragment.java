@@ -71,7 +71,7 @@ public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
                 Calendar calendar = Calendar.getInstance();
 
                 if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                    calendar.add(Calendar.DATE, 9);
+                    calendar.add(Calendar.DATE, 1);
                 } else if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                     calendar.add(Calendar.DATE, 2);
                 }
