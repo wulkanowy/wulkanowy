@@ -107,7 +107,6 @@ public class TimetableSynchronization {
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar.add(Calendar.DATE, numberOfDaysAdd);
-        Log.e("DUPA", calendar.getTime().toString());
         return calendar.getTime();
     }
 }

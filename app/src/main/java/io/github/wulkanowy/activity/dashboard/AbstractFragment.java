@@ -108,7 +108,6 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
 
     protected void initiationFlexibleAdapter() {
         flexibleAdapter = new FlexibleAdapter<>(itemList)
-                .setDisplayHeadersAtStartUp(true)
                 .setAutoCollapseOnExpand(true)
                 .setAutoScrollOnExpand(true)
                 .expandItemsAtStartUp();

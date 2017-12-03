@@ -17,6 +17,8 @@ public class WulkanowyApp extends Application {
 
     private DaoSession daoSession;
 
+    public static final String DEBUG_TAG = "WulaknowyActivity";
+
     @Override
     public void onCreate() {
         super.onCreate();
