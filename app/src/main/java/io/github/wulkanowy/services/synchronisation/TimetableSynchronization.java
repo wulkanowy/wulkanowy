@@ -7,9 +7,11 @@ import org.greenrobot.greendao.query.Query;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.timetable.Day;
@@ -25,33 +27,41 @@ import io.github.wulkanowy.utilities.DateHelper;
 public class TimetableSynchronization {
 
     public void sync(LoginSession loginSession) throws NotLoggedInErrorException, IOException, ParseException {
-
         DayDao dayDao = loginSession.getDaoSession().getDayDao();
         LessonDao lessonDao = loginSession.getDaoSession().getLessonDao();
 
         Week currentWeek = loginSession.getVulcan().getTimetable().getWeekTable();
-        //Week nextWeek = loginSession.getVulcan().getTimetable().getWeekTable(String.valueOf(DateHelper.getDate()))
+        Week nextWeek = loginSession.getVulcan().getTimetable()
+                .getWeekTable(String.valueOf(DateHelper.getTicks(getDateOfNextMonday())));
 
-        List<Day> dayList = currentWeek.getDays();
-        List<io.github.wulkanowy.dao.entities.Day> dayEntityList = ConversionVulcanObject
-                .daysToDaysEntities(dayList);
-        List<io.github.wulkanowy.dao.entities.Day> updatedDayEntityList = new ArrayList<>();
+        List<Day> currentDayList = currentWeek.getDays();
+        List<Day> nextDayList = nextWeek.getDays();
 
         DayDao.dropTable(dayDao.getDatabase(), true);
         DayDao.createTable(dayDao.getDatabase(), false);
 
-        for (io.github.wulkanowy.dao.entities.Day day : dayEntityList) {
-            day.setUserId(loginSession.getUserId());
-            updatedDayEntityList.add(day);
-        }
+        List<io.github.wulkanowy.dao.entities.Day> allDayList = new ArrayList<>();
+        allDayList.addAll(getPreparedDaysList(currentDayList, loginSession.getUserId()));
+        allDayList.addAll(getPreparedDaysList(nextDayList, loginSession.getUserId()));
 
-        dayDao.insertInTx(updatedDayEntityList);
+        dayDao.insertInTx(allDayList);
 
+        Log.d(VulcanJobHelper.DEBUG_TAG, "Synchronization days (amount = " + allDayList.size() + ")");
 
         LessonDao.dropTable(lessonDao.getDatabase(), true);
         LessonDao.createTable(lessonDao.getDatabase(), false);
 
-        int amount = 0;
+        List<Lesson> allLessonList = new ArrayList<>();
+        allLessonList.addAll(getPreparedLessonsList(currentDayList, dayDao));
+        allLessonList.addAll(getPreparedLessonsList(nextDayList, dayDao));
+
+        lessonDao.insertInTx(allLessonList);
+
+        Log.d(VulcanJobHelper.DEBUG_TAG, "Synchronization lessons (amount = " + allLessonList.size() + ")");
+    }
+
+    private List<Lesson> getPreparedLessonsList(List<Day> dayList, DayDao dayDao) {
+        List<Lesson> allLessonsList = new ArrayList<>();
 
         for (Day day : dayList) {
 
@@ -68,11 +78,36 @@ public class TimetableSynchronization {
                     updatedLessonEntityList.add(lesson);
                 }
             }
+            allLessonsList.addAll(updatedLessonEntityList);
+        }
+        return allLessonsList;
+    }
 
-            lessonDao.insertInTx(updatedLessonEntityList);
-            amount += updatedLessonEntityList.size();
+    private List<io.github.wulkanowy.dao.entities.Day> getPreparedDaysList(List<Day> dayList, long userId){
+        List<io.github.wulkanowy.dao.entities.Day> updatedDayList = new ArrayList<>();
+        List<io.github.wulkanowy.dao.entities.Day> dayEntityList = ConversionVulcanObject
+                .daysToDaysEntities(dayList);
+        for (io.github.wulkanowy.dao.entities.Day day : dayEntityList) {
+            day.setUserId(userId);
+            updatedDayList.add(day);
+        }
+        return updatedDayList;
+    }
+
+    private Date getDateOfNextMonday() {
+        Calendar calendar = Calendar.getInstance();
+
+        int numberOfDaysAdd;
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            numberOfDaysAdd = 14;
+        } else {
+            numberOfDaysAdd = 7;
         }
 
-        Log.d(VulcanJobHelper.DEBUG_TAG, "Synchronization lessons (amount = " + String.valueOf(amount + ")"));
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar.add(Calendar.DATE, numberOfDaysAdd);
+        Log.e("DUPA", calendar.getTime().toString());
+        return calendar.getTime();
     }
 }
