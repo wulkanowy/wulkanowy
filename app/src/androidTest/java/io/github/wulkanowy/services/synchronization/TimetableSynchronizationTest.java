@@ -25,6 +25,7 @@ import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.synchronisation.TimetableSynchronization;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -51,8 +52,15 @@ public class TimetableSynchronizationTest {
                 .setLesson(new Lesson().setSubject("Matematyka").setRoom("20")));
         Week week = new Week().setDays(dayList);
 
+        List<Day> nextDayList = new ArrayList<>();
+        dayList.add(new Day()
+                .setDate("24.11.2013")
+                .setLesson(new Lesson().setSubject("Matematyka").setRoom("22")));
+        Week nextWeek = new Week().setDays(nextDayList);
+
         Timetable timetable = mock(Timetable.class);
         doReturn(week).when(timetable).getWeekTable();
+        doReturn(nextWeek).when(timetable).getWeekTable(anyString());
 
         Vulcan vulcan = mock(Vulcan.class);
         doReturn(timetable).when(vulcan).getTimetable();
