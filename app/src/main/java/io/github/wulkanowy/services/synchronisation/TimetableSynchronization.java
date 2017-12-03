@@ -6,6 +6,8 @@ import android.util.Log;
 import org.greenrobot.greendao.query.Query;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,17 +20,19 @@ import io.github.wulkanowy.dao.entities.LessonDao;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.jobs.VulcanJobHelper;
 import io.github.wulkanowy.utilities.ConversionVulcanObject;
+import io.github.wulkanowy.utilities.DateHelper;
 
 public class TimetableSynchronization {
 
-    public void sync(LoginSession loginSession) throws NotLoggedInErrorException, IOException {
+    public void sync(LoginSession loginSession) throws NotLoggedInErrorException, IOException, ParseException {
 
         DayDao dayDao = loginSession.getDaoSession().getDayDao();
         LessonDao lessonDao = loginSession.getDaoSession().getLessonDao();
 
-        Week week = loginSession.getVulcan().getTimetable().getWeekTable();
+        Week currentWeek = loginSession.getVulcan().getTimetable().getWeekTable();
+        //Week nextWeek = loginSession.getVulcan().getTimetable().getWeekTable(String.valueOf(DateHelper.getDate()))
 
-        List<Day> dayList = week.getDays();
+        List<Day> dayList = currentWeek.getDays();
         List<io.github.wulkanowy.dao.entities.Day> dayEntityList = ConversionVulcanObject
                 .daysToDaysEntities(dayList);
         List<io.github.wulkanowy.dao.entities.Day> updatedDayEntityList = new ArrayList<>();

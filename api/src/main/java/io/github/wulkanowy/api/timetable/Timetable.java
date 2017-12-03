@@ -5,8 +5,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.github.wulkanowy.api.StudentAndParent;
 
@@ -20,11 +24,11 @@ public class Timetable {
         this.snp = snp;
     }
 
-    public Week getWeekTable() throws IOException {
+    public Week getWeekTable() throws IOException, ParseException {
         return getWeekTable("");
     }
 
-    public Week getWeekTable(final String tick) throws IOException {
+    public Week getWeekTable(final String tick) throws IOException, ParseException {
         Element table = snp.getSnPPageDocument(TIMETABLE_PAGE_URL + tick)
                 .select(".mainContainer .presentData").first();
 
@@ -35,19 +39,23 @@ public class Timetable {
         setLessonToDays(table, days);
 
         return new Week()
-                .setStartDayDate(tableHeaderCells.get(2).html().split("<br>")[1])
+                .setStartDayDate(days.get(0).getDate())
                 .setDays(days);
     }
 
-    private List<Day> getDays(Elements tableHeaderCells) {
+    private List<Day> getDays(Elements tableHeaderCells) throws ParseException {
         List<Day> days = new ArrayList<>();
 
         for (int i = 2; i < 7; i++) {
             String[] dayHeaderCell = tableHeaderCells.get(i).html().split("<br>");
 
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.ROOT);
+            Date d = sdf.parse(dayHeaderCell[1].trim());
+            sdf.applyPattern("yyyy-MM-dd");
+
             Day day = new Day();
             day.setDayName(dayHeaderCell[0]);
-            day.setDate(dayHeaderCell[1].trim());
+            day.setDate(sdf.format(d));
 
             if (tableHeaderCells.get(i).hasClass("free-day")) {
                 day.setFreeDay(true);

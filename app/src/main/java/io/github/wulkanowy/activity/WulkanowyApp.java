@@ -20,6 +20,7 @@ public class WulkanowyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        enableDebugLog();
 
         DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, "wulkanowy-database");
         Database database = devOpenHelper.getWritableDb();
@@ -36,8 +37,10 @@ public class WulkanowyApp extends Application {
             editor.apply();
         }
 
-        QueryBuilder.LOG_VALUES = true;
+    }
 
+    private void enableDebugLog(){
+        QueryBuilder.LOG_VALUES = true;
         FlexibleAdapter.enableLogs(Log.Level.DEBUG);
     }
 

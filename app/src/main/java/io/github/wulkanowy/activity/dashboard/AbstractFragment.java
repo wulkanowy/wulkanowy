@@ -1,6 +1,7 @@
 package io.github.wulkanowy.activity.dashboard;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -71,7 +72,7 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
 
     public abstract void onRefresh() throws Exception;
 
-    public abstract void onPostRefresh(Boolean result);
+    public abstract void onPostRefresh(Boolean result, Activity activity);
 
     @Nullable
     @Override
@@ -116,7 +117,7 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
             @Override
             public void onRefresh() {
                 if (ConnectionUtilities.isOnline(getContext())) {
-                    new RefreshTask(AbstractFragment.this).execute();
+                    new RefreshTask(AbstractFragment.this, getActivity()).execute();
                 } else {
                     Toast.makeText(getContext(), R.string.noInternet_text, Toast.LENGTH_SHORT).show();
                     getRefreshLayoutView().setRefreshing(false);
@@ -140,9 +141,11 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
     }
 
     protected void setFlexibleAdapterOnRecyclerView(View mainView) {
-        RecyclerView recyclerView = mainView.findViewById(getRecyclerViewId());
-        recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(mainView.getContext()));
-        recyclerView.setAdapter(flexibleAdapter);
+        if(mainView != null) {
+            RecyclerView recyclerView = mainView.findViewById(getRecyclerViewId());
+            recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(mainView.getContext()));
+            recyclerView.setAdapter(flexibleAdapter);
+        }
     }
 
     public static class RefreshTask extends AsyncTask<Void, Void, Boolean> {
@@ -151,8 +154,11 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
 
         private WeakReference<AbstractFragment> abstractFragment;
 
-        public RefreshTask(AbstractFragment abstractFragment) {
+        private WeakReference<Activity> activity;
+
+        public RefreshTask(AbstractFragment abstractFragment, Activity activity) {
             this.abstractFragment = new WeakReference<>(abstractFragment);
+            this.activity = new WeakReference<>(activity);
         }
 
         @SuppressWarnings("unchecked")
@@ -172,7 +178,7 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
             abstractFragment.get().updateDataInRecyclerView();
-            abstractFragment.get().onPostRefresh(result);
+            abstractFragment.get().onPostRefresh(result, activity.get());
             abstractFragment.get().getRefreshLayoutView().setRefreshing(false);
         }
     }
