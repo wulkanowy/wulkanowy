@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -84,6 +85,7 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), container, false);
+        RecyclerView recyclerView = view.findViewById(getRecyclerViewId());
 
         if (getActivity() != null) {
             activityWeakReference = new WeakReference<Activity>(getActivity());
@@ -96,10 +98,10 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
             if (itemList.isEmpty()) {
                 setItemList(getItems());
                 initiationFlexibleAdapter();
-                setFlexibleAdapterOnRecyclerView(view);
+                setAdapterOnRecyclerView(recyclerView);
                 setLoadingBarInvisible(view);
             } else {
-                setFlexibleAdapterOnRecyclerView(view);
+                setAdapterOnRecyclerView(recyclerView);
                 setLoadingBarInvisible(view);
             }
         }
@@ -115,7 +117,9 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
 
     protected void updateDataInRecyclerView() {
         flexibleAdapter.updateDataSet(itemList);
-        setFlexibleAdapterOnRecyclerView(getView());
+        if (getView() != null) {
+            setAdapterOnRecyclerView((RecyclerView) getView().findViewById(getRecyclerViewId()));
+        }
     }
 
     @NonNull
@@ -147,12 +151,9 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
         mainView.findViewById(getLoadingBarId()).setVisibility(View.INVISIBLE);
     }
 
-    protected void setFlexibleAdapterOnRecyclerView(View mainView) {
-        if (mainView != null) {
-            RecyclerView recyclerView = mainView.findViewById(getRecyclerViewId());
-            recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(mainView.getContext()));
-            recyclerView.setAdapter(flexibleAdapter);
-        }
+    protected void setAdapterOnRecyclerView(RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(getActivityWeakReference()));
+        recyclerView.setAdapter(flexibleAdapter);
     }
 
     public static class RefreshTask extends AsyncTask<Void, Void, Boolean> {

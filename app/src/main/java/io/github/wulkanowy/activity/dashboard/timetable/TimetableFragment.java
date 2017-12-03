@@ -1,6 +1,7 @@
 package io.github.wulkanowy.activity.dashboard.timetable;
 
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.VulcanSynchronization;
 
 public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
+
+    private int positionToScroll;
 
     @Override
     public int getLayoutId() {
@@ -48,6 +51,8 @@ public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
 
         List<TimetableHeaderItem> dayList = new ArrayList<>();
 
+        int iterator = -1;
+
         for (Day day : dayEntityList) {
             List<TimetableSubItem> timetableSubItems = new ArrayList<>();
 
@@ -66,15 +71,18 @@ public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
                 Calendar calendar = Calendar.getInstance();
 
                 if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                    calendar.add(Calendar.DATE, 1);
+                    calendar.add(Calendar.DATE, 9);
                 } else if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                     calendar.add(Calendar.DATE, 2);
                 }
+
+                iterator++;
 
                 calendar = zeroingCalendar(calendar);
 
                 if (date.compareTo(calendar.getTime()) == 0) {
                     headerItem.setExpanded(true);
+                    positionToScroll = iterator;
                 }
 
             } catch (Exception e) {
@@ -85,6 +93,12 @@ public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
             dayList.add(headerItem);
         }
         return dayList;
+    }
+
+    @Override
+    protected void setAdapterOnRecyclerView(RecyclerView recyclerView) {
+        super.setAdapterOnRecyclerView(recyclerView);
+        recyclerView.scrollToPosition(positionToScroll);
     }
 
     @Override
