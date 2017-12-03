@@ -1,6 +1,5 @@
 package io.github.wulkanowy.activity.dashboard.timetable;
 
-import android.app.Activity;
 import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
@@ -68,9 +67,9 @@ public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
     }
 
     @Override
-    public void onPostRefresh(Boolean result, Activity activity) {
+    public void onPostRefresh(Boolean result) {
         if (result) {
-            Snackbar.make(activity.findViewById(R.id.fragment_container),
+            Snackbar.make(getActivityWeakReference().findViewById(R.id.fragment_container),
                     R.string.timetable_refresh_success, Snackbar.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getActivity(), R.string.refresh_error_text, Toast.LENGTH_SHORT).show();
