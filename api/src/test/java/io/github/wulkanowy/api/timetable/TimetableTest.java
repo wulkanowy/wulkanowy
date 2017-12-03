@@ -32,9 +32,9 @@ public class TimetableTest extends StudentAndParentTestCase {
 
     @Test
     public void getStartDayDateTest() throws Exception {
-        Assert.assertEquals("19.06.2017", std.getWeekTable().getStartDayDate());
-        Assert.assertEquals("19.06.2017", full.getWeekTable().getStartDayDate());
-        Assert.assertEquals("31.07.2017", holidays.getWeekTable().getStartDayDate());
+        Assert.assertEquals("2017-06-19", std.getWeekTable().getStartDayDate());
+        Assert.assertEquals("2017-06-19", full.getWeekTable().getStartDayDate());
+        Assert.assertEquals("2017-07-31", holidays.getWeekTable().getStartDayDate());
     }
 
     // Day
@@ -50,11 +50,11 @@ public class TimetableTest extends StudentAndParentTestCase {
 
     @Test
     public void getDayDateTest() throws Exception {
-        Assert.assertEquals("19.06.2017", std.getWeekTable().getDay(0).getDate());
-        Assert.assertEquals("23.06.2017", std.getWeekTable().getDay(4).getDate());
-        Assert.assertEquals("20.06.2017", full.getWeekTable().getDay(1).getDate());
-        Assert.assertEquals("22.06.2017", full.getWeekTable().getDay(3).getDate());
-        Assert.assertEquals("02.08.2017", holidays.getWeekTable().getDay(2).getDate());
+        Assert.assertEquals("2017-06-19", std.getWeekTable().getDay(0).getDate());
+        Assert.assertEquals("2017-06-23", std.getWeekTable().getDay(4).getDate());
+        Assert.assertEquals("2017-06-20", full.getWeekTable().getDay(1).getDate());
+        Assert.assertEquals("2017-06-22", full.getWeekTable().getDay(3).getDate());
+        Assert.assertEquals("2017-08-02", holidays.getWeekTable().getDay(2).getDate());
     }
 
     @Test
