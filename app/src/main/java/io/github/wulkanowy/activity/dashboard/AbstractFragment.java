@@ -32,13 +32,15 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
 
     private FlexibleAdapter<T> flexibleAdapter;
 
-    private DaoSession daoSession;
-
     private List<T> itemList = new ArrayList<>();
 
     private WeakReference<Activity> activityWeakReference;
 
     private SwipeRefreshLayout swipeRefreshLayout;
+
+    private RecyclerView recyclerViewLayout;
+
+    private DaoSession daoSession;
 
     private long userId;
 
@@ -84,7 +86,15 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), container, false);
-        RecyclerView recyclerView = view.findViewById(getRecyclerViewId());
+        recyclerViewLayout = view.findViewById(getRecyclerViewId());
+        swipeRefreshLayout = view.findViewById(getRefreshLayoutId());
+        setUpRefreshLayout(swipeRefreshLayout);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         if (getActivity() != null) {
             activityWeakReference = new WeakReference<Activity>(getActivity());
@@ -92,29 +102,27 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
             userId = getActivity().getSharedPreferences("LoginData", Context.MODE_PRIVATE)
                     .getLong("userId", 0);
 
-            setUpRefreshLayout(view);
-
             if (itemList.isEmpty()) {
                 setItemList(getItems());
-                initiationFlexibleAdapter();
-                setAdapterOnRecyclerView(recyclerView);
-                setLoadingBarInvisible(view);
+                flexibleAdapter = onInitiationFlexibleAdapter(itemList);
+                setAdapterOnRecyclerView(recyclerViewLayout);
+                setLoadingBarInvisible(getView());
             } else {
-                setAdapterOnRecyclerView(recyclerView);
-                setLoadingBarInvisible(view);
+                setAdapterOnRecyclerView(recyclerViewLayout);
+                setLoadingBarInvisible(getView());
             }
         }
-        return view;
     }
 
-    protected void initiationFlexibleAdapter() {
-        flexibleAdapter = new FlexibleAdapter<>(itemList)
+    @NonNull
+    protected FlexibleAdapter<T> onInitiationFlexibleAdapter(List<T> itemList) {
+        return new FlexibleAdapter<>(itemList)
                 .setAutoCollapseOnExpand(true)
                 .setAutoScrollOnExpand(true)
                 .expandItemsAtStartUp();
     }
 
-    protected void updateDataInRecyclerView() {
+    private void updateDataInRecyclerView() {
         flexibleAdapter.updateDataSet(itemList);
         if (getView() != null) {
             setAdapterOnRecyclerView((RecyclerView) getView().findViewById(getRecyclerViewId()));
@@ -122,7 +130,7 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
     }
 
     @NonNull
-    protected final SwipeRefreshLayout.OnRefreshListener getDefaultRefreshListener() {
+    private SwipeRefreshLayout.OnRefreshListener getDefaultRefreshListener() {
         return new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -130,23 +138,18 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
                     new RefreshTask(AbstractFragment.this).execute();
                 } else {
                     Toast.makeText(getContext(), R.string.noInternet_text, Toast.LENGTH_SHORT).show();
-                    getRefreshLayoutView().setRefreshing(false);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
         };
     }
 
-    protected void setUpRefreshLayout(View mainView) {
-        swipeRefreshLayout = mainView.findViewById(getRefreshLayoutId());
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.black,
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+    protected void setUpRefreshLayout(SwipeRefreshLayout swipeRefreshLayout) {
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.black);
         swipeRefreshLayout.setOnRefreshListener(getDefaultRefreshListener());
     }
 
-    protected void setLoadingBarInvisible(View mainView) {
+    protected final void setLoadingBarInvisible(View mainView) {
         mainView.findViewById(getLoadingBarId()).setVisibility(View.INVISIBLE);
     }
 

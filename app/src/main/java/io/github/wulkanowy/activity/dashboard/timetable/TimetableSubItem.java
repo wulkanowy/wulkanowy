@@ -2,6 +2,7 @@ package io.github.wulkanowy.activity.dashboard.timetable;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.graphics.Paint;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,6 +61,11 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
             holder.getChange().setVisibility(View.VISIBLE);
         }else {
             holder.getChange().setVisibility(View.GONE);
+        }
+
+        if(lesson.getIsMovedOrCanceled()){
+            holder.getLessonName().setPaintFlags(holder.getLessonName().getPaintFlags()
+                    | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
         if (!lesson.getRoom().isEmpty()) {
