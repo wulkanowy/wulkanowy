@@ -21,7 +21,7 @@ public class TimetableDialogFragment extends DialogFragment {
 
     private Lesson lesson;
 
-    public static final TimetableDialogFragment newInstance(Lesson lesson) {
+    public static TimetableDialogFragment newInstance(Lesson lesson) {
         return new TimetableDialogFragment().setLesson(lesson);
     }
 
@@ -53,6 +53,9 @@ public class TimetableDialogFragment extends DialogFragment {
 
         if(!lesson.getTeacher().isEmpty()) {
             teacherText.setText(lesson.getTeacher());
+        }else {
+            teacherText.setVisibility(View.GONE);
+            view.findViewById(R.id.timetable_dialog_teacher).setVisibility(View.GONE);
         }
 
         if(!lesson.getGroupName().isEmpty()) {

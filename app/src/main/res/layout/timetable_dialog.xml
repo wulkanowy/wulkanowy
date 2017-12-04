@@ -32,11 +32,37 @@
                 android:layout_gravity="start"
                 android:gravity="center_vertical"
                 android:maxLines="5"
-                android:minHeight="70dp"
+                android:minHeight="60dp"
                 android:minLines="2"
+                android:paddingTop="10dp"
                 android:text="@string/generic_dialog_details"
                 android:textIsSelectable="true"
                 android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/timetable_dialog_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/timetable_dialog_details"
+                android:layout_marginTop="10dp"
+                android:text="@string/timetable_dialog_description"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/timetable_dialog_description_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/timetable_dialog_description"
+                android:layout_marginTop="3dp"
+                android:text="@string/generic_app_no_data"
+                android:textColor="@color/colorPrimaryDark"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/timetable_dialog_lesson"
@@ -44,7 +70,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/timetable_dialog_details"
+                android:layout_below="@+id/timetable_dialog_description_value"
+                android:layout_marginTop="10dp"
                 android:text="@string/timetable_dialog_lesson"
                 android:textIsSelectable="true"
                 android:textSize="17sp" />
@@ -153,31 +180,6 @@
                 android:textIsSelectable="true"
                 android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/timetable_dialog_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/timetable_dialog_time_value"
-                android:layout_marginTop="10dp"
-                android:text="@string/timetable_dialog_description"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/timetable_dialog_description_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/timetable_dialog_description"
-                android:layout_marginTop="3dp"
-                android:text="@string/generic_app_no_data"
-                android:textColor="@color/colorPrimaryDark"
-                android:textIsSelectable="true"
-                android:textSize="12sp" />
-
             <Button
                 android:id="@+id/timetable_dialog_close"
                 android:layout_width="wrap_content"
@@ -186,7 +188,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/timetable_dialog_time_value"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="25dp"
                 android:background="?attr/selectableItemBackground"
                 android:focusable="true"
                 android:text="@string/generic_dialog_close"

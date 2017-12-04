@@ -7,10 +7,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem;
 import eu.davidea.viewholders.FlexibleViewHolder;
@@ -50,50 +50,52 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, SubItemViewHolder holder, int position, List payloads) {
-        holder.getLessonName().setText(lesson.getSubject());
-        holder.getLessonTime().setText(String.format("%1$s - %2$s", lesson.getStartTime(), lesson.getEndTime()));
-        holder.getNumberOfLesson().setText(lesson.getNumber());
-        holder.getRoom().setText(lesson.getRoom());
+        holder.lessonName.setText(lesson.getSubject(), TextView.BufferType.SPANNABLE);
+        holder.lessonTime.setText(String.format("%1$s - %2$s", lesson.getStartTime(), lesson.getEndTime()));
+        holder.numberOfLesson.setText(lesson.getNumber());
+        holder.room.setText(lesson.getRoom());
 
         holder.setDialog(lesson, activity);
 
-        if(lesson.getIsMovedOrCanceled() || lesson.getIsNewMovedInOrChanged()){
-            holder.getChange().setVisibility(View.VISIBLE);
-        }else {
-            holder.getChange().setVisibility(View.GONE);
+        if (lesson.getIsMovedOrCanceled() || lesson.getIsNewMovedInOrChanged()) {
+            holder.change.setVisibility(View.VISIBLE);
+        } else {
+            holder.change.setVisibility(View.GONE);
         }
 
-        if(lesson.getIsMovedOrCanceled()){
-            holder.getLessonName().setPaintFlags(holder.getLessonName().getPaintFlags()
+        if (lesson.getIsMovedOrCanceled()) {
+            holder.lessonName.setPaintFlags(holder.lessonName.getPaintFlags()
                     | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.lessonName.setPaintFlags(holder.lessonName.getPaintFlags()
+                    & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
 
         if (!lesson.getRoom().isEmpty()) {
-            holder.getRoom().setText(holder.getContentView().getContext().getString(R.string.timetable_subitem_room, lesson.getRoom()));
+            holder.room.setText(holder.getContentView().getContext().getString(R.string.timetable_subitem_room, lesson.getRoom()));
         }
     }
 
     public static class SubItemViewHolder extends FlexibleViewHolder {
 
-        private TextView lessonName;
+        @BindView(R.id.timetable_subItem_lesson_text)
+        public TextView lessonName;
 
-        private TextView numberOfLesson;
+        @BindView(R.id.timetable_subItem_number_of_lesson)
+        public TextView numberOfLesson;
 
-        private TextView lessonTime;
+        @BindView(R.id.timetable_subItem_time)
+        public TextView lessonTime;
 
-        private TextView room;
+        @BindView(R.id.timetable_subItem_room)
+        public TextView room;
 
-        private ImageView change;
+        @BindView(R.id.timetable_subItem_change_image)
+        public ImageView change;
 
         public SubItemViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
-
-            lessonName = view.findViewById(R.id.timetable_subItem_lesson_text);
-            numberOfLesson = view.findViewById(R.id.timetable_subItem_number_of_lesson);
-            lessonTime = view.findViewById(R.id.timetable_subItem_time);
-            room = view.findViewById(R.id.timetable_subItem_room);
-
-            change = view.findViewById(R.id.timetable_subItem_change_image);
+            ButterKnife.bind(this, view);
         }
 
         public void setDialog(final Lesson lesson, final Activity activity) {
@@ -105,27 +107,6 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
                     dialogFragment.show(activity.getFragmentManager(), lesson.toString());
                 }
             });
-
-        }
-
-        public TextView getLessonName() {
-            return lessonName;
-        }
-
-        public TextView getNumberOfLesson() {
-            return numberOfLesson;
-        }
-
-        public TextView getLessonTime() {
-            return lessonTime;
-        }
-
-        public TextView getRoom() {
-            return room;
-        }
-
-        public ImageView getChange() {
-            return change;
         }
     }
 }
