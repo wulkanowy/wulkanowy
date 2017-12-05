@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import eu.davidea.viewholders.ExpandableViewHolder;
@@ -40,8 +42,8 @@ public class TimetableHeaderItem
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, HeaderViewHolder holder, int position, List payloads) {
-        holder.getDayName().setText(StringUtils.capitalize(day.getDayName()));
-        holder.getDate().setText(day.getDate());
+        holder.dayName.setText(StringUtils.capitalize(day.getDayName()));
+        holder.date.setText(day.getDate());
 
         boolean alertActive = false;
 
@@ -53,46 +55,32 @@ public class TimetableHeaderItem
         }
 
         if (alertActive) {
-            holder.getAlert().setVisibility(View.VISIBLE);
+            holder.alert.setVisibility(View.VISIBLE);
         } else {
-            holder.getAlert().setVisibility(View.GONE);
+            holder.alert.setVisibility(View.GONE);
         }
     }
 
     public static class HeaderViewHolder extends ExpandableViewHolder {
 
-        private TextView dayName;
+        @BindView(R.id.timetable_header_dayName_text)
+        public TextView dayName;
 
-        private TextView date;
+        @BindView(R.id.timetable_header_date_text)
+        public TextView date;
 
-        private ImageView alert;
+        @BindView(R.id.timetable_header_alert_image)
+        public ImageView alert;
 
         public HeaderViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
-
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     toggleExpansion();
                 }
             });
-
-            dayName = view.findViewById(R.id.timetable_header_dayName_text);
-            date = view.findViewById(R.id.timetable_header_date_text);
-
-            alert = view.findViewById(R.id.timetable_header_alert_image);
-        }
-
-        public TextView getDayName() {
-            return dayName;
-        }
-
-        public TextView getDate() {
-            return date;
-        }
-
-        public ImageView getAlert() {
-            return alert;
+            ButterKnife.bind(this, view);
         }
     }
 }

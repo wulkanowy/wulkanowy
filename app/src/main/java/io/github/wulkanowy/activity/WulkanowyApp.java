@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.utils.Log;
 import io.github.wulkanowy.dao.entities.DaoMaster;
@@ -44,6 +45,7 @@ public class WulkanowyApp extends Application {
     private void enableDebugLog(){
         QueryBuilder.LOG_VALUES = true;
         FlexibleAdapter.enableLogs(Log.Level.DEBUG);
+        ButterKnife.setDebug(true);
     }
 
     public DaoSession getDaoSession() {

@@ -1,9 +1,9 @@
 package io.github.wulkanowy.activity.dashboard.timetable;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,6 +45,7 @@ public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
         return R.id.timetable_progress_bar;
     }
 
+    @NonNull
     @Override
     public List<TimetableHeaderItem> getItems() {
         List<Day> dayEntityList = getDaoSession().getAccountDao().load(getUserId()).getDayList();
@@ -96,7 +97,7 @@ public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
     }
 
     @Override
-    protected void setAdapterOnRecyclerView(RecyclerView recyclerView) {
+    protected void setAdapterOnRecyclerView(@NonNull RecyclerView recyclerView) {
         super.setAdapterOnRecyclerView(recyclerView);
         recyclerView.scrollToPosition(positionToScroll);
     }
@@ -109,13 +110,12 @@ public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
     }
 
     @Override
-    public void onPostRefresh(Boolean result) {
-        if (result) {
-            Snackbar.make(getActivityWeakReference().findViewById(R.id.fragment_container),
-                    R.string.timetable_refresh_success, Snackbar.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getActivity(), R.string.refresh_error_text, Toast.LENGTH_SHORT).show();
+    public void onPostRefresh(int stringResult) {
+        if(stringResult == 0){
+            stringResult = R.string.timetable_refresh_success;
         }
+        Snackbar.make(getActivityWeakReference().findViewById(R.id.fragment_container),
+                stringResult, Snackbar.LENGTH_SHORT).show();
     }
 
     private Calendar zeroingCalendar(Calendar calendar) {

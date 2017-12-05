@@ -50,7 +50,7 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, SubItemViewHolder holder, int position, List payloads) {
-        holder.lessonName.setText(lesson.getSubject(), TextView.BufferType.SPANNABLE);
+        holder.lessonName.setText(lesson.getSubject());
         holder.lessonTime.setText(String.format("%1$s - %2$s", lesson.getStartTime(), lesson.getEndTime()));
         holder.numberOfLesson.setText(lesson.getNumber());
         holder.room.setText(lesson.getRoom());

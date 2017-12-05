@@ -65,6 +65,7 @@
     <string name="generic_dialog_teacher">Nauczyciel</string>
 
     <string name="generic_app_no_data">Brak danych</string>
+    <string name="generic_timeout_error">Zbyt długie oczekiwanie na połączenie</string>
 
     <string name="snackbar_no_grades">Brak nowych ocen</string>
     <string name="snackbar_new_grade">Ilość nowych ocen: %1$d</string>

@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.WulkanowyApp;
@@ -87,6 +89,10 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 return R.string.error_bad_account_permission;
             } catch (CryptoException e) {
                 return R.string.encrypt_failed_text;
+            } catch (UnknownHostException e) {
+                return R.string.noInternet_text;
+            } catch (SocketTimeoutException e) {
+                return R.string.generic_timeout_error;
             } catch (NotLoggedInErrorException | IOException e) {
                 return R.string.login_denied_text;
             } catch (UnsupportedOperationException e) {
@@ -147,11 +153,11 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                         .setTitle(R.string.alert_dialog_blocked_app)
                         .setMessage(R.string.alert_dialog_blocked_app_message)
                         .setPositiveButton(R.string.generic_dialog_close, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
                 alertDialog.show();
                 break;
 
