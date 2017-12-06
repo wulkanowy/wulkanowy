@@ -45,7 +45,6 @@ public class WulkanowyApp extends Application {
     private void enableDebugLog(){
         QueryBuilder.LOG_VALUES = true;
         FlexibleAdapter.enableLogs(Log.Level.DEBUG);
-        ButterKnife.setDebug(true);
     }
 
     public DaoSession getDaoSession() {

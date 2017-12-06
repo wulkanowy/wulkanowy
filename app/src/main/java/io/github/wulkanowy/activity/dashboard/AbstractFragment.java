@@ -98,7 +98,9 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
                     .getLong("userId", 0);
 
             if (itemList.isEmpty()) {
-                new QuarryTask(this).execute();
+                flexibleAdapter = getFlexibleAdapter(itemList);
+                setAdapterOnRecyclerView(recyclerViewLayout);
+                new DatabaseQueryTask(this).execute();
             } else {
                 setAdapterOnRecyclerView(recyclerViewLayout);
                 setLoadingBarInvisible(getView());
@@ -109,7 +111,7 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
     @Override
     public void onQuarryProcessFinish(@NonNull List<T> resultItemList) {
         itemList = resultItemList;
-        flexibleAdapter = onInitiationFlexibleAdapter(itemList);
+        flexibleAdapter = getFlexibleAdapter(itemList);
         setAdapterOnRecyclerView(recyclerViewLayout);
         if (getView() != null) {
             setLoadingBarInvisible(getView());
@@ -119,26 +121,19 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
     @Override
     public void onRefreshProcessFinish(@Nullable List<T> resultItemList, int stringEventId) {
         if (resultItemList != null) {
-            updateDataInRecyclerView();
-            itemList = resultItemList;
+           itemList = resultItemList;
+           updateDataInRecyclerView();
         }
         onPostRefresh(stringEventId);
         getRefreshLayoutView().setRefreshing(false);
     }
 
     @NonNull
-    protected FlexibleAdapter<T> onInitiationFlexibleAdapter(@NonNull List<T> itemList) {
+    protected FlexibleAdapter<T> getFlexibleAdapter(@NonNull List<T> itemList) {
         return new FlexibleAdapter<>(itemList)
                 .setAutoCollapseOnExpand(true)
                 .setAutoScrollOnExpand(true)
                 .expandItemsAtStartUp();
-    }
-
-    private void updateDataInRecyclerView() {
-        flexibleAdapter.updateDataSet(itemList);
-        if (getView() != null) {
-            setAdapterOnRecyclerView((RecyclerView) getView().findViewById(getRecyclerViewId()));
-        }
     }
 
     @NonNull
@@ -147,13 +142,18 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
             @Override
             public void onRefresh() {
                 if (ConnectionUtilities.isOnline(getContext())) {
-                   new RefreshTask(AbstractFragment.this).execute();
+                    new RefreshTask(AbstractFragment.this).execute();
                 } else {
                     Toast.makeText(getContext(), R.string.noInternet_text, Toast.LENGTH_SHORT).show();
                     swipeRefreshLayout.setRefreshing(false);
                 }
             }
         };
+    }
+
+    private void updateDataInRecyclerView() {
+        flexibleAdapter.updateDataSet(itemList);
+        setAdapterOnRecyclerView(recyclerViewLayout);
     }
 
     protected void setUpRefreshLayout(@NonNull SwipeRefreshLayout swipeRefreshLayout) {

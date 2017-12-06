@@ -4,11 +4,11 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-public class QuarryTask extends AsyncTask<Void, Void, List<?>> {
+public class DatabaseQueryTask extends AsyncTask<Void, Void, List<?>> {
 
     private AbstractFragment abstractFragment;
 
-    public QuarryTask(AbstractFragment<?> abstractFragment) {
+    public DatabaseQueryTask(AbstractFragment<?> abstractFragment) {
         this.abstractFragment = abstractFragment;
     }
 
