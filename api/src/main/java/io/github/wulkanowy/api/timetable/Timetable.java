@@ -143,7 +143,20 @@ public class Timetable {
     }
 
     private void addChangesInfo(Lesson lesson, Elements spans) {
-        if (4 <= spans.size() && spans.last().hasClass(Lesson.CLASS_REALIZED)) {
+        if (!spans.last().hasClass(Lesson.CLASS_REALIZED)) {
+            return;
+        }
+
+        if (7 == spans.size()) {
+            lesson.setSubject(spans.get(3).text());
+            lesson.setTeacher(spans.get(4).text());
+            lesson.setRoom(spans.get(5).text());
+            lesson.setMovedOrCanceled(false);
+            lesson.setNewMovedInOrChanged(true);
+            lesson.setDescription(
+                    StringUtils.substringBetween(spans.last().text(), "(", ")")
+                            + " (poprzednio: " + spans.get(0).text() + ")");
+        } else if (4 <= spans.size()) {
             lesson.setSubject(spans.get(0).text());
             lesson.setTeacher(spans.get(1).text());
             lesson.setRoom(spans.get(2).text());

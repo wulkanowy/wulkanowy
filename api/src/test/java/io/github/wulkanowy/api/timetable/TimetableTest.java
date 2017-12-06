@@ -96,6 +96,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertEquals("Zajęcia techniczne", std.getWeekTable().getDay(2).getLesson(4).getSubject());
         Assert.assertEquals("Wychowanie fizyczne", std.getWeekTable().getDay(1).getLesson(1).getSubject());
         Assert.assertEquals("Język angielski", full.getWeekTable().getDay(0).getLesson(1).getSubject());
+        Assert.assertEquals("Wychowanie do życia w rodzinie", full.getWeekTable().getDay(2).getLesson(0).getSubject());
         Assert.assertEquals("Uroczyste zakończenie roku szkolnego", full.getWeekTable().getDay(4).getLesson(0).getSubject());
         Assert.assertEquals("Fizyka", full.getWeekTable().getDay(0).getLesson(0).getSubject());
         Assert.assertEquals("Metodologia programowania", full.getWeekTable().getDay(1).getLesson(0).getSubject());
@@ -108,6 +109,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertEquals("Chlebowski Stanisław", std.getWeekTable().getDay(2).getLesson(4).getTeacher());
         Assert.assertEquals("Kobczyk Iwona", full.getWeekTable().getDay(0).getLesson(1).getTeacher());
         Assert.assertEquals("Bączek Grzegorz", full.getWeekTable().getDay(0).getLesson(7).getTeacher());
+        Assert.assertEquals("Nowak Jadwiga", full.getWeekTable().getDay(2).getLesson(0).getTeacher());
         Assert.assertEquals("Baran Małgorzata", full.getWeekTable().getDay(4).getLesson(0).getTeacher());
         Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getTeacher());
     }
@@ -131,6 +133,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertEquals("okienko dla uczniów", full.getWeekTable().getDay(0).getLesson(7).getDescription());
         Assert.assertEquals("przeniesiona z lekcji 7, 20.06.2017", full.getWeekTable().getDay(1).getLesson(2).getDescription());
         Assert.assertEquals("przeniesiona z lekcji 4, 20.06.2017", full.getWeekTable().getDay(1).getLesson(3).getDescription());
+        Assert.assertEquals("zastępstwo", full.getWeekTable().getDay(2).getLesson(0).getDescription());
         Assert.assertEquals("", full.getWeekTable().getDay(4).getLesson(0).getDescription());
         Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getDescription());
     }
