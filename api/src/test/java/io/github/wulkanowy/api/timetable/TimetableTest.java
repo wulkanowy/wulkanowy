@@ -97,6 +97,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertEquals("Wychowanie fizyczne", std.getWeekTable().getDay(1).getLesson(1).getSubject());
         Assert.assertEquals("Język angielski", full.getWeekTable().getDay(0).getLesson(1).getSubject());
         Assert.assertEquals("Wychowanie do życia w rodzinie", full.getWeekTable().getDay(2).getLesson(0).getSubject());
+        Assert.assertEquals("Wychowanie fizyczne", full.getWeekTable().getDay(3).getLesson(1).getSubject());
         Assert.assertEquals("Uroczyste zakończenie roku szkolnego", full.getWeekTable().getDay(4).getLesson(0).getSubject());
         Assert.assertEquals("Fizyka", full.getWeekTable().getDay(0).getLesson(0).getSubject());
         Assert.assertEquals("Metodologia programowania", full.getWeekTable().getDay(1).getLesson(0).getSubject());
@@ -110,6 +111,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertEquals("Kobczyk Iwona", full.getWeekTable().getDay(0).getLesson(1).getTeacher());
         Assert.assertEquals("Bączek Grzegorz", full.getWeekTable().getDay(0).getLesson(7).getTeacher());
         Assert.assertEquals("Nowak Jadwiga", full.getWeekTable().getDay(2).getLesson(0).getTeacher());
+        Assert.assertEquals("Nowicka Irena", full.getWeekTable().getDay(3).getLesson(1).getTeacher());
         Assert.assertEquals("Baran Małgorzata", full.getWeekTable().getDay(4).getLesson(0).getTeacher());
         Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getTeacher());
     }
@@ -122,6 +124,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertEquals("32", full.getWeekTable().getDay(1).getLesson(0).getRoom());
         Assert.assertEquals("32", full.getWeekTable().getDay(1).getLesson(8).getRoom());
         Assert.assertEquals("32", full.getWeekTable().getDay(2).getLesson(8).getRoom());
+        Assert.assertEquals("G4", full.getWeekTable().getDay(3).getLesson(1).getRoom());
         Assert.assertEquals("37", full.getWeekTable().getDay(4).getLesson(0).getRoom());
         Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getRoom());
     }
@@ -134,6 +137,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertEquals("przeniesiona z lekcji 7, 20.06.2017", full.getWeekTable().getDay(1).getLesson(2).getDescription());
         Assert.assertEquals("przeniesiona z lekcji 4, 20.06.2017", full.getWeekTable().getDay(1).getLesson(3).getDescription());
         Assert.assertEquals("zastępstwo (poprzednio: Religia)", full.getWeekTable().getDay(2).getLesson(0).getDescription());
+        Assert.assertEquals("zastępstwo (poprzednio: Wychowanie fizyczne)", full.getWeekTable().getDay(3).getLesson(1).getDescription());
         Assert.assertEquals("", full.getWeekTable().getDay(4).getLesson(0).getDescription());
         Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getDescription());
     }
@@ -145,6 +149,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertEquals("", full.getWeekTable().getDay(0).getLesson(7).getGroupName());
         Assert.assertEquals("zaw2", full.getWeekTable().getDay(1).getLesson(0).getGroupName());
         Assert.assertEquals("wf2", full.getWeekTable().getDay(1).getLesson(3).getGroupName());
+        Assert.assertEquals("zaw1", full.getWeekTable().getDay(3).getLesson(1).getGroupName());
         Assert.assertEquals("", holidays.getWeekTable().getDay(3).getLesson(3).getGroupName());
     }
 
@@ -184,6 +189,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertTrue(std.getWeekTable().getDay(4).getLesson(0).isDivisionIntoGroups());
         Assert.assertFalse(full.getWeekTable().getDay(0).getLesson(7).isDivisionIntoGroups());
         Assert.assertTrue(full.getWeekTable().getDay(1).getLesson(3).isDivisionIntoGroups());
+        Assert.assertTrue(full.getWeekTable().getDay(3).getLesson(1).isDivisionIntoGroups());
         Assert.assertFalse(holidays.getWeekTable().getDay(3).getLesson(3).isDivisionIntoGroups());
     }
 
@@ -220,6 +226,7 @@ public class TimetableTest extends StudentAndParentTestCase {
         Assert.assertFalse(full.getWeekTable().getDay(0).getLesson(1).isNewMovedInOrChanged());
         Assert.assertTrue(full.getWeekTable().getDay(1).getLesson(2).isNewMovedInOrChanged());
         Assert.assertTrue(full.getWeekTable().getDay(1).getLesson(3).isNewMovedInOrChanged());
+        Assert.assertTrue(full.getWeekTable().getDay(3).getLesson(1).isNewMovedInOrChanged());
         Assert.assertFalse(holidays.getWeekTable().getDay(3).getLesson(3).isNewMovedInOrChanged());
     }
 }

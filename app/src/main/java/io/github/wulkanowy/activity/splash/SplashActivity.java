@@ -11,7 +11,7 @@ import io.github.wulkanowy.BuildConfig;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
 import io.github.wulkanowy.activity.login.LoginActivity;
-import io.github.wulkanowy.services.jobs.GradeJob;
+import io.github.wulkanowy.services.jobs.FullSyncJob;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -36,8 +36,7 @@ public class SplashActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         } else {
-            GradeJob gradesSync = new GradeJob();
-            gradesSync.scheduledJob(this);
+            new FullSyncJob().scheduledJob(getApplicationContext());
 
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);

@@ -35,8 +35,7 @@ public abstract class VulcanService extends JobService {
         return true;
     }
 
-    public abstract void workToBePerformed() throws CryptoException, BadCredentialsException,
-            NotLoggedInErrorException, AccountPermissionException, IOException;
+    public abstract void workToBePerformed() throws Exception;
 
     private static class SyncTask extends AsyncTask<Void, Void, Void> {
 

@@ -77,7 +77,6 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:importantForAutofill="noExcludeDescendants"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -98,7 +97,6 @@
                     android:imeActionLabel="@string/action_sign_in"
                     android:imeOptions="actionDone"
                     android:fontFamily="sans-serif"
-                    android:importantForAutofill="noExcludeDescendants"
                     />
 
             </android.support.design.widget.TextInputLayout>

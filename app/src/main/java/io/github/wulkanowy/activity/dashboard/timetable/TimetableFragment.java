@@ -104,8 +104,8 @@ public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
 
     @Override
     public void onRefresh() throws Exception {
-        VulcanSynchronization synchronization = new VulcanSynchronization(new LoginSession());
-        synchronization.loginCurrentUser(getContext(), getDaoSession(), new Vulcan());
+        VulcanSynchronization synchronization = new VulcanSynchronization();
+        synchronization.loginCurrentUser(getContext(), getDaoSession());
         synchronization.syncTimetable();
     }
 

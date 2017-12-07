@@ -11,59 +11,49 @@ import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.activity.dashboard.DashboardActivity;
-import io.github.wulkanowy.api.Vulcan;
-import io.github.wulkanowy.api.login.AccountPermissionException;
-import io.github.wulkanowy.api.login.BadCredentialsException;
-import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.dao.DatabaseAccess;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.dao.entities.Grade;
-import io.github.wulkanowy.security.CryptoException;
-import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.VulcanSynchronization;
-import io.github.wulkanowy.services.notifications.NotificationHelper;
+import io.github.wulkanowy.services.notifications.NotificationBuilder;
 
-public class GradeJob extends VulcanJobHelper {
+public class FullSyncJob extends VulcanJobHelper<FullSyncJob> {
 
-    private static final String UNIQUE_TAG = "GradesSync34512";
+    private static final String UNIQUE_TAG = "FullSync";
 
     private static final int DEFAULT_INTERVAL_START = 60 * 50;
 
-    private static final int DEFAULT_INTERVAL_END = DEFAULT_INTERVAL_START + (60 * 10);
+    private static final int DEFAULT_INTERVAL_END = DEFAULT_INTERVAL_START + (60 * 40);
 
     @Override
     protected Job createJob(FirebaseJobDispatcher dispatcher) {
         return dispatcher.newJobBuilder()
                 .setLifetime(Lifetime.FOREVER)
-                .setService(GradeService.class)
+                .setService(SyncService.class)
                 .setTag(UNIQUE_TAG)
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(DEFAULT_INTERVAL_START, DEFAULT_INTERVAL_END))
                 .setConstraints(Constraint.ON_ANY_NETWORK)
-                .setReplaceCurrent(true)
+                .setReplaceCurrent(false)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                 .build();
     }
 
-    public static class GradeService extends VulcanService {
+    public class SyncService extends VulcanService {
 
         @Override
-        public void workToBePerformed() throws CryptoException, BadCredentialsException,
-                NotLoggedInErrorException, AccountPermissionException, IOException {
-
+        public void workToBePerformed() throws Exception {
             DaoSession daoSession = ((WulkanowyApp) getApplication()).getDaoSession();
 
-            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
-            vulcanSynchronization.loginCurrentUser(getApplicationContext(), daoSession, new Vulcan());
-            vulcanSynchronization.syncGrades();
-
+            VulcanSynchronization synchronization = new VulcanSynchronization()
+                    .loginCurrentUser(getApplicationContext(), daoSession);
+            synchronization.syncAll();
             List<Grade> newGradeList = new DatabaseAccess().getNewGrades(daoSession);
 
             if (newGradeList.size() == 1) {
@@ -81,10 +71,10 @@ public class GradeJob extends VulcanJobHelper {
             PendingIntent pendingIntent = PendingIntent
                     .getActivity(getApplicationContext(), 0, intent, 0);
 
-            NotificationHelper notificationHelper = new NotificationHelper(getApplicationContext());
-            NotificationCompat.Builder builder = notificationHelper
+            NotificationBuilder notificationBuilder = new NotificationBuilder(getApplicationContext());
+            NotificationCompat.Builder builder = notificationBuilder
                     .getNotifications(title, bodyText, pendingIntent);
-            notificationHelper.getManager().notify(new Random().nextInt(10000), builder.build());
+            notificationBuilder.getManager().notify(new Random().nextInt(10000), builder.build());
         }
     }
 }

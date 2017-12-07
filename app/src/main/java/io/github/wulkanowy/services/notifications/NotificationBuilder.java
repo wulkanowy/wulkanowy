@@ -13,7 +13,7 @@ import android.support.v4.app.NotificationCompat;
 
 import io.github.wulkanowy.R;
 
-public class NotificationHelper extends ContextWrapper {
+public class NotificationBuilder extends ContextWrapper {
 
     private NotificationManager manager;
 
@@ -21,7 +21,7 @@ public class NotificationHelper extends ContextWrapper {
 
     public static final String CHANNEL_NAME = "New Grade Channel";
 
-    public NotificationHelper(Context context) {
+    public NotificationBuilder(Context context) {
         super(context);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();

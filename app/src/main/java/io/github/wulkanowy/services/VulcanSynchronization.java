@@ -33,6 +33,10 @@ public class VulcanSynchronization {
         this.loginSession = loginSession;
     }
 
+    public VulcanSynchronization(){
+        this.loginSession = new LoginSession();
+    }
+
     public void firstLoginConnectStep(String email, String password, String symbol)
             throws BadCredentialsException, IOException {
         firstAccountLogin = new FirstAccountLogin(new Login(new Cookies()), new Vulcan(), email, password, symbol);
@@ -49,10 +53,22 @@ public class VulcanSynchronization {
         }
     }
 
-    public void loginCurrentUser(Context context, DaoSession daoSession, Vulcan vulcan)
-            throws CryptoException, BadCredentialsException, AccountPermissionException, LoginErrorException, IOException {
+    public VulcanSynchronization loginCurrentUser(Context context, DaoSession daoSession) throws CryptoException,
+            BadCredentialsException, AccountPermissionException, LoginErrorException, IOException{
+        return loginCurrentUser(context, daoSession, new Vulcan());
+    }
+
+    public VulcanSynchronization loginCurrentUser(Context context, DaoSession daoSession, Vulcan vulcan)
+            throws CryptoException, BadCredentialsException, AccountPermissionException,
+            LoginErrorException, IOException {
         CurrentAccountLogin currentAccountLogin = new CurrentAccountLogin(context, daoSession, vulcan);
         loginSession = currentAccountLogin.loginCurrentUser();
+        return this;
+    }
+
+    public void syncAll() throws IOException{
+        syncSubjectsAndGrades();
+        syncTimetable();
     }
 
     public void syncGrades() throws IOException {

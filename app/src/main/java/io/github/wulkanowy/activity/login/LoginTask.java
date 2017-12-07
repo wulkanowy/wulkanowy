@@ -30,7 +30,7 @@ import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.VulcanSynchronization;
-import io.github.wulkanowy.services.jobs.GradeJob;
+import io.github.wulkanowy.services.jobs.FullSyncJob;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 /**
@@ -80,8 +80,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 vulcanSynchronization.firstLoginSignInStep(activity.get(), daoSession);
 
                 publishProgress("3", activity.get().getResources().getString(R.string.step_synchronization));
-                vulcanSynchronization.syncSubjectsAndGrades();
-                vulcanSynchronization.syncTimetable();
+               vulcanSynchronization.syncAll();
 
             } catch (BadCredentialsException e) {
                 return R.string.login_bad_credentials_text;
@@ -99,8 +98,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 return -1;
             }
 
-            GradeJob gradeJob = new GradeJob();
-            gradeJob.scheduledJob(activity.get());
+            new FullSyncJob().scheduledJob(activity.get());
 
             return R.string.login_accepted_text;
 
