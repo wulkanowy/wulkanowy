@@ -45,7 +45,7 @@ public class FullSyncJob extends VulcanJobHelper<FullSyncJob> {
                 .build();
     }
 
-    public class SyncService extends VulcanService {
+    public static class SyncService extends VulcanService {
 
         @Override
         public void workToBePerformed() throws Exception {
