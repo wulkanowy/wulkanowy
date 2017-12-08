@@ -1,6 +1,8 @@
 package io.github.wulkanowy.services.synchronisation;
 
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.greenrobot.greendao.query.Query;
@@ -11,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.timetable.Day;
@@ -26,38 +27,35 @@ import io.github.wulkanowy.utilities.DateHelper;
 
 public class TimetableSynchronization {
 
-    public void sync(LoginSession loginSession) throws NotLoggedInErrorException, IOException, ParseException {
+    public void sync(@NonNull LoginSession loginSession, @Nullable Date dateOfMonday) throws NotLoggedInErrorException,
+            IOException, ParseException {
         DayDao dayDao = loginSession.getDaoSession().getDayDao();
         LessonDao lessonDao = loginSession.getDaoSession().getLessonDao();
 
-        Week currentWeek = loginSession.getVulcan().getTimetable().getWeekTable();
-        Week nextWeek = loginSession.getVulcan().getTimetable()
-                .getWeekTable(String.valueOf(DateHelper.getTicks(getDateOfNextMonday())));
+        Week week = dateOfMonday == null ? loginSession.getVulcan().getTimetable().getWeekTable()
+                : loginSession.getVulcan().getTimetable()
+                .getWeekTable(String.valueOf(DateHelper.getTicks(dateOfMonday)));
 
-        List<Day> currentDayList = currentWeek.getDays();
-        List<Day> nextDayList = nextWeek.getDays();
+
+        List<Day> dayList = week.getDays();
 
         DayDao.dropTable(dayDao.getDatabase(), true);
         DayDao.createTable(dayDao.getDatabase(), false);
 
-        List<io.github.wulkanowy.dao.entities.Day> allDayList = new ArrayList<>();
-        allDayList.addAll(getPreparedDaysList(currentDayList, loginSession.getUserId()));
-        allDayList.addAll(getPreparedDaysList(nextDayList, loginSession.getUserId()));
+        dayDao.insertInTx(getPreparedDaysList(dayList, loginSession.getUserId()));
 
-        dayDao.insertInTx(allDayList);
+        Log.d(VulcanJobHelper.DEBUG_TAG, "Synchronization days (amount = " + dayList.size() + ")");
 
-        Log.d(VulcanJobHelper.DEBUG_TAG, "Synchronization days (amount = " + allDayList.size() + ")");
 
         LessonDao.dropTable(lessonDao.getDatabase(), true);
         LessonDao.createTable(lessonDao.getDatabase(), false);
 
-        List<Lesson> allLessonList = new ArrayList<>();
-        allLessonList.addAll(getPreparedLessonsList(currentDayList, dayDao));
-        allLessonList.addAll(getPreparedLessonsList(nextDayList, dayDao));
+        List<Lesson> lessonList = new ArrayList<>();
+        lessonList.addAll(getPreparedLessonsList(dayList, dayDao));
 
-        lessonDao.insertInTx(allLessonList);
+        lessonDao.insertInTx(lessonList);
 
-        Log.d(VulcanJobHelper.DEBUG_TAG, "Synchronization lessons (amount = " + allLessonList.size() + ")");
+        Log.d(VulcanJobHelper.DEBUG_TAG, "Synchronization lessons (amount = " + lessonList.size() + ")");
     }
 
     private List<Lesson> getPreparedLessonsList(List<Day> dayList, DayDao dayDao) {
@@ -83,7 +81,7 @@ public class TimetableSynchronization {
         return allLessonsList;
     }
 
-    private List<io.github.wulkanowy.dao.entities.Day> getPreparedDaysList(List<Day> dayList, long userId){
+    private List<io.github.wulkanowy.dao.entities.Day> getPreparedDaysList(List<Day> dayList, long userId) {
         List<io.github.wulkanowy.dao.entities.Day> updatedDayList = new ArrayList<>();
         List<io.github.wulkanowy.dao.entities.Day> dayEntityList = ConversionVulcanObject
                 .daysToDaysEntities(dayList);

@@ -1,8 +1,8 @@
 package io.github.wulkanowy.activity.dashboard.timetable;
 
-import android.app.Activity;
-import android.app.DialogFragment;
 import android.graphics.Paint;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,12 +21,12 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
 
     private Lesson lesson;
 
-    private Activity activity;
+    private FragmentManager fragmentManager;
 
-    public TimetableSubItem(TimetableHeaderItem header, Lesson lesson, Activity activity) {
+    public TimetableSubItem(TimetableHeaderItem header, Lesson lesson, FragmentManager fragmentManager) {
         super(header);
         this.lesson = lesson;
-        this.activity = activity;
+        this.fragmentManager = fragmentManager;
     }
 
     public Lesson getLesson() {
@@ -55,7 +55,7 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
         holder.numberOfLesson.setText(lesson.getNumber());
         holder.room.setText(lesson.getRoom());
 
-        holder.setDialog(lesson, activity);
+        holder.setDialog(lesson, fragmentManager);
 
         if (lesson.getIsMovedOrCanceled() || lesson.getIsNewMovedInOrChanged()) {
             holder.change.setVisibility(View.VISIBLE);
@@ -98,13 +98,13 @@ public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.S
             ButterKnife.bind(this, view);
         }
 
-        public void setDialog(final Lesson lesson, final Activity activity) {
+        public void setDialog(final Lesson lesson, final FragmentManager fragmentManager) {
             getContentView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     TimetableDialogFragment dialogFragment = TimetableDialogFragment.newInstance(lesson);
                     dialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-                    dialogFragment.show(activity.getFragmentManager(), lesson.toString());
+                    dialogFragment.show(fragmentManager, lesson.toString());
                 }
             });
         }

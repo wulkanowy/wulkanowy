@@ -1,9 +1,11 @@
 package io.github.wulkanowy.services;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.Date;
 
 import io.github.wulkanowy.api.Cookies;
 import io.github.wulkanowy.api.Vulcan;
@@ -33,7 +35,7 @@ public class VulcanSynchronization {
         this.loginSession = loginSession;
     }
 
-    public VulcanSynchronization(){
+    public VulcanSynchronization() {
         this.loginSession = new LoginSession();
     }
 
@@ -54,7 +56,7 @@ public class VulcanSynchronization {
     }
 
     public VulcanSynchronization loginCurrentUser(Context context, DaoSession daoSession) throws CryptoException,
-            BadCredentialsException, AccountPermissionException, LoginErrorException, IOException{
+            BadCredentialsException, AccountPermissionException, LoginErrorException, IOException {
         return loginCurrentUser(context, daoSession, new Vulcan());
     }
 
@@ -66,7 +68,7 @@ public class VulcanSynchronization {
         return this;
     }
 
-    public void syncAll() throws IOException{
+    public void syncAll() throws IOException {
         syncSubjectsAndGrades();
         syncTimetable();
     }
@@ -106,7 +108,22 @@ public class VulcanSynchronization {
         if (loginSession != null) {
             TimetableSynchronization timetableSynchronization = new TimetableSynchronization();
             try {
-                timetableSynchronization.sync(loginSession);
+                timetableSynchronization.sync(loginSession, null);
+            } catch (Exception e) {
+                Log.e(VulcanJobHelper.DEBUG_TAG, "Synchronization of timetable failed", e);
+                throw new IOException(e.getCause());
+            }
+        } else {
+            Log.e(VulcanJobHelper.DEBUG_TAG, "Before synchronization, should login user to log",
+                    new UnsupportedOperationException());
+        }
+    }
+
+    public void syncTimetable(@Nullable Date date) throws IOException {
+        if (loginSession != null) {
+            TimetableSynchronization timetableSynchronization = new TimetableSynchronization();
+            try {
+                timetableSynchronization.sync(loginSession, date);
             } catch (Exception e) {
                 Log.e(VulcanJobHelper.DEBUG_TAG, "Synchronization of timetable failed", e);
                 throw new IOException(e.getCause());

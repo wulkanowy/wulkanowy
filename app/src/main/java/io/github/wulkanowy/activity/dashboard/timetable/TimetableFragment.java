@@ -1,128 +1,25 @@
 package io.github.wulkanowy.activity.dashboard.timetable;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.activity.WulkanowyApp;
-import io.github.wulkanowy.activity.dashboard.AbstractFragment;
-import io.github.wulkanowy.api.Vulcan;
-import io.github.wulkanowy.dao.entities.Day;
-import io.github.wulkanowy.dao.entities.Lesson;
-import io.github.wulkanowy.services.LoginSession;
-import io.github.wulkanowy.services.VulcanSynchronization;
 
-public class TimetableFragment extends AbstractFragment<TimetableHeaderItem> {
+public class TimetableFragment extends Fragment{
 
-    private int positionToScroll;
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.fragment_timetable;
+    public TimetableFragment() {
+        //empty constructor for fragment
     }
 
+    @Nullable
     @Override
-    public int getRecyclerViewId() {
-        return R.id.timetable_recycler;
-    }
-
-    @Override
-    public int getRefreshLayoutId() {
-        return R.id.timetable_refresh_layout;
-    }
-
-    @Override
-    public int getLoadingBarId() {
-        return R.id.timetable_progress_bar;
-    }
-
-    @NonNull
-    @Override
-    public List<TimetableHeaderItem> getItems() {
-        List<Day> dayEntityList = getDaoSession().getAccountDao().load(getUserId()).getDayList();
-
-        List<TimetableHeaderItem> dayList = new ArrayList<>();
-
-        int iterator = -1;
-
-        for (Day day : dayEntityList) {
-            List<TimetableSubItem> timetableSubItems = new ArrayList<>();
-
-            TimetableHeaderItem headerItem = new TimetableHeaderItem(day);
-            headerItem.setExpanded(false);
-
-            for (Lesson lesson : day.getLessons()) {
-                TimetableSubItem subItem = new TimetableSubItem(headerItem, lesson, getActivity());
-                timetableSubItems.add(subItem);
-            }
-
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
-                Date date = dateFormat.parse(day.getDate());
-
-                Calendar calendar = Calendar.getInstance();
-
-                if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                    calendar.add(Calendar.DATE, 1);
-                } else if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-                    calendar.add(Calendar.DATE, 2);
-                }
-
-                iterator++;
-
-                calendar = zeroingCalendar(calendar);
-
-                if (date.compareTo(calendar.getTime()) == 0) {
-                    headerItem.setExpanded(true);
-                    positionToScroll = iterator;
-                }
-
-            } catch (Exception e) {
-                Log.e(WulkanowyApp.DEBUG_TAG, "Parse failed", e);
-            }
-
-            headerItem.setSubItems(timetableSubItems);
-            dayList.add(headerItem);
-        }
-        return dayList;
-    }
-
-    @Override
-    protected void setAdapterOnRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.setAdapterOnRecyclerView(recyclerView);
-        recyclerView.scrollToPosition(positionToScroll);
-    }
-
-    @Override
-    public void onRefresh() throws Exception {
-        VulcanSynchronization synchronization = new VulcanSynchronization();
-        synchronization.loginCurrentUser(getContext(), getDaoSession());
-        synchronization.syncTimetable();
-    }
-
-    @Override
-    public void onPostRefresh(int stringResult) {
-        if(stringResult == 0){
-            stringResult = R.string.timetable_refresh_success;
-        }
-        Snackbar.make(getActivityWeakReference().findViewById(R.id.fragment_container),
-                stringResult, Snackbar.LENGTH_SHORT).show();
-    }
-
-    private Calendar zeroingCalendar(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_timetable, container, false);
+        return view;
     }
 }
