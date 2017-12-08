@@ -71,7 +71,7 @@ public class TimetableSynchronizationTest {
         doReturn(userId).when(loginSession).getUserId();
 
         TimetableSynchronization timetableSynchronization = new TimetableSynchronization();
-        timetableSynchronization.sync(loginSession);
+        timetableSynchronization.sync(loginSession, null);
 
         List<io.github.wulkanowy.dao.entities.Day> dayEntityList = daoSession.getDayDao().loadAll();
         List<io.github.wulkanowy.dao.entities.Lesson> lessonEntityList = dayEntityList.get(0).getLessons();
