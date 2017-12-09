@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 
 import io.github.wulkanowy.api.attendance.AttendanceStatistics;
 import io.github.wulkanowy.api.attendance.AttendanceTable;
+import io.github.wulkanowy.api.exams.ExamsWeek;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.SubjectsList;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
@@ -91,6 +92,13 @@ public class VulcanTest extends Vulcan {
         Mockito.when(vulcan.getAttendanceStatistics()).thenCallRealMethod();
         Assert.assertThat(vulcan.getAttendanceStatistics(),
                 CoreMatchers.instanceOf(AttendanceStatistics.class));
+    }
+
+    @Test
+    public void getExamsListTest() throws Exception {
+        Mockito.when(vulcan.getExamsList()).thenCallRealMethod();
+        Assert.assertThat(vulcan.getExamsList(),
+                CoreMatchers.instanceOf(ExamsWeek.class));
     }
 
     @Test
