@@ -61,8 +61,8 @@ public class GradeJob extends VulcanJobHelper {
 
             DaoSession daoSession = ((WulkanowyApp) getApplication()).getDaoSession();
 
-            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
-            vulcanSynchronization.loginCurrentUser(getApplicationContext(), daoSession, new Vulcan());
+            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(getApplicationContext(), daoSession, new LoginSession());
+            vulcanSynchronization.loginCurrentUser(new Vulcan());
             vulcanSynchronization.syncGrades();
 
             List<Grade> newGradeList = new DatabaseAccess().getNewGrades(daoSession);

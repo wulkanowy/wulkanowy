@@ -161,9 +161,9 @@ public class GradesFragment extends Fragment {
 
         @Override
         protected Integer doInBackground(Void... params) {
-            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
+            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(activity.get(), daoSession, new LoginSession());
             try {
-                vulcanSynchronization.loginCurrentUser(activity.get(), daoSession, new Vulcan());
+                vulcanSynchronization.loginCurrentUser(new Vulcan());
                 vulcanSynchronization.syncGrades();
                 downloadGradesFormDatabase(daoSession);
                 return 1;

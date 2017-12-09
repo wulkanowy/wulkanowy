@@ -5,11 +5,9 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import io.github.wulkanowy.api.Cookies;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
-import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
@@ -23,33 +21,23 @@ import io.github.wulkanowy.services.synchronisation.SubjectsSynchronisation;
 
 public class VulcanSynchronization {
 
+    private final Context context;
+    private final DaoSession daoSession;
     private LoginSession loginSession;
 
-    private FirstAccountLogin firstAccountLogin;
-
-    private String certificate;
-
-    public VulcanSynchronization(LoginSession loginSession) {
+    public VulcanSynchronization(Context context, DaoSession daoSession, LoginSession loginSession) {
+        this.context = context;
+        this.daoSession = daoSession;
         this.loginSession = loginSession;
     }
 
-    public void firstLoginConnectStep(String email, String password, String symbol)
-            throws BadCredentialsException, IOException {
-        firstAccountLogin = new FirstAccountLogin(new Login(new Cookies()), new Vulcan(), email, password, symbol);
-        certificate = firstAccountLogin.connect();
+    public void firstLoginSignInStep(String email, String password, String symbol)
+            throws NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException, VulcanOfflineException, BadCredentialsException {
+        FirstAccountLogin firstAccountLogin = new FirstAccountLogin(context, daoSession, new Vulcan());
+        loginSession = firstAccountLogin.login(email, password, symbol);
     }
 
-    public void firstLoginSignInStep(Context context, DaoSession daoSession)
-            throws NotLoggedInErrorException, AccountPermissionException, IOException, CryptoException, VulcanOfflineException {
-        if (firstAccountLogin != null && certificate != null) {
-            loginSession = firstAccountLogin.login(context, daoSession, certificate);
-        } else {
-            Log.e(VulcanJobHelper.DEBUG_TAG, "Before first login, should call firstLoginConnectStep",
-                    new UnsupportedOperationException());
-        }
-    }
-
-    public void loginCurrentUser(Context context, DaoSession daoSession, Vulcan vulcan)
+    public void loginCurrentUser(Vulcan vulcan)
             throws CryptoException, BadCredentialsException, AccountPermissionException, LoginErrorException, IOException, VulcanOfflineException {
         CurrentAccountLogin currentAccountLogin = new CurrentAccountLogin(context, daoSession, vulcan);
         loginSession = currentAccountLogin.loginCurrentUser();

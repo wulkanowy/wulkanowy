@@ -67,18 +67,14 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
     @Override
     protected Integer doInBackground(Void... params) {
         if (ConnectionUtilities.isOnline(activity.get())) {
-            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(new LoginSession());
-
             DaoSession daoSession = ((WulkanowyApp) activity.get().getApplication()).getDaoSession();
+            VulcanSynchronization vulcanSynchronization = new VulcanSynchronization(activity.get(), daoSession, new LoginSession());
 
             try {
-                publishProgress("1", activity.get().getResources().getString(R.string.step_connecting));
-                vulcanSynchronization.firstLoginConnectStep(email, password, symbol);
+                publishProgress("1", activity.get().getResources().getString(R.string.step_login));
+                vulcanSynchronization.firstLoginSignInStep(email, password, symbol);
 
-                publishProgress("2", activity.get().getResources().getString(R.string.step_login));
-                vulcanSynchronization.firstLoginSignInStep(activity.get(), daoSession);
-
-                publishProgress("3", activity.get().getResources().getString(R.string.step_synchronization));
+                publishProgress("2", activity.get().getResources().getString(R.string.step_synchronization));
                 vulcanSynchronization.syncSubjectsAndGrades();
 
             } catch (BadCredentialsException e) {
@@ -107,7 +103,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
     @Override
     protected void onProgressUpdate(String... progress) {
-        showText.get().setText(String.format("%1$s/3 - %2$s...", progress[0], progress[1]));
+        showText.get().setText(String.format("%1$s/2 - %2$s...", progress[0], progress[1]));
     }
 
     @Override
