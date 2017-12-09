@@ -29,19 +29,11 @@ public class Vulcan extends Api {
 
     private StudentAndParent snp;
 
-    public Vulcan setProtocolSchema(String protocolSchema) {
-        this.protocolSchema = protocolSchema;
-        return this;
-    }
-
-    public Vulcan setLogHost(String logHost) {
-        this.logHost = logHost;
-        return this;
-    }
-
     private String protocolSchema = "https";
 
     private String logHost = "vulcan.net.pl";
+
+    private String email;
 
     public void login(Cookies cookies, String symbol) {
         this.cookies = cookies;
@@ -52,9 +44,12 @@ public class Vulcan extends Api {
             throws BadCredentialsException, AccountPermissionException,
             LoginErrorException, IOException, VulcanOfflineException {
         Login login = new Login(new Cookies());
-        login.setLogHost(logHost);
+
+        setFullEndpointInfo(email);
         login.setProtocolSchema(protocolSchema);
-        String realSymbol = login.login(email, password, symbol);
+        login.setLogHost(logHost);
+
+        String realSymbol = login.login(this.email, password, symbol);
 
         login(login.getCookiesObject(), realSymbol);
     }
@@ -65,6 +60,20 @@ public class Vulcan extends Api {
         login(email, password, symbol);
 
         this.id = id;
+    }
+
+    private void setFullEndpointInfo(String email) {
+        String[] creds = email.split("\\\\");
+
+        this.email = email;
+
+        if (creds.length >= 2) {
+            String[] url = creds[0].split("://");
+
+            this.protocolSchema = url[0];
+            this.logHost = url[1];
+            this.email = creds[2];
+        }
     }
 
     public StudentAndParent getStudentAndParent() throws IOException, NotLoggedInErrorException {
