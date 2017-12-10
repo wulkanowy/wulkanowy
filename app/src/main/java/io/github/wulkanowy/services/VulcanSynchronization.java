@@ -105,21 +105,10 @@ public class VulcanSynchronization {
     }
 
     public void syncTimetable() throws IOException {
-        if (loginSession != null) {
-            TimetableSynchronization timetableSynchronization = new TimetableSynchronization();
-            try {
-                timetableSynchronization.sync(loginSession, null);
-            } catch (Exception e) {
-                Log.e(VulcanJobHelper.DEBUG_TAG, "Synchronization of timetable failed", e);
-                throw new IOException(e.getCause());
-            }
-        } else {
-            Log.e(VulcanJobHelper.DEBUG_TAG, "Before synchronization, should login user to log",
-                    new UnsupportedOperationException());
-        }
+       syncTimetable(null);
     }
 
-    public void syncTimetable(@Nullable Date date) throws IOException {
+    public void syncTimetable(@Nullable String date) throws IOException {
         if (loginSession != null) {
             TimetableSynchronization timetableSynchronization = new TimetableSynchronization();
             try {

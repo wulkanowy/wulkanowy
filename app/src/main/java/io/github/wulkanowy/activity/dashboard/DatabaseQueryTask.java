@@ -14,7 +14,11 @@ public class DatabaseQueryTask extends AsyncTask<Void, Void, List<?>> {
 
     @Override
     protected List<?> doInBackground(Void... voids) {
-        return abstractFragment.getItems();
+        try {
+            return abstractFragment.getItems();
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @SuppressWarnings("unchecked")

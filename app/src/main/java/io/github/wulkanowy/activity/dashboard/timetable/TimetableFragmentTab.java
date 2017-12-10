@@ -1,37 +1,53 @@
 package io.github.wulkanowy.activity.dashboard.timetable;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
-import java.text.SimpleDateFormat;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.activity.WulkanowyApp;
 import io.github.wulkanowy.activity.dashboard.AbstractFragment;
 import io.github.wulkanowy.dao.entities.Day;
 import io.github.wulkanowy.dao.entities.Lesson;
+import io.github.wulkanowy.dao.entities.Week;
+import io.github.wulkanowy.dao.entities.WeekDao;
 import io.github.wulkanowy.services.VulcanSynchronization;
 
 public class TimetableFragmentTab extends AbstractFragment<TimetableHeaderItem> {
 
     private int positionToScroll;
 
-    private Date date;
+    private String date;
 
-    public static TimetableFragmentTab newInstance(Date date){
-        return new TimetableFragmentTab().setDate(date);
+    private final String DATE_PATTERN = "yyyy-MM-dd";
+
+    public static TimetableFragmentTab newInstance(String date) {
+        TimetableFragmentTab fragmentTab = new TimetableFragmentTab();
+
+        Bundle argument = new Bundle();
+        argument.putString("date", date);
+        fragmentTab.setArguments(argument);
+
+        return fragmentTab;
     }
 
-    private TimetableFragmentTab setDate(Date date){
-        this.date = date;
-        return this;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            date = getArguments().getString("date");
+        }
     }
 
     @Override
@@ -56,8 +72,15 @@ public class TimetableFragmentTab extends AbstractFragment<TimetableHeaderItem> 
 
     @NonNull
     @Override
-    public List<TimetableHeaderItem> getItems() {
-        List<Day> dayEntityList = getDaoSession().getAccountDao().load(getUserId()).getDayList();
+    public List<TimetableHeaderItem> getItems() throws Exception {
+        Week week = getWeek();
+
+        if (week == null) {
+            onRefresh();
+            return getItems();
+        }
+
+        List<Day> dayEntityList = week.getDayList();
 
         List<TimetableHeaderItem> dayList = new ArrayList<>();
 
@@ -67,38 +90,21 @@ public class TimetableFragmentTab extends AbstractFragment<TimetableHeaderItem> 
             List<TimetableSubItem> timetableSubItems = new ArrayList<>();
 
             TimetableHeaderItem headerItem = new TimetableHeaderItem(day);
-            headerItem.setExpanded(false);
 
             for (Lesson lesson : day.getLessons()) {
                 TimetableSubItem subItem = new TimetableSubItem(headerItem, lesson, getFragmentManager());
                 timetableSubItems.add(subItem);
             }
 
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
-                Date date = dateFormat.parse(day.getDate());
+            iterator++;
 
-                Calendar calendar = Calendar.getInstance();
+            boolean isExpanded = getExpanded(day.getDate());
 
-                if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                    calendar.add(Calendar.DATE, 1);
-                } else if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-                    calendar.add(Calendar.DATE, 2);
-                }
-
-                iterator++;
-
-                calendar = zeroingCalendar(calendar);
-
-                if (date.compareTo(calendar.getTime()) == 0) {
-                    headerItem.setExpanded(true);
-                    positionToScroll = iterator;
-                }
-
-            } catch (Exception e) {
-                Log.e(WulkanowyApp.DEBUG_TAG, "Parse failed", e);
+            if (isExpanded) {
+                positionToScroll = iterator;
             }
 
+            headerItem.setExpanded(isExpanded);
             headerItem.setSubItems(timetableSubItems);
             dayList.add(headerItem);
         }
@@ -120,18 +126,36 @@ public class TimetableFragmentTab extends AbstractFragment<TimetableHeaderItem> 
 
     @Override
     public void onPostRefresh(int stringResult) {
-        if(stringResult == 0){
+        if (stringResult == 0) {
             stringResult = R.string.timetable_refresh_success;
         }
         Snackbar.make(getActivityWeakReference().findViewById(R.id.fragment_container),
                 stringResult, Snackbar.LENGTH_SHORT).show();
     }
 
-    private Calendar zeroingCalendar(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar;
+    private boolean getExpanded(String dayDate) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(DATE_PATTERN);
+        DateTime dayTime = dateTimeFormatter.parseDateTime(dayDate);
+
+        DateTime currentDate = new DateTime();
+
+        if (currentDate.getDayOfWeek() == DateTimeConstants.SATURDAY) {
+            currentDate = currentDate.plusDays(2);
+        } else if (currentDate.getDayOfWeek() == DateTimeConstants.SUNDAY) {
+            currentDate = currentDate.plusDays(1);
+        }
+
+        return DateTimeComparator.getDateOnlyInstance().compare(currentDate, dayTime) == 0;
+    }
+
+    private Week getWeek() {
+        if (date == null) {
+            LocalDate currentMonday = new LocalDate().withDayOfWeek(DateTimeConstants.MONDAY);
+            date = currentMonday.toString(DATE_PATTERN);
+        }
+        return getDaoSession().getWeekDao().queryBuilder()
+                .where(WeekDao.Properties.StartDayDate.eq(date),
+                        WeekDao.Properties.UserId.eq(getUserId()))
+                .unique();
     }
 }

@@ -13,6 +13,7 @@ import io.github.wulkanowy.activity.dashboard.attendance.AttendanceFragment;
 import io.github.wulkanowy.activity.dashboard.board.BoardFragment;
 import io.github.wulkanowy.activity.dashboard.grades.GradesFragment;
 import io.github.wulkanowy.activity.dashboard.timetable.TimetableFragment;
+import io.github.wulkanowy.activity.dashboard.timetable.TimetableFragmentTab;
 
 public class DashboardActivity extends AppCompatActivity {
 

@@ -4,6 +4,7 @@ import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.ToMany;
 
@@ -11,7 +12,8 @@ import java.util.List;
 
 @Entity(
         nameInDb = "Days",
-        active = true
+        active = true,
+        indexes ={@Index(value = "userId,weekId,date", unique = true)}
 )
 public class Day {
 
@@ -20,6 +22,9 @@ public class Day {
 
     @Property(nameInDb = "USER_ID")
     private Long userId;
+
+    @Property(nameInDb = "WEEK_ID")
+    private Long weekId;
 
     @Property(nameInDb = "DATE")
     private String date = "";
@@ -48,11 +53,12 @@ public class Day {
     @Generated(hash = 312167767)
     private transient DayDao myDao;
 
-    @Generated(hash = 1590481046)
-    public Day(Long id, Long userId, String date, String dayName, boolean isFreeDay,
-               String freeDayName) {
+    @Generated(hash = 723729681)
+    public Day(Long id, Long userId, Long weekId, String date, String dayName,
+            boolean isFreeDay, String freeDayName) {
         this.id = id;
         this.userId = userId;
+        this.weekId = weekId;
         this.date = date;
         this.dayName = dayName;
         this.isFreeDay = isFreeDay;
@@ -73,6 +79,15 @@ public class Day {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public Long getWeekId() {
+        return weekId;
+    }
+
+    public Day setWeekId(Long weekId) {
+        this.weekId = weekId;
+        return this;
     }
 
     public Day setUserId(Long userId) {

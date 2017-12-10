@@ -71,11 +71,17 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
 
     public abstract int getRefreshLayoutId();
 
-    public abstract List<T> getItems();
+    public abstract List<T> getItems() throws Exception;
 
     public abstract void onRefresh() throws Exception;
 
     public abstract void onPostRefresh(int stringResult);
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
@@ -92,19 +98,30 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
         super.onActivityCreated(savedInstanceState);
 
         if (getActivity() != null && getView() != null) {
-            activityWeakReference = new WeakReference<Activity>(getActivity());
+            activityWeakReference = new WeakReference<>(getActivity());
             daoSession = ((WulkanowyApp) getActivity().getApplication()).getDaoSession();
             userId = getActivity().getSharedPreferences("LoginData", Context.MODE_PRIVATE)
                     .getLong("userId", 0);
 
-            if (itemList.isEmpty()) {
-                flexibleAdapter = getFlexibleAdapter(itemList);
-                setAdapterOnRecyclerView(recyclerViewLayout);
-                new DatabaseQueryTask(this).execute();
-            } else {
-                setAdapterOnRecyclerView(recyclerViewLayout);
-                setLoadingBarInvisible(getView());
-            }
+            if (itemList != null)
+                if (itemList.isEmpty()) {
+                    flexibleAdapter = getFlexibleAdapter(itemList);
+                    setAdapterOnRecyclerView(recyclerViewLayout);
+                    if (getUserVisibleHint()) {
+                       new DatabaseQueryTask(this).execute();
+                    }
+                } else {
+                    setAdapterOnRecyclerView(recyclerViewLayout);
+                    setLoadingBarInvisible(getView());
+                }
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isResumed() && isVisibleToUser && flexibleAdapter.getItemCount() == 0) {
+            new DatabaseQueryTask(this).execute();
         }
     }
 
@@ -121,8 +138,8 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
     @Override
     public void onRefreshProcessFinish(@Nullable List<T> resultItemList, int stringEventId) {
         if (resultItemList != null) {
-           itemList = resultItemList;
-           updateDataInRecyclerView();
+            itemList = resultItemList;
+            updateDataInRecyclerView();
         }
         onPostRefresh(stringEventId);
         getRefreshLayoutView().setRefreshing(false);
