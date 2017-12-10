@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Random;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.activity.WulkanowyApp;
-import io.github.wulkanowy.activity.dashboard.DashboardActivity;
+import io.github.wulkanowy.ui.WulkanowyApp;
+import io.github.wulkanowy.ui.main.DashboardActivity;
 import io.github.wulkanowy.dao.DatabaseAccess;
 import io.github.wulkanowy.dao.entities.DaoSession;
 import io.github.wulkanowy.dao.entities.Grade;
