@@ -16,7 +16,7 @@ public class DatabaseQueryTask extends AsyncTask<Void, Void, List<?>> {
     protected List<?> doInBackground(Void... voids) {
         try {
             return abstractFragment.getItems();
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }

@@ -26,11 +26,11 @@ import io.github.wulkanowy.ui.main.AbstractFragment;
 
 public class TimetableFragmentTab extends AbstractFragment<TimetableHeaderItem> {
 
+    private final String DATE_PATTERN = "yyyy-MM-dd";
+
     private int positionToScroll;
 
     private String date;
-
-    private final String DATE_PATTERN = "yyyy-MM-dd";
 
     public static TimetableFragmentTab newInstance(String date) {
         TimetableFragmentTab fragmentTab = new TimetableFragmentTab();

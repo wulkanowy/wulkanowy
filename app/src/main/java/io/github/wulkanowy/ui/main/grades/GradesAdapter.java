@@ -23,9 +23,9 @@ import io.github.wulkanowy.utilities.AverageCalculator;
 
 public class GradesAdapter extends ExpandableRecyclerViewAdapter<GradesAdapter.SubjectViewHolder, GradesAdapter.GradeViewHolder> {
 
-    private Activity activity;
-
     private static int numberOfNotReadGrade;
+
+    private Activity activity;
 
     public GradesAdapter(List<? extends ExpandableGroup> groups, Activity activity) {
         super(groups);

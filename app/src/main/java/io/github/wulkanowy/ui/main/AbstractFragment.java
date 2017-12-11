@@ -108,7 +108,7 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
                     flexibleAdapter = getFlexibleAdapter(itemList);
                     setAdapterOnRecyclerView(recyclerViewLayout);
                     if (getUserVisibleHint()) {
-                       new DatabaseQueryTask(this).execute();
+                        new DatabaseQueryTask(this).execute();
                     }
                 } else {
                     setAdapterOnRecyclerView(recyclerViewLayout);

@@ -15,9 +15,9 @@ import io.github.wulkanowy.dao.entities.DaoSession;
 
 public class WulkanowyApp extends Application {
 
-    private DaoSession daoSession;
-
     public static final String DEBUG_TAG = "WulaknowyActivity";
+
+    private DaoSession daoSession;
 
     @Override
     public void onCreate() {
@@ -41,7 +41,7 @@ public class WulkanowyApp extends Application {
 
     }
 
-    private void enableDebugLog(){
+    private void enableDebugLog() {
         QueryBuilder.LOG_VALUES = true;
         FlexibleAdapter.enableLogs(Log.Level.DEBUG);
     }

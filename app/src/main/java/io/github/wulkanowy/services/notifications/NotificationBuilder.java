@@ -15,11 +15,11 @@ import io.github.wulkanowy.R;
 
 public class NotificationBuilder extends ContextWrapper {
 
-    private NotificationManager manager;
-
     public static final String CHANNEL_ID = "Wulkanowy_New_Grade_Channel";
 
     public static final String CHANNEL_NAME = "New Grade Channel";
+
+    private NotificationManager manager;
 
     public NotificationBuilder(Context context) {
         super(context);

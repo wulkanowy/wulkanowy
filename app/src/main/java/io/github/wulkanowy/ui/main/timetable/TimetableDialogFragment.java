@@ -20,12 +20,12 @@ public class TimetableDialogFragment extends DialogFragment {
 
     private Lesson lesson;
 
-    public static TimetableDialogFragment newInstance(Lesson lesson) {
-        return new TimetableDialogFragment().setLesson(lesson);
-    }
-
     public TimetableDialogFragment() {
         //empty constructor for fragment
+    }
+
+    public static TimetableDialogFragment newInstance(Lesson lesson) {
+        return new TimetableDialogFragment().setLesson(lesson);
     }
 
     private TimetableDialogFragment setLesson(Lesson lesson) {
@@ -47,35 +47,35 @@ public class TimetableDialogFragment extends DialogFragment {
         TextView descriptionText = view.findViewById(R.id.timetable_dialog_description_value);
         Button closeButton = view.findViewById(R.id.timetable_dialog_close);
 
-        if(!lesson.getSubject().isEmpty()) {
+        if (!lesson.getSubject().isEmpty()) {
             lessonText.setText(lesson.getSubject());
         }
 
-        if(!lesson.getTeacher().isEmpty()) {
+        if (!lesson.getTeacher().isEmpty()) {
             teacherText.setText(lesson.getTeacher());
-        }else {
+        } else {
             teacherText.setVisibility(View.GONE);
             view.findViewById(R.id.timetable_dialog_teacher).setVisibility(View.GONE);
         }
 
-        if(!lesson.getGroupName().isEmpty()) {
+        if (!lesson.getGroupName().isEmpty()) {
             groupText.setText(lesson.getGroupName());
-        }else {
+        } else {
             groupText.setVisibility(View.GONE);
             view.findViewById(R.id.timetable_dialog_group).setVisibility(View.GONE);
         }
 
-        if(!lesson.getRoom().isEmpty()) {
+        if (!lesson.getRoom().isEmpty()) {
             roomText.setText(lesson.getRoom());
         }
 
-        if(!lesson.getEndTime().isEmpty() && !lesson.getStartTime().isEmpty()) {
+        if (!lesson.getEndTime().isEmpty() && !lesson.getStartTime().isEmpty()) {
             timeText.setText(String.format("%1$s - %2$s", lesson.getStartTime(), lesson.getEndTime()));
         }
 
-        if(!lesson.getDescription().isEmpty()){
+        if (!lesson.getDescription().isEmpty()) {
             descriptionText.setText(StringUtils.capitalize(lesson.getDescription()));
-        }else {
+        } else {
             descriptionText.setVisibility(View.GONE);
             view.findViewById(R.id.timetable_dialog_description).setVisibility(View.GONE);
         }

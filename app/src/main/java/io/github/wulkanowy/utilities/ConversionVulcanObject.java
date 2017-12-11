@@ -52,7 +52,7 @@ public class ConversionVulcanObject {
         return gradeEntityList;
     }
 
-    public static Week weekToWeekEntitie(io.github.wulkanowy.api.timetable.Week week){
+    public static Week weekToWeekEntitie(io.github.wulkanowy.api.timetable.Week week) {
         return new Week().setStartDayDate(week.getStartDayDate());
     }
 

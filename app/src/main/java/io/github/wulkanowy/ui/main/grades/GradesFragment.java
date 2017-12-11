@@ -44,6 +44,30 @@ public class GradesFragment extends Fragment {
         //empty constructor for fragments
     }
 
+    private static void createExpList(View mainView, Activity activity) {
+
+        RecyclerView recyclerView = mainView.findViewById(R.id.subject_grade_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        GradesAdapter gradesAdapter = new GradesAdapter(subjectWithGradesList, activity);
+        recyclerView.setAdapter(gradesAdapter);
+    }
+
+    private static void downloadGradesFormDatabase(DaoSession daoSession) {
+
+        subjectWithGradesList = new ArrayList<>();
+
+        AccountDao accountDao = daoSession.getAccountDao();
+        Account account = accountDao.load(userId);
+
+        for (Subject subject : account.getSubjectList()) {
+            List<Grade> gradeList = subject.getGradeList();
+            if (!gradeList.isEmpty()) {
+                SubjectWithGrades subjectWithGrades = new SubjectWithGrades(subject.getName(), gradeList);
+                subjectWithGradesList.add(subjectWithGrades);
+            }
+        }
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,30 +113,6 @@ public class GradesFragment extends Fragment {
                 }
             }
         });
-    }
-
-    private static void createExpList(View mainView, Activity activity) {
-
-        RecyclerView recyclerView = mainView.findViewById(R.id.subject_grade_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-        GradesAdapter gradesAdapter = new GradesAdapter(subjectWithGradesList, activity);
-        recyclerView.setAdapter(gradesAdapter);
-    }
-
-    private static void downloadGradesFormDatabase(DaoSession daoSession) {
-
-        subjectWithGradesList = new ArrayList<>();
-
-        AccountDao accountDao = daoSession.getAccountDao();
-        Account account = accountDao.load(userId);
-
-        for (Subject subject : account.getSubjectList()) {
-            List<Grade> gradeList = subject.getGradeList();
-            if (!gradeList.isEmpty()) {
-                SubjectWithGrades subjectWithGrades = new SubjectWithGrades(subject.getName(), gradeList);
-                subjectWithGradesList.add(subjectWithGrades);
-            }
-        }
     }
 
     private static class GenerateListTask extends AsyncTask<Void, Void, Void> {

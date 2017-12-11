@@ -80,7 +80,7 @@ public class TimetableSynchronization {
                         LessonDao.Properties.StartTime.eq(lesson.getStartTime()), LessonDao.Properties.EndTime.eq(lesson.getEndTime())).build();
                 Lesson lesson1 = lessonQuery.unique();
 
-                if(lesson1 != null){
+                if (lesson1 != null) {
                     lesson.setId(lesson1.getId());
                 }
 
@@ -104,7 +104,7 @@ public class TimetableSynchronization {
 
             io.github.wulkanowy.dao.entities.Day day1 = dayQuery.unique();
 
-            if(day1 != null){
+            if (day1 != null) {
                 day.setId(day1.getId());
             }
 

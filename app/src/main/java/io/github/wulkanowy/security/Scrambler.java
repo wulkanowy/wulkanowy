@@ -29,10 +29,9 @@ import javax.security.auth.x500.X500Principal;
 
 public class Scrambler {
 
+    public static final String DEBUG_TAG = "WulkanowySecurity";
 
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
-
-    public static final String DEBUG_TAG = "WulkanowySecurity";
 
     private KeyStore keyStore;
 

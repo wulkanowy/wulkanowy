@@ -104,7 +104,7 @@ public class VulcanSynchronization {
     }
 
     public void syncTimetable() throws IOException {
-       syncTimetable(null);
+        syncTimetable(null);
     }
 
     public void syncTimetable(@Nullable String date) throws IOException {

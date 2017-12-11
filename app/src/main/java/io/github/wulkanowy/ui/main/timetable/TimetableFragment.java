@@ -22,6 +22,8 @@ import io.github.wulkanowy.utilities.TimeUtilities;
 
 public class TimetableFragment extends Fragment {
 
+    private final String DATE_PATTERN = "yyyy-MM-dd";
+
     private List<String> dateStringList = new ArrayList<>();
 
     private TimetablePagerAdapter pagerAdapter;
@@ -29,8 +31,6 @@ public class TimetableFragment extends Fragment {
     private ViewPager viewPager;
 
     private TabLayout tabLayout;
-
-    private final String DATE_PATTERN = "yyyy-MM-dd";
 
     public TimetableFragment() {
         //empty constructor for fragment

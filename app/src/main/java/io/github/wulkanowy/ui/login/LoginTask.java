@@ -80,7 +80,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 vulcanSynchronization.firstLoginSignInStep(activity.get(), daoSession);
 
                 publishProgress("3", activity.get().getResources().getString(R.string.step_synchronization));
-               vulcanSynchronization.syncAll();
+                vulcanSynchronization.syncAll();
 
             } catch (BadCredentialsException e) {
                 return R.string.login_bad_credentials_text;

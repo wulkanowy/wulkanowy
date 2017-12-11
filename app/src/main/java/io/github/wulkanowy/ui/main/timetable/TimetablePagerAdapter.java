@@ -43,6 +43,6 @@ public class TimetablePagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public void restoreState(Parcelable state, ClassLoader loader) {
-       // do nothing
+        // do nothing
     }
 }

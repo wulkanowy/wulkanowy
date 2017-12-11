@@ -19,12 +19,31 @@ public class GradesDialogFragment extends DialogFragment {
 
     private Grade grade;
 
+    public GradesDialogFragment() {
+        setRetainInstance(true);
+    }
+
     public static final GradesDialogFragment newInstance(Grade grade) {
         return new GradesDialogFragment().setGrade(grade);
     }
 
-    public GradesDialogFragment() {
-        setRetainInstance(true);
+    public static int colorHexToColorName(String hexColor) {
+        switch (hexColor) {
+            case "000000":
+                return R.string.color_black_text;
+
+            case "F04C4C":
+                return R.string.color_red_text;
+
+            case "20A4F7":
+                return R.string.color_blue_text;
+
+            case "6ECD07":
+                return R.string.color_green_text;
+
+            default:
+                return R.string.noColor_text;
+        }
     }
 
     private GradesDialogFragment setGrade(Grade grade) {
@@ -84,25 +103,5 @@ public class GradesDialogFragment extends DialogFragment {
             dialog.setDismissMessage(null);
         }
         super.onDestroyView();
-    }
-
-
-    public static int colorHexToColorName(String hexColor) {
-        switch (hexColor) {
-            case "000000":
-                return R.string.color_black_text;
-
-            case "F04C4C":
-                return R.string.color_red_text;
-
-            case "20A4F7":
-                return R.string.color_blue_text;
-
-            case "6ECD07":
-                return R.string.color_green_text;
-
-            default:
-                return R.string.noColor_text;
-        }
     }
 }
