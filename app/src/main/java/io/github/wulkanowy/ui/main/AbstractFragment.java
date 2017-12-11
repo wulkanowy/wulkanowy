@@ -98,7 +98,7 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
         super.onActivityCreated(savedInstanceState);
 
         if (getActivity() != null && getView() != null) {
-            activityWeakReference = new WeakReference<>(getActivity());
+            activityWeakReference = new WeakReference<Activity>(getActivity());
             daoSession = ((WulkanowyApp) getActivity().getApplication()).getDaoSession();
             userId = getActivity().getSharedPreferences("LoginData", Context.MODE_PRIVATE)
                     .getLong("userId", 0);
