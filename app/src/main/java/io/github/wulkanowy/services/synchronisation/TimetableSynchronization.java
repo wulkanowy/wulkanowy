@@ -10,8 +10,6 @@ import org.greenrobot.greendao.query.Query;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;

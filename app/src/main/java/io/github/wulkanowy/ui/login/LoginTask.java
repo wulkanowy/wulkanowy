@@ -21,8 +21,6 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.ui.WulkanowyApp;
-import io.github.wulkanowy.ui.main.DashboardActivity;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
@@ -31,6 +29,8 @@ import io.github.wulkanowy.security.CryptoException;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.VulcanSynchronization;
 import io.github.wulkanowy.services.jobs.FullSyncJob;
+import io.github.wulkanowy.ui.WulkanowyApp;
+import io.github.wulkanowy.ui.main.DashboardActivity;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 /**

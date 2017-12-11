@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
-import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;

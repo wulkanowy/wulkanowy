@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.ui.WulkanowyApp;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.dao.DatabaseAccess;
 import io.github.wulkanowy.dao.entities.Account;
@@ -32,6 +31,7 @@ import io.github.wulkanowy.dao.entities.Subject;
 import io.github.wulkanowy.services.LoginSession;
 import io.github.wulkanowy.services.VulcanSynchronization;
 import io.github.wulkanowy.services.jobs.VulcanJobHelper;
+import io.github.wulkanowy.ui.WulkanowyApp;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 public class GradesFragment extends Fragment {

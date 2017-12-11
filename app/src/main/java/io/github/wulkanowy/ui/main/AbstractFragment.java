@@ -22,8 +22,8 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager;
 import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.ui.WulkanowyApp;
 import io.github.wulkanowy.dao.entities.DaoSession;
+import io.github.wulkanowy.ui.WulkanowyApp;
 import io.github.wulkanowy.utilities.ConnectionUtilities;
 
 public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> extends Fragment

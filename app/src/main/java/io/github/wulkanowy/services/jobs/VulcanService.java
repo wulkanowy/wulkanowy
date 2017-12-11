@@ -6,13 +6,7 @@ import android.util.Log;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-
-import io.github.wulkanowy.api.login.AccountPermissionException;
-import io.github.wulkanowy.api.login.BadCredentialsException;
-import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.security.CryptoException;
 
 public abstract class VulcanService extends JobService {
 

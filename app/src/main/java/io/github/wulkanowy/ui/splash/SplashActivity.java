@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import io.github.wulkanowy.BuildConfig;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.ui.main.DashboardActivity;
-import io.github.wulkanowy.ui.login.LoginActivity;
 import io.github.wulkanowy.services.jobs.FullSyncJob;
+import io.github.wulkanowy.ui.login.LoginActivity;
+import io.github.wulkanowy.ui.main.DashboardActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
