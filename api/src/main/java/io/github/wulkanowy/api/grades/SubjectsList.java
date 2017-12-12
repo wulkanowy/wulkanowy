@@ -12,9 +12,9 @@ import io.github.wulkanowy.api.StudentAndParent;
 
 public class SubjectsList {
 
-    private StudentAndParent snp = null;
-
     private static final String SUBJECTS_PAGE_URL = "Oceny/Wszystkie?details=1";
+
+    private StudentAndParent snp = null;
 
     public SubjectsList(StudentAndParent snp) {
         this.snp = snp;

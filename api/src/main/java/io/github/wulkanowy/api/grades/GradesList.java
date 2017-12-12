@@ -19,9 +19,9 @@ import io.github.wulkanowy.api.StudentAndParent;
 
 public class GradesList {
 
-    private StudentAndParent snp = null;
-
     private static final String GRADES_PAGE_URL = "Oceny/Wszystkie?details=2&okres=";
+
+    private StudentAndParent snp = null;
 
     private List<Grade> grades = new ArrayList<>();
 

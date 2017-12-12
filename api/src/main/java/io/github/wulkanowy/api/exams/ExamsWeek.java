@@ -12,9 +12,9 @@ import io.github.wulkanowy.api.StudentAndParent;
 
 public class ExamsWeek {
 
-    private final StudentAndParent snp;
-
     private static final String EXAMS_PAGE_URL = "Sprawdziany.mvc/Terminarz?rodzajWidoku=2&data=";
+
+    private final StudentAndParent snp;
 
     public ExamsWeek(StudentAndParent snp) {
         this.snp = snp;

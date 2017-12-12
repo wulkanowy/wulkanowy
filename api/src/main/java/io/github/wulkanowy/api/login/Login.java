@@ -13,12 +13,6 @@ import io.github.wulkanowy.api.Cookies;
 
 public class Login extends Api {
 
-    private String protocolSchema = "https";
-
-    private String logHost = "vulcan.net.pl";
-
-    private String symbol = "Default";
-
     private static final String loginPageUrl = "{schema}://cufs.{host}/{symbol}/Account/LogOn" +
             "?ReturnUrl=%2F{symbol}%2FFS%2FLS%3Fwa%3Dwsignin1.0%26wtrealm%3D" +
             "{schema}%253a%252f%252fuonetplus.{host}%252f{symbol}%252fLoginEndpoint.aspx%26wctx%3D" +
@@ -26,6 +20,12 @@ public class Login extends Api {
 
     private static final String loginEndpointPageUrl =
             "{schema}://uonetplus.{host}/{symbol}/LoginEndpoint.aspx";
+
+    private String protocolSchema = "https";
+
+    private String logHost = "vulcan.net.pl";
+
+    private String symbol = "Default";
 
     public Login(Cookies cookies) {
         this.cookies = cookies;

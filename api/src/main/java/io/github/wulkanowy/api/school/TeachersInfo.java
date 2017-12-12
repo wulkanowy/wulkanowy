@@ -12,9 +12,9 @@ import io.github.wulkanowy.api.StudentAndParent;
 
 public class TeachersInfo {
 
-    private StudentAndParent snp = null;
-
     private static final String SCHOOL_PAGE_URL = "Szkola.mvc/Nauczyciele";
+
+    private StudentAndParent snp = null;
 
     public TeachersInfo(StudentAndParent snp) {
         this.snp = snp;

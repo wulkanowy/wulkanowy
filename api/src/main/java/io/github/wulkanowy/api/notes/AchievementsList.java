@@ -11,11 +11,11 @@ import io.github.wulkanowy.api.StudentAndParent;
 
 public class AchievementsList {
 
+    private static final String NOTES_PAGE_URL = "UwagiOsiagniecia.mvc/Wszystkie";
+
     private StudentAndParent snp = null;
 
     private List<String> achievements = new ArrayList<>();
-
-    private static final String NOTES_PAGE_URL = "UwagiOsiagniecia.mvc/Wszystkie";
 
     public AchievementsList(StudentAndParent snp) {
         this.snp = snp;

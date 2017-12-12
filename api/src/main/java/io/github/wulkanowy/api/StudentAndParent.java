@@ -12,10 +12,6 @@ import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 
 public class StudentAndParent extends Api {
 
-    private String protocolSchema = "https";
-
-    private String logHost = "vulcan.net.pl";
-
     private static final String startPageUrl = "{schema}://uonetplus.{host}/{symbol}/Start.mvc/Index";
 
     private static final String baseUrl = "{schema}://uonetplus-opiekun.{host}/{symbol}/{ID}/";
@@ -23,6 +19,10 @@ public class StudentAndParent extends Api {
     private static final String SYMBOL_PLACEHOLDER = "{symbol}";
 
     private static final String GRADES_PAGE_URL = "Oceny/Wszystkie";
+
+    private String protocolSchema = "https";
+
+    private String logHost = "vulcan.net.pl";
 
     private String symbol;
 

@@ -11,9 +11,9 @@ import io.github.wulkanowy.api.StudentAndParent;
 
 public class FamilyInformation {
 
-    private StudentAndParent snp;
-
     private static final String STUDENT_DATA_PAGE_URL = "Uczen.mvc/DanePodstawowe";
+
+    private StudentAndParent snp;
 
     public FamilyInformation(StudentAndParent snp) {
         this.snp = snp;

@@ -9,13 +9,13 @@ import io.github.wulkanowy.api.StudentAndParent;
 
 public class BasicInformation {
 
-    private Document studentDataPageDocument;
-
-    private StudentAndParent snp;
-
     private static final String STUDENT_DATA_PAGE_URL = "Uczen.mvc/DanePodstawowe";
 
     private static final String CONTENT_QUERY = ".mainContainer > article";
+
+    private Document studentDataPageDocument;
+
+    private StudentAndParent snp;
 
     public BasicInformation(StudentAndParent snp) {
         this.snp = snp;
