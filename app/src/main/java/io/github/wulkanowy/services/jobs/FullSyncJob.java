@@ -48,7 +48,6 @@ public class FullSyncJob extends VulcanJobHelper<FullSyncJob> {
     public static class SyncService extends VulcanService {
 
         @Override
-
         public void workToBePerformed() throws Exception {
             DaoSession daoSession = ((WulkanowyApp) getApplication()).getDaoSession();
 
