@@ -81,7 +81,7 @@ public class CurrentAccountLoginTest {
         setUserIdSharePreferences(userId);
 
         Vulcan vulcan = Mockito.mock(Vulcan.class);
-        Mockito.doNothing().when(vulcan).login("TEST@TEST", "TEST", "TEST_SYMBOL", "TEST_ID");
+        Mockito.when(vulcan.login("TEST@TEST", "TEST", "TEST_SYMBOL", "TEST_ID")).thenReturn(new Vulcan());
 
         CurrentAccountLogin currentAccountLogin = new CurrentAccountLogin(targetContext, daoSession, vulcan);
         LoginSession loginSession = currentAccountLogin.loginCurrentUser();
