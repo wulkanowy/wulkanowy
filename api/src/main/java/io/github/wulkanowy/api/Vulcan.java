@@ -27,7 +27,7 @@ public class Vulcan extends Api {
 
     private String symbol;
 
-    private StudentAndParent snp;
+    private SnP snp;
 
     private String protocolSchema = "https";
 
@@ -35,15 +35,17 @@ public class Vulcan extends Api {
 
     private String email;
 
-    public void login(Cookies cookies, String symbol) {
+    public Vulcan login(Cookies cookies, String symbol) {
         this.cookies = cookies;
         this.symbol = symbol;
+
+        return this;
     }
 
-    public void login(String email, String password, String symbol)
+    public Vulcan login(String email, String password, String symbol)
             throws BadCredentialsException, AccountPermissionException,
             LoginErrorException, IOException, VulcanOfflineException {
-        Login login = new Login(new Cookies());
+        Login login = getLoginObject();
 
         setFullEndpointInfo(email);
         login.setProtocolSchema(protocolSchema);
@@ -52,6 +54,8 @@ public class Vulcan extends Api {
         String realSymbol = login.login(this.email, password, symbol);
 
         login(login.getCookiesObject(), realSymbol);
+
+        return this;
     }
 
     public void login(String email, String password, String symbol, String id)
@@ -62,7 +66,11 @@ public class Vulcan extends Api {
         this.id = id;
     }
 
-    private void setFullEndpointInfo(String email) {
+    public Login getLoginObject() {
+        return new Login(new Cookies());
+    }
+
+    public Vulcan setFullEndpointInfo(String email) {
         String[] creds = email.split("\\\\");
 
         this.email = email;
@@ -74,9 +82,11 @@ public class Vulcan extends Api {
             this.logHost = url[1];
             this.email = creds[2];
         }
+
+        return this;
     }
 
-    public StudentAndParent getStudentAndParent() throws IOException, NotLoggedInErrorException {
+    public SnP getStudentAndParent() throws IOException, NotLoggedInErrorException {
         if (null == getCookiesObject()) {
             throw new NotLoggedInErrorException();
         }
@@ -96,7 +106,7 @@ public class Vulcan extends Api {
         return snp;
     }
 
-    public StudentAndParent createSnp(Cookies cookies, String symbol, String id) {
+    public SnP createSnp(Cookies cookies, String symbol, String id) {
         if (null == id) {
             return new StudentAndParent(cookies, symbol);
         }

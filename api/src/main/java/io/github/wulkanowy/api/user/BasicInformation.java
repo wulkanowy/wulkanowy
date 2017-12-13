@@ -5,7 +5,7 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 
-import io.github.wulkanowy.api.StudentAndParent;
+import io.github.wulkanowy.api.SnP;
 
 public class BasicInformation {
 
@@ -15,9 +15,9 @@ public class BasicInformation {
 
     private Document studentDataPageDocument;
 
-    private StudentAndParent snp;
+    private SnP snp;
 
-    public BasicInformation(StudentAndParent snp) {
+    public BasicInformation(SnP snp) {
         this.snp = snp;
     }
 

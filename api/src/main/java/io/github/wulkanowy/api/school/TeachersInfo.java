@@ -8,15 +8,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.api.StudentAndParent;
+import io.github.wulkanowy.api.SnP;
 
 public class TeachersInfo {
 
     private static final String SCHOOL_PAGE_URL = "Szkola.mvc/Nauczyciele";
 
-    private StudentAndParent snp = null;
+    private SnP snp = null;
 
-    public TeachersInfo(StudentAndParent snp) {
+    public TeachersInfo(SnP snp) {
         this.snp = snp;
     }
 

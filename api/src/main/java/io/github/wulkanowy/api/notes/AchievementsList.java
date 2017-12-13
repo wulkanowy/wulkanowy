@@ -7,17 +7,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.api.StudentAndParent;
+import io.github.wulkanowy.api.SnP;
 
 public class AchievementsList {
 
     private static final String NOTES_PAGE_URL = "UwagiOsiagniecia.mvc/Wszystkie";
 
-    private StudentAndParent snp = null;
+    private SnP snp = null;
 
     private List<String> achievements = new ArrayList<>();
 
-    public AchievementsList(StudentAndParent snp) {
+    public AchievementsList(SnP snp) {
         this.snp = snp;
     }
 

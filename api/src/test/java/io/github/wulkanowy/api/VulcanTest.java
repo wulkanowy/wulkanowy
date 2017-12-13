@@ -32,6 +32,42 @@ public class VulcanTest extends Vulcan {
                 .thenReturn(snp);
     }
 
+//    @Test
+//    public void setFullEndpointInfoTest() throws Exception {
+//        SnP snp = new StudentParent(new Cookies(), "Default");
+//        Vulcan vulcan = Mockito.mock(Vulcan.class);
+//        Mockito.when(vulcan.createSnp(new Cookies(), "Default", "123456")).thenReturn(snp);
+//        Mockito.when(vulcan.getCookiesObject()).thenCallRealMethod();
+//        Mockito.when(vulcan.login(Mockito.any(Cookies.class), Mockito.anyString())).thenCallRealMethod();
+//        Mockito.when(vulcan.login(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
+//        Mockito.when(vulcan.setFullEndpointInfo(Mockito.anyString())).thenCallRealMethod();
+//        Mockito.when(vulcan.getStudentAndParent()).thenCallRealMethod();
+//        Mockito.when(vulcan.getLoginObject()).thenReturn(new FakeLogin(new Cookies()));
+//
+//        vulcan.login("http://fakelog.net\\\\admin", "pass", "Default");
+//        Assert.assertEquals("fakelog.net", vulcan.getStudentAndParent().getLogHost());
+//    }
+//
+//    private class StudentParent extends StudentAndParent implements SnP {
+//
+//        StudentParent(Cookies cookies, String symbol) {
+//            super(cookies, symbol);
+//        }
+//
+//        @Override
+//        public void storeContextCookies() throws IOException, NotLoggedInErrorException {}
+//    }
+//
+//    private class FakeLogin extends Login {
+//        FakeLogin(Cookies cookies) {
+//            super(cookies);
+//        }
+//
+//        public String login(String email, String password, String symbol) {
+//            return "Default";
+//        }
+//    }
+
     @Test
     public void getStudentAndParentTest() throws Exception {
         Cookies cookies = new Cookies();
@@ -48,7 +84,7 @@ public class VulcanTest extends Vulcan {
 
         Mockito.when(vulcan.getStudentAndParent()).thenCallRealMethod();
 
-        StudentAndParent vulcanSnP = vulcan.getStudentAndParent();
+        SnP vulcanSnP = vulcan.getStudentAndParent();
 
         Assert.assertEquals(snp, vulcanSnP);
         Assert.assertEquals(vulcanSnP, vulcan.getStudentAndParent());

@@ -10,7 +10,7 @@ import java.util.List;
 
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 
-public class StudentAndParent extends Api {
+public class StudentAndParent extends Api implements SnP {
 
     private static final String startPageUrl = "{schema}://uonetplus.{host}/{symbol}/Start.mvc/Index";
 
@@ -20,9 +20,9 @@ public class StudentAndParent extends Api {
 
     private static final String GRADES_PAGE_URL = "Oceny/Wszystkie";
 
-    private String protocolSchema = "https";
+    protected String logHost = "vulcan.net.pl";
 
-    private String logHost = "vulcan.net.pl";
+    private String protocolSchema = "https";
 
     private String symbol;
 
