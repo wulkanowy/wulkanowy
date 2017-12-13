@@ -11,6 +11,7 @@ import io.github.wulkanowy.api.attendance.AttendanceTable;
 import io.github.wulkanowy.api.exams.ExamsWeek;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.SubjectsList;
+import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.notes.AchievementsList;
 import io.github.wulkanowy.api.notes.NotesList;
@@ -32,41 +33,37 @@ public class VulcanTest extends Vulcan {
                 .thenReturn(snp);
     }
 
-//    @Test
-//    public void setFullEndpointInfoTest() throws Exception {
-//        SnP snp = new StudentParent(new Cookies(), "Default");
-//        Vulcan vulcan = Mockito.mock(Vulcan.class);
-//        Mockito.when(vulcan.createSnp(new Cookies(), "Default", "123456")).thenReturn(snp);
-//        Mockito.when(vulcan.getCookiesObject()).thenCallRealMethod();
-//        Mockito.when(vulcan.login(Mockito.any(Cookies.class), Mockito.anyString())).thenCallRealMethod();
-//        Mockito.when(vulcan.login(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
-//        Mockito.when(vulcan.setFullEndpointInfo(Mockito.anyString())).thenCallRealMethod();
-//        Mockito.when(vulcan.getStudentAndParent()).thenCallRealMethod();
-//        Mockito.when(vulcan.getLoginObject()).thenReturn(new FakeLogin(new Cookies()));
-//
-//        vulcan.login("http://fakelog.net\\\\admin", "pass", "Default");
-//        Assert.assertEquals("fakelog.net", vulcan.getStudentAndParent().getLogHost());
-//    }
-//
-//    private class StudentParent extends StudentAndParent implements SnP {
-//
-//        StudentParent(Cookies cookies, String symbol) {
-//            super(cookies, symbol);
-//        }
-//
-//        @Override
-//        public void storeContextCookies() throws IOException, NotLoggedInErrorException {}
-//    }
-//
-//    private class FakeLogin extends Login {
-//        FakeLogin(Cookies cookies) {
-//            super(cookies);
-//        }
-//
-//        public String login(String email, String password, String symbol) {
-//            return "Default";
-//        }
-//    }
+    @Test
+    public void setFullEndpointInfoTest() throws Exception {
+        SnP snp = new StudentAndParent(new Cookies(), "Default");
+        Login login = Mockito.mock(Login.class);
+
+        Vulcan vulcan = Mockito.mock(Vulcan.class);
+        Mockito.when(vulcan.login(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
+        Mockito.when(vulcan.login(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenCallRealMethod();
+        Mockito.when(vulcan.getLoginObject()).thenReturn(login);
+        Mockito.when(vulcan.createSnp(Mockito.any(Cookies.class), Mockito.anyString(), Mockito.anyString())).thenReturn(snp);
+        Mockito.when(vulcan.getCookiesObject()).thenCallRealMethod();
+        Mockito.when(vulcan.getStudentAndParent()).thenCallRealMethod();
+
+        Mockito.when(vulcan.setFullEndpointInfo(Mockito.anyString())).thenCallRealMethod();
+
+        Mockito.when(vulcan.getProtocolSchema()).thenCallRealMethod();
+        Mockito.when(vulcan.getLogHost()).thenCallRealMethod();
+        Mockito.when(vulcan.getEmail()).thenCallRealMethod();
+
+        vulcan.login("http://fakelog.net\\\\admin", "pass", "Default", "123");
+        Assert.assertEquals("http", vulcan.getProtocolSchema());
+        Assert.assertEquals("fakelog.net", vulcan.getLogHost());
+        Assert.assertEquals("admin", vulcan.getEmail());
+    }
+
+    @Test
+    public void getLoginObjectTest() throws Exception {
+        Mockito.when(vulcan.getLoginObject()).thenCallRealMethod();
+
+        Assert.assertThat(vulcan.getLoginObject(), CoreMatchers.instanceOf(Login.class));
+    }
 
     @Test
     public void getStudentAndParentTest() throws Exception {

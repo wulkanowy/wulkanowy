@@ -58,12 +58,26 @@ public class Vulcan extends Api {
         return this;
     }
 
-    public void login(String email, String password, String symbol, String id)
+    public Vulcan login(String email, String password, String symbol, String id)
             throws BadCredentialsException, AccountPermissionException,
             LoginErrorException, IOException, VulcanOfflineException {
         login(email, password, symbol);
 
         this.id = id;
+
+        return this;
+    }
+
+    public String getProtocolSchema() {
+        return protocolSchema;
+    }
+
+    public String getLogHost() {
+        return logHost;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public Login getLoginObject() {
