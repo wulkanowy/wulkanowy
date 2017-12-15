@@ -56,29 +56,34 @@ public class TimetableSynchronization {
         Log.d(VulcanJobHelper.DEBUG_TAG, "Synchronization days (amount = " + dayList.size() + ")");
 
         List<Lesson> lessonList = new ArrayList<>();
-        lessonList.addAll(getPreparedLessonsList(dayList, dayDao, lessonDao));
+        lessonList.addAll(getPreparedLessonsList(dayList, dayDao, lessonDao, loginSession.getUserId(), weekId));
 
         lessonDao.saveInTx(lessonList);
 
         Log.d(VulcanJobHelper.DEBUG_TAG, "Synchronization lessons (amount = " + lessonList.size() + ")");
     }
 
-    private List<Lesson> getPreparedLessonsList(List<Day> dayList, DayDao dayDao, LessonDao lessonDao) {
+    private List<Lesson> getPreparedLessonsList(List<Day> dayList, DayDao dayDao, LessonDao lessonDao, long userId, long weekId) {
         List<Lesson> allLessonsList = new ArrayList<>();
 
         for (Day day : dayList) {
 
             Query<io.github.wulkanowy.dao.entities.Day> dayQuery = dayDao.queryBuilder()
-                    .where(DayDao.Properties.Date.eq(day.getDate()))
+                    .where(DayDao.Properties.Date.eq(day.getDate()),
+                            DayDao.Properties.UserId.eq(userId),
+                            DayDao.Properties.WeekId.eq(weekId))
                     .build();
 
             List<Lesson> lessonEntityList = ConversionVulcanObject.lessonsToLessonsEntities(day.getLessons());
             List<Lesson> updatedLessonEntityList = new ArrayList<>();
 
             for (Lesson lesson : lessonEntityList) {
-                Query<Lesson> lessonQuery = lessonDao.queryBuilder().where(LessonDao.Properties.DayId.eq(dayQuery.uniqueOrThrow().getId()), LessonDao.Properties.Date.eq(lesson.getDate()),
-                        LessonDao.Properties.StartTime.eq(lesson.getStartTime()), LessonDao.Properties.EndTime.eq(lesson.getEndTime())).build();
-                Lesson lesson1 = lessonQuery.unique();
+                Lesson lesson1 = lessonDao.queryBuilder()
+                        .where(LessonDao.Properties.DayId.eq(dayQuery.uniqueOrThrow().getId()),
+                                LessonDao.Properties.Date.eq(lesson.getDate()),
+                                LessonDao.Properties.StartTime.eq(lesson.getStartTime()),
+                                LessonDao.Properties.EndTime.eq(lesson.getEndTime()))
+                        .unique();
 
                 if (lesson1 != null) {
                     lesson.setId(lesson1.getId());
