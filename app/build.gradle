@@ -62,12 +62,12 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.jakewharton:butterknife:8.8.1'
     implementation 'joda-time:joda-time:2.9.9'
+    implementation 'com.github.javiersantos:AppUpdater:2.6.4'
 
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.1'
     debugImplementation 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
-    debugImplementation 'com.github.javiersantos:AppUpdater:2.6.4'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.11.0'
