@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -49,6 +50,8 @@ public class SplashActivity extends AppCompatActivity
 
     private DownloadManager downloadManager;
 
+    private final static String ANDROID_PACKAGE = "application/vnd.android.package-archive";
+
     private BroadcastReceiver onComplete = new BroadcastReceiver() {
 
         @Override
@@ -64,11 +67,20 @@ public class SplashActivity extends AppCompatActivity
 
                 File file = new File(uriString);
 
-                Intent install = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-                Uri uri = FileProvider.getUriForFile(SplashActivity.this,
-                        BuildConfig.APPLICATION_ID + ".fileprovider", file);
-                install.setData(uri);
-                install.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                Intent install;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    install = new Intent(Intent.ACTION_INSTALL_PACKAGE );
+                    install.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    install.setData(FileProvider.getUriForFile(context,
+                            BuildConfig.APPLICATION_ID + ".fileprovider", file));
+                } else {
+                    install = new Intent(Intent.ACTION_VIEW );
+                    install.setDataAndType(
+                            Uri.parse("file://" + file.getAbsolutePath()),
+                            ANDROID_PACKAGE);
+                }
+
                 startActivity(install);
                 finish();
             }
