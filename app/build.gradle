@@ -15,7 +15,10 @@ android {
         versionName "0.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        buildConfigField "String", "UPDATE_URL", "\"https://bitrise-redirector.herokuapp.com" +
+                "/v0.1/apps/daeff1893f3c8128/builds/" + "${getCurrentGitBranch()}" + "/artifacts/app-debug-bitrise-signed.apk/info\""
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -64,10 +67,26 @@ dependencies {
 
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.1'
     debugImplementation 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+    debugImplementation 'com.github.javiersantos:AppUpdater:2.6.4'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.11.0'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'org.mockito:mockito-android:2.11.0'
+}
+
+def getCurrentGitBranch() {
+    def gitBranch = "master"
+
+    try {
+        def workingDir = new File("${project.projectDir}")
+        def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
+        result.waitFor()
+        if (result.exitValue() == 0) {
+            gitBranch = result.text.trim()
+        }
+    } catch (e) {}
+
+    return gitBranch
 }
