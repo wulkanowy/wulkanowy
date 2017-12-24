@@ -84,7 +84,7 @@ def getCurrentGitBranch() {
         def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
         result.waitFor()
         if (result.exitValue() == 0) {
-            gitBranch = result.text.trim()
+            gitBranch = result.text.trim() != "HEAD" ? resut.text.trim() : System.getenv("BITRISE_GIT_BRANCH")
         }
     } catch (e) {}
 
