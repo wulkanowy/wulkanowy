@@ -171,7 +171,7 @@ public class SplashActivity extends AppCompatActivity
     private void downloadUpdate() {
         if (ActivityCompat.checkSelfPermission(getBaseContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
-            Snackbar.make(mLayout, "Rozpocząto pobieranie.", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mLayout, "Downloading started.", Snackbar.LENGTH_SHORT).show();
 
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(update.getUrlToDownload().toString()));
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
