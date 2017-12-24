@@ -21,6 +21,7 @@ import android.widget.TextView;
 import java.util.LinkedHashMap;
 
 import io.github.wulkanowy.R;
+import io.github.wulkanowy.services.Updater;
 
 /**
  * A login screen that offers login via email/password.
@@ -35,10 +36,15 @@ public class LoginActivity extends Activity {
 
     private AutoCompleteTextView symbolView;
 
+    private Updater updater;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        updater = new Updater(this);
+        updater.checkForUpdates();
 
         // Set up the login form.
         emailView = findViewById(R.id.email);
@@ -214,5 +220,11 @@ public class LoginActivity extends Activity {
             }
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        updater.onDestroy(this);
     }
 }

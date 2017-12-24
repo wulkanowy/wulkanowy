@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import io.github.wulkanowy.R;
+import io.github.wulkanowy.services.Updater;
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment;
 import io.github.wulkanowy.ui.main.board.BoardFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
@@ -25,6 +26,8 @@ public class DashboardActivity extends AppCompatActivity {
     private BoardFragment boardFragment = new BoardFragment();
 
     private TimetableFragment timetableFragment = new TimetableFragment();
+
+    private Updater updater;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,6 +68,9 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        updater = new Updater(this);
+        updater.checkForUpdates();
+
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setSelectedItemId(R.id.navigation_marks);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -103,5 +109,11 @@ public class DashboardActivity extends AppCompatActivity {
         } else if (navigation.getSelectedItemId() == R.id.navigation_dashboard) {
             moveTaskToBack(true);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        updater.onDestroy(this);
     }
 }
