@@ -102,12 +102,12 @@ public class SplashActivity extends AppCompatActivity
         TextView versionName = findViewById(R.id.rawText);
         versionName.setText(getString(R.string.version_text, BuildConfig.VERSION_NAME));
 
-        new Handler().postDelayed(new Runnable() {
+        new Handler().post(new Runnable() {
             @Override
             public void run() {
                 executeOnRunApp();
             }
-        }, 500);
+        });
     }
 
     private void executeOnRunApp() {
