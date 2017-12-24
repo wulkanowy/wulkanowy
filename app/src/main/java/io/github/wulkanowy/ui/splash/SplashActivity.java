@@ -156,6 +156,8 @@ public class SplashActivity extends AppCompatActivity
                                         }
                                     })
                                     .show();
+                        } else {
+                            bootApp();
                         }
                     }
 
