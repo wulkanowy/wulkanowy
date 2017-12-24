@@ -77,7 +77,7 @@ dependencies {
 }
 
 static def getCurrentGitBranch() {
-    if (gitBranch() != "HEAD") {
+    if (gitBranch() == "HEAD") {
         return System.getenv("BITRISE_GIT_BRANCH")
     }
 
