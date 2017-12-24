@@ -76,17 +76,19 @@ dependencies {
     androidTestImplementation 'org.mockito:mockito-android:2.11.0'
 }
 
-def getCurrentGitBranch() {
-    def gitBranch = "master"
+static def getCurrentGitBranch() {
+    if (gitBranch() != "HEAD") {
+        return System.getenv("BITRISE_GIT_BRANCH")
+    }
 
-    try {
-        def workingDir = new File("${project.projectDir}")
-        def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
-        result.waitFor()
-        if (result.exitValue() == 0) {
-            gitBranch = result.text.trim() != "HEAD" ? resut.text.trim() : System.getenv("BITRISE_GIT_BRANCH")
-        }
-    } catch (e) {}
+    return gitBranch()
+}
 
-    return gitBranch
+static def gitBranch() {
+    def branch = "null"
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    branch
 }
