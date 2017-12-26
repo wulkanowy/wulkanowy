@@ -29,6 +29,8 @@ public class DashboardActivity extends AppCompatActivity {
 
     private Updater updater;
 
+    private boolean showed;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -68,9 +70,6 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        updater = new Updater(this);
-        updater.checkForUpdates();
-
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setSelectedItemId(R.id.navigation_marks);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -91,6 +90,21 @@ public class DashboardActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, currentFragment).commit();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!showed) {
+            updater = new Updater(this).checkForUpdates();
+            showed = true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        updater.onRequestPermissionsResult(requestCode, grantResults);
     }
 
     @Override
