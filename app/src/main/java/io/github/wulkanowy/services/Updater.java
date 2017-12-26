@@ -66,7 +66,8 @@ public class Updater {
                             BuildConfig.APPLICATION_ID + ".fileprovider", file));
                 } else {
                     install = new Intent(Intent.ACTION_VIEW);
-                    install.setDataAndType(Uri.parse("file://" + file.getAbsolutePath()), "application/vnd.android.package-archive");
+                    install.setDataAndType(Uri.parse("file://" + file.getAbsolutePath()),
+                            "application/vnd.android.package-archive");
                 }
 
                 context.startActivity(install);
@@ -91,7 +92,8 @@ public class Updater {
     }
 
     private void requestWriteStoragePermission() {
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+        ActivityCompat.requestPermissions(activity,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
     }
 
@@ -105,8 +107,9 @@ public class Updater {
                 .setDescription("Downloading " + update.getLatestVersion())
                 .setVisibleInDownloadsUi(true)
                 .setMimeType("application/vnd.android.package-archive")
-                .setDestinationInExternalPublicDir(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_DOWNLOADS).toString(), "/updates/" + update.getLatestVersion() + ".apk");
+                .setDestinationInExternalPublicDir(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(),
+                        "/updates/" + update.getLatestVersion() + ".apk");
 
         downloadManager.enqueue(request);
     }
@@ -116,7 +119,8 @@ public class Updater {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 downloadUpdate();
             } else {
-                Snackbar.make(activity.findViewById(R.id.fragment_container), "Write storage permission request was denied.",
+                Snackbar.make(activity.findViewById(R.id.fragment_container),
+                        "Write storage permission request was denied.",
                         Snackbar.LENGTH_LONG)
                         .show();
             }
