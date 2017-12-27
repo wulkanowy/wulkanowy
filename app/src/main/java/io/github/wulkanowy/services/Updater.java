@@ -103,8 +103,8 @@ public class Updater {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(update.getUrlToDownload().toString()))
                 .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
                 .setAllowedOverRoaming(false)
-                .setTitle("Wulkanowy update to version " + update.getLatestVersionCode())
-                .setDescription("Downloading " + update.getLatestVersion())
+                .setTitle("Wulkanowy v" + update.getLatestVersionCode())
+                .setDescription(update.getLatestVersion())
                 .setVisibleInDownloadsUi(true)
                 .setMimeType("application/vnd.android.package-archive")
                 .setDestinationUri(Uri.fromFile(new File(
