@@ -8,6 +8,6 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/wulkanowy/wulkanowy?branch=master)](https://bettercodehub.com/)
 [![Bintray](https://img.shields.io/bintray/v/wulkanowy/wulkanowy/api.svg?style=flat-square)](https://bintray.com/wulkanowy/wulkanowy/api)
 
-[Pobierz wersję rozwojową](https://bitrise-redirector.herokuapp.com/v0.1/apps/daeff1893f3c8128/builds/master/artifacts/app-debug.apk)
+[Pobierz wersję rozwojową](https://bitrise-redirector.herokuapp.com/v0.1/apps/daeff1893f3c8128/builds/master/artifacts/app-release-bitrise-signed.apk)
 
 Wulkanowy to projekt aplikacji na androida ułatwiającej używanie dziennika VULCANa.

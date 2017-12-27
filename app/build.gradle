@@ -16,7 +16,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         buildConfigField "String", "UPDATE_URL", "\"https://bitrise-redirector.herokuapp.com" +
-                "/v0.1/apps/daeff1893f3c8128/builds/" + "${getCurrentGitBranch()}" + "/artifacts/app-debug-bitrise-signed.apk/info\""
+                "/v0.1/apps/daeff1893f3c8128/builds/" + "${getCurrentGitBranch()}" + "/artifacts/app-release-bitrise-signed.apk/info\""
     }
 
     buildTypes {
