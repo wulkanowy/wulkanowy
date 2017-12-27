@@ -100,6 +100,16 @@ public class Updater {
     private void startDownload() {
         Snackbar.make(activity.findViewById(R.id.container), "Downloading started.", Snackbar.LENGTH_SHORT).show();
 
+        String path = Environment.getExternalStorageDirectory().toString() + File.separator +
+                Environment.DIRECTORY_DOWNLOADS + File.separator + "wulkanowy";
+
+        File dir = new File(path);
+        if(!dir.mkdirs()) {
+            for (String aChildren : dir.list()) {
+                new File(dir, aChildren).delete();
+            }
+        }
+
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(update.getUrlToDownload().toString()))
                 .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
                 .setAllowedOverRoaming(false)
@@ -107,9 +117,7 @@ public class Updater {
                 .setDescription(update.getLatestVersion())
                 .setVisibleInDownloadsUi(true)
                 .setMimeType("application/vnd.android.package-archive")
-                .setDestinationUri(Uri.fromFile(new File(
-                        Environment.getExternalStorageDirectory().toString() +
-                                File.separator + update.getLatestVersion() + ".apk")));
+                .setDestinationUri(Uri.fromFile(new File(path + File.separator + update.getLatestVersion() + ".apk")));
 
         downloadManager.enqueue(request);
     }
