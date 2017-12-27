@@ -98,7 +98,7 @@ public class Updater {
     }
 
     private void startDownload() {
-        Snackbar.make(activity.findViewById(R.id.container), "Downloading started.", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(activity.findViewById(R.id.fragment_container), "Downloading started.", Snackbar.LENGTH_SHORT).show();
 
         String path = Environment.getExternalStorageDirectory().toString() + File.separator +
                 Environment.DIRECTORY_DOWNLOADS + File.separator + "wulkanowy";
