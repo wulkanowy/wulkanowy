@@ -154,8 +154,8 @@ public class Updater {
 
                     @Override
                     public void onFailed(AppUpdaterError error) {
-                        Log.d(DEBUG_TAG, "Something went wrong");
-                        Log.d(DEBUG_TAG, error.toString());
+                        Log.e(DEBUG_TAG, "Something went wrong");
+                        Log.e(DEBUG_TAG, error.toString());
                     }
                 });
         appUpdaterUtils.start();
