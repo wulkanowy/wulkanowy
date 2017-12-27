@@ -107,9 +107,9 @@ public class Updater {
                 .setDescription("Downloading " + update.getLatestVersion())
                 .setVisibleInDownloadsUi(true)
                 .setMimeType("application/vnd.android.package-archive")
-                .setDestinationInExternalPublicDir(
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(),
-                        "/updates/" + update.getLatestVersion() + ".apk");
+                .setDestinationUri(Uri.fromFile(new File(
+                        Environment.getExternalStorageDirectory().toString() +
+                                File.separator + update.getLatestVersion() + ".apk")));
 
         downloadManager.enqueue(request);
     }
