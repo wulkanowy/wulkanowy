@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class TimeUtilities {
+public final class TimeUtilities {
 
     private static final long TICKS_AT_EPOCH = 621355968000000000L;
 

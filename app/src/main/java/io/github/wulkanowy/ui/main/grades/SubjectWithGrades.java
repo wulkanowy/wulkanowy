@@ -5,7 +5,7 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.util.List;
 
-import io.github.wulkanowy.dao.entities.Grade;
+import io.github.wulkanowy.database.dao.entities.Grade;
 
 public class SubjectWithGrades extends ExpandableGroup<Grade> {
 

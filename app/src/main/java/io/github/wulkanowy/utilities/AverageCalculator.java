@@ -2,9 +2,9 @@ package io.github.wulkanowy.utilities;
 
 import java.util.List;
 
-import io.github.wulkanowy.dao.entities.Grade;
+import io.github.wulkanowy.database.dao.entities.Grade;
 
-public class AverageCalculator {
+public final class AverageCalculator {
 
     private AverageCalculator() {
         throw new IllegalStateException("Utility class");

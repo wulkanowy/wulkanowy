@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.dao.entities.Grade;
+import io.github.wulkanowy.database.dao.entities.Grade;
 
 public class GradesDialogFragment extends DialogFragment {
 

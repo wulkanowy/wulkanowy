@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.dao.entities.Grade;
+import io.github.wulkanowy.database.dao.entities.Grade;
 
 public class SubjectWithGradesTest {
 
