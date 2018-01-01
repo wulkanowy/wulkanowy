@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 import org.greenrobot.greendao.database.Database;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,8 +35,10 @@ public class TimetableSyncTest {
     public static void setUpClass() {
         DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-database");
         Database database = devOpenHelper.getWritableDb();
-
         daoSession = new DaoMaster(database).newSession();
+
+        DaoMaster.dropAllTables(database, true);
+        DaoMaster.createAllTables(database, true);
     }
 
     @Test
@@ -83,19 +84,12 @@ public class TimetableSyncTest {
 
     }
 
-    @Before
-    public void setUp() {
-        daoSession.getAccountDao().deleteAll();
-        daoSession.getDayDao().deleteAll();
-        daoSession.getLessonDao().deleteAll();
-        daoSession.clear();
-    }
-
     @AfterClass
     public static void cleanUp() {
         daoSession.getAccountDao().deleteAll();
         daoSession.getDayDao().deleteAll();
         daoSession.getLessonDao().deleteAll();
+        daoSession.getWeekDao().deleteAll();
         daoSession.clear();
     }
 }

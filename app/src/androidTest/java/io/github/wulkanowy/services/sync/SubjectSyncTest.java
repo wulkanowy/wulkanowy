@@ -30,8 +30,10 @@ public class SubjectSyncTest {
     public static void setUpClass() {
         DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-database");
         Database database = devOpenHelper.getWritableDb();
-
         daoSession = new DaoMaster(database).newSession();
+
+        DaoMaster.dropAllTables(database, true);
+        DaoMaster.createAllTables(database, true);
     }
 
     @Before
