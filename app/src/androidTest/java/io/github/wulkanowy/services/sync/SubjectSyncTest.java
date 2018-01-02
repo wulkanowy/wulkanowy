@@ -17,9 +17,9 @@ import java.util.List;
 
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.grades.SubjectsList;
-import io.github.wulkanowy.database.dao.entities.DaoMaster;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
-import io.github.wulkanowy.database.dao.entities.Subject;
+import io.github.wulkanowy.db.dao.entities.DaoMaster;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.db.dao.entities.Subject;
 
 @RunWith(AndroidJUnit4.class)
 public class SubjectSyncTest {
@@ -28,7 +28,7 @@ public class SubjectSyncTest {
 
     @BeforeClass
     public static void setUpClass() {
-        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-database");
+        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-db");
         Database database = devOpenHelper.getWritableDb();
         daoSession = new DaoMaster(database).newSession();
 

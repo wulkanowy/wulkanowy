@@ -8,8 +8,8 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.utils.Log;
-import io.github.wulkanowy.database.dao.entities.DaoMaster;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
+import io.github.wulkanowy.db.dao.entities.DaoMaster;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
 
 public class WulkanowyApp extends Application {
 
@@ -25,7 +25,7 @@ public class WulkanowyApp extends Application {
             enableDebugLog();
         }
 
-        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, "wulkanowy-database");
+        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, "wulkanowy-db");
 
         daoSession = new DaoMaster(devOpenHelper.getWritableDb()).newSession();
 

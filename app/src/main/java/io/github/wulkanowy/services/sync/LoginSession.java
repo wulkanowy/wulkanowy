@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import io.github.wulkanowy.api.Vulcan;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
 
 
 public class LoginSession {

@@ -24,16 +24,16 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.WulkanowyApp;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
-import io.github.wulkanowy.database.dao.DatabaseAccess;
-import io.github.wulkanowy.database.dao.entities.Account;
-import io.github.wulkanowy.database.dao.entities.AccountDao;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
-import io.github.wulkanowy.database.dao.entities.Grade;
-import io.github.wulkanowy.database.dao.entities.Subject;
+import io.github.wulkanowy.db.dao.DatabaseAccess;
+import io.github.wulkanowy.db.dao.entities.Account;
+import io.github.wulkanowy.db.dao.entities.AccountDao;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.db.dao.entities.Grade;
+import io.github.wulkanowy.db.dao.entities.Subject;
 import io.github.wulkanowy.services.jobs.VulcanJobHelper;
 import io.github.wulkanowy.services.sync.LoginSession;
 import io.github.wulkanowy.services.sync.VulcanSync;
-import io.github.wulkanowy.utilities.NetworkUtilities;
+import io.github.wulkanowy.utils.NetworkUtils;
 
 public class GradesFragment extends Fragment {
 
@@ -106,7 +106,7 @@ public class GradesFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (NetworkUtilities.isOnline(getContext())) {
+                if (NetworkUtils.isOnline(getContext())) {
                     new RefreshTask(getActivity(), mainView, daoSession).execute();
                 } else {
                     Toast.makeText(mainView.getContext(), R.string.noInternet_text, Toast.LENGTH_SHORT).show();

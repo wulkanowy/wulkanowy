@@ -18,10 +18,10 @@ import java.util.List;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.grades.Grade;
 import io.github.wulkanowy.api.grades.GradesList;
-import io.github.wulkanowy.database.dao.entities.Account;
-import io.github.wulkanowy.database.dao.entities.DaoMaster;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
-import io.github.wulkanowy.database.dao.entities.Subject;
+import io.github.wulkanowy.db.dao.entities.Account;
+import io.github.wulkanowy.db.dao.entities.DaoMaster;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.db.dao.entities.Subject;
 
 @RunWith(AndroidJUnit4.class)
 public class GradeSyncTest {
@@ -30,7 +30,7 @@ public class GradeSyncTest {
 
     @BeforeClass
     public static void setUpClass() {
-        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-database");
+        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-db");
         Database database = devOpenHelper.getWritableDb();
         daoSession = new DaoMaster(database).newSession();
 
@@ -68,7 +68,7 @@ public class GradeSyncTest {
         GradesSync gradesSync = new GradesSync();
         gradesSync.sync(loginSession);
 
-        io.github.wulkanowy.database.dao.entities.Grade grade = daoSession.getGradeDao().load(1L);
+        io.github.wulkanowy.db.dao.entities.Grade grade = daoSession.getGradeDao().load(1L);
 
         Assert.assertNotNull(grade);
         Assert.assertEquals(userId, grade.getUserId());

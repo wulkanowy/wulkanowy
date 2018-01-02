@@ -18,9 +18,9 @@ import io.github.wulkanowy.api.timetable.Day;
 import io.github.wulkanowy.api.timetable.Lesson;
 import io.github.wulkanowy.api.timetable.Timetable;
 import io.github.wulkanowy.api.timetable.Week;
-import io.github.wulkanowy.database.dao.entities.Account;
-import io.github.wulkanowy.database.dao.entities.DaoMaster;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
+import io.github.wulkanowy.db.dao.entities.Account;
+import io.github.wulkanowy.db.dao.entities.DaoMaster;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
@@ -33,7 +33,7 @@ public class TimetableSyncTest {
 
     @BeforeClass
     public static void setUpClass() {
-        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-database");
+        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-db");
         Database database = devOpenHelper.getWritableDb();
         daoSession = new DaoMaster(database).newSession();
 
@@ -72,8 +72,8 @@ public class TimetableSyncTest {
         TimetableSync timetableSync = new TimetableSync();
         timetableSync.sync(loginSession, null);
 
-        List<io.github.wulkanowy.database.dao.entities.Day> dayEntityList = daoSession.getDayDao().loadAll();
-        List<io.github.wulkanowy.database.dao.entities.Lesson> lessonEntityList = dayEntityList.get(0).getLessons();
+        List<io.github.wulkanowy.db.dao.entities.Day> dayEntityList = daoSession.getDayDao().loadAll();
+        List<io.github.wulkanowy.db.dao.entities.Lesson> lessonEntityList = dayEntityList.get(0).getLessons();
 
         Assert.assertNotNull(dayEntityList.get(0));
         Assert.assertEquals(userId, dayEntityList.get(0).getUserId());

@@ -11,15 +11,15 @@ import java.util.List;
 
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.database.dao.entities.Account;
-import io.github.wulkanowy.database.dao.entities.AccountDao;
-import io.github.wulkanowy.database.dao.entities.Grade;
-import io.github.wulkanowy.database.dao.entities.GradeDao;
-import io.github.wulkanowy.database.dao.entities.Subject;
-import io.github.wulkanowy.database.dao.entities.SubjectDao;
+import io.github.wulkanowy.db.dao.entities.Account;
+import io.github.wulkanowy.db.dao.entities.AccountDao;
+import io.github.wulkanowy.db.dao.entities.Grade;
+import io.github.wulkanowy.db.dao.entities.GradeDao;
+import io.github.wulkanowy.db.dao.entities.Subject;
+import io.github.wulkanowy.db.dao.entities.SubjectDao;
 import io.github.wulkanowy.services.jobs.VulcanJobHelper;
-import io.github.wulkanowy.utilities.DataObjectConverter;
-import io.github.wulkanowy.utilities.EntitiesCompare;
+import io.github.wulkanowy.utils.DataObjectConverter;
+import io.github.wulkanowy.utils.EntitiesCompare;
 
 public class GradesSync {
 

@@ -16,10 +16,10 @@ import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.PersonalData;
-import io.github.wulkanowy.database.dao.entities.Account;
-import io.github.wulkanowy.database.dao.entities.DaoMaster;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
-import io.github.wulkanowy.utilities.security.Safety;
+import io.github.wulkanowy.db.dao.entities.Account;
+import io.github.wulkanowy.db.dao.entities.DaoMaster;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.utils.security.Safety;
 
 public class FirstAccountLoginTest {
 
@@ -29,7 +29,7 @@ public class FirstAccountLoginTest {
 
     @BeforeClass
     public static void setUpClass() {
-        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-database");
+        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-db");
         Database database = devOpenHelper.getWritableDb();
         daoSession = new DaoMaster(database).newSession();
 

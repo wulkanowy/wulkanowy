@@ -16,9 +16,9 @@ import java.util.Random;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.WulkanowyApp;
-import io.github.wulkanowy.database.dao.DatabaseAccess;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
-import io.github.wulkanowy.database.dao.entities.Grade;
+import io.github.wulkanowy.db.dao.DatabaseAccess;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.db.dao.entities.Grade;
 import io.github.wulkanowy.services.notifications.NotificationBuilder;
 import io.github.wulkanowy.services.sync.VulcanSync;
 import io.github.wulkanowy.ui.main.DashboardActivity;

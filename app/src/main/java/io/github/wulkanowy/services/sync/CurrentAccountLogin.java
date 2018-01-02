@@ -10,12 +10,12 @@ import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
-import io.github.wulkanowy.database.dao.entities.Account;
-import io.github.wulkanowy.database.dao.entities.AccountDao;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
+import io.github.wulkanowy.db.dao.entities.Account;
+import io.github.wulkanowy.db.dao.entities.AccountDao;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
 import io.github.wulkanowy.services.jobs.VulcanJobHelper;
-import io.github.wulkanowy.utilities.security.CryptoException;
-import io.github.wulkanowy.utilities.security.Safety;
+import io.github.wulkanowy.utils.security.CryptoException;
+import io.github.wulkanowy.utils.security.Safety;
 
 public class CurrentAccountLogin {
 

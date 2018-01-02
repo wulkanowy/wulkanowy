@@ -21,12 +21,12 @@ import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
-import io.github.wulkanowy.database.dao.entities.Account;
-import io.github.wulkanowy.database.dao.entities.AccountDao;
-import io.github.wulkanowy.database.dao.entities.DaoMaster;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
-import io.github.wulkanowy.utilities.security.CryptoException;
-import io.github.wulkanowy.utilities.security.Safety;
+import io.github.wulkanowy.db.dao.entities.Account;
+import io.github.wulkanowy.db.dao.entities.AccountDao;
+import io.github.wulkanowy.db.dao.entities.DaoMaster;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.utils.security.CryptoException;
+import io.github.wulkanowy.utils.security.Safety;
 
 @RunWith(AndroidJUnit4.class)
 public class CurrentAccountLoginTest {
@@ -39,7 +39,7 @@ public class CurrentAccountLoginTest {
 
     @BeforeClass
     public static void setUpClass() {
-        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-database");
+        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(InstrumentationRegistry.getTargetContext(), "wulkanowyTest-db");
         Database database = devOpenHelper.getWritableDb();
         daoSession = new DaoMaster(database).newSession();
 

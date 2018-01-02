@@ -23,8 +23,8 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager;
 import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.WulkanowyApp;
-import io.github.wulkanowy.database.dao.entities.DaoSession;
-import io.github.wulkanowy.utilities.NetworkUtilities;
+import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.utils.NetworkUtils;
 
 public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> extends Fragment
         implements AsyncResponse<T> {
@@ -158,7 +158,7 @@ public abstract class AbstractFragment<T extends AbstractExpandableHeaderItem> e
         return new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (NetworkUtilities.isOnline(getContext())) {
+                if (NetworkUtils.isOnline(getContext())) {
                     new RefreshTask(AbstractFragment.this).execute();
                 } else {
                     Toast.makeText(getContext(), R.string.noInternet_text, Toast.LENGTH_SHORT).show();
