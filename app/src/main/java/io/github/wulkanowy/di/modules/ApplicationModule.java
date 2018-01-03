@@ -5,6 +5,7 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import io.github.wulkanowy.di.annotations.ApplicationContext;
 
 @Module
 public class ApplicationModule {
@@ -20,6 +21,7 @@ public class ApplicationModule {
         return application;
     }
 
+    @ApplicationContext
     @Provides
     Context provideAppContext() {
         return application;
