@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.LoginEvent;
+
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.SocketTimeoutException;
@@ -53,7 +56,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
     private WeakReference<TextView> showText;
 
-    public LoginTask(Activity activity, String email, String password, String symbol) {
+    LoginTask(Activity activity, String email, String password, String symbol) {
         this.activity = new WeakReference<>(activity);
         this.email = email;
         this.password = password;
@@ -116,6 +119,9 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
         switch (messageID) {
             // if success
             case R.string.login_accepted_text:
+                Answers.getInstance().logLogin(new LoginEvent().putSuccess(true)
+                        .putCustomAttribute("Symbol", symbol));
+
                 Intent intent = new Intent(activity.get(), DashboardActivity.class);
                 activity.get().finish();
                 activity.get().startActivity(intent);
@@ -123,6 +129,10 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
             // if bad credentials entered
             case R.string.login_bad_credentials_text:
+                Answers.getInstance().logLogin(new LoginEvent().putSuccess(false)
+                        .putCustomAttribute("Symbol", symbol)
+                        .putCustomAttribute("Message", activity.get().getString(messageID)));
+
                 EditText passwordView = activity.get().findViewById(R.id.password);
                 passwordView.setError(activity.get().getString(R.string.error_incorrect_password));
                 passwordView.requestFocus();
@@ -131,6 +141,10 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
             // if no permission
             case R.string.error_bad_account_permission:
+                Answers.getInstance().logLogin(new LoginEvent().putSuccess(false)
+                        .putCustomAttribute("Symbol", symbol)
+                        .putCustomAttribute("Message", activity.get().getString(messageID)));
+
                 // Change to visible symbol input view
                 TextInputLayout symbolLayout = activity.get().findViewById(R.id.to_symbol_input_layout);
                 symbolLayout.setVisibility(View.VISIBLE);
@@ -143,6 +157,10 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
             // if rooted and SDK < 18
             case -1:
+                Answers.getInstance().logLogin(new LoginEvent().putSuccess(false)
+                        .putCustomAttribute("Symbol", symbol)
+                        .putCustomAttribute("Message", "Device rooted"));
+
                 final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity.get())
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle(R.string.alert_dialog_blocked_app)
@@ -157,6 +175,10 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 break;
 
             default:
+                Answers.getInstance().logLogin(new LoginEvent().putSuccess(false)
+                        .putCustomAttribute("Symbol", symbol)
+                        .putCustomAttribute("Message", activity.get().getString(messageID)));
+
                 Snackbar.make(activity.get().findViewById(R.id.fragment_container),
                         messageID, Snackbar.LENGTH_LONG).show();
                 break;
@@ -171,7 +193,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
     /**
      * Shows the progress UI and hides the login form.
      */
-    public void showProgress(final boolean show) {
+    void showProgress(final boolean show) {
         loginFormView = new WeakReference<>(activity.get().findViewById(R.id.login_form));
         progressView = new WeakReference<>(activity.get().findViewById(R.id.login_progress));
 
