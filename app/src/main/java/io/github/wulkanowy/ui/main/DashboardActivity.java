@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.services.Updater;
@@ -123,6 +124,10 @@ public class DashboardActivity extends AppCompatActivity {
         } else if (navigation.getSelectedItemId() == R.id.navigation_dashboard) {
             moveTaskToBack(true);
         }
+    }
+
+    public void forceCrash(View view) {
+        throw new RuntimeException("This is a crash");
     }
 
     @Override
