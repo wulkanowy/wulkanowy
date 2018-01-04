@@ -24,7 +24,6 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.WulkanowyApp;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
-import io.github.wulkanowy.db.dao.DatabaseAccess;
 import io.github.wulkanowy.db.dao.entities.Account;
 import io.github.wulkanowy.db.dao.entities.AccountDao;
 import io.github.wulkanowy.db.dao.entities.DaoSession;

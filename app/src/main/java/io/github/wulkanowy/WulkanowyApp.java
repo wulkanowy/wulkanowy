@@ -1,12 +1,9 @@
 package io.github.wulkanowy;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
-
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -14,37 +11,37 @@ import eu.davidea.flexibleadapter.utils.Log;
 import io.fabric.sdk.android.Fabric;
 import io.github.wulkanowy.db.dao.entities.DaoMaster;
 import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.di.component.ApplicationComponent;
+import io.github.wulkanowy.di.component.DaggerApplicationComponent;
+import io.github.wulkanowy.di.modules.ApplicationModule;
 
 public class WulkanowyApp extends Application {
 
     public static final String DEBUG_TAG = "WulaknowyActivity";
 
-    private DaoSession daoSession;
+    protected ApplicationComponent applicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        initializeFabric();
+
+        applicationComponent = DaggerApplicationComponent
+                .builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
+
+        applicationComponent.inject(this);
+
         if (BuildConfig.DEBUG) {
             enableDebugLog();
         }
 
-        initializeFabric();
+    }
 
-        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, "wulkanowy-db");
-
-        daoSession = new DaoMaster(devOpenHelper.getWritableDb()).newSession();
-
-        int schemaVersion = getSharedPreferences("LoginData", Context.MODE_PRIVATE).getInt("schemaVersion", 0);
-
-        if (DaoMaster.SCHEMA_VERSION != schemaVersion) {
-            SharedPreferences sharedPreferences = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong("userId", 0);
-            editor.putInt("schemaVersion", DaoMaster.SCHEMA_VERSION);
-            editor.apply();
-        }
-
+    public ApplicationComponent getApplicationComponent() {
+        return applicationComponent;
     }
 
     private void enableDebugLog() {
@@ -62,6 +59,6 @@ public class WulkanowyApp extends Application {
     }
 
     public DaoSession getDaoSession() {
-        return daoSession;
+        return null;
     }
 }
