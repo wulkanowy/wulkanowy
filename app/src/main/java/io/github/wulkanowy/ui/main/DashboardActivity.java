@@ -8,6 +8,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.services.Updater;
@@ -129,6 +133,12 @@ public class DashboardActivity extends AppCompatActivity {
     public void forceCrash(View view) {
         throw new RuntimeException("This is a crash");
     }
+
+    public void onSayHey(View view) {
+        Answers.getInstance().logCustom(new CustomEvent("Hey"));
+        Toast.makeText(this, "Thanks!", Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public void onDestroy() {

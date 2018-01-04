@@ -15,6 +15,13 @@
         android:text="Force Crash!"
         android:onClick="forceCrash" />
 
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Say hey to devs!"
+        android:onClick="onSayHey"/>
+
+
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

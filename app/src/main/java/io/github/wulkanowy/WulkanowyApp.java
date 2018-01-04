@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+
 import io.fabric.sdk.android.Fabric;
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -25,8 +27,12 @@ public class WulkanowyApp extends Application {
 
         if (BuildConfig.DEBUG) {
             enableDebugLog();
-        } else {
-            Fabric.with(this, new Crashlytics());
+        }
+        else {
+            Fabric.with(new Fabric.Builder(this)
+                    .kits(new Crashlytics())
+                    .debuggable(true)
+                    .build());
         }
 
         DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, "wulkanowy-db");

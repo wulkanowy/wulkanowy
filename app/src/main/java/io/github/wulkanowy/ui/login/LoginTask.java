@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.LoginEvent;
+import com.crashlytics.android.answers.CustomEvent;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -119,8 +119,10 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
         switch (messageID) {
             // if success
             case R.string.login_accepted_text:
-                Answers.getInstance().logLogin(new LoginEvent().putSuccess(true)
-                        .putCustomAttribute("Symbol", symbol));
+                Answers.getInstance().logCustom(new CustomEvent("First login")
+                        .putCustomAttribute("Symbol", symbol)
+                        .putCustomAttribute("Success", 1)
+                        .putCustomAttribute("Message", activity.get().getString(messageID)));
 
                 Intent intent = new Intent(activity.get(), DashboardActivity.class);
                 activity.get().finish();
@@ -129,8 +131,9 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
             // if bad credentials entered
             case R.string.login_bad_credentials_text:
-                Answers.getInstance().logLogin(new LoginEvent().putSuccess(false)
+                Answers.getInstance().logCustom(new CustomEvent("First login")
                         .putCustomAttribute("Symbol", symbol)
+                        .putCustomAttribute("Success", 0)
                         .putCustomAttribute("Message", activity.get().getString(messageID)));
 
                 EditText passwordView = activity.get().findViewById(R.id.password);
@@ -141,8 +144,9 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
             // if no permission
             case R.string.error_bad_account_permission:
-                Answers.getInstance().logLogin(new LoginEvent().putSuccess(false)
+                Answers.getInstance().logCustom(new CustomEvent("First login")
                         .putCustomAttribute("Symbol", symbol)
+                        .putCustomAttribute("Success", 0)
                         .putCustomAttribute("Message", activity.get().getString(messageID)));
 
                 // Change to visible symbol input view
@@ -157,8 +161,9 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
             // if rooted and SDK < 18
             case -1:
-                Answers.getInstance().logLogin(new LoginEvent().putSuccess(false)
+                Answers.getInstance().logCustom(new CustomEvent("First login")
                         .putCustomAttribute("Symbol", symbol)
+                        .putCustomAttribute("Success", 0)
                         .putCustomAttribute("Message", "Device rooted"));
 
                 final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity.get())
@@ -175,8 +180,9 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 break;
 
             default:
-                Answers.getInstance().logLogin(new LoginEvent().putSuccess(false)
+                Answers.getInstance().logCustom(new CustomEvent("First login")
                         .putCustomAttribute("Symbol", symbol)
+                        .putCustomAttribute("Success", 0)
                         .putCustomAttribute("Message", activity.get().getString(messageID)));
 
                 Snackbar.make(activity.get().findViewById(R.id.fragment_container),
