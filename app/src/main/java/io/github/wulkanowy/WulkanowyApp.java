@@ -6,10 +6,12 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import javax.inject.Inject;
+
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.utils.Log;
 import io.fabric.sdk.android.Fabric;
-import io.github.wulkanowy.db.dao.entities.DaoMaster;
+import io.github.wulkanowy.db.DatabaseManager;
 import io.github.wulkanowy.db.dao.entities.DaoSession;
 import io.github.wulkanowy.di.component.ApplicationComponent;
 import io.github.wulkanowy.di.component.DaggerApplicationComponent;
@@ -20,6 +22,9 @@ public class WulkanowyApp extends Application {
     public static final String DEBUG_TAG = "WulaknowyActivity";
 
     protected ApplicationComponent applicationComponent;
+
+    @Inject
+    DatabaseManager databaseManager;
 
     @Override
     public void onCreate() {

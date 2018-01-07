@@ -3,7 +3,7 @@ package io.github.wulkanowy.db;
 
 import android.content.Context;
 
-import java.util.List;
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -11,7 +11,6 @@ import javax.inject.Singleton;
 import io.github.wulkanowy.db.dao.DaoAccess;
 import io.github.wulkanowy.db.dao.entities.AccountDao;
 import io.github.wulkanowy.db.dao.entities.DayDao;
-import io.github.wulkanowy.db.dao.entities.Grade;
 import io.github.wulkanowy.db.dao.entities.GradeDao;
 import io.github.wulkanowy.db.dao.entities.LessonDao;
 import io.github.wulkanowy.db.dao.entities.SubjectDao;
@@ -21,6 +20,10 @@ import io.github.wulkanowy.di.annotations.ApplicationContext;
 
 @Singleton
 public class DatabaseManager implements SharedAccess, DaoAccess {
+
+    public static final String DATABASE_NAME = "wulkanowy_db";
+
+    public static final String SHARED_PREFERNCES_NAME = "user_data";
 
     private final Context context;
 
@@ -78,7 +81,7 @@ public class DatabaseManager implements SharedAccess, DaoAccess {
     }
 
     @Override
-    public List<Grade> getNewGrades() {
-        return daoAccess.getNewGrades();
+    public QueryBuilder getGradeQuery() {
+        return daoAccess.getGradeQuery();
     }
 }

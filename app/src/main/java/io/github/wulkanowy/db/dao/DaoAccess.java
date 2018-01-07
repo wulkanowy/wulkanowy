@@ -1,10 +1,9 @@
 package io.github.wulkanowy.db.dao;
 
-import java.util.List;
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import io.github.wulkanowy.db.dao.entities.AccountDao;
 import io.github.wulkanowy.db.dao.entities.DayDao;
-import io.github.wulkanowy.db.dao.entities.Grade;
 import io.github.wulkanowy.db.dao.entities.GradeDao;
 import io.github.wulkanowy.db.dao.entities.LessonDao;
 import io.github.wulkanowy.db.dao.entities.SubjectDao;
@@ -23,5 +22,5 @@ public interface DaoAccess {
 
     LessonDao getLessonDao();
 
-    List<Grade> getNewGrades();
+    QueryBuilder getGradeQuery();
 }

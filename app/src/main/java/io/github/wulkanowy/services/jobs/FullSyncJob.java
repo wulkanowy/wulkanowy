@@ -11,6 +11,7 @@ import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -53,7 +54,7 @@ public class FullSyncJob extends VulcanJobHelper {
             VulcanSync synchronization = new VulcanSync()
                     .loginCurrentUser(getApplicationContext(), daoSession);
             synchronization.syncAll();
-            List<Grade> newGradeList = new DatabaseAccess().getNewGrades(daoSession);
+            List<Grade> newGradeList = new ArrayList<>();
 
             if (newGradeList.size() == 1) {
                 buildNotify(getResources().getQuantityString(R.plurals.newGradePlurals, 1),

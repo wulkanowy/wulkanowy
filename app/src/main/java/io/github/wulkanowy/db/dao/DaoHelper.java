@@ -1,6 +1,6 @@
 package io.github.wulkanowy.db.dao;
 
-import java.util.List;
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -9,7 +9,6 @@ import io.github.wulkanowy.db.dao.entities.AccountDao;
 import io.github.wulkanowy.db.dao.entities.DaoMaster;
 import io.github.wulkanowy.db.dao.entities.DaoSession;
 import io.github.wulkanowy.db.dao.entities.DayDao;
-import io.github.wulkanowy.db.dao.entities.Grade;
 import io.github.wulkanowy.db.dao.entities.GradeDao;
 import io.github.wulkanowy.db.dao.entities.LessonDao;
 import io.github.wulkanowy.db.dao.entities.SubjectDao;
@@ -56,9 +55,7 @@ public class DaoHelper implements DaoAccess {
     }
 
     @Override
-    public List<Grade> getNewGrades() {
-        return getGradeDao().queryBuilder()
-                .where(GradeDao.Properties.IsNew.eq(1))
-                .list();
+    public QueryBuilder getGradeQuery() {
+        return getGradeDao().queryBuilder();
     }
 }

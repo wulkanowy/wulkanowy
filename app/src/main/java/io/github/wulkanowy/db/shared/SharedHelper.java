@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.di.annotations.ApplicationContext;
+import io.github.wulkanowy.di.annotations.SharedPreferencesInfo;
 
 @Singleton
 public class SharedHelper implements SharedAccess {
@@ -16,7 +17,7 @@ public class SharedHelper implements SharedAccess {
     private final SharedPreferences sharedPreferences;
 
     @Inject
-    public SharedHelper(@ApplicationContext Context context, String sharedName) {
+    public SharedHelper(@ApplicationContext Context context, @SharedPreferencesInfo String sharedName) {
         sharedPreferences = context.getSharedPreferences(sharedName, Context.MODE_PRIVATE);
     }
 
