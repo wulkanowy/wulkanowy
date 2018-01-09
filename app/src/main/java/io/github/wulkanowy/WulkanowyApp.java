@@ -7,11 +7,11 @@ import android.content.SharedPreferences;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 
-import io.fabric.sdk.android.Fabric;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.utils.Log;
+import io.fabric.sdk.android.Fabric;
 import io.github.wulkanowy.db.dao.entities.DaoMaster;
 import io.github.wulkanowy.db.dao.entities.DaoSession;
 
