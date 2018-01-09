@@ -130,16 +130,6 @@ public class DashboardActivity extends AppCompatActivity {
         }
     }
 
-    public void forceCrash(View view) {
-        throw new RuntimeException("This is a crash");
-    }
-
-    public void onSayHey(View view) {
-        Answers.getInstance().logCustom(new CustomEvent("Hey"));
-        Toast.makeText(this, "Thanks!", Toast.LENGTH_SHORT).show();
-    }
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
