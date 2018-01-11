@@ -31,7 +31,7 @@ public class WulkanowyApp extends Application {
 
         Fabric.with(new Fabric.Builder(this)
                 .kits(new Crashlytics.Builder()
-                        .core(new CrashlyticsCore.Builder().disabled(BuildConfig.BUILD_TYPE_DEBUG).build())
+                        .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
                         .build())
                 .debuggable(BuildConfig.DEBUG)
                 .build());
