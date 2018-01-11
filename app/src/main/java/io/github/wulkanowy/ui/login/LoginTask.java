@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 
@@ -96,6 +97,9 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 return R.string.error_host_offline;
             } catch (UnsupportedOperationException e) {
                 return -1;
+            } catch (Throwable e) {
+                Crashlytics.logException(e);
+                return R.string.login_denied_text;
             }
 
             new FullSyncJob().scheduledJob(activity.get());
@@ -119,11 +123,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
         switch (messageID) {
             // if success
             case R.string.login_accepted_text:
-                Answers.getInstance().logCustom(new CustomEvent("First login")
-                        .putCustomAttribute("Symbol", symbol)
-                        .putCustomAttribute("Success", 1)
-                        .putCustomAttribute("Message", activity.get().getString(messageID)));
-
+                logFirstLoginAction(true, activity.get().getString(messageID));
                 Intent intent = new Intent(activity.get(), DashboardActivity.class);
                 activity.get().finish();
                 activity.get().startActivity(intent);
@@ -131,11 +131,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
             // if bad credentials entered
             case R.string.login_bad_credentials_text:
-                Answers.getInstance().logCustom(new CustomEvent("First login")
-                        .putCustomAttribute("Symbol", symbol)
-                        .putCustomAttribute("Success", 0)
-                        .putCustomAttribute("Message", activity.get().getString(messageID)));
-
+                logFirstLoginAction(false, activity.get().getString(messageID));
                 EditText passwordView = activity.get().findViewById(R.id.password);
                 passwordView.setError(activity.get().getString(R.string.error_incorrect_password));
                 passwordView.requestFocus();
@@ -144,11 +140,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
             // if no permission
             case R.string.error_bad_account_permission:
-                Answers.getInstance().logCustom(new CustomEvent("First login")
-                        .putCustomAttribute("Symbol", symbol)
-                        .putCustomAttribute("Success", 0)
-                        .putCustomAttribute("Message", activity.get().getString(messageID)));
-
+                logFirstLoginAction(false, activity.get().getString(messageID));
                 // Change to visible symbol input view
                 TextInputLayout symbolLayout = activity.get().findViewById(R.id.to_symbol_input_layout);
                 symbolLayout.setVisibility(View.VISIBLE);
@@ -161,11 +153,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
             // if rooted and SDK < 18
             case -1:
-                Answers.getInstance().logCustom(new CustomEvent("First login")
-                        .putCustomAttribute("Symbol", symbol)
-                        .putCustomAttribute("Success", 0)
-                        .putCustomAttribute("Message", "Device rooted"));
-
+                logFirstLoginAction(false, "Device rooted");
                 final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity.get())
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle(R.string.alert_dialog_blocked_app)
@@ -180,15 +168,18 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
                 break;
 
             default:
-                Answers.getInstance().logCustom(new CustomEvent("First login")
-                        .putCustomAttribute("Symbol", symbol)
-                        .putCustomAttribute("Success", 0)
-                        .putCustomAttribute("Message", activity.get().getString(messageID)));
-
+                logFirstLoginAction(false, activity.get().getString(messageID));
                 Snackbar.make(activity.get().findViewById(R.id.fragment_container),
                         messageID, Snackbar.LENGTH_LONG).show();
                 break;
         }
+    }
+
+    private void logFirstLoginAction(boolean success, String message) {
+        Answers.getInstance().logCustom(new CustomEvent("First login")
+                .putCustomAttribute("Symbol", symbol)
+                .putCustomAttribute("Success", success ? 1 : 0)
+                .putCustomAttribute("Message", message));
     }
 
     @Override

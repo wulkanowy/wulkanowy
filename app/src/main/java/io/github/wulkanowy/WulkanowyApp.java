@@ -29,12 +29,7 @@ public class WulkanowyApp extends Application {
             enableDebugLog();
         }
 
-        Fabric.with(new Fabric.Builder(this)
-                .kits(new Crashlytics.Builder()
-                        .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-                        .build())
-                .debuggable(BuildConfig.DEBUG)
-                .build());
+        initializeFabric();
 
         DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, "wulkanowy-db");
 
@@ -55,6 +50,15 @@ public class WulkanowyApp extends Application {
     private void enableDebugLog() {
         QueryBuilder.LOG_VALUES = true;
         FlexibleAdapter.enableLogs(Log.Level.DEBUG);
+    }
+
+    private void initializeFabric() {
+        Fabric.with(new Fabric.Builder(this)
+                .kits(new Crashlytics.Builder()
+                        .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                        .build())
+                .debuggable(BuildConfig.DEBUG)
+                .build());
     }
 
     public DaoSession getDaoSession() {
