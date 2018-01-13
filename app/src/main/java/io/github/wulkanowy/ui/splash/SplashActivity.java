@@ -1,47 +1,32 @@
 package io.github.wulkanowy.ui.splash;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.github.wulkanowy.BuildConfig;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.services.jobs.FullSyncJob;
-import io.github.wulkanowy.ui.login.LoginActivity;
-import io.github.wulkanowy.ui.main.DashboardActivity;
+import io.github.wulkanowy.ui.base.BaseActivity;
+import io.github.wulkanowy.ui.base.RootPresenter;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
+
+    @BindView(R.id.rawText)
+    public TextView versionText;
+
+    RootPresenter presenter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        TextView versionName = findViewById(R.id.rawText);
-        versionName.setText(getString(R.string.version_text, BuildConfig.VERSION_NAME));
+        getActivityComponent().inject(this);
+        setButterKnife(ButterKnife.bind(this));
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                executeOnRunApp();
-            }
-        }, 500);
-    }
+        versionText.setText(getString(R.string.version_text, BuildConfig.VERSION_NAME));
 
-    private void executeOnRunApp() {
-        Intent intent;
-
-        if (getSharedPreferences("LoginData", Context.MODE_PRIVATE).getLong("userId", 0) == 0) {
-            intent = new Intent(this, LoginActivity.class);
-        } else {
-            new FullSyncJob().scheduledJob(getApplicationContext());
-
-            intent = new Intent(this, DashboardActivity.class);
-        }
-
-        startActivity(intent);
+        presenter.onStart(this);
     }
 }

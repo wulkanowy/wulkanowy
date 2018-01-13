@@ -2,7 +2,7 @@ package io.github.wulkanowy.ui.base;
 
 import android.support.annotation.StringRes;
 
-public interface BaseView {
+public interface RootActivity {
 
     void showLoadingBar();
 
@@ -11,4 +11,6 @@ public interface BaseView {
     void onError(@StringRes int resId);
 
     void onError(String message);
+
+    void isNetworkConnected();
 }

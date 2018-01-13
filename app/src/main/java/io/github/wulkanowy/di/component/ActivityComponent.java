@@ -1,5 +1,13 @@
 package io.github.wulkanowy.di.component;
 
-//@Component(modules = ApplicationModule.class)
+import dagger.Component;
+import io.github.wulkanowy.di.annotations.PerActivity;
+import io.github.wulkanowy.di.modules.ActivityModule;
+import io.github.wulkanowy.ui.splash.SplashActivity;
+
+@PerActivity
+@Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
 public interface ActivityComponent {
+
+    void inject(SplashActivity splashActivity);
 }

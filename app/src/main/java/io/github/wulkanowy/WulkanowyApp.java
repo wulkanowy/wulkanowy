@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
+
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import javax.inject.Inject;
@@ -29,16 +30,13 @@ public class WulkanowyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        initializeFabric();
-
         applicationComponent = DaggerApplicationComponent
                 .builder()
                 .applicationModule(new ApplicationModule(this))
                 .build();
-
         applicationComponent.inject(this);
 
+        initializeFabric();
         if (BuildConfig.DEBUG) {
             enableDebugLog();
         }
