@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import io.github.wulkanowy.WulkanowyApp;
+import io.github.wulkanowy.db.DatabaseManager;
 import io.github.wulkanowy.di.annotations.ApplicationContext;
 import io.github.wulkanowy.di.modules.ApplicationModule;
 
@@ -20,5 +21,7 @@ public interface ApplicationComponent {
     Context getContext();
 
     Application getApplication();
+
+    DatabaseManager getDataManager();
 
 }

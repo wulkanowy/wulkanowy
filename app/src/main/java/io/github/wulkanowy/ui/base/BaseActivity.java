@@ -11,7 +11,7 @@ import io.github.wulkanowy.di.component.DaggerActivityComponent;
 import io.github.wulkanowy.di.modules.ActivityModule;
 import io.github.wulkanowy.utils.NetworkUtils;
 
-public abstract class BaseActivity extends AppCompatActivity implements RootActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     private ActivityComponent activityComponent;
 
@@ -35,23 +35,18 @@ public abstract class BaseActivity extends AppCompatActivity implements RootActi
         }
     }
 
-    @Override
     public void showLoadingBar() {
     }
 
-    @Override
     public void hideLoadingBar() {
     }
 
-    @Override
     public void onError(int resId) {
     }
 
-    @Override
     public void onError(String message) {
     }
 
-    @Override
     public void isNetworkConnected() {
         NetworkUtils.isOnline(getApplicationContext());
     }

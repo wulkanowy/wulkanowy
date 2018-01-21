@@ -6,9 +6,6 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import io.github.wulkanowy.di.annotations.ActivityContext;
-import io.github.wulkanowy.di.annotations.PerActivity;
-import io.github.wulkanowy.ui.base.RootPresenter;
-import io.github.wulkanowy.ui.splash.SplashPresenter;
 
 @Module
 public class ActivityModule {
@@ -28,11 +25,5 @@ public class ActivityModule {
     @Provides
     Activity provideActivity() {
         return activity;
-    }
-
-    @Provides
-    @PerActivity
-    RootPresenter provideSplashPresenter(SplashPresenter splashPresenter) {
-        return splashPresenter;
     }
 }

@@ -6,28 +6,30 @@ import javax.inject.Inject;
 
 import io.github.wulkanowy.db.DatabaseManager;
 
-public class BasePresenter implements RootPresenter {
+public class BasePresenter<V extends BaseActivity> {
 
     private final DatabaseManager databaseManager;
 
-    private RootActivity rootActivity;
+    private V view;
 
     @Inject
     public BasePresenter(DatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
     }
 
-    @Override
-    public void onStart(@NonNull RootActivity rootActivity) {
-        this.rootActivity = rootActivity;
+    public void onStart(@NonNull V activity) {
+        view = activity;
     }
 
-    @Override
     public void onDestroy() {
-        rootActivity = null;
+        view = null;
     }
 
     public final DatabaseManager getDatabaseManager() {
         return databaseManager;
+    }
+
+    public V getActivityView() {
+        return view;
     }
 }
