@@ -2,7 +2,9 @@ package io.github.wulkanowy.ui.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import butterknife.Unbinder;
 import io.github.wulkanowy.WulkanowyApp;
@@ -35,16 +37,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void showLoadingBar() {
-    }
-
-    public void hideLoadingBar() {
-    }
-
-    public void onError(int resId) {
+    public void onError(@StringRes int stringId) {
+        onError(getString(stringId));
     }
 
     public void onError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     public void isNetworkConnected() {

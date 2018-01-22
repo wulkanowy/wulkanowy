@@ -36,6 +36,12 @@ public class SplashActivity extends BaseActivity {
         presenter.onStart(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
+    }
+
     public void openLoginActivity() {
         startActivity(new Intent(this, LoginActivity.class));
         finish();

@@ -23,10 +23,10 @@ public class SplashPresenter extends BasePresenter<SplashActivity> {
             @Override
             public void run() {
                 if (getDatabaseManager().getCurrentUserId() == 0) {
-                    getActivityView().openLoginActivity();
+                    getConnectedActivity().openLoginActivity();
                 } else {
-                    getActivityView().startFullSyncService();
-                    getActivityView().openDashboardActivity();
+                    getConnectedActivity().startFullSyncService();
+                    getConnectedActivity().openDashboardActivity();
                 }
             }
         }, 500);

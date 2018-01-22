@@ -29,7 +29,7 @@ public class BasePresenter<V extends BaseActivity> {
         return databaseManager;
     }
 
-    public V getActivityView() {
+    public V getConnectedActivity() {
         return view;
     }
 }

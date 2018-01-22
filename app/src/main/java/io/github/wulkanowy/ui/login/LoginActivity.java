@@ -1,226 +1,150 @@
 package io.github.wulkanowy.ui.login;
 
-import android.app.Activity;
-import android.net.Uri;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.customtabs.CustomTabsIntent;
-import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
+import android.support.annotation.StringRes;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.LinkedHashMap;
+import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnEditorAction;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.services.Updater;
-import io.github.wulkanowy.utils.KeyboardUtils;
+import io.github.wulkanowy.ui.base.BaseActivity;
 
-/**
- * A login screen that offers login via email/password.
- */
-public class LoginActivity extends Activity {
+public class LoginActivity extends BaseActivity {
 
-    private float touchPosition;
+    @BindView(R.id.email)
+    EditText emailView;
 
-    private EditText emailView;
+    @BindView(R.id.password)
+    EditText passwordView;
 
-    private EditText passwordView;
+    @BindView(R.id.symbol)
+    AutoCompleteTextView symbolView;
 
-    private AutoCompleteTextView symbolView;
+    @BindView(R.id.login_form)
+    View loginFormView;
 
-    private Updater updater;
+    @BindView(R.id.login_progress)
+    View loadingBarView;
+
+    @BindView(R.id.login_progress_text)
+    TextView showText;
+
+    @Inject
+    LoginPresenter presenter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        updater = new Updater(this).checkForUpdates();
+        setButterKnife(ButterKnife.bind(this));
 
-        // Set up the login form.
-        emailView = findViewById(R.id.email);
-        passwordView = findViewById(R.id.password);
-        symbolView = findViewById(R.id.symbol);
+        getActivityComponent().inject(this);
 
-        passwordView.setOnEditorActionListener(getTextViewSignInListener());
-        symbolView.setOnEditorActionListener(getTextViewSignInListener());
+        initiationAutoComplete();
 
-        populateAutoComplete();
+        presenter.onStart(this);
 
-        Button signInButton = findViewById(R.id.action_sign_in);
-        signInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        findViewById(R.id.action_create_account).setOnClickListener(getButtonLinkListener(
-                "https://cufs.vulcan.net.pl/Default/AccountManage/CreateAccount"
-        ));
-
-        findViewById(R.id.action_forgot_password).setOnClickListener(getButtonLinkListener(
-                "https://cufs.vulcan.net.pl/Default/AccountManage/UnlockAccount"
-        ));
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        updater.onRequestPermissionsResult(requestCode, grantResults);
-    }
-
-    private TextView.OnEditorActionListener getTextViewSignInListener() {
-        return new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        };
-    }
-
-    private OnClickListener getButtonLinkListener(final String url) {
-        return new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                CustomTabsIntent customTabsIntent = builder.build();
-                builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
-                customTabsIntent.launchUrl(view.getContext(), Uri.parse(url));
-            }
-        };
-    }
-
-    private void populateAutoComplete() {
-        // Get the string array
-        String[] countries = getResources().getStringArray(R.array.symbols);
-        // Create the adapter and set it to the AutoCompleteTextView
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
-                countries);
-        symbolView.setAdapter(adapter);
-    }
-
-    /**
-     * Attempts to sign in the account specified by the login form.
-     */
-    private void attemptLogin() {
-        // Reset errors.
-        emailView.setError(null);
-        passwordView.setError(null);
-
-        // Store values at the time of the login attempt.
+    @OnClick(R.id.action_sign_in)
+    void onLoginButtonClick() {
         String email = emailView.getText().toString();
         String password = passwordView.getText().toString();
         String symbol = symbolView.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password.
-        if (TextUtils.isEmpty(password)) {
-            passwordView.setError(getString(R.string.error_field_required));
-            focusView = passwordView;
-            cancel = true;
-        } else if (!isPasswordValid(password)) {
-            passwordView.setError(getString(R.string.error_invalid_password));
-            focusView = passwordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            emailView.setError(getString(R.string.error_field_required));
-            focusView = emailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            emailView.setError(getString(R.string.error_invalid_email));
-            focusView = emailView;
-            cancel = true;
-        }
-
-        // Check for a valid symbol.
-        if (TextUtils.isEmpty(symbol)) {
-            symbol = "Default";
-        }
-
-        String[] keys = getResources().getStringArray(R.array.symbols);
-        String[] values = getResources().getStringArray(R.array.symbols_values);
-        LinkedHashMap<String, String> map = new LinkedHashMap<>();
-
-        for (int i = 0; i < Math.min(keys.length, values.length); ++i) {
-            map.put(keys[i], values[i]);
-        }
-
-        if (map.containsKey(symbol)) {
-            symbol = map.get(symbol);
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner and kick off a background task to
-            // perform the user login attempt.
-            LoginTask authTask = new LoginTask(this, email, password, symbol);
-            authTask.showProgress(true);
-            authTask.execute();
-            KeyboardUtils.hideSoftInput(this);
-        }
+        presenter.attemptLogin(email, password, symbol);
     }
 
-    private boolean isEmailValid(String email) {
-        return email.contains("@") || email.contains("\\\\");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 4;
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            touchPosition = ev.getY();
+    @OnEditorAction(value = {R.id.symbol, R.id.password})
+    boolean onEditorAction(int id) {
+        if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+            onLoginButtonClick();
+            return true;
         }
-        if (ev.getAction() == MotionEvent.ACTION_UP) {
-            float releasePosition = ev.getY();
+        return false;
+    }
 
-            if (touchPosition - releasePosition == 0) {
-                View view = getCurrentFocus();
-                if (view != null && (ev.getAction() == MotionEvent.ACTION_UP
-                        || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText
-                        && !view.getClass().getName().startsWith("android.webkit.")) {
+    @OnClick(R.id.action_create_account)
+    void onCreateAccountButtonClick() {
+        presenter.openInternalBrowserViewer(
+                "https://cufs.vulcan.net.pl/Default/AccountManage/CreateAccount"
+        );
+    }
 
-                    int[] coordinators = new int[2];
-                    view.getLocationOnScreen(coordinators);
-                    float x = ev.getRawX() + view.getLeft() - coordinators[0];
-                    float y = ev.getRawY() + view.getTop() - coordinators[1];
-                    if (x < view.getLeft() || x > view.getRight() || y < view.getTop()
-                            || y > view.getBottom()) {
-                        KeyboardUtils.hideSoftInput(this);
-                    }
-                }
+    @OnClick(R.id.action_forgot_password)
+    void onForgotPasswordButtonClick() {
+        presenter.openInternalBrowserViewer(
+                "https://cufs.vulcan.net.pl/Default/AccountManage/UnlockAccount"
+        );
+    }
+
+    void requestPasswordViewFocus() {
+        passwordView.requestFocus();
+    }
+
+    void requestEmailViewFocus() {
+        emailView.requestFocus();
+    }
+
+    void setPasswordError(@StringRes int stringId) {
+        passwordView.setError(getString(stringId));
+    }
+
+    void setEmailError(@StringRes int stringId) {
+        emailView.setError(getString(stringId));
+    }
+
+    private void initiationAutoComplete() {
+        symbolView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.symbols)));
+    }
+
+    void resetViewErrors() {
+        emailView.setError(null);
+        passwordView.setError(null);
+    }
+
+    void onLoginProgressUpdate(String... progress) {
+        showText.setText(String.format("%1$s/2 - %2$s...", progress[0], progress[1]));
+    }
+
+    void showLoginProgress(final boolean show) {
+        int animTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+        loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        loginFormView.animate().setDuration(animTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             }
-        }
-        return super.dispatchTouchEvent(ev);
+        });
+
+        loadingBarView.setVisibility(show ? View.VISIBLE : View.GONE);
+        loadingBarView.animate().setDuration(animTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                loadingBarView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        updater.onDestroy(this);
+        presenter.onDestroy();
     }
 }

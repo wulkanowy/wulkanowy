@@ -20,7 +20,7 @@ import io.github.wulkanowy.di.modules.ApplicationModule;
 
 public class WulkanowyApp extends Application {
 
-    public static final String DEBUG_TAG = "WulaknowyActivity";
+    public static final String DEBUG_TAG = "WulkanowyActivity";
 
     protected ApplicationComponent applicationComponent;
 

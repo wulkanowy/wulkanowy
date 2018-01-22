@@ -1,6 +1,5 @@
 package io.github.wulkanowy.di.component;
 
-import android.app.Application;
 import android.content.Context;
 
 import javax.inject.Singleton;
@@ -19,8 +18,6 @@ public interface ApplicationComponent {
 
     @ApplicationContext
     Context getContext();
-
-    Application getApplication();
 
     DatabaseManager getDataManager();
 

@@ -1,7 +1,5 @@
 package io.github.wulkanowy.ui.login;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -118,7 +116,7 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
     @Override
     protected void onPostExecute(final Integer messageID) {
-        showProgress(false);
+        //showProgress(false);
 
         switch (messageID) {
             // if success
@@ -184,41 +182,9 @@ public class LoginTask extends AsyncTask<Void, String, Integer> {
 
     @Override
     protected void onCancelled() {
-        showProgress(false);
+        //showProgress(false);
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    void showProgress(final boolean show) {
-        loginFormView = new WeakReference<>(activity.get().findViewById(R.id.login_form));
-        progressView = new WeakReference<>(activity.get().findViewById(R.id.login_progress));
 
-        int animTime = activity.get().getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-        changeLoginFormVisibility(show, animTime);
-        changeProgressVisibility(show, animTime);
-    }
-
-    private void changeLoginFormVisibility(final boolean show, final int animTime) {
-        loginFormView.get().setVisibility(show ? View.GONE : View.VISIBLE);
-        loginFormView.get().animate().setDuration(animTime).alpha(
-                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                loginFormView.get().setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-        });
-    }
-
-    private void changeProgressVisibility(final boolean show, final int animTime) {
-        progressView.get().setVisibility(show ? View.VISIBLE : View.GONE);
-        progressView.get().animate().setDuration(animTime).alpha(
-                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                progressView.get().setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-        });
-    }
 }

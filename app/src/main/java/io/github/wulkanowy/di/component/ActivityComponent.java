@@ -3,6 +3,7 @@ package io.github.wulkanowy.di.component;
 import dagger.Component;
 import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.di.modules.ActivityModule;
+import io.github.wulkanowy.ui.login.LoginActivity;
 import io.github.wulkanowy.ui.splash.SplashActivity;
 
 @PerActivity
@@ -10,4 +11,6 @@ import io.github.wulkanowy.ui.splash.SplashActivity;
 public interface ActivityComponent {
 
     void inject(SplashActivity splashActivity);
+
+    void inject(LoginActivity loginActivity);
 }
