@@ -20,7 +20,7 @@ import butterknife.OnEditorAction;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @BindView(R.id.email)
     EditText emailView;
@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity {
     TextView showText;
 
     @Inject
-    LoginPresenter presenter;
+    LoginContract.Presenter presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,19 +90,23 @@ public class LoginActivity extends BaseActivity {
         );
     }
 
-    void requestPasswordViewFocus() {
+    @Override
+    public void requestPasswordViewFocus() {
         passwordView.requestFocus();
     }
 
-    void requestEmailViewFocus() {
+    @Override
+    public void requestEmailViewFocus() {
         emailView.requestFocus();
     }
 
-    void setPasswordError(@StringRes int stringId) {
+    @Override
+    public void setPasswordError(@StringRes int stringId) {
         passwordView.setError(getString(stringId));
     }
 
-    void setEmailError(@StringRes int stringId) {
+    @Override
+    public void setEmailError(@StringRes int stringId) {
         emailView.setError(getString(stringId));
     }
 
@@ -111,7 +115,8 @@ public class LoginActivity extends BaseActivity {
                 getResources().getStringArray(R.array.symbols)));
     }
 
-    void resetViewErrors() {
+    @Override
+    public void resetViewErrors() {
         emailView.setError(null);
         passwordView.setError(null);
     }

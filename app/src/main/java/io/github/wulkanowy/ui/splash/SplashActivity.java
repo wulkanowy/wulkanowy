@@ -15,13 +15,13 @@ import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.login.LoginActivity;
 import io.github.wulkanowy.ui.main.DashboardActivity;
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity implements SplashContract.View {
 
     @BindView(R.id.rawText)
     public TextView versionText;
 
     @Inject
-    SplashPresenter presenter;
+    SplashContract.Presenter presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,17 +42,20 @@ public class SplashActivity extends BaseActivity {
         super.onDestroy();
     }
 
+    @Override
     public void openLoginActivity() {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 
+    @Override
     public void openDashboardActivity() {
-        startActivity((new Intent(this, DashboardActivity.class)));
+        startActivity(new Intent(this, DashboardActivity.class));
         finish();
     }
 
+    @Override
     public void startFullSyncService() {
-        new FullSyncJob().scheduledJob(this);
+        new FullSyncJob().scheduledJob(getApplicationContext());
     }
 }

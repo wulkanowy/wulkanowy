@@ -8,7 +8,8 @@ import javax.inject.Inject;
 import io.github.wulkanowy.db.DatabaseManager;
 import io.github.wulkanowy.ui.base.BasePresenter;
 
-public class SplashPresenter extends BasePresenter<SplashActivity> {
+public class SplashPresenter extends BasePresenter<SplashContract.View>
+        implements SplashContract.Presenter {
 
     @Inject
     public SplashPresenter(DatabaseManager databaseManager) {
@@ -16,17 +17,17 @@ public class SplashPresenter extends BasePresenter<SplashActivity> {
     }
 
     @Override
-    public void onStart(@NonNull SplashActivity activity) {
+    public void onStart(@NonNull SplashContract.View activity) {
         super.onStart(activity);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (getDatabaseManager().getCurrentUserId() == 0) {
-                    getConnectedActivity().openLoginActivity();
+                    getView().openLoginActivity();
                 } else {
-                    getConnectedActivity().startFullSyncService();
-                    getConnectedActivity().openDashboardActivity();
+                    getView().startFullSyncService();
+                    getView().openDashboardActivity();
                 }
             }
         }, 500);

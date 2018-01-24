@@ -6,6 +6,11 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import io.github.wulkanowy.di.annotations.ActivityContext;
+import io.github.wulkanowy.di.annotations.PerActivity;
+import io.github.wulkanowy.ui.login.LoginContract;
+import io.github.wulkanowy.ui.login.LoginPresenter;
+import io.github.wulkanowy.ui.splash.SplashContract;
+import io.github.wulkanowy.ui.splash.SplashPresenter;
 
 @Module
 public class ActivityModule {
@@ -25,5 +30,19 @@ public class ActivityModule {
     @Provides
     Activity provideActivity() {
         return activity;
+    }
+
+    @PerActivity
+    @Provides
+    SplashContract.Presenter provideSplashPresenter
+            (SplashPresenter splashPresenter) {
+        return splashPresenter;
+    }
+
+    @PerActivity
+    @Provides
+    LoginContract.Presenter provideLoginPresenter
+            (LoginPresenter loginPresenter) {
+        return loginPresenter;
     }
 }

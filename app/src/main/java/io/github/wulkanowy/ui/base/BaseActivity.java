@@ -2,7 +2,6 @@ package io.github.wulkanowy.ui.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -13,7 +12,7 @@ import io.github.wulkanowy.di.component.DaggerActivityComponent;
 import io.github.wulkanowy.di.modules.ActivityModule;
 import io.github.wulkanowy.utils.NetworkUtils;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements BaseContract.View {
 
     private ActivityComponent activityComponent;
 
@@ -37,14 +36,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void onError(@StringRes int stringId) {
-        onError(getString(stringId));
+    @Override
+    public void onError(int resId) {
+        onError(getString(resId));
     }
 
+    @Override
     public void onError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
     public void isNetworkConnected() {
         NetworkUtils.isOnline(getApplicationContext());
     }

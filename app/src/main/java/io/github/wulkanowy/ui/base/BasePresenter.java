@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import io.github.wulkanowy.db.DatabaseManager;
 
-public class BasePresenter<V extends BaseActivity> {
+public class BasePresenter<V extends BaseContract.View> implements BaseContract.Presenter<V> {
 
     private final DatabaseManager databaseManager;
 
@@ -17,10 +17,12 @@ public class BasePresenter<V extends BaseActivity> {
         this.databaseManager = databaseManager;
     }
 
+    @Override
     public void onStart(@NonNull V activity) {
         view = activity;
     }
 
+    @Override
     public void onDestroy() {
         view = null;
     }
@@ -29,7 +31,7 @@ public class BasePresenter<V extends BaseActivity> {
         return databaseManager;
     }
 
-    public V getConnectedActivity() {
+    public V getView() {
         return view;
     }
 }
