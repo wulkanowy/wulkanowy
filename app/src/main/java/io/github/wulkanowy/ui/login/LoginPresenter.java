@@ -1,14 +1,13 @@
 package io.github.wulkanowy.ui.login;
 
-import android.support.customtabs.CustomTabsIntent;
 import android.text.TextUtils;
 
 import java.util.LinkedHashMap;
 
 import javax.inject.Inject;
 
-import io.github.wulkanowy.R;
 import io.github.wulkanowy.db.DatabaseManager;
+import io.github.wulkanowy.db.resources.ResourcesHelper;
 import io.github.wulkanowy.ui.base.BasePresenter;
 
 public class LoginPresenter extends BasePresenter<LoginContract.View>
@@ -22,24 +21,26 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     public void attemptLogin(String email, String password, String symbol) {
         getView().resetViewErrors();
 
+        ResourcesHelper resources = getDatabaseManager().getAppResources();
+
         boolean cancel = false;
 
         if (TextUtils.isEmpty(password)) {
-            getView().setPasswordError(R.string.error_field_required);
+            getView().setPasswordError(resources.getErrorFieldRequired());
             getView().requestPasswordViewFocus();
             cancel = true;
         } else if (!isPasswordValid(password)) {
-            getView().setPasswordError(R.string.error_invalid_password);
+            getView().setPasswordError(resources.getErrorPassInvalid());
             getView().requestPasswordViewFocus();
             cancel = true;
         }
 
         if (TextUtils.isEmpty(email)) {
-            getView().setEmailError(R.string.error_field_required);
+            getView().setEmailError(resources.getErrorFieldRequired());
             getView().requestEmailViewFocus();
             cancel = true;
         } else if (!isEmailValid(email)) {
-            getView().setEmailError(R.string.error_invalid_email);
+            getView().setEmailError(resources.getErrorEmailInvalid());
             getView().requestEmailViewFocus();
             cancel = true;
         }
@@ -52,13 +53,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
             symbol = "Default";
         }
 
-        //String[] keys = getView().getResources().getStringArray(R.array.symbols);
-        //String[] values = getView().getResources().getStringArray(R.array.symbols_values);
+        String[] keys = resources.getSymbolsKeysArray();
+        String[] values = resources.getSymbolsValuesArray();
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
 
-        //for (int i = 0; i < Math.min(keys.length, values.length); ++i) {
-        //  map.put(keys[i], values[i]);
-        //}
+        for (int i = 0; i < Math.min(keys.length, values.length); ++i) {
+            map.put(keys[i], values[i]);
+        }
 
         if (map.containsKey(symbol)) {
             symbol = map.get(symbol);
@@ -69,13 +70,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         //authTask.execute();
         //KeyboardUtils.hideSoftInput(getView());
 
-    }
-
-    public void openInternalBrowserViewer(String url) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        CustomTabsIntent customTabsIntent = builder.build();
-        //builder.setToolbarColor(getView().getResources().getColor(R.color.colorPrimary));
-        //customTabsIntent.launchUrl(getView(), Uri.parse(url));
     }
 
     private boolean isEmailValid(String email) {

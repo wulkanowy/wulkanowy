@@ -1,7 +1,5 @@
 package io.github.wulkanowy.ui.login;
 
-import android.support.annotation.StringRes;
-
 import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.ui.base.BaseContract;
 
@@ -12,9 +10,9 @@ public interface LoginContract {
 
         void requestEmailViewFocus();
 
-        void setPasswordError(@StringRes int resId);
+        void setPasswordError(String message);
 
-        void setEmailError(@StringRes int resId);
+        void setEmailError(String message);
 
         void resetViewErrors();
 
@@ -24,7 +22,5 @@ public interface LoginContract {
     interface Presenter extends BaseContract.Presenter<View> {
 
         void attemptLogin(String email, String password, String symbol);
-
-        void openInternalBrowserViewer(String url);
     }
 }

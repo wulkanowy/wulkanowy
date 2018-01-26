@@ -13,23 +13,24 @@ import io.github.wulkanowy.db.dao.entities.GradeDao;
 import io.github.wulkanowy.db.dao.entities.LessonDao;
 import io.github.wulkanowy.db.dao.entities.SubjectDao;
 import io.github.wulkanowy.db.dao.entities.WeekDao;
+import io.github.wulkanowy.db.resources.ResourcesHelper;
 import io.github.wulkanowy.db.shared.SharedHelper;
 
 @Singleton
 public class DatabaseManager {
 
-    public static final String DATABASE_NAME = "wulkanowy_db";
-
-    public static final String SHARED_PREFERENCES_NAME = "user_data";
-
     private final DaoHelper daoHelper;
 
     private final SharedHelper sharedHelper;
 
+    private final ResourcesHelper resourcesHelper;
+
     @Inject
-    public DatabaseManager(DaoHelper daoHelper, SharedHelper sharedHelper) {
+    public DatabaseManager(DaoHelper daoHelper, SharedHelper sharedHelper,
+                           ResourcesHelper resourcesHelper) {
         this.daoHelper = daoHelper;
         this.sharedHelper = sharedHelper;
+        this.resourcesHelper = resourcesHelper;
     }
 
     public long getCurrentUserId() {
@@ -66,5 +67,9 @@ public class DatabaseManager {
 
     public QueryBuilder getGradeQuery() {
         return daoHelper.getGradeQuery();
+    }
+
+    public ResourcesHelper getAppResources() {
+        return resourcesHelper;
     }
 }

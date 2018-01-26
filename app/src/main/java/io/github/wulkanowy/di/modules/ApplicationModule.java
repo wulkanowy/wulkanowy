@@ -5,10 +5,10 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import io.github.wulkanowy.db.DatabaseManager;
 import io.github.wulkanowy.di.annotations.ApplicationContext;
 import io.github.wulkanowy.di.annotations.DatabaseInfo;
 import io.github.wulkanowy.di.annotations.SharedPreferencesInfo;
+import io.github.wulkanowy.utils.AppConstant;
 
 @Module
 public class ApplicationModule {
@@ -33,12 +33,12 @@ public class ApplicationModule {
     @DatabaseInfo
     @Provides
     String provideDatabaseName() {
-        return DatabaseManager.DATABASE_NAME;
+        return AppConstant.DATABASE_NAME;
     }
 
     @SharedPreferencesInfo
     @Provides
     String provideSharedPreferencesName() {
-        return DatabaseManager.SHARED_PREFERENCES_NAME;
+        return AppConstant.SHARED_PREFERENCES_NAME;
     }
 }

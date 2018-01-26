@@ -3,7 +3,6 @@ package io.github.wulkanowy.ui.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -19,6 +18,8 @@ import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
+import io.github.wulkanowy.utils.AppConstant;
+import io.github.wulkanowy.utils.CommonUtils;
 
 public class LoginActivity extends BaseActivity implements LoginContract.View {
 
@@ -60,11 +61,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @OnClick(R.id.action_sign_in)
     void onLoginButtonClick() {
-        String email = emailView.getText().toString();
-        String password = passwordView.getText().toString();
-        String symbol = symbolView.getText().toString();
-
-        presenter.attemptLogin(email, password, symbol);
+        presenter.attemptLogin(
+                emailView.getText().toString(),
+                passwordView.getText().toString(),
+                symbolView.getText().toString());
     }
 
     @OnEditorAction(value = {R.id.symbol, R.id.password})
@@ -78,16 +78,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @OnClick(R.id.action_create_account)
     void onCreateAccountButtonClick() {
-        presenter.openInternalBrowserViewer(
-                "https://cufs.vulcan.net.pl/Default/AccountManage/CreateAccount"
-        );
+        CommonUtils.openInternalBrowserViewer(getApplicationContext(),
+                AppConstant.VULCAN_CREATE_ACCOUNT_URL);
     }
 
     @OnClick(R.id.action_forgot_password)
     void onForgotPasswordButtonClick() {
-        presenter.openInternalBrowserViewer(
-                "https://cufs.vulcan.net.pl/Default/AccountManage/UnlockAccount"
-        );
+        CommonUtils.openInternalBrowserViewer(getApplicationContext(),
+                AppConstant.VULCAN_FORGOT_PASS_URL);
     }
 
     @Override
@@ -101,13 +99,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @Override
-    public void setPasswordError(@StringRes int stringId) {
-        passwordView.setError(getString(stringId));
+    public void setPasswordError(String message) {
+        passwordView.setError(message);
     }
 
     @Override
-    public void setEmailError(@StringRes int stringId) {
-        emailView.setError(getString(stringId));
+    public void setEmailError(String message) {
+        emailView.setError(message);
     }
 
     private void initiationAutoComplete() {
