@@ -10,7 +10,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.annotations.ApplicationContext;
 
 @Singleton
-public class ResourcesHelper {
+public class ResourcesHelper implements AppResources {
 
     private Resources resources;
 
@@ -19,23 +19,13 @@ public class ResourcesHelper {
         resources = context.getResources();
     }
 
+    @Override
     public String[] getSymbolsKeysArray() {
         return resources.getStringArray(R.array.symbols);
     }
 
+    @Override
     public String[] getSymbolsValuesArray() {
         return resources.getStringArray(R.array.symbols_values);
-    }
-
-    public String getErrorFieldRequired() {
-        return resources.getString(R.string.error_field_required);
-    }
-
-    public String getErrorPassInvalid() {
-        return resources.getString(R.string.error_invalid_password);
-    }
-
-    public String getErrorEmailInvalid() {
-        return resources.getString(R.string.error_invalid_email);
     }
 }

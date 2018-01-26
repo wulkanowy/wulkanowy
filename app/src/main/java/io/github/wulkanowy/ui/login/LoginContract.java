@@ -16,6 +16,8 @@ public interface LoginContract {
 
         void resetViewErrors();
 
+        void hideSoftKeyboard();
+
     }
 
     @PerActivity

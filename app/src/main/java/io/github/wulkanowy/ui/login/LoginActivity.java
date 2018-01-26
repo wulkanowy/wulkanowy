@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -20,6 +21,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.utils.AppConstant;
 import io.github.wulkanowy.utils.CommonUtils;
+import io.github.wulkanowy.utils.KeyboardUtils;
 
 public class LoginActivity extends BaseActivity implements LoginContract.View {
 
@@ -117,6 +119,16 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void resetViewErrors() {
         emailView.setError(null);
         passwordView.setError(null);
+    }
+
+    @Override
+    public void hideSoftKeyboard() {
+        KeyboardUtils.hideSoftInput(this);
+    }
+
+    @Override
+    public void onError(String message) {
+        Snackbar.make(findViewById(R.id.fragment_container), message, Snackbar.LENGTH_LONG).show();
     }
 
     void onLoginProgressUpdate(String... progress) {

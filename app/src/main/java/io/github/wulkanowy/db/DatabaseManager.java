@@ -1,75 +1,78 @@
 package io.github.wulkanowy.db;
 
 
-import org.greenrobot.greendao.query.QueryBuilder;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.github.wulkanowy.db.dao.DaoHelper;
+import io.github.wulkanowy.db.dao.AppDatabase;
 import io.github.wulkanowy.db.dao.entities.AccountDao;
 import io.github.wulkanowy.db.dao.entities.DayDao;
 import io.github.wulkanowy.db.dao.entities.GradeDao;
 import io.github.wulkanowy.db.dao.entities.LessonDao;
 import io.github.wulkanowy.db.dao.entities.SubjectDao;
 import io.github.wulkanowy.db.dao.entities.WeekDao;
-import io.github.wulkanowy.db.resources.ResourcesHelper;
-import io.github.wulkanowy.db.shared.SharedHelper;
+import io.github.wulkanowy.db.resources.AppResources;
+import io.github.wulkanowy.db.shared.AppShared;
 
 @Singleton
-public class DatabaseManager {
+public class DatabaseManager implements AppDatabase, AppResources.ResourcesManager, AppShared {
 
-    private final DaoHelper daoHelper;
+    private final AppDatabase appDatabase;
 
-    private final SharedHelper sharedHelper;
+    private final AppShared appShared;
 
-    private final ResourcesHelper resourcesHelper;
+    private final AppResources appResources;
 
     @Inject
-    public DatabaseManager(DaoHelper daoHelper, SharedHelper sharedHelper,
-                           ResourcesHelper resourcesHelper) {
-        this.daoHelper = daoHelper;
-        this.sharedHelper = sharedHelper;
-        this.resourcesHelper = resourcesHelper;
+    public DatabaseManager(AppDatabase appDatabase, AppShared appShared,
+                           AppResources appResources) {
+        this.appDatabase = appDatabase;
+        this.appShared = appShared;
+        this.appResources = appResources;
     }
 
+    @Override
     public long getCurrentUserId() {
-        return sharedHelper.getCurrentUserId();
+        return appShared.getCurrentUserId();
     }
 
+    @Override
     public void setCurrentUserId(long userId) {
-        sharedHelper.setCurrentUserId(userId);
+        appShared.setCurrentUserId(userId);
     }
 
+    @Override
     public AccountDao getAccountDao() {
-        return daoHelper.getAccountDao();
+        return appDatabase.getAccountDao();
     }
 
+    @Override
     public SubjectDao getSubjectDao() {
-        return daoHelper.getSubjectDao();
+        return appDatabase.getSubjectDao();
     }
 
+    @Override
     public GradeDao getGradeDao() {
-        return daoHelper.getGradeDao();
+        return appDatabase.getGradeDao();
     }
 
+    @Override
     public WeekDao getWeekDao() {
-        return daoHelper.getWeekDao();
+        return appDatabase.getWeekDao();
     }
 
+    @Override
     public DayDao getDayDao() {
-        return daoHelper.getDayDao();
+        return appDatabase.getDayDao();
     }
 
+    @Override
     public LessonDao getLessonDao() {
-        return daoHelper.getLessonDao();
+        return appDatabase.getLessonDao();
     }
 
-    public QueryBuilder getGradeQuery() {
-        return daoHelper.getGradeQuery();
-    }
-
-    public ResourcesHelper getAppResources() {
-        return resourcesHelper;
+    @Override
+    public AppResources getAppResources() {
+        return appResources;
     }
 }

@@ -1,7 +1,5 @@
 package io.github.wulkanowy.db.dao;
 
-import org.greenrobot.greendao.query.QueryBuilder;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -15,7 +13,7 @@ import io.github.wulkanowy.db.dao.entities.SubjectDao;
 import io.github.wulkanowy.db.dao.entities.WeekDao;
 
 @Singleton
-public class DaoHelper {
+public class DaoHelper implements AppDatabase {
 
     private final DaoSession daoSession;
 
@@ -24,31 +22,33 @@ public class DaoHelper {
         daoSession = new DaoMaster(dbHelper.getWritableDb()).newSession();
     }
 
+    @Override
     public AccountDao getAccountDao() {
         return daoSession.getAccountDao();
     }
 
+    @Override
     public SubjectDao getSubjectDao() {
         return daoSession.getSubjectDao();
     }
 
+    @Override
     public GradeDao getGradeDao() {
         return daoSession.getGradeDao();
     }
 
+    @Override
     public WeekDao getWeekDao() {
         return daoSession.getWeekDao();
     }
 
+    @Override
     public DayDao getDayDao() {
         return daoSession.getDayDao();
     }
 
+    @Override
     public LessonDao getLessonDao() {
         return daoSession.getLessonDao();
-    }
-
-    public QueryBuilder getGradeQuery() {
-        return getGradeDao().queryBuilder();
     }
 }

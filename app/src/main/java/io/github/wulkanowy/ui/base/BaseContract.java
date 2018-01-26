@@ -11,7 +11,7 @@ public interface BaseContract {
 
         void onError(String message);
 
-        void isNetworkConnected();
+        boolean isNetworkConnected();
     }
 
     interface Presenter<V extends View> {

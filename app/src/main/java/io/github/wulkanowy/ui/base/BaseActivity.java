@@ -47,8 +47,8 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
     }
 
     @Override
-    public void isNetworkConnected() {
-        NetworkUtils.isOnline(getApplicationContext());
+    public boolean isNetworkConnected() {
+        return NetworkUtils.isOnline(getApplicationContext());
     }
 
     public ActivityComponent getActivityComponent() {
