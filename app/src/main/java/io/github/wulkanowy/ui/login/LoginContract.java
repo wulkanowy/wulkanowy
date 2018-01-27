@@ -6,17 +6,33 @@ import io.github.wulkanowy.ui.base.BaseContract;
 public interface LoginContract {
     interface View extends BaseContract.View {
 
-        void requestPasswordViewFocus();
+        void setErrorEmailRequired();
 
-        void requestEmailViewFocus();
+        void setErrorPassRequired();
 
-        void setPasswordError(String message);
+        void setErrorSymbolRequired();
 
-        void setEmailError(String message);
+        void setErrorEmailInvalid();
+
+        void setErrorPassInvalid();
+
+        void setErrorPassIncorrect();
+
+        void onNoNetworkError();
 
         void resetViewErrors();
 
-        void hideSoftKeyboard();
+        void setStepOneLoginProgress();
+
+        void setStepTwoLoginProgress();
+
+        void openDashboardActivity();
+
+        void showLoginProgress(boolean show);
+
+        void showSoftInput();
+
+        void hideSoftInput();
 
     }
 
@@ -24,5 +40,20 @@ public interface LoginContract {
     interface Presenter extends BaseContract.Presenter<View> {
 
         void attemptLogin(String email, String password, String symbol);
+
+        void onStartAsync();
+
+        void onLoginProgress(int step);
+
+        void onEndAsync(boolean success, Exception exception);
+
+        void onCanceledAsync();
+    }
+
+    interface Task {
+
+        void start(LoginContract.Presenter presenter, String email, String password, String symbol);
+
+        void onDestroy();
     }
 }

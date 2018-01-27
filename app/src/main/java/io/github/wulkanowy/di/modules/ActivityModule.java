@@ -9,6 +9,7 @@ import io.github.wulkanowy.di.annotations.ActivityContext;
 import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.ui.login.LoginContract;
 import io.github.wulkanowy.ui.login.LoginPresenter;
+import io.github.wulkanowy.ui.login.LoginTask;
 import io.github.wulkanowy.ui.splash.SplashContract;
 import io.github.wulkanowy.ui.splash.SplashPresenter;
 
@@ -44,5 +45,11 @@ public class ActivityModule {
     LoginContract.Presenter provideLoginPresenter
             (LoginPresenter loginPresenter) {
         return loginPresenter;
+    }
+
+    @PerActivity
+    @Provides
+    LoginContract.Task provideLoginTask() {
+        return new LoginTask();
     }
 }

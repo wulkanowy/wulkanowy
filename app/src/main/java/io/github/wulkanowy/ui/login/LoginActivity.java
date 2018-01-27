@@ -2,8 +2,10 @@ package io.github.wulkanowy.ui.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -19,6 +21,7 @@ import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
+import io.github.wulkanowy.ui.main.DashboardActivity;
 import io.github.wulkanowy.utils.AppConstant;
 import io.github.wulkanowy.utils.CommonUtils;
 import io.github.wulkanowy.utils.KeyboardUtils;
@@ -41,10 +44,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     View loadingBarView;
 
     @BindView(R.id.login_progress_text)
-    TextView showText;
+    TextView loginProgressText;
+
+    @BindView(R.id.to_symbol_input_layout)
+    TextInputLayout symbolLayout;
 
     @Inject
     LoginContract.Presenter presenter;
+
+    private EditText requestedView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,28 +99,46 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @Override
-    public void requestPasswordViewFocus() {
-        passwordView.requestFocus();
-    }
-
-    @Override
-    public void requestEmailViewFocus() {
+    public void setErrorEmailRequired() {
         emailView.requestFocus();
+        emailView.setError(getString(R.string.error_field_required));
+        requestedView = emailView;
     }
 
     @Override
-    public void setPasswordError(String message) {
-        passwordView.setError(message);
+    public void setErrorEmailInvalid() {
+        emailView.requestFocus();
+        emailView.setError(getString(R.string.error_invalid_email));
+        requestedView = emailView;
     }
 
     @Override
-    public void setEmailError(String message) {
-        emailView.setError(message);
+    public void setErrorPassRequired() {
+        passwordView.requestFocus();
+        passwordView.setError(getString(R.string.error_field_required));
+        requestedView = passwordView;
     }
 
-    private void initiationAutoComplete() {
-        symbolView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
-                getResources().getStringArray(R.array.symbols)));
+    @Override
+    public void setErrorPassInvalid() {
+        passwordView.requestFocus();
+        passwordView.setError(getString(R.string.error_invalid_password));
+        requestedView = passwordView;
+    }
+
+    @Override
+    public void setErrorPassIncorrect() {
+        passwordView.requestFocus();
+        passwordView.setError(getString(R.string.error_incorrect_password));
+        requestedView = passwordView;
+    }
+
+    @Override
+    public void setErrorSymbolRequired() {
+        symbolLayout.setVisibility(View.VISIBLE);
+        symbolView.setError(getString(R.string.error_bad_account_permission));
+        symbolView.requestFocus();
+        requestedView = symbolView;
     }
 
     @Override
@@ -122,20 +148,44 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @Override
-    public void hideSoftKeyboard() {
+    public void showSoftInput() {
+        KeyboardUtils.showSoftInput(requestedView, this);
+    }
+
+    @Override
+    public void hideSoftInput() {
         KeyboardUtils.hideSoftInput(this);
     }
 
     @Override
+    public void onNoNetworkError() {
+        onError(R.string.noInternet_text);
+    }
+
+    @Override
     public void onError(String message) {
-        Snackbar.make(findViewById(R.id.fragment_container), message, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.fragment_container), message,
+                Snackbar.LENGTH_LONG).show();
     }
 
-    void onLoginProgressUpdate(String... progress) {
-        showText.setText(String.format("%1$s/2 - %2$s...", progress[0], progress[1]));
+    @Override
+    public void setStepOneLoginProgress() {
+        onLoginProgressUpdate("1", getString(R.string.step_login));
     }
 
-    void showLoginProgress(final boolean show) {
+    @Override
+    public void setStepTwoLoginProgress() {
+        onLoginProgressUpdate("2", getString(R.string.step_synchronization));
+    }
+
+    @Override
+    public void openDashboardActivity() {
+        startActivity(new Intent(this, DashboardActivity.class));
+        finish();
+    }
+
+    @Override
+    public void showLoginProgress(final boolean show) {
         int animTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         loginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
@@ -161,5 +211,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
+    }
+
+    private void onLoginProgressUpdate(String step, String message) {
+        loginProgressText.setText(String.format("%1$s/2 - %2$s...", step, message));
+    }
+
+    private void initiationAutoComplete() {
+        symbolView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.symbols)));
     }
 }

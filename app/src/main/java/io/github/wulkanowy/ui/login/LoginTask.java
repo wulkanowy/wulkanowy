@@ -1,190 +1,71 @@
 package io.github.wulkanowy.ui.login;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-
-import io.github.wulkanowy.R;
-import io.github.wulkanowy.WulkanowyApp;
-import io.github.wulkanowy.api.login.AccountPermissionException;
-import io.github.wulkanowy.api.login.BadCredentialsException;
-import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.api.login.VulcanOfflineException;
-import io.github.wulkanowy.db.dao.entities.DaoSession;
-import io.github.wulkanowy.services.jobs.FullSyncJob;
-import io.github.wulkanowy.services.sync.LoginSession;
-import io.github.wulkanowy.services.sync.VulcanSync;
-import io.github.wulkanowy.ui.main.DashboardActivity;
-import io.github.wulkanowy.utils.KeyboardUtils;
-import io.github.wulkanowy.utils.NetworkUtils;
-import io.github.wulkanowy.utils.security.CryptoException;
 
 /**
  * Represents an asynchronous login/registration task used to authenticate
  * the user.
  */
-public class LoginTask extends AsyncTask<Void, String, Integer> {
+public class LoginTask extends AsyncTask<Void, Integer, Boolean> implements LoginContract.Task {
 
-    private final String email;
+    private String email;
 
-    private final String password;
+    private String password;
 
-    private final String symbol;
+    private String symbol;
 
-    private WeakReference<Activity> activity;
+    private LoginContract.Presenter presenter;
 
-    private WeakReference<View> progressView;
+    private Exception exception;
 
-    private WeakReference<View> loginFormView;
-
-    private WeakReference<TextView> showText;
-
-    LoginTask(Activity activity, String email, String password, String symbol) {
-        this.activity = new WeakReference<>(activity);
+    @Override
+    public void start(LoginContract.Presenter presenter, String email, String password, String symbol) {
+        this.presenter = presenter;
         this.email = email;
         this.password = password;
         this.symbol = symbol;
+        execute();
+    }
+
+    @Override
+    public void onDestroy() {
+        this.cancel(true);
     }
 
     @Override
     protected void onPreExecute() {
-        showText = new WeakReference<>((TextView) activity.get().findViewById(R.id.login_progress_text));
+        presenter.onStartAsync();
     }
 
     @Override
-    protected Integer doInBackground(Void... params) {
-        if (NetworkUtils.isOnline(activity.get())) {
-            DaoSession daoSession = ((WulkanowyApp) activity.get().getApplication()).getDaoSession();
-            VulcanSync vulcanSync = new VulcanSync(new LoginSession());
+    protected Boolean doInBackground(Void... params) {
+        try {
+            publishProgress(1);
+            //vulcanSync.firstLoginSignInStep(activity.get(), daoSession, email, password, symbol);
+            Thread.sleep(3000);
 
-            try {
-                publishProgress("1", activity.get().getResources().getString(R.string.step_login));
-                vulcanSync.firstLoginSignInStep(activity.get(), daoSession, email, password, symbol);
-
-                publishProgress("2", activity.get().getResources().getString(R.string.step_synchronization));
-                vulcanSync.syncAll();
-            } catch (BadCredentialsException e) {
-                return R.string.login_bad_credentials_text;
-            } catch (AccountPermissionException e) {
-                return R.string.error_bad_account_permission;
-            } catch (CryptoException e) {
-                return R.string.encrypt_failed_text;
-            } catch (UnknownHostException e) {
-                return R.string.noInternet_text;
-            } catch (SocketTimeoutException e) {
-                return R.string.generic_timeout_error;
-            } catch (NotLoggedInErrorException | IOException e) {
-                return R.string.login_denied_text;
-            } catch (VulcanOfflineException e) {
-                return R.string.error_host_offline;
-            } catch (UnsupportedOperationException e) {
-                return -1;
-            } catch (Throwable e) {
-                Crashlytics.logException(e);
-                return R.string.login_denied_text;
-            }
-
-            new FullSyncJob().scheduledJob(activity.get());
-
-            return R.string.login_accepted_text;
-
-        } else {
-            return R.string.noInternet_text;
+            publishProgress(2);
+            //vulcanSync.syncAll();
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            exception = e;
+            return false;
         }
+        return true;
     }
 
     @Override
-    protected void onProgressUpdate(String... progress) {
-        showText.get().setText(String.format("%1$s/2 - %2$s...", progress[0], progress[1]));
+    protected void onProgressUpdate(Integer... progress) {
+        presenter.onLoginProgress(progress[0]);
     }
 
     @Override
-    protected void onPostExecute(final Integer messageID) {
-        //showProgress(false);
-
-        switch (messageID) {
-            // if success
-            case R.string.login_accepted_text:
-                logFirstLoginAction(true, activity.get().getString(messageID));
-                Intent intent = new Intent(activity.get(), DashboardActivity.class);
-                activity.get().finish();
-                activity.get().startActivity(intent);
-                break;
-
-            // if bad credentials entered
-            case R.string.login_bad_credentials_text:
-                logFirstLoginAction(false, activity.get().getString(messageID));
-                EditText passwordView = activity.get().findViewById(R.id.password);
-                passwordView.setError(activity.get().getString(R.string.error_incorrect_password));
-                passwordView.requestFocus();
-                KeyboardUtils.showSoftInput(passwordView, activity.get());
-                break;
-
-            // if no permission
-            case R.string.error_bad_account_permission:
-                logFirstLoginAction(false, activity.get().getString(messageID));
-                // Change to visible symbol input view
-                TextInputLayout symbolLayout = activity.get().findViewById(R.id.to_symbol_input_layout);
-                symbolLayout.setVisibility(View.VISIBLE);
-
-                EditText symbolView = activity.get().findViewById(R.id.symbol);
-                symbolView.setError(activity.get().getString(R.string.error_bad_account_permission));
-                symbolView.requestFocus();
-                KeyboardUtils.showSoftInput(symbolView, activity.get());
-                break;
-
-            // if rooted and SDK < 18
-            case -1:
-                logFirstLoginAction(false, "Device rooted");
-                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(activity.get())
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle(R.string.alert_dialog_blocked_app)
-                        .setMessage(R.string.alert_dialog_blocked_app_message)
-                        .setPositiveButton(R.string.generic_dialog_close, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
-                alertDialog.show();
-                break;
-
-            default:
-                logFirstLoginAction(false, activity.get().getString(messageID));
-                Snackbar.make(activity.get().findViewById(R.id.fragment_container),
-                        messageID, Snackbar.LENGTH_LONG).show();
-                break;
-        }
-    }
-
-    private void logFirstLoginAction(boolean success, String message) {
-        Answers.getInstance().logCustom(new CustomEvent("First login")
-                .putCustomAttribute("Symbol", symbol)
-                .putCustomAttribute("Success", success ? 1 : 0)
-                .putCustomAttribute("Message", message));
+    protected void onPostExecute(Boolean success) {
+        presenter.onEndAsync(success, exception);
     }
 
     @Override
     protected void onCancelled() {
-        //showProgress(false);
+        presenter.onCanceledAsync();
     }
-
-
-
 }

@@ -6,6 +6,8 @@ public interface AppResources {
 
     String[] getSymbolsValuesArray();
 
+    String getErrorLoginMessage(Exception e);
+
     interface ResourcesManager {
 
         AppResources getAppResources();

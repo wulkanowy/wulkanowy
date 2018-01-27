@@ -3,11 +3,18 @@ package io.github.wulkanowy.db.resources;
 import android.content.Context;
 import android.content.res.Resources;
 
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.R;
+import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.di.annotations.ApplicationContext;
+import io.github.wulkanowy.utils.security.CryptoException;
 
 @Singleton
 public class ResourcesHelper implements AppResources {
@@ -27,5 +34,22 @@ public class ResourcesHelper implements AppResources {
     @Override
     public String[] getSymbolsValuesArray() {
         return resources.getStringArray(R.array.symbols_values);
+    }
+
+    @Override
+    public String getErrorLoginMessage(Exception exception) {
+        if (exception instanceof CryptoException) {
+            return resources.getString(R.string.encrypt_failed_text);
+        } else if (exception instanceof UnknownHostException) {
+            return resources.getString(R.string.noInternet_text);
+        } else if (exception instanceof SocketTimeoutException) {
+            return resources.getString(R.string.generic_timeout_error);
+        } else if (exception instanceof NotLoggedInErrorException || exception instanceof IOException) {
+            return resources.getString(R.string.login_denied_text);
+        } else if (exception instanceof VulcanOfflineException) {
+            return resources.getString(R.string.error_host_offline);
+        } else {
+            return exception.getMessage();
+        }
     }
 }
