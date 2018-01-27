@@ -31,52 +31,20 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         }
     }
 
+    @Override
     public void attemptLogin(String email, String password, String symbol) {
         getView().resetViewErrors();
 
-        boolean cancel = false;
-
-        if (TextUtils.isEmpty(password)) {
-            getView().setErrorPassRequired();
-            cancel = true;
-        } else if (!isPasswordValid(password)) {
-            getView().setErrorPassInvalid();
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(email)) {
-            getView().setErrorEmailRequired();
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            getView().setErrorEmailInvalid();
-            cancel = true;
-        }
-
-        if (cancel) {
+        if (!isAllFieldCorrect(password, email)) {
             getView().showSoftInput();
             return;
         }
 
-        if (TextUtils.isEmpty(symbol)) {
-            symbol = "Default";
-        }
-
-        AppResources appResources = getDatabaseManager().getAppResources();
-
-        String[] keys = appResources.getSymbolsKeysArray();
-        String[] values = appResources.getSymbolsValuesArray();
-        LinkedHashMap<String, String> map = new LinkedHashMap<>();
-
-        for (int i = 0; i < Math.min(keys.length, values.length); ++i) {
-            map.put(keys[i], values[i]);
-        }
-
-        if (map.containsKey(symbol)) {
-            symbol = map.get(symbol);
-        }
-
         if (getView().isNetworkConnected()) {
-            loginAsync.start(this, email, password, symbol);
+            loginAsync.start(this,
+                    email,
+                    password,
+                    getNormalizedSymbol(symbol));
         } else {
             getView().onNoNetworkError();
         }
@@ -127,5 +95,48 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
     private boolean isPasswordValid(String password) {
         return password.length() > 4;
+    }
+
+    private String getNormalizedSymbol(String symbol) {
+        if (TextUtils.isEmpty(symbol)) {
+            return "Default";
+        }
+
+        AppResources appResources = getDatabaseManager().getAppResources();
+
+        String[] keys = appResources.getSymbolsKeysArray();
+        String[] values = appResources.getSymbolsValuesArray();
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+
+        for (int i = 0; i < Math.min(keys.length, values.length); ++i) {
+            map.put(keys[i], values[i]);
+        }
+
+        if (map.containsKey(symbol)) {
+            return map.get(symbol);
+        } else {
+            return "Default";
+        }
+    }
+
+    private boolean isAllFieldCorrect(String password, String email) {
+        boolean correct = true;
+
+        if (TextUtils.isEmpty(password)) {
+            getView().setErrorPassRequired();
+            correct = false;
+        } else if (!isPasswordValid(password)) {
+            getView().setErrorPassInvalid();
+            correct = false;
+        }
+
+        if (TextUtils.isEmpty(email)) {
+            getView().setErrorEmailRequired();
+            correct = false;
+        } else if (!isEmailValid(email)) {
+            getView().setErrorEmailInvalid();
+            correct = false;
+        }
+        return correct;
     }
 }

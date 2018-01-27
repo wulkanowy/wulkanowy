@@ -2,10 +2,6 @@ package io.github.wulkanowy.ui.login;
 
 import android.os.AsyncTask;
 
-/**
- * Represents an asynchronous login/registration task used to authenticate
- * the user.
- */
 public class LoginTask extends AsyncTask<Void, Integer, Boolean> implements LoginContract.Task {
 
     private String email;

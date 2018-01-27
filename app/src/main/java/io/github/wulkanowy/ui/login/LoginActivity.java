@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -53,6 +54,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     LoginContract.Presenter presenter;
 
     private EditText requestedView;
+
+    public static Intent getStartIntent(Context context) {
+        return new Intent(context, LoginActivity.class);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
