@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.splash;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -31,8 +30,6 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
         getActivityComponent().inject(this);
         setButterKnife(ButterKnife.bind(this));
 
-        versionText.setText(getString(R.string.version_text, BuildConfig.VERSION_NAME));
-
         presenter.onStart(this);
     }
 
@@ -43,14 +40,19 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     }
 
     @Override
+    protected void setUpOnCreate() {
+        versionText.setText(getString(R.string.version_text, BuildConfig.VERSION_NAME));
+    }
+
+    @Override
     public void openLoginActivity() {
         startActivity(LoginActivity.getStartIntent(this));
         finish();
     }
 
     @Override
-    public void openDashboardActivity() {
-        startActivity(new Intent(this, MainActivity.class));
+    public void openMainActivity() {
+        startActivity(MainActivity.getStartIntent(this));
         finish();
     }
 

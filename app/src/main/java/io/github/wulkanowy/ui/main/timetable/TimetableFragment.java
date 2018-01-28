@@ -1,5 +1,9 @@
 package io.github.wulkanowy.ui.main.timetable;
 
+public class TimetableFragment {
+}
+
+/*
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -119,3 +123,4 @@ public class TimetableFragment extends Fragment {
         }
     }
 }
+*/

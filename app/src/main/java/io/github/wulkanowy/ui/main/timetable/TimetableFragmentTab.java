@@ -1,5 +1,8 @@
 package io.github.wulkanowy.ui.main.timetable;
 
+public class TimetableFragmentTab {
+}
+/*
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,7 +25,6 @@ import io.github.wulkanowy.db.dao.entities.Lesson;
 import io.github.wulkanowy.db.dao.entities.Week;
 import io.github.wulkanowy.db.dao.entities.WeekDao;
 import io.github.wulkanowy.services.sync.VulcanSync;
-import io.github.wulkanowy.ui.main.AbstractFragment;
 
 public class TimetableFragmentTab extends AbstractFragment<TimetableHeaderItem> {
 
@@ -159,3 +161,4 @@ public class TimetableFragmentTab extends AbstractFragment<TimetableHeaderItem> 
                 .unique();
     }
 }
+*/

@@ -23,11 +23,11 @@ public class SplashPresenter extends BasePresenter<SplashContract.View>
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getDatabaseManager().getCurrentUserId() == 0) {
+                if (getDatabaseManager().getCurrentUserId() != 0) {
                     getView().openLoginActivity();
                 } else {
                     getView().startFullSyncService();
-                    getView().openDashboardActivity();
+                    getView().openMainActivity();
                 }
             }
         }, 500);

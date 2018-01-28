@@ -26,7 +26,7 @@ public interface LoginContract {
 
         void setStepTwoLoginProgress();
 
-        void openDashboardActivity();
+        void openMainActivity();
 
         void showLoginProgress(boolean show);
 

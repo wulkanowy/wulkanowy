@@ -65,13 +65,16 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         setContentView(R.layout.activity_login);
 
         setButterKnife(ButterKnife.bind(this));
-
         getActivityComponent().inject(this);
-
-        initiationAutoComplete();
 
         presenter.onStart(this);
 
+    }
+
+    @Override
+    protected void setUpOnCreate() {
+        symbolView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.symbols)));
     }
 
     @OnClick(R.id.login_activity_sign_button)
@@ -184,8 +187,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @Override
-    public void openDashboardActivity() {
-        startActivity(new Intent(this, MainActivity.class));
+    public void openMainActivity() {
+        startActivity(MainActivity.getStartIntent(this));
         finish();
     }
 
@@ -220,10 +223,5 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     private void onLoginProgressUpdate(String step, String message) {
         loginProgressText.setText(String.format("%1$s/2 - %2$s...", step, message));
-    }
-
-    private void initiationAutoComplete() {
-        symbolView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
-                getResources().getStringArray(R.array.symbols)));
     }
 }

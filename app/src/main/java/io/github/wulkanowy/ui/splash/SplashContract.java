@@ -10,7 +10,7 @@ public interface SplashContract {
 
         void openLoginActivity();
 
-        void openDashboardActivity();
+        void openMainActivity();
 
         void startFullSyncService();
     }
