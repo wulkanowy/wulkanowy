@@ -189,11 +189,11 @@ public class GradesFragment extends Fragment {
                 int volumeGrades = 0;
 
                 if (volumeGrades == 0) {
-                    Snackbar.make(activity.get().findViewById(R.id.fragment_container),
+                    Snackbar.make(activity.get().findViewById(R.id.main_activity_container),
                             R.string.snackbar_no_grades,
                             Snackbar.LENGTH_SHORT).show();
                 } else {
-                    Snackbar.make(activity.get().findViewById(R.id.fragment_container),
+                    Snackbar.make(activity.get().findViewById(R.id.main_activity_container),
                             activity.get().getString(R.string.snackbar_new_grade, volumeGrades),
                             Snackbar.LENGTH_SHORT).show();
                 }

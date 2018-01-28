@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -29,7 +28,6 @@ import com.github.javiersantos.appupdater.objects.Update;
 import java.io.File;
 
 import io.github.wulkanowy.BuildConfig;
-import io.github.wulkanowy.R;
 
 public class Updater {
 
@@ -98,13 +96,13 @@ public class Updater {
     }
 
     private void startDownload() {
-        Snackbar.make(activity.findViewById(R.id.fragment_container), "Downloading started.", Snackbar.LENGTH_SHORT).show();
+        //Snackbar.make(activity.findViewById(R.id.fragment_container), "Downloading started.", Snackbar.LENGTH_SHORT).show();
 
         String path = Environment.getExternalStorageDirectory().toString() + File.separator +
                 Environment.DIRECTORY_DOWNLOADS + File.separator + "wulkanowy";
 
         File dir = new File(path);
-        if(!dir.mkdirs()) {
+        if (!dir.mkdirs()) {
             for (String aChildren : dir.list()) {
                 new File(dir, aChildren).delete();
             }
@@ -127,10 +125,10 @@ public class Updater {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 downloadUpdate();
             } else {
-                Snackbar.make(activity.findViewById(R.id.fragment_container),
-                        "Write storage permission request was denied.",
-                        Snackbar.LENGTH_LONG)
-                        .show();
+                // Snackbar.make(activity.findViewById(R.id.fragment_container),
+                //       "Write storage permission request was denied.",
+                //     Snackbar.LENGTH_LONG)
+                //   .show();
             }
         }
     }

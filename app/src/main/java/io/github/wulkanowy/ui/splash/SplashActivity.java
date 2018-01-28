@@ -13,11 +13,11 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.services.jobs.FullSyncJob;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.login.LoginActivity;
-import io.github.wulkanowy.ui.main.DashboardActivity;
+import io.github.wulkanowy.ui.main.MainActivity;
 
 public class SplashActivity extends BaseActivity implements SplashContract.View {
 
-    @BindView(R.id.rawText)
+    @BindView(R.id.splash_activity_version_text)
     public TextView versionText;
 
     @Inject
@@ -50,7 +50,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 
     @Override
     public void openDashboardActivity() {
-        startActivity(new Intent(this, DashboardActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 

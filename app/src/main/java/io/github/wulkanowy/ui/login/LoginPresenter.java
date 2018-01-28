@@ -15,10 +15,10 @@ import io.github.wulkanowy.ui.base.BasePresenter;
 public class LoginPresenter extends BasePresenter<LoginContract.View>
         implements LoginContract.Presenter {
 
-    private LoginContract.Task loginAsync;
+    private LoginContract.Async loginAsync;
 
     @Inject
-    public LoginPresenter(DatabaseManager databaseManager, LoginContract.Task loginAsync) {
+    public LoginPresenter(DatabaseManager databaseManager, LoginContract.Async loginAsync) {
         super(databaseManager);
         this.loginAsync = loginAsync;
     }

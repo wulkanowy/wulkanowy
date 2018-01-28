@@ -129,7 +129,7 @@ public class TimetableFragmentTab extends AbstractFragment<TimetableHeaderItem> 
         if (stringResult == 0) {
             stringResult = R.string.timetable_refresh_success;
         }
-        Snackbar.make(getActivityWeakReference().findViewById(R.id.fragment_container),
+        Snackbar.make(getActivityWeakReference().findViewById(R.id.main_activity_container),
                 stringResult, Snackbar.LENGTH_SHORT).show();
     }
 

@@ -21,7 +21,7 @@ import io.github.wulkanowy.db.dao.entities.DaoSession;
 import io.github.wulkanowy.db.dao.entities.Grade;
 import io.github.wulkanowy.services.notifications.NotificationBuilder;
 import io.github.wulkanowy.services.sync.VulcanSync;
-import io.github.wulkanowy.ui.main.DashboardActivity;
+import io.github.wulkanowy.ui.main.MainActivity;
 
 public class FullSyncJob extends VulcanJobHelper {
 
@@ -66,7 +66,7 @@ public class FullSyncJob extends VulcanJobHelper {
         }
 
         private void buildNotify(String title, String bodyText) {
-            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("cardID", 1);
             PendingIntent pendingIntent = PendingIntent
                     .getActivity(getApplicationContext(), 0, intent, 0);

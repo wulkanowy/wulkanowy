@@ -22,32 +22,32 @@ import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
-import io.github.wulkanowy.ui.main.DashboardActivity;
+import io.github.wulkanowy.ui.main.MainActivity;
 import io.github.wulkanowy.utils.AppConstant;
 import io.github.wulkanowy.utils.CommonUtils;
 import io.github.wulkanowy.utils.KeyboardUtils;
 
 public class LoginActivity extends BaseActivity implements LoginContract.View {
 
-    @BindView(R.id.email)
+    @BindView(R.id.login_activity_email_edit)
     EditText emailView;
 
-    @BindView(R.id.password)
+    @BindView(R.id.login_activity_pass_edit)
     EditText passwordView;
 
-    @BindView(R.id.symbol)
+    @BindView(R.id.login_activity_symbol_edit)
     AutoCompleteTextView symbolView;
 
-    @BindView(R.id.login_form)
+    @BindView(R.id.login_activity_form_scroll)
     View loginFormView;
 
-    @BindView(R.id.login_progress)
+    @BindView(R.id.login_activity_progress_container)
     View loadingBarView;
 
-    @BindView(R.id.login_progress_text)
+    @BindView(R.id.login_activity_progress_text)
     TextView loginProgressText;
 
-    @BindView(R.id.to_symbol_input_layout)
+    @BindView(R.id.login_activity_symbol_text_input)
     TextInputLayout symbolLayout;
 
     @Inject
@@ -74,7 +74,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     }
 
-    @OnClick(R.id.action_sign_in)
+    @OnClick(R.id.login_activity_sign_button)
     void onLoginButtonClick() {
         presenter.attemptLogin(
                 emailView.getText().toString(),
@@ -82,7 +82,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 symbolView.getText().toString());
     }
 
-    @OnEditorAction(value = {R.id.symbol, R.id.password})
+    @OnEditorAction(value = {R.id.login_activity_symbol_edit, R.id.login_activity_pass_edit})
     boolean onEditorAction(int id) {
         if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
             onLoginButtonClick();
@@ -91,13 +91,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         return false;
     }
 
-    @OnClick(R.id.action_create_account)
+    @OnClick(R.id.login_activity_create_text)
     void onCreateAccountButtonClick() {
         CommonUtils.openInternalBrowserViewer(getApplicationContext(),
                 AppConstant.VULCAN_CREATE_ACCOUNT_URL);
     }
 
-    @OnClick(R.id.action_forgot_password)
+    @OnClick(R.id.login_activity_forgot_text)
     void onForgotPasswordButtonClick() {
         CommonUtils.openInternalBrowserViewer(getApplicationContext(),
                 AppConstant.VULCAN_FORGOT_PASS_URL);
@@ -169,7 +169,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @Override
     public void onError(String message) {
-        Snackbar.make(findViewById(R.id.fragment_container), message,
+        Snackbar.make(findViewById(R.id.login_activity_container), message,
                 Snackbar.LENGTH_LONG).show();
     }
 
@@ -185,7 +185,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @Override
     public void openDashboardActivity() {
-        startActivity(new Intent(this, DashboardActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 

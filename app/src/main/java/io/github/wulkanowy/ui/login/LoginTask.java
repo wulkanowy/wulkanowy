@@ -2,7 +2,7 @@ package io.github.wulkanowy.ui.login;
 
 import android.os.AsyncTask;
 
-public class LoginTask extends AsyncTask<Void, Integer, Boolean> implements LoginContract.Task {
+public class LoginTask extends AsyncTask<Void, Integer, Boolean> implements LoginContract.Async {
 
     private String email;
 

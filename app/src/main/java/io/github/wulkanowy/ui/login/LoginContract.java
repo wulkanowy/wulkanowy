@@ -50,7 +50,7 @@ public interface LoginContract {
         void onCanceledAsync();
     }
 
-    interface Task {
+    interface Async {
 
         void start(LoginContract.Presenter presenter, String email, String password, String symbol);
 
