@@ -27,6 +27,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     AHBottomNavigationViewPager viewPager;
 
     @Inject
+    MainPagerAdapter pagerAdapter;
+
+    @Inject
     MainContract.Presenter presenter;
 
     AHBottomNavigation.OnTabSelectedListener listener = new AHBottomNavigation.OnTabSelectedListener() {
@@ -97,7 +100,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     private void initiationViewPager() {
-        MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(new AttendanceFragment());
         pagerAdapter.addFragment(new BoardFragment());
         pagerAdapter.addFragment(new BoardFragment());

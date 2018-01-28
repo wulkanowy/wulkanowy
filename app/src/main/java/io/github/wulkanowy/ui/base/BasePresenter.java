@@ -18,8 +18,8 @@ public class BasePresenter<V extends BaseContract.View> implements BaseContract.
     }
 
     @Override
-    public void onStart(@NonNull V activity) {
-        view = activity;
+    public void onStart(@NonNull V view) {
+        this.view = view;
     }
 
     @Override

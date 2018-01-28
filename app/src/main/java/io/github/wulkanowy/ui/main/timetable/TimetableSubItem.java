@@ -18,7 +18,8 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.db.dao.entities.Lesson;
 
 
-public class TimetableSubItem extends AbstractSectionableItem<TimetableSubItem.SubItemViewHolder, TimetableHeaderItem> {
+public class TimetableSubItem
+        extends AbstractSectionableItem<TimetableSubItem.SubItemViewHolder, TimetableHeaderItem> {
 
     private Lesson lesson;
 

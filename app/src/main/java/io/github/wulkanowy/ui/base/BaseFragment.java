@@ -72,7 +72,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         return false;
     }
 
-    public void setUnbinder(Unbinder unbinder) {
+    public void setButterKnife(Unbinder unbinder) {
         this.unbinder = unbinder;
     }
 

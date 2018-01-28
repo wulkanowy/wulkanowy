@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.db.dao.entities.Grade;
+import io.github.wulkanowy.utils.CommonUtils;
 
 public class GradesDialogFragment extends DialogFragment {
 
@@ -25,25 +26,6 @@ public class GradesDialogFragment extends DialogFragment {
 
     public static final GradesDialogFragment newInstance(Grade grade) {
         return new GradesDialogFragment().setGrade(grade);
-    }
-
-    public static int colorHexToColorName(String hexColor) {
-        switch (hexColor) {
-            case "000000":
-                return R.string.color_black_text;
-
-            case "F04C4C":
-                return R.string.color_red_text;
-
-            case "20A4F7":
-                return R.string.color_blue_text;
-
-            case "6ECD07":
-                return R.string.color_green_text;
-
-            default:
-                return R.string.noColor_text;
-        }
     }
 
     private GradesDialogFragment setGrade(Grade grade) {
@@ -70,7 +52,7 @@ public class GradesDialogFragment extends DialogFragment {
         gradeText.setBackgroundResource(grade.getValueColor());
         weightText.setText(grade.getWeight());
         dateText.setText(grade.getDate());
-        colorText.setText(colorHexToColorName(grade.getColor()));
+        colorText.setText(CommonUtils.colorHexToColorName(grade.getColor()));
 
         if ("".equals(grade.getDescription())) {
             if (!"".equals(grade.getSymbol())) {

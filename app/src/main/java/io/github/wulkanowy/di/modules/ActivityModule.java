@@ -1,26 +1,32 @@
 package io.github.wulkanowy.di.modules;
 
-import android.app.Activity;
+
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 
 import dagger.Module;
 import dagger.Provides;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import io.github.wulkanowy.di.annotations.ActivityContext;
 import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.ui.login.LoginContract;
 import io.github.wulkanowy.ui.login.LoginPresenter;
 import io.github.wulkanowy.ui.login.LoginTask;
 import io.github.wulkanowy.ui.main.MainContract;
+import io.github.wulkanowy.ui.main.MainPagerAdapter;
 import io.github.wulkanowy.ui.main.MainPresenter;
+import io.github.wulkanowy.ui.main.grades.GradeHeaderItem;
+import io.github.wulkanowy.ui.main.grades.GradesContract;
+import io.github.wulkanowy.ui.main.grades.GradesPresenter;
 import io.github.wulkanowy.ui.splash.SplashContract;
 import io.github.wulkanowy.ui.splash.SplashPresenter;
 
 @Module
 public class ActivityModule {
 
-    protected Activity activity;
+    protected AppCompatActivity activity;
 
-    public ActivityModule(Activity activity) {
+    public ActivityModule(AppCompatActivity activity) {
         this.activity = activity;
     }
 
@@ -31,7 +37,7 @@ public class ActivityModule {
     }
 
     @Provides
-    Activity provideActivity() {
+    AppCompatActivity provideActivity() {
         return activity;
     }
 
@@ -54,6 +60,22 @@ public class ActivityModule {
     MainContract.Presenter provideMainPresenter
             (MainPresenter mainPresenter) {
         return mainPresenter;
+    }
+
+    @PerActivity
+    @Provides
+    GradesContract.Presenter provideGradesPresenter(GradesPresenter gradesPresenter) {
+        return gradesPresenter;
+    }
+
+    @Provides
+    MainPagerAdapter provideMainPagerAdapter() {
+        return new MainPagerAdapter(activity.getSupportFragmentManager());
+    }
+
+    @Provides
+    FlexibleAdapter<GradeHeaderItem> provideGradesAdapter() {
+        return new FlexibleAdapter<GradeHeaderItem>(null);
     }
 
     @PerActivity
