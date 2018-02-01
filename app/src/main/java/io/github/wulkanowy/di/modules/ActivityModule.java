@@ -15,6 +15,10 @@ import io.github.wulkanowy.ui.login.LoginTask;
 import io.github.wulkanowy.ui.main.MainContract;
 import io.github.wulkanowy.ui.main.MainPagerAdapter;
 import io.github.wulkanowy.ui.main.MainPresenter;
+import io.github.wulkanowy.ui.main.attendance.AttendanceContract;
+import io.github.wulkanowy.ui.main.attendance.AttendancePresenter;
+import io.github.wulkanowy.ui.main.dashboard.DashboardContract;
+import io.github.wulkanowy.ui.main.dashboard.DashboardPresenter;
 import io.github.wulkanowy.ui.main.grades.GradeHeaderItem;
 import io.github.wulkanowy.ui.main.grades.GradesContract;
 import io.github.wulkanowy.ui.main.grades.GradesPresenter;
@@ -66,6 +70,18 @@ public class ActivityModule {
     @Provides
     GradesContract.Presenter provideGradesPresenter(GradesPresenter gradesPresenter) {
         return gradesPresenter;
+    }
+
+    @PerActivity
+    @Provides
+    AttendanceContract.Presenter provideAttendancePresenter(AttendancePresenter attendancePresenter) {
+        return attendancePresenter;
+    }
+
+    @PerActivity
+    @Provides
+    DashboardContract.Presenter provideDashboardPresenter(DashboardPresenter dashboardPresenter) {
+        return dashboardPresenter;
     }
 
     @Provides
