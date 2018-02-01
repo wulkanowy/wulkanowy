@@ -16,7 +16,7 @@ public interface BaseContract {
 
     interface Presenter<V extends View> {
 
-        void onStart(@NonNull V activity);
+        void onStart(@NonNull V view);
 
         void onDestroy();
     }

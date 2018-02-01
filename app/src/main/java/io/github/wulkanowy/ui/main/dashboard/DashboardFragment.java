@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.attendance;
+package io.github.wulkanowy.ui.main.dashboard;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,19 +13,15 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.component.ActivityComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
 
-public class AttendanceFragment extends BaseFragment implements AttendanceContract.View {
+public class DashboardFragment extends BaseFragment implements DashboardContract.View {
 
     @Inject
-    AttendanceContract.Presenter presenter;
-
-    public AttendanceFragment() {
-        // empty constructor for fragment
-    }
+    DashboardContract.Presenter presenter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_attendance, container, false);
+        View view = inflater.inflate(R.layout.fragment_board, container, false);
 
         ActivityComponent component = getActivityComponent();
         if (component != null) {
@@ -40,11 +36,5 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     @Override
     protected void setUpOnViewCreated(View fragmentView) {
 
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        presenter.onDestroy();
     }
 }
