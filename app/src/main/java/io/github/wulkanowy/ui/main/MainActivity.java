@@ -17,6 +17,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment;
 import io.github.wulkanowy.ui.main.board.BoardFragment;
+import io.github.wulkanowy.ui.main.grades.GradesFragment;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
 
@@ -100,7 +101,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     }
 
     private void initiationViewPager() {
-        pagerAdapter.addFragment(new AttendanceFragment());
+        pagerAdapter.addFragment(new GradesFragment());
         pagerAdapter.addFragment(new BoardFragment());
         pagerAdapter.addFragment(new BoardFragment());
         pagerAdapter.addFragment(new AttendanceFragment());
@@ -108,6 +109,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         viewPager.setPagingEnabled(false);
         viewPager.setAdapter(pagerAdapter);
-
+        viewPager.setCurrentItem(2, false);
+        viewPager.setOffscreenPageLimit(4);
     }
 }

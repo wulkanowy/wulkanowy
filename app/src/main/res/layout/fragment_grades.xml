@@ -22,6 +22,7 @@
             android:contentDescription="@string/activity_dashboard_text"
             android:minHeight="100dp"
             android:minWidth="100dp"
+            android:tint="@color/black"
             app:srcCompat="@drawable/icon_grade_26dp" />
 
         <TextView

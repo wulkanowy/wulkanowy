@@ -83,5 +83,5 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         return null;
     }
 
-    protected abstract void setUpOnViewCreated(View mainView);
+    protected abstract void setUpOnViewCreated(View fragmentView);
 }
