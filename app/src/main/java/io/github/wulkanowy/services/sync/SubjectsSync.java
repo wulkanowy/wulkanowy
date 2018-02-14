@@ -8,8 +8,8 @@ import java.util.List;
 
 import io.github.wulkanowy.api.grades.SubjectsList;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.db.dao.entities.Subject;
-import io.github.wulkanowy.db.dao.entities.SubjectDao;
+import io.github.wulkanowy.data.db.dao.entities.Subject;
+import io.github.wulkanowy.data.db.dao.entities.SubjectDao;
 import io.github.wulkanowy.services.jobs.VulcanJobHelper;
 import io.github.wulkanowy.utils.DataObjectConverter;
 

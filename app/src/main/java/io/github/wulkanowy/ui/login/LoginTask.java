@@ -2,7 +2,7 @@ package io.github.wulkanowy.ui.login;
 
 import android.os.AsyncTask;
 
-public class LoginTask extends AsyncTask<Void, Integer, Boolean> implements LoginContract.Async {
+public class LoginTask extends AsyncTask<Void, Integer, Boolean> {
 
     private String email;
 
@@ -14,16 +14,13 @@ public class LoginTask extends AsyncTask<Void, Integer, Boolean> implements Logi
 
     private Exception exception;
 
-    @Override
-    public void start(LoginContract.Presenter presenter, String email, String password, String symbol) {
+    LoginTask(LoginContract.Presenter presenter, String email, String password, String symbol) {
         this.presenter = presenter;
         this.email = email;
         this.password = password;
         this.symbol = symbol;
-        execute();
     }
 
-    @Override
     public void onDestroy() {
         this.cancel(true);
     }
@@ -37,11 +34,9 @@ public class LoginTask extends AsyncTask<Void, Integer, Boolean> implements Logi
     protected Boolean doInBackground(Void... params) {
         try {
             publishProgress(1);
-            //vulcanSync.firstLoginSignInStep(activity.get(), daoSession, email, password, symbol);
-            Thread.sleep(3000);
+            presenter.getRepository().loginUser(email, password, symbol);
 
             publishProgress(2);
-            //vulcanSync.syncAll();
             Thread.sleep(3000);
         } catch (Exception e) {
             exception = e;

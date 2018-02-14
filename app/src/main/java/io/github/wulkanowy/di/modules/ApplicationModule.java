@@ -7,12 +7,18 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.github.wulkanowy.db.dao.AppDatabase;
-import io.github.wulkanowy.db.dao.DaoHelper;
-import io.github.wulkanowy.db.resources.AppResources;
-import io.github.wulkanowy.db.resources.ResourcesHelper;
-import io.github.wulkanowy.db.shared.AppShared;
-import io.github.wulkanowy.db.shared.SharedHelper;
+import io.github.wulkanowy.api.Vulcan;
+import io.github.wulkanowy.data.Repository;
+import io.github.wulkanowy.data.RepositoryContract;
+import io.github.wulkanowy.data.db.dao.DbHelper;
+import io.github.wulkanowy.data.db.dao.entities.DaoMaster;
+import io.github.wulkanowy.data.db.dao.entities.DaoSession;
+import io.github.wulkanowy.data.db.resources.AppResources;
+import io.github.wulkanowy.data.db.resources.ResourcesContract;
+import io.github.wulkanowy.data.db.shared.SharedPref;
+import io.github.wulkanowy.data.db.shared.SharedPrefContract;
+import io.github.wulkanowy.data.sync.LoginSync;
+import io.github.wulkanowy.data.sync.LoginSyncContract;
 import io.github.wulkanowy.di.annotations.ApplicationContext;
 import io.github.wulkanowy.di.annotations.DatabaseInfo;
 import io.github.wulkanowy.di.annotations.SharedPreferencesInfo;
@@ -21,7 +27,7 @@ import io.github.wulkanowy.utils.AppConstant;
 @Module
 public class ApplicationModule {
 
-    protected final Application application;
+    private final Application application;
 
     public ApplicationModule(Application application) {
         this.application = application;
@@ -52,19 +58,36 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    AppDatabase provideAppDatabase(DaoHelper daoHelper) {
-        return daoHelper;
+    DaoSession provideDaoSession(DbHelper dbHelper) {
+        return new DaoMaster(dbHelper.getWritableDb()).newSession();
+    }
+
+    @Provides
+    Vulcan provideVulcan() {
+        return new Vulcan();
     }
 
     @Singleton
     @Provides
-    AppShared provideAppShared(SharedHelper sharedHelper) {
-        return sharedHelper;
+    RepositoryContract provideRepository(Repository repository) {
+        return repository;
     }
 
     @Singleton
     @Provides
-    AppResources provideAppResources(ResourcesHelper resourcesHelper) {
-        return resourcesHelper;
+    SharedPrefContract provideSharedPref(SharedPref sharedPref) {
+        return sharedPref;
+    }
+
+    @Singleton
+    @Provides
+    ResourcesContract provideAppResources(AppResources appResources) {
+        return appResources;
+    }
+
+    @Singleton
+    @Provides
+    LoginSyncContract provideLoginSync(LoginSync loginSync) {
+        return loginSync;
     }
 }

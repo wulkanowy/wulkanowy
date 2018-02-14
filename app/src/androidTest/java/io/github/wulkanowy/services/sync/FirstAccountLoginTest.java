@@ -16,9 +16,9 @@ import io.github.wulkanowy.api.StudentAndParent;
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.PersonalData;
-import io.github.wulkanowy.db.dao.entities.Account;
-import io.github.wulkanowy.db.dao.entities.DaoMaster;
-import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.data.db.dao.entities.Account;
+import io.github.wulkanowy.data.db.dao.entities.DaoMaster;
+import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.utils.security.Safety;
 
 public class FirstAccountLoginTest {

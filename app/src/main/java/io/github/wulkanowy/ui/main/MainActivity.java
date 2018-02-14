@@ -19,7 +19,8 @@ import io.github.wulkanowy.ui.main.attendance.AttendanceFragment;
 import io.github.wulkanowy.ui.main.dashboard.DashboardFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
 
-public class MainActivity extends BaseActivity implements MainContract.View {
+public class MainActivity extends BaseActivity implements MainContract.View,
+        AHBottomNavigation.OnTabSelectedListener {
 
     @BindView(R.id.main_activity_nav)
     AHBottomNavigation bottomNavigation;
@@ -32,16 +33,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Inject
     MainContract.Presenter presenter;
-
-    AHBottomNavigation.OnTabSelectedListener listener = new AHBottomNavigation.OnTabSelectedListener() {
-        @Override
-        public boolean onTabSelected(int position, boolean wasSelected) {
-            if (!wasSelected) {
-                viewPager.setCurrentItem(position, false);
-            }
-            return true;
-        }
-    };
 
     public static Intent getStartIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -68,6 +59,14 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     protected void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
+    }
+
+    @Override
+    public boolean onTabSelected(int position, boolean wasSelected) {
+        if (!wasSelected) {
+            viewPager.setCurrentItem(position, false);
+        }
+        return true;
     }
 
     private void initiationBottomNav() {
@@ -97,7 +96,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         bottomNavigation.setInactiveColor(Color.BLACK);
         bottomNavigation.setBackgroundColor(getResources().getColor(R.color.colorBackgroundBottomNavi));
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
-        bottomNavigation.setOnTabSelectedListener(listener);
+        bottomNavigation.setOnTabSelectedListener(this);
     }
 
     private void initiationViewPager() {

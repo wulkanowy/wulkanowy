@@ -12,7 +12,7 @@ import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.LoginErrorException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
-import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.services.jobs.VulcanJobHelper;
 import io.github.wulkanowy.utils.security.CryptoException;
 

@@ -15,10 +15,10 @@ import java.util.List;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.timetable.Day;
 import io.github.wulkanowy.api.timetable.Week;
-import io.github.wulkanowy.db.dao.entities.DayDao;
-import io.github.wulkanowy.db.dao.entities.Lesson;
-import io.github.wulkanowy.db.dao.entities.LessonDao;
-import io.github.wulkanowy.db.dao.entities.WeekDao;
+import io.github.wulkanowy.data.db.dao.entities.DayDao;
+import io.github.wulkanowy.data.db.dao.entities.Lesson;
+import io.github.wulkanowy.data.db.dao.entities.LessonDao;
+import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.services.jobs.VulcanJobHelper;
 import io.github.wulkanowy.utils.DataObjectConverter;
 import io.github.wulkanowy.utils.TimeUtils;
@@ -37,10 +37,10 @@ public class TimetableSync {
                 : loginSession.getVulcan().getTimetable()
                 .getWeekTable(String.valueOf(TimeUtils.getNetTicks(dateOfMonday, "yyyy-MM-dd")));
 
-        Query<io.github.wulkanowy.db.dao.entities.Week> weekQuery = weekDao.queryBuilder()
+        Query<io.github.wulkanowy.data.db.dao.entities.Week> weekQuery = weekDao.queryBuilder()
                 .where(WeekDao.Properties.UserId.eq(loginSession.getUserId()), WeekDao.Properties.StartDayDate.eq(week.getStartDayDate())).build();
 
-        io.github.wulkanowy.db.dao.entities.Week week1 = weekQuery.unique();
+        io.github.wulkanowy.data.db.dao.entities.Week week1 = weekQuery.unique();
 
         if (week1 != null) {
             weekId = week1.getId();
@@ -67,7 +67,7 @@ public class TimetableSync {
 
         for (Day day : dayList) {
 
-            Query<io.github.wulkanowy.db.dao.entities.Day> dayQuery = dayDao.queryBuilder()
+            Query<io.github.wulkanowy.data.db.dao.entities.Day> dayQuery = dayDao.queryBuilder()
                     .where(DayDao.Properties.Date.eq(day.getDate()),
                             DayDao.Properties.UserId.eq(userId),
                             DayDao.Properties.WeekId.eq(weekId))
@@ -98,15 +98,15 @@ public class TimetableSync {
         return allLessonsList;
     }
 
-    private List<io.github.wulkanowy.db.dao.entities.Day> getPreparedDaysList(List<Day> dayList, long userId, long weekId, DayDao dayDao) {
-        List<io.github.wulkanowy.db.dao.entities.Day> updatedDayList = new ArrayList<>();
-        List<io.github.wulkanowy.db.dao.entities.Day> dayEntityList = DataObjectConverter
+    private List<io.github.wulkanowy.data.db.dao.entities.Day> getPreparedDaysList(List<Day> dayList, long userId, long weekId, DayDao dayDao) {
+        List<io.github.wulkanowy.data.db.dao.entities.Day> updatedDayList = new ArrayList<>();
+        List<io.github.wulkanowy.data.db.dao.entities.Day> dayEntityList = DataObjectConverter
                 .daysToDaysEntities(dayList);
-        for (io.github.wulkanowy.db.dao.entities.Day day : dayEntityList) {
+        for (io.github.wulkanowy.data.db.dao.entities.Day day : dayEntityList) {
 
-            Query<io.github.wulkanowy.db.dao.entities.Day> dayQuery = dayDao.queryBuilder().where(DayDao.Properties.UserId.eq(userId), DayDao.Properties.WeekId.eq(weekId), DayDao.Properties.Date.eq(day.getDate())).build();
+            Query<io.github.wulkanowy.data.db.dao.entities.Day> dayQuery = dayDao.queryBuilder().where(DayDao.Properties.UserId.eq(userId), DayDao.Properties.WeekId.eq(weekId), DayDao.Properties.Date.eq(day.getDate())).build();
 
-            io.github.wulkanowy.db.dao.entities.Day day1 = dayQuery.unique();
+            io.github.wulkanowy.data.db.dao.entities.Day day1 = dayQuery.unique();
 
             if (day1 != null) {
                 day.setId(day1.getId());

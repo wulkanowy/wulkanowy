@@ -4,11 +4,11 @@ package io.github.wulkanowy.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.wulkanowy.db.dao.entities.Day;
-import io.github.wulkanowy.db.dao.entities.Grade;
-import io.github.wulkanowy.db.dao.entities.Lesson;
-import io.github.wulkanowy.db.dao.entities.Subject;
-import io.github.wulkanowy.db.dao.entities.Week;
+import io.github.wulkanowy.data.db.dao.entities.Day;
+import io.github.wulkanowy.data.db.dao.entities.Grade;
+import io.github.wulkanowy.data.db.dao.entities.Lesson;
+import io.github.wulkanowy.data.db.dao.entities.Subject;
+import io.github.wulkanowy.data.db.dao.entities.Week;
 
 public final class DataObjectConverter {
 

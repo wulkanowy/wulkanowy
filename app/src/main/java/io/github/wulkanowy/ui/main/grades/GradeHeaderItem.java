@@ -13,7 +13,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import eu.davidea.viewholders.ExpandableViewHolder;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.db.dao.entities.Lesson;
+import io.github.wulkanowy.data.db.dao.entities.Lesson;
 
 public class GradeHeaderItem
         extends AbstractExpandableHeaderItem<GradeHeaderItem.HeaderViewHolder, GradesSubItem> {

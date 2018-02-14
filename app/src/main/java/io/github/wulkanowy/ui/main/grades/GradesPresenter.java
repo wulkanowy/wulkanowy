@@ -7,8 +7,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.github.wulkanowy.db.DatabaseManager;
-import io.github.wulkanowy.db.dao.entities.Lesson;
+import io.github.wulkanowy.data.RepositoryContract;
+import io.github.wulkanowy.data.db.dao.entities.Lesson;
 import io.github.wulkanowy.ui.base.BasePresenter;
 
 public class GradesPresenter extends BasePresenter<GradesContract.View>
@@ -17,8 +17,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     private boolean isFirstSight = false;
 
     @Inject
-    public GradesPresenter(DatabaseManager databaseManager) {
-        super(databaseManager);
+    public GradesPresenter(RepositoryContract repository) {
+        super(repository);
     }
 
     @Override

@@ -4,17 +4,17 @@ import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
-import io.github.wulkanowy.db.DatabaseManager;
+import io.github.wulkanowy.data.RepositoryContract;
 
 public class BasePresenter<V extends BaseContract.View> implements BaseContract.Presenter<V> {
 
-    private final DatabaseManager databaseManager;
+    private final RepositoryContract repository;
 
     private V view;
 
     @Inject
-    public BasePresenter(DatabaseManager databaseManager) {
-        this.databaseManager = databaseManager;
+    public BasePresenter(RepositoryContract repository) {
+        this.repository = repository;
     }
 
     @Override
@@ -27,8 +27,8 @@ public class BasePresenter<V extends BaseContract.View> implements BaseContract.
         view = null;
     }
 
-    public final DatabaseManager getDatabaseManager() {
-        return databaseManager;
+    public final RepositoryContract getRepository() {
+        return repository;
     }
 
     public V getView() {

@@ -8,7 +8,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem;
 import eu.davidea.viewholders.FlexibleViewHolder;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.db.dao.entities.Grade;
+import io.github.wulkanowy.data.db.dao.entities.Grade;
 
 public class GradesSubItem
         extends AbstractSectionableItem<GradesSubItem.SubItemViewHolder, GradeHeaderItem> {

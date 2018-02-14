@@ -11,7 +11,6 @@ import io.github.wulkanowy.di.annotations.ActivityContext;
 import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.ui.login.LoginContract;
 import io.github.wulkanowy.ui.login.LoginPresenter;
-import io.github.wulkanowy.ui.login.LoginTask;
 import io.github.wulkanowy.ui.main.MainContract;
 import io.github.wulkanowy.ui.main.MainPagerAdapter;
 import io.github.wulkanowy.ui.main.MainPresenter;
@@ -91,12 +90,6 @@ public class ActivityModule {
 
     @Provides
     FlexibleAdapter<GradeHeaderItem> provideGradesAdapter() {
-        return new FlexibleAdapter<GradeHeaderItem>(null);
-    }
-
-    @PerActivity
-    @Provides
-    LoginContract.Async provideLoginTask() {
-        return new LoginTask();
+        return new FlexibleAdapter<>(null);
     }
 }

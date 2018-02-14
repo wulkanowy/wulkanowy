@@ -12,20 +12,18 @@ import javax.inject.Inject;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.utils.Log;
 import io.fabric.sdk.android.Fabric;
-import io.github.wulkanowy.db.DatabaseManager;
-import io.github.wulkanowy.db.dao.entities.DaoSession;
+import io.github.wulkanowy.data.RepositoryContract;
+import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.di.component.ApplicationComponent;
 import io.github.wulkanowy.di.component.DaggerApplicationComponent;
 import io.github.wulkanowy.di.modules.ApplicationModule;
 
 public class WulkanowyApp extends Application {
 
-    public static final String DEBUG_TAG = "WulkanowyActivity";
-
     protected ApplicationComponent applicationComponent;
 
     @Inject
-    DatabaseManager databaseManager;
+    RepositoryContract repository;
 
     @Override
     public void onCreate() {
