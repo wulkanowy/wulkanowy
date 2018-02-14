@@ -26,7 +26,7 @@ import io.github.wulkanowy.data.db.dao.entities.AccountDao;
 import io.github.wulkanowy.data.db.dao.entities.DaoMaster;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.utils.security.CryptoException;
-import io.github.wulkanowy.utils.security.Safety;
+import io.github.wulkanowy.utils.security.Scrambler;
 
 @RunWith(AndroidJUnit4.class)
 public class CurrentAccountLoginTest {
@@ -70,11 +70,10 @@ public class CurrentAccountLoginTest {
     public void loginCurrentUserTest() throws Exception {
         AccountDao accountDao = daoSession.getAccountDao();
 
-        Safety safety = new Safety();
 
         Long userId = accountDao.insert(new Account()
                 .setEmail("TEST@TEST")
-                .setPassword(safety.encrypt("TEST@TEST", "TEST", context))
+                .setPassword(Scrambler.encrypt("TEST@TEST", "TEST", context))
                 .setSymbol(""));
 
         setUserIdSharePreferences(userId);

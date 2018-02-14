@@ -27,15 +27,17 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.security.auth.x500.X500Principal;
 
+import io.github.wulkanowy.utils.RootChecker;
+
 public class Scrambler {
 
     public static final String DEBUG_TAG = "WulkanowySecurity";
 
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
 
-    private KeyStore keyStore;
+    private static KeyStore keyStore;
 
-    protected void loadKeyStore() throws CryptoException {
+    private static void loadKeyStore() throws CryptoException {
 
         try {
             keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
@@ -47,9 +49,37 @@ public class Scrambler {
 
     }
 
+    public static String encrypt(String email, String plainText, Context context)
+            throws CryptoException {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            loadKeyStore();
+            generateNewKey(email, context);
+            return encryptString(email, plainText);
+        } else {
+            if (RootChecker.isRooted()) {
+                return new String(Base64.encode(plainText.getBytes(), Base64.DEFAULT));
+            } else {
+                throw new UnsupportedOperationException("Stored data in this devices " +
+                        "isn't safe because android is rooted");
+            }
+        }
+    }
+
+    public static String decrypt(String email, String encryptedText) throws CryptoException {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            loadKeyStore();
+            return decryptString(email, encryptedText);
+        } else {
+            return new String(Base64.decode(encryptedText, Base64.DEFAULT));
+        }
+
+    }
+
     @SuppressWarnings("deprecation")
     @TargetApi(18)
-    protected void generateNewKey(String alias, Context context) throws CryptoException {
+    private static void generateNewKey(String alias, Context context) throws CryptoException {
 
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
@@ -61,7 +91,8 @@ public class Scrambler {
             try {
                 if (!keyStore.containsAlias(alias)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        spec = new KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                        spec = new KeyGenParameterSpec.Builder(alias,
+                                KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
                                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
                                 .setDigests(KeyProperties.DIGEST_SHA256)
                                 .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
@@ -79,12 +110,13 @@ public class Scrambler {
                                 .build();
                     }
 
-                    KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", ANDROID_KEYSTORE);
+                    KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA",
+                            ANDROID_KEYSTORE);
                     keyPairGenerator.initialize(spec);
                     keyPairGenerator.generateKeyPair();
 
                 } else {
-                    Log.w(DEBUG_TAG, "GenerateNewKey - " + alias + " is exist");
+                    Log.d(DEBUG_TAG, "GenerateNewKey - " + alias + " is exist");
                 }
             } catch (Exception e) {
                 Log.e(DEBUG_TAG, e.getMessage());
@@ -100,7 +132,7 @@ public class Scrambler {
 
     }
 
-    protected String encryptString(String alias, String text) throws CryptoException {
+    private static String encryptString(String alias, String text) throws CryptoException {
 
         if (!alias.isEmpty() && !text.isEmpty()) {
             try {
@@ -130,7 +162,7 @@ public class Scrambler {
         }
     }
 
-    protected String decryptString(String alias, String text) throws CryptoException {
+    private static String decryptString(String alias, String text) throws CryptoException {
 
         if (!alias.isEmpty() && !text.isEmpty()) {
             try {

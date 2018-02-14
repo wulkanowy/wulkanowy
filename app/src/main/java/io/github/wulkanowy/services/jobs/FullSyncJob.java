@@ -20,7 +20,6 @@ import io.github.wulkanowy.WulkanowyApp;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.services.notifications.NotificationBuilder;
-import io.github.wulkanowy.services.sync.VulcanSync;
 import io.github.wulkanowy.ui.main.MainActivity;
 
 public class FullSyncJob extends VulcanJobHelper {
@@ -51,9 +50,6 @@ public class FullSyncJob extends VulcanJobHelper {
         public void workToBePerformed() throws Exception {
             DaoSession daoSession = ((WulkanowyApp) getApplication()).getDaoSession();
 
-            VulcanSync synchronization = new VulcanSync()
-                    .loginCurrentUser(getApplicationContext(), daoSession);
-            synchronization.syncAll();
             List<Grade> newGradeList = new ArrayList<>();
 
             if (newGradeList.size() == 1) {

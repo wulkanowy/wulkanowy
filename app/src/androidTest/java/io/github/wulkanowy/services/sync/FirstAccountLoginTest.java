@@ -19,7 +19,7 @@ import io.github.wulkanowy.api.user.PersonalData;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.DaoMaster;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
-import io.github.wulkanowy.utils.security.Safety;
+import io.github.wulkanowy.utils.security.Scrambler;
 
 public class FirstAccountLoginTest {
 
@@ -74,12 +74,11 @@ public class FirstAccountLoginTest {
         Assert.assertNotNull(loginSession.getDaoSession());
         Assert.assertEquals(loginSession.getVulcan(), vulcan);
 
-        Safety safety = new Safety();
         Account account = daoSession.getAccountDao().load(userId);
         Assert.assertNotNull(account);
         Assert.assertEquals("TEST@TEST", account.getEmail());
         Assert.assertEquals("NAME-TEST", account.getName());
-        Assert.assertEquals("TEST-PASS", safety.decrypt("TEST@TEST", account.getPassword()));
+        Assert.assertEquals("TEST-PASS", Scrambler.decrypt("TEST@TEST", account.getPassword()));
         Assert.assertEquals("TEST-SYMBOL", account.getSymbol());
         Assert.assertEquals("TEST-ID", account.getSnpId());
     }

@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.sync;
 
+import android.content.Context;
+
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -13,8 +15,10 @@ import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
+import io.github.wulkanowy.di.annotations.ApplicationContext;
 import io.github.wulkanowy.utils.LogUtils;
 import io.github.wulkanowy.utils.security.CryptoException;
+import io.github.wulkanowy.utils.security.Scrambler;
 
 @Singleton
 public class LoginSync implements LoginSyncContract {
@@ -27,11 +31,15 @@ public class LoginSync implements LoginSyncContract {
 
     private final Vulcan vulcan;
 
+    private final Context context;
+
     @Inject
-    LoginSync(DaoSession daoSession, SharedPrefContract sharedPref, Vulcan vulcan) {
+    LoginSync(DaoSession daoSession, SharedPrefContract sharedPref,
+              Vulcan vulcan, @ApplicationContext Context context) {
         this.daoSession = daoSession;
         this.sharedPref = sharedPref;
         this.vulcan = vulcan;
+        this.context = context;
     }
 
     @Override
@@ -46,7 +54,7 @@ public class LoginSync implements LoginSyncContract {
         Account account = new Account()
                 .setName(vulcan.getBasicInformation().getPersonalData().getFirstAndLastName())
                 .setEmail(email)
-                .setPassword(password)
+                .setPassword(Scrambler.encrypt(email, password, context))
                 .setSymbol(symbol)
                 .setSnpId(vulcan.getStudentAndParent().getId());
 
@@ -68,7 +76,7 @@ public class LoginSync implements LoginSyncContract {
         Account account = daoSession.getAccountDao().load(userId);
 
         vulcan.login(account.getEmail(),
-                account.getPassword(),
+                Scrambler.decrypt(account.getEmail(), account.getPassword()),
                 account.getSymbol(),
                 account.getSnpId());
     }
