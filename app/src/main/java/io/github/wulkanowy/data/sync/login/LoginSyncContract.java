@@ -1,4 +1,4 @@
-package io.github.wulkanowy.data.sync;
+package io.github.wulkanowy.data.sync.login;
 
 import java.io.IOException;
 

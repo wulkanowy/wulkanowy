@@ -8,7 +8,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.github.wulkanowy.data.RepositoryContract;
-import io.github.wulkanowy.data.db.dao.entities.Lesson;
+import io.github.wulkanowy.data.db.dao.entities.Grade;
+import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.ui.base.BasePresenter;
 
 public class GradesPresenter extends BasePresenter<GradesContract.View>
@@ -35,7 +36,18 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
             List<GradeHeaderItem> headerItems = new ArrayList<>();
 
-            headerItems.add(new GradeHeaderItem(new Lesson().setSubject("Matemtyka")));
+            List<Subject> subjectList = getRepository().getCurrentUser().getSubjectList();
+
+            for (Subject subject : subjectList) {
+                GradeHeaderItem headerItem = new GradeHeaderItem(subject);
+
+                for (Grade grade : subject.getGradeList()) {
+                    headerItem.addSubItem(new GradesSubItem(headerItem, grade));
+                    headerItem.setExpanded(false);
+                }
+
+                headerItems.add(headerItem);
+            }
 
             getView().updateAdapterList(headerItems);
             getView().showProgressBar(false);

@@ -37,7 +37,7 @@ public class LoginTask extends AsyncTask<Void, Integer, Boolean> {
             presenter.getRepository().loginUser(email, password, symbol);
 
             publishProgress(2);
-            Thread.sleep(3000);
+            presenter.getRepository().syncAll();
         } catch (Exception e) {
             exception = e;
             return false;

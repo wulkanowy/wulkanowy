@@ -17,11 +17,16 @@ import io.github.wulkanowy.data.db.resources.AppResources;
 import io.github.wulkanowy.data.db.resources.ResourcesContract;
 import io.github.wulkanowy.data.db.shared.SharedPref;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
-import io.github.wulkanowy.data.sync.LoginSync;
-import io.github.wulkanowy.data.sync.LoginSyncContract;
+import io.github.wulkanowy.data.sync.SyncContract;
+import io.github.wulkanowy.data.sync.grades.GradeSync;
+import io.github.wulkanowy.data.sync.login.LoginSync;
+import io.github.wulkanowy.data.sync.login.LoginSyncContract;
+import io.github.wulkanowy.data.sync.subjects.SubjectSync;
 import io.github.wulkanowy.di.annotations.ApplicationContext;
 import io.github.wulkanowy.di.annotations.DatabaseInfo;
 import io.github.wulkanowy.di.annotations.SharedPreferencesInfo;
+import io.github.wulkanowy.di.annotations.SyncGrades;
+import io.github.wulkanowy.di.annotations.SyncSubjects;
 import io.github.wulkanowy.utils.AppConstant;
 
 @Module
@@ -62,6 +67,7 @@ public class ApplicationModule {
         return new DaoMaster(dbHelper.getWritableDb()).newSession();
     }
 
+    @Singleton
     @Provides
     Vulcan provideVulcan() {
         return new Vulcan();
@@ -89,5 +95,19 @@ public class ApplicationModule {
     @Provides
     LoginSyncContract provideLoginSync(LoginSync loginSync) {
         return loginSync;
+    }
+
+    @SyncGrades
+    @Singleton
+    @Provides
+    SyncContract provideGradesSync(GradeSync gradeSync) {
+        return gradeSync;
+    }
+
+    @SyncSubjects
+    @Singleton
+    @Provides
+    SyncContract provideSubjectSync(SubjectSync subjectSync) {
+        return subjectSync;
     }
 }

@@ -1,4 +1,4 @@
-package io.github.wulkanowy.data.sync;
+package io.github.wulkanowy.data.sync.login;
 
 import android.content.Context;
 

@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.db.resources;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -38,6 +39,7 @@ public class AppResources implements ResourcesContract {
 
     @Override
     public String getErrorLoginMessage(Exception exception) {
+        Log.e("WULKANOWY", "Error", exception);
         if (exception instanceof CryptoException) {
             return resources.getString(R.string.encrypt_failed_text);
         } else if (exception instanceof UnknownHostException) {

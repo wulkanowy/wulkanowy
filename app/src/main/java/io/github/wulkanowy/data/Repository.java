@@ -2,6 +2,7 @@ package io.github.wulkanowy.data;
 
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -10,27 +11,46 @@ import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
+import io.github.wulkanowy.data.db.dao.entities.Account;
+import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.resources.ResourcesContract;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
-import io.github.wulkanowy.data.sync.LoginSyncContract;
+import io.github.wulkanowy.data.sync.SyncContract;
+import io.github.wulkanowy.data.sync.login.LoginSyncContract;
+import io.github.wulkanowy.di.annotations.SyncGrades;
+import io.github.wulkanowy.di.annotations.SyncSubjects;
 import io.github.wulkanowy.utils.security.CryptoException;
 
 @Singleton
 public class Repository implements RepositoryContract {
 
+    public static final String DEBUG_TAG = "WulkanowyData";
+
     private final SharedPrefContract sharedPref;
 
     private final ResourcesContract resources;
 
+    private final DaoSession daoSession;
+
     private final LoginSyncContract loginSync;
 
+    private final SyncContract gradeSync;
+
+    private final SyncContract subjectSync;
+
     @Inject
-    public Repository(SharedPrefContract sharedPref,
-                      ResourcesContract resources,
-                      LoginSyncContract loginSync) {
+    Repository(SharedPrefContract sharedPref,
+               ResourcesContract resources,
+               DaoSession daoSession,
+               LoginSyncContract loginSync,
+               @SyncGrades SyncContract gradeSync,
+               @SyncSubjects SyncContract subjectSync) {
         this.sharedPref = sharedPref;
         this.resources = resources;
+        this.daoSession = daoSession;
         this.loginSync = loginSync;
+        this.gradeSync = gradeSync;
+        this.subjectSync = subjectSync;
     }
 
     @Override
@@ -64,5 +84,26 @@ public class Repository implements RepositoryContract {
     public void loginCurrentUser() throws NotLoggedInErrorException, AccountPermissionException,
             IOException, CryptoException, VulcanOfflineException, BadCredentialsException {
         loginSync.loginCurrentUser();
+    }
+
+    @Override
+    public void syncGrades() throws NotLoggedInErrorException, IOException, ParseException {
+        gradeSync.sync();
+    }
+
+    @Override
+    public void syncSubjects() throws NotLoggedInErrorException, IOException, ParseException {
+        subjectSync.sync();
+    }
+
+    @Override
+    public void syncAll() throws NotLoggedInErrorException, IOException, ParseException {
+        syncSubjects();
+        syncGrades();
+    }
+
+    @Override
+    public Account getCurrentUser() {
+        return daoSession.getAccountDao().load(sharedPref.getCurrentUserId());
     }
 }

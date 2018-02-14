@@ -13,15 +13,15 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import eu.davidea.viewholders.ExpandableViewHolder;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.data.db.dao.entities.Lesson;
+import io.github.wulkanowy.data.db.dao.entities.Subject;
 
 public class GradeHeaderItem
         extends AbstractExpandableHeaderItem<GradeHeaderItem.HeaderViewHolder, GradesSubItem> {
 
-    private Lesson lesson;
+    private Subject subject;
 
-    public GradeHeaderItem(Lesson lesson) {
-        this.lesson = lesson;
+    public GradeHeaderItem(Subject subject) {
+        this.subject = subject;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class GradeHeaderItem
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, HeaderViewHolder holder, int position, List payloads) {
-        holder.subjectName.setText(lesson.getSubject());
+        holder.subjectName.setText(subject.getName());
     }
 
     class HeaderViewHolder extends ExpandableViewHolder {
