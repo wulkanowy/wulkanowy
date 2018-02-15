@@ -1,9 +1,14 @@
 package io.github.wulkanowy.ui.main.grades;
 
+import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem;
 import eu.davidea.viewholders.FlexibleViewHolder;
@@ -15,7 +20,7 @@ public class GradesSubItem
 
     private Grade grade;
 
-    public GradesSubItem(GradeHeaderItem header, Grade grade) {
+    GradesSubItem(GradeHeaderItem header, Grade grade) {
         super(header);
         this.grade = grade;
     }
@@ -37,13 +42,49 @@ public class GradesSubItem
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, SubItemViewHolder holder, int position, List payloads) {
-
+        holder.onBind(grade);
     }
 
-    public class SubItemViewHolder extends FlexibleViewHolder {
+    class SubItemViewHolder extends FlexibleViewHolder {
 
-        public SubItemViewHolder(View view, FlexibleAdapter adapter) {
+        @BindView(R.id.grade_subitem_value)
+        TextView value;
+
+        @BindView(R.id.grade_subitem_description)
+        TextView description;
+
+        @BindView(R.id.grade_subitem_date)
+        TextView date;
+
+        @BindView(R.id.grade_subitem_alert_image)
+        ImageView alert;
+
+        private Context context;
+
+        SubItemViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
+            ButterKnife.bind(this, view);
+            context = view.getContext();
+        }
+
+        void onBind(Grade item) {
+            value.setText(item.getValue());
+            value.setBackgroundResource(item.getValueColor());
+            date.setText(item.getDate());
+            description.setText(getDescriptionString(item));
+            alert.setVisibility(View.INVISIBLE);
+        }
+
+        private String getDescriptionString(Grade item) {
+            if (item.getDescription() == null || "".equals(item.getDescription())) {
+                if (!"".equals(item.getSymbol())) {
+                    return item.getSymbol();
+                } else {
+                    return context.getString(R.string.noDescription_text);
+                }
+            } else {
+                return item.getDescription();
+            }
         }
     }
 }

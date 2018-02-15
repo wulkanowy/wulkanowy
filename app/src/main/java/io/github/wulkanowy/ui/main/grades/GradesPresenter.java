@@ -18,7 +18,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     private boolean isFirstSight = false;
 
     @Inject
-    public GradesPresenter(RepositoryContract repository) {
+    GradesPresenter(RepositoryContract repository) {
         super(repository);
     }
 
@@ -39,17 +39,28 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             List<Subject> subjectList = getRepository().getCurrentUser().getSubjectList();
 
             for (Subject subject : subjectList) {
-                GradeHeaderItem headerItem = new GradeHeaderItem(subject);
+                List<Grade> gradeList = subject.getGradeList();
 
-                for (Grade grade : subject.getGradeList()) {
-                    headerItem.addSubItem(new GradesSubItem(headerItem, grade));
-                    headerItem.setExpanded(false);
+                if (!gradeList.isEmpty()) {
+                    GradeHeaderItem headerItem = new GradeHeaderItem(subject);
+
+                    for (Grade grade : gradeList) {
+                        headerItem.addSubItem(new GradesSubItem(headerItem, grade));
+                        headerItem.setExpanded(false);
+
+                        if (!grade.getRead()) {
+                            headerItem.setAlertSubItemVisible();
+                        }
+                    }
+                    headerItems.add(headerItem);
                 }
-
-                headerItems.add(headerItem);
             }
 
-            getView().updateAdapterList(headerItems);
+            if (headerItems.isEmpty()) {
+                getView().setVisibleNoItem();
+            } else {
+                getView().updateAdapterList(headerItems);
+            }
             getView().showProgressBar(false);
         }
     }

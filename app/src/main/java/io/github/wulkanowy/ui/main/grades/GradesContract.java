@@ -13,6 +13,8 @@ public interface GradesContract {
 
         void updateAdapterList(List<GradeHeaderItem> headerItems);
 
+        void setVisibleNoItem();
+
     }
 
     @PerActivity

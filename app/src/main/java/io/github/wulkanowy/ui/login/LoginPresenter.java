@@ -71,7 +71,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     public void onEndAsync(boolean success, Exception exception) {
         getView().showLoginProgress(false);
         if (success) {
-            //getView().openDashboardActivity();
+            getView().openMainActivity();
             getView().onError("SUCCESS");
         } else if (exception instanceof BadCredentialsException) {
             getView().setErrorPassIncorrect();

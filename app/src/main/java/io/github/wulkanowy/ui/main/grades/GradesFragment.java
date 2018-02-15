@@ -77,6 +77,11 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     }
 
     @Override
+    public void setVisibleNoItem() {
+        noItemView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void showProgressBar(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }

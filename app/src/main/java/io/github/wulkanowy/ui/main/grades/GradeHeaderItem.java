@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.main.grades;
 
 
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,13 +15,16 @@ import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import eu.davidea.viewholders.ExpandableViewHolder;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
+import io.github.wulkanowy.utils.AverageCalculator;
 
 public class GradeHeaderItem
         extends AbstractExpandableHeaderItem<GradeHeaderItem.HeaderViewHolder, GradesSubItem> {
 
     private Subject subject;
 
-    public GradeHeaderItem(Subject subject) {
+    private boolean showAlert = false;
+
+    GradeHeaderItem(Subject subject) {
         this.subject = subject;
     }
 
@@ -41,7 +45,11 @@ public class GradeHeaderItem
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, HeaderViewHolder holder, int position, List payloads) {
-        holder.subjectName.setText(subject.getName());
+        holder.onBind(subject);
+    }
+
+    void setAlertSubItemVisible() {
+        showAlert = true;
     }
 
     class HeaderViewHolder extends ExpandableViewHolder {
@@ -58,15 +66,36 @@ public class GradeHeaderItem
         @BindView(R.id.grade_header_alert_image)
         ImageView alertImage;
 
+        Resources resources;
+
         HeaderViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             ButterKnife.bind(this, view);
+            resources = view.getResources();
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     toggleExpansion();
                 }
             });
+        }
+
+        void onBind(Subject item) {
+            subjectName.setText(item.getName());
+            numberText.setText(resources.getQuantityString(R.plurals.numberOfGradesPlurals,
+                    getSubItemsCount(), getSubItemsCount()));
+            averageText.setText(getGradesAverageString(item));
+            alertImage.setVisibility(showAlert ? View.VISIBLE : View.INVISIBLE);
+        }
+
+        private String getGradesAverageString(Subject item) {
+            float average = AverageCalculator.calculate(item.getGradeList());
+
+            if (average < 0) {
+                return resources.getString(R.string.info_no_average);
+            } else {
+                return resources.getString(R.string.info_average_grades, average);
+            }
         }
     }
 }
