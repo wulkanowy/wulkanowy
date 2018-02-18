@@ -29,7 +29,9 @@ public class GradesSubItem
 
     @Override
     public boolean equals(Object o) {
-        return this == o;
+        return this == o ||
+                o != null && getClass() != o.getClass()
+                        && ((GradesSubItem) o).grade.equals(grade);
     }
 
     @Override

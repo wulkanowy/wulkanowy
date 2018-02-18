@@ -64,4 +64,9 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             getView().showProgressBar(false);
         }
     }
+
+    @Override
+    public void onRefresh() {
+        getView().hideRefreshingBar();
+    }
 }

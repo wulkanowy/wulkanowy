@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.main.grades;
 
+import android.support.v4.widget.SwipeRefreshLayout;
+
 import java.util.List;
 
 import io.github.wulkanowy.di.annotations.PerActivity;
@@ -7,7 +9,7 @@ import io.github.wulkanowy.ui.base.BaseContract;
 
 public interface GradesContract {
 
-    interface View extends BaseContract.View {
+    interface View extends BaseContract.View, SwipeRefreshLayout.OnRefreshListener {
 
         void showProgressBar(boolean show);
 
@@ -15,11 +17,17 @@ public interface GradesContract {
 
         void setVisibleNoItem();
 
+        void onNoNetworkError();
+
+        void hideRefreshingBar();
+
     }
 
     @PerActivity
     interface Presenter extends BaseContract.Presenter<View> {
 
         void onFragmentVisible(boolean isVisible);
+
+        void onRefresh();
     }
 }

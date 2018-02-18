@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.main.grades;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,9 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
 
     @BindView(R.id.grade_fragment_no_item_container)
     View noItemView;
+
+    @BindView(R.id.grade_fragment_swipe_refresh)
+    SwipeRefreshLayout refreshLayout;
 
     @Inject
     FlexibleAdapter<GradeHeaderItem> adapter;
@@ -66,6 +70,9 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
 
         recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(fragmentView.getContext()));
         recyclerView.setAdapter(adapter);
+
+        refreshLayout.setColorSchemeResources(android.R.color.black);
+        refreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -74,6 +81,11 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
         if (presenter != null) {
             presenter.onFragmentVisible(isVisibleToUser);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        presenter.onRefresh();
     }
 
     @Override
@@ -87,9 +99,19 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     }
 
     @Override
+    public void hideRefreshingBar() {
+        refreshLayout.setRefreshing(false);
+    }
+
+    @Override
     public void updateAdapterList(List<GradeHeaderItem> headerItems) {
         adapter.addItems(0, headerItems);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onNoNetworkError() {
+        onError(R.string.noInternet_text);
     }
 
     @Override
