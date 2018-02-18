@@ -13,12 +13,11 @@
     <RelativeLayout
         android:id="@+id/login_activity_progress_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="178dp"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:visibility="gone">
 
         <ProgressBar
@@ -28,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="91dp"
             android:indeterminate="true"
             android:minHeight="30dp"
             android:minWidth="220dp" />

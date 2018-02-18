@@ -26,7 +26,6 @@ public class SplashPresenter extends BasePresenter<SplashContract.View>
                 if (getRepository().getCurrentUserId() == 0) {
                     getView().openLoginActivity();
                 } else {
-                    getView().startFullSyncService();
                     getView().openMainActivity();
                 }
             }

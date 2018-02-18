@@ -75,12 +75,16 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         } else if (exception instanceof BadCredentialsException) {
             getView().setErrorPassIncorrect();
             getView().showSoftInput();
+            getView().showLoginProgress(false);
         } else if (exception instanceof AccountPermissionException) {
             getView().setErrorSymbolRequired();
             getView().showSoftInput();
+            getView().showLoginProgress(false);
         } else {
             getView().onError(getRepository().getErrorLoginMessage(exception));
+            getView().showLoginProgress(false);
         }
+
     }
 
     @Override
@@ -111,9 +115,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
         if (map.containsKey(symbol)) {
             return map.get(symbol);
-        } else {
-            return AppConstant.DEFAULT_SYMBOL;
         }
+        return AppConstant.DEFAULT_SYMBOL;
     }
 
     private boolean isAllFieldCorrect(String password, String email) {
