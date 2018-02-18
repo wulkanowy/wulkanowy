@@ -15,7 +15,7 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
         super(fragmentManager);
     }
 
-    public void addFragment(Fragment fragment) {
+    void addFragment(Fragment fragment) {
         fragmentList.add(fragment);
     }
 

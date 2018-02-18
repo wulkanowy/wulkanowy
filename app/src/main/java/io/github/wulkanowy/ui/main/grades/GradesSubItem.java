@@ -1,6 +1,8 @@
 package io.github.wulkanowy.ui.main.grades;
 
 import android.content.Context;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,6 +63,8 @@ public class GradesSubItem
 
         private Context context;
 
+        private Grade item;
+
         SubItemViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             ButterKnife.bind(this, view);
@@ -68,14 +72,23 @@ public class GradesSubItem
         }
 
         void onBind(Grade item) {
+            this.item = item;
+            getContentView().setOnClickListener(this);
+
             value.setText(item.getValue());
             value.setBackgroundResource(item.getValueColor());
             date.setText(item.getDate());
-            description.setText(getDescriptionString(item));
-            alert.setVisibility(View.INVISIBLE);
+            description.setText(getDescriptionString());
+            alert.setVisibility(item.getRead() ? View.INVISIBLE : View.VISIBLE);
         }
 
-        private String getDescriptionString(Grade item) {
+        @Override
+        public void onClick(View view) {
+            super.onClick(view);
+            showDialog();
+        }
+
+        private String getDescriptionString() {
             if (item.getDescription() == null || "".equals(item.getDescription())) {
                 if (!"".equals(item.getSymbol())) {
                     return item.getSymbol();
@@ -85,6 +98,12 @@ public class GradesSubItem
             } else {
                 return item.getDescription();
             }
+        }
+
+        private void showDialog() {
+            GradesDialogFragment dialogFragment = GradesDialogFragment.newInstance(item);
+            dialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+            dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), grade.toString());
         }
     }
 }

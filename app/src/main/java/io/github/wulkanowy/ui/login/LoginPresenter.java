@@ -10,6 +10,7 @@ import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.ui.base.BasePresenter;
+import io.github.wulkanowy.utils.AppConstant;
 
 public class LoginPresenter extends BasePresenter<LoginContract.View>
         implements LoginContract.Presenter {
@@ -69,10 +70,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
     @Override
     public void onEndAsync(boolean success, Exception exception) {
-        getView().showLoginProgress(false);
         if (success) {
             getView().openMainActivity();
-            getView().onError("SUCCESS");
         } else if (exception instanceof BadCredentialsException) {
             getView().setErrorPassIncorrect();
             getView().showSoftInput();
@@ -99,7 +98,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
     private String getNormalizedSymbol(String symbol) {
         if (TextUtils.isEmpty(symbol)) {
-            return "Default";
+            return AppConstant.DEFAULT_SYMBOL;
         }
 
         String[] keys = getRepository().getSymbolsKeysArray();
@@ -113,7 +112,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         if (map.containsKey(symbol)) {
             return map.get(symbol);
         } else {
-            return "Default";
+            return AppConstant.DEFAULT_SYMBOL;
         }
     }
 

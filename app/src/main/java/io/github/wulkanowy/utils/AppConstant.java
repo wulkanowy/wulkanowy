@@ -13,6 +13,8 @@ public final class AppConstant {
     public static final String VULCAN_FORGOT_PASS_URL =
             "https://cufs.vulcan.net.pl/Default/AccountManage/UnlockAccount";
 
+    public static final String DEFAULT_SYMBOL = "Default";
+
     private AppConstant() {
         throw new IllegalStateException("Utility class");
     }

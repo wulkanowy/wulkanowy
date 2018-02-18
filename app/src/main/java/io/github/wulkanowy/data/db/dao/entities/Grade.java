@@ -1,8 +1,5 @@
 package io.github.wulkanowy.data.db.dao.entities;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.greenrobot.greendao.DaoException;
@@ -11,13 +8,15 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
 
+import java.io.Serializable;
+
 import io.github.wulkanowy.R;
 
 @Entity(
         nameInDb = "Grades",
         active = true
 )
-public class Grade implements Parcelable {
+public class Grade implements Serializable {
 
     @Id(autoincrement = true)
     protected Long id;
@@ -61,9 +60,7 @@ public class Grade implements Parcelable {
     @Property(nameInDb = "READ")
     private boolean read = true;
 
-    protected Grade(Parcel source) {
-        value = source.readString();
-    }
+    private static final long serialVersionUID = 42L;
 
     @Generated(hash = 568899968)
     public Grade(Long id, Long subjectId, Long userId, String subject, String value,
@@ -89,36 +86,6 @@ public class Grade implements Parcelable {
     @Generated(hash = 2042976393)
     public Grade() {
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(subject);
-        parcel.writeString(value);
-        parcel.writeString(color);
-        parcel.writeString(symbol);
-        parcel.writeString(description);
-        parcel.writeString(weight);
-        parcel.writeString(date);
-        parcel.writeString(teacher);
-        parcel.writeString(semester);
-    }
-
-    public static final Creator<Grade> CREATOR = new Creator<Grade>() {
-        @Override
-        public Grade createFromParcel(Parcel source) {
-            return new Grade(source);
-        }
-
-        @Override
-        public Grade[] newArray(int size) {
-            return new Grade[size];
-        }
-    };
 
     /**
      * Used to resolve relations

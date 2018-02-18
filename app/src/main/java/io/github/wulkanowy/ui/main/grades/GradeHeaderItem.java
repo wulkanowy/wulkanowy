@@ -72,12 +72,7 @@ public class GradeHeaderItem
             super(view, adapter);
             ButterKnife.bind(this, view);
             resources = view.getResources();
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    toggleExpansion();
-                }
-            });
+            view.setOnClickListener(this);
         }
 
         void onBind(Subject item) {
