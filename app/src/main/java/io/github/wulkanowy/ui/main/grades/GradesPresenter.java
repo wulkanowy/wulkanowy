@@ -67,6 +67,11 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     @Override
     public void onRefresh() {
+        if (getView().isNetworkConnected()) {
+            getView().onError("SUCCES");
+        } else {
+            getView().onNoNetworkError();
+        }
         getView().hideRefreshingBar();
     }
 }

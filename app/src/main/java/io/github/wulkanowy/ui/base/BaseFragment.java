@@ -66,10 +66,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     @Override
     public boolean isNetworkConnected() {
-        if (activity != null) {
-            activity.isNetworkConnected();
-        }
-        return false;
+        return activity != null && activity.isNetworkConnected();
     }
 
     public void setButterKnife(Unbinder unbinder) {

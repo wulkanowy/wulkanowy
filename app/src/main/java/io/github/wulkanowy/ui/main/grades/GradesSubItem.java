@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,9 +32,22 @@ public class GradesSubItem
 
     @Override
     public boolean equals(Object o) {
-        return this == o ||
-                o != null && getClass() != o.getClass()
-                        && ((GradesSubItem) o).grade.equals(grade);
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GradesSubItem that = (GradesSubItem) o;
+
+        return new EqualsBuilder()
+                .append(grade, that.grade)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(grade)
+                .toHashCode();
     }
 
     @Override
