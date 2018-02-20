@@ -26,6 +26,8 @@ public interface GradesContract {
 
         void hideRefreshingBar();
 
+        void setActivityTitle();
+
     }
 
     @PerActivity

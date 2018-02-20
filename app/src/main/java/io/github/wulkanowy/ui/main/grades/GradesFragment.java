@@ -85,6 +85,11 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     }
 
     @Override
+    public void setActivityTitle() {
+        setTitle(getString(R.string.grades_text));
+    }
+
+    @Override
     public void onRefresh() {
         presenter.onRefresh();
     }

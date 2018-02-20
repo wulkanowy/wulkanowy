@@ -33,9 +33,12 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     @Override
     public void onFragmentVisible(boolean isVisible) {
-        if (isVisible && !isFirstSight) {
-            isFirstSight = true;
-            setItemsFromDb();
+        if (isVisible) {
+            getView().setActivityTitle();
+            if (!isFirstSight) {
+                isFirstSight = true;
+                setItemsFromDb();
+            }
         }
     }
 

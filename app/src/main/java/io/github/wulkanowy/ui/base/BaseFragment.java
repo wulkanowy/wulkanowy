@@ -71,6 +71,12 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         this.unbinder = unbinder;
     }
 
+    public void setTitle(String title) {
+        if (activity != null) {
+            activity.setTitle(title);
+        }
+    }
+
     public ActivityComponent getActivityComponent() {
         if (activity != null) {
             return activity.getActivityComponent();

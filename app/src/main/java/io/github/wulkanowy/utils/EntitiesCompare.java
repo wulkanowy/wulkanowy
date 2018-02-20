@@ -24,8 +24,8 @@ public final class EntitiesCompare {
         for (Grade grade : addedOrUpdatedGradeList) {
             if (!oldList.isEmpty()) {
                 grade.setRead(false);
-                grade.setIsNew(true);
             }
+            grade.setIsNew(true);
             updatedList.add(grade);
         }
 
