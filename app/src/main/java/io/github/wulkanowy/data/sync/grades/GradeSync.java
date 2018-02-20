@@ -10,7 +10,6 @@ import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.data.Repository;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
@@ -68,7 +67,6 @@ public class GradeSync implements SyncContract {
 
         daoSession.getGradeDao().insertInTx(lastList);
 
-        LogUtils.debug(Repository.DEBUG_TAG, "Synchronization grades (amount = "
-                + String.valueOf(lastList.size() + ")"));
+        LogUtils.debug("Synchronization grades (amount = " + String.valueOf(lastList.size() + ")"));
     }
 }

@@ -10,7 +10,6 @@ import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.data.Repository;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.data.db.dao.entities.SubjectDao;
@@ -57,7 +56,6 @@ public class SubjectSync implements SyncContract {
 
         subjectDao.insertInTx(lastList);
 
-        LogUtils.debug(Repository.DEBUG_TAG, "Synchronization subjects (amount = "
-                + String.valueOf(lastList.size() + ")"));
+        LogUtils.debug("Synchronization subjects (amount = " + String.valueOf(lastList.size() + ")"));
     }
 }

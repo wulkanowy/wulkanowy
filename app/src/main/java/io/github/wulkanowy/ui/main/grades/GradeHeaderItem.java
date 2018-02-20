@@ -3,7 +3,6 @@ package io.github.wulkanowy.ui.main.grades;
 
 import android.content.res.Resources;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -24,8 +23,6 @@ public class GradeHeaderItem
         extends AbstractExpandableHeaderItem<GradeHeaderItem.HeaderViewHolder, GradesSubItem> {
 
     private Subject subject;
-
-    private boolean showAlert = false;
 
     GradeHeaderItem(Subject subject) {
         this.subject = subject;
@@ -63,14 +60,10 @@ public class GradeHeaderItem
 
     @Override
     public void bindViewHolder(FlexibleAdapter adapter, HeaderViewHolder holder, int position, List payloads) {
-        holder.onBind(subject);
+        holder.onBind(subject, getSubItems());
     }
 
-    void setAlertSubItemVisible() {
-        showAlert = true;
-    }
-
-    class HeaderViewHolder extends ExpandableViewHolder {
+    static class HeaderViewHolder extends ExpandableViewHolder {
 
         @BindView(R.id.grade_header_subject_text)
         TextView subjectName;
@@ -82,7 +75,7 @@ public class GradeHeaderItem
         TextView numberText;
 
         @BindView(R.id.grade_header_alert_image)
-        ImageView alertImage;
+        View alertImage;
 
         Resources resources;
 
@@ -93,12 +86,22 @@ public class GradeHeaderItem
             view.setOnClickListener(this);
         }
 
-        void onBind(Subject item) {
+        void onBind(Subject item, List<GradesSubItem> subItem) {
             subjectName.setText(item.getName());
             numberText.setText(resources.getQuantityString(R.plurals.numberOfGradesPlurals,
-                    getSubItemsCount(), getSubItemsCount()));
+                    subItem.size(), subItem.size()));
             averageText.setText(getGradesAverageString(item));
-            alertImage.setVisibility(showAlert ? View.VISIBLE : View.INVISIBLE);
+            alertImage.setVisibility(isSubItemsRead(subItem) ? View.INVISIBLE : View.VISIBLE);
+            alertImage.setTag(item.getName());
+        }
+
+        private boolean isSubItemsRead(List<GradesSubItem> subItem) {
+            boolean isRead = true;
+
+            for (GradesSubItem item : subItem) {
+                isRead = item.getGrade().getRead();
+            }
+            return isRead;
         }
 
         private String getGradesAverageString(Subject item) {

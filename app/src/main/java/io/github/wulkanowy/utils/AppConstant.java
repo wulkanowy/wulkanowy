@@ -2,6 +2,8 @@ package io.github.wulkanowy.utils;
 
 public final class AppConstant {
 
+    public static final String APP_NAME = "Wulkanowy";
+
     public static final String DATABASE_NAME = "wulkanowy_db";
 
     public static final String SHARED_PREFERENCES_NAME = "user_data";

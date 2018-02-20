@@ -52,9 +52,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     @Override
     public void onError(int resId) {
-        if (activity != null) {
-            activity.onError(resId);
-        }
+        onError(getString(resId));
     }
 
     @Override

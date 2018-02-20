@@ -13,6 +13,7 @@ import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
+import io.github.wulkanowy.data.db.dao.entities.GradeDao;
 import io.github.wulkanowy.data.db.resources.ResourcesContract;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
 import io.github.wulkanowy.data.sync.SyncContract;
@@ -23,8 +24,6 @@ import io.github.wulkanowy.utils.security.CryptoException;
 
 @Singleton
 public class Repository implements RepositoryContract {
-
-    public static final String DEBUG_TAG = "WulkanowyData";
 
     private final SharedPrefContract sharedPref;
 
@@ -105,5 +104,13 @@ public class Repository implements RepositoryContract {
     @Override
     public Account getCurrentUser() {
         return daoSession.getAccountDao().load(sharedPref.getCurrentUserId());
+    }
+
+    @Override
+    public int getNumberOfNewGrades() {
+        return daoSession.getGradeDao().queryBuilder()
+                .where(GradeDao.Properties.IsNew.eq(1))
+                .list()
+                .size();
     }
 }

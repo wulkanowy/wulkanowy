@@ -8,7 +8,11 @@ public final class LogUtils {
         throw new IllegalStateException("Utility class");
     }
 
-    public static void debug(String tag, String message) {
-        Log.d(tag, message);
+    public static void debug(String message) {
+        Log.d(AppConstant.APP_NAME, message);
+    }
+
+    public static void error(String message, Throwable throwable) {
+        Log.e(AppConstant.APP_NAME, message, throwable);
     }
 }

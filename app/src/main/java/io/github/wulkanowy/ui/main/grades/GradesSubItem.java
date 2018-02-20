@@ -1,10 +1,10 @@
 package io.github.wulkanowy.ui.main.grades;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -25,9 +25,15 @@ public class GradesSubItem
 
     private Grade grade;
 
+    private static int numberOfNotReadGrade;
+
     GradesSubItem(GradeHeaderItem header, Grade grade) {
         super(header);
         this.grade = grade;
+    }
+
+    public Grade getGrade() {
+        return grade;
     }
 
     @Override
@@ -65,7 +71,7 @@ public class GradesSubItem
         holder.onBind(grade);
     }
 
-    class SubItemViewHolder extends FlexibleViewHolder {
+    static class SubItemViewHolder extends FlexibleViewHolder {
 
         @BindView(R.id.grade_subitem_value)
         TextView value;
@@ -77,7 +83,7 @@ public class GradesSubItem
         TextView date;
 
         @BindView(R.id.grade_subitem_alert_image)
-        ImageView alert;
+        View alert;
 
         private Context context;
 
@@ -87,23 +93,40 @@ public class GradesSubItem
             super(view, adapter);
             ButterKnife.bind(this, view);
             context = view.getContext();
+            view.setOnClickListener(this);
         }
 
         void onBind(Grade item) {
             this.item = item;
-            getContentView().setOnClickListener(this);
 
             value.setText(item.getValue());
             value.setBackgroundResource(item.getValueColor());
             date.setText(item.getDate());
             description.setText(getDescriptionString());
             alert.setVisibility(item.getRead() ? View.INVISIBLE : View.VISIBLE);
+
+            if (!item.getRead()) {
+                numberOfNotReadGrade++;
+            }
         }
 
         @Override
         public void onClick(View view) {
             super.onClick(view);
             showDialog();
+
+            if (!item.getRead()) {
+                numberOfNotReadGrade--;
+
+                if (numberOfNotReadGrade == 0) {
+                    ((Activity) context).findViewById(R.id.grade_fragment_container)
+                            .findViewWithTag(item.getSubject()).setVisibility(View.INVISIBLE);
+                }
+                item.setIsNew(false);
+                item.setRead(true);
+                item.update();
+                alert.setVisibility(View.INVISIBLE);
+            }
         }
 
         private String getDescriptionString() {
@@ -121,7 +144,7 @@ public class GradesSubItem
         private void showDialog() {
             GradesDialogFragment dialogFragment = GradesDialogFragment.newInstance(item);
             dialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-            dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), grade.toString());
+            dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), item.toString());
         }
     }
 }

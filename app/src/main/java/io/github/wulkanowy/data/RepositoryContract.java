@@ -22,4 +22,6 @@ public interface RepositoryContract extends ResourcesContract, LoginSyncContract
     void syncAll() throws NotLoggedInErrorException, IOException, ParseException;
 
     Account getCurrentUser();
+
+    int getNumberOfNewGrades();
 }

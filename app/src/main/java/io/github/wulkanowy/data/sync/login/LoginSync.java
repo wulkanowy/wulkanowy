@@ -23,8 +23,6 @@ import io.github.wulkanowy.utils.security.Scrambler;
 @Singleton
 public class LoginSync implements LoginSyncContract {
 
-    private static final String DEBUG_TAG = "WulkanowyLoginSync";
-
     private final DaoSession daoSession;
 
     private final SharedPrefContract sharedPref;
@@ -47,7 +45,7 @@ public class LoginSync implements LoginSyncContract {
             throws NotLoggedInErrorException, AccountPermissionException, IOException,
             CryptoException, VulcanOfflineException, BadCredentialsException {
 
-        LogUtils.debug(DEBUG_TAG, "Login new user email=" + email);
+        LogUtils.debug("Login new user email=" + email);
 
         vulcan.login(email, password, symbol);
 
@@ -71,7 +69,7 @@ public class LoginSync implements LoginSyncContract {
             throw new IOException("Can't find logged user");
         }
 
-        LogUtils.debug(DEBUG_TAG, "Login current user id=" + String.valueOf(userId));
+        LogUtils.debug("Login current user id=" + String.valueOf(userId));
 
         Account account = daoSession.getAccountDao().load(userId);
 

@@ -4,6 +4,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 
 import java.util.List;
 
+import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.ui.base.BaseContract;
 
@@ -15,9 +16,13 @@ public interface GradesContract {
 
         void updateAdapterList(List<GradeHeaderItem> headerItems);
 
-        void setVisibleNoItem();
+        void showNoItem(boolean show);
 
         void onNoNetworkError();
+
+        void onRefreshSuccessNoGrade();
+
+        void onRefreshSuccess(int number);
 
         void hideRefreshingBar();
 
@@ -29,5 +34,11 @@ public interface GradesContract {
         void onFragmentVisible(boolean isVisible);
 
         void onRefresh();
+
+        void onCanceledAsync();
+
+        void onEndAsync(boolean success, Exception exception);
+
+        RepositoryContract getRepository();
     }
 }

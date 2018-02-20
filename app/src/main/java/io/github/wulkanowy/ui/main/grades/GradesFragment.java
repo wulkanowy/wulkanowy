@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.main.grades;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -89,8 +90,8 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     }
 
     @Override
-    public void setVisibleNoItem() {
-        noItemView.setVisibility(View.VISIBLE);
+    public void showNoItem(boolean show) {
+        noItemView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
@@ -105,13 +106,30 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
 
     @Override
     public void updateAdapterList(List<GradeHeaderItem> headerItems) {
-        adapter.addItems(0, headerItems);
-        adapter.notifyDataSetChanged();
+        adapter.updateDataSet(headerItems);
     }
 
     @Override
     public void onNoNetworkError() {
         onError(R.string.noInternet_text);
+    }
+
+    @Override
+    public void onRefreshSuccessNoGrade() {
+        onError(R.string.snackbar_no_grades);
+    }
+
+    @Override
+    public void onRefreshSuccess(int number) {
+        onError(getString(R.string.snackbar_new_grade, number));
+    }
+
+    @Override
+    public void onError(String message) {
+        if (getActivity() != null) {
+            Snackbar.make(getActivity().findViewById(R.id.main_activity_view_pager),
+                    message, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override
