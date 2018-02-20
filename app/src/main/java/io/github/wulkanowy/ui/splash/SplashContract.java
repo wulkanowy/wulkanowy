@@ -11,8 +11,6 @@ public interface SplashContract {
         void openLoginActivity();
 
         void openMainActivity();
-
-        void startFullSyncService();
     }
 
     @PerActivity

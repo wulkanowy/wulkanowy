@@ -9,7 +9,8 @@
         android:id="@+id/timetable_progress_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -18,14 +19,23 @@
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/timetable_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/timetable_refresh_layout">
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/timetable_tab_fragment_test"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textSize="30sp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/timetable_recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

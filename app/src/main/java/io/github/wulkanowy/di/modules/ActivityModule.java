@@ -21,6 +21,11 @@ import io.github.wulkanowy.ui.main.dashboard.DashboardPresenter;
 import io.github.wulkanowy.ui.main.grades.GradeHeaderItem;
 import io.github.wulkanowy.ui.main.grades.GradesContract;
 import io.github.wulkanowy.ui.main.grades.GradesPresenter;
+import io.github.wulkanowy.ui.main.timetable.TimetableContract;
+import io.github.wulkanowy.ui.main.timetable.TimetablePagerAdapter;
+import io.github.wulkanowy.ui.main.timetable.TimetablePresenter;
+import io.github.wulkanowy.ui.main.timetable.TimetableTabContract;
+import io.github.wulkanowy.ui.main.timetable.TimetableTabPresenter;
 import io.github.wulkanowy.ui.splash.SplashContract;
 import io.github.wulkanowy.ui.splash.SplashPresenter;
 
@@ -83,9 +88,26 @@ public class ActivityModule {
         return dashboardPresenter;
     }
 
+    @PerActivity
+    @Provides
+    TimetableContract.Presenter provideTimetablePresenter(TimetablePresenter timetablePresenter) {
+        return timetablePresenter;
+    }
+
+    @PerActivity
+    @Provides
+    TimetableTabContract.Presenter provideTimetableTabPresnetr(TimetableTabPresenter timetableTabPresenter) {
+        return timetableTabPresenter;
+    }
+
     @Provides
     MainPagerAdapter provideMainPagerAdapter() {
         return new MainPagerAdapter(activity.getSupportFragmentManager());
+    }
+
+    @Provides
+    TimetablePagerAdapter provideTimetablePagerAdapter() {
+        return new TimetablePagerAdapter(activity.getSupportFragmentManager());
     }
 
     @Provides

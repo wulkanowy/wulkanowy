@@ -115,11 +115,6 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     }
 
     @Override
-    public void onNoNetworkError() {
-        onError(R.string.noInternet_text);
-    }
-
-    @Override
     public void onRefreshSuccessNoGrade() {
         onError(R.string.snackbar_no_grades);
     }

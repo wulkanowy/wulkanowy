@@ -166,11 +166,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @Override
-    public void onNoNetworkError() {
-        onError(R.string.noInternet_text);
-    }
-
-    @Override
     public void onError(String message) {
         Snackbar.make(findViewById(R.id.login_activity_container), message,
                 Snackbar.LENGTH_LONG).show();

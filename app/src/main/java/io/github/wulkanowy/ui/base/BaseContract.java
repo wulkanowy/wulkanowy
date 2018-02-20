@@ -13,6 +13,8 @@ public interface BaseContract {
 
         void onError(String message);
 
+        void onNoNetworkError();
+
         boolean isNetworkConnected();
     }
 

@@ -5,6 +5,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
@@ -27,7 +29,22 @@ public class TimetableHeaderItem
 
     @Override
     public boolean equals(Object o) {
-        return this == o;
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TimetableHeaderItem that = (TimetableHeaderItem) o;
+
+        return new EqualsBuilder()
+                .append(day, that.day)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(day)
+                .toHashCode();
     }
 
     @Override

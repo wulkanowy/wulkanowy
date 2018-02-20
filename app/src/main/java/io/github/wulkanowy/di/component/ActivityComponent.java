@@ -8,6 +8,8 @@ import io.github.wulkanowy.ui.main.MainActivity;
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment;
 import io.github.wulkanowy.ui.main.dashboard.DashboardFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
+import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
+import io.github.wulkanowy.ui.main.timetable.TimetableTabFragment;
 import io.github.wulkanowy.ui.splash.SplashActivity;
 
 @PerActivity
@@ -25,4 +27,8 @@ public interface ActivityComponent {
     void inject(AttendanceFragment attendanceFragment);
 
     void inject(DashboardFragment dashboardFragment);
+
+    void inject(TimetableFragment timetableFragment);
+
+    void inject(TimetableTabFragment timetableTabFragment);
 }

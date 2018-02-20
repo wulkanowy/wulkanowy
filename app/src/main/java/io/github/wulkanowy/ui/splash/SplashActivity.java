@@ -9,7 +9,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.wulkanowy.BuildConfig;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.services.jobs.FullSyncJob;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.login.LoginActivity;
 import io.github.wulkanowy.ui.main.MainActivity;
@@ -54,10 +53,5 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     public void openMainActivity() {
         startActivity(MainActivity.getStartIntent(this));
         finish();
-    }
-
-    @Override
-    public void startFullSyncService() {
-        new FullSyncJob().scheduledJob(getApplicationContext());
     }
 }

@@ -17,6 +17,8 @@ public final class AppConstant {
 
     public static final String DEFAULT_SYMBOL = "Default";
 
+    public static final String DATE_PATTERN = "yyyy-MM-dd";
+
     private AppConstant() {
         throw new IllegalStateException("Utility class");
     }

@@ -19,8 +19,6 @@ public interface LoginContract {
 
         void setErrorPassIncorrect();
 
-        void onNoNetworkError();
-
         void resetViewErrors();
 
         void setStepOneLoginProgress();

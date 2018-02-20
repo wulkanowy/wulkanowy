@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import butterknife.Unbinder;
+import io.github.wulkanowy.R;
 import io.github.wulkanowy.WulkanowyApp;
 import io.github.wulkanowy.di.component.ActivityComponent;
 import io.github.wulkanowy.di.component.DaggerActivityComponent;
@@ -44,6 +45,11 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
     @Override
     public void onError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNoNetworkError() {
+        onError(R.string.noInternet_text);
     }
 
     @Override

@@ -63,6 +63,13 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     }
 
     @Override
+    public void onNoNetworkError() {
+        if (activity != null) {
+            activity.onNoNetworkError();
+        }
+    }
+
+    @Override
     public boolean isNetworkConnected() {
         return activity != null && activity.isNetworkConnected();
     }

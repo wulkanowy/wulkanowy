@@ -18,8 +18,6 @@ public interface GradesContract {
 
         void showNoItem(boolean show);
 
-        void onNoNetworkError();
-
         void onRefreshSuccessNoGrade();
 
         void onRefreshSuccess(int number);

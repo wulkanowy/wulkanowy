@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.main.timetable;
 
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,11 +14,11 @@ public class TimetablePagerAdapter extends FragmentStatePagerAdapter {
 
     private List<String> titleList = new ArrayList<>();
 
-    public TimetablePagerAdapter(FragmentManager fm) {
-        super(fm);
+    public TimetablePagerAdapter(FragmentManager fragmentManager) {
+        super(fragmentManager);
     }
 
-    public void addFragment(Fragment fragment, String title) {
+    void addFragment(Fragment fragment, String title) {
         fragmentList.add(fragment);
         titleList.add(title);
     }
@@ -39,10 +38,5 @@ public class TimetablePagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return titleList.get(position);
-    }
-
-    @Override
-    public void restoreState(Parcelable state, ClassLoader loader) {
-        // do nothing
     }
 }
