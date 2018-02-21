@@ -13,9 +13,9 @@ public interface TimetableTabContract {
 
     interface Presenter extends BaseContract.Presenter<View> {
 
-        void onFragmentVisible(boolean isVisible, boolean isResumed);
+        void onResumeFragment();
 
-        void onViewCreated();
+        void setFragmentVisible(boolean isVisible);
 
         void setArgumentDate(String date);
     }

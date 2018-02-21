@@ -18,26 +18,24 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
 
     private boolean isFirstSight = false;
 
+    private boolean isFragmentVisible = false;
+
     @Inject
     TimetableTabPresenter(RepositoryContract repository, MutableBoolean isFirstRun) {
         super(repository);
         this.isFirstRun = isFirstRun;
     }
 
-    @Override
-    public void onViewCreated() {
-        onFragmentVisible(getView().getUserVisibleHint(), true);
-    }
 
     @Override
-    public void onFragmentVisible(boolean isVisible, boolean isResumed) {
-        if (!isFirstSight && isVisible && isResumed && isFirstRun.isFalse()) {
+    public void onResumeFragment() {
+        if (!isFirstSight && isFragmentVisible && isFirstRun.isFalse()) {
             getView().setTestText(date);
             LogUtils.debug(date);
             isFirstSight = true;
         }
 
-        if (isFirstRun.isTrue()) {
+        if (isFirstRun.isTrue() && isFragmentVisible) {
             isFirstRun.setFalse();
         }
     }
@@ -45,5 +43,17 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     @Override
     public void setArgumentDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public void setFragmentVisible(boolean isVisible) {
+        isFragmentVisible = isVisible;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isFirstSight = false;
+        isFragmentVisible = false;
     }
 }

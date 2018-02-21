@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import eu.davidea.flexibleadapter.FlexibleAdapter;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.component.ActivityComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
@@ -25,6 +26,11 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     @Inject
     TimetableTabContract.Presenter presenter;
+
+    boolean visible = false;
+
+    //  @Inject
+    FlexibleAdapter adapter;
 
     public static TimetableTabFragment newInstance(String date) {
         TimetableTabFragment fragmentTab = new TimetableTabFragment();
@@ -56,15 +62,33 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     @Override
     protected void setUpOnViewCreated(View fragmentView) {
-        presenter.onViewCreated();
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (presenter != null) {
-            presenter.onFragmentVisible(isVisibleToUser, isResumed());
+            presenter.setFragmentVisible(isVisibleToUser);
         }
+        //TODO: fuck this shit
+
+    }
+
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (presenter != null) {
+            // presenter.setFragmentVisible(menuVisible);
+        }
+        //TODO: fuck this shit
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onResumeFragment();
+        //TODO: fuck this shit
+
     }
 
     @Override
