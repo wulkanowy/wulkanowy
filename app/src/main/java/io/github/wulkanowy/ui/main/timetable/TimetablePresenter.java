@@ -16,6 +16,10 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
 
     private List<String> dates = new ArrayList<>();
 
+    private int possitionToScroll;
+
+    private boolean isFirstSight = false;
+
     @Inject
     TimetablePresenter(RepositoryContract repository) {
         super(repository);
@@ -28,8 +32,7 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
         if (dates.isEmpty()) {
             dates = TimeUtils.getMondaysFromCurrentSchoolYear();
         }
-
-        // getView().scrollViewPagerToPosition(dates.indexOf(TimeUtils.getDateOfCurrentMonday()));
+        possitionToScroll = dates.indexOf(TimeUtils.getDateOfCurrentMonday());
     }
 
     @Override
@@ -37,11 +40,15 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
         if (isVisible) {
             getView().setActivityTitle();
 
-            for (String date : dates) {
-                getView().addPageToAdapter(TimetableTabFragment.newInstance(date), date);
-            }
+            if (!isFirstSight) {
+                isFirstSight = true;
 
-            getView().setAdapterWithTabLayout();
+                for (String date : dates) {
+                    getView().addPageToAdapter(TimetableTabFragment.newInstance(date), date);
+                }
+                getView().setAdapterWithTabLayout();
+                getView().scrollViewPagerToPosition(possitionToScroll);
+            }
         }
     }
 }

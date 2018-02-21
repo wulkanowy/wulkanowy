@@ -4,6 +4,8 @@ package io.github.wulkanowy.di.modules;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
+import org.apache.commons.lang3.mutable.MutableBoolean;
+
 import dagger.Module;
 import dagger.Provides;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -32,7 +34,7 @@ import io.github.wulkanowy.ui.splash.SplashPresenter;
 @Module
 public class ActivityModule {
 
-    protected AppCompatActivity activity;
+    private AppCompatActivity activity;
 
     public ActivityModule(AppCompatActivity activity) {
         this.activity = activity;
@@ -94,9 +96,8 @@ public class ActivityModule {
         return timetablePresenter;
     }
 
-    @PerActivity
     @Provides
-    TimetableTabContract.Presenter provideTimetableTabPresnetr(TimetableTabPresenter timetableTabPresenter) {
+    TimetableTabContract.Presenter provideTimetableTabPresenter(TimetableTabPresenter timetableTabPresenter) {
         return timetableTabPresenter;
     }
 
@@ -113,5 +114,11 @@ public class ActivityModule {
     @Provides
     FlexibleAdapter<GradeHeaderItem> provideGradesAdapter() {
         return new FlexibleAdapter<>(null);
+    }
+
+    @PerActivity
+    @Provides
+    MutableBoolean provideFragmentTabFirstRun() {
+        return new MutableBoolean(true);
     }
 }

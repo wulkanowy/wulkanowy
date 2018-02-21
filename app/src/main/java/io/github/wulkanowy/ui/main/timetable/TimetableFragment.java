@@ -65,7 +65,6 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     @Override
     public void setAdapterWithTabLayout() {
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
 
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -77,7 +76,7 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
 
     @Override
     public void scrollViewPagerToPosition(int position) {
-        viewPager.setCurrentItem(position);
+        viewPager.setCurrentItem(position, false);
     }
 
     @Override

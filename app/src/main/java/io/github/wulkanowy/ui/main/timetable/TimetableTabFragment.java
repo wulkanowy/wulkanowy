@@ -56,14 +56,14 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     @Override
     protected void setUpOnViewCreated(View fragmentView) {
-
+        presenter.onViewCreated();
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (presenter != null) {
-            presenter.onFragmentVisible(isVisibleToUser);
+            presenter.onFragmentVisible(isVisibleToUser, isResumed());
         }
     }
 
