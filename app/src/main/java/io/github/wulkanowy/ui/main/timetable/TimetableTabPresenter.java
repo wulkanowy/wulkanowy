@@ -1,8 +1,6 @@
 package io.github.wulkanowy.ui.main.timetable;
 
 
-import org.apache.commons.lang3.mutable.MutableBoolean;
-
 import javax.inject.Inject;
 
 import io.github.wulkanowy.data.RepositoryContract;
@@ -14,29 +12,26 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
 
     private String date;
 
-    private MutableBoolean isFirstRun;
-
     private boolean isFirstSight = false;
 
-    private boolean isFragmentVisible = false;
-
     @Inject
-    TimetableTabPresenter(RepositoryContract repository, MutableBoolean isFirstRun) {
+    TimetableTabPresenter(RepositoryContract repository) {
         super(repository);
-        this.isFirstRun = isFirstRun;
     }
 
-
     @Override
-    public void onResumeFragment() {
-        if (!isFirstSight && isFragmentVisible && isFirstRun.isFalse()) {
+    public void onFragmentVisible(boolean selected) {
+        if (!isFirstSight && selected) {
             getView().setTestText(date);
             LogUtils.debug(date);
             isFirstSight = true;
         }
+    }
 
-        if (isFirstRun.isTrue() && isFragmentVisible) {
-            isFirstRun.setFalse();
+    @Override
+    public void onFragmentVisiblePrimary(boolean isPrimary) {
+        if (isPrimary) {
+            onFragmentVisible(true);
         }
     }
 
@@ -46,14 +41,8 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     }
 
     @Override
-    public void setFragmentVisible(boolean isVisible) {
-        isFragmentVisible = isVisible;
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         isFirstSight = false;
-        isFragmentVisible = false;
     }
 }

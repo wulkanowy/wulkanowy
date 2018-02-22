@@ -27,10 +27,12 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
     @Inject
     TimetableTabContract.Presenter presenter;
 
-    boolean visible = false;
+    private boolean isSelected = false;
 
-    //  @Inject
-    FlexibleAdapter adapter;
+    private boolean isPrimary = false;
+
+    // @Inject
+    FlexibleAdapter<TimetableHeaderItem> adapter;
 
     public static TimetableTabFragment newInstance(String date) {
         TimetableTabFragment fragmentTab = new TimetableTabFragment();
@@ -62,33 +64,22 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     @Override
     protected void setUpOnViewCreated(View fragmentView) {
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (presenter != null) {
-            presenter.setFragmentVisible(isVisibleToUser);
-        }
-        //TODO: fuck this shit
-
+        presenter.onFragmentVisiblePrimary(isPrimary);
     }
 
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
-        if (presenter != null) {
-            // presenter.setFragmentVisible(menuVisible);
+        if (presenter != null && getView() != null) {
+            presenter.onFragmentVisible(isSelected);
+        } else if (isSelected) {
+            isPrimary = true;
         }
-        //TODO: fuck this shit
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        presenter.onResumeFragment();
-        //TODO: fuck this shit
-
+    public void setPageSelected(boolean isSelected) {
+        this.isSelected = isSelected;
     }
 
     @Override
@@ -99,6 +90,8 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
     @Override
     public void onDestroyView() {
         presenter.onDestroy();
+        isSelected = false;
+        isPrimary = false;
         super.onDestroyView();
     }
 }

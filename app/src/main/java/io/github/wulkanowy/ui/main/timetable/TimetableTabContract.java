@@ -8,14 +8,14 @@ public interface TimetableTabContract {
 
         void setTestText(String message);
 
-        boolean getUserVisibleHint();
+        void setPageSelected(boolean isSelected);
     }
 
     interface Presenter extends BaseContract.Presenter<View> {
 
-        void onResumeFragment();
+        void onFragmentVisible(boolean isVisible);
 
-        void setFragmentVisible(boolean isVisible);
+        void onFragmentVisiblePrimary(boolean isPrimary);
 
         void setArgumentDate(String date);
     }

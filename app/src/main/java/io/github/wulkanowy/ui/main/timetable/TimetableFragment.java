@@ -18,7 +18,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.component.ActivityComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
 
-public class TimetableFragment extends BaseFragment implements TimetableContract.View {
+public class TimetableFragment extends BaseFragment implements TimetableContract.View, TabLayout.OnTabSelectedListener {
 
     @BindView(R.id.timetable_fragment_viewpager)
     ViewPager viewPager;
@@ -63,10 +63,26 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     }
 
     @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        presenter.onTabSelected(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        presenter.onTabUnselected(tab.getPosition());
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+        //do nothing
+    }
+
+    @Override
     public void setAdapterWithTabLayout() {
         viewPager.setAdapter(pagerAdapter);
 
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(this);
     }
 
     @Override
@@ -82,6 +98,11 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     @Override
     public void setActivityTitle() {
         setTitle(getString(R.string.lessonplan_text));
+    }
+
+    @Override
+    public TimetableTabContract.View getTabView(int position) {
+        return (TimetableTabContract.View) pagerAdapter.getItem(position);
     }
 
     @Override

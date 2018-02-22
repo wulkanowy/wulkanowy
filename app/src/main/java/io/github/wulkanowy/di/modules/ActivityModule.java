@@ -4,8 +4,6 @@ package io.github.wulkanowy.di.modules;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
-import org.apache.commons.lang3.mutable.MutableBoolean;
-
 import dagger.Module;
 import dagger.Provides;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -24,6 +22,7 @@ import io.github.wulkanowy.ui.main.grades.GradeHeaderItem;
 import io.github.wulkanowy.ui.main.grades.GradesContract;
 import io.github.wulkanowy.ui.main.grades.GradesPresenter;
 import io.github.wulkanowy.ui.main.timetable.TimetableContract;
+import io.github.wulkanowy.ui.main.timetable.TimetableHeaderItem;
 import io.github.wulkanowy.ui.main.timetable.TimetablePagerAdapter;
 import io.github.wulkanowy.ui.main.timetable.TimetablePresenter;
 import io.github.wulkanowy.ui.main.timetable.TimetableTabContract;
@@ -116,9 +115,8 @@ public class ActivityModule {
         return new FlexibleAdapter<>(null);
     }
 
-    @PerActivity
     @Provides
-    MutableBoolean provideFragmentTabFirstRun() {
-        return new MutableBoolean(true);
+    FlexibleAdapter<TimetableHeaderItem> provideTimetableTabAdapter() {
+        return new FlexibleAdapter<>(null);
     }
 }

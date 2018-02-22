@@ -16,11 +16,17 @@ public interface TimetableContract {
         void addPageToAdapter(TimetableTabFragment fragment, String title);
 
         void setAdapterWithTabLayout();
+
+        TimetableTabContract.View getTabView(int position);
     }
 
     @PerActivity
     interface Presenter extends BaseContract.Presenter<View> {
 
         void onFragmentVisible(boolean isVisible);
+
+        void onTabSelected(int position);
+
+        void onTabUnselected(int position);
     }
 }
