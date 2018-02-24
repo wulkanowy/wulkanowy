@@ -30,7 +30,7 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
         if (dates.isEmpty()) {
             dates = TimeUtils.getMondaysFromCurrentSchoolYear();
         }
-        positionToScroll = dates.indexOf(TimeUtils.getDateOfCurrentMonday());
+        positionToScroll = dates.indexOf(TimeUtils.getDateOfCurrentMonday(true));
 
         if (primary) {
             onFragmentVisible(true);

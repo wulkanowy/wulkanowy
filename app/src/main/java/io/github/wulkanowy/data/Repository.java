@@ -14,6 +14,8 @@ import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.GradeDao;
+import io.github.wulkanowy.data.db.dao.entities.Week;
+import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.data.db.resources.ResourcesContract;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
 import io.github.wulkanowy.data.sync.SyncContract;
@@ -104,6 +106,14 @@ public class Repository implements RepositoryContract {
     @Override
     public Account getCurrentUser() {
         return daoSession.getAccountDao().load(sharedPref.getCurrentUserId());
+    }
+
+    @Override
+    public Week getWeek(String date) {
+        return daoSession.getWeekDao().queryBuilder()
+                .where(WeekDao.Properties.StartDayDate.eq(date),
+                        WeekDao.Properties.UserId.eq(getCurrentUserId()))
+                .unique();
     }
 
     @Override

@@ -6,11 +6,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import io.github.wulkanowy.R;
@@ -23,13 +21,10 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     private boolean isPrimary = false;
 
-    @BindView(R.id.timetable_tab_fragment_test)
-    TextView testText;
-
     @Inject
     TimetableTabContract.Presenter presenter;
 
-    // @Inject
+    @Inject
     FlexibleAdapter<TimetableHeaderItem> adapter;
 
     public static TimetableTabFragment newInstance(String date) {
@@ -73,11 +68,6 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
         } else if (isSelected()) {
             isPrimary = true;
         }
-    }
-
-    @Override
-    public void setTestText(String message) {
-        testText.setText(message);
     }
 
     @Override

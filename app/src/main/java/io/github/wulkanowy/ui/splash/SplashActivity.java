@@ -30,6 +30,8 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
         setButterKnife(ButterKnife.bind(this));
 
         presenter.onStart(this);
+
+        setUpOnCreate();
     }
 
     @Override

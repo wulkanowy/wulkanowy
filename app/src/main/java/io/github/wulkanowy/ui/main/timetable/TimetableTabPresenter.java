@@ -5,7 +5,6 @@ import javax.inject.Inject;
 
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.ui.base.BasePresenter;
-import io.github.wulkanowy.utils.LogUtils;
 
 public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.View>
         implements TimetableTabContract.Presenter {
@@ -30,9 +29,9 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     @Override
     public void onFragmentVisible(boolean selected) {
         if (!isFirstSight && selected) {
-            getView().setTestText(date);
-            LogUtils.debug(date);
             isFirstSight = true;
+
+            //   List<Day> dayList = getRepository().getWeek(date).getDayList();
         }
     }
 

@@ -86,19 +86,19 @@ public class GradeHeaderItem
             view.setOnClickListener(this);
         }
 
-        void onBind(Subject item, List<GradesSubItem> subItem) {
+        void onBind(Subject item, List<GradesSubItem> subItems) {
             subjectName.setText(item.getName());
             numberText.setText(resources.getQuantityString(R.plurals.numberOfGradesPlurals,
-                    subItem.size(), subItem.size()));
+                    subItems.size(), subItems.size()));
             averageText.setText(getGradesAverageString(item));
-            alertImage.setVisibility(isSubItemsRead(subItem) ? View.INVISIBLE : View.VISIBLE);
+            alertImage.setVisibility(isSubItemsRead(subItems) ? View.INVISIBLE : View.VISIBLE);
             alertImage.setTag(item.getName());
         }
 
-        private boolean isSubItemsRead(List<GradesSubItem> subItem) {
+        private boolean isSubItemsRead(List<GradesSubItem> subItems) {
             boolean isRead = true;
 
-            for (GradesSubItem item : subItem) {
+            for (GradesSubItem item : subItems) {
                 isRead = item.getGrade().getRead();
             }
             return isRead;

@@ -74,12 +74,12 @@ public final class TimeUtils {
         return dateTime.getMonthOfYear() <= 8 ? dateTime.getYear() - 1 : dateTime.getYear();
     }
 
-    public static String getDateOfCurrentMonday() {
+    public static String getDateOfCurrentMonday(boolean normalize) {
         DateTime currentDate = new DateTime();
 
-        if (currentDate.getDayOfWeek() == DateTimeConstants.SATURDAY) {
+        if (currentDate.getDayOfWeek() == DateTimeConstants.SATURDAY && normalize) {
             currentDate = currentDate.plusDays(2);
-        } else if (currentDate.getDayOfWeek() == DateTimeConstants.SUNDAY) {
+        } else if (currentDate.getDayOfWeek() == DateTimeConstants.SUNDAY && normalize) {
             currentDate = currentDate.plusDays(1);
         } else {
             currentDate = currentDate.withDayOfWeek(DateTimeConstants.MONDAY);

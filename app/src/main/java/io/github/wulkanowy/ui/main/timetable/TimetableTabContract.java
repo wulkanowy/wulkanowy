@@ -6,7 +6,6 @@ public interface TimetableTabContract {
 
     interface View extends BaseContract.View {
 
-        void setTestText(String message);
     }
 
     interface Presenter extends BaseContract.Presenter<View> {
