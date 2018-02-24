@@ -44,7 +44,7 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
         if (component != null) {
             component.inject(this);
             setButterKnife(ButterKnife.bind(this, view));
-            presenter.onStart(this);
+            presenter.onStart(this, isSelected());
         }
         return view;
     }
@@ -55,10 +55,10 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
         if (presenter != null) {
-            presenter.onFragmentVisible(isVisibleToUser);
+            presenter.onFragmentVisible(isSelected());
         }
     }
 
@@ -101,8 +101,8 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     }
 
     @Override
-    public TimetableTabContract.View getTabView(int position) {
-        return (TimetableTabContract.View) pagerAdapter.getItem(position);
+    public void setChildFragmentSelected(int position, boolean selected) {
+        ((BaseFragment) pagerAdapter.getItem(position)).setSelected(selected);
     }
 
     @Override

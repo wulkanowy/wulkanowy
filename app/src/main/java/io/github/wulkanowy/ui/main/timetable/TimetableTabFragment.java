@@ -21,15 +21,13 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     private static final String ARGUMENT_KEY = "Date";
 
+    private boolean isPrimary = false;
+
     @BindView(R.id.timetable_tab_fragment_test)
     TextView testText;
 
     @Inject
     TimetableTabContract.Presenter presenter;
-
-    private boolean isSelected = false;
-
-    private boolean isPrimary = false;
 
     // @Inject
     FlexibleAdapter<TimetableHeaderItem> adapter;
@@ -53,33 +51,28 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
         if (component != null) {
             component.inject(this);
             setButterKnife(ButterKnife.bind(this, view));
-            presenter.onStart(this);
 
             if (getArguments() != null) {
                 presenter.setArgumentDate(getArguments().getString(ARGUMENT_KEY));
             }
+
+            presenter.onStart(this, isPrimary);
         }
         return view;
     }
 
     @Override
     protected void setUpOnViewCreated(View fragmentView) {
-        presenter.onFragmentVisiblePrimary(isPrimary);
     }
 
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (presenter != null && getView() != null) {
-            presenter.onFragmentVisible(isSelected);
-        } else if (isSelected) {
+            presenter.onFragmentVisible(isSelected());
+        } else if (isSelected()) {
             isPrimary = true;
         }
-    }
-
-    @Override
-    public void setPageSelected(boolean isSelected) {
-        this.isSelected = isSelected;
     }
 
     @Override
@@ -89,9 +82,8 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     @Override
     public void onDestroyView() {
-        presenter.onDestroy();
-        isSelected = false;
         isPrimary = false;
+        presenter.onDestroy();
         super.onDestroyView();
     }
 }

@@ -16,6 +16,8 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     private Unbinder unbinder;
 
+    private boolean isSelected = false;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -43,11 +45,12 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         if (unbinder != null) {
             unbinder.unbind();
         }
-        super.onDestroy();
+        isSelected = false;
+        super.onDestroyView();
     }
 
     @Override
@@ -89,6 +92,14 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
             return activity.getActivityComponent();
         }
         return null;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     protected abstract void setUpOnViewCreated(View fragmentView);

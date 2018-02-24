@@ -7,16 +7,14 @@ public interface TimetableTabContract {
     interface View extends BaseContract.View {
 
         void setTestText(String message);
-
-        void setPageSelected(boolean isSelected);
     }
 
     interface Presenter extends BaseContract.Presenter<View> {
 
         void onFragmentVisible(boolean isVisible);
 
-        void onFragmentVisiblePrimary(boolean isPrimary);
-
         void setArgumentDate(String date);
+
+        void onStart(View view, boolean primary);
     }
 }

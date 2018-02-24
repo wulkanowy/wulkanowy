@@ -20,18 +20,19 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     }
 
     @Override
+    public void onStart(TimetableTabContract.View view, boolean primary) {
+        super.onStart(view);
+        if (primary) {
+            onFragmentVisible(true);
+        }
+    }
+
+    @Override
     public void onFragmentVisible(boolean selected) {
         if (!isFirstSight && selected) {
             getView().setTestText(date);
             LogUtils.debug(date);
             isFirstSight = true;
-        }
-    }
-
-    @Override
-    public void onFragmentVisiblePrimary(boolean isPrimary) {
-        if (isPrimary) {
-            onFragmentVisible(true);
         }
     }
 

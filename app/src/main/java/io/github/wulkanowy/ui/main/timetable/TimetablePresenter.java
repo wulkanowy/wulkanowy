@@ -1,7 +1,5 @@
 package io.github.wulkanowy.ui.main.timetable;
 
-import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,18 +24,22 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
     }
 
     @Override
-    public void onStart(@NonNull TimetableContract.View view) {
+    public void onStart(TimetableContract.View view, boolean primary) {
         super.onStart(view);
 
         if (dates.isEmpty()) {
             dates = TimeUtils.getMondaysFromCurrentSchoolYear();
         }
         positionToScroll = dates.indexOf(TimeUtils.getDateOfCurrentMonday());
+
+        if (primary) {
+            onFragmentVisible(true);
+        }
     }
 
     @Override
-    public void onFragmentVisible(boolean isVisible) {
-        if (isVisible) {
+    public void onFragmentVisible(boolean isSelected) {
+        if (isSelected) {
             getView().setActivityTitle();
 
             if (!isFirstSight) {
@@ -54,11 +56,11 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
 
     @Override
     public void onTabSelected(int position) {
-        getView().getTabView(position).setPageSelected(true);
+        getView().setChildFragmentSelected(position, true);
     }
 
     @Override
     public void onTabUnselected(int position) {
-        getView().getTabView(position).setPageSelected(false);
+        getView().setChildFragmentSelected(position, false);
     }
 }

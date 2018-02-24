@@ -55,7 +55,7 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
         if (component != null) {
             component.inject(this);
             setButterKnife(ButterKnife.bind(this, view));
-            presenter.onStart(this);
+            presenter.onStart(this, isSelected());
         }
 
         return view;
@@ -77,10 +77,10 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
         if (presenter != null) {
-            presenter.onFragmentVisible(isVisibleToUser);
+            presenter.onFragmentVisible(isSelected());
         }
     }
 

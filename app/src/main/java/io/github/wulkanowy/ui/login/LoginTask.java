@@ -21,10 +21,6 @@ public class LoginTask extends AsyncTask<Void, Integer, Boolean> {
         this.symbol = symbol;
     }
 
-    public void onDestroy() {
-        this.cancel(true);
-    }
-
     @Override
     protected void onPreExecute() {
         presenter.onStartAsync();

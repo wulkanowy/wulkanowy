@@ -40,5 +40,7 @@ public interface GradesContract {
         void onEndAsync(boolean success, Exception exception);
 
         RepositoryContract getRepository();
+
+        void onStart(View view, boolean isSelected);
     }
 }

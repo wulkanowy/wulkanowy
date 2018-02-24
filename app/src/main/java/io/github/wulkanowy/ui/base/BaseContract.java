@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.base;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 
 import io.github.wulkanowy.di.annotations.PerActivity;
@@ -21,7 +20,7 @@ public interface BaseContract {
     @PerActivity
     interface Presenter<V extends View> {
 
-        void onStart(@NonNull V view);
+        void onStart(V view);
 
         void onDestroy();
     }

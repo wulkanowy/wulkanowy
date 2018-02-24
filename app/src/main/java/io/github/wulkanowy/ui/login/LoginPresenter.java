@@ -26,7 +26,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     public void onDestroy() {
         super.onDestroy();
         if (loginAsync != null) {
-            loginAsync.onDestroy();
+            loginAsync.cancel(true);
+            loginAsync = null;
         }
     }
 

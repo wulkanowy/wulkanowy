@@ -15,12 +15,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
+import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.main.dashboard.DashboardFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
 
 public class MainActivity extends BaseActivity implements MainContract.View,
         AHBottomNavigation.OnTabSelectedListener {
+
+    private static final int DEFAULT_TAB_POSITION = 0;
 
     @BindView(R.id.main_activity_nav)
     AHBottomNavigation bottomNavigation;
@@ -47,12 +50,14 @@ public class MainActivity extends BaseActivity implements MainContract.View,
         setButterKnife(ButterKnife.bind(this));
 
         presenter.onStart(this);
+
+        setUpOnCreate();
     }
 
     @Override
     protected void setUpOnCreate() {
-        initiationBottomNav();
         initiationViewPager();
+        initiationBottomNav();
     }
 
     @Override
@@ -63,10 +68,18 @@ public class MainActivity extends BaseActivity implements MainContract.View,
 
     @Override
     public boolean onTabSelected(int position, boolean wasSelected) {
-        if (!wasSelected) {
-            viewPager.setCurrentItem(position, false);
-        }
+        presenter.onTabSelected(position, wasSelected, DEFAULT_TAB_POSITION);
         return true;
+    }
+
+    @Override
+    public void setCurrentPage(int position) {
+        viewPager.setCurrentItem(position, false);
+    }
+
+    @Override
+    public void setChildFragmentSelected(int position, boolean selected) {
+        ((BaseFragment) pagerAdapter.getItem(position)).setSelected(selected);
     }
 
     private void initiationBottomNav() {
@@ -90,13 +103,13 @@ public class MainActivity extends BaseActivity implements MainContract.View,
                 getString(R.string.settings_text),
                 getResources().getDrawable(R.drawable.icon_other_24dp)
         ));
-        bottomNavigation.setCurrentItem(2);
 
         bottomNavigation.setAccentColor(getResources().getColor(R.color.colorPrimary));
         bottomNavigation.setInactiveColor(Color.BLACK);
         bottomNavigation.setBackgroundColor(getResources().getColor(R.color.colorBackgroundBottomNavi));
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
         bottomNavigation.setOnTabSelectedListener(this);
+        bottomNavigation.setCurrentItem(DEFAULT_TAB_POSITION);
     }
 
     private void initiationViewPager() {
@@ -108,7 +121,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
 
         viewPager.setPagingEnabled(false);
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(2, false);
         viewPager.setOffscreenPageLimit(4);
+        viewPager.setCurrentItem(DEFAULT_TAB_POSITION, false);
     }
 }

@@ -1,7 +1,5 @@
 package io.github.wulkanowy.ui.main.grades;
 
-import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +24,13 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     }
 
     @Override
-    public void onStart(@NonNull GradesContract.View view) {
+    public void onStart(GradesContract.View view, boolean isSelected) {
         super.onStart(view);
         getView().showProgressBar(true);
+
+        if (isSelected) {
+            onFragmentVisible(true);
+        }
     }
 
     @Override
