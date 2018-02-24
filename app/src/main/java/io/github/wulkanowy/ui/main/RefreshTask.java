@@ -1,23 +1,21 @@
-package io.github.wulkanowy.ui.main.grades;
+package io.github.wulkanowy.ui.main;
 
 import android.os.AsyncTask;
 
 public class RefreshTask extends AsyncTask<Void, Integer, Boolean> {
 
-    private GradesContract.Presenter presenter;
+    private RefreshCallback callback;
 
     private Exception exception;
 
-    RefreshTask(GradesContract.Presenter presenter) {
-        this.presenter = presenter;
+    public RefreshTask(RefreshCallback callback) {
+        this.callback = callback;
     }
 
     @Override
     protected Boolean doInBackground(Void... voids) {
         try {
-            presenter.getRepository().loginCurrentUser();
-            presenter.getRepository().syncSubjects();
-            presenter.getRepository().syncGrades();
+            callback.onDoInBackground();
             return true;
         } catch (Exception e) {
             exception = e;
@@ -28,12 +26,12 @@ public class RefreshTask extends AsyncTask<Void, Integer, Boolean> {
     @Override
     protected void onCancelled() {
         super.onCancelled();
-        presenter.onCanceledAsync();
+        callback.onCanceledAsync();
     }
 
     @Override
     protected void onPostExecute(Boolean result) {
         super.onPostExecute(result);
-        presenter.onEndAsync(result, exception);
+        callback.onEndAsync(result, exception);
     }
 }

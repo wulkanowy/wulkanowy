@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import butterknife.Unbinder;
+import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.component.ActivityComponent;
 
 public abstract class BaseFragment extends Fragment implements BaseContract.View {
@@ -67,9 +68,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     @Override
     public void onNoNetworkError() {
-        if (activity != null) {
-            activity.onNoNetworkError();
-        }
+        onError(R.string.noInternet_text);
     }
 
     @Override

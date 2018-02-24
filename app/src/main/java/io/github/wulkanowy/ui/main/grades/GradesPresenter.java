@@ -9,10 +9,12 @@ import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.ui.base.BasePresenter;
+import io.github.wulkanowy.ui.main.RefreshCallback;
+import io.github.wulkanowy.ui.main.RefreshTask;
 import io.github.wulkanowy.utils.LogUtils;
 
 public class GradesPresenter extends BasePresenter<GradesContract.View>
-        implements GradesContract.Presenter {
+        implements GradesContract.Presenter, RefreshCallback {
 
     private RefreshTask refreshTask;
 
@@ -51,7 +53,15 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             refreshTask.execute();
         } else {
             getView().onNoNetworkError();
+            getView().hideRefreshingBar();
         }
+    }
+
+    @Override
+    public void onDoInBackground() throws Exception {
+        getRepository().loginCurrentUser();
+        getRepository().syncSubjects();
+        getRepository().syncGrades();
     }
 
     @Override
