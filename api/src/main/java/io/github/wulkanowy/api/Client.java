@@ -29,7 +29,7 @@ public class Client {
                 .cookies(getCookies())
                 .execute();
 
-        this.cookies.addItems(response.cookies());
+        this.cookies.setItems(response.cookies());
 
         return response.parse();
     }
@@ -41,13 +41,49 @@ public class Client {
             connection.data(data[0], data[1]);
         }
 
-        Connection.Response response = connection.cookies(getCookies())
+        Connection.Response response = connection
                 .followRedirects(true)
                 .method(Connection.Method.POST)
+                .cookies(getCookies())
                 .execute();
 
         this.cookies.addItems(response.cookies());
 
         return response.parse();
+    }
+
+    public String getJsonStringByUrl(String url) throws IOException {
+        return getJsonStringByUrl(url, new String[0][]);
+    }
+
+    public String getJsonStringByUrl(String url, String[][] params) throws IOException {
+        Connection.Response response = Jsoup.connect(url)
+                .followRedirects(true)
+                .ignoreContentType(true)
+                .cookies(getCookies())
+                .execute();
+
+        this.cookies.addItems(response.cookies());
+
+        return response.body();
+    }
+
+    public String postJsonStringByUrl(String url, String[][] params) throws IOException {
+        Connection connection = Jsoup.connect(url);
+
+        for (String[] data : params) {
+            connection.data(data[0], data[1]);
+        }
+
+        Connection.Response response = connection
+                .followRedirects(true)
+                .ignoreContentType(true)
+                .method(Connection.Method.POST)
+                .cookies(getCookies())
+                .execute();
+
+        this.cookies.addItems(response.cookies());
+
+        return response.body();
     }
 }
