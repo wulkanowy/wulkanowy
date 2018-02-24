@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class Message {
 
     @SerializedName("Nieprzeczytana")
-    public boolean notUnread;
+    public boolean unread;
 
     @SerializedName("Data")
     public String date;

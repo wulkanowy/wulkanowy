@@ -28,7 +28,7 @@ public class MessagesTest {
         Messages messages = new Messages(client, "", "", "");
         List<Message> messageList = messages.getReceived();
 
-        Assert.assertEquals(true, messageList.get(1).notUnread);
+        Assert.assertEquals(true, messageList.get(1).unread);
         Assert.assertEquals("2016-03-15 09:00:00", messageList.get(0).date);
         Assert.assertEquals(null, messageList.get(0).content);
         Assert.assertEquals("Kowalski Jan", messageList.get(0).sender);
