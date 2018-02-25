@@ -103,11 +103,11 @@ public class Messages {
         return message;
     }
 
-    private static class MessagesContainer {
+    public static class MessagesContainer {
         public List<Message> data;
     }
 
-    private static class MessageContainer {
+    public static class MessageContainer {
         public Message data;
     }
 }
