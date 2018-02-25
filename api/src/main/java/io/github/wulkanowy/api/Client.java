@@ -29,7 +29,7 @@ public class Client {
                 .cookies(getCookies())
                 .execute();
 
-        this.cookies.setItems(response.cookies());
+        this.cookies.addItems(response.cookies());
 
         return response.parse();
     }
