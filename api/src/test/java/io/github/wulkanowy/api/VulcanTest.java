@@ -37,11 +37,11 @@ public class VulcanTest {
     public void createSnPTest() throws Exception {
         vulcan.login("wulkanowy@wulkanowy.io", "wulkanowy123", "wulkan");
 
-        SnP snp1 = vulcan.createSnp(Mockito.mock(Client.class), "testSymbol", null);
-        Assert.assertEquals(snp1.getId(), null);
+        SnP snp1 = vulcan.createSnp(Mockito.mock(Client.class), null);
+        Assert.assertEquals(null, snp1.getId());
 
-        SnP snp2 = vulcan.createSnp(Mockito.mock(Client.class), "testSymbol", "wulkan");
-        Assert.assertEquals(snp2.getId(), "wulkan");
+        SnP snp2 = vulcan.createSnp(Mockito.mock(Client.class), "wulkan");
+        Assert.assertEquals("wulkan", snp2.getId());
 
     }
 

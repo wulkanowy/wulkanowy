@@ -33,23 +33,8 @@ public class Messages {
 
     private Client client;
 
-    private String schema;
-
-    private String host;
-
-    private String symbol;
-
-    public Messages(Client client, String schema, String host, String symbol) {
+    public Messages(Client client) {
         this.client = client;
-        this.schema = schema;
-        this.host = host;
-        this.symbol = symbol;
-    }
-
-    private String getFilledUrl(String url) {
-        return url.replace("{schema}", schema)
-                .replace("{host}", host)
-                .replace("{symbol}", symbol);
     }
 
     public List<Message> getReceived() throws IOException, NotLoggedInErrorException, BadRequestException {
@@ -65,7 +50,7 @@ public class Messages {
     }
 
     private List<Message> getMessages(String url) throws IOException, NotLoggedInErrorException, BadRequestException {
-        String res = client.getJsonStringByUrl(getFilledUrl(url));
+        String res = client.getJsonStringByUrl(url);
 
         List<Message> messages;
 
