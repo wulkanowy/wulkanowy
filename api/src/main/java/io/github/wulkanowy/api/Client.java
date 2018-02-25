@@ -53,10 +53,6 @@ public class Client {
     }
 
     public String getJsonStringByUrl(String url) throws IOException {
-        return getJsonStringByUrl(url, new String[0][]);
-    }
-
-    public String getJsonStringByUrl(String url, String[][] params) throws IOException {
         Connection.Response response = Jsoup.connect(url)
                 .followRedirects(true)
                 .ignoreContentType(true)
