@@ -64,13 +64,13 @@ public class StudentAndParent implements SnP {
     }
 
     String getExtractedIdFromUrl(String snpPageUrl) throws NotLoggedInErrorException {
-        String[] path = snpPageUrl.split(client.getHost() + "/")[1].split("/");
+        String[] path = snpPageUrl.split(client.getHost())[1].split("/");
 
-        if (4 != path.length) {
+        if (5 != path.length) {
             throw new NotLoggedInErrorException();
         }
 
-        return path[1];
+        return path[2];
     }
 
     public String getRowDataChildValue(Element e, int index) {
