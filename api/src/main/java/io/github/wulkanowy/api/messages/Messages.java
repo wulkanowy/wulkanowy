@@ -88,11 +88,11 @@ public class Messages {
         return message;
     }
 
-    public static class MessagesContainer {
-        public List<Message> data;
+    private static class MessagesContainer {
+        private List<Message> data;
     }
 
-    public static class MessageContainer {
-        public Message data;
+    private static class MessageContainer {
+        private Message data;
     }
 }
