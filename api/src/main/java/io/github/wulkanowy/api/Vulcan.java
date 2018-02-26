@@ -70,11 +70,11 @@ public class Vulcan {
         return this;
     }
 
-    public String getProtocolSchema() {
+    String getProtocolSchema() {
         return protocolSchema;
     }
 
-    public String getLogHost() {
+    String getLogHost() {
         return logHost;
     }
 
@@ -96,7 +96,7 @@ public class Vulcan {
         }
     }
 
-    private Client getClient() {
+    protected Client getClient() {
         if (null != client) {
             return client;
         }
@@ -106,7 +106,7 @@ public class Vulcan {
         return client;
     }
 
-    private Login getLogin() {
+    protected Login getLogin() {
         if (null != login) {
             return login;
         }
