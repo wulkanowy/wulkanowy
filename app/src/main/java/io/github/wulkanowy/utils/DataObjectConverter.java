@@ -52,16 +52,16 @@ public final class DataObjectConverter {
         return gradeEntityList;
     }
 
-    public static Week weekToWeekEntitie(io.github.wulkanowy.api.timetable.Week week) {
+    public static Week weekToWeekEntities(io.github.wulkanowy.api.generic.Week week) {
         return new Week().setStartDayDate(week.getStartDayDate());
     }
 
 
-    public static List<Day> daysToDaysEntities(List<io.github.wulkanowy.api.timetable.Day> dayList) {
+    public static List<Day> daysToDaysEntities(List<io.github.wulkanowy.api.generic.Day> dayList) {
 
         List<Day> dayEntityList = new ArrayList<>();
 
-        for (io.github.wulkanowy.api.timetable.Day day : dayList) {
+        for (io.github.wulkanowy.api.generic.Day day : dayList) {
             Day dayEntity = new Day()
                     .setDate(day.getDate())
                     .setDayName(day.getDayName())
@@ -73,11 +73,11 @@ public final class DataObjectConverter {
         return dayEntityList;
     }
 
-    public static List<Lesson> lessonsToLessonsEntities(List<io.github.wulkanowy.api.timetable.Lesson> lessonList) {
+    public static List<Lesson> lessonsToLessonsEntities(List<io.github.wulkanowy.api.generic.Lesson> lessonList) {
 
         List<Lesson> lessonEntityList = new ArrayList<>();
 
-        for (io.github.wulkanowy.api.timetable.Lesson lesson : lessonList) {
+        for (io.github.wulkanowy.api.generic.Lesson lesson : lessonList) {
             Lesson lessonEntity = new Lesson()
                     .setNumber(lesson.getNumber())
                     .setSubject(lesson.getSubject())

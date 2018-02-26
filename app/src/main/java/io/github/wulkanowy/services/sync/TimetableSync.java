@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.api.timetable.Day;
-import io.github.wulkanowy.api.timetable.Week;
+import io.github.wulkanowy.api.generic.Day;
+import io.github.wulkanowy.api.generic.Week;
 import io.github.wulkanowy.db.dao.entities.DayDao;
 import io.github.wulkanowy.db.dao.entities.Lesson;
 import io.github.wulkanowy.db.dao.entities.LessonDao;
@@ -33,7 +33,7 @@ public class TimetableSync {
 
         Long weekId;
 
-        Week week = dateOfMonday == null ? loginSession.getVulcan().getTimetable().getWeekTable()
+        Week<Day> week = dateOfMonday == null ? loginSession.getVulcan().getTimetable().getWeekTable()
                 : loginSession.getVulcan().getTimetable()
                 .getWeekTable(String.valueOf(TimeUtils.getNetTicks(dateOfMonday, "yyyy-MM-dd")));
 
@@ -45,7 +45,7 @@ public class TimetableSync {
         if (week1 != null) {
             weekId = week1.getId();
         } else {
-            weekId = weekDao.insert(DataObjectConverter.weekToWeekEntitie(week).setUserId(loginSession.getUserId()));
+            weekId = weekDao.insert(DataObjectConverter.weekToWeekEntities(week).setUserId(loginSession.getUserId()));
         }
 
         List<Day> dayList = week.getDays();

@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.wulkanowy.api.Vulcan;
-import io.github.wulkanowy.api.timetable.Day;
-import io.github.wulkanowy.api.timetable.Lesson;
+import io.github.wulkanowy.api.generic.Day;
+import io.github.wulkanowy.api.generic.Lesson;
 import io.github.wulkanowy.api.timetable.Timetable;
-import io.github.wulkanowy.api.timetable.Week;
+import io.github.wulkanowy.api.generic.Week;
 import io.github.wulkanowy.db.dao.entities.Account;
 import io.github.wulkanowy.db.dao.entities.DaoMaster;
 import io.github.wulkanowy.db.dao.entities.DaoSession;
@@ -49,13 +49,13 @@ public class TimetableSyncTest {
         dayList.add(new Day()
                 .setDate("20.12.2012")
                 .setLesson(new Lesson().setSubject("Matematyka").setRoom("20")));
-        Week week = new Week().setDays(dayList);
+        Week week = new Week<Day>().setDays(dayList);
 
         List<Day> nextDayList = new ArrayList<>();
         dayList.add(new Day()
                 .setDate("24.11.2013")
                 .setLesson(new Lesson().setSubject("Matematyka").setRoom("22")));
-        Week nextWeek = new Week().setDays(nextDayList);
+        Week nextWeek = new Week<Day>().setDays(nextDayList);
 
         Timetable timetable = mock(Timetable.class);
         doReturn(week).when(timetable).getWeekTable();

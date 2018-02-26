@@ -1,9 +1,9 @@
-package io.github.wulkanowy.api.attendance;
+package io.github.wulkanowy.api.generic;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Week {
+public class Week<Day> {
 
     private List<Day> days = new ArrayList<>();
 
@@ -17,7 +17,7 @@ public class Week {
         return days;
     }
 
-    public Week setDays(List<Day> days) {
+    public Week<Day> setDays(List<Day> days) {
         this.days = days;
         return this;
     }
@@ -26,7 +26,7 @@ public class Week {
         return startDayDate;
     }
 
-    public Week setStartDayDate(String startDayDate) {
+    public Week<Day> setStartDayDate(String startDayDate) {
         this.startDayDate = startDayDate;
         return this;
     }

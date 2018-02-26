@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.wulkanowy.api.SnP;
+import io.github.wulkanowy.api.generic.Week;
 
 public class ExamsWeek {
 
@@ -20,11 +21,11 @@ public class ExamsWeek {
         this.snp = snp;
     }
 
-    public Week getCurrent() throws IOException {
+    public Week<Day> getCurrent() throws IOException {
         return getWeek("", true);
     }
 
-    public Week getWeek(String tick, final boolean onlyNotEmpty) throws IOException {
+    public Week<Day> getWeek(String tick, final boolean onlyNotEmpty) throws IOException {
         Document examsPage = snp.getSnPPageDocument(EXAMS_PAGE_URL + tick);
         Elements examsDays = examsPage.select(".mainContainer > div:not(.navigation)");
 
@@ -39,7 +40,7 @@ public class ExamsWeek {
             }
 
             if (null != dayHeading) {
-                day = new Day().setDate(dayHeading.text().split(", ")[1]);
+                day.setDate(dayHeading.text().split(", ")[1]);
             }
 
             Elements exams = item.select("article");
@@ -56,10 +57,8 @@ public class ExamsWeek {
             days.add(day);
         }
 
-        Week week = new Week();
-        week.setStartDate(examsDays.select("h2").first().text().split(" ")[1]);
-        week.setDayList(days);
-
-        return week;
+        return new Week<Day>()
+                .setStartDayDate(examsDays.select("h2").first().text().split(" ")[1])
+                .setDays(days);
     }
 }

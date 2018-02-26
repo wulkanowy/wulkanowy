@@ -8,8 +8,8 @@ import java.util.List;
 
 import io.github.wulkanowy.api.grades.Grade;
 import io.github.wulkanowy.api.grades.Subject;
-import io.github.wulkanowy.api.timetable.Day;
-import io.github.wulkanowy.api.timetable.Lesson;
+import io.github.wulkanowy.db.dao.entities.Day;
+import io.github.wulkanowy.db.dao.entities.Lesson;
 
 public class DataObjectConverterTest {
 
