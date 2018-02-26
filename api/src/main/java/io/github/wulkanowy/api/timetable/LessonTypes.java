@@ -2,6 +2,10 @@ package io.github.wulkanowy.api.timetable;
 
 class LessonTypes {
 
+    private LessonTypes() {
+        throw new IllegalStateException("Utility class");
+    }
+
     static final String CLASS_PLANNING = "x-treelabel-ppl";
 
     static final String CLASS_REALIZED = "x-treelabel-rlz";

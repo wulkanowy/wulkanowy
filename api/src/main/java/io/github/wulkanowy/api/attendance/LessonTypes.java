@@ -2,6 +2,10 @@ package io.github.wulkanowy.api.attendance;
 
 class LessonTypes {
 
+    private LessonTypes() {
+        throw new IllegalStateException("Utility class");
+    }
+
     static final String CLASS_NOT_EXIST = "x-sp-nieobecny-w-oddziale";
 
     static final String CLASS_PRESENCE = "x-obecnosc";
