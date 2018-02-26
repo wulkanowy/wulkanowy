@@ -21,14 +21,12 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.component.ActivityComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
+import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
 public class GradesFragment extends BaseFragment implements GradesContract.View {
 
     @BindView(R.id.grade_fragment_recycler)
     RecyclerView recyclerView;
-
-    @BindView(R.id.grade_fragment_progress_bar)
-    View progressBar;
 
     @BindView(R.id.grade_fragment_no_item_container)
     View noItemView;
@@ -55,7 +53,7 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
         if (component != null) {
             component.inject(this);
             setButterKnife(ButterKnife.bind(this, view));
-            presenter.onStart(this, isSelected());
+            presenter.onStart(this, (OnFragmentIsReadyListener) getActivity());
         }
 
         return view;
@@ -80,7 +78,7 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (presenter != null) {
-            presenter.onFragmentVisible(isSelected());
+            presenter.onFragmentVisible(menuVisible);
         }
     }
 
@@ -97,11 +95,6 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     @Override
     public void showNoItem(boolean show) {
         noItemView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    @Override
-    public void showProgressBar(boolean show) {
-        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override

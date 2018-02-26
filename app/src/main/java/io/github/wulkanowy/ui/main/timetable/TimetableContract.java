@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.main.timetable;
 
 import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.ui.base.BaseContract;
+import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
 public interface TimetableContract {
 
@@ -9,11 +10,9 @@ public interface TimetableContract {
 
         void setActivityTitle();
 
-        void showProgressBar(boolean show);
-
         void scrollViewPagerToPosition(int position);
 
-        void addPageToAdapter(TimetableTabFragment fragment, String title);
+        void setTabDataToAdapter(TabsData tabsData);
 
         void setAdapterWithTabLayout();
 
@@ -23,12 +22,12 @@ public interface TimetableContract {
     @PerActivity
     interface Presenter extends BaseContract.Presenter<View> {
 
-        void onFragmentVisible(boolean isSelected);
+        void onFragmentVisible(boolean isVisible);
 
         void onTabSelected(int position);
 
         void onTabUnselected(int position);
 
-        void onStart(View view, boolean primary);
+        void onStart(View view, OnFragmentIsReadyListener listener);
     }
 }

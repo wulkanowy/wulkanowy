@@ -22,6 +22,8 @@ import io.github.wulkanowy.data.sync.grades.GradeSync;
 import io.github.wulkanowy.data.sync.login.LoginSync;
 import io.github.wulkanowy.data.sync.login.LoginSyncContract;
 import io.github.wulkanowy.data.sync.subjects.SubjectSync;
+import io.github.wulkanowy.data.sync.timetable.TimetableSync;
+import io.github.wulkanowy.data.sync.timetable.TimetableSyncContract;
 import io.github.wulkanowy.di.annotations.ApplicationContext;
 import io.github.wulkanowy.di.annotations.DatabaseInfo;
 import io.github.wulkanowy.di.annotations.SharedPreferencesInfo;
@@ -109,5 +111,11 @@ public class ApplicationModule {
     @Provides
     SyncContract provideSubjectSync(SubjectSync subjectSync) {
         return subjectSync;
+    }
+
+    @Singleton
+    @Provides
+    TimetableSyncContract provideTimetableSync(TimetableSync timetableSync) {
+        return timetableSync;
     }
 }

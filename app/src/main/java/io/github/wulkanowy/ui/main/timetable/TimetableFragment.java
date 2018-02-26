@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.component.ActivityComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
+import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
 public class TimetableFragment extends BaseFragment implements TimetableContract.View, TabLayout.OnTabSelectedListener {
 
@@ -25,9 +26,6 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
 
     @BindView(R.id.timetable_fragment_tab_layout)
     TabLayout tabLayout;
-
-    @BindView(R.id.timetable_fragment_progress_bar)
-    View progressBar;
 
     @Inject
     TimetablePagerAdapter pagerAdapter;
@@ -44,21 +42,20 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
         if (component != null) {
             component.inject(this);
             setButterKnife(ButterKnife.bind(this, view));
-            presenter.onStart(this, isSelected());
+            presenter.onStart(this, (OnFragmentIsReadyListener) getActivity());
         }
         return view;
     }
 
     @Override
     protected void setUpOnViewCreated(View fragmentView) {
-        showProgressBar(false);
     }
 
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (presenter != null) {
-            presenter.onFragmentVisible(isSelected());
+            presenter.onFragmentVisible(menuVisible);
         }
     }
 
@@ -78,6 +75,11 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     }
 
     @Override
+    public void setTabDataToAdapter(TabsData tabsData) {
+        pagerAdapter.setTabsData(tabsData);
+    }
+
+    @Override
     public void setAdapterWithTabLayout() {
         viewPager.setAdapter(pagerAdapter);
 
@@ -86,8 +88,8 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     }
 
     @Override
-    public void addPageToAdapter(TimetableTabFragment fragment, String title) {
-        pagerAdapter.addFragment(fragment, title);
+    public void setChildFragmentSelected(int position, boolean selected) {
+        ((TimetableTabFragment) pagerAdapter.getItem(position)).setSelected(selected);
     }
 
     @Override
@@ -98,16 +100,6 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     @Override
     public void setActivityTitle() {
         setTitle(getString(R.string.lessonplan_text));
-    }
-
-    @Override
-    public void setChildFragmentSelected(int position, boolean selected) {
-        ((BaseFragment) pagerAdapter.getItem(position)).setSelected(selected);
-    }
-
-    @Override
-    public void showProgressBar(boolean show) {
-        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override

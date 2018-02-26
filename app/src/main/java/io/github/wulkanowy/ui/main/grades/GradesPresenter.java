@@ -9,14 +9,21 @@ import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.ui.base.BasePresenter;
-import io.github.wulkanowy.ui.main.RefreshCallback;
-import io.github.wulkanowy.ui.main.RefreshTask;
-import io.github.wulkanowy.utils.LogUtils;
+import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
+import io.github.wulkanowy.utils.async.AbstractTask;
+import io.github.wulkanowy.utils.async.AsyncListeners;
 
 public class GradesPresenter extends BasePresenter<GradesContract.View>
-        implements GradesContract.Presenter, RefreshCallback {
+        implements GradesContract.Presenter, AsyncListeners.OnRefreshListener,
+        AsyncListeners.OnFirstLoadingListener {
 
-    private RefreshTask refreshTask;
+    private AbstractTask refreshTask;
+
+    private AbstractTask loadingTask;
+
+    private OnFragmentIsReadyListener listener;
+
+    private List<GradeHeaderItem> headerItems = new ArrayList<>();
 
     private boolean isFirstSight = false;
 
@@ -26,12 +33,18 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     }
 
     @Override
-    public void onStart(GradesContract.View view, boolean isSelected) {
+    public void onStart(GradesContract.View view, OnFragmentIsReadyListener listener) {
         super.onStart(view);
-        getView().showProgressBar(true);
+        this.listener = listener;
 
-        if (isSelected) {
-            onFragmentVisible(true);
+        getView().setActivityTitle();
+
+        if (!isFirstSight) {
+            isFirstSight = true;
+
+            loadingTask = new AbstractTask();
+            loadingTask.setOnFirstLoadingListener(this);
+            loadingTask.execute();
         }
     }
 
@@ -39,17 +52,14 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     public void onFragmentVisible(boolean isVisible) {
         if (isVisible) {
             getView().setActivityTitle();
-            if (!isFirstSight) {
-                isFirstSight = true;
-                setItemsFromDb();
-            }
         }
     }
 
     @Override
     public void onRefresh() {
         if (getView().isNetworkConnected()) {
-            refreshTask = new RefreshTask(this);
+            refreshTask = new AbstractTask();
+            refreshTask.setOnRefreshListener(this);
             refreshTask.execute();
         } else {
             getView().onNoNetworkError();
@@ -58,21 +68,23 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     }
 
     @Override
-    public void onDoInBackground() throws Exception {
+    public void onDoInBackgroundRefresh() throws Exception {
         getRepository().loginCurrentUser();
         getRepository().syncSubjects();
         getRepository().syncGrades();
     }
 
     @Override
-    public void onCanceledAsync() {
+    public void onCanceledRefreshAsync() {
         getView().hideRefreshingBar();
     }
 
     @Override
-    public void onEndAsync(boolean success, Exception exception) {
+    public void onEndRefreshAsync(boolean success, Exception exception) {
         if (success) {
-            setItemsFromDb();
+            loadingTask = new AbstractTask();
+            loadingTask.setOnFirstLoadingListener(this);
+            loadingTask.execute();
 
             int numberOfNewGrades = getRepository().getNumberOfNewGrades();
 
@@ -82,15 +94,13 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
                 getView().onRefreshSuccess(numberOfNewGrades);
             }
         } else {
-            LogUtils.error("An error occurred during the update of the data", exception);
             getView().onError(getRepository().getErrorLoginMessage(exception));
         }
         getView().hideRefreshingBar();
     }
 
-    private void setItemsFromDb() {
-        List<GradeHeaderItem> headerItems = new ArrayList<>();
-
+    @Override
+    public void onDoInBackgroundLoading() throws Exception {
         List<Subject> subjectList = getRepository().getCurrentUser().getSubjectList();
 
         for (Subject subject : subjectList) {
@@ -104,19 +114,29 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
                 for (Grade grade : gradeList) {
                     subItems.add(new GradesSubItem(headerItem, grade));
                 }
+
                 headerItem.setSubItems(subItems);
                 headerItem.setExpanded(false);
                 headerItems.add(headerItem);
             }
         }
+    }
 
+    @Override
+    public void onCanceledLoadingAsync() {
+        // do nothing
+    }
+
+    @Override
+    public void onEndLoadingAsync(boolean result, Exception exception) {
         if (headerItems.isEmpty()) {
             getView().showNoItem(true);
         } else {
             getView().updateAdapterList(headerItems);
             getView().showNoItem(false);
+            headerItems = new ArrayList<>();
+            listener.onFragmentIsReady();
         }
-        getView().showProgressBar(false);
     }
 
     @Override
@@ -125,6 +145,10 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         if (refreshTask != null) {
             refreshTask.cancel(true);
             refreshTask = null;
+        }
+        if (loadingTask != null) {
+            loadingTask.cancel(true);
+            loadingTask = null;
         }
     }
 }

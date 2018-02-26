@@ -9,7 +9,7 @@ import io.github.wulkanowy.ui.base.BasePresenter;
 public class MainPresenter extends BasePresenter<MainContract.View>
         implements MainContract.Presenter {
 
-    private int currentTabPosition = 0;
+    private int fragmentCount = 0;
 
     @Inject
     MainPresenter(RepositoryContract repository) {
@@ -17,19 +17,28 @@ public class MainPresenter extends BasePresenter<MainContract.View>
     }
 
     @Override
-    public void onTabSelected(int position, boolean wasSelected, int defaultPosition) {
+    public void onStart(MainContract.View view) {
+        super.onStart(view);
+        getView().showProgressBar(true);
+        getView().hideActionBar();
+    }
+
+    @Override
+    public void onTabSelected(int position, boolean wasSelected) {
         if (!wasSelected) {
-            getView().setChildFragmentSelected(position, true);
             getView().setCurrentPage(position);
+        }
+    }
 
-            getView().setChildFragmentSelected(position, false);
-
-            currentTabPosition = position;
+    @Override
+    public void onFragmentIsReady() {
+        if (fragmentCount < 5) {
+            fragmentCount++;
         }
 
-        if (wasSelected && position == defaultPosition && currentTabPosition == 0) {
-            getView().setChildFragmentSelected(position, true);
-            currentTabPosition = position;
+        if (fragmentCount == 5) {
+            getView().showActionBar();
+            getView().showProgressBar(false);
         }
     }
 }

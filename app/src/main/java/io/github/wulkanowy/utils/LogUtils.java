@@ -15,4 +15,8 @@ public final class LogUtils {
     public static void error(String message, Throwable throwable) {
         Log.e(AppConstant.APP_NAME, message, throwable);
     }
+
+    public static void error(String message) {
+        Log.e(AppConstant.APP_NAME, message);
+    }
 }

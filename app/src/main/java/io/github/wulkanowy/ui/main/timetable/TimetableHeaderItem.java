@@ -23,7 +23,7 @@ public class TimetableHeaderItem
 
     private Day day;
 
-    public TimetableHeaderItem(Day day) {
+    TimetableHeaderItem(Day day) {
         this.day = day;
     }
 

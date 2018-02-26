@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.view.View;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -15,13 +17,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
-import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.main.dashboard.DashboardFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
 
 public class MainActivity extends BaseActivity implements MainContract.View,
-        AHBottomNavigation.OnTabSelectedListener {
+        AHBottomNavigation.OnTabSelectedListener, OnFragmentIsReadyListener {
 
     private static final int DEFAULT_TAB_POSITION = 0;
 
@@ -30,6 +31,9 @@ public class MainActivity extends BaseActivity implements MainContract.View,
 
     @BindView(R.id.main_activity_view_pager)
     AHBottomNavigationViewPager viewPager;
+
+    @BindView(R.id.main_activity_progress_bar)
+    View progressBar;
 
     @Inject
     MainPagerAdapter pagerAdapter;
@@ -61,14 +65,31 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.onDestroy();
+    public void showProgressBar(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+        viewPager.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
+        bottomNavigation.setVisibility(show ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    @Override
+    public void showActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.show();
+        }
+    }
+
+    @Override
+    public void hideActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
     }
 
     @Override
     public boolean onTabSelected(int position, boolean wasSelected) {
-        presenter.onTabSelected(position, wasSelected, DEFAULT_TAB_POSITION);
+        presenter.onTabSelected(position, wasSelected);
         return true;
     }
 
@@ -78,8 +99,8 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     }
 
     @Override
-    public void setChildFragmentSelected(int position, boolean selected) {
-        ((BaseFragment) pagerAdapter.getItem(position)).setSelected(selected);
+    public void onFragmentIsReady() {
+        presenter.onFragmentIsReady();
     }
 
     private void initiationBottomNav() {
@@ -110,6 +131,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
         bottomNavigation.setOnTabSelectedListener(this);
         bottomNavigation.setCurrentItem(DEFAULT_TAB_POSITION);
+        bottomNavigation.setBehaviorTranslationEnabled(false);
     }
 
     private void initiationViewPager() {
@@ -123,5 +145,11 @@ public class MainActivity extends BaseActivity implements MainContract.View,
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOffscreenPageLimit(4);
         viewPager.setCurrentItem(DEFAULT_TAB_POSITION, false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 }

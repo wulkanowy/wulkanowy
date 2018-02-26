@@ -9,13 +9,18 @@ public interface MainContract {
 
         void setCurrentPage(int position);
 
-        void setChildFragmentSelected(int position, boolean selected);
+        void showProgressBar(boolean show);
+
+        void showActionBar();
+
+        void hideActionBar();
     }
 
     @PerActivity
     interface Presenter extends BaseContract.Presenter<View> {
 
-        void onTabSelected(int position, boolean wasSelected, int defaultPosition);
+        void onTabSelected(int position, boolean wasSelected);
 
+        void onFragmentIsReady();
     }
 }

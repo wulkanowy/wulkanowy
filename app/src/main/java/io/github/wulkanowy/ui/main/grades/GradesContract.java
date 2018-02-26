@@ -6,12 +6,11 @@ import java.util.List;
 
 import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.ui.base.BaseContract;
+import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
 public interface GradesContract {
 
     interface View extends BaseContract.View, SwipeRefreshLayout.OnRefreshListener {
-
-        void showProgressBar(boolean show);
 
         void updateAdapterList(List<GradeHeaderItem> headerItems);
 
@@ -34,6 +33,6 @@ public interface GradesContract {
 
         void onRefresh();
 
-        void onStart(View view, boolean isSelected);
+        void onStart(View view, OnFragmentIsReadyListener listener);
     }
 }

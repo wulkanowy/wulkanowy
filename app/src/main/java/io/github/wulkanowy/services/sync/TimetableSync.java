@@ -45,7 +45,7 @@ public class TimetableSync {
         if (week1 != null) {
             weekId = week1.getId();
         } else {
-            weekId = weekDao.insert(DataObjectConverter.weekToWeekEntitie(week).setUserId(loginSession.getUserId()));
+            weekId = weekDao.insert(DataObjectConverter.weekToWeekEntity(week).setUserId(loginSession.getUserId()));
         }
 
         List<Day> dayList = week.getDays();

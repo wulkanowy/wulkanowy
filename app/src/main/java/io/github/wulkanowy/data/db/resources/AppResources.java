@@ -14,6 +14,8 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.di.annotations.ApplicationContext;
+import io.github.wulkanowy.utils.AppConstant;
+import io.github.wulkanowy.utils.LogUtils;
 import io.github.wulkanowy.utils.security.CryptoException;
 
 @Singleton
@@ -38,6 +40,8 @@ public class AppResources implements ResourcesContract {
 
     @Override
     public String getErrorLoginMessage(Exception exception) {
+        LogUtils.error(AppConstant.APP_NAME + " encountered a error", exception);
+
         if (exception instanceof CryptoException) {
             return resources.getString(R.string.encrypt_failed_text);
         } else if (exception instanceof UnknownHostException) {

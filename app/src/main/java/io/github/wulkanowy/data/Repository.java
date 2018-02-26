@@ -20,6 +20,7 @@ import io.github.wulkanowy.data.db.resources.ResourcesContract;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
 import io.github.wulkanowy.data.sync.SyncContract;
 import io.github.wulkanowy.data.sync.login.LoginSyncContract;
+import io.github.wulkanowy.data.sync.timetable.TimetableSyncContract;
 import io.github.wulkanowy.di.annotations.SyncGrades;
 import io.github.wulkanowy.di.annotations.SyncSubjects;
 import io.github.wulkanowy.utils.security.CryptoException;
@@ -35,6 +36,8 @@ public class Repository implements RepositoryContract {
 
     private final LoginSyncContract loginSync;
 
+    private final TimetableSyncContract timetableSync;
+
     private final SyncContract gradeSync;
 
     private final SyncContract subjectSync;
@@ -44,12 +47,14 @@ public class Repository implements RepositoryContract {
                ResourcesContract resources,
                DaoSession daoSession,
                LoginSyncContract loginSync,
+               TimetableSyncContract timetableSync,
                @SyncGrades SyncContract gradeSync,
                @SyncSubjects SyncContract subjectSync) {
         this.sharedPref = sharedPref;
         this.resources = resources;
         this.daoSession = daoSession;
         this.loginSync = loginSync;
+        this.timetableSync = timetableSync;
         this.gradeSync = gradeSync;
         this.subjectSync = subjectSync;
     }
@@ -98,9 +103,20 @@ public class Repository implements RepositoryContract {
     }
 
     @Override
+    public void syncTimetable() throws NotLoggedInErrorException, IOException, ParseException {
+        timetableSync.syncTimetable();
+    }
+
+    @Override
+    public void syncTimetable(String date) throws NotLoggedInErrorException, IOException, ParseException {
+        timetableSync.syncTimetable(date);
+    }
+
+    @Override
     public void syncAll() throws NotLoggedInErrorException, IOException, ParseException {
         syncSubjects();
         syncGrades();
+        syncTimetable();
     }
 
     @Override

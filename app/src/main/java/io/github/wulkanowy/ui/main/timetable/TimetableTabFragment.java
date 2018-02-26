@@ -3,14 +3,19 @@ package io.github.wulkanowy.ui.main.timetable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
+import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.component.ActivityComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
@@ -20,6 +25,11 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
     private static final String ARGUMENT_KEY = "Date";
 
     private boolean isPrimary = false;
+
+    private boolean isSelected = false;
+
+    @BindView(R.id.timetable_tab_fragment_recycler)
+    RecyclerView recyclerView;
 
     @Inject
     TimetableTabContract.Presenter presenter;
@@ -58,16 +68,32 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     @Override
     protected void setUpOnViewCreated(View fragmentView) {
+        adapter.setAutoCollapseOnExpand(true);
+        adapter.setAutoScrollOnExpand(true);
+        adapter.expandItemsAtStartUp();
+
+        recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(fragmentView.getContext()));
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void updateAdapterList(List<TimetableHeaderItem> headerItems) {
+        adapter.updateDataSet(headerItems);
     }
 
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (presenter != null && getView() != null) {
-            presenter.onFragmentVisible(isSelected());
-        } else if (isSelected()) {
+            presenter.onFragmentSelected(isSelected);
+        } else if (isSelected) {
             isPrimary = true;
         }
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     @Override

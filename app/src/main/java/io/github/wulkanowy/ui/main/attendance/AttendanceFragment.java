@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.component.ActivityComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
+import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
 public class AttendanceFragment extends BaseFragment implements AttendanceContract.View {
 
@@ -31,7 +32,7 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
         if (component != null) {
             component.inject(this);
             setButterKnife(ButterKnife.bind(this, view));
-            presenter.onStart(this);
+            presenter.onStart(this, (OnFragmentIsReadyListener) getActivity());
         }
 
         return view;
@@ -40,6 +41,19 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     @Override
     protected void setUpOnViewCreated(View fragmentView) {
 
+    }
+
+    @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (presenter != null) {
+            presenter.onFragmentVisible(menuVisible);
+        }
+    }
+
+    @Override
+    public void setActivityTitle() {
+        setTitle(getString(R.string.dashboard_text));
     }
 
     @Override

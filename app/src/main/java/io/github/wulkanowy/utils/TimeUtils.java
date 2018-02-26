@@ -33,7 +33,7 @@ public final class TimeUtils {
     }
 
     public static long getNetTicks(String dateString) throws ParseException {
-        return getNetTicks(dateString, "dd.MM.yyyy");
+        return getNetTicks(dateString, DATE_PATTERN);
     }
 
     public static long getNetTicks(String dateString, String dateFormat) throws ParseException {
