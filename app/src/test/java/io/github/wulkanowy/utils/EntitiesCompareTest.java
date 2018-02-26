@@ -52,7 +52,8 @@ public class EntitiesCompareTest {
 
         List<Grade> updatedList = EntitiesCompare.compareGradeList(newList, oldList);
 
-        Assert.assertFalse(updatedList.get(0).getIsNew());
+        Assert.assertTrue(updatedList.get(0).getRead());
+        Assert.assertTrue(updatedList.get(0).getIsNew());
 
     }
 
