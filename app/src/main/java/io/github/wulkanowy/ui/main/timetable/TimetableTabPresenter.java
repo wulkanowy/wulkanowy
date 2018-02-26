@@ -145,5 +145,14 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     public void onDestroy() {
         super.onDestroy();
         isFirstSight = false;
+
+        if (refreshTask != null) {
+            refreshTask.cancel(true);
+            refreshTask = null;
+        }
+        if (loadingTask != null) {
+            loadingTask.cancel(true);
+            loadingTask = null;
+        }
     }
 }
