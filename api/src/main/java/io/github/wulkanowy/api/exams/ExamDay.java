@@ -3,7 +3,9 @@ package io.github.wulkanowy.api.exams;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Day extends io.github.wulkanowy.api.generic.Day {
+import io.github.wulkanowy.api.generic.Day;
+
+public class ExamDay extends Day {
 
     private List<Exam> examList = new ArrayList<>();
 
@@ -11,8 +13,7 @@ public class Day extends io.github.wulkanowy.api.generic.Day {
         return examList;
     }
 
-    public Day addExam(Exam exam) {
+    public void addExam(Exam exam) {
         this.examList.add(exam);
-        return this;
     }
 }

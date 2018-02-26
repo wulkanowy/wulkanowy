@@ -21,18 +21,18 @@ public class ExamsWeek {
         this.snp = snp;
     }
 
-    public Week<Day> getCurrent() throws IOException {
+    public Week<ExamDay> getCurrent() throws IOException {
         return getWeek("", true);
     }
 
-    public Week<Day> getWeek(String tick, final boolean onlyNotEmpty) throws IOException {
+    public Week<ExamDay> getWeek(String tick, final boolean onlyNotEmpty) throws IOException {
         Document examsPage = snp.getSnPPageDocument(EXAMS_PAGE_URL + tick);
         Elements examsDays = examsPage.select(".mainContainer > div:not(.navigation)");
 
-        List<Day> days = new ArrayList<>();
+        List<ExamDay> days = new ArrayList<>();
 
         for (Element item : examsDays) {
-            Day day = new Day();
+            ExamDay day = new ExamDay();
             Element dayHeading = item.select("h2").first();
 
             if (null == dayHeading && onlyNotEmpty) {
@@ -57,7 +57,7 @@ public class ExamsWeek {
             days.add(day);
         }
 
-        return new Week<Day>()
+        return new Week<ExamDay>()
                 .setStartDayDate(examsDays.select("h2").first().text().split(" ")[1])
                 .setDays(days);
     }
