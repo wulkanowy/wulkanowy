@@ -7,12 +7,14 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Property;
 
+import java.io.Serializable;
+
 @Entity(
         nameInDb = "Lessons",
         active = true,
-        indexes ={@Index(value = "dayId,date,startTime,endTime", unique = true)}
+        indexes = {@Index(value = "dayId,date,startTime,endTime", unique = true)}
 )
-public class Lesson {
+public class Lesson implements Serializable {
 
     @Id(autoincrement = true)
     private Long id;
@@ -64,6 +66,8 @@ public class Lesson {
 
     @Property(nameInDb = "IS_NEW_MOVED_IN_CANCELED")
     private boolean isNewMovedInOrChanged = false;
+
+    private static final long serialVersionUID = 42L;
 
     /**
      * Used to resolve relations
