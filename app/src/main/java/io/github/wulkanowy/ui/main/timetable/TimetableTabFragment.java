@@ -3,6 +3,8 @@ package io.github.wulkanowy.ui.main.timetable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +22,8 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.component.ActivityComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
 
-public class TimetableTabFragment extends BaseFragment implements TimetableTabContract.View {
+public class TimetableTabFragment extends BaseFragment implements TimetableTabContract.View,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String ARGUMENT_KEY = "Date";
 
@@ -30,6 +33,12 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     @BindView(R.id.timetable_tab_fragment_recycler)
     RecyclerView recyclerView;
+
+    @BindView(R.id.timetable_tab_fragment_swipe_refresh)
+    SwipeRefreshLayout refreshLayout;
+
+    @BindView(R.id.timetable_tab_fragment_progress_bar)
+    View progressBar;
 
     @Inject
     TimetableTabContract.Presenter presenter;
@@ -75,6 +84,9 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
         recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(fragmentView.getContext()));
         recyclerView.setAdapter(adapter);
 
+        refreshLayout.setColorSchemeResources(android.R.color.black);
+        refreshLayout.setOnRefreshListener(this);
+
     }
 
     @Override
@@ -92,8 +104,36 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
         }
     }
 
+    @Override
+    public void onRefresh() {
+        presenter.onRefresh();
+    }
+
+    @Override
+    public void onRefreshSuccess() {
+        onError(R.string.timetable_refresh_success);
+    }
+
+    @Override
+    public void hideRefreshingBar() {
+        refreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showProgressBar(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    }
+
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    @Override
+    public void onError(String message) {
+        if (getActivity() != null) {
+            Snackbar.make(getActivity().findViewById(R.id.main_activity_view_pager),
+                    message, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override

@@ -103,6 +103,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     public void onDoInBackgroundLoading() throws Exception {
         List<Subject> subjectList = getRepository().getCurrentUser().getSubjectList();
 
+        headerItems = new ArrayList<>();
+
         for (Subject subject : subjectList) {
             List<Grade> gradeList = subject.getGradeList();
 
@@ -134,7 +136,6 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         } else {
             getView().updateAdapterList(headerItems);
             getView().showNoItem(false);
-            headerItems = new ArrayList<>();
             listener.onFragmentIsReady();
         }
     }

@@ -9,6 +9,12 @@ public interface TimetableTabContract {
     interface View extends BaseContract.View {
 
         void updateAdapterList(List<TimetableHeaderItem> headerItems);
+
+        void onRefreshSuccess();
+
+        void hideRefreshingBar();
+
+        void showProgressBar(boolean show);
     }
 
     interface Presenter extends BaseContract.Presenter<View> {
@@ -18,5 +24,7 @@ public interface TimetableTabContract {
         void setArgumentDate(String date);
 
         void onStart(View view, boolean isPrimary);
+
+        void onRefresh();
     }
 }
