@@ -15,9 +15,10 @@
         <item name="android:colorBackground">@android:color/white</item>
     </style>
 
-    <style name="WulkanowyTheme.noActionBar" parent="WulkanowyTheme">
+    <style name="WulkanowyTheme.SplashTheme" parent="WulkanowyTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
 </resources>

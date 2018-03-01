@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.splash;
 
-import android.os.Handler;
 import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
@@ -20,15 +19,10 @@ public class SplashPresenter extends BasePresenter<SplashContract.View>
     public void onStart(@NonNull SplashContract.View activity) {
         super.onStart(activity);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (getRepository().getCurrentUserId() == 0) {
-                    getView().openLoginActivity();
-                } else {
-                    getView().openMainActivity();
-                }
-            }
-        }, 500);
+        if (getRepository().getCurrentUserId() == 0) {
+            getView().openLoginActivity();
+        } else {
+            getView().openMainActivity();
+        }
     }
 }
