@@ -14,11 +14,10 @@ import io.github.wulkanowy.di.modules.ApplicationModule;
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
 
-    void inject(WulkanowyApp wulkanowyApp);
-
     @ApplicationContext
     Context getContext();
 
     RepositoryContract getRepository();
 
+    void inject(WulkanowyApp wulkanowyApp);
 }

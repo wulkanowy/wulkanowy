@@ -19,6 +19,8 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
 
     private List<String> dates = new ArrayList<>();
 
+    private TabsData tabsData = new TabsData();
+
     private OnFragmentIsReadyListener listener;
 
     private int positionToScroll;
@@ -35,7 +37,9 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
         super.onStart(view);
         this.listener = listener;
 
-        getView().setActivityTitle();
+        if (getView().isMenuVisible()) {
+            getView().setActivityTitle();
+        }
 
         if (dates.isEmpty()) {
             dates = TimeUtils.getMondaysFromCurrentSchoolYear();
@@ -70,15 +74,10 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
 
     @Override
     public void onDoInBackgroundLoading() throws Exception {
-        TabsData tabsData = new TabsData();
         for (String date : dates) {
-            tabsData.addTitle(date)
-                    .addFragment(TimetableTabFragment.newInstance(date));
+            tabsData.addTitle(date);
+            tabsData.addFragment(TimetableTabFragment.newInstance(date));
         }
-
-        getView().setTabDataToAdapter(tabsData);
-
-
     }
 
     @Override
@@ -90,6 +89,7 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
     @Override
     public void onEndLoadingAsync(boolean result, Exception exception) {
         if (result) {
+            getView().setTabDataToAdapter(tabsData);
             getView().setAdapterWithTabLayout();
             getView().scrollViewPagerToPosition(positionToScroll);
             listener.onFragmentIsReady();

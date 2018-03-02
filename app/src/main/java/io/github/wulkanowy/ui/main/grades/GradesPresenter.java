@@ -37,7 +37,9 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         super.onStart(view);
         this.listener = listener;
 
-        getView().setActivityTitle();
+        if (getView().isMenuVisible()) {
+            getView().setActivityTitle();
+        }
 
         if (!isFirstSight) {
             isFirstSight = true;

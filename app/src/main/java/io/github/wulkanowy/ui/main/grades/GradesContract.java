@@ -24,6 +24,8 @@ public interface GradesContract {
 
         void setActivityTitle();
 
+        boolean isMenuVisible();
+
     }
 
     @PerActivity

@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.di.component.ActivityComponent;
+import io.github.wulkanowy.di.component.FragmentComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
@@ -28,7 +28,7 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attendance, container, false);
 
-        ActivityComponent component = getActivityComponent();
+        FragmentComponent component = getFragmentComponent();
         if (component != null) {
             component.inject(this);
             setButterKnife(ButterKnife.bind(this, view));

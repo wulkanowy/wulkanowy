@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import dagger.Module;
 import dagger.Provides;
-import eu.davidea.flexibleadapter.FlexibleAdapter;
 import io.github.wulkanowy.di.annotations.ActivityContext;
 import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.ui.login.LoginContract;
@@ -14,19 +13,6 @@ import io.github.wulkanowy.ui.login.LoginPresenter;
 import io.github.wulkanowy.ui.main.MainContract;
 import io.github.wulkanowy.ui.main.MainPagerAdapter;
 import io.github.wulkanowy.ui.main.MainPresenter;
-import io.github.wulkanowy.ui.main.attendance.AttendanceContract;
-import io.github.wulkanowy.ui.main.attendance.AttendancePresenter;
-import io.github.wulkanowy.ui.main.dashboard.DashboardContract;
-import io.github.wulkanowy.ui.main.dashboard.DashboardPresenter;
-import io.github.wulkanowy.ui.main.grades.GradeHeaderItem;
-import io.github.wulkanowy.ui.main.grades.GradesContract;
-import io.github.wulkanowy.ui.main.grades.GradesPresenter;
-import io.github.wulkanowy.ui.main.timetable.TimetableContract;
-import io.github.wulkanowy.ui.main.timetable.TimetableHeaderItem;
-import io.github.wulkanowy.ui.main.timetable.TimetablePagerAdapter;
-import io.github.wulkanowy.ui.main.timetable.TimetablePresenter;
-import io.github.wulkanowy.ui.main.timetable.TimetableTabContract;
-import io.github.wulkanowy.ui.main.timetable.TimetableTabPresenter;
 import io.github.wulkanowy.ui.splash.SplashContract;
 import io.github.wulkanowy.ui.splash.SplashPresenter;
 
@@ -71,52 +57,8 @@ public class ActivityModule {
         return mainPresenter;
     }
 
-    @PerActivity
-    @Provides
-    GradesContract.Presenter provideGradesPresenter(GradesPresenter gradesPresenter) {
-        return gradesPresenter;
-    }
-
-    @PerActivity
-    @Provides
-    AttendanceContract.Presenter provideAttendancePresenter(AttendancePresenter attendancePresenter) {
-        return attendancePresenter;
-    }
-
-    @PerActivity
-    @Provides
-    DashboardContract.Presenter provideDashboardPresenter(DashboardPresenter dashboardPresenter) {
-        return dashboardPresenter;
-    }
-
-    @PerActivity
-    @Provides
-    TimetableContract.Presenter provideTimetablePresenter(TimetablePresenter timetablePresenter) {
-        return timetablePresenter;
-    }
-
-    @Provides
-    TimetableTabContract.Presenter provideTimetableTabPresenter(TimetableTabPresenter timetableTabPresenter) {
-        return timetableTabPresenter;
-    }
-
     @Provides
     MainPagerAdapter provideMainPagerAdapter() {
         return new MainPagerAdapter(activity.getSupportFragmentManager());
-    }
-
-    @Provides
-    TimetablePagerAdapter provideTimetablePagerAdapter() {
-        return new TimetablePagerAdapter(activity.getSupportFragmentManager());
-    }
-
-    @Provides
-    FlexibleAdapter<GradeHeaderItem> provideGradesAdapter() {
-        return new FlexibleAdapter<>(null);
-    }
-
-    @Provides
-    FlexibleAdapter<TimetableHeaderItem> provideTimetableTabAdapter() {
-        return new FlexibleAdapter<>(null);
     }
 }

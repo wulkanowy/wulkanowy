@@ -9,6 +9,8 @@ public interface DashboardContract {
     interface View extends BaseContract.View {
 
         void setActivityTitle();
+
+        boolean isMenuVisible();
     }
 
     @PerActivity

@@ -24,7 +24,7 @@ import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
 public class MainActivity extends BaseActivity implements MainContract.View,
         AHBottomNavigation.OnTabSelectedListener, OnFragmentIsReadyListener {
 
-    private static final int DEFAULT_TAB_POSITION = 0;
+    private static final int DEFAULT_TAB_POSITION = 3;
 
     @BindView(R.id.main_activity_nav)
     AHBottomNavigation bottomNavigation;

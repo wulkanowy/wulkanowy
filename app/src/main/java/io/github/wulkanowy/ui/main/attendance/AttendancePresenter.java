@@ -21,7 +21,9 @@ public class AttendancePresenter extends BasePresenter<AttendanceContract.View>
         super.onStart(view);
         this.listener = listener;
 
-        getView().setActivityTitle();
+        if (getView().isMenuVisible()) {
+            getView().setActivityTitle();
+        }
 
         this.listener.onFragmentIsReady();
     }

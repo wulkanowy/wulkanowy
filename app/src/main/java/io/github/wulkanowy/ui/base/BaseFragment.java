@@ -9,7 +9,10 @@ import android.view.View;
 
 import butterknife.Unbinder;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.di.component.ActivityComponent;
+import io.github.wulkanowy.WulkanowyApp;
+import io.github.wulkanowy.di.component.DaggerFragmentComponent;
+import io.github.wulkanowy.di.component.FragmentComponent;
+import io.github.wulkanowy.di.modules.FragmentModule;
 
 public abstract class BaseFragment extends Fragment implements BaseContract.View {
 
@@ -17,12 +20,19 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     private Unbinder unbinder;
 
+    private FragmentComponent fragmentComponent;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof BaseActivity) {
             activity = (BaseActivity) context;
         }
+
+        fragmentComponent = DaggerFragmentComponent.builder()
+                .fragmentModule(new FragmentModule(this))
+                .applicationComponent(((WulkanowyApp) activity.getApplication()).getApplicationComponent())
+                .build();
     }
 
     @Override
@@ -83,11 +93,8 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         }
     }
 
-    public ActivityComponent getActivityComponent() {
-        if (activity != null) {
-            return activity.getActivityComponent();
-        }
-        return null;
+    public FragmentComponent getFragmentComponent() {
+        return fragmentComponent;
     }
 
     protected abstract void setUpOnViewCreated(View fragmentView);

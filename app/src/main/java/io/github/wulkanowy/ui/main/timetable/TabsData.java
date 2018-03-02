@@ -15,11 +15,10 @@ class TabsData {
         return fragments.get(index);
     }
 
-    TabsData addFragment(Fragment fragment) {
+    void addFragment(Fragment fragment) {
         if (fragment != null) {
             fragments.add(fragment);
         }
-        return this;
     }
 
     int getFragmentsCount() {
@@ -30,10 +29,9 @@ class TabsData {
         return titles.get(index);
     }
 
-    TabsData addTitle(String title) {
+    void addTitle(String title) {
         if (title != null) {
             titles.add(title);
         }
-        return this;
     }
 }

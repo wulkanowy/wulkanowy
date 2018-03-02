@@ -17,6 +17,8 @@ public interface TimetableContract {
         void setAdapterWithTabLayout();
 
         void setChildFragmentSelected(int position, boolean selected);
+
+        boolean isMenuVisible();
     }
 
     @PerActivity
