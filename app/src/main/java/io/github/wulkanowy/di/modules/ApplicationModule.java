@@ -3,6 +3,9 @@ package io.github.wulkanowy.di.modules;
 import android.app.Application;
 import android.content.Context;
 
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -117,5 +120,10 @@ public class ApplicationModule {
     @Provides
     TimetableSyncContract provideTimetableSync(TimetableSync timetableSync) {
         return timetableSync;
+    }
+
+    @Provides
+    FirebaseJobDispatcher provideDispatcher() {
+        return new FirebaseJobDispatcher(new GooglePlayDriver(application));
     }
 }

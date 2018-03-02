@@ -1,4 +1,4 @@
-package io.github.wulkanowy.services.notifications;
+package io.github.wulkanowy.services;
 
 
 import android.annotation.TargetApi;
