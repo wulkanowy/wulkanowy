@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
+import io.github.wulkanowy.services.SyncJob;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.main.dashboard.DashboardFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
@@ -24,7 +25,7 @@ import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
 public class MainActivity extends BaseActivity implements MainContract.View,
         AHBottomNavigation.OnTabSelectedListener, OnFragmentIsReadyListener {
 
-    private static final int DEFAULT_TAB_POSITION = 3;
+    private static int initTabPosition = 3;
 
     @BindView(R.id.main_activity_nav)
     AHBottomNavigation bottomNavigation;
@@ -49,6 +50,8 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initTabPosition = getIntent().getIntExtra(SyncJob.EXTRA_INTENT_KEY, initTabPosition);
 
         getActivityComponent().inject(this);
         setButterKnife(ButterKnife.bind(this));
@@ -130,7 +133,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
         bottomNavigation.setBackgroundColor(getResources().getColor(R.color.colorBackgroundBottomNavi));
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
         bottomNavigation.setOnTabSelectedListener(this);
-        bottomNavigation.setCurrentItem(DEFAULT_TAB_POSITION);
+        bottomNavigation.setCurrentItem(initTabPosition);
         bottomNavigation.setBehaviorTranslationEnabled(false);
     }
 
@@ -144,7 +147,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
         viewPager.setPagingEnabled(false);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOffscreenPageLimit(4);
-        viewPager.setCurrentItem(DEFAULT_TAB_POSITION, false);
+        viewPager.setCurrentItem(initTabPosition, false);
     }
 
     @Override

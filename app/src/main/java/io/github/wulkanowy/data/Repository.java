@@ -3,6 +3,7 @@ package io.github.wulkanowy.data;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -13,6 +14,7 @@ import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
+import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.GradeDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
@@ -133,10 +135,9 @@ public class Repository implements RepositoryContract {
     }
 
     @Override
-    public int getNumberOfNewGrades() {
+    public List<Grade> getNewGrades() {
         return daoSession.getGradeDao().queryBuilder()
                 .where(GradeDao.Properties.IsNew.eq(1))
-                .list()
-                .size();
+                .list();
     }
 }

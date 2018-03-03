@@ -88,7 +88,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             loadingTask.setOnFirstLoadingListener(this);
             loadingTask.execute();
 
-            int numberOfNewGrades = getRepository().getNumberOfNewGrades();
+            int numberOfNewGrades = getRepository().getNewGrades().size();
 
             if (numberOfNewGrades <= 0) {
                 getView().onRefreshSuccessNoGrade();
