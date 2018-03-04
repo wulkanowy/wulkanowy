@@ -97,5 +97,8 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         return fragmentComponent;
     }
 
-    protected abstract void setUpOnViewCreated(View fragmentView);
+
+    protected void setUpOnViewCreated(View fragmentView) {
+        // do something on view created
+    }
 }

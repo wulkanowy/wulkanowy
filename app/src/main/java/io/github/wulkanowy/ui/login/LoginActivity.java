@@ -73,7 +73,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     }
 
-    @Override
     protected void setUpOnCreate() {
         symbolView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
                 getResources().getStringArray(R.array.symbols)));

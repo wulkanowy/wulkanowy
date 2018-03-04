@@ -8,7 +8,6 @@ import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
-import android.util.Log;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -27,26 +26,17 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.security.auth.x500.X500Principal;
 
+import io.github.wulkanowy.utils.LogUtils;
 import io.github.wulkanowy.utils.RootChecker;
 
-public class Scrambler {
-
-    public static final String DEBUG_TAG = "WulkanowySecurity";
+public final class Scrambler {
 
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
 
     private static KeyStore keyStore;
 
-    private static void loadKeyStore() throws CryptoException {
-
-        try {
-            keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
-            keyStore.load(null);
-        } catch (Exception e) {
-            Log.e(DEBUG_TAG, e.getMessage());
-            throw new CryptoException(e.getMessage());
-        }
-
+    private Scrambler() {
+        throw new IllegalStateException("Utility class");
     }
 
     public static String encrypt(String email, String plainText, Context context)
@@ -67,14 +57,21 @@ public class Scrambler {
     }
 
     public static String decrypt(String email, String encryptedText) throws CryptoException {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             loadKeyStore();
             return decryptString(email, encryptedText);
         } else {
             return new String(Base64.decode(encryptedText, Base64.DEFAULT));
         }
+    }
 
+    private static void loadKeyStore() throws CryptoException {
+        try {
+            keyStore = KeyStore.getInstance(ANDROID_KEYSTORE);
+            keyStore.load(null);
+        } catch (Exception e) {
+            throw new CryptoException(e.getMessage());
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -114,21 +111,15 @@ public class Scrambler {
                             ANDROID_KEYSTORE);
                     keyPairGenerator.initialize(spec);
                     keyPairGenerator.generateKeyPair();
-
-                } else {
-                    Log.d(DEBUG_TAG, "GenerateNewKey - " + alias + " is exist");
                 }
             } catch (Exception e) {
-                Log.e(DEBUG_TAG, e.getMessage());
                 throw new CryptoException(e.getMessage());
             }
         } else {
-            Log.e(DEBUG_TAG, "GenerateNewKey - String is empty");
             throw new CryptoException("GenerateNewKey - String is empty");
         }
 
-
-        Log.d(DEBUG_TAG, "Key pair are create");
+        LogUtils.debug("Key pair are create");
 
     }
 
@@ -153,11 +144,9 @@ public class Scrambler {
                 return Base64.encodeToString(values, Base64.DEFAULT);
 
             } catch (Exception e) {
-                Log.e(DEBUG_TAG, e.getMessage());
                 throw new CryptoException(e.getMessage());
             }
         } else {
-            Log.e(DEBUG_TAG, "EncryptString - String is empty");
             throw new CryptoException("EncryptString - String is empty");
         }
     }
@@ -185,15 +174,11 @@ public class Scrambler {
                 Byte[] bytes = values.toArray(new Byte[values.size()]);
 
                 return new String(ArrayUtils.toPrimitive(bytes), 0, bytes.length, "UTF-8");
-
             } catch (Exception e) {
-                Log.e(DEBUG_TAG, e.getMessage());
                 throw new CryptoException(e.getMessage());
             }
         } else {
-            Log.e(DEBUG_TAG, "EncryptString - String is empty");
             throw new CryptoException("EncryptString - String is empty");
-
         }
     }
 }

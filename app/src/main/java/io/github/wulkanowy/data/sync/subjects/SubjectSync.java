@@ -56,6 +56,6 @@ public class SubjectSync implements SyncContract {
 
         subjectDao.insertInTx(lastList);
 
-        LogUtils.debug("Synchronization subjects (amount = " + String.valueOf(lastList.size() + ")"));
+        LogUtils.debug("Synchronization subjects (amount = " + lastList.size() + ")");
     }
 }

@@ -48,10 +48,6 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     }
 
     @Override
-    protected void setUpOnViewCreated(View fragmentView) {
-    }
-
-    @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (presenter != null) {

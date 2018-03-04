@@ -64,6 +64,4 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
     public void setButterKnife(Unbinder unbinder) {
         this.unbinder = unbinder;
     }
-
-    protected abstract void setUpOnCreate();
 }

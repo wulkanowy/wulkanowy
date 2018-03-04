@@ -53,7 +53,7 @@ public class LoginSync implements LoginSyncContract {
                 .setName(vulcan.getBasicInformation().getPersonalData().getFirstAndLastName())
                 .setEmail(email)
                 .setPassword(Scrambler.encrypt(email, password, context))
-                .setSymbol(symbol)
+                .setSymbol(vulcan.getSymbol())
                 .setSnpId(vulcan.getStudentAndParent().getId());
 
         sharedPref.setCurrentUserId(daoSession.getAccountDao().insert(account));
@@ -69,7 +69,7 @@ public class LoginSync implements LoginSyncContract {
             throw new IOException("Can't find logged user");
         }
 
-        LogUtils.debug("Login current user id=" + String.valueOf(userId));
+        LogUtils.debug("Login current user id=" + userId);
 
         Account account = daoSession.getAccountDao().load(userId);
 

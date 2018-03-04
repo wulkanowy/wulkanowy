@@ -48,9 +48,6 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
             loadingTask = new AbstractTask();
             loadingTask.setOnFirstLoadingListener(this);
             loadingTask.execute();
-
-
-            getView().updateAdapterList(headerItems);
         }
     }
 

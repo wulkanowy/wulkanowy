@@ -39,11 +39,6 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     }
 
     @Override
-    protected void setUpOnViewCreated(View fragmentView) {
-
-    }
-
-    @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (presenter != null) {

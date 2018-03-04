@@ -67,7 +67,7 @@ public class SyncJob extends SimpleJobService {
 
             gradeList = repository.getNewGrades();
 
-            if (gradeList.size() > 0) {
+            if (!gradeList.isEmpty()) {
                 showNotification();
             }
             return JobService.RESULT_SUCCESS;

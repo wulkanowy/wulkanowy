@@ -67,6 +67,6 @@ public class GradeSync implements SyncContract {
 
         daoSession.getGradeDao().insertInTx(lastList);
 
-        LogUtils.debug("Synchronization grades (amount = " + String.valueOf(lastList.size() + ")"));
+        LogUtils.debug("Synchronization grades (amount = " + lastList.size() + ")");
     }
 }
