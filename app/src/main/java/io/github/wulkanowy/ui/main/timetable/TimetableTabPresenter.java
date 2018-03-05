@@ -70,7 +70,9 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
 
     @Override
     public void onCanceledRefreshAsync() {
-        // do nothing
+        if (getView() != null) {
+            getView().hideRefreshingBar();
+        }
     }
 
     @Override
@@ -140,7 +142,6 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         isFirstSight = false;
 
         if (refreshTask != null) {
@@ -151,5 +152,6 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
             loadingTask.cancel(true);
             loadingTask = null;
         }
+        super.onDestroy();
     }
 }
