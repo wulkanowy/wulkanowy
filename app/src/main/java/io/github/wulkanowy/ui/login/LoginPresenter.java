@@ -48,7 +48,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
     @Override
     public void onStartAsync() {
-        if (getView() != null) {
+        if (isViewAttached()) {
             getView().showLoginProgress(true);
         }
     }
@@ -83,7 +83,9 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
     @Override
     public void onCanceledAsync() {
-        getView().showLoginProgress(false);
+        if (isViewAttached()) {
+            getView().showLoginProgress(false);
+        }
     }
 
     private boolean isEmailValid(String email) {

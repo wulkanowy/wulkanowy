@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -41,6 +42,12 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     @BindView(R.id.timetable_tab_fragment_progress_bar)
     View progressBar;
+
+    @BindView(R.id.timetable_tab_fragment_no_item_container)
+    View noItemView;
+
+    @BindView(R.id.timetable_tab_fragment_no_item_name)
+    TextView noItemName;
 
     @Inject
     TimetableTabContract.Presenter presenter;
@@ -115,6 +122,11 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
     }
 
     @Override
+    public void setFreeWeekName(String text) {
+        noItemName.setText(text);
+    }
+
+    @Override
     public void onRefresh() {
         presenter.onRefresh();
     }
@@ -132,6 +144,11 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
     @Override
     public void showProgressBar(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @Override
+    public void showNoItem(boolean show) {
+        noItemView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void setSelected(boolean selected) {

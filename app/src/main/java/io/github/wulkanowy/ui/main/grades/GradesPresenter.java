@@ -78,7 +78,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     @Override
     public void onCanceledRefreshAsync() {
-        if (getView() != null) {
+        if (isViewAttached()) {
             getView().hideRefreshingBar();
         }
     }
