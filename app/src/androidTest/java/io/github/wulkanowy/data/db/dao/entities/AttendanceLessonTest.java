@@ -15,13 +15,13 @@ public class AttendanceLessonTest extends AbstractDaoTestLongPk<AttendanceLesson
     protected AttendanceLesson createEntity(Long key) {
         AttendanceLesson entity = new AttendanceLesson();
         entity.setId(key);
-        entity.setIsPresence();
-        entity.setIsAbsenceUnexcused();
-        entity.setIsAbsenceExcused();
-        entity.setIsUnexcusedLateness();
-        entity.setIsAbsenceForSchoolReasons();
-        entity.setIsExcusedLateness();
-        entity.setIsExemption();
+        entity.setIsPresence(false);
+        entity.setIsAbsenceUnexcused(false);
+        entity.setIsAbsenceExcused(false);
+        entity.setIsUnexcusedLateness(false);
+        entity.setIsAbsenceForSchoolReasons(false);
+        entity.setIsExcusedLateness(false);
+        entity.setIsExemption(false);
         return entity;
     }
 

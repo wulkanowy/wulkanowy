@@ -2,10 +2,13 @@ package io.github.wulkanowy.data.db.dao.entities;
 
 import org.greenrobot.greendao.test.AbstractDaoTestLongPk;
 
-public class TimetableLessonTest extends AbstractDaoTestLongPk<LessonDao, TimetableLesson> {
+import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
+import io.github.wulkanowy.data.db.dao.entities.TimetableLessonDao;
+
+public class TimetableLessonTest extends AbstractDaoTestLongPk<TimetableLessonDao, TimetableLesson> {
 
     public TimetableLessonTest() {
-        super(LessonDao.class);
+        super(TimetableLessonDao.class);
     }
 
     @Override
