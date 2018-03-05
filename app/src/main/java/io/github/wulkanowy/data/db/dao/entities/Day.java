@@ -13,7 +13,7 @@ import java.util.List;
 @Entity(
         nameInDb = "Days",
         active = true,
-        indexes ={@Index(value = "userId,weekId,date", unique = true)}
+        indexes = {@Index(value = "userId,weekId,date", unique = true)}
 )
 public class Day {
 
@@ -39,7 +39,10 @@ public class Day {
     private String freeDayName = "";
 
     @ToMany(referencedJoinProperty = "dayId")
-    private List<Lesson> lessons;
+    private List<TimetableLesson> timetableLessons;
+
+    @ToMany(referencedJoinProperty = "dayId")
+    private List<AttendanceLesson> attendanceLessons;
 
     /**
      * Used to resolve relations
@@ -143,30 +146,58 @@ public class Day {
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Generated(hash = 1552857303)
-    public List<Lesson> getLessons() {
-        if (lessons == null) {
+    @Generated(hash = 218588195)
+    public List<TimetableLesson> getTimetableLessons() {
+        if (timetableLessons == null) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            LessonDao targetDao = daoSession.getLessonDao();
-            List<Lesson> lessonsNew = targetDao._queryDay_Lessons(id);
+            TimetableLessonDao targetDao = daoSession.getTimetableLessonDao();
+            List<TimetableLesson> timetableLessonsNew = targetDao
+                    ._queryDay_TimetableLessons(id);
             synchronized (this) {
-                if (lessons == null) {
-                    lessons = lessonsNew;
+                if (timetableLessons == null) {
+                    timetableLessons = timetableLessonsNew;
                 }
             }
         }
-        return lessons;
+        return timetableLessons;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1687683740)
+    public synchronized void resetTimetableLessons() {
+        timetableLessons = null;
     }
 
     /**
-     * Resets a to-many relationship, making the next get call to query for a fresh result.
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Generated(hash = 1769801440)
-    public synchronized void resetLessons() {
-        lessons = null;
+    @Generated(hash = 1166820581)
+    public List<AttendanceLesson> getAttendanceLessons() {
+        if (attendanceLessons == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            AttendanceLessonDao targetDao = daoSession.getAttendanceLessonDao();
+            List<AttendanceLesson> attendanceLessonsNew = targetDao
+                    ._queryDay_AttendanceLessons(id);
+            synchronized (this) {
+                if (attendanceLessons == null) {
+                    attendanceLessons = attendanceLessonsNew;
+                }
+            }
+        }
+        return attendanceLessons;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1343075564)
+    public synchronized void resetAttendanceLessons() {
+        attendanceLessons = null;
     }
 
     /**

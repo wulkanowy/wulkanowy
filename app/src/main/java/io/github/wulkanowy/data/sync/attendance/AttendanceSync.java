@@ -1,4 +1,4 @@
-package io.github.wulkanowy.data.sync.timetable;
+package io.github.wulkanowy.data.sync.attendance;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -9,12 +9,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
+import io.github.wulkanowy.api.generic.Day;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
+import io.github.wulkanowy.data.db.dao.entities.AttendanceLessonDao;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
-import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.DayDao;
-import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
-import io.github.wulkanowy.data.db.dao.entities.TimetableLessonDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
@@ -23,7 +23,7 @@ import io.github.wulkanowy.utils.LogUtils;
 import io.github.wulkanowy.utils.TimeUtils;
 
 @Singleton
-public class TimetableSync implements TimetableSyncContract {
+public class AttendanceSync implements AttendanceSyncContract {
 
     private final DaoSession daoSession;
 
@@ -32,19 +32,19 @@ public class TimetableSync implements TimetableSyncContract {
     private final SharedPrefContract sharedPref;
 
     @Inject
-    TimetableSync(DaoSession daoSession, SharedPrefContract sharedPref, Vulcan vulcan) {
+    AttendanceSync(DaoSession daoSession, SharedPrefContract sharedPref, Vulcan vulcan) {
         this.daoSession = daoSession;
         this.sharedPref = sharedPref;
         this.vulcan = vulcan;
     }
 
     @Override
-    public void syncTimetable(String date) throws NotLoggedInErrorException, IOException, ParseException {
+    public void syncAttendance(String date) throws IOException, NotLoggedInErrorException, ParseException {
         long userId = sharedPref.getCurrentUserId();
 
-        io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> weekFromNet =
-                date == null ? vulcan.getTimetable().getWeekTable()
-                : vulcan.getTimetable().getWeekTable(String.valueOf(TimeUtils.getNetTicks(date)));
+        io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> weekFromNet = date == null
+                ? vulcan.getAttendanceTable().getWeekTable()
+                : vulcan.getAttendanceTable().getWeekTable(String.valueOf(TimeUtils.getNetTicks(date)));
 
         Week weekFromDb = daoSession.getWeekDao().queryBuilder()
                 .where(WeekDao.Properties.UserId.eq(userId),
@@ -60,16 +60,15 @@ public class TimetableSync implements TimetableSyncContract {
             weekId = weekFromDb.getId();
         }
 
-        List<io.github.wulkanowy.api.generic.Day> dayListFromNet = weekFromNet.getDays();
+        List<Day> dayListFromNet = weekFromNet.getDays();
 
-        List<TimetableLesson> updatedLessonList = new ArrayList<>();
+        List<AttendanceLesson> updatedLessonList = new ArrayList<>();
 
         for (io.github.wulkanowy.api.generic.Day dayFromNet : dayListFromNet) {
-            Day dayFromNetEntity = DataObjectConverter.dayToDayEntity(dayFromNet);
+            io.github.wulkanowy.data.db.dao.entities.Day dayFromNetEntity = DataObjectConverter.dayToDayEntity(dayFromNet);
 
-            Day dayFromDb = daoSession.getDayDao().queryBuilder()
+            io.github.wulkanowy.data.db.dao.entities.Day dayFromDb = daoSession.getDayDao().queryBuilder()
                     .where(DayDao.Properties.UserId.eq(userId),
-                            DayDao.Properties.WeekId.eq(weekId),
                             DayDao.Properties.Date.eq(dayFromNetEntity.getDate()))
                     .unique();
 
@@ -86,15 +85,14 @@ public class TimetableSync implements TimetableSyncContract {
                 dayId = daoSession.getDayDao().insert(dayFromNetEntity);
             }
 
-            List<TimetableLesson> lessonListFromNetEntities = DataObjectConverter
-                    .lessonsToTimetableLessonsEntities(dayFromNet.getLessons());
+            List<AttendanceLesson> lessonListFromNetEntities = DataObjectConverter
+                    .lessonsToAttendanceLessonsEntities(dayFromNet.getLessons());
 
-            for (TimetableLesson lessonFromNetEntity : lessonListFromNetEntities) {
-                TimetableLesson lessonFromDb = daoSession.getTimetableLessonDao().queryBuilder()
-                        .where(TimetableLessonDao.Properties.DayId.eq(dayId),
-                                TimetableLessonDao.Properties.Date.eq(lessonFromNetEntity.getDate()),
-                                TimetableLessonDao.Properties.StartTime.eq(lessonFromNetEntity.getStartTime()),
-                                TimetableLessonDao.Properties.EndTime.eq(lessonFromNetEntity.getEndTime()))
+            for (AttendanceLesson lessonFromNetEntity : lessonListFromNetEntities) {
+                AttendanceLesson lessonFromDb = daoSession.getAttendanceLessonDao().queryBuilder()
+                        .where(AttendanceLessonDao.Properties.DayId.eq(dayId),
+                                AttendanceLessonDao.Properties.Date.eq(lessonFromNetEntity.getDate()),
+                                AttendanceLessonDao.Properties.Number.eq(lessonFromNetEntity.getNumber()))
                         .unique();
 
                 if (lessonFromDb != null) {
@@ -108,13 +106,13 @@ public class TimetableSync implements TimetableSyncContract {
                 }
             }
         }
-        daoSession.getTimetableLessonDao().saveInTx(updatedLessonList);
+        daoSession.getAttendanceLessonDao().saveInTx(updatedLessonList);
 
         LogUtils.debug("Synchronization lessons (amount = " + updatedLessonList.size() + ")");
     }
 
     @Override
-    public void syncTimetable() throws NotLoggedInErrorException, IOException, ParseException {
-        syncTimetable(null);
+    public void syncAttendance() throws IOException, NotLoggedInErrorException, ParseException {
+        syncAttendance(null);
     }
 }

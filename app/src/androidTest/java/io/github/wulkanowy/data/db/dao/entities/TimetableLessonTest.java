@@ -2,15 +2,15 @@ package io.github.wulkanowy.data.db.dao.entities;
 
 import org.greenrobot.greendao.test.AbstractDaoTestLongPk;
 
-public class LessonTest extends AbstractDaoTestLongPk<LessonDao, Lesson> {
+public class TimetableLessonTest extends AbstractDaoTestLongPk<LessonDao, TimetableLesson> {
 
-    public LessonTest() {
+    public TimetableLessonTest() {
         super(LessonDao.class);
     }
 
     @Override
-    protected Lesson createEntity(Long key) {
-        Lesson entity = new Lesson();
+    protected TimetableLesson createEntity(Long key) {
+        TimetableLesson entity = new TimetableLesson();
         entity.setId(key);
         entity.setIsEmpty(false);
         entity.setIsDivisionIntoGroups(false);

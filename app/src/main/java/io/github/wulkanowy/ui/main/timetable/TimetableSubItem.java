@@ -16,20 +16,20 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractSectionableItem;
 import eu.davidea.viewholders.FlexibleViewHolder;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.data.db.dao.entities.Lesson;
+import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
 
 
 public class TimetableSubItem
         extends AbstractSectionableItem<TimetableSubItem.SubItemViewHolder, TimetableHeaderItem> {
 
-    private Lesson lesson;
+    private TimetableLesson lesson;
 
-    public TimetableSubItem(TimetableHeaderItem header, Lesson lesson) {
+    public TimetableSubItem(TimetableHeaderItem header, TimetableLesson lesson) {
         super(header);
         this.lesson = lesson;
     }
 
-    public Lesson getLesson() {
+    public TimetableLesson getLesson() {
         return lesson;
     }
 
@@ -72,7 +72,7 @@ public class TimetableSubItem
 
         private Context context;
 
-        private Lesson item;
+        private TimetableLesson item;
 
         SubItemViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
@@ -81,7 +81,7 @@ public class TimetableSubItem
             view.setOnClickListener(this);
         }
 
-        void onBind(Lesson lesson) {
+        void onBind(TimetableLesson lesson) {
             item = lesson;
 
             lessonName.setText(lesson.getSubject());
