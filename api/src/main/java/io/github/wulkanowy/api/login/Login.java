@@ -56,20 +56,17 @@ public class Login {
         this.symbol = findSymbol(defaultSymbol, certificate);
         client.setSymbol(this.symbol);
 
-        Document html = client.postPageByUrl(LOGIN_ENDPOINT_PAGE_URL, new String[][]{
+        String title = client.postPageByUrl(LOGIN_ENDPOINT_PAGE_URL, new String[][]{
                 {"wa", "wsignin1.0"},
                 {"wresult", certificate}
-        });
+        }).select("title").text();
 
-        if (html.getElementsByTag("title").text().equals("Logowanie")) {
-            throw new AccountPermissionException();
+        switch (title) {
+            case "Logowanie": throw new AccountPermissionException();
+            case "Przerwa techniczna": throw new VulcanOfflineException();
         }
 
-        if (html.getElementsByTag("title").text().equals("Przerwa techniczna")) {
-            throw new VulcanOfflineException();
-        }
-
-        if (!html.select("title").text().equals("Uonet+")) {
+        if (!title.equals("Uonet+")) {
             throw new LoginErrorException();
         }
 
