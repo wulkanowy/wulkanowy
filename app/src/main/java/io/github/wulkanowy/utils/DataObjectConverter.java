@@ -7,8 +7,8 @@ import java.util.List;
 import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
 import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
-import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
+import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 
 public final class DataObjectConverter {

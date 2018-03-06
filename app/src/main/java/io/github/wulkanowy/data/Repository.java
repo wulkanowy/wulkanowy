@@ -20,7 +20,6 @@ import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.data.db.resources.ResourcesContract;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
 import io.github.wulkanowy.data.sync.SyncContract;
-import io.github.wulkanowy.data.sync.attendance.AttendanceSync;
 import io.github.wulkanowy.data.sync.attendance.AttendanceSyncContract;
 import io.github.wulkanowy.data.sync.login.LoginSyncContract;
 import io.github.wulkanowy.data.sync.timetable.TimetableSyncContract;

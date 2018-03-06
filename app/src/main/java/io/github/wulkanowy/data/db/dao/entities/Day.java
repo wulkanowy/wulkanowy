@@ -134,14 +134,6 @@ public class Day {
         return this;
     }
 
-    public boolean getIsFreeDay() {
-        return this.isFreeDay;
-    }
-
-    public void setIsFreeDay(boolean isFreeDay) {
-        this.isFreeDay = isFreeDay;
-    }
-
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
@@ -234,6 +226,14 @@ public class Day {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.update(this);
+    }
+
+    public boolean getIsFreeDay() {
+        return this.isFreeDay;
+    }
+
+    public void setIsFreeDay(boolean isFreeDay) {
+        this.isFreeDay = isFreeDay;
     }
 
     /** called by internal mechanisms, do not call yourself. */
