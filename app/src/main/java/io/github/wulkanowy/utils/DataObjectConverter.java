@@ -97,7 +97,7 @@ public final class DataObjectConverter {
 
     public static AttendanceLesson lessonToAttendanceLessonEntity(io.github.wulkanowy.api.generic.Lesson lesson) {
         return new AttendanceLesson()
-                .setNumber(lesson.getNumber())
+                .setNumber(Integer.valueOf(lesson.getNumber()))
                 .setSubject(lesson.getSubject())
                 .setDate(lesson.getDate())
                 .setIsPresence(lesson.isPresence())

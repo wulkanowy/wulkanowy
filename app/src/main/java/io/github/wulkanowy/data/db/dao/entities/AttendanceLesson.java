@@ -27,7 +27,7 @@ public class AttendanceLesson implements Serializable {
     private String date = "";
 
     @Property(nameInDb = "NUMBER_OF_LESSON")
-    private String number = "";
+    private int number = 0;
 
     @Property(nameInDb = "SUBJECT_NAME")
     private String subject = "";
@@ -70,8 +70,8 @@ public class AttendanceLesson implements Serializable {
     @Generated(hash = 1936953859)
     private transient AttendanceLessonDao myDao;
 
-    @Generated(hash = 1332039839)
-    public AttendanceLesson(Long id, Long dayId, String date, String number,
+    @Generated(hash = 1428129046)
+    public AttendanceLesson(Long id, Long dayId, String date, int number,
                             String subject, boolean isPresence, boolean isAbsenceUnexcused,
                             boolean isAbsenceExcused, boolean isUnexcusedLateness,
                             boolean isAbsenceForSchoolReasons, boolean isExcusedLateness,
@@ -119,11 +119,11 @@ public class AttendanceLesson implements Serializable {
         return this;
     }
 
-    public String getNumber() {
+    public int getNumber() {
         return this.number;
     }
 
-    public AttendanceLesson setNumber(String number) {
+    public AttendanceLesson setNumber(int number) {
         this.number = number;
         return this;
     }

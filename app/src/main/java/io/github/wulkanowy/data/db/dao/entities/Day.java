@@ -5,6 +5,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
+import org.greenrobot.greendao.annotation.OrderBy;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.ToMany;
 
@@ -42,6 +43,7 @@ public class Day {
     private List<TimetableLesson> timetableLessons;
 
     @ToMany(referencedJoinProperty = "dayId")
+    @OrderBy("number ASC")
     private List<AttendanceLesson> attendanceLessons;
 
     /**

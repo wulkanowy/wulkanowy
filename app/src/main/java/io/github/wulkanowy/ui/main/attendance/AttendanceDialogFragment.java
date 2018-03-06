@@ -71,8 +71,8 @@ public class AttendanceDialogFragment extends DialogFragment {
             date.setText(lesson.getDate());
         }
 
-        if (!lesson.getNumber().isEmpty()) {
-            number.setText(lesson.getNumber());
+        if (0 != lesson.getNumber()) {
+            number.setText(String.valueOf(lesson.getNumber()));
         }
 
         description.setText(lesson.getDescription());

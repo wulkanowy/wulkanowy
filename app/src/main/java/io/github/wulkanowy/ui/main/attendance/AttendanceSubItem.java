@@ -80,7 +80,7 @@ class AttendanceSubItem
             item = lesson;
 
             lessonName.setText(lesson.getSubject());
-            lessonNumber.setText(lesson.getNumber());
+            lessonNumber.setText((String.valueOf(lesson.getNumber())));
             lessonDescription.setText(lesson.getDescription());
             alert.setVisibility(lesson.getIsAbsenceUnexcused() || lesson.getIsUnexcusedLateness()
                     ? View.VISIBLE : View.INVISIBLE);
