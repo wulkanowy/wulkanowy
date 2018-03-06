@@ -96,7 +96,7 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     public void onDoInBackgroundLoading() throws Exception {
         Week week = getRepository().getWeek(date);
 
-        if (week == null) {
+        if (week == null || !week.getIsTimetableSynced()) {
             syncData();
             week = getRepository().getWeek(date);
         }
