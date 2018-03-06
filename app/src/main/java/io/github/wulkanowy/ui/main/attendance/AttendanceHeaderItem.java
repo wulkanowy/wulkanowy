@@ -106,7 +106,7 @@ public class AttendanceHeaderItem
 
         private boolean isSubItemsHasChanges(List<AttendanceSubItem> subItems) {
             for (AttendanceSubItem subItem : subItems) {
-                if (!subItem.getLesson().getIsPresence()) {
+                if (subItem.getLesson().getIsAbsenceUnexcused() || subItem.getLesson().getIsUnexcusedLateness()) {
                     return true;
                 }
             }

@@ -82,7 +82,8 @@ class AttendanceSubItem
             lessonName.setText(lesson.getSubject());
             lessonNumber.setText(lesson.getNumber());
             lessonDescription.setText(AttendanceTypeHelper.getLessonDescription(lesson));
-            alert.setVisibility(lesson.getIsAbsenceUnexcused() ? View.VISIBLE : View.INVISIBLE);
+            alert.setVisibility(lesson.getIsAbsenceUnexcused() || lesson.getIsUnexcusedLateness()
+                    ? View.VISIBLE : View.INVISIBLE);
         }
 
         @Override
