@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.main.attendance;
 
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -76,6 +78,12 @@ public class AttendanceHeaderItem
         @BindView(R.id.attendance_header_alert_image)
         ImageView alert;
 
+        @BindColor(R.color.secondary_text)
+        int secondaryColor;
+
+        @BindColor(R.color.free_day)
+        int backgroundFreeDay;
+
         HeaderViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             view.setOnClickListener(this);
@@ -91,6 +99,12 @@ public class AttendanceHeaderItem
                     numberOfHours, numberOfHours)));
             description.setVisibility(numberOfHours > 0 ? View.VISIBLE : View.INVISIBLE);
             alert.setVisibility(isSubItemsHasChanges(subItems) ? View.VISIBLE : View.INVISIBLE);
+
+            if (item.getAttendanceLessons().isEmpty()) {
+                ((FrameLayout) getContentView()).setForeground(null);
+                getContentView().setBackgroundColor(backgroundFreeDay);
+                dayName.setTextColor(secondaryColor);
+            }
         }
 
         private int countNotPresentHours(List<AttendanceSubItem> subItems) {

@@ -36,6 +36,7 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
     public void onStart(AttendanceTabContract.View view, boolean isPrimary) {
         super.onStart(view);
         getView().showProgressBar(true);
+        getView().showNoItem(false);
         onFragmentSelected(isPrimary);
     }
 
@@ -101,8 +102,14 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
 
         headerItems = new ArrayList<>();
 
+        boolean isEmptyWeek = true;
+
         for (Day day : dayList) {
             AttendanceHeaderItem headerItem = new AttendanceHeaderItem(day);
+
+            if (isEmptyWeek) {
+                isEmptyWeek = day.getAttendanceLessons().isEmpty();
+            }
 
             List<AttendanceLesson> lessonList = day.getAttendanceLessons();
 
@@ -117,6 +124,10 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
             headerItem.setExpanded(false);
             headerItems.add(headerItem);
         }
+
+        if (isEmptyWeek) {
+            headerItems = new ArrayList<>();
+        }
     }
 
     @Override
@@ -126,7 +137,11 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
 
     @Override
     public void onEndLoadingAsync(boolean result, Exception exception) {
-        getView().updateAdapterList(headerItems);
+        if (headerItems.isEmpty()) {
+            getView().showNoItem(true);
+        } else {
+            getView().updateAdapterList(headerItems);
+        }
         getView().showProgressBar(false);
     }
 

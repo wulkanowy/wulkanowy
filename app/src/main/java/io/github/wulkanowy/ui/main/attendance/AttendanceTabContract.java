@@ -14,6 +14,8 @@ public interface AttendanceTabContract {
 
         void hideRefreshingBar();
 
+        void showNoItem(boolean show);
+
         void showProgressBar(boolean show);
     }
 

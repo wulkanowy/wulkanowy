@@ -42,6 +42,9 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
     @BindView(R.id.attendance_tab_fragment_progress_bar)
     View progressBar;
 
+    @BindView(R.id.attendance_tab_fragment_no_item_container)
+    View noItemView;
+
     @Inject
     AttendanceTabContract.Presenter presenter;
 
@@ -133,6 +136,11 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
     @Override
     public void showProgressBar(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @Override
+    public void showNoItem(boolean show) {
+        noItemView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void setSelected(boolean selected) {
