@@ -98,7 +98,7 @@
     </plurals>
 
     <string name="attendance_absence_for_school_reasons">Nieobecny z przyczyn szkolnych</string>
-    <string name="attendance_absence_excused">Nieobecny z przyczyn szkolnych</string>
+    <string name="attendance_absence_excused">Nieobecność usprawiedliwiona</string>
     <string name="attendance_absence_unexcused">Nieobecność nieusprawiedliwiona</string>
     <string name="attendance_exemption">Zwolniony</string>
     <string name="attendance_excused_lateness">Spóźnienie usprawiedliowione</string>
