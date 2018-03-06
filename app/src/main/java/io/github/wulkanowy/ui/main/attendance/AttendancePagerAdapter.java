@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import io.github.wulkanowy.ui.main.TabsData;
+
 public class AttendancePagerAdapter extends FragmentStatePagerAdapter {
 
     private TabsData tabsData;
