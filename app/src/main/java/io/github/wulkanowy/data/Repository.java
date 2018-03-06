@@ -12,6 +12,7 @@ import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.api.login.VulcanOfflineException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
+import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.GradeDao;
@@ -83,6 +84,11 @@ public class Repository implements RepositoryContract {
     @Override
     public String getErrorLoginMessage(Exception e) {
         return resources.getErrorLoginMessage(e);
+    }
+
+    @Override
+    public String getAttendanceLessonDescription(AttendanceLesson lesson) {
+        return resources.getAttendanceLessonDescription(lesson);
     }
 
     @Override

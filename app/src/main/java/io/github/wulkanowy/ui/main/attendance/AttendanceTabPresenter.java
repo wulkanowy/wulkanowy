@@ -107,6 +107,7 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
             List<AttendanceSubItem> subItems = new ArrayList<>();
 
             for (AttendanceLesson lesson : lessonList) {
+                lesson.setDescription(getRepository().getAttendanceLessonDescription(lesson));
                 subItems.add(new AttendanceSubItem(headerItem, lesson));
             }
 

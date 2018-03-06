@@ -75,7 +75,7 @@ public class AttendanceDialogFragment extends DialogFragment {
             number.setText(lesson.getNumber());
         }
 
-        description.setText(AttendanceTypeHelper.getLessonDescription(lesson));
+        description.setText(lesson.getDescription());
 
         if (lesson.getIsAbsenceUnexcused()) {
             description.setTextColor(getResources().getColor(R.color.colorPrimaryDark));

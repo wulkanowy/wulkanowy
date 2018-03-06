@@ -6,6 +6,7 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Property;
+import org.greenrobot.greendao.annotation.Transient;
 
 import java.io.Serializable;
 
@@ -51,6 +52,9 @@ public class AttendanceLesson implements Serializable {
 
     @Property(nameInDb = "IS_EXEMPTION")
     private boolean isExemption = false;
+
+    @Transient
+    private String description = "";
 
     private static final long serialVersionUID = 42L;
 
@@ -193,6 +197,15 @@ public class AttendanceLesson implements Serializable {
 
     public AttendanceLesson setIsExemption(boolean isExemption) {
         this.isExemption = isExemption;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public AttendanceLesson setDescription(String description) {
+        this.description = description;
         return this;
     }
 
