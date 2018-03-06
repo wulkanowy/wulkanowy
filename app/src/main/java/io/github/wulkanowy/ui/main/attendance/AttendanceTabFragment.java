@@ -25,7 +25,9 @@ import io.github.wulkanowy.ui.base.BaseFragment;
 public class AttendanceTabFragment extends BaseFragment implements AttendanceTabContract.View,
         SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String ARGUMENT_KEY = "Date";
+    private static final String ARGUMENT_KEY = "date";
+
+    private static final String SAVED_KEY = "isSelected";
 
     private boolean isPrimary = false;
 
@@ -54,6 +56,15 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
         fragmentTab.setArguments(bundle);
 
         return fragmentTab;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            isSelected = savedInstanceState.getBoolean(SAVED_KEY, isSelected);
+        }
     }
 
     @Nullable
@@ -134,6 +145,12 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
             Snackbar.make(getActivity().findViewById(R.id.main_activity_view_pager),
                     message, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean(SAVED_KEY, isSelected);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

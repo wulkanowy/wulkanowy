@@ -69,7 +69,9 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
 
     @Override
     public void onCanceledRefreshAsync() {
-        // do nothing
+        if (isViewAttached()) {
+            getView().hideRefreshingBar();
+        }
     }
 
     @Override
@@ -140,7 +142,6 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         isFirstSight = false;
 
         if (refreshTask != null) {
@@ -151,5 +152,7 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
             loadingTask.cancel(true);
             loadingTask = null;
         }
+
+        super.onDestroy();
     }
 }
