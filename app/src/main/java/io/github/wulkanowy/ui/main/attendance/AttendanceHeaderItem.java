@@ -64,7 +64,6 @@ public class AttendanceHeaderItem
 
     static class HeaderViewHolder extends ExpandableViewHolder {
 
-        private final View view;
         @BindView(R.id.attendance_header_day)
         TextView dayName;
 
@@ -79,7 +78,6 @@ public class AttendanceHeaderItem
 
         HeaderViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
-            this.view = view;
             view.setOnClickListener(this);
             ButterKnife.bind(this, view);
         }
@@ -89,7 +87,7 @@ public class AttendanceHeaderItem
             date.setText(item.getDate());
 
             int numberOfHours = countNotPresentHours(subItems);
-            description.setText((view.getResources().getQuantityString(R.plurals.numberOfAbsences,
+            description.setText((getContentView().getResources().getQuantityString(R.plurals.numberOfAbsences,
                     numberOfHours, numberOfHours)));
             description.setVisibility(numberOfHours > 0 ? View.VISIBLE : View.INVISIBLE);
             alert.setVisibility(isSubItemsHasChanges(subItems) ? View.VISIBLE : View.INVISIBLE);
