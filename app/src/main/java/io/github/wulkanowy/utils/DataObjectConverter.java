@@ -61,7 +61,7 @@ public final class DataObjectConverter {
         return new Day()
                 .setDate(day.getDate())
                 .setDayName(day.getDayName())
-                .setFreeDay(day.isFreeDay())
+                .setIsFreeDay(day.isFreeDay())
                 .setFreeDayName(day.getFreeDayName());
     }
 

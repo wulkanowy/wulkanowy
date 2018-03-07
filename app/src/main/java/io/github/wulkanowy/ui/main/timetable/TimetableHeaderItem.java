@@ -94,10 +94,10 @@ public class TimetableHeaderItem
             dayName.setText(StringUtils.capitalize(item.getDayName()));
             date.setText(item.getDate());
             alert.setVisibility(isSubItemNewMovedInOrChanged(subItems) ? View.VISIBLE : View.INVISIBLE);
-            freeName.setVisibility(item.isFreeDay() ? View.VISIBLE : View.INVISIBLE);
+            freeName.setVisibility(item.getIsFreeDay() ? View.VISIBLE : View.INVISIBLE);
             freeName.setText(item.getFreeDayName());
 
-            if (item.isFreeDay()) {
+            if (item.getIsFreeDay()) {
                 ((FrameLayout) getContentView()).setForeground(null);
                 getContentView().setBackgroundColor(backgroundFreeDay);
                 dayName.setTextColor(secondaryColor);

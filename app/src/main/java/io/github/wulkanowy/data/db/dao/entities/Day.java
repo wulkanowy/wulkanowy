@@ -118,12 +118,12 @@ public class Day {
         return this;
     }
 
-    public boolean isFreeDay() {
-        return isFreeDay;
+    public boolean getIsFreeDay() {
+        return this.isFreeDay;
     }
 
-    public Day setFreeDay(boolean freeDay) {
-        isFreeDay = freeDay;
+    public Day setIsFreeDay(boolean isFreeDay) {
+        this.isFreeDay = isFreeDay;
         return this;
     }
 
@@ -228,14 +228,6 @@ public class Day {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.update(this);
-    }
-
-    public boolean getIsFreeDay() {
-        return this.isFreeDay;
-    }
-
-    public void setIsFreeDay(boolean isFreeDay) {
-        this.isFreeDay = isFreeDay;
     }
 
     /** called by internal mechanisms, do not call yourself. */
