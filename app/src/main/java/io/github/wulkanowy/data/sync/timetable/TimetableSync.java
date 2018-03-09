@@ -84,7 +84,8 @@ public class TimetableSync implements TimetableSyncContract {
             if (dayFromDb != null) {
                 dayFromNetEntity.setId(dayFromDb.getId());
                 daoSession.getDayDao().save(dayFromNetEntity);
-                dayId = dayFromNetEntity.getId();
+                dayFromDb.refresh();
+                dayId = dayFromDb.getId();
             } else {
                 dayId = daoSession.getDayDao().insert(dayFromNetEntity);
             }
