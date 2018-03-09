@@ -139,6 +139,7 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
     public void onEndLoadingAsync(boolean result, Exception exception) {
         if (headerItems.isEmpty()) {
             getView().showNoItem(true);
+            getView().updateAdapterList(null);
         } else {
             getView().updateAdapterList(headerItems);
             getView().showNoItem(false);

@@ -143,6 +143,7 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
         if (headerItems.isEmpty()) {
             getView().showNoItem(true);
             getView().setFreeWeekName(freeWeekName);
+            getView().updateAdapterList(null);
         } else {
             getView().updateAdapterList(headerItems);
             getView().showNoItem(false);
