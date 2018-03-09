@@ -117,17 +117,14 @@ public class AttendanceSync implements AttendanceSyncContract {
     }
 
     private long updateDay(Day dayFromDb, Day dayFromApiEntity, long weekId) {
+        if (null != dayFromDb) {
+            return dayFromDb.getId();
+        }
+
         dayFromApiEntity.setUserId(userId);
         dayFromApiEntity.setWeekId(weekId);
 
-        if (null == dayFromDb) {
-            return daoSession.getDayDao().insert(dayFromApiEntity);
-        }
-
-        dayFromApiEntity.setId(dayFromDb.getId());
-        daoSession.getDayDao().save(dayFromApiEntity);
-
-        return dayFromApiEntity.getId();
+        return daoSession.getDayDao().insert(dayFromApiEntity);
     }
 
     private void updateLessons(List<Lesson> lessons, List<AttendanceLesson> updatedLessons, long dayId) {
