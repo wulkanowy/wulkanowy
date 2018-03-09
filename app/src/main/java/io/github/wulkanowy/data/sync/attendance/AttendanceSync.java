@@ -9,11 +9,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
-import io.github.wulkanowy.api.generic.Day;
+import io.github.wulkanowy.api.generic.Lesson;
 import io.github.wulkanowy.api.login.NotLoggedInErrorException;
 import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
 import io.github.wulkanowy.data.db.dao.entities.AttendanceLessonDao;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
+import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.DayDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
@@ -27,9 +28,11 @@ public class AttendanceSync implements AttendanceSyncContract {
 
     private final DaoSession daoSession;
 
+    private final SharedPrefContract sharedPref;
+
     private final Vulcan vulcan;
 
-    private final SharedPrefContract sharedPref;
+    private long userId;
 
     @Inject
     AttendanceSync(DaoSession daoSession, SharedPrefContract sharedPref, Vulcan vulcan) {
@@ -40,80 +43,117 @@ public class AttendanceSync implements AttendanceSyncContract {
 
     @Override
     public void syncAttendance(String date) throws IOException, NotLoggedInErrorException, ParseException {
-        long userId = sharedPref.getCurrentUserId();
+        this.userId = sharedPref.getCurrentUserId();
 
-        io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> weekFromNet = date == null
-                ? vulcan.getAttendanceTable().getWeekTable()
-                : vulcan.getAttendanceTable().getWeekTable(String.valueOf(TimeUtils.getNetTicks(date)));
+        io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> weekApi = getWeekFromApi(getNormalizedDate(date));
+        Week weekDb = getWeekFromDb(weekApi.getStartDayDate());
 
-        Week weekFromDb = daoSession.getWeekDao().queryBuilder()
-                .where(WeekDao.Properties.UserId.eq(userId),
-                        WeekDao.Properties.StartDayDate.eq(weekFromNet.getStartDayDate()))
-                .unique();
+        long weekId = updateWeekInDb(weekDb, weekApi);
 
-        Long weekId;
+        List<AttendanceLesson> lessonList = updateDays(weekApi.getDays(), weekId);
 
-        if (weekFromDb == null) {
-            Week weekFromNetEntity = DataObjectConverter.weekToWeekEntity(weekFromNet).setUserId(userId);
-            weekFromNetEntity.setIsAttendanceSynced(true);
-            weekId = daoSession.getWeekDao().insert(weekFromNetEntity);
-        } else {
-            weekId = weekFromDb.getId();
-        }
+        daoSession.getAttendanceLessonDao().saveInTx(lessonList);
 
-        List<Day> dayListFromNet = weekFromNet.getDays();
-
-        List<AttendanceLesson> updatedLessonList = new ArrayList<>();
-
-        for (io.github.wulkanowy.api.generic.Day dayFromNet : dayListFromNet) {
-            io.github.wulkanowy.data.db.dao.entities.Day dayFromNetEntity = DataObjectConverter.dayToDayEntity(dayFromNet);
-
-            io.github.wulkanowy.data.db.dao.entities.Day dayFromDb = daoSession.getDayDao().queryBuilder()
-                    .where(DayDao.Properties.UserId.eq(userId),
-                            DayDao.Properties.Date.eq(dayFromNetEntity.getDate()))
-                    .unique();
-
-            dayFromNetEntity.setUserId(userId);
-            dayFromNetEntity.setWeekId(weekId);
-
-            Long dayId;
-
-            if (dayFromDb != null) {
-                dayFromNetEntity.setId(dayFromDb.getId());
-                daoSession.getDayDao().save(dayFromNetEntity);
-                dayId = dayFromNetEntity.getId();
-            } else {
-                dayId = daoSession.getDayDao().insert(dayFromNetEntity);
-            }
-
-            List<AttendanceLesson> lessonListFromNetEntities = DataObjectConverter
-                    .lessonsToAttendanceLessonsEntities(dayFromNet.getLessons());
-
-            for (AttendanceLesson lessonFromNetEntity : lessonListFromNetEntities) {
-                AttendanceLesson lessonFromDb = daoSession.getAttendanceLessonDao().queryBuilder()
-                        .where(AttendanceLessonDao.Properties.DayId.eq(dayId),
-                                AttendanceLessonDao.Properties.Date.eq(lessonFromNetEntity.getDate()),
-                                AttendanceLessonDao.Properties.Number.eq(lessonFromNetEntity.getNumber()))
-                        .unique();
-
-                if (lessonFromDb != null) {
-                    lessonFromNetEntity.setId(lessonFromDb.getId());
-                }
-
-                lessonFromNetEntity.setDayId(dayFromNetEntity.getId());
-
-                if (!"".equals(lessonFromNetEntity.getSubject())) {
-                    updatedLessonList.add(lessonFromNetEntity);
-                }
-            }
-        }
-        daoSession.getAttendanceLessonDao().saveInTx(updatedLessonList);
-
-        LogUtils.debug("Synchronization lessons (amount = " + updatedLessonList.size() + ")");
+        LogUtils.debug("Synchronization lessons (amount = " + lessonList.size() + ")");
     }
 
     @Override
     public void syncAttendance() throws IOException, NotLoggedInErrorException, ParseException {
         syncAttendance(null);
+    }
+
+    private String getNormalizedDate(String date) throws ParseException {
+        return null != date ? String.valueOf(TimeUtils.getNetTicks(date)) : "";
+    }
+
+    private io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> getWeekFromApi(String date)
+            throws IOException, NotLoggedInErrorException, ParseException {
+        return vulcan.getAttendanceTable().getWeekTable(date);
+    }
+
+    private Week getWeekFromDb(String date) {
+        return daoSession.getWeekDao()
+                .queryBuilder()
+                .where(WeekDao.Properties.UserId.eq(userId), WeekDao.Properties.StartDayDate.eq(date))
+                .unique();
+    }
+
+    private Long updateWeekInDb(Week fromDb, io.github.wulkanowy.api.generic.Week fromApi) {
+        if (fromDb != null) {
+            fromDb.setIsAttendanceSynced(true);
+            fromDb.update();
+
+            return fromDb.getId();
+        }
+
+        Week weekFromNetEntity = DataObjectConverter.weekToWeekEntity(fromApi).setUserId(userId);
+        weekFromNetEntity.setIsAttendanceSynced(true);
+
+        return daoSession.getWeekDao().insert(weekFromNetEntity);
+    }
+
+    private List<AttendanceLesson> updateDays(List<io.github.wulkanowy.api.generic.Day> dayListFromApi, long weekId) {
+        List<AttendanceLesson> updatedLessonList = new ArrayList<>();
+
+        for (io.github.wulkanowy.api.generic.Day dayFromApi : dayListFromApi) {
+
+            Day dayFromDb = getDayFromDb(dayFromApi.getDate());
+
+            Day dayFromApiEntity = DataObjectConverter.dayToDayEntity(dayFromApi);
+
+            long dayId = updateDay(dayFromDb, dayFromApiEntity, weekId);
+
+            updateLessons(dayFromApi.getLessons(), updatedLessonList, dayId);
+        }
+
+        return updatedLessonList;
+    }
+
+    private Day getDayFromDb(String date) {
+        return daoSession.getDayDao()
+                .queryBuilder()
+                .where(DayDao.Properties.UserId.eq(userId), DayDao.Properties.Date.eq(date))
+                .unique();
+    }
+
+    private long updateDay(Day dayFromDb, Day dayFromApiEntity, long weekId) {
+        dayFromApiEntity.setUserId(userId);
+        dayFromApiEntity.setWeekId(weekId);
+
+        if (null == dayFromDb) {
+            return daoSession.getDayDao().insert(dayFromApiEntity);
+        }
+
+        dayFromApiEntity.setId(dayFromDb.getId());
+        daoSession.getDayDao().save(dayFromApiEntity);
+
+        return dayFromApiEntity.getId();
+    }
+
+    private void updateLessons(List<Lesson> lessons, List<AttendanceLesson> updatedLessons, long dayId) {
+        List<AttendanceLesson> lessonsFromApiEntities = DataObjectConverter
+                .lessonsToAttendanceLessonsEntities(lessons);
+
+        for (AttendanceLesson lessonFromApiEntity : lessonsFromApiEntities) {
+            AttendanceLesson lessonFromDb = getLessonFromDb(lessonFromApiEntity, dayId);
+
+            lessonFromApiEntity.setDayId(dayId);
+
+            if (lessonFromDb != null) {
+                lessonFromApiEntity.setId(lessonFromDb.getId());
+            }
+
+            if (!"".equals(lessonFromApiEntity.getSubject())) {
+                updatedLessons.add(lessonFromApiEntity);
+            }
+        }
+    }
+
+    private AttendanceLesson getLessonFromDb(AttendanceLesson lessonFromNetEntity, long dayId) {
+        return daoSession.getAttendanceLessonDao().queryBuilder()
+                .where(AttendanceLessonDao.Properties.DayId.eq(dayId),
+                        AttendanceLessonDao.Properties.Date.eq(lessonFromNetEntity.getDate()),
+                        AttendanceLessonDao.Properties.Number.eq(lessonFromNetEntity.getNumber()))
+                .unique();
     }
 }

@@ -58,6 +58,8 @@ public class TimetableSync implements TimetableSyncContract {
             weekFromNetEntity.setIsTimetableSynced(true);
             weekId = daoSession.getWeekDao().insert(weekFromNetEntity);
         } else {
+            weekFromDb.setIsTimetableSynced(true);
+            weekFromDb.update();
             weekId = weekFromDb.getId();
         }
 

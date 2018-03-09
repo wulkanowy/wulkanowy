@@ -141,6 +141,7 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
             getView().showNoItem(true);
         } else {
             getView().updateAdapterList(headerItems);
+            getView().showNoItem(false);
         }
         getView().showProgressBar(false);
     }
