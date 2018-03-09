@@ -108,6 +108,7 @@
     <string name="attendance_dialog_date">Data</string>
     <string name="attendance_dialog_subject">Przedmiot</string>
     <string name="attendance_dialog_number">Numer lekcji</string>
+    <string name="attendance_no_entries">Brak wpisów w tym tygodniu</string>
     <plurals name="numberOfAbsences">
         <item quantity="one">%1$d nieobecność</item>
         <item quantity="few">%1$d nieobecności</item>
