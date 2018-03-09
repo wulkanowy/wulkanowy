@@ -78,18 +78,18 @@ public class TimetableSync implements TimetableSyncContract {
                 .unique();
     }
 
-    private Long updateWeekInDb(Week fromDb, io.github.wulkanowy.api.generic.Week fromApi) {
-        if (fromDb != null) {
-            fromDb.setIsTimetableSynced(true);
-            fromDb.update();
+    private Long updateWeekInDb(Week dbEntity, io.github.wulkanowy.api.generic.Week fromApi) {
+        if (dbEntity != null) {
+            dbEntity.setIsTimetableSynced(true);
+            dbEntity.update();
 
-            return fromDb.getId();
+            return dbEntity.getId();
         }
 
-        Week weekFromNetEntity = DataObjectConverter.weekToWeekEntity(fromApi).setUserId(userId);
-        weekFromNetEntity.setIsTimetableSynced(true);
+        Week apiEntity = DataObjectConverter.weekToWeekEntity(fromApi).setUserId(userId);
+        apiEntity.setIsTimetableSynced(true);
 
-        return daoSession.getWeekDao().insert(weekFromNetEntity);
+        return daoSession.getWeekDao().insert(apiEntity);
     }
 
     private List<TimetableLesson> updateDays(List<io.github.wulkanowy.api.generic.Day> dayListFromApi, long weekId) {
@@ -97,11 +97,11 @@ public class TimetableSync implements TimetableSyncContract {
 
         for (io.github.wulkanowy.api.generic.Day dayFromApi : dayListFromApi) {
 
-            Day dayFromDb = getDayFromDb(dayFromApi.getDate());
+            Day dbDayEntity = getDayFromDb(dayFromApi.getDate());
 
-            Day dayFromApiEntity = DataObjectConverter.dayToDayEntity(dayFromApi);
+            Day apiDayEntity = DataObjectConverter.dayToDayEntity(dayFromApi);
 
-            long dayId = updateDay(dayFromDb, dayFromApiEntity, weekId);
+            long dayId = updateDay(dbDayEntity, apiDayEntity, weekId);
 
             updateLessons(dayFromApi.getLessons(), updatedLessonList, dayId);
         }
@@ -116,47 +116,47 @@ public class TimetableSync implements TimetableSyncContract {
                 .unique();
     }
 
-    private long updateDay(Day dayFromDb, Day dayFromApiEntity, long weekId) {
-        dayFromApiEntity.setUserId(userId);
-        dayFromApiEntity.setWeekId(weekId);
+    private long updateDay(Day dayFromDb, Day apiDayEntity, long weekId) {
+        apiDayEntity.setUserId(userId);
+        apiDayEntity.setWeekId(weekId);
 
         if (null != dayFromDb) {
-            dayFromApiEntity.setId(dayFromDb.getId());
+            apiDayEntity.setId(dayFromDb.getId());
 
-            daoSession.getDayDao().save(dayFromApiEntity);
+            daoSession.getDayDao().save(apiDayEntity);
             dayFromDb.refresh();
 
             return dayFromDb.getId();
         }
 
-        return daoSession.getDayDao().insert(dayFromApiEntity);
+        return daoSession.getDayDao().insert(apiDayEntity);
     }
 
     private void updateLessons(List<Lesson> lessons, List<TimetableLesson> updatedLessons, long dayId) {
         List<TimetableLesson> lessonsFromApiEntities = DataObjectConverter
                 .lessonsToTimetableLessonsEntities(lessons);
 
-        for (TimetableLesson lessonFromApiEntity : lessonsFromApiEntities) {
-            TimetableLesson lessonFromDb = getLessonFromDb(lessonFromApiEntity, dayId);
+        for (TimetableLesson apiLessonEntity : lessonsFromApiEntities) {
+            TimetableLesson lessonFromDb = getLessonFromDb(apiLessonEntity, dayId);
 
-            lessonFromApiEntity.setDayId(dayId);
+            apiLessonEntity.setDayId(dayId);
 
             if (lessonFromDb != null) {
-                lessonFromApiEntity.setId(lessonFromDb.getId());
+                apiLessonEntity.setId(lessonFromDb.getId());
             }
 
-            if (!"".equals(lessonFromApiEntity.getSubject())) {
-                updatedLessons.add(lessonFromApiEntity);
+            if (!"".equals(apiLessonEntity.getSubject())) {
+                updatedLessons.add(apiLessonEntity);
             }
         }
     }
 
-    private TimetableLesson getLessonFromDb(TimetableLesson lessonFromNetEntity, long dayId) {
+    private TimetableLesson getLessonFromDb(TimetableLesson apiEntity, long dayId) {
         return daoSession.getTimetableLessonDao().queryBuilder()
                 .where(TimetableLessonDao.Properties.DayId.eq(dayId),
-                        TimetableLessonDao.Properties.Date.eq(lessonFromNetEntity.getDate()),
-                        TimetableLessonDao.Properties.StartTime.eq(lessonFromNetEntity.getStartTime()),
-                        TimetableLessonDao.Properties.EndTime.eq(lessonFromNetEntity.getEndTime()))
+                        TimetableLessonDao.Properties.Date.eq(apiEntity.getDate()),
+                        TimetableLessonDao.Properties.StartTime.eq(apiEntity.getStartTime()),
+                        TimetableLessonDao.Properties.EndTime.eq(apiEntity.getEndTime()))
                 .unique();
     }
 }

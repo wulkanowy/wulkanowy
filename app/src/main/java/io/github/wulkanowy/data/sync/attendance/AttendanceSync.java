@@ -78,18 +78,18 @@ public class AttendanceSync implements AttendanceSyncContract {
                 .unique();
     }
 
-    private Long updateWeekInDb(Week fromDb, io.github.wulkanowy.api.generic.Week fromApi) {
-        if (fromDb != null) {
-            fromDb.setIsAttendanceSynced(true);
-            fromDb.update();
+    private Long updateWeekInDb(Week dbWeekEntity, io.github.wulkanowy.api.generic.Week fromApi) {
+        if (dbWeekEntity != null) {
+            dbWeekEntity.setIsAttendanceSynced(true);
+            dbWeekEntity.update();
 
-            return fromDb.getId();
+            return dbWeekEntity.getId();
         }
 
-        Week weekFromNetEntity = DataObjectConverter.weekToWeekEntity(fromApi).setUserId(userId);
-        weekFromNetEntity.setIsAttendanceSynced(true);
+        Week apiWeekEntity = DataObjectConverter.weekToWeekEntity(fromApi).setUserId(userId);
+        apiWeekEntity.setIsAttendanceSynced(true);
 
-        return daoSession.getWeekDao().insert(weekFromNetEntity);
+        return daoSession.getWeekDao().insert(apiWeekEntity);
     }
 
     private List<AttendanceLesson> updateDays(List<io.github.wulkanowy.api.generic.Day> dayListFromApi, long weekId) {
@@ -97,11 +97,11 @@ public class AttendanceSync implements AttendanceSyncContract {
 
         for (io.github.wulkanowy.api.generic.Day dayFromApi : dayListFromApi) {
 
-            Day dayFromDb = getDayFromDb(dayFromApi.getDate());
+            Day dbDayEntity = getDayFromDb(dayFromApi.getDate());
 
-            Day dayFromApiEntity = DataObjectConverter.dayToDayEntity(dayFromApi);
+            Day apiDayEntity = DataObjectConverter.dayToDayEntity(dayFromApi);
 
-            long dayId = updateDay(dayFromDb, dayFromApiEntity, weekId);
+            long dayId = updateDay(dbDayEntity, apiDayEntity, weekId);
 
             updateLessons(dayFromApi.getLessons(), updatedLessonList, dayId);
         }
@@ -116,41 +116,41 @@ public class AttendanceSync implements AttendanceSyncContract {
                 .unique();
     }
 
-    private long updateDay(Day dayFromDb, Day dayFromApiEntity, long weekId) {
-        if (null != dayFromDb) {
-            return dayFromDb.getId();
+    private long updateDay(Day dbDayEntity, Day apiDayEntity, long weekId) {
+        if (null != dbDayEntity) {
+            return dbDayEntity.getId();
         }
 
-        dayFromApiEntity.setUserId(userId);
-        dayFromApiEntity.setWeekId(weekId);
+        apiDayEntity.setUserId(userId);
+        apiDayEntity.setWeekId(weekId);
 
-        return daoSession.getDayDao().insert(dayFromApiEntity);
+        return daoSession.getDayDao().insert(apiDayEntity);
     }
 
     private void updateLessons(List<Lesson> lessons, List<AttendanceLesson> updatedLessons, long dayId) {
         List<AttendanceLesson> lessonsFromApiEntities = DataObjectConverter
                 .lessonsToAttendanceLessonsEntities(lessons);
 
-        for (AttendanceLesson lessonFromApiEntity : lessonsFromApiEntities) {
-            AttendanceLesson lessonFromDb = getLessonFromDb(lessonFromApiEntity, dayId);
+        for (AttendanceLesson apiLessonEntity : lessonsFromApiEntities) {
+            AttendanceLesson lessonFromDb = getLessonFromDb(apiLessonEntity, dayId);
 
-            lessonFromApiEntity.setDayId(dayId);
+            apiLessonEntity.setDayId(dayId);
 
             if (lessonFromDb != null) {
-                lessonFromApiEntity.setId(lessonFromDb.getId());
+                apiLessonEntity.setId(lessonFromDb.getId());
             }
 
-            if (!"".equals(lessonFromApiEntity.getSubject())) {
-                updatedLessons.add(lessonFromApiEntity);
+            if (!"".equals(apiLessonEntity.getSubject())) {
+                updatedLessons.add(apiLessonEntity);
             }
         }
     }
 
-    private AttendanceLesson getLessonFromDb(AttendanceLesson lessonFromNetEntity, long dayId) {
+    private AttendanceLesson getLessonFromDb(AttendanceLesson apiEntity, long dayId) {
         return daoSession.getAttendanceLessonDao().queryBuilder()
                 .where(AttendanceLessonDao.Properties.DayId.eq(dayId),
-                        AttendanceLessonDao.Properties.Date.eq(lessonFromNetEntity.getDate()),
-                        AttendanceLessonDao.Properties.Number.eq(lessonFromNetEntity.getNumber()))
+                        AttendanceLessonDao.Properties.Date.eq(apiEntity.getDate()),
+                        AttendanceLessonDao.Properties.Number.eq(apiEntity.getNumber()))
                 .unique();
     }
 }
