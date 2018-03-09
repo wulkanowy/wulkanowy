@@ -44,6 +44,7 @@ android {
         }
         debug {
             applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
             testCoverageEnabled = true
             ext.enableCrashlytics = false
         }
