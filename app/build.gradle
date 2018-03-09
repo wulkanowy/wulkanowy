@@ -43,6 +43,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            applicationIdSuffix ".dev"
             testCoverageEnabled = true
             ext.enableCrashlytics = false
         }
