@@ -42,6 +42,11 @@ public class AttendanceSync implements AttendanceSyncContract {
     }
 
     @Override
+    public void syncAttendance() throws IOException, NotLoggedInErrorException, ParseException {
+        syncAttendance(null);
+    }
+
+    @Override
     public void syncAttendance(String date) throws IOException, NotLoggedInErrorException, ParseException {
         this.userId = sharedPref.getCurrentUserId();
 
@@ -55,11 +60,6 @@ public class AttendanceSync implements AttendanceSyncContract {
         daoSession.getAttendanceLessonDao().saveInTx(lessonList);
 
         LogUtils.debug("Synchronization lessons (amount = " + lessonList.size() + ")");
-    }
-
-    @Override
-    public void syncAttendance() throws IOException, NotLoggedInErrorException, ParseException {
-        syncAttendance(null);
     }
 
     private String getNormalizedDate(String date) throws ParseException {
