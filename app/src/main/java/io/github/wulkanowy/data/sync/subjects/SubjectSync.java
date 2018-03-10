@@ -9,7 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
-import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.NotLoggedInErrorException;
+import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.data.db.dao.entities.SubjectDao;
@@ -35,7 +36,7 @@ public class SubjectSync implements SyncContract {
     }
 
     @Override
-    public void sync() throws NotLoggedInErrorException, IOException, ParseException {
+    public void sync() throws VulcanException, IOException, ParseException {
 
         long userId = sharedPref.getCurrentUserId();
 

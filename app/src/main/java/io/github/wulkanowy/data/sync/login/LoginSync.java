@@ -8,10 +8,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
+import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.api.login.AccountPermissionException;
 import io.github.wulkanowy.api.login.BadCredentialsException;
-import io.github.wulkanowy.api.login.NotLoggedInErrorException;
-import io.github.wulkanowy.api.login.VulcanOfflineException;
+import io.github.wulkanowy.api.NotLoggedInErrorException;
+import io.github.wulkanowy.api.VulcanOfflineException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
@@ -42,12 +43,11 @@ public class LoginSync implements LoginSyncContract {
 
     @Override
     public void loginUser(String email, String password, String symbol)
-            throws NotLoggedInErrorException, AccountPermissionException, IOException,
-            CryptoException, VulcanOfflineException, BadCredentialsException {
+            throws VulcanException, IOException, CryptoException {
 
         LogUtils.debug("Login new user email=" + email);
 
-        vulcan.login(email, password, symbol);
+        vulcan.login(email, password, symbol, null);
 
         Account account = new Account()
                 .setName(vulcan.getBasicInformation().getPersonalData().getFirstAndLastName())
@@ -60,8 +60,7 @@ public class LoginSync implements LoginSyncContract {
     }
 
     @Override
-    public void loginCurrentUser() throws NotLoggedInErrorException, AccountPermissionException,
-            IOException, CryptoException, VulcanOfflineException, BadCredentialsException {
+    public void loginCurrentUser() throws VulcanException, IOException, CryptoException {
 
         long userId = sharedPref.getCurrentUserId();
 

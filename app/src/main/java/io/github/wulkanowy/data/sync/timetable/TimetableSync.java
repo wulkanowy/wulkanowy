@@ -9,7 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
-import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.NotLoggedInErrorException;
+import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.DayDao;
@@ -39,7 +40,7 @@ public class TimetableSync implements TimetableSyncContract {
     }
 
     @Override
-    public void syncTimetable(String date) throws NotLoggedInErrorException, IOException, ParseException {
+    public void syncTimetable(String date) throws VulcanException, IOException, ParseException {
         long userId = sharedPref.getCurrentUserId();
 
         io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> weekFromNet =
@@ -114,7 +115,7 @@ public class TimetableSync implements TimetableSyncContract {
     }
 
     @Override
-    public void syncTimetable() throws NotLoggedInErrorException, IOException, ParseException {
+    public void syncTimetable() throws VulcanException, IOException, ParseException {
         syncTimetable(null);
     }
 }

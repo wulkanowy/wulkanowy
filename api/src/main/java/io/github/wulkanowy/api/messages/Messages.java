@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import io.github.wulkanowy.api.Client;
-import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.NotLoggedInErrorException;
 
 public class Messages {
 

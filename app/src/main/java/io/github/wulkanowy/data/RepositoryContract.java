@@ -6,7 +6,8 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
-import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.NotLoggedInErrorException;
+import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.Week;
@@ -20,11 +21,11 @@ public interface RepositoryContract extends ResourcesContract, LoginSyncContract
 
     long getCurrentUserId();
 
-    void syncGrades() throws NotLoggedInErrorException, IOException, ParseException;
+    void syncGrades() throws VulcanException, IOException, ParseException;
 
-    void syncSubjects() throws NotLoggedInErrorException, IOException, ParseException;
+    void syncSubjects() throws VulcanException, IOException, ParseException;
 
-    void syncAll() throws NotLoggedInErrorException, IOException, ParseException;
+    void syncAll() throws VulcanException, IOException, ParseException;
 
     Account getCurrentUser();
 

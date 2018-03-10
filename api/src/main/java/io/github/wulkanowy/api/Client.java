@@ -31,8 +31,12 @@ public class Client {
         this.symbol = symbol;
     }
 
-    Map<String, String> getCookies() {
+    private Map<String, String> getCookies() {
         return cookies.getItems();
+    }
+
+    boolean isLoggedIn() {
+        return getCookies().size() > 0;
     }
 
     private String getFilledUrl(String url) {
@@ -42,15 +46,14 @@ public class Client {
                 .replace("{symbol}", symbol == null ? "Default" : symbol);
     }
 
-    Document getPageByUrl(String url) throws IOException {
+    Document getPageByUrl(String url) throws IOException, VulcanException {
         Connection.Response response = Jsoup.connect(getFilledUrl(url))
                 .followRedirects(true)
                 .cookies(getCookies())
                 .execute();
 
         this.cookies.addItems(response.cookies());
-
-        return response.parse();
+        return checkForErrors(response.parse());
     }
 
     public Document postPageByUrl(String url, String[][] params) throws IOException {
@@ -100,5 +103,17 @@ public class Client {
         this.cookies.addItems(response.cookies());
 
         return response.body();
+    }
+
+    Document checkForErrors(Document doc) throws VulcanException {
+        if ("Przerwa techniczna".equals(doc.select("title").text())) {
+            throw new VulcanOfflineException();
+        }
+
+        if ("Zaloguj się".equals(doc.select(".loginButton").text())) {
+            throw new NotLoggedInErrorException();
+        }
+
+        return doc;
     }
 }

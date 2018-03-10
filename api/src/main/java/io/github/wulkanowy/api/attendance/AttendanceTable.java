@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.wulkanowy.api.SnP;
+import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.api.generic.Day;
 import io.github.wulkanowy.api.generic.Lesson;
 import io.github.wulkanowy.api.generic.Week;
@@ -22,11 +23,11 @@ public class AttendanceTable {
         this.snp = snp;
     }
 
-    public Week<Day> getWeekTable() throws IOException {
+    public Week<Day> getWeekTable() throws IOException, VulcanException {
         return getWeekTable("");
     }
 
-    public Week<Day> getWeekTable(String tick) throws IOException {
+    public Week<Day> getWeekTable(String tick) throws IOException, VulcanException {
         Element table = snp.getSnPPageDocument(attendancePageUrl + tick)
                 .select(".mainContainer .presentData").first();
 

@@ -9,7 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
-import io.github.wulkanowy.api.login.NotLoggedInErrorException;
+import io.github.wulkanowy.api.NotLoggedInErrorException;
+import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
@@ -37,7 +38,7 @@ public class GradeSync implements SyncContract {
     }
 
     @Override
-    public void sync() throws IOException, NotLoggedInErrorException, ParseException {
+    public void sync() throws IOException, VulcanException, ParseException {
 
         long userId = sharedPref.getCurrentUserId();
 

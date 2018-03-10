@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 import io.github.wulkanowy.api.Client;
+import io.github.wulkanowy.api.VulcanOfflineException;
 
 public class Login {
 
@@ -61,9 +62,8 @@ public class Login {
                 {"wresult", certificate}
         }).select("title").text();
 
-        switch (title) {
-            case "Logowanie": throw new AccountPermissionException();
-            case "Przerwa techniczna": throw new VulcanOfflineException();
+        if (title.equals("Logowanie")) {
+            throw new AccountPermissionException();
         }
 
         if (!title.equals("Uonet+")) {

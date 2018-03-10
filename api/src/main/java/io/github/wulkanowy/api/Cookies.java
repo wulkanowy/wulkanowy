@@ -7,7 +7,7 @@ public class Cookies {
 
     private Map<String, String> jar = new HashMap<>();
 
-    public Map<String, String> getItems() {
+    Map<String, String> getItems() {
         return jar;
     }
 
@@ -16,8 +16,7 @@ public class Cookies {
         return this;
     }
 
-    public Cookies addItems(Map<String, String> items) {
+    void addItems(Map<String, String> items) {
         this.jar.putAll(items);
-        return this;
     }
 }
