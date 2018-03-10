@@ -90,7 +90,7 @@ public class Vulcan {
 
     private Client getClient(boolean notLoginBefore) throws IOException, VulcanException {
         if (null != client) {
-            if ((null != login || !client.isLoggedIn()) && !notLoginBefore) {
+            if (null != login && !client.isLoggedIn() && !notLoginBefore) {
                 performLogin();
             }
             return client;
@@ -123,12 +123,14 @@ public class Vulcan {
     }
 
     public SnP getStudentAndParent() throws IOException, VulcanException {
-        if (null != snp) {
-            return snp;
+
+        SnP snp = new StudentAndParent(getClient(), id);
+
+        if (null == this.snp) {
+            snp.storeContextCookies();
         }
 
-        snp = new StudentAndParent(getClient(), id);
-        snp.storeContextCookies();
+        this.snp = snp;
 
         return snp;
     }

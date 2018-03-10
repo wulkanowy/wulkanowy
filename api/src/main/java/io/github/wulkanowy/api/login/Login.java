@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 import io.github.wulkanowy.api.Client;
-import io.github.wulkanowy.api.VulcanOfflineException;
+import io.github.wulkanowy.api.VulcanException;
 
 public class Login {
 
@@ -28,16 +28,13 @@ public class Login {
         this.client = client;
     }
 
-    public String login(String email, String password, String symbol)
-            throws BadCredentialsException, LoginErrorException,
-            AccountPermissionException, IOException, VulcanOfflineException {
+    public String login(String email, String password, String symbol) throws VulcanException, IOException {
         String certificate = sendCredentials(email, password, symbol);
 
         return sendCertificate(certificate, symbol);
     }
 
-    String sendCredentials(String email, String password, String symbol)
-            throws IOException, BadCredentialsException {
+    String sendCredentials(String email, String password, String symbol) throws IOException, VulcanException {
         this.symbol = symbol;
 
         Document html = client.postPageByUrl(LOGIN_PAGE_URL, new String[][]{
@@ -52,8 +49,7 @@ public class Login {
         return html.select("input[name=wresult]").attr("value");
     }
 
-    String sendCertificate(String certificate, String defaultSymbol)
-            throws IOException, LoginErrorException, AccountPermissionException, VulcanOfflineException {
+    String sendCertificate(String certificate, String defaultSymbol) throws IOException, VulcanException {
         this.symbol = findSymbol(defaultSymbol, certificate);
         client.setSymbol(this.symbol);
 
@@ -82,7 +78,8 @@ public class Login {
     }
 
     String findSymbolInCertificate(String certificate) {
-        Elements els = Jsoup.parse(certificate.replaceAll(":", ""), "", Parser.xmlParser())
+        Elements els = Jsoup
+                .parse(certificate.replaceAll(":", ""), "", Parser.xmlParser())
                 .select("[AttributeName=\"UserInstance\"] samlAttributeValue");
 
         if (els.isEmpty()) {

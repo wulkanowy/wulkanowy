@@ -5,7 +5,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Client {
 
@@ -14,6 +16,8 @@ public class Client {
     private String host;
 
     private String symbol;
+
+    private Date lastSuccessRequest = new Date();
 
     private Cookies cookies = new Cookies();
 
@@ -36,7 +40,9 @@ public class Client {
     }
 
     boolean isLoggedIn() {
-        return getCookies().size() > 0;
+        return getCookies().size() > 0 &&
+                29 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());
+
     }
 
     private String getFilledUrl(String url) {
@@ -53,10 +59,11 @@ public class Client {
                 .execute();
 
         this.cookies.addItems(response.cookies());
+
         return checkForErrors(response.parse());
     }
 
-    public Document postPageByUrl(String url, String[][] params) throws IOException {
+    public Document postPageByUrl(String url, String[][] params) throws IOException, VulcanException {
         Connection connection = Jsoup.connect(getFilledUrl(url));
 
         for (String[] data : params) {
@@ -71,7 +78,7 @@ public class Client {
 
         this.cookies.addItems(response.cookies());
 
-        return response.parse();
+        return checkForErrors(response.parse());
     }
 
     public String getJsonStringByUrl(String url) throws IOException {
@@ -113,6 +120,8 @@ public class Client {
         if ("Zaloguj się".equals(doc.select(".loginButton").text())) {
             throw new NotLoggedInErrorException();
         }
+
+        lastSuccessRequest = new Date();
 
         return doc;
     }
