@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,7 +36,22 @@ class AttendanceSubItem
 
     @Override
     public boolean equals(Object o) {
-        return this == o;
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AttendanceSubItem that = (AttendanceSubItem) o;
+
+        return new EqualsBuilder()
+                .append(lesson, that.lesson)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(lesson)
+                .toHashCode();
     }
 
     @Override
