@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
-import io.github.wulkanowy.api.NotLoggedInErrorException;
 import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.Grade;

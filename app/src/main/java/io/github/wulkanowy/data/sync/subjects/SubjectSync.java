@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
-import io.github.wulkanowy.api.NotLoggedInErrorException;
 import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
