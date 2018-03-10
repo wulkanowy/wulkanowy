@@ -4,8 +4,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.github.wulkanowy.api.SnP;
 import io.github.wulkanowy.api.VulcanException;
@@ -17,25 +21,35 @@ public class AttendanceTable {
 
     private SnP snp;
 
-    private String attendancePageUrl = "Frekwencja.mvc?data=";
+    private final static String ATTENDANCE_PAGE_URL = "Frekwencja.mvc?data=";
 
     public AttendanceTable(SnP snp) {
         this.snp = snp;
     }
 
-    public Week<Day> getWeekTable() throws IOException, VulcanException {
+    public Week<Day> getWeekTable() throws IOException, ParseException, VulcanException {
         return getWeekTable("");
     }
 
-    public Week<Day> getWeekTable(String tick) throws IOException, VulcanException {
-        Element table = snp.getSnPPageDocument(attendancePageUrl + tick)
+    public Week<Day> getWeekTable(String tick) throws IOException, ParseException, VulcanException {
+        Element table = snp.getSnPPageDocument(ATTENDANCE_PAGE_URL + tick)
+
                 .select(".mainContainer .presentData").first();
 
         Elements headerCells = table.select("thead th");
         List<Day> days = new ArrayList<>();
 
         for (int i = 1; i < headerCells.size(); i++) {
-            days.add(new Day().setDate(headerCells.get(i).html().split("<br>")[1]));
+            String[] dayHeaderCell = headerCells.get(i).html().split("<br>");
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.ROOT);
+            Date d = sdf.parse(dayHeaderCell[1].trim());
+            sdf.applyPattern("yyyy-MM-dd");
+
+            Day day = new Day();
+            day.setDayName(dayHeaderCell[0]);
+            day.setDate(sdf.format(d));
+            days.add(day);
         }
 
         Elements hoursInDays = table.select("tbody tr");
@@ -47,26 +61,29 @@ public class AttendanceTable {
             // fill hours in day
             int size = hours.size();
             for (int i = 1; i < size; i++) {
-                days.get(i - 1).setLesson(getNewLesson(hours.get(i)));
+                Lesson lesson = new Lesson();
+                lesson.setDate(days.get(i - 1).getDate());
+                lesson.setNumber(hours.get(0).text());
+
+                addLessonDetails(lesson, hours.get(i));
+
+                days.get(i - 1).setLesson(lesson);
             }
         }
 
-        String[] dayDescription = headerCells.get(1).html().split("<br>");
-
         return new Week<Day>()
-                .setStartDayDate(dayDescription[1])
+                .setStartDayDate(days.get(0).getDate())
                 .setDays(days);
     }
 
-    private Lesson getNewLesson(Element cell) {
-        Lesson lesson = new Lesson();
+    private void addLessonDetails(Lesson lesson, Element cell) {
         lesson.setSubject(cell.select("span").text());
 
         if (LessonTypes.CLASS_NOT_EXIST.equals(cell.attr("class"))) {
             lesson.setNotExist(true);
             lesson.setEmpty(true);
 
-            return lesson;
+            return;
         }
 
         switch (cell.select("div").attr("class")) {
@@ -96,7 +113,5 @@ public class AttendanceTable {
                 lesson.setEmpty(true);
                 break;
         }
-
-        return lesson;
     }
 }
