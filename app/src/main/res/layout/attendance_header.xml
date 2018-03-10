@@ -57,6 +57,21 @@
             android:textColor="@color/secondary_text"
             android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/attendance_header_free_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="180dp"
+            android:layout_marginStart="180dp"
+            android:gravity="end"
+            android:maxLines="2"
+            android:text="@string/attendance_no_entries"
+            android:textColor="@color/secondary_text"
+            android:textSize="16sp" />
+
         <ImageView
             android:id="@+id/attendance_header_alert_image"
             android:layout_width="wrap_content"

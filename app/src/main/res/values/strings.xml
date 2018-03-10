@@ -103,7 +103,7 @@
     <string name="attendance_dialog_date">Date</string>
     <string name="attendance_dialog_subject">Subject</string>
     <string name="attendance_dialog_number">Lesson number</string>
-    <string name="attendance_no_entries">No entries in this week</string>
+    <string name="attendance_no_entries">No entries</string>
     <plurals name="numberOfAbsences">
         <item quantity="one">%1$d absence</item>
         <item quantity="few">%1$d absences</item>

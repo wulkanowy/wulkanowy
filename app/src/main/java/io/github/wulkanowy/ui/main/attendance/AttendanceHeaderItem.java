@@ -18,6 +18,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import eu.davidea.viewholders.ExpandableViewHolder;
 import io.github.wulkanowy.R;
+import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
 import io.github.wulkanowy.data.db.dao.entities.Day;
 
 public class AttendanceHeaderItem
@@ -78,6 +79,9 @@ public class AttendanceHeaderItem
         @BindView(R.id.attendance_header_alert_image)
         ImageView alert;
 
+        @BindView(R.id.attendance_header_free_name)
+        TextView freeName;
+
         @BindColor(R.color.secondary_text)
         int secondaryColor;
 
@@ -99,6 +103,7 @@ public class AttendanceHeaderItem
                     numberOfHours, numberOfHours)));
             description.setVisibility(numberOfHours > 0 ? View.VISIBLE : View.INVISIBLE);
             alert.setVisibility(isSubItemsHasChanges(subItems) ? View.VISIBLE : View.INVISIBLE);
+            freeName.setVisibility(subItems.isEmpty() ? View.VISIBLE : View.INVISIBLE);
 
             if (item.getAttendanceLessons().isEmpty()) {
                 ((FrameLayout) getContentView()).setForeground(null);
