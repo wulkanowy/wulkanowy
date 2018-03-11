@@ -3,7 +3,7 @@ package io.github.wulkanowy.api;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Cookies {
+class Cookies {
 
     private Map<String, String> jar = new HashMap<>();
 
@@ -11,12 +11,7 @@ public class Cookies {
         return jar;
     }
 
-    public Cookies setItems(Map<String, String> items) {
-        this.jar = items;
-        return this;
-    }
-
     void addItems(Map<String, String> items) {
-        this.jar.putAll(items);
+        jar.putAll(items);
     }
 }

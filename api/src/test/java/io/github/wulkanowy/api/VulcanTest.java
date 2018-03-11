@@ -1,43 +1,31 @@
 package io.github.wulkanowy.api;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import io.github.wulkanowy.api.login.Login;
 
 public class VulcanTest {
 
-    private Vulcan vulcan;
+    @Test(expected = NotLoggedInErrorException.class)
+    public void getClientWithoutLoginTest() throws Exception {
+        Vulcan vulcan = new Vulcan();
 
-    @Before
-    public void setUp() throws Exception {
-        vulcan = new Vulcan();
-        vulcan.setClient(Mockito.mock(Client.class));
-        vulcan.setLogin(Mockito.mock(Login.class));
+        vulcan.getClient();
     }
 
     @Test
-    public void setFullEndpointInfoTest() throws Exception {
-        vulcan.login("http://fakelog.net\\\\admin", "pass", "Default", "123");
+    public void getClientTest() throws Exception {
+        Vulcan vulcan = new Vulcan();
+        vulcan.login("email", "password", "symbol", null);
 
-        Assert.assertEquals("http", vulcan.getProtocolSchema());
-        Assert.assertEquals("fakelog.net", vulcan.getLogHost());
-        Assert.assertEquals("admin", vulcan.getEmail());
+        Assert.assertThat(vulcan.getClient(), CoreMatchers.instanceOf(Client.class));
     }
 
     @Test
     public void getClientTwiceTest() throws Exception {
         Vulcan vulcan = new Vulcan();
-        Login login = Mockito.mock(Login.class);
-        vulcan.setLogin(login);
-        Assert.assertTrue(vulcan.getClient().equals(vulcan.getClient()));
-    }
+        vulcan.login("email", "password", "symbol", null);
 
-    @Test
-    public void getLoginTwiceTest() throws Exception {
-        Vulcan vulcan = new Vulcan();
-        Assert.assertTrue(vulcan.getLogin().equals(vulcan.getLogin()));
+        Assert.assertEquals(vulcan.getClient(), vulcan.getClient());
     }
 }
