@@ -123,16 +123,15 @@ public class Vulcan {
     }
 
     public SnP getStudentAndParent() throws IOException, VulcanException {
-
-        SnP snp = new StudentAndParent(getClient(), id);
-
-        if (null == this.snp) {
-            snp.storeContextCookies();
+        if (null != this.snp) {
+            return this.snp;
         }
 
+        SnP snp = new StudentAndParent(getClient(), id);
+        snp.storeContextCookies();
         this.snp = snp;
 
-        return snp;
+        return this.snp;
     }
 
     public AttendanceStatistics getAttendanceStatistics() throws IOException, VulcanException {
