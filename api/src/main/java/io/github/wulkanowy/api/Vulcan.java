@@ -124,6 +124,9 @@ public class Vulcan {
 
     public SnP getStudentAndParent() throws IOException, VulcanException {
         if (null != this.snp) {
+            if (!client.isLoggedIn()) {
+                performLogin();
+            }
             return this.snp;
         }
 
