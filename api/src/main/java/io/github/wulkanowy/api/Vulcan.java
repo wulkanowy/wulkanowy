@@ -37,7 +37,7 @@ public class Vulcan {
 
     private Login login;
 
-    public void login(String email, String password, String symbol, String id) throws IOException, VulcanException {
+    public void setCredentials(String email, String password, String symbol, String id) throws IOException, VulcanException {
         this.email = email;
         this.password = password;
         this.symbol = symbol;
@@ -113,7 +113,7 @@ public class Vulcan {
         this.login = login;
     }
 
-    Login getLogin() throws IOException, VulcanException{
+    Login getLogin() throws IOException, VulcanException {
         if (null != login) {
             return login;
         }

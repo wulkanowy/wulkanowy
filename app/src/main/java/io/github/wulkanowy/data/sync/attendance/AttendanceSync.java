@@ -59,7 +59,7 @@ public class AttendanceSync implements AttendanceSyncContract {
 
         daoSession.getAttendanceLessonDao().saveInTx(lessonList);
 
-        LogUtils.debug("Synchronization lessons (amount = " + lessonList.size() + ")");
+        LogUtils.debug("Synchronization attendance lessons (amount = " + lessonList.size() + ")");
     }
 
     private String getNormalizedDate(String date) throws ParseException {
