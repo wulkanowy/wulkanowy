@@ -65,7 +65,7 @@ public class Client {
 
     }
 
-    Login getLogin() throws IOException, VulcanException {
+    Login getLogin() {
         if (null != login) {
             return login;
         }

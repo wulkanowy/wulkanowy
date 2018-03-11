@@ -24,7 +24,7 @@ public class Vulcan {
 
     private Client client;
 
-    public void setCredentials(String email, String password, String symbol, String id) throws IOException, VulcanException {
+    public void setCredentials(String email, String password, String symbol, String id) {
         client = new Client(email, password, symbol);
 
         this.id = id;
@@ -105,7 +105,7 @@ public class Vulcan {
         return new FamilyInformation(getStudentAndParent());
     }
 
-    public Messages getMessages() throws VulcanException, IOException {
+    public Messages getMessages() throws VulcanException {
         return new Messages(getClient());
     }
 }
