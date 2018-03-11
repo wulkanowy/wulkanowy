@@ -5,9 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.github.wulkanowy.api.login.Login;
 
 public class VulcanTest {
