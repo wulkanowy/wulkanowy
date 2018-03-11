@@ -1,3 +1,4 @@
 package io.github.wulkanowy.api;
 
-public abstract class VulcanException extends Exception {}
+public abstract class VulcanException extends Exception {
+}

@@ -9,26 +9,74 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import io.github.wulkanowy.api.login.Login;
+
 public class Client {
 
-    private String protocol;
+    private String protocol = "https";
 
-    private String host;
+    private String host = "vulcan.net.pl";
 
-    private String symbol;
+    private String email;
+
+    private String password;
+
+    private String symbol = "Default";
+
+    private Login login;
 
     private Date lastSuccessRequest = new Date();
 
     private Cookies cookies = new Cookies();
 
-    Client(String protocol, String host, String symbol) {
-        this.protocol = protocol;
-        this.host = host;
+    Client(String email, String password, String symbol) {
+        this.email = email;
+        this.password = password;
         this.symbol = symbol;
+
+        setFullEndpointInfo(email);
     }
 
-    String getHost() {
-        return host;
+    private void setFullEndpointInfo(String info) {
+        String[] creds = info.split("\\\\");
+
+        email = info;
+
+        if (creds.length > 2) {
+            String[] url = creds[0].split("://");
+
+            protocol = url[0];
+            host = url[1];
+            email = creds[2];
+        }
+    }
+
+    private void login() throws IOException, VulcanException {
+        if (isLoggedIn()) {
+            return;
+        }
+
+        this.symbol = getLogin().login(email, password, symbol);
+    }
+
+    private boolean isLoggedIn() {
+        return getCookies().size() > 0 &&
+                29 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());
+
+    }
+
+    Login getLogin() throws IOException, VulcanException {
+        if (null != login) {
+            return login;
+        }
+
+        login = new Login(this);
+
+        return login;
+    }
+
+    public String getSymbol() {
+        return symbol;
     }
 
     public void setSymbol(String symbol) {
@@ -39,20 +87,20 @@ public class Client {
         return cookies.getItems();
     }
 
-    boolean isLoggedIn() {
-        return getCookies().size() > 0 &&
-                29 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());
-
+    String getHost() {
+        return host;
     }
 
-    private String getFilledUrl(String url) {
+    String getFilledUrl(String url) {
         return url
                 .replace("{schema}", protocol)
                 .replace("{host}", host.replace(":", "%253A"))
-                .replace("{symbol}", symbol == null ? "Default" : symbol);
+                .replace("{symbol}", symbol);
     }
 
     Document getPageByUrl(String url) throws IOException, VulcanException {
+        login();
+
         Connection.Response response = Jsoup.connect(getFilledUrl(url))
                 .followRedirects(true)
                 .cookies(getCookies())
@@ -81,7 +129,9 @@ public class Client {
         return checkForErrors(response.parse());
     }
 
-    public String getJsonStringByUrl(String url) throws IOException {
+    public String getJsonStringByUrl(String url) throws IOException, VulcanException {
+        login();
+
         Connection.Response response = Jsoup.connect(getFilledUrl(url))
                 .followRedirects(true)
                 .ignoreContentType(true)
@@ -93,7 +143,9 @@ public class Client {
         return response.body();
     }
 
-    public String postJsonStringByUrl(String url, String[][] params) throws IOException {
+    public String postJsonStringByUrl(String url, String[][] params) throws IOException, VulcanException {
+        login();
+
         Connection connection = Jsoup.connect(getFilledUrl(url));
 
         for (String[] data : params) {

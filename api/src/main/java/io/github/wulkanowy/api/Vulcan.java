@@ -7,7 +7,6 @@ import io.github.wulkanowy.api.attendance.AttendanceTable;
 import io.github.wulkanowy.api.exams.ExamsWeek;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.SubjectsList;
-import io.github.wulkanowy.api.login.Login;
 import io.github.wulkanowy.api.messages.Messages;
 import io.github.wulkanowy.api.notes.AchievementsList;
 import io.github.wulkanowy.api.notes.NotesList;
@@ -19,130 +18,51 @@ import io.github.wulkanowy.api.user.FamilyInformation;
 
 public class Vulcan {
 
-    private String protocolSchema = "https";
-
-    private String logHost = "vulcan.net.pl";
-
-    private String email;
-
-    private String password;
-
-    private String symbol;
-
     private String id;
 
     private SnP snp;
 
     private Client client;
 
-    private Login login;
-
     public void setCredentials(String email, String password, String symbol, String id) throws IOException, VulcanException {
-        this.email = email;
-        this.password = password;
-        this.symbol = symbol;
+        client = new Client(email, password, symbol);
+
         this.id = id;
-
-        setFullEndpointInfo(email);
     }
 
-    private void setFullEndpointInfo(String info) {
-        String[] creds = info.split("\\\\");
-
-        email = info;
-
-        if (creds.length >= 2) {
-            String[] url = creds[0].split("://");
-
-            protocolSchema = url[0];
-            logHost = url[1];
-            email = creds[2];
+    public Client getClient() throws NotLoggedInErrorException {
+        if (null == client) {
+            throw new NotLoggedInErrorException();
         }
+
+        return client;
     }
 
-    private void performLogin() throws IOException, VulcanException {
-        this.symbol = getLogin().login(email, password, symbol);
+    public String getSymbol() throws NotLoggedInErrorException {
+        return getClient().getSymbol();
+
     }
 
-    String getProtocolSchema() {
-        return protocolSchema;
-    }
+    public SnP getStudentAndParent() throws IOException, VulcanException {
+        if (null != this.snp) {
+            return this.snp;
+        }
 
-    String getLogHost() {
-        return logHost;
-    }
+        this.snp = new StudentAndParent(getClient(), id).storeContextCookies();
 
-    String getEmail() {
-        return email;
-    }
-
-    public String getSymbol() {
-        return symbol;
+        return this.snp;
     }
 
     public String getId() throws IOException, VulcanException {
         return getStudentAndParent().getId();
     }
 
-    Client getClient() throws IOException, VulcanException {
-        return getClient(false);
-    }
-
-    private Client getClient(boolean notLoginBefore) throws IOException, VulcanException {
-        if (null != client) {
-            if (null != login && !client.isLoggedIn() && !notLoginBefore) {
-                performLogin();
-            }
-            return client;
-        }
-
-        setClient(new Client(getProtocolSchema(), getLogHost(), symbol));
-
-        if (!notLoginBefore) {
-            performLogin();
-        }
-
-        return client;
-    }
-
-    void setClient(Client client) {
-        this.client = client;
-    }
-
-    public void setLogin(Login login) {
-        this.login = login;
-    }
-
-    Login getLogin() throws IOException, VulcanException {
-        if (null != login) {
-            return login;
-        }
-
-        setLogin(new Login(getClient(true)));
-        return login;
-    }
-
-    public SnP getStudentAndParent() throws IOException, VulcanException {
-        if (null != this.snp) {
-            if (!client.isLoggedIn()) {
-                performLogin();
-            }
-            return this.snp;
-        }
-
-        SnP snp = new StudentAndParent(getClient(), id);
-        snp.storeContextCookies();
-        this.snp = snp;
-
-        return this.snp;
+    public AttendanceTable getAttendanceTable() throws IOException, VulcanException {
+        return new AttendanceTable(getStudentAndParent());
     }
 
     public AttendanceStatistics getAttendanceStatistics() throws IOException, VulcanException {
         return new AttendanceStatistics(getStudentAndParent());
-    }
-
-    public AttendanceTable getAttendanceTable() throws IOException, VulcanException {
-        return new AttendanceTable(getStudentAndParent());
     }
 
     public ExamsWeek getExamsList() throws IOException, VulcanException {

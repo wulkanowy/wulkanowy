@@ -19,9 +19,9 @@ import io.github.wulkanowy.api.generic.Week;
 
 public class AttendanceTable {
 
-    private SnP snp;
-
     private final static String ATTENDANCE_PAGE_URL = "Frekwencja.mvc?data=";
+
+    private SnP snp;
 
     public AttendanceTable(SnP snp) {
         this.snp = snp;
