@@ -58,11 +58,11 @@ public class Login {
                 {"wresult", certificate}
         }).select("title").text();
 
-        if (title.equals("Logowanie")) {
+        if ("Logowanie".equals(title)) {
             throw new AccountPermissionException();
         }
 
-        if (!title.equals("Uonet+")) {
+        if (!"Uonet+".equals(title)) {
             throw new LoginErrorException();
         }
 
