@@ -1,16 +1,16 @@
-package io.github.wulkanowy.data.sync.login;
+package io.github.wulkanowy.data.sync.account;
 
 import java.io.IOException;
 
 import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.utils.security.CryptoException;
 
-public interface LoginSyncContract {
+public interface AccountSyncContract {
 
-    void loginUser(String email, String password, String symbol)
+    void registerUser(String email, String password, String symbol)
             throws VulcanException, IOException,
             CryptoException;
 
-    void loginCurrentUser() throws VulcanException, IOException,
+    void initLastUser() throws VulcanException, IOException,
             CryptoException;
 }

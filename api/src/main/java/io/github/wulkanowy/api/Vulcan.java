@@ -24,8 +24,7 @@ public class Vulcan {
 
     private Client client;
 
-    // call this once, on app startup
-    public void login(String email, String password, String symbol, String id) throws IOException, VulcanException {
+    public void setCredentials(String email, String password, String symbol, String id) throws IOException, VulcanException {
         client = new Client(email, password, symbol);
 
         this.id = id;
@@ -41,6 +40,7 @@ public class Vulcan {
 
     public String getSymbol() throws NotLoggedInErrorException {
         return getClient().getSymbol();
+
     }
 
     public SnP getStudentAndParent() throws IOException, VulcanException {

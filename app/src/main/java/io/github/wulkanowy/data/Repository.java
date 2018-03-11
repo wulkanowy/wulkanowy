@@ -7,7 +7,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.github.wulkanowy.api.NotLoggedInErrorException;
 import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
@@ -19,8 +18,8 @@ import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.data.db.resources.ResourcesContract;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
 import io.github.wulkanowy.data.sync.SyncContract;
+import io.github.wulkanowy.data.sync.account.AccountSyncContract;
 import io.github.wulkanowy.data.sync.attendance.AttendanceSyncContract;
-import io.github.wulkanowy.data.sync.login.LoginSyncContract;
 import io.github.wulkanowy.data.sync.timetable.TimetableSyncContract;
 import io.github.wulkanowy.di.annotations.SyncGrades;
 import io.github.wulkanowy.di.annotations.SyncSubjects;
@@ -35,7 +34,7 @@ public class Repository implements RepositoryContract {
 
     private final DaoSession daoSession;
 
-    private final LoginSyncContract loginSync;
+    private final AccountSyncContract accountSync;
 
     private final AttendanceSyncContract attendanceSync;
 
@@ -49,7 +48,7 @@ public class Repository implements RepositoryContract {
     Repository(SharedPrefContract sharedPref,
                ResourcesContract resources,
                DaoSession daoSession,
-               LoginSyncContract loginSync,
+               AccountSyncContract accountSync,
                AttendanceSyncContract attendanceSync,
                TimetableSyncContract timetableSync,
                @SyncGrades SyncContract gradeSync,
@@ -57,7 +56,7 @@ public class Repository implements RepositoryContract {
         this.sharedPref = sharedPref;
         this.resources = resources;
         this.daoSession = daoSession;
-        this.loginSync = loginSync;
+        this.accountSync = accountSync;
         this.attendanceSync = attendanceSync;
         this.timetableSync = timetableSync;
         this.gradeSync = gradeSync;
@@ -90,14 +89,14 @@ public class Repository implements RepositoryContract {
     }
 
     @Override
-    public void loginUser(String email, String password, String symbol)
-            throws VulcanException, IOException, CryptoException {
-        loginSync.loginUser(email, password, symbol);
+    public void registerUser(String email, String password, String symbol) throws VulcanException,
+            IOException, CryptoException {
+        accountSync.registerUser(email, password, symbol);
     }
 
     @Override
-    public void loginCurrentUser() throws VulcanException, IOException, CryptoException {
-        loginSync.loginCurrentUser();
+    public void initLastUser() throws VulcanException, IOException, CryptoException {
+        accountSync.initLastUser();
     }
 
     @Override

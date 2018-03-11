@@ -59,7 +59,7 @@ public class TimetableSync implements TimetableSyncContract {
 
         daoSession.getTimetableLessonDao().saveInTx(lessonList);
 
-        LogUtils.debug("Synchronization lessons (amount = " + lessonList.size() + ")");
+        LogUtils.debug("Synchronization timetable lessons (amount = " + lessonList.size() + ")");
     }
 
     private String getNormalizedDate(String date) throws ParseException {
