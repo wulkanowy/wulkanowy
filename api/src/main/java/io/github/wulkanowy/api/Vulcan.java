@@ -113,7 +113,7 @@ public class Vulcan {
         this.login = login;
     }
 
-    Login getLogin() throws IOException, VulcanException{
+    Login getLogin() throws IOException, VulcanException {
         if (null != login) {
             return login;
         }
@@ -130,19 +130,17 @@ public class Vulcan {
             return this.snp;
         }
 
-        SnP snp = new StudentAndParent(getClient(), id);
-        snp.storeContextCookies();
-        this.snp = snp;
+        this.snp = new StudentAndParent(getClient(), id).storeContextCookies();
 
         return this.snp;
     }
 
-    public AttendanceStatistics getAttendanceStatistics() throws IOException, VulcanException {
-        return new AttendanceStatistics(getStudentAndParent());
-    }
-
     public AttendanceTable getAttendanceTable() throws IOException, VulcanException {
         return new AttendanceTable(getStudentAndParent());
+    }
+
+    public AttendanceStatistics getAttendanceStatistics() throws IOException, VulcanException {
+        return new AttendanceStatistics(getStudentAndParent());
     }
 
     public ExamsWeek getExamsList() throws IOException, VulcanException {

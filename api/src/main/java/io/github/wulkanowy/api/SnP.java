@@ -10,7 +10,7 @@ public interface SnP {
 
     String getId();
 
-    void storeContextCookies() throws IOException, VulcanException;
+    StudentAndParent storeContextCookies() throws IOException, VulcanException;
 
     String getRowDataChildValue(Element e, int index);
 

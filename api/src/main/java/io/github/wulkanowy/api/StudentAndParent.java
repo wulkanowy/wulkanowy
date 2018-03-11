@@ -33,8 +33,9 @@ public class StudentAndParent implements SnP {
         return id;
     }
 
-    public void storeContextCookies() throws IOException, VulcanException {
+    public StudentAndParent storeContextCookies() throws IOException, VulcanException {
         client.getPageByUrl(getSnpHomePageUrl());
+        return this;
     }
 
     String getSnpHomePageUrl() throws IOException, VulcanException {
