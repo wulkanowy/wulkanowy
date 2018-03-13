@@ -42,10 +42,12 @@ public class WulkanowyApp extends Application {
     }
 
     private void initializeUserSession() {
-        try {
-            repository.initLastUser();
-        } catch (Exception e) {
-            LogUtils.error("An error occurred when the application was started", e);
+        if (repository.getCurrentUserId() != 0) {
+            try {
+                repository.initLastUser();
+            } catch (Exception e) {
+                LogUtils.error("An error occurred when the application was started", e);
+            }
         }
     }
 
