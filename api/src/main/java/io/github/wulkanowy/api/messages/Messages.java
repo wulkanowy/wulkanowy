@@ -59,7 +59,7 @@ public class Messages {
             messages = new Gson().fromJson(res, MessagesContainer.class).data;
         } catch (JsonParseException e) {
             if (res.contains(ERROR_TITLE)) {
-                throw new BadRequestException();
+                throw new BadRequestException(ERROR_TITLE);
             }
 
             throw new NotLoggedInErrorException();
@@ -80,7 +80,7 @@ public class Messages {
             message = new Gson().fromJson(res, MessageContainer.class).data;
         } catch (JsonParseException e) {
             if (res.contains(ERROR_TITLE)) {
-                throw new BadRequestException();
+                throw new BadRequestException(ERROR_TITLE);
             }
 
             throw new NotLoggedInErrorException();
