@@ -61,11 +61,11 @@ public class Login {
         }).select("title").text();
 
         if ("Logowanie".equals(title)) {
-            throw new AccountPermissionException();
+            throw new AccountPermissionException("No account access. Try another symbol");
         }
 
         if (!"Uonet+".equals(title)) {
-            throw new LoginErrorException();
+            throw new LoginErrorException("Could not log in, unknown error");
         }
 
         return this.symbol;

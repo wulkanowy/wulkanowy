@@ -4,7 +4,7 @@ import io.github.wulkanowy.api.NotLoggedInErrorException;
 
 class LoginErrorException extends NotLoggedInErrorException {
 
-    LoginErrorException() {
-        super("Nie udało się zalogować, nieznany błąd");
+    LoginErrorException(String message) {
+        super(message);
     }
 }

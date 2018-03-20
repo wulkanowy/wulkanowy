@@ -62,7 +62,7 @@ public class Messages {
                 throw new BadRequestException(ERROR_TITLE);
             }
 
-            throw new NotLoggedInErrorException();
+            throw new NotLoggedInErrorException("You are probably not logged in");
         }
 
         return messages;
@@ -83,7 +83,7 @@ public class Messages {
                 throw new BadRequestException(ERROR_TITLE);
             }
 
-            throw new NotLoggedInErrorException();
+            throw new NotLoggedInErrorException("You are probably not logged in. Force login");
         }
 
         return message;
