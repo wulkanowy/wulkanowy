@@ -33,15 +33,14 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
     }
 
     @Override
-    public void onStart(AttendanceTabContract.View view, boolean isPrimary) {
+    public void onStart(AttendanceTabContract.View view) {
         super.onStart(view);
         getView().showProgressBar(true);
         getView().showNoItem(false);
-        onFragmentSelected(isPrimary);
     }
 
     @Override
-    public void onFragmentSelected(boolean isSelected) {
+    public void onFragmentActivated(boolean isSelected) {
         if (!isFirstSight && isSelected) {
             isFirstSight = true;
 

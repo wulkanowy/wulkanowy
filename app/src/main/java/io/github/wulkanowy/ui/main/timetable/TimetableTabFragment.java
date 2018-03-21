@@ -28,12 +28,6 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     private static final String ARGUMENT_KEY = "date";
 
-    private static final String SAVED_KEY = "isSelected";
-
-    private boolean isPrimary = false;
-
-    private boolean isSelected = false;
-
     @BindView(R.id.timetable_tab_fragment_recycler)
     RecyclerView recyclerView;
 
@@ -65,14 +59,6 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
         return fragmentTab;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            isSelected = savedInstanceState.getBoolean(SAVED_KEY, isSelected);
-        }
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -86,8 +72,8 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
             if (getArguments() != null) {
                 presenter.setArgumentDate(getArguments().getString(ARGUMENT_KEY));
             }
-
-            presenter.onStart(this, isPrimary);
+            presenter.onStart(this);
+            presenter.onFragmentActivated(getUserVisibleHint());
         }
         return view;
     }
@@ -114,10 +100,8 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
-        if (presenter != null && getView() != null) {
-            presenter.onFragmentSelected(isSelected);
-        } else if (isSelected) {
-            isPrimary = true;
+        if (presenter != null) {
+            presenter.onFragmentActivated(menuVisible);
         }
     }
 
@@ -151,10 +135,6 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
         noItemView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-    }
-
     @Override
     public void onError(String message) {
         if (getActivity() != null) {
@@ -164,14 +144,7 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBoolean(SAVED_KEY, isSelected);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onDestroyView() {
-        isPrimary = false;
         presenter.onDestroy();
         super.onDestroyView();
     }

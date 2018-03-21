@@ -36,15 +36,14 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     }
 
     @Override
-    public void onStart(TimetableTabContract.View view, boolean isPrimary) {
+    public void onStart(TimetableTabContract.View view) {
         super.onStart(view);
         getView().showProgressBar(true);
         getView().showNoItem(false);
-        onFragmentSelected(isPrimary);
     }
 
     @Override
-    public void onFragmentSelected(boolean isSelected) {
+    public void onFragmentActivated(boolean isSelected) {
         if (!isFirstSight && isSelected) {
             isFirstSight = true;
 
