@@ -45,6 +45,8 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
     @Inject
     FlexibleAdapter<AttendanceHeaderItem> adapter;
 
+    private boolean isFragmentVisible = false;
+
     public static AttendanceTabFragment newInstance(String date) {
         AttendanceTabFragment fragmentTab = new AttendanceTabFragment();
 
@@ -70,7 +72,7 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
             }
 
             presenter.onStart(this);
-            presenter.onFragmentActivated(getUserVisibleHint());
+            presenter.onFragmentActivated(isFragmentVisible);
         }
         return view;
     }
@@ -97,6 +99,7 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
+        isFragmentVisible = menuVisible;
         if (presenter != null) {
             presenter.onFragmentActivated(menuVisible);
         }

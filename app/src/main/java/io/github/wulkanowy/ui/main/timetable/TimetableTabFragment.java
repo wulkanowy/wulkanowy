@@ -49,6 +49,8 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
     @Inject
     FlexibleAdapter<TimetableHeaderItem> adapter;
 
+    private boolean isFragmentVisible = false;
+
     public static TimetableTabFragment newInstance(String date) {
         TimetableTabFragment fragmentTab = new TimetableTabFragment();
 
@@ -73,7 +75,7 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
                 presenter.setArgumentDate(getArguments().getString(ARGUMENT_KEY));
             }
             presenter.onStart(this);
-            presenter.onFragmentActivated(getUserVisibleHint());
+            presenter.onFragmentActivated(isFragmentVisible);
         }
         return view;
     }
@@ -100,6 +102,7 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
+        isFragmentVisible = menuVisible;
         if (presenter != null) {
             presenter.onFragmentActivated(menuVisible);
         }
