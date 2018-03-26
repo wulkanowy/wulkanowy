@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_view"
+        android:key="pref_view">
+        <ListPreference
+            android:defaultValue="2"
+            android:dialogTitle="@string/pref_tab_list"
+            android:entries="@array/startup_tab_entries"
+            android:entryValues="@array/startup_tab_value"
+            android:key="startup_tab"
+            android:title="@string/pref_tab_list"
+            android:summary="%s" />
+    </PreferenceCategory>
+</PreferenceScreen>

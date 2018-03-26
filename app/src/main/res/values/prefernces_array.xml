@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="startup_tab_entries">
+        <item>@string/grades_text</item>
+        <item>@string/attendance_text</item>
+        <item>@string/dashboard_text</item>
+        <item>@string/timetable_text</item>
+    </string-array>
+    <string-array name="startup_tab_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>

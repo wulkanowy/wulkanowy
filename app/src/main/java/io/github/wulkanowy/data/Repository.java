@@ -69,6 +69,11 @@ public class Repository implements RepositoryContract {
     }
 
     @Override
+    public int getStartupTab() {
+        return sharedPref.getStartupTab();
+    }
+
+    @Override
     public String[] getSymbolsKeysArray() {
         return resources.getSymbolsKeysArray();
     }
