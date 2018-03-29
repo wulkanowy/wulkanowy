@@ -98,8 +98,14 @@ public class Client {
                 .replace("{symbol}", symbol);
     }
 
-    Document getPageByUrl(String url) throws IOException, VulcanException {
-        login();
+    public Document getPageByUrl(String url) throws IOException, VulcanException {
+        return getPageByUrl(url, true);
+    }
+
+    public Document getPageByUrl(String url, boolean loginBefore) throws IOException, VulcanException {
+        if (loginBefore) {
+            login();
+        }
 
         Connection.Response response = Jsoup.connect(getFilledUrl(url))
                 .followRedirects(true)
@@ -110,7 +116,9 @@ public class Client {
 
         Document doc = checkForErrors(response.parse());
 
-        lastSuccessRequest = new Date();
+        if (loginBefore) {
+            lastSuccessRequest = new Date();
+        }
 
         return doc;
     }

@@ -38,12 +38,40 @@ public class Login {
     String sendCredentials(String email, String password, String symbol) throws IOException, VulcanException {
         this.symbol = symbol;
 
-        Document html = client.postPageByUrl(LOGIN_PAGE_URL, new String[][]{
+        String[][] credentials = new String[][]{
                 {"LoginName", email},
                 {"Password", password}
-        });
+        };
 
-        Element errorMessage = html.select(".ErrorMessage").first();
+        String loginFormAction = LOGIN_PAGE_URL;
+
+        Document loginPage = client.getPageByUrl(LOGIN_PAGE_URL, false);
+        Element form = loginPage.select("#form1").first();
+        if (null != form) {
+            Document formPage = client.postPageByUrl(form.attr("abs:action"), new String[][]{
+                    {"__VIEWSTATE", loginPage.select("#__VIEWSTATE").val()},
+                    {"__VIEWSTATEGENERATOR", loginPage.select("#__VIEWSTATEGENERATOR").val()},
+                    {"__EVENTVALIDATION", loginPage.select("#__EVENTVALIDATION").val()},
+                    {"__db", loginPage.select("input[name=__db]").val()},
+                    {"PassiveSignInButton.x", "0"},
+                    {"PassiveSignInButton.y", "0"},
+            });
+            loginFormAction = formPage.select("#form1").first().attr("abs:action");
+            credentials = new String[][]{
+                    {"__VIEWSTATE", formPage.select("#__VIEWSTATE").val()},
+                    {"__VIEWSTATEGENERATOR", formPage.select("#__VIEWSTATEGENERATOR").val()},
+                    {"__EVENTVALIDATION", formPage.select("#__EVENTVALIDATION").val()},
+                    {"__db", formPage.select("input[name=__db]").val()},
+                    {"UsernameTextBox", email},
+                    {"PasswordTextBox", password},
+                    {"SubmitButton.x", "0"},
+                    {"SubmitButton.y", "0"},
+            };
+        }
+
+        Document html = client.postPageByUrl(loginFormAction, credentials);
+
+        Element errorMessage = html.select(".ErrorMessage, #ErrorTextLabel").first();
         if (null != errorMessage) {
             throw new BadCredentialsException(errorMessage.text());
         }
@@ -85,7 +113,7 @@ public class Login {
                 .select("[AttributeName=\"UserInstance\"] samlAttributeValue");
 
         if (els.isEmpty()) {
-            return "";
+            return "opole";
         }
 
         return els.get(1).text();
