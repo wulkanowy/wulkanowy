@@ -74,6 +74,11 @@ public class Repository implements RepositoryContract {
     }
 
     @Override
+    public int getServicesInterval() {
+        return sharedPref.getServicesInterval();
+    }
+
+    @Override
     public boolean isServicesEnable() {
         return sharedPref.isServicesEnable();
     }
@@ -81,6 +86,11 @@ public class Repository implements RepositoryContract {
     @Override
     public boolean isNotifyEnable() {
         return sharedPref.isNotifyEnable();
+    }
+
+    @Override
+    public boolean isMobileDisable() {
+        return sharedPref.isMobileDisable();
     }
 
     @Override

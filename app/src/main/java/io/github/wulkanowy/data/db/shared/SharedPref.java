@@ -42,12 +42,22 @@ public class SharedPref implements SharedPrefContract {
     }
 
     @Override
+    public int getServicesInterval() {
+        return Integer.valueOf(settingsSharedPref.getString(SettingsFragment.SHARED_KEY_SERVICES_INTERVAL, "60"));
+    }
+
+    @Override
     public boolean isServicesEnable() {
         return settingsSharedPref.getBoolean(SettingsFragment.SHARED_KEY_SERVICES_ENABLE, true);
     }
 
     @Override
     public boolean isNotifyEnable() {
-        return settingsSharedPref.getBoolean(SettingsFragment.SHARED_KEY_SERVICES_ENABLE, true);
+        return settingsSharedPref.getBoolean(SettingsFragment.SHARED_KEY_NOTIFY_ENABLE, true);
+    }
+
+    @Override
+    public boolean isMobileDisable() {
+        return settingsSharedPref.getBoolean(SettingsFragment.SHARED_KEY_SERVICES_MOBILE_DISABLED, false);
     }
 }

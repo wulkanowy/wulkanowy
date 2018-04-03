@@ -8,6 +8,10 @@ public interface SharedPrefContract {
 
     int getStartupTab();
 
+    int getServicesInterval();
+
+    boolean isMobileDisable();
+
     boolean isServicesEnable();
 
     boolean isNotifyEnable();

@@ -27,10 +27,6 @@ import io.github.wulkanowy.utils.LogUtils;
 
 public class SyncJob extends SimpleJobService {
 
-    private static final int DEFAULT_INTERVAL_START = 60 * 50;
-
-    private static final int DEFAULT_INTERVAL_END = DEFAULT_INTERVAL_START + (60 * 40);
-
     public static final String EXTRA_INTENT_KEY = "cardId";
 
     public static final String JOB_TAG = "SyncJob";
@@ -40,7 +36,7 @@ public class SyncJob extends SimpleJobService {
     @Inject
     RepositoryContract repository;
 
-    public static void start(Context context) {
+    public static void start(Context context, int interval, boolean useMobileData) {
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
 
         dispatcher.mustSchedule(dispatcher.newJobBuilder()
@@ -48,8 +44,8 @@ public class SyncJob extends SimpleJobService {
                 .setService(SyncJob.class)
                 .setTag(JOB_TAG)
                 .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(DEFAULT_INTERVAL_START, DEFAULT_INTERVAL_END))
-                .setConstraints(Constraint.ON_ANY_NETWORK)
+                .setTrigger(Trigger.executionWindow(interval * 60, (interval + 10) * 60))
+                .setConstraints(useMobileData ? Constraint.ON_ANY_NETWORK : Constraint.ON_UNMETERED_NETWORK)
                 .setReplaceCurrent(false)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                 .build());

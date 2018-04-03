@@ -16,6 +16,10 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     public static final String SHARED_KEY_NOTIFY_ENABLE = "notify_enable";
 
+    public static final String SHARED_KEY_SERVICES_INTERVAL = "services_interval";
+
+    public static final String SHARED_KEY_SERVICES_MOBILE_DISABLED = "services_disable_mobile";
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
@@ -23,12 +27,20 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(SHARED_KEY_SERVICES_ENABLE)) {
-            if (sharedPreferences.getBoolean(SHARED_KEY_SERVICES_ENABLE, true)) {
-                SyncJob.start(getContext());
-            } else {
-                SyncJob.stop(getContext());
-            }
+        if (key.equals(SHARED_KEY_SERVICES_ENABLE) || key.equals(SHARED_KEY_SERVICES_INTERVAL)
+                || key.equals(SHARED_KEY_SERVICES_MOBILE_DISABLED)) {
+            launchServices(sharedPreferences.getBoolean(SHARED_KEY_SERVICES_ENABLE, true),
+                    sharedPreferences);
+        }
+    }
+
+    private void launchServices(boolean start, SharedPreferences sharedPref) {
+        if (start) {
+            SyncJob.stop(getContext());
+            SyncJob.start(getContext(), sharedPref.getInt(SHARED_KEY_SERVICES_INTERVAL, 60),
+                    sharedPref.getBoolean(SHARED_KEY_SERVICES_MOBILE_DISABLED, false));
+        } else {
+            SyncJob.stop(getContext());
         }
     }
 

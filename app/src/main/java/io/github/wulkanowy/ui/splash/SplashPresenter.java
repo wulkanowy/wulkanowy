@@ -19,7 +19,8 @@ public class SplashPresenter extends BasePresenter<SplashContract.View>
     public void onStart(@NonNull SplashContract.View activity) {
         super.onStart(activity);
         if (getRepository().isServicesEnable()) {
-            getView().startSyncService();
+            getView().startSyncService(getRepository().getServicesInterval(),
+                    getRepository().isMobileDisable());
         }
 
         if (getRepository().getCurrentUserId() == 0) {
