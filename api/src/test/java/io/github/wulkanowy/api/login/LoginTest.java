@@ -11,15 +11,20 @@ import io.github.wulkanowy.api.FixtureHelper;
 
 public class LoginTest {
 
+    private Document getFixtureAsDocument(String fixtureFileName) {
+        return Jsoup.parse(getFixtureAsString(fixtureFileName));
+    }
+
     private String getFixtureAsString(String fixtureFileName) {
         return FixtureHelper.getAsString(getClass().getResourceAsStream(fixtureFileName));
     }
 
     private Client getClient(String fixtureFileName) throws Exception {
-        Document doc = Jsoup.parse(getFixtureAsString(fixtureFileName));
+        Document doc = getFixtureAsDocument(fixtureFileName);
 
         Client client = Mockito.mock(Client.class);
         Mockito.when(client.postPageByUrl(Mockito.anyString(), Mockito.any(String[][].class))).thenReturn(doc);
+        Mockito.when(client.getPageByUrl(Mockito.anyString(), Mockito.anyBoolean())).thenReturn(doc);
 
         return client;
     }
@@ -43,8 +48,8 @@ public class LoginTest {
         Login login = new Login(getClient("Logowanie-certyfikat.html"));
 
         Assert.assertEquals(
-                getFixtureAsString("cert.xml").replaceAll("\\s+",""),
-                login.sendCredentials("a@a", "passwd", "d123").replaceAll("\\s+","")
+                getFixtureAsString("cert-stock.xml").replaceAll("\\s+",""),
+                login.sendCredentials("a@a", "passwd", "d123").select("input[name=wresult]").attr("value").replaceAll("\\s+","")
         );
     }
 
@@ -53,7 +58,7 @@ public class LoginTest {
         Login login = new Login(getClient("Logowanie-success.html"));
 
         Assert.assertEquals("wulkanowyschool321",
-                login.sendCertificate("", "wulkanowyschool321"));
+                login.sendCertificate(new Document(""), "wulkanowyschool321"));
     }
 
     @Test
@@ -61,28 +66,28 @@ public class LoginTest {
         Login login = new Login(getClient("Logowanie-success.html"));
 
         Assert.assertEquals("demo12345",
-                login.sendCertificate(getFixtureAsString("cert.xml"), "Default"));
+                login.sendCertificate(getFixtureAsDocument("Logowanie-certyfikat.html"), "Default"));
     }
 
     @Test(expected = AccountPermissionException.class)
     public void sendCertificateAccountPermissionTest() throws Exception {
         Login login = new Login(getClient("Logowanie-brak-dostepu.html"));
 
-        login.sendCertificate(getFixtureAsString("cert.xml"), "demo123");
+        login.sendCertificate(getFixtureAsDocument("cert-stock.xml"), "demo123");
     }
 
     @Test(expected = LoginErrorException.class)
     public void sendCertificateLoginErrorTest() throws Exception {
         Login login = new Login(getClient("Logowanie-certyfikat.html")); // change to other document
 
-        login.sendCertificate(getFixtureAsString("cert.xml"), "demo123");
+        login.sendCertificate(getFixtureAsDocument("cert-stock.xml"), "demo123");
     }
 
     @Test
     public void findSymbolInCertificateTest() throws Exception {
         Login login = new Login(getClient("Logowanie-certyfikat.html"));
 
-        String certificate = getFixtureAsString("cert.xml");
+        String certificate = getFixtureAsString("cert-stock.xml");
 
         Assert.assertEquals("demo12345", login.findSymbolInCertificate(certificate));
     }

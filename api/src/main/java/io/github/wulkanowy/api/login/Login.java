@@ -18,9 +18,6 @@ public class Login {
             "{schema}%253a%252f%252fuonetplus.{host}%252f{symbol}%252fLoginEndpoint.aspx%26wctx%3D" +
             "{schema}%253a%252f%252fuonetplus.{host}%252f{symbol}%252fLoginEndpoint.aspx";
 
-    private static final String LOGIN_ENDPOINT_PAGE_URL =
-            "{schema}://uonetplus.{host}/{symbol}/LoginEndpoint.aspx";
-
     private Client client;
 
     private String symbol;
@@ -30,12 +27,12 @@ public class Login {
     }
 
     public String login(String email, String password, String symbol) throws VulcanException, IOException {
-        String certificate = sendCredentials(email, password, symbol);
+        Document certDoc = sendCredentials(email, password, symbol);
 
-        return sendCertificate(certificate, symbol);
+        return sendCertificate(certDoc, symbol);
     }
 
-    String sendCredentials(String email, String password, String symbol) throws IOException, VulcanException {
+    Document sendCredentials(String email, String password, String symbol) throws IOException, VulcanException {
         this.symbol = symbol;
 
         String[][] credentials = new String[][]{
@@ -76,14 +73,17 @@ public class Login {
             throw new BadCredentialsException(errorMessage.text());
         }
 
-        return html.select("input[name=wresult]").attr("value");
+        return html;
     }
 
-    String sendCertificate(String certificate, String defaultSymbol) throws IOException, VulcanException {
+    String sendCertificate(Document certDoc, String defaultSymbol) throws IOException, VulcanException {
+        String certificate = certDoc.select("input[name=wresult]").attr("value");
+        String url = certDoc.select("form[name=hiddenform]").attr("action");
+
         this.symbol = findSymbol(defaultSymbol, certificate);
         client.setSymbol(this.symbol);
 
-        String title = client.postPageByUrl(LOGIN_ENDPOINT_PAGE_URL, new String[][]{
+        String title = client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
                 {"wa", "wsignin1.0"},
                 {"wresult", certificate}
         }).select("title").text();
@@ -108,14 +108,14 @@ public class Login {
     }
 
     String findSymbolInCertificate(String certificate) {
-        Elements els = Jsoup
+        Elements instances = Jsoup
                 .parse(certificate.replaceAll(":", ""), "", Parser.xmlParser())
                 .select("[AttributeName=\"UserInstance\"] samlAttributeValue");
 
-        if (els.isEmpty()) {
-            return "opole";
+        if (instances.isEmpty()) {
+            return "";
         }
 
-        return els.get(1).text();
+        return instances.get(1).text();
     }
 }
