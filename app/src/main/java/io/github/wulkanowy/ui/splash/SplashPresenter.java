@@ -18,7 +18,9 @@ public class SplashPresenter extends BasePresenter<SplashContract.View>
     @Override
     public void onStart(@NonNull SplashContract.View activity) {
         super.onStart(activity);
-        getView().startSyncService();
+        if (getRepository().isServicesEnable()) {
+            getView().startSyncService();
+        }
 
         if (getRepository().getCurrentUserId() == 0) {
             getView().openLoginActivity();

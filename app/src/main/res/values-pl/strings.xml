@@ -113,6 +113,13 @@
         <item quantity="few">%1$d nieobecności</item>
         <item quantity="many">%1$d nieobecności</item>
     </plurals>
-    <string name="pref_tab_list">Domyślny widok po uruchomieniu</string>
+
     <string name="pref_view">Widok</string>
+    <string name="pref_tab_list">Domyślny widok</string>
+    <string name="pref_notify">Powiadomienia</string>
+    <string name="pref_notify_switch">Pokazuj powiadomienia</string>
+    <string name="pref_services">Usługi</string>
+    <string name="pref_services_switch">Włącz odświeżanie danych w tle</string>
+    <string name="pref_services_interval">Interwał między odświeżaniem danych</string>
+    <string name="pref_services_mobile_data">Odświeżaj tylko w sieci WiFi</string>
 </resources>

@@ -7,4 +7,8 @@ public interface SharedPrefContract {
     void setCurrentUserId(long userId);
 
     int getStartupTab();
+
+    boolean isServicesEnable();
+
+    boolean isNotifyEnable();
 }

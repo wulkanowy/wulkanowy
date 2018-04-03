@@ -33,6 +33,8 @@ public class SyncJob extends SimpleJobService {
 
     public static final String EXTRA_INTENT_KEY = "cardId";
 
+    public static final String JOB_TAG = "SyncJob";
+
     private List<Grade> gradeList;
 
     @Inject
@@ -44,13 +46,17 @@ public class SyncJob extends SimpleJobService {
         dispatcher.mustSchedule(dispatcher.newJobBuilder()
                 .setLifetime(Lifetime.FOREVER)
                 .setService(SyncJob.class)
-                .setTag("SyncJob")
+                .setTag(JOB_TAG)
                 .setRecurring(true)
                 .setTrigger(Trigger.executionWindow(DEFAULT_INTERVAL_START, DEFAULT_INTERVAL_END))
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setReplaceCurrent(false)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                 .build());
+    }
+
+    public static void stop(Context context) {
+        new FirebaseJobDispatcher(new GooglePlayDriver(context)).cancel(JOB_TAG);
     }
 
     @Override
@@ -67,7 +73,7 @@ public class SyncJob extends SimpleJobService {
 
             gradeList = repository.getNewGrades();
 
-            if (!gradeList.isEmpty()) {
+            if (!gradeList.isEmpty() && repository.isNotifyEnable()) {
                 showNotification();
             }
             return JobService.RESULT_SUCCESS;

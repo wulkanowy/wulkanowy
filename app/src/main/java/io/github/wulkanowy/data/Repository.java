@@ -74,6 +74,16 @@ public class Repository implements RepositoryContract {
     }
 
     @Override
+    public boolean isServicesEnable() {
+        return sharedPref.isServicesEnable();
+    }
+
+    @Override
+    public boolean isNotifyEnable() {
+        return sharedPref.isNotifyEnable();
+    }
+
+    @Override
     public String[] getSymbolsKeysArray() {
         return resources.getSymbolsKeysArray();
     }

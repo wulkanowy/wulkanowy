@@ -9,13 +9,12 @@ import javax.inject.Singleton;
 
 import io.github.wulkanowy.di.annotations.ApplicationContext;
 import io.github.wulkanowy.di.annotations.SharedPreferencesInfo;
+import io.github.wulkanowy.ui.main.settings.SettingsFragment;
 
 @Singleton
 public class SharedPref implements SharedPrefContract {
 
     private static final String SHARED_KEY_USER_ID = "USER_ID";
-
-    private static final String SHARED_KEY_START_TAB = "startup_tab";
 
     private final SharedPreferences appSharedPref;
 
@@ -39,6 +38,16 @@ public class SharedPref implements SharedPrefContract {
 
     @Override
     public int getStartupTab() {
-        return Integer.valueOf(settingsSharedPref.getString(SHARED_KEY_START_TAB, "2"));
+        return Integer.valueOf(settingsSharedPref.getString(SettingsFragment.SHARED_KEY_START_TAB, "2"));
+    }
+
+    @Override
+    public boolean isServicesEnable() {
+        return settingsSharedPref.getBoolean(SettingsFragment.SHARED_KEY_SERVICES_ENABLE, true);
+    }
+
+    @Override
+    public boolean isNotifyEnable() {
+        return settingsSharedPref.getBoolean(SettingsFragment.SHARED_KEY_SERVICES_ENABLE, true);
     }
 }
