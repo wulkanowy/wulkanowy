@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="startup_tab_entries">
+    <string-array name="startup_tab_entries" translatable="false">
         <item>@string/grades_text</item>
         <item>@string/attendance_text</item>
         <item>@string/dashboard_text</item>
         <item>@string/timetable_text</item>
     </string-array>
-    <string-array name="startup_tab_value">
+    <string-array name="startup_tab_value" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
@@ -21,7 +21,7 @@
         <item>12 hours</item>
         <item>24 hours</item>
     </string-array>
-    <string-array name="services_interval_value">
+    <string-array name="services_interval_value" translatable="false">
         <item>10</item>
         <item>30</item>
         <item>60</item>
