@@ -44,7 +44,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     }
 
     @Override
-    public void startSyncService(int interval, boolean useMobile) {
-        SyncJob.start(getApplicationContext(), interval, useMobile);
+    public void startSyncService(int interval, boolean useOnlyWifi) {
+        SyncJob.start(getApplicationContext(), interval, useOnlyWifi);
     }
 }

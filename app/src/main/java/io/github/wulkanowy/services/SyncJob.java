@@ -14,6 +14,7 @@ import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.SimpleJobService;
 import com.firebase.jobdispatcher.Trigger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,12 +32,12 @@ public class SyncJob extends SimpleJobService {
 
     public static final String JOB_TAG = "SyncJob";
 
-    private List<Grade> gradeList;
+    private List<Grade> gradeList = new ArrayList<>();
 
     @Inject
     RepositoryContract repository;
 
-    public static void start(Context context, int interval, boolean useMobileData) {
+    public static void start(Context context, int interval, boolean useOnlyWifi) {
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
 
         dispatcher.mustSchedule(dispatcher.newJobBuilder()
@@ -44,8 +45,8 @@ public class SyncJob extends SimpleJobService {
                 .setService(SyncJob.class)
                 .setTag(JOB_TAG)
                 .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(interval * 60, (interval + 10) * 60))
-                .setConstraints(useMobileData ? Constraint.ON_ANY_NETWORK : Constraint.ON_UNMETERED_NETWORK)
+                .setTrigger(Trigger.executionWindow(interval, interval + 10))
+                .setConstraints(useOnlyWifi ? Constraint.ON_UNMETERED_NETWORK : Constraint.ON_ANY_NETWORK)
                 .setReplaceCurrent(false)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                 .build());
@@ -69,7 +70,7 @@ public class SyncJob extends SimpleJobService {
 
             gradeList = repository.getNewGrades();
 
-            if (!gradeList.isEmpty() && repository.isNotifyEnable()) {
+            if (repository.isNotifyEnable()) {
                 showNotification();
             }
             return JobService.RESULT_SUCCESS;

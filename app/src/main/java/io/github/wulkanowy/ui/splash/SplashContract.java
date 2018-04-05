@@ -12,7 +12,7 @@ public interface SplashContract {
 
         void openMainActivity();
 
-        void startSyncService(int interval, boolean useMobile);
+        void startSyncService(int interval, boolean useOnlyWifi);
     }
 
     @PerActivity
