@@ -45,7 +45,7 @@ public class SyncJob extends SimpleJobService {
                 .setService(SyncJob.class)
                 .setTag(JOB_TAG)
                 .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(interval, interval + 10))
+                .setTrigger(Trigger.executionWindow(interval * 60, (interval + 10) * 60))
                 .setConstraints(useOnlyWifi ? Constraint.ON_UNMETERED_NETWORK : Constraint.ON_ANY_NETWORK)
                 .setReplaceCurrent(false)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
@@ -70,7 +70,7 @@ public class SyncJob extends SimpleJobService {
 
             gradeList = repository.getNewGrades();
 
-            if (repository.isNotifyEnable()) {
+            if (!gradeList.isEmpty() && repository.isNotifyEnable()) {
                 showNotification();
             }
             return JobService.RESULT_SUCCESS;
