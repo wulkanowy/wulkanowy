@@ -12,7 +12,9 @@ public interface SplashContract {
 
         void openMainActivity();
 
-        void startSyncService();
+        void startSyncService(int interval, boolean useOnlyWifi);
+
+        void cancelNotifications();
     }
 
     @PerActivity
