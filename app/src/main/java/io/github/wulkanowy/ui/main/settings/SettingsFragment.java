@@ -36,7 +36,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     private void launchServices(boolean start, SharedPreferences sharedPref) {
         if (start) {
-            int newInterval = Integer.valueOf(sharedPref.getString(SHARED_KEY_SERVICES_INTERVAL, "60"));
+            int newInterval = Integer.parseInt(sharedPref.getString(SHARED_KEY_SERVICES_INTERVAL, "60"));
             boolean useOnlyWifi = sharedPref.getBoolean(SHARED_KEY_SERVICES_MOBILE_DISABLED, false);
 
             SyncJob.stop(getContext());
