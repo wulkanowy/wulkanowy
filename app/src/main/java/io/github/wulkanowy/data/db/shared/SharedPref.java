@@ -38,12 +38,12 @@ public class SharedPref implements SharedPrefContract {
 
     @Override
     public int getStartupTab() {
-        return Integer.valueOf(settingsSharedPref.getString(SettingsFragment.SHARED_KEY_START_TAB, "2"));
+        return Integer.parseInt(settingsSharedPref.getString(SettingsFragment.SHARED_KEY_START_TAB, "2"));
     }
 
     @Override
     public int getServicesInterval() {
-        return Integer.valueOf(settingsSharedPref.getString(SettingsFragment.SHARED_KEY_SERVICES_INTERVAL, "60"));
+        return Integer.parseInt(settingsSharedPref.getString(SettingsFragment.SHARED_KEY_SERVICES_INTERVAL, "60"));
     }
 
     @Override
