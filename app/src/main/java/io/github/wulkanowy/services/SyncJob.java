@@ -86,7 +86,7 @@ public class SyncJob extends SimpleJobService {
         gradeNotify.notify(gradeNotify.notificationBuilder()
                 .setContentTitle(getStringTitle())
                 .setContentText(getStringContent())
-                .setSmallIcon(R.drawable.ic_stat_notify)
+                .setSmallIcon(R.drawable.ic_notify_grade)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

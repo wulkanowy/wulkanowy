@@ -19,9 +19,6 @@ public class NotificationService {
 
     public NotificationService(Context context) {
         this.context = context;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannel();
-        }
     }
 
     void notify(Notification notification) {
@@ -29,6 +26,9 @@ public class NotificationService {
     }
 
     NotificationCompat.Builder notificationBuilder() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannel();
+        }
         return new NotificationCompat.Builder(context, getChannelId());
     }
 
