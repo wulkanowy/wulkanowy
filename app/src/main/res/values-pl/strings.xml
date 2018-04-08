@@ -121,5 +121,5 @@
     <string name="pref_services">Usługi</string>
     <string name="pref_services_switch">Włącz odświeżanie danych w tle</string>
     <string name="pref_services_interval">Interwał między odświeżaniem danych</string>
-    <string name="pref_services_mobile_data">Odświeżaj tylko w sieci WiFi</string>
+    <string name="pref_services_mobile_data">Synchronizacja tylko przez WiFi</string>
 </resources>

@@ -47,6 +47,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
     }
 
     @Override
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
+        if (menuVisible) {
+            getActivity().setTitle(R.string.settings_text);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         getPreferenceScreen().getSharedPreferences()
