@@ -33,7 +33,7 @@ public interface LoginContract {
 
         void hideSoftInput();
 
-        void hideActionBar();
+        void showActionBar(boolean show);
 
     }
 

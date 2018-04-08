@@ -211,10 +211,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     @Override
-    public void hideActionBar() {
+    public void showActionBar(boolean show) {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.hide();
+            if (show) {
+                actionBar.show();
+            } else {
+                actionBar.hide();
+            }
         }
     }
 

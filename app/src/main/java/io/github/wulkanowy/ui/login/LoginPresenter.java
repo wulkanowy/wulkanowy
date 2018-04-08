@@ -55,7 +55,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     @Override
     public void onStartAsync() {
         if (isViewAttached()) {
-            getView().hideActionBar();
+            getView().showActionBar(false);
             getView().showLoginProgress(true);
         }
     }
@@ -88,12 +88,15 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
         } else if (exception instanceof BadCredentialsException) {
             getView().setErrorPassIncorrect();
             getView().showSoftInput();
+            getView().showActionBar(true);
             getView().showLoginProgress(false);
         } else if (exception instanceof AccountPermissionException) {
             getView().setErrorSymbolRequired();
             getView().showSoftInput();
+            getView().showActionBar(true);
             getView().showLoginProgress(false);
         } else {
+            getView().showActionBar(true);
             getView().onError(getRepository().getErrorLoginMessage(exception));
             getView().showLoginProgress(false);
         }
@@ -103,6 +106,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     @Override
     public void onCanceledAsync() {
         if (isViewAttached()) {
+            getView().showActionBar(true);
             getView().showLoginProgress(false);
         }
     }
