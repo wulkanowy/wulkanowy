@@ -55,6 +55,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
     @Override
     public void onStartAsync() {
         if (isViewAttached()) {
+            getView().hideActionBar();
             getView().showLoginProgress(true);
         }
     }

@@ -33,6 +33,8 @@ public interface LoginContract {
 
         void hideSoftInput();
 
+        void hideActionBar();
+
     }
 
     @PerActivity
