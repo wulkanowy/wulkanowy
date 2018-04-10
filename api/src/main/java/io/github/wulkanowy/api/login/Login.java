@@ -81,7 +81,8 @@ public class Login {
 
         String title = client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
                 {"wa", "wsignin1.0"},
-                {"wresult", certificate}
+                {"wresult", certificate},
+                {"wctx", certDoc.select("input[name=wctx]").attr("value")}
         }).select("title").text();
 
         if ("Logowanie".equals(title)) {
