@@ -40,7 +40,7 @@ public class LoginTest {
     public void sendWrongCredentialsTest() throws Exception {
         Login login = new Login(getClient("Logowanie-error.html"));
 
-        login.sendCredentials("a@a", "pswd", "d123");
+        login.sendCredentials("a@a", "pswd");
     }
 
     @Test
@@ -49,7 +49,7 @@ public class LoginTest {
 
         Assert.assertEquals(
                 getFixtureAsString("cert-stock.xml").replaceAll("\\s+",""),
-                login.sendCredentials("a@a", "passwd", "d123").select("input[name=wresult]").attr("value").replaceAll("\\s+","")
+                login.sendCredentials("a@a", "passwd").select("input[name=wresult]").attr("value").replaceAll("\\s+","")
         );
     }
 
