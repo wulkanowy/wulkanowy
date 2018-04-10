@@ -20,21 +20,17 @@ public class Login {
 
     private Client client;
 
-    private String symbol;
-
     public Login(Client client) {
         this.client = client;
     }
 
     public String login(String email, String password, String symbol) throws VulcanException, IOException {
-        Document certDoc = sendCredentials(email, password, symbol);
+        Document certDoc = sendCredentials(email, password);
 
         return sendCertificate(certDoc, symbol);
     }
 
-    Document sendCredentials(String email, String password, String symbol) throws IOException, VulcanException {
-        this.symbol = symbol;
-
+    Document sendCredentials(String email, String password) throws IOException, VulcanException {
         String[][] credentials = new String[][]{
                 {"LoginName", email},
                 {"Password", password}
@@ -80,8 +76,8 @@ public class Login {
         String certificate = certDoc.select("input[name=wresult]").attr("value");
         String url = certDoc.select("form[name=hiddenform]").attr("action");
 
-        this.symbol = findSymbol(defaultSymbol, certificate);
-        client.setSymbol(this.symbol);
+        String symbol = findSymbol(defaultSymbol, certificate);
+        client.setSymbol(symbol);
 
         String title = client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
                 {"wa", "wsignin1.0"},
@@ -96,7 +92,7 @@ public class Login {
             throw new LoginErrorException("Could not log in, unknown error");
         }
 
-        return this.symbol;
+        return symbol;
     }
 
     private String findSymbol(String symbol, String certificate) {
