@@ -99,7 +99,7 @@ public class Timetable {
                 addLessonInfoFromElement(lesson, e.first());
                 break;
             case 2:
-                addLessonInfoFromElement(lesson, e.last());
+                addLessonInfoFromElement(lesson, e.first());
                 break;
             case 3:
                 addLessonInfoFromElement(lesson, e.get(1));
