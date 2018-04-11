@@ -74,16 +74,27 @@ public class Login {
 
     String sendCertificate(Document certDoc, String defaultSymbol) throws IOException, VulcanException {
         String certificate = certDoc.select("input[name=wresult]").attr("value");
-        String url = certDoc.select("form[name=hiddenform]").attr("action");
 
         String symbol = findSymbol(defaultSymbol, certificate);
         client.setSymbol(symbol);
 
-        String title = client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
+        String url = certDoc.select("form[name=hiddenform]").attr("action");
+        Document afterWorking = client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
                 {"wa", "wsignin1.0"},
                 {"wresult", certificate},
                 {"wctx", certDoc.select("input[name=wctx]").attr("value")}
-        }).select("title").text();
+        });
+
+        String title = afterWorking.select("title").text();
+
+        if ("Working...".equals(title)) {
+            url = afterWorking.select("form[name=hiddenform]").attr("action");
+            title = client.postPageByUrl(url, new String[][]{
+                    {"wa", "wsignin1.0"},
+                    {"wresult", afterWorking.select("input[name=wresult]").attr("value")},
+                    {"wctx", afterWorking.select("input[name=wctx]").attr("value")}
+            }).select("title").text();
+        }
 
         if ("Logowanie".equals(title)) {
             throw new AccountPermissionException("No account access. Try another symbol");
