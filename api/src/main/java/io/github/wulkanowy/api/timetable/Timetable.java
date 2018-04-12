@@ -95,10 +95,11 @@ public class Timetable {
         moveWarningToLessonNode(e);
 
         switch (e.size()) {
-            case 1:
-                addLessonInfoFromElement(lesson, e.first());
-                break;
             case 2:
+                lesson.setNewMovedInOrChanged(true);
+                lesson.setDescription("poprzednio: " +
+                        getLessonAndGroupInfoFromSpan(e.last().select("span").first())[0]);
+            case 1:
                 addLessonInfoFromElement(lesson, e.first());
                 break;
             case 3:
