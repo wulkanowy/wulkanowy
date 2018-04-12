@@ -37,29 +37,14 @@ public class Login {
         };
 
         String loginFormAction = LOGIN_PAGE_URL;
-
         Document loginPage = client.getPageByUrl(LOGIN_PAGE_URL, false);
+
         Element form = loginPage.select("#form1").first();
-        if (null != form) {
-            Document formPage = client.postPageByUrl(form.attr("abs:action"), new String[][]{
-                    {"__VIEWSTATE", loginPage.select("#__VIEWSTATE").val()},
-                    {"__VIEWSTATEGENERATOR", loginPage.select("#__VIEWSTATEGENERATOR").val()},
-                    {"__EVENTVALIDATION", loginPage.select("#__EVENTVALIDATION").val()},
-                    {"__db", loginPage.select("input[name=__db]").val()},
-                    {"PassiveSignInButton.x", "0"},
-                    {"PassiveSignInButton.y", "0"},
-            });
+        if (null != form) { // on adfs login
+            Document formPage = client.postPageByUrl(form.attr("abs:action"),
+                    getFormStateParams(form, "", ""));
             loginFormAction = formPage.select("#form1").first().attr("abs:action");
-            credentials = new String[][]{
-                    {"__VIEWSTATE", formPage.select("#__VIEWSTATE").val()},
-                    {"__VIEWSTATEGENERATOR", formPage.select("#__VIEWSTATEGENERATOR").val()},
-                    {"__EVENTVALIDATION", formPage.select("#__EVENTVALIDATION").val()},
-                    {"__db", formPage.select("input[name=__db]").val()},
-                    {"UsernameTextBox", email},
-                    {"PasswordTextBox", password},
-                    {"SubmitButton.x", "0"},
-                    {"SubmitButton.y", "0"},
-            };
+            credentials = getFormStateParams(formPage, email, password);
         }
 
         Document html = client.postPageByUrl(loginFormAction, credentials);
@@ -72,28 +57,30 @@ public class Login {
         return html;
     }
 
-    String sendCertificate(Document certDoc, String defaultSymbol) throws IOException, VulcanException {
-        String certificate = certDoc.select("input[name=wresult]").attr("value");
+    private String[][] getFormStateParams(Element form, String email, String password) {
+        return new String[][]{
+                {"__VIEWSTATE", form.select("#__VIEWSTATE").val()},
+                {"__VIEWSTATEGENERATOR", form.select("#__VIEWSTATEGENERATOR").val()},
+                {"__EVENTVALIDATION", form.select("#__EVENTVALIDATION").val()},
+                {"__db", form.select("input[name=__db]").val()},
+                {"SubmitButton.x", "0"},
+                {"SubmitButton.y", "0"},
+                {"UsernameTextBox", email},
+                {"PasswordTextBox", password},
+        };
+    }
+
+    String sendCertificate(Document doc, String defaultSymbol) throws IOException, VulcanException {
+        String certificate = doc.select("input[name=wresult]").attr("value");
 
         String symbol = findSymbol(defaultSymbol, certificate);
         client.setSymbol(symbol);
 
-        String url = certDoc.select("form[name=hiddenform]").attr("action");
-        Document afterWorking = client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
-                {"wa", "wsignin1.0"},
-                {"wresult", certificate},
-                {"wctx", certDoc.select("input[name=wctx]").attr("value")}
-        });
+        Document targetDoc = sendCertData(doc);
+        String title = targetDoc.select("title").text();
 
-        String title = afterWorking.select("title").text();
-
-        if ("Working...".equals(title)) {
-            url = afterWorking.select("form[name=hiddenform]").attr("action");
-            title = client.postPageByUrl(url, new String[][]{
-                    {"wa", "wsignin1.0"},
-                    {"wresult", afterWorking.select("input[name=wresult]").attr("value")},
-                    {"wctx", afterWorking.select("input[name=wctx]").attr("value")}
-            }).select("title").text();
+        if ("Working...".equals(title)) { // on adfs login
+            title = sendCertData(targetDoc).select("title").text();
         }
 
         if ("Logowanie".equals(title)) {
@@ -105,6 +92,16 @@ public class Login {
         }
 
         return symbol;
+    }
+
+    private Document sendCertData(Document doc) throws IOException, VulcanException {
+        String url = doc.select("form[name=hiddenform]").attr("action");
+
+        return client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
+                {"wa", "wsignin1.0"},
+                {"wresult", doc.select("input[name=wresult]").attr("value")},
+                {"wctx", doc.select("input[name=wctx]").attr("value")}
+        });
     }
 
     private String findSymbol(String symbol, String certificate) {
