@@ -50,20 +50,6 @@ public class ClientTest {
     }
 
     @Test
-    public void getClientTest() throws Exception {
-        Client client = new Client("", "", "");
-
-        Assert.assertThat(client.getLogin(), CoreMatchers.instanceOf(Login.class));
-    }
-
-    @Test
-    public void getClientTwiceTest() throws Exception {
-        Client client = new Client("", "", "");
-
-        Assert.assertEquals(client.getLogin(), client.getLogin());
-    }
-
-    @Test
     public void getFilledUrlTest() throws Exception {
         Client client = new Client("http://fakelog.cf\\\\admin", "", "symbol123");
 
