@@ -30,21 +30,30 @@ public class LoginTest {
 
     @Test
     public void loginTest() throws Exception {
-        Login login = new Login(getClient("Logowanie-success.html"));
+        Client client = getClient("Logowanie-success.html");
+        Mockito.when(client.getPageByUrl(Mockito.anyString(), Mockito.anyBoolean()))
+                .thenReturn(getFixtureAsDocument("Logowanie-error.html"));
+        Login login = new Login(client);
 
         Assert.assertEquals("d123", login.login("a@a", "pswd", "d123"));
     }
 
     @Test(expected = BadCredentialsException.class)
     public void sendWrongCredentialsTest() throws Exception {
-        Login login = new Login(getClient("Logowanie-error.html"));
+        Client client = getClient("Logowanie-error.html");
+        Mockito.when(client.getPageByUrl(Mockito.anyString(), Mockito.anyBoolean()))
+                .thenReturn(getFixtureAsDocument("Logowanie-error.html")); // -error.html because it html with form used by
+        Login login = new Login(client);
 
         login.sendCredentials("a@a", "pswd");
     }
 
     @Test
     public void sendCredentialsCertificateTest() throws Exception {
-        Login login = new Login(getClient("Logowanie-certyfikat.html"));
+        Client client = getClient("Logowanie-certyfikat.html");
+        Mockito.when(client.getPageByUrl(Mockito.anyString(), Mockito.anyBoolean()))
+                .thenReturn(getFixtureAsDocument("Logowanie-error.html")); // -error.html because it html with form used by
+        Login login = new Login(client);
 
         Assert.assertEquals(
                 getFixtureAsString("cert.xml").replaceAll("\\s+",""),

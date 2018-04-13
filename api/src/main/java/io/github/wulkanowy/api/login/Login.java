@@ -42,10 +42,6 @@ public class Login {
             throw new BadCredentialsException(errorMessage.text());
         }
 
-        if (!"Working...".equals(html.select("title").first().text())) {
-            throw new LoginErrorException("Could not get valid certificate page");
-        }
-
         return html;
     }
 
