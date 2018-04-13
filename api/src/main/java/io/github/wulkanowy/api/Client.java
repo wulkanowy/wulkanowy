@@ -21,9 +21,7 @@ public class Client {
 
     private String password;
 
-    private String symbol = "Default";
-
-    private Login login;
+    private String symbol;
 
     private Date lastSuccessRequest = new Date();
 
@@ -56,23 +54,14 @@ public class Client {
             return;
         }
 
-        this.symbol = getLogin().login(email, password, symbol);
+        this.cookies = new Cookies();
+        this.symbol = new Login(this).login(email, password, symbol);
     }
 
     private boolean isLoggedIn() {
         return getCookies().size() > 0 &&
                 29 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());
 
-    }
-
-    Login getLogin() {
-        if (null != login) {
-            return login;
-        }
-
-        login = new Login(this);
-
-        return login;
     }
 
     public String getSymbol() {
