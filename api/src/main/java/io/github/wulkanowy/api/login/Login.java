@@ -31,8 +31,8 @@ public class Login {
     }
 
     Document sendCredentials(String email, String password) throws IOException, VulcanException {
-        client.getPageByUrl(LOGIN_PAGE_URL, false);
-        Document html = client.postPageByUrl(LOGIN_PAGE_URL, new String[][]{
+        Element form = client.getPageByUrl(LOGIN_PAGE_URL, false).select("#MainDiv form").first();
+        Document html = client.postPageByUrl(form.attr("abs:action"), new String[][]{
                 {"LoginName", email},
                 {"Password", password}
         });
@@ -40,6 +40,10 @@ public class Login {
         Element errorMessage = html.select(".ErrorMessage").first();
         if (null != errorMessage) {
             throw new BadCredentialsException(errorMessage.text());
+        }
+
+        if (!"Working...".equals(html.select("title").first().text())) {
+            throw new LoginErrorException("Could not get valid certificate page");
         }
 
         return html;
