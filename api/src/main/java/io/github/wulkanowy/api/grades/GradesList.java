@@ -22,7 +22,7 @@ public class GradesList {
 
     private static final String GRADES_PAGE_URL = "Oceny/Wszystkie?details=2&okres=";
 
-    private SnP snp = null;
+    private SnP snp;
 
     private List<Grade> grades = new ArrayList<>();
 
@@ -41,7 +41,8 @@ public class GradesList {
     public List<Grade> getAll(String semester) throws IOException, ParseException, VulcanException {
         Document gradesPage = snp.getSnPPageDocument(getGradesPageUrl() + semester);
         Elements gradesRows = gradesPage.select(".ocenySzczegoly-table > tbody > tr");
-        Semester currentSemester = snp.getCurrentSemester(snp.getSemesters(gradesPage));
+        List<Semester> semesterList = snp.getSemesters(gradesPage);
+        Semester currentSemester = snp.getCurrent(semesterList);
 
         for (Element row : gradesRows) {
             if ("Brak ocen".equals(row.select("td:nth-child(2)").text())) {
@@ -74,7 +75,7 @@ public class GradesList {
                     .setWeight(row.select("td:nth-child(4)").text())
                     .setDate(sdf.format(d))
                     .setTeacher(row.select("td:nth-child(6)").text())
-                    .setSemester(currentSemester.getNumber())
+                    .setSemester(currentSemester.getName())
             );
         }
 

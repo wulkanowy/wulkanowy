@@ -5,8 +5,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudentAndParent implements SnP {
 
@@ -18,28 +21,46 @@ public class StudentAndParent implements SnP {
 
     private Client client;
 
-    private String id;
+    private String schoolID;
 
-    StudentAndParent(Client client, String id) {
+    private String studentID;
+
+    private String diaryID;
+
+    StudentAndParent(Client client, String schoolID, String studentID, String diaryID) {
         this.client = client;
-        this.id = id;
+        this.schoolID = schoolID;
+        this.studentID = studentID;
+        this.diaryID = diaryID;
     }
 
-    private String getBaseUrl() {
-        return BASE_URL.replace("{ID}", getId());
-    }
+    public StudentAndParent setUp() throws IOException, VulcanException {
+        if (null == getStudentID()) {
+            Document doc = client.getPageByUrl(getSnpHomePageUrl());
+            Student student = getCurrent(getStudents(doc));
+            Diary diary = getCurrent(getDiaries(doc));
 
-    public String getId() {
-        return id;
-    }
+            studentID = student.getId();
+            diaryID = diary.getId();
+        }
 
-    public StudentAndParent storeContextCookies() throws IOException, VulcanException {
-        client.getPageByUrl(getSnpHomePageUrl());
         return this;
     }
 
+    public String getSchoolID() {
+        return schoolID;
+    }
+
+    public String getStudentID() {
+        return studentID;
+    }
+
+    private String getBaseUrl() {
+        return BASE_URL.replace("{ID}", getSchoolID());
+    }
+
     String getSnpHomePageUrl() throws IOException, VulcanException {
-        if (null != getId()) {
+        if (null != getSchoolID()) {
             return getBaseUrl();
         }
 
@@ -53,7 +74,7 @@ public class StudentAndParent implements SnP {
 
         String snpPageUrl = studentTileLink.attr("href");
 
-        this.id = getExtractedIdFromUrl(snpPageUrl);
+        this.schoolID = getExtractedIdFromUrl(snpPageUrl);
 
         return snpPageUrl;
     }
@@ -72,14 +93,39 @@ public class StudentAndParent implements SnP {
         return e.select(".daneWiersz .wartosc").get(index - 1).text();
     }
 
+    public void setDiaryID(String id) {
+        this.diaryID = id;
+    }
+
     public Document getSnPPageDocument(String url) throws IOException, VulcanException {
-        Document doc = client.getPageByUrl(getBaseUrl() + url);
+        Map<String, String> cookies = new HashMap<>();
+        cookies.put("idBiezacyDziennik", diaryID);
+        cookies.put("idBiezacyUczen", studentID);
+        client.addCookies(cookies);
+
+        Document doc = client.getPageByUrl(getBaseUrl() + url, true, cookies);
 
         if ("Witryna ucznia i rodzica – Strona główna".equals(doc.select("title").first().text())) {
             throw new VulcanException("Sesja została nieprawidłowo zainicjowana");
         }
 
         return doc;
+    }
+
+    public List<Diary> getDiaries() throws IOException, VulcanException {
+        return getDiaries(client.getPageByUrl(getBaseUrl()));
+    }
+
+    private List<Diary> getDiaries(Document doc) throws IOException {
+        return getList(doc.select("#dziennikDropDownList option"), Diary.class);
+    }
+
+    public List<Student> getStudents() throws IOException, VulcanException {
+        return getStudents(client.getPageByUrl(getBaseUrl()));
+    }
+
+    public List<Student> getStudents(Document doc) throws IOException {
+        return getList(doc.select("#uczenDropDownList option"), Student.class);
     }
 
     public List<Semester> getSemesters() throws IOException, VulcanException {
@@ -94,7 +140,7 @@ public class StudentAndParent implements SnP {
         for (Element e : semesterOptions) {
             Semester semester = new Semester()
                     .setId(e.text())
-                    .setNumber(e.attr("value"));
+                    .setName(e.attr("value"));
 
             if ("selected".equals(e.attr("selected"))) {
                 semester.setCurrent(true);
@@ -106,15 +152,43 @@ public class StudentAndParent implements SnP {
         return semesters;
     }
 
-    public Semester getCurrentSemester(List<Semester> semesterList) {
-        Semester current = null;
-        for (Semester s : semesterList) {
+    @SuppressWarnings("unchecked")
+    private <T> List<T> getList(Elements options, Class<? extends ParamItem> type) throws IOException {
+        List<T> list = new ArrayList<>();
+
+        for (Element e : options) {
+            URL url = new URL(e.val());
+            try {
+                ParamItem item = type.newInstance()
+                        .setId(url.getQuery().split("=")[1])
+                        .setName(e.text());
+
+                if ("selected".equals(e.attr("selected"))) {
+                    item.setCurrent(true);
+                }
+                if (item instanceof Diary) {
+                    item.setStudentId(getStudentID());
+                }
+
+                list.add((T) item);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+
+        return list;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getCurrent(List<? extends ParamItem> list) {
+        ParamItem current = null;
+        for (ParamItem s : list) {
             if (s.isCurrent()) {
                 current = s;
                 break;
             }
         }
 
-        return current;
+        return (T) current;
     }
 }

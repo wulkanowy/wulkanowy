@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +24,7 @@ public class Client {
 
     private String symbol;
 
-    private Date lastSuccessRequest = new Date();
+    private Date lastSuccessRequest = null;
 
     private Cookies cookies = new Cookies();
 
@@ -59,7 +60,7 @@ public class Client {
     }
 
     private boolean isLoggedIn() {
-        return getCookies().size() > 0 &&
+        return getCookies().size() > 0 && lastSuccessRequest != null &&
                 29 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());
 
     }
@@ -70,6 +71,10 @@ public class Client {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+    public void addCookies(Map<String, String> items) {
+        cookies.addItems(items);
     }
 
     private Map<String, String> getCookies() {
@@ -88,12 +93,20 @@ public class Client {
     }
 
     public Document getPageByUrl(String url) throws IOException, VulcanException {
-        return getPageByUrl(url, true);
+        return getPageByUrl(url, true, null);
     }
 
     public Document getPageByUrl(String url, boolean loginBefore) throws IOException, VulcanException {
+        return getPageByUrl(url, loginBefore, null);
+    }
+
+    public Document getPageByUrl(String url, boolean loginBefore, Map<String, String> cookies) throws IOException, VulcanException {
         if (loginBefore) {
             login();
+        }
+
+        if (null != cookies) {
+            this.cookies.addItems(cookies);
         }
 
         Connection.Response response = Jsoup.connect(getFilledUrl(url))
@@ -174,6 +187,10 @@ public class Client {
         String singIn = doc.select(".loginButton").text();
         if ("Zaloguj się".equals(singIn)) {
             throw new NotLoggedInErrorException(singIn);
+        }
+
+        if ("Błąd strony".equals(title)) {
+            throw new VulcanException("Nieznany błąd");
         }
 
         return doc;
