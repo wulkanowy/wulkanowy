@@ -24,20 +24,20 @@ public class Account {
     @Property(nameInDb = "REAL_ID")
     private String realId;
 
-    @Property(nameInDb = "NAME")
-    private String name;
-
-    @Property(nameInDb = "E-MAIL")
-    private String email;
-
-    @Property(nameInDb = "PASSWORD")
-    private String password;
-
     @Property(nameInDb = "SYMBOL")
     private String symbol;
 
     @Property(nameInDb = "SCHOOL_ID")
     private String schoolId;
+
+    @Property(nameInDb = "NAME")
+    private String name;
+
+    @Property(nameInDb = "E_MAIL")
+    private String email;
+
+    @Property(nameInDb = "PASSWORD")
+    private String password;
 
     @ToMany(joinProperties = {
             @JoinProperty(name = "realId", referencedName = "studentId")
@@ -65,16 +65,16 @@ public class Account {
     @Generated(hash = 335469827)
     private transient AccountDao myDao;
 
-    @Generated(hash = 873032372)
-    public Account(Long id, String realId, String name, String email,
-                   String password, String symbol, String schoolId) {
+    @Generated(hash = 727721142)
+    public Account(Long id, String realId, String symbol, String schoolId, String name,
+            String email, String password) {
         this.id = id;
         this.realId = realId;
+        this.symbol = symbol;
+        this.schoolId = schoolId;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.symbol = symbol;
-        this.schoolId = schoolId;
     }
 
     @Generated(hash = 882125521)

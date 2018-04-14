@@ -35,12 +35,13 @@ public class StudentAndParent implements SnP {
     }
 
     public StudentAndParent setUp() throws IOException, VulcanException {
-        if (null == getStudentID()) {
+        if (null == getStudentID() || "".equals(getStudentID())) {
             Document doc = client.getPageByUrl(getSnpHomePageUrl());
-            Student student = getCurrent(getStudents(doc));
-            Diary diary = getCurrent(getDiaries(doc));
 
+            Student student = getCurrent(getStudents(doc));
             studentID = student.getId();
+
+            Diary diary = getCurrent(getDiaries(doc));
             diaryID = diary.getId();
         }
 

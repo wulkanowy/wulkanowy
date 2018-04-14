@@ -15,7 +15,7 @@ public class DiaryTest extends AbstractDaoTestLongPk<DiaryDao, Diary> {
     protected Diary createEntity(Long key) {
         Diary entity = new Diary();
         entity.setId(key);
-        entity.setIsCurrent();
+        entity.setIsCurrent(false);
         return entity;
     }
 
