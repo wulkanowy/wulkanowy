@@ -73,7 +73,13 @@ public class StudentAndParent implements SnP {
     }
 
     public Document getSnPPageDocument(String url) throws IOException, VulcanException {
-        return client.getPageByUrl(getBaseUrl() + url);
+        Document doc = client.getPageByUrl(getBaseUrl() + url);
+
+        if ("Witryna ucznia i rodzica – Strona główna".equals(doc.select("title").first().text())) {
+            throw new VulcanException("Sesja została nieprawidłowo zainicjowana");
+        }
+
+        return doc;
     }
 
     public List<Semester> getSemesters() throws IOException, VulcanException {
