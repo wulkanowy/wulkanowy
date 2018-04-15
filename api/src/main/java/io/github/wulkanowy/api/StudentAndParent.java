@@ -173,7 +173,6 @@ public class StudentAndParent implements SnP {
 
                 list.add((T) item);
             } catch (Exception ex) {
-                ex.printStackTrace();
                 throw new VulcanException("Error while trying to parse params list", ex);
             }
         }

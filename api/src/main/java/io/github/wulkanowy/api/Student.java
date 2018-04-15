@@ -18,13 +18,12 @@ public class Student implements ParamItem {
     }
 
     public String getStudentId() {
-        return id;
+        return getId();
     }
 
     @Override
     public Student setStudentId(String studentId) {
-        this.id = studentId;
-        return this;
+        return setId(studentId);
     }
 
     public String getName() {
