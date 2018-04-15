@@ -178,6 +178,8 @@ public class Client {
     }
 
     Document checkForErrors(Document doc) throws VulcanException {
+        lastSuccessRequest = null;
+
         String title = doc.select("title").text();
         if ("Przerwa techniczna".equals(title)) {
             throw new VulcanOfflineException(title);
