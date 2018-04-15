@@ -50,13 +50,14 @@ public class DbHelper extends DaoMaster.OpenHelper {
     @Override
     public void onUpgrade(Database db, int oldVersion, int newVersion) {
         List<Migration> migrations = getMigrations();
-        DaoSession daoSession = new DaoMaster(db).newSession();
 
         // Only run migrations past the old version
         for (Migration migration : migrations) {
             if (oldVersion < migration.getVersion()) {
                 try {
-                    migration.runMigration(db, sharedPref, daoSession, vulcan);
+                    LogUtils.info("Applying migration to db schema v" + migration.getVersion() + "...");
+                    migration.runMigration(db, sharedPref, vulcan);
+                    LogUtils.info("Migration " + migration.getVersion() + " complete");
                 } catch (Exception e) {
                     e.printStackTrace();
                     DaoMaster.dropAllTables(db, true);
@@ -86,6 +87,6 @@ public class DbHelper extends DaoMaster.OpenHelper {
     public interface Migration {
         Integer getVersion();
 
-        void runMigration(Database db, SharedPrefContract sharedPref, DaoSession daoSession, Vulcan vulcan) throws Exception;
+        void runMigration(Database db, SharedPrefContract sharedPref, Vulcan vulcan) throws Exception;
     }
 }
