@@ -8,7 +8,7 @@ public class Student implements ParamItem {
 
     private String name = "";
 
-    private boolean isCurrent = false;
+    private boolean current = false;
 
     public String getId() {
         return id;
@@ -39,11 +39,11 @@ public class Student implements ParamItem {
     }
 
     public boolean isCurrent() {
-        return isCurrent;
+        return current;
     }
 
     public Student setCurrent(boolean current) {
-        isCurrent = current;
+        this.current = current;
         return this;
     }
 }

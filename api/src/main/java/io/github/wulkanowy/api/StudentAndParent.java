@@ -117,7 +117,7 @@ public class StudentAndParent implements SnP {
         return getDiaries(client.getPageByUrl(getBaseUrl()));
     }
 
-    private List<Diary> getDiaries(Document doc) throws IOException {
+    private List<Diary> getDiaries(Document doc) throws IOException, VulcanException {
         return getList(doc.select("#dziennikDropDownList option"), Diary.class);
     }
 
@@ -125,7 +125,7 @@ public class StudentAndParent implements SnP {
         return getStudents(client.getPageByUrl(getBaseUrl()));
     }
 
-    public List<Student> getStudents(Document doc) throws IOException {
+    public List<Student> getStudents(Document doc) throws IOException, VulcanException {
         return getList(doc.select("#uczenDropDownList option"), Student.class);
     }
 
@@ -154,7 +154,7 @@ public class StudentAndParent implements SnP {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> List<T> getList(Elements options, Class<? extends ParamItem> type) throws IOException {
+    private <T> List<T> getList(Elements options, Class<? extends ParamItem> type) throws IOException, VulcanException {
         List<T> list = new ArrayList<>();
 
         for (Element e : options) {
@@ -172,8 +172,9 @@ public class StudentAndParent implements SnP {
                 }
 
                 list.add((T) item);
-            } catch (Exception e1) {
-                e1.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                throw new VulcanException("Error while trying to parse params list", ex);
             }
         }
 

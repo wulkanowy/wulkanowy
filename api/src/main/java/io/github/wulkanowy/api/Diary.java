@@ -1,6 +1,6 @@
 package io.github.wulkanowy.api;
 
-public class Diary implements ParamItem, Cloneable {
+public class Diary implements ParamItem {
 
     private String id = "";
 
@@ -8,7 +8,7 @@ public class Diary implements ParamItem, Cloneable {
 
     private String name = "";
 
-    private boolean isCurrent = false;
+    private boolean current = false;
 
     public String getId() {
         return id;
@@ -40,11 +40,11 @@ public class Diary implements ParamItem, Cloneable {
 
     @Override
     public boolean isCurrent() {
-        return isCurrent;
+        return current;
     }
 
     public Diary setCurrent(boolean current) {
-        isCurrent = current;
+        this.current = current;
         return this;
     }
 }
