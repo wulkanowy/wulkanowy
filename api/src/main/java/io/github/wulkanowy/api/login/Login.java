@@ -45,7 +45,7 @@ public class Login {
     }
 
     String sendCertificate(Document doc, String defaultSymbol) throws IOException, VulcanException {
-        String certificate = doc.select("input[name=wresult]").attr("value");
+        String certificate = doc.select("input[name=wresult]").val();
 
         String symbol = findSymbol(defaultSymbol, certificate);
         client.setSymbol(symbol);
@@ -69,8 +69,8 @@ public class Login {
 
         return client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
                 {"wa", "wsignin1.0"},
-                {"wresult", doc.select("input[name=wresult]").attr("value")},
-                {"wctx", doc.select("input[name=wctx]").attr("value")}
+                {"wresult", doc.select("input[name=wresult]").val()},
+                {"wctx", doc.select("input[name=wctx]").val()}
         });
     }
 
