@@ -143,7 +143,7 @@ public class StudentAndParent implements SnP {
                     .setId(e.text())
                     .setName(e.attr("value"));
 
-            if ("selected".equals(e.attr("selected"))) {
+            if (isCurrent(e)) {
                 semester.setCurrent(true);
             }
 
@@ -164,7 +164,7 @@ public class StudentAndParent implements SnP {
                         .setId(url.getQuery().split("=")[1])
                         .setName(e.text());
 
-                if ("selected".equals(e.attr("selected"))) {
+                if (isCurrent(e)) {
                     item.setCurrent(true);
                 }
                 if (item instanceof Diary) {
@@ -192,5 +192,9 @@ public class StudentAndParent implements SnP {
         }
 
         return (T) current;
+    }
+
+    private boolean isCurrent(Element e) {
+        return "selected".equals(e.attr("selected"));
     }
 }
