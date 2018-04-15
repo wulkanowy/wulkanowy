@@ -125,7 +125,7 @@ public class StudentAndParent implements SnP {
         return getStudents(client.getPageByUrl(getBaseUrl()));
     }
 
-    public List<Student> getStudents(Document doc) throws IOException, VulcanException {
+    private List<Student> getStudents(Document doc) throws IOException, VulcanException {
         return getList(doc.select("#uczenDropDownList option"), Student.class);
     }
 

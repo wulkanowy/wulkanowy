@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,5 +125,34 @@ public class StudentAndParentTest {
         List<Semester> semesters = new ArrayList<>();
 
         Assert.assertNull(snp.getCurrent(semesters));
+    }
+
+    @Test
+    public void getDiariesAndStudentTest() throws IOException, VulcanException {
+        Document snpHome = Jsoup.parse(FixtureHelper.getAsString(
+                getClass().getResourceAsStream("StudentAndParent.html")));
+
+        client = Mockito.mock(Client.class);
+        Mockito.when(client.getPageByUrl(Mockito.anyString())).thenReturn(snpHome);
+        SnP snp = new StudentAndParent(client, "", null, null);
+
+        snp.setUp();
+
+        Assert.assertEquals("3Ti 2017", snp.getDiaries().get(0).getName());
+        Assert.assertEquals("2Ti 2016", snp.getDiaries().get(1).getName());
+        Assert.assertEquals("1Ti 2015", snp.getDiaries().get(2).getName());
+
+        Assert.assertEquals("1300", snp.getDiaries().get(0).getId());
+        Assert.assertEquals("1200", snp.getDiaries().get(1).getId());
+        Assert.assertEquals("1100", snp.getDiaries().get(2).getId());
+
+        Assert.assertTrue(snp.getDiaries().get(0).isCurrent());
+        Assert.assertFalse(snp.getDiaries().get(1).isCurrent());
+        Assert.assertFalse(snp.getDiaries().get(2).isCurrent());
+
+        Assert.assertEquals("100", snp.getDiaries().get(0).getStudentId());
+
+        Assert.assertEquals("Jan Kowal", snp.getStudents().get(0).getName());
+        Assert.assertEquals("100", snp.getStudents().get(0).getStudentId());
     }
 }

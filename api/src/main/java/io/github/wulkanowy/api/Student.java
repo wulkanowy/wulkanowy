@@ -4,8 +4,6 @@ public class Student implements ParamItem {
 
     private String id = "";
 
-    private String studentId = "";
-
     private String name = "";
 
     private boolean current = false;
@@ -20,12 +18,12 @@ public class Student implements ParamItem {
     }
 
     public String getStudentId() {
-        return studentId;
+        return id;
     }
 
     @Override
     public Student setStudentId(String studentId) {
-        this.studentId = studentId;
+        this.id = studentId;
         return this;
     }
 

@@ -14,6 +14,8 @@ public interface SnP {
 
     String getStudentID();
 
+    List<Student> getStudents() throws IOException, VulcanException;
+
     StudentAndParent setUp() throws IOException, VulcanException;
 
     String getRowDataChildValue(Element e, int index);
