@@ -25,9 +25,9 @@ public class Login {
     }
 
     public String login(String email, String password, String symbol) throws VulcanException, IOException {
-        Document certificatePage = sendCredentials(email, password);
+        Document certDoc = sendCredentials(email, password);
 
-        return sendCertificate(certificatePage, symbol);
+        return sendCertificate(certDoc, symbol);
     }
 
     Document sendCredentials(String email, String password) throws IOException, VulcanException {
@@ -45,28 +45,34 @@ public class Login {
         return html;
     }
 
-    String sendCertificate(Document certDoc, String defaultSymbol) throws IOException, VulcanException {
-        String certificate = certDoc.select("input[name=wresult]").val();
-        String symbol = findSymbol(defaultSymbol, certificate);
+    String sendCertificate(Document doc, String defaultSymbol) throws IOException, VulcanException {
+        String certificate = doc.select("input[name=wresult]").attr("value");
 
+        String symbol = findSymbol(defaultSymbol, certificate);
         client.setSymbol(symbol);
 
-        String url = certDoc.select("form[name=hiddenform]").attr("action");
-        String title = client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
-                {"wa", "wsignin1.0"},
-                {"wresult", certificate},
-                {"wctx", certDoc.select("input[name=wctx]").val()}
-        }).select("title").text();
+        Document targetDoc = sendCertData(doc);
+        String title = targetDoc.select("title").text();
 
         if ("Logowanie".equals(title)) {
             throw new AccountPermissionException("No account access. Try another symbol");
         }
 
         if (!"Uonet+".equals(title)) {
-            throw new LoginErrorException("Could not log in, unknown error");
+            throw new LoginErrorException("Expected page title `UONET+`, got " + title);
         }
 
         return symbol;
+    }
+
+    private Document sendCertData(Document doc) throws IOException, VulcanException {
+        String url = doc.select("form[name=hiddenform]").attr("action");
+
+        return client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
+                {"wa", "wsignin1.0"},
+                {"wresult", doc.select("input[name=wresult]").attr("value")},
+                {"wctx", doc.select("input[name=wctx]").attr("value")}
+        });
     }
 
     private String findSymbol(String symbol, String certificate) {
