@@ -31,8 +31,7 @@ public class Login {
     }
 
     Document sendCredentials(String email, String password) throws IOException, VulcanException {
-        Element form = client.getPageByUrl(LOGIN_PAGE_URL, false).select("#MainDiv form").first();
-        Document html = client.postPageByUrl(form.attr("abs:action"), new String[][]{
+        Document html = client.postPageByUrl(LOGIN_PAGE_URL, new String[][]{
                 {"LoginName", email},
                 {"Password", password}
         });
