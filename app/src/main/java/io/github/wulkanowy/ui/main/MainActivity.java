@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.services.SyncJob;
+import io.github.wulkanowy.services.jobs.SyncJob;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment;
 import io.github.wulkanowy.ui.main.dashboard.DashboardFragment;

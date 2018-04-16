@@ -1,4 +1,4 @@
-package io.github.wulkanowy.services;
+package io.github.wulkanowy.services.jobs;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -24,6 +24,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.WulkanowyApp;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
+import io.github.wulkanowy.services.notifi.GradeNotify;
 import io.github.wulkanowy.ui.main.MainActivity;
 import io.github.wulkanowy.utils.LogUtils;
 

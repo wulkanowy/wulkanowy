@@ -86,4 +86,8 @@ public final class TimeUtils {
         }
         return currentDate.format(formatter);
     }
+
+    public static int getTodayDayValue() {
+        return LocalDate.now().getDayOfWeek().getValue();
+    }
 }

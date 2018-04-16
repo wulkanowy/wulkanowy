@@ -4,19 +4,27 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:text="@string/app_name"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:layout_height="@dimen/widget_bar_height"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/widget_bar_height"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/timetable_text"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </FrameLayout>
 
     <ListView
+        android:id="@+id/timetable_widget_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="40dp">
+        android:layout_marginTop="@dimen/widget_bar_height">
 
     </ListView>
 </FrameLayout>

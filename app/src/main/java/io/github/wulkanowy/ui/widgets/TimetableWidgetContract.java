@@ -4,10 +4,15 @@ public interface TimetableWidgetContract {
 
     interface Presenter {
 
-        void onInject();
-    }
+        void onStart();
 
-    interface Provider {
+        int getCount();
+
+        int getViewTypeCount();
+
+        String getSubjectName(int position);
+
+        boolean hasStableIds();
 
     }
 }
