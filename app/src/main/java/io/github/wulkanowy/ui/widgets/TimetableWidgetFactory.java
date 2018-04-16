@@ -10,7 +10,8 @@ import javax.inject.Inject;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.WulkanowyApp;
 
-public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFactory {
+public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFactory,
+        TimetableWidgetContract.Factory {
 
     private Context context;
 
@@ -23,14 +24,14 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public void onCreate() {
-
+        return;
     }
 
     @Override
     public void onDataSetChanged() {
         presenter = null;
         ((WulkanowyApp) context).getApplicationComponent().inject(this);
-        presenter.onStart();
+        presenter.onStart(this);
 
     }
 
@@ -51,7 +52,9 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
         }
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.timetable_widget_item);
-        views.setTextViewText(R.id.timetable_widget_item_text, presenter.getSubjectName(position));
+        views.setTextViewText(R.id.timetable_widget_item_subject, presenter.getSubjectName(position));
+        views.setTextViewText(R.id.timetable_widget_item_room, presenter.getRoomText(position));
+        views.setTextViewText(R.id.timetable_widget_item_time, presenter.getTimeText(position));
 
         return views;
     }
@@ -74,5 +77,10 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
     @Override
     public boolean hasStableIds() {
         return presenter.hasStableIds();
+    }
+
+    @Override
+    public String getRoomString() {
+        return context.getString(R.string.timetable_dialog_room);
     }
 }

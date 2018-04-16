@@ -4,7 +4,7 @@ public interface TimetableWidgetContract {
 
     interface Presenter {
 
-        void onStart();
+        void onStart(Factory widgetFactory);
 
         int getCount();
 
@@ -12,7 +12,16 @@ public interface TimetableWidgetContract {
 
         String getSubjectName(int position);
 
+        String getRoomText(int position);
+
+        String getTimeText(int position);
+
         boolean hasStableIds();
 
+    }
+
+    interface Factory {
+
+        String getRoomString();
     }
 }

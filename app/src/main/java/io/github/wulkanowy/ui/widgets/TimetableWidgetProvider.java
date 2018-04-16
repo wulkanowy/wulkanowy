@@ -20,6 +20,6 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
             views.setRemoteAdapter(R.id.timetable_widget_list, intent);
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
-
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 }

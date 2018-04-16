@@ -16,13 +16,17 @@ public class TimetableWidgetPresenter implements TimetableWidgetContract.Present
 
     private List<TimetableLesson> lessonList = new ArrayList<>();
 
+    private TimetableWidgetContract.Factory widgetFactory;
+
     @Inject
     TimetableWidgetPresenter(RepositoryContract repository) {
         this.repository = repository;
     }
 
     @Override
-    public void onStart() {
+    public void onStart(TimetableWidgetContract.Factory widgetFactory) {
+        this.widgetFactory = widgetFactory;
+
         Week week = repository.getWeek(TimeUtils.getDateOfCurrentMonday(true));
         lessonList = week.getDayList().get(TimeUtils.getTodayDayValue() - 1)
                 .getTimetableLessons();
@@ -36,6 +40,21 @@ public class TimetableWidgetPresenter implements TimetableWidgetContract.Present
     @Override
     public String getSubjectName(int position) {
         return lessonList.get(position).getSubject();
+    }
+
+    @Override
+    public String getRoomText(int position) {
+        TimetableLesson lesson = lessonList.get(position);
+        if (!lesson.getRoom().isEmpty()) {
+            return widgetFactory.getRoomString() + " " + lesson.getRoom();
+        }
+        return lesson.getRoom();
+    }
+
+    @Override
+    public String getTimeText(int position) {
+        TimetableLesson lesson = lessonList.get(position);
+        return lesson.getStartTime() + " - " + lesson.getEndTime();
     }
 
     @Override
