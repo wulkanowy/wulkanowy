@@ -16,8 +16,9 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.timetable_widget);
             Intent intent = new Intent(context, TimetableWidgetServices.class);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 
-            views.setRemoteAdapter(R.id.timetable_widget_list, intent);
+            views.setRemoteAdapter(appWidgetId, R.id.timetable_widget_list, intent);
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);

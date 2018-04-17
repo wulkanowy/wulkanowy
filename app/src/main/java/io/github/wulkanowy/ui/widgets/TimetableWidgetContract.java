@@ -4,7 +4,7 @@ public interface TimetableWidgetContract {
 
     interface Presenter {
 
-        void onStart(Factory widgetFactory);
+        void onDataSetChanged(Factory widgetFactory);
 
         int getCount();
 

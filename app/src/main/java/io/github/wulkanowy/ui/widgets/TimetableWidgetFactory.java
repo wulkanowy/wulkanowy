@@ -24,14 +24,13 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public void onCreate() {
-        return;
+        presenter = null;
+        ((WulkanowyApp) context).getApplicationComponent().inject(this);
     }
 
     @Override
     public void onDataSetChanged() {
-        presenter = null;
-        ((WulkanowyApp) context).getApplicationComponent().inject(this);
-        presenter.onStart(this);
+        presenter.onDataSetChanged(this);
 
     }
 

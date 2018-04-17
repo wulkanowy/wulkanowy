@@ -24,10 +24,11 @@ public class TimetableWidgetPresenter implements TimetableWidgetContract.Present
     }
 
     @Override
-    public void onStart(TimetableWidgetContract.Factory widgetFactory) {
+    public void onDataSetChanged(TimetableWidgetContract.Factory widgetFactory) {
         this.widgetFactory = widgetFactory;
 
         Week week = repository.getWeek(TimeUtils.getDateOfCurrentMonday(true));
+        week.resetDayList();
         lessonList = week.getDayList().get(TimeUtils.getTodayDayValue() - 1)
                 .getTimetableLessons();
     }
