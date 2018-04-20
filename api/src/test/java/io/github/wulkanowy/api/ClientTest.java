@@ -1,12 +1,9 @@
 package io.github.wulkanowy.api;
 
-import org.hamcrest.CoreMatchers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Assert;
 import org.junit.Test;
-
-import io.github.wulkanowy.api.login.Login;
 
 public class ClientTest {
 

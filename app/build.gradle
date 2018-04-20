@@ -28,8 +28,8 @@ android {
         testApplicationId "io.github.tests.wulkanowy"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 6
-        versionName "0.3.0"
+        versionCode 7
+        versionName "0.3.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         manifestPlaceholders = [
@@ -62,7 +62,7 @@ android {
 }
 
 greendao {
-    schemaVersion 22
+    schemaVersion 23
     generateTests = true
 }
 
@@ -79,7 +79,6 @@ dependencies {
     implementation "eu.davidea:flexible-adapter:$flexibleAdapter"
     implementation "eu.davidea:flexible-adapter-ui:$flexibleUi"
     implementation "org.greenrobot:greendao:$greenDao"
-    implementation "com.github.yuweiguocn:GreenDaoUpgradeHelper:$greenDaoHelper"
     implementation "com.jakewharton:butterknife:$butterknife"
     implementation "com.google.dagger:dagger-android-support:$dagger2"
     implementation "com.aurelhubert:ahbottomnavigation:$ahbottom"
