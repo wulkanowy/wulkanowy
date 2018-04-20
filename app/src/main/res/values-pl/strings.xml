@@ -124,4 +124,5 @@
     <string name="pref_services_mobile_data">Synchronizacja tylko przez WiFi</string>
 
     <string name="notify_grade_channel">Nowe oceny</string>
+    <string name="widget_timetable_no_lesson">Brak lekcji</string>
 </resources>

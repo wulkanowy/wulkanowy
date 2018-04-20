@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.widgets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -53,6 +54,8 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
         views.setTextViewText(R.id.timetable_widget_item_subject, presenter.getSubjectName(position));
         views.setTextViewText(R.id.timetable_widget_item_room, presenter.getRoomText(position));
         views.setTextViewText(R.id.timetable_widget_item_time, presenter.getTimeText(position));
+
+        views.setOnClickFillInIntent(R.id.timetable_widget_item_container, new Intent());
 
         return views;
     }

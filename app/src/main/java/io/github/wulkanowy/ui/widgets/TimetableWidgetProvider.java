@@ -6,10 +6,12 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.services.widgets.TimetableWidgetServices;
+import io.github.wulkanowy.ui.main.MainActivity;
 
 public class TimetableWidgetProvider extends AppWidgetProvider {
 
@@ -17,8 +19,7 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.timetable_widget);
-            Intent intent = new Intent(context, TimetableWidgetServices.class);
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+
 
             Intent refreshIntent = new Intent(context, TimetableWidgetProvider.class);
             refreshIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -26,10 +27,9 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
                     refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(R.id.button, pendingIntent);
 
-            views.setRemoteAdapter(appWidgetId, R.id.timetable_widget_list, intent);
-            views.setEmptyView(R.id.timetable_widget_list, R.id.empty);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.timetable_widget_list);
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+            setViews(views, context, appWidgetId);
+            setTemplateIntent(views, context);
+            updateWidget(views, appWidgetManager, appWidgetId);
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
@@ -46,5 +46,29 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
 
             onUpdate(context, appWidgetManager, appWidgetIds);
         }
+    }
+
+    private void setTemplateIntent(RemoteViews views, Context context) {
+        Intent intent = MainActivity.getStartIntent(context);
+        intent.putExtra(MainActivity.EXTRA_CARD_ID_KEY, 3);
+
+        PendingIntent pendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(intent)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        views.setPendingIntentTemplate(R.id.timetable_widget_list, pendingIntent);
+    }
+
+    private void setViews(RemoteViews views, Context context, int appWidgetId) {
+        Intent intent = new Intent(context, TimetableWidgetServices.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+
+        views.setRemoteAdapter(appWidgetId, R.id.timetable_widget_list, intent);
+        views.setEmptyView(R.id.timetable_widget_list, R.id.timetable_widget_empty);
+    }
+
+    private void updateWidget(RemoteViews views, AppWidgetManager appWidgetManager, int appWidgetId) {
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.timetable_widget_list);
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 }

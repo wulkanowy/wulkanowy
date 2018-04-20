@@ -30,8 +30,6 @@ import io.github.wulkanowy.utils.LogUtils;
 
 public class SyncJob extends SimpleJobService {
 
-    public static final String EXTRA_INTENT_KEY = "cardId";
-
     public static final String JOB_TAG = "SyncJob";
 
     private List<Grade> gradeList = new ArrayList<>();
@@ -95,7 +93,8 @@ public class SyncJob extends SimpleJobService {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setColor(getResources().getColor(R.color.colorPrimary))
                 .setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0,
-                        MainActivity.getStartIntent(getApplicationContext()).putExtra(EXTRA_INTENT_KEY, 0)
+                        MainActivity.getStartIntent(getApplicationContext())
+                                .putExtra(MainActivity.EXTRA_CARD_ID_KEY, 0)
                         , 0
                 ))
                 .build());
