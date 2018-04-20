@@ -10,6 +10,7 @@
         android:background="@color/colorPrimary">
 
         <Button
+            android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/widget_bar_height"
             android:layout_alignParentEnd="true"
@@ -34,7 +35,14 @@
         android:id="@+id/timetable_widget_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/widget_bar_height">
+        android:layout_marginTop="@dimen/widget_bar_height" />
 
-    </ListView>
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="PUSTO"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
 </FrameLayout>
