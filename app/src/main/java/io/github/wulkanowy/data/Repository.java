@@ -17,6 +17,7 @@ import io.github.wulkanowy.data.db.dao.entities.GradeDao;
 import io.github.wulkanowy.data.db.dao.entities.SemesterDao;
 import io.github.wulkanowy.data.db.dao.entities.StudentDao;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
+import io.github.wulkanowy.data.db.dao.entities.SymbolDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.data.db.resources.ResourcesContract;
@@ -193,9 +194,8 @@ public class Repository implements RepositoryContract {
 
     @Override
     public long getCurrentSymbolId() {
-        return daoSession.getDiaryDao().queryBuilder().where(
-                DiaryDao.Properties.StudentId.eq(getCurrentUserId()),
-                DiaryDao.Properties.Current.eq(true)
+        return daoSession.getSymbolDao().queryBuilder().where(
+                SymbolDao.Properties.UserId.eq(getCurrentUserId())
         ).unique().getId();
     }
 

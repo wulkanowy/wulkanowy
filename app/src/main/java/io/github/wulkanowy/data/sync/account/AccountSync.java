@@ -69,34 +69,6 @@ public class AccountSync implements AccountSyncContract {
         }
     }
 
-    private void insertSemesters() throws VulcanException, IOException {
-        List<Semester> semesterList = DataObjectConverter.semestersToSemesterEntities(
-                vulcan.getStudentAndParent().getSemesters(),
-                daoSession.getDiaryDao().queryBuilder().where(DiaryDao.Properties.Current.eq(true)).unique().getId());
-        LogUtils.debug("Register semesters: " + semesterList.size());
-        daoSession.getSemesterDao().insertInTx(semesterList);
-    }
-
-    private void insertDiaries(Symbol symbolEntity) throws VulcanException, IOException {
-        List<Diary> diaryList = DataObjectConverter.diariesToDiaryEntities(
-                vulcan.getStudentAndParent().getDiaries(),
-                daoSession.getStudentDao().queryBuilder().where(
-                        StudentDao.Properties.SymbolId.eq(symbolEntity.getId()),
-                        StudentDao.Properties.Current.eq(true)
-                ).unique().getId());
-        LogUtils.debug("Register diaries: " + diaryList.size());
-        daoSession.getDiaryDao().insertInTx(diaryList);
-    }
-
-    private void insertStudents(Symbol symbol) throws VulcanException, IOException {
-        List<Student> studentList = DataObjectConverter.studentsToStudentEntities(
-                vulcan.getStudentAndParent().getStudents(),
-                symbol.getId()
-        );
-        LogUtils.debug("Register students: " + studentList.size());
-        daoSession.getStudentDao().insertInTx(studentList);
-    }
-
     private Account insertAccount(String email, String password) throws CryptoException {
         LogUtils.debug("Register account: " + email);
         Account account = new Account()
@@ -115,6 +87,36 @@ public class AccountSync implements AccountSyncContract {
         daoSession.getSymbolDao().insert(symbol);
 
         return symbol;
+    }
+
+    private void insertStudents(Symbol symbol) throws VulcanException, IOException {
+        List<Student> studentList = DataObjectConverter.studentsToStudentEntities(
+                vulcan.getStudentAndParent().getStudents(),
+                symbol.getId()
+        );
+        LogUtils.debug("Register students: " + studentList.size());
+        daoSession.getStudentDao().insertInTx(studentList);
+    }
+
+    private void insertDiaries(Symbol symbolEntity) throws VulcanException, IOException {
+        List<Diary> diaryList = DataObjectConverter.diariesToDiaryEntities(
+                vulcan.getStudentAndParent().getDiaries(),
+                daoSession.getStudentDao().queryBuilder().where(
+                        StudentDao.Properties.SymbolId.eq(symbolEntity.getId()),
+                        StudentDao.Properties.Current.eq(true)
+                ).unique().getId());
+        LogUtils.debug("Register diaries: " + diaryList.size());
+        daoSession.getDiaryDao().insertInTx(diaryList);
+    }
+
+    private void insertSemesters() throws VulcanException, IOException {
+        List<Semester> semesterList = DataObjectConverter.semestersToSemesterEntities(
+                vulcan.getStudentAndParent().getSemesters(),
+                daoSession.getDiaryDao().queryBuilder().where(
+                        DiaryDao.Properties.Current.eq(true)
+                ).unique().getId());
+        LogUtils.debug("Register semesters: " + semesterList.size());
+        daoSession.getSemesterDao().insertInTx(semesterList);
     }
 
     @Override

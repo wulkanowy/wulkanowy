@@ -21,14 +21,14 @@ public class Diary {
     @Property(nameInDb = "student_id")
     private Long studentId;
 
+    @Property(nameInDb = "current")
+    private boolean current;
+
     @Property(nameInDb = "name")
     private String name;
 
     @Property(nameInDb = "value")
     private String value;
-
-    @Property(nameInDb = "current")
-    private boolean current;
 
     @ToMany(referencedJoinProperty = "diaryId")
     private List<Semester> semesterList;
@@ -45,14 +45,13 @@ public class Diary {
     @Generated(hash = 21166549)
     private transient DiaryDao myDao;
 
-    @Generated(hash = 15865939)
-    public Diary(Long id, Long studentId, String name, String value,
-                 boolean current) {
+    @Generated(hash = 277096196)
+    public Diary(Long id, Long studentId, boolean current, String name, String value) {
         this.id = id;
         this.studentId = studentId;
+        this.current = current;
         this.name = name;
         this.value = value;
-        this.current = current;
     }
 
     @Generated(hash = 112123061)

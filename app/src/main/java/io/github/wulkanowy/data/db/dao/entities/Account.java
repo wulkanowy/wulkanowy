@@ -6,6 +6,7 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.ToMany;
+import org.greenrobot.greendao.annotation.Unique;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class Account {
     @Id(autoincrement = true)
     private Long id;
 
+    @Unique
     @Property(nameInDb = "email")
     private String email;
 
