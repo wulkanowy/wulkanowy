@@ -130,32 +130,32 @@ public class Repository implements RepositoryContract {
 
     @Override
     public void syncGrades() throws VulcanException, IOException, ParseException {
-        gradeSync.sync();
+        gradeSync.sync(getCurrentSemesterId());
     }
 
     @Override
     public void syncSubjects() throws VulcanException, IOException, ParseException {
-        subjectSync.sync();
+        subjectSync.sync(getCurrentSemesterId());
     }
 
     @Override
     public void syncAttendance() throws ParseException, IOException, VulcanException {
-        attendanceSync.syncAttendance();
+        attendanceSync.syncAttendance(getCurrentDiaryId());
     }
 
     @Override
     public void syncAttendance(String date) throws ParseException, IOException, VulcanException {
-        attendanceSync.syncAttendance(date);
+        attendanceSync.syncAttendance(getCurrentDiaryId(), date);
     }
 
     @Override
     public void syncTimetable() throws VulcanException, IOException, ParseException {
-        timetableSync.syncTimetable();
+        timetableSync.syncTimetable(getCurrentDiaryId());
     }
 
     @Override
     public void syncTimetable(String date) throws VulcanException, IOException, ParseException {
-        timetableSync.syncTimetable(date);
+        timetableSync.syncTimetable(getCurrentDiaryId(), date);
     }
 
     @Override

@@ -16,11 +16,8 @@ import io.github.wulkanowy.data.db.dao.entities.AttendanceLessonDao;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.DayDao;
-import io.github.wulkanowy.data.db.dao.entities.DiaryDao;
-import io.github.wulkanowy.data.db.dao.entities.StudentDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
-import io.github.wulkanowy.data.db.shared.SharedPrefContract;
 import io.github.wulkanowy.utils.DataObjectConverter;
 import io.github.wulkanowy.utils.LogUtils;
 import io.github.wulkanowy.utils.TimeUtils;
@@ -30,30 +27,24 @@ public class AttendanceSync implements AttendanceSyncContract {
 
     private final DaoSession daoSession;
 
-    private final SharedPrefContract sharedPref;
-
     private final Vulcan vulcan;
-
-    private long userId;
 
     private long diaryId;
 
     @Inject
-    AttendanceSync(DaoSession daoSession, SharedPrefContract sharedPref, Vulcan vulcan) {
+    AttendanceSync(DaoSession daoSession, Vulcan vulcan) {
         this.daoSession = daoSession;
-        this.sharedPref = sharedPref;
         this.vulcan = vulcan;
     }
 
     @Override
-    public void syncAttendance() throws IOException, ParseException, VulcanException {
-        syncAttendance(null);
+    public void syncAttendance(long diaryId) throws IOException, ParseException, VulcanException {
+        syncAttendance(diaryId, null);
     }
 
     @Override
-    public void syncAttendance(String date) throws IOException, ParseException, VulcanException {
-        this.userId = sharedPref.getCurrentUserId();
-        this.diaryId = getCurrentDiaryId();
+    public void syncAttendance(long diaryId, String date) throws IOException, ParseException, VulcanException {
+        this.diaryId = diaryId;
 
         io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> weekApi = getWeekFromApi(getNormalizedDate(date));
         Week weekDb = getWeekFromDb(weekApi.getStartDayDate());
@@ -74,26 +65,6 @@ public class AttendanceSync implements AttendanceSyncContract {
     private io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> getWeekFromApi(String date)
             throws IOException, ParseException, VulcanException {
         return vulcan.getAttendanceTable().getWeekTable(date);
-    }
-
-    /**
-     * FIXME: duplicated {@link io.github.wulkanowy.data.Repository#getCurrentDiaryId()}
-     */
-    private long getCurrentDiaryId() {
-        long symbolId = daoSession.getDiaryDao().queryBuilder().where(
-                DiaryDao.Properties.StudentId.eq(userId),
-                DiaryDao.Properties.Current.eq(true)
-        ).unique().getId();
-
-        long studentId = daoSession.getStudentDao().queryBuilder().where(
-                StudentDao.Properties.SymbolId.eq(symbolId),
-                StudentDao.Properties.Current.eq(true)
-        ).unique().getId();
-
-        return daoSession.getDiaryDao().queryBuilder().where(
-                DiaryDao.Properties.StudentId.eq(studentId),
-                DiaryDao.Properties.Current.eq(true)
-        ).unique().getId();
     }
 
     private Week getWeekFromDb(String date) {

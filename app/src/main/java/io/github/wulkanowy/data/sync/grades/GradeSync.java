@@ -10,15 +10,10 @@ import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
 import io.github.wulkanowy.api.VulcanException;
-import io.github.wulkanowy.data.Repository;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
-import io.github.wulkanowy.data.db.dao.entities.DiaryDao;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.Semester;
-import io.github.wulkanowy.data.db.dao.entities.SemesterDao;
-import io.github.wulkanowy.data.db.dao.entities.StudentDao;
 import io.github.wulkanowy.data.db.dao.entities.SubjectDao;
-import io.github.wulkanowy.data.db.shared.SharedPrefContract;
 import io.github.wulkanowy.data.sync.SyncContract;
 import io.github.wulkanowy.utils.DataObjectConverter;
 import io.github.wulkanowy.utils.EntitiesCompare;
@@ -31,25 +26,17 @@ public class GradeSync implements SyncContract {
 
     private final Vulcan vulcan;
 
-    private final SharedPrefContract sharedPref;
-
-    private Long userId;
-
-    private Semester semester;
-
     private long semesterId;
 
     @Inject
-    GradeSync(DaoSession daoSession, SharedPrefContract sharedPref, Vulcan vulcan) {
+    GradeSync(DaoSession daoSession, Vulcan vulcan) {
         this.daoSession = daoSession;
-        this.sharedPref = sharedPref;
         this.vulcan = vulcan;
     }
 
     @Override
-    public void sync() throws IOException, VulcanException, ParseException {
-        userId = sharedPref.getCurrentUserId();
-        semesterId = getCurrentSemesterId();
+    public void sync(long semesterId) throws IOException, VulcanException, ParseException {
+        this.semesterId = semesterId;
 
         Semester semester = daoSession.getSemesterDao().load(semesterId);
         resetSemesterRelations(semester);
@@ -60,33 +47,6 @@ public class GradeSync implements SyncContract {
         daoSession.getGradeDao().insertInTx(lastList);
 
         LogUtils.debug("Synchronization grades (amount = " + lastList.size() + ")");
-    }
-
-    /**
-     * FIXME: duplicated {@link Repository#getCurrentSemesterId()} ()}
-     */
-    private long getCurrentSemesterId() {
-        long symbolId = daoSession.getDiaryDao().queryBuilder().where(
-                DiaryDao.Properties.StudentId.eq(userId),
-                DiaryDao.Properties.Current.eq(true)
-        ).unique().getId();
-
-        long studentId = daoSession.getStudentDao().queryBuilder().where(
-                StudentDao.Properties.SymbolId.eq(symbolId),
-                StudentDao.Properties.Current.eq(true)
-        ).unique().getId();
-
-        long diaryId = daoSession.getDiaryDao().queryBuilder().where(
-                DiaryDao.Properties.StudentId.eq(studentId),
-                DiaryDao.Properties.Current.eq(true)
-        ).unique().getId();
-
-        semester = daoSession.getSemesterDao().queryBuilder().where(
-                SemesterDao.Properties.DiaryId.eq(diaryId),
-                SemesterDao.Properties.Current.eq(true)
-        ).unique();
-
-        return semester.getId();
     }
 
     private void resetSemesterRelations(Semester semester) {
