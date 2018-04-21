@@ -14,6 +14,8 @@ import io.github.wulkanowy.api.generic.Lesson;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.DayDao;
+import io.github.wulkanowy.data.db.dao.entities.DiaryDao;
+import io.github.wulkanowy.data.db.dao.entities.StudentDao;
 import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
 import io.github.wulkanowy.data.db.dao.entities.TimetableLessonDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
@@ -34,6 +36,8 @@ public class TimetableSync implements TimetableSyncContract {
 
     private long userId;
 
+    private long diaryId;
+
     @Inject
     TimetableSync(DaoSession daoSession, SharedPrefContract sharedPref, Vulcan vulcan) {
         this.daoSession = daoSession;
@@ -49,6 +53,7 @@ public class TimetableSync implements TimetableSyncContract {
     @Override
     public void syncTimetable(String date) throws IOException, ParseException, VulcanException {
         this.userId = sharedPref.getCurrentUserId();
+        this.diaryId = getCurrentDiaryId();
 
         io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> weekApi = getWeekFromApi(getNormalizedDate(date));
         Week weekDb = getWeekFromDb(weekApi.getStartDayDate());
@@ -67,27 +72,47 @@ public class TimetableSync implements TimetableSyncContract {
     }
 
     private io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> getWeekFromApi(String date)
-            throws IOException, VulcanException, ParseException {
+            throws IOException, ParseException, VulcanException {
         return vulcan.getTimetable().getWeekTable(date);
     }
 
+    /**
+     * FIXME: duplicated {@link io.github.wulkanowy.data.Repository#getCurrentDiaryId()}
+     */
+    private long getCurrentDiaryId() {
+        long symbolId = daoSession.getDiaryDao().queryBuilder().where(
+                DiaryDao.Properties.StudentId.eq(userId),
+                DiaryDao.Properties.Current.eq(true)
+        ).unique().getId();
+
+        long studentId = daoSession.getStudentDao().queryBuilder().where(
+                StudentDao.Properties.SymbolId.eq(symbolId),
+                StudentDao.Properties.Current.eq(true)
+        ).unique().getId();
+
+        return daoSession.getDiaryDao().queryBuilder().where(
+                DiaryDao.Properties.StudentId.eq(studentId),
+                DiaryDao.Properties.Current.eq(true)
+        ).unique().getId();
+    }
+
     private Week getWeekFromDb(String date) {
-        return daoSession.getWeekDao()
-                .queryBuilder()
-                .where(WeekDao.Properties.UserId.eq(userId), WeekDao.Properties.StartDayDate.eq(date))
-                .unique();
+        return daoSession.getWeekDao().queryBuilder().where(
+                WeekDao.Properties.DiaryId.eq(diaryId),
+                WeekDao.Properties.StartDayDate.eq(date)
+        ).unique();
     }
 
     private Long updateWeekInDb(Week dbEntity, io.github.wulkanowy.api.generic.Week fromApi) {
         if (dbEntity != null) {
-            dbEntity.setIsTimetableSynced(true);
+            dbEntity.setTimetableSynced(true);
             dbEntity.update();
 
             return dbEntity.getId();
         }
 
-        Week apiEntity = DataObjectConverter.weekToWeekEntity(fromApi).setUserId(userId);
-        apiEntity.setIsTimetableSynced(true);
+        Week apiEntity = DataObjectConverter.weekToWeekEntity(fromApi).setDiaryId(diaryId);
+        apiEntity.setTimetableSynced(true);
 
         return daoSession.getWeekDao().insert(apiEntity);
     }
@@ -97,7 +122,7 @@ public class TimetableSync implements TimetableSyncContract {
 
         for (io.github.wulkanowy.api.generic.Day dayFromApi : dayListFromApi) {
 
-            Day dbDayEntity = getDayFromDb(dayFromApi.getDate());
+            Day dbDayEntity = getDayFromDb(dayFromApi.getDate(), weekId);
 
             Day apiDayEntity = DataObjectConverter.dayToDayEntity(dayFromApi);
 
@@ -109,15 +134,14 @@ public class TimetableSync implements TimetableSyncContract {
         return updatedLessonList;
     }
 
-    private Day getDayFromDb(String date) {
-        return daoSession.getDayDao()
-                .queryBuilder()
-                .where(DayDao.Properties.UserId.eq(userId), DayDao.Properties.Date.eq(date))
-                .unique();
+    private Day getDayFromDb(String date, long weekId) {
+        return daoSession.getDayDao().queryBuilder().where(
+                DayDao.Properties.WeekId.eq(weekId),
+                DayDao.Properties.Date.eq(date)
+        ).unique();
     }
 
     private long updateDay(Day dayFromDb, Day apiDayEntity, long weekId) {
-        apiDayEntity.setUserId(userId);
         apiDayEntity.setWeekId(weekId);
 
         if (null != dayFromDb) {

@@ -10,28 +10,31 @@ import org.greenrobot.greendao.annotation.ToMany;
 import java.util.List;
 
 @Entity(
-        nameInDb = "Diaries",
+        nameInDb = "Symbols",
         active = true
 )
-public class Diary {
+public class Symbol {
 
     @Id(autoincrement = true)
     private Long id;
 
-    @Property(nameInDb = "student_id")
-    private Long studentId;
+    @Property(nameInDb = "user_id")
+    private Long userId;
 
-    @Property(nameInDb = "name")
-    private String name;
+    @Property(nameInDb = "host")
+    private String host;
 
-    @Property(nameInDb = "value")
-    private String value;
+    @Property(nameInDb = "school_id")
+    private String schoolId;
 
-    @Property(nameInDb = "current")
-    private boolean current;
+    @Property(nameInDb = "symbol")
+    private String symbol;
 
-    @ToMany(referencedJoinProperty = "diaryId")
-    private List<Semester> semesterList;
+    @Property(nameInDb = "type")
+    private String type;
+
+    @ToMany(referencedJoinProperty = "symbolId")
+    private List<Student> studentList;
 
     /**
      * Used to resolve relations
@@ -42,21 +45,22 @@ public class Diary {
     /**
      * Used for active entity operations.
      */
-    @Generated(hash = 21166549)
-    private transient DiaryDao myDao;
+    @Generated(hash = 684907977)
+    private transient SymbolDao myDao;
 
-    @Generated(hash = 15865939)
-    public Diary(Long id, Long studentId, String name, String value,
-                 boolean current) {
+    @Generated(hash = 242774339)
+    public Symbol(Long id, Long userId, String host, String schoolId, String symbol,
+                  String type) {
         this.id = id;
-        this.studentId = studentId;
-        this.name = name;
-        this.value = value;
-        this.current = current;
+        this.userId = userId;
+        this.host = host;
+        this.schoolId = schoolId;
+        this.symbol = symbol;
+        this.type = type;
     }
 
-    @Generated(hash = 112123061)
-    public Diary() {
+    @Generated(hash = 460475327)
+    public Symbol() {
     }
 
     public Long getId() {
@@ -67,39 +71,48 @@ public class Diary {
         this.id = id;
     }
 
-    public Long getStudentId() {
-        return this.studentId;
+    public Long getUserId() {
+        return this.userId;
     }
 
-    public Diary setStudentId(Long studentId) {
-        this.studentId = studentId;
+    public Symbol setUserId(Long userId) {
+        this.userId = userId;
         return this;
     }
 
-    public String getName() {
-        return this.name;
+    public String getHost() {
+        return this.host;
     }
 
-    public Diary setName(String name) {
-        this.name = name;
+    public Symbol setHost(String host) {
+        this.host = host;
         return this;
     }
 
-    public String getValue() {
-        return this.value;
+    public String getSchoolId() {
+        return this.schoolId;
     }
 
-    public Diary setValue(String value) {
-        this.value = value;
+    public Symbol setSchoolId(String schoolId) {
+        this.schoolId = schoolId;
         return this;
     }
 
-    public boolean getCurrent() {
-        return this.current;
+    public String getSymbol() {
+        return this.symbol;
     }
 
-    public Diary setCurrent(boolean current) {
-        this.current = current;
+    public Symbol setSymbol(String symbol) {
+        this.symbol = symbol;
+        return this;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public Symbol setType(String type) {
+        this.type = type;
         return this;
     }
 
@@ -107,30 +120,30 @@ public class Diary {
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
      */
-    @Generated(hash = 1738383053)
-    public List<Semester> getSemesterList() {
-        if (semesterList == null) {
+    @Generated(hash = 604366458)
+    public List<Student> getStudentList() {
+        if (studentList == null) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            SemesterDao targetDao = daoSession.getSemesterDao();
-            List<Semester> semesterListNew = targetDao._queryDiary_SemesterList(id);
+            StudentDao targetDao = daoSession.getStudentDao();
+            List<Student> studentListNew = targetDao._querySymbol_StudentList(id);
             synchronized (this) {
-                if (semesterList == null) {
-                    semesterList = semesterListNew;
+                if (studentList == null) {
+                    studentList = studentListNew;
                 }
             }
         }
-        return semesterList;
+        return studentList;
     }
 
     /**
      * Resets a to-many relationship, making the next get call to query for a fresh result.
      */
-    @Generated(hash = 995060657)
-    public synchronized void resetSemesterList() {
-        semesterList = null;
+    @Generated(hash = 1628625923)
+    public synchronized void resetStudentList() {
+        studentList = null;
     }
 
     /**
@@ -170,9 +183,9 @@ public class Diary {
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 629297785)
+    @Generated(hash = 632145708)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getDiaryDao() : null;
+        myDao = daoSession != null ? daoSession.getSymbolDao() : null;
     }
 }

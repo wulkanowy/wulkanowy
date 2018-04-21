@@ -16,6 +16,8 @@ import io.github.wulkanowy.data.db.dao.entities.AttendanceLessonDao;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.DayDao;
+import io.github.wulkanowy.data.db.dao.entities.DiaryDao;
+import io.github.wulkanowy.data.db.dao.entities.StudentDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
@@ -34,6 +36,8 @@ public class AttendanceSync implements AttendanceSyncContract {
 
     private long userId;
 
+    private long diaryId;
+
     @Inject
     AttendanceSync(DaoSession daoSession, SharedPrefContract sharedPref, Vulcan vulcan) {
         this.daoSession = daoSession;
@@ -49,6 +53,7 @@ public class AttendanceSync implements AttendanceSyncContract {
     @Override
     public void syncAttendance(String date) throws IOException, ParseException, VulcanException {
         this.userId = sharedPref.getCurrentUserId();
+        this.diaryId = getCurrentDiaryId();
 
         io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> weekApi = getWeekFromApi(getNormalizedDate(date));
         Week weekDb = getWeekFromDb(weekApi.getStartDayDate());
@@ -71,23 +76,43 @@ public class AttendanceSync implements AttendanceSyncContract {
         return vulcan.getAttendanceTable().getWeekTable(date);
     }
 
+    /**
+     * FIXME: duplicated {@link io.github.wulkanowy.data.Repository#getCurrentDiaryId()}
+     */
+    private long getCurrentDiaryId() {
+        long symbolId = daoSession.getDiaryDao().queryBuilder().where(
+                DiaryDao.Properties.StudentId.eq(userId),
+                DiaryDao.Properties.Current.eq(true)
+        ).unique().getId();
+
+        long studentId = daoSession.getStudentDao().queryBuilder().where(
+                StudentDao.Properties.SymbolId.eq(symbolId),
+                StudentDao.Properties.Current.eq(true)
+        ).unique().getId();
+
+        return daoSession.getDiaryDao().queryBuilder().where(
+                DiaryDao.Properties.StudentId.eq(studentId),
+                DiaryDao.Properties.Current.eq(true)
+        ).unique().getId();
+    }
+
     private Week getWeekFromDb(String date) {
-        return daoSession.getWeekDao()
-                .queryBuilder()
-                .where(WeekDao.Properties.UserId.eq(userId), WeekDao.Properties.StartDayDate.eq(date))
-                .unique();
+        return daoSession.getWeekDao().queryBuilder().where(
+                WeekDao.Properties.DiaryId.eq(diaryId),
+                WeekDao.Properties.StartDayDate.eq(date)
+        ).unique();
     }
 
     private Long updateWeekInDb(Week dbWeekEntity, io.github.wulkanowy.api.generic.Week fromApi) {
         if (dbWeekEntity != null) {
-            dbWeekEntity.setIsAttendanceSynced(true);
+            dbWeekEntity.setAttendanceSynced(true);
             dbWeekEntity.update();
 
             return dbWeekEntity.getId();
         }
 
-        Week apiWeekEntity = DataObjectConverter.weekToWeekEntity(fromApi).setUserId(userId);
-        apiWeekEntity.setIsAttendanceSynced(true);
+        Week apiWeekEntity = DataObjectConverter.weekToWeekEntity(fromApi).setDiaryId(diaryId);
+        apiWeekEntity.setAttendanceSynced(true);
 
         return daoSession.getWeekDao().insert(apiWeekEntity);
     }
@@ -97,7 +122,7 @@ public class AttendanceSync implements AttendanceSyncContract {
 
         for (io.github.wulkanowy.api.generic.Day dayFromApi : dayListFromApi) {
 
-            Day dbDayEntity = getDayFromDb(dayFromApi.getDate());
+            Day dbDayEntity = getDayFromDb(dayFromApi.getDate(), weekId);
 
             Day apiDayEntity = DataObjectConverter.dayToDayEntity(dayFromApi);
 
@@ -109,11 +134,12 @@ public class AttendanceSync implements AttendanceSyncContract {
         return updatedLessonList;
     }
 
-    private Day getDayFromDb(String date) {
-        return daoSession.getDayDao()
-                .queryBuilder()
-                .where(DayDao.Properties.UserId.eq(userId), DayDao.Properties.Date.eq(date))
-                .unique();
+    private Day getDayFromDb(String date, long weekId) {
+        return daoSession.getDayDao().queryBuilder()
+                .where(
+                        DayDao.Properties.WeekId.eq(weekId),
+                        DayDao.Properties.Date.eq(date)
+                ).unique();
     }
 
     private long updateDay(Day dbDayEntity, Day apiDayEntity, long weekId) {
@@ -121,7 +147,6 @@ public class AttendanceSync implements AttendanceSyncContract {
             return dbDayEntity.getId();
         }
 
-        apiDayEntity.setUserId(userId);
         apiDayEntity.setWeekId(weekId);
 
         return daoSession.getDayDao().insert(apiDayEntity);

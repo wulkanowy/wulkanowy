@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 import io.github.wulkanowy.api.VulcanException;
 import io.github.wulkanowy.data.db.dao.entities.Account;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
+import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.resources.ResourcesContract;
 import io.github.wulkanowy.data.sync.account.AccountSyncContract;
@@ -41,5 +42,15 @@ public interface RepositoryContract extends ResourcesContract, AccountSyncContra
 
     Week getWeek(String date);
 
+    List<Subject> getSubjectList();
+
     List<Grade> getNewGrades();
+
+    long getCurrentStudentId();
+
+    long getCurrentSymbolId();
+
+    long getCurrentDiaryId();
+
+    long getCurrentSemesterId();
 }
