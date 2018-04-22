@@ -125,4 +125,6 @@
 
     <string name="notify_grade_channel">Nowe oceny</string>
     <string name="widget_timetable_no_lesson">Brak lekcji</string>
+    <string name="widget_timetable_today">Dziś</string>
+    <string name="widget_timetable_tomorrow">Jutro</string>
 </resources>

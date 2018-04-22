@@ -16,6 +16,8 @@ public class SharedPref implements SharedPrefContract {
 
     private static final String SHARED_KEY_USER_ID = "USER_ID";
 
+    private static final String SHARED_KEY_TIMETABLE_WIDGET_STATE = "TIMETABLE_WIDGET_STATE";
+
     private final SharedPreferences appSharedPref;
 
     private final SharedPreferences settingsSharedPref;
@@ -34,6 +36,16 @@ public class SharedPref implements SharedPrefContract {
     @Override
     public void setCurrentUserId(long userId) {
         appSharedPref.edit().putLong(SHARED_KEY_USER_ID, userId).apply();
+    }
+
+    @Override
+    public void setTimetableWidgetState(boolean nextDay) {
+        appSharedPref.edit().putBoolean(SHARED_KEY_TIMETABLE_WIDGET_STATE, nextDay).apply();
+    }
+
+    @Override
+    public boolean getTimetableWidgetState() {
+        return appSharedPref.getBoolean(SHARED_KEY_TIMETABLE_WIDGET_STATE, false);
     }
 
     @Override

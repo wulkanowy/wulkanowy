@@ -2,46 +2,73 @@ package io.github.wulkanowy.ui.widgets;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.WulkanowyApp;
+import io.github.wulkanowy.data.RepositoryContract;
+import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
+import io.github.wulkanowy.data.db.dao.entities.Week;
+import io.github.wulkanowy.utils.TimeUtils;
 
-public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFactory,
-        TimetableWidgetContract.Factory {
+public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context context;
 
+    private List<TimetableLesson> lessonList = new ArrayList<>();
+
     @Inject
-    TimetableWidgetContract.Presenter presenter;
+    RepositoryContract repository;
 
     public TimetableWidgetFactory(Context context) {
         this.context = context;
     }
 
+    private void inject() {
+        if (repository == null) {
+            ((WulkanowyApp) context).getApplicationComponent().inject(this);
+        }
+    }
+
     @Override
     public void onCreate() {
+        // do nothing
     }
 
     @Override
     public void onDataSetChanged() {
-        presenter = null;
-        ((WulkanowyApp) context).getApplicationComponent().inject(this);
-        presenter.onDataSetChanged(this);
+        inject();
+
+        Week week = repository.getWeek(TimeUtils.getDateOfCurrentMonday(true));
+        week.resetDayList();
+
+        int valueOfDay = TimeUtils.getTodayOrNextDayValue(repository.getTimetableWidgetState());
+
+        lessonList = new ArrayList<>();
+
+        if (valueOfDay != 5 && valueOfDay != 6) {
+            lessonList = week.getDayList().get(valueOfDay).getTimetableLessons();
+        }
     }
 
     @Override
     public void onDestroy() {
-        presenter = null;
+        // do nothing
     }
 
     @Override
     public int getCount() {
-        return presenter.getCount();
+        return lessonList.size();
     }
 
     @Override
@@ -51,9 +78,20 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
         }
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.timetable_widget_item);
-        views.setTextViewText(R.id.timetable_widget_item_subject, presenter.getSubjectName(position));
-        views.setTextViewText(R.id.timetable_widget_item_room, presenter.getRoomText(position));
-        views.setTextViewText(R.id.timetable_widget_item_time, presenter.getTimeText(position));
+        views.setTextViewText(R.id.timetable_widget_item_subject, getSubjectName(position));
+        views.setTextViewText(R.id.timetable_widget_item_time, getTimeText(position));
+
+        if (!getRoomText(position).isEmpty()) {
+            views.setTextViewText(R.id.timetable_widget_item_room, getRoomText(position));
+        } else {
+            views.setViewVisibility(R.id.timetable_widget_item_room, View.GONE);
+        }
+
+        if (!getDescriptionText(position).isEmpty()) {
+            views.setTextViewText(R.id.timetable_widget_item_description, getDescriptionText(position));
+        } else {
+            views.setViewVisibility(R.id.timetable_widget_item_description, View.GONE);
+        }
 
         views.setOnClickFillInIntent(R.id.timetable_widget_item_container, new Intent());
 
@@ -67,7 +105,7 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public int getViewTypeCount() {
-        return presenter.getViewTypeCount();
+        return 1;
     }
 
     @Override
@@ -77,11 +115,28 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public boolean hasStableIds() {
-        return presenter.hasStableIds();
+        return true;
     }
 
-    @Override
-    public String getRoomString() {
-        return context.getString(R.string.timetable_dialog_room);
+    private String getSubjectName(int position) {
+        return lessonList.get(position).getSubject();
     }
+
+    private String getRoomText(int position) {
+        TimetableLesson lesson = lessonList.get(position);
+        if (!lesson.getRoom().isEmpty()) {
+            return context.getString(R.string.timetable_dialog_room) + " " + lesson.getRoom();
+        }
+        return lesson.getRoom();
+    }
+
+    private String getTimeText(int position) {
+        TimetableLesson lesson = lessonList.get(position);
+        return lesson.getStartTime() + " - " + lesson.getEndTime();
+    }
+
+    private String getDescriptionText(int position) {
+        return StringUtils.capitalize(lessonList.get(position).getDescription());
+    }
+
 }

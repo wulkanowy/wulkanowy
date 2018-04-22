@@ -34,8 +34,6 @@ import io.github.wulkanowy.di.annotations.DatabaseInfo;
 import io.github.wulkanowy.di.annotations.SharedPreferencesInfo;
 import io.github.wulkanowy.di.annotations.SyncGrades;
 import io.github.wulkanowy.di.annotations.SyncSubjects;
-import io.github.wulkanowy.ui.widgets.TimetableWidgetContract;
-import io.github.wulkanowy.ui.widgets.TimetableWidgetPresenter;
 import io.github.wulkanowy.utils.AppConstant;
 
 @Module
@@ -135,10 +133,5 @@ public class ApplicationModule {
     @Provides
     FirebaseJobDispatcher provideDispatcher() {
         return new FirebaseJobDispatcher(new GooglePlayDriver(application));
-    }
-
-    @Provides
-    TimetableWidgetContract.Presenter provideTimetableWidgetPresenter(TimetableWidgetPresenter timetableWidgetPresenter) {
-        return timetableWidgetPresenter;
     }
 }
