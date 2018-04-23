@@ -36,18 +36,20 @@ public class Login {
                 {"Password", password}
         };
 
-        String loginFormAction = LOGIN_PAGE_URL;
-        Document loginPage = client.getPageByUrl(LOGIN_PAGE_URL, false);
+        String nextUrl = LOGIN_PAGE_URL;
+        Document loginPage = client.getPageByUrl(nextUrl, false);
 
-        Element form = loginPage.select("#form1").first();
-        if (null != form) { // on adfs login
-            Document formPage = client.postPageByUrl(form.attr("abs:action"),
-                    getFormStateParams(form, "", ""));
-            loginFormAction = formPage.select("#form1").first().attr("abs:action");
-            credentials = getFormStateParams(formPage, email, password);
+        Element formFirst = loginPage.select("#form1").first();
+        if (null != formFirst) { // on adfs login
+            Document formSecond = client.postPageByUrl(
+                    formFirst.attr("abs:action"),
+                    getFormStateParams(formFirst, "", "")
+            );
+            credentials = getFormStateParams(formSecond, email, password);
+            nextUrl = formSecond.select("#form1").first().attr("abs:action");
         }
 
-        Document html = client.postPageByUrl(loginFormAction, credentials);
+        Document html = client.postPageByUrl(nextUrl, credentials);
 
         Element errorMessage = html.select(".ErrorMessage, #ErrorTextLabel").first();
         if (null != errorMessage) {
