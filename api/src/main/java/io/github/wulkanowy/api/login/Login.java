@@ -63,6 +63,8 @@ public class Login {
                 {"__VIEWSTATEGENERATOR", form.select("#__VIEWSTATEGENERATOR").val()},
                 {"__EVENTVALIDATION", form.select("#__EVENTVALIDATION").val()},
                 {"__db", form.select("input[name=__db]").val()},
+                {"PassiveSignInButton.x", "0"},
+                {"PassiveSignInButton.y", "0"},
                 {"SubmitButton.x", "0"},
                 {"SubmitButton.y", "0"},
                 {"UsernameTextBox", email},
