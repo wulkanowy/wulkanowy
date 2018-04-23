@@ -56,7 +56,7 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
                 public void run() {
                     onUpdate(context, appWidgetManager, appWidgetIds);
                 }
-            }, 500);
+            }, 250);
         }
     }
 

@@ -48,16 +48,17 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
     @Override
     public void onDataSetChanged() {
         inject();
-
-        Week week = repository.getWeek(TimeUtils.getDateOfCurrentMonday(true));
-        week.resetDayList();
-
-        int valueOfDay = TimeUtils.getTodayOrNextDayValue(repository.getTimetableWidgetState());
-
         lessonList = new ArrayList<>();
 
-        if (valueOfDay != 5 && valueOfDay != 6) {
-            lessonList = week.getDayList().get(valueOfDay).getTimetableLessons();
+        if (repository.getCurrentUserId() != 0) {
+
+            Week week = repository.getWeek(TimeUtils.getDateOfCurrentMonday(true));
+            int valueOfDay = TimeUtils.getTodayOrNextDayValue(repository.getTimetableWidgetState());
+
+            if (valueOfDay != 5 && valueOfDay != 6 && week != null) {
+                week.resetDayList();
+                lessonList = week.getDayList().get(valueOfDay).getTimetableLessons();
+            }
         }
     }
 
@@ -80,12 +81,7 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.timetable_widget_item);
         views.setTextViewText(R.id.timetable_widget_item_subject, getSubjectName(position));
         views.setTextViewText(R.id.timetable_widget_item_time, getTimeText(position));
-
-        if (!getRoomText(position).isEmpty()) {
-            views.setTextViewText(R.id.timetable_widget_item_room, getRoomText(position));
-        } else {
-            views.setViewVisibility(R.id.timetable_widget_item_room, View.GONE);
-        }
+        views.setTextViewText(R.id.timetable_widget_item_room, getRoomText(position));
 
         if (!getDescriptionText(position).isEmpty()) {
             views.setTextViewText(R.id.timetable_widget_item_description, getDescriptionText(position));
