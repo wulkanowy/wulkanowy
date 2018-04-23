@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.db.shared;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -38,9 +39,10 @@ public class SharedPref implements SharedPrefContract {
         appSharedPref.edit().putLong(SHARED_KEY_USER_ID, userId).apply();
     }
 
+    @SuppressLint("ApplySharedPref")
     @Override
     public void setTimetableWidgetState(boolean nextDay) {
-        appSharedPref.edit().putBoolean(SHARED_KEY_TIMETABLE_WIDGET_STATE, nextDay).apply();
+        appSharedPref.edit().putBoolean(SHARED_KEY_TIMETABLE_WIDGET_STATE, nextDay).commit();
     }
 
     @Override

@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
@@ -51,12 +50,7 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
             final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 
             repository.setTimetableWidgetState(!repository.getTimetableWidgetState());
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    onUpdate(context, appWidgetManager, appWidgetIds);
-                }
-            }, 250);
+            onUpdate(context, appWidgetManager, appWidgetIds);
         }
     }
 
