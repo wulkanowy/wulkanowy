@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.dashboard;
+package io.github.wulkanowy.ui.main.exams;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,10 +14,10 @@ import io.github.wulkanowy.di.component.FragmentComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
-public class DashboardFragment extends BaseFragment implements DashboardContract.View {
+public class ExamsFragment extends BaseFragment implements ExamsContract.View {
 
     @Inject
-    DashboardContract.Presenter presenter;
+    ExamsContract.Presenter presenter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -43,6 +43,6 @@ public class DashboardFragment extends BaseFragment implements DashboardContract
 
     @Override
     public void setActivityTitle() {
-        setTitle(getString(R.string.dashboard_text));
+        setTitle(getString(R.string.exams_text));
     }
 }

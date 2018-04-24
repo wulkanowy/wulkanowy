@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.dashboard;
+package io.github.wulkanowy.ui.main.exams;
 
 import javax.inject.Inject;
 
@@ -6,18 +6,18 @@ import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.ui.base.BasePresenter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
-public class DashboardPresenter extends BasePresenter<DashboardContract.View>
-        implements DashboardContract.Presenter {
+public class ExamsPresenter extends BasePresenter<ExamsContract.View>
+        implements ExamsContract.Presenter {
 
     private OnFragmentIsReadyListener listener;
 
     @Inject
-    DashboardPresenter(RepositoryContract repository) {
+    ExamsPresenter(RepositoryContract repository) {
         super(repository);
     }
 
     @Override
-    public void onStart(DashboardContract.View view, OnFragmentIsReadyListener listener) {
+    public void onStart(ExamsContract.View view, OnFragmentIsReadyListener listener) {
         super.onStart(view);
         this.listener = listener;
 
