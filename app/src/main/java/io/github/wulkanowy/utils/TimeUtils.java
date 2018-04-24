@@ -88,14 +88,14 @@ public final class TimeUtils {
     }
 
     public static int getTodayOrNextDayValue(boolean nextDay) {
-        int valueOfToday = LocalDate.now().getDayOfWeek().getValue();
+        DayOfWeek day = LocalDate.now().getDayOfWeek();
         if (nextDay) {
-            if (valueOfToday == 7) {
+            if (day == DayOfWeek.SUNDAY) {
                 return 0;
             }
-            return valueOfToday;
+            return day.getValue();
         }
-        return valueOfToday - 1;
+        return day.getValue() - 1;
     }
 
     public static String getTodayOrNextDay(boolean nextDay) {
