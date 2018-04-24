@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment;
-import io.github.wulkanowy.ui.main.dashboard.DashboardFragment;
+import io.github.wulkanowy.ui.main.exams.ExamsFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
 import io.github.wulkanowy.ui.main.settings.SettingsFragment;
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
         bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.attendance_text),
                 R.drawable.ic_menu_attendance_24dp));
 
-        bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.dashboard_text),
+        bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.exams_text),
                 R.drawable.ic_menu_dashboard_24dp));
 
         bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.timetable_text),
@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     public void initiationViewPager(int tabPosition) {
         pagerAdapter.addFragment(new GradesFragment());
         pagerAdapter.addFragment(new AttendanceFragment());
-        pagerAdapter.addFragment(new DashboardFragment());
+        pagerAdapter.addFragment(new ExamsFragment());
         pagerAdapter.addFragment(new TimetableFragment());
         pagerAdapter.addFragment(new SettingsFragment());
 
