@@ -59,11 +59,15 @@ public class Grade implements Serializable {
 
     private static final long serialVersionUID = 42L;
 
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 681281562)
     private transient GradeDao myDao;
 
@@ -73,8 +77,8 @@ public class Grade implements Serializable {
 
     @Generated(hash = 619853992)
     public Grade(Long id, Long semesterId, Long subjectId, String subject, String value,
-            String weight, String date, String symbol, String color, String description,
-            String teacher, boolean isNew, boolean read) {
+                 String weight, String date, String symbol, String color, String description,
+                 String teacher, boolean isNew, boolean read) {
         this.id = id;
         this.semesterId = semesterId;
         this.subjectId = subjectId;
@@ -133,8 +137,6 @@ public class Grade implements Serializable {
                 .append(weight, grade.weight)
                 .append(date, grade.date)
                 .append(teacher, grade.teacher)
-                .append(isNew, grade.isNew)
-                .append(read, grade.read)
                 .isEquals();
     }
 
@@ -150,8 +152,6 @@ public class Grade implements Serializable {
                 .append(weight)
                 .append(date)
                 .append(teacher)
-                .append(isNew)
-                .append(read)
                 .toHashCode();
     }
 
