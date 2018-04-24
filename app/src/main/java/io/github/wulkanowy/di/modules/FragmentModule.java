@@ -12,8 +12,8 @@ import io.github.wulkanowy.ui.main.attendance.AttendancePagerAdapter;
 import io.github.wulkanowy.ui.main.attendance.AttendancePresenter;
 import io.github.wulkanowy.ui.main.attendance.AttendanceTabContract;
 import io.github.wulkanowy.ui.main.attendance.AttendanceTabPresenter;
-import io.github.wulkanowy.ui.main.dashboard.DashboardContract;
-import io.github.wulkanowy.ui.main.dashboard.DashboardPresenter;
+import io.github.wulkanowy.ui.main.exams.ExamsContract;
+import io.github.wulkanowy.ui.main.exams.ExamsPresenter;
 import io.github.wulkanowy.ui.main.grades.GradeHeaderItem;
 import io.github.wulkanowy.ui.main.grades.GradesContract;
 import io.github.wulkanowy.ui.main.grades.GradesPresenter;
@@ -47,8 +47,8 @@ public class FragmentModule {
 
     @PerFragment
     @Provides
-    DashboardContract.Presenter provideDashboardPresenter(DashboardPresenter dashboardPresenter) {
-        return dashboardPresenter;
+    ExamsContract.Presenter provideDashboardPresenter(ExamsPresenter examsPresenter) {
+        return examsPresenter;
     }
 
     @PerFragment
