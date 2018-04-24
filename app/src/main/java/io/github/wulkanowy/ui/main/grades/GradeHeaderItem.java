@@ -74,6 +74,12 @@ public class GradeHeaderItem
         @BindView(R.id.grade_header_number_of_grade_text)
         TextView numberText;
 
+        @BindView(R.id.grade_header_predicted_rating_text)
+        TextView predictedTest;
+
+        @BindView(R.id.grade_header_final_rating_text)
+        TextView finalText;
+
         @BindView(R.id.grade_header_alert_image)
         View alertImage;
 
@@ -91,6 +97,10 @@ public class GradeHeaderItem
             numberText.setText(resources.getQuantityString(R.plurals.numberOfGradesPlurals,
                     subItems.size(), subItems.size()));
             averageText.setText(getGradesAverageString(item));
+
+            predictedTest.setText(resources.getString(R.string.info_grades_predicted_rating, item.getPredictedRating()));
+            finalText.setText(resources.getString(R.string.info_grades_final_rating, item.getFinalRating()));
+
             alertImage.setVisibility(isSubItemsReadAndSaveAlertView(subItems)
                     ? View.INVISIBLE : View.VISIBLE);
         }
@@ -112,6 +122,7 @@ public class GradeHeaderItem
                 isRead = item.getGrade().getRead();
                 item.setSubjectAlertImage(alertImage);
             }
+
             return isRead;
         }
 
@@ -120,9 +131,9 @@ public class GradeHeaderItem
 
             if (average < 0) {
                 return resources.getString(R.string.info_no_average);
-            } else {
-                return resources.getString(R.string.info_average_grades, average);
             }
+
+            return resources.getString(R.string.info_average_grades, average);
         }
     }
 }

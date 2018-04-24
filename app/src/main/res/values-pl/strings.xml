@@ -72,6 +72,8 @@
 
     <string name="info_average_grades">Średnia: %1$.2f</string>
     <string name="info_no_average">Brak średniej</string>
+    <string name="info_grades_predicted_rating">Przewidywana: %1$s</string>
+    <string name="info_grades_final_rating">Końcowa: %1$s</string>
     <string name="info_free_week">Brak lekcji w tym tygodniu</string>
     <string name="timetable_subitem_room">Sala %s</string>
 
