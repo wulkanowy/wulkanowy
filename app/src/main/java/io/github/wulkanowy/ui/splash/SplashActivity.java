@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import io.github.wulkanowy.services.jobs.SyncJob;
-import io.github.wulkanowy.services.notifi.NotificationService;
+import io.github.wulkanowy.services.notifies.NotificationService;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.login.LoginActivity;
 import io.github.wulkanowy.ui.main.MainActivity;
