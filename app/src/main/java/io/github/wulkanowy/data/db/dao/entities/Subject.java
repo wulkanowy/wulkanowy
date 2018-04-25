@@ -18,20 +18,17 @@ public class Subject {
     @Id(autoincrement = true)
     private Long id;
 
-    @Property(nameInDb = "USER_ID")
-    private Long userId;
+    @Property(nameInDb = "semester_id")
+    private Long semesterId;
 
-    @Property(nameInDb = "NAME")
+    @Property(nameInDb = "name")
     private String name;
 
-    @Property(nameInDb = "PREDICTED_RATING")
+    @Property(nameInDb = "predicted_rating")
     private String predictedRating;
 
-    @Property(nameInDb = "FINAL_RATING")
+    @Property(nameInDb = "final_rating")
     private String finalRating;
-
-    @Property(nameInDb = "SEMESTER")
-    private String semester;
 
     @ToMany(referencedJoinProperty = "subjectId")
     private List<Grade> gradeList;
@@ -48,15 +45,14 @@ public class Subject {
     @Generated(hash = 1644932788)
     private transient SubjectDao myDao;
 
-    @Generated(hash = 396325764)
-    public Subject(Long id, Long userId, String name, String predictedRating,
-                   String finalRating, String semester) {
+    @Generated(hash = 1817932538)
+    public Subject(Long id, Long semesterId, String name, String predictedRating,
+                   String finalRating) {
         this.id = id;
-        this.userId = userId;
+        this.semesterId = semesterId;
         this.name = name;
         this.predictedRating = predictedRating;
         this.finalRating = finalRating;
-        this.semester = semester;
     }
 
     @Generated(hash = 1617906264)
@@ -64,25 +60,24 @@ public class Subject {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
-    public Subject setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getSemesterId() {
+        return this.semesterId;
     }
 
-    public Subject setUserId(Long userId) {
-        this.userId = userId;
+    public Subject setSemesterId(Long semesterId) {
+        this.semesterId = semesterId;
         return this;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public Subject setName(String name) {
@@ -91,7 +86,7 @@ public class Subject {
     }
 
     public String getPredictedRating() {
-        return predictedRating;
+        return this.predictedRating;
     }
 
     public Subject setPredictedRating(String predictedRating) {
@@ -100,51 +95,12 @@ public class Subject {
     }
 
     public String getFinalRating() {
-        return finalRating;
+        return this.finalRating;
     }
 
     public Subject setFinalRating(String finalRating) {
         this.finalRating = finalRating;
         return this;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public Subject setSemester(String semester) {
-        this.semester = semester;
-        return this;
-    }
-
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 1358847893)
-    public List<Grade> getGradeList() {
-        if (gradeList == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            GradeDao targetDao = daoSession.getGradeDao();
-            List<Grade> gradeListNew = targetDao._querySubject_GradeList(id);
-            synchronized (this) {
-                if (gradeList == null) {
-                    gradeList = gradeListNew;
-                }
-            }
-        }
-        return gradeList;
-    }
-
-    /**
-     * Resets a to-many relationship, making the next get call to query for a fresh result.
-     */
-    @Generated(hash = 1939990047)
-    public synchronized void resetGradeList() {
-        gradeList = null;
     }
 
     /**
@@ -181,6 +137,34 @@ public class Subject {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.update(this);
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 1358847893)
+    public List<Grade> getGradeList() {
+        if (gradeList == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            GradeDao targetDao = daoSession.getGradeDao();
+            List<Grade> gradeListNew = targetDao._querySubject_GradeList(id);
+            synchronized (this) {
+                if (gradeList == null) {
+                    gradeList = gradeListNew;
+                }
+            }
+        }
+        return gradeList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1939990047)
+    public synchronized void resetGradeList() {
+        gradeList = null;
     }
 
     /** called by internal mechanisms, do not call yourself. */
