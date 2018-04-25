@@ -17,6 +17,7 @@ import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import eu.davidea.viewholders.ExpandableViewHolder;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
+import io.github.wulkanowy.utils.AnimationUtils;
 import io.github.wulkanowy.utils.AverageCalculator;
 
 public class GradeHeaderItem
@@ -98,8 +99,12 @@ public class GradeHeaderItem
                     subItems.size(), subItems.size()));
             averageText.setText(getGradesAverageString(item));
 
-            predictedTest.setText(resources.getString(R.string.info_grades_predicted_rating, item.getPredictedRating()));
-            finalText.setText(resources.getString(R.string.info_grades_final_rating, item.getFinalRating()));
+            predictedTest.setText(resources.getString(R.string.info_grades_predicted_rating,
+                    item.getPredictedRating()));
+            finalText.setText(resources.getString(R.string.info_grades_final_rating,
+                    item.getFinalRating()));
+            predictedTest.setVisibility(View.GONE);
+            finalText.setVisibility(View.GONE);
 
             alertImage.setVisibility(isSubItemsReadAndSaveAlertView(subItems)
                     ? View.INVISIBLE : View.VISIBLE);
@@ -112,6 +117,17 @@ public class GradeHeaderItem
                 subjectName.setMaxLines(3);
             } else {
                 subjectName.setMaxLines(1);
+            }
+
+            toggleText(predictedTest);
+            toggleText(finalText);
+        }
+
+        private void toggleText(final View view) {
+            if (view.getVisibility() == View.GONE) {
+                AnimationUtils.slideDown(view);
+            } else {
+                AnimationUtils.slideUp(view);
             }
         }
 
