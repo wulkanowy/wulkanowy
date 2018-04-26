@@ -84,6 +84,8 @@ public class GradeHeaderItem
         @BindView(R.id.grade_header_alert_image)
         View alertImage;
 
+        boolean expandSummary = false;
+
         Resources resources;
 
         HeaderViewHolder(View view, FlexibleAdapter adapter) {
@@ -106,6 +108,10 @@ public class GradeHeaderItem
             predictedTest.setVisibility(View.GONE);
             finalText.setVisibility(View.GONE);
 
+            if (!"-".equals(item.getPredictedRating()) || !"-".equals(item.getFinalRating())) {
+                expandSummary = true;
+            }
+
             alertImage.setVisibility(isSubItemsReadAndSaveAlertView(subItems)
                     ? View.INVISIBLE : View.VISIBLE);
         }
@@ -119,8 +125,10 @@ public class GradeHeaderItem
                 subjectName.setMaxLines(1);
             }
 
-            toggleText(predictedTest);
-            toggleText(finalText);
+            if (expandSummary) {
+                toggleText(predictedTest);
+                toggleText(finalText);
+            }
         }
 
         private void toggleText(final View view) {
