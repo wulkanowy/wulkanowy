@@ -6,9 +6,9 @@ import dagger.Module;
 import dagger.Provides;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import io.github.wulkanowy.di.annotations.PerFragment;
+import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.attendance.AttendanceContract;
 import io.github.wulkanowy.ui.main.attendance.AttendanceHeaderItem;
-import io.github.wulkanowy.ui.main.attendance.AttendancePagerAdapter;
 import io.github.wulkanowy.ui.main.attendance.AttendancePresenter;
 import io.github.wulkanowy.ui.main.attendance.AttendanceTabContract;
 import io.github.wulkanowy.ui.main.attendance.AttendanceTabPresenter;
@@ -19,7 +19,6 @@ import io.github.wulkanowy.ui.main.grades.GradesContract;
 import io.github.wulkanowy.ui.main.grades.GradesPresenter;
 import io.github.wulkanowy.ui.main.timetable.TimetableContract;
 import io.github.wulkanowy.ui.main.timetable.TimetableHeaderItem;
-import io.github.wulkanowy.ui.main.timetable.TimetablePagerAdapter;
 import io.github.wulkanowy.ui.main.timetable.TimetablePresenter;
 import io.github.wulkanowy.ui.main.timetable.TimetableTabContract;
 import io.github.wulkanowy.ui.main.timetable.TimetableTabPresenter;
@@ -58,8 +57,8 @@ public class FragmentModule {
     }
 
     @Provides
-    AttendancePagerAdapter provideAttendancePagerAdapter() {
-        return new AttendancePagerAdapter(fragment.getChildFragmentManager());
+    BasePagerAdapter provideBasePagerAdapter() {
+        return new BasePagerAdapter(fragment.getChildFragmentManager());
     }
 
     @Provides
@@ -77,11 +76,6 @@ public class FragmentModule {
     @Provides
     TimetableTabContract.Presenter provideTimetableTabPresenter(TimetableTabPresenter timetableTabPresenter) {
         return timetableTabPresenter;
-    }
-
-    @Provides
-    TimetablePagerAdapter provideTimetablePagerAdapter() {
-        return new TimetablePagerAdapter(fragment.getChildFragmentManager());
     }
 
     @Provides

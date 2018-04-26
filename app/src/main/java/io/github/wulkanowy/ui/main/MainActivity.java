@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseActivity;
+import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment;
 import io.github.wulkanowy.ui.main.exams.ExamsFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
@@ -39,7 +40,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     View progressBar;
 
     @Inject
-    MainPagerAdapter pagerAdapter;
+    BasePagerAdapter pagerAdapter;
 
     @Inject
     MainContract.Presenter presenter;
