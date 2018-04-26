@@ -1,11 +1,16 @@
 package io.github.wulkanowy.utils;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 
 public final class GradeUtils {
+
+    private final static Pattern validGradePattern = Pattern.compile("^(\\++|-|--|=)?[0-6](\\++|-|--|=)?$");
+    private final static Pattern simpleGradeValuePattern = Pattern.compile("([0-6])");
 
     private GradeUtils() {
         throw new IllegalStateException("Utility class");
@@ -61,26 +66,31 @@ public final class GradeUtils {
     }
 
     public static int getValueColor(String value) {
-        String replacedString = value.replaceAll("[^0-9]", "");
-
-        if (!"".equals(replacedString)) {
-            switch (Integer.parseInt(replacedString)) {
-                case 6:
-                    return R.color.six_grade;
-                case 5:
-                    return R.color.five_grade;
-                case 4:
-                    return R.color.four_grade;
-                case 3:
-                    return R.color.three_grade;
-                case 2:
-                    return R.color.two_grade;
-                case 1:
-                    return R.color.one_grade;
-                default:
-                    return R.color.default_grade;
-            }
+        Matcher m1 = validGradePattern.matcher(value);
+        if (!m1.find()) {
+            return R.color.default_grade;
         }
-        return R.color.default_grade;
+
+        Matcher m2 = simpleGradeValuePattern.matcher(m1.group());
+        if (!m2.find()) {
+            return R.color.default_grade;
+        }
+
+        switch (Integer.parseInt(m2.group())) {
+            case 6:
+                return R.color.six_grade;
+            case 5:
+                return R.color.five_grade;
+            case 4:
+                return R.color.four_grade;
+            case 3:
+                return R.color.three_grade;
+            case 2:
+                return R.color.two_grade;
+            case 1:
+                return R.color.one_grade;
+            default:
+                return R.color.default_grade;
+        }
     }
 }
