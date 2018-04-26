@@ -17,8 +17,8 @@ import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.di.component.FragmentComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
+import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
-import io.github.wulkanowy.ui.main.TabsData;
 
 public class TimetableFragment extends BaseFragment implements TimetableContract.View {
 
@@ -31,7 +31,7 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     TabLayout tabLayout;
 
     @Inject
-    TimetablePagerAdapter pagerAdapter;
+    BasePagerAdapter pagerAdapter;
 
     @Inject
     TimetableContract.Presenter presenter;
@@ -63,8 +63,8 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     }
 
     @Override
-    public void setTabDataToAdapter(TabsData tabsData) {
-        pagerAdapter.setTabsData(tabsData);
+    public void setTabDataToAdapter(String date) {
+        pagerAdapter.addFragment(TimetableTabFragment.newInstance(date), date);
     }
 
     @Override
