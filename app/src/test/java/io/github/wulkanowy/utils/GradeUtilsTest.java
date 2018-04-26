@@ -8,7 +8,7 @@ import java.util.List;
 
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 
-public class AverageCalculatorTest {
+public class GradeUtilsTest {
 
     @Test
     public void averageTest() {
@@ -28,8 +28,8 @@ public class AverageCalculatorTest {
         gradeList1.add(new Grade().setValue("5+").setWeight("10,00"));
         gradeList1.add(new Grade().setValue("5").setWeight("10,00"));
 
-        Assert.assertEquals(4.8f, AverageCalculator.calculate(gradeList), 0.0f);
-        Assert.assertEquals(4.8f, AverageCalculator.calculate(gradeList1), 0.0f);
+        Assert.assertEquals(4.8f, GradeUtils.calculate(gradeList), 0.0f);
+        Assert.assertEquals(4.8f, GradeUtils.calculate(gradeList1), 0.0f);
     }
 
     @Test
@@ -37,6 +37,6 @@ public class AverageCalculatorTest {
         List<Grade> gradeList = new ArrayList<>();
         gradeList.add(new Grade().setValue("np.").setWeight("1,00"));
 
-        Assert.assertEquals(-1f, AverageCalculator.calculate(gradeList), 0.0f);
+        Assert.assertEquals(-1f, GradeUtils.calculate(gradeList), 0.0f);
     }
 }
