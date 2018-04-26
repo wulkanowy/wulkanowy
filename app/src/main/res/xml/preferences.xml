@@ -10,7 +10,7 @@
             android:title="@string/pref_tab_list" />
         <SwitchPreference
             android:defaultValue="false"
-            android:key="grades_grades_summary"
+            android:key="grades_summary"
             android:title="@string/pref_grades_summary_line_show"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_services_header">
