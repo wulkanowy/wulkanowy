@@ -122,9 +122,7 @@ public class GradeHeaderItem
 
             if (isSummaryEmpty) {
                 isSummaryTogglable = false;
-            }
-
-            if (isShowSummary && !isSummaryEmpty) {
+            } else if (isShowSummary) {
                 predictedTest.setVisibility(View.VISIBLE);
                 finalText.setVisibility(View.VISIBLE);
 
