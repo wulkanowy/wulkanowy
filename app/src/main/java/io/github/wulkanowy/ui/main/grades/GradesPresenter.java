@@ -27,6 +27,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     private boolean isFirstSight = false;
 
+    private boolean isShowSummary;
+
     @Inject
     GradesPresenter(RepositoryContract repository) {
         super(repository);
@@ -36,6 +38,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     public void onStart(GradesContract.View view, OnFragmentIsReadyListener listener) {
         super.onStart(view);
         this.listener = listener;
+        this.isShowSummary = getRepository().isShowGradesSummary();
 
         if (getView().isMenuVisible()) {
             getView().setActivityTitle();
@@ -113,7 +116,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             List<Grade> gradeList = subject.getGradeList();
 
             if (!gradeList.isEmpty()) {
-                GradeHeaderItem headerItem = new GradeHeaderItem(subject);
+                GradeHeaderItem headerItem = new GradeHeaderItem(subject, isShowSummary);
 
                 List<GradesSubItem> subItems = new ArrayList<>();
 
