@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
                 R.drawable.ic_menu_attendance_24dp));
 
         bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.exams_text),
-                R.drawable.ic_menu_dashboard_24dp));
+                R.drawable.ic_menu_exams_24dp));
 
         bottomNavigation.addItem(new AHBottomNavigationItem(getString(R.string.timetable_text),
                 R.drawable.ic_menu_timetable_24dp));
