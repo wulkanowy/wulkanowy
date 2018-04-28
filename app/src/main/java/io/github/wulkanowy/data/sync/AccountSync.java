@@ -1,4 +1,4 @@
-package io.github.wulkanowy.data.sync.account;
+package io.github.wulkanowy.data.sync;
 
 import android.content.Context;
 
@@ -27,7 +27,7 @@ import io.github.wulkanowy.utils.security.CryptoException;
 import io.github.wulkanowy.utils.security.Scrambler;
 
 @Singleton
-public class AccountSync implements AccountSyncContract {
+public class AccountSync {
 
     private final DaoSession daoSession;
 
@@ -46,7 +46,6 @@ public class AccountSync implements AccountSyncContract {
         this.context = context;
     }
 
-    @Override
     public void registerUser(String email, String password, String symbol)
             throws VulcanException, IOException, CryptoException {
 
@@ -119,7 +118,6 @@ public class AccountSync implements AccountSyncContract {
         daoSession.getSemesterDao().insertInTx(semesterList);
     }
 
-    @Override
     public void initLastUser() throws IOException, CryptoException {
 
         long userId = sharedPref.getCurrentUserId();
