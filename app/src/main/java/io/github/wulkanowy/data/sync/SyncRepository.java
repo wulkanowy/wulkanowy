@@ -58,12 +58,12 @@ public class SyncRepository implements SyncContract {
     }
 
     @Override
-    public void syncSubjects(long semesterId) throws VulcanException, IOException, ParseException {
+    public void syncSubjects(long semesterId) throws VulcanException, IOException {
         subjectSync.sync(semesterId);
     }
 
     @Override
-    public void syncSubjects() throws VulcanException, IOException, ParseException {
+    public void syncSubjects() throws VulcanException, IOException {
         subjectSync.sync(database.getCurrentSemesterId());
     }
 
@@ -73,7 +73,7 @@ public class SyncRepository implements SyncContract {
     }
 
     @Override
-    public void syncAttendance(String date, long diaryId) throws ParseException, IOException, VulcanException {
+    public void syncAttendance(long diaryId, String date) throws ParseException, IOException, VulcanException {
         if (diaryId != 0) {
             attendanceSync.syncAttendance(diaryId, date);
         } else {
@@ -87,7 +87,7 @@ public class SyncRepository implements SyncContract {
     }
 
     @Override
-    public void syncTimetable(String date, long diaryId) throws VulcanException, IOException, ParseException {
+    public void syncTimetable(long diaryId, String date) throws VulcanException, IOException, ParseException {
         if (diaryId != 0) {
             timetableSync.syncTimetable(diaryId, date);
         } else {

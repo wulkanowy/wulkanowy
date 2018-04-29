@@ -129,26 +129,27 @@ public class AccountSync {
         LogUtils.debug("Initialization current user id=" + userId);
 
         Account account = daoSession.getAccountDao().load(userId);
-        String email = account.getEmail();
-        String pass = Scrambler.decrypt(account.getEmail(), account.getPassword());
 
-        Symbol symbolE = daoSession.getSymbolDao().queryBuilder().where(
+        Symbol symbol = daoSession.getSymbolDao().queryBuilder().where(
                 SymbolDao.Properties.UserId.eq(account.getId())).unique();
-        String symbol = symbolE.getSymbol();
-        String schoolId = symbolE.getSchoolId();
 
-        Student studentE = daoSession.getStudentDao().queryBuilder().where(
-                StudentDao.Properties.SymbolId.eq(symbolE.getId()),
+        Student student = daoSession.getStudentDao().queryBuilder().where(
+                StudentDao.Properties.SymbolId.eq(symbol.getId()),
                 StudentDao.Properties.Current.eq(true)
         ).unique();
-        String studentId = studentE.getRealId();
 
-        Diary diaryE = daoSession.getDiaryDao().queryBuilder().where(
-                DiaryDao.Properties.StudentId.eq(studentE.getId()),
+        Diary diary = daoSession.getDiaryDao().queryBuilder().where(
+                DiaryDao.Properties.StudentId.eq(student.getId()),
                 DiaryDao.Properties.Current.eq(true)
         ).unique();
-        String diaryId = diaryE.getValue();
 
-        vulcan.setCredentials(email, pass, symbol, schoolId, studentId, diaryId);
+        vulcan.setCredentials(
+                account.getEmail(),
+                Scrambler.decrypt(account.getEmail(), account.getPassword()),
+                symbol.getSymbol(),
+                symbol.getSchoolId(),
+                student.getRealId(),
+                diary.getValue()
+        );
     }
 }

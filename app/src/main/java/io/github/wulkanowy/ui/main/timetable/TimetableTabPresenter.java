@@ -159,7 +159,7 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     }
 
     private void syncData() throws Exception {
-        getRepository().getSyncRepo().syncTimetable(date, 0);
+        getRepository().getSyncRepo().syncTimetable(0, date);
     }
 
     private void cancelAsyncTasks() {

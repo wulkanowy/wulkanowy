@@ -20,17 +20,17 @@ public interface SyncContract {
 
     void syncGrades() throws VulcanException, IOException, ParseException;
 
-    void syncSubjects(long semesterId) throws VulcanException, IOException, ParseException;
+    void syncSubjects(long semesterId) throws VulcanException, IOException;
 
-    void syncSubjects() throws VulcanException, IOException, ParseException;
+    void syncSubjects() throws VulcanException, IOException;
 
     void syncAttendance() throws ParseException, IOException, VulcanException;
 
-    void syncAttendance(String date, long diaryId) throws ParseException, IOException, VulcanException;
+    void syncAttendance(long diaryId, String date) throws ParseException, IOException, VulcanException;
 
     void syncTimetable() throws VulcanException, IOException, ParseException;
 
-    void syncTimetable(String date, long diaryId) throws VulcanException, IOException, ParseException;
+    void syncTimetable(long diaryId, String date) throws VulcanException, IOException, ParseException;
 
     void syncAll() throws VulcanException, IOException, ParseException;
 }
