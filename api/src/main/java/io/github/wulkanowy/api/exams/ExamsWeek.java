@@ -59,7 +59,7 @@ public class ExamsWeek {
         }
 
         return new Week<ExamDay>()
-                .setStartDayDate(examsDays.select("h2").first().text().split(" ")[1])
+                .setStartDayDate(examsPage.select(".mainContainer > h2").first().text().split(" ")[1])
                 .setDays(days);
     }
 }

@@ -12,20 +12,25 @@ public class ExamsWeekTest extends StudentAndParentTestCase {
 
     private ExamsWeek onePerDay;
 
+    private ExamsWeek empty;
+
     @Before
     public void getCurrent() throws Exception {
         onePerDay = new ExamsWeek(getSnp("Sprawdziany-one-per-day.html"));
+        empty = new ExamsWeek(getSnp("Sprawdziany-empty.html"));
     }
 
     @Test
     public void getWeekTest() throws Exception {
         Assert.assertEquals("23.10.2017", onePerDay.getCurrent().getStartDayDate());
+        Assert.assertEquals("30.04.2018", empty.getCurrent().getStartDayDate());
     }
 
     @Test
     public void getDaysListTest() throws Exception {
         Assert.assertEquals(3, onePerDay.getCurrent().getDays().size());
         Assert.assertEquals(7, onePerDay.getWeek("", false).getDays().size());
+        Assert.assertEquals(0, empty.getCurrent().getDays().size());
     }
 
     @Test
