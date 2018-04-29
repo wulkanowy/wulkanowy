@@ -61,7 +61,7 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
     public void onDisabled(Context context) {
         super.onDisabled(context);
         inject(context);
-        repository.setTimetableWidgetState(false);
+        repository.getSharedRepo().setTimetableWidgetState(false);
     }
 
     private void setToggleIntent(RemoteViews views, Context context) {
