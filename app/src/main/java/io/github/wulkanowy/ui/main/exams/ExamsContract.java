@@ -11,6 +11,12 @@ public interface ExamsContract {
         void setActivityTitle();
 
         boolean isMenuVisible();
+
+        void scrollViewPagerToPosition(int position);
+
+        void setTabDataToAdapter(String date);
+
+        void setAdapterWithTabLayout();
     }
 
     @PerActivity
@@ -18,6 +24,8 @@ public interface ExamsContract {
 
         void onStart(View view, OnFragmentIsReadyListener listener);
 
-        void onFragmentVisible(boolean isVisible);
+        void onFragmentActivated(boolean isVisible);
+
+        void setRestoredPosition(int position);
     }
 }

@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.main.exams;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -50,12 +51,42 @@ public class ExamsFragment extends BaseFragment implements ExamsContract.View {
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         if (presenter != null) {
-            presenter.onFragmentVisible(menuVisible);
+            presenter.onFragmentActivated(menuVisible);
+        }
+    }
+
+    @Override
+    public void onError(String message) {
+        if (getActivity() != null) {
+            Snackbar.make(getActivity().findViewById(R.id.main_activity_view_pager),
+                    message, Snackbar.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void setActivityTitle() {
         setTitle(getString(R.string.exams_text));
+    }
+
+    @Override
+    public void scrollViewPagerToPosition(int position) {
+        viewPager.setCurrentItem(position, false);
+    }
+
+    @Override
+    public void setTabDataToAdapter(String date) {
+        pagerAdapter.addFragment(ExamsTabFragment.newInstance(date), date);
+    }
+
+    @Override
+    public void setAdapterWithTabLayout() {
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.onDestroy();
     }
 }

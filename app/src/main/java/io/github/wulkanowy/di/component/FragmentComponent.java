@@ -6,6 +6,7 @@ import io.github.wulkanowy.di.modules.FragmentModule;
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment;
 import io.github.wulkanowy.ui.main.attendance.AttendanceTabFragment;
 import io.github.wulkanowy.ui.main.exams.ExamsFragment;
+import io.github.wulkanowy.ui.main.exams.ExamsTabFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
 import io.github.wulkanowy.ui.main.timetable.TimetableTabFragment;
@@ -21,6 +22,8 @@ public interface FragmentComponent {
     void inject(AttendanceTabFragment attendanceTabFragment);
 
     void inject(ExamsFragment examsFragment);
+
+    void inject(ExamsTabFragment examsTabFragment);
 
     void inject(TimetableFragment timetableFragment);
 
