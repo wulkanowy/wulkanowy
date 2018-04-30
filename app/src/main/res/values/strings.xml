@@ -134,4 +134,5 @@
     <string name="widget_timetable_no_lesson">No lessons</string>
     <string name="widget_timetable_today">Today</string>
     <string name="widget_timetable_tomorrow">Tomorrow</string>
+    <string name="exams_no_entries">No exams in this week</string>
 </resources>

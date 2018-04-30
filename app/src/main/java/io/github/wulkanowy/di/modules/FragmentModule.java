@@ -14,6 +14,9 @@ import io.github.wulkanowy.ui.main.attendance.AttendanceTabContract;
 import io.github.wulkanowy.ui.main.attendance.AttendanceTabPresenter;
 import io.github.wulkanowy.ui.main.exams.ExamsContract;
 import io.github.wulkanowy.ui.main.exams.ExamsPresenter;
+import io.github.wulkanowy.ui.main.exams.ExamsSubItem;
+import io.github.wulkanowy.ui.main.exams.ExamsTabContract;
+import io.github.wulkanowy.ui.main.exams.ExamsTabPresenter;
 import io.github.wulkanowy.ui.main.grades.GradeHeaderItem;
 import io.github.wulkanowy.ui.main.grades.GradesContract;
 import io.github.wulkanowy.ui.main.grades.GradesPresenter;
@@ -66,6 +69,21 @@ public class FragmentModule {
         return new FlexibleAdapter<>(null);
     }
 
+    @Provides
+    FlexibleAdapter<TimetableHeaderItem> provideTimetableTabAdapter() {
+        return new FlexibleAdapter<>(null);
+    }
+
+    @Provides
+    FlexibleAdapter<GradeHeaderItem> provideGradesAdapter() {
+        return new FlexibleAdapter<>(null);
+    }
+
+    @Provides
+    FlexibleAdapter<ExamsSubItem> provideExamAdapter() {
+        return new FlexibleAdapter<>(null);
+    }
+
     @PerFragment
     @Provides
     TimetableContract.Presenter provideTimetablePresenter(TimetablePresenter timetablePresenter) {
@@ -79,12 +97,7 @@ public class FragmentModule {
     }
 
     @Provides
-    FlexibleAdapter<TimetableHeaderItem> provideTimetableTabAdapter() {
-        return new FlexibleAdapter<>(null);
-    }
-
-    @Provides
-    FlexibleAdapter<GradeHeaderItem> provideGradesAdapter() {
-        return new FlexibleAdapter<>(null);
+    ExamsTabContract.Presenter provideExamsTabPresenter(ExamsTabPresenter examsTabPresenter) {
+        return examsTabPresenter;
     }
 }

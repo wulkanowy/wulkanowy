@@ -139,4 +139,5 @@
     <string name="widget_timetable_no_lesson">Brak lekcji</string>
     <string name="widget_timetable_today">Dziś</string>
     <string name="widget_timetable_tomorrow">Jutro</string>
+    <string name="exams_no_entries">Brak sprawdzianów w tym tygodniu</string>
 </resources>
