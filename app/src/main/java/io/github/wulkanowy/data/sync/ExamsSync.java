@@ -59,7 +59,7 @@ public class ExamsSync {
     }
 
     private io.github.wulkanowy.api.generic.Week<ExamDay> getWeekFromApi(String date)
-            throws VulcanException, IOException {
+            throws VulcanException, IOException, ParseException {
         return vulcan.getExamsList().getWeek(date, false);
     }
 

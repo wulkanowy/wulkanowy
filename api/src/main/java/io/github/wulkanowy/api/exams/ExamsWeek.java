@@ -5,8 +5,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.github.wulkanowy.api.SnP;
 import io.github.wulkanowy.api.VulcanException;
@@ -22,11 +26,11 @@ public class ExamsWeek {
         this.snp = snp;
     }
 
-    public Week<ExamDay> getCurrent() throws IOException, VulcanException {
+    public Week<ExamDay> getCurrent() throws IOException, VulcanException, ParseException {
         return getWeek("", true);
     }
 
-    public Week<ExamDay> getWeek(String tick, final boolean onlyNotEmpty) throws IOException, VulcanException {
+    public Week<ExamDay> getWeek(String tick, final boolean onlyNotEmpty) throws IOException, VulcanException, ParseException {
         Document examsPage = snp.getSnPPageDocument(EXAMS_PAGE_URL + tick);
         Elements examsDays = examsPage.select(".mainContainer > div:not(.navigation)");
 
@@ -58,8 +62,12 @@ public class ExamsWeek {
             days.add(day);
         }
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.ROOT);
+        Date d = sdf.parse(examsPage.select(".mainContainer > h2").first().text().split(" ")[1]);
+        sdf.applyPattern("yyyy-MM-dd");
+
         return new Week<ExamDay>()
-                .setStartDayDate(examsPage.select(".mainContainer > h2").first().text().split(" ")[1])
+                .setStartDayDate(sdf.format(d))
                 .setDays(days);
     }
 }
