@@ -151,12 +151,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     @Override
     public void onEndLoadingAsync(boolean result, Exception exception) {
-        if (headerItems.isEmpty()) {
-            getView().showNoItem(true);
-        } else {
-            getView().updateAdapterList(headerItems);
-            getView().showNoItem(false);
-        }
+        getView().showNoItem(headerItems.isEmpty());
+        getView().updateAdapterList(headerItems);
         listener.onFragmentIsReady();
     }
 
