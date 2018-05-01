@@ -27,6 +27,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     private boolean isFirstSight = false;
 
+    private int semesterName;
+
     @Inject
     GradesPresenter(RepositoryContract repository) {
         super(repository);
@@ -41,7 +43,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             getView().setActivityTitle();
         }
 
-        getView().setCurrentSemester(getRepository().getDbRepo().getCurrentSemesterName() - 1);
+        semesterName = getRepository().getDbRepo().getCurrentSemesterName();
+        getView().setCurrentSemester(semesterName - 1);
 
         if (!isFirstSight) {
             isFirstSight = true;
@@ -54,8 +57,12 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     @Override
     public void onSemesterChange(int which) {
-        getRepository().getDbRepo().setCurrentSemester(which + 1);
+        semesterName = which + 1;
         getView().setCurrentSemester(which);
+
+        //TODO: do smth with this
+        onDoInBackgroundLoading();
+        onEndLoadingAsync(false, null);
     }
 
     @Override
@@ -79,8 +86,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     @Override
     public void onDoInBackgroundRefresh() throws Exception {
-        getRepository().getSyncRepo().syncSubjects();
-        getRepository().getSyncRepo().syncGrades();
+        getRepository().getSyncRepo().syncSubjects(semesterName);
+        getRepository().getSyncRepo().syncGrades(semesterName);
     }
 
     @Override
@@ -97,7 +104,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             loadingTask.setOnFirstLoadingListener(this);
             loadingTask.execute();
 
-            int numberOfNewGrades = getRepository().getDbRepo().getNewGrades().size();
+            int numberOfNewGrades = getRepository().getDbRepo().getNewGrades(semesterName).size();
 
             if (numberOfNewGrades <= 0) {
                 getView().onRefreshSuccessNoGrade();
@@ -112,7 +119,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     @Override
     public void onDoInBackgroundLoading() {
-        List<Subject> subjectList = getRepository().getDbRepo().getSubjectList();
+        List<Subject> subjectList = getRepository().getDbRepo().getSubjectList(semesterName);
         boolean isShowSummary = getRepository().getSharedRepo().isShowGradesSummary();
 
         headerItems = new ArrayList<>();

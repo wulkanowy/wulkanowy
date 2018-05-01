@@ -38,15 +38,16 @@ public class DbRepository implements DbContract {
         ).unique();
     }
 
-    public List<Subject> getSubjectList() {
-        return daoSession.getSemesterDao().load(getCurrentSemesterId()).getSubjectList();
+
+    public List<Subject> getSubjectList(int semesterName) {
+        return daoSession.getSemesterDao().load(getSemesterId(semesterName)).getSubjectList();
     }
 
     @Override
-    public List<Grade> getNewGrades() {
+    public List<Grade> getNewGrades(int semesterName) {
         return daoSession.getGradeDao().queryBuilder().where(
                 GradeDao.Properties.IsNew.eq(1),
-                GradeDao.Properties.SemesterId.eq(getCurrentSemesterId())
+                GradeDao.Properties.SemesterId.eq(getSemesterId(semesterName))
         ).list();
     }
 
@@ -74,6 +75,14 @@ public class DbRepository implements DbContract {
     }
 
     @Override
+    public long getSemesterId(int name) {
+        return daoSession.getSemesterDao().queryBuilder().where(
+                SemesterDao.Properties.DiaryId.eq(getCurrentDiaryId()),
+                SemesterDao.Properties.Name.eq(String.valueOf(name))
+        ).unique().getId();
+    }
+
+    @Override
     public long getCurrentSemesterId() {
         return getCurrentSemester().getId();
     }
@@ -81,17 +90,6 @@ public class DbRepository implements DbContract {
     @Override
     public int getCurrentSemesterName() {
         return Integer.valueOf(getCurrentSemester().getName());
-    }
-
-    @Override
-    public void setCurrentSemester(int name) {
-        Semester newCurrent = daoSession.getSemesterDao().queryBuilder().where(
-                SemesterDao.Properties.DiaryId.eq(getCurrentDiaryId()),
-                SemesterDao.Properties.Name.eq(String.valueOf(name))
-        ).unique();
-
-        getCurrentSemester().setCurrent(false).update();
-        newCurrent.setCurrent(true).update();
     }
 
     private Semester getCurrentSemester() {
