@@ -49,9 +49,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         if (!isFirstSight) {
             isFirstSight = true;
 
-            loadingTask = new AbstractTask();
-            loadingTask.setOnFirstLoadingListener(this);
-            loadingTask.execute();
+            reloadGrades();
         }
     }
 
@@ -60,9 +58,13 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         semesterName = which + 1;
         getView().setCurrentSemester(which);
 
-        //TODO: do smth with this
-        onDoInBackgroundLoading();
-        onEndLoadingAsync(false, null);
+        reloadGrades();
+    }
+
+    private void reloadGrades() {
+        loadingTask = new AbstractTask();
+        loadingTask.setOnFirstLoadingListener(this);
+        loadingTask.execute();
     }
 
     @Override
@@ -100,9 +102,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     @Override
     public void onEndRefreshAsync(boolean success, Exception exception) {
         if (success) {
-            loadingTask = new AbstractTask();
-            loadingTask.setOnFirstLoadingListener(this);
-            loadingTask.execute();
+            reloadGrades();
 
             int numberOfNewGrades = getRepository().getDbRepo().getNewGrades(semesterName).size();
 
