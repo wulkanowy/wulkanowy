@@ -41,6 +41,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             getView().setActivityTitle();
         }
 
+        getView().setCurrentSemester(getRepository().getDbRepo().getCurrentSemesterName() - 1);
+
         if (!isFirstSight) {
             isFirstSight = true;
 
@@ -48,6 +50,12 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             loadingTask.setOnFirstLoadingListener(this);
             loadingTask.execute();
         }
+    }
+
+    @Override
+    public void onSemesterChange(int which) {
+        getRepository().getDbRepo().setCurrentSemester(which + 1);
+        getView().setCurrentSemester(which);
     }
 
     @Override

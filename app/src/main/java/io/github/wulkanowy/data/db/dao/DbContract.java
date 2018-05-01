@@ -21,4 +21,8 @@ public interface DbContract {
     long getCurrentDiaryId();
 
     long getCurrentSemesterId();
+
+    int getCurrentSemesterName();
+
+    void setCurrentSemester(int name);
 }

@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.DiaryDao;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.GradeDao;
+import io.github.wulkanowy.data.db.dao.entities.Semester;
 import io.github.wulkanowy.data.db.dao.entities.SemesterDao;
 import io.github.wulkanowy.data.db.dao.entities.StudentDao;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
@@ -74,9 +75,29 @@ public class DbRepository implements DbContract {
 
     @Override
     public long getCurrentSemesterId() {
+        return getCurrentSemester().getId();
+    }
+
+    @Override
+    public int getCurrentSemesterName() {
+        return Integer.valueOf(getCurrentSemester().getName());
+    }
+
+    @Override
+    public void setCurrentSemester(int name) {
+        Semester newCurrent = daoSession.getSemesterDao().queryBuilder().where(
+                SemesterDao.Properties.DiaryId.eq(getCurrentDiaryId()),
+                SemesterDao.Properties.Name.eq(String.valueOf(name))
+        ).unique();
+
+        getCurrentSemester().setCurrent(false).update();
+        newCurrent.setCurrent(true).update();
+    }
+
+    private Semester getCurrentSemester() {
         return daoSession.getSemesterDao().queryBuilder().where(
                 SemesterDao.Properties.DiaryId.eq(getCurrentDiaryId()),
                 SemesterDao.Properties.Current.eq(true)
-        ).unique().getId();
+        ).unique();
     }
 }
