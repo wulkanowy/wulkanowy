@@ -66,6 +66,10 @@ greendao {
     generateTests = true
 }
 
+configurations.all {
+    resolutionStrategy.force "com.android.support:support-annotations:$supportVersion"
+}
+
 dependencies {
     implementation project(':api')
     implementation "com.android.support:support-v4:$supportVersion"
