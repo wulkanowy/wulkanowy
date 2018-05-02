@@ -127,7 +127,7 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
                 subItems.add(new AttendanceSubItem(headerItem, lesson));
             }
 
-            if (!isShowPresent && 0 == subItems.size()) {
+            if (!isShowPresent && subItems.isEmpty()) {
                 continue;
             }
 
