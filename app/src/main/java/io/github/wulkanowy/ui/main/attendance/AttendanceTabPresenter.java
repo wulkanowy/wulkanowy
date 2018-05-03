@@ -99,6 +99,7 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
             week = getRepository().getDbRepo().getWeek(date);
         }
 
+        week.resetDayList();
         List<Day> dayList = week.getDayList();
 
         headerItems = new ArrayList<>();

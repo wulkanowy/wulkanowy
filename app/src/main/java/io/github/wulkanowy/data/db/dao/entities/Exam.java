@@ -31,8 +31,8 @@ public class Exam {
     @Property(nameInDb = "teacher")
     private String teacher = "";
 
-    @Property(nameInDb = "entry_date")
-    private String entryDate = "";
+    @Property(nameInDb = "date")
+    private String date = "";
 
     /**
      * Used to resolve relations
@@ -40,22 +40,20 @@ public class Exam {
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /**
-     * Used for active entity operations.
-     */
+    /** Used for active entity operations. */
     @Generated(hash = 973692038)
     private transient ExamDao myDao;
 
-    @Generated(hash = 998653360)
-    public Exam(Long id, Long dayId, String subjectAndGroup, String type, String description,
-                String teacher, String entryDate) {
+    @Generated(hash = 1455345431)
+    public Exam(Long id, Long dayId, String subjectAndGroup, String type,
+                String description, String teacher, String date) {
         this.id = id;
         this.dayId = dayId;
         this.subjectAndGroup = subjectAndGroup;
         this.type = type;
         this.description = description;
         this.teacher = teacher;
-        this.entryDate = entryDate;
+        this.date = date;
     }
 
     @Generated(hash = 945526930)
@@ -68,6 +66,15 @@ public class Exam {
 
     public Exam setId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public Long getDayId() {
+        return this.dayId;
+    }
+
+    public Exam setDayId(Long dayId) {
+        this.dayId = dayId;
         return this;
     }
 
@@ -107,12 +114,12 @@ public class Exam {
         return this;
     }
 
-    public String getEntryDate() {
-        return entryDate;
+    public String getDate() {
+        return date;
     }
 
-    public Exam setEntryDate(String entryDate) {
-        this.entryDate = entryDate;
+    public Exam setDate(String date) {
+        this.date = date;
         return this;
     }
 
@@ -152,18 +159,13 @@ public class Exam {
         myDao.update(this);
     }
 
-    public Long getDayId() {
-        return this.dayId;
-    }
-
-    public void setDayId(Long dayId) {
-        this.dayId = dayId;
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 1730563422)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getExamDao() : null;
     }
+
 }

@@ -105,7 +105,7 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
             week = getRepository().getDbRepo().getWeek(date);
         }
 
-        //TODO Week is null. Sync failed
+        week.resetDayList();
         List<Day> dayList = week.getDayList();
 
         subItems = new ArrayList<>();

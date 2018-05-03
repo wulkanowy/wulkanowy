@@ -106,6 +106,12 @@ public final class DataObjectConverter {
     public static Day dayToDayEntity(io.github.wulkanowy.api.generic.Day day) {
         return new Day()
                 .setDate(day.getDate())
+                .setDayName(day.getDayName());
+    }
+
+    public static Day timetableDayToDayEntity(io.github.wulkanowy.api.timetable.TimetableDay day) {
+        return new Day()
+                .setDate(day.getDate())
                 .setDayName(day.getDayName())
                 .setFreeDay(day.isFreeDay())
                 .setFreeDayName(day.getFreeDayName());
@@ -170,7 +176,7 @@ public final class DataObjectConverter {
         for (io.github.wulkanowy.api.exams.Exam exam : examList) {
             examEntityList.add(new Exam()
                     .setDescription(exam.getDescription())
-                    .setEntryDate(exam.getEntryDate())
+                    .setDate(exam.getEntryDate())
                     .setSubjectAndGroup(exam.getSubjectAndGroup())
                     .setTeacher(exam.getTeacher())
                     .setType(exam.getType()));
