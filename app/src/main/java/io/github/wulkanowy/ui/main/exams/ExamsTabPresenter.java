@@ -10,7 +10,6 @@ import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.Exam;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.ui.base.BasePresenter;
-import io.github.wulkanowy.utils.LogUtils;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
@@ -129,7 +128,6 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
 
     @Override
     public void onEndLoadingAsync(boolean result, Exception exception) {
-        LogUtils.error("ERROR", exception);
         if (subItems.isEmpty()) {
             getView().showNoItem(true);
             getView().updateAdapterList(null);
