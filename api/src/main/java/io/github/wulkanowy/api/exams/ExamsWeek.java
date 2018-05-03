@@ -45,7 +45,7 @@ public class ExamsWeek {
             }
 
             if (null != dayHeading) {
-                day.setDate(dayHeading.text().split(", ")[1]);
+                day.setDate(getFormattedDate(dayHeading.text().split(", ")[1]));
             }
 
             Elements exams = item.select("article");
@@ -62,12 +62,17 @@ public class ExamsWeek {
             days.add(day);
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.ROOT);
-        Date d = sdf.parse(examsPage.select(".mainContainer > h2").first().text().split(" ")[1]);
-        sdf.applyPattern("yyyy-MM-dd");
 
         return new Week<ExamDay>()
-                .setStartDayDate(sdf.format(d))
+                .setStartDayDate(getFormattedDate(examsPage.select(".mainContainer > h2")
+                        .first().text().split(" ")[1]))
                 .setDays(days);
+    }
+
+    private String getFormattedDate(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.ROOT);
+        Date d = sdf.parse(date);
+        sdf.applyPattern("yyyy-MM-dd");
+        return sdf.format(d);
     }
 }
