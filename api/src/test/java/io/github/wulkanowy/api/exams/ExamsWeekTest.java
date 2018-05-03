@@ -22,8 +22,8 @@ public class ExamsWeekTest extends StudentAndParentTestCase {
 
     @Test
     public void getWeekTest() throws Exception {
-        Assert.assertEquals("23.10.2017", onePerDay.getCurrent().getStartDayDate());
-        Assert.assertEquals("30.04.2018", empty.getCurrent().getStartDayDate());
+        Assert.assertEquals("2017-10-23", onePerDay.getCurrent().getStartDayDate());
+        Assert.assertEquals("2018-04-30", empty.getCurrent().getStartDayDate());
     }
 
     @Test
@@ -50,9 +50,18 @@ public class ExamsWeekTest extends StudentAndParentTestCase {
     public void getDayDateTest() throws Exception {
         List<ExamDay> dayList = onePerDay.getCurrent().getDays();
 
-        Assert.assertEquals("23.10.2017", dayList.get(0).getDate());
-        Assert.assertEquals("24.10.2017", dayList.get(1).getDate());
-        Assert.assertEquals("27.10.2017", dayList.get(2).getDate());
+        Assert.assertEquals("2017-10-23", dayList.get(0).getDate());
+        Assert.assertEquals("2017-10-24", dayList.get(1).getDate());
+        Assert.assertEquals("2017-10-27", dayList.get(2).getDate());
+    }
+
+    @Test
+    public void getDayNameTest() throws Exception {
+        List<ExamDay> dayList = onePerDay.getCurrent().getDays();
+
+        Assert.assertEquals("Poniedziałek", dayList.get(0).getDayName());
+        Assert.assertEquals("Wtorek", dayList.get(1).getDayName());
+        Assert.assertEquals("Piątek", dayList.get(2).getDayName());
     }
 
     @Test

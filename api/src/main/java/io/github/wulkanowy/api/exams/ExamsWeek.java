@@ -1,5 +1,6 @@
 package io.github.wulkanowy.api.exams;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -45,7 +46,9 @@ public class ExamsWeek {
             }
 
             if (null != dayHeading) {
-                day.setDate(getFormattedDate(dayHeading.text().split(", ")[1]));
+                String[] dateHeader = dayHeading.text().split(", ");
+                day.setDayName(StringUtils.capitalize(dateHeader[0]));
+                day.setDate(getFormattedDate(dateHeader[1]));
             }
 
             Elements exams = item.select("article");

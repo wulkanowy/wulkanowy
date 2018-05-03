@@ -1,14 +1,9 @@
 package io.github.wulkanowy.data.sync;
 
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.TextStyle;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -22,7 +17,6 @@ import io.github.wulkanowy.data.db.dao.entities.Exam;
 import io.github.wulkanowy.data.db.dao.entities.ExamDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
-import io.github.wulkanowy.utils.AppConstant;
 import io.github.wulkanowy.utils.DataObjectConverter;
 import io.github.wulkanowy.utils.LogUtils;
 import io.github.wulkanowy.utils.TimeUtils;
@@ -117,7 +111,6 @@ public class ExamsSync {
         if (null != dayDb) {
             return dayDb.getId();
         }
-        dayApi.setDayName(getNameOfDate(dayApi.getDate()));
         return daoSession.getDayDao().insert(dayApi);
     }
 
@@ -144,10 +137,5 @@ public class ExamsSync {
                         ExamDao.Properties.SubjectAndGroup.eq(examApi.getSubjectAndGroup()),
                         ExamDao.Properties.Teacher.eq(examApi.getTeacher()))
                 .unique();
-    }
-
-    private String getNameOfDate(String date) {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern(AppConstant.DATE_PATTERN))
-                .getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pl"));
     }
 }
