@@ -33,6 +33,9 @@ public class AttendanceDialogFragment extends DialogFragment {
     @BindView(R.id.attendance_dialog_description_value)
     TextView description;
 
+    public AttendanceDialogFragment() {
+        //empty constructor for fragment
+    }
 
     public static AttendanceDialogFragment newInstance(AttendanceLesson lesson) {
         AttendanceDialogFragment dialogFragment = new AttendanceDialogFragment();

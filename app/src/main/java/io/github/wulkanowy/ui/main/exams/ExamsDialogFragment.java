@@ -62,21 +62,10 @@ public class ExamsDialogFragment extends DialogFragment {
 
         ButterKnife.bind(this, view);
 
-        if (!exam.getSubjectAndGroup().isEmpty()) {
-            subject.setText(exam.getSubjectAndGroup());
-        }
-
-        if (!exam.getTeacher().isEmpty()) {
-            teacher.setText(exam.getTeacher());
-        }
-
-        if (!exam.getType().isEmpty()) {
-            type.setText(exam.getType());
-        }
-
-        if (!exam.getDate().isEmpty()) {
-            date.setText(exam.getDate());
-        }
+        subject.setText(exam.getSubjectAndGroup());
+        teacher.setText(exam.getTeacher());
+        type.setText(exam.getType());
+        date.setText(exam.getDate());
 
         if (!exam.getDescription().isEmpty()) {
             description.setText(exam.getDescription());
