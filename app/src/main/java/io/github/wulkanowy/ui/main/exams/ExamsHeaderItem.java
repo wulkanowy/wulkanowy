@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.main.exams;
 import android.view.View;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -65,13 +66,17 @@ public class ExamsHeaderItem extends AbstractHeaderItem<ExamsHeaderItem.HeaderVi
         @BindView(R.id.exams_header_name)
         TextView name;
 
+        @BindView(R.id.exams_header_date)
+        TextView date;
+
         HeaderVieHolder(View view, FlexibleAdapter adapter) {
-            super(view, adapter, true);
+            super(view, adapter);
             ButterKnife.bind(this, view);
         }
 
         void onBind(Day item) {
-            name.setText(item.getDayName());
+            name.setText(StringUtils.capitalize(item.getDayName()));
+            date.setText(item.getDate());
         }
     }
 }

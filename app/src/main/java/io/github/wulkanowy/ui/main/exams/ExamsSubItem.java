@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.main.exams;
 
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -64,16 +66,43 @@ public class ExamsSubItem
 
     static class SubItemViewHolder extends FlexibleViewHolder {
 
-        @BindView(R.id.exams_subitem_name)
-        TextView name;
+        @BindView(R.id.exams_subitem_subject)
+        TextView subject;
+
+        @BindView(R.id.exams_subitems_teacher)
+        TextView teacher;
+
+        @BindView(R.id.exams_subitems_type)
+        TextView type;
+
+        private Exam item;
 
         SubItemViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             ButterKnife.bind(this, view);
+            view.setOnClickListener(this);
         }
 
-        void onBind(Exam item) {
-            name.setText(item.getDescription());
+        void onBind(Exam exam) {
+            item = exam;
+
+            subject.setText(item.getSubjectAndGroup());
+            teacher.setText(item.getTeacher());
+            type.setText(item.getType());
+        }
+
+        @Override
+        public void onClick(View view) {
+            super.onClick(view);
+            showDialog();
+
+        }
+
+        private void showDialog() {
+            ExamsDialogFragment dialogFragment = ExamsDialogFragment.newInstance(item);
+            dialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+            dialogFragment.show(((FragmentActivity) getContentView().getContext()).getSupportFragmentManager(),
+                    item.toString());
         }
     }
 }

@@ -6,12 +6,14 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
 
+import java.io.Serializable;
+
 @Entity(
         nameInDb = "Exams",
         active = true
 )
 
-public class Exam {
+public class Exam implements Serializable {
 
     @Id(autoincrement = true)
     private Long id;
@@ -34,13 +36,17 @@ public class Exam {
     @Property(nameInDb = "date")
     private String date = "";
 
+    private static final long serialVersionUID = 42L;
+
     /**
      * Used to resolve relations
      */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 973692038)
     private transient ExamDao myDao;
 

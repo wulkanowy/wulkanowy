@@ -78,7 +78,6 @@ public class ExamsTabFragment extends BaseFragment implements ExamsTabContract.V
     @Override
     protected void setUpOnViewCreated(View fragmentView) {
         adapter.setDisplayHeadersAtStartUp(true);
-        adapter.setStickyHeaders(true);
 
         recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(fragmentView.getContext()));
         recyclerView.setAdapter(adapter);
