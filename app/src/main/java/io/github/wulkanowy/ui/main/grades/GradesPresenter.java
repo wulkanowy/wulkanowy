@@ -27,6 +27,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     private boolean isFirstSight = false;
 
+    private int semesterName;
+
     @Inject
     GradesPresenter(RepositoryContract repository) {
         super(repository);
@@ -41,13 +43,28 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             getView().setActivityTitle();
         }
 
+        semesterName = getRepository().getDbRepo().getCurrentSemesterName();
+        getView().setCurrentSemester(semesterName - 1);
+
         if (!isFirstSight) {
             isFirstSight = true;
 
-            loadingTask = new AbstractTask();
-            loadingTask.setOnFirstLoadingListener(this);
-            loadingTask.execute();
+            reloadGrades();
         }
+    }
+
+    @Override
+    public void onSemesterChange(int which) {
+        semesterName = which + 1;
+        getView().setCurrentSemester(which);
+
+        reloadGrades();
+    }
+
+    private void reloadGrades() {
+        loadingTask = new AbstractTask();
+        loadingTask.setOnFirstLoadingListener(this);
+        loadingTask.execute();
     }
 
     @Override
@@ -71,8 +88,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     @Override
     public void onDoInBackgroundRefresh() throws Exception {
-        getRepository().syncSubjects();
-        getRepository().syncGrades();
+        getRepository().getSyncRepo().syncSubjects(semesterName);
+        getRepository().getSyncRepo().syncGrades(semesterName);
     }
 
     @Override
@@ -85,11 +102,9 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     @Override
     public void onEndRefreshAsync(boolean success, Exception exception) {
         if (success) {
-            loadingTask = new AbstractTask();
-            loadingTask.setOnFirstLoadingListener(this);
-            loadingTask.execute();
+            reloadGrades();
 
-            int numberOfNewGrades = getRepository().getNewGrades().size();
+            int numberOfNewGrades = getRepository().getDbRepo().getNewGrades(semesterName).size();
 
             if (numberOfNewGrades <= 0) {
                 getView().onRefreshSuccessNoGrade();
@@ -97,15 +112,15 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
                 getView().onRefreshSuccess(numberOfNewGrades);
             }
         } else {
-            getView().onError(getRepository().getErrorLoginMessage(exception));
+            getView().onError(getRepository().getResRepo().getErrorLoginMessage(exception));
         }
         getView().hideRefreshingBar();
     }
 
     @Override
     public void onDoInBackgroundLoading() {
-        List<Subject> subjectList = getRepository().getSubjectList();
-        boolean isShowSummary = getRepository().isShowGradesSummary();
+        List<Subject> subjectList = getRepository().getDbRepo().getSubjectList(semesterName);
+        boolean isShowSummary = getRepository().getSharedRepo().isShowGradesSummary();
 
         headerItems = new ArrayList<>();
 
@@ -136,12 +151,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     @Override
     public void onEndLoadingAsync(boolean result, Exception exception) {
-        if (headerItems.isEmpty()) {
-            getView().showNoItem(true);
-        } else {
-            getView().updateAdapterList(headerItems);
-            getView().showNoItem(false);
-        }
+        getView().showNoItem(headerItems.isEmpty());
+        getView().updateAdapterList(headerItems);
         listener.onFragmentIsReady();
     }
 

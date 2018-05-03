@@ -85,18 +85,19 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
 
             getView().onRefreshSuccess();
         } else {
-            getView().onError(getRepository().getErrorLoginMessage(exception));
+            getView().onError(getRepository().getResRepo().getErrorLoginMessage(exception));
         }
         getView().hideRefreshingBar();
     }
 
     @Override
     public void onDoInBackgroundLoading() throws Exception {
-        Week week = getRepository().getWeek(date);
+        Week week = getRepository().getDbRepo().getWeek(date);
+        boolean isShowPresent = getRepository().getSharedRepo().isShowAttendancePresent();
 
         if (week == null || !week.getAttendanceSynced()) {
             syncData();
-            week = getRepository().getWeek(date);
+            week = getRepository().getDbRepo().getWeek(date);
         }
 
         List<Day> dayList = week.getDayList();
@@ -118,8 +119,16 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
             List<AttendanceSubItem> subItems = new ArrayList<>();
 
             for (AttendanceLesson lesson : lessonList) {
-                lesson.setDescription(getRepository().getAttendanceLessonDescription(lesson));
+                if (!isShowPresent && lesson.getPresence()) {
+                    continue;
+                }
+
+                lesson.setDescription(getRepository().getResRepo().getAttendanceLessonDescription(lesson));
                 subItems.add(new AttendanceSubItem(headerItem, lesson));
+            }
+
+            if (!isShowPresent && subItems.isEmpty()) {
+                continue;
             }
 
             headerItem.setSubItems(subItems);
@@ -155,7 +164,7 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
     }
 
     private void syncData() throws Exception {
-        getRepository().syncAttendance(date);
+        getRepository().getSyncRepo().syncAttendance(0, date);
     }
 
     private void cancelAsyncTasks() {

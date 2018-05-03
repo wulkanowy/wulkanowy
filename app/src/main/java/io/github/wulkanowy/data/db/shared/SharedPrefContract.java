@@ -1,8 +1,13 @@
 package io.github.wulkanowy.data.db.shared;
 
+import javax.inject.Singleton;
+
+@Singleton
 public interface SharedPrefContract {
 
     long getCurrentUserId();
+
+    boolean isUserLoggedIn();
 
     void setCurrentUserId(long userId);
 
@@ -13,6 +18,8 @@ public interface SharedPrefContract {
     int getStartupTab();
 
     boolean isShowGradesSummary();
+
+    boolean isShowAttendancePresent();
 
     int getServicesInterval();
 
