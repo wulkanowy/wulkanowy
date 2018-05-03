@@ -43,6 +43,7 @@ public class DbRepository implements DbContract {
         ).unique();
     }
 
+    @Override
     public List<Subject> getSubjectList(int semesterName) {
         return daoSession.getSemesterDao().load(getSemesterId(semesterName)).getSubjectList();
     }

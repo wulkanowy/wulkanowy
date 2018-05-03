@@ -117,7 +117,6 @@ public class ExamsSync {
         if (null != dayDb) {
             return dayDb.getId();
         }
-        dayApi.setDayName(getNameOfDate(dayApi.getDate()));
         return daoSession.getDayDao().insert(dayApi);
     }
 
@@ -144,10 +143,5 @@ public class ExamsSync {
                         ExamDao.Properties.SubjectAndGroup.eq(examApi.getSubjectAndGroup()),
                         ExamDao.Properties.Teacher.eq(examApi.getTeacher()))
                 .unique();
-    }
-
-    private String getNameOfDate(String date) {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern(AppConstant.DATE_PATTERN))
-                .getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("pl"));
     }
 }
