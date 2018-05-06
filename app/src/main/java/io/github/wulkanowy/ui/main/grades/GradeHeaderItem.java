@@ -161,9 +161,9 @@ public class GradeHeaderItem
         private boolean isSubItemsReadAndSaveAlertView(List<GradesSubItem> subItems) {
             boolean isRead = true;
 
-            for (GradesSubItem item : subItems) {
-                isRead = item.getGrade().getRead();
-                item.setSubjectAlertImage(alertImage);
+            for (GradesSubItem gradesSubItem : subItems) {
+                isRead = gradesSubItem.getGrade().getRead();
+                gradesSubItem.setSubjectAlertImage(alertImage);
             }
 
             return isRead;
