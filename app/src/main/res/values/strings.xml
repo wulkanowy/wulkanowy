@@ -130,6 +130,9 @@
     <string name="pref_services_interval">Interval between data refreshing</string>
     <string name="pref_services_mobile_data">Synchronization via WiFi only</string>
 
+    <string name="pref_about_header">About</string>
+    <string name="pref_about_version">Version</string>
+
     <string name="notify_grade_channel">New grades</string>
     <string name="widget_timetable_no_lesson">No lessons</string>
     <string name="widget_timetable_today">Today</string>

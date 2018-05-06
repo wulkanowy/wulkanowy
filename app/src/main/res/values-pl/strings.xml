@@ -135,6 +135,9 @@
     <string name="pref_services_interval">Interwał między odświeżaniem danych</string>
     <string name="pref_services_mobile_data">Synchronizacja tylko przez WiFi</string>
 
+    <string name="pref_about_header">O aplikacji</string>
+    <string name="pref_about_version">Wersja</string>
+
     <string name="notify_grade_channel">Nowe oceny</string>
     <string name="widget_timetable_no_lesson">Brak lekcji</string>
     <string name="widget_timetable_today">Dziś</string>

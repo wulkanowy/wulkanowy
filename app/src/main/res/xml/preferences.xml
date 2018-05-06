@@ -45,4 +45,9 @@
             android:key="notify_enable"
             android:title="@string/pref_notify_switch" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_about_header">
+        <io.github.wulkanowy.ui.main.settings.VersionPreference
+            android:selectable="false"
+            android:title="@string/pref_about_version"/>
+    </PreferenceCategory>
 </PreferenceScreen>
