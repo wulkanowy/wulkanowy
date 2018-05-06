@@ -49,5 +49,8 @@
         <io.github.wulkanowy.ui.main.settings.VersionPreference
             android:selectable="false"
             android:title="@string/pref_about_version"/>
+        <Preference
+            android:key="about_osl"
+            android:title="@string/pref_about_osl"/>
     </PreferenceCategory>
 </PreferenceScreen>
