@@ -137,6 +137,8 @@
 
     <string name="pref_about_header">O aplikacji</string>
     <string name="pref_about_version">Wersja</string>
+    <string name="pref_about_osl">Licencje open source</string>
+    <string name="pref_about_osl_summary">Szczegóły licencji na oprogramowanie open source</string>
 
     <string name="notify_grade_channel">Nowe oceny</string>
     <string name="widget_timetable_no_lesson">Brak lekcji</string>
@@ -145,5 +147,4 @@
     <string name="exams_no_entries">Brak sprawdzianów w tym tygodniu</string>
     <string name="exams_type">Typ</string>
     <string name="exams_dialog_entry_date">Data wpisu</string>
-    <string name="pref_about_osl">Open Source Licenses</string>
 </resources>

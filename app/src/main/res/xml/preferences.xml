@@ -54,7 +54,8 @@
                 android:title="@string/pref_about_version"/>
             <Preference
                 android:key="about_osl"
-                android:title="@string/pref_about_osl"/>
+                android:title="@string/pref_about_osl"
+                android:summary="@string/pref_about_osl_summary"/>
         </PreferenceCategory>
     </PreferenceScreen>
 </PreferenceScreen>
