@@ -60,6 +60,12 @@
                     android:key="about_osl"
                     android:title="@string/pref_about_osl"
                     android:summary="@string/pref_about_osl_summary"/>
+                <Preference
+                    android:title="@string/pref_about_support">
+                    <intent
+                    android:action="android.intent.action.VIEW"
+                    android:data="@string/repository_url" />
+                </Preference>
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
