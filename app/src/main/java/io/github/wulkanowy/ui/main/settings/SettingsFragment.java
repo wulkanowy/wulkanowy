@@ -42,15 +42,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        findPreference(SHARED_KEY_ABOUT_OSL).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(getActivity(), OssLicensesMenuActivity.class);
-                String title = getString(R.string.pref_about_osl);
-                intent.putExtra("title", title);
-                startActivity(intent);
-                return true;
-            }
-        });
     }
 
     @Override
