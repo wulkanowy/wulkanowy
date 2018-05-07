@@ -137,6 +137,7 @@
 
     <string name="pref_about_header">O aplikacji</string>
     <string name="pref_about">Informacje o Wulkanowym</string>
+    <string name="pref_about_summary">Wulkanowy to nieoficjalny klient dziennika VULCAN UONET+.</string>
     <string name="pref_about_version">Wersja</string>
     <string name="pref_about_osl">Licencje open source</string>
     <string name="pref_about_osl_summary">Szczegóły licencji na oprogramowanie open source</string>

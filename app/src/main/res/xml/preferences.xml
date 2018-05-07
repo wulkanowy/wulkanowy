@@ -51,6 +51,9 @@
             android:title="@string/pref_about"
             android:persistent="false">
             <PreferenceCategory android:title="@string/pref_about">
+                <Preference
+                    android:selectable="false"
+                    android:summary="@string/pref_about_summary"/>
                 <io.github.wulkanowy.ui.main.settings.VersionPreference
                     android:title="@string/pref_about_version"/>
                 <Preference
