@@ -45,17 +45,19 @@
             android:key="notify_enable"
             android:title="@string/pref_notify_switch" />
     </PreferenceCategory>
-    <PreferenceScreen
-        android:key="pref_about"
-        android:title="@string/pref_about_header"
-        android:persistent="false">
-        <PreferenceCategory android:title="@string/pref_about_header">
-            <io.github.wulkanowy.ui.main.settings.VersionPreference
-                android:title="@string/pref_about_version"/>
-            <Preference
-                android:key="about_osl"
-                android:title="@string/pref_about_osl"
-                android:summary="@string/pref_about_osl_summary"/>
-        </PreferenceCategory>
-    </PreferenceScreen>
+    <PreferenceCategory android:title="@string/pref_about_header">
+        <PreferenceScreen
+            android:key="pref_about"
+            android:title="@string/pref_about"
+            android:persistent="false">
+            <PreferenceCategory android:title="@string/pref_about">
+                <io.github.wulkanowy.ui.main.settings.VersionPreference
+                    android:title="@string/pref_about_version"/>
+                <Preference
+                    android:key="about_osl"
+                    android:title="@string/pref_about_osl"
+                    android:summary="@string/pref_about_osl_summary"/>
+            </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
 </PreferenceScreen>

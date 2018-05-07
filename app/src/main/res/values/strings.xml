@@ -131,6 +131,7 @@
     <string name="pref_services_mobile_data">Synchronization via WiFi only</string>
 
     <string name="pref_about_header">About</string>
+    <string name="pref_about">About Wulkanowy</string>
     <string name="pref_about_version">Version</string>
     <string name="pref_about_osl">Open source licenses</string>
     <string name="pref_about_osl_summary">License details for open source software</string>
