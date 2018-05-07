@@ -28,8 +28,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     public static final String SHARED_KEY_SERVICES_MOBILE_DISABLED = "services_disable_mobile";
 
-    public static final String SHARED_KEY_ABOUT_OSL = "about_osl";
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.preferences);
