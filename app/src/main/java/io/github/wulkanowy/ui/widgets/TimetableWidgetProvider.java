@@ -12,7 +12,6 @@ import android.widget.RemoteViews;
 import javax.inject.Inject;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.WulkanowyApp;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.services.widgets.TimetableWidgetServices;
 import io.github.wulkanowy.ui.main.MainActivity;
@@ -106,7 +105,7 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
 
     private void inject(Context context) {
         if (repository == null) {
-            ((WulkanowyApp) context.getApplicationContext()).getApplicationComponent().inject(this);
+
         }
     }
 }

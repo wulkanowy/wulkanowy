@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.di.component.FragmentComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
@@ -40,15 +39,11 @@ public class ExamsFragment extends BaseFragment implements ExamsContract.View {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exams, container, false);
 
-        FragmentComponent component = getFragmentComponent();
-        if (component != null) {
-            component.inject(this);
-            setButterKnife(ButterKnife.bind(this, view));
-            presenter.onStart(this, (OnFragmentIsReadyListener) getActivity());
+        setButterKnife(ButterKnife.bind(this, view));
+        presenter.onStart(this, (OnFragmentIsReadyListener) getActivity());
 
-            if (savedInstanceState != null) {
-                presenter.setRestoredPosition(savedInstanceState.getInt(CURRENT_ITEM_KEY));
-            }
+        if (savedInstanceState != null) {
+            presenter.setRestoredPosition(savedInstanceState.getInt(CURRENT_ITEM_KEY));
         }
         return view;
     }

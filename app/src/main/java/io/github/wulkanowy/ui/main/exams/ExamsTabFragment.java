@@ -18,7 +18,6 @@ import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.di.component.FragmentComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
 
 public class ExamsTabFragment extends BaseFragment implements ExamsTabContract.View,
@@ -61,17 +60,13 @@ public class ExamsTabFragment extends BaseFragment implements ExamsTabContract.V
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exams_tab, container, false);
 
-        FragmentComponent component = getFragmentComponent();
-        if (component != null) {
-            component.inject(this);
-            setButterKnife(ButterKnife.bind(this, view));
+        setButterKnife(ButterKnife.bind(this, view));
 
-            if (getArguments() != null) {
-                presenter.setArgumentDate(getArguments().getString(ARGUMENT_KEY));
-            }
-            presenter.onStart(this);
-            presenter.onFragmentActivated(isFragmentVisible);
+        if (getArguments() != null) {
+            presenter.setArgumentDate(getArguments().getString(ARGUMENT_KEY));
         }
+        presenter.onStart(this);
+        presenter.onFragmentActivated(isFragmentVisible);
         return view;
     }
 

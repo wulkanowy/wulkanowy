@@ -4,7 +4,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 
 import java.util.List;
 
-import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.ui.base.BaseContract;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
@@ -30,7 +29,6 @@ public interface GradesContract {
 
     }
 
-    @PerActivity
     interface Presenter extends BaseContract.Presenter<View> {
 
         void onFragmentVisible(boolean isVisible);

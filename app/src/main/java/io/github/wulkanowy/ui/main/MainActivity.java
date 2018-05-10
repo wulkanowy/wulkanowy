@@ -56,7 +56,6 @@ public class MainActivity extends BaseActivity implements MainContract.View,
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        getActivityComponent().inject(this);
         setButterKnife(ButterKnife.bind(this));
 
         presenter.onStart(this, getIntent().getIntExtra(EXTRA_CARD_ID_KEY, -1));

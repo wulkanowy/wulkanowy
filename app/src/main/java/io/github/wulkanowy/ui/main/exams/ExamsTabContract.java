@@ -2,7 +2,6 @@ package io.github.wulkanowy.ui.main.exams;
 
 import java.util.List;
 
-import io.github.wulkanowy.di.annotations.PerFragment;
 import io.github.wulkanowy.ui.base.BaseContract;
 
 public interface ExamsTabContract {
@@ -20,7 +19,6 @@ public interface ExamsTabContract {
         void updateAdapterList(List<ExamsSubItem> headerItems);
     }
 
-    @PerFragment
     interface Presenter extends BaseContract.Presenter<View> {
 
         void onFragmentActivated(boolean isSelected);

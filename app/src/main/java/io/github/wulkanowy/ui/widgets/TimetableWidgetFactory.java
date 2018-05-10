@@ -15,7 +15,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.WulkanowyApp;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
 import io.github.wulkanowy.data.db.dao.entities.Week;
@@ -36,7 +35,7 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
 
     private void inject() {
         if (repository == null) {
-            ((WulkanowyApp) context).getApplicationComponent().inject(this);
+
         }
     }
 

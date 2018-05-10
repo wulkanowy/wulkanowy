@@ -19,7 +19,6 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getActivityComponent().inject(this);
         setButterKnife(ButterKnife.bind(this));
 
         presenter.onStart(this);

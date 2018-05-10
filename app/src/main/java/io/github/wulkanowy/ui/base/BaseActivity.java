@@ -8,15 +8,9 @@ import android.widget.Toast;
 
 import butterknife.Unbinder;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.WulkanowyApp;
-import io.github.wulkanowy.di.component.ActivityComponent;
-import io.github.wulkanowy.di.component.DaggerActivityComponent;
-import io.github.wulkanowy.di.modules.ActivityModule;
 import io.github.wulkanowy.utils.NetworkUtils;
 
 public abstract class BaseActivity extends AppCompatActivity implements BaseContract.View {
-
-    private ActivityComponent activityComponent;
 
     private Unbinder unbinder;
 
@@ -25,11 +19,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
         super.onCreate(savedInstanceState);
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-
-        activityComponent = DaggerActivityComponent.builder()
-                .activityModule(new ActivityModule(this))
-                .applicationComponent(((WulkanowyApp) getApplication()).getApplicationComponent())
-                .build();
     }
 
     @Override
@@ -58,10 +47,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseCont
     @Override
     public boolean isNetworkConnected() {
         return NetworkUtils.isOnline(getApplicationContext());
-    }
-
-    public ActivityComponent getActivityComponent() {
-        return activityComponent;
     }
 
     public void setButterKnife(Unbinder unbinder) {

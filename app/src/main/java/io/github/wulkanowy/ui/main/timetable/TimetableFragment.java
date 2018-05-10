@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.di.component.FragmentComponent;
 import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
@@ -41,16 +40,13 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timetable, container, false);
 
-        FragmentComponent component = getFragmentComponent();
-        if (component != null) {
-            component.inject(this);
-            setButterKnife(ButterKnife.bind(this, view));
-            presenter.onStart(this, (OnFragmentIsReadyListener) getActivity());
+        setButterKnife(ButterKnife.bind(this, view));
+        presenter.onStart(this, (OnFragmentIsReadyListener) getActivity());
 
-            if (savedInstanceState != null) {
-                presenter.setRestoredPosition(savedInstanceState.getInt(CURRENT_ITEM_KEY));
-            }
+        if (savedInstanceState != null) {
+            presenter.setRestoredPosition(savedInstanceState.getInt(CURRENT_ITEM_KEY));
         }
+
         return view;
     }
 

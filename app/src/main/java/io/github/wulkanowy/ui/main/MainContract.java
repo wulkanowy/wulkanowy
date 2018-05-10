@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.main;
 
-import io.github.wulkanowy.di.annotations.PerActivity;
 import io.github.wulkanowy.ui.base.BaseContract;
 
 public interface MainContract {
@@ -22,7 +21,6 @@ public interface MainContract {
         void startSyncService(int interval, boolean useOnlyWifi);
     }
 
-    @PerActivity
     interface Presenter extends BaseContract.Presenter<View> {
 
         void onStart(View view, int tabPositionIntent);

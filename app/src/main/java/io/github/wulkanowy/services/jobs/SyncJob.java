@@ -21,7 +21,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.WulkanowyApp;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.sync.NotRegisteredUserException;
@@ -60,7 +59,6 @@ public class SyncJob extends SimpleJobService {
     @Override
     public void onCreate() {
         super.onCreate();
-        ((WulkanowyApp) getApplication()).getApplicationComponent().inject(this);
     }
 
     @Override
