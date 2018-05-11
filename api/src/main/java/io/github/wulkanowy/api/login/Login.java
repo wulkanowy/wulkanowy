@@ -27,6 +27,10 @@ public class Login {
     public String login(String email, String password, String symbol) throws VulcanException, IOException {
         Document certDoc = sendCredentials(email, password);
 
+        if (!"Working...".equals(certDoc.title())) {
+            throw new VulcanException("Zamiast strony z certyfikatem dostałem: " + certDoc.title() + ", symbol: " + symbol);
+        }
+
         return sendCertificate(certDoc, symbol);
     }
 
@@ -47,6 +51,10 @@ public class Login {
             );
             credentials = getFormStateParams(formSecond, email, password);
             nextUrl = formSecond.select("#form1").first().attr("abs:action");
+        }
+
+        if (!"Logowanie".equals(loginPage.select("#h1Default").text())) {
+            throw new VulcanException("Zamiast strony z logowaniem dostałem: " + loginPage.title());
         }
 
         Document html = client.postPageByUrl(nextUrl, credentials);
