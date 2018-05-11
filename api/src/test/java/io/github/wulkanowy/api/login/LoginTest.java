@@ -101,10 +101,10 @@ public class LoginTest {
         Assert.assertEquals("demo12345", login.findSymbolInCertificate(certificate));
     }
 
-    @Test
-    public void findSymbolInInvalidCertificateTest() throws Exception {
+    @Test(expected = AccountPermissionException.class)
+    public void findSymbolInCertificateWithoutSecondInstanceTest() throws Exception {
         Login login = new Login(getClient("Logowanie-certyfikat.html"));
 
-        Assert.assertEquals("", login.findSymbolInCertificate("<xml></xml>")); // change to real cert with empty symbols
+        login.findSymbolInCertificate(getFixtureAsString("cert-no-symbols.xml"));
     }
 }

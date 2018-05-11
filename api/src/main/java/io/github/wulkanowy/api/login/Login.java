@@ -108,7 +108,7 @@ public class Login {
         });
     }
 
-    private String findSymbol(String symbol, String certificate) {
+    private String findSymbol(String symbol, String certificate) throws AccountPermissionException {
         if ("Default".equals(symbol)) {
             return findSymbolInCertificate(certificate);
         }
@@ -116,13 +116,13 @@ public class Login {
         return symbol;
     }
 
-    String findSymbolInCertificate(String certificate) {
+    String findSymbolInCertificate(String certificate) throws AccountPermissionException {
         Elements instances = Jsoup
                 .parse(certificate.replaceAll(":", ""), "", Parser.xmlParser())
                 .select("[AttributeName=\"UserInstance\"] samlAttributeValue");
 
-        if (instances.isEmpty()) {
-            return "";
+        if (instances.size() < 2) { // 1st index is always `Default`
+            throw new AccountPermissionException("First login detected, specify symbol");
         }
 
         return instances.get(1).text();
