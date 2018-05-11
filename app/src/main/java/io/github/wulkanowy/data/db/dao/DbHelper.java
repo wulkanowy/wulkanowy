@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.api.Vulcan;
@@ -31,7 +32,7 @@ public class DbHelper extends DaoMaster.OpenHelper {
     private final Vulcan vulcan;
 
     @Inject
-    DbHelper(Context context, String dbName,
+    DbHelper(Context context, @Named("dbName") String dbName,
              SharedPrefContract sharedPref, Vulcan vulcan) {
         super(context, dbName);
         this.sharedPref = sharedPref;

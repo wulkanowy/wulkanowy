@@ -7,6 +7,8 @@ import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import javax.inject.Inject;
+
 import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerApplication;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -18,7 +20,7 @@ import io.github.wulkanowy.utils.LogUtils;
 
 public class WulkanowyApp extends DaggerApplication {
 
-    //@Inject
+    @Inject
     RepositoryContract repository;
 
     @Override

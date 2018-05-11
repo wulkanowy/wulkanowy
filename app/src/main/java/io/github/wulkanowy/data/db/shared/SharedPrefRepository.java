@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import io.github.wulkanowy.ui.main.settings.SettingsFragment;
@@ -22,7 +23,7 @@ public class SharedPrefRepository implements SharedPrefContract {
     private final SharedPreferences settingsSharedPref;
 
     @Inject
-    SharedPrefRepository(Context context, String sharedName) {
+    SharedPrefRepository(Context context, @Named("sharedPrefName") String sharedName) {
         appSharedPref = context.getSharedPreferences(sharedName, Context.MODE_PRIVATE);
         settingsSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
     }

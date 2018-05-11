@@ -4,13 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.View;
 
 import butterknife.Unbinder;
+import dagger.android.support.DaggerFragment;
 import io.github.wulkanowy.R;
 
-public abstract class BaseFragment extends Fragment implements BaseContract.View {
+public abstract class BaseFragment extends DaggerFragment implements BaseContract.View {
 
     private BaseActivity activity;
 
