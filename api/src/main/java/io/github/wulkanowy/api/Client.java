@@ -25,6 +25,8 @@ public class Client {
 
     private Date lastSuccessRequest = null;
 
+    private String lastRequestUrl;
+
     private Cookies cookies = new Cookies();
 
     Client(String email, String password, String symbol) {
@@ -89,10 +91,14 @@ public class Client {
     }
 
     String getFilledUrl(String url) {
-        return url
+        url = url
                 .replace("{schema}", protocol)
                 .replace("{host}", host.replace(":", "%253A"))
                 .replace("{symbol}", symbol);
+
+        lastRequestUrl = url;
+
+        return url;
     }
 
     public Document getPageByUrl(String url) throws IOException, VulcanException {
@@ -191,7 +197,7 @@ public class Client {
 
         String singIn = doc.select(".loginButton").text();
         if ("Zaloguj się".equals(singIn)) {
-            throw new NotLoggedInErrorException(singIn);
+            throw new NotLoggedInErrorException(singIn + " :" + lastRequestUrl);
         }
 
         if ("Błąd strony".equals(title)) {
