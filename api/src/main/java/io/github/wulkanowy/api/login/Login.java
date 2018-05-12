@@ -35,51 +35,17 @@ public class Login {
     }
 
     Document sendCredentials(String email, String password) throws IOException, VulcanException {
-        String[][] credentials = new String[][]{
+        Document html = client.postPageByUrl(LOGIN_PAGE_URL, new String[][]{
                 {"LoginName", email},
                 {"Password", password}
-        };
+        });
 
-        String nextUrl = LOGIN_PAGE_URL;
-        Document loginPage = client.getPageByUrl(nextUrl, false);
-
-        Element formFirst = loginPage.select("#form1").first();
-        if (null != formFirst) { // on adfs login
-            Document formSecond = client.postPageByUrl(
-                    formFirst.attr("abs:action"),
-                    getFormStateParams(formFirst, "", "")
-            );
-            credentials = getFormStateParams(formSecond, email, password);
-            nextUrl = formSecond.select("#form1").first().attr("abs:action");
-        }
-
-        if (!"Logowanie".equals(loginPage.select("#h1Default").text())) {
-            throw new VulcanException("Zamiast strony z logowaniem dostałem: " + loginPage.title());
-        }
-
-        Document html = client.postPageByUrl(nextUrl, credentials);
-
-        Element errorMessage = html.select(".ErrorMessage, #ErrorTextLabel").first();
+        Element errorMessage = html.select(".ErrorMessage").first();
         if (null != errorMessage) {
             throw new BadCredentialsException(errorMessage.text());
         }
 
         return html;
-    }
-
-    private String[][] getFormStateParams(Element form, String email, String password) {
-        return new String[][]{
-                {"__VIEWSTATE", form.select("#__VIEWSTATE").val()},
-                {"__VIEWSTATEGENERATOR", form.select("#__VIEWSTATEGENERATOR").val()},
-                {"__EVENTVALIDATION", form.select("#__EVENTVALIDATION").val()},
-                {"__db", form.select("input[name=__db]").val()},
-                {"PassiveSignInButton.x", "0"},
-                {"PassiveSignInButton.y", "0"},
-                {"SubmitButton.x", "0"},
-                {"SubmitButton.y", "0"},
-                {"UsernameTextBox", email},
-                {"PasswordTextBox", password},
-        };
     }
 
     String sendCertificate(Document doc, String defaultSymbol) throws IOException, VulcanException {
@@ -93,10 +59,6 @@ public class Login {
 
         Document targetDoc = sendCertData(doc);
         String title = targetDoc.title();
-
-        if ("Working...".equals(title)) { // on adfs login
-            title = sendCertData(targetDoc).title();
-        }
 
         if ("Logowanie".equals(title)) {
             throw new AccountPermissionException("No account access. Try another symbol");
