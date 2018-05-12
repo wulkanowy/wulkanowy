@@ -85,14 +85,17 @@ public class Login {
     String sendCertificate(Document doc, String defaultSymbol) throws IOException, VulcanException {
         String certificate = doc.select("input[name=wresult]").val();
 
-        String symbol = findSymbol(defaultSymbol, certificate);
-        client.setSymbol(symbol);
+        if ("".equals(certificate)) {
+            throw new VulcanException("Zamiast certyfikatu pusty string. title: " + doc.title());
+        }
+
+        client.setSymbol(findSymbol(defaultSymbol, certificate));
 
         Document targetDoc = sendCertData(doc);
-        String title = targetDoc.select("title").text();
+        String title = targetDoc.title();
 
         if ("Working...".equals(title)) { // on adfs login
-            title = sendCertData(targetDoc).select("title").text();
+            title = sendCertData(targetDoc).title();
         }
 
         if ("Logowanie".equals(title)) {
@@ -103,11 +106,15 @@ public class Login {
             throw new LoginErrorException("Expected page title `UONET+`, got " + title);
         }
 
-        return symbol;
+        return client.getSymbol();
     }
 
     private Document sendCertData(Document doc) throws IOException, VulcanException {
         String url = doc.select("form[name=hiddenform]").attr("action");
+
+        if (!doc.title().equals("Working...")) {
+            throw new VulcanException("Zamiast strony z certyfikatem strona z tytułem: " + doc.title());
+        }
 
         return client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{
                 {"wa", "wsignin1.0"},
