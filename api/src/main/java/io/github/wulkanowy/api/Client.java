@@ -23,7 +23,7 @@ public class Client {
 
     private String symbol;
 
-    private Date lastSuccessRequest = null;
+    private Date lastSuccessRequest;
 
     private String lastRequestUrl;
 
@@ -149,7 +149,13 @@ public class Client {
 
         this.cookies.addItems(response.cookies());
 
-        return checkForErrors(response.parse());
+        Document doc = response.parse();
+
+        if ("Zaloguj się".equals(doc.select(".loginButton").text())) {
+            throw new NotLoggedInErrorException(doc.title() + params[1][1] + response.url());
+        }
+
+        return checkForErrors(doc);
     }
 
     public String getJsonStringByUrl(String url) throws IOException, VulcanException {
