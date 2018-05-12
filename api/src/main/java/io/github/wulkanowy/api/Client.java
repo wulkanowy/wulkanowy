@@ -142,6 +142,7 @@ public class Client {
         }
 
         Connection.Response response = connection
+                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36")
                 .followRedirects(true)
                 .method(Connection.Method.POST)
                 .cookies(getCookies())
@@ -152,7 +153,7 @@ public class Client {
         Document doc = response.parse();
 
         if ("Zaloguj się".equals(doc.select(".loginButton").text())) {
-            throw new NotLoggedInErrorException(doc.title() + params[1][1] + response.url());
+            throw new NotLoggedInErrorException(doc.title() + cookies.getItems().size() + response.url());
         }
 
         return checkForErrors(doc);
