@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.exams;
+package io.github.wulkanowy.ui.main.exams.tab;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

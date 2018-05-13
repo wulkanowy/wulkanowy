@@ -17,6 +17,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
+import io.github.wulkanowy.ui.main.exams.tab.ExamsTabFragment;
 
 public class ExamsFragment extends BaseFragment implements ExamsContract.View {
 

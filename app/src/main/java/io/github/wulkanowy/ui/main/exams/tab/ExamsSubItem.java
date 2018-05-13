@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.exams;
+package io.github.wulkanowy.ui.main.exams.tab;
 
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -18,6 +18,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.FlexibleViewHolder;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.Exam;
+import io.github.wulkanowy.ui.main.exams.ExamsDialogFragment;
 
 public class ExamsSubItem
         extends AbstractSectionableItem<ExamsSubItem.SubItemViewHolder, ExamsHeaderItem> {

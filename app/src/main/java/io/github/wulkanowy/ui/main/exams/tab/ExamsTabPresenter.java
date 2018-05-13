@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.exams;
+package io.github.wulkanowy.ui.main.exams.tab;
 
 import java.util.ArrayList;
 import java.util.List;
