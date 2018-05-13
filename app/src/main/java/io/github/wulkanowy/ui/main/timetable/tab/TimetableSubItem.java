@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.timetable;
+package io.github.wulkanowy.ui.main.timetable.tab;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -21,6 +21,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.FlexibleViewHolder;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
+import io.github.wulkanowy.ui.main.timetable.TimetableDialogFragment;
 
 
 public class TimetableSubItem

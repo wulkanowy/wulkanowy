@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,6 +19,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
+import io.github.wulkanowy.ui.main.timetable.tab.TimetableTabFragment;
 
 public class TimetableFragment extends BaseFragment implements TimetableContract.View {
 
@@ -29,6 +31,7 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     @BindView(R.id.timetable_fragment_tab_layout)
     TabLayout tabLayout;
 
+    @Named("Timetable")
     @Inject
     BasePagerAdapter pagerAdapter;
 

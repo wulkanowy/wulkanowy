@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.timetable;
+package io.github.wulkanowy.ui.main.timetable.tab;
 
 import android.content.Context;
 import android.content.res.TypedArray;
