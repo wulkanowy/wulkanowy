@@ -32,6 +32,9 @@ public class MainPresenter extends BasePresenter<MainContract.View>
 
         getView().initiationBottomNav(tabPosition);
         getView().initiationViewPager(tabPosition);
+
+        getView().startSyncService(getRepository().getSharedRepo().getServicesInterval(),
+                getRepository().getSharedRepo().isMobileDisable());
     }
 
     @Override
