@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +31,7 @@ public class ExamsFragment extends BaseFragment implements ExamsContract.View {
     TabLayout tabLayout;
 
     @Inject
+    @Named("Exams")
     BasePagerAdapter pagerAdapter;
 
     @Inject

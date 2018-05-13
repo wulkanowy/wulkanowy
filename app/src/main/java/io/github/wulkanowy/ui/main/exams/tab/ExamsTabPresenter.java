@@ -29,7 +29,7 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
     private boolean isFirstSight = false;
 
     @Inject
-    public ExamsTabPresenter(RepositoryContract repository) {
+    ExamsTabPresenter(RepositoryContract repository) {
         super(repository);
     }
 

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,6 +19,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
+import io.github.wulkanowy.ui.main.attendance.tab.AttendanceTabFragment;
 
 public class AttendanceFragment extends BaseFragment implements AttendanceContract.View {
 
@@ -30,6 +32,7 @@ public class AttendanceFragment extends BaseFragment implements AttendanceContra
     TabLayout tabLayout;
 
     @Inject
+    @Named("Attendance")
     BasePagerAdapter pagerAdapter;
 
     @Inject

@@ -10,6 +10,7 @@ import io.github.wulkanowy.di.scopes.PerChildFragment;
 import io.github.wulkanowy.di.scopes.PerFragment;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
 import io.github.wulkanowy.ui.main.exams.tab.ExamsTabFragment;
+import io.github.wulkanowy.ui.main.exams.tab.ExamsTabModule;
 
 @Module
 public abstract class ExamsModule {
@@ -26,6 +27,6 @@ public abstract class ExamsModule {
     }
 
     @PerChildFragment
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = ExamsTabModule.class)
     abstract ExamsTabFragment bindExamsTabFragment();
 }

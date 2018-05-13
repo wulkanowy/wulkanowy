@@ -21,6 +21,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.services.jobs.SyncJob;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
+import io.github.wulkanowy.ui.main.attendance.AttendanceFragment;
 import io.github.wulkanowy.ui.main.exams.ExamsFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
 import io.github.wulkanowy.ui.main.settings.SettingsFragment;
@@ -130,7 +131,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     @Override
     public void initiationViewPager(int tabPosition) {
         pagerAdapter.addFragment(new GradesFragment());
-        pagerAdapter.addFragment(new GradesFragment());
+        pagerAdapter.addFragment(new AttendanceFragment());
         pagerAdapter.addFragment(new ExamsFragment());
         pagerAdapter.addFragment(new TimetableFragment());
         pagerAdapter.addFragment(new SettingsFragment());

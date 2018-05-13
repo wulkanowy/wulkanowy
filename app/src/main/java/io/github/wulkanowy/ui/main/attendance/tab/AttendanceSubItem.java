@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.attendance;
+package io.github.wulkanowy.ui.main.attendance.tab;
 
 import android.content.Context;
 import android.support.v4.app.DialogFragment;
@@ -20,6 +20,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.FlexibleViewHolder;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
+import io.github.wulkanowy.ui.main.attendance.AttendanceDialogFragment;
 
 class AttendanceSubItem
         extends AbstractSectionableItem<AttendanceSubItem.SubItemViewHolder, AttendanceHeaderItem> {

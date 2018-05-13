@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.main.attendance;
+package io.github.wulkanowy.ui.main.attendance.tab;
 
 import java.util.List;
 

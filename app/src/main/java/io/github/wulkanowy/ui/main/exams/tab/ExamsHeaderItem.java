@@ -22,7 +22,7 @@ public class ExamsHeaderItem extends AbstractHeaderItem<ExamsHeaderItem.HeaderVi
 
     private Day day;
 
-    public ExamsHeaderItem(Day day) {
+    ExamsHeaderItem(Day day) {
         this.day = day;
     }
 
