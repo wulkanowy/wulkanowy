@@ -12,8 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
@@ -22,22 +20,17 @@ import io.github.wulkanowy.utils.TimeUtils;
 
 public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    private Context context;
+    private final Context context;
 
     private List<TimetableLesson> lessonList = new ArrayList<>();
 
-    @Inject
-    RepositoryContract repository;
+    private final RepositoryContract repository;
 
-    public TimetableWidgetFactory(Context context) {
+    public TimetableWidgetFactory(Context context, RepositoryContract repository) {
         this.context = context;
+        this.repository = repository;
     }
 
-    private void inject() {
-        if (repository == null) {
-
-        }
-    }
 
     @Override
     public void onCreate() {
@@ -46,7 +39,6 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
 
     @Override
     public void onDataSetChanged() {
-        inject();
         lessonList = new ArrayList<>();
 
         if (repository.getSharedRepo().isUserLoggedIn()) {

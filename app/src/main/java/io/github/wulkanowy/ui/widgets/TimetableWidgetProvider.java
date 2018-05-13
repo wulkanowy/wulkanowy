@@ -11,6 +11,7 @@ import android.widget.RemoteViews;
 
 import javax.inject.Inject;
 
+import dagger.android.AndroidInjection;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.services.widgets.TimetableWidgetServices;
@@ -25,7 +26,6 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
     RepositoryContract repository;
 
     @Override
-
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         inject(context);
 
@@ -105,7 +105,7 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
 
     private void inject(Context context) {
         if (repository == null) {
-
+            AndroidInjection.inject(this, context);
         }
     }
 }

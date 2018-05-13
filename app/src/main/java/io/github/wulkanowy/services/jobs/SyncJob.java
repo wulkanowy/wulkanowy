@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dagger.android.AndroidInjection;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
@@ -45,7 +46,7 @@ public class SyncJob extends SimpleJobService {
                 .setService(SyncJob.class)
                 .setTag(JOB_TAG)
                 .setRecurring(true)
-                .setTrigger(Trigger.executionWindow(interval * 60, (interval + 10) * 60))
+                .setTrigger(Trigger.executionWindow(interval, (interval + 10)))
                 .setConstraints(useOnlyWifi ? Constraint.ON_UNMETERED_NETWORK : Constraint.ON_ANY_NETWORK)
                 .setReplaceCurrent(false)
                 .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
@@ -59,6 +60,7 @@ public class SyncJob extends SimpleJobService {
     @Override
     public void onCreate() {
         super.onCreate();
+        AndroidInjection.inject(this);
     }
 
     @Override
