@@ -13,7 +13,7 @@ import io.github.wulkanowy.api.VulcanException;
 
 public class Login {
 
-    private static final String LOGIN_PAGE_URL = "{schema}://cufs.{host}/{symbol}/Account/LogOn" +
+    static final String LOGIN_PAGE_URL = "{schema}://cufs.{host}/{symbol}/Account/LogOn" +
             "?ReturnUrl=%2F{symbol}%2FFS%2FLS%3Fwa%3Dwsignin1.0%26wtrealm%3D" +
             "{schema}%253a%252f%252fuonetplus.{host}%252f{symbol}%252fLoginEndpoint.aspx%26wctx%3D" +
             "{schema}%253a%252f%252fuonetplus.{host}%252f{symbol}%252fLoginEndpoint.aspx";
@@ -26,10 +26,6 @@ public class Login {
 
     public String login(String email, String password, String symbol) throws VulcanException, IOException {
         Document certDoc = sendCredentials(email, password);
-
-        if (!"Working...".equals(certDoc.title())) {
-            throw new VulcanException("Expected certificate page, got page with title: " + certDoc.title() + ", symbol: " + symbol);
-        }
 
         return sendCertificate(certDoc, symbol);
     }
@@ -111,7 +107,7 @@ public class Login {
         String url = doc.select("form[name=hiddenform]").attr("action");
 
         if (!doc.title().equals("Working...")) {
-            throw new VulcanException("Expected page with certificate, got page with title: " + doc.title());
+            throw new VulcanException("Expected certificate page, got page with title: " + doc.title());
         }
 
         return client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{

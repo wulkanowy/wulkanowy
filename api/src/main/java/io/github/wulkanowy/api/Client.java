@@ -135,16 +135,15 @@ public class Client {
             connection.data(data[0], data[1]);
         }
 
-        Connection.Response response = connection.followRedirects(true)
+        Connection.Response response = connection
+                .followRedirects(true)
                 .method(Connection.Method.POST)
                 .cookies(getCookies())
                 .execute();
 
         this.cookies.addItems(response.cookies());
 
-        Document doc = response.parse();
-
-        return checkForErrors(doc);
+        return checkForErrors(response.parse());
     }
 
     public String getJsonStringByUrl(String url) throws IOException, VulcanException {
