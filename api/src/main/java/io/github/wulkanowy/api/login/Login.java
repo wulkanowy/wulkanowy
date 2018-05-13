@@ -28,19 +28,36 @@ public class Login {
         Document certDoc = sendCredentials(email, password);
 
         if (!"Working...".equals(certDoc.title())) {
-            throw new VulcanException("Zamiast strony z certyfikatem dostałem: " + certDoc.title() + ", symbol: " + symbol);
+            throw new VulcanException("Expected certificate page, got page with title: " + certDoc.title() + ", symbol: " + symbol);
         }
 
         return sendCertificate(certDoc, symbol);
     }
 
     Document sendCredentials(String email, String password) throws IOException, VulcanException {
-        Document html = client.postPageByUrl(LOGIN_PAGE_URL, new String[][]{
+        String[][] credentials = new String[][]{
                 {"LoginName", email},
                 {"Password", password}
-        });
+        };
 
-        Element errorMessage = html.select(".ErrorMessage").first();
+        String nextUrl = LOGIN_PAGE_URL;
+        Document loginPage = client.getPageByUrl(nextUrl, false);
+
+        Element formFirst = loginPage.select("#form1").first();
+        if (null != formFirst) { // on adfs login
+            Document formSecond = client.postPageByUrl(
+                    formFirst.attr("abs:action"),
+                    getFormStateParams(formFirst, "", "")
+            );
+            credentials = getFormStateParams(formSecond, email, password);
+            nextUrl = formSecond.select("#form1").first().attr("abs:action");
+        } else if (!"Logowanie".equals(loginPage.select("#h1Default").text())) {
+            throw new VulcanException("Expected login page, got page with title: " + loginPage.title());
+        }
+
+        Document html = client.postPageByUrl(nextUrl, credentials);
+
+        Element errorMessage = html.select(".ErrorMessage, #ErrorTextLabel").first();
         if (null != errorMessage) {
             throw new BadCredentialsException(errorMessage.text());
         }
@@ -48,17 +65,36 @@ public class Login {
         return html;
     }
 
+    private String[][] getFormStateParams(Element form, String email, String password) {
+        return new String[][]{
+                {"__VIEWSTATE", form.select("#__VIEWSTATE").val()},
+                {"__VIEWSTATEGENERATOR", form.select("#__VIEWSTATEGENERATOR").val()},
+                {"__EVENTVALIDATION", form.select("#__EVENTVALIDATION").val()},
+                {"__db", form.select("input[name=__db]").val()},
+                {"PassiveSignInButton.x", "0"},
+                {"PassiveSignInButton.y", "0"},
+                {"SubmitButton.x", "0"},
+                {"SubmitButton.y", "0"},
+                {"UsernameTextBox", email},
+                {"PasswordTextBox", password},
+        };
+    }
+
     String sendCertificate(Document doc, String defaultSymbol) throws IOException, VulcanException {
         String certificate = doc.select("input[name=wresult]").val();
 
         if ("".equals(certificate)) {
-            throw new VulcanException("Zamiast certyfikatu pusty string. title: " + doc.title());
+            throw new VulcanException("Expected certificate, got empty string. Page title: " + doc.title());
         }
 
         client.setSymbol(findSymbol(defaultSymbol, certificate));
 
         Document targetDoc = sendCertData(doc);
         String title = targetDoc.title();
+
+        if ("Working...".equals(title)) { // on adfs login
+            title = sendCertData(targetDoc).title();
+        }
 
         if ("Logowanie".equals(title)) {
             throw new AccountPermissionException("No account access. Try another symbol");
@@ -75,7 +111,7 @@ public class Login {
         String url = doc.select("form[name=hiddenform]").attr("action");
 
         if (!doc.title().equals("Working...")) {
-            throw new VulcanException("Zamiast strony z certyfikatem strona z tytułem: " + doc.title());
+            throw new VulcanException("Expected page with certificate, got page with title: " + doc.title());
         }
 
         return client.postPageByUrl(url.replaceFirst("Default", "{symbol}"), new String[][]{

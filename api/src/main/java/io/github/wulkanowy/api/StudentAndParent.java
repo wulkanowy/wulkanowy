@@ -107,7 +107,7 @@ public class StudentAndParent implements SnP {
         Document doc = client.getPageByUrl(getBaseUrl() + url, true, cookies);
 
         if (!doc.title().startsWith("Witryna ucznia i rodzica")) {
-            throw new VulcanException("Zamiast witryny ucznia i rodzica dostałem to: " + doc.title());
+            throw new VulcanException("Expected SnP page, got page with title: " + doc.title());
         }
 
         if (doc.title().endsWith("Strona główna")) {

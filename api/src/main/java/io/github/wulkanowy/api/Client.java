@@ -25,8 +25,6 @@ public class Client {
 
     private Date lastSuccessRequest;
 
-    private String lastRequestUrl;
-
     private Cookies cookies = new Cookies();
 
     Client(String email, String password, String symbol) {
@@ -91,14 +89,10 @@ public class Client {
     }
 
     String getFilledUrl(String url) {
-        url = url
+        return url
                 .replace("{schema}", protocol)
                 .replace("{host}", host.replace(":", "%253A"))
                 .replace("{symbol}", symbol);
-
-        lastRequestUrl = url;
-
-        return url;
     }
 
     public Document getPageByUrl(String url) throws IOException, VulcanException {
@@ -141,9 +135,7 @@ public class Client {
             connection.data(data[0], data[1]);
         }
 
-        Connection.Response response = connection
-                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36")
-                .followRedirects(true)
+        Connection.Response response = connection.followRedirects(true)
                 .method(Connection.Method.POST)
                 .cookies(getCookies())
                 .execute();
@@ -151,10 +143,6 @@ public class Client {
         this.cookies.addItems(response.cookies());
 
         Document doc = response.parse();
-
-        if ("Zaloguj się".equals(doc.select(".loginButton").text())) {
-            throw new NotLoggedInErrorException(doc.title() + cookies.getItems().size() + response.url());
-        }
 
         return checkForErrors(doc);
     }
@@ -204,7 +192,7 @@ public class Client {
 
         String singIn = doc.select(".loginButton").text();
         if ("Zaloguj się".equals(singIn)) {
-            throw new NotLoggedInErrorException(singIn + " :" + lastRequestUrl);
+            throw new NotLoggedInErrorException(singIn);
         }
 
         if ("Błąd strony".equals(title)) {
