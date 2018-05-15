@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.db.dao.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -12,7 +14,7 @@ import java.io.Serializable;
 @Entity(
         nameInDb = "TimetableLessons",
         active = true,
-        indexes = {@Index(value = "dayId,date,startTime,endTime", unique = true)}
+        indexes = {@Index(value = "dayId,date,number,startTime,endTime", unique = true)}
 )
 public class TimetableLesson implements Serializable {
 
@@ -260,6 +262,32 @@ public class TimetableLesson implements Serializable {
     public TimetableLesson setNewMovedInOrChanged(boolean newMovedInOrChanged) {
         this.newMovedInOrChanged = newMovedInOrChanged;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TimetableLesson lesson = (TimetableLesson) o;
+
+        return new EqualsBuilder()
+                .append(number, lesson.number)
+                .append(startTime, lesson.startTime)
+                .append(endTime, lesson.endTime)
+                .append(date, lesson.date)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(number)
+                .append(startTime)
+                .append(endTime)
+                .append(date)
+                .toHashCode();
     }
 
     /**
