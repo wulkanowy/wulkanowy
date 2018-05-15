@@ -129,10 +129,10 @@ public class TimetableSync {
 
         List<TimetableLesson> lessonsFromDbEntities = getLessonsFromDb(dayId);
 
-        List<TimetableLesson> testList = new ArrayList<>(CollectionUtils.disjunction(lessonsFromApiEntities, lessonsFromDbEntities));
+        if (!lessonsFromDbEntities.isEmpty()) {
+            List<TimetableLesson> lessonToRemove = new ArrayList<>(CollectionUtils.removeAll(lessonsFromDbEntities, lessonsFromApiEntities));
 
-        for (TimetableLesson timetableLesson : testList) {
-            if (!timetableLesson.getEmpty()) {
+            for (TimetableLesson timetableLesson : lessonToRemove) {
                 daoSession.getTimetableLessonDao().delete(timetableLesson);
             }
         }

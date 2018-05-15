@@ -78,6 +78,7 @@ public class DbHelper extends DaoMaster.OpenHelper {
         migrations.add(new Migration23());
         migrations.add(new Migration26());
         migrations.add(new Migration27());
+        //migrations.add(new Migration28());
 
         // Sorting just to be safe, in case other people add migrations in the wrong order.
         Comparator<Migration> migrationComparator = new Comparator<Migration>() {
