@@ -14,7 +14,7 @@ public class Migration28 implements DbHelper.Migration {
     }
 
     @Override
-    public void runMigration(Database db, SharedPrefContract sharedPref, Vulcan vulcan) {
-        //TODO: Make a migration
+    public void runMigration(final Database db, final SharedPrefContract sharedPref, final Vulcan vulcan) throws Exception {
+        throw new Exception("No migrations");
     }
 }
