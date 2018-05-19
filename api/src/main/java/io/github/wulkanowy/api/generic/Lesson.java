@@ -2,7 +2,7 @@ package io.github.wulkanowy.api.generic;
 
 public class Lesson {
 
-    private String number = "";
+    private int number = 0;
 
     private String subject = "";
 
@@ -48,11 +48,11 @@ public class Lesson {
 
     private boolean isExemption = false;
 
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
 
-    public Lesson setNumber(String number) {
+    public Lesson setNumber(int number) {
         this.number = number;
         return this;
     }

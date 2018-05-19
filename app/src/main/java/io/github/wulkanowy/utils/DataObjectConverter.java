@@ -131,7 +131,7 @@ public final class DataObjectConverter {
 
         for (io.github.wulkanowy.api.generic.Lesson lesson : lessonList) {
             lessonEntityList.add(new TimetableLesson()
-                    .setNumber(Integer.parseInt(lesson.getNumber()))
+                    .setNumber(lesson.getNumber())
                     .setSubject(lesson.getSubject())
                     .setTeacher(lesson.getTeacher())
                     .setRoom(lesson.getRoom())
@@ -156,7 +156,7 @@ public final class DataObjectConverter {
 
         for (io.github.wulkanowy.api.generic.Lesson lesson : lessonList) {
             lessonEntityList.add(new AttendanceLesson()
-                    .setNumber(Integer.parseInt(lesson.getNumber()))
+                    .setNumber(lesson.getNumber())
                     .setSubject(lesson.getSubject())
                     .setDate(lesson.getDate())
                     .setPresence(lesson.isPresence())
