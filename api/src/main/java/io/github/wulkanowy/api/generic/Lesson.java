@@ -52,8 +52,9 @@ public class Lesson {
         return number;
     }
 
-    public void setNumber(String number) {
+    public Lesson setNumber(String number) {
         this.number = number;
+        return this;
     }
 
     public String getSubject() {
