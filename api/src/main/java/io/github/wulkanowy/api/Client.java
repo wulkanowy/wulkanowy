@@ -63,7 +63,7 @@ public class Client {
 
     private boolean isLoggedIn() {
         return getCookies().size() > 0 && lastSuccessRequest != null &&
-                29 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());
+                5 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());
 
     }
 
