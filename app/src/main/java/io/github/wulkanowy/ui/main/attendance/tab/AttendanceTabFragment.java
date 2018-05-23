@@ -3,7 +3,6 @@ package io.github.wulkanowy.ui.main.attendance.tab;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager;
 import io.github.wulkanowy.R;
@@ -60,30 +58,28 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attendance_tab, container, false);
-
-        setButterKnife(ButterKnife.bind(this, view));
+        injectViews(view);
 
         if (getArguments() != null) {
             presenter.setArgumentDate(getArguments().getString(ARGUMENT_KEY));
         }
 
-        presenter.onStart(this);
+        presenter.attachView(this);
         presenter.onFragmentActivated(isFragmentVisible);
         return view;
     }
 
     @Override
-    protected void setUpOnViewCreated(View fragmentView) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         adapter.setAutoCollapseOnExpand(true);
         adapter.setAutoScrollOnExpand(true);
         adapter.expandItemsAtStartUp();
 
-        recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(fragmentView.getContext()));
+        recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
 
         refreshLayout.setColorSchemeResources(android.R.color.black);
         refreshLayout.setOnRefreshListener(this);
-
     }
 
     @Override
@@ -107,7 +103,7 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
 
     @Override
     public void onRefreshSuccess() {
-        onError(R.string.sync_completed);
+        showMessage(R.string.sync_completed);
     }
 
     @Override
@@ -126,16 +122,8 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
     }
 
     @Override
-    public void onError(String message) {
-        if (getActivity() != null) {
-            Snackbar.make(getActivity().findViewById(R.id.main_activity_view_pager),
-                    message, Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
     public void onDestroyView() {
-        presenter.onDestroy();
+        presenter.detachView();
         super.onDestroyView();
     }
 }

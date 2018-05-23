@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.main.grades;
 
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public interface GradesContract {
 
         void onRefresh();
 
-        void onStart(View view, OnFragmentIsReadyListener listener);
+        void attachView(@NonNull View view, OnFragmentIsReadyListener listener);
 
         void onSemesterChange(int which);
 

@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.main;
 
+import android.support.annotation.NonNull;
+
 import io.github.wulkanowy.ui.base.BaseContract;
 
 public interface MainContract {
@@ -23,7 +25,7 @@ public interface MainContract {
 
     interface Presenter extends BaseContract.Presenter<View> {
 
-        void onStart(View view, int tabPositionIntent);
+        void attachView(@NonNull View view, int initTabId);
 
         void onTabSelected(int position, boolean wasSelected);
 

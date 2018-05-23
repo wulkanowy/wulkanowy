@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.main.attendance.tab;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +36,9 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
     }
 
     @Override
-    public void onStart(AttendanceTabContract.View view) {
-        super.onStart(view);
+    public void attachView(@NonNull AttendanceTabContract.View view) {
+        super.attachView(view);
+
         getView().showProgressBar(true);
         getView().showNoItem(false);
     }
@@ -60,7 +63,7 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
             refreshTask.setOnRefreshListener(this);
             refreshTask.execute();
         } else {
-            getView().onNoNetworkError();
+            getView().showNoNetworkMessage();
             getView().hideRefreshingBar();
         }
     }
@@ -86,7 +89,7 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
 
             getView().onRefreshSuccess();
         } else {
-            getView().onError(getRepository().getResRepo().getErrorLoginMessage(exception));
+            getView().showMessage(getRepository().getResRepo().getErrorLoginMessage(exception));
         }
         getView().hideRefreshingBar();
 
@@ -183,9 +186,9 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
     }
 
     @Override
-    public void onDestroy() {
+    public void detachView() {
         cancelAsyncTasks();
         isFirstSight = false;
-        super.onDestroy();
+        super.detachView();
     }
 }

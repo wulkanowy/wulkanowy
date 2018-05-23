@@ -1,10 +1,13 @@
 package io.github.wulkanowy.ui.base;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatDelegate;
-import android.widget.Toast;
+import android.view.View;
 
+import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerAppCompatActivity;
 import io.github.wulkanowy.R;
@@ -20,27 +23,20 @@ public abstract class BaseActivity extends DaggerAppCompatActivity implements Ba
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
+    protected void injectViews() {
+        unbinder = ButterKnife.bind(this);
+    }
+
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (unbinder != null) {
-            unbinder.unbind();
+    public void showMessage(@NonNull String text) {
+        if (getMessageView() != null) {
+            Snackbar.make(getMessageView(), text, Snackbar.LENGTH_LONG).show();
         }
     }
 
     @Override
-    public void onError(int resId) {
-        onError(getString(resId));
-    }
-
-    @Override
-    public void onError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNoNetworkError() {
-        onError(R.string.noInternet_text);
+    public void showNoNetworkMessage() {
+        showMessage(getString(R.string.noInternet_text));
     }
 
     @Override
@@ -48,7 +44,15 @@ public abstract class BaseActivity extends DaggerAppCompatActivity implements Ba
         return NetworkUtils.isOnline(getApplicationContext());
     }
 
-    public void setButterKnife(Unbinder unbinder) {
-        this.unbinder = unbinder;
+    protected View getMessageView() {
+        return null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
     }
 }

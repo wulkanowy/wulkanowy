@@ -1,5 +1,8 @@
 package io.github.wulkanowy.ui.main.timetable.tab;
 
+
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +39,8 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     }
 
     @Override
-    public void onStart(TimetableTabContract.View view) {
-        super.onStart(view);
+    public void attachView(@NonNull TimetableTabContract.View view) {
+        super.attachView(view);
         getView().showProgressBar(true);
         getView().showNoItem(false);
     }
@@ -62,7 +65,7 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
             refreshTask.setOnRefreshListener(this);
             refreshTask.execute();
         } else {
-            getView().onNoNetworkError();
+            getView().showNoNetworkMessage();
             getView().hideRefreshingBar();
         }
     }
@@ -88,7 +91,7 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
 
             getView().onRefreshSuccess();
         } else {
-            getView().onError(getRepository().getResRepo().getErrorLoginMessage(exception));
+            getView().showMessage(getRepository().getResRepo().getErrorLoginMessage(exception));
         }
         getView().hideRefreshingBar();
 
@@ -177,9 +180,9 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     }
 
     @Override
-    public void onDestroy() {
+    public void detachView() {
         isFirstSight = false;
         cancelAsyncTasks();
-        super.onDestroy();
+        super.detachView();
     }
 }

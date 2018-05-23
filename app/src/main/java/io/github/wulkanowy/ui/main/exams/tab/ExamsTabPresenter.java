@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.main.exams.tab;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +36,8 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
     }
 
     @Override
-    public void onStart(ExamsTabContract.View view) {
-        super.onStart(view);
+    public void attachView(@NonNull ExamsTabContract.View view) {
+        super.attachView(view);
         getView().showProgressBar(true);
         getView().showNoItem(false);
     }
@@ -65,7 +67,7 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
             refreshTask.setOnRefreshListener(this);
             refreshTask.execute();
         } else {
-            getView().onNoNetworkError();
+            getView().showNoNetworkMessage();
             getView().hideRefreshingBar();
         }
     }
@@ -91,7 +93,7 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
 
             getView().onRefreshSuccess();
         } else {
-            getView().onError(getRepository().getResRepo().getErrorLoginMessage(exception));
+            getView().showMessage(getRepository().getResRepo().getErrorLoginMessage(exception));
         }
         getView().hideRefreshingBar();
 
@@ -157,9 +159,9 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
     }
 
     @Override
-    public void onDestroy() {
+    public void detachView() {
         isFirstSight = false;
         cancelAsyncTasks();
-        super.onDestroy();
+        super.detachView();
     }
 }

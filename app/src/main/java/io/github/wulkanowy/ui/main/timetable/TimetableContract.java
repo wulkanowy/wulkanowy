@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.main.timetable;
 
+import android.support.annotation.NonNull;
+
 import io.github.wulkanowy.ui.base.BaseContract;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
@@ -24,7 +26,7 @@ public interface TimetableContract {
 
         void onFragmentActivated(boolean isVisible);
 
-        void onStart(View view, OnFragmentIsReadyListener listener);
+        void attachView(@NonNull View view, OnFragmentIsReadyListener listener);
 
         void setRestoredPosition(int position);
     }
