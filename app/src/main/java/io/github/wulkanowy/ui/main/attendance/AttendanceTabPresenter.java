@@ -1,5 +1,8 @@
 package io.github.wulkanowy.ui.main.attendance;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +91,10 @@ public class AttendanceTabPresenter extends BasePresenter<AttendanceTabContract.
             getView().onError(getRepository().getResRepo().getErrorLoginMessage(exception));
         }
         getView().hideRefreshingBar();
+
+        Answers.getInstance().logCustom(new CustomEvent("Attendance refresh")
+                .putCustomAttribute("Success", result ? 1 : 0)
+                .putCustomAttribute("Date", date));
     }
 
     @Override

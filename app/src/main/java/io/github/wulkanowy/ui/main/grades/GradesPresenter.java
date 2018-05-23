@@ -1,5 +1,8 @@
 package io.github.wulkanowy.ui.main.grades;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +62,9 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         getView().setCurrentSemester(which);
 
         reloadGrades();
+
+        Answers.getInstance().logCustom(new CustomEvent("Semester change")
+                .putCustomAttribute("Name", semesterName));
     }
 
     private void reloadGrades() {
@@ -100,8 +106,8 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     }
 
     @Override
-    public void onEndRefreshAsync(boolean success, Exception exception) {
-        if (success) {
+    public void onEndRefreshAsync(boolean result, Exception exception) {
+        if (result) {
             reloadGrades();
 
             int numberOfNewGrades = getRepository().getDbRepo().getNewGrades(semesterName).size();
@@ -115,6 +121,9 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             getView().onError(getRepository().getResRepo().getErrorLoginMessage(exception));
         }
         getView().hideRefreshingBar();
+
+        Answers.getInstance().logCustom(new CustomEvent("Grades refresh")
+                .putCustomAttribute("Success", result ? 1 : 0));
     }
 
     @Override

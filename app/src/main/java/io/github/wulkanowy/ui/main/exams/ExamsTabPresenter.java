@@ -1,5 +1,8 @@
 package io.github.wulkanowy.ui.main.exams;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,6 +96,10 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
             getView().onError(getRepository().getResRepo().getErrorLoginMessage(exception));
         }
         getView().hideRefreshingBar();
+
+        Answers.getInstance().logCustom(new CustomEvent("Exams refresh")
+                .putCustomAttribute("Success", result ? 1 : 0)
+                .putCustomAttribute("Date", date));
     }
 
     @Override
