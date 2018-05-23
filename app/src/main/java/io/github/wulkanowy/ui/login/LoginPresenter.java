@@ -2,6 +2,9 @@ package io.github.wulkanowy.ui.login;
 
 import android.text.TextUtils;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.SignUpEvent;
+
 import java.util.LinkedHashMap;
 
 import javax.inject.Inject;
@@ -83,7 +86,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
     @Override
     public void onEndAsync(boolean success, Exception exception) {
+        String userSymbol = getRepository().getDbRepo().getCurrentSymbol().getSymbol();
+
         if (success) {
+            Answers.getInstance().logSignUp(new SignUpEvent()
+                    .putMethod("Login activity")
+                    .putSuccess(true)
+                    .putCustomAttribute("symbol", userSymbol));
             getView().openMainActivity();
             return;
         } else if (exception instanceof BadCredentialsException) {
@@ -93,6 +102,10 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
             getView().setErrorSymbolRequired();
             getView().showSoftInput();
         } else {
+            Answers.getInstance().logSignUp(new SignUpEvent()
+                    .putMethod("Login activity")
+                    .putSuccess(false)
+                    .putCustomAttribute("symbol", userSymbol));
             getView().onError(getRepository().getResRepo().getErrorLoginMessage(exception));
         }
 
