@@ -1,8 +1,5 @@
 package io.github.wulkanowy.ui.main.exams;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +10,7 @@ import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.Exam;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.ui.base.BasePresenter;
+import io.github.wulkanowy.utils.FabricUtils;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
@@ -97,9 +95,7 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
         }
         getView().hideRefreshingBar();
 
-        Answers.getInstance().logCustom(new CustomEvent("Exams refresh")
-                .putCustomAttribute("Success", result ? 1 : 0)
-                .putCustomAttribute("Date", date));
+        FabricUtils.logRefresh("Exams", result, date);
     }
 
     @Override

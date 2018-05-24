@@ -2,9 +2,6 @@ package io.github.wulkanowy.ui.login;
 
 import android.text.TextUtils;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.SignUpEvent;
-
 import java.util.LinkedHashMap;
 
 import javax.inject.Inject;
@@ -14,6 +11,7 @@ import io.github.wulkanowy.api.login.BadCredentialsException;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.ui.base.BasePresenter;
 import io.github.wulkanowy.utils.AppConstant;
+import io.github.wulkanowy.utils.FabricUtils;
 
 public class LoginPresenter extends BasePresenter<LoginContract.View>
         implements LoginContract.Presenter {
@@ -86,13 +84,8 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
 
     @Override
     public void onEndAsync(boolean success, Exception exception) {
-        String userSymbol = getRepository().getDbRepo().getCurrentSymbol().getSymbol();
-
         if (success) {
-            Answers.getInstance().logSignUp(new SignUpEvent()
-                    .putMethod("Login activity")
-                    .putSuccess(true)
-                    .putCustomAttribute("symbol", userSymbol));
+            FabricUtils.logRegister(true, getRepository().getDbRepo().getCurrentSymbol().getSymbol());
             getView().openMainActivity();
             return;
         } else if (exception instanceof BadCredentialsException) {
@@ -102,10 +95,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
             getView().setErrorSymbolRequired();
             getView().showSoftInput();
         } else {
-            Answers.getInstance().logSignUp(new SignUpEvent()
-                    .putMethod("Login activity")
-                    .putSuccess(false)
-                    .putCustomAttribute("symbol", userSymbol));
+            FabricUtils.logRegister(false, symbol);
             getView().onError(getRepository().getResRepo().getErrorLoginMessage(exception));
         }
 

@@ -13,6 +13,7 @@ import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.ui.base.BasePresenter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
+import io.github.wulkanowy.utils.FabricUtils;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
@@ -122,8 +123,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         }
         getView().hideRefreshingBar();
 
-        Answers.getInstance().logCustom(new CustomEvent("Grades refresh")
-                .putCustomAttribute("Success", result ? 1 : 0));
+        FabricUtils.logRefresh("Grades", result, null);
     }
 
     @Override
