@@ -58,7 +58,7 @@ ext {
     testRunner = "1.0.2"
 
     fabricGradle = "1.25.4"
-    crashlyticsSdk = "2.9.2"
+    crashlyticsSdk = "2.9.3"
     crashlyticsAnswers = "1.4.1"
 }
 
