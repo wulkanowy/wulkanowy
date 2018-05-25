@@ -3,6 +3,8 @@ package io.github.wulkanowy.ui.main.grades;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.ui.base.BasePresenter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
+import io.github.wulkanowy.utils.FabricUtils;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
@@ -126,7 +129,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         }
         getView().hideRefreshingBar();
 
-        //FabricUtils.logRefresh("Grades", result, null);
+        FabricUtils.logRefresh("Grades", result, LocalDate.now().toString());
     }
 
     @Override
