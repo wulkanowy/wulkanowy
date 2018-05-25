@@ -13,7 +13,6 @@ import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.ui.base.BasePresenter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
-import io.github.wulkanowy.utils.FabricUtils;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
@@ -58,10 +57,14 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     }
 
     @Override
+    public void onSemesterSwitchActive() {
+        cancelAsyncTasks();
+    }
+
+    @Override
     public void onSemesterChange(int which) {
         semesterName = which + 1;
         getView().setCurrentSemester(which);
-
         reloadGrades();
 
         Answers.getInstance().logCustom(new CustomEvent("Semester change")
@@ -123,7 +126,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         }
         getView().hideRefreshingBar();
 
-        FabricUtils.logRefresh("Grades", result, null);
+        //FabricUtils.logRefresh("Grades", result, null);
     }
 
     @Override
@@ -165,10 +168,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         listener.onFragmentIsReady();
     }
 
-    @Override
-    public void onDestroy() {
-        isFirstSight = false;
-
+    private void cancelAsyncTasks() {
         if (refreshTask != null) {
             refreshTask.cancel(true);
             refreshTask = null;
@@ -177,6 +177,12 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             loadingTask.cancel(true);
             loadingTask = null;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        isFirstSight = false;
+        cancelAsyncTasks();
         super.onDestroy();
     }
 }
