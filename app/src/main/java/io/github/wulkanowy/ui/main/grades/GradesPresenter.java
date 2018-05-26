@@ -182,7 +182,6 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
             loadingTask.cancel(true);
             loadingTask = null;
         }
-        super.detachView();
     }
 
     @Override
