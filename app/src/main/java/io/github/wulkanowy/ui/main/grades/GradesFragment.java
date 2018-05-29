@@ -27,6 +27,12 @@ import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
 public class GradesFragment extends BaseFragment implements GradesContract.View {
 
+    @BindView(R.id.grade_fragment_summary_container)
+    View summary;
+
+    @BindView(R.id.grade_fragment_details_container)
+    View details;
+
     @BindView(R.id.grade_fragment_recycler)
     RecyclerView recyclerView;
 
@@ -66,12 +72,12 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.semester_switch, menu);
+        inflater.inflate(R.menu.grades_action_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_filter) {
+        if (item.getItemId() == R.id.action_semester_switch) {
             presenter.onSemesterSwitchActive();
             CharSequence[] items = new CharSequence[]{
                     getResources().getString(R.string.semester_text, 1),
@@ -87,6 +93,15 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
                             dialog.cancel();
                         }
                     }).show();
+            return true;
+        } else if (item.getItemId() == R.id.action_summary_switch) {
+            if (details.getVisibility() == View.VISIBLE) {
+                details.setVisibility(View.GONE);
+                summary.setVisibility(View.VISIBLE);
+            } else if (details.getVisibility() == View.GONE) {
+                details.setVisibility(View.VISIBLE);
+                summary.setVisibility(View.GONE);
+            }
             return true;
         } else {
             return super.onOptionsItemSelected(item);

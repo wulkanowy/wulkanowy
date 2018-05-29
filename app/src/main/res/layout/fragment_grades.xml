@@ -6,45 +6,77 @@
     android:layout_height="match_parent"
     tools:context="io.github.wulkanowy.ui.main.grades.GradesFragment">
 
-    <RelativeLayout
-        android:id="@+id/grade_fragment_no_item_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/grade_fragment_no_item_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/grade_fragment_no_item_text"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:minHeight="100dp"
-            android:minWidth="100dp"
-            android:tint="@android:color/black"
-            app:srcCompat="@drawable/ic_menu_grade_26dp"
-            tools:ignore="contentDescription" />
-
-        <TextView
-            android:id="@+id/grade_fragment_no_item_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="46dp"
-            android:text="@string/fragment_no_grades"
-            android:gravity="center"
-            android:textSize="20sp" />
-    </RelativeLayout>
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/grade_fragment_swipe_refresh"
+    <FrameLayout
+        android:id="@+id/grade_fragment_details_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/grade_fragment_recycler"
+        <RelativeLayout
+            android:id="@+id/grade_fragment_no_item_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:gravity="center">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            <ImageView
+                android:id="@+id/grade_fragment_no_item_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/grade_fragment_no_item_text"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:minHeight="100dp"
+                android:minWidth="100dp"
+                android:tint="@android:color/black"
+                app:srcCompat="@drawable/ic_menu_grade_26dp"
+                tools:ignore="contentDescription" />
+
+            <TextView
+                android:id="@+id/grade_fragment_no_item_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="46dp"
+                android:gravity="center"
+                android:text="@string/fragment_no_grades"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/grade_fragment_swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/grade_fragment_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/grade_fragment_summary_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/grade_fragment_summary_average_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:text="@string/app_name"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/grade_fragment_summary_average"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/grade_fragment_summary_average_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="6,00"
+            android:textSize="25sp" />
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
