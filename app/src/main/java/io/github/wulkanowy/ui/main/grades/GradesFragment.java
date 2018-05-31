@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -36,14 +37,23 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     @BindView(R.id.grade_fragment_recycler)
     RecyclerView recyclerView;
 
+    @BindView(R.id.grade_fragment_summary_recycler)
+    RecyclerView summaryRecyclerView;
+
     @BindView(R.id.grade_fragment_no_item_container)
     View noItemView;
 
     @BindView(R.id.grade_fragment_swipe_refresh)
     SwipeRefreshLayout refreshLayout;
 
+    @BindView(R.id.grade_fragment_summary_average)
+    TextView average;
+
     @Inject
-    FlexibleAdapter<GradeHeaderItem> adapter;
+    FlexibleAdapter<GradesHeader> adapter;
+
+    @Inject
+    FlexibleAdapter<GradesSummarySubItem> summaryAdapter;
 
     @Inject
     GradesContract.Presenter presenter;
@@ -95,13 +105,10 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
                     }).show();
             return true;
         } else if (item.getItemId() == R.id.action_summary_switch) {
-            if (details.getVisibility() == View.VISIBLE) {
-                details.setVisibility(View.GONE);
-                summary.setVisibility(View.VISIBLE);
-            } else if (details.getVisibility() == View.GONE) {
-                details.setVisibility(View.VISIBLE);
-                summary.setVisibility(View.GONE);
-            }
+            boolean isDetailsVisible = details.getVisibility() == View.VISIBLE;
+
+            details.setVisibility(isDetailsVisible ? View.GONE : View.VISIBLE);
+            summary.setVisibility(isDetailsVisible ? View.VISIBLE : View.GONE);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -111,13 +118,18 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         noItemView.setVisibility(View.GONE);
+        summary.setVisibility(View.GONE);
+        details.setVisibility(View.VISIBLE);
 
         adapter.setAutoCollapseOnExpand(true);
         adapter.setAutoScrollOnExpand(true);
         adapter.expandItemsAtStartUp();
+        summaryAdapter.setDisplayHeadersAtStartUp(true);
 
         recyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
+        summaryRecyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(view.getContext()));
+        summaryRecyclerView.setAdapter(summaryAdapter);
 
         refreshLayout.setColorSchemeResources(android.R.color.black);
         refreshLayout.setOnRefreshListener(this);
@@ -129,6 +141,11 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
         if (presenter != null) {
             presenter.onFragmentVisible(menuVisible);
         }
+    }
+
+    @Override
+    public void setSummaryAverage(String value) {
+        average.setText(value);
     }
 
     @Override
@@ -156,8 +173,13 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     }
 
     @Override
-    public void updateAdapterList(List<GradeHeaderItem> headerItems) {
+    public void updateAdapterList(List<GradesHeader> headerItems) {
         adapter.updateDataSet(headerItems);
+    }
+
+    @Override
+    public void updateSummaryAdapterList(List<GradesSummarySubItem> summarySubItems) {
+        summaryAdapter.updateDataSet(summarySubItems);
     }
 
     @Override

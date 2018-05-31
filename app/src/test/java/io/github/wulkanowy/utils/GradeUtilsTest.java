@@ -29,8 +29,8 @@ public class GradeUtilsTest {
         gradeList1.add(new Grade().setValue("5+").setWeight("10,00"));
         gradeList1.add(new Grade().setValue("5").setWeight("10,00"));
 
-        Assert.assertEquals(4.8f, GradeUtils.calculate(gradeList), 0.0f);
-        Assert.assertEquals(4.8f, GradeUtils.calculate(gradeList1), 0.0f);
+        Assert.assertEquals(4.8f, GradeUtils.calculateGradesAverage(gradeList), 0.0f);
+        Assert.assertEquals(4.8f, GradeUtils.calculateGradesAverage(gradeList1), 0.0f);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class GradeUtilsTest {
         List<Grade> gradeList = new ArrayList<>();
         gradeList.add(new Grade().setValue("np.").setWeight("1,00"));
 
-        Assert.assertEquals(-1f, GradeUtils.calculate(gradeList), 0.0f);
+        Assert.assertEquals(-1f, GradeUtils.calculateGradesAverage(gradeList), 0.0f);
     }
 
     @Test

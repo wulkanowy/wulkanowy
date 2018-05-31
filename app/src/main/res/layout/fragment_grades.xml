@@ -56,8 +56,7 @@
     <RelativeLayout
         android:id="@+id/grade_fragment_summary_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/grade_fragment_summary_average_text"
@@ -65,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:text="@string/app_name"
+            android:text="@string/grades_summary_average"
             android:textSize="20sp" />
 
         <TextView
@@ -77,6 +76,13 @@
             android:layout_marginTop="10dp"
             android:text="6,00"
             android:textSize="25sp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/grade_fragment_summary_recycler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/grade_fragment_summary_average"
+            android:layout_marginTop="25dp" />
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

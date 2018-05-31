@@ -18,6 +18,7 @@ import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.ui.base.BasePresenter;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 import io.github.wulkanowy.utils.FabricUtils;
+import io.github.wulkanowy.utils.GradeUtils;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
@@ -31,11 +32,15 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     private OnFragmentIsReadyListener listener;
 
-    private List<GradeHeaderItem> headerItems = new ArrayList<>();
+    private List<GradesHeader> headerItems = new ArrayList<>();
+
+    private List<GradesSummarySubItem> summarySubItems = new ArrayList<>();
 
     private boolean isFirstSight = false;
 
     private int semesterName;
+
+    private float averageOfSubjects;
 
     @Inject
     GradesPresenter(RepositoryContract repository) {
@@ -74,12 +79,6 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
         Answers.getInstance().logCustom(new CustomEvent("Semester change")
                 .putCustomAttribute("Name", semesterName));
-    }
-
-    private void reloadGrades() {
-        loadingTask = new AbstractTask();
-        loadingTask.setOnFirstLoadingListener(this);
-        loadingTask.execute();
     }
 
     @Override
@@ -138,15 +137,20 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     public void onDoInBackgroundLoading() {
         List<Subject> subjectList = getRepository().getDbRepo().getSubjectList(semesterName);
         boolean isShowSummary = getRepository().getSharedRepo().isShowGradesSummary();
+        averageOfSubjects = GradeUtils.calculateSubjectsAverage(subjectList);
 
         headerItems = new ArrayList<>();
 
         for (Subject subject : subjectList) {
             subject.resetGradeList();
+
+            GradesSummaryHeader summaryHeader = new GradesSummaryHeader(subject);
+            summarySubItems.add(new GradesSummarySubItem(summaryHeader, subject));
+
             List<Grade> gradeList = subject.getGradeList();
 
             if (!gradeList.isEmpty()) {
-                GradeHeaderItem headerItem = new GradeHeaderItem(subject, isShowSummary);
+                GradesHeader headerItem = new GradesHeader(subject, isShowSummary);
 
                 List<GradesSubItem> subItems = new ArrayList<>();
 
@@ -170,7 +174,24 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     public void onEndLoadingAsync(boolean result, Exception exception) {
         getView().showNoItem(headerItems.isEmpty());
         getView().updateAdapterList(headerItems);
+
+        setSummaryAverage();
+        getView().updateSummaryAdapterList(summarySubItems);
+
         listener.onFragmentIsReady();
+    }
+
+    private void setSummaryAverage() {
+        if (averageOfSubjects != -1f) {
+            getView().setSummaryAverage(String.valueOf(averageOfSubjects));
+        } else
+            getView().setSummaryAverage("-- --");
+    }
+
+    private void reloadGrades() {
+        loadingTask = new AbstractTask();
+        loadingTask.setOnFirstLoadingListener(this);
+        loadingTask.execute();
     }
 
     private void cancelAsyncTasks() {

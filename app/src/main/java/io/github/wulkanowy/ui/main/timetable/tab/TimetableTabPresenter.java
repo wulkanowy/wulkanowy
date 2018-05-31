@@ -25,7 +25,7 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
 
     private AbstractTask loadingTask;
 
-    private List<TimetableHeaderItem> headerItems = new ArrayList<>();
+    private List<TimetableHeader> headerItems = new ArrayList<>();
 
     private String date;
 
@@ -116,7 +116,7 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
 
         for (Day day : dayList) {
             day.resetTimetableLessons();
-            TimetableHeaderItem headerItem = new TimetableHeaderItem(day);
+            TimetableHeader headerItem = new TimetableHeader(day);
 
             if (isFreeWeek) {
                 isFreeWeek = day.getFreeDay();
