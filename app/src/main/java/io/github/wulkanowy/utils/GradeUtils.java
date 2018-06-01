@@ -38,13 +38,28 @@ public final class GradeUtils {
         return counter / denominator;
     }
 
-    public static float calculateSubjectsAverage(List<Subject> subjectList) {
+    public static float calculateSubjectsAverage(List<Subject> subjectList, boolean usePredicted) {
+        return calculateSubjectsAverage(subjectList, usePredicted, false);
+    }
 
+    public static float calculateDetailedSubjectsAverage(List<Subject> subjectList) {
+        return calculateSubjectsAverage(subjectList, false, true);
+    }
+
+    private static float calculateSubjectsAverage(List<Subject> subjectList, boolean usePredicted,
+                                                  boolean useSubjectsAverages) {
         float counter = 0f;
         float denominator = 0f;
 
         for (Subject subject : subjectList) {
-            float value = getMathematicalValueOfSubjectGrade(subject.getFinalRating());
+            float value;
+
+            if (useSubjectsAverages) {
+                value = calculateGradesAverage(subject.getGradeList());
+            } else {
+                value = getMathematicalValueOfSubjectGrade(usePredicted ? subject.getPredictedRating()
+                        : subject.getFinalRating());
+            }
 
             if (value != -1f) {
                 counter += value;

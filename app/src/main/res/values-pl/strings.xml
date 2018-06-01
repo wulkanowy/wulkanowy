@@ -157,5 +157,8 @@
     <string name="exams_no_entries">Brak sprawdzianów w tym tygodniu</string>
     <string name="exams_type">Typ</string>
     <string name="exams_dialog_entry_date">Data wpisu</string>
-    <string name="grades_summary_average">Twoja średnia</string>
+
+    <string name="grades_summary_calculated_average">Obliczona średnia</string>
+    <string name="grades_summary_predicted_average">Przewidywana średnia</string>
+    <string name="grades_summary_final_average">Końcowa średnia</string>
 </resources>

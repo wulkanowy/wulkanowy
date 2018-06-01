@@ -30,7 +30,7 @@ public interface GradesContract {
 
         boolean isMenuVisible();
 
-        void setSummaryAverage(String value);
+        void setSummaryAverages(String calculatedValue, String predictedValue, String finalValue );
 
     }
 

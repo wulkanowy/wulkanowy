@@ -41,7 +41,11 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     private int semesterName;
 
-    private float averageOfSubjects;
+    private float finalAverage;
+
+    private float predictedAverage;
+
+    private float calculatedAverage;
 
     @Inject
     GradesPresenter(RepositoryContract repository) {
@@ -62,7 +66,6 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
         if (!isFirstSight) {
             isFirstSight = true;
-
             reloadGrades();
         }
     }
@@ -138,7 +141,6 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     public void onDoInBackgroundLoading() {
         List<Subject> subjectList = getRepository().getDbRepo().getSubjectList(semesterName);
         boolean isShowSummary = getRepository().getSharedRepo().isShowGradesSummary();
-        averageOfSubjects = GradeUtils.calculateSubjectsAverage(subjectList);
 
         headerItems = new ArrayList<>();
         summarySubItems = new ArrayList<>();
@@ -165,6 +167,10 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
                 headerItems.add(headerItem);
             }
         }
+
+        finalAverage = GradeUtils.calculateSubjectsAverage(subjectList, false);
+        predictedAverage = GradeUtils.calculateSubjectsAverage(subjectList, true);
+        calculatedAverage = GradeUtils.calculateDetailedSubjectsAverage(subjectList);
     }
 
     @Override
@@ -177,17 +183,36 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         getView().showNoItem(headerItems.isEmpty());
         getView().updateAdapterList(headerItems);
 
-        setSummaryAverage();
+        setSummaryAverages();
         getView().updateSummaryAdapterList(summarySubItems);
 
         listener.onFragmentIsReady();
     }
 
-    private void setSummaryAverage() {
-        if (averageOfSubjects != -1f) {
-            getView().setSummaryAverage(String.format(Locale.FRANCE, "%.2f", averageOfSubjects));
-        } else
-            getView().setSummaryAverage("-- --");
+    private void setSummaryAverages() {
+        String finalAverageText;
+        String predictedAverageText;
+        String calculatedAverageText;
+
+        if (finalAverage != -1f) {
+            finalAverageText = String.format(Locale.FRANCE, "%.2f", finalAverage);
+        } else {
+            finalAverageText = "-- --";
+        }
+
+        if (predictedAverage != -1f) {
+            predictedAverageText = String.format(Locale.FRANCE, "%.2f", predictedAverage);
+        } else {
+            predictedAverageText = "-- --";
+        }
+
+        if (calculatedAverage != -1f) {
+            calculatedAverageText = String.format(Locale.FRANCE, "%.2f", calculatedAverage);
+        } else {
+            calculatedAverageText = "-- --";
+        }
+
+        getView().setSummaryAverages(calculatedAverageText, predictedAverageText, finalAverageText);
     }
 
     private void reloadGrades() {

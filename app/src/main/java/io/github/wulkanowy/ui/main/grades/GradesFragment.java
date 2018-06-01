@@ -47,8 +47,14 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     @BindView(R.id.grade_fragment_swipe_refresh)
     SwipeRefreshLayout refreshLayout;
 
-    @BindView(R.id.grade_fragment_summary_average)
-    TextView average;
+    @BindView(R.id.grade_fragment_summary_predicted_average)
+    TextView predictedAverage;
+
+    @BindView(R.id.grade_fragment_summary_calculated_average)
+    TextView calculatedAverage;
+
+    @BindView(R.id.grade_fragment_summary_final_average)
+    TextView finalAverage;
 
     @Inject
     FlexibleAdapter<GradesHeader> adapter;
@@ -148,8 +154,10 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     }
 
     @Override
-    public void setSummaryAverage(String value) {
-        average.setText(value);
+    public void setSummaryAverages(String calculatedValue, String predictedValue, String finalValue) {
+        calculatedAverage.setText(calculatedValue);
+        predictedAverage.setText(predictedValue);
+        finalAverage.setText(finalValue);
     }
 
     @Override
