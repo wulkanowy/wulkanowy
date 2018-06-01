@@ -1,5 +1,8 @@
 package io.github.wulkanowy.data.sync;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -16,7 +19,6 @@ import io.github.wulkanowy.data.db.dao.entities.Semester;
 import io.github.wulkanowy.data.db.dao.entities.SubjectDao;
 import io.github.wulkanowy.utils.DataObjectConverter;
 import io.github.wulkanowy.utils.EntitiesCompare;
-import io.github.wulkanowy.utils.LogUtils;
 
 @Singleton
 public class GradeSync {
@@ -26,6 +28,8 @@ public class GradeSync {
     private final Vulcan vulcan;
 
     private long semesterId;
+
+    private static final Logger logger = LoggerFactory.getLogger(GradeSync.class);
 
     @Inject
     GradeSync(DaoSession daoSession, Vulcan vulcan) {
@@ -44,7 +48,7 @@ public class GradeSync {
         daoSession.getGradeDao().deleteInTx(semester.getGradeList());
         daoSession.getGradeDao().insertInTx(lastList);
 
-        LogUtils.debug("Synchronization grades (amount = " + lastList.size() + ")");
+        logger.debug("Synchronization grades (amount = " + lastList.size() + ")");
     }
 
     private void resetSemesterRelations(Semester semester) {
@@ -64,7 +68,7 @@ public class GradeSync {
         return updatedList;
     }
 
-    private List<Grade> getComparedList(Semester semester) throws IOException, VulcanException, ParseException {
+    private List<Grade> getComparedList(Semester semester) throws IOException, VulcanException {
         List<Grade> gradesFromNet = DataObjectConverter.gradesToGradeEntities(
                 vulcan.getGradesList().getAll(semester.getValue()), semesterId);
 

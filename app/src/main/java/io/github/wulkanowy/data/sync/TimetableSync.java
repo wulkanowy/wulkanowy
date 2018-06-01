@@ -1,6 +1,8 @@
 package io.github.wulkanowy.data.sync;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +22,6 @@ import io.github.wulkanowy.data.db.dao.entities.TimetableLessonDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.utils.DataObjectConverter;
-import io.github.wulkanowy.utils.LogUtils;
 
 @Singleton
 public class TimetableSync {
@@ -30,6 +31,8 @@ public class TimetableSync {
     private final Vulcan vulcan;
 
     private long diaryId;
+
+    private static final Logger logger = LoggerFactory.getLogger(TimetableSync.class);
 
     @Inject
     TimetableSync(DaoSession daoSession, Vulcan vulcan) {
@@ -49,7 +52,7 @@ public class TimetableSync {
 
         daoSession.getTimetableLessonDao().saveInTx(lessonList);
 
-        LogUtils.debug("Synchronization timetable lessons (amount = " + lessonList.size() + ")");
+        logger.debug("Synchronization timetable lessons (amount = " + lessonList.size() + ")");
     }
 
     private io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.timetable.TimetableDay> getWeekFromApi(String date)

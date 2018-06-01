@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.StandardDatabase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +24,6 @@ import io.github.wulkanowy.data.db.dao.migrations.Migration26;
 import io.github.wulkanowy.data.db.dao.migrations.Migration27;
 import io.github.wulkanowy.data.db.dao.migrations.Migration28;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
-import io.github.wulkanowy.utils.LogUtils;
 
 @Singleton
 public class DbHelper extends DaoMaster.OpenHelper {
@@ -30,6 +31,8 @@ public class DbHelper extends DaoMaster.OpenHelper {
     private final SharedPrefContract sharedPref;
 
     private final Vulcan vulcan;
+
+    private static final Logger logger = LoggerFactory.getLogger(DbHelper.class);
 
     @Inject
     DbHelper(Context context, @Named("dbName") String dbName,
@@ -41,7 +44,7 @@ public class DbHelper extends DaoMaster.OpenHelper {
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        LogUtils.info("Cleaning user data oldVersion=" + oldVersion + " newVersion=" + newVersion);
+        logger.info("Cleaning user data oldVersion=" + oldVersion + " newVersion=" + newVersion);
         Database database = new StandardDatabase(db);
         recreateDatabase(database);
     }
@@ -54,11 +57,11 @@ public class DbHelper extends DaoMaster.OpenHelper {
         for (Migration migration : migrations) {
             if (oldVersion < migration.getVersion()) {
                 try {
-                    LogUtils.info("Applying migration to db schema v" + migration.getVersion() + "...");
+                    logger.info("Applying migration to db schema v" + migration.getVersion() + "...");
                     migration.runMigration(db, sharedPref, vulcan);
-                    LogUtils.info("Migration " + migration.getVersion() + " complete");
+                    logger.info("Migration " + migration.getVersion() + " complete");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Failed to apply migration", e);
                     recreateDatabase(db);
                     break;
                 }
@@ -67,7 +70,7 @@ public class DbHelper extends DaoMaster.OpenHelper {
     }
 
     private void recreateDatabase(Database db) {
-        LogUtils.info("Database is recreating...");
+        logger.info("Database is recreating...");
         sharedPref.setCurrentUserId(0);
         DaoMaster.dropAllTables(db, true);
         onCreate(db);

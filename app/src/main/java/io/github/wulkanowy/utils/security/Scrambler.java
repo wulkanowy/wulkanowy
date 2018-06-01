@@ -10,6 +10,8 @@ import android.security.keystore.KeyProperties;
 import android.util.Base64;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,13 +28,13 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.security.auth.x500.X500Principal;
 
-import io.github.wulkanowy.utils.LogUtils;
-
 public final class Scrambler {
 
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";
 
     private static KeyStore keyStore;
+
+    private static final Logger logger = LoggerFactory.getLogger(Scrambler.class);
 
     private Scrambler() {
         throw new IllegalStateException("Utility class");
@@ -111,7 +113,7 @@ public final class Scrambler {
             throw new CryptoException("GenerateNewKey - String is empty");
         }
 
-        LogUtils.debug("Key pair are create");
+        logger.debug("Key pair are create");
 
     }
 

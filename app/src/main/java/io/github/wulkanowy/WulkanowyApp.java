@@ -6,6 +6,8 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
@@ -16,12 +18,13 @@ import eu.davidea.flexibleadapter.utils.Log;
 import io.fabric.sdk.android.Fabric;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.di.DaggerAppComponent;
-import io.github.wulkanowy.utils.LogUtils;
 
 public class WulkanowyApp extends DaggerApplication {
 
     @Inject
     RepositoryContract repository;
+
+    private static final Logger logger = LoggerFactory.getLogger(WulkanowyApp.class);
 
     @Override
     public void onCreate() {
@@ -40,7 +43,7 @@ public class WulkanowyApp extends DaggerApplication {
             try {
                 repository.getSyncRepo().initLastUser();
             } catch (Exception e) {
-                LogUtils.error("An error occurred when the application was started", e);
+                logger.error("An error occurred when the application was started", e);
             }
         }
     }
@@ -66,4 +69,5 @@ public class WulkanowyApp extends DaggerApplication {
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         return DaggerAppComponent.builder().create(this);
     }
+
 }

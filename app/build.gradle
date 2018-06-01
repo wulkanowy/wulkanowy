@@ -118,6 +118,8 @@ dependencies {
     implementation "com.jakewharton.threetenabp:threetenabp:$threeTenABP"
     implementation "com.google.android.gms:play-services-oss-licenses:$ossLicenses"
 
+    implementation "org.slf4j:slf4j-api:$slf4jApi"
+
     implementation("com.crashlytics.sdk.android:crashlytics:$crashlyticsSdk@aar") {
         transitive = true
     }

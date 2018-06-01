@@ -15,6 +15,9 @@ import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.SimpleJobService;
 import com.firebase.jobdispatcher.Trigger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +30,6 @@ import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.sync.NotRegisteredUserException;
 import io.github.wulkanowy.services.notifies.GradeNotify;
 import io.github.wulkanowy.ui.main.MainActivity;
-import io.github.wulkanowy.utils.LogUtils;
 
 public class SyncJob extends SimpleJobService {
 
@@ -37,6 +39,8 @@ public class SyncJob extends SimpleJobService {
 
     @Inject
     RepositoryContract repository;
+
+    private static final Logger logger = LoggerFactory.getLogger(SyncJob.class);
 
     public static void start(Context context, int interval, boolean useOnlyWifi) {
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
@@ -123,6 +127,6 @@ public class SyncJob extends SimpleJobService {
 
     private void logError(Exception e) {
         Crashlytics.logException(e);
-        LogUtils.error("During background synchronization an error occurred", e);
+        logger.error("During background synchronization an error occurred", e);
     }
 }

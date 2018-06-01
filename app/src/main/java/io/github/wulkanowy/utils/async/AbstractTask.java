@@ -2,7 +2,8 @@ package io.github.wulkanowy.utils.async;
 
 import android.os.AsyncTask;
 
-import io.github.wulkanowy.utils.LogUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AbstractTask extends AsyncTask<Void, Integer, Boolean> {
 
@@ -11,6 +12,8 @@ public class AbstractTask extends AsyncTask<Void, Integer, Boolean> {
     private AsyncListeners.OnRefreshListener onRefreshListener;
 
     private AsyncListeners.OnFirstLoadingListener onFirstLoadingListener;
+
+    private static final Logger logger = LoggerFactory.getLogger(AbstractTask.class);
 
     public void setOnFirstLoadingListener(AsyncListeners.OnFirstLoadingListener onFirstLoadingListener) {
         this.onFirstLoadingListener = onFirstLoadingListener;
@@ -28,7 +31,7 @@ public class AbstractTask extends AsyncTask<Void, Integer, Boolean> {
             } else if (onRefreshListener != null) {
                 onRefreshListener.onDoInBackgroundRefresh();
             } else {
-                LogUtils.error("AbstractTask does not have a listener assigned");
+                logger.error("AbstractTask does not have a listener assigned");
             }
             return true;
         } catch (Exception e) {
@@ -45,7 +48,7 @@ public class AbstractTask extends AsyncTask<Void, Integer, Boolean> {
         } else if (onRefreshListener != null) {
             onRefreshListener.onCanceledRefreshAsync();
         } else {
-            LogUtils.error("AbstractTask does not have a listener assigned");
+            logger.error("AbstractTask does not have a listener assigned");
         }
     }
 
@@ -57,7 +60,7 @@ public class AbstractTask extends AsyncTask<Void, Integer, Boolean> {
         } else if (onRefreshListener != null) {
             onRefreshListener.onEndRefreshAsync(result, exception);
         } else {
-            LogUtils.error("AbstractTask does not have a listener assigned");
+            logger.error("AbstractTask does not have a listener assigned");
         }
     }
 }

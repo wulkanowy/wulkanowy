@@ -5,6 +5,9 @@ import android.content.res.Resources;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -16,13 +19,14 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.api.NotLoggedInErrorException;
 import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
 import io.github.wulkanowy.utils.AppConstant;
-import io.github.wulkanowy.utils.LogUtils;
 import io.github.wulkanowy.utils.security.CryptoException;
 
 @Singleton
 public class ResourcesRepository implements ResourcesContract {
 
     private Resources resources;
+
+    private static final Logger logger = LoggerFactory.getLogger(ResourcesRepository.class);
 
     @Inject
     ResourcesRepository(Context context) {
@@ -41,7 +45,7 @@ public class ResourcesRepository implements ResourcesContract {
 
     @Override
     public String getErrorLoginMessage(Exception exception) {
-        LogUtils.error(AppConstant.APP_NAME + " encountered a error", exception);
+        logger.error(AppConstant.APP_NAME + " encountered a error", exception);
         Crashlytics.logException(exception);
 
         if (exception instanceof CryptoException) {

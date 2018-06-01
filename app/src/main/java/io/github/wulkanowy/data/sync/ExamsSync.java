@@ -1,5 +1,8 @@
 package io.github.wulkanowy.data.sync;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,6 @@ import io.github.wulkanowy.data.db.dao.entities.ExamDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.utils.DataObjectConverter;
-import io.github.wulkanowy.utils.LogUtils;
 
 public class ExamsSync {
 
@@ -26,6 +28,8 @@ public class ExamsSync {
     private final Vulcan vulcan;
 
     private long diaryId;
+
+    private static final Logger logger = LoggerFactory.getLogger(ExamsSync.class);
 
     @Inject
     ExamsSync(DaoSession daoSession, Vulcan vulcan) {
@@ -45,7 +49,7 @@ public class ExamsSync {
 
         daoSession.getExamDao().saveInTx(examList);
 
-        LogUtils.debug("Synchronization exams (amount = " + examList.size() + ")");
+        logger.debug("Synchronization exams (amount = " + examList.size() + ")");
     }
 
     private Week getWeekFromDb(String date) {

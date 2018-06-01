@@ -3,6 +3,8 @@ package io.github.wulkanowy.api;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Date;
@@ -26,6 +28,8 @@ public class Client {
     private Date lastSuccessRequest;
 
     private Cookies cookies = new Cookies();
+
+    private static final Logger logger = LoggerFactory.getLogger(Client.class);
 
     Client(String email, String password, String symbol) {
         this.email = email;
@@ -111,7 +115,11 @@ public class Client {
             this.cookies.addItems(cookies);
         }
 
-        Connection.Response response = Jsoup.connect(getFilledUrl(url))
+        url = getFilledUrl(url);
+
+        logger.debug("GET " + url);
+
+        Connection.Response response = Jsoup.connect(url)
                 .followRedirects(true)
                 .cookies(getCookies())
                 .execute();
@@ -128,7 +136,11 @@ public class Client {
     }
 
     public synchronized Document postPageByUrl(String url, String[][] params) throws IOException, VulcanException {
-        Connection connection = Jsoup.connect(getFilledUrl(url));
+        url = getFilledUrl(url);
+
+        logger.debug("POST " + url);
+
+        Connection connection = Jsoup.connect(url);
 
         for (String[] data : params) {
             connection.data(data[0], data[1]);
