@@ -9,6 +9,7 @@ import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -140,6 +141,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         averageOfSubjects = GradeUtils.calculateSubjectsAverage(subjectList);
 
         headerItems = new ArrayList<>();
+        summarySubItems = new ArrayList<>();
 
         for (Subject subject : subjectList) {
             subject.resetGradeList();
@@ -183,7 +185,7 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
     private void setSummaryAverage() {
         if (averageOfSubjects != -1f) {
-            getView().setSummaryAverage(String.valueOf(averageOfSubjects));
+            getView().setSummaryAverage(String.format(Locale.FRANCE, "%.2f", averageOfSubjects));
         } else
             getView().setSummaryAverage("-- --");
     }

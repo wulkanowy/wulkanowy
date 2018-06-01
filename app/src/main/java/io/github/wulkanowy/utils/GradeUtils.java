@@ -47,7 +47,7 @@ public final class GradeUtils {
             float value = getMathematicalValueOfSubjectGrade(subject.getFinalRating());
 
             if (value != -1f) {
-                counter = +value;
+                counter += value;
                 denominator++;
             }
         }

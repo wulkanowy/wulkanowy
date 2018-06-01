@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +30,7 @@ import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 public class GradesFragment extends BaseFragment implements GradesContract.View {
 
     @BindView(R.id.grade_fragment_summary_container)
-    View summary;
+    NestedScrollView summary;
 
     @BindView(R.id.grade_fragment_details_container)
     View details;
@@ -109,6 +110,8 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
 
             details.setVisibility(isDetailsVisible ? View.GONE : View.VISIBLE);
             summary.setVisibility(isDetailsVisible ? View.VISIBLE : View.GONE);
+
+            //summary.scrollTo(0, 0);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -130,6 +133,7 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
         recyclerView.setAdapter(adapter);
         summaryRecyclerView.setLayoutManager(new SmoothScrollLinearLayoutManager(view.getContext()));
         summaryRecyclerView.setAdapter(summaryAdapter);
+        summaryRecyclerView.setNestedScrollingEnabled(false);
 
         refreshLayout.setColorSchemeResources(android.R.color.black);
         refreshLayout.setOnRefreshListener(this);
