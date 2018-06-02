@@ -147,11 +147,10 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
 
         for (Subject subject : subjectList) {
             subject.resetGradeList();
-
-            GradesSummaryHeader summaryHeader = new GradesSummaryHeader(subject);
-            summarySubItems.add(new GradesSummarySubItem(summaryHeader, subject));
-
             List<Grade> gradeList = subject.getGradeList();
+
+            GradesSummaryHeader summaryHeader = new GradesSummaryHeader(subject, GradeUtils.calculateWeightedAverage(gradeList));
+            summarySubItems.add(new GradesSummarySubItem(summaryHeader, subject));
 
             if (!gradeList.isEmpty()) {
                 GradesHeader headerItem = new GradesHeader(subject, isShowSummary);

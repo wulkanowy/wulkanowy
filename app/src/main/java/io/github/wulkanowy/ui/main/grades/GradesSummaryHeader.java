@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,8 +22,11 @@ class GradesSummaryHeader extends AbstractHeaderItem<GradesSummaryHeader.HeaderV
 
     private Subject subject;
 
-    GradesSummaryHeader(Subject subject) {
+    private String average;
+
+    GradesSummaryHeader(Subject subject, float average) {
         this.subject = subject;
+        this.average = String.format(Locale.FRANCE, "%.2f", average);
     }
 
     @Override
@@ -35,6 +39,7 @@ class GradesSummaryHeader extends AbstractHeaderItem<GradesSummaryHeader.HeaderV
 
         return new EqualsBuilder()
                 .append(subject, that.subject)
+                .append(average, that.average)
                 .isEquals();
     }
 
@@ -42,6 +47,7 @@ class GradesSummaryHeader extends AbstractHeaderItem<GradesSummaryHeader.HeaderV
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(subject)
+                .append(average)
                 .toHashCode();
     }
 
@@ -57,7 +63,7 @@ class GradesSummaryHeader extends AbstractHeaderItem<GradesSummaryHeader.HeaderV
 
     @Override
     public void bindViewHolder(FlexibleAdapter<IFlexible> adapter, HeaderViewHolder holder, int position, List<Object> payloads) {
-        holder.onBind(subject);
+        holder.onBind(subject, average);
     }
 
     static class HeaderViewHolder extends FlexibleViewHolder {
@@ -65,13 +71,17 @@ class GradesSummaryHeader extends AbstractHeaderItem<GradesSummaryHeader.HeaderV
         @BindView(R.id.grades_summary_header_name)
         TextView name;
 
+        @BindView(R.id.grades_summary_header_average)
+        TextView average;
+
         HeaderViewHolder(View view, FlexibleAdapter adapter) {
             super(view, adapter);
             ButterKnife.bind(this, view);
         }
 
-        void onBind(Subject item) {
+        void onBind(Subject item, String value) {
             name.setText(item.getName());
+            average.setText(value.equals("-1,00") ? "" : value);
         }
     }
 }

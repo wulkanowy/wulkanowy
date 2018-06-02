@@ -17,14 +17,14 @@ public final class GradeUtils {
         throw new IllegalStateException("Utility class");
     }
 
-    public static float calculateGradesAverage(List<Grade> gradeList) {
+    public static float calculateWeightedAverage(List<Grade> gradeList) {
 
         float counter = 0f;
         float denominator = 0f;
 
         for (Grade grade : gradeList) {
-            int weight = getIntegerForWeightOfGrade(grade.getWeight());
-            float value = getMathematicalValueOfString(grade.getValue());
+            int weight = getWeightValue(grade.getWeight());
+            float value = getWeightedGradeValue(grade.getValue());
 
             if (value != -1f) {
                 counter += value * weight;
@@ -46,8 +46,7 @@ public final class GradeUtils {
         return calculateSubjectsAverage(subjectList, false, true);
     }
 
-    private static float calculateSubjectsAverage(List<Subject> subjectList, boolean usePredicted,
-                                                  boolean useSubjectsAverages) {
+    private static float calculateSubjectsAverage(List<Subject> subjectList, boolean usePredicted, boolean useSubjectsAverages) {
         float counter = 0f;
         float denominator = 0f;
 
@@ -55,14 +54,13 @@ public final class GradeUtils {
             float value;
 
             if (useSubjectsAverages) {
-                value = calculateGradesAverage(subject.getGradeList());
+                value = calculateWeightedAverage(subject.getGradeList());
             } else {
-                value = getMathematicalValueOfSubjectGrade(usePredicted ? subject.getPredictedRating()
-                        : subject.getFinalRating());
+                value = getGradeValue(usePredicted ? subject.getPredictedRating() : subject.getFinalRating());
             }
 
             if (value != -1f) {
-                counter += value;
+                counter += Math.round(value);
                 denominator++;
             }
         }
@@ -70,54 +68,46 @@ public final class GradeUtils {
         if (counter == 0) {
             return -1f;
         }
+
         return counter / denominator;
     }
 
-    private static float getMathematicalValueOfSubjectGrade(String subjectGrade) {
-        float valueOfSubjectGrade;
-
-        if (!validGradePattern.matcher(subjectGrade).matches()) {
-            switch (subjectGrade) {
-                case "celujący":
-                    valueOfSubjectGrade = 6f;
-                    break;
-                case "bardzo dobry":
-                    valueOfSubjectGrade = 5f;
-                    break;
-                case "dobry":
-                    valueOfSubjectGrade = 4f;
-                    break;
-                case "dostateczny":
-                    valueOfSubjectGrade = 3f;
-                    break;
-                case "dopuszczający":
-                    valueOfSubjectGrade = 2f;
-                    break;
-                case "niedostateczny":
-                    valueOfSubjectGrade = 1f;
-                    break;
-                default:
-                    valueOfSubjectGrade = -1f;
-            }
-        } else {
-            valueOfSubjectGrade = getMathematicalValueOfString(subjectGrade);
+    public static float getGradeValue(String grade) {
+        if (validGradePattern.matcher(grade).matches()) {
+            return getWeightedGradeValue(grade);
         }
-        return valueOfSubjectGrade;
+
+        return getVerbalGradeValue(grade);
     }
 
-    private static float getMathematicalValueOfString(String value) {
-        if (value.matches("[-|+|=]{0,2}[0-6]")
-                || value.matches("[0-6][-|+|=]{0,2}")) {
-            if (value.matches("[-][0-6]")
-                    || value.matches("[0-6][-]")) {
+    public static float getVerbalGradeValue(String grade) {
+        switch (grade) {
+            case "celujący":
+                return 6f;
+            case "bardzo dobry":
+                return 5f;
+            case "dobry":
+                return 4f;
+            case "dostateczny":
+                return 3f;
+            case "dopuszczający":
+                return 2f;
+            case "niedostateczny":
+                return 1f;
+            default:
+                return -1f;
+        }
+    }
+
+    public static float getWeightedGradeValue(String value) {
+        if (validGradePattern.matcher(value).matches()) {
+            if (value.matches("[-][0-6]") || value.matches("[0-6][-]")) {
                 String replacedValue = value.replaceAll("[-]", "");
                 return Float.valueOf(replacedValue) - 0.33f;
-            } else if (value.matches("[+][0-6]")
-                    || value.matches("[0-6][+]")) {
+            } else if (value.matches("[+][0-6]") || value.matches("[0-6][+]")) {
                 String replacedValue = value.replaceAll("[+]", "");
                 return Float.valueOf((replacedValue)) + 0.33f;
-            } else if (value.matches("[-|=]{1,2}[0-6]")
-                    || value.matches("[0-6][-|=]{1,2}")) {
+            } else if (value.matches("[-|=]{1,2}[0-6]") || value.matches("[0-6][-|=]{1,2}")) {
                 String replacedValue = value.replaceAll("[-|=]{1,2}", "");
                 return Float.valueOf((replacedValue)) - 0.5f;
             } else {
@@ -128,7 +118,7 @@ public final class GradeUtils {
         }
     }
 
-    private static int getIntegerForWeightOfGrade(String weightOfGrade) {
+    public static int getWeightValue(String weightOfGrade) {
         return Integer.valueOf(weightOfGrade.substring(0, weightOfGrade.length() - 3));
     }
 

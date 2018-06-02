@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +29,7 @@ import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 public class GradesFragment extends BaseFragment implements GradesContract.View {
 
     @BindView(R.id.grade_fragment_summary_container)
-    NestedScrollView summary;
+    View summary;
 
     @BindView(R.id.grade_fragment_details_container)
     View details;
@@ -114,10 +113,8 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
         } else if (item.getItemId() == R.id.action_summary_switch) {
             boolean isDetailsVisible = details.getVisibility() == View.VISIBLE;
 
-            details.setVisibility(isDetailsVisible ? View.GONE : View.VISIBLE);
-            summary.setVisibility(isDetailsVisible ? View.VISIBLE : View.GONE);
-
-            //summary.scrollTo(0, 0);
+            details.setVisibility(isDetailsVisible ? View.INVISIBLE : View.VISIBLE);
+            summary.setVisibility(isDetailsVisible ? View.VISIBLE : View.INVISIBLE);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -127,7 +124,7 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         noItemView.setVisibility(View.GONE);
-        summary.setVisibility(View.GONE);
+        summary.setVisibility(View.INVISIBLE);
         details.setVisibility(View.VISIBLE);
 
         adapter.setAutoCollapseOnExpand(true);

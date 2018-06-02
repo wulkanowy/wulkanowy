@@ -170,7 +170,7 @@ public class GradesHeader
         }
 
         private String getGradesAverageString() {
-            float average = GradeUtils.calculateGradesAverage(item.getGradeList());
+            float average = GradeUtils.calculateWeightedAverage(item.getGradeList());
 
             if (average < 0) {
                 return resources.getString(R.string.info_no_average);
