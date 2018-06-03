@@ -114,6 +114,7 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
             case R.id.action_summary_switch:
                 boolean isDetailsVisible = details.getVisibility() == View.VISIBLE;
 
+                item.setTitle(isDetailsVisible ? R.string.action_title_details : R.string.action_title_summary);
                 details.setVisibility(isDetailsVisible ? View.INVISIBLE : View.VISIBLE);
                 summary.setVisibility(isDetailsVisible ? View.VISIBLE : View.INVISIBLE);
                 return true;

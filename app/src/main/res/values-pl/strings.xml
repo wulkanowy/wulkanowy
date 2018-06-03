@@ -162,4 +162,5 @@
     <string name="grades_summary_predicted_average">Szacowana średnia</string>
     <string name="grades_summary_final_average">Końcowa średnia</string>
     <string name="action_title_summary">Podsumowanie</string>
+    <string name="action_title_details">Szczegóły</string>
 </resources>

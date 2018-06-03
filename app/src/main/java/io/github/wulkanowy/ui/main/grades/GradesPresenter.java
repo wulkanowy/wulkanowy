@@ -189,29 +189,19 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
     }
 
     private void setSummaryAverages() {
-        String finalAverageText;
-        String predictedAverageText;
-        String calculatedAverageText;
+        getView().setSummaryAverages(
+                getFormattedAverage(calculatedAverage),
+                getFormattedAverage(predictedAverage),
+                getFormattedAverage(finalAverage)
+        );
+    }
 
-        if (finalAverage != -1.0f) {
-            finalAverageText = String.format(Locale.FRANCE, "%.2f", finalAverage);
-        } else {
-            finalAverageText = "-- --";
+    private String getFormattedAverage(float average) {
+        if (-1.0f == average) {
+            return "-- --";
         }
 
-        if (predictedAverage != -1.0f) {
-            predictedAverageText = String.format(Locale.FRANCE, "%.2f", predictedAverage);
-        } else {
-            predictedAverageText = "-- --";
-        }
-
-        if (calculatedAverage != -1.0f) {
-            calculatedAverageText = String.format(Locale.FRANCE, "%.2f", calculatedAverage);
-        } else {
-            calculatedAverageText = "-- --";
-        }
-
-        getView().setSummaryAverages(calculatedAverageText, predictedAverageText, finalAverageText);
+        return String.format(Locale.FRANCE, "%.2f", average);
     }
 
     private void reloadGrades() {
