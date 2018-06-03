@@ -49,7 +49,7 @@ public class ExamsSync {
 
         daoSession.getExamDao().saveInTx(examList);
 
-        logger.debug("Synchronization exams (amount = " + examList.size() + ")");
+        logger.debug("Exams synchronization complete ({})", examList.size());
     }
 
     private Week getWeekFromDb(String date) {

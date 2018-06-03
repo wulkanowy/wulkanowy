@@ -76,7 +76,7 @@ public class AccountSync {
     }
 
     private Account insertAccount(String email, String password) throws CryptoException {
-        logger.debug("Register account: " + email);
+        logger.debug("Register account");
         Account account = new Account()
                 .setEmail(email)
                 .setPassword(Scrambler.encrypt(email, password, context));
@@ -85,7 +85,7 @@ public class AccountSync {
     }
 
     private Symbol insertSymbol(Account account) throws VulcanException, IOException {
-        logger.debug("Register symbol: " + vulcan.getSymbol());
+        logger.debug("Register symbol {}", vulcan.getSymbol());
         Symbol symbol = new Symbol()
                 .setUserId(account.getId())
                 .setSchoolId(vulcan.getStudentAndParent().getSchoolID())
@@ -100,7 +100,7 @@ public class AccountSync {
                 vulcan.getStudentAndParent().getStudents(),
                 symbol.getId()
         );
-        logger.debug("Register students: " + studentList.size());
+        logger.debug("Register students {}", studentList.size());
         daoSession.getStudentDao().insertInTx(studentList);
     }
 
@@ -111,7 +111,7 @@ public class AccountSync {
                         StudentDao.Properties.SymbolId.eq(symbolEntity.getId()),
                         StudentDao.Properties.Current.eq(true)
                 ).unique().getId());
-        logger.debug("Register diaries: " + diaryList.size());
+        logger.debug("Register diaries {}", diaryList.size());
         daoSession.getDiaryDao().insertInTx(diaryList);
     }
 
@@ -121,7 +121,7 @@ public class AccountSync {
                 daoSession.getDiaryDao().queryBuilder().where(
                         DiaryDao.Properties.Current.eq(true)
                 ).unique().getId());
-        logger.debug("Register semesters: " + semesterList.size());
+        logger.debug("Register semesters {}", semesterList.size());
         daoSession.getSemesterDao().insertInTx(semesterList);
     }
 
@@ -133,7 +133,7 @@ public class AccountSync {
             throw new NotRegisteredUserException("Can't find user id in SharedPreferences");
         }
 
-        logger.debug("Initialization current user id=" + userId);
+        logger.debug("Init current user ({})", userId);
 
         Account account = daoSession.getAccountDao().load(userId);
 

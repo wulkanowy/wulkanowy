@@ -44,7 +44,7 @@ public class SubjectSync {
         daoSession.getSubjectDao().deleteInTx(getSubjectsFromDb());
         daoSession.getSubjectDao().insertInTx(lastList);
 
-        logger.debug("Synchronization subjects (amount = " + lastList.size() + ")");
+        logger.debug("Subjects synchronization complete ({})", lastList.size());
     }
 
     private List<Subject> getSubjectsFromNet(Semester semester) throws VulcanException, IOException {

@@ -52,7 +52,7 @@ public class TimetableSync {
 
         daoSession.getTimetableLessonDao().saveInTx(lessonList);
 
-        logger.debug("Synchronization timetable lessons (amount = " + lessonList.size() + ")");
+        logger.debug("Timetable synchronization complete ({})", lessonList.size());
     }
 
     private io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.timetable.TimetableDay> getWeekFromApi(String date)

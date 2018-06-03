@@ -63,12 +63,12 @@ public class Client {
         }
 
         this.symbol = new Login(this).login(email, password, symbol);
-        logger.debug("Login successful");
+        logger.debug("Login successful at {}", getHost());
     }
 
     private boolean isLoggedIn() {
-        logger.debug("Last success request: " + lastSuccessRequest);
-        logger.debug("Cookies: " + getCookies().size());
+        logger.debug("Last success request: {}", lastSuccessRequest);
+        logger.debug("Cookies: {}", getCookies().size());
 
         return getCookies().size() > 0 && lastSuccessRequest != null &&
                 5 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());
@@ -121,7 +121,7 @@ public class Client {
 
         url = getFilledUrl(url);
 
-        logger.debug("GET " + url);
+        logger.debug("GET {}", url);
 
         Connection.Response response = Jsoup.connect(url)
                 .followRedirects(true)
@@ -142,7 +142,7 @@ public class Client {
     public synchronized Document postPageByUrl(String url, String[][] params) throws IOException, VulcanException {
         url = getFilledUrl(url);
 
-        logger.debug("POST " + url);
+        logger.debug("POST {}", url);
 
         Connection connection = Jsoup.connect(url);
 
@@ -168,7 +168,7 @@ public class Client {
 
         url = getFilledUrl(url);
 
-        logger.debug("GET " + url);
+        logger.debug("GET {}", url);
 
         Connection.Response response = Jsoup.connect(url)
                 .followRedirects(true)
@@ -186,7 +186,7 @@ public class Client {
 
         url = getFilledUrl(url);
 
-        logger.debug("POST " + url);
+        logger.debug("POST {}", url);
 
         Connection connection = Jsoup.connect(url);
 

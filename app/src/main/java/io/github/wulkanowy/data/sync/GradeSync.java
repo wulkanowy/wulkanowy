@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class GradeSync {
         this.vulcan = vulcan;
     }
 
-    public void sync(long semesterId) throws IOException, VulcanException, ParseException {
+    public void sync(long semesterId) throws IOException, VulcanException {
         this.semesterId = semesterId;
 
         Semester semester = daoSession.getSemesterDao().load(semesterId);
@@ -48,7 +47,7 @@ public class GradeSync {
         daoSession.getGradeDao().deleteInTx(semester.getGradeList());
         daoSession.getGradeDao().insertInTx(lastList);
 
-        logger.debug("Synchronization grades (amount = " + lastList.size() + ")");
+        logger.debug("Grades synchronization complete ({})", lastList.size());
     }
 
     private void resetSemesterRelations(Semester semester) {

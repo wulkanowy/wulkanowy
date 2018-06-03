@@ -51,7 +51,7 @@ public class AttendanceSync {
 
         daoSession.getAttendanceLessonDao().saveInTx(lessonList);
 
-        logger.debug("Synchronization attendance lessons (amount = " + lessonList.size() + ")");
+        logger.debug("Attendance synchronization complete ({})", lessonList.size());
     }
 
     private io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.generic.Day> getWeekFromApi(String date)
