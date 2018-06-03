@@ -27,7 +27,7 @@ class RegisteredDevices(private val snp: SnP) {
             devices.add(Device(
                     cells[0].text().replace(" ($system)", ""),
                     system,
-                    getFormattedDate(cells[1].text(), "dd.MM.yyyy 'godz:' HH:mm:ss"),
+                    getFormattedDate(cells[1].text(), "dd.MM.yyyy 'godz:' HH:mm:ss", "yyyy-MM-dd HH:mm:ss"),
                     cells[2].select("a").attr("href")
                             .split("/").last().toInt()
             ))
