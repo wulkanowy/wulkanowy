@@ -3,8 +3,6 @@ package io.github.wulkanowy.data.db.resources;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.crashlytics.android.Crashlytics;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +44,6 @@ public class ResourcesRepository implements ResourcesContract {
     @Override
     public String getErrorLoginMessage(Exception exception) {
         logger.error(AppConstant.APP_NAME + " encountered a error", exception);
-        Crashlytics.logException(exception);
 
         if (exception instanceof CryptoException) {
             return resources.getString(R.string.encrypt_failed_text);

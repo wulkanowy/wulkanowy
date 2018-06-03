@@ -20,6 +20,7 @@ import io.fabric.sdk.android.Fabric;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.di.DaggerAppComponent;
 import io.github.wulkanowy.utils.AppConstant;
+import io.github.wulkanowy.utils.FabricUtils;
 
 public class WulkanowyApp extends DaggerApplication {
 
@@ -44,7 +45,9 @@ public class WulkanowyApp extends DaggerApplication {
         if (repository.getSharedRepo().isUserLoggedIn()) {
             try {
                 repository.getSyncRepo().initLastUser();
+                FabricUtils.logLogin("Open app", true);
             } catch (Exception e) {
+                FabricUtils.logLogin("Open app", false);
                 logger.error("An error occurred when the application was started", e);
             }
         }
