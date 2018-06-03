@@ -159,6 +159,6 @@
     <string name="exams_dialog_entry_date">Data wpisu</string>
 
     <string name="grades_summary_calculated_average">Obliczona średnia</string>
-    <string name="grades_summary_predicted_average">Przewidywana średnia</string>
+    <string name="grades_summary_predicted_average">Szacowana średnia</string>
     <string name="grades_summary_final_average">Końcowa średnia</string>
 </resources>
