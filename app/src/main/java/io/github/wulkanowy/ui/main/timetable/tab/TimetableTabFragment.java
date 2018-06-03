@@ -91,6 +91,12 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
     }
 
     @Override
+    public void expandItem(int position) {
+        adapter.expand(adapter.getItem(position), true);
+        recyclerView.scrollToPosition(position);
+    }
+
+    @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
         isFragmentVisible = menuVisible;

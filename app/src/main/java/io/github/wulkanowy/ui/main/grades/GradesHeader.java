@@ -118,29 +118,41 @@ public class GradesHeader
                     item.getFinalRating()));
 
             resetViews();
-            toggleSummaryText();
             toggleSubjectText();
+            toggleSummary();
 
             alertImage.setVisibility(isSubItemsReadAndSaveAlertView(subItems)
                     ? View.INVISIBLE : View.VISIBLE);
+        }
+
+        private String getGradesAverageString() {
+            float average = GradeUtils.calculate(item.getGradeList());
+
+            if (average < 0) {
+                return resources.getString(R.string.info_no_average);
+            }
+
+            return resources.getString(R.string.info_average_grades, average);
         }
 
         @Override
         public void onClick(View view) {
             super.onClick(view);
             toggleSubjectText();
-            toggleSummaryText();
+            toggleSummary();
         }
 
-        private void toggleSummaryText() {
-            if (isSummaryToggleable()) {
-                if (isExpand()) {
-                    AnimationUtils.slideDown(predictedText);
-                    AnimationUtils.slideDown(finalText);
-                } else {
-                    AnimationUtils.slideUp(predictedText);
-                    AnimationUtils.slideUp(finalText);
-                }
+        private void resetViews() {
+            subjectName.setMaxLines(1);
+            setDefaultSummaryVisibility(predictedText, item.getPredictedRating());
+            setDefaultSummaryVisibility(finalText, item.getFinalRating());
+        }
+
+        private void setDefaultSummaryVisibility(View view, String value) {
+            if (!"-".equals(value) && isShowSummary) {
+                view.setVisibility(View.VISIBLE);
+            } else {
+                view.setVisibility(View.GONE);
             }
         }
 
@@ -152,10 +164,25 @@ public class GradesHeader
             }
         }
 
-        private void resetViews() {
-            subjectName.setMaxLines(1);
-            predictedText.setVisibility(View.GONE);
-            finalText.setVisibility(View.GONE);
+        private void toggleSummary() {
+            toggleSummaryView(predictedText, item.getPredictedRating(), isExpand());
+            toggleSummaryView(finalText, item.getFinalRating(), isExpand());
+        }
+
+        private boolean isExpand() {
+            return adapter.isExpanded(getFlexibleAdapterPosition());
+        }
+
+        private void toggleSummaryView(View view, String value, boolean expand) {
+            if ("-".equals(value) || isShowSummary) {
+                return;
+            }
+
+            if (expand) {
+                AnimationUtils.slideDown(view);
+            } else {
+                AnimationUtils.slideUp(view);
+            }
         }
 
         private boolean isSubItemsReadAndSaveAlertView(List<GradesSubItem> subItems) {
@@ -167,38 +194,6 @@ public class GradesHeader
             }
 
             return isRead;
-        }
-
-        private String getGradesAverageString() {
-            float average = GradeUtils.calculateWeightedAverage(item.getGradeList());
-
-            if (average < 0) {
-                return resources.getString(R.string.info_no_average);
-            }
-
-            return resources.getString(R.string.info_average_grades, average);
-        }
-
-        private boolean isExpand() {
-            return adapter.isExpanded(getFlexibleAdapterPosition());
-        }
-
-        private boolean isSummaryToggleable() {
-            boolean isSummaryEmpty = true;
-
-            if (!"-".equals(item.getPredictedRating()) || !"-".equals(item.getFinalRating())) {
-                isSummaryEmpty = false;
-            }
-
-            if (isSummaryEmpty) {
-                return false;
-            } else if (isShowSummary) {
-                predictedText.setVisibility(View.VISIBLE);
-                finalText.setVisibility(View.VISIBLE);
-
-                return false;
-            }
-            return true;
         }
     }
 }

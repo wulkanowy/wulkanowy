@@ -10,6 +10,8 @@ public interface TimetableTabContract {
 
         void updateAdapterList(List<TimetableHeader> headerItems);
 
+        void expandItem(int item);
+
         void onRefreshSuccess();
 
         void hideRefreshingBar();
