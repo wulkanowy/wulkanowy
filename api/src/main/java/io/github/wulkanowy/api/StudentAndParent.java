@@ -89,7 +89,7 @@ public class StudentAndParent implements SnP {
         String[] path = snpPageUrl.split(client.getHost())[1].split("/");
 
         if (5 != path.length) {
-            throw new NotLoggedInErrorException("You are probably not logged in " + snpPageUrl);
+            throw new NotLoggedInErrorException("Na pewno używasz konta z dostępem do Witryny ucznia i rodzica? " + snpPageUrl);
         }
 
         return path[2];

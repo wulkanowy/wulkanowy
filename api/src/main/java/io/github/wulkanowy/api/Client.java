@@ -63,9 +63,13 @@ public class Client {
         }
 
         this.symbol = new Login(this).login(email, password, symbol);
+        logger.debug("Login successful");
     }
 
     private boolean isLoggedIn() {
+        logger.debug("Last success request: " + lastSuccessRequest);
+        logger.debug("Cookies: " + getCookies().size());
+
         return getCookies().size() > 0 && lastSuccessRequest != null &&
                 5 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());
 
@@ -162,7 +166,11 @@ public class Client {
     public String getJsonStringByUrl(String url) throws IOException, VulcanException {
         login();
 
-        Connection.Response response = Jsoup.connect(getFilledUrl(url))
+        url = getFilledUrl(url);
+
+        logger.debug("GET " + url);
+
+        Connection.Response response = Jsoup.connect(url)
                 .followRedirects(true)
                 .ignoreContentType(true)
                 .cookies(getCookies())
@@ -176,7 +184,11 @@ public class Client {
     public String postJsonStringByUrl(String url, String[][] params) throws IOException, VulcanException {
         login();
 
-        Connection connection = Jsoup.connect(getFilledUrl(url));
+        url = getFilledUrl(url);
+
+        logger.debug("POST " + url);
+
+        Connection connection = Jsoup.connect(url);
 
         for (String[] data : params) {
             connection.data(data[0], data[1]);

@@ -8,6 +8,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.impl.HandroidLoggerAdapter;
 
 import javax.inject.Inject;
 
@@ -18,6 +19,7 @@ import eu.davidea.flexibleadapter.utils.Log;
 import io.fabric.sdk.android.Fabric;
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.di.DaggerAppComponent;
+import io.github.wulkanowy.utils.AppConstant;
 
 public class WulkanowyApp extends DaggerApplication {
 
@@ -51,6 +53,8 @@ public class WulkanowyApp extends DaggerApplication {
     private void enableDebugLog() {
         QueryBuilder.LOG_VALUES = true;
         FlexibleAdapter.enableLogs(Log.Level.DEBUG);
+        HandroidLoggerAdapter.DEBUG = BuildConfig.DEBUG;
+        HandroidLoggerAdapter.APP_NAME = AppConstant.APP_NAME;
     }
 
     private void initializeFabric() {
@@ -63,11 +67,11 @@ public class WulkanowyApp extends DaggerApplication {
                 )
                 .debuggable(BuildConfig.DEBUG)
                 .build());
+        HandroidLoggerAdapter.enableLoggingToCrashlytics();
     }
 
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         return DaggerAppComponent.builder().create(this);
     }
-
 }

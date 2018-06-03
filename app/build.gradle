@@ -119,6 +119,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-oss-licenses:$ossLicenses"
 
     implementation "org.slf4j:slf4j-api:$slf4jApi"
+    implementation "sk.baka.slf4j:slf4j-handroid:$handroid"
 
     implementation("com.crashlytics.sdk.android:crashlytics:$crashlyticsSdk@aar") {
         transitive = true
