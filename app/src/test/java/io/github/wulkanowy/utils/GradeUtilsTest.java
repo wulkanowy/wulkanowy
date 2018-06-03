@@ -7,13 +7,14 @@ import java.util.List;
 
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
+import io.github.wulkanowy.data.db.dao.entities.Subject;
 
 import static org.junit.Assert.assertEquals;
 
 public class GradeUtilsTest {
 
     @Test
-    public void averageTest() {
+    public void weightedAverageTest() {
         List<Grade> gradeList = new ArrayList<>();
         gradeList.add(new Grade().setValue("np.").setWeight("1,00"));
         gradeList.add(new Grade().setValue("-5").setWeight("10,00"));
@@ -35,38 +36,28 @@ public class GradeUtilsTest {
     }
 
     @Test
-    public void errorAverageTest() {
+    public void subjectsAverageTest() {
+        List<Subject> subjectList = new ArrayList<>();
+        subjectList.add(new Subject().setPredictedRating("2").setFinalRating("3"));
+        subjectList.add(new Subject().setPredictedRating("niedostateczny").setFinalRating("dopuszczający"));
+        subjectList.add(new Subject().setPredictedRating("dostateczny").setFinalRating("dobry"));
+        subjectList.add(new Subject().setPredictedRating("bardzo dobry").setFinalRating("celujący"));
+        subjectList.add(new Subject().setPredictedRating("2/3").setFinalRating("-4"));
+
+        assertEquals(3.8f, GradeUtils.calculateSubjectsAverage(subjectList, false), 0.0f);
+        assertEquals(2.75f, GradeUtils.calculateSubjectsAverage(subjectList, true), 0.0f);
+    }
+
+    @Test
+    public void abnormalAverageTest() {
         List<Grade> gradeList = new ArrayList<>();
         gradeList.add(new Grade().setValue("np.").setWeight("1,00"));
 
+        List<Subject> subjectList = new ArrayList<>();
+        subjectList.add(new Subject().setFinalRating("nieklasyfikowany"));
+
         assertEquals(-1f, GradeUtils.calculateWeightedAverage(gradeList), 0.0f);
-    }
-
-    @Test
-    public void getGradeValueTest() {
-        assertEquals(1f, GradeUtils.getGradeValue("niedostateczny"), 0);
-        assertEquals(1f, GradeUtils.getGradeValue("1"), 0);
-        assertEquals(1f, GradeUtils.getGradeValue("1+"), 0);
-        assertEquals(2f, GradeUtils.getGradeValue("2--"), 0);
-    }
-
-    @Test
-    public void getVerbalGradeValueTest() {
-        assertEquals(6, GradeUtils.getVerbalGradeValue("celujący"), 0);
-        assertEquals(-1, GradeUtils.getVerbalGradeValue("wzorowe"), 0);
-    }
-
-    @Test
-    public void getWeightedGradeValueTest() {
-        assertEquals(1.67f, GradeUtils.getWeightedGradeValue("2-"), 0);
-        assertEquals(1.5f, GradeUtils.getWeightedGradeValue("2--"), 0);
-        assertEquals(2.33f, GradeUtils.getWeightedGradeValue("2+"), 0);
-    }
-
-    @Test
-    public void getWeightValueTest() {
-        assertEquals(1, GradeUtils.getWeightValue("1.00"));
-        assertEquals(10, GradeUtils.getWeightValue("10.50"));
+        assertEquals(-1f, GradeUtils.calculateSubjectsAverage(subjectList, false), 0.0f);
     }
 
     @Test
