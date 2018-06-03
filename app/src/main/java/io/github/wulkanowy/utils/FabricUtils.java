@@ -10,11 +10,13 @@ public final class FabricUtils {
         throw new IllegalStateException("Utility class");
     }
 
-    public static void logRegister(boolean result, String symbol) {
+    public static void logRegister(boolean result, String symbol, String message) {
         Answers.getInstance().logSignUp(new SignUpEvent()
                 .putMethod("Login activity")
                 .putSuccess(result)
-                .putCustomAttribute("symbol", symbol));
+                .putCustomAttribute("symbol", symbol)
+                .putCustomAttribute("message", message)
+        );
     }
 
     public static void logRefresh(String name, boolean result, String date) {
