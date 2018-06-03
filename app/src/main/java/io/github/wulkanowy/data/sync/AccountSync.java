@@ -85,10 +85,11 @@ public class AccountSync {
     }
 
     private Symbol insertSymbol(Account account) throws VulcanException, IOException {
+        String schoolId = vulcan.getStudentAndParent().getSchoolID();
         logger.debug("Register symbol {}", vulcan.getSymbol());
         Symbol symbol = new Symbol()
                 .setUserId(account.getId())
-                .setSchoolId(vulcan.getStudentAndParent().getSchoolID())
+                .setSchoolId(schoolId)
                 .setSymbol(vulcan.getSymbol());
         daoSession.getSymbolDao().insert(symbol);
 
