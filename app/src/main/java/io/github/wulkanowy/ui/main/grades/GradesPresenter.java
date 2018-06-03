@@ -193,19 +193,19 @@ public class GradesPresenter extends BasePresenter<GradesContract.View>
         String predictedAverageText;
         String calculatedAverageText;
 
-        if (finalAverage != -1f) {
+        if (finalAverage != -1.0f) {
             finalAverageText = String.format(Locale.FRANCE, "%.2f", finalAverage);
         } else {
             finalAverageText = "-- --";
         }
 
-        if (predictedAverage != -1f) {
+        if (predictedAverage != -1.0f) {
             predictedAverageText = String.format(Locale.FRANCE, "%.2f", predictedAverage);
         } else {
             predictedAverageText = "-- --";
         }
 
-        if (calculatedAverage != -1f) {
+        if (calculatedAverage != -1.0f) {
             calculatedAverageText = String.format(Locale.FRANCE, "%.2f", calculatedAverage);
         } else {
             calculatedAverageText = "-- --";

@@ -14,7 +14,7 @@
         android:id="@+id/action_summary_switch"
         android:icon="@drawable/ic_action_menu_summary"
         android:orderInCategory="1"
-        android:title="@string/app_name"
+        android:title="@string/action_title_summary"
         app:showAsAction="ifRoom" />
 
 </menu>

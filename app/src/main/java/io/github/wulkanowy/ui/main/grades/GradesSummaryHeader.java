@@ -81,7 +81,7 @@ class GradesSummaryHeader extends AbstractHeaderItem<GradesSummaryHeader.HeaderV
 
         void onBind(Subject item, String value) {
             name.setText(item.getName());
-            average.setText(value.equals("-1,00") ? "" : value);
+            average.setText("-1,00".equals(value) ? "" : value);
         }
     }
 }

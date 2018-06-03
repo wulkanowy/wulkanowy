@@ -26,14 +26,14 @@ public final class GradeUtils {
             int weight = getWeightValue(grade.getWeight());
             float value = getWeightedGradeValue(grade.getValue());
 
-            if (value != -1f) {
+            if (value != -1.0f) {
                 counter += value * weight;
                 denominator += weight;
             }
         }
 
         if (counter == 0f) {
-            return -1f;
+            return -1.0f;
         }
         return counter / denominator;
     }
@@ -88,14 +88,14 @@ public final class GradeUtils {
                 value = getGradeValue(usePredicted ? subject.getPredictedRating() : subject.getFinalRating());
             }
 
-            if (value != -1f) {
+            if (value != -1.0f) {
                 counter += Math.round(value);
                 denominator++;
             }
         }
 
         if (counter == 0) {
-            return -1f;
+            return -1.0f;
         }
 
         return counter / denominator;

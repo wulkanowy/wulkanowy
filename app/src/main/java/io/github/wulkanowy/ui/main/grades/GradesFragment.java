@@ -93,31 +93,32 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_semester_switch) {
-            presenter.onSemesterSwitchActive();
-            CharSequence[] items = new CharSequence[]{
-                    getResources().getString(R.string.semester_text, 1),
-                    getResources().getString(R.string.semester_text, 2),
-            };
-            new AlertDialog.Builder(getContext())
-                    .setTitle(R.string.switch_semester)
-                    .setNegativeButton(R.string.cancel, null)
-                    .setSingleChoiceItems(items, this.currentSemester, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            presenter.onSemesterChange(which);
-                            dialog.cancel();
-                        }
-                    }).show();
-            return true;
-        } else if (item.getItemId() == R.id.action_summary_switch) {
-            boolean isDetailsVisible = details.getVisibility() == View.VISIBLE;
+        switch (item.getItemId()) {
+            case R.id.action_semester_switch:
+                presenter.onSemesterSwitchActive();
+                CharSequence[] items = new CharSequence[]{
+                        getResources().getString(R.string.semester_text, 1),
+                        getResources().getString(R.string.semester_text, 2),
+                };
+                new AlertDialog.Builder(getContext())
+                        .setTitle(R.string.switch_semester)
+                        .setNegativeButton(R.string.cancel, null)
+                        .setSingleChoiceItems(items, this.currentSemester, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                presenter.onSemesterChange(which);
+                                dialog.cancel();
+                            }
+                        }).show();
+                return true;
+            case R.id.action_summary_switch:
+                boolean isDetailsVisible = details.getVisibility() == View.VISIBLE;
 
-            details.setVisibility(isDetailsVisible ? View.INVISIBLE : View.VISIBLE);
-            summary.setVisibility(isDetailsVisible ? View.VISIBLE : View.INVISIBLE);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+                details.setVisibility(isDetailsVisible ? View.INVISIBLE : View.VISIBLE);
+                summary.setVisibility(isDetailsVisible ? View.VISIBLE : View.INVISIBLE);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
