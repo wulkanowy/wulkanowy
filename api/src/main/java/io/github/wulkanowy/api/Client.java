@@ -63,7 +63,7 @@ public class Client {
         }
 
         this.symbol = new Login(this).login(email, password, symbol);
-        logger.debug("Login successful at {}", getHost());
+        logger.info("Login successful on {} at {}", getHost(), new Date());
     }
 
     private boolean isLoggedIn() {
