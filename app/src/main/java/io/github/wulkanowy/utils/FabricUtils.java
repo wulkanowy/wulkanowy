@@ -20,7 +20,7 @@ public final class FabricUtils {
     public static void logRefresh(String name, boolean result, String date) {
         Answers.getInstance().logCustom(
                 new CustomEvent(name + " refresh")
-                        .putCustomAttribute("Success", result ? 1 : 0)
+                        .putCustomAttribute("Success", result ? "true" : "false")
                         .putCustomAttribute("Date", date)
         );
     }
