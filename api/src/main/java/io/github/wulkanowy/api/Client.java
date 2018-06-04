@@ -83,10 +83,6 @@ public class Client {
         this.symbol = symbol;
     }
 
-    public void addCookies(Map<String, String> items) {
-        cookies.addItems(items);
-    }
-
     private Map<String, String> getCookies() {
         return cookies.getItems();
     }
@@ -220,7 +216,7 @@ public class Client {
         }
 
         if ("Błąd strony".equals(title)) {
-            throw new NotLoggedInErrorException(title + " " + doc.selectFirst("p, body") + ", status: " + code);
+            throw new NotLoggedInErrorException(title + " " + doc.selectFirst("body") + ", status: " + code);
         }
 
         return doc;
