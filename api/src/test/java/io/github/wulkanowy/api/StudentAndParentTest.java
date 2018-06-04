@@ -83,7 +83,7 @@ public class StudentAndParentTest {
                 snp.getExtractedIdFromUrl("https://uonetplus-opiekun.vulcan.net.pl/demoupowiat/demo12345/Start/Index/"));
     }
 
-    @Test(expected = NotLoggedInErrorException.class)
+    @Test(expected = VulcanException.class)
     public void getExtractedIDNotLoggedTest() throws Exception {
         Mockito.when(client.getHost()).thenReturn("vulcan.net.pl");
         StudentAndParent snp = new StudentAndParent(client, "symbol", null, null);
