@@ -29,7 +29,7 @@ public class WulkanowyApp extends DaggerApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(WulkanowyApp.class);
 
-    WulkanowyApp() {
+    public WulkanowyApp() {
         super();
         HandroidLoggerAdapter.APP_NAME = AppConstant.APP_NAME;
     }
