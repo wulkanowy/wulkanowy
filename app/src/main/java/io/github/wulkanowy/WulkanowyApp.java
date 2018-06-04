@@ -29,6 +29,11 @@ public class WulkanowyApp extends DaggerApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(WulkanowyApp.class);
 
+    WulkanowyApp() {
+        super();
+        HandroidLoggerAdapter.APP_NAME = AppConstant.APP_NAME;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -57,7 +62,6 @@ public class WulkanowyApp extends DaggerApplication {
         QueryBuilder.LOG_VALUES = true;
         FlexibleAdapter.enableLogs(Log.Level.DEBUG);
         HandroidLoggerAdapter.DEBUG = BuildConfig.DEBUG;
-        HandroidLoggerAdapter.APP_NAME = AppConstant.APP_NAME;
     }
 
     private void initializeFabric() {
