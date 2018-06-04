@@ -131,8 +131,8 @@
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/grade_fragment_summary_recycler"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_below="@id/grade_fragment_summary_calculated_container"
                         android:layout_marginTop="20dp" />
                 </RelativeLayout>
