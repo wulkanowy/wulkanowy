@@ -49,7 +49,7 @@ public class StudentAndParent implements SnP {
 
             if (doc.select("#idSection").isEmpty()) {
                 logger.error("Expected SnP page, got page with title: {} {}", doc.title(), doc.selectFirst("body"));
-                throw new VulcanException("".equals(doc.title()) ? "Nieznany błąd podczas pobierania danych" : doc.title());
+                throw new VulcanException("Nieznany błąd podczas pobierania danych. Strona: " + doc.title());
             }
 
             Student student = getCurrent(getStudents(doc));
@@ -124,7 +124,7 @@ public class StudentAndParent implements SnP {
 
         if (!doc.title().startsWith("Witryna ucznia i rodzica")) {
             logger.error("Expected SnP page, got page with title: {} {}", doc.title(), doc.selectFirst("body"));
-            throw new VulcanException("".equals(doc.title()) ? "Nieznany błąd podczas pobierania danych" : doc.title());
+            throw new VulcanException("Nieznany błąd podczas pobierania danych. Strona: " + doc.title());
         }
 
         if (doc.title().endsWith("Strona główna")) {

@@ -131,8 +131,8 @@ public class StudentAndParentTest {
 
     @Test
     public void getDiariesAndStudentTest() throws IOException, VulcanException {
-        Document snpHome = Jsoup.parse(FixtureHelper.getAsString(
-                getClass().getResourceAsStream("StudentAndParent.html")));
+        String input = FixtureHelper.getAsString(getClass().getResourceAsStream("WitrynaUczniaIRodzica.html"));
+        Document snpHome = Jsoup.parse(input);
 
         client = Mockito.mock(Client.class);
         Mockito.when(client.getPageByUrl(Mockito.anyString())).thenReturn(snpHome);
