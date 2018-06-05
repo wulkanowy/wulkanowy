@@ -47,7 +47,7 @@ public class Vulcan {
 
     public Client getClient() throws NotLoggedInErrorException {
         if (null == client) {
-            throw new NotLoggedInErrorException("Use setCredentials() method first");
+            throw new NotLoggedInErrorException("Vulcan must be initialized by calling setCredentials() prior to fetch data");
         }
 
         return client;
