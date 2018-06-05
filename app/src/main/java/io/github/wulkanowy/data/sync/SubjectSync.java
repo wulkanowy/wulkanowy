@@ -1,8 +1,5 @@
 package io.github.wulkanowy.data.sync;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +13,7 @@ import io.github.wulkanowy.data.db.dao.entities.DaoSession;
 import io.github.wulkanowy.data.db.dao.entities.Semester;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.utils.DataObjectConverter;
+import timber.log.Timber;
 
 @Singleton
 public class SubjectSync {
@@ -25,8 +23,6 @@ public class SubjectSync {
     private final Vulcan vulcan;
 
     private long semesterId;
-
-    private static final Logger logger = LoggerFactory.getLogger(SubjectSync.class);
 
     @Inject
     SubjectSync(DaoSession daoSession, Vulcan vulcan) {
@@ -44,7 +40,7 @@ public class SubjectSync {
         daoSession.getSubjectDao().deleteInTx(getSubjectsFromDb());
         daoSession.getSubjectDao().insertInTx(lastList);
 
-        logger.debug("Subjects synchronization complete ({})", lastList.size());
+        Timber.d("Subjects synchronization complete (%s)", lastList.size());
     }
 
     private List<Subject> getSubjectsFromNet(Semester semester) throws VulcanException, IOException {

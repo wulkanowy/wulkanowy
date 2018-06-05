@@ -3,8 +3,6 @@ package io.github.wulkanowy.data.sync;
 import android.content.Context;
 
 import org.greenrobot.greendao.database.Database;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,6 +26,7 @@ import io.github.wulkanowy.data.db.shared.SharedPrefContract;
 import io.github.wulkanowy.utils.DataObjectConverter;
 import io.github.wulkanowy.utils.security.CryptoException;
 import io.github.wulkanowy.utils.security.Scrambler;
+import timber.log.Timber;
 
 @Singleton
 public class AccountSync {
@@ -39,8 +38,6 @@ public class AccountSync {
     private final Vulcan vulcan;
 
     private final Context context;
-
-    private static final Logger logger = LoggerFactory.getLogger(AccountSync.class);
 
     @Inject
     AccountSync(DaoSession daoSession, SharedPrefContract sharedPref,
@@ -76,7 +73,7 @@ public class AccountSync {
     }
 
     private Account insertAccount(String email, String password) throws CryptoException {
-        logger.debug("Register account");
+        Timber.d("Register account");
         Account account = new Account()
                 .setEmail(email)
                 .setPassword(Scrambler.encrypt(email, password, context));
@@ -86,7 +83,7 @@ public class AccountSync {
 
     private Symbol insertSymbol(Account account) throws VulcanException, IOException {
         String schoolId = vulcan.getStudentAndParent().getSchoolID();
-        logger.debug("Register symbol {}", vulcan.getSymbol());
+        Timber.d("Register symbol %s", vulcan.getSymbol());
         Symbol symbol = new Symbol()
                 .setUserId(account.getId())
                 .setSchoolId(schoolId)
@@ -101,7 +98,7 @@ public class AccountSync {
                 vulcan.getStudentAndParent().getStudents(),
                 symbol.getId()
         );
-        logger.debug("Register students {}", studentList.size());
+        Timber.d("Register students %s", studentList.size());
         daoSession.getStudentDao().insertInTx(studentList);
     }
 
@@ -112,7 +109,7 @@ public class AccountSync {
                         StudentDao.Properties.SymbolId.eq(symbolEntity.getId()),
                         StudentDao.Properties.Current.eq(true)
                 ).unique().getId());
-        logger.debug("Register diaries {}", diaryList.size());
+        Timber.d("Register diaries %s", diaryList.size());
         daoSession.getDiaryDao().insertInTx(diaryList);
     }
 
@@ -122,7 +119,7 @@ public class AccountSync {
                 daoSession.getDiaryDao().queryBuilder().where(
                         DiaryDao.Properties.Current.eq(true)
                 ).unique().getId());
-        logger.debug("Register semesters {}", semesterList.size());
+        Timber.d("Register semesters %s", semesterList.size());
         daoSession.getSemesterDao().insertInTx(semesterList);
     }
 
@@ -134,7 +131,7 @@ public class AccountSync {
             throw new NotRegisteredUserException("Can't find user id in SharedPreferences");
         }
 
-        logger.debug("Init current user ({})", userId);
+        Timber.d("Init current user (%s)", userId);
 
         Account account = daoSession.getAccountDao().load(userId);
 

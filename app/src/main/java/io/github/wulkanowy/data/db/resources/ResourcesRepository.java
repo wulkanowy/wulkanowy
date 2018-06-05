@@ -3,9 +3,6 @@ package io.github.wulkanowy.data.db.resources;
 import android.content.Context;
 import android.content.res.Resources;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -18,13 +15,12 @@ import io.github.wulkanowy.api.NotLoggedInErrorException;
 import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
 import io.github.wulkanowy.utils.AppConstant;
 import io.github.wulkanowy.utils.security.CryptoException;
+import timber.log.Timber;
 
 @Singleton
 public class ResourcesRepository implements ResourcesContract {
 
     private Resources resources;
-
-    private static final Logger logger = LoggerFactory.getLogger(ResourcesRepository.class);
 
     @Inject
     ResourcesRepository(Context context) {
@@ -43,7 +39,7 @@ public class ResourcesRepository implements ResourcesContract {
 
     @Override
     public String getErrorLoginMessage(Exception exception) {
-        logger.error(AppConstant.APP_NAME + " encountered a error", exception);
+        Timber.e(exception,"%s encountered a error", AppConstant.APP_NAME);
 
         if (exception instanceof CryptoException) {
             return resources.getString(R.string.encrypt_failed_text);
