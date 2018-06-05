@@ -83,7 +83,8 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        //TODO: uncomment this
+//        setHasOptionsMenu(true);
     }
 
     @Override

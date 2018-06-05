@@ -20,6 +20,8 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     public static final String SHARED_KEY_ATTENDANCE_PRESENT = "attendance_present";
 
+    public static final String SHARED_KEY_THEME_DARK = "theme_dark";
+
     public static final String SHARED_KEY_SERVICES_ENABLE = "services_enable";
 
     public static final String SHARED_KEY_NOTIFY_ENABLE = "notify_enable";
@@ -64,6 +66,15 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 || key.equals(SHARED_KEY_SERVICES_MOBILE_DISABLED)) {
             launchServices(sharedPreferences.getBoolean(SHARED_KEY_SERVICES_ENABLE, true),
                     sharedPreferences);
+        }
+
+        if (key.equals(SHARED_KEY_THEME_DARK)) {
+            if (sharedPreferences.getBoolean(SHARED_KEY_THEME_DARK, true)) {
+                getActivity().setTheme(R.style.WulkanowyThemeDark);
+            } else {
+                getActivity().setTheme(R.style.WulkanowyTheme);
+            }
+            getActivity().recreate();
         }
     }
 

@@ -18,6 +18,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import io.github.wulkanowy.R;
+import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.services.jobs.SyncJob;
 import io.github.wulkanowy.ui.base.BaseActivity;
 import io.github.wulkanowy.ui.base.BasePagerAdapter;
@@ -48,6 +49,9 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     @Inject
     MainContract.Presenter presenter;
 
+    @Inject
+    RepositoryContract repository;
+
     public static Intent getStartIntent(Context context) {
         return new Intent(context, MainActivity.class);
     }
@@ -55,6 +59,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(repository.getSharedRepo().getCurrentTheme());
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         injectViews();
