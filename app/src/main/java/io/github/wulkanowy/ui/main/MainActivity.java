@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar((Toolbar) findViewById(R.id.main_activity_toolbar));
         injectViews();
 
         presenter.attachView(this, getIntent().getIntExtra(EXTRA_CARD_ID_KEY, -1));
