@@ -70,9 +70,9 @@ ext {
 
 allprojects {
     repositories {
-        jcenter()
         mavenCentral()
         google()
+        jcenter()
         maven { url "https://jitpack.io" }
     }
 }
