@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -40,6 +41,9 @@ public class MainActivity extends BaseActivity implements MainContract.View,
 
     @BindView(R.id.main_activity_progress_bar)
     View progressBar;
+
+    @BindView(R.id.main_activity_appbar)
+    AppBarLayout appBar;
 
     @Named("Main")
     @Inject
@@ -88,6 +92,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     @Override
     public boolean onTabSelected(int position, boolean wasSelected) {
         presenter.onTabSelected(position, wasSelected);
+        appBar.setExpanded(true, true);
         return true;
     }
 
