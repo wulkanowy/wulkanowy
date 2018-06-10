@@ -2,7 +2,6 @@ package io.github.wulkanowy.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -133,7 +132,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
 
         bottomNavigation.setAccentColor(getResources().getColor(R.color.colorPrimary));
         bottomNavigation.setInactiveColor(CommonUtils.getThemeAttrColor(this, android.R.attr.textColorTertiary));
-        bottomNavigation.setDefaultBackgroundColor(CommonUtils.getThemeAttrColor(this, android.R.attr.textColorTertiaryInverse));
+        bottomNavigation.setDefaultBackgroundColor(CommonUtils.getThemeAttrColor(this, android.R.attr.textColorPrimaryInverse));
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
         bottomNavigation.setOnTabSelectedListener(this);
         bottomNavigation.setCurrentItem(tabPosition);
