@@ -227,6 +227,10 @@ public class Timetable {
     }
 
     private String[] getLessonAndGroupInfoFromSpan(Element span) {
+        if (!span.text().contains("[")) {
+            return new String[] {span.text(), ""};
+        }
+
         String[] subjectNameArray = span.text().split(" ");
         String groupName = subjectNameArray[subjectNameArray.length - 1];
 
