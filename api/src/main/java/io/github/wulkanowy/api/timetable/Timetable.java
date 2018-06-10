@@ -136,6 +136,11 @@ public class Timetable {
     private void addLessonInfoFromElement(Lesson lesson, Element e) {
         Elements spans = e.select("span");
 
+        if (spans.isEmpty()) {
+            logger.warn("Lesson span is empty");
+            return;
+        }
+
         addTypeInfo(lesson, spans);
         addNormalLessonInfo(lesson, spans);
         addChangesInfo(lesson, spans);
