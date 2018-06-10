@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.main.settings.SettingsFragment;
 
 @Singleton
@@ -72,7 +71,7 @@ public class SharedPrefRepository implements SharedPrefContract {
 
     @Override
     public int getCurrentTheme() {
-        return settingsSharedPref.getBoolean(SettingsFragment.SHARED_KEY_THEME_DARK, false) ? R.style.WulkanowyThemeDark : R.style.WulkanowyTheme;
+        return Integer.parseInt(settingsSharedPref.getString(SettingsFragment.SHARED_KEY_THEME, "1"));
     }
 
     @Override

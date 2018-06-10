@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.widget.Toast;
@@ -25,7 +26,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     public static final String SHARED_KEY_ATTENDANCE_PRESENT = "attendance_present";
 
-    public static final String SHARED_KEY_THEME_DARK = "theme_dark";
+    public static final String SHARED_KEY_THEME = "theme";
 
     public static final String SHARED_KEY_SERVICES_ENABLE = "services_enable";
 
@@ -96,12 +97,8 @@ public class SettingsFragment extends PreferenceFragmentCompat
                     sharedPreferences);
         }
 
-        if (key.equals(SHARED_KEY_THEME_DARK)) {
-            if (sharedPreferences.getBoolean(SHARED_KEY_THEME_DARK, true)) {
-                getActivity().setTheme(R.style.WulkanowyThemeDark);
-            } else {
-                getActivity().setTheme(R.style.WulkanowyTheme);
-            }
+        if (key.equals(SHARED_KEY_THEME)) {
+            AppCompatDelegate.setDefaultNightMode(Integer.parseInt(sharedPreferences.getString(SHARED_KEY_THEME, "1")));
             getActivity().recreate();
         }
     }
