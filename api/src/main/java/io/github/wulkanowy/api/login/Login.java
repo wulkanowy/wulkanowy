@@ -33,7 +33,8 @@ public class Login {
         Document certDoc = sendCredentials(email, password);
 
         if ("Błąd".equals(certDoc.title())) {
-            throw new NotLoggedInErrorException(certDoc.selectFirst("body").text());
+            client.clearCookies();
+            throw new NotLoggedInErrorException(certDoc.body().text());
         }
 
         return sendCertificate(certDoc, symbol);
