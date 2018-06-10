@@ -15,6 +15,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import io.github.wulkanowy.BuildConfig;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.services.jobs.SyncJob;
+import io.github.wulkanowy.ui.main.MainActivity;
 import io.github.wulkanowy.utils.AppConstant;
 
 public class SettingsFragment extends PreferenceFragmentCompat
@@ -41,6 +42,10 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public static final String SHARED_KEY_ABOUT_LICENSES = "about_osl";
 
     public static final String SHARED_KEY_ABOUT_REPO = "about_repo";
+
+    private boolean isStarted;
+
+    private boolean isVisible;
 
     private Preference.OnPreferenceClickListener onProgrammerListener = new Preference.OnPreferenceClickListener() {
         private int clicks = 0;
@@ -98,9 +103,18 @@ public class SettingsFragment extends PreferenceFragmentCompat
         }
 
         if (key.equals(SHARED_KEY_THEME)) {
-            AppCompatDelegate.setDefaultNightMode(Integer.parseInt(sharedPreferences.getString(SHARED_KEY_THEME, "1")));
-            getActivity().recreate();
+            setCurrentTheme(sharedPreferences);
         }
+    }
+
+    private void setCurrentTheme(SharedPreferences sharedPreferences) {
+        AppCompatDelegate.setDefaultNightMode(Integer.parseInt(sharedPreferences.getString(SHARED_KEY_THEME, "1")));
+        getActivity().finish();
+        startActivity(MainActivity
+                .getStartIntent(getContext())
+                .putExtra(MainActivity.EXTRA_CARD_ID_KEY, 4)
+        );
+        getActivity().overridePendingTransition(0, 0);
     }
 
     private void launchServices(boolean start, SharedPreferences sharedPref) {
@@ -115,11 +129,25 @@ public class SettingsFragment extends PreferenceFragmentCompat
         }
     }
 
+    private void setTitle() {
+        getActivity().setTitle(R.string.settings_text);
+    }
+
     @Override
-    public void setMenuVisibility(boolean menuVisible) {
-        super.setMenuVisibility(menuVisible);
-        if (menuVisible) {
-            getActivity().setTitle(R.string.settings_text);
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isVisible = isVisibleToUser;
+        if (isVisible && isStarted) {
+            setTitle();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        isStarted = true;
+        if (isVisible) {
+            setTitle();
         }
     }
 
@@ -135,5 +163,11 @@ public class SettingsFragment extends PreferenceFragmentCompat
         super.onPause();
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isStarted = false;
     }
 }
