@@ -14,7 +14,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
-import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.davidea.flexibleadapter.FlexibleAdapter;
@@ -104,8 +103,8 @@ public class TimetableHeader
 
         private void setInactiveHeader(boolean inactive) {
             ((FrameLayout) getContentView()).setForeground(inactive ? null : getSelectableDrawable());
-            dayName.setTextColor(inactive ? CommonUtils.getThemeAttrColor(context, android.R.attr.textColorSecondary)
-                    : CommonUtils.getThemeAttrColor(context, android.R.attr.textColorPrimary));
+            dayName.setTextColor(CommonUtils.getThemeAttrColor(context,
+                    inactive ? android.R.attr.textColorSecondary : android.R.attr.textColorPrimary));
 
             if (inactive) {
                 getContentView().setBackgroundColor(CommonUtils.getThemeAttrColor(context, R.attr.colorControlHighlight));
