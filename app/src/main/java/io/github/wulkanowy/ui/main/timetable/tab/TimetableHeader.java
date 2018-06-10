@@ -23,6 +23,7 @@ import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.ExpandableViewHolder;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.Day;
+import io.github.wulkanowy.utils.CommonUtils;
 
 public class TimetableHeader
         extends AbstractExpandableHeaderItem<TimetableHeader.HeaderViewHolder, TimetableSubItem> {
@@ -83,15 +84,6 @@ public class TimetableHeader
         @BindView(R.id.timetable_header_free_name)
         TextView freeName;
 
-        @BindColor(R.color.secondary_text)
-        int secondaryColor;
-
-        @BindColor(R.color.free_day)
-        int backgroundFreeDay;
-
-        @BindColor(android.R.color.black)
-        int black;
-
         private Context context;
 
         HeaderViewHolder(View view, FlexibleAdapter adapter) {
@@ -112,13 +104,13 @@ public class TimetableHeader
 
         private void setInactiveHeader(boolean inactive) {
             ((FrameLayout) getContentView()).setForeground(inactive ? null : getSelectableDrawable());
-            dayName.setTextColor(inactive ? secondaryColor : black);
+            dayName.setTextColor(inactive ? CommonUtils.getThemeAttrColor(context, android.R.attr.textColorSecondary)
+                    : CommonUtils.getThemeAttrColor(context, android.R.attr.textColorPrimary));
 
             if (inactive) {
-                getContentView().setBackgroundColor(backgroundFreeDay);
+                getContentView().setBackgroundColor(CommonUtils.getThemeAttrColor(context, R.attr.colorControlHighlight));
             } else {
-                getContentView().setBackgroundDrawable(context.getResources()
-                        .getDrawable(R.drawable.ic_border));
+                getContentView().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.ic_border));
             }
         }
 

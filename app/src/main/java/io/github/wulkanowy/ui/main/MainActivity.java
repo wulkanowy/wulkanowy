@@ -29,6 +29,7 @@ import io.github.wulkanowy.ui.main.exams.ExamsFragment;
 import io.github.wulkanowy.ui.main.grades.GradesFragment;
 import io.github.wulkanowy.ui.main.settings.SettingsFragment;
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment;
+import io.github.wulkanowy.utils.CommonUtils;
 
 public class MainActivity extends BaseActivity implements MainContract.View,
         AHBottomNavigation.OnTabSelectedListener, OnFragmentIsReadyListener {
@@ -99,6 +100,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     public boolean onTabSelected(int position, boolean wasSelected) {
         presenter.onTabSelected(position, wasSelected);
         appBar.setExpanded(true, true);
+        invalidateOptionsMenu();
         return true;
     }
 
@@ -130,8 +132,8 @@ public class MainActivity extends BaseActivity implements MainContract.View,
                 R.drawable.ic_menu_other_24dp));
 
         bottomNavigation.setAccentColor(getResources().getColor(R.color.colorPrimary));
-        bottomNavigation.setInactiveColor(Color.BLACK);
-        bottomNavigation.setBackgroundColor(getResources().getColor(R.color.colorBackgroundBottomNav));
+        bottomNavigation.setInactiveColor(CommonUtils.getThemeAttrColor(this, android.R.attr.textColorTertiary));
+        bottomNavigation.setDefaultBackgroundColor(CommonUtils.getThemeAttrColor(this, android.R.attr.textColorTertiaryInverse));
         bottomNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
         bottomNavigation.setOnTabSelectedListener(this);
         bottomNavigation.setCurrentItem(tabPosition);
