@@ -5,6 +5,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -20,6 +22,8 @@ public class Login {
             "{schema}%253a%252f%252fuonetplus.{host}%252f{symbol}%252fLoginEndpoint.aspx";
 
     private Client client;
+
+    private static final Logger logger = LoggerFactory.getLogger(Login.class);
 
     public Login(Client client) {
         this.client = client;
@@ -88,6 +92,7 @@ public class Login {
         String title = targetDoc.title();
 
         if ("Working...".equals(title)) { // on adfs login
+            logger.info("ADFS login");
             title = sendCertData(targetDoc).title();
         }
 
@@ -96,6 +101,7 @@ public class Login {
         }
 
         if (!"Uonet+".equals(title)) {
+            logger.debug("Login failed. Body: {}", targetDoc.body());
             throw new LoginErrorException("Expected page title `UONET+`, got " + title);
         }
 
