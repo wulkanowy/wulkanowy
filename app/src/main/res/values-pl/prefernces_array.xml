@@ -9,7 +9,7 @@
         <item>12 godzin</item>
         <item>24 godzin</item>
     </string-array>
-    <string-array name="theme_entries" translatable="false">
+    <string-array name="theme_entries">
         <item>Wyłączony</item>
         <item>Włączony</item>
         <item>Automatyczny</item>
