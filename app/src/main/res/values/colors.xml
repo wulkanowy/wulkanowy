@@ -15,6 +15,6 @@
     <color name="secondary_text">#4c4c4c</color>
     <color name="second_text_color">#333</color>
 
-    <color name="bottom_nav_background">#333333</color>
-    <color name="bottom_nav_background_inverse">#f3f3f3</color>
+    <color name="bottom_nav_background">#303030</color>
+    <color name="bottom_nav_background_inverse">#ffffff</color>
 </resources>
