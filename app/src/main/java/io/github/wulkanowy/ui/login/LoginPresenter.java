@@ -90,6 +90,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.View>
                 getView().openMainActivity();
                 return;
             case LoginTask.SYNC_FAILED:
+                FabricUtils.logRegister(true, symbol, exception.getMessage());
                 getView().onSyncFailed();
                 getView().openMainActivity();
                 return;

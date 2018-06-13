@@ -37,6 +37,7 @@ public class LoginTask extends AsyncTask<Void, Integer, Integer> {
             publishProgress(2);
             presenter.onDoInBackground(2);
         } catch (Exception e) {
+            exception = e;
             return SYNC_FAILED;
         }
         return LOGIN_AND_SYNC_SUCCESS;
