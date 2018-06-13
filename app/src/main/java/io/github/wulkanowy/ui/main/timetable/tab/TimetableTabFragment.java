@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter;
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseFragment;
+import io.github.wulkanowy.utils.CommonUtils;
 
 public class TimetableTabFragment extends BaseFragment implements TimetableTabContract.View,
         SwipeRefreshLayout.OnRefreshListener {
@@ -36,6 +38,9 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     @BindView(R.id.timetable_tab_fragment_no_item_container)
     View noItemView;
+
+    @BindView(R.id.timetable_tab_fragment_no_item_image)
+    ImageView noItemImage;
 
     @BindView(R.id.timetable_tab_fragment_no_item_name)
     TextView noItemName;
@@ -132,6 +137,7 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     @Override
     public void showNoItem(boolean show) {
+        noItemImage.setColorFilter(CommonUtils.getThemeAttrColor(getContext(), android.R.attr.textColorPrimary));
         noItemView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
