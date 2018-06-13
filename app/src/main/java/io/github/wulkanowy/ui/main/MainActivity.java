@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -64,7 +63,6 @@ public class MainActivity extends BaseActivity implements MainContract.View,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppCompatDelegate.setDefaultNightMode(repository.getSharedRepo().getCurrentTheme());
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.main_activity_toolbar));
         injectViews();
