@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -26,7 +25,6 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.ui.base.BaseFragment;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
-import io.github.wulkanowy.utils.CommonUtils;
 
 public class GradesFragment extends BaseFragment implements GradesContract.View {
 
@@ -44,9 +42,6 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
 
     @BindView(R.id.grade_fragment_no_item_container)
     View noItemView;
-
-    @BindView(R.id.grade_fragment_no_item_image)
-    ImageView noItemImage;
 
     @BindView(R.id.grade_fragment_swipe_refresh)
     SwipeRefreshLayout refreshLayout;
@@ -182,7 +177,6 @@ public class GradesFragment extends BaseFragment implements GradesContract.View 
 
     @Override
     public void showNoItem(boolean show) {
-        noItemImage.setColorFilter(CommonUtils.getThemeAttrColor(getContext(), android.R.attr.textColorPrimary));
         noItemView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
