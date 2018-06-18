@@ -81,7 +81,7 @@ public class StudentAndParent implements SnP {
 
         // get url to uonetplus-opiekun.fakelog.cf
         Document startPage = client.getPageByUrl(START_PAGE_URL);
-        Elements studentTileLink = startPage.select(".panel.linkownia.pracownik.klient > a");
+        Elements studentTileLink = startPage.select(".panel.linkownia.pracownik.klient a");
 
         logger.debug("studentTileLink: {}", studentTileLink.size());
 
@@ -89,7 +89,7 @@ public class StudentAndParent implements SnP {
             throw new VulcanException("Na pewno używasz konta z dostępem do Witryny ucznia i rodzica?");
         }
 
-        String snpPageUrl = studentTileLink.last().attr("href");
+        String snpPageUrl = studentTileLink.first().attr("href");
 
         this.schoolID = getExtractedIdFromUrl(snpPageUrl);
 

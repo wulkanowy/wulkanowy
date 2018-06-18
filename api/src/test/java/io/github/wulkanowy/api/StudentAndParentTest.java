@@ -44,7 +44,7 @@ public class StudentAndParentTest {
 
     @Test
     public void getSnpPageUrlWithoutIdTest() throws Exception {
-        String input = FixtureHelper.getAsString(getClass().getResourceAsStream("Start.html"));
+        String input = FixtureHelper.getAsString(getClass().getResourceAsStream("Start-std.html"));
         Document startPageDocument = Jsoup.parse(input);
 
         Mockito.when(client.getHost()).thenReturn("vulcan.net.pl");
@@ -52,6 +52,19 @@ public class StudentAndParentTest {
         StudentAndParent snp = new StudentAndParent(client, null, null, null);
 
         Assert.assertEquals("https://uonetplus-opiekun.vulcan.net.pl/symbol/534213/Start/Index/",
+                snp.getSnpHomePageUrl());
+    }
+
+    @Test
+    public void getSnpPageUrlWithoutIdFromMultiplesTest() throws Exception {
+        String input = FixtureHelper.getAsString(getClass().getResourceAsStream("Start-multi.html"));
+        Document startPageDocument = Jsoup.parse(input);
+
+        Mockito.when(client.getHost()).thenReturn("fakelog.cf");
+        Mockito.when(client.getPageByUrl(Mockito.anyString())).thenReturn(startPageDocument);
+        StudentAndParent snp = new StudentAndParent(client, null, null, null);
+
+        Assert.assertEquals("https://uonetplus-opiekun.fakelog.cf/symbol/123456/Start/Index/",
                 snp.getSnpHomePageUrl());
     }
 
