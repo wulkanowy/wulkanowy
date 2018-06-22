@@ -15,7 +15,7 @@ public class SchoolTest extends AbstractDaoTestLongPk<SchoolDao, School> {
     protected School createEntity(Long key) {
         School entity = new School();
         entity.setId(key);
-        entity.setCurrent();
+        entity.setCurrent(false);
         return entity;
     }
 
