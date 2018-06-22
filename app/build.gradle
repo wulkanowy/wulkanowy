@@ -91,7 +91,7 @@ play {
 }
 
 greendao {
-    schemaVersion 28
+    schemaVersion 29
     generateTests = true
 }
 
