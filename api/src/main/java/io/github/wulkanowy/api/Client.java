@@ -69,14 +69,18 @@ public class Client {
             return;
         }
 
+        logger.info("Not logged. Login...");
+
         clearCookies();
         new Login(this).login(email, password, symbol);
+        lastSuccessRequest = new Date();
+
         logger.info("Login successful on {} at {}", getHost(), new Date());
     }
 
     private boolean isLoggedIn() {
-        logger.debug("Last success request: {}", lastSuccessRequest);
-        logger.debug("Cookies: {}", getCookies().size());
+        logger.trace("Last success request: {}", lastSuccessRequest);
+        logger.trace("Cookies: {}", getCookies().size());
 
         return getCookies().size() > 0 && lastSuccessRequest != null &&
                 5 > TimeUnit.MILLISECONDS.toMinutes(new Date().getTime() - lastSuccessRequest.getTime());

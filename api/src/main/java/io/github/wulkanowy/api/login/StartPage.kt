@@ -22,7 +22,11 @@ class StartPage(val client: Client) {
         }
 
         snpLinks.map {
-            schoolList.add(School(it.text(), getExtractedIdFromUrl(it.attr("href"))))
+            schoolList.add(School(
+                    it.text(),
+                    getExtractedIdFromUrl(it.attr("href")),
+                    it == snpLinks.first()
+            ))
         }
 
         return schoolList
