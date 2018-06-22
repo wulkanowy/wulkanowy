@@ -82,7 +82,7 @@ public class AccountSync {
     }
 
     private Symbol insertSymbol(Account account) throws VulcanException, IOException {
-        String schoolId = vulcan.getStudentAndParent().getSchoolID();
+        String schoolId = vulcan.getSchoolId();
         Timber.d("Register symbol %s", vulcan.getSymbol());
         Symbol symbol = new Symbol()
                 .setUserId(account.getId())

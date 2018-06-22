@@ -40,7 +40,7 @@ public class Vulcan {
         this.studentId = studentId;
         this.diaryId = diaryId;
 
-        client = new Client(email, password, symbol);
+        client = new Client(email, password, symbol, schoolId);
 
         logger.debug("Client created with symbol " + symbol);
     }
@@ -55,7 +55,10 @@ public class Vulcan {
 
     public String getSymbol() throws NotLoggedInErrorException {
         return getClient().getSymbol();
+    }
 
+    public String getSchoolId() throws VulcanException, IOException {
+        return getClient().getSchools().get(0).getId();
     }
 
     public SnP getStudentAndParent() throws VulcanException, IOException {
@@ -63,7 +66,7 @@ public class Vulcan {
             return this.snp;
         }
 
-        this.snp = new StudentAndParent(getClient(), schoolId, studentId, diaryId)
+        this.snp = new StudentAndParent(getClient(), studentId, diaryId)
                 .setUp();
 
         return this.snp;
