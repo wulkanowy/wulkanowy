@@ -2,7 +2,9 @@ package io.github.wulkanowy.utils;
 
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.Year;
 import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.temporal.TemporalAdjusters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +78,29 @@ public final class TimeUtils {
 
     public static boolean isDateInWeek(LocalDate firstWeekDay, LocalDate date) {
         return date.isAfter(firstWeekDay.minusDays(1)) && date.isBefore(firstWeekDay.plusDays(5));
+    }
 
+    public static boolean isHolidays() {
+        return isHolidays(LocalDate.now(), Year.now().getValue());
+    }
+
+    /**
+     * <a href="http://prawo.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20160001335">Dz.U. 2016 poz. 1335</a>
+     */
+    public static boolean isHolidays(LocalDate day, int year) {
+        LocalDate lastSchoolDay = LocalDate
+                .of(year, 6, 20)
+                .with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+
+        LocalDate firstSchoolDay = LocalDate.of(year, 9, 1);
+        switch (firstSchoolDay.getDayOfWeek()) {
+            case FRIDAY:
+            case SATURDAY:
+            case SUNDAY:
+                firstSchoolDay = firstSchoolDay.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY));
+                break;
+        }
+
+        return day.isAfter(lastSchoolDay) && day.isBefore(firstSchoolDay);
     }
 }

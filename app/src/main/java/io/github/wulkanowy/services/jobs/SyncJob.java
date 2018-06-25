@@ -28,6 +28,7 @@ import io.github.wulkanowy.data.sync.NotRegisteredUserException;
 import io.github.wulkanowy.services.notifies.GradeNotify;
 import io.github.wulkanowy.ui.main.MainActivity;
 import io.github.wulkanowy.utils.FabricUtils;
+import io.github.wulkanowy.utils.TimeUtils;
 import timber.log.Timber;
 
 public class SyncJob extends SimpleJobService {
@@ -66,6 +67,10 @@ public class SyncJob extends SimpleJobService {
 
     @Override
     public int onRunJob(JobParameters job) {
+        if (TimeUtils.isHolidays()) {
+            return JobService.RESULT_FAIL_NORETRY;
+        }
+
         try {
             repository.getSyncRepo().initLastUser();
             repository.getSyncRepo().syncAll();
