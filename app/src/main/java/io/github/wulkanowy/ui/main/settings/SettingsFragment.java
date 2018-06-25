@@ -17,6 +17,7 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.services.jobs.SyncJob;
 import io.github.wulkanowy.ui.main.MainActivity;
 import io.github.wulkanowy.utils.AppConstant;
+import io.github.wulkanowy.utils.TimeUtils;
 
 public class SettingsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -86,7 +87,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
         findPreference(SHARED_KEY_ABOUT_VERSION).setOnPreferenceClickListener(onProgrammerListener);
         findPreference(SHARED_KEY_ABOUT_REPO).setIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstant.REPO_URL)));
         findPreference(SHARED_KEY_ABOUT_LICENSES).setIntent(new Intent(getActivity(), OssLicensesMenuActivity.class)
-                .putExtra("title", getString(R.string.pref_about_osl)));
+                .putExtra("title", R.string.pref_about_osl));
+
+        if (TimeUtils.isHolidays()) {
+            Preference services = findPreference(SHARED_KEY_SERVICES_ENABLE);
+            services.setSummary(R.string.pref_services_suspended_on_holidays);
+            services.setEnabled(false);
+        }
     }
 
     @Override

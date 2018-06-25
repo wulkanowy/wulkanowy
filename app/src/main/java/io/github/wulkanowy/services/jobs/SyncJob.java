@@ -68,6 +68,8 @@ public class SyncJob extends SimpleJobService {
     @Override
     public int onRunJob(JobParameters job) {
         if (TimeUtils.isHolidays()) {
+            stop(getApplicationContext());
+
             return JobService.RESULT_FAIL_NORETRY;
         }
 
