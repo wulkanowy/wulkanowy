@@ -17,7 +17,7 @@ buildscript {
 
 plugins {
     // gradle dependencyUpdates -Drevision=release
-    id "com.github.ben-manes.versions" version "0.17.0"
+    id "com.github.ben-manes.versions" version "0.20.0"
 }
 
 project.ext.preDexLibs = !project.hasProperty("disablePreDex")
@@ -56,15 +56,15 @@ ext {
     slf4jTimber = "1.0.1"
     timber = "4.7.0"
 
-    debugDb = "1.0.3"
+    debugDb = "1.0.4"
     sqlcipher = "3.5.9"
 
     junit = "4.12"
-    mockito = "2.18.3"
+    mockito = "2.19.0"
     testRunner = "1.0.2"
 
     fabricGradle = "1.25.4"
-    crashlyticsSdk = "2.9.3"
+    crashlyticsSdk = "2.9.4"
     crashlyticsAnswers = "1.4.2"
 
     playPublisher = "1.2.2"
