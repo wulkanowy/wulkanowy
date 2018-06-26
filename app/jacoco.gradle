@@ -2,6 +2,7 @@ apply plugin: "jacoco"
 
 jacoco {
     toolVersion "0.8.1"
+    reportsDir = file("$buildDir/reports")
 }
 
 tasks.withType(Test) {
@@ -19,22 +20,31 @@ task jacocoTestReport(type: JacocoReport) {
         html.enabled = true
     }
 
-    def fileFilter = ["**/R.class",
-                      "**/R\$*.class",
-                      "**/BuildConfig.*",
-                      "**/Manifest*.*",
-                      "android/**/*.*",
-                      "**/Lambda.class",
-                      "**/*Lambda.class",
-                      "**/*Lambda*.class",
-                      "**/*Lambda*.*",
-                      "**/*Builder.*"
+    def excludes = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/*$ViewInjector*.*',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*',
+            '**/*Fragment.*',
+            '**/*Activity.*'
     ]
 
-    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
+    // generated classes
+    classDirectories = fileTree(
+            dir: "$buildDir/intermediates/classes/debug",
+            excludes: excludes
+    ) + fileTree(
+            dir: "$buildDir/tmp/kotlin-classes/debug",
+            excludes: excludes
+    )
 
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree])
+    // sources
+    sourceDirectories = files([
+            android.sourceSets.main.java.srcDirs,
+            "src/main/kotlin"
+    ])
     executionData = fileTree(dir: project.projectDir, includes: ["**/*.exec" , "**/*.ec"])
 }
