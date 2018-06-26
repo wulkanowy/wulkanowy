@@ -22,6 +22,8 @@ plugins {
 
 project.ext.preDexLibs = !project.hasProperty("disablePreDex")
 subprojects {
+    apply plugin: 'build-dashboard' // build/reports/buildDashboard/index.html
+
     project.plugins.whenPluginAdded { plugin ->
         if ("com.android.build.gradle.AppPlugin" == plugin.class.name) {
             project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
