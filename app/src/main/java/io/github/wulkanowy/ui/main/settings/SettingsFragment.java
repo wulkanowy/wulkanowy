@@ -17,7 +17,8 @@ import io.github.wulkanowy.R;
 import io.github.wulkanowy.services.jobs.SyncJob;
 import io.github.wulkanowy.ui.main.MainActivity;
 import io.github.wulkanowy.utils.AppConstant;
-import io.github.wulkanowy.utils.TimeUtils;
+
+import static io.github.wulkanowy.utils.TimeUtilsKt.isHolidays;
 
 public class SettingsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -89,7 +90,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         findPreference(SHARED_KEY_ABOUT_LICENSES).setIntent(new Intent(getActivity(), OssLicensesMenuActivity.class)
                 .putExtra("title", R.string.pref_about_osl));
 
-        if (TimeUtils.isHolidays()) {
+        if (isHolidays()) {
             Preference services = findPreference(SHARED_KEY_SERVICES_ENABLE);
             services.setSummary(R.string.pref_services_suspended_on_holidays);
             services.setEnabled(false);
