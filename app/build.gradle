@@ -136,7 +136,6 @@ dependencies {
     kapt "com.jakewharton:butterknife-compiler:$butterknife"
 
     debugImplementation "com.amitshekhar.android:debug-db:$debugDb"
-    debugImplementation "net.zetetic:android-database-sqlcipher:$sqlcipher"
 
     testImplementation "junit:junit:$junit"
     testImplementation "org.mockito:mockito-core:$mockito"

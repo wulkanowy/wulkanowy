@@ -59,7 +59,6 @@ ext {
     timber = "4.7.1"
 
     debugDb = "1.0.4"
-    sqlcipher = "3.5.9"
 
     junit = "4.12"
     mockito = "2.19.0"
