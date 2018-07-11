@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.main.grades;
 
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -77,13 +76,12 @@ public class GradesDialogFragment extends DialogFragment {
 
         subject.setText(grade.getSubject());
         value.setText(grade.getValue());
-        value.setBackgroundResource(GradeUtils.getValueColor(grade.getValue()));
+        value.setBackgroundColor(GradeUtils.getValueColor(getContext(), grade.getValue()));
         weight.setText(grade.getWeight());
         date.setText(grade.getDate());
         color.setText(CommonUtils.colorHexToColorName(grade.getColor()));
         teacher.setText(getTeacherString());
         description.setText(getDescriptionString());
-
 
         return view;
     }

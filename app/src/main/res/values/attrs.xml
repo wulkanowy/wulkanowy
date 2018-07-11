@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="bottomNavBackground" format="reference" />
+
+    <attr name="gradeSix" format="reference" />
+    <attr name="gradeFive" format="reference" />
+    <attr name="gradeFour" format="reference" />
+    <attr name="gradeThree" format="reference" />
+    <attr name="gradeTwo" format="reference" />
+    <attr name="gradeOne" format="reference" />
+    <attr name="gradeDefault" format="reference" />
 </resources>

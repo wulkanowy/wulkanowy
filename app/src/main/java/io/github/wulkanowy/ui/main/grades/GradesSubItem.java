@@ -109,7 +109,7 @@ public class GradesSubItem
             this.subjectAlertImage = subjectAlertImage;
 
             value.setText(item.getValue());
-            value.setBackgroundResource(GradeUtils.getValueColor(item.getValue()));
+            value.setBackgroundColor(GradeUtils.getValueColor(context, item.getValue()));
             date.setText(item.getDate());
             description.setText(getDescriptionString());
             alert.setVisibility(item.getRead() ? View.INVISIBLE : View.VISIBLE);
