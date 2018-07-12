@@ -16,8 +16,9 @@ import io.github.wulkanowy.api.VulcanException;
 
 public class Login {
 
-    static final String LOGIN_PAGE_URL = "{schema}://cufs.{host}/{symbol}/Account/LogOn" +
-            "?ReturnUrl=%2F{symbol}%2FFS%2FLS%3Fwa%3Dwsignin1.0%26wtrealm%3D" +
+    protected static final String LOGIN_PAGE_URL = "{schema}://cufs.{host}/{symbol}/Account/LogOn";
+
+    private static final String LOGIN_PAGE_URL_QUERY = "?ReturnUrl=%2F{symbol}%2FFS%2FLS%3Fwa%3Dwsignin1.0%26wtrealm%3D" +
             "{schema}%253a%252f%252fuonetplus.{host}%252f{symbol}%252fLoginEndpoint.aspx%26wctx%3D" +
             "{schema}%253a%252f%252fuonetplus.{host}%252f{symbol}%252fLoginEndpoint.aspx";
 
@@ -46,7 +47,7 @@ public class Login {
                 {"Password", password}
         };
 
-        Document nextDoc = sendCredentialsData(credentials, LOGIN_PAGE_URL);
+        Document nextDoc = sendCredentialsData(credentials, LOGIN_PAGE_URL + LOGIN_PAGE_URL_QUERY.replace(":", "%253A"));
 
         Element errorMessage = nextDoc.selectFirst(".ErrorMessage, #ErrorTextLabel");
         if (null != errorMessage) {

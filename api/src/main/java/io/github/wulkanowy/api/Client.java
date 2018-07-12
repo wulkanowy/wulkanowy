@@ -124,7 +124,7 @@ public class Client {
     String getFilledUrl(String url) {
         return url
                 .replace("{schema}", protocol)
-                .replace("{host}", host.replace(":", "%253A"))
+                .replace("{host}", host)
                 .replace("{symbol}", symbol)
                 .replace("{ID}", schoolId != null ? schoolId : "");
     }
