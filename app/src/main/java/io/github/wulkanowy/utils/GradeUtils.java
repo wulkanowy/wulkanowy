@@ -1,7 +1,5 @@
 package io.github.wulkanowy.utils;
 
-import android.content.Context;
-
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,36 +46,32 @@ public final class GradeUtils {
         return calculateSubjectsAverage(subjectList, false, true);
     }
 
-    public static int getValueColor(Context context, String value) {
-        return CommonUtils.getThemeAttrColor(context, getValueColor(value));
-    }
-
-    protected static int getValueColor(String value) {
+    public static int getValueColor(String value) {
         Matcher m1 = validGradePattern.matcher(value);
         if (!m1.find()) {
-            return R.attr.gradeDefault;
+            return R.color.default_grade;
         }
 
         Matcher m2 = simpleGradeValuePattern.matcher(m1.group());
         if (!m2.find()) {
-            return R.attr.gradeDefault;
+            return R.color.default_grade;
         }
 
         switch (Integer.parseInt(m2.group())) {
             case 6:
-                return R.attr.gradeSix;
+                return R.color.six_grade;
             case 5:
-                return R.attr.gradeFive;
+                return R.color.five_grade;
             case 4:
-                return R.attr.gradeFour;
+                return R.color.four_grade;
             case 3:
-                return R.attr.gradeThree;
+                return R.color.three_grade;
             case 2:
-                return R.attr.gradeTwo;
+                return R.color.two_grade;
             case 1:
-                return R.attr.gradeOne;
+                return R.color.one_grade;
             default:
-                return R.attr.gradeDefault;
+                return R.color.default_grade;
         }
     }
 

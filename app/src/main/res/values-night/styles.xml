@@ -6,13 +6,6 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="bottomNavBackground">@color/bottom_nav_background</item>
-        <item name="gradeSix">@color/grade_six_dark</item>
-        <item name="gradeFive">@color/grade_five_dark</item>
-        <item name="gradeFour">@color/grade_four_dark</item>
-        <item name="gradeThree">@color/grade_three_dark</item>
-        <item name="gradeTwo">@color/grade_two_dark</item>
-        <item name="gradeOne">@color/grade_one_dark</item>
-        <item name="gradeDefault">@color/grade_default_dark</item>
     </style>
 
     <style name="WulkanowyTheme.DarkActionBar" parent="@style/Theme.AppCompat.DayNight.DarkActionBar">

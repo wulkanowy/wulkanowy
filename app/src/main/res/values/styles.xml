@@ -15,13 +15,6 @@
         <item name="android:colorBackground">@android:color/white</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="bottomNavBackground">@color/bottom_nav_background_inverse</item>
-        <item name="gradeSix">@color/grade_six</item>
-        <item name="gradeFive">@color/grade_five</item>
-        <item name="gradeFour">@color/grade_four</item>
-        <item name="gradeThree">@color/grade_three</item>
-        <item name="gradeTwo">@color/grade_two</item>
-        <item name="gradeOne">@color/grade_one</item>
-        <item name="gradeDefault">@color/grade_default</item>
     </style>
 
     <style name="WulkanowyTheme.DarkActionBar" parent="@style/Theme.AppCompat.DayNight.DarkActionBar">
