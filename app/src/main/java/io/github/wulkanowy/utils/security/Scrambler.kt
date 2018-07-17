@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package io.github.wulkanowy.utils.security
 
 import android.annotation.TargetApi
@@ -11,16 +13,23 @@ import android.security.keystore.KeyProperties.*
 import android.util.Base64
 import android.util.Base64.DEFAULT
 import org.apache.commons.lang3.StringUtils
+import timber.log.Timber
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.math.BigInteger
+import java.nio.charset.Charset
 import java.security.KeyPairGenerator
 import java.security.KeyStore
+import java.security.PrivateKey
 import java.security.PublicKey
 import java.util.*
 import javax.crypto.Cipher
+import javax.crypto.Cipher.DECRYPT_MODE
 import javax.crypto.Cipher.ENCRYPT_MODE
+import javax.crypto.CipherInputStream
 import javax.crypto.CipherOutputStream
 import javax.security.auth.x500.X500Principal
+import kotlin.collections.ArrayList
 
 
 object Scrambler {
@@ -37,26 +46,24 @@ object Scrambler {
 
     private const val KEY_CIPHER_M_PROVIDER = "AndroidKeyStoreBCWorkaround"
 
+    private val KEY_CHARSET = Charset.forName("UTF-8")
+
     fun encrypt(plainText: String, context: Context): String {
         if (StringUtils.isNotEmpty(plainText)) {
             if (SDK_INT < JELLY_BEAN_MR2) {
-                return Base64.encode(plainText.toByteArray(), DEFAULT).toString()
+                return String(Base64.encode(plainText.toByteArray(KEY_CHARSET), DEFAULT), KEY_CHARSET)
             } else {
                 try {
                     if (!isKeyPairExist()) {
                         generateKeyPair(context)
                     }
 
-                    val cipher = if (SDK_INT >= M) {
-                        Cipher.getInstance(KEY_TRANSFORMATION_ALGORITHM, KEY_CIPHER_M_PROVIDER)
-                    } else {
-                        Cipher.getInstance(KEY_TRANSFORMATION_ALGORITHM, KEY_CIPHER_JELLY_PROVIDER)
-                    }
+                    val cipher = getCipher()
                     cipher.init(ENCRYPT_MODE, getPublicKey())
 
                     val outputStream = ByteArrayOutputStream()
                     val cipherOutputStream = CipherOutputStream(outputStream, cipher)
-                    cipherOutputStream.write(plainText.toByteArray())
+                    cipherOutputStream.write(plainText.toByteArray(KEY_CHARSET))
                     cipherOutputStream.close()
 
                     return Base64.encodeToString(outputStream.toByteArray(), DEFAULT)
@@ -69,7 +76,33 @@ object Scrambler {
     }
 
     fun decrypt(cipherText: String): String {
-        return ""
+        if (StringUtils.isNotEmpty(cipherText)) {
+            if (SDK_INT < JELLY_BEAN_MR2) {
+                return String(Base64.decode(cipherText.toByteArray(KEY_CHARSET), DEFAULT), KEY_CHARSET)
+            } else if (isKeyPairExist()) {
+                try {
+                    val cipher = getCipher()
+                    cipher.init(DECRYPT_MODE, getPrivateKey())
+
+                    val input = CipherInputStream(ByteArrayInputStream(Base64.decode(cipherText, DEFAULT)), cipher)
+                    val values = ArrayList<Byte>()
+
+                    var nextByte = 0
+                    while ({ nextByte = input.read(); nextByte }() != -1) {
+                        values.add(nextByte.toByte())
+                    }
+
+                    val bytes = ByteArray(values.size)
+                    for (i in bytes.indices) {
+                        bytes[i] = values[i]
+                    }
+                    return String(bytes, 0, bytes.size, KEY_CHARSET)
+                } catch (e: Exception) {
+                    throw ScramblerException("An error occurred while decrypting text", e)
+                }
+            }
+        }
+        throw ScramblerException("Text to be encrypted is empty")
     }
 
     private fun getKeyStoreInstance(): KeyStore {
@@ -84,8 +117,17 @@ object Scrambler {
         throw ScramblerException("KeyPair doesn't exist")
     }
 
+    private fun getPrivateKey(): PrivateKey =
+            (getKeyStoreInstance().getEntry(KEY_ALIAS, null) as KeyStore.PrivateKeyEntry).privateKey
+
+
+    private fun getCipher(): Cipher = if (SDK_INT >= M) {
+        Cipher.getInstance(KEY_TRANSFORMATION_ALGORITHM, KEY_CIPHER_M_PROVIDER)
+    } else {
+        Cipher.getInstance(KEY_TRANSFORMATION_ALGORITHM, KEY_CIPHER_JELLY_PROVIDER)
+    }
+
     @TargetApi(JELLY_BEAN_MR2)
-    @Suppress("DEPRECATION")
     private fun generateKeyPair(context: Context) {
         val spec = if (SDK_INT >= M) {
             KeyGenParameterSpec.Builder(KEY_ALIAS, PURPOSE_DECRYPT or PURPOSE_ENCRYPT)
@@ -108,6 +150,8 @@ object Scrambler {
         val generator = KeyPairGenerator.getInstance(ALGORITHM_RSA)
         generator.initialize(spec)
         generator.generateKeyPair()
+
+        Timber.i("A new KeyPair has been generated")
     }
 
     private fun isKeyPairExist(): Boolean = getKeyStoreInstance().getKey(KEY_ALIAS, null) != null
