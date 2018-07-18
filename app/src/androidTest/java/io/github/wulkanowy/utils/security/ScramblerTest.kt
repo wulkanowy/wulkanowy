@@ -1,6 +1,7 @@
 package io.github.wulkanowy.utils.security
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.filters.SdkSuppress
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
 import org.junit.Test
@@ -32,6 +33,7 @@ class ScramblerTest {
     }
 
     @Test
+    @SdkSuppress(minSdkVersion = 18)
     fun emptyKeyStoreTest() {
         val text = Scrambler.encrypt("test", InstrumentationRegistry.getTargetContext())
 
