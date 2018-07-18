@@ -153,7 +153,7 @@ object Scrambler {
             end.add(Calendar.YEAR, 99)
 
             KeyPairGeneratorSpec.Builder(context)
-                    .setAlias(KEYSTORE_NAME)
+                    .setAlias(KEY_ALIAS)
                     .setSubject(X500Principal("CN=Wulkanowy"))
                     .setSerialNumber(BigInteger.TEN)
                     .setStartDate(start.time)
@@ -161,7 +161,7 @@ object Scrambler {
                     .build()
         }
 
-        val generator = KeyPairGenerator.getInstance(ALGORITHM_RSA)
+        val generator = KeyPairGenerator.getInstance(ALGORITHM_RSA, KEYSTORE_NAME)
         generator.initialize(spec)
         generator.generateKeyPair()
 
