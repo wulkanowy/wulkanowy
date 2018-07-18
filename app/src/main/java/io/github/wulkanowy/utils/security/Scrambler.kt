@@ -31,7 +31,6 @@ import javax.crypto.CipherOutputStream
 import javax.security.auth.x500.X500Principal
 import kotlin.collections.ArrayList
 
-
 object Scrambler {
 
     private const val KEY_ALIAS = "USER_PASSWORD"
@@ -50,61 +49,69 @@ object Scrambler {
 
     @JvmStatic
     fun encrypt(plainText: String, context: Context): String {
-        if (StringUtils.isNotEmpty(plainText)) {
-            if (SDK_INT < JELLY_BEAN_MR2) {
-                return String(Base64.encode(plainText.toByteArray(KEY_CHARSET), DEFAULT), KEY_CHARSET)
-            } else {
-                try {
-                    if (!isKeyPairExist()) {
-                        generateKeyPair(context)
-                    }
-
-                    val cipher = getCipher()
-                    cipher.init(ENCRYPT_MODE, getPublicKey())
-
-                    val outputStream = ByteArrayOutputStream()
-                    val cipherOutputStream = CipherOutputStream(outputStream, cipher)
-                    cipherOutputStream.write(plainText.toByteArray(KEY_CHARSET))
-                    cipherOutputStream.close()
-
-                    return Base64.encodeToString(outputStream.toByteArray(), DEFAULT)
-                } catch (e: Exception) {
-                    throw ScramblerException("An error occurred while encrypting text", e)
-                }
-            }
+        if (StringUtils.isEmpty(plainText)) {
+            throw ScramblerException("Text to be encrypted is empty")
         }
-        throw ScramblerException("Text to be encrypted is empty")
+
+        if (SDK_INT < JELLY_BEAN_MR2) {
+            return String(Base64.encode(plainText.toByteArray(KEY_CHARSET), DEFAULT), KEY_CHARSET)
+        }
+
+        try {
+            if (!isKeyPairExist()) {
+                generateKeyPair(context)
+            }
+
+            val cipher = getCipher()
+            cipher.init(ENCRYPT_MODE, getPublicKey())
+
+            val outputStream = ByteArrayOutputStream()
+            val cipherOutputStream = CipherOutputStream(outputStream, cipher)
+            cipherOutputStream.write(plainText.toByteArray(KEY_CHARSET))
+            cipherOutputStream.close()
+
+            return Base64.encodeToString(outputStream.toByteArray(), DEFAULT)
+        } catch (e: Exception) {
+            throw ScramblerException("An error occurred while encrypting text", e)
+        }
+
     }
 
     @JvmStatic
     fun decrypt(cipherText: String): String {
-        if (StringUtils.isNotEmpty(cipherText)) {
-            if (SDK_INT < JELLY_BEAN_MR2) {
-                return String(Base64.decode(cipherText.toByteArray(KEY_CHARSET), DEFAULT), KEY_CHARSET)
-            } else if (isKeyPairExist()) {
-                try {
-                    val cipher = getCipher()
-                    cipher.init(DECRYPT_MODE, getPrivateKey())
-
-                    val input = CipherInputStream(ByteArrayInputStream(Base64.decode(cipherText, DEFAULT)), cipher)
-                    val values = ArrayList<Byte>()
-
-                    var nextByte = 0
-                    while ({ nextByte = input.read(); nextByte }() != -1) {
-                        values.add(nextByte.toByte())
-                    }
-
-                    val bytes = ByteArray(values.size)
-                    for (i in bytes.indices) {
-                        bytes[i] = values[i]
-                    }
-                    return String(bytes, 0, bytes.size, KEY_CHARSET)
-                } catch (e: Exception) {
-                    throw ScramblerException("An error occurred while decrypting text", e)
-                }
-            }
+        if (StringUtils.isEmpty(cipherText)) {
+            throw ScramblerException("Text to be encrypted is empty")
         }
-        throw ScramblerException("Text to be encrypted is empty")
+
+        if (SDK_INT < JELLY_BEAN_MR2) {
+            return String(Base64.decode(cipherText.toByteArray(KEY_CHARSET), DEFAULT), KEY_CHARSET)
+        }
+
+        if (!isKeyPairExist()) {
+            throw ScramblerException("KeyPair doesn't exist")
+        }
+
+        try {
+            val cipher = getCipher()
+            cipher.init(DECRYPT_MODE, getPrivateKey())
+
+            val input = CipherInputStream(ByteArrayInputStream(Base64.decode(cipherText, DEFAULT)), cipher)
+            val values = ArrayList<Byte>()
+
+            var nextByte = 0
+            while ({ nextByte = input.read(); nextByte }() != -1) {
+                values.add(nextByte.toByte())
+            }
+
+            val bytes = ByteArray(values.size)
+            for (i in bytes.indices) {
+                bytes[i] = values[i]
+            }
+            return String(bytes, 0, bytes.size, KEY_CHARSET)
+        } catch (e: Exception) {
+            throw ScramblerException("An error occurred while decrypting text", e)
+        }
+
     }
 
     private fun getKeyStoreInstance(): KeyStore {
@@ -113,14 +120,10 @@ object Scrambler {
         return keyStore
     }
 
-    private fun getPublicKey(): PublicKey {
-        if (isKeyPairExist()) {
-            return (getKeyStoreInstance().getEntry(KEY_ALIAS, null) as KeyStore.PrivateKeyEntry)
+    private fun getPublicKey(): PublicKey =
+            (getKeyStoreInstance().getEntry(KEY_ALIAS, null) as KeyStore.PrivateKeyEntry)
                     .certificate.publicKey
-        } else {
-            throw ScramblerException("KeyPair doesn't exist")
-        }
-    }
+
 
     private fun getPrivateKey(): PrivateKey =
             (getKeyStoreInstance().getEntry(KEY_ALIAS, null) as KeyStore.PrivateKeyEntry).privateKey
@@ -130,6 +133,7 @@ object Scrambler {
         if (SDK_INT >= M) {
             return Cipher.getInstance(KEY_TRANSFORMATION_ALGORITHM, KEY_CIPHER_M_PROVIDER)
         }
+
         return Cipher.getInstance(KEY_TRANSFORMATION_ALGORITHM, KEY_CIPHER_JELLY_PROVIDER)
     }
 
@@ -138,7 +142,10 @@ object Scrambler {
         val spec = if (SDK_INT >= M) {
             KeyGenParameterSpec.Builder(KEY_ALIAS, PURPOSE_DECRYPT or PURPOSE_ENCRYPT)
                     .setDigests(DIGEST_SHA256, DIGEST_SHA512)
+                    .setCertificateSubject(X500Principal("CN=Wulkanowy"))
                     .setEncryptionPaddings(ENCRYPTION_PADDING_RSA_PKCS1)
+                    .setSignaturePaddings(SIGNATURE_PADDING_RSA_PKCS1)
+                    .setCertificateSerialNumber(BigInteger.TEN)
                     .build()
         } else {
             val start = Calendar.getInstance()
@@ -147,12 +154,13 @@ object Scrambler {
 
             KeyPairGeneratorSpec.Builder(context)
                     .setAlias(KEYSTORE_NAME)
-                    .setSubject(X500Principal("CN=Sample Name, O=Android Authority"))
+                    .setSubject(X500Principal("CN=Wulkanowy"))
                     .setSerialNumber(BigInteger.TEN)
                     .setStartDate(start.time)
                     .setEndDate(end.time)
                     .build()
         }
+
         val generator = KeyPairGenerator.getInstance(ALGORITHM_RSA)
         generator.initialize(spec)
         generator.generateKeyPair()
