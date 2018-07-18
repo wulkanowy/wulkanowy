@@ -83,7 +83,7 @@ public class AccountSync {
         Timber.d("Register account");
         Account account = new Account()
                 .setEmail(email)
-                .setPassword(Scrambler.INSTANCE.encrypt(password, context));
+                .setPassword(Scrambler.encrypt(password, context));
         daoSession.getAccountDao().insert(account);
         return account;
     }
@@ -180,7 +180,7 @@ public class AccountSync {
 
         vulcan.setCredentials(
                 account.getEmail(),
-                Scrambler.INSTANCE.decrypt(account.getPassword()),
+                Scrambler.decrypt(account.getPassword()),
                 symbol.getSymbol(),
                 school.getRealId(),
                 student.getRealId(),

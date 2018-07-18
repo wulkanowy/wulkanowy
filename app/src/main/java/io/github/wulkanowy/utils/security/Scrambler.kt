@@ -48,6 +48,7 @@ object Scrambler {
 
     private val KEY_CHARSET = Charset.forName("UTF-8")
 
+    @JvmStatic
     fun encrypt(plainText: String, context: Context): String {
         if (StringUtils.isNotEmpty(plainText)) {
             if (SDK_INT < JELLY_BEAN_MR2) {
@@ -75,6 +76,7 @@ object Scrambler {
         throw ScramblerException("Text to be encrypted is empty")
     }
 
+    @JvmStatic
     fun decrypt(cipherText: String): String {
         if (StringUtils.isNotEmpty(cipherText)) {
             if (SDK_INT < JELLY_BEAN_MR2) {
@@ -111,20 +113,24 @@ object Scrambler {
         return keyStore
     }
 
-    private fun getPublicKey(): PublicKey = if (isKeyPairExist()) {
-        (getKeyStoreInstance().getEntry(KEY_ALIAS, null) as KeyStore.PrivateKeyEntry).certificate.publicKey
-    } else {
-        throw ScramblerException("KeyPair doesn't exist")
+    private fun getPublicKey(): PublicKey {
+        if (isKeyPairExist()) {
+            return (getKeyStoreInstance().getEntry(KEY_ALIAS, null) as KeyStore.PrivateKeyEntry)
+                    .certificate.publicKey
+        } else {
+            throw ScramblerException("KeyPair doesn't exist")
+        }
     }
 
     private fun getPrivateKey(): PrivateKey =
             (getKeyStoreInstance().getEntry(KEY_ALIAS, null) as KeyStore.PrivateKeyEntry).privateKey
 
 
-    private fun getCipher(): Cipher = if (SDK_INT >= M) {
-        Cipher.getInstance(KEY_TRANSFORMATION_ALGORITHM, KEY_CIPHER_M_PROVIDER)
-    } else {
-        Cipher.getInstance(KEY_TRANSFORMATION_ALGORITHM, KEY_CIPHER_JELLY_PROVIDER)
+    private fun getCipher(): Cipher {
+        if (SDK_INT >= M) {
+            return Cipher.getInstance(KEY_TRANSFORMATION_ALGORITHM, KEY_CIPHER_M_PROVIDER)
+        }
+        return Cipher.getInstance(KEY_TRANSFORMATION_ALGORITHM, KEY_CIPHER_JELLY_PROVIDER)
     }
 
     @TargetApi(JELLY_BEAN_MR2)
