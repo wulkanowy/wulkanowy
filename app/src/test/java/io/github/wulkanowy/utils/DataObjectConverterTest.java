@@ -71,7 +71,9 @@ public class DataObjectConverterTest {
     @Test
     public void lessonConversionTest() {
         List<Lesson> lessonList = new ArrayList<>();
-        lessonList.add(new Lesson().setRoom("20"));
+        Lesson lesson = new Lesson();
+        lesson.setRoom("20");
+        lessonList.add(lesson);
         List<TimetableLesson> lessonEntityList =
                 DataObjectConverter.lessonsToTimetableLessonsEntities(lessonList);
 
