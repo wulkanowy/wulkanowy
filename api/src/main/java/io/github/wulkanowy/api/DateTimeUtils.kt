@@ -18,6 +18,7 @@ fun getFormattedDate(date: String, format: String): String {
 }
 
 fun getFormattedDate(date: String, fromFormat: String, toFormat: String): String {
+    if (date.isEmpty()) return ""
     val sdf = SimpleDateFormat(fromFormat, Locale.ROOT)
     val d = sdf.parse(date)
     sdf.applyPattern(toFormat)
