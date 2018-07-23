@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.sync;
 
+import org.threeten.bp.LocalDate;
+
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -72,11 +74,11 @@ public class SyncRepository implements SyncContract {
 
     @Override
     public void syncAttendance() throws IOException, VulcanException {
-        attendanceSync.syncAttendance(database.getCurrentDiaryId(), null);
+        attendanceSync.syncAttendance(database.getCurrentDiaryId(), LocalDate.now());
     }
 
     @Override
-    public void syncAttendance(long diaryId, String date) throws IOException, VulcanException {
+    public void syncAttendance(long diaryId, LocalDate date) throws IOException, VulcanException {
         if (diaryId != 0) {
             attendanceSync.syncAttendance(diaryId, date);
         } else {

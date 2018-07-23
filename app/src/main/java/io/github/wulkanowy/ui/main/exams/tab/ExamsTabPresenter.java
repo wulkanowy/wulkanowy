@@ -2,6 +2,8 @@ package io.github.wulkanowy.ui.main.exams.tab;
 
 import android.support.annotation.NonNull;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,8 @@ import io.github.wulkanowy.utils.FabricUtils;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
+import static io.github.wulkanowy.utils.TimeUtilsKt.getAppDateFormatter;
+
 public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
         implements ExamsTabContract.Presenter, AsyncListeners.OnFirstLoadingListener,
         AsyncListeners.OnRefreshListener {
@@ -26,7 +30,7 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
 
     private List<ExamsSubItem> subItems = new ArrayList<>();
 
-    private String date;
+    private LocalDate date;
 
     private boolean isFirstSight = false;
 
@@ -56,7 +60,7 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
     }
 
     @Override
-    public void setArgumentDate(String date) {
+    public void setArgumentDate(LocalDate date) {
         this.date = date;
     }
 
@@ -97,16 +101,16 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
         }
         getView().hideRefreshingBar();
 
-        FabricUtils.logRefresh("Exams", result, date);
+        FabricUtils.logRefresh("Exams", result, date.format(getAppDateFormatter()));
     }
 
     @Override
     public void onDoInBackgroundLoading() throws Exception {
-        Week week = getRepository().getDbRepo().getWeek(date);
+        Week week = getRepository().getDbRepo().getWeek(date.format(getAppDateFormatter()));
 
         if (week == null || !week.getExamsSynced()) {
             syncData();
-            week = getRepository().getDbRepo().getWeek(date);
+            week = getRepository().getDbRepo().getWeek(date.format(getAppDateFormatter()));
         }
 
         week.resetDayList();
@@ -144,7 +148,7 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
     }
 
     private void syncData() throws Exception {
-        getRepository().getSyncRepo().syncExams(0, date);
+        getRepository().getSyncRepo().syncExams(0, date.format(getAppDateFormatter()));
     }
 
     private void cancelAsyncTasks() {

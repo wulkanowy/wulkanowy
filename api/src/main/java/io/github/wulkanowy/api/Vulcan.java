@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 
+import io.github.wulkanowy.api.attendance.Attendance;
 import io.github.wulkanowy.api.attendance.AttendanceStatistics;
 import io.github.wulkanowy.api.attendance.AttendanceTable;
 import io.github.wulkanowy.api.exams.ExamsWeek;
@@ -73,6 +74,10 @@ public class Vulcan {
 
     public AttendanceTable getAttendanceTable() throws IOException, VulcanException {
         return new AttendanceTable(getStudentAndParent());
+    }
+
+    public Attendance getAttendance() throws IOException, VulcanException {
+        return new Attendance(getStudentAndParent());
     }
 
     public AttendanceStatistics getAttendanceStatistics() throws IOException, VulcanException {

@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,11 +45,11 @@ public class ExamsTabFragment extends BaseFragment implements ExamsTabContract.V
 
     private boolean isFragmentVisible = false;
 
-    public static ExamsTabFragment newInstance(String date) {
+    public static ExamsTabFragment newInstance(LocalDate date) {
         ExamsTabFragment tabFragment = new ExamsTabFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putString(ARGUMENT_KEY, date);
+        bundle.putSerializable(ARGUMENT_KEY, date);
         tabFragment.setArguments(bundle);
 
         return tabFragment;
@@ -60,7 +62,7 @@ public class ExamsTabFragment extends BaseFragment implements ExamsTabContract.V
         injectViews(view);
 
         if (getArguments() != null) {
-            presenter.setArgumentDate(getArguments().getString(ARGUMENT_KEY));
+            presenter.setArgumentDate((LocalDate) getArguments().getSerializable(ARGUMENT_KEY));
         }
         presenter.attachView(this);
         presenter.onFragmentActivated(isFragmentVisible);

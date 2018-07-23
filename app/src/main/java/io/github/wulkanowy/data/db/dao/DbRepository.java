@@ -1,13 +1,17 @@
 package io.github.wulkanowy.data.db.dao;
 
 import org.greenrobot.greendao.database.Database;
+import org.threeten.bp.LocalDate;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
+import io.github.wulkanowy.data.db.dao.entities.AttendanceLessonDao;
 import io.github.wulkanowy.data.db.dao.entities.DaoMaster;
 import io.github.wulkanowy.data.db.dao.entities.DaoSession;
+import io.github.wulkanowy.data.db.dao.entities.Diary;
 import io.github.wulkanowy.data.db.dao.entities.DiaryDao;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.GradeDao;
@@ -21,6 +25,8 @@ import io.github.wulkanowy.data.db.dao.entities.SymbolDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
+
+import static io.github.wulkanowy.utils.TimeUtilsKt.getAppDateFormatter;
 
 public class DbRepository implements DbContract {
 
@@ -45,6 +51,14 @@ public class DbRepository implements DbContract {
         return daoSession.getWeekDao().queryBuilder().where(
                 WeekDao.Properties.StartDayDate.eq(date),
                 WeekDao.Properties.DiaryId.eq(diaryId)
+        ).unique();
+    }
+
+    @Override
+    public Diary getDiary() {
+        return daoSession.getDiaryDao().queryBuilder().where(
+                DiaryDao.Properties.StudentId.eq(getCurrentStudentId()),
+                DiaryDao.Properties.Current.eq(true)
         ).unique();
     }
 
@@ -91,10 +105,7 @@ public class DbRepository implements DbContract {
 
     @Override
     public long getCurrentDiaryId() {
-        return daoSession.getDiaryDao().queryBuilder().where(
-                DiaryDao.Properties.StudentId.eq(getCurrentStudentId()),
-                DiaryDao.Properties.Current.eq(true)
-        ).unique().getId();
+        return getDiary().getId();
     }
 
     @Override
@@ -128,5 +139,14 @@ public class DbRepository implements DbContract {
 
         DaoMaster.dropAllTables(database, true);
         DaoMaster.createAllTables(database, true);
+    }
+
+    @Override
+    public List<AttendanceLesson> getAttendance(LocalDate start) {
+
+        return daoSession.getAttendanceLessonDao().queryBuilder().where(
+                AttendanceLessonDao.Properties.DiaryId.eq(getCurrentDiaryId()),
+                AttendanceLessonDao.Properties.Date.between(start, start.plusDays(5))
+        ).list();
     }
 }

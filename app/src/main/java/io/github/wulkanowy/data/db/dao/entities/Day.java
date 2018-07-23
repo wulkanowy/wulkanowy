@@ -40,10 +40,6 @@ public class Day {
     @ToMany(referencedJoinProperty = "dayId")
     private List<TimetableLesson> timetableLessons;
 
-    @OrderBy("number ASC")
-    @ToMany(referencedJoinProperty = "dayId")
-    private List<AttendanceLesson> attendanceLessons;
-
     @ToMany(referencedJoinProperty = "dayId")
     private List<Exam> exams;
 
@@ -153,37 +149,6 @@ public class Day {
     @Generated(hash = 1687683740)
     public synchronized void resetTimetableLessons() {
         timetableLessons = null;
-    }
-
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 1166820581)
-    public List<AttendanceLesson> getAttendanceLessons() {
-        if (attendanceLessons == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            AttendanceLessonDao targetDao = daoSession.getAttendanceLessonDao();
-            List<AttendanceLesson> attendanceLessonsNew = targetDao
-                    ._queryDay_AttendanceLessons(id);
-            synchronized (this) {
-                if (attendanceLessons == null) {
-                    attendanceLessons = attendanceLessonsNew;
-                }
-            }
-        }
-        return attendanceLessons;
-    }
-
-    /**
-     * Resets a to-many relationship, making the next get call to query for a fresh result.
-     */
-    @Generated(hash = 1343075564)
-    public synchronized void resetAttendanceLessons() {
-        attendanceLessons = null;
     }
 
     /**

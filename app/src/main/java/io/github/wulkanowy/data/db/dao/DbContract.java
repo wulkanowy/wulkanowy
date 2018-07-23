@@ -1,7 +1,11 @@
 package io.github.wulkanowy.data.db.dao;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
+import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
+import io.github.wulkanowy.data.db.dao.entities.Diary;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.data.db.dao.entities.Symbol;
@@ -12,6 +16,8 @@ public interface DbContract {
     Week getWeek(String date);
 
     Week getWeek(long diaryId, String date);
+
+    Diary getDiary();
 
     List<Subject> getSubjectList(int semesterName);
 
@@ -34,4 +40,6 @@ public interface DbContract {
     int getCurrentSemesterName();
 
     void recreateDatabase();
+
+    List<AttendanceLesson> getAttendance(LocalDate start);
 }

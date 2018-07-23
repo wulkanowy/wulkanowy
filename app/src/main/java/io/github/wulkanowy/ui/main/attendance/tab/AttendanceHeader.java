@@ -23,13 +23,14 @@ import eu.davidea.viewholders.ExpandableViewHolder;
 import io.github.wulkanowy.R;
 import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.utils.CommonUtils;
+import kotlin.Pair;
 
 public class AttendanceHeader
         extends AbstractExpandableHeaderItem<AttendanceHeader.HeaderViewHolder, AttendanceSubItem> {
 
-    private Day day;
+    private Pair<String, String> day;
 
-    AttendanceHeader(Day day) {
+    AttendanceHeader(Pair<String, String> day) {
         this.day = day;
     }
 
@@ -95,9 +96,9 @@ public class AttendanceHeader
             context = view.getContext();
         }
 
-        void onBind(Day item, List<AttendanceSubItem> subItems) {
-            dayName.setText(StringUtils.capitalize(item.getDayName()));
-            date.setText(item.getDate());
+        void onBind(Pair<String, String> item, List<AttendanceSubItem> subItems) {
+            dayName.setText(StringUtils.capitalize(item.getSecond()));
+            date.setText(item.getFirst());
 
             int numberOfHours = countNotPresentHours(subItems);
             description.setText((getContentView().getResources().getQuantityString(R.plurals.numberOfAbsences,
@@ -105,7 +106,7 @@ public class AttendanceHeader
             description.setVisibility(numberOfHours > 0 ? View.VISIBLE : View.INVISIBLE);
             alert.setVisibility(isSubItemsHasChanges(subItems) ? View.VISIBLE : View.INVISIBLE);
             freeName.setVisibility(subItems.isEmpty() ? View.VISIBLE : View.INVISIBLE);
-            setInactiveHeader(item.getAttendanceLessons().isEmpty());
+            setInactiveHeader(subItems.isEmpty());
         }
 
         private void setInactiveHeader(boolean inactive) {

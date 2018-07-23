@@ -13,18 +13,21 @@ import java.io.Serializable;
 @Entity(
         nameInDb = "AttendanceLessons",
         active = true,
-        indexes = {@Index(value = "dayId,date,number", unique = true)}
+        indexes = {@Index(value = "date,number", unique = true)}
 )
 public class AttendanceLesson implements Serializable {
 
     @Id(autoincrement = true)
     private Long id;
 
-    @Property(nameInDb = "day_id")
-    private Long dayId;
+    @Property(nameInDb = "diary_id")
+    private Long diaryId;
 
     @Property(nameInDb = "date")
     private String date = "";
+
+    @Property(nameInDb = "date_text")
+    private String dateText = "";
 
     @Property(nameInDb = "number_of_lesson")
     private int number = 0;
@@ -70,15 +73,16 @@ public class AttendanceLesson implements Serializable {
     @Generated(hash = 1936953859)
     private transient AttendanceLessonDao myDao;
 
-    @Generated(hash = 1741231228)
-    public AttendanceLesson(Long id, Long dayId, String date, int number,
-                            String subject, boolean presence, boolean absenceUnexcused,
+    @Generated(hash = 2115795529)
+    public AttendanceLesson(Long id, Long diaryId, String date, String dateText,
+                            int number, String subject, boolean presence, boolean absenceUnexcused,
                             boolean absenceExcused, boolean unexcusedLateness,
                             boolean absenceForSchoolReasons, boolean excusedLateness,
                             boolean exemption) {
         this.id = id;
-        this.dayId = dayId;
+        this.diaryId = diaryId;
         this.date = date;
+        this.dateText = dateText;
         this.number = number;
         this.subject = subject;
         this.presence = presence;
@@ -98,16 +102,18 @@ public class AttendanceLesson implements Serializable {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public AttendanceLesson setId(Long id) {
         this.id = id;
+        return this;
     }
 
-    public Long getDayId() {
-        return this.dayId;
+    public Long getDiaryId() {
+        return this.diaryId;
     }
 
-    public void setDayId(Long dayId) {
-        this.dayId = dayId;
+    public AttendanceLesson setDiaryId(Long diaryId) {
+        this.diaryId = diaryId;
+        return this;
     }
 
     public String getDate() {
@@ -116,6 +122,15 @@ public class AttendanceLesson implements Serializable {
 
     public AttendanceLesson setDate(String date) {
         this.date = date;
+        return this;
+    }
+
+    public String getDateText() {
+        return this.dateText;
+    }
+
+    public AttendanceLesson setDateText(String dateText) {
+        this.dateText = dateText;
         return this;
     }
 

@@ -19,6 +19,7 @@ import io.github.wulkanowy.utils.FabricUtils;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
+import static io.github.wulkanowy.utils.TimeUtilsKt.getAppDateFormatter;
 import static io.github.wulkanowy.utils.TimeUtilsKt.getParsedDate;
 import static io.github.wulkanowy.utils.TimeUtilsKt.isDateInWeek;
 
@@ -32,7 +33,7 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
 
     private List<TimetableHeader> headerItems = new ArrayList<>();
 
-    private String date;
+    private LocalDate date;
 
     private String freeWeekName;
 
@@ -98,16 +99,16 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
         }
         getView().hideRefreshingBar();
 
-        FabricUtils.logRefresh("Timetable", result, date);
+        FabricUtils.logRefresh("Timetable", result, date.format(getAppDateFormatter()));
     }
 
     @Override
     public void onDoInBackgroundLoading() throws Exception {
-        Week week = getRepository().getDbRepo().getWeek(date);
+        Week week = getRepository().getDbRepo().getWeek(date.format(getAppDateFormatter()));
 
         if (week == null || !week.getTimetableSynced()) {
             syncData();
-            week = getRepository().getDbRepo().getWeek(date);
+            week = getRepository().getDbRepo().getWeek(date.format(getAppDateFormatter()));
         }
 
         week.resetDayList();
@@ -164,7 +165,7 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     }
 
     private void expandCurrentDayHeader() {
-        LocalDate monday = getParsedDate(date, AppConstant.DATE_PATTERN);
+        LocalDate monday = getParsedDate(date.format(getAppDateFormatter()), AppConstant.DATE_PATTERN);
 
         if (isDateInWeek(monday, LocalDate.now()) && !isFirstSight) {
             getView().expandItem(LocalDate.now().getDayOfWeek().getValue() - 1);
@@ -172,12 +173,12 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
     }
 
     @Override
-    public void setArgumentDate(String date) {
+    public void setArgumentDate(LocalDate date) {
         this.date = date;
     }
 
     private void syncData() throws Exception {
-        getRepository().getSyncRepo().syncTimetable(0, date);
+        getRepository().getSyncRepo().syncTimetable(0, date.format(getAppDateFormatter()));
     }
 
     private void cancelAsyncTasks() {

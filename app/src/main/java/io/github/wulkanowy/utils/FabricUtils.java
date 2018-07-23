@@ -23,7 +23,7 @@ public final class FabricUtils {
                 .putMethod("Login activity")
                 .putSuccess(result)
                 .putCustomAttribute("symbol", symbol)
-                .putCustomAttribute("message", message)
+                .putCustomAttribute("message", message.substring(0, 99))
         );
     }
 

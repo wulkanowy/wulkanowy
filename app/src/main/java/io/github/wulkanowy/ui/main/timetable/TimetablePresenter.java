@@ -2,6 +2,8 @@ package io.github.wulkanowy.ui.main.timetable;
 
 import android.support.annotation.NonNull;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
+import static io.github.wulkanowy.utils.TimeUtilsKt.getAppDateFormatter;
 import static io.github.wulkanowy.utils.TimeUtilsKt.getFirstDayOfCurrentWeek;
 import static io.github.wulkanowy.utils.TimeUtilsKt.getMondaysFromCurrentSchoolYear;
 
@@ -21,7 +24,7 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
 
     private AbstractTask loadingTask;
 
-    private List<String> dates = new ArrayList<>();
+    private List<LocalDate> dates = new ArrayList<>();
 
     private OnFragmentIsReadyListener listener;
 
@@ -69,7 +72,7 @@ public class TimetablePresenter extends BasePresenter<TimetableContract.View>
 
     @Override
     public void onDoInBackgroundLoading() {
-        for (String date : dates) {
+        for (LocalDate date : dates) {
             getView().setTabDataToAdapter(date);
         }
     }

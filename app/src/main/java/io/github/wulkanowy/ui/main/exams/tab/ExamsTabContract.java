@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.main.exams.tab;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.List;
 
 import io.github.wulkanowy.ui.base.BaseContract;
@@ -23,7 +25,7 @@ public interface ExamsTabContract {
 
         void onFragmentActivated(boolean isSelected);
 
-        void setArgumentDate(String date);
+        void setArgumentDate(LocalDate date);
 
         void onRefresh();
     }

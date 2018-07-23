@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.threeten.bp.LocalDate;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -76,7 +78,7 @@ public class ExamsFragment extends BaseFragment implements ExamsContract.View {
     }
 
     @Override
-    public void setTabDataToAdapter(String date) {
+    public void setTabDataToAdapter(LocalDate date) {
         pagerAdapter.addFragment(ExamsTabFragment.newInstance(date), date);
     }
 

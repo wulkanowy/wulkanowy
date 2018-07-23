@@ -18,6 +18,7 @@ import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 
+import static io.github.wulkanowy.utils.TimeUtilsKt.getAppDateFormatter;
 import static io.github.wulkanowy.utils.TimeUtilsKt.getFirstDayOfCurrentWeek;
 import static io.github.wulkanowy.utils.TimeUtilsKt.getTodayOrNextDayOrder;
 
@@ -46,7 +47,7 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
 
         if (repository.getSharedRepo().isUserLoggedIn()) {
 
-            Week week = repository.getDbRepo().getWeek(getFirstDayOfCurrentWeek());
+            Week week = repository.getDbRepo().getWeek(getFirstDayOfCurrentWeek().format(getAppDateFormatter()));
             int valueOfDay = getTodayOrNextDayOrder(repository.getSharedRepo().getTimetableWidgetState());
 
             if (valueOfDay != 5 && valueOfDay != 6 && week != null) {

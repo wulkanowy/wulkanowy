@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.sync;
 
+import org.threeten.bp.LocalDate;
+
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -27,7 +29,7 @@ public interface SyncContract {
 
     void syncAttendance() throws ParseException, IOException, VulcanException;
 
-    void syncAttendance(long diaryId, String date) throws ParseException, IOException, VulcanException;
+    void syncAttendance(long diaryId, LocalDate date) throws ParseException, IOException, VulcanException;
 
     void syncTimetable() throws VulcanException, IOException, ParseException;
 

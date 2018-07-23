@@ -9,22 +9,24 @@ import java.util.*
 
 private val formatter = DateTimeFormatter.ofPattern(AppConstant.DATE_PATTERN)
 
+fun getAppDateFormatter() = formatter
+
 fun getParsedDate(dateString: String, dateFormat: String): LocalDate {
     return LocalDate.parse(dateString, DateTimeFormatter.ofPattern(dateFormat))
 }
 
 fun getMondaysFromCurrentSchoolYear() = getMondaysFromCurrentSchoolYear(LocalDate.now())
 
-fun getMondaysFromCurrentSchoolYear(date: LocalDate): List<String> {
+fun getMondaysFromCurrentSchoolYear(date: LocalDate): ArrayList<LocalDate> {
     val startDate = getFirstSchoolDay(getSchoolYearForDate(date))
             ?.with(TemporalAdjusters.previousOrSame(MONDAY))
     val endDate = getFirstSchoolDay(getSchoolYearForDate(date) + 1)
             ?.with(TemporalAdjusters.previousOrSame(MONDAY))
 
-    val dateList = ArrayList<String>()
+    val dateList = ArrayList<LocalDate>()
     var monday = startDate as LocalDate
     while (monday.isBefore(endDate)) {
-        dateList.add(monday.format(formatter))
+        dateList.add(monday)
         monday = monday.plusWeeks(1)
     }
 
@@ -35,14 +37,14 @@ fun getSchoolYearForDate(date: LocalDate): Int {
     return if (date.monthValue <= 8) date.year - 1 else date.year
 }
 
-fun getFirstDayOfCurrentWeek(): String = getFirstDayOfCurrentWeek(LocalDate.now())
+fun getFirstDayOfCurrentWeek() = getFirstDayOfCurrentWeek(LocalDate.now())
 
-fun getFirstDayOfCurrentWeek(date: LocalDate): String {
+fun getFirstDayOfCurrentWeek(date: LocalDate): LocalDate {
     return when (date.dayOfWeek) {
         SATURDAY -> date.plusDays(2)
         SUNDAY -> date.plusDays(1)
         else -> date.with(MONDAY)
-    }.format(formatter)
+    }
 }
 
 fun getTodayOrNextDayOrder(next: Boolean): Int = getTodayOrNextDayOrder(next, LocalDate.now())
@@ -84,9 +86,7 @@ fun getFirstSchoolDay(year: Int): LocalDate? {
         FRIDAY,
         SATURDAY,
         SUNDAY -> firstSeptember.with(TemporalAdjusters.firstInMonth(MONDAY))
-        else -> {
-            firstSeptember
-        }
+        else -> firstSeptember
     }
 }
 
