@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity(
         nameInDb = "AttendanceLessons",
         active = true,
-        indexes = {@Index(value = "date,number", unique = true)}
+        indexes = {@Index(value = "diaryId,date,number", unique = true)}
 )
 public class AttendanceLesson implements Serializable {
 

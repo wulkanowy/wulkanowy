@@ -9,7 +9,7 @@ import java.util.*
 
 private val formatter = DateTimeFormatter.ofPattern(AppConstant.DATE_PATTERN)
 
-fun getAppDateFormatter() = formatter
+fun getAppDateFormatter() = formatter!!
 
 fun getParsedDate(dateString: String, dateFormat: String): LocalDate {
     return LocalDate.parse(dateString, DateTimeFormatter.ofPattern(dateFormat))

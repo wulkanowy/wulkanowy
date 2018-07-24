@@ -16,16 +16,16 @@ class TimeUtilsTest {
 
     @Test fun getMondaysFromCurrentSchoolYearTest() {
         val y201718 = getMondaysFromCurrentSchoolYear(LocalDate.of(2018, 1, 1))
-        assertEquals("2017-09-04", y201718.first())
-        assertEquals("2018-08-27", y201718.last())
+        assertEquals("2017-09-04", y201718.first().format(getAppDateFormatter()))
+        assertEquals("2018-08-27", y201718.last().format(getAppDateFormatter()))
 
         val y202122 = getMondaysFromCurrentSchoolYear(LocalDate.of(2022, 1, 1))
-        assertEquals("2021-08-30", y202122.first())
-        assertEquals("2022-08-22", y202122.last())
+        assertEquals("2021-08-30", y202122.first().format(getAppDateFormatter()))
+        assertEquals("2022-08-22", y202122.last().format(getAppDateFormatter()))
 
         val y202223 = getMondaysFromCurrentSchoolYear(LocalDate.of(2023, 1, 1))
-        assertEquals("2022-08-29", y202223.first())
-        assertEquals("2023-08-28", y202223.last())
+        assertEquals("2022-08-29", y202223.first().format(getAppDateFormatter()))
+        assertEquals("2023-08-28", y202223.last().format(getAppDateFormatter()))
     }
 
     @Test fun getCurrentSchoolYearTest() {
@@ -34,12 +34,12 @@ class TimeUtilsTest {
     }
 
     @Test fun getFirstWeekDayTest() {
-        assertEquals("2018-06-18", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 21)))
-        assertEquals("2018-06-18", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 22)))
-        assertEquals("2018-06-25", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 23)))
-        assertEquals("2018-06-25", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 24)))
-        assertEquals("2018-06-25", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 25)))
-        assertEquals("2018-06-25", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 26)))
+        assertEquals("2018-06-18", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 21)).format(getAppDateFormatter()))
+        assertEquals("2018-06-18", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 22)).format(getAppDateFormatter()))
+        assertEquals("2018-06-25", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 23)).format(getAppDateFormatter()))
+        assertEquals("2018-06-25", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 24)).format(getAppDateFormatter()))
+        assertEquals("2018-06-25", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 25)).format(getAppDateFormatter()))
+        assertEquals("2018-06-25", getFirstDayOfCurrentWeek(LocalDate.of(2018, 6, 26)).format(getAppDateFormatter()))
     }
 
     @Test fun getTodayOrNextDayOrderTest() {
