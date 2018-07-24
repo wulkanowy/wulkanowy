@@ -2,13 +2,11 @@ package io.github.wulkanowy.api.attendance
 
 data class AttendanceLesson(
 
-        var number: Int = 0,
+        val number: Int,
 
-        var subject: String = "",
+        val date: String,
 
-        var date: String = "",
-
-        var empty: Boolean = false,
+        val subject: String,
 
         var notExist: Boolean = false,
 
