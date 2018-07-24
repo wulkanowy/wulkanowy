@@ -61,22 +61,4 @@ public class DataObjectConverterTest {
 
         Assert.assertEquals("20.12.2012", dayEntityList.get(0).getDate());
     }
-
-    @Test
-    public void lessonConversionEmptyTest() {
-        Assert.assertEquals(new ArrayList<>(),
-                DataObjectConverter.lessonsToTimetableLessonsEntities(new ArrayList<Lesson>()));
-    }
-
-    @Test
-    public void lessonConversionTest() {
-        List<Lesson> lessonList = new ArrayList<>();
-        Lesson lesson = new Lesson();
-        lesson.setRoom("20");
-        lessonList.add(lesson);
-        List<TimetableLesson> lessonEntityList =
-                DataObjectConverter.lessonsToTimetableLessonsEntities(lessonList);
-
-        Assert.assertEquals("20", lessonEntityList.get(0).getRoom());
-    }
 }

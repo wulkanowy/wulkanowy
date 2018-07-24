@@ -22,11 +22,11 @@ import io.github.wulkanowy.data.db.dao.entities.StudentDao;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.data.db.dao.entities.Symbol;
 import io.github.wulkanowy.data.db.dao.entities.SymbolDao;
+import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
+import io.github.wulkanowy.data.db.dao.entities.TimetableLessonDao;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.data.db.dao.entities.WeekDao;
 import io.github.wulkanowy.data.db.shared.SharedPrefContract;
-
-import static io.github.wulkanowy.utils.TimeUtilsKt.getAppDateFormatter;
 
 public class DbRepository implements DbContract {
 
@@ -143,10 +143,17 @@ public class DbRepository implements DbContract {
 
     @Override
     public List<AttendanceLesson> getAttendance(LocalDate start) {
-
         return daoSession.getAttendanceLessonDao().queryBuilder().where(
                 AttendanceLessonDao.Properties.DiaryId.eq(getCurrentDiaryId()),
                 AttendanceLessonDao.Properties.Date.between(start, start.plusDays(5))
+        ).list();
+    }
+
+    @Override
+    public List<TimetableLesson> getTimetable(LocalDate start) {
+        return daoSession.getTimetableLessonDao().queryBuilder().where(
+                TimetableLessonDao.Properties.DiaryId.eq(getCurrentDiaryId()),
+                TimetableLessonDao.Properties.Date.between(start, start.plusDays(5))
         ).list();
     }
 }

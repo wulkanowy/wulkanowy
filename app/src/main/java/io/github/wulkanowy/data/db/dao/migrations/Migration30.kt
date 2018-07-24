@@ -1,10 +1,9 @@
 package io.github.wulkanowy.data.db.dao.migrations
 
-import org.greenrobot.greendao.database.Database
-
 import io.github.wulkanowy.api.Vulcan
 import io.github.wulkanowy.data.db.dao.DbHelper
 import io.github.wulkanowy.data.db.shared.SharedPrefContract
+import org.greenrobot.greendao.database.Database
 
 class Migration30 : DbHelper.Migration {
 

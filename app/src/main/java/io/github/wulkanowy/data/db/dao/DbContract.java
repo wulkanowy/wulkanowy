@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.db.dao.entities.Diary;
 import io.github.wulkanowy.data.db.dao.entities.Grade;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
 import io.github.wulkanowy.data.db.dao.entities.Symbol;
+import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 
 public interface DbContract {
@@ -42,4 +43,6 @@ public interface DbContract {
     void recreateDatabase();
 
     List<AttendanceLesson> getAttendance(LocalDate start);
+
+    List<TimetableLesson> getTimetable(LocalDate start);
 }

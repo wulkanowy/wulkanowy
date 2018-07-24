@@ -15,7 +15,6 @@ import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
-import static io.github.wulkanowy.utils.TimeUtilsKt.getAppDateFormatter;
 import static io.github.wulkanowy.utils.TimeUtilsKt.getFirstDayOfCurrentWeek;
 import static io.github.wulkanowy.utils.TimeUtilsKt.getMondaysFromCurrentSchoolYear;
 

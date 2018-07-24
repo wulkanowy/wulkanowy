@@ -5,7 +5,6 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
-import org.greenrobot.greendao.annotation.OrderBy;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.ToMany;
 
@@ -30,16 +29,6 @@ public class Day {
     @Property(nameInDb = "day_name")
     private String dayName = "";
 
-    @Property(nameInDb = "free_day")
-    private boolean freeDay = false;
-
-    @Property(nameInDb = "free_day_name")
-    private String freeDayName = "";
-
-    @OrderBy("number ASC")
-    @ToMany(referencedJoinProperty = "dayId")
-    private List<TimetableLesson> timetableLessons;
-
     @ToMany(referencedJoinProperty = "dayId")
     private List<Exam> exams;
 
@@ -49,19 +38,18 @@ public class Day {
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 312167767)
     private transient DayDao myDao;
 
-    @Generated(hash = 523139020)
-    public Day(Long id, Long weekId, String date, String dayName, boolean freeDay,
-               String freeDayName) {
+    @Generated(hash = 322427092)
+    public Day(Long id, Long weekId, String date, String dayName) {
         this.id = id;
         this.weekId = weekId;
         this.date = date;
         this.dayName = dayName;
-        this.freeDay = freeDay;
-        this.freeDayName = freeDayName;
     }
 
     @Generated(hash = 866989762)
@@ -88,67 +76,16 @@ public class Day {
         return this.date;
     }
 
-    public Day setDate(String date) {
+    public void setDate(String date) {
         this.date = date;
-        return this;
     }
 
     public String getDayName() {
         return this.dayName;
     }
 
-    public Day setDayName(String dayName) {
+    public void setDayName(String dayName) {
         this.dayName = dayName;
-        return this;
-    }
-
-    public boolean getFreeDay() {
-        return this.freeDay;
-    }
-
-    public Day setFreeDay(boolean freeDay) {
-        this.freeDay = freeDay;
-        return this;
-    }
-
-    public String getFreeDayName() {
-        return this.freeDayName;
-    }
-
-    public Day setFreeDayName(String freeDayName) {
-        this.freeDayName = freeDayName;
-        return this;
-    }
-
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 218588195)
-    public List<TimetableLesson> getTimetableLessons() {
-        if (timetableLessons == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            TimetableLessonDao targetDao = daoSession.getTimetableLessonDao();
-            List<TimetableLesson> timetableLessonsNew = targetDao
-                    ._queryDay_TimetableLessons(id);
-            synchronized (this) {
-                if (timetableLessons == null) {
-                    timetableLessons = timetableLessonsNew;
-                }
-            }
-        }
-        return timetableLessons;
-    }
-
-    /**
-     * Resets a to-many relationship, making the next get call to query for a fresh result.
-     */
-    @Generated(hash = 1687683740)
-    public synchronized void resetTimetableLessons() {
-        timetableLessons = null;
     }
 
     /**
@@ -223,6 +160,4 @@ public class Day {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getDayDao() : null;
     }
-
-
 }

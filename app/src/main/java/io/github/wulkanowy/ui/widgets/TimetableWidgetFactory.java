@@ -52,7 +52,8 @@ public class TimetableWidgetFactory implements RemoteViewsService.RemoteViewsFac
 
             if (valueOfDay != 5 && valueOfDay != 6 && week != null) {
                 week.resetDayList();
-                lessonList = week.getDayList().get(valueOfDay).getTimetableLessons();
+                //TODO check this
+//                lessonList = week.getDayList().get(valueOfDay).getTimetableLessons();
             }
         }
     }

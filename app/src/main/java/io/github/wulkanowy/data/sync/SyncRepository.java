@@ -1,6 +1,8 @@
 package io.github.wulkanowy.data.sync;
 
+import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.temporal.TemporalAdjusters;
 
 import java.io.IOException;
 
@@ -73,12 +75,12 @@ public class SyncRepository implements SyncContract {
     }
 
     @Override
-    public void syncAttendance() throws IOException, VulcanException {
+    public void syncAttendance() {
         attendanceSync.syncAttendance(database.getCurrentDiaryId(), LocalDate.now());
     }
 
     @Override
-    public void syncAttendance(long diaryId, LocalDate date) throws IOException, VulcanException {
+    public void syncAttendance(long diaryId, LocalDate date) {
         if (diaryId != 0) {
             attendanceSync.syncAttendance(diaryId, date);
         } else {
@@ -87,12 +89,12 @@ public class SyncRepository implements SyncContract {
     }
 
     @Override
-    public void syncTimetable() throws VulcanException, IOException {
-        timetableSync.syncTimetable(database.getCurrentDiaryId(), null);
+    public void syncTimetable() {
+        timetableSync.syncTimetable(database.getCurrentDiaryId(), LocalDate.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)));
     }
 
     @Override
-    public void syncTimetable(long diaryId, String date) throws VulcanException, IOException {
+    public void syncTimetable(long diaryId, LocalDate date) {
         if (diaryId != 0) {
             timetableSync.syncTimetable(diaryId, date);
         } else {

@@ -5,6 +5,7 @@ import io.github.wulkanowy.api.SnP
 import io.github.wulkanowy.api.getDateAsTick
 import io.github.wulkanowy.api.getFormattedDate
 import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 
 class Attendance(private val snp: SnP) {
 
@@ -14,7 +15,7 @@ class Attendance(private val snp: SnP) {
         val table = snp.getSnPPageDocument(ATTENDANCE_PAGE_URL + getDateAsTick(start))
                 .selectFirst(".mainContainer .presentData")
 
-        val days = getDays(table)
+        val days = getDays(table.select("thead th"))
 
         return table.select("tbody tr").map {
             val hours = it.select("td")
@@ -28,8 +29,8 @@ class Attendance(private val snp: SnP) {
         }
     }
 
-    private fun getDays(table: Element): List<String> {
-        return table.select("thead th").drop(1).map {
+    private fun getDays(el: Elements): List<String> {
+        return el.drop(1).map {
             getFormattedDate(it.html().split("<br>")[1])
         }
     }
@@ -56,7 +57,7 @@ class Attendance(private val snp: SnP) {
         return lesson
     }
 
-    private object Types{
+    private object Types {
         const val CLASS_NOT_EXIST = "x-sp-nieobecny-w-oddziale"
         const val CLASS_PRESENCE = "x-obecnosc"
         const val CLASS_ABSENCE_UNEXCUSED = "x-nieobecnosc-nieuspr"

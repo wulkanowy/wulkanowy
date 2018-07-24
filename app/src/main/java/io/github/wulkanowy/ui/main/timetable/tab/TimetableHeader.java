@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.main.timetable.tab;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.util.Pair;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -21,15 +22,15 @@ import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.ExpandableViewHolder;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.utils.CommonUtils;
+import io.github.wulkanowy.utils.TimeUtilsKt;
 
 public class TimetableHeader
         extends AbstractExpandableHeaderItem<TimetableHeader.HeaderViewHolder, TimetableSubItem> {
 
-    private Day day;
+    private Pair<String, String> day;
 
-    TimetableHeader(Day day) {
+    TimetableHeader(Pair<String, String> day) {
         this.day = day;
     }
 
@@ -92,13 +93,14 @@ public class TimetableHeader
             context = view.getContext();
         }
 
-        void onBind(Day item, List<TimetableSubItem> subItems) {
-            dayName.setText(StringUtils.capitalize(item.getDayName()));
-            date.setText(item.getDate());
+        void onBind(Pair<String, String> item, List<TimetableSubItem> subItems) {
+            dayName.setText(StringUtils.capitalize(TimeUtilsKt.getWeekDayName(item.first)));
+            date.setText(item.first);
             alert.setVisibility(isSubItemNewMovedInOrChanged(subItems) ? View.VISIBLE : View.INVISIBLE);
-            freeName.setVisibility(item.getFreeDay() ? View.VISIBLE : View.INVISIBLE);
-            freeName.setText(item.getFreeDayName());
-            setInactiveHeader(item.getFreeDay());
+
+            freeName.setVisibility(item.second.isEmpty() ? View.VISIBLE : View.INVISIBLE);
+            freeName.setText(item.second);
+            setInactiveHeader(!item.second.isEmpty());
         }
 
         private void setInactiveHeader(boolean inactive) {

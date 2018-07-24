@@ -30,21 +30,5 @@ data class Lesson(
 
         var isMovedOrCanceled: Boolean = false,
 
-        var isNewMovedInOrChanged: Boolean = false,
-
-        var isNotExist: Boolean = false,
-
-        var isPresence: Boolean = false,
-
-        var isAbsenceUnexcused: Boolean = false,
-
-        var isAbsenceExcused: Boolean = false,
-
-        var isUnexcusedLateness: Boolean = false,
-
-        var isAbsenceForSchoolReasons: Boolean = false,
-
-        var isExcusedLateness: Boolean = false,
-
-        var isExemption: Boolean = false
+        var isNewMovedInOrChanged: Boolean = false
 )
