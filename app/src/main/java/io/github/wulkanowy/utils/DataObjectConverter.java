@@ -167,25 +167,6 @@ public final class DataObjectConverter {
         return lessonEntityList;
     }
 
-    public static List<AttendanceLesson> lessonsToAttendanceLessonsEntities(List<io.github.wulkanowy.api.generic.Lesson> lessonList) {
-        List<AttendanceLesson> lessonEntityList = new ArrayList<>();
-
-        for (io.github.wulkanowy.api.generic.Lesson lesson : lessonList) {
-            lessonEntityList.add(new AttendanceLesson()
-                    .setNumber(lesson.getNumber())
-                    .setSubject(lesson.getSubject())
-                    .setDate(lesson.getDate())
-                    .setPresence(lesson.isPresence())
-                    .setAbsenceUnexcused(lesson.isAbsenceUnexcused())
-                    .setAbsenceExcused(lesson.isAbsenceExcused())
-                    .setUnexcusedLateness(lesson.isUnexcusedLateness())
-                    .setAbsenceForSchoolReasons(lesson.isAbsenceForSchoolReasons())
-                    .setExcusedLateness(lesson.isExcusedLateness())
-                    .setExemption(lesson.isExemption()));
-        }
-        return lessonEntityList;
-    }
-
     public static List<Exam> examsToExamsEntity(List<io.github.wulkanowy.api.exams.Exam> examList) {
         List<Exam> examEntityList = new ArrayList<>();
 

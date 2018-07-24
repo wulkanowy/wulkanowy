@@ -10,8 +10,7 @@ class AttendanceTest : StudentAndParentTestCase() {
 
     private val excellent by lazy { Attendance(getSnp("Frekwencja-excellent.html")) }
 
-    @Test
-    fun getAttendanceFull() {
+    @Test fun getAttendanceFull() {
         assertTrue(full.getAttendance().isNotEmpty())
         assertEquals(38, full.getAttendance().size)
     }

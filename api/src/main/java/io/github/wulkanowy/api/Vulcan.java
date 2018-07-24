@@ -8,7 +8,6 @@ import java.util.List;
 
 import io.github.wulkanowy.api.attendance.Attendance;
 import io.github.wulkanowy.api.attendance.AttendanceStatistics;
-import io.github.wulkanowy.api.attendance.AttendanceTable;
 import io.github.wulkanowy.api.exams.ExamsWeek;
 import io.github.wulkanowy.api.generic.School;
 import io.github.wulkanowy.api.grades.GradesList;
@@ -70,10 +69,6 @@ public class Vulcan {
                 .setUp();
 
         return this.snp;
-    }
-
-    public AttendanceTable getAttendanceTable() throws IOException, VulcanException {
-        return new AttendanceTable(getStudentAndParent());
     }
 
     public Attendance getAttendance() throws IOException, VulcanException {
