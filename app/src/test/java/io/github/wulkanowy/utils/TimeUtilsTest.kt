@@ -6,8 +6,14 @@ import org.threeten.bp.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
+import java.util.*
 
 class TimeUtilsTest {
+
+    @Before fun setUp() {
+        Locale.setDefault(Locale.ENGLISH)
+    }
 
     @Test fun getParsedDateTest() {
         assertEquals(LocalDate.of(1970, 1, 1),
@@ -83,6 +89,10 @@ class TimeUtilsTest {
                 LocalDate.of(2018, 5, 28),
                 LocalDate.of(2018, 5, 27)
         ))
+    }
+
+    @Test fun getWeekDayNameTest() {
+        assertEquals("Monday", getWeekDayName("2018-07-23"))
     }
 
     @Test fun isHolidaysInSchoolEndTest() {

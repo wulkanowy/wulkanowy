@@ -77,15 +77,19 @@ class AttendanceTabPresenter @Inject constructor(repository: RepositoryContract)
         FabricUtils.logRefresh("Attendance", result, date?.format(getAppDateFormatter()))
     }
 
+    private fun getAttendanceDays(date: LocalDate?) = repository.dbRepo.getAttendance(date).groupBy { it.date }.values
+
     override fun onDoInBackgroundLoading() {
         val isShowPresent = repository.sharedRepo.isShowAttendancePresent
 
-        val lessons = repository.dbRepo.getAttendance(date).groupBy { it.date }.values
+        var days = getAttendanceDays(date)
+        if (days.isEmpty()) {
+            syncData()
+            days = getAttendanceDays(date)
+        }
 
-        if (lessons.isEmpty()) syncData()
-
-        headerItems = lessons.map {
-            val header = AttendanceHeader(Pair(it[0].date, it[0].dateText))
+        headerItems = days.map {
+            val header = AttendanceHeader(it[0].date.format(getAppDateFormatter()))
 
             header.subItems = it.map {
                 AttendanceSubItem(header, it.setDescription(repository.resRepo.getAttendanceLessonDescription(it)))

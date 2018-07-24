@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.main.attendance.tab;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.util.TimeUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -11,8 +12,10 @@ import android.widget.TextView;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.threeten.bp.format.TextStyle;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,16 +24,15 @@ import eu.davidea.flexibleadapter.items.AbstractExpandableHeaderItem;
 import eu.davidea.flexibleadapter.items.IFlexible;
 import eu.davidea.viewholders.ExpandableViewHolder;
 import io.github.wulkanowy.R;
-import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.utils.CommonUtils;
-import kotlin.Pair;
+import io.github.wulkanowy.utils.TimeUtilsKt;
 
 public class AttendanceHeader
         extends AbstractExpandableHeaderItem<AttendanceHeader.HeaderViewHolder, AttendanceSubItem> {
 
-    private Pair<String, String> day;
+    private String day;
 
-    AttendanceHeader(Pair<String, String> day) {
+    AttendanceHeader(String day) {
         this.day = day;
     }
 
@@ -96,9 +98,9 @@ public class AttendanceHeader
             context = view.getContext();
         }
 
-        void onBind(Pair<String, String> item, List<AttendanceSubItem> subItems) {
-            dayName.setText(StringUtils.capitalize(item.getSecond()));
-            date.setText(item.getFirst());
+        void onBind(String item, List<AttendanceSubItem> subItems) {
+            dayName.setText(StringUtils.capitalize(TimeUtilsKt.getWeekDayName(item)));
+            date.setText(item);
 
             int numberOfHours = countNotPresentHours(subItems);
             description.setText((getContentView().getResources().getQuantityString(R.plurals.numberOfAbsences,

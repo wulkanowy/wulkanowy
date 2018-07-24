@@ -26,9 +26,6 @@ public class AttendanceLesson implements Serializable {
     @Property(nameInDb = "date")
     private String date = "";
 
-    @Property(nameInDb = "date_text")
-    private String dateText = "";
-
     @Property(nameInDb = "number_of_lesson")
     private int number = 0;
 
@@ -73,16 +70,15 @@ public class AttendanceLesson implements Serializable {
     @Generated(hash = 1936953859)
     private transient AttendanceLessonDao myDao;
 
-    @Generated(hash = 2115795529)
-    public AttendanceLesson(Long id, Long diaryId, String date, String dateText,
-                            int number, String subject, boolean presence, boolean absenceUnexcused,
+    @Generated(hash = 2095868249)
+    public AttendanceLesson(Long id, Long diaryId, String date, int number,
+                            String subject, boolean presence, boolean absenceUnexcused,
                             boolean absenceExcused, boolean unexcusedLateness,
                             boolean absenceForSchoolReasons, boolean excusedLateness,
                             boolean exemption) {
         this.id = id;
         this.diaryId = diaryId;
         this.date = date;
-        this.dateText = dateText;
         this.number = number;
         this.subject = subject;
         this.presence = presence;
@@ -102,117 +98,96 @@ public class AttendanceLesson implements Serializable {
         return this.id;
     }
 
-    public AttendanceLesson setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
 
     public Long getDiaryId() {
         return this.diaryId;
     }
 
-    public AttendanceLesson setDiaryId(Long diaryId) {
+    public void setDiaryId(Long diaryId) {
         this.diaryId = diaryId;
-        return this;
     }
 
     public String getDate() {
         return this.date;
     }
 
-    public AttendanceLesson setDate(String date) {
+    public void setDate(String date) {
         this.date = date;
-        return this;
-    }
-
-    public String getDateText() {
-        return this.dateText;
-    }
-
-    public AttendanceLesson setDateText(String dateText) {
-        this.dateText = dateText;
-        return this;
     }
 
     public int getNumber() {
         return this.number;
     }
 
-    public AttendanceLesson setNumber(int number) {
+    public void setNumber(int number) {
         this.number = number;
-        return this;
     }
 
     public String getSubject() {
         return this.subject;
     }
 
-    public AttendanceLesson setSubject(String subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
-        return this;
     }
 
     public boolean getPresence() {
         return this.presence;
     }
 
-    public AttendanceLesson setPresence(boolean presence) {
+    public void setPresence(boolean presence) {
         this.presence = presence;
-        return this;
     }
 
     public boolean getAbsenceUnexcused() {
         return this.absenceUnexcused;
     }
 
-    public AttendanceLesson setAbsenceUnexcused(boolean absenceUnexcused) {
+    public void setAbsenceUnexcused(boolean absenceUnexcused) {
         this.absenceUnexcused = absenceUnexcused;
-        return this;
     }
 
     public boolean getAbsenceExcused() {
         return this.absenceExcused;
     }
 
-    public AttendanceLesson setAbsenceExcused(boolean absenceExcused) {
+    public void setAbsenceExcused(boolean absenceExcused) {
         this.absenceExcused = absenceExcused;
-        return this;
     }
 
     public boolean getUnexcusedLateness() {
         return this.unexcusedLateness;
     }
 
-    public AttendanceLesson setUnexcusedLateness(boolean unexcusedLateness) {
+    public void setUnexcusedLateness(boolean unexcusedLateness) {
         this.unexcusedLateness = unexcusedLateness;
-        return this;
     }
 
     public boolean getAbsenceForSchoolReasons() {
         return this.absenceForSchoolReasons;
     }
 
-    public AttendanceLesson setAbsenceForSchoolReasons(boolean absenceForSchoolReasons) {
+    public void setAbsenceForSchoolReasons(boolean absenceForSchoolReasons) {
         this.absenceForSchoolReasons = absenceForSchoolReasons;
-        return this;
     }
 
     public boolean getExcusedLateness() {
         return this.excusedLateness;
     }
 
-    public AttendanceLesson setExcusedLateness(boolean excusedLateness) {
+    public void setExcusedLateness(boolean excusedLateness) {
         this.excusedLateness = excusedLateness;
-        return this;
     }
 
     public boolean getExemption() {
         return this.exemption;
     }
 
-    public AttendanceLesson setExemption(boolean exemption) {
+    public void setExemption(boolean exemption) {
         this.exemption = exemption;
-        return this;
     }
 
     public String getDescription() {

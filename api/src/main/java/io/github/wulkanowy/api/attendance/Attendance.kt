@@ -21,8 +21,7 @@ class Attendance(private val snp: SnP) {
             val hours = it.select("td")
             hours.drop(1).mapIndexed { i, item ->
                 lessons.add(addLessonDetails(AttendanceLesson(
-                        date = days[i].first,
-                        dateText = days[i].second,
+                        date = days[i],
                         number = hours[0].text().toInt()
                 ), item))
             }
@@ -35,10 +34,9 @@ class Attendance(private val snp: SnP) {
         }
     }
 
-    private fun getDays(table: Element): List<Pair<String, String>> {
+    private fun getDays(table: Element): List<String> {
         return table.select("thead th").drop(1).map {
-            val (name, date) = it.html().split("<br>")
-            Pair(getFormattedDate(date.trim()), name.trim())
+            getFormattedDate(it.html().split("<br>")[1])
         }
     }
 

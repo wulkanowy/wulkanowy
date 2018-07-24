@@ -8,8 +8,6 @@ data class AttendanceLesson(
 
         var date: String = "",
 
-        val dateText: String = "",
-
         var empty: Boolean = false,
 
         var notExist: Boolean = false,

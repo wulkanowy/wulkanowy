@@ -1,10 +1,12 @@
 package io.github.wulkanowy.utils
 
+import android.annotation.SuppressLint
 import org.threeten.bp.DayOfWeek.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.Year
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.TemporalAdjusters
+import java.text.SimpleDateFormat
 import java.util.*
 
 private val formatter = DateTimeFormatter.ofPattern(AppConstant.DATE_PATTERN)
@@ -68,6 +70,11 @@ fun getTodayOrNextDay(next: Boolean, date: LocalDate): String? {
 
 fun isDateInWeek(firstWeekDay: LocalDate, date: LocalDate): Boolean {
     return date.isAfter(firstWeekDay.minusDays(1)) && date.isBefore(firstWeekDay.plusDays(5))
+}
+
+@SuppressLint("SimpleDateFormat")
+fun getWeekDayName(dateString: String): String {
+    return SimpleDateFormat("EEEE").format(java.sql.Date.valueOf(dateString))
 }
 
 /**

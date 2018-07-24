@@ -25,7 +25,7 @@ class AttendanceSync @Inject constructor(private val daoSession: DaoSession, pri
     private fun getLessonListToSave(lessons: List<ApiLesson>, diaryId: Long): List<AttendanceLesson> {
         return lessons.map {
             AttendanceLesson(getLessonFromDb(it.date, it.number, diaryId)?.id, diaryId, it.date,
-                    it.dateText, it.number, it.subject, it.presence, it.absenceUnexcused,
+                    it.number, it.subject, it.presence, it.absenceUnexcused,
                     it.absenceExcused, it.unexcusedLateness, it.absenceForSchoolReasons,
                     it.excusedLateness, it.exemption)
         }
