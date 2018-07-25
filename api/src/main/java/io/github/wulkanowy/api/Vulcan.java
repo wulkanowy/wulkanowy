@@ -14,6 +14,8 @@ import io.github.wulkanowy.api.exams.ExamEntry;
 import io.github.wulkanowy.api.exams.Exams;
 import io.github.wulkanowy.api.exams.ExamsWeek;
 import io.github.wulkanowy.api.generic.School;
+import io.github.wulkanowy.api.grades.GradeKt;
+import io.github.wulkanowy.api.grades.Grades;
 import io.github.wulkanowy.api.grades.GradesList;
 import io.github.wulkanowy.api.grades.SubjectsList;
 import io.github.wulkanowy.api.messages.Messages;
@@ -99,6 +101,11 @@ public class Vulcan {
         return new ExamsWeek(getStudentAndParent());
     }
 
+    public List<GradeKt> getGrades(String semester) throws VulcanException, IOException {
+        return new Grades(getStudentAndParent()).getGrades(semester);
+    }
+
+    @Deprecated
     public GradesList getGradesList() throws IOException, VulcanException {
         return new GradesList(getStudentAndParent());
     }

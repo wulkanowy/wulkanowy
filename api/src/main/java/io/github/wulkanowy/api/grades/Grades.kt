@@ -1,0 +1,47 @@
+package io.github.wulkanowy.api.grades
+
+import io.github.wulkanowy.api.GRADES_PAGE_URL
+import io.github.wulkanowy.api.SnP
+import io.github.wulkanowy.api.getFormattedDate
+import java.util.regex.Pattern
+
+class Grades(private val snp: SnP) {
+
+    private val colorPattern by lazy { Pattern.compile("#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})") }
+
+    fun getGrades() = getGrades("")
+
+    fun getGrades(semester: String): List<GradeKt> {
+        val rows = snp.getSnPPageDocument(GRADES_PAGE_URL + semester)
+                .select(".ocenySzczegoly-table > tbody > tr")
+
+        return rows.map {
+            val tds = it.select("td")
+
+            val symbol = tds[2].text().split(", ").first()
+            val description = tds[2].text().replaceFirst(symbol, "").replaceFirst(", ", "")
+
+            GradeKt(
+                    subject = tds[0].text(),
+                    value = tds[1].text(),
+                    color = getColor(tds[1].select(".ocenaCzastkowa").attr("style")),
+                    symbol = symbol,
+                    description = description,
+                    weight = tds[3].text(),
+                    date = getFormattedDate(tds[4].text()),
+                    teacher = tds[5].text()
+            )
+        }.filter {
+            it.value != "Brak ocen"
+        }
+    }
+
+    private fun getColor(styleAttr: String): String {
+        val matcher = colorPattern.matcher(styleAttr)
+        while (matcher.find()) {
+            return matcher.group(1)
+        }
+
+        return ""
+    }
+}
