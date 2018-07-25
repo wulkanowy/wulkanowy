@@ -1,6 +1,5 @@
 package io.github.wulkanowy.api.grades
 
-import io.github.wulkanowy.api.GRADES_PAGE_URL
 import io.github.wulkanowy.api.SnP
 import io.github.wulkanowy.api.getFormattedDate
 import java.util.regex.Pattern
@@ -12,7 +11,7 @@ class Grades(private val snp: SnP) {
     fun getGrades() = getGrades("")
 
     fun getGrades(semester: String): List<GradeKt> {
-        val rows = snp.getSnPPageDocument(GRADES_PAGE_URL + semester)
+        val rows = snp.getSnPPageDocument("Oceny/Wszystkie?details=2&okres=$semester")
                 .select(".ocenySzczegoly-table > tbody > tr")
 
         return rows.map {

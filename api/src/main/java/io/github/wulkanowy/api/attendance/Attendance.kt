@@ -1,6 +1,5 @@
 package io.github.wulkanowy.api.attendance
 
-import io.github.wulkanowy.api.ATTENDANCE_PAGE_URL
 import io.github.wulkanowy.api.SnP
 import io.github.wulkanowy.api.getDateAsTick
 import io.github.wulkanowy.api.getFormattedDate
@@ -12,7 +11,7 @@ class Attendance(private val snp: SnP) {
     fun getAttendance() = getAttendance("")
 
     fun getAttendance(start: String): List<AttendanceLesson> {
-        val table = snp.getSnPPageDocument(ATTENDANCE_PAGE_URL + getDateAsTick(start))
+        val table = snp.getSnPPageDocument("Frekwencja.mvc?data=" + getDateAsTick(start))
                 .selectFirst(".mainContainer .presentData")
 
         val days = getDays(table.select("thead th"))

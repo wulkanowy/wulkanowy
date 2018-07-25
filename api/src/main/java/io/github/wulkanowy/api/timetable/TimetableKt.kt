@@ -1,7 +1,6 @@
 package io.github.wulkanowy.api.timetable
 
 import io.github.wulkanowy.api.SnP
-import io.github.wulkanowy.api.TIMETABLE_PAGE_URL
 import io.github.wulkanowy.api.getDateAsTick
 import io.github.wulkanowy.api.getFormattedDate
 import org.apache.commons.lang3.StringUtils
@@ -13,7 +12,7 @@ class TimetableKt(private val snp: SnP) {
     fun getTimetable() = getTimetable("")
 
     fun getTimetable(start: String): List<TimetableLesson> {
-        val table = snp.getSnPPageDocument(TIMETABLE_PAGE_URL + getDateAsTick(start))
+        val table = snp.getSnPPageDocument("Lekcja.mvc/PlanZajec?data=" + getDateAsTick(start))
                 .select(".mainContainer .presentData").first()
 
         val days = getDays(table.select("thead th"))

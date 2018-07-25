@@ -1,6 +1,5 @@
 package io.github.wulkanowy.api.exams
 
-import io.github.wulkanowy.api.EXAMS_PAGE_URL
 import io.github.wulkanowy.api.SnP
 import io.github.wulkanowy.api.getDateAsTick
 import io.github.wulkanowy.api.getFormattedDate
@@ -10,7 +9,7 @@ class Exams(private val snp: SnP) {
     fun getExams() = getExams("")
 
     fun getExams(start: String): List<ExamEntry> {
-        return snp.getSnPPageDocument(EXAMS_PAGE_URL + getDateAsTick(start))
+        return snp.getSnPPageDocument("Sprawdziany.mvc/Terminarz?rodzajWidoku=2&data=" + getDateAsTick(start))
                 .select(".mainContainer > div:not(.navigation)").map {
             val date = getFormattedDate(it.selectFirst("h2")?.text()?.split(", ")?.last()?.trim())
 
