@@ -20,8 +20,7 @@ class TimetableKt(private val snp: SnP) {
         return table.select("tbody tr").map {
             val hours = it.select("td")
             hours.drop(2).mapIndexed { i, item ->
-                val lessonTime = hours[1].text().split(" ")
-                getLesson(item, days[i], lessonTime, hours[0].text().toInt())
+                getLesson(item, days[i], hours[1].text().split(" "), hours[0].text().toInt())
             }
         }.flatten().sortedBy {
             it.date

@@ -2,6 +2,7 @@ package io.github.wulkanowy.api.grades
 
 import io.github.wulkanowy.api.SnP
 import io.github.wulkanowy.api.getFormattedDate
+import org.jsoup.nodes.Element
 import java.util.regex.Pattern
 
 class Grades(private val snp: SnP) {
@@ -11,28 +12,26 @@ class Grades(private val snp: SnP) {
     fun getGrades() = getGrades("")
 
     fun getGrades(semester: String): List<GradeKt> {
-        val rows = snp.getSnPPageDocument("Oceny/Wszystkie?details=2&okres=$semester")
-                .select(".ocenySzczegoly-table > tbody > tr")
+        return snp.getSnPPageDocument("Oceny/Wszystkie?details=2&okres=$semester")
+                .select(".ocenySzczegoly-table > tbody > tr").map { getGrade(it) }.filter {
+                    it.value != "Brak ocen"
+                }
+    }
 
-        return rows.map {
-            val tds = it.select("td")
+    private fun getGrade(e: Element): GradeKt {
+        val tds = e.select("td")
+        val symbol = tds[2].text().split(", ").first()
 
-            val symbol = tds[2].text().split(", ").first()
-            val description = tds[2].text().replaceFirst(symbol, "").replaceFirst(", ", "")
-
-            GradeKt(
-                    subject = tds[0].text(),
-                    value = tds[1].text(),
-                    color = getColor(tds[1].select(".ocenaCzastkowa").attr("style")),
-                    symbol = symbol,
-                    description = description,
-                    weight = tds[3].text(),
-                    date = getFormattedDate(tds[4].text()),
-                    teacher = tds[5].text()
-            )
-        }.filter {
-            it.value != "Brak ocen"
-        }
+        return GradeKt(
+                subject = tds[0].text(),
+                value = tds[1].text(),
+                color = getColor(tds[1].select(".ocenaCzastkowa").attr("style")),
+                symbol = symbol,
+                description = tds[2].text().replaceFirst(symbol, "").replaceFirst(", ", ""),
+                weight = tds[3].text(),
+                date = getFormattedDate(tds[4].text()),
+                teacher = tds[5].text()
+        )
     }
 
     private fun getColor(styleAttr: String): String {
