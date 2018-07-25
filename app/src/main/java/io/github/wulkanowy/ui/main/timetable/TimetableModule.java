@@ -15,7 +15,7 @@ import io.github.wulkanowy.ui.main.timetable.tab.TimetableTabModule;
 @Module
 public abstract class TimetableModule {
 
-    @Named("TimetableKt")
+    @Named("Timetable")
     @PerFragment
     @Provides
     static BasePagerAdapter providePagerAdapter(TimetableFragment fragment) {

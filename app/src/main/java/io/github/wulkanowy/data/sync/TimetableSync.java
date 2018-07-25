@@ -49,7 +49,7 @@ public class TimetableSync {
 
         daoSession.getTimetableLessonDao().saveInTx(lessonList);
 
-        Timber.d("TimetableKt synchronization complete (%s)", lessonList.size());
+        Timber.d("Timetable synchronization complete (%s)", lessonList.size());
     }
 
     private io.github.wulkanowy.api.generic.Week<io.github.wulkanowy.api.timetable.TimetableDay> getWeekFromApi(String date)

@@ -29,7 +29,7 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     @BindView(R.id.timetable_fragment_tab_layout)
     TabLayout tabLayout;
 
-    @Named("TimetableKt")
+    @Named("Timetable")
     @Inject
     BasePagerAdapter pagerAdapter;
 

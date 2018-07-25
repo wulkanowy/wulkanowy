@@ -98,7 +98,7 @@ public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.Vi
         }
         getView().hideRefreshingBar();
 
-        FabricUtils.logRefresh("TimetableKt", result, date);
+        FabricUtils.logRefresh("Timetable", result, date);
     }
 
     @Override
