@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
-class Timetable(private val snp: SnP) {
+class TimetableKt(private val snp: SnP) {
 
     fun getTimetable() = getTimetable("")
 

@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.threeten.bp.LocalDate;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -50,11 +48,11 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
 
     private boolean isFragmentVisible = false;
 
-    public static TimetableTabFragment newInstance(LocalDate date) {
+    public static TimetableTabFragment newInstance(String date) {
         TimetableTabFragment fragmentTab = new TimetableTabFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ARGUMENT_KEY, date);
+        bundle.putString(ARGUMENT_KEY, date);
         fragmentTab.setArguments(bundle);
 
         return fragmentTab;
@@ -67,7 +65,7 @@ public class TimetableTabFragment extends BaseFragment implements TimetableTabCo
         injectViews(view);
 
         if (getArguments() != null) {
-            presenter.setArgumentDate((LocalDate) getArguments().getSerializable(ARGUMENT_KEY));
+            presenter.setArgumentDate(getArguments().getString(ARGUMENT_KEY));
         }
         presenter.attachView(this);
         presenter.onFragmentActivated(isFragmentVisible);

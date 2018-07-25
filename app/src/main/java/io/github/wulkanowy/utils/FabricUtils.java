@@ -5,8 +5,6 @@ import com.crashlytics.android.answers.CustomEvent;
 import com.crashlytics.android.answers.LoginEvent;
 import com.crashlytics.android.answers.SignUpEvent;
 
-import org.apache.commons.lang3.StringUtils;
-
 public final class FabricUtils {
 
     private FabricUtils() {
@@ -25,7 +23,7 @@ public final class FabricUtils {
                 .putMethod("Login activity")
                 .putSuccess(result)
                 .putCustomAttribute("symbol", symbol)
-                .putCustomAttribute("message", StringUtils.abbreviate(message, 100))
+                .putCustomAttribute("message", message)
         );
     }
 

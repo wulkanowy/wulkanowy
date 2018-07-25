@@ -4,13 +4,13 @@ import io.github.wulkanowy.api.StudentAndParentTestCase
 import org.junit.Assert.*
 import org.junit.Test
 
-class TimetableTest : StudentAndParentTestCase() {
+class TimetableKtTest : StudentAndParentTestCase() {
 
-    private val std by lazy { Timetable(getSnp("PlanLekcji-std.html")) }
+    private val std by lazy { TimetableKt(getSnp("PlanLekcji-std.html")) }
 
-    private val full by lazy { Timetable(getSnp("PlanLekcji-full.html")) }
+    private val full by lazy { TimetableKt(getSnp("PlanLekcji-full.html")) }
 
-    private val holidays by lazy { Timetable(getSnp("PlanLekcji-holidays.html")) }
+    private val holidays by lazy { TimetableKt(getSnp("PlanLekcji-holidays.html")) }
 
     @Test fun getTimetableTest() {
         assertEquals(32, std.getTimetable().size)

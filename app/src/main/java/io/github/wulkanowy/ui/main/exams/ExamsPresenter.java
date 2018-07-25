@@ -2,8 +2,6 @@ package io.github.wulkanowy.ui.main.exams;
 
 import android.support.annotation.NonNull;
 
-import org.threeten.bp.LocalDate;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +21,7 @@ public class ExamsPresenter extends BasePresenter<ExamsContract.View>
 
     private AbstractTask loadingTask;
 
-    private List<LocalDate> dates = new ArrayList<>();
+    private List<String> dates = new ArrayList<>();
 
     private OnFragmentIsReadyListener listener;
 
@@ -76,7 +74,7 @@ public class ExamsPresenter extends BasePresenter<ExamsContract.View>
 
     @Override
     public void onDoInBackgroundLoading() {
-        for (LocalDate date : dates) {
+        for (String date : dates) {
             getView().setTabDataToAdapter(date);
         }
     }

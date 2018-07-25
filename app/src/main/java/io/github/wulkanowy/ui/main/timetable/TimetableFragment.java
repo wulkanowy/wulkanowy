@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.threeten.bp.LocalDate;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -31,7 +29,7 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     @BindView(R.id.timetable_fragment_tab_layout)
     TabLayout tabLayout;
 
-    @Named("Timetable")
+    @Named("TimetableKt")
     @Inject
     BasePagerAdapter pagerAdapter;
 
@@ -61,7 +59,7 @@ public class TimetableFragment extends BaseFragment implements TimetableContract
     }
 
     @Override
-    public void setTabDataToAdapter(LocalDate date) {
+    public void setTabDataToAdapter(String date) {
         pagerAdapter.addFragment(TimetableTabFragment.newInstance(date), date);
     }
 

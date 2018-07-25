@@ -1,8 +1,10 @@
 package io.github.wulkanowy.utils;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.wulkanowy.data.db.dao.entities.AttendanceLesson;
 import io.github.wulkanowy.data.db.dao.entities.Day;
 import io.github.wulkanowy.data.db.dao.entities.Diary;
 import io.github.wulkanowy.data.db.dao.entities.Exam;
@@ -11,6 +13,7 @@ import io.github.wulkanowy.data.db.dao.entities.School;
 import io.github.wulkanowy.data.db.dao.entities.Semester;
 import io.github.wulkanowy.data.db.dao.entities.Student;
 import io.github.wulkanowy.data.db.dao.entities.Subject;
+import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 
 public final class DataObjectConverter {
@@ -117,7 +120,17 @@ public final class DataObjectConverter {
     }
 
     public static Day dayToDayEntity(io.github.wulkanowy.api.generic.Day day) {
-        return new Day(null, null, day.getDate(), day.getDayName());
+        return new Day()
+                .setDate(day.getDate())
+                .setDayName(day.getDayName());
+    }
+
+    public static Day timetableDayToDayEntity(io.github.wulkanowy.api.timetable.TimetableDay day) {
+        return new Day()
+                .setDate(day.getDate())
+                .setDayName(day.getDayName())
+                .setFreeDay(day.isFreeDay())
+                .setFreeDayName(day.getFreeDayName());
     }
 
     public static List<Day> daysToDaysEntities(List<io.github.wulkanowy.api.generic.Day> dayList) {
@@ -127,6 +140,50 @@ public final class DataObjectConverter {
             dayEntityList.add(dayToDayEntity(day));
         }
         return dayEntityList;
+    }
+
+    public static List<TimetableLesson> lessonsToTimetableLessonsEntities(List<io.github.wulkanowy.api.generic.Lesson> lessonList) {
+        List<TimetableLesson> lessonEntityList = new ArrayList<>();
+
+        for (io.github.wulkanowy.api.generic.Lesson lesson : lessonList) {
+            lessonEntityList.add(new TimetableLesson()
+                    .setNumber(lesson.getNumber())
+                    .setSubject(lesson.getSubject())
+                    .setTeacher(lesson.getTeacher())
+                    .setRoom(lesson.getRoom())
+                    .setDescription(lesson.getDescription())
+                    .setGroup(lesson.getGroupName())
+                    .setStartTime(lesson.getStartTime())
+                    .setEndTime(lesson.getEndTime())
+                    .setDate(lesson.getDate())
+                    .setEmpty(lesson.isEmpty())
+                    .setDivisionIntoGroups(lesson.isDivisionIntoGroups())
+                    .setPlanning(lesson.isPlanning())
+                    .setRealized(lesson.isRealized())
+                    .setMovedOrCanceled(lesson.isMovedOrCanceled())
+                    .setNewMovedInOrChanged(lesson.isNewMovedInOrChanged()));
+        }
+
+        return lessonEntityList;
+    }
+
+    public static List<AttendanceLesson> lessonsToAttendanceLessonsEntities(List<io.github.wulkanowy.api.generic.Lesson> lessonList) {
+        List<AttendanceLesson> lessonEntityList = new ArrayList<>();
+
+        for (io.github.wulkanowy.api.generic.Lesson lesson : lessonList) {
+            lessonEntityList.add(new AttendanceLesson()
+                    .setNumber(lesson.getNumber())
+                    .setSubject(lesson.getSubject())
+                    .setDate(lesson.getDate())
+                    .setPresence(lesson.isPresence())
+                    .setAbsenceUnexcused(lesson.isAbsenceUnexcused())
+                    .setAbsenceExcused(lesson.isAbsenceExcused())
+                    .setUnexcusedLateness(lesson.isUnexcusedLateness())
+                    .setAbsenceForSchoolReasons(lesson.isAbsenceForSchoolReasons())
+                    .setExcusedLateness(lesson.isExcusedLateness())
+                    .setExemption(lesson.isExemption()));
+        }
+        return lessonEntityList;
     }
 
     public static List<Exam> examsToExamsEntity(List<io.github.wulkanowy.api.exams.Exam> examList) {

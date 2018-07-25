@@ -1,5 +1,7 @@
 package io.github.wulkanowy.data.db.dao.entities;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -12,7 +14,7 @@ import java.io.Serializable;
 @Entity(
         nameInDb = "TimetableLessons",
         active = true,
-        indexes = {@Index(value = "diaryId,date,number,startTime,endTime", unique = true)}
+        indexes = {@Index(value = "dayId,date,number,startTime,endTime", unique = true)}
 )
 public class TimetableLesson implements Serializable {
 
@@ -21,8 +23,8 @@ public class TimetableLesson implements Serializable {
     @Id(autoincrement = true)
     private Long id;
 
-    @Property(nameInDb = "diary_id")
-    private Long diaryId;
+    @Property(nameInDb = "day_id")
+    private Long dayId;
 
     @Property(nameInDb = "number")
     private int number = 0;
@@ -51,9 +53,6 @@ public class TimetableLesson implements Serializable {
     @Property(nameInDb = "date")
     private String date = "";
 
-    @Property(nameInDb = "free_day_name")
-    private String freeDayName = "";
-
     @Property(nameInDb = "empty")
     private boolean empty = false;
 
@@ -78,19 +77,17 @@ public class TimetableLesson implements Serializable {
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
 
-    /**
-     * Used for active entity operations.
-     */
+    /** Used for active entity operations. */
     @Generated(hash = 1119360138)
     private transient TimetableLessonDao myDao;
 
-    @Generated(hash = 1497054786)
-    public TimetableLesson(Long id, Long diaryId, int number, String subject, String teacher, String room,
-            String description, String group, String startTime, String endTime, String date, String freeDayName,
-            boolean empty, boolean divisionIntoGroups, boolean planning, boolean realized,
-            boolean movedOrCanceled, boolean newMovedInOrChanged) {
+    @Generated(hash = 1665905034)
+    public TimetableLesson(Long id, Long dayId, int number, String subject, String teacher,
+                           String room, String description, String group, String startTime, String endTime,
+                           String date, boolean empty, boolean divisionIntoGroups, boolean planning,
+                           boolean realized, boolean movedOrCanceled, boolean newMovedInOrChanged) {
         this.id = id;
-        this.diaryId = diaryId;
+        this.dayId = dayId;
         this.number = number;
         this.subject = subject;
         this.teacher = teacher;
@@ -100,7 +97,6 @@ public class TimetableLesson implements Serializable {
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;
-        this.freeDayName = freeDayName;
         this.empty = empty;
         this.divisionIntoGroups = divisionIntoGroups;
         this.planning = planning;
@@ -112,7 +108,7 @@ public class TimetableLesson implements Serializable {
     @Generated(hash = 1878030142)
     public TimetableLesson() {
     }
-
+    
     public Long getId() {
         return this.id;
     }
@@ -121,132 +117,174 @@ public class TimetableLesson implements Serializable {
         this.id = id;
     }
 
-    public Long getDiaryId() {
-        return this.diaryId;
+    public Long getDayId() {
+        return this.dayId;
     }
 
-    public void setDiaryId(Long diaryId) {
-        this.diaryId = diaryId;
+    public TimetableLesson setDayId(Long dayId) {
+        this.dayId = dayId;
+        return this;
     }
 
     public int getNumber() {
         return this.number;
     }
 
-    public void setNumber(int number) {
+    public TimetableLesson setNumber(int number) {
         this.number = number;
+        return this;
     }
 
     public String getSubject() {
         return this.subject;
     }
 
-    public void setSubject(String subject) {
+    public TimetableLesson setSubject(String subject) {
         this.subject = subject;
+        return this;
     }
 
     public String getTeacher() {
         return this.teacher;
     }
 
-    public void setTeacher(String teacher) {
+    public TimetableLesson setTeacher(String teacher) {
         this.teacher = teacher;
+        return this;
     }
 
     public String getRoom() {
         return this.room;
     }
 
-    public void setRoom(String room) {
+    public TimetableLesson setRoom(String room) {
         this.room = room;
+        return this;
     }
 
     public String getDescription() {
         return this.description;
     }
 
-    public void setDescription(String description) {
+    public TimetableLesson setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public String getGroup() {
         return this.group;
     }
 
-    public void setGroup(String group) {
+    public TimetableLesson setGroup(String group) {
         this.group = group;
+        return this;
     }
 
     public String getStartTime() {
         return this.startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public TimetableLesson setStartTime(String startTime) {
         this.startTime = startTime;
+        return this;
     }
 
     public String getEndTime() {
         return this.endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public TimetableLesson setEndTime(String endTime) {
         this.endTime = endTime;
+        return this;
     }
 
     public String getDate() {
         return this.date;
     }
 
-    public void setDate(String date) {
+    public TimetableLesson setDate(String date) {
         this.date = date;
+        return this;
     }
 
     public boolean getEmpty() {
         return this.empty;
     }
 
-    public void setEmpty(boolean empty) {
+    public TimetableLesson setEmpty(boolean empty) {
         this.empty = empty;
+        return this;
     }
 
     public boolean getDivisionIntoGroups() {
         return this.divisionIntoGroups;
     }
 
-    public void setDivisionIntoGroups(boolean divisionIntoGroups) {
+    public TimetableLesson setDivisionIntoGroups(boolean divisionIntoGroups) {
         this.divisionIntoGroups = divisionIntoGroups;
+        return this;
     }
 
     public boolean getPlanning() {
         return this.planning;
     }
 
-    public void setPlanning(boolean planning) {
+    public TimetableLesson setPlanning(boolean planning) {
         this.planning = planning;
+        return this;
     }
 
     public boolean getRealized() {
         return this.realized;
     }
 
-    public void setRealized(boolean realized) {
+    public TimetableLesson setRealized(boolean realized) {
         this.realized = realized;
+        return this;
     }
 
     public boolean getMovedOrCanceled() {
         return this.movedOrCanceled;
     }
 
-    public void setMovedOrCanceled(boolean movedOrCanceled) {
+    public TimetableLesson setMovedOrCanceled(boolean movedOrCanceled) {
         this.movedOrCanceled = movedOrCanceled;
+        return this;
     }
 
     public boolean getNewMovedInOrChanged() {
         return this.newMovedInOrChanged;
     }
 
-    public void setNewMovedInOrChanged(boolean newMovedInOrChanged) {
+    public TimetableLesson setNewMovedInOrChanged(boolean newMovedInOrChanged) {
         this.newMovedInOrChanged = newMovedInOrChanged;
+        return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TimetableLesson lesson = (TimetableLesson) o;
+
+        return new EqualsBuilder()
+                .append(number, lesson.number)
+                .append(startTime, lesson.startTime)
+                .append(endTime, lesson.endTime)
+                .append(date, lesson.date)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(number)
+                .append(startTime)
+                .append(endTime)
+                .append(date)
+                .toHashCode();
     }
 
     /**
@@ -283,14 +321,6 @@ public class TimetableLesson implements Serializable {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.update(this);
-    }
-
-    public String getFreeDayName() {
-        return this.freeDayName;
-    }
-
-    public void setFreeDayName(String freeDayName) {
-        this.freeDayName = freeDayName;
     }
 
     /** called by internal mechanisms, do not call yourself. */

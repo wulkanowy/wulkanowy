@@ -33,9 +33,6 @@ public class Diary {
     @ToMany(referencedJoinProperty = "diaryId")
     private List<Semester> semesterList;
 
-    @ToMany(referencedJoinProperty = "diaryId")
-    private List<AttendanceLesson> attendanceLessonList;
-
     /**
      * Used to resolve relations
      */
@@ -169,35 +166,6 @@ public class Diary {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.update(this);
-    }
-
-    /**
-     * To-many relationship, resolved on first access (and after reset).
-     * Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated(hash = 1994925584)
-    public List<AttendanceLesson> getAttendanceLessonList() {
-        if (attendanceLessonList == null) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            AttendanceLessonDao targetDao = daoSession.getAttendanceLessonDao();
-            List<AttendanceLesson> attendanceLessonListNew = targetDao
-                    ._queryDiary_AttendanceLessonList(id);
-            synchronized (this) {
-                if (attendanceLessonList == null) {
-                    attendanceLessonList = attendanceLessonListNew;
-                }
-            }
-        }
-        return attendanceLessonList;
-    }
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    @Generated(hash = 209550260)
-    public synchronized void resetAttendanceLessonList() {
-        attendanceLessonList = null;
     }
 
     /** called by internal mechanisms, do not call yourself. */

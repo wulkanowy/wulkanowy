@@ -1,17 +1,13 @@
 package io.github.wulkanowy.utils
 
-import android.annotation.SuppressLint
 import org.threeten.bp.DayOfWeek.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.Year
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.TemporalAdjusters
-import java.text.SimpleDateFormat
 import java.util.*
 
 private val formatter = DateTimeFormatter.ofPattern(AppConstant.DATE_PATTERN)
-
-fun getAppDateFormatter() = formatter!!
 
 fun getParsedDate(dateString: String, dateFormat: String): LocalDate {
     return LocalDate.parse(dateString, DateTimeFormatter.ofPattern(dateFormat))
@@ -19,16 +15,16 @@ fun getParsedDate(dateString: String, dateFormat: String): LocalDate {
 
 fun getMondaysFromCurrentSchoolYear() = getMondaysFromCurrentSchoolYear(LocalDate.now())
 
-fun getMondaysFromCurrentSchoolYear(date: LocalDate): ArrayList<LocalDate> {
+fun getMondaysFromCurrentSchoolYear(date: LocalDate): List<String> {
     val startDate = getFirstSchoolDay(getSchoolYearForDate(date))
             ?.with(TemporalAdjusters.previousOrSame(MONDAY))
     val endDate = getFirstSchoolDay(getSchoolYearForDate(date) + 1)
             ?.with(TemporalAdjusters.previousOrSame(MONDAY))
 
-    val dateList = ArrayList<LocalDate>()
+    val dateList = ArrayList<String>()
     var monday = startDate as LocalDate
     while (monday.isBefore(endDate)) {
-        dateList.add(monday)
+        dateList.add(monday.format(formatter))
         monday = monday.plusWeeks(1)
     }
 
@@ -39,14 +35,14 @@ fun getSchoolYearForDate(date: LocalDate): Int {
     return if (date.monthValue <= 8) date.year - 1 else date.year
 }
 
-fun getFirstDayOfCurrentWeek() = getFirstDayOfCurrentWeek(LocalDate.now())
+fun getFirstDayOfCurrentWeek(): String = getFirstDayOfCurrentWeek(LocalDate.now())
 
-fun getFirstDayOfCurrentWeek(date: LocalDate): LocalDate {
+fun getFirstDayOfCurrentWeek(date: LocalDate): String {
     return when (date.dayOfWeek) {
         SATURDAY -> date.plusDays(2)
         SUNDAY -> date.plusDays(1)
         else -> date.with(MONDAY)
-    }
+    }.format(formatter)
 }
 
 fun getTodayOrNextDayOrder(next: Boolean): Int = getTodayOrNextDayOrder(next, LocalDate.now())
@@ -72,11 +68,6 @@ fun isDateInWeek(firstWeekDay: LocalDate, date: LocalDate): Boolean {
     return date.isAfter(firstWeekDay.minusDays(1)) && date.isBefore(firstWeekDay.plusDays(5))
 }
 
-@SuppressLint("SimpleDateFormat")
-fun getWeekDayName(dateString: String): String {
-    return SimpleDateFormat("EEEE").format(java.sql.Date.valueOf(dateString))
-}
-
 /**
  * [Dz.U. 2016 poz. 1335](http://prawo.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20160001335)
  */
@@ -93,7 +84,9 @@ fun getFirstSchoolDay(year: Int): LocalDate? {
         FRIDAY,
         SATURDAY,
         SUNDAY -> firstSeptember.with(TemporalAdjusters.firstInMonth(MONDAY))
-        else -> firstSeptember
+        else -> {
+            firstSeptember
+        }
     }
 }
 

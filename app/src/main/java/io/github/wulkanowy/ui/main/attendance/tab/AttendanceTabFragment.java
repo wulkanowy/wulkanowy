@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.threeten.bp.LocalDate;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -46,11 +44,11 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
 
     private boolean isFragmentVisible = false;
 
-    public static AttendanceTabFragment newInstance(LocalDate date) {
+    public static AttendanceTabFragment newInstance(String date) {
         AttendanceTabFragment fragmentTab = new AttendanceTabFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ARGUMENT_KEY, date);
+        bundle.putString(ARGUMENT_KEY, date);
         fragmentTab.setArguments(bundle);
 
         return fragmentTab;
@@ -63,7 +61,7 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
         injectViews(view);
 
         if (getArguments() != null) {
-            presenter.setArgumentDate((LocalDate) getArguments().getSerializable(ARGUMENT_KEY));
+            presenter.setArgumentDate(getArguments().getString(ARGUMENT_KEY));
         }
 
         presenter.attachView(this);
@@ -72,7 +70,7 @@ public class AttendanceTabFragment extends BaseFragment implements AttendanceTab
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         adapter.setAutoCollapseOnExpand(true);
         adapter.setAutoScrollOnExpand(true);
         adapter.expandItemsAtStartUp();

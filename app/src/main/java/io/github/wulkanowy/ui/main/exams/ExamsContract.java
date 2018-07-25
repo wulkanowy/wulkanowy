@@ -2,8 +2,6 @@ package io.github.wulkanowy.ui.main.exams;
 
 import android.support.annotation.NonNull;
 
-import org.threeten.bp.LocalDate;
-
 import io.github.wulkanowy.ui.base.BaseContract;
 import io.github.wulkanowy.ui.main.OnFragmentIsReadyListener;
 
@@ -17,7 +15,7 @@ public interface ExamsContract {
 
         void scrollViewPagerToPosition(int position);
 
-        void setTabDataToAdapter(LocalDate date);
+        void setTabDataToAdapter(String date);
 
         void setAdapterWithTabLayout();
 

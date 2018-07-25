@@ -1,6 +1,8 @@
-package io.github.wulkanowy.ui.main.exams.tab;
+package io.github.wulkanowy.ui.main.timetable.tab;
 
 import android.support.annotation.NonNull;
+
+import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,34 +11,40 @@ import javax.inject.Inject;
 
 import io.github.wulkanowy.data.RepositoryContract;
 import io.github.wulkanowy.data.db.dao.entities.Day;
-import io.github.wulkanowy.data.db.dao.entities.Exam;
+import io.github.wulkanowy.data.db.dao.entities.TimetableLesson;
 import io.github.wulkanowy.data.db.dao.entities.Week;
 import io.github.wulkanowy.ui.base.BasePresenter;
+import io.github.wulkanowy.utils.AppConstant;
 import io.github.wulkanowy.utils.FabricUtils;
 import io.github.wulkanowy.utils.async.AbstractTask;
 import io.github.wulkanowy.utils.async.AsyncListeners;
 
-public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
-        implements ExamsTabContract.Presenter, AsyncListeners.OnFirstLoadingListener,
-        AsyncListeners.OnRefreshListener {
+import static io.github.wulkanowy.utils.TimeUtilsKt.getParsedDate;
+import static io.github.wulkanowy.utils.TimeUtilsKt.isDateInWeek;
+
+public class TimetableTabPresenter extends BasePresenter<TimetableTabContract.View>
+        implements TimetableTabContract.Presenter, AsyncListeners.OnRefreshListener,
+        AsyncListeners.OnFirstLoadingListener {
 
     private AbstractTask refreshTask;
 
     private AbstractTask loadingTask;
 
-    private List<ExamsSubItem> subItems = new ArrayList<>();
+    private List<TimetableHeader> headerItems = new ArrayList<>();
 
     private String date;
+
+    private String freeWeekName;
 
     private boolean isFirstSight = false;
 
     @Inject
-    ExamsTabPresenter(RepositoryContract repository) {
+    TimetableTabPresenter(RepositoryContract repository) {
         super(repository);
     }
 
     @Override
-    public void attachView(@NonNull ExamsTabContract.View view) {
+    public void attachView(@NonNull TimetableTabContract.View view) {
         super.attachView(view);
         getView().showProgressBar(true);
         getView().showNoItem(false);
@@ -45,19 +53,12 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
     @Override
     public void onFragmentActivated(boolean isSelected) {
         if (!isFirstSight && isSelected && isViewAttached()) {
-            isFirstSight = true;
-
             loadingTask = new AbstractTask();
             loadingTask.setOnFirstLoadingListener(this);
             loadingTask.execute();
         } else if (!isSelected) {
             cancelAsyncTasks();
         }
-    }
-
-    @Override
-    public void setArgumentDate(String date) {
-        this.date = date;
     }
 
     @Override
@@ -97,14 +98,14 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
         }
         getView().hideRefreshingBar();
 
-        FabricUtils.logRefresh("Exams", result, date);
+        FabricUtils.logRefresh("TimetableKt", result, date);
     }
 
     @Override
     public void onDoInBackgroundLoading() throws Exception {
         Week week = getRepository().getDbRepo().getWeek(date);
 
-        if (week == null || !week.getExamsSynced()) {
+        if (week == null || !week.getTimetableSynced()) {
             syncData();
             week = getRepository().getDbRepo().getWeek(date);
         }
@@ -112,17 +113,34 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
         week.resetDayList();
         List<Day> dayList = week.getDayList();
 
-        subItems = new ArrayList<>();
+        headerItems = new ArrayList<>();
+
+        boolean isFreeWeek = true;
 
         for (Day day : dayList) {
-            day.resetExams();
-            ExamsHeader headerItem = new ExamsHeader(day);
+            day.resetTimetableLessons();
+            TimetableHeader headerItem = new TimetableHeader(day);
 
-            List<Exam> examList = day.getExams();
-
-            for (Exam exam : examList) {
-                subItems.add(new ExamsSubItem(headerItem, exam));
+            if (isFreeWeek) {
+                isFreeWeek = day.getFreeDay();
             }
+
+            List<TimetableLesson> lessonList = day.getTimetableLessons();
+
+            List<TimetableSubItem> subItems = new ArrayList<>();
+
+            for (TimetableLesson lesson : lessonList) {
+                subItems.add(new TimetableSubItem(headerItem, lesson));
+            }
+
+            headerItem.setSubItems(subItems);
+            headerItem.setExpanded(false);
+            headerItems.add(headerItem);
+        }
+
+        if (isFreeWeek) {
+            freeWeekName = dayList.get(4).getFreeDayName();
+            headerItems = new ArrayList<>();
         }
     }
 
@@ -133,18 +151,33 @@ public class ExamsTabPresenter extends BasePresenter<ExamsTabContract.View>
 
     @Override
     public void onEndLoadingAsync(boolean result, Exception exception) {
-        if (subItems.isEmpty()) {
-            getView().showNoItem(true);
-            getView().updateAdapterList(null);
+        getView().showNoItem(headerItems.isEmpty());
+        getView().updateAdapterList(headerItems);
+
+        if (headerItems.isEmpty()) {
+            getView().setFreeWeekName(freeWeekName);
         } else {
-            getView().updateAdapterList(subItems);
-            getView().showNoItem(false);
+            expandCurrentDayHeader();
         }
         getView().showProgressBar(false);
+        isFirstSight = true;
+    }
+
+    private void expandCurrentDayHeader() {
+        LocalDate monday = getParsedDate(date, AppConstant.DATE_PATTERN);
+
+        if (isDateInWeek(monday, LocalDate.now()) && !isFirstSight) {
+            getView().expandItem(LocalDate.now().getDayOfWeek().getValue() - 1);
+        }
+    }
+
+    @Override
+    public void setArgumentDate(String date) {
+        this.date = date;
     }
 
     private void syncData() throws Exception {
-        getRepository().getSyncRepo().syncExams(0, date);
+        getRepository().getSyncRepo().syncTimetable(0, date);
     }
 
     private void cancelAsyncTasks() {
