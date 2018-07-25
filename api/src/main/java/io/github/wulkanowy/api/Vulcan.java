@@ -10,6 +10,8 @@ import io.github.wulkanowy.api.attendance.Attendance;
 import io.github.wulkanowy.api.attendance.AttendanceLesson;
 import io.github.wulkanowy.api.attendance.AttendanceStatistics;
 import io.github.wulkanowy.api.attendance.AttendanceTable;
+import io.github.wulkanowy.api.exams.ExamEntry;
+import io.github.wulkanowy.api.exams.Exams;
 import io.github.wulkanowy.api.exams.ExamsWeek;
 import io.github.wulkanowy.api.generic.School;
 import io.github.wulkanowy.api.grades.GradesList;
@@ -88,6 +90,11 @@ public class Vulcan {
         return new AttendanceStatistics(getStudentAndParent());
     }
 
+    public List<ExamEntry> getExams(String dateStart) throws VulcanException, IOException {
+        return new Exams(getStudentAndParent()).getExams(dateStart);
+    }
+
+    @Deprecated
     public ExamsWeek getExamsList() throws IOException, VulcanException {
         return new ExamsWeek(getStudentAndParent());
     }
