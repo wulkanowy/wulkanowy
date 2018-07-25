@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.List;
 
+import io.github.wulkanowy.api.attendance.Attendance;
+import io.github.wulkanowy.api.attendance.AttendanceLesson;
 import io.github.wulkanowy.api.attendance.AttendanceStatistics;
 import io.github.wulkanowy.api.attendance.AttendanceTable;
 import io.github.wulkanowy.api.exams.ExamsWeek;
@@ -20,6 +22,8 @@ import io.github.wulkanowy.api.notes.NotesList;
 import io.github.wulkanowy.api.school.SchoolInfo;
 import io.github.wulkanowy.api.school.TeachersInfo;
 import io.github.wulkanowy.api.timetable.Timetable;
+import io.github.wulkanowy.api.timetable.TimetableKt;
+import io.github.wulkanowy.api.timetable.TimetableLesson;
 import io.github.wulkanowy.api.user.BasicInformation;
 import io.github.wulkanowy.api.user.FamilyInformation;
 
@@ -71,6 +75,11 @@ public class Vulcan {
         return this.snp;
     }
 
+    public List<AttendanceLesson> getAttendance(String dateStart) throws VulcanException, IOException {
+        return new Attendance(getStudentAndParent()).getAttendance(dateStart);
+    }
+
+    @Deprecated
     public AttendanceTable getAttendanceTable() throws IOException, VulcanException {
         return new AttendanceTable(getStudentAndParent());
     }
@@ -107,6 +116,11 @@ public class Vulcan {
         return new TeachersInfo(getStudentAndParent());
     }
 
+    public List<TimetableLesson> getTimetable(String dateStart) throws VulcanException, IOException {
+        return new TimetableKt(getStudentAndParent()).getTimetable(dateStart);
+    }
+
+    @Deprecated
     public Timetable getTimetable() throws IOException, VulcanException {
         return new Timetable(getStudentAndParent());
     }
