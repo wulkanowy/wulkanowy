@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt' // sync warning probably caused by bug https://issuetracker.google.com/issues/74537216
+apply plugin: 'kotlin-kapt'// sync warning probably caused by bug https://issuetracker.google.com/issues/74537216
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply from: 'jacoco.gradle'
 apply from: 'android-sonarqube.gradle'

@@ -21,24 +21,25 @@ class LoginPresenter @Inject constructor(disposable: CompositeDisposable,
 
     private var symbol: String? = null
 
-    override fun attemptLogin(email: String, password: String, symbol: String) {
+    override fun attemptLogin(email: String, password: String) {
         view?.resetViewErrors()
 
         this.email = email
         this.password = password
-        this.symbol = getNormalizedSymbol(symbol)
 
         if (!isAllFieldCorrect(password, email)) {
-            view?.showSoftInput()
+            view?.showSoftKeyboard()
             return
         }
+
+        view?.showLoginProgress(true)
 
         studentRepository.getConnectedStudents(email, password)
                 .observeOn(schedulers.mainThread())
                 .subscribeOn(schedulers.backgroundThread())
-                .subscribe { _ -> }
+                .subscribe { _ -> view?.showLoginProgress(false) }
 
-        view?.hideSoftInput()
+        view?.hideSoftKeyboard()
     }
 
 
@@ -87,9 +88,5 @@ class LoginPresenter @Inject constructor(disposable: CompositeDisposable,
             correct = false
         }
         return correct
-    }
-
-    override fun detachView() {
-        super.detachView()
     }
 }
