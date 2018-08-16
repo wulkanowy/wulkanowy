@@ -7,9 +7,7 @@ import org.jsoup.nodes.Element
 
 class HomeworkList(private val snp: SnP) {
 
-    fun getHomework() = getHomework("")
-
-    fun getHomework(date: String): List<Homework> {
+    fun getHomework(date: String = ""): List<Homework> {
         return snp.getSnPPageDocument("ZadaniaDomowe.mvc?data=${getDateAsTick(date)}&rodzajWidoku=Dzien")
                 .select(".mainContainer article").map {
                     getItem(it, date)
