@@ -18,5 +18,5 @@ internal class AppModule {
     fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 
     @Provides
-    fun provideShedulers(): SchedulersManager = AppSchedulers()
+    fun provideSchedulers(): SchedulersManager = AppSchedulers()
 }
