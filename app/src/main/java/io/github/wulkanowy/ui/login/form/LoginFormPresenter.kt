@@ -1,11 +1,8 @@
 package io.github.wulkanowy.ui.login.form
 
-import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
-import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -17,13 +14,7 @@ class LoginFormPresenter @Inject constructor(disposable: CompositeDisposable,
     override fun attemptLogin(email: String, password: String) {
         if (!validateCredentials(email, password)) return
 
-        ReactiveNetwork.checkInternetConnectivity()
-                .flatMap { isConnected ->
-                    if (isConnected) {
-                        return@flatMap studentRepository.getConnectedStudents(email, password)
-                    }
-                    Single.error<List<Student>>(RuntimeException())
-                }
+        studentRepository.getConnectedStudents(email, password)
                 .observeOn(schedulers.mainThread())
                 .subscribeOn(schedulers.backgroundThread())
                 .subscribe({ students -> }, { exception -> view?.showNoNetworkMessage() })

@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.v7.preference.PreferenceManager
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import dagger.Module
 import dagger.Provides
 import io.github.wulkanowy.api.Vulcan
@@ -13,6 +14,12 @@ import javax.inject.Singleton
 
 @Module
 internal class RepositoryModule {
+
+    @Singleton
+    @Provides
+    fun provideInternetObservingSettings(): InternetObservingSettings {
+        return InternetObservingSettings.create()
+    }
 
     @Singleton
     @Provides
