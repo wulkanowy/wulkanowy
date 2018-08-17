@@ -8,7 +8,6 @@ import dagger.Module
 import dagger.Provides
 import io.github.wulkanowy.api.Vulcan
 import io.github.wulkanowy.data.db.AppDatabase
-import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.utils.AppConstant
 import javax.inject.Singleton
 
@@ -17,7 +16,7 @@ internal class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideVulcanApi(): Vulcan = Vulcan()
+    fun provideVulcanApi() = Vulcan()
 
     @Singleton
     @Provides
@@ -34,5 +33,5 @@ internal class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideStudentDao(database: AppDatabase): StudentDao = database.studentDao()
+    fun provideStudentDao(database: AppDatabase) = database.studentDao()
 }

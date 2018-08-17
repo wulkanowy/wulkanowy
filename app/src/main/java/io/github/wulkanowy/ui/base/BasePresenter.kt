@@ -2,7 +2,7 @@ package io.github.wulkanowy.ui.base
 
 import io.reactivex.disposables.CompositeDisposable
 
-open class BasePresenter<T : BaseContract.View>(val disposable: CompositeDisposable)
+open class BasePresenter<T : BaseContract.View>(private val disposable: CompositeDisposable)
     : BaseContract.Presenter<T> {
 
     var view: T? = null

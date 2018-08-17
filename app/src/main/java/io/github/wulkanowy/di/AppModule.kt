@@ -15,7 +15,7 @@ internal class AppModule {
     fun provideContext(app: WulkanowyApp): Context = app
 
     @Provides
-    fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
+    fun provideCompositeDisposable() = CompositeDisposable()
 
     @Provides
     fun provideSchedulers(): SchedulersManager = AppSchedulers()
