@@ -7,7 +7,7 @@ import android.widget.Toast
 import dagger.android.support.DaggerAppCompatActivity
 import io.github.wulkanowy.R
 
-abstract class BaseActivity : DaggerAppCompatActivity(), BaseContract.View {
+abstract class BaseActivity : DaggerAppCompatActivity(), BaseView {
 
     protected lateinit var messageView: View
 

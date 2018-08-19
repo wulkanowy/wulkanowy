@@ -1,13 +1,17 @@
 package io.github.wulkanowy.ui.splash
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.di.scopes.PerActivity
+import io.reactivex.disposables.CompositeDisposable
 
 @Module
-internal abstract class SplashModule {
+internal class SplashModule {
 
     @PerActivity
-    @Binds
-    abstract fun provideSplashPresenter(splashPresenter: SplashPresenter): SplashContract.Presenter
+    @Provides
+    fun provideSplashPresenter(disposable: CompositeDisposable, repository: StudentRepository): SplashPresenter {
+        return SplashPresenter(repository, disposable)
+    }
 }

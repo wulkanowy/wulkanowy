@@ -1,11 +1,17 @@
 package io.github.wulkanowy.ui.login.options
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import io.github.wulkanowy.di.scopes.PerChildFragment
+import io.github.wulkanowy.ui.login.LoginPresenter
+import io.reactivex.disposables.CompositeDisposable
 
 @Module
-internal abstract class LoginOptionsModule {
+internal class LoginOptionsModule {
 
-    @Binds
-    abstract fun provideLoginPresenter(presenter: LoginOptionsPresenter): LoginOptionsContract.Presenter
+    @Provides
+    @PerChildFragment
+    fun provideLoginPresenter(disposable: CompositeDisposable): LoginPresenter {
+        return LoginPresenter(disposable)
+    }
 }

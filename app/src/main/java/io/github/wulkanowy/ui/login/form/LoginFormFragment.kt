@@ -14,10 +14,10 @@ import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.fragment_login_form.*
 import javax.inject.Inject
 
-class LoginFormFragment : BaseFragment(), LoginFormContract.View {
+class LoginFormFragment : BaseFragment(), LoginFormView {
 
     @Inject
-    lateinit var presenter: LoginFormContract.Presenter
+    lateinit var presenter: LoginFormPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_form, container, false)

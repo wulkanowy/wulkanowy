@@ -8,10 +8,10 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import javax.inject.Inject
 
-class LoginOptionsFragment : BaseFragment(), LoginOptionsContract.View {
+class LoginOptionsFragment : BaseFragment(), LoginOptionsView {
 
     @Inject
-    lateinit var presenter: LoginOptionsContract.Presenter
+    lateinit var presenter: LoginOptionsPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_options, container, false)

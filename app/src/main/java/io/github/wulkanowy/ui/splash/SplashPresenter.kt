@@ -6,10 +6,10 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class SplashPresenter @Inject constructor(private val studentRepository: StudentRepository,
-                                          composite: CompositeDisposable)
-    : BasePresenter<SplashContract.View>(composite), SplashContract.Presenter {
+                                          disposable: CompositeDisposable)
+    : BasePresenter<SplashView>(disposable) {
 
-    override fun attachView(view: SplashContract.View) {
+    override fun attachView(view: SplashView) {
         super.attachView(view)
         view.cancelNotifications()
 

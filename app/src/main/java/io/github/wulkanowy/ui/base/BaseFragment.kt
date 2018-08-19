@@ -4,7 +4,7 @@ import android.support.annotation.StringRes
 
 import dagger.android.support.DaggerFragment
 
-abstract class BaseFragment : DaggerFragment(), BaseContract.View {
+abstract class BaseFragment : DaggerFragment(), BaseView {
 
     fun setTitle(title: String) {
         activity?.title = title

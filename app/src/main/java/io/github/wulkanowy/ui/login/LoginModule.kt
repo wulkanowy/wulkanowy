@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.login
 
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
@@ -11,6 +10,7 @@ import io.github.wulkanowy.ui.login.form.LoginFormFragment
 import io.github.wulkanowy.ui.login.form.LoginFormModule
 import io.github.wulkanowy.ui.login.options.LoginOptionsFragment
 import io.github.wulkanowy.ui.login.options.LoginOptionsModule
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Named
 
 @Module
@@ -18,15 +18,19 @@ internal abstract class LoginModule {
 
     @Module
     companion object {
+
         @JvmStatic
         @Provides
         @Named("Login")
         fun provideLoginAdapter(activity: LoginActivity) = BasePagerAdapter(activity.supportFragmentManager)
-    }
 
-    @PerActivity
-    @Binds
-    abstract fun provideLoginPresenter(loginPresenter: LoginPresenter): LoginContract.Presenter
+        @JvmStatic
+        @Provides
+        @PerActivity
+        fun provideLoginPresenter(disposable: CompositeDisposable): LoginPresenter {
+            return LoginPresenter(disposable)
+        }
+    }
 
     @PerChildFragment
     @ContributesAndroidInjector(modules = [LoginFormModule::class])

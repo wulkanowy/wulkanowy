@@ -6,10 +6,10 @@ import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.login.LoginActivity
 import javax.inject.Inject
 
-class SplashActivity : BaseActivity(), SplashContract.View {
+class SplashActivity : BaseActivity(), SplashView {
 
     @Inject
-    lateinit var presenter: SplashContract.Presenter
+    lateinit var presenter: SplashPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -12,10 +12,10 @@ import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 import javax.inject.Named
 
-class LoginActivity : BaseActivity(), LoginContract.View {
+class LoginActivity : BaseActivity(), LoginView {
 
     @Inject
-    lateinit var presenter: LoginContract.Presenter
+    lateinit var presenter: LoginPresenter
 
     @Inject
     @field:Named("Login")

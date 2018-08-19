@@ -9,9 +9,9 @@ import javax.inject.Inject
 class LoginFormPresenter @Inject constructor(disposable: CompositeDisposable,
                                              private val schedulers: SchedulersManager,
                                              private val studentRepository: StudentRepository)
-    : BasePresenter<LoginFormContract.View>(disposable), LoginFormContract.Presenter {
+    : BasePresenter<LoginFormView>(disposable) {
 
-    override fun attemptLogin(email: String, password: String) {
+    fun attemptLogin(email: String, password: String) {
         if (!validateCredentials(email, password)) return
 
         studentRepository.getConnectedStudents(email, password)

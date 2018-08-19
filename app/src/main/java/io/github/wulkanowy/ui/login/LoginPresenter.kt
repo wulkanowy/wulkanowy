@@ -5,6 +5,6 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class LoginPresenter @Inject constructor(disposable: CompositeDisposable)
-    : BasePresenter<LoginContract.View>(disposable), LoginContract.Presenter {
+    : BasePresenter<LoginView>(disposable) {
 
 }
