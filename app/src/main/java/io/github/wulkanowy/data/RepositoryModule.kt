@@ -9,7 +9,7 @@ import dagger.Module
 import dagger.Provides
 import io.github.wulkanowy.api.Vulcan
 import io.github.wulkanowy.data.db.AppDatabase
-import io.github.wulkanowy.utils.AppConstant
+import io.github.wulkanowy.utils.DATABASE_NAME
 import javax.inject.Singleton
 
 @Module
@@ -28,7 +28,7 @@ internal class RepositoryModule {
     @Singleton
     @Provides
     fun provideDatabase(context: Context): AppDatabase {
-        return Room.databaseBuilder(context, AppDatabase::class.java, AppConstant.DATABASE_NAME)
+        return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
                 .build()
     }
 

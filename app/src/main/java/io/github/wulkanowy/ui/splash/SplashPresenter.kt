@@ -1,13 +1,13 @@
 package io.github.wulkanowy.ui.splash
 
+import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class SplashPresenter @Inject constructor(private val studentRepository: StudentRepository,
-                                          disposable: CompositeDisposable)
-    : BasePresenter<SplashView>(disposable) {
+                                          errorHandler: ErrorHandler)
+    : BasePresenter<SplashView>(errorHandler) {
 
     override fun attachView(view: SplashView) {
         super.attachView(view)

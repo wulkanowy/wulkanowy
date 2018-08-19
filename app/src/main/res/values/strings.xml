@@ -4,6 +4,7 @@
     <!-- Strings related to login -->
     <string name="title_activity_login">Sign in</string>
     <string name="login_heading">Sign in with VULCAN account</string>
+    <string name="login_heading_symbol">Enter the VULCAN diary symbol</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_symbol">Symbol</string>
@@ -14,6 +15,7 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_incorrect_symbol">No student found. Check the symbol</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_bad_account_permission">No permission to open log. Check another symbol</string>
     <string name="login_accepted_text">Login is successful</string>

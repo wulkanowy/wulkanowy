@@ -5,8 +5,11 @@ import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.utils.hideSoftInput
@@ -28,7 +31,9 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         presenter.attachView(this)
 
         loginSignButton.setOnClickListener {
-            presenter.attemptLogin(loginEmailEdit.text.toString(), loginPassEdit.text.toString())
+            presenter.attemptLogin(loginEmailEdit.text.toString(),
+                    loginPassEdit.text.toString(),
+                    loginSymbolEdit.text.toString())
         }
 
         loginPassEdit.setOnEditorActionListener { _, id, _ ->
@@ -37,6 +42,20 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
                 else -> false
             }
         }
+
+        loginSymbolEdit.setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1,
+                resources.getStringArray(R.array.symbols_values)))
+    }
+
+    override fun showSymbolInput() {
+        loginMainForm.visibility = GONE
+        loginSymbolInput.visibility = VISIBLE
+        loginFormHeader.text = getString(R.string.login_heading_symbol)
+        loginSymbolEdit.requestFocus()
+    }
+
+    override fun switchNextView() {
+
     }
 
     override fun setErrorEmailRequired() {
@@ -67,6 +86,13 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
     }
 
+    override fun setErrorSymbolRequire() {
+        loginSymbolEdit.run {
+            requestFocus()
+            error = getString(R.string.error_field_required)
+        }
+    }
+
     override fun setErrorPassIncorrect() {
         loginPassEdit.run {
             requestFocus()
@@ -74,13 +100,16 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
     }
 
+    override fun setErrorSymbolIncorrect() {
+        loginSymbolEdit.run {
+            requestFocus()
+            error = getString(R.string.error_incorrect_symbol)
+        }
+    }
+
     override fun resetViewErrors() {
         loginEmailEdit.error = null
         loginPassEdit.error = null
-    }
-
-    override fun showActionBar(show: Boolean) {
-        activity?.actionBar?.run { if (show) show() else hide() }
     }
 
     override fun showSoftKeyboard() {
@@ -95,26 +124,26 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         val animTime = resources.getInteger(android.R.integer.config_shortAnimTime)
 
         loginFormContainer.run {
-            visibility = if (show) View.GONE else View.VISIBLE
+            visibility = if (show) GONE else VISIBLE
             animate().run {
                 duration = animTime.toLong()
                 alpha((if (show) 0f else 1f))
                 setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator?) {
-                        loginFormContainer.visibility = if (show) View.GONE else View.VISIBLE
+                        loginFormContainer.visibility = if (show) GONE else VISIBLE
                     }
                 })
             }
         }
 
         loginProgressContainer.run {
-            visibility = if (show) View.VISIBLE else View.GONE
+            visibility = if (show) VISIBLE else GONE
             animate().run {
                 duration = animTime.toLong()
                 alpha((if (show) 1f else 0f))
                 setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator?) {
-                        loginProgressContainer.visibility = if (show) View.VISIBLE else View.GONE
+                        loginProgressContainer.visibility = if (show) VISIBLE else GONE
                     }
                 })
             }

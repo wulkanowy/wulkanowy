@@ -20,11 +20,11 @@ class StudentRepository @Inject constructor(private val local: StudentLocal,
     val isStudentLoggedIn: Boolean
         get() = local.isStudentLoggedIn
 
-    fun getConnectedStudents(email: String, password: String): Single<List<Student>> {
+    fun getConnectedStudents(email: String, password: String, symbol: String): Single<List<Student>> {
         return if (cachedStudents.isEmpty()) {
             ReactiveNetwork.checkInternetConnectivity(settings)
                     .flatMap { isConnected ->
-                        if (isConnected) remote.getConnectedStudents(email, password)
+                        if (isConnected) remote.getConnectedStudents(email, password, symbol)
                         else Single.error<List<Student>>(UnknownHostException("No internet connection"))
                     }.doAfterSuccess { cachedStudents = it }
         } else Single.just(cachedStudents)

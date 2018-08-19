@@ -4,9 +4,9 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import io.github.wulkanowy.WulkanowyApp
-import io.github.wulkanowy.utils.schedulers.AppSchedulers
+import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
-import io.reactivex.disposables.CompositeDisposable
+import io.github.wulkanowy.utils.schedulers.SchedulersProvider
 
 @Module
 internal class AppModule {
@@ -15,8 +15,8 @@ internal class AppModule {
     fun provideContext(app: WulkanowyApp): Context = app
 
     @Provides
-    fun provideCompositeDisposable() = CompositeDisposable()
+    fun provideSchedulers(): SchedulersManager = SchedulersProvider()
 
     @Provides
-    fun provideSchedulers(): SchedulersManager = AppSchedulers()
+    fun provideErrorHandler(context: Context): ErrorHandler = ErrorHandler(context.resources)
 }

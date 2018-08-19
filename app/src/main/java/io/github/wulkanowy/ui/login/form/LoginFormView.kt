@@ -8,11 +8,15 @@ interface LoginFormView : BaseView {
 
     fun setErrorPassRequired(focus: Boolean)
 
+    fun setErrorSymbolRequire()
+
     fun setErrorEmailInvalid()
 
     fun setErrorPassInvalid(focus: Boolean)
 
     fun setErrorPassIncorrect()
+
+    fun setErrorSymbolIncorrect()
 
     fun resetViewErrors()
 
@@ -20,7 +24,9 @@ interface LoginFormView : BaseView {
 
     fun hideSoftKeyboard()
 
-    fun showActionBar(show: Boolean)
-
     fun showLoginProgress(show: Boolean)
+
+    fun showSymbolInput()
+
+    fun switchNextView()
 }

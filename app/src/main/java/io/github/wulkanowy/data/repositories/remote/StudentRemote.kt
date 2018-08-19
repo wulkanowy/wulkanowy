@@ -9,9 +9,9 @@ import javax.inject.Inject
 
 class StudentRemote @Inject constructor(private val api: Vulcan) {
 
-    fun getConnectedStudents(email: String, password: String): Single<List<Student>> {
+    fun getConnectedStudents(email: String, password: String, symbol: String): Single<List<Student>> {
         return Single.fromCallable {
-            initApi(email, password)
+            initApi(email, password, symbol)
             getSymbols().mapNotNull { symbol ->
                 try {
                     initApi(email, password, symbol)
@@ -36,8 +36,7 @@ class StudentRemote @Inject constructor(private val api: Vulcan) {
         }
     }
 
-    private fun initApi(email: String, password: String, symbol: String = "Deafult",
-                        schoolId: String? = null) {
+    private fun initApi(email: String, password: String, symbol: String, schoolId: String? = null) {
         api.apply {
             logout()
             setCredentials(email, password, symbol, schoolId, null, null)

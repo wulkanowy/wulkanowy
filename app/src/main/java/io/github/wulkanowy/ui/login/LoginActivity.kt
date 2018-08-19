@@ -30,6 +30,7 @@ class LoginActivity : BaseActivity(), LoginView {
         setContentView(R.layout.activity_login)
         presenter.attachView(this)
 
+        messageView = loginContainer
         loginAdapter.addFragments(LoginFormFragment(), LoginOptionsFragment())
         loginViewpager.adapter = loginAdapter
     }
