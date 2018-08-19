@@ -91,7 +91,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         activity?.hideSoftInput()
     }
 
-    fun showLoginProgress(show: Boolean) {
+    override fun showLoginProgress(show: Boolean) {
         val animTime = resources.getInteger(android.R.integer.config_shortAnimTime)
 
         loginFormContainer.run {

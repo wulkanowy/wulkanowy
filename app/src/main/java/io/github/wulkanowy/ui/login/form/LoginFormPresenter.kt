@@ -6,7 +6,7 @@ import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
-class LoginFormPresenter @Inject constructor(disposable: CompositeDisposable,
+class LoginFormPresenter @Inject constructor(private val disposable: CompositeDisposable,
                                              private val schedulers: SchedulersManager,
                                              private val studentRepository: StudentRepository)
     : BasePresenter<LoginFormView>(disposable) {
@@ -14,10 +14,19 @@ class LoginFormPresenter @Inject constructor(disposable: CompositeDisposable,
     fun attemptLogin(email: String, password: String) {
         if (!validateCredentials(email, password)) return
 
-        studentRepository.getConnectedStudents(email, password)
+        view?.run {
+            hideSoftKeyboard()
+            showLoginProgress(true)
+        }
+
+        disposable.add(studentRepository.getConnectedStudents(email, password)
                 .observeOn(schedulers.mainThread())
                 .subscribeOn(schedulers.backgroundThread())
-                .subscribe({ students -> }, { exception -> view?.showNoNetworkMessage() })
+                .subscribe({ students ->
+                    view?.run {
+                        showLoginProgress(false)
+                    }
+                }, { exception -> view?.showNoNetworkMessage() }))
 
     }
 

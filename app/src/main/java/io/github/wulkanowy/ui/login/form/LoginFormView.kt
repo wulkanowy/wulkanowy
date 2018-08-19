@@ -21,4 +21,6 @@ interface LoginFormView : BaseView {
     fun hideSoftKeyboard()
 
     fun showActionBar(show: Boolean)
+
+    fun showLoginProgress(show: Boolean)
 }

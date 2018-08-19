@@ -13,6 +13,6 @@ fun Activity.showSoftInput() {
 
 fun Activity.hideSoftInput() {
     (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?)?.run {
-        hideSoftInputFromInputMethod(window.decorView.applicationWindowToken, 0)
+        hideSoftInputFromWindow(window.decorView.applicationWindowToken, 0)
     }
 }
