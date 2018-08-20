@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.login.LoginSwitchListener
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.fragment_login_form.*
@@ -55,7 +56,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     }
 
     override fun switchNextView() {
-
+        (activity as LoginSwitchListener?)?.switchFragment(1)
     }
 
     override fun setErrorEmailRequired() {

@@ -88,6 +88,10 @@ android {
     }
 }
 
+androidExtensions {
+    experimental = true
+}
+
 play {
     track = 'alpha'
     uploadImages = true

@@ -10,7 +10,7 @@ class LoginErrorHandler(resources: Resources) : ErrorHandler(resources) {
 
     override fun proceed(error: Throwable) {
         when (error) {
-            is BadCredentialsException -> doOnBadCredentials.invoke()
+            is BadCredentialsException -> doOnBadCredentials()
             else -> super.proceed(error)
         }
     }

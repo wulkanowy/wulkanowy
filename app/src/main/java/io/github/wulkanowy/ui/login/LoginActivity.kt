@@ -8,11 +8,12 @@ import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.BasePagerAdapter
 import io.github.wulkanowy.ui.login.form.LoginFormFragment
 import io.github.wulkanowy.ui.login.options.LoginOptionsFragment
+import io.github.wulkanowy.utils.setOnSelectPageListener
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 import javax.inject.Named
 
-class LoginActivity : BaseActivity(), LoginView {
+class LoginActivity : BaseActivity(), LoginView, LoginSwitchListener {
 
     @Inject
     lateinit var presenter: LoginPresenter
@@ -32,7 +33,14 @@ class LoginActivity : BaseActivity(), LoginView {
 
         messageView = loginContainer
         loginAdapter.addFragments(LoginFormFragment(), LoginOptionsFragment())
-        loginViewpager.adapter = loginAdapter
+        loginViewpager.run {
+            adapter = loginAdapter
+            setOnSelectPageListener { (loginAdapter.getItem(it) as LoginOptionsFragment).loadData() }
+        }
+    }
+
+    override fun switchFragment(position: Int) {
+        loginViewpager.setCurrentItem(position, false)
     }
 
     public override fun onDestroy() {
