@@ -3,6 +3,7 @@ package io.github.wulkanowy.data.repositories.remote
 import io.github.wulkanowy.api.Vulcan
 import io.github.wulkanowy.api.login.AccountPermissionException
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.utils.DEFAULT_SYMBOL
 import io.reactivex.Single
 import org.apache.commons.lang3.StringUtils.stripAccents
 import javax.inject.Inject
@@ -12,27 +13,28 @@ class StudentRemote @Inject constructor(private val api: Vulcan) {
     fun getConnectedStudents(email: String, password: String, symbol: String): Single<List<Student>> {
         return Single.fromCallable {
             initApi(email, password, symbol)
-            getSymbols().mapNotNull { symbol ->
-                try {
-                    initApi(email, password, symbol)
-                    api.schools.flatMap { school ->
-                        initApi(email, password, symbol, school.id)
-                        api.studentAndParent.students.map { student ->
-                            Student(
-                                    email = email,
-                                    password = password,
-                                    symbol = symbol,
-                                    studentId = student.id.toLong(),
-                                    studentName = student.name,
-                                    schoolId = school.id.toLong(),
-                                    schoolName = school.name
-                            )
+            getSymbols().filterNot { it == DEFAULT_SYMBOL }
+                    .mapNotNull { symbol ->
+                        try {
+                            initApi(email, password, symbol)
+                            api.schools.flatMap { school ->
+                                initApi(email, password, symbol, school.id)
+                                api.studentAndParent.students.map { student ->
+                                    Student(
+                                            email = email,
+                                            password = password,
+                                            symbol = symbol,
+                                            studentId = student.id.toLong(),
+                                            studentName = student.name,
+                                            schoolId = school.id.toLong(),
+                                            schoolName = school.name
+                                    )
+                                }
+                            }
+                        } catch (e: AccountPermissionException) {
+                            null
                         }
-                    }
-                } catch (e: AccountPermissionException) {
-                    null
-                }
-            }.flatten()
+                    }.flatten()
         }
     }
 

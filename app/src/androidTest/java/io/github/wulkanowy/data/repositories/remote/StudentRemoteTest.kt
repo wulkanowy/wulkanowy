@@ -5,6 +5,7 @@ import io.github.wulkanowy.api.StudentAndParent
 import io.github.wulkanowy.api.Vulcan
 import io.github.wulkanowy.api.generic.School
 import io.github.wulkanowy.api.login.AccountPermissionException
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
@@ -14,9 +15,16 @@ import io.github.wulkanowy.api.generic.Student as StudentApi
 @RunWith(AndroidJUnit4::class)
 class StudentRemoteTest {
 
+    private lateinit var mockApi: Vulcan
+
+    @Before
+    fun initApi() {
+        mockApi = mock(Vulcan::class.java)
+        doNothing().`when`(mockApi).setCredentials(any(), any(), any(), any(), any(), any())
+    }
+
     @Test
     fun testRemoteAll() {
-        val mockApi = mock(Vulcan::class.java)
         `when`(mockApi.symbols).thenReturn(mutableListOf("przeworsk", "jaroslaw", "zarzecze"))
         `when`(mockApi.schools).thenReturn(mutableListOf(
                 School("ZSTIO", "123", false),
@@ -29,11 +37,9 @@ class StudentRemoteTest {
                     name = "Włodzimierz"
                     isCurrent = false
                 }))
-
         `when`(mockApi.studentAndParent).thenReturn(mockSnP)
-        doNothing().`when`(mockApi).setCredentials(any(), any(), any(), any(), any(), any())
 
-        val students = StudentRemote(mockApi).getConnectedStudents("test@test.com", "test123", "test").blockingGet()
+        val students = StudentRemote(mockApi).getConnectedStudents("", "", "").blockingGet()
         assert(students.size == 6)
         assert(students[3].studentName == "Włodzimierz")
 
@@ -41,12 +47,18 @@ class StudentRemoteTest {
 
     @Test
     fun testOneEmptySymbol() {
-        val mockApi = mock(Vulcan::class.java)
-        doNothing().`when`(mockApi).setCredentials(any(), any(), any(), any(), any(), any())
         doReturn(mutableListOf("przeworsk")).`when`(mockApi).symbols
         doThrow(AccountPermissionException::class.java).`when`(mockApi).schools
 
-        val students = StudentRemote(mockApi).getConnectedStudents("test@test.com", "test123", "test").blockingGet()
+        val students = StudentRemote(mockApi).getConnectedStudents("", "", "").blockingGet()
+        assert(students.isEmpty())
+    }
+
+    @Test
+    fun testDefaultSymbol() {
+        doReturn(listOf("Default")).`when`(mockApi).symbols
+
+        val students = StudentRemote(mockApi).getConnectedStudents("", "", "").blockingGet()
         assert(students.isEmpty())
     }
 }
