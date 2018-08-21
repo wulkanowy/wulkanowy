@@ -5,4 +5,6 @@ import io.github.wulkanowy.ui.base.BaseView
 interface LoginOptionsView : BaseView {
 
     fun updateData(data: List<LoginOptionsItem>)
+
+    fun initRecycler()
 }

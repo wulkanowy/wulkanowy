@@ -7,7 +7,9 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.utils.security.Scrambler
 import io.reactivex.Single
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class StudentLocal @Inject constructor(private val studentDb: StudentDao,
                                        private val sharedPref: SharedPrefHelper,
                                        private val context: Context) {

@@ -30,17 +30,31 @@ class LoginActivity : BaseActivity(), LoginView, LoginSwitchListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         presenter.attachView(this)
-
         messageView = loginContainer
+    }
+
+    override fun initAdapter() {
         loginAdapter.addFragments(LoginFormFragment(), LoginOptionsFragment())
         loginViewpager.run {
             adapter = loginAdapter
-            setOnSelectPageListener { (loginAdapter.getItem(it) as LoginOptionsFragment).loadData() }
+            setOnSelectPageListener { presenter.onPageSelected(it) }
         }
     }
 
     override fun switchFragment(position: Int) {
+        presenter.onSwitchFragment(position)
+    }
+
+    override fun switchView(position: Int) {
         loginViewpager.setCurrentItem(position, false)
+    }
+
+    override fun hideActionBar() {
+        supportActionBar?.hide()
+    }
+
+    override fun loadOptionsView(index: Int) {
+        (loginAdapter.getItem(index) as LoginOptionsFragment).loadData()
     }
 
     public override fun onDestroy() {

@@ -11,10 +11,16 @@ class LoginOptionsPresenter @Inject constructor(private val errorHandler: ErrorH
                                                 private val schedulers: SchedulersManager)
     : BasePresenter<LoginOptionsView>(errorHandler) {
 
+    override fun attachView(view: LoginOptionsView) {
+        super.attachView(view)
+        view.initRecycler()
+    }
+
     fun refreshData() {
         disposable.add(repository.cachedStudents
                 .observeOn(schedulers.mainThread())
                 .subscribeOn(schedulers.backgroundThread())
+                .doAfterSuccess { repository.clearCache() }
                 .subscribe({
                     view?.updateData(it.map { student ->
                         LoginOptionsItem(student)

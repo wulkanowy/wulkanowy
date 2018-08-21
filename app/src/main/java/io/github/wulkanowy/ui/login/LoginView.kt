@@ -4,4 +4,11 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface LoginView : BaseView {
 
+    fun initAdapter()
+
+    fun loadOptionsView(index: Int)
+
+    fun switchView(position: Int)
+
+    fun hideActionBar()
 }

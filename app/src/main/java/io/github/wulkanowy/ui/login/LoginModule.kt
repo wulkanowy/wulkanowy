@@ -1,14 +1,13 @@
 package io.github.wulkanowy.ui.login
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
-import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.di.scopes.PerActivity
-import io.github.wulkanowy.di.scopes.PerChildFragment
+import io.github.wulkanowy.di.scopes.PerFragment
 import io.github.wulkanowy.ui.base.BasePagerAdapter
 import io.github.wulkanowy.ui.login.form.LoginFormFragment
-import io.github.wulkanowy.ui.login.form.LoginFormModule
 import io.github.wulkanowy.ui.login.options.LoginOptionsFragment
 import io.github.wulkanowy.ui.login.options.LoginOptionsModule
 import javax.inject.Named
@@ -25,18 +24,16 @@ internal abstract class LoginModule {
         fun provideLoginAdapter(activity: LoginActivity) = BasePagerAdapter(activity.supportFragmentManager)
 
         @JvmStatic
-        @Provides
         @PerActivity
-        fun provideLoginPresenter(errorHandler: ErrorHandler): LoginPresenter {
-            return LoginPresenter(errorHandler)
-        }
+        @Provides
+        fun provideLoginErrorHandler(context: Context) = LoginErrorHandler(context.resources)
     }
 
-    @PerChildFragment
-    @ContributesAndroidInjector(modules = [LoginFormModule::class])
+    @PerFragment
+    @ContributesAndroidInjector()
     abstract fun bindLoginFormFragment(): LoginFormFragment
 
-    @PerChildFragment
+    @PerFragment
     @ContributesAndroidInjector(modules = [LoginOptionsModule::class])
     abstract fun bindLoginOptionsFragment(): LoginOptionsFragment
 }

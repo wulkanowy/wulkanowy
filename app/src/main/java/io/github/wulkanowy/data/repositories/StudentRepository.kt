@@ -15,18 +15,19 @@ class StudentRepository @Inject constructor(private val local: StudentLocal,
                                             private val remote: StudentRemote,
                                             private val settings: InternetObservingSettings) {
 
-    var cachedStudents: Single<List<Student>> = Single.just(listOf())
+    lateinit var cachedStudents: Single<List<Student>>
         private set
 
     val isStudentLoggedIn: Boolean
         get() = local.isStudentLoggedIn
 
     fun getConnectedStudents(email: String, password: String, symbol: String): Single<List<Student>> {
-        return ReactiveNetwork.checkInternetConnectivity(settings)
+        cachedStudents = ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap { isConnected ->
                     if (isConnected) remote.getConnectedStudents(email, password, symbol)
                     else Single.error<List<Student>>(UnknownHostException("No internet connection"))
-                }.doAfterSuccess { cachedStudents = Single.just(it) }
+                }.doOnSuccess { cachedStudents = Single.just(it) }
+        return cachedStudents
     }
 
     fun save(student: Student) {
@@ -36,6 +37,6 @@ class StudentRepository @Inject constructor(private val local: StudentLocal,
     fun getCurrentStudent(): Single<Student> = local.getCurrentStudent()
 
     fun clearCache() {
-        cachedStudents = Single.just(listOf())
+        cachedStudents = Single.just(emptyList())
     }
 }

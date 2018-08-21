@@ -24,6 +24,7 @@
     <string name="login_failed_text">Logowanie nie powiodło się. Spróbuj ponownie lub zrestartuj aplikację</string>
     <string name="action_create_account">Nie masz jeszcze konta? Załóż je</string>
     <string name="action_forgot_password">Zapomniałeś hasła?</string>
+    <string name="login_options_header">Wybierz ucznia</string>
 
     <string name="color_black_text">Czarny</string>
     <string name="color_red_text">Czerwony</string>

@@ -4,6 +4,8 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface LoginFormView : BaseView {
 
+    fun initInputs()
+
     fun setErrorEmailRequired()
 
     fun setErrorPassRequired(focus: Boolean)

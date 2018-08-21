@@ -11,12 +11,6 @@ class SplashPresenter @Inject constructor(private val studentRepository: Student
 
     override fun attachView(view: SplashView) {
         super.attachView(view)
-        view.cancelNotifications()
-
-        if (studentRepository.isStudentLoggedIn) {
-            view.openMainActivity()
-        } else {
-            view.openLoginActivity()
-        }
+        view.run { if (studentRepository.isStudentLoggedIn) openMainActivity() else openLoginActivity() }
     }
 }

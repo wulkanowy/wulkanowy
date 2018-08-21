@@ -30,29 +30,36 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         presenter.attachView(this)
+    }
 
+    override fun initInputs() {
         loginSignButton.setOnClickListener {
             presenter.attemptLogin(loginEmailEdit.text.toString(),
                     loginPassEdit.text.toString(),
                     loginSymbolEdit.text.toString())
         }
 
-        loginPassEdit.setOnEditorActionListener { _, id, _ ->
-            when (id) {
-                EditorInfo.IME_ACTION_DONE, EditorInfo.IME_NULL -> loginSignButton.callOnClick()
-                else -> false
-            }
-        }
+        loginPassEdit.setOnEditorActionListener { _, id, _ -> onEditAction(id) }
 
-        loginSymbolEdit.setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1,
-                resources.getStringArray(R.array.symbols_values)))
+        loginSymbolEdit.run {
+            setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1,
+                    resources.getStringArray(R.array.symbols_values)))
+            setOnEditorActionListener { _, id, _ -> onEditAction(id) }
+        }
+    }
+
+    private fun onEditAction(actionId: Int): Boolean {
+        return when (actionId) {
+            EditorInfo.IME_ACTION_DONE, EditorInfo.IME_NULL -> loginSignButton.callOnClick()
+            else -> false
+        }
     }
 
     override fun showSymbolInput() {
         loginMainForm.visibility = GONE
-        loginSymbolInput.visibility = VISIBLE
-        loginFormHeader.text = getString(R.string.login_heading_symbol)
+        loginSymbolForm.visibility = VISIBLE
         loginSymbolEdit.requestFocus()
+        showSoftKeyboard()
     }
 
     override fun switchNextView() {

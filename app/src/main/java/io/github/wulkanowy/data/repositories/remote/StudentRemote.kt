@@ -7,7 +7,9 @@ import io.github.wulkanowy.utils.DEFAULT_SYMBOL
 import io.reactivex.Single
 import org.apache.commons.lang3.StringUtils.stripAccents
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class StudentRemote @Inject constructor(private val api: Vulcan) {
 
     fun getConnectedStudents(email: String, password: String, symbol: String): Single<List<Student>> {

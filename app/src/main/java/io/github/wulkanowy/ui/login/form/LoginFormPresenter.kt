@@ -14,6 +14,11 @@ class LoginFormPresenter @Inject constructor(private val schedulers: SchedulersM
 
     private var wasEmpty = false
 
+    override fun attachView(view: LoginFormView) {
+        super.attachView(view)
+        view.initInputs()
+    }
+
     fun attemptLogin(email: String, password: String, symbol: String) {
         if (!validateCredentials(email, password, symbol)) return
         disposable.add(studentRepository.getConnectedStudents(email, password, normalizeSymbol(symbol))
@@ -23,9 +28,7 @@ class LoginFormPresenter @Inject constructor(private val schedulers: SchedulersM
                     view?.run {
                         hideSoftKeyboard()
                         showLoginProgress(true)
-                    }
-                    errorHandler.doOnBadCredentials = {
-                        view?.run {
+                        errorHandler.doOnBadCredentials = {
                             setErrorPassIncorrect()
                             showSoftKeyboard()
                         }
@@ -34,14 +37,16 @@ class LoginFormPresenter @Inject constructor(private val schedulers: SchedulersM
                 }
                 .doFinally { view?.showLoginProgress(false) }
                 .subscribe({
-                    if (it.isEmpty() && !wasEmpty) {
-                        showSymbolForm()
-                        wasEmpty = true
-                    } else if (it.isEmpty() && wasEmpty) {
-                        showSymbolForm()
-                        view?.setErrorSymbolIncorrect()
-                    } else {
-                        view?.switchNextView()
+                    view?.run {
+                        if (it.isEmpty() && !wasEmpty) {
+                            showSymbolInput()
+                            wasEmpty = true
+                        } else if (it.isEmpty() && wasEmpty) {
+                            showSymbolInput()
+                            setErrorSymbolIncorrect()
+                        } else {
+                            switchNextView()
+                        }
                     }
                 }, { errorHandler.proceed(it) }))
     }
@@ -78,12 +83,5 @@ class LoginFormPresenter @Inject constructor(private val schedulers: SchedulersM
 
     private fun normalizeSymbol(symbol: String): String {
         return if (symbol.isEmpty()) DEFAULT_SYMBOL else symbol
-    }
-
-    private fun showSymbolForm() {
-        view?.run {
-            showSymbolInput()
-            showSoftKeyboard()
-        }
     }
 }

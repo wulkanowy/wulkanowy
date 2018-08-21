@@ -6,13 +6,12 @@ import io.github.wulkanowy.di.scopes.PerActivity
 import io.github.wulkanowy.ui.login.LoginActivity
 import io.github.wulkanowy.ui.login.LoginModule
 import io.github.wulkanowy.ui.splash.SplashActivity
-import io.github.wulkanowy.ui.splash.SplashModule
 
 @Module
 internal abstract class BuilderModule {
 
     @PerActivity
-    @ContributesAndroidInjector(modules = [SplashModule::class])
+    @ContributesAndroidInjector()
     abstract fun bindSplashActivity(): SplashActivity
 
     @PerActivity

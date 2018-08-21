@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.login.options
 
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,9 @@ class LoginOptionsFragment : BaseFragment(), LoginOptionsView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         presenter.attachView(this)
+    }
+
+    override fun initRecycler() {
         loginOptionsRecycler.run {
             adapter = loginAdapter
             layoutManager = SmoothScrollLinearLayoutManager(context)
@@ -34,6 +38,10 @@ class LoginOptionsFragment : BaseFragment(), LoginOptionsView {
 
     fun loadData() {
         presenter.refreshData()
+        (activity as AppCompatActivity?)?.supportActionBar?.run {
+            title = getString(R.string.login_options_header)
+            show()
+        }
     }
 
     override fun updateData(data: List<LoginOptionsItem>) {

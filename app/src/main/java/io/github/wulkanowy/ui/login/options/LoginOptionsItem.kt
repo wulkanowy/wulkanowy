@@ -45,7 +45,10 @@ class LoginOptionsItem(private val student: Student) : AbstractFlexibleItem<Logi
             get() = itemView
 
         fun bind(item: Student) {
-            itemView.loginItemName.text = item.studentName
+            itemView.run {
+                loginItemName.text = item.studentName
+                loginItemSchool.text = item.schoolName
+            }
         }
     }
 }

@@ -7,8 +7,4 @@ interface SplashView : BaseView {
     fun openLoginActivity()
 
     fun openMainActivity()
-
-    fun cancelNotifications()
-
-    //void setCurrentThemeMode(int mode);
 }
