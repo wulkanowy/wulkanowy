@@ -1,9 +1,11 @@
 package io.github.wulkanowy.ui.login.options
 
 import io.github.wulkanowy.data.ErrorHandler
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
+import io.reactivex.Single
 import javax.inject.Inject
 
 class LoginOptionsPresenter @Inject constructor(private val errorHandler: ErrorHandler,
@@ -26,5 +28,14 @@ class LoginOptionsPresenter @Inject constructor(private val errorHandler: ErrorH
                         LoginOptionsItem(student)
                     })
                 }, { errorHandler.proceed(it) }))
+    }
+
+    fun saveStudent(student: Student) {
+        disposable.add(student.let {
+            Single.fromCallable { repository.save(it) }
+                    .subscribeOn(schedulers.backgroundThread())
+                    .observeOn(schedulers.mainThread())
+                    .subscribe({ _ -> }, { error -> errorHandler.proceed(error) })
+        })
     }
 }

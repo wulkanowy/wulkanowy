@@ -22,8 +22,9 @@ class StudentLocal @Inject constructor(private val studentDb: StudentDao,
         get() = sharedPref.getLong(CURRENT_USER_KEY, 0) != 0L
 
     fun save(student: Student) {
-        student.password = Scrambler.encrypt(student.password, context)
-        sharedPref.putLong(CURRENT_USER_KEY, studentDb.insert(student))
+        sharedPref.putLong(CURRENT_USER_KEY, studentDb.insert(student.apply {
+            password = Scrambler.encrypt(password, context)
+        }))
     }
 
     fun getCurrentStudent(): Single<Student> {

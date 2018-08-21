@@ -9,6 +9,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_login_options.*
 import javax.inject.Inject
 
@@ -30,6 +31,7 @@ class LoginOptionsFragment : BaseFragment(), LoginOptionsView {
     }
 
     override fun initRecycler() {
+        loginAdapter.setOnItemClickListener { item -> item?.let { presenter.saveStudent(it.student) } }
         loginOptionsRecycler.run {
             adapter = loginAdapter
             layoutManager = SmoothScrollLinearLayoutManager(context)

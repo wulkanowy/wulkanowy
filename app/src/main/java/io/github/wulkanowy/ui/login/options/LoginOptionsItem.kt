@@ -10,7 +10,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_login_opions_item.view.*
 
-class LoginOptionsItem(private val student: Student) : AbstractFlexibleItem<LoginOptionsItem.ItemViewHolder>() {
+class LoginOptionsItem(val student: Student) : AbstractFlexibleItem<LoginOptionsItem.ItemViewHolder>() {
 
     override fun getLayoutRes(): Int = R.layout.fragment_login_opions_item
 
