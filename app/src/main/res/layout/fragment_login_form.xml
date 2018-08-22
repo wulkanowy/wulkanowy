@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/loginProgressContainer"
+        android:id="@+id/loginFormProgressContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
@@ -17,14 +17,14 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/loginProgressText"
+            android:layout_below="@id/loginFormProgressText"
             android:layout_centerHorizontal="true"
             android:indeterminate="true"
             android:minHeight="30dp"
             android:minWidth="220dp" />
 
         <TextView
-            android:id="@+id/loginProgressText"
+            android:id="@+id/loginFormProgressText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -44,8 +44,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/loginHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/login_heading"
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:id="@+id/loginMainForm"
@@ -53,26 +62,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="10dp"
-                    android:src="@drawable/img_splash_512px" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/app_name"
-                    android:textSize="18sp" />
-
-
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="15dp"
                     android:hint="@string/prompt_email">
 
                     <EditText
@@ -87,7 +80,6 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
                     android:hint="@string/prompt_password">
 
                     <EditText
@@ -103,44 +95,30 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/loginSymbolForm"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/loginSymbolInput"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_symbol"
                 android:visibility="gone">
 
-                <TextView
+                <AutoCompleteTextView
+                    android:id="@+id/loginSymbolEdit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
-                    android:text="@string/login_heading_symbol"
-                    android:textSize="16sp" />
+                    android:imeActionLabel="@string/action_sign_in"
+                    android:imeOptions="actionDone"
+                    android:inputType="textAutoComplete"
+                    android:maxLines="1" />
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/loginSymbolInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_symbol">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/loginSymbolEdit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeActionLabel="@string/action_sign_in"
-                        android:imeOptions="actionDone"
-                        android:inputType="textAutoComplete"
-                        android:maxLines="1" />
-
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
+            </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/loginSignButton"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/action_sign_in"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"

@@ -11,4 +11,6 @@ interface LoginView : BaseView {
     fun switchView(position: Int)
 
     fun hideActionBar()
+
+    fun currentViewPosition(): Int
 }

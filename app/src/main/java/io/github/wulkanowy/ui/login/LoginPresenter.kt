@@ -16,11 +16,19 @@ class LoginPresenter @Inject constructor(errorHandler: ErrorHandler)
     }
 
     fun onPageSelected(index: Int) {
-        view?.loadOptionsView(index)
+        if (index == 1) view?.loadOptionsView(index)
     }
 
     fun onSwitchFragment(position: Int) {
         view?.switchView(position)
     }
 
+    fun onBackPressed(default: () -> Unit) {
+        view?.run {
+            if (currentViewPosition() == 1) {
+                switchView(0)
+                hideActionBar()
+            } else default()
+        }
+    }
 }

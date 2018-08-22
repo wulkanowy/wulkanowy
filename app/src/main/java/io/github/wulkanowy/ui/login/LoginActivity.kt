@@ -33,6 +33,10 @@ class LoginActivity : BaseActivity(), LoginView, LoginSwitchListener {
         messageView = loginContainer
     }
 
+    override fun onBackPressed() {
+        presenter.onBackPressed { super.onBackPressed() }
+    }
+
     override fun initAdapter() {
         loginAdapter.addFragments(LoginFormFragment(), LoginOptionsFragment())
         loginViewpager.run {
@@ -56,6 +60,8 @@ class LoginActivity : BaseActivity(), LoginView, LoginSwitchListener {
     override fun loadOptionsView(index: Int) {
         (loginAdapter.getItem(index) as LoginOptionsFragment).loadData()
     }
+
+    override fun currentViewPosition(): Int = loginViewpager.currentItem
 
     public override fun onDestroy() {
         presenter.detachView()

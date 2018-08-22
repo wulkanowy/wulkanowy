@@ -9,6 +9,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.main.MainActivity
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_login_options.*
 import javax.inject.Inject
@@ -31,7 +32,7 @@ class LoginOptionsFragment : BaseFragment(), LoginOptionsView {
     }
 
     override fun initRecycler() {
-        loginAdapter.setOnItemClickListener { item -> item?.let { presenter.saveStudent(it.student) } }
+        loginAdapter.setOnItemClickListener { item -> item?.let { presenter.onSelectStudent(it.student) } }
         loginOptionsRecycler.run {
             adapter = loginAdapter
             layoutManager = SmoothScrollLinearLayoutManager(context)
@@ -40,15 +41,27 @@ class LoginOptionsFragment : BaseFragment(), LoginOptionsView {
 
     fun loadData() {
         presenter.refreshData()
-        (activity as AppCompatActivity?)?.supportActionBar?.run {
-            title = getString(R.string.login_options_header)
-            show()
-        }
     }
 
     override fun updateData(data: List<LoginOptionsItem>) {
         loginAdapter.run {
             updateDataSet(data)
         }
+    }
+
+    override fun openMainView() {
+        activity?.let {
+            startActivity(MainActivity.getStartIntent(it))
+            it.finish()
+        }
+    }
+
+    override fun showLoginProgress(show: Boolean) {
+        loginOptionsProgressContainer.visibility = if (show) View.GONE else View.VISIBLE
+        loginOptionsRecycler.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showActionBar(show: Boolean) {
+        (activity as AppCompatActivity?)?.supportActionBar?.run { if (show) show() else hide() }
     }
 }

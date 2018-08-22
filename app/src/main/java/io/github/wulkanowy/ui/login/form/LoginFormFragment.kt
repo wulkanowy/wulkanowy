@@ -1,7 +1,5 @@
 package io.github.wulkanowy.ui.login.form
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,8 +54,9 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     }
 
     override fun showSymbolInput() {
+        loginHeader.text = getString(R.string.login_heading_symbol)
         loginMainForm.visibility = GONE
-        loginSymbolForm.visibility = VISIBLE
+        loginSymbolInput.visibility = VISIBLE
         loginSymbolEdit.requestFocus()
         showSoftKeyboard()
     }
@@ -129,33 +128,8 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     }
 
     override fun showLoginProgress(show: Boolean) {
-        val animTime = resources.getInteger(android.R.integer.config_shortAnimTime)
-
-        loginFormContainer.run {
-            visibility = if (show) GONE else VISIBLE
-            animate().run {
-                duration = animTime.toLong()
-                alpha((if (show) 0f else 1f))
-                setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        loginFormContainer.visibility = if (show) GONE else VISIBLE
-                    }
-                })
-            }
-        }
-
-        loginProgressContainer.run {
-            visibility = if (show) VISIBLE else GONE
-            animate().run {
-                duration = animTime.toLong()
-                alpha((if (show) 1f else 0f))
-                setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        loginProgressContainer.visibility = if (show) VISIBLE else GONE
-                    }
-                })
-            }
-        }
+        loginFormContainer.visibility = if (show) GONE else VISIBLE
+        loginFormProgressContainer.visibility = if (show) VISIBLE else GONE
     }
 
     override fun onDestroy() {

@@ -3,7 +3,7 @@
 
     <!-- Strings related to login -->
     <string name="title_activity_login">Sign in</string>
-    <string name="login_heading">Sign in with VULCAN account</string>
+    <string name="login_heading">Sign in with student or parent account</string>
     <string name="login_heading_symbol">Enter the VULCAN diary symbol</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

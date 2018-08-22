@@ -22,6 +22,7 @@ class LoginOptionsPresenter @Inject constructor(private val errorHandler: ErrorH
         disposable.add(repository.cachedStudents
                 .observeOn(schedulers.mainThread())
                 .subscribeOn(schedulers.backgroundThread())
+                .doOnSubscribe { view?.showActionBar(true) }
                 .doAfterSuccess { repository.clearCache() }
                 .subscribe({
                     view?.updateData(it.map { student ->
@@ -30,11 +31,13 @@ class LoginOptionsPresenter @Inject constructor(private val errorHandler: ErrorH
                 }, { errorHandler.proceed(it) }))
     }
 
-    fun saveStudent(student: Student) {
+    fun onSelectStudent(student: Student) {
         disposable.add(student.let {
             Single.fromCallable { repository.save(it) }
                     .subscribeOn(schedulers.backgroundThread())
                     .observeOn(schedulers.mainThread())
+                    .doOnSubscribe { _ -> view?.showLoginProgress(true) }
+                    .doOnSuccess { _ -> view?.openMainView() }
                     .subscribe({ _ -> }, { error -> errorHandler.proceed(error) })
         })
     }
