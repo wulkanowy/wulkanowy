@@ -11,9 +11,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class StudentRepository @Inject constructor(private val local: StudentLocal,
-                                            private val remote: StudentRemote,
-                                            private val settings: InternetObservingSettings) {
+class StudentRepository @Inject constructor(
+        private val local: StudentLocal,
+        private val remote: StudentRemote,
+        private val settings: InternetObservingSettings) {
 
     lateinit var cachedStudents: Single<List<Student>>
         private set

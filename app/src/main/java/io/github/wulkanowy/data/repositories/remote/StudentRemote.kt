@@ -26,9 +26,9 @@ class StudentRemote @Inject constructor(private val api: Vulcan) {
                                             email = email,
                                             password = password,
                                             symbol = symbol,
-                                            studentId = student.id.toLong(),
+                                            studentId = student.id,
                                             studentName = student.name,
-                                            schoolId = school.id.toLong(),
+                                            schoolId = school.id,
                                             schoolName = school.name
                                     )
                                 }

@@ -23,20 +23,3 @@ internal abstract class BuilderModule {
     @ContributesAndroidInjector()
     abstract fun bindMainActivity(): MainActivity
 }
-/*
-    @PerActivity
-    @ContributesAndroidInjector(modules = LoginModule.class)
-    abstract LoginActivity bindLoginActivity();
-
-    @PerActivity
-    @ContributesAndroidInjector(modules = MainModule.class)
-    abstract MainActivity bindMainActivity();
-
-    @ContributesAndroidInjector
-    abstract SyncJob bindSyncJob();
-
-    @ContributesAndroidInjector
-    abstract TimetableWidgetServices bindTimetableWidgetServices();
-
-    @ContributesAndroidInjector
-    abstract TimetableWidgetProvider bindTimetableWidgetProvider();*/

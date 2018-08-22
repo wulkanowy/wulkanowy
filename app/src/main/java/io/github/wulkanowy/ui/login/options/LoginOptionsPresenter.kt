@@ -8,9 +8,10 @@ import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import io.reactivex.Single
 import javax.inject.Inject
 
-class LoginOptionsPresenter @Inject constructor(private val errorHandler: ErrorHandler,
-                                                private val repository: StudentRepository,
-                                                private val schedulers: SchedulersManager)
+class LoginOptionsPresenter @Inject constructor(
+        private val errorHandler: ErrorHandler,
+        private val repository: StudentRepository,
+        private val schedulers: SchedulersManager)
     : BasePresenter<LoginOptionsView>(errorHandler) {
 
     override fun attachView(view: LoginOptionsView) {

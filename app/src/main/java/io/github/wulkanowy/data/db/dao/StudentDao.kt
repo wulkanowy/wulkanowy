@@ -10,7 +10,7 @@ import io.reactivex.Single
 @Dao
 interface StudentDao {
 
-    @Insert(onConflict = REPLACE) // temporary
+    @Insert(onConflict = REPLACE)
     fun insert(student: Student): Long
 
     @Query("SELECT * FROM Students WHERE id = :id")

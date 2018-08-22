@@ -1,4 +1,4 @@
-package io.github.wulkanowy.utils
+package io.github.wulkanowy.utils.extension
 
 import android.support.v4.view.ViewPager
 

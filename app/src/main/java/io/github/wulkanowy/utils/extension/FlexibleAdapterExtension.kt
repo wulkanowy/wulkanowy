@@ -1,4 +1,4 @@
-package io.github.wulkanowy.utils
+package io.github.wulkanowy.utils.extension
 
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem

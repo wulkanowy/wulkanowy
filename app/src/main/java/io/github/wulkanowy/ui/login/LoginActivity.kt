@@ -8,7 +8,7 @@ import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.BasePagerAdapter
 import io.github.wulkanowy.ui.login.form.LoginFormFragment
 import io.github.wulkanowy.ui.login.options.LoginOptionsFragment
-import io.github.wulkanowy.utils.setOnSelectPageListener
+import io.github.wulkanowy.utils.extension.setOnSelectPageListener
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 import javax.inject.Named

@@ -11,6 +11,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class StudentLocalTest {
@@ -37,12 +38,12 @@ class StudentLocalTest {
 
     @Test
     fun saveAndReadTest() {
-        studentLocal.save(Student(email = "test", password = "test123"))
+        studentLocal.save(Student(email = "test", password = "test123", schoolId = "23"))
         assert(sharedHelper.getLong(StudentLocal.CURRENT_USER_KEY, 0) == 1L)
 
         assert(studentLocal.isStudentLoggedIn)
 
         val student = studentLocal.getCurrentStudent().blockingGet()
-        assert(student.schoolId == 23L)
+        assertEquals("23", student.schoolId)
     }
 }

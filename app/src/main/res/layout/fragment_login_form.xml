@@ -54,7 +54,7 @@
                 android:layout_marginBottom="24dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/login_heading"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:id="@+id/loginMainForm"
@@ -118,6 +118,7 @@
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/action_sign_in"
                 android:textColor="@android:color/white"

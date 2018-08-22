@@ -10,7 +10,7 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.main.MainActivity
-import io.github.wulkanowy.utils.setOnItemClickListener
+import io.github.wulkanowy.utils.extension.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_login_options.*
 import javax.inject.Inject
 

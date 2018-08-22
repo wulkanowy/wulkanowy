@@ -11,9 +11,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class StudentLocal @Inject constructor(private val studentDb: StudentDao,
-                                       private val sharedPref: SharedPrefHelper,
-                                       private val context: Context) {
+class StudentLocal @Inject constructor(
+        private val studentDb: StudentDao,
+        private val sharedPref: SharedPrefHelper,
+        private val context: Context) {
 
     companion object {
         const val CURRENT_USER_KEY: String = "current_user_id"
@@ -23,9 +24,8 @@ class StudentLocal @Inject constructor(private val studentDb: StudentDao,
         get() = sharedPref.getLong(CURRENT_USER_KEY, 0) != 0L
 
     fun save(student: Student) {
-        sharedPref.putLong(CURRENT_USER_KEY, studentDb.insert(student.apply {
-            password = encrypt(password, context)
-        }))
+        sharedPref.putLong(CURRENT_USER_KEY, studentDb.insert(student.copy(
+                password = encrypt(student.password, context))))
     }
 
     fun getCurrentStudent(): Single<Student> {

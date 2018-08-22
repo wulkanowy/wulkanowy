@@ -11,8 +11,8 @@ import android.widget.ArrayAdapter
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.login.LoginSwitchListener
-import io.github.wulkanowy.utils.hideSoftInput
-import io.github.wulkanowy.utils.showSoftInput
+import io.github.wulkanowy.utils.extension.hideSoftInput
+import io.github.wulkanowy.utils.extension.showSoftInput
 import kotlinx.android.synthetic.main.fragment_login_form.*
 import javax.inject.Inject
 

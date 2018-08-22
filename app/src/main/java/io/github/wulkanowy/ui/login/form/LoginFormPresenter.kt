@@ -7,9 +7,10 @@ import io.github.wulkanowy.utils.DEFAULT_SYMBOL
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import javax.inject.Inject
 
-class LoginFormPresenter @Inject constructor(private val schedulers: SchedulersManager,
-                                             private val errorHandler: LoginErrorHandler,
-                                             private val studentRepository: StudentRepository)
+class LoginFormPresenter @Inject constructor(
+        private val schedulers: SchedulersManager,
+        private val errorHandler: LoginErrorHandler,
+        private val studentRepository: StudentRepository)
     : BasePresenter<LoginFormView>(errorHandler) {
 
     private var wasEmpty = false
@@ -69,7 +70,7 @@ class LoginFormPresenter @Inject constructor(private val schedulers: SchedulersM
             isCorrect = false
         }
 
-        if (!email.contains("[@]|[/]{4}".toRegex()) && email.isNotEmpty()) {
+        if (!email.contains("[@]|[\\\\]{4}".toRegex()) && email.isNotEmpty()) {
             view?.setErrorEmailInvalid()
             isCorrect = false
         }
