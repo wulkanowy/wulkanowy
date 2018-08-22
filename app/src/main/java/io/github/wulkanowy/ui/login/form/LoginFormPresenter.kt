@@ -69,12 +69,12 @@ class LoginFormPresenter @Inject constructor(private val schedulers: SchedulersM
             isCorrect = false
         }
 
-        if (!email.contains("[@]|[/]{4}".toRegex())) {
+        if (!email.contains("[@]|[/]{4}".toRegex()) && email.isNotEmpty()) {
             view?.setErrorEmailInvalid()
             isCorrect = false
         }
 
-        if (password.length <= 4) {
+        if (password.length <= 4 && password.isNotEmpty()) {
             view?.setErrorPassInvalid(focus = isCorrect)
             isCorrect = false
         }

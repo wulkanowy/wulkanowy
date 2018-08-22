@@ -23,7 +23,7 @@ class LoginOptionsPresenter @Inject constructor(private val errorHandler: ErrorH
                 .observeOn(schedulers.mainThread())
                 .subscribeOn(schedulers.backgroundThread())
                 .doOnSubscribe { view?.showActionBar(true) }
-                .doAfterSuccess { repository.clearCache() }
+                .doFinally { repository.clearCache() }
                 .subscribe({
                     view?.updateData(it.map { student ->
                         LoginOptionsItem(student)

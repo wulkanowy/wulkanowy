@@ -1,25 +1,25 @@
 package io.github.wulkanowy.data.repositories.remote
 
-import android.support.test.runner.AndroidJUnit4
 import io.github.wulkanowy.api.StudentAndParent
 import io.github.wulkanowy.api.Vulcan
 import io.github.wulkanowy.api.generic.School
 import io.github.wulkanowy.api.login.AccountPermissionException
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mock
 import org.mockito.Mockito.*
+import org.mockito.MockitoAnnotations
 import io.github.wulkanowy.api.generic.Student as StudentApi
 
-@RunWith(AndroidJUnit4::class)
 class StudentRemoteTest {
 
+    @Mock
     private lateinit var mockApi: Vulcan
 
     @Before
     fun initApi() {
-        mockApi = mock(Vulcan::class.java)
+        MockitoAnnotations.initMocks(this)
         doNothing().`when`(mockApi).setCredentials(any(), any(), any(), any(), any(), any())
     }
 
