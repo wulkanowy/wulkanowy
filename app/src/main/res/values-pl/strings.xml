@@ -38,6 +38,7 @@
     <string name="attendance_text">Frekwencja</string>
     <string name="timetable_text">Plan lekcji</string>
     <string name="settings_text">Ustawienia</string>
+    <string name="more_text">Więcej</string>
     <string name="activity_under_construction">Ta część aplikacji jest w budowie</string>
     <string name="fragment_no_grades">Brak ocen</string>
 
