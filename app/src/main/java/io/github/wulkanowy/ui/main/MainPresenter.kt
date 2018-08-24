@@ -9,8 +9,21 @@ class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
 
     override fun attachView(view: MainView) {
         super.attachView(view)
-        view.initFragmentController()
-        view.initBottomNav()
+        view.run {
+            initFragmentController()
+            initBottomNav()
+        }
+    }
+
+    fun onTabSelected(position: Int): Boolean {
+        view?.switchMenuFragment(position)
+        return true
+    }
+
+    fun onMenuFragmentChange(position: Int) {
+        view?.run {
+            setViewTitle(mapOfTitles()[position] ?: defaultTitle())
+        }
     }
 }
 
