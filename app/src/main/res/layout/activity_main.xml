@@ -9,7 +9,6 @@
         android:id="@+id/mainFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/bottom_navigation_height"
         android:layout_weight="1" />
 
     <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
