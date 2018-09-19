@@ -55,7 +55,7 @@ class ExamFragment : BaseFragment(), ExamView {
         examSwipe.setOnRefreshListener { presenter.loadData(forceRefresh = true) }
     }
 
-    override fun updateData(data: List<ExamHeader>) {
+    override fun updateData(data: List<ExamItem>) {
         examAdapter.updateDataSet(data, true)
     }
 

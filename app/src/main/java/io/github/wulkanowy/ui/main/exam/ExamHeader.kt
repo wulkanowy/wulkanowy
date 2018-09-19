@@ -2,7 +2,7 @@ package io.github.wulkanowy.ui.main.exam
 
 import android.view.View
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.items.AbstractExpandableItem
+import eu.davidea.flexibleadapter.items.AbstractHeaderItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.ExpandableViewHolder
 import io.github.wulkanowy.R
@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.header_exam.*
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 
-class ExamHeader : AbstractExpandableItem<ExamHeader.ViewHolder, ExamItem>() {
+class ExamHeader : AbstractHeaderItem<ExamHeader.ViewHolder>() {
 
     lateinit var date: Date
 

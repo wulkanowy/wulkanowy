@@ -50,13 +50,11 @@ class ExamPresenter @Inject constructor(
                 .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
     }
 
-    private fun createExamItems(items: Map<Date, List<Exam>>): List<ExamHeader> {
-        return items.map {
-            ExamHeader().apply {
-                date = it.key
-                subItems = (it.value.reversed().map { item ->
-                    ExamItem().apply { exam = item }
-                })
+    private fun createExamItems(items: Map<Date, List<Exam>>): List<ExamItem> {
+        return items.flatMap {
+            val header = ExamHeader().apply { date = it.key }
+            it.value.reversed().map { item ->
+                ExamItem(header, item)
             }
         }
     }

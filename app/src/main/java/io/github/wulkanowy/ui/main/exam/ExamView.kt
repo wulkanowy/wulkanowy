@@ -7,7 +7,7 @@ interface ExamView : BaseView {
 
     fun initView()
 
-    fun updateData(data: List<ExamHeader>)
+    fun updateData(data: List<ExamItem>)
 
     fun showEmpty(show: Boolean)
 
