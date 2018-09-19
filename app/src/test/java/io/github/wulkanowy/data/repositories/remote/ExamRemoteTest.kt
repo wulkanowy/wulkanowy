@@ -11,6 +11,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mock
 import org.mockito.Mockito.doReturn
 import org.mockito.MockitoAnnotations
+import org.threeten.bp.LocalDate
 import java.sql.Date
 
 class ExamRemoteTest {
@@ -36,7 +37,7 @@ class ExamRemoteTest {
         doReturn("1").`when`(semesterMock).studentId
         doReturn("1").`when`(semesterMock).diaryId
 
-        val exams = ExamRemote(mockApi).getExams(semesterMock, Date.valueOf("2018-09-10")).blockingGet()
+        val exams = ExamRemote(mockApi).getExams(semesterMock, LocalDate.of(2018, 9, 10)).blockingGet()
         assertEquals(2, exams.size)
     }
 
