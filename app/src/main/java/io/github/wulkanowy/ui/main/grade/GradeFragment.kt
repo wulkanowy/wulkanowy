@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.main.grade
 
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.*
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -51,6 +52,15 @@ class GradeFragment : BaseFragment(), GradeView {
         gradeTabLayout.setupWithViewPager(gradeViewPager)
     }
 
+    override fun loadChildViewData(semesterId: String) {
+        pagerAdapter.fragments.forEach { _, fragment -> (fragment as LoadDataListener).loadData(semesterId) }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return if (item?.itemId == R.id.gradeMenuSemester) presenter.onSemesterSwitch()
+        else false
+    }
+
     override fun showContent(show: Boolean) {
         gradeViewPager.visibility = if (show) VISIBLE else INVISIBLE
         gradeTabLayout.visibility = if (show) VISIBLE else INVISIBLE
@@ -58,6 +68,22 @@ class GradeFragment : BaseFragment(), GradeView {
 
     override fun showProgress(show: Boolean) {
         gradeProgress.visibility = if (show) VISIBLE else INVISIBLE
+    }
+
+    override fun showSemesterDialog(selectedIndex: Int) {
+        val semesters = arrayOf(getString(R.string.grade_semester, 1),
+                getString(R.string.grade_semester, 2))
+
+        context?.let {
+            AlertDialog.Builder(it)
+                    .setSingleChoiceItems(semesters, selectedIndex) { dialog, which ->
+                        presenter.changeSemester(which)
+                        dialog.dismiss()
+                    }
+                    .setTitle(R.string.grade_switch_semester)
+                    .setNegativeButton(R.string.all_cancel) { dialog, _ -> dialog.dismiss() }
+                    .show()
+        }
     }
 
     override fun onDestroyView() {

@@ -10,10 +10,11 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.main.grade.LoadDataListener
 import kotlinx.android.synthetic.main.fragment_grade_summary.*
 import javax.inject.Inject
 
-class GradeSummaryFragment : BaseFragment(), GradeSummaryView {
+class GradeSummaryFragment : BaseFragment(), GradeSummaryView, LoadDataListener {
 
     @Inject
     lateinit var presenter: GradeSummaryPresenter
@@ -36,10 +37,7 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.run {
-            attachView(this@GradeSummaryFragment)
-            loadData()
-        }
+        presenter.attachView(this)
     }
 
     override fun initView() {
@@ -57,6 +55,10 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView {
         gradeSummaryAdapter.updateDataSet(data)
         gradeSummaryFinalAverage.text = finalAvg
         gradeSummaryCalculatedAverage.text = calculatedAvg
+    }
+
+    override fun loadData(semesterId: String) {
+        presenter.loadData(semesterId = semesterId)
     }
 
     override fun showContent(show: Boolean) {

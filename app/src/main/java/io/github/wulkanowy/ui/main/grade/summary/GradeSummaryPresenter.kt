@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.main.grade.summary
 
 import io.github.wulkanowy.data.ErrorHandler
-import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.GradeSummaryRepository
@@ -22,33 +21,44 @@ class GradeSummaryPresenter @Inject constructor(
         private val schedulers: SchedulersManager)
     : BasePresenter<GradeSummaryView>(errorHandler) {
 
+    private var selectedSemester = "0"
+
     override fun attachView(view: GradeSummaryView) {
         super.attachView(view)
         view.initView()
     }
 
-    fun loadData(forceRefresh: Boolean = false) {
-        disposable.add(sessionRepository.getSemesters().map { semester -> semester.first { it.current } }
+    fun loadData(forceRefresh: Boolean = false, semesterId: String = selectedSemester) {
+        selectedSemester = semesterId
+        disposable.add(sessionRepository.getSemesters()
+                .map { semester -> semester.first { it.semesterId == semesterId } }
                 .flatMap {
                     gradeSummaryRepository.getGradesSummary(it, forceRefresh)
                             .flatMap { gradesSummary ->
                                 gradeRepository.getGrades(it, forceRefresh)
-                                        .map { grades -> ListContainer(gradesSummary, grades) }
-                            }
-                }
-                .map { listContainer ->
-                    listContainer.grades.groupBy { grade -> grade.subject }
-                            .mapValues { entry -> calcAverage(entry.value) }
-                            .let {
-                                DataContainer(
-                                        createGradeSummaryItems(listContainer, it),
-                                        formatAverage(calcSummaryAverage(listContainer.gradesSummary)),
-                                        formatAverage(it.values.average().toFloat())
-                                )
+                                        .map { grades ->
+                                            grades.groupBy { grade -> grade.subject }
+                                                    .mapValues { entry -> calcAverage(entry.value) }
+                                                    .let { averages ->
+                                                        DataContainer(
+                                                                createGradeSummaryItems(gradesSummary, averages),
+                                                                formatAverage(calcSummaryAverage(gradesSummary)),
+                                                                formatAverage(averages.values.average().toFloat())
+                                                        )
+                                                    }
+                                        }
                             }
                 }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
+                .doOnSubscribe {
+                    if (!forceRefresh) {
+                        view?.run {
+                            showProgress(true)
+                            showContent(false)
+                        }
+                    }
+                }
                 .doFinally {
                     view?.run {
                         showProgress(false)
@@ -64,9 +74,9 @@ class GradeSummaryPresenter @Inject constructor(
                 { errorHandler.proceed(it) })
     }
 
-    private fun createGradeSummaryItems(listContainer: ListContainer, averages: Map<String, Float>)
+    private fun createGradeSummaryItems(gradesSummary: List<GradeSummary>, averages: Map<String, Float>)
             : List<GradeSummaryItem> {
-        return listContainer.gradesSummary.filter { !checkEmpty(it, averages) }
+        return gradesSummary.filter { !checkEmpty(it, averages) }
                 .flatMap {
                     GradeSummaryHeader().apply {
                         average = formatAverage(averages.getOrElse(it.subject) { 0f }, "")
@@ -96,7 +106,6 @@ class GradeSummaryPresenter @Inject constructor(
         else format(FRANCE, "%.2f", average)
     }
 
-    data class ListContainer(var gradesSummary: List<GradeSummary>, var grades: List<Grade>)
     data class DataContainer(var gradesSummaryItem: List<GradeSummaryItem>, var finalAvg: String,
                              var calculatedAvg: String)
 }

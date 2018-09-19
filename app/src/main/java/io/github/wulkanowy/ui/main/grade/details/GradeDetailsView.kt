@@ -11,8 +11,6 @@ interface GradeDetailsView : BaseView {
 
     fun showGradeDialog(grade: Grade)
 
-    fun showSemesterDialog(selectedIndex: Int)
-
     fun showEmpty(show: Boolean)
 
     fun showContent(show: Boolean)
