@@ -24,8 +24,23 @@ class GradeDetailsPresenter @Inject constructor(
         view.initView()
     }
 
-    fun loadData(forceRefresh: Boolean = false, semesterId: String = selectedSemester) {
-        selectedSemester = semesterId
+    fun onRefresh() {
+        if (selectedSemester != "0") loadData(selectedSemester, true)
+    }
+
+    fun onLoadData(semesterId: String) {
+        if (semesterId != selectedSemester) {
+            view?.run {
+                showProgress(true)
+                showContent(false)
+                showEmpty(false)
+            }
+            loadData(semesterId)
+            selectedSemester = semesterId
+        }
+    }
+
+    private fun loadData(semesterId: String, forceRefresh: Boolean = false) {
         disposable.add(sessionRepository.getSemesters()
                 .flatMap { semesters ->
                     gradeRepository.getGrades(semesters.first { it.semesterId == semesterId }, forceRefresh)
@@ -35,18 +50,11 @@ class GradeDetailsPresenter @Inject constructor(
                 }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
-                .doOnSubscribe {
-                    if (!forceRefresh) {
-                        view?.run {
-                            showProgress(true)
-                            showContent(false)
-                        }
-                    }
-                }
                 .doFinally {
                     view?.run {
                         showRefresh(false)
                         showProgress(false)
+                        dataLoaded()
                     }
                 }
                 .doAfterSuccess {

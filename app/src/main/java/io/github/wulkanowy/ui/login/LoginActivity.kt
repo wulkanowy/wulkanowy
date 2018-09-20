@@ -28,7 +28,7 @@ class LoginActivity : BaseActivity(), LoginView, LoginSwitchListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         presenter.attachView(this)
-        messageView = loginContainer
+        messageContainer = loginContainer
     }
 
     override fun onBackPressed() {

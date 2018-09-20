@@ -11,13 +11,13 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.main.grade.LoadDataListener
+import io.github.wulkanowy.ui.main.grade.GradeFragment
 import io.github.wulkanowy.utils.extension.setOnItemClickListener
 import io.github.wulkanowy.utils.extension.setOnUpdateListener
 import kotlinx.android.synthetic.main.fragment_grade_details.*
 import javax.inject.Inject
 
-class GradeDetailsFragment : BaseFragment(), GradeDetailsView, LoadDataListener {
+class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeFragment.OnLoadDataListener {
 
     @Inject
     lateinit var presenter: GradeDetailsPresenter
@@ -49,15 +49,19 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, LoadDataListener 
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = gradeAdapter
         }
-        gradeDetailsSwipe.setOnRefreshListener { presenter.loadData(forceRefresh = true) }
+        gradeDetailsSwipe.setOnRefreshListener { presenter.onRefresh() }
     }
 
     override fun updateData(data: List<GradeDetailsHeader>) {
         gradeAdapter.updateDataSet(data, true)
     }
 
-    override fun loadData(semesterId: String) {
-        presenter.loadData(semesterId = semesterId)
+    override fun onLoadData(semesterId: String) {
+        presenter.onLoadData(semesterId)
+    }
+
+    override fun dataLoaded() {
+        (parentFragment as? GradeFragment)?.onChildFragmentLoaded()
     }
 
     override fun showEmpty(show: Boolean) {

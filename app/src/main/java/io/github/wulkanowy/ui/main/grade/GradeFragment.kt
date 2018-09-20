@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BasePagerAdapter
 import io.github.wulkanowy.ui.main.grade.details.GradeDetailsFragment
 import io.github.wulkanowy.ui.main.grade.summary.GradeSummaryFragment
+import io.github.wulkanowy.utils.extension.setOnSelectPageListener
 import kotlinx.android.synthetic.main.fragment_grade.*
 import javax.inject.Inject
 
@@ -48,17 +49,24 @@ class GradeFragment : BaseFragment(), GradeView {
                 getString(R.string.all_details) to GradeDetailsFragment.newInstance(),
                 getString(R.string.grade_menu_summary) to GradeSummaryFragment.newInstance()
         ))
-        gradeViewPager.adapter = pagerAdapter
+        gradeViewPager.run {
+            adapter = pagerAdapter
+            setOnSelectPageListener { presenter.onPageSelected(it) }
+        }
         gradeTabLayout.setupWithViewPager(gradeViewPager)
     }
 
-    override fun loadChildViewData(semesterId: String) {
-        pagerAdapter.fragments.forEach { _, fragment -> (fragment as LoadDataListener).loadData(semesterId) }
+    override fun loadChildViewData(semesterId: String, index: Int) {
+        (pagerAdapter.getItem(index) as? OnLoadDataListener)?.onLoadData(semesterId)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return if (item?.itemId == R.id.gradeMenuSemester) presenter.onSemesterSwitch()
         else false
+    }
+
+    fun onChildFragmentLoaded() {
+        presenter.onChildViewLoaded()
     }
 
     override fun showContent(show: Boolean) {
@@ -77,7 +85,7 @@ class GradeFragment : BaseFragment(), GradeView {
         context?.let {
             AlertDialog.Builder(it)
                     .setSingleChoiceItems(semesters, selectedIndex) { dialog, which ->
-                        presenter.changeSemester(which)
+                        presenter.onSemesterSelected(which)
                         dialog.dismiss()
                     }
                     .setTitle(R.string.grade_switch_semester)
@@ -86,8 +94,15 @@ class GradeFragment : BaseFragment(), GradeView {
         }
     }
 
+    override fun currentPageIndex() = gradeViewPager.currentItem
+
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.detachView()
+    }
+
+    interface OnLoadDataListener {
+
+        fun onLoadData(semesterId: String)
     }
 }

@@ -6,7 +6,9 @@ interface GradeView : BaseView {
 
     fun initView()
 
-    fun loadChildViewData(semesterId: String)
+    fun loadChildViewData(semesterId: String, index: Int)
+
+    fun currentPageIndex(): Int
 
     fun showContent(show: Boolean)
 

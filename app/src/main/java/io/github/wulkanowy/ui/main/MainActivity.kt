@@ -19,7 +19,7 @@ import io.github.wulkanowy.ui.main.timetable.TimetableFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : BaseActivity(), MainView, FragNavController.TransactionListener, FragmentNavigationListener {
+class MainActivity : BaseActivity(), MainView, FragNavController.TransactionListener {
 
     @Inject
     lateinit var presenter: MainPresenter
@@ -37,7 +37,7 @@ class MainActivity : BaseActivity(), MainView, FragNavController.TransactionList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(mainToolbar)
-        messageView = mainFragmentContainer
+        messageContainer = mainFragmentContainer
 
         presenter.attachView(this)
         navController.initialize(DEFAULT_TAB, savedInstanceState)
@@ -104,10 +104,6 @@ class MainActivity : BaseActivity(), MainView, FragNavController.TransactionList
                 3 to R.string.timetable_title,
                 4 to R.string.more_title
         ).mapValues { getString(it.value) }
-    }
-
-    override fun pushFragment(fragment: Fragment) {
-        navController.pushFragment(fragment)
     }
 
     override fun onBackPressed() {

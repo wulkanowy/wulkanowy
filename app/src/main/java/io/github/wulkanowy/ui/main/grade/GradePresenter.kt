@@ -22,11 +22,7 @@ class GradePresenter @Inject constructor(
         super.attachView(view)
         disposable.add(Completable.timer(150, TimeUnit.MILLISECONDS, schedulers.mainThread())
                 .subscribe {
-                    view.run {
-                        initView()
-                        showContent(true)
-                        showProgress(false)
-                    }
+                    view.initView()
                     loadData()
                 })
     }
@@ -36,12 +32,23 @@ class GradePresenter @Inject constructor(
         return true
     }
 
-    fun changeSemester(index: Int) {
+    fun onSemesterSelected(index: Int) {
         if (selectedIndex != index) {
             selectedIndex = index
             semesters.first { item -> item.semesterName == index + 1 }
-                    .let { view?.loadChildViewData(it.semesterId) }
+                    .let { view?.run { loadChildViewData(it.semesterId, currentPageIndex()) } }
         }
+    }
+
+    fun onChildViewLoaded() {
+        view?.run {
+            showContent(true)
+            showProgress(false)
+        }
+    }
+
+    fun onPageSelected(index: Int) {
+        view?.loadChildViewData(semesters.first { it.semesterName == selectedIndex + 1 }.semesterId, index)
     }
 
     private fun loadData() {
@@ -53,7 +60,8 @@ class GradePresenter @Inject constructor(
                     }
                 }
                 .subscribeOn(schedulers.backgroundThread())
-                .subscribe({ view?.loadChildViewData(it.semesterId) }) { errorHandler.proceed(it) })
+                .observeOn(schedulers.mainThread())
+                .subscribe({ view?.loadChildViewData(it.semesterId, 0) }) { errorHandler.proceed(it) })
     }
 }
 

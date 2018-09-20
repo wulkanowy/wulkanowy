@@ -10,11 +10,11 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.main.grade.LoadDataListener
+import io.github.wulkanowy.ui.main.grade.GradeFragment
 import kotlinx.android.synthetic.main.fragment_grade_summary.*
 import javax.inject.Inject
 
-class GradeSummaryFragment : BaseFragment(), GradeSummaryView, LoadDataListener {
+class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeFragment.OnLoadDataListener {
 
     @Inject
     lateinit var presenter: GradeSummaryPresenter
@@ -48,7 +48,7 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, LoadDataListener 
             adapter = gradeSummaryAdapter
             isNestedScrollingEnabled = false
         }
-        gradeSummarySwipe.setOnRefreshListener { presenter.loadData(true) }
+        gradeSummarySwipe.setOnRefreshListener { presenter.onRefresh() }
     }
 
     override fun updateDataSet(data: List<GradeSummaryItem>, finalAvg: String, calculatedAvg: String) {
@@ -57,8 +57,8 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, LoadDataListener 
         gradeSummaryCalculatedAverage.text = calculatedAvg
     }
 
-    override fun loadData(semesterId: String) {
-        presenter.loadData(semesterId = semesterId)
+    override fun onLoadData(semesterId: String) {
+        presenter.onLoadData(semesterId)
     }
 
     override fun showContent(show: Boolean) {
