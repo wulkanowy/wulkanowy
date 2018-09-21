@@ -9,7 +9,9 @@ interface GradeDetailsView : BaseView {
 
     fun updateData(data: List<GradeDetailsHeader>)
 
-    fun dataLoaded()
+    fun onDataLoaded()
+
+    fun onSwipeRefresh()
 
     fun showGradeDialog(grade: Grade)
 

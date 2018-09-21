@@ -8,6 +8,8 @@ interface GradeSummaryView : BaseView {
 
     fun updateDataSet(data: List<GradeSummaryItem>, finalAvg: String, calculatedAvg: String)
 
+    fun onSwipeRefresh()
+
     fun showProgress(show: Boolean)
 
     fun showRefresh(show: Boolean)

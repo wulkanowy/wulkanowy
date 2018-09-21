@@ -18,6 +18,8 @@ class GradePresenter @Inject constructor(
 
     private var selectedIndex = 0
 
+    private val loadedSemesterId = mutableListOf<String>()
+
     override fun attachView(view: GradeView) {
         super.attachView(view)
         disposable.add(Completable.timer(150, TimeUnit.MILLISECONDS, schedulers.mainThread())
@@ -35,12 +37,18 @@ class GradePresenter @Inject constructor(
     fun onSemesterSelected(index: Int) {
         if (selectedIndex != index) {
             selectedIndex = index
-            semesters.first { item -> item.semesterName == index + 1 }
-                    .let { view?.run { loadChildViewData(it.semesterId, currentPageIndex()) } }
+            view?.run {
+                showChildProgress()
+                loadChild(false, currentPageIndex())
+            }
         }
     }
 
-    fun onChildViewLoaded() {
+    fun onChildViewRefresh() {
+        view?.run { loadChild(true, currentPageIndex()) }
+    }
+
+    fun onFirstViewLoaded() {
         view?.run {
             showContent(true)
             showProgress(false)
@@ -48,7 +56,7 @@ class GradePresenter @Inject constructor(
     }
 
     fun onPageSelected(index: Int) {
-        view?.loadChildViewData(semesters.first { it.semesterName == selectedIndex + 1 }.semesterId, index)
+        loadChild(false, index)
     }
 
     private fun loadData() {
@@ -61,7 +69,17 @@ class GradePresenter @Inject constructor(
                 }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
-                .subscribe({ view?.loadChildViewData(it.semesterId, 0) }) { errorHandler.proceed(it) })
+                .subscribe({ loadChild(false, 0) })
+                { errorHandler.proceed(it) })
+    }
+
+    private fun loadChild(forceRefresh: Boolean, index: Int) {
+        semesters.first { it.semesterName == selectedIndex + 1 }.semesterId.let {
+            if (forceRefresh || loadedSemesterId.getOrNull(index) != it) {
+                view?.loadChildViewData(it, forceRefresh, index)
+                loadedSemesterId.add(index, it)
+            }
+        }
     }
 }
 

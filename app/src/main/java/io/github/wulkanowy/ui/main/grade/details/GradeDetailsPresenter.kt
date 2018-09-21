@@ -17,30 +17,12 @@ class GradeDetailsPresenter @Inject constructor(
         private val gradeRepository: GradeRepository,
         private val sessionRepository: SessionRepository) : BasePresenter<GradeDetailsView>(errorHandler) {
 
-    private var selectedSemester = "0"
-
     override fun attachView(view: GradeDetailsView) {
         super.attachView(view)
         view.initView()
     }
 
-    fun onRefresh() {
-        if (selectedSemester != "0") loadData(selectedSemester, true)
-    }
-
-    fun onLoadData(semesterId: String) {
-        if (semesterId != selectedSemester) {
-            view?.run {
-                showProgress(true)
-                showContent(false)
-                showEmpty(false)
-            }
-            loadData(semesterId)
-            selectedSemester = semesterId
-        }
-    }
-
-    private fun loadData(semesterId: String, forceRefresh: Boolean = false) {
+    fun loadData(semesterId: String, forceRefresh: Boolean) {
         disposable.add(sessionRepository.getSemesters()
                 .flatMap { semesters ->
                     gradeRepository.getGrades(semesters.first { it.semesterId == semesterId }, forceRefresh)
@@ -54,7 +36,7 @@ class GradeDetailsPresenter @Inject constructor(
                     view?.run {
                         showRefresh(false)
                         showProgress(false)
-                        dataLoaded()
+                        onDataLoaded()
                     }
                 }
                 .doAfterSuccess {
@@ -64,6 +46,18 @@ class GradeDetailsPresenter @Inject constructor(
                     }
                 }
                 .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
+    }
+
+    fun onSwipeRefresh() {
+        view?.onSwipeRefresh()
+    }
+
+    fun onShowProgress() {
+        view?.run {
+            showProgress(true)
+            showEmpty(false)
+            showContent(false)
+        }
     }
 
     fun onGradeItemSelected(item: AbstractFlexibleItem<*>?) {

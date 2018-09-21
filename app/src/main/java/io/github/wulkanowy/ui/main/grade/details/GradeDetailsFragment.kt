@@ -17,7 +17,7 @@ import io.github.wulkanowy.utils.extension.setOnUpdateListener
 import kotlinx.android.synthetic.main.fragment_grade_details.*
 import javax.inject.Inject
 
-class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeFragment.OnLoadDataListener {
+class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeFragment.GradeViewEventListener {
 
     @Inject
     lateinit var presenter: GradeDetailsPresenter
@@ -49,19 +49,27 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeFragment.OnL
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = gradeAdapter
         }
-        gradeDetailsSwipe.setOnRefreshListener { presenter.onRefresh() }
+        gradeDetailsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+    }
+
+    override fun loadData(semesterId: String, forceRefresh: Boolean) {
+        presenter.loadData(semesterId, forceRefresh)
     }
 
     override fun updateData(data: List<GradeDetailsHeader>) {
         gradeAdapter.updateDataSet(data, true)
     }
 
-    override fun onLoadData(semesterId: String) {
-        presenter.onLoadData(semesterId)
+    override fun onDataLoaded() {
+        (parentFragment as? GradeFragment)?.onFirstFragmentLoaded()
     }
 
-    override fun dataLoaded() {
-        (parentFragment as? GradeFragment)?.onChildFragmentLoaded()
+    override fun onSwipeRefresh() {
+        (parentFragment as? GradeFragment)?.onChildRefresh()
+    }
+
+    override fun showProgressAndHideContent() {
+        presenter.onShowProgress()
     }
 
     override fun showEmpty(show: Boolean) {

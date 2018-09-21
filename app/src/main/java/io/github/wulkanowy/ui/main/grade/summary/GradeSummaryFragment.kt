@@ -14,7 +14,7 @@ import io.github.wulkanowy.ui.main.grade.GradeFragment
 import kotlinx.android.synthetic.main.fragment_grade_summary.*
 import javax.inject.Inject
 
-class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeFragment.OnLoadDataListener {
+class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeFragment.GradeViewEventListener {
 
     @Inject
     lateinit var presenter: GradeSummaryPresenter
@@ -48,7 +48,7 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeFragment.OnL
             adapter = gradeSummaryAdapter
             isNestedScrollingEnabled = false
         }
-        gradeSummarySwipe.setOnRefreshListener { presenter.onRefresh() }
+        gradeSummarySwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
     override fun updateDataSet(data: List<GradeSummaryItem>, finalAvg: String, calculatedAvg: String) {
@@ -57,8 +57,16 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeFragment.OnL
         gradeSummaryCalculatedAverage.text = calculatedAvg
     }
 
-    override fun onLoadData(semesterId: String) {
-        presenter.onLoadData(semesterId)
+    override fun loadData(semesterId: String, forceRefresh: Boolean) {
+        presenter.loadData(semesterId, forceRefresh)
+    }
+
+    override fun onSwipeRefresh() {
+        (parentFragment as? GradeFragment)?.onChildRefresh()
+    }
+
+    override fun showProgressAndHideContent() {
+        presenter.onShowProgress()
     }
 
     override fun showContent(show: Boolean) {

@@ -1,9 +1,9 @@
 package io.github.wulkanowy.data.repositories.remote
 
 import io.github.wulkanowy.api.Api
-import io.github.wulkanowy.api.DATE_FORMAT
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.utils.DATE_PATTERN
 import io.reactivex.Single
 import org.apache.commons.lang3.time.DateFormatUtils.format
 import javax.inject.Inject
@@ -25,12 +25,12 @@ class GradeRemote @Inject constructor(private val api: Api) {
                                 semesterId = semester.semesterId,
                                 studentId = semester.studentId,
                                 subject = it.subject,
-                                value = it.value,
+                                value = it.value.toString(),
                                 color = it.color,
                                 gradeSymbol = it.symbol,
                                 description = it.description,
                                 weight = it.weight,
-                                date = format(it.date, DATE_FORMAT),
+                                date = format(it.date, DATE_PATTERN),
                                 teacher = it.teacher
                         )
                     }

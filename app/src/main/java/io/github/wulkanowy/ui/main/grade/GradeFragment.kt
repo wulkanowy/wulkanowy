@@ -56,17 +56,29 @@ class GradeFragment : BaseFragment(), GradeView {
         gradeTabLayout.setupWithViewPager(gradeViewPager)
     }
 
-    override fun loadChildViewData(semesterId: String, index: Int) {
-        (pagerAdapter.getItem(index) as? OnLoadDataListener)?.onLoadData(semesterId)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return if (item?.itemId == R.id.gradeMenuSemester) presenter.onSemesterSwitch()
         else false
     }
 
-    fun onChildFragmentLoaded() {
-        presenter.onChildViewLoaded()
+    override fun loadChildViewData(semesterId: String, forceRefresh: Boolean, index: Int) {
+        (pagerAdapter.registeredFragments[index] as? GradeViewEventListener)?.loadData(semesterId, forceRefresh)
+    }
+
+    fun onFirstFragmentLoaded() {
+        presenter.onFirstViewLoaded()
+    }
+
+    fun onChildRefresh() {
+        presenter.onChildViewRefresh()
+    }
+
+    override fun currentPageIndex() = gradeViewPager.currentItem
+
+    override fun showChildProgress() {
+        pagerAdapter.registeredFragments.forEach { _, fragment ->
+            (fragment as? GradeViewEventListener)?.showProgressAndHideContent()
+        }
     }
 
     override fun showContent(show: Boolean) {
@@ -94,15 +106,15 @@ class GradeFragment : BaseFragment(), GradeView {
         }
     }
 
-    override fun currentPageIndex() = gradeViewPager.currentItem
-
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.detachView()
     }
 
-    interface OnLoadDataListener {
+    interface GradeViewEventListener {
 
-        fun onLoadData(semesterId: String)
+        fun loadData(semesterId: String, forceRefresh: Boolean)
+
+        fun showProgressAndHideContent()
     }
 }

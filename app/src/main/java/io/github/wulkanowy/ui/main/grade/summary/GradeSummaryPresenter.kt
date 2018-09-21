@@ -21,30 +21,12 @@ class GradeSummaryPresenter @Inject constructor(
         private val schedulers: SchedulersManager)
     : BasePresenter<GradeSummaryView>(errorHandler) {
 
-    private var selectedSemester = "0"
-
     override fun attachView(view: GradeSummaryView) {
         super.attachView(view)
         view.initView()
     }
 
-    fun onRefresh() {
-        if (selectedSemester != "0") loadData(selectedSemester, true)
-    }
-
-    fun onLoadData(semesterId: String) {
-        if (semesterId != selectedSemester) {
-            view?.run {
-                showProgress(true)
-                showContent(false)
-                showEmpty(false)
-            }
-            loadData(semesterId)
-            selectedSemester = semesterId
-        }
-    }
-
-    private fun loadData(semesterId: String, forceRefresh: Boolean = false) {
+    fun loadData(semesterId: String, forceRefresh: Boolean) {
         disposable.add(sessionRepository.getSemesters()
                 .map { semester -> semester.first { it.semesterId == semesterId } }
                 .flatMap {
@@ -79,6 +61,18 @@ class GradeSummaryPresenter @Inject constructor(
                 }
                 .subscribe({ view?.updateDataSet(it.gradesSummaryItem, it.finalAvg, it.calculatedAvg) })
                 { errorHandler.proceed(it) })
+    }
+
+    fun onSwipeRefresh() {
+        view?.onSwipeRefresh()
+    }
+
+    fun onShowProgress() {
+        view?.run {
+            showProgress(true)
+            showEmpty(false)
+            showContent(false)
+        }
     }
 
     private fun createGradeSummaryItems(gradesSummary: List<GradeSummary>, averages: Map<String, Float>)
