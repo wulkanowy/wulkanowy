@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.main.exam
 
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.ui.base.BaseView
+import org.threeten.bp.LocalDate
 
 interface ExamView : BaseView {
 
@@ -18,4 +19,6 @@ interface ExamView : BaseView {
     fun showRefresh(show: Boolean)
 
     fun showExamDialog(exam: Exam)
+
+    fun setNavDate(date: LocalDate)
 }

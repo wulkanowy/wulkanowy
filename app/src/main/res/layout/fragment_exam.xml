@@ -1,51 +1,98 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/examSwipe"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/examRecycler"
+        <ProgressBar
+            android:id="@+id/examProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/examSwipe"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/examRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-    <ProgressBar
-        android:id="@+id/examProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/examEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"
+                android:minWidth="100dp"
+                app:srcCompat="@drawable/ic_menu_main_exam_24dp"
+                app:tint="?android:attr/textColorPrimary"
+                tools:ignore="contentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/exam_no_items"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/examEmpty"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatImageView
+        <Button
+            android:id="@+id/examPreviousButton"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="100dp"
-            android:minWidth="100dp"
-            app:srcCompat="@drawable/ic_menu_main_exam_24dp"
-            app:tint="?android:attr/textColorPrimary"
-            tools:ignore="contentDescription" />
+
+            android:drawableLeft="@drawable/ic_keyboard_arrow_left_black_24dp"
+            android:drawablePadding="4dp"
+            android:drawableStart="@drawable/ic_keyboard_arrow_left_black_24dp"
+            android:text="@string/prev" />
 
         <TextView
+            android:id="@+id/examNavDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/app_name" />
+
+        <Button
+            android:id="@+id/examNextButton"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="@string/exam_no_items"
-            android:textSize="20sp" />
+            android:layout_gravity="end"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:drawablePadding="4dp"
+            android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+            android:text="@string/next" />
+
     </LinearLayout>
-</FrameLayout>
+
+</LinearLayout>

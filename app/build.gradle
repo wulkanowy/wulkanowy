@@ -72,7 +72,7 @@ ext.supportVersion = "28.0.0-rc02"
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.github.wulkanowy:api:914292c294'
+    implementation 'com.github.wulkanowy:api:35be9d6'
 
     implementation "com.android.support:support-v4:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
