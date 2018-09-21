@@ -1,172 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="300dp">
+        android:minWidth="300dp"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/examDialogDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/all_details"
+            android:textIsSelectable="true"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/examDialogSubject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/all_subject"
+            android:textIsSelectable="true"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/examDialogSubjectValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/all_no_data"
+            android:textIsSelectable="true"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/examDialogType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/exam_type"
+            android:textIsSelectable="true"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/examDialogTypeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/all_no_data"
+            android:textIsSelectable="true"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/examDialogTeacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/all_teacher"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/examDialogTeacherValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/all_no_data"
+            android:textIsSelectable="true"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/examDialogDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/exam_entry_date"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/examDialogDateValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/all_no_data"
+            android:textIsSelectable="true"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/examDialogDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/all_description"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/examDialogDescriptionValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/all_no_data"
+            android:textIsSelectable="true"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/examDialogClose"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_marginTop="15dp"
-            android:padding="20dp"
-            tools:ignore="UselessParent">
+            android:padding="0dp"
+            android:text="@string/all_close"
+            android:textAllCaps="true"
+            android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/examDialogDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="start"
-                android:gravity="center_vertical"
-                android:maxLines="5"
-                android:minHeight="60dp"
-                android:minLines="2"
-                android:paddingTop="10dp"
-                android:text="@string/all_details"
-                android:textIsSelectable="true"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/examDialogSubject"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/examDialogDetails"
-                android:layout_marginTop="10dp"
-                android:text="@string/all_subject"
-                android:textIsSelectable="true"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/examDialogSubjectValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/examDialogSubject"
-                android:layout_marginTop="3dp"
-                android:text="@string/all_no_data"
-                android:textIsSelectable="true"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/examDialogType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/examDialogSubjectValue"
-                android:layout_marginTop="10dp"
-                android:text="@string/exam_type"
-                android:textIsSelectable="true"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/examDialogTypeValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/examDialogType"
-                android:layout_marginTop="3dp"
-                android:text="@string/all_no_data"
-                android:textIsSelectable="true"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/examDialogTeacher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/examDialogTypeValue"
-                android:layout_marginTop="10dp"
-                android:text="@string/all_teacher"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/examDialogTeacherValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/examDialogTeacher"
-                android:layout_marginTop="3dp"
-                android:text="@string/all_no_data"
-                android:textIsSelectable="true"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/examDialogDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/examDialogTeacherValue"
-                android:layout_marginTop="10dp"
-                android:text="@string/exam_entry_date"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/examDialogDateValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/examDialogDate"
-                android:layout_marginTop="3dp"
-                android:text="@string/all_no_data"
-                android:textIsSelectable="true"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/examDialogDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/examDialogDateValue"
-                android:layout_marginTop="10dp"
-                android:text="@string/all_description"
-                android:textSize="17sp" />
-
-            <TextView
-                android:id="@+id/examDialogDescriptionValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/examDialogDescription"
-                android:layout_marginTop="3dp"
-                android:text="@string/all_no_data"
-                android:textIsSelectable="true"
-                android:textSize="12sp" />
-
-
-            <Button
-                android:id="@+id/examDialogClose"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/examDialogDescriptionValue"
-                android:layout_marginTop="25dp"
-                android:background="?attr/selectableItemBackground"
-                android:focusable="true"
-                android:text="@string/all_close"
-                android:textColor="?android:attr/android:textColorSecondary"
-                android:textAllCaps="true"
-                android:textSize="15sp" />
-
-        </RelativeLayout>
     </LinearLayout>
 </ScrollView>
