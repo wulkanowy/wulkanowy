@@ -7,6 +7,7 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.utils.extension.isHolidays
 import io.github.wulkanowy.utils.getNearMonday
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import org.threeten.bp.LocalDate
@@ -20,7 +21,8 @@ class ExamPresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<ExamView>(errorHandler) {
 
-    var date: LocalDate = getNearMonday(LocalDate.now())
+    var currentDate: LocalDate = getNearMonday(LocalDate.now())
+        private set
 
     override fun attachView(view: ExamView) {
         super.attachView(view)
@@ -30,12 +32,11 @@ class ExamPresenter @Inject constructor(
     fun loadData(forceRefresh: Boolean = false) {
         disposable.add(sessionRepository.getSemesters()
                 .map { selectSemester(it, -1) }
-                .flatMap { examRepository.getExams(it, date, forceRefresh) }
+                .flatMap { examRepository.getExams(it, currentDate, forceRefresh) }
                 .map { it.groupBy { exam -> exam.date }.toSortedMap() }
                 .map { createExamItems(it) }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
-                .doOnSubscribe { view?.setNavDate(date) }
                 .doFinally {
                     view?.run {
                         showRefresh(false)
@@ -49,6 +50,20 @@ class ExamPresenter @Inject constructor(
                     }
                 }
                 .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
+    }
+
+    fun loadExamsForDate(date: LocalDate) {
+        if (!date.isHolidays()) {
+            disposable.clear()
+            this.currentDate = date
+            view?.run {
+                setNavDate(currentDate)
+                showProgress(true)
+                showEmpty(false)
+                showContent(false)
+            }
+            loadData()
+        }
     }
 
     private fun createExamItems(items: Map<Date, List<Exam>>): List<ExamItem> {

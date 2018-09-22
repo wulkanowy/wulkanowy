@@ -12,7 +12,6 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.utils.extension.isHolidays
 import io.github.wulkanowy.utils.extension.setOnItemClickListener
 import io.github.wulkanowy.utils.extension.setOnUpdateListener
 import io.github.wulkanowy.utils.extension.toFormattedString
@@ -57,30 +56,10 @@ class ExamFragment : BaseFragment(), ExamView {
         }
         examSwipe.setOnRefreshListener { presenter.loadData(forceRefresh = true) }
         examPreviousButton.setOnClickListener {
-            presenter.date.minusDays(7).run {
-                if (!this.isHolidays()) {
-                    showProgress(true)
-                    showEmpty(false)
-                    showContent(false)
-                    presenter.run {
-                        date = date.minusDays(7)
-                        loadData()
-                    }
-                }
-            }
+            presenter.loadExamsForDate(presenter.currentDate.minusDays(7))
         }
         examNextButton.setOnClickListener {
-            presenter.date.plusDays(7).run {
-                if (!this.isHolidays()) {
-                    showProgress(true)
-                    showEmpty(false)
-                    showContent(false)
-                    presenter.run {
-                        date = date.plusDays(7)
-                        loadData()
-                    }
-                }
-            }
+            presenter.loadExamsForDate(presenter.currentDate.plusDays(7))
         }
     }
 
