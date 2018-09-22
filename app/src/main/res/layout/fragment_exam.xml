@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -36,6 +36,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
+            android:padding="10dp"
             android:visibility="gone">
 
             <android.support.v7.widget.AppCompatImageView
@@ -68,7 +69,6 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:drawablePadding="4dp"
             android:text="@string/prev" />
 
@@ -87,7 +87,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:drawablePadding="4dp"
-
             android:text="@string/next" />
 
     </LinearLayout>
