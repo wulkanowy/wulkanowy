@@ -10,11 +10,18 @@ interface GradeView : BaseView {
 
     fun currentPageIndex(): Int
 
-    fun showChildProgress()
+    fun showChildProgress(index: Int, showProgress: Boolean)
 
     fun showContent(show: Boolean)
 
     fun showProgress(show: Boolean)
 
     fun showSemesterDialog(selectedIndex: Int)
+
+    interface GradeChildView {
+
+        fun loadData(semesterId: String, forceRefresh: Boolean)
+
+        fun notifyShowProgress(showProgress: Boolean)
+    }
 }

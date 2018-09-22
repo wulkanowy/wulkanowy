@@ -10,9 +10,7 @@ interface MainView : BaseView {
 
     fun setViewTitle(title: String)
 
-    fun defaultTitle(): String
+    fun viewTitles(): List<String>
 
-    fun mapOfTitles(): Map<Int, String>
-
-    fun showActionBar(show: Boolean)
+    fun expandActionBar(show: Boolean)
 }

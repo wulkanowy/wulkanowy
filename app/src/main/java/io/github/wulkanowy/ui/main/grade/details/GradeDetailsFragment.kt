@@ -12,12 +12,12 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.main.grade.GradeFragment
+import io.github.wulkanowy.ui.main.grade.GradeView
 import io.github.wulkanowy.utils.extension.setOnItemClickListener
-import io.github.wulkanowy.utils.extension.setOnUpdateListener
 import kotlinx.android.synthetic.main.fragment_grade_details.*
 import javax.inject.Inject
 
-class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeFragment.GradeViewEventListener {
+class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeChildView {
 
     @Inject
     lateinit var presenter: GradeDetailsPresenter
@@ -42,7 +42,6 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeFragment.Gra
         gradeAdapter.run {
             isAutoCollapseOnExpand = true
             isAutoScrollOnExpand = true
-            setOnUpdateListener { presenter.onUpdateDataList(it) }
             setOnItemClickListener { presenter.onGradeItemSelected(getItem(it)) }
         }
         gradeDetailsRecycler.run {
@@ -60,16 +59,16 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeFragment.Gra
         gradeAdapter.updateDataSet(data, true)
     }
 
-    override fun onDataLoaded() {
-        (parentFragment as? GradeFragment)?.onFirstFragmentLoaded()
+    override fun onDataLoaded(semesterId: String) {
+        (parentFragment as? GradeFragment)?.onChildFragmentLoaded(semesterId)
     }
 
     override fun onSwipeRefresh() {
         (parentFragment as? GradeFragment)?.onChildRefresh()
     }
 
-    override fun showProgressAndHideContent() {
-        presenter.onShowProgress()
+    override fun notifyShowProgress(showProgress: Boolean) {
+        presenter.onParentShowProgress(showProgress)
     }
 
     override fun showEmpty(show: Boolean) {

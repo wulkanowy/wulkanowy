@@ -15,13 +15,14 @@ class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
     fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
         return if (!wasSelected) {
             view?.switchMenuFragment(position)
+            view?.expandActionBar(true)
             true
         } else false
     }
 
     fun onMenuFragmentChange(position: Int) {
         view?.run {
-            setViewTitle(mapOfTitles()[position] ?: defaultTitle())
+            setViewTitle(viewTitles()[position])
         }
     }
 }

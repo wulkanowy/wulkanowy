@@ -9,7 +9,7 @@ interface GradeDetailsView : BaseView {
 
     fun updateData(data: List<GradeDetailsHeader>)
 
-    fun onDataLoaded()
+    fun onDataLoaded(semesterId: String)
 
     fun onSwipeRefresh()
 

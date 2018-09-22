@@ -62,11 +62,11 @@ class GradeFragment : BaseFragment(), GradeView {
     }
 
     override fun loadChildViewData(semesterId: String, forceRefresh: Boolean, index: Int) {
-        (pagerAdapter.registeredFragments[index] as? GradeViewEventListener)?.loadData(semesterId, forceRefresh)
+        (pagerAdapter.registeredFragments[index] as? GradeView.GradeChildView)?.loadData(semesterId, forceRefresh)
     }
 
-    fun onFirstFragmentLoaded() {
-        presenter.onFirstViewLoaded()
+    fun onChildFragmentLoaded(semesterId: String) {
+        presenter.onChildViewLoaded(semesterId)
     }
 
     fun onChildRefresh() {
@@ -75,10 +75,8 @@ class GradeFragment : BaseFragment(), GradeView {
 
     override fun currentPageIndex() = gradeViewPager.currentItem
 
-    override fun showChildProgress() {
-        pagerAdapter.registeredFragments.forEach { _, fragment ->
-            (fragment as? GradeViewEventListener)?.showProgressAndHideContent()
-        }
+    override fun showChildProgress(index: Int, showProgress: Boolean) {
+        (pagerAdapter.registeredFragments[index] as? GradeView.GradeChildView)?.notifyShowProgress(showProgress)
     }
 
     override fun showContent(show: Boolean) {
@@ -91,30 +89,23 @@ class GradeFragment : BaseFragment(), GradeView {
     }
 
     override fun showSemesterDialog(selectedIndex: Int) {
-        val semesters = arrayOf(getString(R.string.grade_semester, 1),
-                getString(R.string.grade_semester, 2))
-
-        context?.let {
-            AlertDialog.Builder(it)
-                    .setSingleChoiceItems(semesters, selectedIndex) { dialog, which ->
-                        presenter.onSemesterSelected(which)
-                        dialog.dismiss()
-                    }
-                    .setTitle(R.string.grade_switch_semester)
-                    .setNegativeButton(R.string.all_cancel) { dialog, _ -> dialog.dismiss() }
-                    .show()
+        arrayOf(getString(R.string.grade_semester, 1),
+                getString(R.string.grade_semester, 2)).also { array ->
+            context?.let {
+                AlertDialog.Builder(it)
+                        .setSingleChoiceItems(array, selectedIndex) { dialog, which ->
+                            presenter.onSemesterSelected(which)
+                            dialog.dismiss()
+                        }
+                        .setTitle(R.string.grade_switch_semester)
+                        .setNegativeButton(R.string.all_cancel) { dialog, _ -> dialog.dismiss() }
+                        .show()
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.detachView()
-    }
-
-    interface GradeViewEventListener {
-
-        fun loadData(semesterId: String, forceRefresh: Boolean)
-
-        fun showProgressAndHideContent()
     }
 }

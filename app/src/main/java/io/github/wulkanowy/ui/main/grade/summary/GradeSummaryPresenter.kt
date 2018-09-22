@@ -21,6 +21,10 @@ class GradeSummaryPresenter @Inject constructor(
         private val schedulers: SchedulersManager)
     : BasePresenter<GradeSummaryView>(errorHandler) {
 
+    private var loadedSemesterId = "0"
+
+    private var isItemsEmpty = true
+
     override fun attachView(view: GradeSummaryView) {
         super.attachView(view)
         view.initView()
@@ -48,18 +52,24 @@ class GradeSummaryPresenter @Inject constructor(
                 }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
+                .doOnEvent { data, exception ->
+                    if (loadedSemesterId != semesterId) isItemsEmpty = true
+                    (if (exception == null) data.gradesSummaryItem.isEmpty() else isItemsEmpty).also {
+                        isItemsEmpty = it
+                        loadedSemesterId = semesterId
+                        view?.run {
+                            showContent(!it)
+                            showEmpty(it)
+                        }
+                    }
+                }
                 .doFinally {
                     view?.run {
                         showProgress(false)
                         showRefresh(false)
+                        onDataLoaded(semesterId)
                     }
-                }.doAfterSuccess {
-                    view?.run {
-                        showContent(it.gradesSummaryItem.isNotEmpty())
-                        showEmpty(it.gradesSummaryItem.isEmpty())
-                    }
-                }
-                .subscribe({ view?.updateDataSet(it.gradesSummaryItem, it.finalAvg, it.calculatedAvg) })
+                }.subscribe({ view?.updateDataSet(it.gradesSummaryItem, it.finalAvg, it.calculatedAvg) })
                 { errorHandler.proceed(it) })
     }
 
@@ -67,11 +77,11 @@ class GradeSummaryPresenter @Inject constructor(
         view?.onSwipeRefresh()
     }
 
-    fun onShowProgress() {
-        view?.run {
-            showProgress(true)
-            showEmpty(false)
-            showContent(false)
+    fun onParentShowProgress(showProgress: Boolean) {
+        view?.apply {
+            showProgress(showProgress)
+            showEmpty(if (showProgress) false else isItemsEmpty)
+            showContent(if (showProgress) false else !isItemsEmpty)
         }
     }
 
@@ -94,7 +104,6 @@ class GradeSummaryPresenter @Inject constructor(
                     }
                 }
     }
-
 
     private fun checkEmpty(gradeSummary: GradeSummary, averages: Map<String, Float>): Boolean {
         return gradeSummary.run {

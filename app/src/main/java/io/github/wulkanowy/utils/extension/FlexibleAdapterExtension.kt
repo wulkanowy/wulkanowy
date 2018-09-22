@@ -8,7 +8,3 @@ fun FlexibleAdapter<*>.setOnItemClickListener(listener: (position: Int) -> Unit)
         true
     })
 }
-
-fun FlexibleAdapter<*>.setOnUpdateListener(listener: (size: Int) -> Unit) {
-    addListener(FlexibleAdapter.OnUpdateListener { listener(it) })
-}

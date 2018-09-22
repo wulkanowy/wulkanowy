@@ -11,10 +11,11 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.main.grade.GradeFragment
+import io.github.wulkanowy.ui.main.grade.GradeView
 import kotlinx.android.synthetic.main.fragment_grade_summary.*
 import javax.inject.Inject
 
-class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeFragment.GradeViewEventListener {
+class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeChildView {
 
     @Inject
     lateinit var presenter: GradeSummaryPresenter
@@ -61,12 +62,16 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeFragment.Gra
         presenter.loadData(semesterId, forceRefresh)
     }
 
+    override fun onDataLoaded(semesterId: String) {
+        (parentFragment as? GradeFragment)?.onChildFragmentLoaded(semesterId)
+    }
+
     override fun onSwipeRefresh() {
         (parentFragment as? GradeFragment)?.onChildRefresh()
     }
 
-    override fun showProgressAndHideContent() {
-        presenter.onShowProgress()
+    override fun notifyShowProgress(showProgress: Boolean) {
+        presenter.onParentShowProgress(showProgress)
     }
 
     override fun showContent(show: Boolean) {

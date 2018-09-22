@@ -18,7 +18,7 @@ class GradePresenter @Inject constructor(
 
     private var selectedIndex = 0
 
-    private val loadedSemesterId = mutableListOf<String>()
+    private val loadedSemesterId = mutableMapOf<Int, String>()
 
     override fun attachView(view: GradeView) {
         super.attachView(view)
@@ -37,26 +37,24 @@ class GradePresenter @Inject constructor(
     fun onSemesterSelected(index: Int) {
         if (selectedIndex != index) {
             selectedIndex = index
-            view?.run {
-                showChildProgress()
-                loadChild(false, currentPageIndex())
-            }
+            view?.let { loadChild(false, it.currentPageIndex(), true) }
         }
     }
 
     fun onChildViewRefresh() {
-        view?.run { loadChild(true, currentPageIndex()) }
+        view?.let { loadChild(true, it.currentPageIndex(), false) }
     }
 
-    fun onFirstViewLoaded() {
-        view?.run {
+    fun onChildViewLoaded(semesterId: String) {
+        view?.apply {
             showContent(true)
             showProgress(false)
+            loadedSemesterId[currentPageIndex()] = semesterId
         }
     }
 
     fun onPageSelected(index: Int) {
-        loadChild(false, index)
+        loadChild(false, index, false)
     }
 
     private fun loadData() {
@@ -69,17 +67,23 @@ class GradePresenter @Inject constructor(
                 }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
-                .subscribe({ loadChild(false, 0) })
+                .subscribe({ _ ->
+                    view?.let { loadChild(false, it.currentPageIndex(), true) }
+                })
                 { errorHandler.proceed(it) })
     }
 
-    private fun loadChild(forceRefresh: Boolean, index: Int) {
-        semesters.first { it.semesterName == selectedIndex + 1 }.semesterId.let {
-            if (forceRefresh || loadedSemesterId.getOrNull(index) != it) {
+    private fun loadChild(forceRefresh: Boolean, index: Int, showProgress: Boolean) {
+        semesters.first { it.semesterName == selectedIndex + 1 }.semesterId.also {
+            if (forceRefresh || loadedSemesterId[index] != it) {
+                if (showProgress) showChildrenProgress(true)
                 view?.loadChildViewData(it, forceRefresh, index)
-                loadedSemesterId.add(index, it)
-            }
+            } else showChildrenProgress(false)
         }
+    }
+
+    private fun showChildrenProgress(showProgress: Boolean) {
+        for (i in 0..1) view?.showChildProgress(i, showProgress)
     }
 }
 

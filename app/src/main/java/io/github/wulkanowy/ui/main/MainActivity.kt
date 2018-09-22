@@ -8,7 +8,7 @@ import android.support.v4.content.ContextCompat
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.ncapdevi.fragnav.FragNavController
-import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
+import com.ncapdevi.fragnav.FragNavController.Companion.DETACH_ON_NAVIGATE_HIDE_ON_SWITCH
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment
@@ -66,7 +66,7 @@ class MainActivity : BaseActivity(), MainView, FragNavController.TransactionList
 
         navController.run {
             transactionListener = this@MainActivity
-            fragmentHideStrategy = HIDE
+            fragmentHideStrategy = DETACH_ON_NAVIGATE_HIDE_ON_SWITCH
             rootFragments = listOf(
                     GradeFragment.newInstance(),
                     AttendanceFragment.newInstance(),
@@ -91,23 +91,20 @@ class MainActivity : BaseActivity(), MainView, FragNavController.TransactionList
         supportActionBar?.title = title
     }
 
-    override fun showActionBar(show: Boolean) {
-        supportActionBar?.run { if (show) show() else hide() }
+    override fun expandActionBar(show: Boolean) {
+        mainAppBarContainer.setExpanded(show, true)
     }
 
-    override fun defaultTitle(): String = getString(R.string.main_title)
-
-    override fun mapOfTitles(): Map<Int, String> {
-        return mapOf(0 to R.string.grade_title,
-                1 to R.string.attendance_title,
-                2 to R.string.exam_title,
-                3 to R.string.timetable_title,
-                4 to R.string.more_title
-        ).mapValues { getString(it.value) }
+    override fun viewTitles(): List<String> {
+        return listOf(R.string.grade_title,
+                R.string.attendance_title,
+                R.string.exam_title,
+                R.string.timetable_title,
+                R.string.more_title).map { getString(it) }
     }
 
     override fun onBackPressed() {
-        navController.run { if (isRootFragment) super.onBackPressed() else popFragment() }
+        navController.apply { if (isRootFragment) super.onBackPressed() else popFragment() }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
