@@ -12,9 +12,9 @@ private val formatter = DateTimeFormatter.ofPattern(DATE_PATTERN)
 
 fun LocalDate.toDate(): Date = java.sql.Date.valueOf(this.format(formatter))
 
-fun LocalDate.toFormattedString(format: String): String = this.format(DateTimeFormatter.ofPattern(format))
+fun LocalDate.toFormat(format: String): String = this.format(DateTimeFormatter.ofPattern(format))
 
-fun LocalDate.toFormattedString(): String = this.toFormattedString(DATE_PATTERN)
+fun LocalDate.toFormat(): String = this.toFormat(DATE_PATTERN)
 
 fun LocalDate.isHolidays(): Boolean = isHolidays(this)
 
@@ -22,4 +22,4 @@ fun Date.toLocalDate(): LocalDate = Instant.ofEpochMilli(this.time).atZone(ZoneI
 
 fun Date.getWeekDayName(): String = this.toLocalDate().format(DateTimeFormatter.ofPattern("EEEE", Locale.getDefault()))
 
-fun Date.toFormattedString(): String = this.toLocalDate().toFormattedString()
+fun Date.toFormat(): String = this.toLocalDate().toFormat()

@@ -20,5 +20,5 @@ interface ExamView : BaseView {
 
     fun showExamDialog(exam: Exam)
 
-    fun setNavDate(date: LocalDate)
+    fun updateWeekNavigation(date: LocalDate)
 }

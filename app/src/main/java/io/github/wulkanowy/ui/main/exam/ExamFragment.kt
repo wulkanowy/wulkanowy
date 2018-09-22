@@ -3,8 +3,7 @@ package io.github.wulkanowy.ui.main.exam
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -12,13 +11,12 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.utils.extension.isHolidays
 import io.github.wulkanowy.utils.extension.setOnItemClickListener
 import io.github.wulkanowy.utils.extension.setOnUpdateListener
-import io.github.wulkanowy.utils.extension.toFormattedString
+import io.github.wulkanowy.utils.extension.toFormat
 import kotlinx.android.synthetic.main.fragment_exam.*
-import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
-import org.threeten.bp.temporal.TemporalAdjusters
 import javax.inject.Inject
 
 class ExamFragment : BaseFragment(), ExamView {
@@ -67,8 +65,10 @@ class ExamFragment : BaseFragment(), ExamView {
         examAdapter.updateDataSet(data, true)
     }
 
-    override fun setNavDate(date: LocalDate) {
-        examNavDate.text = "${date.toFormattedString("dd.MM")}-${date.with(TemporalAdjusters.next(DayOfWeek.FRIDAY)).toFormattedString("dd.MM")}"
+    override fun updateWeekNavigation(date: LocalDate) {
+        examPreviousButton.visibility = if (date.minusDays(7).isHolidays()) INVISIBLE else VISIBLE
+        examNextButton.visibility = if (date.plusDays(7).isHolidays()) INVISIBLE else VISIBLE
+        examNavDate.text = String.format("%s-%s", date.toFormat("dd.MM"), date.plusDays(4).toFormat("dd.MM"))
     }
 
     override fun showEmpty(show: Boolean) {

@@ -37,16 +37,17 @@ class ExamPresenter @Inject constructor(
                 .map { createExamItems(it) }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
-                .doFinally {
-                    view?.run {
-                        showRefresh(false)
-                        showProgress(false)
-                    }
-                }
+                .doOnSubscribe { view?.updateWeekNavigation(currentDate) }
                 .doAfterSuccess {
                     view?.run {
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
+                    }
+                }
+                .doFinally {
+                    view?.run {
+                        showRefresh(false)
+                        showProgress(false)
                     }
                 }
                 .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
@@ -57,7 +58,6 @@ class ExamPresenter @Inject constructor(
             disposable.clear()
             this.currentDate = date
             view?.run {
-                setNavDate(currentDate)
                 showProgress(true)
                 showEmpty(false)
                 showContent(false)

@@ -7,7 +7,7 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.ExpandableViewHolder
 import io.github.wulkanowy.R
 import io.github.wulkanowy.utils.extension.getWeekDayName
-import io.github.wulkanowy.utils.extension.toFormattedString
+import io.github.wulkanowy.utils.extension.toFormat
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.header_exam.*
 import org.apache.commons.lang3.StringUtils
@@ -42,7 +42,7 @@ class ExamHeader : AbstractHeaderItem<ExamHeader.ViewHolder>() {
                                 position: Int, payloads: MutableList<Any>?) {
         holder.run {
             examHeaderDay.text = StringUtils.capitalize(date.getWeekDayName())
-            examHeaderDate.text = date.toFormattedString()
+            examHeaderDate.text = date.toFormat()
         }
     }
 
