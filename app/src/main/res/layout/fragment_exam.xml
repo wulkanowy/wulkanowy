@@ -69,9 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:drawableLeft="@drawable/ic_keyboard_arrow_left_black_24dp"
             android:drawablePadding="4dp"
-            android:drawableStart="@drawable/ic_keyboard_arrow_left_black_24dp"
             android:text="@string/prev" />
 
         <TextView
@@ -88,9 +86,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
             android:drawablePadding="4dp"
-            android:drawableRight="@drawable/ic_keyboard_arrow_right_black_24dp"
+
             android:text="@string/next" />
 
     </LinearLayout>

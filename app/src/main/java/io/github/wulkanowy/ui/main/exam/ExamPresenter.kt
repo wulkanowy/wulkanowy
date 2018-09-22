@@ -20,7 +20,7 @@ class ExamPresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<ExamView>(errorHandler) {
 
-    var date: LocalDate = LocalDate.now()
+    var date: LocalDate = getNearMonday(LocalDate.now())
 
     override fun attachView(view: ExamView) {
         super.attachView(view)
@@ -30,14 +30,12 @@ class ExamPresenter @Inject constructor(
     fun loadData(forceRefresh: Boolean = false) {
         disposable.add(sessionRepository.getSemesters()
                 .map { selectSemester(it, -1) }
-                .flatMap {
-                    view?.setNavDate(date)
-                    examRepository.getExams(it, getNearMonday(date), forceRefresh)
-                }
+                .flatMap { examRepository.getExams(it, date, forceRefresh) }
                 .map { it.groupBy { exam -> exam.date }.toSortedMap() }
                 .map { createExamItems(it) }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
+                .doOnSubscribe { view?.setNavDate(date) }
                 .doFinally {
                     view?.run {
                         showRefresh(false)

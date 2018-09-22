@@ -26,12 +26,14 @@ class ExamDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogFragmentTheme)
         arguments?.run {
             exam = getSerializable(ARGUMENT_KEY) as Exam
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        dialog.setTitle(getString(R.string.all_details))
         return inflater.inflate(R.layout.dialog_exam, container, false)
     }
 
