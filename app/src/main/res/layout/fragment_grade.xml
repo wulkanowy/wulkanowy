@@ -10,10 +10,10 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:elevation="5dp"
-        app:tabMaxWidth="0dp"
-        app:tabGravity="fill"
         android:visibility="invisible"
+        app:tabGravity="fill"
         app:tabIndicatorColor="@android:color/white"
+        app:tabMaxWidth="0dp"
         app:tabMode="fixed"
         app:tabTextColor="@android:color/white" />
 

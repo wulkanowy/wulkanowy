@@ -30,7 +30,7 @@ class GradePresenter @Inject constructor(
     }
 
     fun onViewReselected() {
-        TODO()
+        view?.run { notifyChildParentReselected(currentPageIndex()) }
     }
 
     fun onSemesterSwitch(): Boolean {
@@ -80,7 +80,7 @@ class GradePresenter @Inject constructor(
         semesters.first { it.semesterName == selectedIndex + 1 }.semesterId.also {
             if (forceRefresh || loadedSemesterId[index] != it) {
                 if (showProgress) showChildrenProgress(true)
-                view?.loadChildViewData(it, forceRefresh, index)
+                view?.loadChildData(it, forceRefresh, index)
             } else showChildrenProgress(false)
         }
     }

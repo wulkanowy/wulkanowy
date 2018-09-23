@@ -62,7 +62,7 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
         presenter.loadData(semesterId, forceRefresh)
     }
 
-    override fun onDataLoaded(semesterId: String) {
+    override fun notifyParentDataLoaded(semesterId: String) {
         (parentFragment as? GradeFragment)?.onChildFragmentLoaded(semesterId)
     }
 
@@ -70,8 +70,16 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
         (parentFragment as? GradeFragment)?.onChildRefresh()
     }
 
-    override fun notifyShowProgress(showProgress: Boolean) {
+    override fun onParentReselected() {
+        presenter.onParentViewReselected()
+    }
+
+    override fun showChildProgress(showProgress: Boolean) {
         presenter.onParentShowProgress(showProgress)
+    }
+
+    override fun resetView() {
+        gradeSummaryAdapter.smoothScrollToPosition(0)
     }
 
     override fun showContent(show: Boolean) {

@@ -23,7 +23,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
     lateinit var presenter: GradeDetailsPresenter
 
     @Inject
-    lateinit var gradeAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
+    lateinit var gradeDetailsAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
         fun newInstance() = GradeDetailsFragment()
@@ -39,14 +39,14 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
     }
 
     override fun initView() {
-        gradeAdapter.run {
+        gradeDetailsAdapter.run {
             isAutoCollapseOnExpand = true
             isAutoScrollOnExpand = true
             setOnItemClickListener { presenter.onGradeItemSelected(getItem(it)) }
         }
         gradeDetailsRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
-            adapter = gradeAdapter
+            adapter = gradeDetailsAdapter
         }
         gradeDetailsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
@@ -56,18 +56,29 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
     }
 
     override fun updateData(data: List<GradeDetailsHeader>) {
-        gradeAdapter.updateDataSet(data, true)
+        gradeDetailsAdapter.updateDataSet(data, true)
     }
 
-    override fun onDataLoaded(semesterId: String) {
+    override fun notifyParentDataLoaded(semesterId: String) {
         (parentFragment as? GradeFragment)?.onChildFragmentLoaded(semesterId)
+    }
+
+    override fun onParentReselected() {
+        presenter.onParentViewReselected()
     }
 
     override fun onSwipeRefresh() {
         (parentFragment as? GradeFragment)?.onChildRefresh()
     }
 
-    override fun notifyShowProgress(showProgress: Boolean) {
+    override fun resetView() {
+        gradeDetailsAdapter.apply {
+            smoothScrollToPosition(0)
+            collapseAll()
+        }
+    }
+
+    override fun showChildProgress(showProgress: Boolean) {
         presenter.onParentShowProgress(showProgress)
     }
 

@@ -49,10 +49,14 @@ class GradeDetailsPresenter @Inject constructor(
                     view?.run {
                         showRefresh(false)
                         showProgress(false)
-                        onDataLoaded(semesterId)
+                        notifyParentDataLoaded(semesterId)
                     }
                 }
                 .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
+    }
+
+    fun onParentViewReselected() {
+        view?.resetView()
     }
 
     fun onSwipeRefresh() {

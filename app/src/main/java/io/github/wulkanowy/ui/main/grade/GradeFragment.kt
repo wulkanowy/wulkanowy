@@ -62,8 +62,12 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MenuFragmentView {
         else false
     }
 
-    override fun loadChildViewData(semesterId: String, forceRefresh: Boolean, index: Int) {
+    override fun loadChildData(semesterId: String, forceRefresh: Boolean, index: Int) {
         (childFragmentManager.fragments[index] as GradeView.GradeChildView).loadData(semesterId, forceRefresh)
+    }
+
+    override fun notifyChildParentReselected(index: Int) {
+        (pagerAdapter.registeredFragments[index] as? GradeView.GradeChildView)?.onParentReselected()
     }
 
     fun onChildFragmentLoaded(semesterId: String) {
@@ -81,7 +85,7 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MenuFragmentView {
     override fun currentPageIndex() = gradeViewPager.currentItem
 
     override fun showChildProgress(index: Int, showProgress: Boolean) {
-        (pagerAdapter.registeredFragments[index] as? GradeView.GradeChildView)?.notifyShowProgress(showProgress)
+        (pagerAdapter.registeredFragments[index] as? GradeView.GradeChildView)?.showChildProgress(showProgress)
     }
 
     override fun showContent(show: Boolean) {

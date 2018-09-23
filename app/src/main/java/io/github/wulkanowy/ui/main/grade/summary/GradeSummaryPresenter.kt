@@ -67,10 +67,14 @@ class GradeSummaryPresenter @Inject constructor(
                     view?.run {
                         showProgress(false)
                         showRefresh(false)
-                        onDataLoaded(semesterId)
+                        notifyParentDataLoaded(semesterId)
                     }
                 }.subscribe({ view?.updateDataSet(it.gradesSummaryItem, it.finalAvg, it.calculatedAvg) })
                 { errorHandler.proceed(it) })
+    }
+
+    fun onParentViewReselected() {
+        view?.resetView()
     }
 
     fun onSwipeRefresh() {
