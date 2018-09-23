@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.extension.isHolidays
+import io.github.wulkanowy.utils.extension.toFormat
 import io.github.wulkanowy.utils.getNearMonday
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import org.threeten.bp.LocalDate
@@ -21,8 +22,7 @@ class ExamPresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<ExamView>(errorHandler) {
 
-    var currentDate: LocalDate = getNearMonday(LocalDate.now())
-        private set
+    private var currentDate: LocalDate = getNearMonday(LocalDate.now())
 
     override fun attachView(view: ExamView) {
         super.attachView(view)
@@ -37,7 +37,13 @@ class ExamPresenter @Inject constructor(
                 .map { createExamItems(it) }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
-                .doOnSubscribe { view?.updateWeekNavigation(currentDate) }
+                .doOnSubscribe {
+                    view?.run {
+                        showPreButton(!currentDate.minusDays(7).isHolidays())
+                        showNextButton(!currentDate.plusDays(7).isHolidays())
+                        updateNavigationWeek("${currentDate.toFormat("dd.MM")}-${currentDate.plusDays(4).toFormat("dd.MM")}")
+                    }
+                }
                 .doAfterSuccess {
                     view?.run {
                         showEmpty(it.isEmpty())
@@ -53,7 +59,11 @@ class ExamPresenter @Inject constructor(
                 .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
     }
 
-    fun loadExamsForDate(date: LocalDate) {
+    fun loadExamsForPreviousWeek() = loadExamsForDate(currentDate.minusDays(7))
+
+    fun loadExamsForNextWeek() = loadExamsForDate(currentDate.plusDays(7))
+
+    private fun loadExamsForDate(date: LocalDate) {
         if (!date.isHolidays()) {
             disposable.clear()
             this.currentDate = date
@@ -73,10 +83,6 @@ class ExamPresenter @Inject constructor(
                 ExamItem(header, item)
             }
         }
-    }
-
-    fun onUpdateDataList(size: Int) {
-        if (size != 0) view?.showProgress(false)
     }
 
     fun onExamItemSelected(item: AbstractFlexibleItem<*>?) {

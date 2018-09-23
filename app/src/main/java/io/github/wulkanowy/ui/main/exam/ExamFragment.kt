@@ -11,12 +11,8 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.utils.extension.isHolidays
 import io.github.wulkanowy.utils.extension.setOnItemClickListener
-import io.github.wulkanowy.utils.extension.setOnUpdateListener
-import io.github.wulkanowy.utils.extension.toFormat
 import kotlinx.android.synthetic.main.fragment_exam.*
-import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class ExamFragment : BaseFragment(), ExamView {
@@ -45,7 +41,6 @@ class ExamFragment : BaseFragment(), ExamView {
 
     override fun initView() {
         examAdapter.run {
-            setOnUpdateListener { presenter.onUpdateDataList(it) }
             setOnItemClickListener { presenter.onExamItemSelected(getItem(it)) }
         }
         examRecycler.run {
@@ -53,22 +48,16 @@ class ExamFragment : BaseFragment(), ExamView {
             adapter = examAdapter
         }
         examSwipe.setOnRefreshListener { presenter.loadData(forceRefresh = true) }
-        examPreviousButton.setOnClickListener {
-            presenter.loadExamsForDate(presenter.currentDate.minusDays(7))
-        }
-        examNextButton.setOnClickListener {
-            presenter.loadExamsForDate(presenter.currentDate.plusDays(7))
-        }
+        examPreviousButton.setOnClickListener { presenter.loadExamsForPreviousWeek() }
+        examNextButton.setOnClickListener { presenter.loadExamsForNextWeek()}
     }
 
     override fun updateData(data: List<ExamItem>) {
         examAdapter.updateDataSet(data, true)
     }
 
-    override fun updateWeekNavigation(date: LocalDate) {
-        examPreviousButton.visibility = if (date.minusDays(7).isHolidays()) INVISIBLE else VISIBLE
-        examNextButton.visibility = if (date.plusDays(7).isHolidays()) INVISIBLE else VISIBLE
-        examNavDate.text = String.format("%s-%s", date.toFormat("dd.MM"), date.plusDays(4).toFormat("dd.MM"))
+    override fun updateNavigationWeek(date: String) {
+        examNavDate.text = date
     }
 
     override fun showEmpty(show: Boolean) {
@@ -85,6 +74,14 @@ class ExamFragment : BaseFragment(), ExamView {
 
     override fun showRefresh(show: Boolean) {
         examSwipe.isRefreshing = show
+    }
+
+    override fun showPreButton(show: Boolean) {
+        examPreviousButton.visibility = if (show) VISIBLE else INVISIBLE
+    }
+
+    override fun showNextButton(show: Boolean) {
+        examNextButton.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showExamDialog(exam: Exam) {

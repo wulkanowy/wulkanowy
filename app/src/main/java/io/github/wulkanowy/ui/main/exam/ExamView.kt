@@ -18,7 +18,11 @@ interface ExamView : BaseView {
 
     fun showRefresh(show: Boolean)
 
+    fun showNextButton(show: Boolean)
+
+    fun showPreButton(show: Boolean)
+
     fun showExamDialog(exam: Exam)
 
-    fun updateWeekNavigation(date: LocalDate)
+    fun updateNavigationWeek(date: String)
 }
