@@ -53,8 +53,6 @@ class ExamHeader : AbstractHeaderItem<ExamHeader.ViewHolder>() {
             contentView.setOnClickListener(this)
         }
 
-        override fun shouldNotifyParentOnClick() = true
-
         override val containerView: View
             get() = contentView
     }

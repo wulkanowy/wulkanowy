@@ -10,27 +10,22 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_exam.*
-import org.apache.commons.lang3.builder.EqualsBuilder
-import org.apache.commons.lang3.builder.HashCodeBuilder
 
 class ExamItem(header: ExamHeader, val exam: Exam) : AbstractSectionableItem<ExamItem.ViewHolder, ExamHeader>(header) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-        if (other == null || javaClass != other.javaClass) return false
+        other as ExamItem
 
-        val that = other as ExamItem?
+        if (exam.id != other.exam.id) return false
 
-        return EqualsBuilder()
-                .append(exam, that!!.exam)
-                .isEquals
+        return true
     }
 
     override fun hashCode(): Int {
-        return HashCodeBuilder(17, 37)
-                .append(exam)
-                .toHashCode()
+        return exam.id.hashCode()
     }
 
     override fun getLayoutRes() = R.layout.item_exam
