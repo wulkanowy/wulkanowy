@@ -30,7 +30,15 @@ class ExamPresenter @Inject constructor(
         view.initView()
     }
 
-    fun loadData(forceRefresh: Boolean = false) {
+    fun loadExamsForPreviousWeek() = loadData(currentDate.minusDays(7).toEpochDay())
+
+    fun loadExamsForNextWeek() = loadData(currentDate.plusDays(7).toEpochDay())
+
+    fun loadData(date: Long?, forceRefresh: Boolean = false) {
+        this.currentDate = LocalDate.ofEpochDay(date ?: getNearMonday(currentDate).toEpochDay())
+        if (currentDate.isHolidays()) return
+
+        disposable.clear()
         disposable.add(sessionRepository.getSemesters()
                 .map { selectSemester(it, -1) }
                 .flatMap { examRepository.getExams(it, currentDate, forceRefresh) }
@@ -40,6 +48,10 @@ class ExamPresenter @Inject constructor(
                 .observeOn(schedulers.mainThread())
                 .doOnSubscribe {
                     view?.run {
+                        showRefresh(forceRefresh)
+                        showProgress(!forceRefresh)
+                        if (!forceRefresh) showEmpty(false)
+                        showContent(null == date && forceRefresh)
                         showPreButton(!currentDate.minusDays(7).isHolidays())
                         showNextButton(!currentDate.plusDays(7).isHolidays())
                         updateNavigationWeek("${currentDate.toFormat("dd.MM")}-${currentDate.plusDays(4).toFormat("dd.MM")}")
@@ -58,24 +70,6 @@ class ExamPresenter @Inject constructor(
                     }
                 }
                 .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
-    }
-
-    fun loadExamsForPreviousWeek() = loadExamsFor(currentDate.minusDays(7).toEpochDay())
-
-    fun loadExamsForNextWeek() = loadExamsFor(currentDate.plusDays(7).toEpochDay())
-
-    fun loadExamsFor(date: Long?) {
-        this.currentDate = LocalDate.ofEpochDay(date ?: getNearMonday(LocalDate.now()).toEpochDay())
-
-        if (!currentDate.isHolidays()) {
-            disposable.clear()
-            view?.run {
-                showProgress(true)
-                showEmpty(false)
-                showContent(false)
-            }
-            loadData()
-        }
     }
 
     private fun createExamItems(items: Map<Date, List<Exam>>): List<ExamItem> {

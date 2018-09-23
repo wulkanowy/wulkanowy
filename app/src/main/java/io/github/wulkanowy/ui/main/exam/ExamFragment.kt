@@ -36,7 +36,7 @@ class ExamFragment : BaseFragment(), ExamView {
         super.onActivityCreated(savedInstanceState)
         presenter.run {
             attachView(this@ExamFragment)
-            loadData()
+            loadData(date = savedInstanceState?.getLong(SAVED_DATE_KEY))
         }
     }
 
@@ -48,7 +48,7 @@ class ExamFragment : BaseFragment(), ExamView {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = examAdapter
         }
-        examSwipe.setOnRefreshListener { presenter.loadData(forceRefresh = true) }
+        examSwipe.setOnRefreshListener { presenter.loadData(date = null, forceRefresh = true) }
         examPreviousButton.setOnClickListener { presenter.loadExamsForPreviousWeek() }
         examNextButton.setOnClickListener { presenter.loadExamsForNextWeek()}
     }
@@ -96,7 +96,7 @@ class ExamFragment : BaseFragment(), ExamView {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        presenter.loadExamsFor(savedInstanceState?.getLong(SAVED_DATE_KEY))
+        presenter.loadData(date = savedInstanceState?.getLong(SAVED_DATE_KEY))
     }
 
     override fun onDestroyView() {

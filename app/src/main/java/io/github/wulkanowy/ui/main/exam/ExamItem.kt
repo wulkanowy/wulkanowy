@@ -19,13 +19,13 @@ class ExamItem(header: ExamHeader, val exam: Exam) : AbstractSectionableItem<Exa
 
         other as ExamItem
 
-        if (exam.id != other.exam.id) return false
+        if (exam != other.exam) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return exam.id.hashCode()
+        return exam.hashCode()
     }
 
     override fun getLayoutRes() = R.layout.item_exam
