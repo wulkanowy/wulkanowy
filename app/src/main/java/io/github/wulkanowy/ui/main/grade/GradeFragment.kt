@@ -8,13 +8,14 @@ import android.view.View.VISIBLE
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BasePagerAdapter
+import io.github.wulkanowy.ui.main.MainView
 import io.github.wulkanowy.ui.main.grade.details.GradeDetailsFragment
 import io.github.wulkanowy.ui.main.grade.summary.GradeSummaryFragment
 import io.github.wulkanowy.utils.extension.setOnSelectPageListener
 import kotlinx.android.synthetic.main.fragment_grade.*
 import javax.inject.Inject
 
-class GradeFragment : BaseFragment(), GradeView {
+class GradeFragment : BaseFragment(), GradeView, MainView.MenuFragmentView {
 
     @Inject
     lateinit var presenter: GradePresenter
@@ -62,7 +63,7 @@ class GradeFragment : BaseFragment(), GradeView {
     }
 
     override fun loadChildViewData(semesterId: String, forceRefresh: Boolean, index: Int) {
-        (pagerAdapter.registeredFragments[index] as? GradeView.GradeChildView)?.loadData(semesterId, forceRefresh)
+        (childFragmentManager.fragments[index] as GradeView.GradeChildView).loadData(semesterId, forceRefresh)
     }
 
     fun onChildFragmentLoaded(semesterId: String) {
@@ -71,6 +72,10 @@ class GradeFragment : BaseFragment(), GradeView {
 
     fun onChildRefresh() {
         presenter.onChildViewRefresh()
+    }
+
+    override fun onFragmentReselected() {
+        presenter.onViewReselected()
     }
 
     override fun currentPageIndex() = gradeViewPager.currentItem

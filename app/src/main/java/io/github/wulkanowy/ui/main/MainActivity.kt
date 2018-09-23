@@ -43,6 +43,11 @@ class MainActivity : BaseActivity(), MainView, FragNavController.TransactionList
         navController.initialize(DEFAULT_TAB, savedInstanceState)
     }
 
+    override fun onStart() {
+        super.onStart()
+        presenter.onStartView()
+    }
+
     override fun initView() {
         mainBottomNav.run {
             addItems(mutableListOf(
@@ -80,11 +85,15 @@ class MainActivity : BaseActivity(), MainView, FragNavController.TransactionList
     override fun onFragmentTransaction(fragment: Fragment?, transactionType: FragNavController.TransactionType) {}
 
     override fun onTabTransaction(fragment: Fragment?, index: Int) {
-        presenter.onMenuFragmentChange(index)
+        presenter.onMenuViewChange(index)
     }
 
-    override fun switchMenuFragment(position: Int) {
+    override fun switchMenuView(position: Int) {
         navController.switchTab(position)
+    }
+
+    override fun setMenuViewReselected() {
+        (navController.currentFrag as? MainView.MenuFragmentView)?.onFragmentReselected()
     }
 
     override fun setViewTitle(title: String) {
@@ -95,13 +104,15 @@ class MainActivity : BaseActivity(), MainView, FragNavController.TransactionList
         mainAppBarContainer.setExpanded(show, true)
     }
 
-    override fun viewTitles(): List<String> {
-        return listOf(R.string.grade_title,
+    override fun viewTitle(index: Int): String {
+        return getString(listOf(R.string.grade_title,
                 R.string.attendance_title,
                 R.string.exam_title,
                 R.string.timetable_title,
-                R.string.more_title).map { getString(it) }
+                R.string.more_title)[index])
     }
+
+    override fun currentMenuIndex() = navController.currentStackIndex
 
     override fun onBackPressed() {
         navController.apply { if (isRootFragment) super.onBackPressed() else popFragment() }

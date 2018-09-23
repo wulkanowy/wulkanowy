@@ -12,18 +12,25 @@ class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
         view.initView()
     }
 
-    fun onTabSelected(position: Int, wasSelected: Boolean): Boolean {
-        return if (!wasSelected) {
-            view?.switchMenuFragment(position)
-            view?.expandActionBar(true)
-            true
-        } else false
+    fun onStartView() {
+        view?.run { setViewTitle(viewTitle(currentMenuIndex())) }
     }
 
-    fun onMenuFragmentChange(position: Int) {
-        view?.run {
-            setViewTitle(viewTitles()[position])
-        }
+    fun onMenuViewChange(index: Int) {
+        view?.run { setViewTitle(viewTitle(index)) }
+    }
+
+    fun onTabSelected(index: Int, wasSelected: Boolean): Boolean {
+        return view?.run {
+            expandActionBar(true)
+            if (wasSelected) {
+                setMenuViewReselected()
+                false
+            } else {
+                switchMenuView(index)
+                true
+            }
+        } == true
     }
 }
 

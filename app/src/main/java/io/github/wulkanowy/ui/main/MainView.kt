@@ -6,11 +6,20 @@ interface MainView : BaseView {
 
     fun initView()
 
-    fun switchMenuFragment(position: Int)
+    fun switchMenuView(position: Int)
 
     fun setViewTitle(title: String)
 
-    fun viewTitles(): List<String>
+    fun setMenuViewReselected()
 
     fun expandActionBar(show: Boolean)
+
+    fun viewTitle(index: Int): String
+
+    fun currentMenuIndex(): Int
+
+    interface MenuFragmentView {
+
+        fun onFragmentReselected()
+    }
 }

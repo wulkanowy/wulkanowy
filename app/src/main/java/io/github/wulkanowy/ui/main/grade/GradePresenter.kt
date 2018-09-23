@@ -29,6 +29,10 @@ class GradePresenter @Inject constructor(
                 })
     }
 
+    fun onViewReselected() {
+        TODO()
+    }
+
     fun onSemesterSwitch(): Boolean {
         if (semesters.isNotEmpty()) view?.showSemesterDialog(selectedIndex)
         return true
@@ -37,12 +41,12 @@ class GradePresenter @Inject constructor(
     fun onSemesterSelected(index: Int) {
         if (selectedIndex != index) {
             selectedIndex = index
-            view?.let { loadChild(false, it.currentPageIndex(), true) }
+            view?.let { loadChild(it.currentPageIndex(), showProgress = true) }
         }
     }
 
     fun onChildViewRefresh() {
-        view?.let { loadChild(true, it.currentPageIndex(), false) }
+        view?.let { loadChild(it.currentPageIndex(), forceRefresh = true) }
     }
 
     fun onChildViewLoaded(semesterId: String) {
@@ -54,7 +58,7 @@ class GradePresenter @Inject constructor(
     }
 
     fun onPageSelected(index: Int) {
-        loadChild(false, index, false)
+        loadChild(index)
     }
 
     private fun loadData() {
@@ -68,12 +72,11 @@ class GradePresenter @Inject constructor(
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
                 .subscribe({ _ ->
-                    view?.let { loadChild(false, it.currentPageIndex(), true) }
-                })
-                { errorHandler.proceed(it) })
+                    view?.let { loadChild(it.currentPageIndex(), showProgress = true) }
+                }) { errorHandler.proceed(it) })
     }
 
-    private fun loadChild(forceRefresh: Boolean, index: Int, showProgress: Boolean) {
+    private fun loadChild(index: Int, forceRefresh: Boolean = false, showProgress: Boolean = false) {
         semesters.first { it.semesterName == selectedIndex + 1 }.semesterId.also {
             if (forceRefresh || loadedSemesterId[index] != it) {
                 if (showProgress) showChildrenProgress(true)

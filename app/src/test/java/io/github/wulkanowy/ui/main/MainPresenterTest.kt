@@ -34,13 +34,13 @@ class MainPresenterTest {
     @Test
     fun onTabSelectedTest() {
         presenter.onTabSelected(1, false)
-        verify(mainView).switchMenuFragment(1)
+        verify(mainView).switchMenuView(1)
     }
 
     @Test
     fun onMenuFragmentChangeTest() {
         doReturn(mapOf(1 to "Test")).`when`(mainView).mapOfTitles()
-        presenter.onMenuFragmentChange(1)
+        presenter.onMenuViewChange(1)
         verify(mainView).setViewTitle("Test")
     }
 
@@ -48,7 +48,7 @@ class MainPresenterTest {
     fun onMenuFragmentChangeDefaultTest() {
         doReturn(emptyMap<Int, String>()).`when`(mainView).mapOfTitles()
         doReturn("Default").`when`(mainView).defaultTitle()
-        presenter.onMenuFragmentChange(2)
+        presenter.onMenuViewChange(2)
         verify(mainView).setViewTitle("Default")
     }
 }
