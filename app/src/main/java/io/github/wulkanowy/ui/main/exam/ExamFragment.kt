@@ -24,6 +24,7 @@ class ExamFragment : BaseFragment(), ExamView {
     lateinit var examAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
+        private const val SAVED_DATE_KEY = "CURRENT_DATE"
         fun newInstance() = ExamFragment()
     }
 
@@ -86,6 +87,16 @@ class ExamFragment : BaseFragment(), ExamView {
 
     override fun showExamDialog(exam: Exam) {
         ExamDialog.newInstance(exam).show(fragmentManager, exam.toString())
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putLong(SAVED_DATE_KEY, presenter.currentDate.toEpochDay())
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        presenter.loadExamsFor(savedInstanceState?.getLong(SAVED_DATE_KEY))
     }
 
     override fun onDestroyView() {

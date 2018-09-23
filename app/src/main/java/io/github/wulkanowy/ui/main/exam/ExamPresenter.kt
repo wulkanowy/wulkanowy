@@ -22,7 +22,8 @@ class ExamPresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<ExamView>(errorHandler) {
 
-    private var currentDate: LocalDate = getNearMonday(LocalDate.now())
+    var currentDate: LocalDate = getNearMonday(LocalDate.now())
+        private set
 
     override fun attachView(view: ExamView) {
         super.attachView(view)
@@ -59,14 +60,15 @@ class ExamPresenter @Inject constructor(
                 .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
     }
 
-    fun loadExamsForPreviousWeek() = loadExamsForDate(currentDate.minusDays(7))
+    fun loadExamsForPreviousWeek() = loadExamsFor(currentDate.minusDays(7).toEpochDay())
 
-    fun loadExamsForNextWeek() = loadExamsForDate(currentDate.plusDays(7))
+    fun loadExamsForNextWeek() = loadExamsFor(currentDate.plusDays(7).toEpochDay())
 
-    private fun loadExamsForDate(date: LocalDate) {
-        if (!date.isHolidays()) {
+    fun loadExamsFor(date: Long?) {
+        this.currentDate = LocalDate.ofEpochDay(date ?: getNearMonday(LocalDate.now()).toEpochDay())
+
+        if (!currentDate.isHolidays()) {
             disposable.clear()
-            this.currentDate = date
             view?.run {
                 showProgress(true)
                 showEmpty(false)
