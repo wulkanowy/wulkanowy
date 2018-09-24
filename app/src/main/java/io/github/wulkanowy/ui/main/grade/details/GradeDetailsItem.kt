@@ -9,7 +9,7 @@ import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_grade.*
+import kotlinx.android.synthetic.main.item_grade_details.*
 
 class GradeDetailsItem : AbstractFlexibleItem<GradeDetailsItem.ViewHolder>() {
 
@@ -23,7 +23,7 @@ class GradeDetailsItem : AbstractFlexibleItem<GradeDetailsItem.ViewHolder>() {
         return ViewHolder(view, adapter)
     }
 
-    override fun getLayoutRes() = R.layout.item_grade
+    override fun getLayoutRes() = R.layout.item_grade_details
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -8,7 +8,7 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.ExpandableViewHolder
 import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.header_grade.*
+import kotlinx.android.synthetic.main.header_grade_details.*
 
 class GradeDetailsHeader : AbstractExpandableItem<GradeDetailsHeader.ViewHolder, GradeDetailsItem>() {
 
@@ -22,7 +22,7 @@ class GradeDetailsHeader : AbstractExpandableItem<GradeDetailsHeader.ViewHolder,
         return ViewHolder(view, adapter)
     }
 
-    override fun getLayoutRes() = R.layout.header_grade
+    override fun getLayoutRes() = R.layout.header_grade_details
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

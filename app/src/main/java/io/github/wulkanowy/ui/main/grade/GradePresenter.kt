@@ -41,7 +41,10 @@ class GradePresenter @Inject constructor(
     fun onSemesterSelected(index: Int) {
         if (selectedIndex != index) {
             selectedIndex = index
-            view?.let { loadChild(it.currentPageIndex(), showProgress = true) }
+            view?.let {
+                notifyChildrenSemesterChange()
+                loadChild(it.currentPageIndex())
+            }
         }
     }
 
@@ -64,7 +67,7 @@ class GradePresenter @Inject constructor(
     private fun loadData() {
         disposable.add(sessionRepository.getSemesters()
                 .map {
-                    it.first { item -> item.current }.also { current ->
+                    it.first { item -> item.semesterId == "866" }.also { current ->
                         selectedIndex = current.semesterName - 1
                         semesters = it.filter { semester -> semester.diaryId == current.diaryId }
                     }
@@ -72,21 +75,19 @@ class GradePresenter @Inject constructor(
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
                 .subscribe({ _ ->
-                    view?.let { loadChild(it.currentPageIndex(), showProgress = true) }
+                    view?.let { loadChild(it.currentPageIndex()) }
                 }) { errorHandler.proceed(it) })
     }
 
-    private fun loadChild(index: Int, forceRefresh: Boolean = false, showProgress: Boolean = false) {
+    private fun loadChild(index: Int, forceRefresh: Boolean = false) {
         semesters.first { it.semesterName == selectedIndex + 1 }.semesterId.also {
             if (forceRefresh || loadedSemesterId[index] != it) {
-                if (showProgress) showChildrenProgress(true)
-                view?.loadChildData(it, forceRefresh, index)
-            } else showChildrenProgress(false)
+                view?.notifyChildLoadData(index, it, forceRefresh)
+            }
         }
     }
 
-    private fun showChildrenProgress(showProgress: Boolean) {
-        for (i in 0..1) view?.showChildProgress(i, showProgress)
+    private fun notifyChildrenSemesterChange() {
+        for (i in 0..1) view?.notifyChildSemesterChange(i)
     }
 }
-

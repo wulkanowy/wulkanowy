@@ -21,10 +21,6 @@ class GradeSummaryPresenter @Inject constructor(
         private val schedulers: SchedulersManager)
     : BasePresenter<GradeSummaryView>(errorHandler) {
 
-    private var loadedSemesterId = "0"
-
-    private var isItemsEmpty = true
-
     override fun attachView(view: GradeSummaryView) {
         super.attachView(view)
         view.initView()
@@ -41,51 +37,41 @@ class GradeSummaryPresenter @Inject constructor(
                                             grades.groupBy { grade -> grade.subject }
                                                     .mapValues { entry -> calcAverage(entry.value) }
                                                     .let { averages ->
-                                                        DataContainer(
-                                                                createGradeSummaryItems(gradesSummary, averages),
-                                                                formatAverage(calcSummaryAverage(gradesSummary)),
-                                                                formatAverage(averages.values.average().toFloat())
-                                                        )
+                                                        createGradeSummaryItems(gradesSummary, averages) to
+                                                                GradeSummaryScrollableHeader().apply {
+                                                                    finalAverage = formatAverage(calcSummaryAverage(gradesSummary))
+                                                                    calculatedAverage = formatAverage(averages.values.average().toFloat())
+                                                                }
                                                     }
                                         }
                             }
                 }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
-                .doOnEvent { data, exception ->
-                    if (loadedSemesterId != semesterId) isItemsEmpty = true
-                    (if (exception == null) data.gradesSummaryItem.isEmpty() else isItemsEmpty).also {
-                        isItemsEmpty = it
-                        loadedSemesterId = semesterId
-                        view?.run {
-                            showContent(!it)
-                            showEmpty(it)
-                        }
-                    }
-                }
                 .doFinally {
                     view?.run {
+                        showContent(true)
                         showProgress(false)
                         showRefresh(false)
                         notifyParentDataLoaded(semesterId)
                     }
-                }.subscribe({ view?.updateDataSet(it.gradesSummaryItem, it.finalAvg, it.calculatedAvg) })
+                }.subscribe({ view?.updateDataSet(it.first, it.second) })
                 { errorHandler.proceed(it) })
+    }
+
+    fun onSwipeRefresh() {
+        view?.notifyParentRefresh()
     }
 
     fun onParentViewReselected() {
         view?.resetView()
     }
 
-    fun onSwipeRefresh() {
-        view?.onSwipeRefresh()
-    }
-
-    fun onParentShowProgress(showProgress: Boolean) {
-        view?.apply {
-            showProgress(showProgress)
-            showEmpty(if (showProgress) false else isItemsEmpty)
-            showContent(if (showProgress) false else !isItemsEmpty)
+    fun onParentChangeSemester() {
+        view?.run {
+            showProgress(true)
+            showContent(false)
+            clearView()
         }
     }
 
@@ -119,7 +105,4 @@ class GradeSummaryPresenter @Inject constructor(
         return if (average == 0f || average.isNaN()) defaultValue
         else format(FRANCE, "%.2f", average)
     }
-
-    data class DataContainer(var gradesSummaryItem: List<GradeSummaryItem>, var finalAvg: String,
-                             var calculatedAvg: String)
 }

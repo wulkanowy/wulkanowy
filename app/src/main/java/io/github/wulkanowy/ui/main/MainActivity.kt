@@ -3,7 +3,6 @@ package io.github.wulkanowy.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
@@ -16,10 +15,11 @@ import io.github.wulkanowy.ui.main.exam.ExamFragment
 import io.github.wulkanowy.ui.main.grade.GradeFragment
 import io.github.wulkanowy.ui.main.more.MoreFragment
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment
+import io.github.wulkanowy.utils.extension.setOnTabTransactionListener
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : BaseActivity(), MainView, FragNavController.TransactionListener {
+class MainActivity : BaseActivity(), MainView {
 
     @Inject
     lateinit var presenter: MainPresenter
@@ -70,7 +70,7 @@ class MainActivity : BaseActivity(), MainView, FragNavController.TransactionList
         }
 
         navController.run {
-            transactionListener = this@MainActivity
+            setOnTabTransactionListener { presenter.onMenuViewChange(it) }
             fragmentHideStrategy = DETACH_ON_NAVIGATE_HIDE_ON_SWITCH
             rootFragments = listOf(
                     GradeFragment.newInstance(),
@@ -82,18 +82,8 @@ class MainActivity : BaseActivity(), MainView, FragNavController.TransactionList
         }
     }
 
-    override fun onFragmentTransaction(fragment: Fragment?, transactionType: FragNavController.TransactionType) {}
-
-    override fun onTabTransaction(fragment: Fragment?, index: Int) {
-        presenter.onMenuViewChange(index)
-    }
-
     override fun switchMenuView(position: Int) {
         navController.switchTab(position)
-    }
-
-    override fun setMenuViewReselected() {
-        (navController.currentFrag as? MainView.MenuFragmentView)?.onFragmentReselected()
     }
 
     override fun setViewTitle(title: String) {
@@ -113,6 +103,10 @@ class MainActivity : BaseActivity(), MainView, FragNavController.TransactionList
     }
 
     override fun currentMenuIndex() = navController.currentStackIndex
+
+    override fun notifyMenuViewReselected() {
+        (navController.currentFrag as? MainView.MenuFragmentView)?.onFragmentReselected()
+    }
 
     override fun onBackPressed() {
         navController.apply { if (isRootFragment) super.onBackPressed() else popFragment() }

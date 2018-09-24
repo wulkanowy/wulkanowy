@@ -17,10 +17,6 @@ class GradeDetailsPresenter @Inject constructor(
         private val gradeRepository: GradeRepository,
         private val sessionRepository: SessionRepository) : BasePresenter<GradeDetailsView>(errorHandler) {
 
-    private var loadedSemesterId = "0"
-
-    private var isItemsEmpty = true
-
     override fun attachView(view: GradeDetailsView) {
         super.attachView(view)
         view.initView()
@@ -34,19 +30,9 @@ class GradeDetailsPresenter @Inject constructor(
                 }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
-                .doOnEvent { data, exception ->
-                    if (loadedSemesterId != semesterId) isItemsEmpty = true
-                    (if (exception == null) data.isEmpty() else isItemsEmpty).also {
-                        isItemsEmpty = it
-                        loadedSemesterId = semesterId
-                        view?.run {
-                            showContent(!it)
-                            showEmpty(it)
-                        }
-                    }
-                }
                 .doFinally {
                     view?.run {
+                        showContent(true)
                         showRefresh(false)
                         showProgress(false)
                         notifyParentDataLoaded(semesterId)
@@ -55,24 +41,24 @@ class GradeDetailsPresenter @Inject constructor(
                 .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
     }
 
+    fun onGradeItemSelected(item: AbstractFlexibleItem<*>?) {
+        if (item is GradeDetailsItem) view?.showGradeDialog(item.grade)
+    }
+
+    fun onSwipeRefresh() {
+        view?.notifyParentRefresh()
+    }
+
     fun onParentViewReselected() {
         view?.resetView()
     }
 
-    fun onSwipeRefresh() {
-        view?.onSwipeRefresh()
-    }
-
-    fun onParentShowProgress(showProgress: Boolean) {
-        view?.apply {
-            showProgress(showProgress)
-            showEmpty(if (showProgress) false else isItemsEmpty)
-            showContent(if (showProgress) false else !isItemsEmpty)
+    fun onParentChangeSemester() {
+        view?.run {
+            showProgress(true)
+            showContent(false)
+            clearView()
         }
-    }
-
-    fun onGradeItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is GradeDetailsItem) view?.showGradeDialog(item.grade)
     }
 
     private fun createGradeItems(items: Map<String, List<Grade>>): List<GradeDetailsHeader> {

@@ -2,20 +2,20 @@ package io.github.wulkanowy.ui.main.grade.summary
 
 import android.view.View
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.items.AbstractHeaderItem
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.header_grade_summary.*
+import kotlinx.android.synthetic.main.scrollable_header_grade_summary.*
 
-class GradeSummaryHeader : AbstractHeaderItem<GradeSummaryHeader.ViewHolder>() {
+class GradeSummaryScrollableHeader : AbstractFlexibleItem<GradeSummaryScrollableHeader.ViewHolder>() {
 
-    lateinit var name: String
+    var calculatedAverage = ""
 
-    lateinit var average: String
+    var finalAverage = ""
 
-    override fun getLayoutRes() = R.layout.header_grade_summary
+    override fun getLayoutRes() = R.layout.scrollable_header_grade_summary
 
     override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?): ViewHolder {
         return ViewHolder(view, adapter)
@@ -23,9 +23,9 @@ class GradeSummaryHeader : AbstractHeaderItem<GradeSummaryHeader.ViewHolder>() {
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?,
                                 position: Int, payloads: MutableList<Any>?) {
-        holder?.run {
-            gradeSummaryHeaderName.text = name
-            gradeSummaryHeaderAverage.text = average
+        holder?.apply {
+            gradeSummaryScrollableHeaderFinal.text = finalAverage
+            gradeSummaryScrollableHeaderCalculated.text = calculatedAverage
         }
     }
 
@@ -33,22 +33,22 @@ class GradeSummaryHeader : AbstractHeaderItem<GradeSummaryHeader.ViewHolder>() {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as GradeSummaryHeader
+        other as GradeSummaryScrollableHeader
 
-        if (name != other.name) return false
-        if (average != other.average) return false
+        if (calculatedAverage != other.calculatedAverage) return false
+        if (finalAverage != other.finalAverage) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = name.hashCode()
-        result = 31 * result + average.hashCode()
+        var result = calculatedAverage.hashCode()
+        result = 31 * result + finalAverage.hashCode()
         return result
     }
 
-    class ViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?) :
-            FlexibleViewHolder(view, adapter), LayoutContainer {
+    class ViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?) : FlexibleViewHolder(view, adapter),
+            LayoutContainer {
 
         override val containerView: View?
             get() = contentView

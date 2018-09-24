@@ -22,6 +22,14 @@ class GradeSummaryItem(header: GradeSummaryHeader) :
         return ViewHolder(view, adapter)
     }
 
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?,
+                                position: Int, payloads: MutableList<Any>?) {
+        holder?.run {
+            gradeSummaryItemGrade.text = grade
+            gradeSummaryItemTitle.text = title
+        }
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -38,14 +46,6 @@ class GradeSummaryItem(header: GradeSummaryHeader) :
         var result = grade.hashCode()
         result = 31 * result + title.hashCode()
         return result
-    }
-
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?,
-                                position: Int, payloads: MutableList<Any>?) {
-        holder?.run {
-            gradeSummaryItemGrade.text = grade
-            gradeSummaryItemTitle.text = title
-        }
     }
 
     class ViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?)

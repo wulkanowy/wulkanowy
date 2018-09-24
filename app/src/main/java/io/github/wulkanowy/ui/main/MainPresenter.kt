@@ -24,7 +24,7 @@ class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
         return view?.run {
             expandActionBar(true)
             if (wasSelected) {
-                setMenuViewReselected()
+                notifyMenuViewReselected()
                 false
             } else {
                 switchMenuView(index)
@@ -33,4 +33,3 @@ class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
         } == true
     }
 }
-

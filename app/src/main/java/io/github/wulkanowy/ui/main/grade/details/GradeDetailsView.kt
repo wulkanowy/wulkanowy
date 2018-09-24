@@ -9,15 +9,11 @@ interface GradeDetailsView : BaseView {
 
     fun updateData(data: List<GradeDetailsHeader>)
 
-    fun notifyParentDataLoaded(semesterId: String)
-
-    fun onSwipeRefresh()
-
     fun resetView()
 
-    fun showGradeDialog(grade: Grade)
+    fun clearView()
 
-    fun showEmpty(show: Boolean)
+    fun showGradeDialog(grade: Grade)
 
     fun showContent(show: Boolean)
 
@@ -32,4 +28,8 @@ interface GradeDetailsView : BaseView {
     fun gradeNumberString(number: Int): String
 
     fun weightString(): String
+
+    fun notifyParentDataLoaded(semesterId: String)
+
+    fun notifyParentRefresh()
 }

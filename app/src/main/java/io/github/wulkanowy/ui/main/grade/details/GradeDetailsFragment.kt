@@ -7,6 +7,7 @@ import android.view.View.*
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
+import eu.davidea.flexibleadapter.helpers.EmptyViewHelper
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
@@ -44,6 +45,8 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
             isAutoScrollOnExpand = true
             setOnItemClickListener { presenter.onGradeItemSelected(getItem(it)) }
         }
+        EmptyViewHelper.create(gradeDetailsAdapter, gradeDetailsEmpty)
+
         gradeDetailsRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = gradeDetailsAdapter
@@ -51,24 +54,8 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         gradeDetailsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
-    override fun loadData(semesterId: String, forceRefresh: Boolean) {
-        presenter.loadData(semesterId, forceRefresh)
-    }
-
     override fun updateData(data: List<GradeDetailsHeader>) {
         gradeDetailsAdapter.updateDataSet(data, true)
-    }
-
-    override fun notifyParentDataLoaded(semesterId: String) {
-        (parentFragment as? GradeFragment)?.onChildFragmentLoaded(semesterId)
-    }
-
-    override fun onParentReselected() {
-        presenter.onParentViewReselected()
-    }
-
-    override fun onSwipeRefresh() {
-        (parentFragment as? GradeFragment)?.onChildRefresh()
     }
 
     override fun resetView() {
@@ -78,12 +65,8 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         }
     }
 
-    override fun showChildProgress(showProgress: Boolean) {
-        presenter.onParentShowProgress(showProgress)
-    }
-
-    override fun showEmpty(show: Boolean) {
-        gradeDetailsEmpty.visibility = if (show) VISIBLE else GONE
+    override fun clearView() {
+        gradeDetailsAdapter.clear()
     }
 
     override fun showProgress(show: Boolean) {
@@ -91,7 +74,10 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
     }
 
     override fun showContent(show: Boolean) {
-        gradeDetailsRecycler.visibility = if (show) VISIBLE else INVISIBLE
+        (if (show) VISIBLE else INVISIBLE).let {
+            gradeDetailsEmpty.visibility = it
+            gradeDetailsRecycler.visibility = it
+        }
     }
 
     override fun showRefresh(show: Boolean) {
@@ -100,6 +86,26 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
 
     override fun showGradeDialog(grade: Grade) {
         GradeDetailsDialog.newInstance(grade).show(fragmentManager, grade.toString())
+    }
+
+    override fun onParentLoadData(semesterId: String, forceRefresh: Boolean) {
+        presenter.loadData(semesterId, forceRefresh)
+    }
+
+    override fun onParentReselected() {
+        presenter.onParentViewReselected()
+    }
+
+    override fun onParentChangeSemester() {
+        presenter.onParentChangeSemester()
+    }
+
+    override fun notifyParentDataLoaded(semesterId: String) {
+        (parentFragment as? GradeFragment)?.onChildFragmentLoaded(semesterId)
+    }
+
+    override fun notifyParentRefresh() {
+        (parentFragment as? GradeFragment)?.onChildRefresh()
     }
 
     override fun emptyAverageString(): String = getString(R.string.grade_no_average)

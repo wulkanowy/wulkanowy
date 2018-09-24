@@ -10,13 +10,13 @@ interface MainView : BaseView {
 
     fun setViewTitle(title: String)
 
-    fun setMenuViewReselected()
-
     fun expandActionBar(show: Boolean)
 
     fun viewTitle(index: Int): String
 
     fun currentMenuIndex(): Int
+
+    fun notifyMenuViewReselected()
 
     interface MenuFragmentView {
 

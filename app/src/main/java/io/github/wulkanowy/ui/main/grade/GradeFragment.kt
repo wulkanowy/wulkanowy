@@ -62,30 +62,8 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MenuFragmentView {
         else false
     }
 
-    override fun loadChildData(semesterId: String, forceRefresh: Boolean, index: Int) {
-        (childFragmentManager.fragments[index] as GradeView.GradeChildView).loadData(semesterId, forceRefresh)
-    }
-
-    override fun notifyChildParentReselected(index: Int) {
-        (pagerAdapter.registeredFragments[index] as? GradeView.GradeChildView)?.onParentReselected()
-    }
-
-    fun onChildFragmentLoaded(semesterId: String) {
-        presenter.onChildViewLoaded(semesterId)
-    }
-
-    fun onChildRefresh() {
-        presenter.onChildViewRefresh()
-    }
-
     override fun onFragmentReselected() {
         presenter.onViewReselected()
-    }
-
-    override fun currentPageIndex() = gradeViewPager.currentItem
-
-    override fun showChildProgress(index: Int, showProgress: Boolean) {
-        (pagerAdapter.registeredFragments[index] as? GradeView.GradeChildView)?.showChildProgress(showProgress)
     }
 
     override fun showContent(show: Boolean) {
@@ -111,6 +89,28 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MenuFragmentView {
                         .show()
             }
         }
+    }
+
+    override fun currentPageIndex() = gradeViewPager.currentItem
+
+    fun onChildRefresh() {
+        presenter.onChildViewRefresh()
+    }
+
+    fun onChildFragmentLoaded(semesterId: String) {
+        presenter.onChildViewLoaded(semesterId)
+    }
+
+    override fun notifyChildLoadData(index: Int, semesterId: String, forceRefresh: Boolean) {
+        (childFragmentManager.fragments[index] as GradeView.GradeChildView).onParentLoadData(semesterId, forceRefresh)
+    }
+
+    override fun notifyChildParentReselected(index: Int) {
+        (pagerAdapter.registeredFragments[index] as? GradeView.GradeChildView)?.onParentReselected()
+    }
+
+    override fun notifyChildSemesterChange(index: Int) {
+        (pagerAdapter.registeredFragments[index] as? GradeView.GradeChildView)?.onParentChangeSemester()
     }
 
     override fun onDestroyView() {
