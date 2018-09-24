@@ -1,0 +1,17 @@
+package io.github.wulkanowy.ui.main.timetable
+
+import io.github.wulkanowy.ui.base.BaseView
+
+interface TimetableView : BaseView {
+
+    fun initView()
+
+    fun updateData(data: List<TimetableHeader>)
+    fun updateNavigationWeek(date: String)
+    fun showEmpty(show: Boolean)
+    fun showProgress(show: Boolean)
+    fun showContent(show: Boolean)
+    fun showRefresh(show: Boolean)
+    fun showPreButton(show: Boolean)
+    fun showNextButton(show: Boolean)
+}

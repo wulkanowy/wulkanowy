@@ -21,6 +21,7 @@ class TimetableRemote @Inject constructor(private val api: Api) {
                 Timetable(
                         studentId = semester.studentId,
                         diaryId = semester.diaryId,
+                        number = it.number,
                         start = it.start,
                         end = it.end,
                         date = it.date,

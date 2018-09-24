@@ -4,17 +4,96 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
+import kotlinx.android.synthetic.main.fragment_timetable.*
+import javax.inject.Inject
 
-class TimetableFragment : BaseFragment() {
+class TimetableFragment : BaseFragment(), TimetableView {
+
+    @Inject
+    lateinit var presenter: TimetablePresenter
+
+    @Inject
+    lateinit var timetableAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
+        private const val SAVED_DATE_KEY = "CURRENT_DATE"
         fun newInstance() = TimetableFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_timetable, container, false)
     }
-}
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        presenter.run {
+            attachView(this@TimetableFragment)
+            loadData(date = savedInstanceState?.getLong(SAVED_DATE_KEY))
+        }
+    }
+
+    override fun initView() {
+        timetableAdapter.run {
+//            setOnItemClickListener { presenter.onTimetableItemSelected(getItem(it))}
+        }
+        timetableRecycler.run {
+            layoutManager = SmoothScrollLinearLayoutManager(context)
+            adapter = timetableAdapter
+        }
+        timetableSwipe.setOnRefreshListener { presenter.loadData(date = null, forceRefresh = true) }
+        timetablePreviousButton.setOnClickListener { presenter.loadTimetableForPreviousWeek() }
+        timetableNextButton.setOnClickListener { presenter.loadTimetableForNextWeek() }
+    }
+
+    override fun updateData(data: List<TimetableHeader>) {
+        timetableAdapter.updateDataSet(data, true)
+    }
+
+    override fun updateNavigationWeek(date: String) {
+        timetableNavDate.text = date
+    }
+
+    override fun showEmpty(show: Boolean) {
+        timetableEmpty.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showProgress(show: Boolean) {
+        timetableProgress.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showContent(show: Boolean) {
+        timetableRecycler.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showRefresh(show: Boolean) {
+        timetableSwipe.isRefreshing = show
+    }
+
+    override fun showPreButton(show: Boolean) {
+        timetablePreviousButton.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun showNextButton(show: Boolean) {
+        timetableNextButton.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putLong(SAVED_DATE_KEY, presenter.currentDate.toEpochDay())
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        presenter.loadData(date = savedInstanceState?.getLong(SAVED_DATE_KEY))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.detachView()
+    }
+}
