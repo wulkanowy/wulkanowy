@@ -8,7 +8,9 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.utils.extension.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_timetable.*
 import javax.inject.Inject
 
@@ -39,7 +41,9 @@ class TimetableFragment : BaseFragment(), TimetableView {
 
     override fun initView() {
         timetableAdapter.run {
-//            setOnItemClickListener { presenter.onTimetableItemSelected(getItem(it))}
+            isAutoCollapseOnExpand = true
+            isAutoScrollOnExpand = true
+            setOnItemClickListener { presenter.onTimetableItemSelected(getItem(it))}
         }
         timetableRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
@@ -80,6 +84,10 @@ class TimetableFragment : BaseFragment(), TimetableView {
 
     override fun showNextButton(show: Boolean) {
         timetableNextButton.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun showTimetableDialog(lesson: Timetable) {
+        TimetableDialog.newInstance(lesson).show(fragmentManager, lesson.toString())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

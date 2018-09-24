@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.main.timetable
 
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Timetable
@@ -80,6 +81,10 @@ class TimetablePresenter @Inject constructor(
                 }
             }
         }
+    }
+
+    fun onTimetableItemSelected(item: AbstractFlexibleItem<*>?) {
+        if (item is TimetableItem) view?.showTimetableDialog(item.lesson)
     }
 
     private fun selectSemester(semesters: List<Semester>, index: Int): Semester {

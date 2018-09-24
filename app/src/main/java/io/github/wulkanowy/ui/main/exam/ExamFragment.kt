@@ -42,8 +42,6 @@ class ExamFragment : BaseFragment(), ExamView {
 
     override fun initView() {
         examAdapter.run {
-            isAutoCollapseOnExpand = true
-            isAutoScrollOnExpand = true
             setOnItemClickListener { presenter.onExamItemSelected(getItem(it)) }
         }
         examRecycler.run {

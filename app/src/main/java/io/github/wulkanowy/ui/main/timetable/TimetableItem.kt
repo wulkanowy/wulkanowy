@@ -46,12 +46,11 @@ class TimetableItem : AbstractFlexibleItem<TimetableItem.ViewHolder>() {
             timetableItemNumber.text = lesson.number.toString()
             timetableItemSubject.text = lesson.subject
             timetableItemRoom.text = lesson.room
-            timetableItemTime.text = "${lesson.start.toFormatTime("H:m")} - ${lesson.end.toFormatTime("H:m")}"
+            timetableItemTime.text = "${lesson.start.toFormatTime("HH:mm")} - ${lesson.end.toFormatTime("HH:mm")}"
             timetableItemAlert.visibility = if (lesson.changes || lesson.canceled) VISIBLE else GONE
-            timetableItemSubject.paintFlags = if (lesson.canceled)
-                timetableItemSubject.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-            else
-                timetableItemSubject.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            timetableItemSubject.paintFlags =
+                    if (lesson.canceled) timetableItemSubject.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    else timetableItemSubject.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
     }
 
