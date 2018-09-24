@@ -67,7 +67,7 @@ class GradePresenter @Inject constructor(
     private fun loadData() {
         disposable.add(sessionRepository.getSemesters()
                 .map {
-                    it.first { item -> item.semesterId == "866" }.also { current ->
+                    it.first { item -> item.current }.also { current ->
                         selectedIndex = current.semesterName - 1
                         semesters = it.filter { semester -> semester.diaryId == current.diaryId }
                     }

@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'// sync warning probably caused by bug https://issuetracker.google.com/issues/74537216, fix in AS 3.2
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
+apply plugin: 'com.github.triplet.play'
 apply from: 'jacoco.gradle'
 apply from: 'sonarqube.gradle'
-apply plugin: 'com.github.triplet.play'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
 
     playAccountConfigs {
         defaultAccountConfig {
@@ -68,7 +68,7 @@ play {
     uploadImages = true
 }
 
-ext.supportVersion = "28.0.0-rc02"
+ext.supportVersion = "28.0.0"
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -92,7 +92,7 @@ dependencies {
     implementation "android.arch.persistence.room:rxjava2:1.1.1"
     kapt "android.arch.persistence.room:compiler:1.1.1"
 
-    implementation "eu.davidea:flexible-adapter:5.0.5"
+    implementation "eu.davidea:flexible-adapter:5.0.6"
     implementation "eu.davidea:flexible-adapter-ui:1.0.0-b5"
     implementation "com.aurelhubert:ahbottomnavigation:2.2.0"
     implementation 'com.ncapdevi:frag-nav:3.0.0-RC3'
