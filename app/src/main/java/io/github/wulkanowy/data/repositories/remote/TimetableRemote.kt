@@ -1,0 +1,38 @@
+package io.github.wulkanowy.data.repositories.remote
+
+import io.github.wulkanowy.api.Api
+import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.utils.extension.toDate
+import io.reactivex.Single
+import org.threeten.bp.LocalDate
+import javax.inject.Inject
+
+class TimetableRemote @Inject constructor(private val api: Api) {
+
+    fun getLessons(semester: Semester, startDate: LocalDate): Single<List<Timetable>> {
+        return Single.just(api.run {
+            if (diaryId != semester.diaryId) {
+                diaryId = semester.diaryId
+                notifyDataChanged()
+            }
+        }).flatMap { api.getTimetable(startDate.toDate()) }.map { lessons ->
+            lessons.map {
+                Timetable(
+                        studentId = semester.studentId,
+                        diaryId = semester.diaryId,
+                        start = it.start,
+                        end = it.end,
+                        date = it.date,
+                        subject = it.subject,
+                        group = it.group,
+                        room = it.room,
+                        teacher = it.teacher,
+                        info = it.info,
+                        changes = it.changes,
+                        canceled = it.canceled
+                )
+            }
+        }
+    }
+}
