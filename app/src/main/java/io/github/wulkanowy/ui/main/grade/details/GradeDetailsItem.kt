@@ -11,32 +11,13 @@ import io.github.wulkanowy.data.db.entities.Grade
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_grade_details.*
 
-class GradeDetailsItem : AbstractFlexibleItem<GradeDetailsItem.ViewHolder>() {
-
-    lateinit var grade: Grade
-
-    lateinit var weightString: String
-
-    var valueColor = 0
-
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
-        return ViewHolder(view, adapter)
-    }
+class GradeDetailsItem(val grade: Grade, private val weightString: String, private val valueColor: Int)
+    : AbstractFlexibleItem<GradeDetailsItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_grade_details
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as GradeDetailsItem
-
-        if (grade != other.grade) return false
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return grade.hashCode()
+    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
+        return ViewHolder(view, adapter)
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder,
@@ -52,6 +33,27 @@ class GradeDetailsItem : AbstractFlexibleItem<GradeDetailsItem.ViewHolder>() {
             gradeItemNote.visibility = GONE
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as GradeDetailsItem
+
+        if (grade != other.grade) return false
+        if (weightString != other.weightString) return false
+        if (valueColor != other.valueColor) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = grade.hashCode()
+        result = 31 * result + weightString.hashCode()
+        result = 31 * result + valueColor
+        return result
+    }
+
 
     class ViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter),
             LayoutContainer {

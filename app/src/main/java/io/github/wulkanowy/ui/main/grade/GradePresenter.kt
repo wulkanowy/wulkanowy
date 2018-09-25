@@ -41,6 +41,7 @@ class GradePresenter @Inject constructor(
     fun onSemesterSelected(index: Int) {
         if (selectedIndex != index) {
             selectedIndex = index
+            loadedSemesterId.clear()
             view?.let {
                 notifyChildrenSemesterChange()
                 loadChild(it.currentPageIndex())

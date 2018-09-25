@@ -9,11 +9,8 @@ import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.scrollable_header_grade_summary.*
 
-class GradeSummaryScrollableHeader : AbstractFlexibleItem<GradeSummaryScrollableHeader.ViewHolder>() {
-
-    var calculatedAverage = ""
-
-    var finalAverage = ""
+class GradeSummaryScrollableHeader(private val finalAverage: String, private val calculatedAverage: String)
+    : AbstractFlexibleItem<GradeSummaryScrollableHeader.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.scrollable_header_grade_summary
 

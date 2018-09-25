@@ -7,7 +7,6 @@ import android.view.View.*
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
-import eu.davidea.flexibleadapter.helpers.EmptyViewHelper
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
@@ -45,7 +44,6 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
             isAutoScrollOnExpand = true
             setOnItemClickListener { presenter.onGradeItemSelected(getItem(it)) }
         }
-        EmptyViewHelper.create(gradeDetailsAdapter, gradeDetailsEmpty)
 
         gradeDetailsRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
@@ -58,6 +56,10 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         gradeDetailsAdapter.updateDataSet(data, true)
     }
 
+    override fun clearView() {
+        gradeDetailsAdapter.clear()
+    }
+
     override fun resetView() {
         gradeDetailsAdapter.apply {
             smoothScrollToPosition(0)
@@ -65,19 +67,18 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         }
     }
 
-    override fun clearView() {
-        gradeDetailsAdapter.clear()
-    }
+    override fun isViewEmpty() = gradeDetailsAdapter.isEmpty
 
     override fun showProgress(show: Boolean) {
         gradeDetailsProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showContent(show: Boolean) {
-        (if (show) VISIBLE else INVISIBLE).let {
-            gradeDetailsEmpty.visibility = it
-            gradeDetailsRecycler.visibility = it
-        }
+        gradeDetailsRecycler.visibility = if (show) VISIBLE else INVISIBLE
+    }
+
+    override fun showEmpty(show: Boolean) {
+        gradeDetailsEmpty.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showRefresh(show: Boolean) {

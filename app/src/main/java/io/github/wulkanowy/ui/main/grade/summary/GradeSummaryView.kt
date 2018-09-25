@@ -12,11 +12,15 @@ interface GradeSummaryView : BaseView {
 
     fun clearView()
 
+    fun isViewEmpty(): Boolean
+
     fun showProgress(show: Boolean)
 
     fun showRefresh(show: Boolean)
 
     fun showContent(show: Boolean)
+
+    fun showEmpty(show: Boolean)
 
     fun predictedString(): String
 

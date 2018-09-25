@@ -9,12 +9,8 @@ import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_grade_summary.*
 
-class GradeSummaryItem(header: GradeSummaryHeader) :
-        AbstractSectionableItem<GradeSummaryItem.ViewHolder, GradeSummaryHeader>(header) {
-
-    lateinit var grade: String
-
-    lateinit var title: String
+class GradeSummaryItem(header: GradeSummaryHeader, private val grade: String, private val title: String)
+    : AbstractSectionableItem<GradeSummaryItem.ViewHolder, GradeSummaryHeader>(header) {
 
     override fun getLayoutRes() = R.layout.item_grade_summary
 
@@ -38,15 +34,18 @@ class GradeSummaryItem(header: GradeSummaryHeader) :
 
         if (grade != other.grade) return false
         if (title != other.title) return false
+        if (header != other.header) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = grade.hashCode()
+        var result = header.hashCode()
+        result = 31 * result + grade.hashCode()
         result = 31 * result + title.hashCode()
         return result
     }
+
 
     class ViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?)
         : FlexibleViewHolder(view, adapter), LayoutContainer {

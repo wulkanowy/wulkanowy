@@ -7,7 +7,6 @@ import android.view.View.*
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
-import eu.davidea.flexibleadapter.helpers.EmptyViewHelper
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -28,11 +27,6 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
         fun newInstance() = GradeSummaryFragment()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_grade_summary, container, false)
     }
@@ -44,19 +38,17 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
 
     override fun initView() {
         gradeSummaryAdapter.setDisplayHeadersAtStartUp(true)
-        EmptyViewHelper.create(gradeSummaryAdapter, gradeSummaryEmpty)
 
         gradeSummaryRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = gradeSummaryAdapter
-            isNestedScrollingEnabled = false
         }
         gradeSummarySwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
     override fun updateDataSet(data: List<GradeSummaryItem>, header: GradeSummaryScrollableHeader) {
         gradeSummaryAdapter.apply {
-            updateDataSet(data)
+            updateDataSet(data, true)
             removeAllScrollableHeaders()
             addScrollableHeader(header)
         }
@@ -70,11 +62,14 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
         gradeSummaryAdapter.smoothScrollToPosition(0)
     }
 
+    override fun isViewEmpty() = gradeSummaryAdapter.isEmpty
+
     override fun showContent(show: Boolean) {
-        (if (show) VISIBLE else INVISIBLE).let {
-            gradeSummaryRecycler.visibility = it
-            gradeSummaryEmpty.visibility = it
-        }
+        gradeSummaryRecycler.visibility = if (show) VISIBLE else INVISIBLE
+    }
+
+    override fun showEmpty(show: Boolean) {
+        gradeSummaryEmpty.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showProgress(show: Boolean) {

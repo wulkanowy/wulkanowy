@@ -24,21 +24,27 @@ class GradeDetailsPresenter @Inject constructor(
 
     fun loadData(semesterId: String, forceRefresh: Boolean) {
         disposable.add(sessionRepository.getSemesters()
-                .flatMap { semesters ->
-                    gradeRepository.getGrades(semesters.first { it.semesterId == semesterId }, forceRefresh)
-                            .map { createGradeItems(it.groupBy { grade -> grade.subject }.toSortedMap()) }
-                }
+                .flatMap { gradeRepository.getGrades(it.first { item -> item.semesterId == semesterId }, forceRefresh) }
+                .map { createGradeItems(it.groupBy { grade -> grade.subject }.toSortedMap()) }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
                 .doFinally {
                     view?.run {
-                        showContent(true)
                         showRefresh(false)
                         showProgress(false)
                         notifyParentDataLoaded(semesterId)
                     }
                 }
-                .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
+                .subscribe({
+                    view?.run {
+                        showEmpty(it.isEmpty())
+                        showContent(it.isNotEmpty())
+                        updateData(it)
+                    }
+                }) {
+                    view?.run { showEmpty(isViewEmpty()) }
+                    errorHandler.proceed(it)
+                })
     }
 
     fun onGradeItemSelected(item: AbstractFlexibleItem<*>?) {
@@ -57,28 +63,35 @@ class GradeDetailsPresenter @Inject constructor(
         view?.run {
             showProgress(true)
             showContent(false)
+            showEmpty(false)
             clearView()
         }
     }
 
     private fun createGradeItems(items: Map<String, List<Grade>>): List<GradeDetailsHeader> {
         return items.map {
-            val gradesAverage = calcAverage(it.value)
-            GradeDetailsHeader().apply {
-                subject = it.key
-                average = view?.run {
-                    if (gradesAverage == 0f) emptyAverageString()
-                    else averageString().format(gradesAverage)
-                }.orEmpty()
-                number = view?.gradeNumberString(it.value.size).orEmpty()
-                subItems = (it.value.reversed().map { item ->
-                    GradeDetailsItem().apply {
-                        grade = item
-                        weightString = view?.weightString().orEmpty()
-                        valueColor = getValueColor(item.value)
+            calcAverage(it.value).let { average ->
+                GradeDetailsHeader(
+                        subject = it.key,
+                        average = formatAverage(average),
+                        number = view?.gradeNumberString(it.value.size).orEmpty()
+                ).apply {
+                    subItems = it.value.map { item ->
+                        GradeDetailsItem(
+                                grade = item,
+                                weightString = view?.weightString().orEmpty(),
+                                valueColor = getValueColor(item.value)
+                        )
                     }
-                })
+                }
             }
         }
+    }
+
+    private fun formatAverage(average: Float): String {
+        return view?.run {
+            if (average == 0f) emptyAverageString()
+            else averageString().format(average)
+        }.orEmpty()
     }
 }

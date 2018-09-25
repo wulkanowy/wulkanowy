@@ -9,11 +9,7 @@ import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.header_grade_summary.*
 
-class GradeSummaryHeader : AbstractHeaderItem<GradeSummaryHeader.ViewHolder>() {
-
-    lateinit var name: String
-
-    lateinit var average: String
+class GradeSummaryHeader(private val name: String, private val average: String) : AbstractHeaderItem<GradeSummaryHeader.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.header_grade_summary
 

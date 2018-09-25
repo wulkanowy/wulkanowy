@@ -38,10 +38,10 @@ class GradeSummaryPresenter @Inject constructor(
                                                     .mapValues { entry -> calcAverage(entry.value) }
                                                     .let { averages ->
                                                         createGradeSummaryItems(gradesSummary, averages) to
-                                                                GradeSummaryScrollableHeader().apply {
-                                                                    finalAverage = formatAverage(calcSummaryAverage(gradesSummary))
-                                                                    calculatedAverage = formatAverage(averages.values.average().toFloat())
-                                                                }
+                                                                GradeSummaryScrollableHeader(
+                                                                        formatAverage(calcSummaryAverage(gradesSummary)),
+                                                                        formatAverage(averages.values.average().toFloat())
+                                                                )
                                                     }
                                         }
                             }
@@ -50,13 +50,20 @@ class GradeSummaryPresenter @Inject constructor(
                 .observeOn(schedulers.mainThread())
                 .doFinally {
                     view?.run {
-                        showContent(true)
-                        showProgress(false)
                         showRefresh(false)
+                        showProgress(false)
                         notifyParentDataLoaded(semesterId)
                     }
-                }.subscribe({ view?.updateDataSet(it.first, it.second) })
-                { errorHandler.proceed(it) })
+                }.subscribe({
+                    view?.run {
+                        showEmpty(it.first.isEmpty())
+                        showContent(it.first.isNotEmpty())
+                        updateDataSet(it.first, it.second)
+                    }
+                }) {
+                    view?.run { showEmpty(isViewEmpty()) }
+                    errorHandler.proceed(it)
+                })
     }
 
     fun onSwipeRefresh() {
@@ -71,6 +78,7 @@ class GradeSummaryPresenter @Inject constructor(
         view?.run {
             showProgress(true)
             showContent(false)
+            showEmpty(false)
             clearView()
         }
     }
@@ -78,19 +86,20 @@ class GradeSummaryPresenter @Inject constructor(
     private fun createGradeSummaryItems(gradesSummary: List<GradeSummary>, averages: Map<String, Float>)
             : List<GradeSummaryItem> {
         return gradesSummary.filter { !checkEmpty(it, averages) }
-                .flatMap {
-                    GradeSummaryHeader().apply {
-                        average = formatAverage(averages.getOrElse(it.subject) { 0f }, "")
-                        name = it.subject
-                    }.let { header ->
-                        listOf(GradeSummaryItem(header).apply {
-                            grade = it.predictedGrade
-                            title = view?.predictedString().orEmpty()
-                        }, GradeSummaryItem(header).apply {
-                            grade = it.finalGrade
-                            title = view?.finalString().orEmpty()
-                        }
-                        )
+                .flatMap { gradeSummary ->
+                    GradeSummaryHeader(
+                            name = gradeSummary.subject,
+                            average = formatAverage(averages.getOrElse(gradeSummary.subject) { 0f }, "")
+                    ).let {
+                        listOf(GradeSummaryItem(
+                                header = it,
+                                title = view?.predictedString().orEmpty(),
+                                grade = gradeSummary.predictedGrade
+                        ), GradeSummaryItem(
+                                header = it,
+                                title = view?.finalString().orEmpty(),
+                                grade = gradeSummary.finalGrade
+                        ))
                     }
                 }
     }

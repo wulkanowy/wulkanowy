@@ -10,33 +10,13 @@ import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.header_grade_details.*
 
-class GradeDetailsHeader : AbstractExpandableItem<GradeDetailsHeader.ViewHolder, GradeDetailsItem>() {
-
-    lateinit var subject: String
-
-    lateinit var number: String
-
-    lateinit var average: String
-
-    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?): ViewHolder {
-        return ViewHolder(view, adapter)
-    }
+class GradeDetailsHeader(private val subject: String, private val number: String, private val average: String)
+    : AbstractExpandableItem<GradeDetailsHeader.ViewHolder, GradeDetailsItem>() {
 
     override fun getLayoutRes() = R.layout.header_grade_details
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as GradeDetailsHeader
-
-        if (subject != other.subject) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return subject.hashCode()
+    override fun createViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?): ViewHolder {
+        return ViewHolder(view, adapter)
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder,
@@ -48,9 +28,31 @@ class GradeDetailsHeader : AbstractExpandableItem<GradeDetailsHeader.ViewHolder,
             gradeHeaderPredicted.visibility = GONE
             gradeHeaderFinal.visibility = GONE
 
+            //TODO Temporary hide grade note
             gradeHeaderNote.visibility = GONE
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as GradeDetailsHeader
+
+        if (subject != other.subject) return false
+        if (number != other.number) return false
+        if (average != other.average) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = subject.hashCode()
+        result = 31 * result + number.hashCode()
+        result = 31 * result + average.hashCode()
+        return result
+    }
+
 
     class ViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?) : ExpandableViewHolder(view, adapter),
             LayoutContainer {

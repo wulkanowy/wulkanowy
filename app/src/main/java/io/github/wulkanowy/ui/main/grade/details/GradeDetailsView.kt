@@ -13,9 +13,13 @@ interface GradeDetailsView : BaseView {
 
     fun clearView()
 
+    fun isViewEmpty(): Boolean
+
     fun showGradeDialog(grade: Grade)
 
     fun showContent(show: Boolean)
+
+    fun showEmpty(show: Boolean)
 
     fun showProgress(show: Boolean)
 
