@@ -71,7 +71,9 @@ class GradeSummaryPresenter @Inject constructor(
     }
 
     fun onParentViewReselected() {
-        view?.resetView()
+        view?.run {
+            if (!isViewEmpty()) resetView()
+        }
     }
 
     fun onParentChangeSemester() {

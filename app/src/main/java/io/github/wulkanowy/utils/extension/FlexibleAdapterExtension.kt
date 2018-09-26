@@ -2,7 +2,7 @@ package io.github.wulkanowy.utils.extension
 
 import eu.davidea.flexibleadapter.FlexibleAdapter
 
-fun FlexibleAdapter<*>.setOnItemClickListener(listener: (position: Int) -> Unit) {
+inline fun FlexibleAdapter<*>.setOnItemClickListener(crossinline listener: (position: Int) -> Unit) {
     addListener(FlexibleAdapter.OnItemClickListener { _, position ->
         listener(position)
         true
