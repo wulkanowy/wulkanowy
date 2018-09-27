@@ -7,12 +7,9 @@ import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.github.wulkanowy.utils.extension.isHolidays
-import io.github.wulkanowy.utils.extension.toFormat
-import io.github.wulkanowy.utils.getNearMonday
+import io.github.wulkanowy.utils.extension.*
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import org.threeten.bp.LocalDate
-import java.util.*
 import javax.inject.Inject
 
 class TimetablePresenter @Inject constructor(
@@ -22,7 +19,7 @@ class TimetablePresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<TimetableView>(errorHandler) {
 
-    var currentDate: LocalDate = getNearMonday(LocalDate.now())
+    var currentDate: LocalDate = LocalDate.now().getNearSchoolDay()
         private set
 
     override fun attachView(view: TimetableView) {
@@ -30,19 +27,18 @@ class TimetablePresenter @Inject constructor(
         view.initView()
     }
 
-    fun loadTimetableForPreviousWeek() = loadData(currentDate.minusDays(7).toEpochDay())
+    fun loadTimetableForPreviousDay() = loadData(currentDate.getPreviousSchoolDay().toEpochDay())
 
-    fun loadTimetableForNextWeek() = loadData(currentDate.plusDays(7).toEpochDay())
+    fun loadTimetableForNextDay() = loadData(currentDate.getNextSchoolDay().toEpochDay())
 
     fun loadData(date: Long?, forceRefresh: Boolean = false) {
-        this.currentDate = LocalDate.ofEpochDay(date ?: getNearMonday(currentDate).toEpochDay())
+        this.currentDate = LocalDate.ofEpochDay(date ?: currentDate.getNearSchoolDay().toEpochDay())
         if (currentDate.isHolidays()) return
 
         disposable.clear()
         disposable.add(sessionRepository.getSemesters()
                 .map { selectSemester(it, -1) }
-                .flatMap { timetableRepository.getTimetable(it, currentDate, forceRefresh) }
-                .map { it.groupBy { exam -> exam.date }.toSortedMap() }
+                .flatMap { timetableRepository.getTimetable(it, currentDate, currentDate, forceRefresh) }
                 .map { createTimetableItems(it) }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
@@ -52,15 +48,9 @@ class TimetablePresenter @Inject constructor(
                         showProgress(!forceRefresh)
                         if (!forceRefresh) showEmpty(false)
                         showContent(null == date && forceRefresh)
-                        showPreButton(!currentDate.minusDays(7).isHolidays())
-                        showNextButton(!currentDate.plusDays(7).isHolidays())
-                        updateNavigationWeek("${currentDate.toFormat("dd.MM")}-${currentDate.plusDays(4).toFormat("dd.MM")}")
-                    }
-                }
-                .doAfterSuccess {
-                    view?.run {
-                        showEmpty(it.isEmpty())
-                        showContent(it.isNotEmpty())
+                        showPreButton(!currentDate.minusDays(1).isHolidays())
+                        showNextButton(!currentDate.plusDays(1).isHolidays())
+                        updateNavigationDay(currentDate.toFormat("EEEE \n dd.MM.YYYY").capitalize())
                     }
                 }
                 .doFinally {
@@ -69,17 +59,21 @@ class TimetablePresenter @Inject constructor(
                         showProgress(false)
                     }
                 }
-                .subscribe({ view?.updateData(it) }) { errorHandler.proceed(it) })
+                .subscribe({
+                    view?.run {
+                        showEmpty(it.isEmpty())
+                        showContent(it.isNotEmpty())
+                        updateData(it)
+                    }
+                }) {
+                    view?.run { showEmpty(isViewEmpty()) }
+                    errorHandler.proceed(it)
+                })
     }
 
-    private fun createTimetableItems(items: Map<Date, List<Timetable>>): List<TimetableHeader> {
+    private fun createTimetableItems(items: List<Timetable>): List<TimetableItem> {
         return items.map {
-            TimetableHeader().apply {
-                date = it.key
-                subItems = it.value.map { item ->
-                    TimetableItem().apply { lesson = item }
-                }
-            }
+            TimetableItem().apply { lesson = it }
         }
     }
 

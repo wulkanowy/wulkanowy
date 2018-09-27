@@ -2,11 +2,9 @@ package io.github.wulkanowy.utils.extension
 
 import io.github.wulkanowy.utils.DATE_PATTERN
 import io.github.wulkanowy.utils.isHolidays
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneId
+import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.temporal.TemporalAdjusters
 import java.util.*
 
 private val formatter = DateTimeFormatter.ofPattern(DATE_PATTERN)
@@ -18,6 +16,27 @@ fun LocalDate.toFormat(format: String): String = this.format(DateTimeFormatter.o
 fun LocalDate.toFormat(): String = this.toFormat(DATE_PATTERN)
 
 fun LocalDate.isHolidays(): Boolean = isHolidays(this)
+
+fun LocalDate.getNearSchoolDay(): LocalDate {
+    return when(this.dayOfWeek) {
+        DayOfWeek.SATURDAY, DayOfWeek.SUNDAY -> this.with(TemporalAdjusters.next(DayOfWeek.MONDAY))
+        else -> this
+    }
+}
+
+fun LocalDate.getNextSchoolDay(): LocalDate {
+    return when(this.dayOfWeek) {
+        DayOfWeek.FRIDAY -> this.with(TemporalAdjusters.next(DayOfWeek.MONDAY))
+        else -> this.plusDays(1)
+    }
+}
+
+fun LocalDate.getPreviousSchoolDay(): LocalDate {
+    return when(this.dayOfWeek) {
+        DayOfWeek.MONDAY -> this.with(TemporalAdjusters.previous(DayOfWeek.FRIDAY))
+        else -> this.minusDays(1)
+    }
+}
 
 fun Date.toLocalDate(): LocalDate = Instant.ofEpochMilli(this.time).atZone(ZoneId.systemDefault()).toLocalDate()
 

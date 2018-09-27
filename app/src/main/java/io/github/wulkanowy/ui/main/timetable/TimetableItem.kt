@@ -39,25 +39,27 @@ class TimetableItem : AbstractFlexibleItem<TimetableItem.ViewHolder>() {
         return lesson.hashCode()
     }
 
-    @SuppressLint("SetTextI18n")
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder,
                                 position: Int, payloads: MutableList<Any>?) {
-        holder.run {
+        holder.bind(lesson)
+    }
+
+    class ViewHolder(val view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter),
+            LayoutContainer {
+
+        override val containerView: View
+            get() = contentView
+
+        @SuppressLint("SetTextI18n")
+        fun bind(lesson: Timetable) {
             timetableItemNumber.text = lesson.number.toString()
             timetableItemSubject.text = lesson.subject
-            timetableItemRoom.text = lesson.room
+            timetableItemRoom.text = if (lesson.room.isNotBlank()) "${view.context.getString(R.string.timetable_room)} ${lesson.room}" else ""
             timetableItemTime.text = "${lesson.start.toFormatTime("HH:mm")} - ${lesson.end.toFormatTime("HH:mm")}"
             timetableItemAlert.visibility = if (lesson.changes || lesson.canceled) VISIBLE else GONE
             timetableItemSubject.paintFlags =
                     if (lesson.canceled) timetableItemSubject.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                     else timetableItemSubject.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
-    }
-
-    class ViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter),
-            LayoutContainer {
-
-        override val containerView: View
-            get() = contentView
     }
 }

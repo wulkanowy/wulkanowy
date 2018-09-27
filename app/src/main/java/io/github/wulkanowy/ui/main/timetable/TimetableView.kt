@@ -7,9 +7,9 @@ interface TimetableView : BaseView {
 
     fun initView()
 
-    fun updateData(data: List<TimetableHeader>)
+    fun updateData(data: List<TimetableItem>)
 
-    fun updateNavigationWeek(date: String)
+    fun updateNavigationDay(date: String)
 
     fun showEmpty(show: Boolean)
 
@@ -24,4 +24,6 @@ interface TimetableView : BaseView {
     fun showNextButton(show: Boolean)
 
     fun showTimetableDialog(lesson: Timetable)
+
+    fun isViewEmpty(): Boolean
 }

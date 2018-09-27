@@ -4,13 +4,14 @@ import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.utils.extension.toDate
+import io.github.wulkanowy.utils.getNearMonday
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class TimetableRemote @Inject constructor(private val api: Api) {
 
-    fun getLessons(semester: Semester, startDate: LocalDate): Single<List<Timetable>> {
+    fun getLessons(semester: Semester, startDate: LocalDate, endDate: LocalDate): Single<List<Timetable>> {
         return Single.just(api.run {
             if (diaryId != semester.diaryId) {
                 diaryId = semester.diaryId

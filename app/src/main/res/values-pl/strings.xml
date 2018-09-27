@@ -65,7 +65,7 @@
     <string name="timetable_group">Grupa</string>
     <string name="timetable_time">Godziny</string>
     <string name="timetable_changes">Zmiany</string>
-    <string name="timetable_no_items">Brak lekcji w tym tygodniu</string>
+    <string name="timetable_no_items">Brak lekcji w tym dniu</string>
 
 
     <!--Attendance-->

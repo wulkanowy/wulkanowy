@@ -50,17 +50,19 @@ class TimetableFragment : BaseFragment(), TimetableView {
             adapter = timetableAdapter
         }
         timetableSwipe.setOnRefreshListener { presenter.loadData(date = null, forceRefresh = true) }
-        timetablePreviousButton.setOnClickListener { presenter.loadTimetableForPreviousWeek() }
-        timetableNextButton.setOnClickListener { presenter.loadTimetableForNextWeek() }
+        timetablePreviousButton.setOnClickListener { presenter.loadTimetableForPreviousDay() }
+        timetableNextButton.setOnClickListener { presenter.loadTimetableForNextDay() }
     }
 
-    override fun updateData(data: List<TimetableHeader>) {
+    override fun updateData(data: List<TimetableItem>) {
         timetableAdapter.updateDataSet(data, true)
     }
 
-    override fun updateNavigationWeek(date: String) {
+    override fun updateNavigationDay(date: String) {
         timetableNavDate.text = date
     }
+
+    override fun isViewEmpty() = timetableAdapter.isEmpty
 
     override fun showEmpty(show: Boolean) {
         timetableEmpty.visibility = if (show) View.VISIBLE else View.GONE
