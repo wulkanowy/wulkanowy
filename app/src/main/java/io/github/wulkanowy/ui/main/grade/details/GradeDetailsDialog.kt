@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
@@ -43,14 +44,24 @@ class GradeDetailsDialog : DialogFragment() {
         gradeDialogSubject.text = grade.subject
         gradeDialogWeightValue.text = grade.weight
         gradeDialogDateValue.text = grade.date
-        gradeDialogColorValue.text = getString(getColorName(grade.color))
-        gradeDialogValue.run {
-            text = grade.value
-            setBackgroundResource(getValueColor(grade.value))
+        gradeDialogColorValue.text = getString(getColorName(grade))
+
+        gradeDialogCommentValue.apply {
+            if (grade.comment.isEmpty()) {
+                visibility = GONE
+                gradeDialogComment.visibility = GONE
+            } else text = grade.comment
         }
+
+        gradeDialogValue.run {
+            text = grade.entry
+            setBackgroundResource(getValueColor(grade))
+        }
+
         gradeDialogTeacherValue.text = if (grade.teacher.isEmpty()) {
             getString(R.string.all_no_data)
         } else grade.teacher
+
         gradeDialogDescriptionValue.text = grade.run {
             when {
                 description.isEmpty() && gradeSymbol.isNotEmpty() -> gradeSymbol
@@ -59,6 +70,7 @@ class GradeDetailsDialog : DialogFragment() {
                 else -> description
             }
         }
+
         gradeDialogClose.setOnClickListener { dismiss() }
     }
 

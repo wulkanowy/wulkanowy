@@ -25,11 +25,15 @@ class GradeRemote @Inject constructor(private val api: Api) {
                                 semesterId = semester.semesterId,
                                 studentId = semester.studentId,
                                 subject = it.subject,
-                                value = it.value.toString(),
+                                entry = it.entry,
+                                value = it.value,
+                                modifier = it.modifier,
+                                comment = it.comment,
                                 color = it.color,
                                 gradeSymbol = it.symbol,
                                 description = it.description,
                                 weight = it.weight,
+                                weightValue = it.weightValue,
                                 date = format(it.date, DATE_PATTERN),
                                 teacher = it.teacher
                         )

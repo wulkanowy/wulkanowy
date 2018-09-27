@@ -100,9 +100,9 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
         (parentFragment as? GradeFragment)?.onChildRefresh()
     }
 
-    override fun predictedString() = getString(R.string.grade_predicted)
+    override fun predictedString() = getString(R.string.grade_summary_predicted_grade)
 
-    override fun finalString() = getString(R.string.grade_final)
+    override fun finalString() = getString(R.string.grade_summary_final_grade)
 
     override fun onDestroyView() {
         super.onDestroyView()

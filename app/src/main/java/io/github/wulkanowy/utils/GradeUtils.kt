@@ -4,62 +4,41 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 
-private val validGrade = "^(\\++|-|--|=)?[0-6](\\++|-|--|=)?$".toRegex()
-
 fun calcAverage(gradeList: List<Grade>): Float {
     var counter = 0f
     var denominator = 0f
 
     gradeList.forEach {
-        if (it.value.matches(validGrade)) {
-            val weight = it.weight.dropLast(3).toFloat()
-
-            counter += getCalculatedValue(it.value) * weight
-            denominator += weight
-        }
+        counter += it.value * it.weightValue
+        denominator += it.weightValue
     }
-    return if (counter == 0f) counter else counter / denominator
+    return if (denominator != 0f) counter / denominator else 0f
 }
 
 fun calcSummaryAverage(gradesSummaryList: List<GradeSummary>): Float {
-    return gradesSummaryList.mapNotNull {
-        if (it.finalGrade.matches(validGrade)) it.finalGrade.toFloat() else null
+    return gradesSummaryList.asSequence().mapNotNull {
+        if (it.finalGrade.matches("[0-6]".toRegex())) it.finalGrade.toFloat() else null
     }.average().toFloat()
 }
 
-fun getValueColor(value: String): Int {
-    return if (!value.contains(validGrade)) {
-        R.color.grade_default
-    } else {
-        when (value.replace("[^0-6]".toRegex(), "").toInt()) {
-            6 -> R.color.grade_six
-            5 -> R.color.grade_five
-            4 -> R.color.grade_four
-            3 -> R.color.grade_three
-            2 -> R.color.grade_two
-            1 -> R.color.grade_one
-            else -> R.color.grade_default
-        }
+fun getValueColor(grade: Grade): Int {
+    return when (grade.value) {
+        6 -> R.color.grade_six
+        5 -> R.color.grade_five
+        4 -> R.color.grade_four
+        3 -> R.color.grade_three
+        2 -> R.color.grade_two
+        1 -> R.color.grade_one
+        else -> R.color.grade_default
     }
 }
 
-fun getColorName(hexValue: String): Int {
-    return when (hexValue) {
+fun getColorName(grade: Grade): Int {
+    return when (grade.color) {
         "000000" -> R.string.all_black
         "F04C4C" -> R.string.all_red
         "20A4F7" -> R.string.all_blue
         "6ECD07" -> R.string.all_green
         else -> R.string.all_empty_color
-    }
-}
-
-private fun getCalculatedValue(value: String): Float {
-    return value.run {
-        when {
-            matches("[-][0-6]|[0-6][-]".toRegex()) -> replace("-", "").toFloat() - 0.33f
-            matches("[+][0-6]|[0-6][+]".toRegex()) -> replace("+", "").toFloat() + 0.33f
-            matches("[-|=]{1,2}[0-6]|[0-6][-|=]{1,2}".toRegex()) -> replace("[-|=]{1,2}".toRegex(), "").toFloat() - 0.5f
-            else -> toFloat()
-        }
     }
 }

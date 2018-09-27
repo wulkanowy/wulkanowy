@@ -9,23 +9,31 @@ import java.io.Serializable
 data class Grade(
 
         @ColumnInfo(name = "semester_id")
-        var semesterId: String = "",
+        var semesterId: String,
 
         @ColumnInfo(name = "student_id")
-        var studentId: String = "",
+        var studentId: String,
 
         var subject: String,
 
-        var value: String,
+        var entry: String,
+
+        var value: Int,
+
+        var modifier: Float,
+
+        var comment: String,
 
         var color: String,
 
         @ColumnInfo(name = "grade_symbol")
-        var gradeSymbol: String = "",
+        var gradeSymbol: String,
 
-        var description: String = "",
+        var description: String,
 
         var weight: String,
+
+        var weightValue: Int,
 
         var date: String,
 

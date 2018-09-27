@@ -11,7 +11,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
-        android:text="@string/grade_summary_predicted_average"
+        android:text="@string/grade_summary_predicted_grade"
         android:textSize="14sp" />
 
     <TextView

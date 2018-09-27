@@ -84,7 +84,7 @@ class GradeDetailsPresenter @Inject constructor(
                         GradeDetailsItem(
                                 grade = item,
                                 weightString = view?.weightString().orEmpty(),
-                                valueColor = getValueColor(item.value)
+                                valueColor = getValueColor(item)
                         )
                     }
                 }

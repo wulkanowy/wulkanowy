@@ -36,6 +36,7 @@ class GradeSummaryPresenter @Inject constructor(
                                         .map { grades ->
                                             grades.groupBy { grade -> grade.subject }
                                                     .mapValues { entry -> calcAverage(entry.value) }
+                                                    .filterValues { value -> value != 0f }
                                                     .let { averages ->
                                                         createGradeSummaryItems(gradesSummary, averages) to
                                                                 GradeSummaryScrollableHeader(

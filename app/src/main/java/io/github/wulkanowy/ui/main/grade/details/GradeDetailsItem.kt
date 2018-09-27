@@ -24,7 +24,7 @@ class GradeDetailsItem(val grade: Grade, private val weightString: String, priva
                                 position: Int, payloads: MutableList<Any>?) {
         holder.run {
             gradeItemValue.run {
-                text = grade.value
+                text = grade.entry
                 setBackgroundResource(valueColor)
             }
             gradeItemDescription.text = if (grade.description.isNotEmpty()) grade.description else grade.gradeSymbol
