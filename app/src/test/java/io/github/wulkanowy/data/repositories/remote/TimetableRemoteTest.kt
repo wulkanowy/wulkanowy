@@ -37,7 +37,10 @@ class TimetableRemoteTest {
         doReturn("1").`when`(semesterMock).studentId
         doReturn("1").`when`(semesterMock).diaryId
 
-        val exams = TimetableRemote(mockApi).getLessons(semesterMock, LocalDate.of(2018, 9, 10)).blockingGet()
+        val exams = TimetableRemote(mockApi).getLessons(semesterMock,
+                LocalDate.of(2018, 9, 10),
+                LocalDate.of(2018, 9, 15)
+        ).blockingGet()
         assertEquals(2, exams.size)
     }
 
