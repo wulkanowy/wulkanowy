@@ -64,10 +64,12 @@ class GradeDetailsPresenter @Inject constructor(
     fun onParentChangeSemester() {
         view?.run {
             showProgress(true)
+            showRefresh(false)
             showContent(false)
             showEmpty(false)
             clearView()
         }
+        disposable.clear()
     }
 
     private fun createGradeItems(items: Map<String, List<Grade>>): List<GradeDetailsHeader> {

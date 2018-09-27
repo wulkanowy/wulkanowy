@@ -17,6 +17,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.splash.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/WulkanowyTheme.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

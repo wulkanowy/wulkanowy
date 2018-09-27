@@ -79,10 +79,12 @@ class GradeSummaryPresenter @Inject constructor(
     fun onParentChangeSemester() {
         view?.run {
             showProgress(true)
+            showRefresh(false)
             showContent(false)
             showEmpty(false)
             clearView()
         }
+        disposable.clear()
     }
 
     private fun createGradeSummaryItems(gradesSummary: List<GradeSummary>, averages: Map<String, Float>)
