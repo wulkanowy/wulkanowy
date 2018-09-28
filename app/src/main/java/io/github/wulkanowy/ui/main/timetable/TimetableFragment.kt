@@ -58,6 +58,10 @@ class TimetableFragment : BaseFragment(), TimetableView {
         timetableAdapter.updateDataSet(data, true)
     }
 
+    override fun clearData() {
+        timetableAdapter.clear()
+    }
+
     override fun updateNavigationDay(date: String) {
         timetableNavDate.text = date
     }

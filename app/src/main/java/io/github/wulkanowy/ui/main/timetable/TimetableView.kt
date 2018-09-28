@@ -26,4 +26,5 @@ interface TimetableView : BaseView {
     fun showTimetableDialog(lesson: Timetable)
 
     fun isViewEmpty(): Boolean
+    fun clearData()
 }

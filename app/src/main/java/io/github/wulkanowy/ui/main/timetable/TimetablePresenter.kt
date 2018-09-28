@@ -46,8 +46,7 @@ class TimetablePresenter @Inject constructor(
                     view?.run {
                         showRefresh(forceRefresh)
                         showProgress(!forceRefresh)
-                        if (!forceRefresh) showEmpty(false)
-                        showContent(null == date && forceRefresh)
+                        if (!forceRefresh) clearData()
                         showPreButton(!currentDate.minusDays(1).isHolidays())
                         showNextButton(!currentDate.plusDays(1).isHolidays())
                         updateNavigationDay(currentDate.toFormat("EEEE \n dd.MM.YYYY").capitalize())
