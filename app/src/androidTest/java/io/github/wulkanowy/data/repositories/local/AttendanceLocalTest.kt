@@ -41,7 +41,10 @@ class AttendanceLocalTest {
         ))
 
         val attendance = attendanceLocal
-                .getAttendance(Semester(studentId = "1", diaryId = "2", semesterId = "3"), LocalDate.of(2018, 9, 10))
+                .getAttendance(Semester(studentId = "1", diaryId = "2", semesterId = "3"),
+                        LocalDate.of(2018, 9, 10),
+                        LocalDate.of(2018, 9, 15)
+                )
                 .blockingGet()
         assertEquals(2, attendance.size)
         assertEquals(attendance[0].date, Date.valueOf("2018-09-10"))

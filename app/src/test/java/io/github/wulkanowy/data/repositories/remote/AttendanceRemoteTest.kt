@@ -38,7 +38,8 @@ class AttendanceRemoteTest {
         doReturn("1").`when`(semesterMock).diaryId
 
         val attendance = AttendanceRemote(mockApi).getAttendance(semesterMock,
-                LocalDate.of(2018, 9, 10)).blockingGet()
+                LocalDate.of(2018, 9, 10),
+                LocalDate.of(2018, 9, 15)).blockingGet()
         assertEquals(2, attendance.size)
     }
 
