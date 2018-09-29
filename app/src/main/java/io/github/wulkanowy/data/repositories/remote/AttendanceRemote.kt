@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class AttendanceRemote @Inject constructor(private val api: Api) {
 
-    fun getAttendance(semester: Semester, startDate: LocalDate): Single<List<Attendance>> {
+    fun getAttendance(semester: Semester, startDate: LocalDate, endDate: LocalDate): Single<List<Attendance>> {
         return Single.just(api.run {
             if (diaryId != semester.diaryId) {
                 diaryId = semester.diaryId

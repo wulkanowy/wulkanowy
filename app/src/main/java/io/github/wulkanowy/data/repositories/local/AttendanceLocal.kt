@@ -5,17 +5,14 @@ import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.utils.extension.toDate
 import io.reactivex.Maybe
-import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
-import org.threeten.bp.temporal.TemporalAdjusters
 import javax.inject.Inject
 
 class AttendanceLocal @Inject constructor(private val attendanceDb: AttendanceDao) {
 
-    fun getAttendance(semester: Semester, startDate: LocalDate): Maybe<List<Attendance>> {
-        return attendanceDb.getExams(semester.diaryId, semester.studentId, startDate.toDate(),
-                startDate.with(TemporalAdjusters.next(DayOfWeek.FRIDAY)).toDate()
-        ).filter { !it.isEmpty() }
+    fun getAttendance(semester: Semester, startDate: LocalDate, endDate: LocalDate): Maybe<List<Attendance>> {
+        return attendanceDb.getExams(semester.diaryId, semester.studentId, startDate.toDate(), endDate.toDate())
+                .filter { !it.isEmpty() }
     }
 
     fun saveAttendance(attendance: List<Attendance>) {
