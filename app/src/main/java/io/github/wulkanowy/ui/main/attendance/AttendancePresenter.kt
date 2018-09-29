@@ -77,7 +77,7 @@ class AttendancePresenter @Inject constructor(
     }
 
     fun onAttendanceItemSelected(item: AbstractFlexibleItem<*>?) {
-//        if (item is AttendanceItem) view?.showTimetableDialog(item.attendance)
+        if (item is AttendanceItem) view?.showAttendanceDialog(item.attendance)
     }
 
     private fun selectSemester(semesters: List<Semester>, index: Int): Semester {

@@ -92,8 +92,8 @@ class AttendanceFragment : BaseFragment(), AttendanceView {
         attendanceNextButton.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 
-    override fun showTimetableDialog(lesson: Attendance) {
-//        TimetableDialog.newInstance(lesson).show(fragmentManager, lesson.toString())
+    override fun showAttendanceDialog(lesson: Attendance) {
+        AttendanceDialog.newInstance(lesson).show(fragmentManager, lesson.toString())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
