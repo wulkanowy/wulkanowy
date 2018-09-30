@@ -3,39 +3,42 @@ package io.github.wulkanowy.data.repositories.remote
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.api.attendance.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.reactivex.Single
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mock
-import org.mockito.Mockito.doReturn
-import org.mockito.MockitoAnnotations
 import org.threeten.bp.LocalDate
 import java.sql.Date
 
 class AttendanceRemoteTest {
 
-    @Mock
+    @MockK
     private lateinit var mockApi: Api
 
-    @Mock
+    @MockK
     private lateinit var semesterMock: Semester
 
     @Before
     fun initApi() {
-        MockitoAnnotations.initMocks(this)
+        MockKAnnotations.init(this)
     }
 
     @Test
     fun getExamsTest() {
-        doReturn(Single.just(listOf(
+        every { mockApi.getAttendance(
+                LocalDate.of(2018, 9, 10),
+                LocalDate.of(2018, 9, 15)
+        ) } returns Single.just(listOf(
                 getAttendance("2018-09-10"),
                 getAttendance("2018-09-17")
-        ))).`when`(mockApi).getAttendance(any())
+        ))
 
-        doReturn("1").`when`(semesterMock).studentId
-        doReturn("1").`when`(semesterMock).diaryId
+        every { mockApi.diaryId } returns "1"
+        every { semesterMock.studentId } returns "1"
+        every { semesterMock.diaryId } returns "1"
 
         val attendance = AttendanceRemote(mockApi).getAttendance(semesterMock,
                 LocalDate.of(2018, 9, 10),

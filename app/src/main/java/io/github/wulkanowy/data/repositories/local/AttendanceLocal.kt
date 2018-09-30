@@ -3,7 +3,6 @@ package io.github.wulkanowy.data.repositories.local
 import io.github.wulkanowy.data.db.dao.AttendanceDao
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
-import io.github.wulkanowy.utils.extension.toDate
 import io.reactivex.Maybe
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
@@ -11,7 +10,7 @@ import javax.inject.Inject
 class AttendanceLocal @Inject constructor(private val attendanceDb: AttendanceDao) {
 
     fun getAttendance(semester: Semester, startDate: LocalDate, endDate: LocalDate): Maybe<List<Attendance>> {
-        return attendanceDb.getExams(semester.diaryId, semester.studentId, startDate.toDate(), endDate.toDate())
+        return attendanceDb.getExams(semester.diaryId, semester.studentId, startDate, endDate)
                 .filter { !it.isEmpty() }
     }
 

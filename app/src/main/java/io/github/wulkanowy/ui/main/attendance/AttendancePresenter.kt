@@ -19,7 +19,7 @@ class AttendancePresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<AttendanceView>(errorHandler) {
 
-    var currentDate: LocalDate = LocalDate.now().getLastSchoolDay()
+    var currentDate: LocalDate = LocalDate.now().getNearSchoolDayPrevOnWeekEnd()
         private set
 
     override fun attachView(view: AttendanceView) {
@@ -27,12 +27,12 @@ class AttendancePresenter @Inject constructor(
         view.initView()
     }
 
-    fun loadAttendanceForPreviousDay() = loadData(currentDate.getPreviousSchoolDay().toEpochDay())
+    fun loadAttendanceForPreviousDay() = loadData(currentDate.getPreviousWorkDay().toEpochDay())
 
-    fun loadAttendanceForNextDay() = loadData(currentDate.getNextSchoolDay().toEpochDay())
+    fun loadAttendanceForNextDay() = loadData(currentDate.getNextWorkDay().toEpochDay())
 
     fun loadData(date: Long?, forceRefresh: Boolean = false) {
-        this.currentDate = LocalDate.ofEpochDay(date ?: currentDate.getLastSchoolDay().toEpochDay())
+        this.currentDate = LocalDate.ofEpochDay(date ?: currentDate.getNearSchoolDayPrevOnWeekEnd().toEpochDay())
         if (currentDate.isHolidays()) return
 
         disposable.clear()
@@ -46,7 +46,10 @@ class AttendancePresenter @Inject constructor(
                     view?.run {
                         showRefresh(forceRefresh)
                         showProgress(!forceRefresh)
-                        if (!forceRefresh) clearData()
+                        if (!forceRefresh) {
+                            showEmpty(false)
+                            clearData()
+                        }
                         showPreButton(!currentDate.minusDays(1).isHolidays())
                         showNextButton(!currentDate.plusDays(1).isHolidays())
                         updateNavigationDay(currentDate.toFormat("EEEE \n dd.MM.YYYY").capitalize())

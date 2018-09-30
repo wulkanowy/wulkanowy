@@ -3,8 +3,8 @@ package io.github.wulkanowy.data.db.entities
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import org.threeten.bp.LocalDate
 import java.io.Serializable
-import java.util.*
 
 @Entity(tableName = "Exams")
 data class Exam(
@@ -18,10 +18,10 @@ data class Exam(
         @ColumnInfo(name = "diary_id")
         var diaryId: String = "",
 
-        var date: Date,
+        var date: LocalDate,
 
         @ColumnInfo(name = "entry_date")
-        var entryDate: Date = Date(),
+        var entryDate: LocalDate = LocalDate.now(),
 
         var subject: String = "",
 
