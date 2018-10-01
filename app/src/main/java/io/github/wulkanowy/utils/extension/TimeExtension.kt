@@ -9,7 +9,8 @@ import java.util.*
 
 fun Date.toLocalDate(): LocalDate = LocalDate.parse(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(this))
 
-fun Date.toLocalDateTime(): LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(this.time), ZoneOffset.systemDefault())
+fun Date.toLocalDateTime(): LocalDateTime = LocalDateTime.parse(SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+        Locale.getDefault()).format(this), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
 
 fun String.toDate(format: String = "yyyy-MM-dd"): LocalDate = LocalDate.parse(this, DateTimeFormatter.ofPattern(format))
 
