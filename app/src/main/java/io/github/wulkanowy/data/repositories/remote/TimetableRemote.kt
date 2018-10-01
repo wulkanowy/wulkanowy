@@ -3,8 +3,8 @@ package io.github.wulkanowy.data.repositories.remote
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Timetable
-import io.github.wulkanowy.utils.extension.toDate
-import io.github.wulkanowy.utils.getNearMonday
+import io.github.wulkanowy.utils.extension.toLocalDate
+import io.github.wulkanowy.utils.extension.toLocalDateTime
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
@@ -17,15 +17,15 @@ class TimetableRemote @Inject constructor(private val api: Api) {
                 diaryId = semester.diaryId
                 notifyDataChanged()
             }
-        }).flatMap { api.getTimetable(startDate.toDate()) }.map { lessons ->
+        }).flatMap { api.getTimetable(startDate, endDate) }.map { lessons ->
             lessons.map {
                 Timetable(
                         studentId = semester.studentId,
                         diaryId = semester.diaryId,
                         number = it.number,
-                        start = it.start,
-                        end = it.end,
-                        date = it.date,
+                        start = it.start.toLocalDateTime(),
+                        end = it.end.toLocalDateTime(),
+                        date = it.date.toLocalDate(),
                         subject = it.subject,
                         group = it.group,
                         room = it.room,

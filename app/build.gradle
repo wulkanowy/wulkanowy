@@ -72,8 +72,7 @@ ext.supportVersion = "28.0.0"
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.github.wulkanowy:api:ad57669'
-
+    implementation('com.github.wulkanowy:api:f54b673') { exclude module: "threetenbp" }
     implementation "com.android.support:support-v4:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
     implementation "com.android.support:cardview-v7:$supportVersion"
@@ -116,6 +115,7 @@ dependencies {
     debugImplementation "com.amitshekhar.android:debug-db:1.0.4"
 
     testImplementation "junit:junit:4.12"
+    testImplementation "io.mockk:mockk:1.8.8"
     testImplementation "org.mockito:mockito-inline:2.21.0"
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

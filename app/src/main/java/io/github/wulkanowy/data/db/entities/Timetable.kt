@@ -3,8 +3,9 @@ package io.github.wulkanowy.data.db.entities
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import java.io.Serializable
-import java.util.*
 
 @Entity(tableName = "Timetable")
 data class Timetable(
@@ -20,11 +21,11 @@ data class Timetable(
 
         val number: Int = 0,
 
-        val start: Date = Date(),
+        val start: LocalDateTime = LocalDateTime.now(),
 
-        val end: Date = Date(),
+        val end: LocalDateTime = LocalDateTime.now(),
 
-        val date: Date,
+        val date: LocalDate,
 
         val subject: String = "",
 

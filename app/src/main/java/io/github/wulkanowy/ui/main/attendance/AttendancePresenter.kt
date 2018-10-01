@@ -1,52 +1,55 @@
-package io.github.wulkanowy.ui.main.timetable
+package io.github.wulkanowy.ui.main.attendance
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.ErrorHandler
+import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
-import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
-import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.extension.*
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
-class TimetablePresenter @Inject constructor(
+class AttendancePresenter @Inject constructor(
         private val errorHandler: ErrorHandler,
         private val schedulers: SchedulersManager,
-        private val timetableRepository: TimetableRepository,
+        private val attendanceRepository: AttendanceRepository,
         private val sessionRepository: SessionRepository
-) : BasePresenter<TimetableView>(errorHandler) {
+) : BasePresenter<AttendanceView>(errorHandler) {
 
-    var currentDate: LocalDate = LocalDate.now().getNearSchoolDayNextOnWeekEnd()
+    var currentDate: LocalDate = LocalDate.now().getNearSchoolDayPrevOnWeekEnd()
         private set
 
-    override fun attachView(view: TimetableView) {
+    override fun attachView(view: AttendanceView) {
         super.attachView(view)
         view.initView()
     }
 
-    fun loadTimetableForPreviousDay() = loadData(currentDate.getPreviousWorkDay().toEpochDay())
+    fun loadAttendanceForPreviousDay() = loadData(currentDate.getPreviousWorkDay().toEpochDay())
 
-    fun loadTimetableForNextDay() = loadData(currentDate.getNextWorkDay().toEpochDay())
+    fun loadAttendanceForNextDay() = loadData(currentDate.getNextWorkDay().toEpochDay())
 
     fun loadData(date: Long?, forceRefresh: Boolean = false) {
-        this.currentDate = LocalDate.ofEpochDay(date ?: currentDate.getNearSchoolDayNextOnWeekEnd().toEpochDay())
+        this.currentDate = LocalDate.ofEpochDay(date ?: currentDate.getNearSchoolDayPrevOnWeekEnd().toEpochDay())
         if (currentDate.isHolidays()) return
 
         disposable.clear()
         disposable.add(sessionRepository.getSemesters()
                 .map { selectSemester(it, -1) }
-                .flatMap { timetableRepository.getTimetable(it, currentDate, currentDate, forceRefresh) }
-                .map { createTimetableItems(it) }
+                .flatMap { attendanceRepository.getAttendance(it, currentDate, currentDate, forceRefresh) }
+                .map { createAttendanceItems(it) }
                 .subscribeOn(schedulers.backgroundThread())
                 .observeOn(schedulers.mainThread())
                 .doOnSubscribe {
                     view?.run {
                         showRefresh(forceRefresh)
                         showProgress(!forceRefresh)
-                        if (!forceRefresh) clearData()
+                        if (!forceRefresh) {
+                            showEmpty(false)
+                            clearData()
+                        }
                         showPreButton(!currentDate.minusDays(1).isHolidays())
                         showNextButton(!currentDate.plusDays(1).isHolidays())
                         updateNavigationDay(currentDate.toFormat("EEEE \n dd.MM.YYYY").capitalize())
@@ -70,14 +73,14 @@ class TimetablePresenter @Inject constructor(
                 })
     }
 
-    private fun createTimetableItems(items: List<Timetable>): List<TimetableItem> {
+    private fun createAttendanceItems(items: List<Attendance>): List<AttendanceItem> {
         return items.map {
-            TimetableItem().apply { lesson = it }
+            AttendanceItem().apply { attendance = it }
         }
     }
 
-    fun onTimetableItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is TimetableItem) view?.showTimetableDialog(item.lesson)
+    fun onAttendanceItemSelected(item: AbstractFlexibleItem<*>?) {
+        if (item is AttendanceItem) view?.showAttendanceDialog(item.attendance)
     }
 
     private fun selectSemester(semesters: List<Semester>, index: Int): Semester {
