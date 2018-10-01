@@ -56,6 +56,10 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         gradeDetailsAdapter.updateDataSet(data, true)
     }
 
+    override fun updateItem(item: AbstractFlexibleItem<*>) {
+        gradeDetailsAdapter.updateItem(item)
+    }
+
     override fun clearView() {
         gradeDetailsAdapter.clear()
     }

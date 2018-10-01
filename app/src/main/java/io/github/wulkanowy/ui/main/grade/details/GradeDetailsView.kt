@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.main.grade.details
 
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.base.BaseView
 
@@ -8,6 +9,8 @@ interface GradeDetailsView : BaseView {
     fun initView()
 
     fun updateData(data: List<GradeDetailsHeader>)
+
+    fun updateItem(item: AbstractFlexibleItem<*>)
 
     fun resetView()
 

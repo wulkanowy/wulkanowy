@@ -9,7 +9,7 @@ fun calcAverage(gradeList: List<Grade>): Float {
     var denominator = 0f
 
     gradeList.forEach {
-        counter += it.value * it.weightValue
+        counter += (it.value + it.modifier) * it.weightValue
         denominator += it.weightValue
     }
     return if (denominator != 0f) counter / denominator else 0f

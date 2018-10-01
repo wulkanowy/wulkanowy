@@ -1,7 +1,9 @@
 package io.github.wulkanowy.ui.main.grade.details
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -20,6 +22,7 @@ class GradeDetailsItem(val grade: Grade, private val weightString: String, priva
         return ViewHolder(view, adapter)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder,
                                 position: Int, payloads: MutableList<Any>?) {
         holder.run {
@@ -29,8 +32,8 @@ class GradeDetailsItem(val grade: Grade, private val weightString: String, priva
             }
             gradeItemDescription.text = if (grade.description.isNotEmpty()) grade.description else grade.gradeSymbol
             gradeItemDate.text = grade.date
-            gradeItemWeight.text = "%s: %s".format(weightString, grade.weight)
-            gradeItemNote.visibility = GONE
+            gradeItemWeight.text = "$weightString: ${grade.weight}"
+            gradeItemNote.visibility = if (grade.isNew) VISIBLE else GONE
         }
     }
 

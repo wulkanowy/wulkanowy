@@ -48,7 +48,21 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     fun onGradeItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is GradeDetailsItem) view?.showGradeDialog(item.grade)
+        if (item is GradeDetailsItem) {
+            item.grade.let {
+                view?.apply {
+                    showGradeDialog(it)
+                    if (it.isNew) {
+                        it.isNew = false
+                        updateItem(item)
+                        disposable.add(gradeRepository.updateGrade(it)
+                                .subscribeOn(schedulers.backgroundThread())
+                                .observeOn(schedulers.mainThread())
+                                .subscribe({}) { error -> errorHandler.proceed(error) })
+                    }
+                }
+            }
+        }
     }
 
     fun onSwipeRefresh() {
