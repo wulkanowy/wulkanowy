@@ -6,6 +6,4 @@ const val DATABASE_NAME = "wulkanowy_database"
 
 const val DEFAULT_SYMBOL = "Default"
 
-const val DATE_PATTERN = "yyyy-MM-dd"
-
 const val REPO_URL = "https://github.com/wulkanowy/wulkanowy"

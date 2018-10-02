@@ -13,10 +13,10 @@ data class GradeSummary(
         var id: Long = 0,
 
         @ColumnInfo(name = "semester_id")
-        var semesterId: String = "",
+        var semesterId: String,
 
         @ColumnInfo(name = "student_id")
-        var studentId: String = "",
+        var studentId: String,
 
         var subject: String,
 

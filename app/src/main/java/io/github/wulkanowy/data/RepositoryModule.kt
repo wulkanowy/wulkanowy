@@ -34,9 +34,6 @@ internal class RepositoryModule {
     @Provides
     fun provideErrorHandler(context: Context) = ErrorHandler(context.resources)
 
-    @Provides
-    fun provideErrorHandler(context: Context) = ErrorHandler(context.resources)
-
     @Singleton
     @Provides
     fun provideSharedPref(context: Context): SharedPreferences {

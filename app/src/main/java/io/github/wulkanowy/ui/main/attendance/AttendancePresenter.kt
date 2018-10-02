@@ -19,7 +19,7 @@ class AttendancePresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<AttendanceView>(errorHandler) {
 
-    var currentDate: LocalDate = LocalDate.now().getNearSchoolDayPrevOnWeekEnd()
+    var currentDate: LocalDate = LocalDate.now().nearSchoolDayPrevOnWeekEnd
         private set
 
     override fun attachView(view: AttendanceView) {
@@ -27,13 +27,14 @@ class AttendancePresenter @Inject constructor(
         view.initView()
     }
 
-    fun loadAttendanceForPreviousDay() = loadData(currentDate.getPreviousWorkDay().toEpochDay())
+    fun loadAttendanceForPreviousDay() = loadData(currentDate.previousWorkDay.toEpochDay())
 
-    fun loadAttendanceForNextDay() = loadData(currentDate.getNextWorkDay().toEpochDay())
+    fun loadAttendanceForNextDay() = loadData(currentDate.nextWorkDay.toEpochDay())
 
     fun loadData(date: Long?, forceRefresh: Boolean = false) {
-        this.currentDate = LocalDate.ofEpochDay(date ?: currentDate.getNearSchoolDayPrevOnWeekEnd().toEpochDay())
-        if (currentDate.isHolidays()) return
+        this.currentDate = LocalDate.ofEpochDay(date
+                ?: currentDate.nearSchoolDayPrevOnWeekEnd.toEpochDay())
+        if (currentDate.isHolidays) return
 
         disposable.clear()
         disposable.add(sessionRepository.getSemesters()
@@ -50,9 +51,9 @@ class AttendancePresenter @Inject constructor(
                             showEmpty(false)
                             clearData()
                         }
-                        showPreButton(!currentDate.minusDays(1).isHolidays())
-                        showNextButton(!currentDate.plusDays(1).isHolidays())
-                        updateNavigationDay(currentDate.toFormat("EEEE \n dd.MM.YYYY").capitalize())
+                        showPreButton(!currentDate.minusDays(1).isHolidays)
+                        showNextButton(!currentDate.plusDays(1).isHolidays)
+                        updateNavigationDay(currentDate.toFormattedString("EEEE \n dd.MM.YYYY").capitalize())
                     }
                 }
                 .doFinally {
