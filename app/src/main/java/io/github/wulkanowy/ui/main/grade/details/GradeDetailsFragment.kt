@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import eu.davidea.flexibleadapter.items.IExpandable
+import eu.davidea.flexibleadapter.items.IFlexible
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -69,6 +71,10 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
             smoothScrollToPosition(0)
             collapseAll()
         }
+    }
+
+    override fun getHeaderOfItem(item: AbstractFlexibleItem<*>): IExpandable<*, out IFlexible<*>>? {
+        return gradeDetailsAdapter.getExpandableOf(item)
     }
 
     override fun isViewEmpty() = gradeDetailsAdapter.isEmpty

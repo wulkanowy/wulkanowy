@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.main.grade.details
 
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractExpandableItem
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -10,7 +11,11 @@ import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.header_grade_details.*
 
-class GradeDetailsHeader(private val subject: String, private val number: String, private val average: String)
+class GradeDetailsHeader(
+        private val subject: String,
+        private val number: String,
+        private val average: String,
+        var newGrades: Int)
     : AbstractExpandableItem<GradeDetailsHeader.ViewHolder, GradeDetailsItem>() {
 
     override fun getLayoutRes() = R.layout.header_grade_details
@@ -28,8 +33,7 @@ class GradeDetailsHeader(private val subject: String, private val number: String
             gradeHeaderPredicted.visibility = GONE
             gradeHeaderFinal.visibility = GONE
 
-            //TODO Temporary hide grade note
-            gradeHeaderNote.visibility = GONE
+            gradeHeaderNote.visibility = if (newGrades > 0) VISIBLE else GONE
         }
     }
 

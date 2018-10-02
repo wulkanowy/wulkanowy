@@ -49,17 +49,18 @@ class GradeDetailsPresenter @Inject constructor(
 
     fun onGradeItemSelected(item: AbstractFlexibleItem<*>?) {
         if (item is GradeDetailsItem) {
-            item.grade.let {
-                view?.apply {
-                    showGradeDialog(it)
-                    if (it.isNew) {
-                        it.isNew = false
-                        updateItem(item)
-                        disposable.add(gradeRepository.updateGrade(it)
-                                .subscribeOn(schedulers.backgroundThread())
-                                .observeOn(schedulers.mainThread())
-                                .subscribe({}) { error -> errorHandler.proceed(error) })
+            view?.apply {
+                showGradeDialog(item.grade)
+                if (item.grade.isNew) {
+                    item.grade.isNew = false
+                    updateItem(item)
+                    getHeaderOfItem(item)?.let { header ->
+                        if (header is GradeDetailsHeader) {
+                            header.newGrades--
+                            updateItem(header)
+                        }
                     }
+                    updateGrade(item.grade)
                 }
             }
         }
@@ -92,7 +93,8 @@ class GradeDetailsPresenter @Inject constructor(
                 GradeDetailsHeader(
                         subject = it.key,
                         average = formatAverage(average),
-                        number = view?.gradeNumberString(it.value.size).orEmpty()
+                        number = view?.gradeNumberString(it.value.size).orEmpty(),
+                        newGrades = it.value.filter { grade -> grade.isNew }.size
                 ).apply {
                     subItems = it.value.map { item ->
                         GradeDetailsItem(
@@ -111,5 +113,12 @@ class GradeDetailsPresenter @Inject constructor(
             if (average == 0f) emptyAverageString()
             else averageString().format(average)
         }.orEmpty()
+    }
+
+    private fun updateGrade(grade: Grade) {
+        disposable.add(gradeRepository.updateGrade(grade)
+                .subscribeOn(schedulers.backgroundThread())
+                .observeOn(schedulers.mainThread())
+                .subscribe({}) { error -> errorHandler.proceed(error) })
     }
 }
