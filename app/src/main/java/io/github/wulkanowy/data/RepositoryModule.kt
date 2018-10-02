@@ -34,6 +34,9 @@ internal class RepositoryModule {
     @Provides
     fun provideErrorHandler(context: Context) = ErrorHandler(context.resources)
 
+    @Provides
+    fun provideErrorHandler(context: Context) = ErrorHandler(context.resources)
+
     @Singleton
     @Provides
     fun provideSharedPref(context: Context): SharedPreferences {
@@ -55,4 +58,12 @@ internal class RepositoryModule {
     @Singleton
     @Provides
     fun provideGradeSummaryDao(database: AppDatabase) = database.gradeSummaryDao()
+
+    @Singleton
+    @Provides
+    fun provideExamDao(database: AppDatabase) = database.examsDao()
+
+    @Singleton
+    @Provides
+    fun provideAttendanceDao(database: AppDatabase) = database.attendanceDao()
 }

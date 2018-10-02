@@ -24,6 +24,9 @@ class SessionRepository @Inject constructor(
     lateinit var cachedStudents: Single<List<Student>>
         private set
 
+    val isStudentLoggedIn: Boolean
+        get() = local.isStudentLoggedIn
+
     fun getConnectedStudents(email: String, password: String, symbol: String): Single<List<Student>> {
         cachedStudents = ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap { isConnected ->
