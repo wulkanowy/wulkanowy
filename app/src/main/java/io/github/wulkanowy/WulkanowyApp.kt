@@ -8,10 +8,13 @@ import com.crashlytics.android.core.CrashlyticsCore
 import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
+import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.utils.Log
 import io.fabric.sdk.android.Fabric
 import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.di.DaggerAppComponent
-import io.github.wulkanowy.utils.LoggerUtils
+import io.github.wulkanowy.utils.CrashlyticsTree
+import io.github.wulkanowy.utils.DebugLogTree
 import timber.log.Timber
 
 class WulkanowyApp : DaggerApplication() {
@@ -29,7 +32,8 @@ class WulkanowyApp : DaggerApplication() {
     }
 
     private fun enableDebugLog() {
-        Timber.plant(LoggerUtils.DebugLogTree())
+        Timber.plant(DebugLogTree)
+        FlexibleAdapter.enableLogs(Log.Level.DEBUG)
     }
 
     private fun initializeFabric() {
@@ -42,9 +46,10 @@ class WulkanowyApp : DaggerApplication() {
                 )
                 .debuggable(BuildConfig.DEBUG)
                 .build())
-        Timber.plant(LoggerUtils.CrashlyticsTree())
+        Timber.plant(CrashlyticsTree)
     }
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
-            DaggerAppComponent.builder().create(this)
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerAppComponent.builder().create(this)
+    }
 }

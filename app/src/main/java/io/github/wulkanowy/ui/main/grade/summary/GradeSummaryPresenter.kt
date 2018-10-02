@@ -36,12 +36,12 @@ class GradeSummaryPresenter @Inject constructor(
                                         .map { grades ->
                                             grades.groupBy { grade -> grade.subject }
                                                     .mapValues { entry -> calcAverage(entry.value) }
-                                                    .filterValues { value -> value != 0f }
+                                                    .filterValues { value -> value != 0.0 }
                                                     .let { averages ->
                                                         createGradeSummaryItems(gradesSummary, averages) to
                                                                 GradeSummaryScrollableHeader(
                                                                         formatAverage(calcSummaryAverage(gradesSummary)),
-                                                                        formatAverage(averages.values.average().toFloat())
+                                                                        formatAverage(averages.values.average())
                                                                 )
                                                     }
                                         }
@@ -88,13 +88,13 @@ class GradeSummaryPresenter @Inject constructor(
         disposable.clear()
     }
 
-    private fun createGradeSummaryItems(gradesSummary: List<GradeSummary>, averages: Map<String, Float>)
+    private fun createGradeSummaryItems(gradesSummary: List<GradeSummary>, averages: Map<String, Double>)
             : List<GradeSummaryItem> {
         return gradesSummary.filter { !checkEmpty(it, averages) }
                 .flatMap { gradeSummary ->
                     GradeSummaryHeader(
                             name = gradeSummary.subject,
-                            average = formatAverage(averages.getOrElse(gradeSummary.subject) { 0f }, "")
+                            average = formatAverage(averages.getOrElse(gradeSummary.subject) { 0.0 }, "")
                     ).let {
                         listOf(GradeSummaryItem(
                                 header = it,
@@ -109,14 +109,14 @@ class GradeSummaryPresenter @Inject constructor(
                 }
     }
 
-    private fun checkEmpty(gradeSummary: GradeSummary, averages: Map<String, Float>): Boolean {
+    private fun checkEmpty(gradeSummary: GradeSummary, averages: Map<String, Double>): Boolean {
         return gradeSummary.run {
             finalGrade.isEmpty() && predictedGrade.isEmpty() && averages[subject] == null
         }
     }
 
-    private fun formatAverage(average: Float, defaultValue: String = "-- --"): String {
-        return if (average == 0f || average.isNaN()) defaultValue
+    private fun formatAverage(average: Double, defaultValue: String = "-- --"): String {
+        return if (average == 0.0 || average.isNaN()) defaultValue
         else format(FRANCE, "%.2f", average)
     }
 }

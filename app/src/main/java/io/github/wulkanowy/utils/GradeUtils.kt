@@ -4,21 +4,21 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 
-fun calcAverage(gradeList: List<Grade>): Float {
-    var counter = 0f
-    var denominator = 0f
+fun calcAverage(gradeList: List<Grade>): Double {
+    var counter = 0.0
+    var denominator = 0.0
 
     gradeList.forEach {
         counter += (it.value + it.modifier) * it.weightValue
         denominator += it.weightValue
     }
-    return if (denominator != 0f) counter / denominator else 0f
+    return if (denominator != 0.0) counter / denominator else 0.0
 }
 
-fun calcSummaryAverage(gradesSummaryList: List<GradeSummary>): Float {
+fun calcSummaryAverage(gradesSummaryList: List<GradeSummary>): Double {
     return gradesSummaryList.asSequence().mapNotNull {
-        if (it.finalGrade.matches("[0-6]".toRegex())) it.finalGrade.toFloat() else null
-    }.average().toFloat()
+        if (it.finalGrade.matches("[0-6]".toRegex())) it.finalGrade.toDouble() else null
+    }.average()
 }
 
 fun getValueColor(grade: Grade): Int {

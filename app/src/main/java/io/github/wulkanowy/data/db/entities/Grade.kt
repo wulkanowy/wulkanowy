@@ -20,7 +20,7 @@ data class Grade(
 
         var value: Int,
 
-        var modifier: Float,
+        var modifier: Double,
 
         var comment: String,
 

@@ -108,9 +108,9 @@ class GradeDetailsPresenter @Inject constructor(
         }
     }
 
-    private fun formatAverage(average: Float): String {
+    private fun formatAverage(average: Double): String {
         return view?.run {
-            if (average == 0f) emptyAverageString()
+            if (average == 0.0) emptyAverageString()
             else averageString().format(average)
         }.orEmpty()
     }
