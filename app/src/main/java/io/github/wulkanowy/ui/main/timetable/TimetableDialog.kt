@@ -9,7 +9,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
-import io.github.wulkanowy.utils.extension.toFormat
+import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.synthetic.main.dialog_timetable.*
 
 class TimetableDialog : DialogFragment() {
@@ -44,7 +44,7 @@ class TimetableDialog : DialogFragment() {
         super.onActivityCreated(savedInstanceState)
 
         timetableDialogSubject.text = lesson.subject
-        timetableDialogTime.text = "${lesson.start.toFormat("HH:mm")} - ${lesson.end.toFormat("HH:mm")}"
+        timetableDialogTime.text = "${lesson.start.toFormattedString("HH:mm")} - ${lesson.end.toFormattedString("HH:mm")}"
 
         lesson.group.let {
             if (it.isBlank()) {

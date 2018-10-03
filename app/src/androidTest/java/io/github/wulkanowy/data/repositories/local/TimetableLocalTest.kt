@@ -40,7 +40,7 @@ class TimetableLocalTest {
         ))
 
         val exams = timetableDb.getLessons(
-                Semester(studentId = "1", diaryId = "2", semesterId = "3"),
+                Semester(studentId = "1", diaryId = "2", semesterId = "3", diaryName = "", semesterName = 1),
                 LocalDate.of(2018, 9, 10),
                 LocalDate.of(2018, 9, 14)
         ).blockingGet()

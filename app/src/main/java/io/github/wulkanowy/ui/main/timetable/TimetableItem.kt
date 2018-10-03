@@ -11,7 +11,7 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
-import io.github.wulkanowy.utils.extension.toFormat
+import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_timetable.*
 
@@ -55,7 +55,7 @@ class TimetableItem : AbstractFlexibleItem<TimetableItem.ViewHolder>() {
             timetableItemNumber.text = lesson.number.toString()
             timetableItemSubject.text = lesson.subject
             timetableItemRoom.text = if (lesson.room.isNotBlank()) "${view.context.getString(R.string.timetable_room)} ${lesson.room}" else ""
-            timetableItemTime.text = "${lesson.start.toFormat("HH:mm")} - ${lesson.end.toFormat("HH:mm")}"
+            timetableItemTime.text = "${lesson.start.toFormattedString("HH:mm")} - ${lesson.end.toFormattedString("HH:mm")}"
             timetableItemAlert.visibility = if (lesson.changes || lesson.canceled) VISIBLE else GONE
             timetableItemSubject.paintFlags =
                     if (lesson.canceled) timetableItemSubject.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG

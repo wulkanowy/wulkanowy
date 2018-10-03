@@ -6,7 +6,7 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.local.TimetableLocal
 import io.github.wulkanowy.data.repositories.remote.TimetableRemote
-import io.github.wulkanowy.utils.extension.getWeekFirstDayAlwaysCurrent
+import io.github.wulkanowy.utils.weekFirstDayAlwaysCurrent
 import io.reactivex.Single
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
@@ -23,7 +23,7 @@ class TimetableRepository @Inject constructor(
 ) {
 
     fun getTimetable(semester: Semester, startDate: LocalDate, endDate: LocalDate, forceRefresh: Boolean = false): Single<List<Timetable>> {
-        val start = startDate.getWeekFirstDayAlwaysCurrent()
+        val start = startDate.weekFirstDayAlwaysCurrent
         val end = endDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.FRIDAY))
 
         return local.getLessons(semester, start, end).filter { !forceRefresh }

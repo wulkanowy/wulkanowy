@@ -7,7 +7,7 @@ import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.github.wulkanowy.utils.extension.*
+import io.github.wulkanowy.utils.*
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
@@ -19,7 +19,7 @@ class TimetablePresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<TimetableView>(errorHandler) {
 
-    var currentDate: LocalDate = LocalDate.now().getNearSchoolDayNextOnWeekEnd()
+    var currentDate: LocalDate = LocalDate.now().nearSchoolDayNextOnWeekEnd
         private set
 
     override fun attachView(view: TimetableView) {
@@ -27,13 +27,13 @@ class TimetablePresenter @Inject constructor(
         view.initView()
     }
 
-    fun loadTimetableForPreviousDay() = loadData(currentDate.getPreviousWorkDay().toEpochDay())
+    fun loadTimetableForPreviousDay() = loadData(currentDate.previousWorkDay.toEpochDay())
 
-    fun loadTimetableForNextDay() = loadData(currentDate.getNextWorkDay().toEpochDay())
+    fun loadTimetableForNextDay() = loadData(currentDate.nextWorkDay.toEpochDay())
 
     fun loadData(date: Long?, forceRefresh: Boolean = false) {
-        this.currentDate = LocalDate.ofEpochDay(date ?: currentDate.getNearSchoolDayNextOnWeekEnd().toEpochDay())
-        if (currentDate.isHolidays()) return
+        this.currentDate = LocalDate.ofEpochDay(date ?: currentDate.nearSchoolDayNextOnWeekEnd.toEpochDay())
+        if (currentDate.isHolidays) return
 
         disposable.clear()
         disposable.add(sessionRepository.getSemesters()
@@ -47,9 +47,9 @@ class TimetablePresenter @Inject constructor(
                         showRefresh(forceRefresh)
                         showProgress(!forceRefresh)
                         if (!forceRefresh) clearData()
-                        showPreButton(!currentDate.minusDays(1).isHolidays())
-                        showNextButton(!currentDate.plusDays(1).isHolidays())
-                        updateNavigationDay(currentDate.toFormat("EEEE \n dd.MM.YYYY").capitalize())
+                        showPreButton(!currentDate.minusDays(1).isHolidays)
+                        showNextButton(!currentDate.plusDays(1).isHolidays)
+                        updateNavigationDay(currentDate.toFormattedString("EEEE \n dd.MM.YYYY").capitalize())
                     }
                 }
                 .doFinally {
