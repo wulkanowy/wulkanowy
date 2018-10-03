@@ -10,6 +10,7 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_grade_details.*
 
@@ -31,7 +32,7 @@ class GradeDetailsItem(val grade: Grade, private val weightString: String, priva
                 setBackgroundResource(valueColor)
             }
             gradeItemDescription.text = if (grade.description.isNotEmpty()) grade.description else grade.gradeSymbol
-            gradeItemDate.text = grade.date
+            gradeItemDate.text = grade.date.toFormattedString()
             gradeItemWeight.text = "$weightString: ${grade.weight}"
             gradeItemNote.visibility = if (grade.isNew) VISIBLE else GONE
         }

@@ -3,6 +3,7 @@ package io.github.wulkanowy.data.db.entities
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import org.threeten.bp.LocalDate
 import java.io.Serializable
 
 @Entity(tableName = "Grades")
@@ -35,7 +36,7 @@ data class Grade(
 
         var weightValue: Int,
 
-        var date: String,
+        var date: LocalDate,
 
         var teacher: String
 ) : Serializable {

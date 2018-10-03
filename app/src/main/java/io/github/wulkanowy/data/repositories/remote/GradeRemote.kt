@@ -3,7 +3,6 @@ package io.github.wulkanowy.data.repositories.remote
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.Semester
-import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.toLocalDate
 import io.reactivex.Single
 import javax.inject.Inject
@@ -34,7 +33,7 @@ class GradeRemote @Inject constructor(private val api: Api) {
                                 description = it.description,
                                 weight = it.weight,
                                 weightValue = it.weightValue,
-                                date = it.date.toLocalDate().toFormattedString(),
+                                date = it.date.toLocalDate(),
                                 teacher = it.teacher
                         )
                     }
