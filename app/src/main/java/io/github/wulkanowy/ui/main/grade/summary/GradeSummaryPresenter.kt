@@ -7,7 +7,6 @@ import io.github.wulkanowy.data.repositories.GradeSummaryRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.calcAverage
-import io.github.wulkanowy.utils.calcSummaryAverage
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import java.lang.String.format
 import java.util.Locale.FRANCE
@@ -35,12 +34,12 @@ class GradeSummaryPresenter @Inject constructor(
                                 gradeRepository.getGrades(it, forceRefresh)
                                         .map { grades ->
                                             grades.groupBy { grade -> grade.subject }
-                                                    .mapValues { entry -> calcAverage(entry.value) }
+                                                    .mapValues { entry -> entry.value.calcAverage() }
                                                     .filterValues { value -> value != 0.0 }
                                                     .let { averages ->
                                                         createGradeSummaryItems(gradesSummary, averages) to
                                                                 GradeSummaryScrollableHeader(
-                                                                        formatAverage(calcSummaryAverage(gradesSummary)),
+                                                                        formatAverage(gradesSummary.calcAverage()),
                                                                         formatAverage(averages.values.average())
                                                                 )
                                                     }

@@ -15,7 +15,7 @@ import io.github.wulkanowy.ui.main.exam.ExamFragment
 import io.github.wulkanowy.ui.main.grade.GradeFragment
 import io.github.wulkanowy.ui.main.more.MoreFragment
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment
-import io.github.wulkanowy.utils.extension.setOnTabTransactionListener
+import io.github.wulkanowy.utils.setOnTabTransactionListener
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 

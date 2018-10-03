@@ -15,7 +15,7 @@ import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.main.grade.GradeFragment
 import io.github.wulkanowy.ui.main.grade.GradeView
-import io.github.wulkanowy.utils.extension.setOnItemClickListener
+import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_grade_details.*
 import javax.inject.Inject
 

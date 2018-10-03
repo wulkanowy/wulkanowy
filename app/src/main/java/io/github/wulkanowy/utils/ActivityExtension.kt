@@ -1,4 +1,4 @@
-package io.github.wulkanowy.utils.extension
+package io.github.wulkanowy.utils
 
 import android.app.Activity
 import android.content.Context.INPUT_METHOD_SERVICE

@@ -7,10 +7,10 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.github.wulkanowy.utils.extension.isHolidays
-import io.github.wulkanowy.utils.extension.toFormattedString
-import io.github.wulkanowy.utils.extension.weekFirstDayNextOnWeekEnd
+import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
+import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.weekFirstDayNextOnWeekEnd
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 

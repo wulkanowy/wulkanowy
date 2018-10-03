@@ -39,17 +39,9 @@ class MainPresenterTest {
 
     @Test
     fun onMenuFragmentChangeTest() {
-        doReturn(mapOf(1 to "Test")).`when`(mainView).mapOfTitles()
+        doReturn("Test").`when`(mainView).viewTitle(1)
         presenter.onMenuViewChange(1)
         verify(mainView).setViewTitle("Test")
-    }
-
-    @Test
-    fun onMenuFragmentChangeDefaultTest() {
-        doReturn(emptyMap<Int, String>()).`when`(mainView).mapOfTitles()
-        doReturn("Default").`when`(mainView).defaultTitle()
-        presenter.onMenuViewChange(2)
-        verify(mainView).setViewTitle("Default")
     }
 }
 

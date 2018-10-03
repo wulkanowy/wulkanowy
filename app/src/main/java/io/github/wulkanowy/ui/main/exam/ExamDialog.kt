@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
-import io.github.wulkanowy.utils.extension.toFormattedString
+import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.synthetic.main.dialog_exam.*
 
 class ExamDialog : DialogFragment() {

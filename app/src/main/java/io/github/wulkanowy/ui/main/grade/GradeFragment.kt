@@ -11,7 +11,7 @@ import io.github.wulkanowy.ui.base.BasePagerAdapter
 import io.github.wulkanowy.ui.main.MainView
 import io.github.wulkanowy.ui.main.grade.details.GradeDetailsFragment
 import io.github.wulkanowy.ui.main.grade.summary.GradeSummaryFragment
-import io.github.wulkanowy.utils.extension.setOnSelectPageListener
+import io.github.wulkanowy.utils.setOnSelectPageListener
 import kotlinx.android.synthetic.main.fragment_grade.*
 import javax.inject.Inject
 

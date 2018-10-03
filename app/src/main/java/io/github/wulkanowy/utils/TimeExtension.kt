@@ -1,4 +1,4 @@
-package io.github.wulkanowy.utils.extension
+package io.github.wulkanowy.utils
 
 import org.threeten.bp.DayOfWeek.*
 import org.threeten.bp.LocalDate
@@ -82,6 +82,6 @@ inline val LocalDate.isHolidays: Boolean
         }.let { firstSchoolDay ->
             LocalDate.of(this.year, 6, 20)
                     .with(next(FRIDAY))
-                    .let { lastSchoolDay -> this.isAfter(firstSchoolDay) && this.isBefore(lastSchoolDay) }
+                    .let { lastSchoolDay -> this.isBefore(firstSchoolDay) && this.isAfter(lastSchoolDay) }
         }
     }

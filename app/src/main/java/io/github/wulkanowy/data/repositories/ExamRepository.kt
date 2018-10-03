@@ -6,7 +6,7 @@ import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.local.ExamLocal
 import io.github.wulkanowy.data.repositories.remote.ExamRemote
-import io.github.wulkanowy.utils.extension.weekFirstDayAlwaysCurrent
+import io.github.wulkanowy.utils.weekFirstDayAlwaysCurrent
 import io.reactivex.Single
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate

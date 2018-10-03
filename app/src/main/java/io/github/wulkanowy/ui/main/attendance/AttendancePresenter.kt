@@ -7,7 +7,7 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.github.wulkanowy.utils.extension.*
+import io.github.wulkanowy.utils.*
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import org.threeten.bp.LocalDate
 import javax.inject.Inject

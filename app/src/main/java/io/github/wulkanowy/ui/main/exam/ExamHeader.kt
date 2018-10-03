@@ -6,8 +6,8 @@ import eu.davidea.flexibleadapter.items.AbstractHeaderItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.ExpandableViewHolder
 import io.github.wulkanowy.R
-import io.github.wulkanowy.utils.extension.toFormattedString
-import io.github.wulkanowy.utils.extension.weekDayName
+import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.weekDayName
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.header_exam.*
 import org.threeten.bp.LocalDate

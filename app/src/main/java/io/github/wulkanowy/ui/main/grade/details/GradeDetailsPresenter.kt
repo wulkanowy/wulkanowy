@@ -7,8 +7,8 @@ import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.calcAverage
-import io.github.wulkanowy.utils.getValueColor
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
+import io.github.wulkanowy.utils.valueColor
 import javax.inject.Inject
 
 class GradeDetailsPresenter @Inject constructor(
@@ -89,7 +89,7 @@ class GradeDetailsPresenter @Inject constructor(
 
     private fun createGradeItems(items: Map<String, List<Grade>>): List<GradeDetailsHeader> {
         return items.map {
-            calcAverage(it.value).let { average ->
+            it.value.calcAverage().let { average ->
                 GradeDetailsHeader(
                         subject = it.key,
                         average = formatAverage(average),
@@ -100,7 +100,7 @@ class GradeDetailsPresenter @Inject constructor(
                         GradeDetailsItem(
                                 grade = item,
                                 weightString = view?.weightString().orEmpty(),
-                                valueColor = getValueColor(item)
+                                valueColor = item.valueColor
                         )
                     }
                 }
