@@ -19,7 +19,7 @@ class TimetablePresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<TimetableView>(errorHandler) {
 
-    var currentDate: LocalDate = LocalDate.now().nearSchoolDayNextOnWeekEnd
+    lateinit var currentDate: LocalDate
         private set
 
     override fun onAttachView(view: TimetableView) {
@@ -27,12 +27,13 @@ class TimetablePresenter @Inject constructor(
         view.initView()
     }
 
-    fun loadTimetableForPreviousDay() = loadData(currentDate.previousWorkDay.toEpochDay())
+    fun loadTimetableForPreviousDay() = loadData(currentDate.previousSchoolDay.toEpochDay())
 
-    fun loadTimetableForNextDay() = loadData(currentDate.nextWorkDay.toEpochDay())
+    fun loadTimetableForNextDay() = loadData(currentDate.nextSchoolDay.toEpochDay())
 
     fun loadData(date: Long?, forceRefresh: Boolean = false) {
-        this.currentDate = LocalDate.ofEpochDay(date ?: currentDate.nearSchoolDayNextOnWeekEnd.toEpochDay())
+        this.currentDate = LocalDate.ofEpochDay(date
+                ?: LocalDate.now().nextOrSameSchoolDay.toEpochDay())
         if (currentDate.isHolidays) return
 
         disposable.clear()

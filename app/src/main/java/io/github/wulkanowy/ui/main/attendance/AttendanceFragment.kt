@@ -34,10 +34,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.run {
-            onAttachView(this@AttendanceFragment)
-            loadData(date = savedInstanceState?.getLong(SAVED_DATE_KEY))
-        }
+        presenter.onAttachView(this@AttendanceFragment, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }
 
     override fun initView() {
@@ -50,9 +47,9 @@ class AttendanceFragment : BaseFragment(), AttendanceView {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = attendanceAdapter
         }
-        attendanceSwipe.setOnRefreshListener { presenter.loadData(date = null, forceRefresh = true) }
-        attendancePreviousButton.setOnClickListener { presenter.loadAttendanceForPreviousDay() }
-        attendanceNextButton.setOnClickListener { presenter.loadAttendanceForNextDay() }
+        attendanceSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+        attendancePreviousButton.setOnClickListener { presenter.onPreviousDay() }
+        attendanceNextButton.setOnClickListener { presenter.onNextDay() }
     }
 
     override fun updateData(data: List<AttendanceItem>) {
@@ -81,8 +78,8 @@ class AttendanceFragment : BaseFragment(), AttendanceView {
         attendanceRecycler.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun showRefresh(show: Boolean) {
-        attendanceSwipe.isRefreshing = show
+    override fun hideRefresh() {
+        attendanceSwipe.isRefreshing = false
     }
 
     override fun showPreButton(show: Boolean) {

@@ -8,9 +8,9 @@ import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.weekFirstDayNextOnWeekEnd
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class ExamPresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<ExamView>(errorHandler) {
 
-    var currentDate: LocalDate = LocalDate.now().weekFirstDayNextOnWeekEnd
+    lateinit var currentDate: LocalDate
         private set
 
     override fun onAttachView(view: ExamView) {
@@ -35,7 +35,7 @@ class ExamPresenter @Inject constructor(
 
     fun loadData(date: Long?, forceRefresh: Boolean = false) {
         this.currentDate = LocalDate.ofEpochDay(date
-                ?: currentDate.weekFirstDayNextOnWeekEnd.toEpochDay())
+                ?: LocalDate.now().nextOrSameSchoolDay.toEpochDay())
         if (currentDate.isHolidays) return
 
         disposable.clear()

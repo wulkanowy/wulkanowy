@@ -7,7 +7,6 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeFormatter.ofPattern
-import org.threeten.bp.temporal.TemporalAdjusters
 import org.threeten.bp.temporal.TemporalAdjusters.*
 import java.util.*
 
@@ -29,7 +28,7 @@ fun LocalDate.toFormattedString(format: String = DATE_PATTERN): String = this.fo
 
 fun LocalDateTime.toFormattedString(format: String = DATE_PATTERN): String = this.format(ofPattern(format))
 
-inline val LocalDate.nextWorkDay: LocalDate
+inline val LocalDate.nextSchoolDay: LocalDate
     get() {
         return when (this.dayOfWeek) {
             FRIDAY, SATURDAY, SUNDAY -> this.with(next(MONDAY))
@@ -37,7 +36,7 @@ inline val LocalDate.nextWorkDay: LocalDate
         }
     }
 
-inline val LocalDate.previousWorkDay: LocalDate
+inline val LocalDate.previousSchoolDay: LocalDate
     get() {
         return when (this.dayOfWeek) {
             SATURDAY, SUNDAY, MONDAY -> this.with(previous(FRIDAY))
@@ -45,15 +44,7 @@ inline val LocalDate.previousWorkDay: LocalDate
         }
     }
 
-inline val LocalDate.nearSchoolDayPrevOnWeekEnd: LocalDate
-    get() {
-        return when (this.dayOfWeek) {
-            SATURDAY, SUNDAY -> this.with(previous(FRIDAY))
-            else -> this
-        }
-    }
-
-inline val LocalDate.nearSchoolDayNextOnWeekEnd: LocalDate
+inline val LocalDate.nextOrSameSchoolDay: LocalDate
     get() {
         return when (this.dayOfWeek) {
             SATURDAY, SUNDAY -> this.with(next(MONDAY))
@@ -64,16 +55,11 @@ inline val LocalDate.nearSchoolDayNextOnWeekEnd: LocalDate
 inline val LocalDate.weekDayName: String
     get() = this.format(ofPattern("EEEE", Locale.getDefault()))
 
-inline val LocalDate.weekFirstDayAlwaysCurrent: LocalDate
-    get() = this.with(TemporalAdjusters.previousOrSame(MONDAY))
+inline val LocalDate.monday: LocalDate
+    get() = this.with(MONDAY)
 
-inline val LocalDate.weekFirstDayNextOnWeekEnd: LocalDate
-    get() {
-        return when (this.dayOfWeek) {
-            SATURDAY, SUNDAY -> this.with(next(MONDAY))
-            else -> this.with(previousOrSame(MONDAY))
-        }
-    }
+inline val LocalDate.friday: LocalDate
+    get() = this.with(FRIDAY)
 
 /**
  * [Dz.U. 2016 poz. 1335](http://prawo.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20160001335)

@@ -6,11 +6,10 @@ import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.local.ExamLocal
 import io.github.wulkanowy.data.repositories.remote.ExamRemote
-import io.github.wulkanowy.utils.weekFirstDayAlwaysCurrent
+import io.github.wulkanowy.utils.friday
+import io.github.wulkanowy.utils.monday
 import io.reactivex.Single
-import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
-import org.threeten.bp.temporal.TemporalAdjusters
 import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,8 +22,8 @@ class ExamRepository @Inject constructor(
 ) {
 
     fun getExams(semester: Semester, startDate: LocalDate, endDate: LocalDate, forceRefresh: Boolean = false): Single<List<Exam>> {
-        val start = startDate.weekFirstDayAlwaysCurrent
-        val end = endDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.FRIDAY))
+        val start = startDate.monday
+        val end = endDate.friday
 
         return local.getExams(semester, start, end).filter { !forceRefresh }
                 .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings).flatMap {
