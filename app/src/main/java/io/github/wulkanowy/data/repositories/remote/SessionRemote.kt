@@ -10,18 +10,22 @@ import javax.inject.Singleton
 @Singleton
 class SessionRemote @Inject constructor(private val api: Api) {
 
-    fun getConnectedStudents(email: String, password: String, symbol: String): Single<List<Student>> {
-        return Single.just(initApi(Student(email = email, password = password, symbol = symbol)))
+    fun getConnectedStudents(email: String, password: String, symbol: String, host: String, ssl: Boolean): Single<List<Student>> {
+        return Single.just(initApi(Student(email = email, password = password, symbol = symbol, host = host, hostSsl = ssl)))
                 .flatMap { _ ->
                     api.getPupils().map { students ->
                         students.map {
-                            Student(email = email,
+                            Student(
+                                    email = email,
                                     password = password,
                                     symbol = it.symbol,
                                     studentId = it.studentId,
                                     studentName = it.studentName,
                                     schoolId = it.schoolId,
-                                    schoolName = it.schoolName)
+                                    schoolName = it.schoolName,
+                                    host = host,
+                                    hostSsl = ssl
+                            )
                         }
                     }
                 }
@@ -31,12 +35,14 @@ class SessionRemote @Inject constructor(private val api: Api) {
         return Single.just(initApi(student)).flatMap { _ ->
             api.getSemesters().map { semesters ->
                 semesters.map {
-                    Semester(studentId = student.studentId,
+                    Semester(
+                            studentId = student.studentId,
                             diaryId = it.diaryId,
                             diaryName = it.diaryName,
                             semesterId = it.semesterId.toString(),
                             semesterName = it.semesterNumber,
-                            current = it.current)
+                            current = it.current
+                    )
                 }
 
             }
@@ -49,7 +55,8 @@ class SessionRemote @Inject constructor(private val api: Api) {
                 email = student.email
                 password = student.password
                 symbol = student.symbol
-                host = "vulcan.net.pl"
+                host = student.host
+                ssl = student.hostSsl
                 schoolId = student.schoolId
                 studentId = student.studentId
                 notifyDataChanged()

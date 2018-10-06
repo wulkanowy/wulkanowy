@@ -17,6 +17,7 @@
     <string name="login_header_symbol">Enter the VULCAN diary symbol</string>
     <string name="login_email_hint">Email</string>
     <string name="login_password_hint">Password</string>
+    <string name="login_host_hint">Log</string>
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Sign in</string>
     <string name="login_progress">Logging in&#8230;</string>

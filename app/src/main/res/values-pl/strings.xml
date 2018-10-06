@@ -17,6 +17,7 @@
     <string name="login_header_symbol">Podaj symbol dziennika VULCAN</string>
     <string name="login_email_hint">Email</string>
     <string name="login_password_hint">Hasło</string>
+    <string name="login_host_hint">Dziennik</string>
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Zaloguj</string>
     <string name="login_progress">Logowanie&#8230;</string>

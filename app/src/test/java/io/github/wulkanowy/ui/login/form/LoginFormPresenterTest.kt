@@ -94,7 +94,7 @@ class LoginFormPresenterTest {
 
     @Test
     fun loginTest() {
-        val studentTest = Student(email = "test@", password = "123")
+        val studentTest = Student(email = "test@", password = "123", host = "fakelog.cf", hostSsl = true)
         doReturn(Single.just(listOf(studentTest)))
                 .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString())
         presenter.attemptLogin("@", "12345", "test")

@@ -24,10 +24,10 @@ class SessionRepository @Inject constructor(
     lateinit var cachedStudents: Single<List<Student>>
         private set
 
-    fun getConnectedStudents(email: String, password: String, symbol: String): Single<List<Student>> {
+    fun getConnectedStudents(email: String, password: String, symbol: String, host: String, ssl: Boolean = true): Single<List<Student>> {
         cachedStudents = ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap { isConnected ->
-                    if (isConnected) remote.getConnectedStudents(email, password, symbol)
+                    if (isConnected) remote.getConnectedStudents(email, password, symbol, host, ssl)
                     else Single.error<List<Student>>(UnknownHostException("No internet connection"))
                 }.doOnSuccess { cachedStudents = Single.just(it) }
         return cachedStudents

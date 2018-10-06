@@ -25,7 +25,7 @@ class LoginOptionsPresenterTest {
 
     private lateinit var presenter: LoginOptionsPresenter
 
-    private val testStudent by lazy { Student(email = "test", password = "test123") }
+    private val testStudent by lazy { Student(email = "test", password = "test123", host = "fakelog.cf", hostSsl = true) }
 
     private val testException by lazy { RuntimeException("Problem") }
 
