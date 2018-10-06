@@ -74,7 +74,7 @@ class LoginFormPresenter @Inject constructor(
             isCorrect = false
         }
 
-        if (password.length <= 6 && password.isNotEmpty()) {
+        if (password.length < 6 && password.isNotEmpty()) {
             view?.setErrorPassInvalid(focus = isCorrect)
             isCorrect = false
         }

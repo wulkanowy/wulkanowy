@@ -38,7 +38,7 @@ class SessionLocalTest {
 
     @Test
     fun saveAndReadTest() {
-        sessionLocal.saveStudent(Student(email = "test", password = "test123", schoolId = "23")).blockingAwait()
+        sessionLocal.saveStudent(Student(email = "test", password = "test123", schoolId = "23", hostSsl = true, host = "fakelog.cf")).blockingAwait()
         assert(sharedHelper.getLong(SessionLocal.LAST_USER_KEY, 0) == 1L)
 
         assert(sessionLocal.isSessionSaved)

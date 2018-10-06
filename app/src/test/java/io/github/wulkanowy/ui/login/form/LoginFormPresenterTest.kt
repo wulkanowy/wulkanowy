@@ -40,7 +40,7 @@ class LoginFormPresenterTest {
 
     @Test
     fun emptyEmailLoginTest() {
-        presenter.attemptLogin("", "test123", "test")
+        presenter.attemptLogin("", "test123", "test", "fakelog.cf", true)
 
         verify(loginFormView).setErrorEmailRequired()
         verify(loginFormView, never()).setErrorPassRequired(false)
@@ -51,7 +51,7 @@ class LoginFormPresenterTest {
 
     @Test
     fun invalidEmailLoginTest() {
-        presenter.attemptLogin("test", "test123", "test")
+        presenter.attemptLogin("test", "test123", "test", "fakelog.cf", true)
 
         verify(loginFormView, never()).setErrorEmailRequired()
         verify(loginFormView, never()).setErrorPassRequired(false)
@@ -62,7 +62,7 @@ class LoginFormPresenterTest {
 
     @Test
     fun emptyPassLoginTest() {
-        presenter.attemptLogin("@", "", "test")
+        presenter.attemptLogin("@", "", "test", "fakelog.cf", true)
 
         verify(loginFormView, never()).setErrorEmailRequired()
         verify(loginFormView).setErrorPassRequired(true)
@@ -73,7 +73,7 @@ class LoginFormPresenterTest {
 
     @Test
     fun invalidPassLoginTest() {
-        presenter.attemptLogin("@", "123", "test")
+        presenter.attemptLogin("@", "123", "test", "fakelog.cf", true)
 
         verify(loginFormView, never()).setErrorEmailRequired()
         verify(loginFormView, never()).setErrorPassRequired(true)
@@ -85,9 +85,9 @@ class LoginFormPresenterTest {
     @Test
     fun emptySymbolLoginTest() {
         doReturn(Single.just(emptyList<Student>()))
-                .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString())
-        presenter.attemptLogin("@", "12345", "")
-        presenter.attemptLogin("@", "12345", "")
+                .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString(), anyString(), anyBoolean())
+        presenter.attemptLogin("@", "123456", "", "fakelog.cf", true)
+        presenter.attemptLogin("@", "123456", "", "fakelog.cf", true)
 
         verify(loginFormView).setErrorSymbolRequire()
     }
@@ -96,8 +96,8 @@ class LoginFormPresenterTest {
     fun loginTest() {
         val studentTest = Student(email = "test@", password = "123", host = "fakelog.cf", hostSsl = true)
         doReturn(Single.just(listOf(studentTest)))
-                .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString())
-        presenter.attemptLogin("@", "12345", "test")
+                .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString(), anyString(), anyBoolean())
+        presenter.attemptLogin("@", "123456", "test", "fakelog.cf", true)
 
         verify(loginFormView).hideSoftKeyboard()
         verify(loginFormView).showLoginProgress(true)
@@ -109,8 +109,8 @@ class LoginFormPresenterTest {
     @Test
     fun loginEmptyTest() {
         doReturn(Single.just(emptyList<Student>()))
-                .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString())
-        presenter.attemptLogin("@", "12345", "test")
+                .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString(), anyString(), anyBoolean())
+        presenter.attemptLogin("@", "123456", "test", "fakelog.cf", true)
 
         verify(loginFormView).hideSoftKeyboard()
         verify(loginFormView).showLoginProgress(true)
@@ -122,9 +122,9 @@ class LoginFormPresenterTest {
     @Test
     fun loginEmptyTwiceTest() {
         doReturn(Single.just(emptyList<Student>()))
-                .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString())
-        presenter.attemptLogin("@", "12345", "")
-        presenter.attemptLogin("@", "12345", "test")
+                .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString(), anyString(), anyBoolean())
+        presenter.attemptLogin("@", "123456", "", "fakelog.cf", true)
+        presenter.attemptLogin("@", "123456", "test", "fakelog.cf", true)
 
         verify(loginFormView, times(2)).hideSoftKeyboard()
         verify(loginFormView, times(2)).showLoginProgress(true)
@@ -139,8 +139,8 @@ class LoginFormPresenterTest {
     fun loginErrorTest() {
         val testException = RuntimeException()
         doReturn(Single.error<List<Student>>(testException))
-                .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString())
-        presenter.attemptLogin("@", "12345", "test")
+                .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString(), anyString(), anyBoolean())
+        presenter.attemptLogin("@", "123456", "test", "fakelog.cf", true)
 
         verify(loginFormView).hideSoftKeyboard()
         verify(loginFormView).showLoginProgress(true)
