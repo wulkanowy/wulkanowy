@@ -11,6 +11,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
@@ -34,13 +35,16 @@ class TimetableLocalTest {
     @Test
     fun saveAndReadTest() {
         timetableDb.saveLessons(listOf(
-                Timetable(studentId = "1", diaryId = "2", date = LocalDate.of(2018, 9, 10)),
-                Timetable(studentId = "1", diaryId = "2", date = LocalDate.of(2018, 9, 14)),
-                Timetable(studentId = "1", diaryId = "2", date = LocalDate.of(2018, 9, 17)) // in next week
+                Timetable(0, "1", "2", 1, LocalDateTime.now(), LocalDateTime.now(),
+                        LocalDate.of(2018, 9, 10), "", "", "", "", ""),
+                Timetable(0, "1", "2", 1, LocalDateTime.now(), LocalDateTime.now(),
+                        LocalDate.of(2018, 9, 14), "", "", "", "", ""),
+                Timetable(0, "1", "2", 1, LocalDateTime.now(), LocalDateTime.now(),
+                        LocalDate.of(2018, 9, 17), "", "", "", "", "")
         ))
 
         val exams = timetableDb.getLessons(
-                Semester(studentId = "1", diaryId = "2", semesterId = "3", diaryName = "", semesterName = 1),
+                Semester(0, "1", "2", "3", "", 1),
                 LocalDate.of(2018, 9, 10),
                 LocalDate.of(2018, 9, 14)
         ).blockingGet()

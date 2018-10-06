@@ -24,8 +24,8 @@ class ExamPresenter @Inject constructor(
     var currentDate: LocalDate = LocalDate.now().weekFirstDayNextOnWeekEnd
         private set
 
-    override fun attachView(view: ExamView) {
-        super.attachView(view)
+    override fun onAttachView(view: ExamView) {
+        super.onAttachView(view)
         view.initView()
     }
 

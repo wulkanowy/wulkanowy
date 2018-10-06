@@ -22,8 +22,8 @@ class TimetablePresenter @Inject constructor(
     var currentDate: LocalDate = LocalDate.now().nearSchoolDayNextOnWeekEnd
         private set
 
-    override fun attachView(view: TimetableView) {
-        super.attachView(view)
+    override fun onAttachView(view: TimetableView) {
+        super.onAttachView(view)
         view.initView()
     }
 

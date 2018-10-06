@@ -14,14 +14,14 @@ class TimeExtensionTest {
     }
 
     @Test
-    fun toFormattedStringTest() {
-        assertEquals("2018-10-01", LocalDate.of(2018, 10, 1).toFormattedString())
+    fun toFormattedStringLocalDateTest() {
+        assertEquals("01.10.2018", LocalDate.of(2018, 10, 1).toFormattedString())
         assertEquals("2018-10.01", LocalDate.of(2018, 10, 1).toFormattedString("yyyy-MM.dd"))
     }
 
     @Test
-    fun toFormat_LocalDateTime() {
-        assertEquals("2018-10-01", LocalDateTime.of(2018, 10, 1, 10, 0, 0).toFormattedString())
+    fun toFormattedStringLocalDateTimeTest() {
+        assertEquals("01.10.2018", LocalDateTime.of(2018, 10, 1, 10, 0, 0).toFormattedString())
         assertEquals("2018-10-01 10:00:00", LocalDateTime.of(2018, 10, 1, 10, 0, 0).toFormattedString("uuuu-MM-dd HH:mm:ss"))
     }
 

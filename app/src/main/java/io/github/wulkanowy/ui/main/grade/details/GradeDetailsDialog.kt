@@ -30,6 +30,7 @@ class GradeDetailsDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, 0)
         arguments?.run {
             grade = getSerializable(ARGUMENT_KEY) as Grade
         }

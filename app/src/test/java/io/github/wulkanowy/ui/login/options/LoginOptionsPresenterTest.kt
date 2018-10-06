@@ -34,7 +34,7 @@ class LoginOptionsPresenterTest {
         MockitoAnnotations.initMocks(this)
         clearInvocations(repository, loginOptionsView)
         presenter = LoginOptionsPresenter(errorHandler, repository, TestSchedulers())
-        presenter.attachView(loginOptionsView)
+        presenter.onAttachView(loginOptionsView)
     }
 
     @Test

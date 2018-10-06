@@ -39,7 +39,7 @@ class MainActivity : BaseActivity(), MainView {
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer
 
-        presenter.attachView(this)
+        presenter.onAttachView(this)
         navController.initialize(DEFAULT_TAB, savedInstanceState)
     }
 
@@ -119,6 +119,6 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter.detachView()
+        presenter.onDetachView()
     }
 }

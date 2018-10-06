@@ -34,7 +34,7 @@ class TimetableFragment : BaseFragment(), TimetableView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         presenter.run {
-            attachView(this@TimetableFragment)
+            onAttachView(this@TimetableFragment)
             loadData(date = savedInstanceState?.getLong(SAVED_DATE_KEY))
         }
     }
@@ -102,7 +102,7 @@ class TimetableFragment : BaseFragment(), TimetableView {
     }
 
     override fun onDestroyView() {
+        presenter.onDetachView()
         super.onDestroyView()
-        presenter.detachView()
     }
 }

@@ -24,6 +24,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView {
 
     companion object {
         private const val SAVED_DATE_KEY = "CURRENT_DATE"
+
         fun newInstance() = AttendanceFragment()
     }
 
@@ -34,7 +35,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         presenter.run {
-            attachView(this@AttendanceFragment)
+            onAttachView(this@AttendanceFragment)
             loadData(date = savedInstanceState?.getLong(SAVED_DATE_KEY))
         }
     }
@@ -43,7 +44,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView {
         attendanceAdapter.run {
             isAutoCollapseOnExpand = true
             isAutoScrollOnExpand = true
-            setOnItemClickListener { presenter.onAttendanceItemSelected(getItem(it))}
+            setOnItemClickListener { presenter.onAttendanceItemSelected(getItem(it)) }
         }
         attendanceRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
@@ -102,8 +103,8 @@ class AttendanceFragment : BaseFragment(), AttendanceView {
     }
 
     override fun onDestroyView() {
+        presenter.onDetachView()
         super.onDestroyView()
-        presenter.detachView()
     }
 }
 

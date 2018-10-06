@@ -35,7 +35,7 @@ class ExamFragment : BaseFragment(), ExamView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         presenter.run {
-            attachView(this@ExamFragment)
+            onAttachView(this@ExamFragment)
             loadData(date = savedInstanceState?.getLong(SAVED_DATE_KEY))
         }
     }
@@ -50,7 +50,7 @@ class ExamFragment : BaseFragment(), ExamView {
         }
         examSwipe.setOnRefreshListener { presenter.loadData(date = null, forceRefresh = true) }
         examPreviousButton.setOnClickListener { presenter.loadExamsForPreviousWeek() }
-        examNextButton.setOnClickListener { presenter.loadExamsForNextWeek()}
+        examNextButton.setOnClickListener { presenter.loadExamsForNextWeek() }
     }
 
     override fun updateData(data: List<ExamItem>) {
@@ -95,7 +95,7 @@ class ExamFragment : BaseFragment(), ExamView {
     }
 
     override fun onDestroyView() {
+        presenter.onDetachView()
         super.onDestroyView()
-        presenter.detachView()
     }
 }

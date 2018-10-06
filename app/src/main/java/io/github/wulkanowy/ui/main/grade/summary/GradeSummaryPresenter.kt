@@ -20,12 +20,12 @@ class GradeSummaryPresenter @Inject constructor(
         private val schedulers: SchedulersManager)
     : BasePresenter<GradeSummaryView>(errorHandler) {
 
-    override fun attachView(view: GradeSummaryView) {
-        super.attachView(view)
+    override fun onAttachView(view: GradeSummaryView) {
+        super.onAttachView(view)
         view.initView()
     }
 
-    fun loadData(semesterId: String, forceRefresh: Boolean) {
+    fun onParentViewLoadData(semesterId: String, forceRefresh: Boolean) {
         disposable.add(sessionRepository.getSemesters()
                 .map { semester -> semester.first { it.semesterId == semesterId } }
                 .flatMap {
@@ -76,7 +76,7 @@ class GradeSummaryPresenter @Inject constructor(
         }
     }
 
-    fun onParentChangeSemester() {
+    fun onParentViewChangeSemester() {
         view?.run {
             showProgress(true)
             showRefresh(false)

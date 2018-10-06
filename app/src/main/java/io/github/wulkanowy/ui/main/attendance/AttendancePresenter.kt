@@ -22,8 +22,8 @@ class AttendancePresenter @Inject constructor(
     var currentDate: LocalDate = LocalDate.now().nearSchoolDayPrevOnWeekEnd
         private set
 
-    override fun attachView(view: AttendanceView) {
-        super.attachView(view)
+    override fun onAttachView(view: AttendanceView) {
+        super.onAttachView(view)
         view.initView()
     }
 
