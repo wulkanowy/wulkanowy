@@ -38,7 +38,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginSignButton.setOnClickListener {
             val hostValue = resources.getStringArray(R.array.endpoints_hosts)[loginHostEdit.selectedItemPosition].split("|")
             presenter.attemptLogin(
-                    loginEmailEdit.text.toString(),
+                    loginNicknameEdit.text.toString(),
                     loginPassEdit.text.toString(),
                     loginSymbolEdit.text.toString(),
                     hostValue.last(),
@@ -79,17 +79,10 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         (activity as LoginSwitchListener?)?.switchFragment(1)
     }
 
-    override fun setErrorEmailRequired() {
-        loginEmailEdit.run {
+    override fun setErrorNicknameRequired() {
+        loginNicknameEdit.run {
             requestFocus()
             error = getString(R.string.login_field_required)
-        }
-    }
-
-    override fun setErrorEmailInvalid() {
-        loginEmailEdit.run {
-            requestFocus()
-            error = getString(R.string.login_invalid_email)
         }
     }
 
@@ -129,7 +122,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     }
 
     override fun resetViewErrors() {
-        loginEmailEdit.error = null
+        loginNicknameEdit.error = null
         loginPassEdit.error = null
     }
 

@@ -39,24 +39,12 @@ class LoginFormPresenterTest {
     }
 
     @Test
-    fun emptyEmailLoginTest() {
+    fun emptyNicknameLoginTest() {
         presenter.attemptLogin("", "test123", "test", "fakelog.cf", true)
 
-        verify(loginFormView).setErrorEmailRequired()
+        verify(loginFormView).setErrorNicknameRequired()
         verify(loginFormView, never()).setErrorPassRequired(false)
         verify(loginFormView, never()).setErrorSymbolRequire()
-        verify(loginFormView, never()).setErrorEmailInvalid()
-        verify(loginFormView, never()).setErrorPassInvalid(false)
-    }
-
-    @Test
-    fun invalidEmailLoginTest() {
-        presenter.attemptLogin("test", "test123", "test", "fakelog.cf", true)
-
-        verify(loginFormView, never()).setErrorEmailRequired()
-        verify(loginFormView, never()).setErrorPassRequired(false)
-        verify(loginFormView, never()).setErrorSymbolRequire()
-        verify(loginFormView).setErrorEmailInvalid()
         verify(loginFormView, never()).setErrorPassInvalid(false)
     }
 
@@ -64,10 +52,9 @@ class LoginFormPresenterTest {
     fun emptyPassLoginTest() {
         presenter.attemptLogin("@", "", "test", "fakelog.cf", true)
 
-        verify(loginFormView, never()).setErrorEmailRequired()
+        verify(loginFormView, never()).setErrorNicknameRequired()
         verify(loginFormView).setErrorPassRequired(true)
         verify(loginFormView, never()).setErrorSymbolRequire()
-        verify(loginFormView, never()).setErrorEmailInvalid()
         verify(loginFormView, never()).setErrorPassInvalid(false)
     }
 
@@ -75,10 +62,9 @@ class LoginFormPresenterTest {
     fun invalidPassLoginTest() {
         presenter.attemptLogin("@", "123", "test", "fakelog.cf", true)
 
-        verify(loginFormView, never()).setErrorEmailRequired()
+        verify(loginFormView, never()).setErrorNicknameRequired()
         verify(loginFormView, never()).setErrorPassRequired(true)
         verify(loginFormView, never()).setErrorSymbolRequire()
-        verify(loginFormView, never()).setErrorEmailInvalid()
         verify(loginFormView).setErrorPassInvalid(true)
     }
 

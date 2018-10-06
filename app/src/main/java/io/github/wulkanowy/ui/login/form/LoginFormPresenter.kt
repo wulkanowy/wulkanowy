@@ -51,11 +51,11 @@ class LoginFormPresenter @Inject constructor(
                 }, { errorHandler.proceed(it) }))
     }
 
-    private fun validateCredentials(email: String, password: String, symbol: String): Boolean {
+    private fun validateCredentials(login: String, password: String, symbol: String): Boolean {
         var isCorrect = true
 
-        if (email.isEmpty()) {
-            view?.setErrorEmailRequired()
+        if (login.isEmpty()) {
+            view?.setErrorNicknameRequired()
             isCorrect = false
         }
 
@@ -66,11 +66,6 @@ class LoginFormPresenter @Inject constructor(
 
         if (symbol.isEmpty() && wasEmpty) {
             view?.setErrorSymbolRequire()
-            isCorrect = false
-        }
-
-        if (!email.contains("[@]".toRegex()) && email.isNotEmpty()) {
-            view?.setErrorEmailInvalid()
             isCorrect = false
         }
 
