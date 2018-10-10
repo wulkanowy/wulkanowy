@@ -19,9 +19,9 @@ class LoginFormPresenter @Inject constructor(
         view.initInputs()
     }
 
-    fun attemptLogin(email: String, password: String, symbol: String, host: String, ssl: Boolean) {
+    fun attemptLogin(email: String, password: String, symbol: String, endpoint: String) {
         if (!validateCredentials(email, password, symbol)) return
-        disposable.add(sessionRepository.getConnectedStudents(email, password, symbol, host, ssl)
+        disposable.add(sessionRepository.getConnectedStudents(email, password, symbol, endpoint)
                 .observeOn(schedulers.mainThread())
                 .subscribeOn(schedulers.backgroundThread())
                 .doOnSubscribe {

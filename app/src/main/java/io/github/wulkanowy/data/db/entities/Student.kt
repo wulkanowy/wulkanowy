@@ -12,10 +12,7 @@ data class Student(
         @PrimaryKey(autoGenerate = true)
         var id: Long = 0,
 
-        var host: String,
-
-        @ColumnInfo(name = "host_ssl")
-        var hostSsl: Boolean,
+        var endpoint: String,
 
         var email: String,
 

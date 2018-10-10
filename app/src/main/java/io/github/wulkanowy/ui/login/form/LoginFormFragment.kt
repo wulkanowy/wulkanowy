@@ -36,20 +36,18 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
     override fun initInputs() {
         loginSignButton.setOnClickListener {
-            val hostValue = resources.getStringArray(R.array.endpoints_hosts)[loginHostEdit.selectedItemPosition].split("|")
             presenter.attemptLogin(
                     loginNicknameEdit.text.toString(),
                     loginPassEdit.text.toString(),
                     loginSymbolEdit.text.toString(),
-                    hostValue.last(),
-                    "1" == hostValue.first()
+                    resources.getStringArray(R.array.endpoints_values)[loginHostEdit.selectedItemPosition]
             )
         }
 
         loginPassEdit.setOnEditorActionListener { _, id, _ -> onEditAction(id) }
 
         loginHostEdit.run {
-            adapter = ArrayAdapter.createFromResource(context, R.array.endpoints_names, android.R.layout.simple_spinner_item).apply {
+            adapter = ArrayAdapter.createFromResource(context, R.array.endpoints_keys, android.R.layout.simple_spinner_item).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
         }

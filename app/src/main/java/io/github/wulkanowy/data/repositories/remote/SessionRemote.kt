@@ -1,17 +1,19 @@
 package io.github.wulkanowy.data.repositories.remote
 
+import android.webkit.URLUtil
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.reactivex.Single
+import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SessionRemote @Inject constructor(private val api: Api) {
 
-    fun getConnectedStudents(email: String, password: String, symbol: String, host: String, ssl: Boolean): Single<List<Student>> {
-        return Single.just(initApi(Student(email = email, password = password, symbol = symbol, host = host, hostSsl = ssl)))
+    fun getConnectedStudents(email: String, password: String, symbol: String, endpoint: String): Single<List<Student>> {
+        return Single.just(initApi(Student(email = email, password = password, symbol = symbol, endpoint = endpoint)))
                 .flatMap { _ ->
                     api.getPupils().map { students ->
                         students.map {
@@ -23,8 +25,7 @@ class SessionRemote @Inject constructor(private val api: Api) {
                                     studentName = it.studentName,
                                     schoolId = it.schoolId,
                                     schoolName = it.schoolName,
-                                    host = host,
-                                    hostSsl = ssl
+                                    endpoint = endpoint
                             )
                         }
                     }
@@ -55,8 +56,8 @@ class SessionRemote @Inject constructor(private val api: Api) {
                 email = student.email
                 password = student.password
                 symbol = student.symbol
-                host = student.host
-                ssl = student.hostSsl
+                host = URL(student.endpoint).run { host + ":$port".removeSuffix(":-1") }
+                ssl = URLUtil.isHttpsUrl(student.endpoint)
                 schoolId = student.schoolId
                 studentId = student.studentId
                 notifyDataChanged()
