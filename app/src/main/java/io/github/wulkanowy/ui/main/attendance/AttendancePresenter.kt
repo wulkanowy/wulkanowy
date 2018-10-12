@@ -8,7 +8,9 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.*
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import org.threeten.bp.LocalDate
-import java.util.concurrent.TimeUnit
+import org.threeten.bp.LocalDate.now
+import org.threeten.bp.LocalDate.ofEpochDay
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class AttendancePresenter @Inject constructor(
@@ -24,7 +26,7 @@ class AttendancePresenter @Inject constructor(
     fun onAttachView(view: AttendanceView, date: Long?) {
         super.onAttachView(view)
         view.initView()
-        loadData(LocalDate.ofEpochDay(date ?: LocalDate.now().nextOrSameSchoolDay.toEpochDay()))
+        loadData(ofEpochDay(date ?: now().nextOrSameSchoolDay.toEpochDay()))
         reloadView()
     }
 
@@ -43,7 +45,7 @@ class AttendancePresenter @Inject constructor(
     }
 
     fun onViewReselected() {
-        loadData(LocalDate.now().nextOrSameSchoolDay)
+        loadData(now().nextOrSameSchoolDay)
         reloadView()
     }
 
@@ -56,7 +58,7 @@ class AttendancePresenter @Inject constructor(
         disposable.apply {
             clear()
             add(sessionRepository.getSemesters()
-                    .delay(200, TimeUnit.MILLISECONDS)
+                    .delay(200, MILLISECONDS)
                     .map { it.single { semester -> semester.current } }
                     .flatMap { attendanceRepository.getAttendance(it, date, date, forceRefresh) }
                     .map { items -> items.map { AttendanceItem(it) } }

@@ -39,8 +39,7 @@ class AttendanceRepository @Inject constructor(
                             }.flatMap {
                                 local.getAttendance(semester, dates.first, dates.second)
                                         .toSingle(emptyList())
-                            })
-                            .map { list -> list.filter { it.date in startDate..endDate } }
+                            }).map { list -> list.filter { it.date in startDate..endDate } }
                 }
     }
 }

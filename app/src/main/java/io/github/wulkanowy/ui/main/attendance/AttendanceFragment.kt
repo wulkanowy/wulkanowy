@@ -36,7 +36,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MenuFragment
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.onAttachView(this@AttendanceFragment, savedInstanceState?.getLong(SAVED_DATE_KEY))
+        presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }
 
     override fun initView() {

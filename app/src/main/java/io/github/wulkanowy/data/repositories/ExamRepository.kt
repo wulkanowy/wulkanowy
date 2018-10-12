@@ -22,23 +22,24 @@ class ExamRepository @Inject constructor(
 ) {
 
     fun getExams(semester: Semester, startDate: LocalDate, endDate: LocalDate, forceRefresh: Boolean = false): Single<List<Exam>> {
-        val start = startDate.monday
-        val end = endDate.friday
-
-        return local.getExams(semester, start, end).filter { !forceRefresh }
-                .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings).flatMap {
-                    if (it) remote.getExams(semester, start, end)
-                    else Single.error(UnknownHostException())
-                }.flatMap { newExams ->
-                    local.getExams(semester, start, end).toSingle(emptyList()).map { grades ->
-                        local.deleteExams(grades - newExams)
-                        local.saveExams(newExams - grades)
-                        newExams
-                    }
-                }).map { list ->
-                    list.asSequence().filter {
-                        it.date in startDate..endDate
-                    }.toList()
+        return Single.fromCallable { startDate.monday to endDate.friday }
+                .flatMap { dates ->
+                    local.getExams(semester, dates.first, dates.second).filter { !forceRefresh }
+                            .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
+                                    .flatMap {
+                                        if (it) remote.getExams(semester, dates.first, dates.second)
+                                        else Single.error(UnknownHostException())
+                                    }.flatMap { newExams ->
+                                        local.getExams(semester, dates.first, dates.second)
+                                                .toSingle(emptyList())
+                                                .doOnSuccess { oldExams ->
+                                                    local.deleteExams(oldExams - newExams)
+                                                    local.saveExams(newExams - oldExams)
+                                                }
+                                    }.flatMap {
+                                        local.getExams(semester, dates.first, dates.second)
+                                                .toSingle(emptyList())
+                                    }).map { list -> list.filter { it.date in startDate..endDate } }
                 }
     }
 }
