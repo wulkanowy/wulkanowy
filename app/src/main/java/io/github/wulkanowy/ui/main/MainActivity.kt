@@ -90,10 +90,6 @@ class MainActivity : BaseActivity(), MainView {
         supportActionBar?.title = title
     }
 
-    override fun expandActionBar(show: Boolean) {
-        mainAppBarContainer.setExpanded(show, true)
-    }
-
     override fun viewTitle(index: Int): String {
         return getString(listOf(R.string.grade_title,
                 R.string.attendance_title,

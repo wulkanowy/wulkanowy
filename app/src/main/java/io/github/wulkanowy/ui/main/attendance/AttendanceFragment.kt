@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.main.MainView
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_attendance.*
 import javax.inject.Inject
 
-class AttendanceFragment : BaseFragment(), AttendanceView {
+class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MenuFragmentView {
 
     @Inject
     lateinit var presenter: AttendancePresenter
@@ -38,14 +40,14 @@ class AttendanceFragment : BaseFragment(), AttendanceView {
     }
 
     override fun initView() {
-        attendanceAdapter.run {
-            isAutoCollapseOnExpand = true
-            isAutoScrollOnExpand = true
+        attendanceAdapter.apply {
             setOnItemClickListener { presenter.onAttendanceItemSelected(getItem(it)) }
         }
+
         attendanceRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = attendanceAdapter
+            addItemDecoration(FlexibleItemDecoration(context).withDefaultDivider())
         }
         attendanceSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         attendancePreviousButton.setOnClickListener { presenter.onPreviousDay() }
@@ -56,15 +58,19 @@ class AttendanceFragment : BaseFragment(), AttendanceView {
         attendanceAdapter.updateDataSet(data, true)
     }
 
-    override fun clearData() {
-        attendanceAdapter.clear()
-    }
-
     override fun updateNavigationDay(date: String) {
         attendanceNavDate.text = date
     }
 
+    override fun clearData() {
+        attendanceAdapter.clear()
+    }
+
     override fun isViewEmpty() = attendanceAdapter.isEmpty
+
+    override fun onFragmentReselected() {
+        presenter.onViewReselected()
+    }
 
     override fun showEmpty(show: Boolean) {
         attendanceEmpty.visibility = if (show) View.VISIBLE else View.GONE

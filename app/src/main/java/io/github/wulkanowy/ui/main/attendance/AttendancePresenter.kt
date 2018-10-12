@@ -1,16 +1,14 @@
 package io.github.wulkanowy.ui.main.attendance
 
-import android.os.Handler
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.github.wulkanowy.utils.nextOrSameSchoolDay
-import io.github.wulkanowy.utils.nextSchoolDay
-import io.github.wulkanowy.utils.previousSchoolDay
+import io.github.wulkanowy.utils.*
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import org.threeten.bp.LocalDate
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AttendancePresenter @Inject constructor(
@@ -27,30 +25,26 @@ class AttendancePresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         loadData(LocalDate.ofEpochDay(date ?: LocalDate.now().nextOrSameSchoolDay.toEpochDay()))
+        reloadView()
     }
 
     fun onPreviousDay() {
-        view?.apply {
-            clearData()
-            showProgress(true)
-            showContent(false)
-            showEmpty(false)
-        }
         loadData(currentDate.previousSchoolDay)
+        reloadView()
     }
 
     fun onNextDay() {
-        view?.apply {
-            clearData()
-            showProgress(true)
-            showContent(false)
-            showEmpty(false)
-        }
         loadData(currentDate.nextSchoolDay)
+        reloadView()
     }
 
     fun onSwipeRefresh() {
         loadData(currentDate, true)
+    }
+
+    fun onViewReselected() {
+        loadData(LocalDate.now().nextOrSameSchoolDay)
+        reloadView()
     }
 
     fun onAttendanceItemSelected(item: AbstractFlexibleItem<*>?) {
@@ -62,6 +56,7 @@ class AttendancePresenter @Inject constructor(
         disposable.apply {
             clear()
             add(sessionRepository.getSemesters()
+                    .delay(200, TimeUnit.MILLISECONDS)
                     .map { it.single { semester -> semester.current } }
                     .flatMap { attendanceRepository.getAttendance(it, date, date, forceRefresh) }
                     .map { items -> items.map { AttendanceItem(it) } }
@@ -76,17 +71,26 @@ class AttendancePresenter @Inject constructor(
                     .subscribe({
                         view?.apply {
                             updateData(it)
-                            Handler().postDelayed({
-                                showEmpty(it.isEmpty())
-                                showContent(it.isNotEmpty())
-                            }, 300)
-
+                            showEmpty(it.isEmpty())
+                            showContent(it.isNotEmpty())
                         }
                     }) {
                         view?.run { showEmpty(isViewEmpty()) }
                         errorHandler.proceed(it)
                     }
             )
+        }
+    }
+
+    private fun reloadView() {
+        view?.apply {
+            showProgress(true)
+            showContent(false)
+            showEmpty(false)
+            clearData()
+            showNextButton(!currentDate.plusDays(1).isHolidays)
+            showPreButton(!currentDate.minusDays(1).isHolidays)
+            updateNavigationDay(currentDate.toFormattedString("EEEE \n dd.MM.YYYY").capitalize())
         }
     }
 }

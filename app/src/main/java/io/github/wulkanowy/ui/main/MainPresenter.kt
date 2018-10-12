@@ -22,7 +22,6 @@ class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
 
     fun onTabSelected(index: Int, wasSelected: Boolean): Boolean {
         return view?.run {
-            expandActionBar(true)
             if (wasSelected) {
                 notifyMenuViewReselected()
                 false
