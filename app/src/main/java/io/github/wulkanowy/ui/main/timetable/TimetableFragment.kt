@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
@@ -47,8 +46,6 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MenuFragmentVi
         timetableRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = timetableAdapter
-            addItemDecoration(FlexibleItemDecoration(context).withDefaultDivider())
-
         }
         timetableSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         timetablePreviousButton.setOnClickListener { presenter.onPreviousDay() }

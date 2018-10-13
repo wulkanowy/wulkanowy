@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
@@ -46,7 +45,6 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MenuFragmentView {
         examRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = examAdapter
-            addItemDecoration(FlexibleItemDecoration(context).withDefaultDivider())
         }
         examSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         examPreviousButton.setOnClickListener { presenter.onPreviousWeek() }

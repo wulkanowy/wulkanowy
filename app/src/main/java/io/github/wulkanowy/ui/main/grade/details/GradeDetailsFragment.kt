@@ -47,6 +47,8 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
             setOnItemClickListener { presenter.onGradeItemSelected(getItem(it)) }
         }
 
+        gradeDetailsAdapter.getItemCountOfTypes()
+
         gradeDetailsRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = gradeDetailsAdapter
