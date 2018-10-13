@@ -34,7 +34,7 @@ class TimetableLocalTest {
 
     @Test
     fun saveAndReadTest() {
-        timetableDb.saveLessons(listOf(
+        timetableDb.saveTimetable(listOf(
                 Timetable(0, "1", "2", 1, LocalDateTime.now(), LocalDateTime.now(),
                         LocalDate.of(2018, 9, 10), "", "", "", "", ""),
                 Timetable(0, "1", "2", 1, LocalDateTime.now(), LocalDateTime.now(),
@@ -43,7 +43,7 @@ class TimetableLocalTest {
                         LocalDate.of(2018, 9, 17), "", "", "", "", "")
         ))
 
-        val exams = timetableDb.getLessons(
+        val exams = timetableDb.getTimetable(
                 Semester(0, "1", "2", "3", "", 1),
                 LocalDate.of(2018, 9, 10),
                 LocalDate.of(2018, 9, 14)
