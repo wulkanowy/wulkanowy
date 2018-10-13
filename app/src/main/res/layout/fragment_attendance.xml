@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@android:color/white"
-        android:elevation="15dp"
+        android:elevation="10dp"
         android:orientation="horizontal">
 
         <Button

@@ -21,24 +21,26 @@ class TimetableRepository @Inject constructor(
         private val remote: TimetableRemote
 ) {
 
-    fun getTimetable(semester: Semester, startDate: LocalDate, endDate: LocalDate, forceRefresh: Boolean = false): Single<List<Timetable>> {
-        val start = startDate.monday
-        val end = endDate.friday
-
-        return local.getLessons(semester, start, end).filter { !forceRefresh }
-                .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings).flatMap {
-                    if (it) remote.getLessons(semester, start, end)
-                    else Single.error(UnknownHostException())
-                }.flatMap { newLessons ->
-                    local.getLessons(semester, start, end).toSingle(emptyList()).map { lessons ->
-                        local.deleteLessons(lessons - newLessons)
-                        local.saveLessons(newLessons - lessons)
-                        newLessons
-                    }
-                }).map { list ->
-                    list.asSequence().filter {
-                        it.date in startDate..endDate
-                    }.toList()
+    fun getTimetable(semester: Semester, startDate: LocalDate, endDate: LocalDate, forceRefresh: Boolean = false)
+            : Single<List<Timetable>> {
+        return Single.fromCallable { startDate.monday to endDate.friday }
+                .flatMap { dates ->
+                    local.getTimetable(semester, dates.first, dates.second).filter { !forceRefresh }
+                            .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
+                                    .flatMap {
+                                        if (it) remote.getTimetable(semester, dates.first, dates.second)
+                                        else Single.error(UnknownHostException())
+                                    }.flatMap { newTimetable ->
+                                        local.getTimetable(semester, dates.first, dates.second)
+                                                .toSingle(emptyList())
+                                                .doOnSuccess { oldTimetable ->
+                                                    local.deleteTimetable(oldTimetable - newTimetable)
+                                                    local.saveTimetable(newTimetable - oldTimetable)
+                                                }
+                                    }.flatMap {
+                                        local.getTimetable(semester, dates.first, dates.second)
+                                                .toSingle(emptyList())
+                                    }).map { list -> list.filter { it.date in startDate..endDate } }
                 }
     }
 }

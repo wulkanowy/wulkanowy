@@ -6,7 +6,7 @@ import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.schedulers.SchedulersManager
 import io.reactivex.Completable
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class GradePresenter @Inject constructor(
@@ -23,7 +23,7 @@ class GradePresenter @Inject constructor(
 
     fun onAttachView(view: GradeView, savedIndex: Int?) {
         super.onAttachView(view)
-        disposable.add(Completable.timer(150, TimeUnit.MILLISECONDS, schedulers.mainThread())
+        disposable.add(Completable.timer(150, MILLISECONDS, schedulers.mainThread())
                 .subscribe {
                     selectedIndex = savedIndex ?: 0
                     view.initView()

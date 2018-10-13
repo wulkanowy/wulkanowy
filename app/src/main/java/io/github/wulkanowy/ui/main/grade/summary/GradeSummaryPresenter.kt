@@ -110,12 +110,12 @@ class GradeSummaryPresenter @Inject constructor(
 
     private fun checkEmpty(gradeSummary: GradeSummary, averages: Map<String, Double>): Boolean {
         return gradeSummary.run {
-            finalGrade.isEmpty() && predictedGrade.isEmpty() && averages[subject] == null
+            finalGrade.isBlank() && predictedGrade.isBlank() && averages[subject] == null
         }
     }
 
     private fun formatAverage(average: Double, defaultValue: String = "-- --"): String {
-        return if (average == 0.0 || average.isNaN()) defaultValue
+        return if (average == 0.0) defaultValue
         else format(FRANCE, "%.2f", average)
     }
 }

@@ -59,7 +59,7 @@
 
     <!--Timetable-->
     <string name="timetable_lesson">Lesson</string>
-    <string name="timetable_room">Room %s</string>
+    <string name="timetable_room">Room</string>
     <string name="timetable_group">Group</string>
     <string name="timetable_time">Hours</string>
     <string name="timetable_changes">Changes</string>

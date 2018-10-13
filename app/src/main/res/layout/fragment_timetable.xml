@@ -42,8 +42,8 @@
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="100dp"
                 android:minWidth="100dp"
+                android:minHeight="100dp"
                 app:srcCompat="@drawable/ic_menu_main_timetable_24dp"
                 app:tint="?android:attr/textColorPrimary"
                 tools:ignore="contentDescription" />
@@ -62,6 +62,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:background="@android:color/white"
+        android:elevation="10dp"
         android:orientation="horizontal">
 
         <Button
