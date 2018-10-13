@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.login.form
 
 import io.github.wulkanowy.TestSchedulers
+import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.login.LoginErrorHandler
@@ -80,7 +81,7 @@ class LoginFormPresenterTest {
 
     @Test
     fun loginTest() {
-        val studentTest = Student(email = "test@", password = "123", endpoint = "https://fakelog.cf")
+        val studentTest = Student(email = "test@", password = "123", endpoint = "https://fakelog.cf", loginType = "AUTO")
         doReturn(Single.just(listOf(studentTest)))
                 .`when`(repository).getConnectedStudents(anyString(), anyString(), anyString(), anyString())
         presenter.attemptLogin("@", "123456", "test", "https://fakelog.cf")

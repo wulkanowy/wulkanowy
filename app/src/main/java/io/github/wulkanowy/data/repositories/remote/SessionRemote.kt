@@ -13,7 +13,7 @@ import javax.inject.Singleton
 class SessionRemote @Inject constructor(private val api: Api) {
 
     fun getConnectedStudents(email: String, password: String, symbol: String, endpoint: String): Single<List<Student>> {
-        return Single.just(initApi(Student(email = email, password = password, symbol = symbol, endpoint = endpoint)))
+        return Single.just(initApi(Student(email = email, password = password, symbol = symbol, endpoint = endpoint, loginType = "AUTO")))
                 .flatMap { _ ->
                     api.getPupils().map { students ->
                         students.map {
@@ -25,7 +25,8 @@ class SessionRemote @Inject constructor(private val api: Api) {
                                     studentName = it.studentName,
                                     schoolId = it.schoolId,
                                     schoolName = it.schoolName,
-                                    endpoint = endpoint
+                                    endpoint = endpoint,
+                                    loginType = it.loginType.name
                             )
                         }
                     }
@@ -60,6 +61,7 @@ class SessionRemote @Inject constructor(private val api: Api) {
                 ssl = URLUtil.isHttpsUrl(student.endpoint)
                 schoolId = student.schoolId
                 studentId = student.studentId
+                loginType = Api.LoginType.valueOf(student.loginType)
                 notifyDataChanged()
             }
         }

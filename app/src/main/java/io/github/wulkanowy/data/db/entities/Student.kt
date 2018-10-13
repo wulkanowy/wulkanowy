@@ -14,6 +14,8 @@ data class Student(
 
         var endpoint: String,
 
+        var loginType: String,
+
         var email: String,
 
         var password: String,
