@@ -45,7 +45,7 @@ class AttendancePresenter @Inject constructor(
     }
 
     fun onViewReselected() {
-        loadData(now().nextOrSameSchoolDay)
+        loadData(now().previousOrSameSchoolDay)
         reloadView()
     }
 

@@ -43,6 +43,7 @@ inline val Grade.colorStringId: Int
             "F04C4C" -> R.string.all_red
             "20A4F7" -> R.string.all_blue
             "6ECD07" -> R.string.all_green
+            "B16CF1" -> R.string.all_purple
             else -> R.string.all_empty_color
         }
     }

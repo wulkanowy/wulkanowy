@@ -85,6 +85,15 @@ class TimeExtensionTest {
     }
 
     @Test
+    fun previousOrSameSchoolDayTest() {
+        assertEquals(LocalDate.of(2018, 9, 28), LocalDate.of(2018, 9, 28).previousOrSameSchoolDay)
+        assertEquals(LocalDate.of(2018, 9, 28), LocalDate.of(2018, 9, 29).previousOrSameSchoolDay)
+        assertEquals(LocalDate.of(2018, 9, 28), LocalDate.of(2018, 9, 30).previousOrSameSchoolDay)
+        assertEquals(LocalDate.of(2018, 10, 1), LocalDate.of(2018, 10, 1).previousOrSameSchoolDay)
+        assertEquals(LocalDate.of(2018, 10, 2), LocalDate.of(2018, 10, 2).previousOrSameSchoolDay)
+    }
+
+    @Test
     fun isHolidays_schoolEndTest() {
         assertFalse(LocalDate.of(2017, 6, 23).isHolidays)
         assertFalse(LocalDate.of(2018, 6, 22).isHolidays)
