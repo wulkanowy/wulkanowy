@@ -26,7 +26,7 @@ class AttendancePresenter @Inject constructor(
     fun onAttachView(view: AttendanceView, date: Long?) {
         super.onAttachView(view)
         view.initView()
-        loadData(ofEpochDay(date ?: now().nextOrSameSchoolDay.toEpochDay()))
+        loadData(ofEpochDay(date ?: now().previousOrSameSchoolDay.toEpochDay()))
         reloadView()
     }
 

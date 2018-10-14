@@ -52,6 +52,14 @@ inline val LocalDate.nextOrSameSchoolDay: LocalDate
         }
     }
 
+inline val LocalDate.previousOrSameSchoolDay: LocalDate
+    get() {
+        return when (this.dayOfWeek) {
+            SATURDAY, SUNDAY -> this.with(previous(FRIDAY))
+            else -> this
+        }
+    }
+
 inline val LocalDate.weekDayName: String
     get() = this.format(ofPattern("EEEE", Locale.getDefault()))
 

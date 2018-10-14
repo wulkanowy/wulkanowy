@@ -10,9 +10,6 @@ import java.io.Serializable
 @Entity(tableName = "Timetable")
 data class Timetable(
 
-        @PrimaryKey(autoGenerate = true)
-        var id: Long = 0,
-
         @ColumnInfo(name = "student_id")
         var studentId: String,
 
@@ -40,4 +37,8 @@ data class Timetable(
         val changes: Boolean = false,
 
         val canceled: Boolean = false
-) : Serializable
+) : Serializable {
+
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
+}
