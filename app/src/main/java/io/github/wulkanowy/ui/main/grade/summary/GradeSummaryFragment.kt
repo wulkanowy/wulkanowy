@@ -33,6 +33,7 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        messageContainer = gradeSummaryRecycler
         presenter.onAttachView(this)
     }
 

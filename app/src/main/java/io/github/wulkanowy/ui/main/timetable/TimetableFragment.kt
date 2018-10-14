@@ -35,6 +35,7 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MenuFragmentVi
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        messageContainer = timetableRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }
 

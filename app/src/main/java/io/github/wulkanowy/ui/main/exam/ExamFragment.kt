@@ -35,6 +35,7 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MenuFragmentView {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        messageContainer = examRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }
 

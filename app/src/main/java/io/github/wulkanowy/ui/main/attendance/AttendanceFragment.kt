@@ -35,6 +35,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MenuFragment
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        messageContainer = attendanceRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }
 
