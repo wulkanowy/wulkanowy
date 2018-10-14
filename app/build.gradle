@@ -57,10 +57,6 @@ android {
             multiDexKeepProguard file('proguard-multidex-rules.pro')
         }
     }
-
-    testOptions {
-        unitTests.returnDefaultValues = true
-    }
 }
 
 androidExtensions {

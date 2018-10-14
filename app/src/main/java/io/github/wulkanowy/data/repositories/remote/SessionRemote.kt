@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.remote
 
-import android.webkit.URLUtil
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -58,7 +57,7 @@ class SessionRemote @Inject constructor(private val api: Api) {
                 password = student.password
                 symbol = student.symbol
                 host = URL(student.endpoint).run { host + ":$port".removeSuffix(":-1") }
-                ssl = URLUtil.isHttpsUrl(student.endpoint)
+                ssl = student.endpoint.startsWith("https")
                 schoolId = student.schoolId
                 studentId = student.studentId
                 loginType = Api.LoginType.valueOf(student.loginType)

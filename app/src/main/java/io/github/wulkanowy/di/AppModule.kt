@@ -22,5 +22,5 @@ internal class AppModule {
     fun provideSchedulers(): SchedulersManager = SchedulersProvider()
 
     @Provides
-    fun provideFlexibleAdapter() = FlexibleAdapter<AbstractFlexibleItem<*>>(null, null, false)
+    fun provideFlexibleAdapter() = FlexibleAdapter<AbstractFlexibleItem<*>>(null, null, true)
 }
