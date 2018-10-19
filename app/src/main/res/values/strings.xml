@@ -127,8 +127,8 @@
 
     <string name="pref_about_description">About Wulkanowy</string>
     <string name="pref_about_version">Version</string>
-    <string name="pref_about_osl">Open source licences</string>
-    <string name="pref_about_osl_summary">License details for open source software</string>
+    <string name="pref_about_libraries">Open source libraries</string>
+    <string name="pref_about_libraries_summary">Libraries details for open source software</string>
     <string name="pref_about_support">Source code &amp; feedback</string>
 
     <string name="about_programmer_step1">No, you will not become a programmer!</string>
@@ -140,7 +140,7 @@
 
 
     <!--Grade notify-->
-    <string name="notify_grade_chanell">New grades</string>
+    <string name="notify_grade_chanel">New grades</string>
     <plurals name="notify_grade_new_items">
         <item quantity="one">You received %1$d grade</item>
         <item quantity="other">You received %1$d grades</item>

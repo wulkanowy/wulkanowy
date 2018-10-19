@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
@@ -27,9 +28,9 @@ class MainActivity : BaseActivity(), MainView {
     @Inject
     lateinit var navController: FragNavController
 
-    companion object {
-        const val DEFAULT_TAB = 2
+    private var startTab = 2
 
+    companion object {
         fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
 
@@ -40,7 +41,7 @@ class MainActivity : BaseActivity(), MainView {
         messageContainer = mainFragmentContainer
 
         presenter.onAttachView(this)
-        navController.initialize(DEFAULT_TAB, savedInstanceState)
+        navController.initialize(startTab, savedInstanceState)
     }
 
     override fun onStart() {
@@ -60,7 +61,7 @@ class MainActivity : BaseActivity(), MainView {
             accentColor = ContextCompat.getColor(context, R.color.colorPrimary)
             inactiveColor = ContextCompat.getColor(context, android.R.color.black)
             titleState = AHBottomNavigation.TitleState.ALWAYS_SHOW
-            currentItem = DEFAULT_TAB
+            currentItem = startTab
             isBehaviorTranslationEnabled = false
             setTitleTextSizeInSp(10f, 10f)
 
@@ -102,6 +103,10 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun notifyMenuViewReselected() {
         (navController.currentFrag as? MainView.MenuFragmentView)?.onFragmentReselected()
+    }
+
+    fun pushFragment(fragment: Fragment) {
+        navController.pushFragment(fragment)
     }
 
     override fun onBackPressed() {

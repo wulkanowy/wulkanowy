@@ -11,6 +11,9 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.main.MainActivity
+import io.github.wulkanowy.ui.main.settings.SettingsFragment
+import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_more.*
 import javax.inject.Inject
 
@@ -36,6 +39,8 @@ class MoreFragment : BaseFragment(), MoreView {
     }
 
     override fun initView() {
+        moreAdapter.run { setOnItemClickListener { presenter.onItemSelected(getItem(it)) } }
+
         moreRecycler.apply {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = moreAdapter
@@ -44,6 +49,10 @@ class MoreFragment : BaseFragment(), MoreView {
 
     override fun updateData(data: List<MoreItem>) {
         moreAdapter.updateDataSet(data)
+    }
+
+    override fun openSettingsView() {
+        (activity as? MainActivity)?.pushFragment(SettingsFragment.newInstance())
     }
 
     override fun settingsRes(): Pair<String, Drawable?>? {

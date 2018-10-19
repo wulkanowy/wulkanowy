@@ -9,5 +9,7 @@ interface MoreView : BaseView {
 
     fun updateData(data: List<MoreItem>)
 
+    fun openSettingsView()
+
     fun settingsRes(): Pair<String, Drawable?>?
 }

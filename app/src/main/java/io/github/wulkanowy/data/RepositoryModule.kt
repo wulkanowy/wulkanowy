@@ -17,7 +17,7 @@ internal class RepositoryModule {
     @Singleton
     @Provides
     fun provideInternetObservingSettings(): InternetObservingSettings {
-        return InternetObservingSettings
+        return InternetObservingSettings.builder()
                 .strategy(SocketInternetObservingStrategy())
                 .host("www.google.com")
                 .build()
