@@ -13,6 +13,7 @@ import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.di.Provider
 import io.github.wulkanowy.utils.friday
+import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -52,6 +53,8 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
         val monday = LocalDate.now().monday
         val friday = LocalDate.now().friday
 
+        if (monday.isHolidays) return Result.FAILURE
+
         return try {
             session.getSemesters()
                 .map { it.single { semester -> semester.current } }
@@ -67,7 +70,7 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
 
             Timber.d("Synchronization successful")
 
-            Result.RETRY
+            Result.SUCCESS
         } catch (e: Exception) {
             Timber.d("Synchronization failed: ${e.localizedMessage}")
             Result.RETRY

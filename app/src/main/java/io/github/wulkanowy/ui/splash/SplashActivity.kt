@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.splash
 
 import android.os.Bundle
-import io.github.wulkanowy.services.ServiceManager
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.login.LoginActivity
 import io.github.wulkanowy.ui.main.MainActivity
@@ -23,7 +22,6 @@ class SplashActivity : BaseActivity(), SplashView {
     }
 
     override fun openMainView() {
-        ServiceManager().start()
         startActivity(MainActivity.getStartIntent(this))
         finish()
     }

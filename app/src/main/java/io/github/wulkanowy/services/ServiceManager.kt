@@ -9,21 +9,15 @@ import java.util.concurrent.TimeUnit
 
 class ServiceManager {
 
-    private val jobTag = "SyncJob"
-
-    private val interval = 15L
-
-    private val useOnlyWifi = true
-
-    fun start() {
+    fun start(interval: Int, useOnlyWifi: Boolean) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(if (useOnlyWifi) NetworkType.NOT_ROAMING else NetworkType.CONNECTED)
             .build()
 
-        val uploadWork = PeriodicWorkRequestBuilder<SyncWorker>(interval, TimeUnit.MINUTES)
-            .setConstraints(constraints)
-            .addTag(jobTag)
-            .build()
-        WorkManager.getInstance().enqueueUniquePeriodicWork(jobTag, ExistingPeriodicWorkPolicy.KEEP, uploadWork)
+        val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(interval.toLong(), TimeUnit.MINUTES)
+            .setConstraints(constraints).build()
+
+        WorkManager.getInstance()
+            .enqueueUniquePeriodicWork("SyncJob", ExistingPeriodicWorkPolicy.KEEP, syncWork)
     }
 }

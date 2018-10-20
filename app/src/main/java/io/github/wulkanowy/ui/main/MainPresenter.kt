@@ -1,7 +1,10 @@
 package io.github.wulkanowy.ui.main
 
 import io.github.wulkanowy.data.ErrorHandler
+import io.github.wulkanowy.services.ServiceManager
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.utils.isHolidays
+import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
@@ -10,6 +13,8 @@ class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
     override fun onAttachView(view: MainView) {
         super.onAttachView(view)
         view.initView()
+
+        if (!LocalDate.now().isHolidays) ServiceManager().start(15, true)
     }
 
     fun onStartView() {
