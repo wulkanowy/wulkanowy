@@ -116,7 +116,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         GradeDetailsDialog.newInstance(grade).show(fragmentManager, grade.toString())
     }
 
-    override fun onParentLoadData(semesterId: String, forceRefresh: Boolean) {
+    override fun onParentLoadData(semesterId: Int, forceRefresh: Boolean) {
         presenter.onParentViewLoadData(semesterId, forceRefresh)
     }
 
@@ -128,7 +128,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         presenter.onParentViewChangeSemester()
     }
 
-    override fun notifyParentDataLoaded(semesterId: String) {
+    override fun notifyParentDataLoaded(semesterId: Int) {
         (parentFragment as? GradeFragment)?.onChildFragmentLoaded(semesterId)
     }
 

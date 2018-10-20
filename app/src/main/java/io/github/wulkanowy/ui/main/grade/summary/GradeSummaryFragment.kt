@@ -88,7 +88,7 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
         gradeSummarySwipe.isRefreshing = show
     }
 
-    override fun onParentLoadData(semesterId: String, forceRefresh: Boolean) {
+    override fun onParentLoadData(semesterId: Int, forceRefresh: Boolean) {
         presenter.onParentViewLoadData(semesterId, forceRefresh)
     }
 
@@ -100,7 +100,7 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
         presenter.onParentViewChangeSemester()
     }
 
-    override fun notifyParentDataLoaded(semesterId: String) {
+    override fun notifyParentDataLoaded(semesterId: Int) {
         (parentFragment as? GradeFragment)?.onChildFragmentLoaded(semesterId)
     }
 

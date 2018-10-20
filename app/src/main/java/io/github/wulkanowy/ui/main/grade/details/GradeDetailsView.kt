@@ -36,7 +36,7 @@ interface GradeDetailsView : BaseView {
 
     fun showRefresh(show: Boolean)
 
-    fun notifyParentDataLoaded(semesterId: String)
+    fun notifyParentDataLoaded(semesterId: Int)
 
     fun notifyParentRefresh()
 
