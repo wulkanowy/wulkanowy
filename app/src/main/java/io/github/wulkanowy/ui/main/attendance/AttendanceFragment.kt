@@ -29,6 +29,9 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MenuFragment
         fun newInstance() = AttendanceFragment()
     }
 
+    override val isViewEmpty: Boolean
+        get() = attendanceAdapter.isEmpty
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_attendance, container, false)
     }
@@ -64,8 +67,6 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MenuFragment
     override fun clearData() {
         attendanceAdapter.clear()
     }
-
-    override fun isViewEmpty() = attendanceAdapter.isEmpty
 
     override fun onFragmentReselected() {
         presenter.onViewReselected()

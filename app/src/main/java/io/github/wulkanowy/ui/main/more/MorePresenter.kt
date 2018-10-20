@@ -21,6 +21,6 @@ class MorePresenter @Inject constructor(errorHandler: ErrorHandler)
     }
 
     private fun loadData() {
-        view?.run { settingsRes()?.let { updateData(listOf(MoreItem(it.first, it.second))) } }
+        view?.run { settingsRes?.let { updateData(listOf(MoreItem(it.first, it.second))) } }
     }
 }

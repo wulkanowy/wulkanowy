@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.main
 
 import io.github.wulkanowy.data.ErrorHandler
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -13,6 +14,9 @@ class MainPresenterTest {
     lateinit var errorHandler: ErrorHandler
 
     @Mock
+    lateinit var prefRepository: PreferencesRepository
+
+    @Mock
     lateinit var mainView: MainView
 
     private lateinit var presenter: MainPresenter
@@ -22,7 +26,7 @@ class MainPresenterTest {
         MockitoAnnotations.initMocks(this)
         clearInvocations(mainView)
 
-        presenter = MainPresenter(errorHandler)
+        presenter = MainPresenter(errorHandler, prefRepository)
         presenter.onAttachView(mainView)
     }
 
@@ -39,7 +43,7 @@ class MainPresenterTest {
 
     @Test
     fun onMenuFragmentChangeTest() {
-        doReturn("Test").`when`(mainView).viewTitle(1)
+        doReturn("Test").`when`(mainView).getViewTitle(1)
         presenter.onMenuViewChange(1)
         verify(mainView).setViewTitle("Test")
     }

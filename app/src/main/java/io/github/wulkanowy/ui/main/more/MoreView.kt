@@ -5,11 +5,11 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface MoreView : BaseView {
 
+    val settingsRes: Pair<String, Drawable?>?
+
     fun initView()
 
     fun updateData(data: List<MoreItem>)
 
     fun openSettingsView()
-
-    fun settingsRes(): Pair<String, Drawable?>?
 }

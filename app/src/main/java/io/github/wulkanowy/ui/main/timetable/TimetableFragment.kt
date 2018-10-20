@@ -29,6 +29,9 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MenuFragmentVi
         fun newInstance() = TimetableFragment()
     }
 
+    override val roomString: String
+        get() = getString(R.string.timetable_room)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_timetable, container, false)
     }
@@ -98,8 +101,6 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MenuFragmentVi
     override fun showTimetableDialog(lesson: Timetable) {
         TimetableDialog.newInstance(lesson).show(fragmentManager, lesson.toString())
     }
-
-    override fun roomString() = getString(R.string.timetable_room)
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

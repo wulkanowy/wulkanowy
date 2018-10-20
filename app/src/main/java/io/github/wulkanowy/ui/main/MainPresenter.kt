@@ -13,17 +13,17 @@ class MainPresenter @Inject constructor(
     override fun onAttachView(view: MainView) {
         super.onAttachView(view)
         view.run {
-            setStartMenuIndex(prefRepository.startMenuIndex)
+            startMenuIndex = prefRepository.startMenuIndex
             initView()
         }
     }
 
     fun onStartView() {
-        view?.run { setViewTitle(viewTitle(currentMenuIndex())) }
+        view?.run { setViewTitle(getViewTitle(currentMenuIndex)) }
     }
 
     fun onMenuViewChange(index: Int) {
-        view?.run { setViewTitle(viewTitle(index)) }
+        view?.run { setViewTitle(getViewTitle(index)) }
     }
 
     fun onTabSelected(index: Int, wasSelected: Boolean): Boolean {

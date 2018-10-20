@@ -26,8 +26,12 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MenuFragmentView {
 
     companion object {
         private const val SAVED_DATE_KEY = "CURRENT_DATE"
+
         fun newInstance() = ExamFragment()
     }
+
+    override val isViewEmpty: Boolean
+        get() = examAdapter.isEmpty
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_exam, container, false)
@@ -67,8 +71,6 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MenuFragmentView {
     override fun clearData() {
         examAdapter.clear()
     }
-
-    override fun isViewEmpty() = examAdapter.isEmpty
 
     override fun onFragmentReselected() {
         presenter.onViewReselected()

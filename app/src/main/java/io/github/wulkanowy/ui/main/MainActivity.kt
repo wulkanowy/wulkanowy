@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigation.TitleState.ALWAYS_SHOW
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.DETACH_ON_NAVIGATE_HIDE_ON_SWITCH
@@ -28,11 +28,14 @@ class MainActivity : BaseActivity(), MainView {
     @Inject
     lateinit var navController: FragNavController
 
-    private var startMenuIndex = 0
-
     companion object {
         fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
+
+    override var startMenuIndex = 0
+
+    override val currentMenuIndex: Int
+        get() = navController.currentStackIndex
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,11 +63,10 @@ class MainActivity : BaseActivity(), MainView {
             ))
             accentColor = ContextCompat.getColor(context, R.color.colorPrimary)
             inactiveColor = ContextCompat.getColor(context, android.R.color.black)
-            titleState = AHBottomNavigation.TitleState.ALWAYS_SHOW
+            titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false
             setTitleTextSizeInSp(10f, 10f)
-
             setOnTabSelectedListener { position, wasSelected ->
                 presenter.onTabSelected(position, wasSelected)
             }
@@ -91,7 +93,7 @@ class MainActivity : BaseActivity(), MainView {
         supportActionBar?.title = title
     }
 
-    override fun viewTitle(index: Int): String {
+    override fun getViewTitle(index: Int): String {
         return getString(listOf(R.string.grade_title,
                 R.string.attendance_title,
                 R.string.exam_title,
@@ -99,18 +101,12 @@ class MainActivity : BaseActivity(), MainView {
                 R.string.more_title)[index])
     }
 
-    override fun currentMenuIndex() = navController.currentStackIndex
-
     override fun notifyMenuViewReselected() {
         (navController.currentFrag as? MainView.MenuFragmentView)?.onFragmentReselected()
     }
 
     fun pushFragment(fragment: Fragment) {
         navController.pushFragment(fragment)
-    }
-
-    override fun setStartMenuIndex(index: Int) {
-        startMenuIndex = index
     }
 
     override fun onBackPressed() {

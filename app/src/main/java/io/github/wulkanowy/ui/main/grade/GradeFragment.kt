@@ -29,6 +29,9 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MenuFragmentView {
         fun newInstance() = GradeFragment()
     }
 
+    override val currentPageIndex: Int
+        get() = gradeViewPager.currentItem
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -92,8 +95,6 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MenuFragmentView {
             }
         }
     }
-
-    override fun currentPageIndex() = gradeViewPager.currentItem
 
     fun onChildRefresh() {
         presenter.onChildViewRefresh()

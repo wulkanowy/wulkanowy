@@ -29,6 +29,14 @@ class MoreFragment : BaseFragment(), MoreView {
         fun newInstance() = MoreFragment()
     }
 
+    override val settingsRes: Pair<String, Drawable?>?
+        get() {
+            return context?.run {
+                getString(R.string.settings_title) to
+                        ContextCompat.getDrawable(this, R.drawable.ic_more_settings_24dp)
+            }
+        }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_more, container, false)
     }
@@ -53,12 +61,5 @@ class MoreFragment : BaseFragment(), MoreView {
 
     override fun openSettingsView() {
         (activity as? MainActivity)?.pushFragment(SettingsFragment.newInstance())
-    }
-
-    override fun settingsRes(): Pair<String, Drawable?>? {
-        return context?.run {
-            getString(R.string.settings_title) to
-                    ContextCompat.getDrawable(this, R.drawable.ic_more_settings_24dp)
-        }
     }
 }
