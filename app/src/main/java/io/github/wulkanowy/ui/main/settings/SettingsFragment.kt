@@ -2,7 +2,7 @@ package io.github.wulkanowy.ui.main.settings
 
 import android.os.Bundle
 import com.mikepenz.aboutlibraries.LibsBuilder
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat
+import com.takisoft.preferencex.PreferenceFragmentCompat
 import io.github.wulkanowy.BuildConfig.VERSION_NAME
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.main.MainActivity
