@@ -26,7 +26,7 @@ interface GradeSummaryView : BaseView {
 
     fun showEmpty(show: Boolean)
 
-    fun notifyParentDataLoaded(semesterId: String)
+    fun notifyParentDataLoaded(index: Int)
 
     fun notifyParentRefresh()
 }
