@@ -2,7 +2,7 @@ package io.github.wulkanowy.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.support.v7.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy
 import dagger.Module
