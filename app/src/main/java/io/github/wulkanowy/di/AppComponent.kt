@@ -5,6 +5,7 @@ import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import io.github.wulkanowy.WulkanowyApp
 import io.github.wulkanowy.data.RepositoryModule
+import io.github.wulkanowy.services.SyncWorker
 import javax.inject.Singleton
 
 @Singleton
@@ -14,6 +15,9 @@ import javax.inject.Singleton
     RepositoryModule::class,
     BuilderModule::class])
 interface AppComponent : AndroidInjector<WulkanowyApp> {
+
+    fun inject(uploadWorker: SyncWorker)
+
     @Component.Builder
     abstract class Builder : AndroidInjector.Builder<WulkanowyApp>()
 }
