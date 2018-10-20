@@ -5,7 +5,7 @@
             android:defaultValue="0"
             android:entries="@array/startup_tab_entries"
             android:entryValues="@array/startup_tab_value"
-            android:key="startup_menu"
+            android:key="start_menu"
             android:summary="%s"
             android:title="@string/pref_view_list" />
         <SwitchPreference

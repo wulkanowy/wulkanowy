@@ -10,10 +10,6 @@ import io.github.wulkanowy.ui.main.MainActivity
 class SettingsFragment : PreferenceFragmentCompat() {
 
     companion object {
-        const val PREF_KEY_DEFAULT_VIEW = "startup_menu"
-
-        const val PREF_KEY_SHOW_PRESENT = "attendance_present"
-
         fun newInstance() = SettingsFragment()
     }
 

@@ -28,7 +28,7 @@ class MainActivity : BaseActivity(), MainView {
     @Inject
     lateinit var navController: FragNavController
 
-    private var startTab = 2
+    private var startMenuIndex = 0
 
     companion object {
         fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
@@ -41,7 +41,7 @@ class MainActivity : BaseActivity(), MainView {
         messageContainer = mainFragmentContainer
 
         presenter.onAttachView(this)
-        navController.initialize(startTab, savedInstanceState)
+        navController.initialize(startMenuIndex, savedInstanceState)
     }
 
     override fun onStart() {
@@ -61,7 +61,7 @@ class MainActivity : BaseActivity(), MainView {
             accentColor = ContextCompat.getColor(context, R.color.colorPrimary)
             inactiveColor = ContextCompat.getColor(context, android.R.color.black)
             titleState = AHBottomNavigation.TitleState.ALWAYS_SHOW
-            currentItem = startTab
+            currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false
             setTitleTextSizeInSp(10f, 10f)
 
@@ -107,6 +107,10 @@ class MainActivity : BaseActivity(), MainView {
 
     fun pushFragment(fragment: Fragment) {
         navController.pushFragment(fragment)
+    }
+
+    override fun setStartMenuIndex(index: Int) {
+        startMenuIndex = index
     }
 
     override fun onBackPressed() {

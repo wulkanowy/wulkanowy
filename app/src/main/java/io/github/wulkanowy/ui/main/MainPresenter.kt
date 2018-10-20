@@ -1,15 +1,21 @@
 package io.github.wulkanowy.ui.main
 
 import io.github.wulkanowy.data.ErrorHandler
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import javax.inject.Inject
 
-class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
+class MainPresenter @Inject constructor(
+        errorHandler: ErrorHandler,
+        private val prefRepository: PreferencesRepository)
     : BasePresenter<MainView>(errorHandler) {
 
     override fun onAttachView(view: MainView) {
         super.onAttachView(view)
-        view.initView()
+        view.run {
+            setStartMenuIndex(prefRepository.startMenuIndex)
+            initView()
+        }
     }
 
     fun onStartView() {

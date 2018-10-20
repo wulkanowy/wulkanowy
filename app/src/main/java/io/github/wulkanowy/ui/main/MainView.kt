@@ -16,6 +16,8 @@ interface MainView : BaseView {
 
     fun notifyMenuViewReselected()
 
+    fun setStartMenuIndex(index: Int)
+
     interface MenuFragmentView {
 
         fun onFragmentReselected()
