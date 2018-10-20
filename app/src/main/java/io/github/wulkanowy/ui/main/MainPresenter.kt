@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.main
 
 import io.github.wulkanowy.data.ErrorHandler
-import io.github.wulkanowy.services.ServiceManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.isHolidays
 import org.threeten.bp.LocalDate
@@ -14,7 +13,7 @@ class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
         super.onAttachView(view)
         view.initView()
 
-        if (!LocalDate.now().isHolidays) ServiceManager().start(15, true)
+        if (!LocalDate.now().isHolidays) view.startSyncService(15, true)
     }
 
     fun onStartView() {

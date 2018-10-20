@@ -20,4 +20,6 @@ interface MainView : BaseView {
 
         fun onFragmentReselected()
     }
+
+    fun startSyncService(interval: Int, useOnlyWifi: Boolean)
 }
