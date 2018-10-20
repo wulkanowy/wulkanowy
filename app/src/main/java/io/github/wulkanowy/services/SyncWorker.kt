@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
@@ -15,11 +14,9 @@ import io.github.wulkanowy.di.Provider
 import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
-import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import timber.log.Timber
-import java.io.Serializable
 import javax.inject.Inject
 
 class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(context, workerParameters) {
@@ -50,23 +47,37 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
     override fun doWork(): Result {
         Timber.d("Synchronization started")
 
-        val monday = LocalDate.now().monday
-        val friday = LocalDate.now().friday
+        val start = LocalDate.now().monday
+        val end = LocalDate.now().friday
 
-        if (monday.isHolidays) return Result.FAILURE
+        if (start.isHolidays) return Result.FAILURE
+
+        var error: Throwable? = null
 
         return try {
-            session.getSemesters()
+            session.getSemesters(true)
                 .map { it.single { semester -> semester.current } }
-                .map {
+                .flatMapPublisher {
                     Single.merge(
-                        gradesDetails.getGrades(it, true),
-                        gradesSummary.getGradesSummary(it, true)
-                    ).subscribe()
+                        listOf(
+                            gradesDetails.getGrades(it, true),
+                            gradesDetails.getGrades(it, true),
+                            gradesSummary.getGradesSummary(it, true),
+                            attendance.getAttendance(it, start, end, true),
+                            attendance.getAttendance(it, start.plusDays(7), end.plusDays(7), true),
+                            exam.getExams(it, start, end, true),
+                            exam.getExams(it, start.plusDays(7), end.plusDays(7), true),
+                            timetable.getTimetable(it, start, end, true),
+                            timetable.getTimetable(it, start.plusDays(7), end.plusDays(7), true)
+                        )
+                    )
 
-                    syncByWeek(it, monday, friday).subscribe()
-                    syncByWeek(it, monday.plusDays(7), friday.plusDays(7)).subscribe()
-                }.blockingGet()
+                }
+                .subscribe({}, { error = it })
+
+            if (null !== error) {
+                throw error!!
+            }
 
             Timber.d("Synchronization successful")
 
@@ -75,13 +86,5 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
             Timber.d("Synchronization failed: ${e.localizedMessage}")
             Result.RETRY
         }
-    }
-
-    private fun syncByWeek(semester: Semester, start: LocalDate, end: LocalDate): Flowable<List<Serializable>> {
-        return Single.merge(
-            attendance.getAttendance(semester, start, end, true),
-            exam.getExams(semester, start, end, true),
-            timetable.getTimetable(semester, start, end, true)
-        )
     }
 }

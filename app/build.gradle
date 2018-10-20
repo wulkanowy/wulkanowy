@@ -73,7 +73,7 @@ ext.work_version = "1.0.0-alpha10"
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation('com.github.wulkanowy:api:1400211f0d') { exclude module: "threetenbp" }
+    implementation('com.github.wulkanowy:api:e829b094de') { exclude module: "threetenbp" }
 
     implementation "androidx.legacy:legacy-support-v4:$androidx_version"
     implementation "androidx.appcompat:appcompat:$androidx_version"
