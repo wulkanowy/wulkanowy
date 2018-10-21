@@ -15,6 +15,10 @@ class GradeLocal @Inject constructor(private val gradeDb: GradeDao) {
         return gradeDb.getGrades(semester.semesterId, semester.studentId).filter { !it.isEmpty() }
     }
 
+    fun getNewGrades(): Maybe<List<Grade>> {
+        return gradeDb.getNewGrades()
+    }
+
     fun saveGrades(grades: List<Grade>) {
         gradeDb.insertAll(grades)
     }

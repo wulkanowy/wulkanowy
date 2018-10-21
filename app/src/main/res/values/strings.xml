@@ -140,7 +140,7 @@
 
 
     <!--Grade notify-->
-    <string name="notify_grade_chanell">New grades</string>
+    <string name="notify_grade_channel">New grades</string>
     <plurals name="notify_grade_new_items">
         <item quantity="one">You received %1$d grade</item>
         <item quantity="other">You received %1$d grades</item>

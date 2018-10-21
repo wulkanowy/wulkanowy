@@ -7,6 +7,7 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.local.GradeLocal
 import io.github.wulkanowy.data.repositories.remote.GradeRemote
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -34,6 +35,10 @@ class GradeRepository @Inject constructor(
                                     }
                         }.flatMap { local.getGrades(semester).toSingle(emptyList()) })
 
+    }
+
+    fun getNewGrades(): Maybe<List<Grade>> {
+        return local.getNewGrades()
     }
 
     fun updateGrade(grade: Grade): Completable {

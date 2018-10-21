@@ -145,7 +145,7 @@
 
 
     <!--Grade notify-->
-    <string name="notify_grade_chanell">Nowe oceny</string>
+    <string name="notify_grade_channel">Nowe oceny</string>
     <plurals name="notify_grade_new_items">
         <item quantity="one">Dostałeś %1$d ocenę</item>
         <item quantity="few">"Dostałeś %1$d oceny</item>

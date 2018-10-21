@@ -11,6 +11,7 @@ import io.github.wulkanowy.data.repositories.GradeSummaryRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.di.Provider
+import io.github.wulkanowy.services.notification.GradeNotification
 import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
@@ -70,8 +71,8 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
                             timetable.getTimetable(it, start.plusDays(7), end.plusDays(7), true)
                         )
                     )
-
                 }
+                .doFinally { sendNotifications() }
                 .subscribe({}, { error = it })
 
             if (null !== error) {
@@ -85,5 +86,18 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
             Timber.d("Synchronization failed: ${e.localizedMessage}")
             Result.RETRY
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private fun sendNotifications() {
+        Timber.d("Search for notification to send")
+        gradesDetails.getNewGrades().subscribe {
+            val notify = GradeNotification(applicationContext)
+            it.map { grade ->
+                Timber.d("New grade id: ${grade.id}")
+                notify.sendNotification(grade.subject, "${grade.gradeSymbol + (", " +  grade.description).removeSuffix(", ")}: ${grade.entry}")
+            }
+        }
+        Timber.d("All pending notifications sent")
     }
 }
