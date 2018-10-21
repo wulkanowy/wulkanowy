@@ -1,4 +1,4 @@
-package io.github.wulkanowy.services
+package io.github.wulkanowy.services.job
 
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -7,7 +7,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
-class ServiceManager {
+class JobManager {
 
     fun start(interval: Int, useOnlyWifi: Boolean) {
         val constraints = Constraints.Builder()

@@ -9,7 +9,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.DETACH_ON_NAVIGATE_HIDE_ON_SWITCH
 import io.github.wulkanowy.R
-import io.github.wulkanowy.services.ServiceManager
+import io.github.wulkanowy.services.job.JobManager
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.main.exam.ExamFragment
@@ -110,7 +110,7 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     override fun startSyncService(interval: Int, useOnlyWifi: Boolean) {
-        ServiceManager().start(interval, useOnlyWifi)
+        JobManager().start(interval, useOnlyWifi)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

@@ -1,4 +1,4 @@
-package io.github.wulkanowy.services
+package io.github.wulkanowy.services.job
 
 import android.annotation.SuppressLint
 import android.content.Context
