@@ -1,27 +1,48 @@
 package io.github.wulkanowy.ui.main
 
 import io.github.wulkanowy.data.ErrorHandler
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.isHolidays
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
-class MainPresenter @Inject constructor(errorHandler: ErrorHandler)
+class MainPresenter @Inject constructor(
+        errorHandler: ErrorHandler,
+        private val prefRepository: PreferencesRepository)
     : BasePresenter<MainView>(errorHandler) {
 
     override fun onAttachView(view: MainView) {
         super.onAttachView(view)
-        view.initView()
 
-        if (!LocalDate.now().isHolidays) view.startSyncService(15, true)
+        view.run {
+            startMenuIndex = prefRepository.startMenuIndex
+            initView()
+            if (!LocalDate.now().isHolidays) startSyncService(15, true)
+        }
     }
 
-    fun onStartView() {
-        view?.run { setViewTitle(viewTitle(currentMenuIndex())) }
+    fun onViewStart() {
+        view?.apply {
+            currentViewTitle?.let { setViewTitle(it) }
+            currentStackSize?.let {
+                if (it > 1) showHomeArrow(true)
+                else showHomeArrow(false)
+            }
+        }
     }
 
-    fun onMenuViewChange(index: Int) {
-        view?.run { setViewTitle(viewTitle(index)) }
+    fun onUpNavigate(): Boolean {
+        view?.popView()
+        return true
+    }
+
+
+    fun onBackPressed(default: () -> Unit) {
+        view?.run {
+            if (isRootView) default()
+            else popView()
+        }
     }
 
     fun onTabSelected(index: Int, wasSelected: Boolean): Boolean {

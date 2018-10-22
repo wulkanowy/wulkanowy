@@ -4,22 +4,35 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface MainView : BaseView {
 
+    var startMenuIndex: Int
+
+    val isRootView: Boolean
+
+    val currentViewTitle: String?
+
+    val currentStackSize: Int?
+
     fun initView()
 
     fun switchMenuView(position: Int)
 
-    fun setViewTitle(title: String)
-
-    fun viewTitle(index: Int): String
-
-    fun currentMenuIndex(): Int
+    fun showHomeArrow(show: Boolean)
 
     fun notifyMenuViewReselected()
 
-    interface MenuFragmentView {
+    fun setViewTitle(title: String)
+  
+    fun startSyncService(interval: Int, useOnlyWifi: Boolean)
+
+    fun popView()
+
+    interface MainChildView {
 
         fun onFragmentReselected()
     }
 
-    fun startSyncService(interval: Int, useOnlyWifi: Boolean)
+    interface TitledView {
+
+        val titleStringId: Int
+    }
 }
