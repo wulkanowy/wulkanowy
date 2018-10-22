@@ -64,11 +64,8 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
                             gradesDetails.getGrades(it, true),
                             gradesSummary.getGradesSummary(it, true),
                             attendance.getAttendance(it, start, end, true),
-                            attendance.getAttendance(it, start.minusDays(7), end.minusDays(7), true),
                             exam.getExams(it, start, end, true),
-                            exam.getExams(it, start.plusDays(7), end.plusDays(7), true),
-                            timetable.getTimetable(it, start, end, true),
-                            timetable.getTimetable(it, start.plusDays(7), end.plusDays(7), true)
+                            timetable.getTimetable(it, start, end, true)
                         )
                     )
                 }
