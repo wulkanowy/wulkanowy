@@ -13,7 +13,5 @@
     <string name="library_WulkanowyApi_isOpenSource" translatable="false">true</string>
     <string name="library_WulkanowyApi_repositoryLink" translatable="false">https://github.com/wulkanowy/api</string>
 
-    <string name="library_WulkanowyApi_classPath" translatable="false">io.github.wulkanowy.api.Api</string>
-
     <string name="library_WulkanowyApi_licenseId" translatable="false">apache_2_0</string>
 </resources>

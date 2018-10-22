@@ -38,10 +38,10 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
                     .withLicenseShown(true)
                     .withAboutSpecial1(getString(R.string.about_source_code))
                     .withAboutSpecial2(getString(R.string.about_feedback))
-                    .withFields(R.string::class.java.fields)
-                    .withOnExtraListener { presenter.onExtraSelect(it) }
+                    .withCheckCachedDetection(false)
                     .withExcludedLibraries("fastadapter", "AndroidIconics", "gson",
-                            "Jsoup", "Retrofit", "okio", "OkHttp"))
+                            "Jsoup", "Retrofit", "okio", "OkHttp")
+                    .withOnExtraListener { presenter.onExtraSelect(it) })
         }.let {
             fragmentCompat.onCreateView(inflater.context, inflater, container, savedInstanceState, it)
         }
