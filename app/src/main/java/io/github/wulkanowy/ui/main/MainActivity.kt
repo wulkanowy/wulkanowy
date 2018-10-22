@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation.TitleState.ALWAYS_SHOW
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.ncapdevi.fragnav.FragNavController
-import com.ncapdevi.fragnav.FragNavController.Companion.DETACH_ON_NAVIGATE_HIDE_ON_SWITCH
+import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.main.attendance.AttendanceFragment
@@ -16,6 +16,7 @@ import io.github.wulkanowy.ui.main.exam.ExamFragment
 import io.github.wulkanowy.ui.main.grade.GradeFragment
 import io.github.wulkanowy.ui.main.more.MoreFragment
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment
+import io.github.wulkanowy.utils.safelyPopFragment
 import io.github.wulkanowy.utils.setOnViewChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -32,8 +33,14 @@ class MainActivity : BaseActivity(), MainView {
         fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
 
+    override val isRootView: Boolean
+        get() = navController.isRootFragment
+
     override val currentViewTitle: String?
         get() = (navController.currentFrag as? MainView.TitledView)?.titleStringId?.let { getString(it) }
+
+    override val currentStackSize: Int?
+        get() = navController.currentStack?.size
 
     override var startMenuIndex = 0
 
@@ -50,6 +57,10 @@ class MainActivity : BaseActivity(), MainView {
     override fun onStart() {
         super.onStart()
         presenter.onViewStart()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return presenter.onUpNavigate()
     }
 
     override fun initView() {
@@ -74,7 +85,7 @@ class MainActivity : BaseActivity(), MainView {
 
         navController.run {
             setOnViewChangeListener { presenter.onViewStart() }
-            fragmentHideStrategy = DETACH_ON_NAVIGATE_HIDE_ON_SWITCH
+            fragmentHideStrategy = HIDE
             rootFragments = listOf(
                     GradeFragment.newInstance(),
                     AttendanceFragment.newInstance(),
@@ -93,16 +104,24 @@ class MainActivity : BaseActivity(), MainView {
         supportActionBar?.title = title
     }
 
-    override fun notifyMenuViewReselected() {
-        (navController.currentFrag as? MainView.MainChildView)?.onFragmentReselected()
+    override fun showHomeArrow(show: Boolean) {
+        supportActionBar?.setDisplayHomeAsUpEnabled(show)
     }
 
-    fun pushFragment(fragment: Fragment) {
+    override fun notifyMenuViewReselected() {
+        (navController.currentStack?.get(0) as? MainView.MainChildView)?.onFragmentReselected()
+    }
+
+    fun pushView(fragment: Fragment) {
         navController.pushFragment(fragment)
     }
 
+    override fun popView() {
+        navController.safelyPopFragment()
+    }
+
     override fun onBackPressed() {
-        navController.apply { if (isRootFragment) super.onBackPressed() else popFragment() }
+        presenter.onBackPressed { super.onBackPressed() }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

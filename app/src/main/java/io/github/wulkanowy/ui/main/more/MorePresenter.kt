@@ -25,6 +25,10 @@ class MorePresenter @Inject constructor(errorHandler: ErrorHandler)
         }
     }
 
+    fun onViewReselected() {
+        view?.popView()
+    }
+
     private fun loadData() {
         view?.run {
             updateData(listOfNotNull(

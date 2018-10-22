@@ -14,3 +14,7 @@ inline fun FragNavController.setOnViewChangeListener(crossinline listener: (frag
         }
     }
 }
+
+fun FragNavController.safelyPopFragment() {
+    if (!isRootFragment) popFragment()
+}

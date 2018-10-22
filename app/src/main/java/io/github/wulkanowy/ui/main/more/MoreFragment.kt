@@ -19,7 +19,7 @@ import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_more.*
 import javax.inject.Inject
 
-class MoreFragment : BaseFragment(), MoreView, MainView.TitledView {
+class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.MainChildView {
 
     @Inject
     lateinit var presenter: MorePresenter
@@ -68,16 +68,24 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView {
         }
     }
 
+    override fun onFragmentReselected() {
+        presenter.onViewReselected()
+    }
+
     override fun updateData(data: List<MoreItem>) {
         moreAdapter.updateDataSet(data)
     }
 
     override fun openSettingsView() {
-        (activity as? MainActivity)?.pushFragment(SettingsFragment.newInstance())
+        (activity as? MainActivity)?.pushView(SettingsFragment.newInstance())
     }
 
     override fun openAboutView() {
-        (activity as? MainActivity)?.pushFragment(AboutFragment.newInstance())
+        (activity as? MainActivity)?.pushView(AboutFragment.newInstance())
+    }
+
+    override fun popView() {
+        (activity as? MainActivity)?.popView()
     }
 
     override fun onDestroyView() {

@@ -19,7 +19,26 @@ class MainPresenter @Inject constructor(
     }
 
     fun onViewStart() {
-        view?.apply { currentViewTitle?.let { setViewTitle(it) } }
+        view?.apply {
+            currentViewTitle?.let { setViewTitle(it) }
+            currentStackSize?.let {
+                if (it > 1) showHomeArrow(true)
+                else showHomeArrow(false)
+            }
+        }
+    }
+
+    fun onUpNavigate(): Boolean {
+        view?.popView()
+        return true
+    }
+
+
+    fun onBackPressed(default: () -> Unit) {
+        view?.run {
+            if (isRootView) default()
+            else popView()
+        }
     }
 
     fun onTabSelected(index: Int, wasSelected: Boolean): Boolean {

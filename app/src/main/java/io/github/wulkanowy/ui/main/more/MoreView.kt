@@ -16,4 +16,6 @@ interface MoreView : BaseView {
     fun openSettingsView()
 
     fun openAboutView()
+
+    fun popView()
 }
