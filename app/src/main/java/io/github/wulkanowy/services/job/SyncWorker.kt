@@ -92,7 +92,11 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
             val notify = GradeNotification(applicationContext)
             it.map { grade ->
                 Timber.d("New grade id: ${grade.id}")
-                notify.sendNotification(grade.subject, "${grade.gradeSymbol + (", " +  grade.description).removeSuffix(", ")}: ${grade.entry}")
+                notify.sendNotification(
+                    grade.id.toInt(),
+                    grade.subject,
+                    "${grade.gradeSymbol + (", " + grade.description).removeSuffix(", ")}: ${grade.entry}"
+                )
             }
         }
         Timber.d("All pending notifications sent")

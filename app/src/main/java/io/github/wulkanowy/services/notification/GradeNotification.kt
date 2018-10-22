@@ -13,23 +13,25 @@ import timber.log.Timber
 
 class GradeNotification(private val context: Context) : BaseNotification(context) {
 
-    override val channelId = "Grade_Notify"
+    private val channelId = "Grade_Notify"
 
     @TargetApi(26)
-    override fun createChannel() {
+    override fun createChannel(channelId: String) {
         getManager().createNotificationChannel(NotificationChannel(
             channelId, getString(R.string.notify_grade_channel),
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
+            description
             enableLights(true)
             enableVibration(true)
             lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         })
     }
 
-    fun sendNotification(title: String, content: String) {
+    fun sendNotification(id: Int, title: String, content: String) {
         notify(
-            notificationBuilder()
+            id = id,
+            notification = notificationBuilder(channelId)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_stat_notify_grade)
@@ -48,5 +50,9 @@ class GradeNotification(private val context: Context) : BaseNotification(context
         )
 
         Timber.d("Notification sent")
+    }
+
+    fun cancelNotification(id: Int) {
+        getManager().cancel(id)
     }
 }
