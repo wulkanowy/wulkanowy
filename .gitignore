@@ -48,3 +48,4 @@ Thumbs.db
 .idea/caches/
 ./app/key.p12
 ./app/upload-key.jks
+*.log
