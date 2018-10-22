@@ -12,12 +12,14 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.main.MainActivity
+import io.github.wulkanowy.ui.main.MainView
+import io.github.wulkanowy.ui.main.about.AboutFragment
 import io.github.wulkanowy.ui.main.settings.SettingsFragment
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_more.*
 import javax.inject.Inject
 
-class MoreFragment : BaseFragment(), MoreView {
+class MoreFragment : BaseFragment(), MoreView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: MorePresenter
@@ -29,11 +31,22 @@ class MoreFragment : BaseFragment(), MoreView {
         fun newInstance() = MoreFragment()
     }
 
+    override val titleStringId: Int
+        get() = R.string.more_title
+
     override val settingsRes: Pair<String, Drawable?>?
         get() {
             return context?.run {
                 getString(R.string.settings_title) to
                         ContextCompat.getDrawable(this, R.drawable.ic_more_settings_24dp)
+            }
+        }
+
+    override val aboutRes: Pair<String, Drawable?>?
+        get() {
+            return context?.run {
+                getString(R.string.about_title) to
+                        ContextCompat.getDrawable(this, R.drawable.ic_more_about_24dp)
             }
         }
 
@@ -61,5 +74,14 @@ class MoreFragment : BaseFragment(), MoreView {
 
     override fun openSettingsView() {
         (activity as? MainActivity)?.pushFragment(SettingsFragment.newInstance())
+    }
+
+    override fun openAboutView() {
+        (activity as? MainActivity)?.pushFragment(AboutFragment.newInstance())
+    }
+
+    override fun onDestroyView() {
+        presenter.onDetachView()
+        super.onDestroyView()
     }
 }

@@ -16,7 +16,7 @@ import io.github.wulkanowy.ui.main.exam.ExamFragment
 import io.github.wulkanowy.ui.main.grade.GradeFragment
 import io.github.wulkanowy.ui.main.more.MoreFragment
 import io.github.wulkanowy.ui.main.timetable.TimetableFragment
-import io.github.wulkanowy.utils.setOnTabTransactionListener
+import io.github.wulkanowy.utils.setOnViewChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -32,10 +32,10 @@ class MainActivity : BaseActivity(), MainView {
         fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
 
-    override var startMenuIndex = 0
+    override val currentViewTitle: String?
+        get() = (navController.currentFrag as? MainView.TitledView)?.titleStringId?.let { getString(it) }
 
-    override val currentMenuIndex: Int
-        get() = navController.currentStackIndex
+    override var startMenuIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,7 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun onStart() {
         super.onStart()
-        presenter.onStartView()
+        presenter.onViewStart()
     }
 
     override fun initView() {
@@ -73,7 +73,7 @@ class MainActivity : BaseActivity(), MainView {
         }
 
         navController.run {
-            setOnTabTransactionListener { presenter.onMenuViewChange(it) }
+            setOnViewChangeListener { presenter.onViewStart() }
             fragmentHideStrategy = DETACH_ON_NAVIGATE_HIDE_ON_SWITCH
             rootFragments = listOf(
                     GradeFragment.newInstance(),
@@ -93,16 +93,8 @@ class MainActivity : BaseActivity(), MainView {
         supportActionBar?.title = title
     }
 
-    override fun getViewTitle(index: Int): String {
-        return getString(listOf(R.string.grade_title,
-                R.string.attendance_title,
-                R.string.exam_title,
-                R.string.timetable_title,
-                R.string.more_title)[index])
-    }
-
     override fun notifyMenuViewReselected() {
-        (navController.currentFrag as? MainView.MenuFragmentView)?.onFragmentReselected()
+        (navController.currentFrag as? MainView.MainChildView)?.onFragmentReselected()
     }
 
     fun pushFragment(fragment: Fragment) {

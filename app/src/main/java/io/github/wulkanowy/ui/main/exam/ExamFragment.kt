@@ -16,7 +16,7 @@ import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_exam.*
 import javax.inject.Inject
 
-class ExamFragment : BaseFragment(), ExamView, MainView.MenuFragmentView {
+class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: ExamPresenter
@@ -29,6 +29,9 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MenuFragmentView {
 
         fun newInstance() = ExamFragment()
     }
+
+    override val titleStringId: Int
+        get() = R.string.exam_title
 
     override val isViewEmpty: Boolean
         get() = examAdapter.isEmpty

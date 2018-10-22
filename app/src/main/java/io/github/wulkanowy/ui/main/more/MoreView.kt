@@ -7,9 +7,13 @@ interface MoreView : BaseView {
 
     val settingsRes: Pair<String, Drawable?>?
 
+    val aboutRes: Pair<String, Drawable?>?
+
     fun initView()
 
     fun updateData(data: List<MoreItem>)
 
     fun openSettingsView()
+
+    fun openAboutView()
 }

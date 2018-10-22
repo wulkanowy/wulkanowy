@@ -10,6 +10,7 @@
     <string name="timetable_title">Timetable</string>
     <string name="settings_title">Settings</string>
     <string name="more_title">More</string>
+    <string name="about_title">About Wulkanowy</string>
 
 
     <!--Login form-->
@@ -125,7 +126,6 @@
     <string name="pref_services_interval">Updates interval</string>
     <string name="pref_services_wifi">Only WiFi</string>
 
-    <string name="pref_about_description">About Wulkanowy</string>
     <string name="pref_about_version">Version</string>
     <string name="pref_about_libraries">Open source libraries</string>
     <string name="pref_about_libraries_summary">Libraries details for open source software</string>

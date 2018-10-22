@@ -15,7 +15,7 @@ import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_timetable.*
 import javax.inject.Inject
 
-class TimetableFragment : BaseFragment(), TimetableView, MainView.MenuFragmentView {
+class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: TimetablePresenter
@@ -28,6 +28,9 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MenuFragmentVi
 
         fun newInstance() = TimetableFragment()
     }
+
+    override val titleStringId: Int
+        get() = R.string.timetable_title
 
     override val roomString: String
         get() = getString(R.string.timetable_room)

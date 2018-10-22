@@ -6,7 +6,7 @@ interface MainView : BaseView {
 
     var startMenuIndex: Int
 
-    val currentMenuIndex: Int
+    val currentViewTitle: String?
 
     fun initView()
 
@@ -16,10 +16,13 @@ interface MainView : BaseView {
 
     fun setViewTitle(title: String)
 
-    fun getViewTitle(index: Int): String
-
-    interface MenuFragmentView {
+    interface MainChildView {
 
         fun onFragmentReselected()
+    }
+
+    interface TitledView {
+
+        val titleStringId: Int
     }
 }

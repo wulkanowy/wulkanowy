@@ -16,11 +16,20 @@ class MorePresenter @Inject constructor(errorHandler: ErrorHandler)
 
     fun onItemSelected(item: AbstractFlexibleItem<*>?) {
         if (item is MoreItem) {
-            view?.openSettingsView()
+            view?.run {
+                when (item.title) {
+                    settingsRes?.first -> openSettingsView()
+                    aboutRes?.first -> openAboutView()
+                }
+            }
         }
     }
 
     private fun loadData() {
-        view?.run { settingsRes?.let { updateData(listOf(MoreItem(it.first, it.second))) } }
+        view?.run {
+            updateData(listOfNotNull(
+                    settingsRes?.let { MoreItem(it.first, it.second) },
+                    aboutRes?.let { MoreItem(it.first, it.second) }))
+        }
     }
 }

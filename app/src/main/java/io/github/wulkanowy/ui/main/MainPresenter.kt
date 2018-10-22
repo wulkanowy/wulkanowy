@@ -18,12 +18,8 @@ class MainPresenter @Inject constructor(
         }
     }
 
-    fun onStartView() {
-        view?.run { setViewTitle(getViewTitle(currentMenuIndex)) }
-    }
-
-    fun onMenuViewChange(index: Int) {
-        view?.run { setViewTitle(getViewTitle(index)) }
+    fun onViewStart() {
+        view?.apply { currentViewTitle?.let { setViewTitle(it) } }
     }
 
     fun onTabSelected(index: Int, wasSelected: Boolean): Boolean {

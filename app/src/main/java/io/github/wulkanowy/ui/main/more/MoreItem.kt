@@ -10,7 +10,7 @@ import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_more.*
 
-class MoreItem(private val title: String, private val drawable: Drawable?)
+class MoreItem(val title: String, private val drawable: Drawable?)
     : AbstractFlexibleItem<MoreItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_more

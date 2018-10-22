@@ -18,24 +18,4 @@
             android:title="@string/pref_view_present"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/pref_about_description"
-        app:iconSpaceReserved="false">
-        <Preference
-            android:key="version"
-            android:title="@string/pref_about_version"
-            app:iconSpaceReserved="false" />
-        <Preference
-            android:key="libraries"
-            android:summary="@string/pref_about_libraries_summary"
-            android:title="@string/pref_about_libraries"
-            app:iconSpaceReserved="false" />
-        <Preference
-            android:title="@string/pref_about_support"
-            app:iconSpaceReserved="false">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:data="https://github.com/wulkanowy/wulkanowy" />
-        </Preference>
-    </PreferenceCategory>
 </PreferenceScreen>
