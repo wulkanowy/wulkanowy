@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.main.about
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +10,13 @@ import com.mikepenz.aboutlibraries.LibsFragmentCompat
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.main.MainView
+import io.github.wulkanowy.utils.withOnExtraListener
 import javax.inject.Inject
 
-class AboutFragment : BaseFragment(), MainView.TitledView {
+class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
+
+    @Inject
+    lateinit var presenter: AboutPresenter
 
     @Inject
     lateinit var fragmentCompat: LibsFragmentCompat
@@ -24,12 +29,19 @@ class AboutFragment : BaseFragment(), MainView.TitledView {
         get() = R.string.about_title
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        presenter.onAttachView(this)
         return Bundle().apply {
             putSerializable("data", LibsBuilder()
                     .withAboutAppName(getString(R.string.app_name))
                     .withAboutVersionShown(true)
                     .withAboutIconShown(true)
-                    .withLicenseShown(true))
+                    .withLicenseShown(true)
+                    .withAboutSpecial1(getString(R.string.about_source_code))
+                    .withAboutSpecial2(getString(R.string.about_feedback))
+                    .withFields(R.string::class.java.fields)
+                    .withOnExtraListener { presenter.onExtraSelect(it) }
+                    .withExcludedLibraries("fastadapter", "AndroidIconics", "gson",
+                            "Jsoup", "Retrofit", "okio", "OkHttp"))
         }.let {
             fragmentCompat.onCreateView(inflater.context, inflater, container, savedInstanceState, it)
         }
@@ -40,9 +52,17 @@ class AboutFragment : BaseFragment(), MainView.TitledView {
         fragmentCompat.onViewCreated(view, savedInstanceState)
     }
 
+    override fun openSourceWebView() {
+        startActivity(Intent.parseUri("https://github.com/wulkanowy/wulkanowy", 0))
+    }
+
+    override fun openIssuesWebView() {
+        startActivity(Intent.parseUri("https://github.com/wulkanowy/wulkanowy/issues", 0))
+    }
+
     override fun onDestroyView() {
         fragmentCompat.onDestroyView()
+        presenter.onDetachView()
         super.onDestroyView()
     }
 }
-

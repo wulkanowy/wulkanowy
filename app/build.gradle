@@ -81,7 +81,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.0'
 
     implementation 'com.takisoft.preferencex:preferencex:1.0.0'
-    implementation "com.mikepenz:aboutlibraries:6.1.1"
+    implementation "com.mikepenz:aboutlibraries:6.2.0"
     implementation "com.firebase:firebase-jobdispatcher:0.8.5"
 
     //Do not update dagger https://github.com/google/dagger/issues/1245
