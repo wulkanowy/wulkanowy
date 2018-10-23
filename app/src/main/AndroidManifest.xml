@@ -17,7 +17,7 @@
         android:theme="@style/WulkanowyTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name="io.github.wulkanowy.ui.modules.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/WulkanowyTheme.SplashScreen">
             <intent-filter>
@@ -27,12 +27,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name="io.github.wulkanowy.ui.modules.login.LoginActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/login_title"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name="io.github.wulkanowy.ui.modules.main.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/main_title"
             android:launchMode="singleTop"
