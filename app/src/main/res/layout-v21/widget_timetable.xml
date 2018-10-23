@@ -11,19 +11,19 @@
         android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@color/colorPrimaryDark"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:src="@drawable/ic_widget_chevron_24dp"
             tools:ignore="ContentDescription" />
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@color/colorPrimaryDark"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:rotation="180"
             android:src="@drawable/ic_widget_chevron_24dp"
             tools:ignore="ContentDescription" />
