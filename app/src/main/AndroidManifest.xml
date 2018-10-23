@@ -29,16 +29,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ui.modules.login.LoginActivity"
+            android:name=".ui.modules.login.LoginActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/login_title"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="ui.modules.main.MainActivity"
+            android:name=".ui.modules.main.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/main_title"
             android:launchMode="singleTop"
             android:theme="@style/WulkanowyTheme.NoActionBar" />
+
+        <service
+            android:name=".services.widgets.TimetableWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver android:name=".ui.widgets.timetable.TimetableWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/provider_widget_timetable" />
+        </receiver>
 
         <meta-data
             android:name="io.fabric.ApiKey"
