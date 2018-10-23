@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.GradeSummaryRepository
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.di.Provider
@@ -19,7 +20,6 @@ import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
-import java.sql.Date
 import java.util.Random
 import javax.inject.Inject
 
@@ -42,6 +42,9 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
 
     @Inject
     lateinit var timetable: TimetableRepository
+
+    @Inject
+    lateinit var prefRepository: PreferencesRepository
 
     companion object {
         const val WORK_TAG = "FULL_SYNC"
@@ -76,7 +79,8 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
                         )
                     )
                 }
-                .doFinally { sendNotifications() }
+                .doFinally { if (prefRepository.notificationsEnable) sendNotifications()
+                }
                 .subscribe({}, { error = it })
 
             if (null !== error) {

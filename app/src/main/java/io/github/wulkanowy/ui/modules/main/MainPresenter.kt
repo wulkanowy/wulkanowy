@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.isHolidays
 import org.threeten.bp.LocalDate
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
@@ -18,7 +19,11 @@ class MainPresenter @Inject constructor(
         view.run {
             startMenuIndex = prefRepository.startMenuIndex
             initView()
-            if (!LocalDate.now().isHolidays) startSyncService(15, true)
+
+            if (!LocalDate.now().isHolidays && prefRepository.serviceEnables) {
+                Timber.d("Sync service started")
+                startSyncService(prefRepository.servicesInterval, prefRepository.servicesOnlyWifi)
+            }
         }
     }
 

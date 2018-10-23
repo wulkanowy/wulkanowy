@@ -22,7 +22,7 @@ interface MainView : BaseView {
 
     fun setViewTitle(title: String)
   
-    fun startSyncService(interval: Int, useOnlyWifi: Boolean)
+    fun startSyncService(interval: Long, useOnlyWifi: Boolean)
 
     fun popView()
 
