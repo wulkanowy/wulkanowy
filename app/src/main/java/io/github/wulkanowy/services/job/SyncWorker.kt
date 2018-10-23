@@ -17,7 +17,10 @@ import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import java.sql.Date
+import java.util.Random
 import javax.inject.Inject
 
 class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(context, workerParameters) {
@@ -39,6 +42,10 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
 
     @Inject
     lateinit var timetable: TimetableRepository
+
+    companion object {
+        const val WORK_TAG = "FULL_SYNC"
+    }
 
     init {
         Provider.appComponent.inject(this)
@@ -79,7 +86,7 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
             Timber.d("Synchronization successful")
 
             Result.SUCCESS
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Timber.d("Synchronization failed: ${e.localizedMessage}")
             Result.RETRY
         }
@@ -87,9 +94,12 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
 
     @SuppressLint("CheckResult")
     private fun sendNotifications() {
+        val notify = GradeNotification(applicationContext)
+
+        notify.sendNotification(Random().nextInt(1000), "Coś działa", "Powiadomienie wysłano o ${LocalDateTime.now()}")
+
         Timber.d("Search for notification to send")
         gradesDetails.getNewGrades().subscribe {
-            val notify = GradeNotification(applicationContext)
             it.map { grade ->
                 Timber.d("New grade id: ${grade.id}")
                 notify.sendNotification(

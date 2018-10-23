@@ -11,13 +11,14 @@ class JobManager {
 
     fun start(interval: Int, useOnlyWifi: Boolean) {
         val constraints = Constraints.Builder()
-            .setRequiredNetworkType(if (useOnlyWifi) NetworkType.NOT_ROAMING else NetworkType.CONNECTED)
+            .setRequiredNetworkType(if (useOnlyWifi) NetworkType.UNMETERED else NetworkType.CONNECTED)
             .build()
 
         val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(interval.toLong(), TimeUnit.MINUTES)
-            .setConstraints(constraints).build()
+            .setConstraints(constraints)
+            .build()
 
         WorkManager.getInstance()
-            .enqueueUniquePeriodicWork("SyncJob", ExistingPeriodicWorkPolicy.KEEP, syncWork)
+            .enqueueUniquePeriodicWork(SyncWorker.WORK_TAG, ExistingPeriodicWorkPolicy.REPLACE, syncWork)
     }
 }
