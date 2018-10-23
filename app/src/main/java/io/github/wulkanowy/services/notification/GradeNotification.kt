@@ -8,7 +8,7 @@ import android.app.PendingIntent
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import io.github.wulkanowy.R
-import io.github.wulkanowy.ui.main.MainActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import timber.log.Timber
 
 class GradeNotification(private val context: Context) : BaseNotification(context) {
