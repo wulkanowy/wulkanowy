@@ -8,13 +8,13 @@
                 android:defaultValue="0"
                 android:entries="@array/startup_tab_entries"
                 android:entryValues="@array/startup_tab_value"
-                android:key="start_menu"
+                android:key="@string/pref_key_start_menu"
                 android:summary="%s"
                 android:title="@string/pref_view_list"
                 app:iconSpaceReserved="false"/>
         <SwitchPreference
                 android:defaultValue="true"
-                android:key="attendance_present"
+                android:key="@string/pref_key_attendance_present"
                 android:title="@string/pref_view_present"
                 app:iconSpaceReserved="false"/>
     </PreferenceCategory>
@@ -23,7 +23,7 @@
             app:iconSpaceReserved="false">
         <SwitchPreference
                 android:defaultValue="true"
-                android:key="services_enable"
+                android:key="@string/pref_key_services_enable"
                 android:title="@string/pref_services_switch"
                 app:iconSpaceReserved="false"/>
         <ListPreference
@@ -31,14 +31,14 @@
                 android:dependency="services_enable"
                 android:entries="@array/services_interval_entries"
                 android:entryValues="@array/services_interval_value"
-                android:key="services_interval"
+                android:key="@string/pref_key_services_interval"
                 android:summary="%s"
                 android:title="@string/pref_services_interval"
                 app:iconSpaceReserved="false"/>
         <SwitchPreference
                 android:defaultValue="false"
                 android:dependency="services_enable"
-                android:key="services_disable_mobile"
+                android:key="@string/pref_key_services_wifi_only"
                 android:title="@string/pref_services_wifi"
                 app:iconSpaceReserved="false"/>
     </PreferenceCategory>
@@ -48,7 +48,7 @@
         <SwitchPreference
                 android:defaultValue="true"
                 android:dependency="services_enable"
-                android:key="notifications_enable"
+                android:key="@string/pref_key_notifications_enable"
                 android:title="@string/pref_notify_switch"
                 app:iconSpaceReserved="false"/>
     </PreferenceCategory>

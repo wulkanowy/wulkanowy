@@ -8,6 +8,7 @@ import com.firebase.jobdispatcher.Trigger
 import io.github.wulkanowy.services.job.SyncWorker
 import io.github.wulkanowy.utils.isHolidays
 import org.threeten.bp.LocalDate
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,13 +20,17 @@ class ServiceRepository @Inject constructor(
 
     fun reloadFullSyncService() {
         stopFullSyncService()
+        startFullSyncService()
 
-        if (!LocalDate.now().isHolidays && prefRepository.serviceEnables) {
-            startFullSyncService()
-        }
+        Timber.d("Services reloaded")
     }
 
     fun startFullSyncService() {
+        if (LocalDate.now().isHolidays || !prefRepository.serviceEnables) {
+            Timber.d("Don't start services")
+            return
+        }
+
         dispatcher.mustSchedule(
             dispatcher.newJobBuilder()
                 .setLifetime(Lifetime.FOREVER)

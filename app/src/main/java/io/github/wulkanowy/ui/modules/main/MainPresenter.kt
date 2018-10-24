@@ -20,7 +20,7 @@ class MainPresenter @Inject constructor(
             initView()
         }
 
-        serviceRepository.reloadFullSyncService()
+        serviceRepository.startFullSyncService()
     }
 
     fun onViewStart() {

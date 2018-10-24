@@ -1,34 +1,38 @@
 package io.github.wulkanowy.data.repositories
 
+import android.content.Context
 import android.content.SharedPreferences
+import io.github.wulkanowy.R
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PreferencesRepository @Inject constructor(private val sharedPref: SharedPreferences) {
+class PreferencesRepository @Inject constructor(
+    private val sharedPref: SharedPreferences,
+    val context: Context
+) {
 
-    companion object {
-        const val KEY_SERVICES_ENABLE = "services_enable"
-        const val KEY_SERVICES_INTERVAL = "services_interval"
-        const val KEY_SERVICES_WIFI_ONLY = "services_disable_wifi_only"
-        const val KEY_NOTIFICATIONS_ENABLE = "notifications_enable"
-    }
-
+    val startMenuIndexKey = context.getString(R.string.pref_key_start_menu)
     val startMenuIndex: Int
-        get() = sharedPref.getString("start_menu", "0")?.toInt() ?: 0
+        get() = sharedPref.getString(startMenuIndexKey, "0")?.toInt() ?: 0
 
+    val showPresentKey = context.getString(R.string.pref_key_attendance_present)
     val showPresent: Boolean
-        get() = sharedPref.getBoolean("attendance_present", true)
+        get() = sharedPref.getBoolean(showPresentKey, true)
 
+    val serviceEnablesKey = context.getString(R.string.pref_key_services_enable)
     val serviceEnables: Boolean
-        get() = sharedPref.getBoolean(KEY_SERVICES_ENABLE, true)
+        get() = sharedPref.getBoolean(serviceEnablesKey, true)
 
+    val servicesIntervalKey = context.getString(R.string.pref_key_services_interval)
     val servicesInterval: Int
-        get() = sharedPref.getString(KEY_SERVICES_INTERVAL, "60")?.toInt() ?: 60
+        get() = sharedPref.getString(servicesIntervalKey, "60")?.toInt() ?: 60
 
+    val servicesOnlyWifiKey = context.getString(R.string.pref_key_services_wifi_only)
     val servicesOnlyWifi: Boolean
-        get() = sharedPref.getBoolean(KEY_SERVICES_WIFI_ONLY, true)
+        get() = sharedPref.getBoolean(servicesOnlyWifiKey, true)
 
+    val notificationsEnableKey = context.getString(R.string.pref_key_notifications_enable)
     val notificationsEnable: Boolean
-        get() = sharedPref.getBoolean(KEY_NOTIFICATIONS_ENABLE, true)
+        get() = sharedPref.getBoolean(notificationsEnableKey, true)
 }
