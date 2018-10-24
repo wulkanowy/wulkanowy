@@ -73,7 +73,6 @@ play {
 }
 
 ext.androidx_version = "1.0.0"
-ext.work_version = "1.0.0-alpha10"
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -87,6 +86,7 @@ dependencies {
 
     implementation 'com.takisoft.preferencex:preferencex:1.0.0'
     implementation "com.mikepenz:aboutlibraries:6.2.0"
+    implementation "com.firebase:firebase-jobdispatcher:0.8.5"
 
     //Do not update dagger https://github.com/google/dagger/issues/1245
     implementation "com.google.dagger:dagger-android-support:2.16"
@@ -96,9 +96,6 @@ dependencies {
     implementation "androidx.room:room-runtime:2.1.0-alpha01"
     implementation "androidx.room:room-rxjava2:2.1.0-alpha01"
     kapt "androidx.room:room-compiler:2.1.0-alpha01"
-
-    implementation "android.arch.work:work-runtime-ktx:$work_version"
-    implementation "android.arch.work:work-firebase:$work_version"
 
     implementation "eu.davidea:flexible-adapter:5.1.0"
     implementation "eu.davidea:flexible-adapter-ui:1.0.0"
@@ -131,7 +128,6 @@ dependencies {
     androidTestImplementation 'androidx.test:core:1.0.0-beta02'
     androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
     androidTestImplementation 'androidx.test.ext:junit:1.0.0-beta02'
-    androidTestImplementation "android.arch.work:work-testing:$work_version"
     androidTestImplementation "org.mockito:mockito-android:2.23.0"
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"

@@ -39,6 +39,11 @@ class GradeNotification(private val context: Context) : BaseNotification(context
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setColor(context.resources.getColor(R.color.colorPrimary))
+                .setLights(
+                    0xFF0000,
+                    context.resources.getInteger(context.resources.getIdentifier("config_defaultNotificationLedOn", "integer", "android")),
+                    context.resources.getInteger(context.resources.getIdentifier("config_defaultNotificationLedOff", "integer", "android"))
+                )
                 .setContentIntent(
                     PendingIntent.getActivity(
                         context, 0,

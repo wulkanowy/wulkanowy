@@ -1,9 +1,9 @@
 package io.github.wulkanowy.services.job
 
 import android.annotation.SuppressLint
-import android.content.Context
-import androidx.work.Worker
-import androidx.work.WorkerParameters
+import com.firebase.jobdispatcher.JobParameters
+import com.firebase.jobdispatcher.SimpleJobService
+import dagger.android.AndroidInjection
 import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
@@ -11,19 +11,16 @@ import io.github.wulkanowy.data.repositories.GradeSummaryRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
-import io.github.wulkanowy.di.Provider
 import io.github.wulkanowy.services.notification.GradeNotification
 import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
 import timber.log.Timber
-import java.util.Random
 import javax.inject.Inject
 
-class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(context, workerParameters) {
+class SyncWorker : SimpleJobService() {
 
     @Inject
     lateinit var session: SessionRepository
@@ -50,18 +47,19 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
         const val WORK_TAG = "FULL_SYNC"
     }
 
-    init {
-        Provider.appComponent.inject(this)
+    override fun onCreate() {
+        super.onCreate()
+        AndroidInjection.inject(this)
     }
 
     @SuppressLint("CheckResult")
-    override fun doWork(): Result {
+    override fun onRunJob(job: JobParameters?): Int {
         Timber.d("Synchronization started")
 
         val start = LocalDate.now().monday
         val end = LocalDate.now().friday
 
-        if (start.isHolidays) return Result.FAILURE
+        if (start.isHolidays) return RESULT_FAIL_NORETRY
 
         var error: Throwable? = null
 
@@ -79,8 +77,7 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
                         )
                     )
                 }
-                .doFinally { if (prefRepository.notificationsEnable) sendNotifications()
-                }
+                .doFinally { if (prefRepository.notificationsEnable) sendNotifications() }
                 .subscribe({}, { error = it })
 
             if (null !== error) {
@@ -89,27 +86,22 @@ class SyncWorker(context: Context, workerParameters: WorkerParameters) : Worker(
 
             Timber.d("Synchronization successful")
 
-            Result.SUCCESS
+            RESULT_SUCCESS
         } catch (e: Throwable) {
             Timber.d("Synchronization failed: ${e.localizedMessage}")
-            Result.RETRY
+            RESULT_FAIL_NORETRY
         }
     }
 
     @SuppressLint("CheckResult")
     private fun sendNotifications() {
-        val notify = GradeNotification(applicationContext)
-
-        notify.sendNotification(Random().nextInt(1000), "Coś działa", "Powiadomienie wysłano o ${LocalDateTime.now()}")
-
-        Timber.d("Search for notification to send")
         gradesDetails.getNewGrades().subscribe {
             it.map { grade ->
                 Timber.d("New grade id: ${grade.id}")
-                notify.sendNotification(
-                    grade.id.toInt(),
-                    grade.subject,
-                    "${grade.gradeSymbol + (", " + grade.description).removeSuffix(", ")}: ${grade.entry}"
+                GradeNotification(applicationContext).sendNotification(
+                    id = grade.id.toInt(),
+                    title = grade.subject,
+                    content = "${grade.gradeSymbol + (", " + grade.description).removeSuffix(", ")}: ${grade.entry}"
                 )
             }
         }

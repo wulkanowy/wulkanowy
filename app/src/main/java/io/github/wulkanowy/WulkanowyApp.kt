@@ -12,12 +12,10 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.utils.Log
 import io.fabric.sdk.android.Fabric
 import io.github.wulkanowy.BuildConfig.DEBUG
-import io.github.wulkanowy.di.AppComponent
 import io.github.wulkanowy.di.DaggerAppComponent
 import io.github.wulkanowy.utils.CrashlyticsTree
 import io.github.wulkanowy.utils.DebugLogTree
 import timber.log.Timber
-import io.github.wulkanowy.di.Provider
 
 class WulkanowyApp : DaggerApplication() {
 
@@ -49,11 +47,7 @@ class WulkanowyApp : DaggerApplication() {
         Timber.plant(CrashlyticsTree)
     }
 
-    // TODO: Update when [this issue](https://github.com/google/dagger/issues/1183) will be closed
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().create(this)
-        appComponent.inject(this)
-        Provider.appComponent = appComponent as AppComponent
-        return appComponent
+        return DaggerAppComponent.builder().create(this)
     }
 }

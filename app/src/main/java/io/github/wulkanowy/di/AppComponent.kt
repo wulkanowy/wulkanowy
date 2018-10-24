@@ -16,8 +16,6 @@ import javax.inject.Singleton
     BuilderModule::class])
 interface AppComponent : AndroidInjector<WulkanowyApp> {
 
-    fun inject(uploadWorker: SyncWorker)
-
     @Component.Builder
     abstract class Builder : AndroidInjector.Builder<WulkanowyApp>()
 }

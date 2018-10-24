@@ -125,8 +125,8 @@ class MainActivity : BaseActivity(), MainView {
         presenter.onBackPressed { super.onBackPressed() }
     }
 
-    override fun startSyncService(interval: Long, useOnlyWifi: Boolean) {
-        JobManager().start(interval, useOnlyWifi)
+    override fun startSyncService(interval: Int, useOnlyWifi: Boolean) {
+        JobManager().start(applicationContext, interval, useOnlyWifi)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

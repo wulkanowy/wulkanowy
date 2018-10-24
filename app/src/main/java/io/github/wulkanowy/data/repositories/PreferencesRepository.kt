@@ -16,8 +16,8 @@ class PreferencesRepository @Inject constructor(private val sharedPref: SharedPr
     val serviceEnables: Boolean
         get() = sharedPref.getBoolean("services_enable", true)
 
-    val servicesInterval: Long
-        get() = sharedPref.getString("services_interval", "60")?.toLong() ?: 60L
+    val servicesInterval: Int
+        get() = sharedPref.getString("services_interval", "60")?.toInt() ?: 60
 
     val servicesOnlyWifi: Boolean
         get() = sharedPref.getBoolean("services_disable_mobile", true)
