@@ -20,7 +20,7 @@ class ExamPresenter @Inject constructor(
         private val sessionRepository: SessionRepository
 ) : BasePresenter<ExamView>(errorHandler) {
 
-    var currentDate = now().nextOrSameSchoolDay
+    lateinit var currentDate: LocalDate
         private set
 
     fun onAttachView(view: ExamView, date: Long?) {
