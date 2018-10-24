@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.main
 
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.PreferencesRepository
+import io.github.wulkanowy.data.repositories.ServiceRepository
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -18,6 +19,9 @@ class MainPresenterTest {
     lateinit var prefRepository: PreferencesRepository
 
     @Mock
+    lateinit var serviceRepository: ServiceRepository
+
+    @Mock
     lateinit var mainView: MainView
 
     private lateinit var presenter: MainPresenter
@@ -27,7 +31,7 @@ class MainPresenterTest {
         MockitoAnnotations.initMocks(this)
         clearInvocations(mainView)
 
-        presenter = MainPresenter(errorHandler, prefRepository)
+        presenter = MainPresenter(errorHandler, prefRepository, serviceRepository)
         presenter.onAttachView(mainView)
     }
 
