@@ -21,8 +21,6 @@ interface MainView : BaseView {
     fun notifyMenuViewReselected()
 
     fun setViewTitle(title: String)
-  
-    fun startSyncService(interval: Int, useOnlyWifi: Boolean)
 
     fun popView()
 

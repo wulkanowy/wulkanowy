@@ -7,6 +7,13 @@ import javax.inject.Singleton
 @Singleton
 class PreferencesRepository @Inject constructor(private val sharedPref: SharedPreferences) {
 
+    companion object {
+        const val KEY_SERVICES_ENABLE = "services_enable"
+        const val KEY_SERVICES_INTERVAL = "services_interval"
+        const val KEY_SERVICES_WIFI_ONLY = "services_disable_wifi_only"
+        const val KEY_NOTIFICATIONS_ENABLE = "notifications_enable"
+    }
+
     val startMenuIndex: Int
         get() = sharedPref.getString("start_menu", "0")?.toInt() ?: 0
 
@@ -14,15 +21,14 @@ class PreferencesRepository @Inject constructor(private val sharedPref: SharedPr
         get() = sharedPref.getBoolean("attendance_present", true)
 
     val serviceEnables: Boolean
-        get() = sharedPref.getBoolean("services_enable", true)
+        get() = sharedPref.getBoolean(KEY_SERVICES_ENABLE, true)
 
     val servicesInterval: Int
-        get() = sharedPref.getString("services_interval", "60")?.toInt() ?: 60
+        get() = sharedPref.getString(KEY_SERVICES_INTERVAL, "60")?.toInt() ?: 60
 
     val servicesOnlyWifi: Boolean
-        get() = sharedPref.getBoolean("services_disable_mobile", true)
+        get() = sharedPref.getBoolean(KEY_SERVICES_WIFI_ONLY, true)
 
     val notificationsEnable: Boolean
-        get() = sharedPref.getBoolean("notifications_enable", true)
+        get() = sharedPref.getBoolean(KEY_NOTIFICATIONS_ENABLE, true)
 }
-

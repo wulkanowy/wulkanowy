@@ -10,7 +10,6 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
 import io.github.wulkanowy.R
-import io.github.wulkanowy.services.job.JobManager
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
@@ -66,13 +65,15 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun initView() {
         mainBottomNav.run {
-            addItems(mutableListOf(
+            addItems(
+                mutableListOf(
                     AHBottomNavigationItem(R.string.grade_title, R.drawable.ic_menu_main_grade_26dp, 0),
                     AHBottomNavigationItem(R.string.attendance_title, R.drawable.ic_menu_main_attendance_24dp, 0),
                     AHBottomNavigationItem(R.string.exam_title, R.drawable.ic_menu_main_exam_24dp, 0),
                     AHBottomNavigationItem(R.string.timetable_title, R.drawable.ic_menu_main_timetable_24dp, 0),
                     AHBottomNavigationItem(R.string.more_title, R.drawable.ic_menu_main_more_24dp, 0)
-            ))
+                )
+            )
             accentColor = ContextCompat.getColor(context, R.color.colorPrimary)
             inactiveColor = ContextCompat.getColor(context, android.R.color.black)
             titleState = ALWAYS_SHOW
@@ -88,11 +89,11 @@ class MainActivity : BaseActivity(), MainView {
             setOnViewChangeListener { presenter.onViewStart() }
             fragmentHideStrategy = HIDE
             rootFragments = listOf(
-                    GradeFragment.newInstance(),
-                    AttendanceFragment.newInstance(),
-                    ExamFragment.newInstance(),
-                    TimetableFragment.newInstance(),
-                    MoreFragment.newInstance()
+                GradeFragment.newInstance(),
+                AttendanceFragment.newInstance(),
+                ExamFragment.newInstance(),
+                TimetableFragment.newInstance(),
+                MoreFragment.newInstance()
             )
         }
     }
@@ -123,10 +124,6 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun onBackPressed() {
         presenter.onBackPressed { super.onBackPressed() }
-    }
-
-    override fun startSyncService(interval: Int, useOnlyWifi: Boolean) {
-        JobManager().start(applicationContext, interval, useOnlyWifi)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

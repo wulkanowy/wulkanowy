@@ -5,7 +5,6 @@ import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import io.github.wulkanowy.WulkanowyApp
 import io.github.wulkanowy.data.RepositoryModule
-import io.github.wulkanowy.services.job.SyncWorker
 import javax.inject.Singleton
 
 @Singleton

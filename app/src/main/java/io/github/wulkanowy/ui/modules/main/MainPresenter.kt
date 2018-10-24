@@ -2,16 +2,15 @@ package io.github.wulkanowy.ui.modules.main
 
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.PreferencesRepository
+import io.github.wulkanowy.data.repositories.ServiceRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.github.wulkanowy.utils.isHolidays
-import org.threeten.bp.LocalDate
-import timber.log.Timber
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
-        errorHandler: ErrorHandler,
-        private val prefRepository: PreferencesRepository)
-    : BasePresenter<MainView>(errorHandler) {
+    errorHandler: ErrorHandler,
+    private val prefRepository: PreferencesRepository,
+    private val serviceRepository: ServiceRepository
+) : BasePresenter<MainView>(errorHandler) {
 
     override fun onAttachView(view: MainView) {
         super.onAttachView(view)
@@ -19,12 +18,9 @@ class MainPresenter @Inject constructor(
         view.run {
             startMenuIndex = prefRepository.startMenuIndex
             initView()
-
-            if (!LocalDate.now().isHolidays && prefRepository.serviceEnables) {
-                Timber.d("Sync service started")
-                startSyncService(prefRepository.servicesInterval, prefRepository.servicesOnlyWifi)
-            }
         }
+
+        serviceRepository.reloadFullSyncService()
     }
 
     fun onViewStart() {
@@ -41,7 +37,6 @@ class MainPresenter @Inject constructor(
         view?.popView()
         return true
     }
-
 
     fun onBackPressed(default: () -> Unit) {
         view?.run {
