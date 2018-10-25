@@ -89,25 +89,31 @@ class SyncWorker : SimpleJobService() {
 
             RESULT_SUCCESS
         } catch (e: Throwable) {
-            Timber.d("Synchronization failed: ${e.localizedMessage}")
+            Timber.e("Synchronization failed: ${e.localizedMessage}")
             JobService.RESULT_FAIL_RETRY
         }
     }
 
     @SuppressLint("CheckResult")
     private fun sendNotifications() {
-        gradesDetails.getNewGrades().subscribe { list ->
-            Timber.d("Found ${list.size} unread grades")
-            list.asSequence().filter { !it.notified }.map { grade ->
-                Timber.d("New grade id: ${grade.id}")
-                GradeNotification(applicationContext).sendNotification(
-                    id = grade.id.toInt(),
-                    title = grade.subject,
-                    content = "${grade.gradeSymbol + (", " + grade.description).removeSuffix(", ")}: ${grade.entry}"
-                )
-                gradesDetails.updateGrade(grade.apply { notified = true }).subscribe()
-            }.toList()
-        }
-        Timber.d("All pending notifications sent")
+        session.getSemesters(true)
+            .map { it.single { semester -> semester.current } }
+            .doFinally {
+                Timber.d("All pending notifications sent")
+            }
+            .subscribe({ semester ->
+                gradesDetails.getNewGrades(semester).subscribe { list ->
+                    Timber.d("Found ${list.size} unread grades")
+                    list.asSequence().filter { !it.notified }.map { grade ->
+                        Timber.d("New grade id: ${grade.id}")
+                        GradeNotification(applicationContext).sendNotification(
+                            id = grade.id.toInt(),
+                            title = grade.subject,
+                            content = "${grade.gradeSymbol + (", " + grade.description).removeSuffix(", ")}: ${grade.entry}"
+                        )
+                        gradesDetails.updateGrade(grade.apply { notified = true }).subscribe()
+                    }.toList()
+                }
+            }, { Timber.e("Notifications sending failed") })
     }
 }

@@ -19,6 +19,6 @@ interface GradeDao {
     @Query("SELECT * FROM Grades WHERE semester_id = :semesterId AND student_id = :studentId")
     fun getGrades(semesterId: Int, studentId: Int): Maybe<List<Grade>>
 
-    @Query("SELECT * FROM Grades WHERE read = 0")
-    fun getNewGrades(): Maybe<List<Grade>>
+    @Query("SELECT * FROM Grades WHERE read = 0 AND semester_id = :semesterId AND student_id = :studentId")
+    fun getNewGrades(semesterId: Int, studentId: Int): Maybe<List<Grade>>
 }

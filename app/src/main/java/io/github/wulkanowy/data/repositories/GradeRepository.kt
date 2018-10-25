@@ -39,8 +39,8 @@ class GradeRepository @Inject constructor(
                 }.flatMap { local.getGrades(semester).toSingle(emptyList()) })
     }
 
-    fun getNewGrades(): Maybe<List<Grade>> {
-        return local.getNewGrades()
+    fun getNewGrades(semester: Semester): Maybe<List<Grade>> {
+        return local.getNewGrades(semester)
     }
 
     fun updateGrade(grade: Grade): Completable {
