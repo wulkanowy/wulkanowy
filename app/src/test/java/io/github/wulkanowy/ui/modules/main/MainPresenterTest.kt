@@ -32,7 +32,7 @@ class MainPresenterTest {
         clearInvocations(mainView)
 
         presenter = MainPresenter(errorHandler, prefRepository, serviceRepository)
-        presenter.onAttachView(mainView)
+        presenter.onAttachView(mainView, -1)
     }
 
     @Test
