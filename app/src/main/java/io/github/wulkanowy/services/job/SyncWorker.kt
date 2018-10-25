@@ -2,6 +2,7 @@ package io.github.wulkanowy.services.job
 
 import android.annotation.SuppressLint
 import com.firebase.jobdispatcher.JobParameters
+import com.firebase.jobdispatcher.JobService
 import com.firebase.jobdispatcher.SimpleJobService
 import dagger.android.AndroidInjection
 import io.github.wulkanowy.data.repositories.AttendanceRepository
@@ -69,7 +70,7 @@ class SyncWorker : SimpleJobService() {
                 .flatMapPublisher {
                     Single.merge(
                         listOf(
-                            gradesDetails.getGrades(it, true),
+                            gradesDetails.getGrades(it, true, true),
                             gradesSummary.getGradesSummary(it, true),
                             attendance.getAttendance(it, start, end, true),
                             exam.getExams(it, start, end, true),
@@ -89,21 +90,23 @@ class SyncWorker : SimpleJobService() {
             RESULT_SUCCESS
         } catch (e: Throwable) {
             Timber.d("Synchronization failed: ${e.localizedMessage}")
-            RESULT_FAIL_NORETRY
+            JobService.RESULT_FAIL_RETRY
         }
     }
 
     @SuppressLint("CheckResult")
     private fun sendNotifications() {
-        gradesDetails.getNewGrades().subscribe {
-            it.map { grade ->
+        gradesDetails.getNewGrades().subscribe { list ->
+            Timber.d("Found ${list.size} unread grades")
+            list.asSequence().filter { !it.notified }.map { grade ->
                 Timber.d("New grade id: ${grade.id}")
                 GradeNotification(applicationContext).sendNotification(
                     id = grade.id.toInt(),
                     title = grade.subject,
                     content = "${grade.gradeSymbol + (", " + grade.description).removeSuffix(", ")}: ${grade.entry}"
                 )
-            }
+                gradesDetails.updateGrade(grade.apply { notified = true }).subscribe()
+            }.toList()
         }
         Timber.d("All pending notifications sent")
     }
