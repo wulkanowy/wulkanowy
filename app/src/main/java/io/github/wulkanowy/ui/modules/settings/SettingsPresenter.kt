@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.settings
 
+import io.github.wulkanowy.BuildConfig
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.ServiceRepository
@@ -13,12 +14,12 @@ class SettingsPresenter @Inject constructor(
 ) : BasePresenter<SettingsView>(errorHandler) {
 
     fun onSharedPreferenceChanged(key: String) {
-
         when (key) {
             preferencesRepository.serviceEnablesKey,
             preferencesRepository.servicesIntervalKey,
             preferencesRepository.servicesOnlyWifiKey -> {
                 serviceRepository.reloadFullSyncService()
+                if (BuildConfig.DEBUG) view?.showMessage("Services reloaded")
             }
         }
     }
