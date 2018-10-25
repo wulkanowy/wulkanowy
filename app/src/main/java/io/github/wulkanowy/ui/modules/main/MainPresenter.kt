@@ -12,11 +12,11 @@ class MainPresenter @Inject constructor(
     private val serviceRepository: ServiceRepository
 ) : BasePresenter<MainView>(errorHandler) {
 
-    override fun onAttachView(view: MainView) {
+    override fun onAttachView(view: MainView, init: Int) {
         super.onAttachView(view)
 
         view.run {
-            startMenuIndex = prefRepository.startMenuIndex
+            startMenuIndex = if (init != -1) init else prefRepository.startMenuIndex
             initView()
         }
 

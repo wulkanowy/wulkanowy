@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import io.github.wulkanowy.BuildConfig.APPLICATION_ID
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.modules.main.MainActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_CARD_ID_KEY
 import timber.log.Timber
 
 class GradeNotification(private val context: Context) : BaseNotification(context) {
@@ -49,7 +50,7 @@ class GradeNotification(private val context: Context) : BaseNotification(context
                 .setContentIntent(
                     PendingIntent.getActivity(
                         context, 0,
-                        MainActivity.getStartIntent(context),
+                        MainActivity.getStartIntent(context).putExtra(EXTRA_CARD_ID_KEY, 0),
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )
