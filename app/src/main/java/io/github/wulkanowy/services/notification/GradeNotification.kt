@@ -59,8 +59,4 @@ class GradeNotification(private val context: Context) : BaseNotification(context
 
         Timber.d("Notification sent")
     }
-
-    fun cancelNotification(id: Int) {
-        getManager().cancel(id)
-    }
 }

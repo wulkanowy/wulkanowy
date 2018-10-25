@@ -16,6 +16,7 @@ class MainPresenter @Inject constructor(
         super.onAttachView(view)
 
         view.run {
+            cancelNotifications()
             startMenuIndex = if (init != -1) init else prefRepository.startMenuIndex
             initView()
         }

@@ -10,6 +10,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
 import io.github.wulkanowy.R
+import io.github.wulkanowy.services.notification.GradeNotification
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
@@ -125,6 +126,10 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun onBackPressed() {
         presenter.onBackPressed { super.onBackPressed() }
+    }
+
+    override fun cancelNotifications() {
+        GradeNotification(applicationContext).cancelAll()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

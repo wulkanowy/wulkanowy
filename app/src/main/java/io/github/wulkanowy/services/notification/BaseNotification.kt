@@ -7,6 +7,7 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
+import timber.log.Timber
 import java.util.Random
 
 abstract class BaseNotification(private val context: Context) {
@@ -38,5 +39,6 @@ abstract class BaseNotification(private val context: Context) {
 
     fun cancelAll() {
         notificationManager.cancelAll()
+        Timber.d("Notifications canceled")
     }
 }
