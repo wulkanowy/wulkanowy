@@ -44,6 +44,8 @@ class SyncWorker : SimpleJobService() {
     @Inject
     lateinit var prefRepository: PreferencesRepository
 
+    private val gradeNotification = GradeNotification(applicationContext)
+
     companion object {
         const val WORK_TAG = "FULL_SYNC"
     }
@@ -106,7 +108,7 @@ class SyncWorker : SimpleJobService() {
                     Timber.d("Found ${list.size} unread grades")
                     list.asSequence().filter { !it.notified }.map { grade ->
                         Timber.d("New grade id: ${grade.id}")
-                        GradeNotification(applicationContext).sendNotification(
+                        gradeNotification.sendNotification(
                             id = grade.id.toInt(),
                             title = grade.subject,
                             content = "${grade.gradeSymbol + (", " + grade.description).removeSuffix(", ")}: ${grade.entry}"
