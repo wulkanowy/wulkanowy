@@ -38,7 +38,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        presenter.onSharedPreferenceChanged(key)
+        presenter.onSharedPreferenceChanged(sharedPreferences, key)
     }
 
     override fun showMessage(text: String) {

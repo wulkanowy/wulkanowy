@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.settings
 
+import android.content.SharedPreferences
 import io.github.wulkanowy.BuildConfig
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.PreferencesRepository
@@ -13,9 +14,13 @@ class SettingsPresenter @Inject constructor(
     private val serviceRepository: ServiceRepository
 ) : BasePresenter<SettingsView>(errorHandler) {
 
-    fun onSharedPreferenceChanged(key: String) {
+    fun onSharedPreferenceChanged(sharedPref: SharedPreferences, key: String) {
         when (key) {
-            preferencesRepository.serviceEnablesKey,
+            preferencesRepository.serviceEnablesKey -> {
+                if (sharedPref.getBoolean(preferencesRepository.serviceEnablesKey, true))
+                    serviceRepository.startFullSyncService()
+                else serviceRepository.stopFullSyncService()
+            }
             preferencesRepository.servicesIntervalKey,
             preferencesRepository.servicesOnlyWifiKey -> {
                 serviceRepository.reloadFullSyncService()
