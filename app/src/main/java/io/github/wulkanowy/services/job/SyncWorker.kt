@@ -2,7 +2,6 @@ package io.github.wulkanowy.services.job
 
 import android.annotation.SuppressLint
 import com.firebase.jobdispatcher.JobParameters
-import com.firebase.jobdispatcher.JobService
 import com.firebase.jobdispatcher.SimpleJobService
 import dagger.android.AndroidInjection
 import io.github.wulkanowy.data.repositories.AttendanceRepository
@@ -78,38 +77,38 @@ class SyncWorker : SimpleJobService() {
                         )
                     )
                 }
-                .subscribe({ if (prefRepository.notificationsEnable) sendNotifications() }, { error = it })
+                .subscribe({}, { error = it })
 
             if (null !== error) {
                 throw error!!
             }
+
+            if (prefRepository.notificationsEnable) sendNotifications()
 
             Timber.d("Synchronization successful")
 
             RESULT_SUCCESS
         } catch (e: Throwable) {
             Timber.e(e, "Synchronization failed")
-            JobService.RESULT_FAIL_RETRY
+            RESULT_FAIL_RETRY
         }
     }
 
     @SuppressLint("CheckResult")
     private fun sendNotifications() {
+        val gradeNotification = GradeNotification(applicationContext)
+
         session.getSemesters(true)
             .map { it.single { semester -> semester.current } }
             .subscribe({ semester ->
                 gradesDetails.getNewGrades(semester).subscribe { list ->
-                    Timber.d("Found ${list.size} unread grades")
-                    val gradeNotification = GradeNotification(applicationContext)
-                    list.asSequence().filter { !it.notified }.map { grade ->
-                        Timber.d("New grade id: ${grade.id}")
-                        gradeNotification.sendNotification(
-                            id = grade.id.toInt(),
-                            title = grade.subject,
-                            content = "${grade.gradeSymbol + (", " + grade.description).removeSuffix(", ")}: ${grade.entry}"
-                        )
-                        gradesDetails.updateGrade(grade.apply { notified = true }).subscribe()
-                    }.toList()
+                    list.filter { !it.notified }.let { grades ->
+                        Timber.d("Found ${grades.size} unread grades")
+                        if (grades.isNotEmpty()) {
+                            gradeNotification.sendNotification(grades)
+                            gradesDetails.updateGrades(grades.map { it.apply { notified = true } }).subscribe()
+                        }
+                    }
                 }
             }, { Timber.e("Notifications sending failed") })
     }

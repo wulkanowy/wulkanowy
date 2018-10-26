@@ -7,8 +7,8 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import androidx.core.app.NotificationCompat
-import io.github.wulkanowy.BuildConfig.APPLICATION_ID
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_CARD_ID_KEY
 import timber.log.Timber
@@ -30,30 +30,34 @@ class GradeNotification(private val context: Context) : BaseNotification(context
         })
     }
 
-    fun sendNotification(id: Int, title: String, content: String) {
+    fun sendNotification(items: List<Grade>) {
         notify(
-            id = id,
-            notification = notificationBuilder(channelId)
-                .setContentTitle(title)
-                .setContentText(content)
+            notificationBuilder(channelId)
+                .setContentTitle(context.resources.getQuantityString(R.plurals.grade_new_items, items.size, items.size))
+                .setContentText(context.resources.getQuantityString(R.plurals.notify_grade_new_items, items.size, items.size))
                 .setSmallIcon(R.drawable.ic_stat_notify_grade)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setColor(context.resources.getColor(R.color.colorPrimary))
-                .setGroup("$APPLICATION_ID.NEW_GRADES")
                 .setLights(
                     0xFF0000,
                     context.resources.getInteger(context.resources.getIdentifier("config_defaultNotificationLedOn", "integer", "android")),
                     context.resources.getInteger(context.resources.getIdentifier("config_defaultNotificationLedOff", "integer", "android"))
                 )
                 .setContentIntent(
-                    PendingIntent.getActivity(
-                        context, 0,
+                    PendingIntent.getActivity(context, 0,
                         MainActivity.getStartIntent(context).putExtra(EXTRA_CARD_ID_KEY, 0),
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )
+                .setStyle(NotificationCompat.InboxStyle().run {
+                    setSummaryText(context.resources.getQuantityString(R.plurals.grade_number_item, items.size, items.size))
+                    items.forEach {
+                        addLine("${it.subject}: ${it.entry}")
+                    }
+                    this
+                })
                 .build()
         )
 

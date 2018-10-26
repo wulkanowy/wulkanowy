@@ -13,6 +13,9 @@ interface GradeDao {
     @Update
     fun update(grade: Grade)
 
+    @Update
+    fun updateAll(grade: List<Grade>)
+
     @Delete
     fun deleteAll(grades: List<Grade>)
 

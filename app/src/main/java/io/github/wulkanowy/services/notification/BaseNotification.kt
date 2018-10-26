@@ -18,8 +18,8 @@ abstract class BaseNotification(private val context: Context) {
 
     internal abstract fun createChannel(channelId: String)
 
-    fun notify(id: Int = Random().nextInt(1000), notification: Notification) {
-        notificationManager.notify(id, notification)
+    fun notify(notification: Notification) {
+        notificationManager.notify(Random().nextInt(1000), notification)
     }
 
     fun notificationBuilder(channelId: String): NotificationCompat.Builder {

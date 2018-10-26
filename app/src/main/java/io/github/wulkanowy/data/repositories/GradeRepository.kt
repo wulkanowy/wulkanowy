@@ -46,4 +46,8 @@ class GradeRepository @Inject constructor(
     fun updateGrade(grade: Grade): Completable {
         return local.updateGrade(grade)
     }
+
+    fun updateGrades(grades: List<Grade>): Completable {
+        return local.updateGrades(grades)
+    }
 }

@@ -57,6 +57,13 @@
         <item quantity="other">New grades</item>
     </plurals>
 
+    <!--Grade notify-->
+    <string name="notify_grade_channel">New grades</string>
+    <plurals name="notify_grade_new_items">
+        <item quantity="one">You received %1$d grade</item>
+        <item quantity="other">You received %1$d grades</item>
+    </plurals>
+
 
     <!--Timetable-->
     <string name="timetable_lesson">Lesson</string>
@@ -131,14 +138,6 @@
     <string name="pref_services_wifi">Only WiFi</string>
 
     <string name="pref_restart">Restart required</string>
-
-
-    <!--Grade notify-->
-    <string name="notify_grade_channel">New grades</string>
-    <plurals name="notify_grade_new_items">
-        <item quantity="one">You received %1$d grade</item>
-        <item quantity="other">You received %1$d grades</item>
-    </plurals>
 
 
     <!--Colors-->
