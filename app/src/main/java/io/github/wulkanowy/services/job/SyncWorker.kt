@@ -78,8 +78,7 @@ class SyncWorker : SimpleJobService() {
                         )
                     )
                 }
-                .doFinally { if (prefRepository.notificationsEnable) sendNotifications() }
-                .subscribe({}, { error = it })
+                .subscribe({ if (prefRepository.notificationsEnable) sendNotifications() }, { error = it })
 
             if (null !== error) {
                 throw error!!
@@ -89,7 +88,7 @@ class SyncWorker : SimpleJobService() {
 
             RESULT_SUCCESS
         } catch (e: Throwable) {
-            Timber.e("Synchronization failed: ${e.localizedMessage}")
+            Timber.e(e, "Synchronization failed")
             JobService.RESULT_FAIL_RETRY
         }
     }
@@ -98,9 +97,6 @@ class SyncWorker : SimpleJobService() {
     private fun sendNotifications() {
         session.getSemesters(true)
             .map { it.single { semester -> semester.current } }
-            .doFinally {
-                Timber.d("All pending notifications sent")
-            }
             .subscribe({ semester ->
                 gradesDetails.getNewGrades(semester).subscribe { list ->
                     Timber.d("Found ${list.size} unread grades")

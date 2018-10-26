@@ -38,7 +38,7 @@ class ServiceRepository @Inject constructor(
                 .setTrigger(
                     executionWindow(
                         prefRepository.servicesInterval * 60,
-                        (prefRepository.servicesInterval + 0) * 60
+                        (prefRepository.servicesInterval + 10) * 60
                     )
                 )
                 .setConstraints(if (prefRepository.servicesOnlyWifi) ON_UNMETERED_NETWORK else ON_ANY_NETWORK)
