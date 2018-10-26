@@ -16,6 +16,7 @@ import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
+import io.github.wulkanowy.utils.getColorFromAttr
 import io.github.wulkanowy.utils.safelyPopFragment
 import io.github.wulkanowy.utils.setOnViewChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -74,6 +75,7 @@ class MainActivity : BaseActivity(), MainView {
             ))
             accentColor = ContextCompat.getColor(context, R.color.colorPrimary)
             inactiveColor = ContextCompat.getColor(context, android.R.color.black)
+            defaultBackgroundColor = context.getColorFromAttr(R.attr.bottomNavBackground)
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false

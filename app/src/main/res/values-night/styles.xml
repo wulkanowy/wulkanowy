@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="WulkanowyTheme" parent="@style/Theme.AppCompat.DayNight">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="bottomNavBackground">@color/bottom_nav_background</item>
+    </style>
+
+    <style name="WulkanowyTheme.NoActionBar" parent="WulkanowyTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColorTertiary">@android:color/primary_text_dark</item>
+    </style>
+</resources>
