@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="services_interval_entries">
-        <item>1 minuta</item>
         <item>15 minut</item>
         <item>30 minut</item>
         <item>1 godzina</item>
