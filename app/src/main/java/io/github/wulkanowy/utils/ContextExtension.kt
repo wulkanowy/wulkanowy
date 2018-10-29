@@ -1,14 +1,15 @@
 package io.github.wulkanowy.utils
 
 import android.content.Context
-import android.util.TypedValue
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 
-fun Context.getColorFromAttr(
-    @AttrRes attrColor: Int,
-    typedValue: TypedValue = TypedValue(),
-    resolveRefs: Boolean = true
-): Int {
-    theme.resolveAttribute(attrColor, typedValue, resolveRefs)
-    return typedValue.data
+@ColorInt
+fun Context.getThemeAttrColor(@AttrRes colorAttr: Int): Int {
+    val array = this.obtainStyledAttributes(null, intArrayOf(colorAttr))
+    try {
+        return array.getColor(0, 0)
+    } finally {
+        array.recycle()
+    }
 }
