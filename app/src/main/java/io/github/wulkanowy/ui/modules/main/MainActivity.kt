@@ -74,8 +74,8 @@ class MainActivity : BaseActivity(), MainView {
                     AHBottomNavigationItem(R.string.more_title, R.drawable.ic_menu_main_more_24dp, 0)
             ))
             accentColor = ContextCompat.getColor(context, R.color.colorPrimary)
-            inactiveColor = context.getThemeAttrColor(android.R.attr.textColorSecondary)
-            defaultBackgroundColor = context.getThemeAttrColor(R.attr.bottomNavBackground)
+            inactiveColor = getThemeAttrColor(android.R.attr.textColorSecondary)
+            defaultBackgroundColor = getThemeAttrColor(R.attr.bottomNavBackground)
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false
