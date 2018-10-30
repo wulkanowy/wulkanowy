@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.modules.main.MainActivity
@@ -39,7 +40,7 @@ class GradeNotification(private val context: Context) : BaseNotification(context
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setColor(context.resources.getColor(R.color.colorPrimary))
+                .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setContentIntent(
                     PendingIntent.getActivity(context, 0,
                         MainActivity.getStartIntent(context).putExtra(EXTRA_CARD_ID_KEY, 0),
