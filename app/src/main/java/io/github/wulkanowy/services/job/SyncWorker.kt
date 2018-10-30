@@ -63,33 +63,27 @@ class SyncWorker : SimpleJobService() {
 
         var error: Throwable? = null
 
-        return try {
-            session.getSemesters(true)
-                .map { it.single { semester -> semester.current } }
-                .flatMapPublisher {
-                    Single.merge(
-                        listOf(
-                            gradesDetails.getGrades(it, true, true),
-                            gradesSummary.getGradesSummary(it, true),
-                            attendance.getAttendance(it, start, end, true),
-                            exam.getExams(it, start, end, true),
-                            timetable.getTimetable(it, start, end, true)
-                        )
+        session.getSemesters(true)
+            .map { it.single { semester -> semester.current } }
+            .flatMapPublisher {
+                Single.merge(
+                    listOf(
+                        gradesDetails.getGrades(it, true, true),
+                        gradesSummary.getGradesSummary(it, true),
+                        attendance.getAttendance(it, start, end, true),
+                        exam.getExams(it, start, end, true),
+                        timetable.getTimetable(it, start, end, true)
                     )
-                }
-                .subscribe({}, { error = it })
-
-            if (null !== error) {
-                throw error!!
+                )
             }
+            .subscribe({}, { error = it })
 
+        return if (null === error) {
             if (prefRepository.notificationsEnable) sendNotifications()
-
             Timber.d("Synchronization successful")
-
             RESULT_SUCCESS
-        } catch (e: Throwable) {
-            Timber.e(e, "Synchronization failed")
+        } else {
+            Timber.e(error, "Synchronization failed")
             RESULT_FAIL_RETRY
         }
     }
