@@ -12,6 +12,14 @@
                 android:summary="%s"
                 android:title="@string/pref_view_list"
                 app:iconSpaceReserved="false"/>
+        <ListPreference
+                android:defaultValue="1"
+                android:entries="@array/theme_entries"
+                android:entryValues="@array/theme_values"
+                android:key="theme"
+                android:summary="%s"
+                android:title="@string/pref_view_theme_dark"
+                app:iconSpaceReserved="false"/>
         <SwitchPreference
                 android:defaultValue="true"
                 android:key="@string/pref_key_attendance_present"

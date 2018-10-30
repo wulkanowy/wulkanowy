@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import com.takisoft.preferencex.PreferenceFragmentCompat
 import dagger.android.support.AndroidSupportInjection
 import io.github.wulkanowy.R
@@ -39,6 +40,11 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         presenter.onSharedPreferenceChanged(sharedPreferences, key)
+    }
+
+    override fun setTheme(theme: Int) {
+        AppCompatDelegate.setDefaultNightMode(theme)
+        activity?.recreate()
     }
 
     override fun showMessage(text: String) {

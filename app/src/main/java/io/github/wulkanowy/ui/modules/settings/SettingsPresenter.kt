@@ -26,6 +26,9 @@ class SettingsPresenter @Inject constructor(
                 serviceRepository.reloadFullSyncService()
                 if (BuildConfig.DEBUG) view?.showMessage("Services reloaded")
             }
+            preferencesRepository.currentThemeKey -> {
+                view?.setTheme(sharedPref.getString(preferencesRepository.currentThemeKey, "1")?.toInt() ?: 1)
+            }
         }
     }
 }
