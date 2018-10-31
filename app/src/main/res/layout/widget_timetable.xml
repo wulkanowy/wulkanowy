@@ -51,13 +51,13 @@
     </RelativeLayout>
 
     <ListView
-        android:id="@+id/timetable_widget_list"
+        android:id="@+id/timetableWidgetList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/timetable_widget_bar_height" />
 
     <TextView
-        android:id="@+id/timetable_widget_empty"
+        android:id="@+id/timetableWidgetEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
