@@ -131,13 +131,11 @@
     <string name="pref_notify_header">Notifications</string>
     <string name="pref_notify_switch">Show notifications</string>
 
-    <string name="pref_services_header">Services</string>
+    <string name="pref_services_header">Synchronization</string>
     <string name="pref_services_switch">Automatic update</string>
     <string name="pref_services_suspended">Suspended on holiday</string>
     <string name="pref_services_interval">Updates interval</string>
     <string name="pref_services_wifi">Only WiFi</string>
-
-    <string name="pref_restart">Restart required</string>
 
 
     <!--Colors-->

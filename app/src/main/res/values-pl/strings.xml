@@ -138,13 +138,11 @@
     <string name="pref_notify_header">Powiadomienia</string>
     <string name="pref_notify_switch">Pokazuj powiadomienia</string>
 
-    <string name="pref_services_header">Usługi</string>
+    <string name="pref_services_header">Synchronizacja</string>
     <string name="pref_services_switch">Automatyczna aktualizacja</string>
     <string name="pref_services_suspended">Zawieszone na wakacjach</string>
     <string name="pref_services_interval">Interwał aktualizacji</string>
     <string name="pref_services_wifi">Tylko WiFi</string>
-
-    <string name="pref_restart">Wymagany restart</string>
 
 
     <!--Colors-->
