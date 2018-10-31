@@ -47,6 +47,13 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         activity?.recreate()
     }
 
+    override fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean) {
+        findPreference(serviceEnablesKey).run {
+            summary = if (isHolidays) getString(R.string.pref_services_suspended) else ""
+            isEnabled = !isHolidays
+        }
+    }
+
     override fun showMessage(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
