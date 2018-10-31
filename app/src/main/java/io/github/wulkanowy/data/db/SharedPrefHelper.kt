@@ -14,4 +14,12 @@ class SharedPrefHelper @Inject constructor(private val sharedPref: SharedPrefere
     fun getLong(key: String, defaultValue: Long): Long {
         return sharedPref.getLong(key, defaultValue)
     }
+
+    fun putInt(key: String, value: Int) {
+        sharedPref.edit().putInt(key, value).apply()
+    }
+
+    fun getInt(key: String, defaultValue: Int): Int {
+        return sharedPref.getInt(key, defaultValue)
+    }
 }
