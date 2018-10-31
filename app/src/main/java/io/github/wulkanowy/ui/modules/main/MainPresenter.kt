@@ -2,14 +2,14 @@ package io.github.wulkanowy.ui.modules.main
 
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.github.wulkanowy.data.repositories.ServiceRepository
+import io.github.wulkanowy.services.job.ServiceHelper
 import io.github.wulkanowy.ui.base.BasePresenter
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     private val prefRepository: PreferencesRepository,
-    private val serviceRepository: ServiceRepository
+    private val serviceHelper: ServiceHelper
 ) : BasePresenter<MainView>(errorHandler) {
 
     override fun onAttachView(view: MainView, init: Int) {
@@ -21,7 +21,7 @@ class MainPresenter @Inject constructor(
             initView()
         }
 
-        serviceRepository.startFullSyncService()
+        serviceHelper.startFullSyncService()
     }
 
     fun onViewStart() {

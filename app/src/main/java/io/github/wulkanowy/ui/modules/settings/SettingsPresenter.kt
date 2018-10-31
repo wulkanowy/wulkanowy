@@ -4,26 +4,26 @@ import android.content.SharedPreferences
 import io.github.wulkanowy.BuildConfig
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.github.wulkanowy.data.repositories.ServiceRepository
+import io.github.wulkanowy.services.job.ServiceHelper
 import io.github.wulkanowy.ui.base.BasePresenter
 import javax.inject.Inject
 
 class SettingsPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     private val preferencesRepository: PreferencesRepository,
-    private val serviceRepository: ServiceRepository
+    private val serviceHelper: ServiceHelper
 ) : BasePresenter<SettingsView>(errorHandler) {
 
     fun onSharedPreferenceChanged(sharedPref: SharedPreferences, key: String) {
         when (key) {
             preferencesRepository.serviceEnablesKey -> {
                 if (sharedPref.getBoolean(preferencesRepository.serviceEnablesKey, true))
-                    serviceRepository.startFullSyncService()
-                else serviceRepository.stopFullSyncService()
+                    serviceHelper.startFullSyncService()
+                else serviceHelper.stopFullSyncService()
             }
             preferencesRepository.servicesIntervalKey,
             preferencesRepository.servicesOnlyWifiKey -> {
-                serviceRepository.reloadFullSyncService()
+                serviceHelper.reloadFullSyncService()
                 if (BuildConfig.DEBUG) view?.showMessage("Services reloaded")
             }
             preferencesRepository.currentThemeKey -> {
