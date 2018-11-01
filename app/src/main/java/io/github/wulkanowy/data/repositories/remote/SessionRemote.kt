@@ -22,37 +22,36 @@ class SessionRemote @Inject constructor(private val api: Api) {
                     loginType = "AUTO"
                 ), true
             )
-        )
-            .flatMap { _ ->
-                api.getPupils().map { students ->
-                    students.map {
-                        Student(
-                            email = email,
-                            password = password,
-                            symbol = it.symbol,
-                            studentId = it.studentId,
-                            studentName = it.studentName,
-                            schoolSymbol = it.schoolSymbol,
-                            schoolName = it.schoolName,
-                            endpoint = endpoint,
-                            loginType = it.loginType.name
-                        )
-                    }
+        ).flatMap {
+            api.getPupils().map { students ->
+                students.map { pupil ->
+                    Student(
+                        email = email,
+                        password = password,
+                        symbol = pupil.symbol,
+                        studentId = pupil.studentId,
+                        studentName = pupil.studentName,
+                        schoolSymbol = pupil.schoolSymbol,
+                        schoolName = pupil.schoolName,
+                        endpoint = endpoint,
+                        loginType = pupil.loginType.name
+                    )
                 }
             }
+        }
     }
 
     fun getSemesters(student: Student): Single<List<Semester>> {
-        return Single.just(initApi(student)).flatMap { _ ->
+        return Single.just(initApi(student)).flatMap {
             api.getSemesters().map { semesters ->
-                semesters.map {
+                semesters.map { semester ->
                     Semester(
                         studentId = student.studentId,
-                        diaryId = it.diaryId,
-                        diaryName = it.diaryName,
-                        semesterId = it.semesterId,
-                        semesterName = it.semesterNumber,
-                        current = it.current
+                        diaryId = semester.diaryId,
+                        diaryName = semester.diaryName,
+                        semesterId = semester.semesterId,
+                        semesterName = semester.semesterNumber,
+                        current = semester.current
                     )
                 }
 

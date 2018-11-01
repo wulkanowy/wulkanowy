@@ -7,7 +7,6 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.local.GradeLocal
 import io.github.wulkanowy.data.repositories.remote.GradeRemote
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -32,15 +31,15 @@ class GradeRepository @Inject constructor(
                             local.deleteGrades(oldGrades - newGrades)
                             local.saveGrades((newGrades - oldGrades)
                                 .onEach {
-                                    if (oldGrades.isNotEmpty()) it.read = false
-                                    if (notify) it.notified = false
+                                    if (oldGrades.isNotEmpty()) it.isRead = false
+                                    if (notify) it.isNotified = false
                                 })
                         }
                 }.flatMap { local.getGrades(semester).toSingle(emptyList()) })
     }
 
-    fun getNewGrades(semester: Semester): Maybe<List<Grade>> {
-        return local.getNewGrades(semester)
+    fun getNewGrades(semester: Semester): Single<List<Grade>> {
+        return local.getNewGrades(semester).toSingle(emptyList())
     }
 
     fun updateGrade(grade: Grade): Completable {

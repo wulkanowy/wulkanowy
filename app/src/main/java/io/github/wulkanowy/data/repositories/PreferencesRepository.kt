@@ -12,20 +12,18 @@ class PreferencesRepository @Inject constructor(
     val context: Context
 ) {
 
-    val startMenuIndexKey: String = context.getString(R.string.pref_key_start_menu)
     val startMenuIndex: Int
-        get() = sharedPref.getString(startMenuIndexKey, "0")?.toInt() ?: 0
+        get() = sharedPref.getString(context.getString(R.string.pref_key_start_menu), "0")?.toInt() ?: 0
 
-    val showPresentKey: String = context.getString(R.string.pref_key_attendance_present)
     val showPresent: Boolean
-        get() = sharedPref.getBoolean(showPresentKey, true)
+        get() = sharedPref.getBoolean(context.getString(R.string.pref_key_attendance_present), true)
 
     val currentThemeKey: String = context.getString(R.string.pref_key_theme)
     val currentTheme: Int
         get() = sharedPref.getString(currentThemeKey, "1")?.toInt() ?: 1
 
     val serviceEnablesKey: String = context.getString(R.string.pref_key_services_enable)
-    val serviceEnables: Boolean
+    val serviceEnabled: Boolean
         get() = sharedPref.getBoolean(serviceEnablesKey, true)
 
     val servicesIntervalKey: String = context.getString(R.string.pref_key_services_interval)
@@ -36,7 +34,6 @@ class PreferencesRepository @Inject constructor(
     val servicesOnlyWifi: Boolean
         get() = sharedPref.getBoolean(servicesOnlyWifiKey, true)
 
-    val notificationsEnableKey: String = context.getString(R.string.pref_key_notifications_enable)
     val notificationsEnable: Boolean
-        get() = sharedPref.getBoolean(notificationsEnableKey, true)
+        get() = sharedPref.getBoolean(context.getString(R.string.pref_key_notifications_enable), true)
 }

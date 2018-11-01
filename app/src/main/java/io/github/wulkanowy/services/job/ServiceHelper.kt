@@ -24,7 +24,7 @@ class ServiceHelper @Inject constructor(
     }
 
     fun startFullSyncService(replaceCurrent: Boolean = false) {
-        if (LocalDate.now().isHolidays || !prefRepository.serviceEnables) {
+        if (LocalDate.now().isHolidays || !prefRepository.serviceEnabled) {
             Timber.d("Services disabled or it's holidays")
             return
         }

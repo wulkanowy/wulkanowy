@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.settings
 
 import io.github.wulkanowy.data.ErrorHandler
-import io.github.wulkanowy.data.db.SharedPrefHelper
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.services.job.ServiceHelper
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -12,7 +11,6 @@ import javax.inject.Inject
 class SettingsPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     private val preferencesRepository: PreferencesRepository,
-    private val sharedPrefHelper: SharedPrefHelper,
     private val serviceHelper: ServiceHelper
 ) : BasePresenter<SettingsView>(errorHandler) {
 
@@ -27,18 +25,15 @@ class SettingsPresenter @Inject constructor(
     fun onSharedPreferenceChanged(key: String) {
         when (key) {
             preferencesRepository.serviceEnablesKey -> {
-                if (sharedPrefHelper.getBoolean(preferencesRepository.serviceEnablesKey, true)) {
-                    serviceHelper.startFullSyncService()
-                } else {
-                    serviceHelper.stopFullSyncService()
-                }
+                if (preferencesRepository.serviceEnabled) serviceHelper.startFullSyncService()
+                else serviceHelper.stopFullSyncService()
             }
             preferencesRepository.servicesIntervalKey,
             preferencesRepository.servicesOnlyWifiKey -> {
                 serviceHelper.reloadFullSyncService()
             }
             preferencesRepository.currentThemeKey -> {
-                view?.setTheme(sharedPrefHelper.getString(preferencesRepository.currentThemeKey, "1").toInt())
+                view?.setTheme(preferencesRepository.currentTheme)
             }
         }
     }

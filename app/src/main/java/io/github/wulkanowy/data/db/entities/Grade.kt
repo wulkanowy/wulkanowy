@@ -44,7 +44,9 @@ data class Grade(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
-    var read: Boolean = true
+    @ColumnInfo(name = "is_read")
+    var isRead: Boolean = true
 
-    var notified: Boolean = true
+    @ColumnInfo(name = "is_notified")
+    var isNotified: Boolean = true
 }

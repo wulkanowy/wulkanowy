@@ -3,8 +3,6 @@ package io.github.wulkanowy.data
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
-import com.firebase.jobdispatcher.FirebaseJobDispatcher
-import com.firebase.jobdispatcher.GooglePlayDriver
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy
 import dagger.Module
@@ -40,12 +38,6 @@ internal class RepositoryModule {
     @Provides
     fun provideSharedPref(context: Context): SharedPreferences {
         return PreferenceManager.getDefaultSharedPreferences(context)
-    }
-
-    @Singleton
-    @Provides
-    fun provideJobDispatcher(context: Context): FirebaseJobDispatcher {
-        return FirebaseJobDispatcher(GooglePlayDriver(context))
     }
 
     @Singleton

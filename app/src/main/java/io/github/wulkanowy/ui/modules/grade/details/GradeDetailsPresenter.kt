@@ -52,8 +52,8 @@ class GradeDetailsPresenter @Inject constructor(
         if (item is GradeDetailsItem) {
             view?.apply {
                 showGradeDialog(item.grade)
-                if (!item.grade.read) {
-                    item.grade.read = true
+                if (!item.grade.isRead) {
+                    item.grade.isRead = true
                     updateItem(item)
                     getHeaderOfItem(item)?.let { header ->
                         if (header is GradeDetailsHeader) {
@@ -95,7 +95,7 @@ class GradeDetailsPresenter @Inject constructor(
                         subject = it.key,
                         average = formatAverage(average),
                         number = view?.getGradeNumberString(it.value.size).orEmpty(),
-                        newGrades = it.value.filter { grade -> !grade.read }.size
+                        newGrades = it.value.filter { grade -> !grade.isRead }.size
                 ).apply {
                     subItems = it.value.map { item ->
                         GradeDetailsItem(

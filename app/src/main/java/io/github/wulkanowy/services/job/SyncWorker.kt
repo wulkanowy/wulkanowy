@@ -1,6 +1,5 @@
 package io.github.wulkanowy.services.job
 
-import android.annotation.SuppressLint
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.SimpleJobService
 import dagger.android.AndroidInjection
@@ -16,6 +15,7 @@ import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDate
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,6 +43,8 @@ class SyncWorker : SimpleJobService() {
     @Inject
     lateinit var prefRepository: PreferencesRepository
 
+    private val disposable = CompositeDisposable()
+
     companion object {
         const val WORK_TAG = "FULL_SYNC"
     }
@@ -52,7 +54,6 @@ class SyncWorker : SimpleJobService() {
         AndroidInjection.inject(this)
     }
 
-    @SuppressLint("CheckResult")
     override fun onRunJob(job: JobParameters?): Int {
         Timber.d("Synchronization started")
 
@@ -63,7 +64,7 @@ class SyncWorker : SimpleJobService() {
 
         var error: Throwable? = null
 
-        session.getSemesters(true)
+        disposable.add(session.getSemesters(true)
             .map { it.single { semester -> semester.current } }
             .flatMapPublisher {
                 Single.merge(
@@ -76,7 +77,7 @@ class SyncWorker : SimpleJobService() {
                     )
                 )
             }
-            .subscribe({}, { error = it })
+            .subscribe({}, { error = it }))
 
         return if (null === error) {
             if (prefRepository.notificationsEnable) sendNotifications()
@@ -88,22 +89,22 @@ class SyncWorker : SimpleJobService() {
         }
     }
 
-    @SuppressLint("CheckResult")
     private fun sendNotifications() {
-        val gradeNotification = GradeNotification(applicationContext)
-
-        session.getSemesters(true)
+        disposable.add(session.getSemesters(true)
             .map { it.single { semester -> semester.current } }
-            .subscribe({ semester ->
-                gradesDetails.getNewGrades(semester).subscribe { list ->
-                    list.filter { !it.notified }.let { grades ->
-                        Timber.d("Found ${grades.size} unread grades")
-                        if (grades.isNotEmpty()) {
-                            gradeNotification.sendNotification(grades)
-                            gradesDetails.updateGrades(grades.map { it.apply { notified = true } }).subscribe()
-                        }
-                    }
+            .flatMap { gradesDetails.getNewGrades(it) }
+            .map { it.filter { grade -> !grade.isNotified } }
+            .subscribe({
+                if (it.isNotEmpty()) {
+                    Timber.d("Found ${it.size} unread grades")
+                    GradeNotification(applicationContext).sendNotification(it)
+                    gradesDetails.updateGrades(it.map { grade -> grade.apply { isNotified = true } }).subscribe()
                 }
-            }, { Timber.e("Notifications sending failed") })
+            }) { Timber.e("Notifications sending failed") })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable.clear()
     }
 }

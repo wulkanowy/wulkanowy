@@ -12,7 +12,7 @@ class MainPresenter @Inject constructor(
     private val serviceHelper: ServiceHelper
 ) : BasePresenter<MainView>(errorHandler) {
 
-    override fun onAttachView(view: MainView, init: Int) {
+    fun onAttachView(view: MainView, init: Int) {
         super.onAttachView(view)
 
         view.run {
