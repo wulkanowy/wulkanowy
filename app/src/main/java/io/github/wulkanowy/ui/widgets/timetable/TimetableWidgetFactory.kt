@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.widgets.timetable
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.view.View.GONE
@@ -10,23 +9,22 @@ import android.widget.AdapterView.INVALID_POSITION
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.SharedPrefHelper
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
-import io.github.wulkanowy.ui.widgets.timetable.TimetableWidgetProvider.Companion.EXTRA_SELECTED_DATE
 import io.github.wulkanowy.utils.toFormattedString
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDate
 import timber.log.Timber
 import javax.inject.Inject
 
-
 class TimetableWidgetFactory @Inject constructor(
-        private val timetableRepository: TimetableRepository,
-        private val sessionRepository: SessionRepository,
-        private val context: Context,
-        private val intent: Intent?)
-    : RemoteViewsService.RemoteViewsFactory {
+    private val timetableRepository: TimetableRepository,
+    private val sessionRepository: SessionRepository,
+    private val sharedPref: SharedPrefHelper,
+    private val context: Context
+) : RemoteViewsService.RemoteViewsFactory {
 
     private lateinit var currentDate: LocalDate
 
@@ -44,20 +42,17 @@ class TimetableWidgetFactory @Inject constructor(
 
     override fun getItemId(position: Int) = position.toLong()
 
-    override fun onCreate() {
-        intent?.run {
-            currentDate = LocalDate.ofEpochDay(getLongExtra(EXTRA_SELECTED_DATE, 0))
-        }
-    }
+    override fun onCreate() {}
 
     override fun onDataSetChanged() {
+        currentDate = LocalDate.ofEpochDay(sharedPref.getLong("timetable_widget", -1))
         if (sessionRepository.isSessionSaved) {
             disposable.add(sessionRepository.getSemesters()
-                    .map { it.single { item -> item.current } }
-                    .flatMap { timetableRepository.getTimetable(it, currentDate, currentDate) }
-                    .map { item -> item.sortedBy { it.number } }
-                    .subscribe({ lessons = it })
-                    { Timber.e(it, "An error has occurred while downloading data for the widget") })
+                .map { it.single { item -> item.current } }
+                .flatMap { timetableRepository.getTimetable(it, currentDate, currentDate) }
+                .map { item -> item.sortedBy { it.number } }
+                .subscribe({ lessons = it })
+                { Timber.e(it, "An error has occurred while downloading data for the widget") })
         }
     }
 
@@ -68,7 +63,7 @@ class TimetableWidgetFactory @Inject constructor(
             lessons[position].let {
                 setTextViewText(R.id.timetableWidgetItemSubject, it.subject)
                 setTextViewText(R.id.timetableWidgetItemTime, it.start.toFormattedString("HH:mm") +
-                        " - ${it.end.toFormattedString("HH:mm")}")
+                    " - ${it.end.toFormattedString("HH:mm")}")
 
                 if (it.room.isNotBlank()) {
                     setTextViewText(R.id.timetableWidgetItemRoom, "${context.getString(R.string.timetable_room)} ${it.room}")
@@ -81,7 +76,7 @@ class TimetableWidgetFactory @Inject constructor(
 
                 if (it.changes) {
                     setInt(R.id.timetableWidgetItemSubject, "setPaintFlags",
-                            STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG)
+                        STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG)
                 } else {
                     setInt(R.id.timetableWidgetItemSubject, "setPaintFlags", ANTI_ALIAS_FLAG)
                 }

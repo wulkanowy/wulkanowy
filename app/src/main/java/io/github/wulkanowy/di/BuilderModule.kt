@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.modules.login.LoginModule
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainModule
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
+import io.github.wulkanowy.ui.widgets.timetable.TimetableWidgetProvider
 
 @Module
 internal abstract class BuilderModule {
@@ -28,6 +29,9 @@ internal abstract class BuilderModule {
 
     @ContributesAndroidInjector
     abstract fun bindTimetableWidgetService(): TimetableWidgetService
+
+    @ContributesAndroidInjector
+    abstract fun bindTimetableWIdgetProvider(): TimetableWidgetProvider
 
     @ContributesAndroidInjector
     abstract fun bindSyncJob(): SyncWorker
