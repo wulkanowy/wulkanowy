@@ -39,7 +39,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        presenter.onSharedPreferenceChanged(sharedPreferences, key)
+        presenter.onSharedPreferenceChanged(key)
     }
 
     override fun setTheme(theme: Int) {
