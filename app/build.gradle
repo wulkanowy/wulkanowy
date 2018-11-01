@@ -55,7 +55,7 @@ android {
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
             testCoverageEnabled = true
-            ext.enableCrashlytics = fabricApiKey != "null"
+            ext.enableCrashlytics = fabricApiKey != "null" && !project.hasProperty("disableCrashlytics")
             multiDexKeepProguard file('proguard-multidex-rules.pro')
         }
     }
