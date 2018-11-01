@@ -14,14 +14,14 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_CARD_ID_KEY
 import timber.log.Timber
 
-class GradeNotification(private val context: Context) : BaseNotification(context) {
+class GradeNotification(context: Context) : BaseNotification(context) {
 
     private val channelId = "Grade_Notify"
 
     @TargetApi(26)
     override fun createChannel(channelId: String) {
-        getManager().createNotificationChannel(NotificationChannel(
-            channelId, getString(R.string.notify_grade_channel),
+        notificationManager.createNotificationChannel(NotificationChannel(
+            channelId, context.getString(R.string.notify_grade_channel),
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
             description
@@ -42,7 +42,8 @@ class GradeNotification(private val context: Context) : BaseNotification(context
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setContentIntent(
-                    PendingIntent.getActivity(context, 0,
+                    PendingIntent.getActivity(
+                        context, 0,
                         MainActivity.getStartIntent(context).putExtra(EXTRA_CARD_ID_KEY, 0),
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
