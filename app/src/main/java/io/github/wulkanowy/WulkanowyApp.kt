@@ -39,12 +39,10 @@ class WulkanowyApp : DaggerApplication() {
     }
 
     private fun initializeFabric() {
-        Fabric.with(Fabric.Builder(this)
-            .kits(Crashlytics.Builder().core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG || !BuildConfig.FABRIC_ENABLED).build()).build(),
-                Answers()
-            )
-            .debuggable(BuildConfig.DEBUG)
-            .build())
+        Fabric.with(Fabric.Builder(this).kits(
+            Crashlytics.Builder().core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG || !BuildConfig.FABRIC_ENABLED).build()).build(),
+            Answers()
+        ).debuggable(BuildConfig.DEBUG).build())
         Timber.plant(CrashlyticsTree())
     }
 

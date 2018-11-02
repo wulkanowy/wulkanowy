@@ -9,6 +9,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
@@ -39,18 +40,17 @@ class ExamPresenter @Inject constructor(
     fun onPreviousWeek() {
         loadData(currentDate.minusDays(7))
         reloadView()
-        Timber.i("Exam day changed to %s by %s button", currentDate.toFormattedString(), "prev")
+        logEvent("Exam week changed", mapOf("button" to "prev", "date" to currentDate.toFormattedString()))
     }
 
     fun onNextWeek() {
         loadData(currentDate.plusDays(7))
         reloadView()
-        Timber.i("Exam day changed to %s by %s button", currentDate.toFormattedString(), "next")
+        logEvent("Exam week changed", mapOf("button" to "next", "date" to currentDate.toFormattedString()))
     }
 
     fun onSwipeRefresh() {
         loadData(currentDate, true)
-        Timber.i("Exam refreshed")
     }
 
     fun onExamItemSelected(item: AbstractFlexibleItem<*>?) {
@@ -87,7 +87,7 @@ class ExamPresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    Timber.i("Loaded ${it.size} exam items")
+                    logEvent("Exam load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.proceed(it)

@@ -8,7 +8,7 @@ import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
-import timber.log.Timber
+import io.github.wulkanowy.utils.logEvent
 import java.lang.String.format
 import java.util.Locale.FRANCE
 import javax.inject.Inject
@@ -61,7 +61,7 @@ class GradeSummaryPresenter @Inject constructor(
                     showContent(it.first.isNotEmpty())
                     updateDataSet(it.first, it.second)
                 }
-                Timber.i("Loaded ${it.first.size} grade summary items")
+                logEvent("Grade summary load", mapOf("items" to it.first.size, "forceRefresh" to forceRefresh))
             }) {
                 view?.run { showEmpty(isViewEmpty) }
                 errorHandler.proceed(it)
@@ -70,7 +70,6 @@ class GradeSummaryPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         view?.notifyParentRefresh()
-        Timber.i("Grade summary refreshed")
     }
 
     fun onParentViewReselected() {

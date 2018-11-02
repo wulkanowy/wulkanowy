@@ -18,6 +18,7 @@ import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.logLogin
 import io.github.wulkanowy.utils.safelyPopFragment
 import io.github.wulkanowy.utils.setOnViewChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -54,7 +55,14 @@ class MainActivity : BaseActivity(), MainView {
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer
 
-        presenter.onAttachView(this, intent.getIntExtra(EXTRA_START_MENU_INDEX, -1))
+        intent.getIntExtra(EXTRA_START_MENU_INDEX, -1).let { initMenuIndex ->
+            when (initMenuIndex) {
+                -1 -> logLogin("Open app")
+                1 -> logLogin("Grades")
+                3 -> logLogin("Timetable")
+            }
+            presenter.onAttachView(this, initMenuIndex)
+        }
         navController.initialize(startMenuIndex, savedInstanceState)
     }
 

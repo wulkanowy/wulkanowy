@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules.about
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.Libs.SpecialButton.SPECIAL1
 import com.mikepenz.aboutlibraries.Libs.SpecialButton.SPECIAL2
+import com.mikepenz.aboutlibraries.Libs.SpecialButton.SPECIAL3
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.ui.base.BasePresenter
 import timber.log.Timber
@@ -21,7 +22,7 @@ class AboutPresenter @Inject constructor(errorHandler: ErrorHandler) : BasePrese
                     Timber.i("Opening issues page")
                     openIssuesWebView()
                 }
-                else -> TODO()
+                SPECIAL3 -> { }
             }
         }
     }

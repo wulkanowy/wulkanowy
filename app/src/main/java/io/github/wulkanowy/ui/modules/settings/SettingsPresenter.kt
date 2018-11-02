@@ -5,8 +5,8 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.services.job.ServiceHelper
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.logEvent
 import org.threeten.bp.LocalDate.now
-import timber.log.Timber
 import javax.inject.Inject
 
 class SettingsPresenter @Inject constructor(
@@ -38,6 +38,6 @@ class SettingsPresenter @Inject constructor(
             }
         }
 
-        Timber.i("Setting `$key` changed")
+        logEvent("Setting changed", mapOf("name" to key))
     }
 }

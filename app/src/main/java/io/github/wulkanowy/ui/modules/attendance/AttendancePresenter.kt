@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
@@ -15,7 +16,6 @@ import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
 import org.threeten.bp.LocalDate.ofEpochDay
-import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
@@ -40,18 +40,17 @@ class AttendancePresenter @Inject constructor(
     fun onPreviousDay() {
         loadData(currentDate.previousSchoolDay)
         reloadView()
-        Timber.i("Attendance day changed to %s by %s button", currentDate.toFormattedString(), "prev")
+        logEvent("Attendance day changed", mapOf("button" to "prev", "date" to currentDate.toFormattedString()))
     }
 
     fun onNextDay() {
         loadData(currentDate.nextSchoolDay)
         reloadView()
-        Timber.i("Attendance day changed to %s by %s button", currentDate.toFormattedString(), "next")
+        logEvent("Attendance day changed", mapOf("button" to "next", "date" to currentDate.toFormattedString()))
     }
 
     fun onSwipeRefresh() {
         loadData(currentDate, true)
-        Timber.i("Attendance refreshed")
     }
 
     fun onViewReselected() {
@@ -91,7 +90,7 @@ class AttendancePresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    Timber.i("Loaded ${it.size} attendance items")
+                    logEvent("Attendance load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.proceed(it)

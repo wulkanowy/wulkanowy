@@ -7,6 +7,7 @@ import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
@@ -14,7 +15,6 @@ import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
 import org.threeten.bp.LocalDate.ofEpochDay
-import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
@@ -38,18 +38,17 @@ class TimetablePresenter @Inject constructor(
     fun onPreviousDay() {
         loadData(currentDate.previousSchoolDay)
         reloadView()
-        Timber.i("Attendance day changed to %s by %s button", currentDate.toFormattedString(), "prev")
+        logEvent("Timetable day changed", mapOf("button" to "prev", "date" to currentDate.toFormattedString()))
     }
 
     fun onNextDay() {
         loadData(currentDate.nextSchoolDay)
         reloadView()
-        Timber.i("Timteable day changed to %s by %s button", currentDate.toFormattedString(), "next")
+        logEvent("Timetable day changed", mapOf("button" to "next", "date" to currentDate.toFormattedString()))
     }
 
     fun onSwipeRefresh() {
         loadData(currentDate, true)
-        Timber.i("Timetable refreshed")
     }
 
     fun onViewReselected() {
@@ -85,7 +84,7 @@ class TimetablePresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    Timber.i("Loaded ${it.size} timetable items")
+                    logEvent("Timetable load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
                 }) {
                     view?.run { showEmpty(isViewEmpty()) }
                     errorHandler.proceed(it)

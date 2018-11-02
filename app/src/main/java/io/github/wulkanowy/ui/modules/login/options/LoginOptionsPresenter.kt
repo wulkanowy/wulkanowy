@@ -9,10 +9,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class LoginOptionsPresenter @Inject constructor(
-        private val errorHandler: ErrorHandler,
-        private val repository: SessionRepository,
-        private val schedulers: SchedulersProvider)
-    : BasePresenter<LoginOptionsView>(errorHandler) {
+    private val errorHandler: ErrorHandler,
+    private val repository: SessionRepository,
+    private val schedulers: SchedulersProvider
+) : BasePresenter<LoginOptionsView>(errorHandler) {
 
     override fun onAttachView(view: LoginOptionsView) {
         super.onAttachView(view)
@@ -21,30 +21,30 @@ class LoginOptionsPresenter @Inject constructor(
 
     fun refreshData() {
         disposable.add(repository.cachedStudents
-                .observeOn(schedulers.mainThread)
-                .subscribeOn(schedulers.backgroundThread)
-                .doOnSubscribe { view?.showActionBar(true) }
-                .doFinally { repository.clearCache() }
-                .subscribe({
-                    view?.updateData(it.map { student ->
-                        LoginOptionsItem(student)
-                    })
-                }, { errorHandler.proceed(it) }))
+            .observeOn(schedulers.mainThread)
+            .subscribeOn(schedulers.backgroundThread)
+            .doOnSubscribe { view?.showActionBar(true) }
+            .doFinally { repository.clearCache() }
+            .subscribe({
+                view?.updateData(it.map { student ->
+                    LoginOptionsItem(student)
+                })
+            }, { errorHandler.proceed(it) }))
     }
 
     fun onSelectStudent(student: Student) {
         disposable.add(repository.saveStudent(student)
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doOnSubscribe {
-                    view?.run {
-                        showLoginProgress(true)
-                        showActionBar(false)
-                    }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .doOnSubscribe {
+                view?.run {
+                    showLoginProgress(true)
+                    showActionBar(false)
                 }
-                .subscribe({
-                    view?.openMainView()
-                    Timber.d("Successfully synchronized user ${student.studentId} semesters")
-                }, { errorHandler.proceed(it) }))
+            }
+            .subscribe({
+                view?.openMainView()
+                Timber.i("Successfully synchronized user ${student.studentId} semesters")
+            }, { errorHandler.proceed(it) }))
     }
 }
