@@ -3,19 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="45dp"
+    android:id="@+id/timetableWidgetItemContainer"
     android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/timetableWidgetItemNumber"
+        android:layout_width="55dp"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:text="0"
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/timetableWidgetItemTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
+        android:layout_toEndOf="@id/timetableWidgetItemNumber"
+        android:layout_toRightOf="@id/timetableWidgetItemNumber"
         android:text="@string/app_name"
         android:textColor="@color/second_text_color"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/timetableWidgetItemSubject"
@@ -30,7 +39,7 @@
         android:layout_toRightOf="@id/timetableWidgetItemTime"
         android:text="@string/app_name"
         android:textColor="@color/second_text_color"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/timetableWidgetItemDescription"
@@ -54,10 +63,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/timetableWidgetItemTime"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@id/timetableWidgetItemNumber"
+        android:layout_toRightOf="@id/timetableWidgetItemNumber"
         android:text="@string/app_name"
         android:textColor="@color/second_text_color"
         android:textSize="12sp" />

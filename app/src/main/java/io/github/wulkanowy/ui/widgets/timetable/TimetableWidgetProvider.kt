@@ -2,7 +2,6 @@ package io.github.wulkanowy.ui.widgets.timetable
 
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
-import android.app.PendingIntent.getBroadcast
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
@@ -14,6 +13,8 @@ import dagger.android.AndroidInjection
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.SharedPrefHelper
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
+import io.github.wulkanowy.ui.modules.main.MainActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
@@ -26,50 +27,52 @@ class TimetableWidgetProvider : AppWidgetProvider() {
     @Inject
     lateinit var sharedPref: SharedPrefHelper
 
-    private var currentDate = LocalDate.now().nextOrSameSchoolDay
-
     companion object {
-        const val EXTRA_SELECTED_DATE = "extraSelectedDate"
+        const val EXTRA_TOGGLED_WIDGET_ID = "extraToggledWidget"
 
-        const val ACTION_TOGGLE_NEXT = "actionToggleNext"
+        const val EXTRA_TOGGLE_VALUE = "extraToggleValue"
 
-        const val ACTION_TOGGLE_PREV = "actionTogglePrev"
+        const val TOGGLE_NEXT = "actionToggleNext"
+
+        const val TOGGLE_PREV = "actionTogglePrev"
     }
 
     override fun onUpdate(context: Context?, appWidgetManager: AppWidgetManager?, appWidgetIds: IntArray?) {
         appWidgetIds?.forEach {
+            val widgetKey = "timetable_widget_$it"
+            val savedDate = LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0))
 
-            if (sharedPref.getLong("timetable_widget", -1) == -1L || sharedPref.getLong("timetable_widget", -1) != currentDate.toEpochDay()) {
-                sharedPref.putLong("timetable_widget", currentDate.toEpochDay())
-            }
-
-            currentDate = LocalDate.ofEpochDay(sharedPref.getLong("timetable_widget", -1))
-
+            checkSavedWidgetDate(widgetKey)
             context?.run {
                 RemoteViews(packageName, R.layout.widget_timetable).apply {
-                    setTextViewText(R.id.timetableWidgetDay, currentDate.weekDayName)
-                    setTextViewText(R.id.timetableWidgetDate, currentDate.toFormattedString())
+                    setTextViewText(R.id.timetableWidgetDay, savedDate.weekDayName.capitalize())
+                    setTextViewText(R.id.timetableWidgetDate, savedDate.toFormattedString())
                     setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
                     setRemoteAdapter(R.id.timetableWidgetList, Intent(context, TimetableWidgetService::class.java)
-                        .apply { putExtra(EXTRA_SELECTED_DATE, currentDate.toEpochDay()) })
+                        .apply { action = widgetKey })
 
                     setOnClickPendingIntent(R.id.timetableWidgetNext,
-                        PendingIntent.getBroadcast(context, 1,
+                        PendingIntent.getBroadcast(context, it,
                             Intent(context, TimetableWidgetProvider::class.java).apply {
                                 action = ACTION_APPWIDGET_UPDATE
-                                putExtra("toggle", ACTION_TOGGLE_NEXT)
                                 putExtra(EXTRA_APPWIDGET_IDS, appWidgetIds)
-                            },
-                            FLAG_UPDATE_CURRENT))
+                                putExtra(EXTRA_TOGGLE_VALUE, TOGGLE_NEXT)
+                                putExtra(EXTRA_TOGGLED_WIDGET_ID, it)
+                            }, FLAG_UPDATE_CURRENT))
 
                     setOnClickPendingIntent(R.id.timetableWidgetPrev,
-                        getBroadcast(context, 2,
+                        PendingIntent.getBroadcast(context, -it,
                             Intent(context, TimetableWidgetProvider::class.java).apply {
                                 action = ACTION_APPWIDGET_UPDATE
-                                putExtra("toggle", ACTION_TOGGLE_PREV)
                                 putExtra(EXTRA_APPWIDGET_IDS, appWidgetIds)
-                            },
-                            FLAG_UPDATE_CURRENT))
+                                putExtra(EXTRA_TOGGLE_VALUE, TOGGLE_PREV)
+                                putExtra(EXTRA_TOGGLED_WIDGET_ID, it)
+                            }, FLAG_UPDATE_CURRENT))
+
+                    setPendingIntentTemplate(R.id.timetableWidgetList,
+                        PendingIntent.getActivity(context, 1, MainActivity.getStartIntent(context).apply {
+                            putExtra(EXTRA_START_MENU_INDEX, 3)
+                        }, FLAG_UPDATE_CURRENT))
 
                 }.let { view ->
                     appWidgetManager?.notifyAppWidgetViewDataChanged(it, R.id.timetableWidgetList)
@@ -81,15 +84,33 @@ class TimetableWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         AndroidInjection.inject(this, context)
-
         intent?.let {
-            when (it.getStringExtra("toggle")) {
-                ACTION_TOGGLE_NEXT -> currentDate = LocalDate.ofEpochDay(sharedPref.getLong("timetable_widget", -1))
-                    .plusDays(1).nextOrSameSchoolDay
-                ACTION_TOGGLE_PREV -> currentDate = LocalDate.ofEpochDay(sharedPref.getLong("timetable_widget", -1))
-                    .minusDays(1).previousOrSameSchoolDay
+            val widgetKey = "timetable_widget_${it.getIntExtra(EXTRA_TOGGLED_WIDGET_ID, 0)}"
+            when (it.getStringExtra(EXTRA_TOGGLE_VALUE)) {
+                TOGGLE_NEXT -> {
+                    LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0)).plusDays(1).nextOrSameSchoolDay
+                        .let { date -> sharedPref.putLong(widgetKey, date.toEpochDay(), true) }
+                }
+                TOGGLE_PREV -> {
+                    LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0)).minusDays(1).previousOrSameSchoolDay
+                        .let { date -> sharedPref.putLong(widgetKey, date.toEpochDay(), true) }
+                }
             }
         }
         super.onReceive(context, intent)
+    }
+
+    override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
+        appWidgetIds?.forEach {
+            sharedPref.delete("timetable_widget_$it")
+        }
+    }
+
+    private fun checkSavedWidgetDate(widgetKey: String) {
+        sharedPref.run {
+            if (getLong(widgetKey, -1) == -1L) {
+                putLong(widgetKey, LocalDate.now().nextOrSameSchoolDay.toEpochDay(), true)
+            }
+        }
     }
 }

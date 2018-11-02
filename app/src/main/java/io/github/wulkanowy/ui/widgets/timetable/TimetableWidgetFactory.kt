@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.widgets.timetable
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.view.View.GONE
@@ -23,10 +24,9 @@ class TimetableWidgetFactory @Inject constructor(
     private val timetableRepository: TimetableRepository,
     private val sessionRepository: SessionRepository,
     private val sharedPref: SharedPrefHelper,
-    private val context: Context
+    private val context: Context,
+    private val intent: Intent?
 ) : RemoteViewsService.RemoteViewsFactory {
-
-    private lateinit var currentDate: LocalDate
 
     private val disposable: CompositeDisposable = CompositeDisposable()
 
@@ -45,15 +45,17 @@ class TimetableWidgetFactory @Inject constructor(
     override fun onCreate() {}
 
     override fun onDataSetChanged() {
-        currentDate = LocalDate.ofEpochDay(sharedPref.getLong("timetable_widget", -1))
-        if (sessionRepository.isSessionSaved) {
-            disposable.add(sessionRepository.getSemesters()
-                .map { it.single { item -> item.current } }
-                .flatMap { timetableRepository.getTimetable(it, currentDate, currentDate) }
-                .map { item -> item.sortedBy { it.number } }
-                .subscribe({ lessons = it })
-                { Timber.e(it, "An error has occurred while downloading data for the widget") })
-        }
+        intent?.action?.let { LocalDate.ofEpochDay(sharedPref.getLong(it, 0)) }
+            ?.let { date ->
+                if (sessionRepository.isSessionSaved) {
+                    disposable.add(sessionRepository.getSemesters()
+                        .map { it.single { item -> item.current } }
+                        .flatMap { timetableRepository.getTimetable(it, date, date) }
+                        .map { item -> item.sortedBy { it.number } }
+                        .subscribe({ lessons = it })
+                        { Timber.e(it, "An error has occurred while downloading data for the widget") })
+                }
+            }
     }
 
     override fun getViewAt(position: Int): RemoteViews? {
@@ -62,6 +64,7 @@ class TimetableWidgetFactory @Inject constructor(
         return RemoteViews(context.packageName, R.layout.item_widget_timetable).apply {
             lessons[position].let {
                 setTextViewText(R.id.timetableWidgetItemSubject, it.subject)
+                setTextViewText(R.id.timetableWidgetItemNumber, it.number.toString())
                 setTextViewText(R.id.timetableWidgetItemTime, it.start.toFormattedString("HH:mm") +
                     " - ${it.end.toFormattedString("HH:mm")}")
 
@@ -81,6 +84,7 @@ class TimetableWidgetFactory @Inject constructor(
                     setInt(R.id.timetableWidgetItemSubject, "setPaintFlags", ANTI_ALIAS_FLAG)
                 }
             }
+            setOnClickFillInIntent(R.id.timetableWidgetItemContainer, Intent())
         }
     }
 
