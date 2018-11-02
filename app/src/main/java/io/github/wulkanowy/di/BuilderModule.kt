@@ -31,7 +31,7 @@ internal abstract class BuilderModule {
     abstract fun bindTimetableWidgetService(): TimetableWidgetService
 
     @ContributesAndroidInjector
-    abstract fun bindTimetableWIdgetProvider(): TimetableWidgetProvider
+    abstract fun bindTimetableWidgetProvider(): TimetableWidgetProvider
 
     @ContributesAndroidInjector
     abstract fun bindSyncJob(): SyncWorker

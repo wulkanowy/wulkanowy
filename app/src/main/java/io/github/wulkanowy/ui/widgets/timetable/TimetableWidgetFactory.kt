@@ -18,9 +18,8 @@ import io.github.wulkanowy.utils.toFormattedString
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDate
 import timber.log.Timber
-import javax.inject.Inject
 
-class TimetableWidgetFactory @Inject constructor(
+class TimetableWidgetFactory(
     private val timetableRepository: TimetableRepository,
     private val sessionRepository: SessionRepository,
     private val sharedPref: SharedPrefHelper,

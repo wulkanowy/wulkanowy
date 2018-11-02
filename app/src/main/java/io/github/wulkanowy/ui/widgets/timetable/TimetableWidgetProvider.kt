@@ -16,7 +16,8 @@ import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
-import io.github.wulkanowy.utils.previousOrSameSchoolDay
+import io.github.wulkanowy.utils.nextSchoolDay
+import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.weekDayName
 import org.threeten.bp.LocalDate
@@ -32,11 +33,11 @@ class TimetableWidgetProvider : AppWidgetProvider() {
 
         const val EXTRA_TOGGLE_VALUE = "extraToggleValue"
 
-        const val TOGGLE_NEXT = "toggleNext"
+        const val BUTTON_NEXT = "toggleNext"
 
-        const val TOGGLE_PREV = "togglePrev"
+        const val BUTTON_PREV = "togglePrev"
 
-        const val TOGGLE_RESET = "toggleReset"
+        const val BUTTON_RESET = "toggleReset"
     }
 
     override fun onUpdate(context: Context?, appWidgetManager: AppWidgetManager?, appWidgetIds: IntArray?) {
@@ -52,44 +53,22 @@ class TimetableWidgetProvider : AppWidgetProvider() {
                     setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
                     setRemoteAdapter(R.id.timetableWidgetList, Intent(context, TimetableWidgetService::class.java)
                         .apply { action = widgetKey })
-
-                    setOnClickPendingIntent(R.id.timetableWidgetNext,
-                        PendingIntent.getBroadcast(context, it,
-                            Intent(context, TimetableWidgetProvider::class.java).apply {
-                                action = ACTION_APPWIDGET_UPDATE
-                                putExtra(EXTRA_APPWIDGET_IDS, appWidgetIds)
-                                putExtra(EXTRA_TOGGLE_VALUE, TOGGLE_NEXT)
-                                putExtra(EXTRA_TOGGLED_WIDGET_ID, it)
-                            }, FLAG_UPDATE_CURRENT))
-
-                    setOnClickPendingIntent(R.id.timetableWidgetPrev,
-                        PendingIntent.getBroadcast(context, -it,
-                            Intent(context, TimetableWidgetProvider::class.java).apply {
-                                action = ACTION_APPWIDGET_UPDATE
-                                putExtra(EXTRA_APPWIDGET_IDS, appWidgetIds)
-                                putExtra(EXTRA_TOGGLE_VALUE, TOGGLE_PREV)
-                                putExtra(EXTRA_TOGGLED_WIDGET_ID, it)
-                            }, FLAG_UPDATE_CURRENT))
-
-                    PendingIntent.getBroadcast(context, Int.MAX_VALUE,
-                        Intent(context, TimetableWidgetProvider::class.java).apply {
-                            action = ACTION_APPWIDGET_UPDATE
-                            putExtra(EXTRA_APPWIDGET_IDS, appWidgetIds)
-                            putExtra(EXTRA_TOGGLE_VALUE, TOGGLE_RESET)
-                            putExtra(EXTRA_TOGGLED_WIDGET_ID, it)
-                        }, FLAG_UPDATE_CURRENT).let { pendingIntent ->
-                        setOnClickPendingIntent(R.id.timetableWidgetDate, pendingIntent)
-                        setOnClickPendingIntent(R.id.timetableWidgetDay, pendingIntent)
+                    setOnClickPendingIntent(R.id.timetableWidgetNext, createNavIntent(context, it, it, appWidgetIds, BUTTON_NEXT))
+                    setOnClickPendingIntent(R.id.timetableWidgetPrev, createNavIntent(context, -it, it, appWidgetIds, BUTTON_PREV))
+                    createNavIntent(context, Int.MAX_VALUE, it, appWidgetIds, BUTTON_RESET).let { intent ->
+                        setOnClickPendingIntent(R.id.timetableWidgetDate, intent)
+                        setOnClickPendingIntent(R.id.timetableWidgetDay, intent)
                     }
-
                     setPendingIntentTemplate(R.id.timetableWidgetList,
                         PendingIntent.getActivity(context, 1, MainActivity.getStartIntent(context).apply {
                             putExtra(EXTRA_START_MENU_INDEX, 3)
                         }, FLAG_UPDATE_CURRENT))
 
                 }.also { view ->
-                    appWidgetManager?.notifyAppWidgetViewDataChanged(it, R.id.timetableWidgetList)
-                    appWidgetManager?.updateAppWidget(it, view)
+                    appWidgetManager?.apply {
+                        notifyAppWidgetViewDataChanged(it, R.id.timetableWidgetList)
+                        updateAppWidget(it, view)
+                    }
                 }
             }
         }
@@ -100,17 +79,15 @@ class TimetableWidgetProvider : AppWidgetProvider() {
         intent?.let {
             val widgetKey = "timetable_widget_${it.getIntExtra(EXTRA_TOGGLED_WIDGET_ID, 0)}"
             when (it.getStringExtra(EXTRA_TOGGLE_VALUE)) {
-                TOGGLE_NEXT -> {
-                    LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0)).plusDays(1).nextOrSameSchoolDay
+                BUTTON_NEXT -> {
+                    LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0)).nextSchoolDay
                         .let { date -> sharedPref.putLong(widgetKey, date.toEpochDay(), true) }
                 }
-                TOGGLE_PREV -> {
-                    LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0)).minusDays(1).previousOrSameSchoolDay
+                BUTTON_PREV -> {
+                    LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0)).previousSchoolDay
                         .let { date -> sharedPref.putLong(widgetKey, date.toEpochDay(), true) }
                 }
-                TOGGLE_RESET -> {
-                    sharedPref.putLong(widgetKey, LocalDate.now().nextOrSameSchoolDay.toEpochDay(), true)
-                }
+                BUTTON_RESET -> sharedPref.putLong(widgetKey, LocalDate.now().nextOrSameSchoolDay.toEpochDay(), true)
             }
         }
         super.onReceive(context, intent)
@@ -120,6 +97,16 @@ class TimetableWidgetProvider : AppWidgetProvider() {
         appWidgetIds?.forEach {
             sharedPref.delete("timetable_widget_$it")
         }
+    }
+
+    private fun createNavIntent(context: Context, code: Int, widgetId: Int, widgetIds: IntArray, buttonType: String): PendingIntent {
+        return PendingIntent.getBroadcast(context, code,
+            Intent(context, TimetableWidgetProvider::class.java).apply {
+                action = ACTION_APPWIDGET_UPDATE
+                putExtra(EXTRA_APPWIDGET_IDS, widgetIds)
+                putExtra(EXTRA_TOGGLE_VALUE, buttonType)
+                putExtra(EXTRA_TOGGLED_WIDGET_ID, widgetId)
+            }, FLAG_UPDATE_CURRENT)
     }
 
     private fun checkSavedWidgetDate(widgetKey: String) {
