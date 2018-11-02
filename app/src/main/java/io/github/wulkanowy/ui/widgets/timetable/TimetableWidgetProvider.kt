@@ -31,13 +31,13 @@ class TimetableWidgetProvider : AppWidgetProvider() {
     companion object {
         const val EXTRA_TOGGLED_WIDGET_ID = "extraToggledWidget"
 
-        const val EXTRA_TOGGLE_VALUE = "extraToggleValue"
+        const val EXTRA_BUTTON_TYPE = "extraButtonType"
 
-        const val BUTTON_NEXT = "toggleNext"
+        const val BUTTON_NEXT = "buttonNext"
 
-        const val BUTTON_PREV = "togglePrev"
+        const val BUTTON_PREV = "buttonPrev"
 
-        const val BUTTON_RESET = "toggleReset"
+        const val BUTTON_RESET = "buttonReset"
     }
 
     override fun onUpdate(context: Context?, appWidgetManager: AppWidgetManager?, appWidgetIds: IntArray?) {
@@ -78,7 +78,7 @@ class TimetableWidgetProvider : AppWidgetProvider() {
         AndroidInjection.inject(this, context)
         intent?.let {
             val widgetKey = "timetable_widget_${it.getIntExtra(EXTRA_TOGGLED_WIDGET_ID, 0)}"
-            when (it.getStringExtra(EXTRA_TOGGLE_VALUE)) {
+            when (it.getStringExtra(EXTRA_BUTTON_TYPE)) {
                 BUTTON_NEXT -> {
                     LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0)).nextSchoolDay
                         .let { date -> sharedPref.putLong(widgetKey, date.toEpochDay(), true) }
@@ -104,7 +104,7 @@ class TimetableWidgetProvider : AppWidgetProvider() {
             Intent(context, TimetableWidgetProvider::class.java).apply {
                 action = ACTION_APPWIDGET_UPDATE
                 putExtra(EXTRA_APPWIDGET_IDS, widgetIds)
-                putExtra(EXTRA_TOGGLE_VALUE, buttonType)
+                putExtra(EXTRA_BUTTON_TYPE, buttonType)
                 putExtra(EXTRA_TOGGLED_WIDGET_ID, widgetId)
             }, FLAG_UPDATE_CURRENT)
     }
