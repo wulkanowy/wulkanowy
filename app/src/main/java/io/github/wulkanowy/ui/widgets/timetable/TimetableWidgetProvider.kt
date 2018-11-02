@@ -32,9 +32,11 @@ class TimetableWidgetProvider : AppWidgetProvider() {
 
         const val EXTRA_TOGGLE_VALUE = "extraToggleValue"
 
-        const val TOGGLE_NEXT = "actionToggleNext"
+        const val TOGGLE_NEXT = "toggleNext"
 
-        const val TOGGLE_PREV = "actionTogglePrev"
+        const val TOGGLE_PREV = "togglePrev"
+
+        const val TOGGLE_RESET = "toggleReset"
     }
 
     override fun onUpdate(context: Context?, appWidgetManager: AppWidgetManager?, appWidgetIds: IntArray?) {
@@ -69,6 +71,17 @@ class TimetableWidgetProvider : AppWidgetProvider() {
                                 putExtra(EXTRA_TOGGLED_WIDGET_ID, it)
                             }, FLAG_UPDATE_CURRENT))
 
+                    PendingIntent.getBroadcast(context, Int.MAX_VALUE,
+                        Intent(context, TimetableWidgetProvider::class.java).apply {
+                            action = ACTION_APPWIDGET_UPDATE
+                            putExtra(EXTRA_APPWIDGET_IDS, appWidgetIds)
+                            putExtra(EXTRA_TOGGLE_VALUE, TOGGLE_RESET)
+                            putExtra(EXTRA_TOGGLED_WIDGET_ID, it)
+                        }, FLAG_UPDATE_CURRENT).let { pendingIntent ->
+                        setOnClickPendingIntent(R.id.timetableWidgetDate, pendingIntent)
+                        setOnClickPendingIntent(R.id.timetableWidgetDay, pendingIntent)
+                    }
+
                     setPendingIntentTemplate(R.id.timetableWidgetList,
                         PendingIntent.getActivity(context, 1, MainActivity.getStartIntent(context).apply {
                             putExtra(EXTRA_START_MENU_INDEX, 3)
@@ -94,6 +107,9 @@ class TimetableWidgetProvider : AppWidgetProvider() {
                 TOGGLE_PREV -> {
                     LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0)).minusDays(1).previousOrSameSchoolDay
                         .let { date -> sharedPref.putLong(widgetKey, date.toEpochDay(), true) }
+                }
+                TOGGLE_RESET -> {
+                    sharedPref.putLong(widgetKey, LocalDate.now().nextOrSameSchoolDay.toEpochDay(), true)
                 }
             }
         }
