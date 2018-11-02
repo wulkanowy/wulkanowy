@@ -84,7 +84,7 @@ class TimetablePresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    logEvent("Timetable load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
+                    logEvent("Timetable load", mapOf("items" to it.size, "forceRefresh" to forceRefresh, "date" to currentDate.toFormattedString()))
                 }) {
                     view?.run { showEmpty(isViewEmpty()) }
                     errorHandler.proceed(it)

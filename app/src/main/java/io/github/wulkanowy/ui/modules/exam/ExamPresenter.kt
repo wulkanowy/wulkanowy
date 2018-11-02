@@ -16,7 +16,6 @@ import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
 import org.threeten.bp.LocalDate.ofEpochDay
-import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
@@ -87,7 +86,7 @@ class ExamPresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    logEvent("Exam load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
+                    logEvent("Exam load", mapOf("items" to it.size, "forceRefresh" to forceRefresh, "date" to currentDate.toFormattedString()))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.proceed(it)

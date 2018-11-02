@@ -4,6 +4,7 @@ import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
 import com.crashlytics.android.answers.LoginEvent
 import com.crashlytics.android.answers.SignUpEvent
+import timber.log.Timber
 
 fun logLogin(method: String, result: Boolean = true) {
     Answers.getInstance().logLogin(LoginEvent()
@@ -23,12 +24,14 @@ fun logRegister(message: String, students: Int, result: Boolean, symbol: String,
     )
 }
 
-fun logEvent(name: String, params: Map<String, Any>) {
+fun <T> logEvent(name: String, params: Map<String, T>) {
     Answers.getInstance().logCustom(CustomEvent(name)
         .apply {
             params.forEach {
+                if (it.value is String) putCustomAttribute(it.key, it.value as String)
                 if (it.value is Number) putCustomAttribute(it.key, it.value as Number)
-                else putCustomAttribute(it.key, it.value as String)
+                if (it.value is Boolean) putCustomAttribute(it.key, if ((it.value as Boolean)) "true" else "false")
+                Timber.w("logEvent() unknown value type: ${it.value}")
             }
         }
     )

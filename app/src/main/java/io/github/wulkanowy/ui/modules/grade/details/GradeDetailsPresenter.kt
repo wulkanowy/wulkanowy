@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
+import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.valueColor
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,7 +44,7 @@ class GradeDetailsPresenter @Inject constructor(
                     showContent(it.isNotEmpty())
                     updateData(it)
                 }
-                Timber.i("Loaded ${it.size} grade details items")
+                logEvent("Grade details load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
             }) {
                 view?.run { showEmpty(isViewEmpty) }
                 errorHandler.proceed(it)

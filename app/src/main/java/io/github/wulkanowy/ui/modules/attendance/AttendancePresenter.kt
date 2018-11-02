@@ -90,7 +90,7 @@ class AttendancePresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    logEvent("Attendance load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
+                    logEvent("Attendance load", mapOf("items" to it.size, "forceRefresh" to forceRefresh, "date" to currentDate.toFormattedString()))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.proceed(it)
