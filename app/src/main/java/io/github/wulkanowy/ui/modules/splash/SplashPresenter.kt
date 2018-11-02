@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import timber.log.Timber
 import javax.inject.Inject
 
 class SplashPresenter @Inject constructor(
@@ -16,7 +17,13 @@ class SplashPresenter @Inject constructor(
         super.onAttachView(view)
         view.run {
             setCurrentThemeMode(preferencesRepository.currentTheme)
-            if (sessionRepository.isSessionSaved) openMainView() else openLoginView()
+            if (sessionRepository.isSessionSaved) {
+                openMainView()
+                Timber.i("Opening app")
+            } else {
+                openLoginView()
+                Timber.i("Opening login form")
+            }
         }
     }
 }

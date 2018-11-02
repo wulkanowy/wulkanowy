@@ -5,18 +5,24 @@ import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import io.github.wulkanowy.utils.nextSchoolDay
+import io.github.wulkanowy.utils.previousSchoolDay
+import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
 import org.threeten.bp.LocalDate.ofEpochDay
+import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class TimetablePresenter @Inject constructor(
-        private val errorHandler: ErrorHandler,
-        private val schedulers: SchedulersProvider,
-        private val timetableRepository: TimetableRepository,
-        private val sessionRepository: SessionRepository
+    private val errorHandler: ErrorHandler,
+    private val schedulers: SchedulersProvider,
+    private val timetableRepository: TimetableRepository,
+    private val sessionRepository: SessionRepository
 ) : BasePresenter<TimetableView>(errorHandler) {
 
     lateinit var currentDate: LocalDate
@@ -32,15 +38,18 @@ class TimetablePresenter @Inject constructor(
     fun onPreviousDay() {
         loadData(currentDate.previousSchoolDay)
         reloadView()
+        Timber.i("Attendance day changed to %s by %s button", currentDate.toFormattedString(), "prev")
     }
 
     fun onNextDay() {
         loadData(currentDate.nextSchoolDay)
         reloadView()
+        Timber.i("Timteable day changed to %s by %s button", currentDate.toFormattedString(), "next")
     }
 
     fun onSwipeRefresh() {
         loadData(currentDate, true)
+        Timber.i("Timetable refreshed")
     }
 
     fun onViewReselected() {
@@ -57,29 +66,30 @@ class TimetablePresenter @Inject constructor(
         disposable.apply {
             clear()
             add(sessionRepository.getSemesters()
-                    .delay(200, MILLISECONDS)
-                    .map { it.single { semester -> semester.current } }
-                    .flatMap { timetableRepository.getTimetable(it, currentDate, currentDate, forceRefresh) }
-                    .map { items -> items.map { TimetableItem(it, view?.roomString.orEmpty()) } }
-                    .map { items -> items.sortedBy { it.lesson.number } }
-                    .subscribeOn(schedulers.backgroundThread)
-                    .observeOn(schedulers.mainThread)
-                    .doFinally {
-                        view?.run {
-                            hideRefresh()
-                            showProgress(false)
-                        }
+                .delay(200, MILLISECONDS)
+                .map { it.single { semester -> semester.current } }
+                .flatMap { timetableRepository.getTimetable(it, currentDate, currentDate, forceRefresh) }
+                .map { items -> items.map { TimetableItem(it, view?.roomString.orEmpty()) } }
+                .map { items -> items.sortedBy { it.lesson.number } }
+                .subscribeOn(schedulers.backgroundThread)
+                .observeOn(schedulers.mainThread)
+                .doFinally {
+                    view?.run {
+                        hideRefresh()
+                        showProgress(false)
                     }
-                    .subscribe({
-                        view?.apply {
-                            updateData(it)
-                            showEmpty(it.isEmpty())
-                            showContent(it.isNotEmpty())
-                        }
-                    }) {
-                        view?.run { showEmpty(isViewEmpty()) }
-                        errorHandler.proceed(it)
-                    })
+                }
+                .subscribe({
+                    view?.apply {
+                        updateData(it)
+                        showEmpty(it.isEmpty())
+                        showContent(it.isNotEmpty())
+                    }
+                    Timber.i("Loaded ${it.size} timetable items")
+                }) {
+                    view?.run { showEmpty(isViewEmpty()) }
+                    errorHandler.proceed(it)
+                })
         }
     }
 

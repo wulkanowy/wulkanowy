@@ -3,7 +3,7 @@ package io.github.wulkanowy.utils
 import com.crashlytics.android.Crashlytics
 import timber.log.Timber
 
-object CrashlyticsTree : Timber.Tree() {
+class CrashlyticsTree : Timber.Tree() {
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         Crashlytics.setInt("priority", priority)
@@ -12,16 +12,14 @@ object CrashlyticsTree : Timber.Tree() {
         if (t == null) {
             Crashlytics.log(message)
         } else {
-            Crashlytics.setString("message", message)
             Crashlytics.logException(t)
         }
     }
 }
 
-object DebugLogTree : Timber.DebugTree() {
+class DebugLogTree : Timber.DebugTree() {
 
-    override fun createStackElementTag(element: StackTraceElement): String? {
-        return super.createStackElementTag(element) + " - ${element.lineNumber}"
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        super.log(priority, "Wulkanowy", message, t)
     }
 }
-

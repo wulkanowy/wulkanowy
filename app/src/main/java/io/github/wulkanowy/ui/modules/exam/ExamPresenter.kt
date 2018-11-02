@@ -6,18 +6,24 @@ import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.friday
+import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.monday
+import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
 import org.threeten.bp.LocalDate.ofEpochDay
+import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class ExamPresenter @Inject constructor(
-        private val errorHandler: ErrorHandler,
-        private val schedulers: SchedulersProvider,
-        private val examRepository: ExamRepository,
-        private val sessionRepository: SessionRepository
+    private val errorHandler: ErrorHandler,
+    private val schedulers: SchedulersProvider,
+    private val examRepository: ExamRepository,
+    private val sessionRepository: SessionRepository
 ) : BasePresenter<ExamView>(errorHandler) {
 
     lateinit var currentDate: LocalDate
@@ -33,15 +39,18 @@ class ExamPresenter @Inject constructor(
     fun onPreviousWeek() {
         loadData(currentDate.minusDays(7))
         reloadView()
+        Timber.i("Exam day changed to %s by %s button", currentDate.toFormattedString(), "prev")
     }
 
     fun onNextWeek() {
         loadData(currentDate.plusDays(7))
         reloadView()
+        Timber.i("Exam day changed to %s by %s button", currentDate.toFormattedString(), "next")
     }
 
     fun onSwipeRefresh() {
         loadData(currentDate, true)
+        Timber.i("Exam refreshed")
     }
 
     fun onExamItemSelected(item: AbstractFlexibleItem<*>?) {
@@ -58,30 +67,31 @@ class ExamPresenter @Inject constructor(
         disposable.apply {
             clear()
             add(sessionRepository.getSemesters()
-                    .delay(200, MILLISECONDS)
-                    .map { it.single { semester -> semester.current } }
-                    .flatMap {
-                        examRepository.getExams(it, currentDate.monday, currentDate.friday, forceRefresh)
-                    }.map { it.groupBy { exam -> exam.date }.toSortedMap() }
-                    .map { createExamItems(it) }
-                    .subscribeOn(schedulers.backgroundThread)
-                    .observeOn(schedulers.mainThread)
-                    .doFinally {
-                        view?.run {
-                            hideRefresh()
-                            showProgress(false)
-                        }
+                .delay(200, MILLISECONDS)
+                .map { it.single { semester -> semester.current } }
+                .flatMap {
+                    examRepository.getExams(it, currentDate.monday, currentDate.friday, forceRefresh)
+                }.map { it.groupBy { exam -> exam.date }.toSortedMap() }
+                .map { createExamItems(it) }
+                .subscribeOn(schedulers.backgroundThread)
+                .observeOn(schedulers.mainThread)
+                .doFinally {
+                    view?.run {
+                        hideRefresh()
+                        showProgress(false)
                     }
-                    .subscribe({
-                        view?.apply {
-                            updateData(it)
-                            showEmpty(it.isEmpty())
-                            showContent(it.isNotEmpty())
-                        }
-                    }) {
-                        view?.run { showEmpty(isViewEmpty) }
-                        errorHandler.proceed(it)
-                    })
+                }
+                .subscribe({
+                    view?.apply {
+                        updateData(it)
+                        showEmpty(it.isEmpty())
+                        showContent(it.isNotEmpty())
+                    }
+                    Timber.i("Loaded ${it.size} exam items")
+                }) {
+                    view?.run { showEmpty(isViewEmpty) }
+                    errorHandler.proceed(it)
+                })
         }
     }
 
@@ -102,7 +112,7 @@ class ExamPresenter @Inject constructor(
             showPreButton(!currentDate.minusDays(7).isHolidays)
             showNextButton(!currentDate.plusDays(7).isHolidays)
             updateNavigationWeek("${currentDate.monday.toFormattedString("dd.MM")} - " +
-                    currentDate.friday.toFormattedString("dd.MM"))
+                currentDate.friday.toFormattedString("dd.MM"))
         }
     }
 }

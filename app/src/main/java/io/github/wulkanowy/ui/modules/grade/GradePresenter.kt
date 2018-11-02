@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Completable
+import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
@@ -48,6 +49,7 @@ class GradePresenter @Inject constructor(
                 notifyChildrenSemesterChange()
                 loadChild(it.currentPageIndex)
             }
+            Timber.i("Semester changed to ${index + 1}")
         }
     }
 

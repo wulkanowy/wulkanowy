@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 class LoginFormPresenter @Inject constructor(
@@ -31,9 +32,11 @@ class LoginFormPresenter @Inject constructor(
                         errorHandler.doOnBadCredentials = {
                             setErrorPassIncorrect()
                             showSoftKeyboard()
+                            Timber.i("Entered wrong username or password")
                         }
                     }
                     sessionRepository.clearCache()
+                    Timber.i("Log endpoint: $endpoint")
                 }
                 .doFinally { view?.showLoginProgress(false) }
                 .subscribe({
@@ -44,8 +47,10 @@ class LoginFormPresenter @Inject constructor(
                         } else if (it.isEmpty() && wasEmpty) {
                             showSymbolInput()
                             setErrorSymbolIncorrect()
+                            Timber.w("No student found")
                         } else {
                             switchNextView()
+                            Timber.d("Found students: ${it.size}")
                         }
                     }
                 }, { errorHandler.proceed(it) }))

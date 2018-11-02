@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 class LoginOptionsPresenter @Inject constructor(
@@ -35,10 +36,15 @@ class LoginOptionsPresenter @Inject constructor(
         disposable.add(repository.saveStudent(student)
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
-                .doOnSubscribe { _ ->
-                    view?.showLoginProgress(true)
-                    view?.showActionBar(false)
+                .doOnSubscribe {
+                    view?.run {
+                        showLoginProgress(true)
+                        showActionBar(false)
+                    }
                 }
-                .subscribe({ view?.openMainView() }, { errorHandler.proceed(it) }))
+                .subscribe({
+                    view?.openMainView()
+                    Timber.d("Successfully synchronized user ${student.studentId} semesters")
+                }, { errorHandler.proceed(it) }))
     }
 }
