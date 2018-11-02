@@ -40,9 +40,9 @@ class TimetableWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(context: Context?, appWidgetManager: AppWidgetManager?, appWidgetIds: IntArray?) {
         appWidgetIds?.forEach {
             val widgetKey = "timetable_widget_$it"
-            val savedDate = LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0))
-
             checkSavedWidgetDate(widgetKey)
+
+            val savedDate = LocalDate.ofEpochDay(sharedPref.getLong(widgetKey, 0))
             context?.run {
                 RemoteViews(packageName, R.layout.widget_timetable).apply {
                     setTextViewText(R.id.timetableWidgetDay, savedDate.weekDayName.capitalize())
@@ -74,7 +74,7 @@ class TimetableWidgetProvider : AppWidgetProvider() {
                             putExtra(EXTRA_START_MENU_INDEX, 3)
                         }, FLAG_UPDATE_CURRENT))
 
-                }.let { view ->
+                }.also { view ->
                     appWidgetManager?.notifyAppWidgetViewDataChanged(it, R.id.timetableWidgetList)
                     appWidgetManager?.updateAppWidget(it, view)
                 }
