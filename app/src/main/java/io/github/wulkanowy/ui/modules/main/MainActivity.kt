@@ -55,13 +55,7 @@ class MainActivity : BaseActivity(), MainView {
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer
 
-        intent.getIntExtra(EXTRA_START_MENU_INDEX, -1).let { initMenuIndex ->
-            when (initMenuIndex) {
-                1 -> logLogin("Grades")
-                3 -> logLogin("Timetable")
-            }
-            presenter.onAttachView(this, initMenuIndex)
-        }
+        presenter.onAttachView(this, intent.getIntExtra(EXTRA_START_MENU_INDEX, -1))
         navController.initialize(startMenuIndex, savedInstanceState)
     }
 
