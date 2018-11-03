@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.logRegister
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -43,8 +44,8 @@ class LoginOptionsPresenter @Inject constructor(
                 }
             }
             .subscribe({
+                logRegister("Success", true, student.symbol, student.endpoint)
                 view?.openMainView()
-                Timber.i("Successfully synchronized user ${student.studentId} semesters")
             }, { errorHandler.proceed(it) }))
     }
 }

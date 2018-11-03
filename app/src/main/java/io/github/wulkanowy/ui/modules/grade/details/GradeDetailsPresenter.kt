@@ -72,7 +72,6 @@ class GradeDetailsPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         view?.notifyParentRefresh()
-        Timber.i("Grade details refreshed")
     }
 
     fun onParentViewReselected() {

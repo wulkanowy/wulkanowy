@@ -57,7 +57,6 @@ class MainActivity : BaseActivity(), MainView {
 
         intent.getIntExtra(EXTRA_START_MENU_INDEX, -1).let { initMenuIndex ->
             when (initMenuIndex) {
-                -1 -> logLogin("Open app")
                 1 -> logLogin("Grades")
                 3 -> logLogin("Timetable")
             }

@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.logRegister
 import timber.log.Timber
 import javax.inject.Inject
@@ -37,7 +38,6 @@ class LoginFormPresenter @Inject constructor(
                     }
                 }
                 sessionRepository.clearCache()
-                Timber.i("Log endpoint: $endpoint")
             }
             .doFinally { view?.showLoginProgress(false) }
             .subscribe({
@@ -48,15 +48,15 @@ class LoginFormPresenter @Inject constructor(
                     } else if (it.isEmpty() && wasEmpty) {
                         showSymbolInput()
                         setErrorSymbolIncorrect()
-                        logRegister("No student found", it.size, false, "null", endpoint)
+                        logRegister("No student found", false, if (symbol.isEmpty()) "nil" else symbol, endpoint)
                     } else {
                         switchNextView()
-                        logRegister("Found students", it.size,true, symbol, endpoint)
+                        logEvent("Found students", mapOf("students" to it.size, "symbol" to it.joinToString { student -> student.symbol }, "endpoint" to endpoint))
                     }
                 }
             }, {
                 errorHandler.proceed(it)
-                logRegister(it.localizedMessage, 0, false, symbol, endpoint)
+                logRegister(it.localizedMessage, false, if (symbol.isEmpty()) "nil" else symbol, endpoint)
             }))
     }
 
