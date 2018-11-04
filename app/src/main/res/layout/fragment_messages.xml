@@ -1,25 +1,66 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/fragment_messages"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="io.github.wulkanowy.ui.main.messages.DialogsFragment">
+    android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/messages_fragment_swipe_refresh"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fragment_messages"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.modules.messages.dialogs.DialogsFragment">
 
-        <com.stfalcon.chatkit.dialogs.DialogsList
-            app:dialogTitleTextColor="?android:attr/android:textColorPrimary"
-            app:dialogAvatarWidth="0dp"
-            app:dialogAvatarHeight="55dp"
-            app:dialogDividerColor="?android:attr/android:windowBackground"
-            app:dialogDividerLeftPadding="0dp"
-            android:id="@+id/dialogsList"
+        <ProgressBar
+            android:id="@+id/dialogProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/dialogsSwipe"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
-</android.support.design.widget.CoordinatorLayout>
+            <com.stfalcon.chatkit.dialogs.DialogsList
+                android:id="@+id/dialogsList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:dialogAvatarHeight="55dp"
+                app:dialogAvatarWidth="0dp"
+                app:dialogDividerColor="?android:attr/android:windowBackground"
+                app:dialogDividerLeftPadding="0dp"
+                app:dialogTitleTextColor="?android:attr/android:textColorPrimary" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/dialogsEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                app:srcCompat="@drawable/ic_inbox_black_24dp"
+                app:tint="?android:attr/textColorPrimary"
+                tools:ignore="contentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/message_no_items"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>

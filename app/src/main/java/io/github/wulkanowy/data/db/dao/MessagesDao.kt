@@ -1,0 +1,32 @@
+package io.github.wulkanowy.data.db.dao
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
+import io.github.wulkanowy.data.db.entities.Message
+import io.reactivex.Maybe
+import io.reactivex.Single
+
+@Dao
+interface MessagesDao {
+
+    @Insert
+    fun insertAll(messages: List<Message>): List<Long>
+
+    @Delete
+    fun deleteAll(messages: List<Message>)
+
+    @Update
+    fun updateAll(messages: List<Message>)
+
+    @Query("SELECT * FROM Messages WHERE student_id = :studentId")
+    fun getAll(studentId: Int): Maybe<List<Message>>
+
+    @Query("SELECT COUNT(id) FROM Messages WHERE student_id = :studentId AND sender_id = :senderId")
+    fun getNumberOfMessages(studentId: Int, senderId: Int): Single<Int>
+
+    @Query("SELECT * FROM Messages WHERE student_id = :studentId AND sender_id = :senderId ORDER BY date DESC LIMIT :start, 1")
+    fun getBySenderId(studentId: Int, senderId: Int, start: Int): Maybe<List<Message>>
+}
