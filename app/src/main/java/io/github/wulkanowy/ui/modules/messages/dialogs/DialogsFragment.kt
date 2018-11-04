@@ -25,7 +25,7 @@ class DialogsFragment : BaseFragment(), DialogsView, MainView.MainChildView, Mai
     override val isViewEmpty: Boolean
         get() = dialogsAdapter.isEmpty
 
-    private var dialogsAdapter: DialogsListAdapter<Dialog> = DialogsListAdapter(null)
+    private var dialogsAdapter: DialogsListAdapter<Dialog> = DialogsListAdapter(R.layout.item_dialog, null)
 
     companion object {
         fun newInstance() = DialogsFragment()

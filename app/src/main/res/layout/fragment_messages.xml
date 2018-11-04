@@ -30,6 +30,7 @@
                 app:dialogAvatarWidth="0dp"
                 app:dialogDividerColor="?android:attr/android:windowBackground"
                 app:dialogTitleTextColor="?android:attr/android:textColorPrimary"
+                app:dialogUnreadBubbleBackgroundColor="@color/colorPrimary"
                 app:dialogUnreadTitleTextColor="?android:attr/textColorPrimary"
                 app:dialogUnreadTitleTextStyle="bold" />
 
