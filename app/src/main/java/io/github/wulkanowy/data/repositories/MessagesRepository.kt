@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.local.MessagesLocal
 import io.github.wulkanowy.data.repositories.remote.MessagesRemote
+import io.reactivex.Completable
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -18,7 +19,7 @@ class MessagesRepository @Inject constructor(
     private val remote: MessagesRemote
 ) {
 
-    fun getMessages(semester: Semester, forceRefresh: Boolean = false): Single<List<Message>> {
+    fun getMessages(semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
         return local.getMessages(semester).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
@@ -29,11 +30,22 @@ class MessagesRepository @Inject constructor(
                         .toSingle(emptyList())
                         .doOnSuccess { oldMessages ->
                             local.deleteMessages(oldMessages - newMessages)
-                            local.saveMessages(newMessages - oldMessages)
+                            local.saveMessages((newMessages - oldMessages)
+                                .onEach {
+                                    if (notify) it.isNotified = false
+                                })
                         }
                 }.flatMap {
                     local.getMessages(semester).toSingle(emptyList())
                 })
+    }
+
+    fun getNewMessages(semester: Semester): Single<List<Message>> {
+        return local.getNewMessages(semester).toSingle(emptyList())
+    }
+
+    fun updateMessages(messages: List<Message>): Completable {
+        return local.updateMessages(messages)
     }
 
     fun getNumberOfMessages(semester: Semester, senderId: Int): Single<Int> {

@@ -100,6 +100,22 @@
     <!--Message-->
     <string name="message_yesterday">Yesterday</string>
     <string name="message_no_items">No messages</string>
+    <plurals name="message_number_item">
+        <item quantity="one">%d message</item>
+        <item quantity="other">%d messages</item>
+    </plurals>
+
+    <plurals name="message_new_items">
+        <item quantity="one">New message</item>
+        <item quantity="other">New messages</item>
+    </plurals>
+
+    <!--Message notify-->
+    <string name="notify_message_channel">New messages</string>
+    <plurals name="notify_message_new_items">
+        <item quantity="one">You received %1$d message</item>
+        <item quantity="other">You received %1$d messages</item>
+    </plurals>
 
     <!--About-->
     <string name="about_source_code">Source code</string>

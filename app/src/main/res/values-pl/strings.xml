@@ -58,8 +58,7 @@
     <plurals name="grade_new_items">
         <item quantity="one">Nowa ocena</item>
         <item quantity="few">Nowe oceny</item>
-        <item quantity="many">Nowych ocen</item>
-        <item quantity="other">Nowych ocen</item>
+        <item quantity="many">Nowe oceny</item>
     </plurals>
 
 
@@ -108,6 +107,26 @@
     <!--Message-->
     <string name="message_yesterday">Wczoraj</string>
     <string name="message_no_items">Brak wiadomości</string>
+    <plurals name="message_number_item">
+        <item quantity="one">%d wiadomość</item>
+        <item quantity="few">%d wiadomości</item>
+        <item quantity="many">%d wiadomości</item>
+    </plurals>
+
+    <plurals name="message_new_items">
+        <item quantity="one">Nowa wiadomość</item>
+        <item quantity="few">Nowe wiadomości</item>
+        <item quantity="many">Nowe wiadomości</item>
+    </plurals>
+
+
+    <!--Message notify-->
+    <string name="notify_message_channel">Nowe wiadomości</string>
+    <plurals name="notify_message_new_items">
+        <item quantity="one">Dostałeś %1$d wiadomość</item>
+        <item quantity="few">"Dostałeś %1$d wiadomości</item>
+        <item quantity="many">Dostałeś %1$d wiadomości</item>
+    </plurals>
 
     <!--About-->
     <string name="about_source_code">Kod źródłowy</string>

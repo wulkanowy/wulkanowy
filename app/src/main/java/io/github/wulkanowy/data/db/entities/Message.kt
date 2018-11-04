@@ -31,7 +31,7 @@ data class Message(
     @ColumnInfo(name = "userName")
     val sender: String?,
 
-    val unread: Boolean?,
+    val unread: Boolean? = false,
 
     val date: LocalDateTime?,
 
@@ -45,4 +45,7 @@ data class Message(
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    @ColumnInfo(name = "is_notified")
+    var isNotified: Boolean = true
 }

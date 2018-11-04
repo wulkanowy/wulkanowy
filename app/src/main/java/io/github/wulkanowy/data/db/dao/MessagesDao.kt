@@ -24,6 +24,9 @@ interface MessagesDao {
     @Query("SELECT * FROM Messages WHERE student_id = :studentId")
     fun getAll(studentId: Int): Maybe<List<Message>>
 
+    @Query("SELECT * FROM Messages WHERE unread = 1 AND student_id = :studentId")
+    fun getNewMessages(studentId: Int): Maybe<List<Message>>
+
     @Query("SELECT COUNT(id) FROM Messages WHERE student_id = :studentId AND sender_id = :senderId")
     fun getNumberOfMessages(studentId: Int, senderId: Int): Single<Int>
 

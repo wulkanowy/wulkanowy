@@ -16,6 +16,10 @@ class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
         return messagesDb.getAll(semester.studentId).filter { !it.isEmpty() }
     }
 
+    fun getNewMessages(semester: Semester): Maybe<List<Message>> {
+        return messagesDb.getNewMessages(semester.studentId)
+    }
+
     fun getNumberOfMessages(semester: Semester, senderId: Int): Single<Int> {
         return messagesDb.getNumberOfMessages(semester.studentId, senderId)
     }
