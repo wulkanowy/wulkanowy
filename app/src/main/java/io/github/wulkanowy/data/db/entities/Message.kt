@@ -16,6 +16,9 @@ data class Message(
     @ColumnInfo(name = "diary_id")
     var diaryId: Int,
 
+    @ColumnInfo(name = "conversation_id")
+    val conversationId: Int,
+
     @ColumnInfo(name = "real_id")
     val realId: Int?,
 

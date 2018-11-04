@@ -40,12 +40,12 @@ class MessagesRepository @Inject constructor(
         return local.getNumberOfMessages(semester, senderId)
     }
 
-    fun getMessagesBySenderId(semester: Semester, senderId: Int, start: Int): Single<List<Message>> {
-        return local.getMessagesBySenderId(semester, senderId, start)
+    fun getMessagesByConversationId(semester: Semester, conversationId: Int, start: Int): Single<List<Message>> {
+        return local.getMessagesByConversationId(semester, conversationId, start)
             .filter { messages -> messages.none { it.content.isNullOrEmpty() } }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
-                    if (it) local.getMessagesBySenderId(semester, senderId, start).toSingle(emptyList())
+                    if (it) local.getMessagesByConversationId(semester, conversationId, start).toSingle(emptyList())
                     else Single.error(UnknownHostException())
                 }
                 .map { messages -> messages.filter { it.content.isNullOrEmpty() } }
@@ -58,7 +58,7 @@ class MessagesRepository @Inject constructor(
                             }).subscribe()
                         }
                 }.flatMap {
-                    local.getMessagesBySenderId(semester, senderId, start).toSingle(emptyList())
+                    local.getMessagesByConversationId(semester, conversationId, start).toSingle(emptyList())
                 }
             )
     }

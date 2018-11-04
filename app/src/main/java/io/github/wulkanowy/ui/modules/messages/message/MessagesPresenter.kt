@@ -18,16 +18,16 @@ class MessagesPresenter @Inject constructor(
     private val messagesRepository: MessagesRepository
 ) : BasePresenter<MessagesView>(errorHandler) {
 
-    private var senderId = 0
+    private var conversationId = 0
 
-    fun onAttachView(view: MessagesView, senderId: Int, senderName: String) {
+    fun onAttachView(view: MessagesView, conversationId: Int, conversationName: String) {
         super.onAttachView(view)
         view.run {
             initAdapter()
-            setActivityTitle(senderName)
+            setActivityTitle(conversationName)
         }
 
-        this.senderId = senderId
+        this.conversationId = conversationId
 
         insertNumberOfMessages()
         loadData()
@@ -40,7 +40,7 @@ class MessagesPresenter @Inject constructor(
     private fun loadData(start: Int = 0) {
         disposable.add(sessionRepository.getSemesters()
             .map { it.single { semester -> semester.current } }
-            .flatMap { messagesRepository.getMessagesBySenderId(it, senderId, start) }
+            .flatMap { messagesRepository.getMessagesByConversationId(it, conversationId, start) }
             .map { messages -> messages.map { getMappedMessage(it) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
@@ -58,7 +58,7 @@ class MessagesPresenter @Inject constructor(
     private fun insertNumberOfMessages() {
         disposable.add(sessionRepository.getSemesters()
             .map { it.single { semester -> semester.current } }
-            .flatMap { messagesRepository.getNumberOfMessages(it, senderId) }
+            .flatMap { messagesRepository.getNumberOfMessages(it, conversationId) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .subscribe({
@@ -72,7 +72,7 @@ class MessagesPresenter @Inject constructor(
             e.realId.toString(),
             (if (!e.subject.isNullOrEmpty()) "Temat: " + e.subject + "\n\n" else "") + e.content?.trim(),
             e.date.toDate(),
-            User(if (e.folderId != 1) e.senderID.toString() else "0", e.sender, e.sender)
+            User(if (e.folderId == 2) "0" else e.senderID.toString(), e.sender, null)
         )
     }
 }

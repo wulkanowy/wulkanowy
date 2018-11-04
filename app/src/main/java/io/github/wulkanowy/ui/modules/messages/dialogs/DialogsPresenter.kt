@@ -29,12 +29,12 @@ class DialogsPresenter @Inject constructor(
                 .map { it.single { semester -> semester.current } }
                 .flatMap { messagesRepository.getMessages(it, forceRefresh) }
                 .map { messages -> messages.sortedByDescending { it.date } }
-                .map { messages -> messages.groupBy { it.senderID } }
+                .map { messages -> messages.groupBy { it.conversationId } }
                 .map { messages ->
                     messages.map {
                         val dialogs = it.value.map { message ->
                             Message(message.realId.toString(), message.subject, message.date.toDate(),
-                                User(message.senderID.toString(), message.sender, null))
+                                User(message.conversationId.toString(), message.sender, null))
                         }
                         Dialog(it.key.toString(), null, it.value.first().sender,
                             arrayListOf(dialogs.first().user), dialogs.first(),

@@ -17,11 +17,12 @@ class MessagesRemote @Inject constructor(private val api: Api) {
                 diaryId = semester.diaryId
                 notifyDataChanged()
             }
-        }).flatMap { api.getReceivedMessages() }.map { messages ->
+        }).flatMap { api.getReceivedMessages() }.mergeWith(api.getSentMessages()).map { messages ->
             messages.map {
                 Message(
                     studentId = semester.studentId,
                     diaryId = semester.diaryId,
+                    conversationId = it.conversationId,
                     content = it.content,
                     date = it.date?.toLocalDateTime(),
                     folderId = it.folderId,
@@ -33,7 +34,7 @@ class MessagesRemote @Inject constructor(private val api: Api) {
                     unread = it.unread
                 )
             }
-        }
+        }.toList().map { it.flatten() }
     }
 
     fun getMessagesContent(semester: Semester, messages: List<Message>): Single<List<Message>> {
@@ -48,6 +49,7 @@ class MessagesRemote @Inject constructor(private val api: Api) {
                 Message(
                     studentId = semester.studentId,
                     diaryId = semester.diaryId,
+                    conversationId = it.conversationId,
                     content = it.content,
                     date = it.date?.toLocalDateTime(),
                     folderId = it.folderId,

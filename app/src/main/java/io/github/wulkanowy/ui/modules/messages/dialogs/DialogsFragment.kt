@@ -43,8 +43,8 @@ class DialogsFragment : BaseFragment(), DialogsView, MainView.MainChildView, Mai
     override fun initView() {
         dialogsAdapter.setOnDialogClickListener { dialog ->
             context?.startActivity(Intent(context, MessagesActivity::class.java)
-                .putExtra(MessagesActivity.SENDER_ID_KEY, dialog!!.users[0].id.toInt())
-                .putExtra(MessagesActivity.SENDER_NAME_KEY, dialog.dialogName)
+                .putExtra(MessagesActivity.CONVERSATION_ID_KEY, dialog!!.users[0].id.toInt())
+                .putExtra(MessagesActivity.CONVERSATION_NAME_KEY, dialog.dialogName)
             )
         }
 
@@ -52,7 +52,7 @@ class DialogsFragment : BaseFragment(), DialogsView, MainView.MainChildView, Mai
         dialogsAdapter.setDatesFormatter { date ->
             when {
                 DateFormatter.isToday(date) -> DateFormatter.format(date, DateFormatter.Template.TIME)
-            DateFormatter.isYesterday(date) -> getString(R.string.message_yesterday)
+                DateFormatter.isYesterday(date) -> getString(R.string.message_yesterday)
                 else -> DateFormatter.format(date, DateFormatter.Template.STRING_DAY_MONTH_YEAR)
             }
         }

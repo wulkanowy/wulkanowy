@@ -20,8 +20,8 @@ class MessagesActivity : BaseActivity(), MessagesView, MainView.TitledView {
     private val messagesAdapter: MessagesListAdapter<IMessage> = MessagesListAdapter("0", null)
 
     companion object {
-        const val SENDER_ID_KEY = "SENDER_ID_KEY"
-        const val SENDER_NAME_KEY = "SENDER_NAME_KEY"
+        const val CONVERSATION_ID_KEY = "CONVERSATION_ID_KEY"
+        const val CONVERSATION_NAME_KEY = "CONVERSATION_NAME_KEY"
     }
 
     private var messagesTotal = 0
@@ -32,8 +32,8 @@ class MessagesActivity : BaseActivity(), MessagesView, MainView.TitledView {
         messageContainer = messagesContainer
 
         presenter.onAttachView(this,
-            intent.getIntExtra(SENDER_ID_KEY, 0),
-            intent.getStringExtra(SENDER_NAME_KEY)
+            intent.getIntExtra(CONVERSATION_ID_KEY, 0),
+            intent.getStringExtra(CONVERSATION_NAME_KEY)
         )
     }
 
