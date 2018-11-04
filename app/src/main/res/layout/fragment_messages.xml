@@ -5,8 +5,6 @@
     android:layout_height="match_parent">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/fragment_messages"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,8 +29,9 @@
                 app:dialogAvatarHeight="55dp"
                 app:dialogAvatarWidth="0dp"
                 app:dialogDividerColor="?android:attr/android:windowBackground"
-                app:dialogDividerLeftPadding="0dp"
-                app:dialogTitleTextColor="?android:attr/android:textColorPrimary" />
+                app:dialogTitleTextColor="?android:attr/android:textColorPrimary"
+                app:dialogUnreadTitleTextColor="?android:attr/textColorPrimary"
+                app:dialogUnreadTitleTextStyle="bold" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
