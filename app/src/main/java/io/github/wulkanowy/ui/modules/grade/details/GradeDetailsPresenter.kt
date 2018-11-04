@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
+import io.github.wulkanowy.utils.changeModifier
 import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.valueColor
 import timber.log.Timber
@@ -30,7 +31,7 @@ class GradeDetailsPresenter @Inject constructor(
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         disposable.add(sessionRepository.getSemesters()
             .flatMap { gradeRepository.getGrades(it.first { item -> item.semesterId == semesterId }, forceRefresh) }
-            .map { it.map { item -> item.apply { modifier = preferencesRepository.gradeModifier } } }
+            .map { it.map { item -> item.changeModifier(preferencesRepository.gradeModifier) } }
             .map { createGradeItems(it.groupBy { grade -> grade.subject }.toSortedMap()) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)

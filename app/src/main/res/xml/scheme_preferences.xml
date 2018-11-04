@@ -26,7 +26,7 @@
             android:title="@string/pref_view_present"
             app:iconSpaceReserved="false" />
         <ListPreference
-            android:defaultValue="0.25"
+            android:defaultValue="0.0"
             android:entries="@array/grade_modifier_entries"
             android:entryValues="@array/grade_modifier_value"
             android:key="@string/pref_key_grade_modifier"

@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
+import io.github.wulkanowy.utils.changeModifier
 import io.github.wulkanowy.utils.logEvent
 import java.lang.String.format
 import java.util.Locale.FRANCE
@@ -36,7 +37,7 @@ class GradeSummaryPresenter @Inject constructor(
                     .flatMap { gradesSummary ->
                         gradeRepository.getGrades(it, forceRefresh)
                             .map { grades ->
-                                grades.map { item -> item.apply { modifier = preferencesRepository.gradeModifier } }
+                                grades.map { item -> item.changeModifier(preferencesRepository.gradeModifier) }
                                     .groupBy { grade -> grade.subject }
                                     .mapValues { entry -> entry.value.calcAverage() }
                                     .filterValues { value -> value != 0.0 }
