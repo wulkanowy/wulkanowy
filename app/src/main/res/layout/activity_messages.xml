@@ -8,6 +8,13 @@
     android:orientation="vertical"
     tools:context=".ui.modules.messages.message.MessagesActivity">
 
+    <ProgressBar
+        android:id="@+id/messagesProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true" />
+
     <com.stfalcon.chatkit.messages.MessagesList
         android:id="@+id/messagesList"
         android:layout_width="match_parent"

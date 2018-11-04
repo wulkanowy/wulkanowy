@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.messages.message
 
 import android.os.Bundle
+import android.view.View
 import com.stfalcon.chatkit.commons.models.IMessage
 import com.stfalcon.chatkit.messages.MessagesListAdapter
 import io.github.wulkanowy.R
@@ -44,6 +45,10 @@ class MessagesActivity : BaseActivity(), MessagesView, MainView.TitledView {
             }
         }
         messagesList.setAdapter(messagesAdapter)
+    }
+
+    override fun showProgress(show: Boolean) {
+        messagesProgress.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun setActivityTitle(senderName: String) {

@@ -12,4 +12,6 @@ interface MessagesView : BaseView {
     fun setTotalMessages(total: Int)
 
     fun initAdapter()
+
+    fun showProgress(show: Boolean)
 }

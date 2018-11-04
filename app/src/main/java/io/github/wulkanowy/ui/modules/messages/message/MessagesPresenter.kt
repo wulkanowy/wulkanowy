@@ -44,12 +44,13 @@ class MessagesPresenter @Inject constructor(
             .map { messages -> messages.map { getMappedMessage(it) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
+            .doFinally { view?.showProgress(false) }
             .subscribe({
                 view?.run {
+                    showProgress(true)
                     addToEnd(it)
                 }
             }, {
-//                view?.run { showEmpty(isViewEmpty) }
                 errorHandler.proceed(it)
             })
         )
