@@ -32,13 +32,13 @@ class DialogsPresenter @Inject constructor(
                 .map { messages -> messages.groupBy { it.conversationId } }
                 .map { messages ->
                     messages.map {
-                        val dialogs = it.value.map { message ->
-                            Message(message.realId.toString(), message.subject, message.date.toDate(),
-                                User(message.conversationId.toString(), message.sender, null))
+                        val lastMessage = it.value.first().run {
+                            Message(realId.toString(), subject, date.toDate(),
+                                User(conversationId.toString(), conversationName, null))
                         }
-                        Dialog(it.key.toString(), null, it.value.first().sender,
-                            arrayListOf(dialogs.first().user), dialogs.first(),
-                            it.value.count { message -> message.unread ?: false }
+
+                        Dialog(it.key.toString(), null, it.value.first().conversationName,
+                            arrayListOf(lastMessage.user), lastMessage, it.value.count { m -> m.unread ?: false }
                         )
                     }
                 }

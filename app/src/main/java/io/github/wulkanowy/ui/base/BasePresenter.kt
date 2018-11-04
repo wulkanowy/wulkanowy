@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.base
 
 import io.github.wulkanowy.data.ErrorHandler
-import io.github.wulkanowy.ui.modules.main.MainView
 import io.reactivex.disposables.CompositeDisposable
 
 open class BasePresenter<T : BaseView>(private val errorHandler: ErrorHandler) {
