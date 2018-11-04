@@ -48,6 +48,8 @@ inline val Grade.colorStringId: Int
     }
 
 fun Grade.changeModifier(newModifier: Double): Grade {
-    if (modifier != 0.0 && newModifier != 0.0) modifier = newModifier
+    if (modifier != 0.0 && newModifier != 0.0) {
+        modifier = if (modifier > 0) newModifier else -newModifier
+    }
     return this
 }
