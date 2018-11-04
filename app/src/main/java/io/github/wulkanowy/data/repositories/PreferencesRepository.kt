@@ -18,6 +18,9 @@ class PreferencesRepository @Inject constructor(
     val showPresent: Boolean
         get() = sharedPref.getBoolean(context.getString(R.string.pref_key_attendance_present), true)
 
+    val expandGrades: Boolean
+        get() = sharedPref.getBoolean(context.getString(R.string.pref_key_expand_grade), false)
+
     val currentThemeKey: String = context.getString(R.string.pref_key_theme)
     val currentTheme: Int
         get() = sharedPref.getString(currentThemeKey, "1")?.toInt() ?: 1
