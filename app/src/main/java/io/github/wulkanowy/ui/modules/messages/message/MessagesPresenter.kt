@@ -40,7 +40,7 @@ class MessagesPresenter @Inject constructor(
     private fun loadData(start: Int = 0) {
         disposable.add(sessionRepository.getSemesters()
             .map { it.single { semester -> semester.current } }
-            .flatMap { messagesRepository.getMessagesByConversationId(it, conversationId, start) }
+            .flatMap { messagesRepository.getMessagesByConversationId(it, conversationId, start, 2) }
             .map { messages -> messages.map { getMappedMessage(it) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)

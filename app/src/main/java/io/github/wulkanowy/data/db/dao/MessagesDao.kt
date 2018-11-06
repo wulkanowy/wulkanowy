@@ -30,6 +30,6 @@ interface MessagesDao {
     @Query("SELECT COUNT(id) FROM Messages WHERE student_id = :studentId AND sender_id = :senderId")
     fun getNumberOfMessages(studentId: Int, senderId: Int): Single<Int>
 
-    @Query("SELECT * FROM Messages WHERE student_id = :studentId AND conversation_id = :conversationId ORDER BY date DESC LIMIT :start, 1")
-    fun getByConversationId(studentId: Int, conversationId: Int, start: Int): Maybe<List<Message>>
+    @Query("SELECT * FROM Messages WHERE student_id = :studentId AND conversation_id = :conversationId ORDER BY date DESC LIMIT :start, :end")
+    fun getByConversationId(studentId: Int, conversationId: Int, start: Int, end: Int): Maybe<List<Message>>
 }
