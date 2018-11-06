@@ -24,6 +24,9 @@ interface MessagesDao {
     @Query("SELECT * FROM Messages WHERE student_id = :studentId")
     fun getAll(studentId: Int): Maybe<List<Message>>
 
+    @Query("SELECT * FROM Messages WHERE student_id = :studentId ORDER BY date DESC LIMIT 0, 1")
+    fun getLast(studentId: Int): Maybe<Message>
+
     @Query("SELECT * FROM Messages WHERE unread = 1 AND student_id = :studentId")
     fun getNewMessages(studentId: Int): Maybe<List<Message>>
 

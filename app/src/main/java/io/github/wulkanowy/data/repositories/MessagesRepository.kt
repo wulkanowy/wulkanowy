@@ -7,7 +7,11 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.local.MessagesLocal
 import io.github.wulkanowy.data.repositories.remote.MessagesRemote
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
+import org.threeten.bp.DayOfWeek.MONDAY
+import org.threeten.bp.LocalDate.now
+import org.threeten.bp.temporal.TemporalAdjusters.next
 import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,23 +25,21 @@ class MessagesRepository @Inject constructor(
 
     fun getMessages(semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
         return local.getMessages(semester).filter { !forceRefresh }
-            .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
-                .flatMap {
-                    if (it) remote.getMessages(semester)
-                    else Single.error(UnknownHostException())
-                }.flatMap { newMessages ->
-                    local.getMessages(semester)
-                        .toSingle(emptyList())
-                        .doOnSuccess { oldMessages ->
-                            local.deleteMessages(oldMessages - newMessages)
-                            local.saveMessages((newMessages - oldMessages)
-                                .onEach {
-                                    if (notify) it.isNotified = false
-                                })
+            .switchIfEmpty(local.getLastMessage(semester).switchIfEmpty(Maybe.just(Message())).toSingle()
+                .flatMap { lastMessage ->
+                    ReactiveNetwork.checkInternetConnectivity(settings)
+                        .flatMap {
+                            if (it) remote.getMessages(semester, lastMessage.date, now().with(next(MONDAY)).atStartOfDay())
+                            else Single.error(UnknownHostException())
                         }
+                }.map { newMessages ->
+                    local.saveMessages(newMessages.onEach {
+                        if (notify) it.isNotified = false
+                    })
                 }.flatMap {
                     local.getMessages(semester).toSingle(emptyList())
-                })
+                }
+            )
     }
 
     fun getNewMessages(semester: Semester): Single<List<Message>> {

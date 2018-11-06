@@ -16,6 +16,10 @@ class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
         return messagesDb.getAll(semester.studentId).filter { !it.isEmpty() }
     }
 
+    fun getLastMessage(semester: Semester): Maybe<Message> {
+        return messagesDb.getLast(semester.studentId)
+    }
+
     fun getNewMessages(semester: Semester): Maybe<List<Message>> {
         return messagesDb.getNewMessages(semester.studentId)
     }
@@ -28,12 +32,8 @@ class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
         return messagesDb.getByConversationId(semester.studentId, conversationId, start, end).filter { !it.isEmpty() }
     }
 
-    fun saveMessages(messages: List<Message>) {
-        messagesDb.insertAll(messages)
-    }
-
-    fun deleteMessages(messages: List<Message>) {
-        messagesDb.deleteAll(messages)
+    fun saveMessages(messages: List<Message>): List<Long> {
+        return messagesDb.insertAll(messages)
     }
 
     fun updateMessages(messages: List<Message>): Completable {
