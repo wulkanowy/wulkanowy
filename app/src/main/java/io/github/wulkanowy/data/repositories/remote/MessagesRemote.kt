@@ -26,7 +26,6 @@ class MessagesRemote @Inject constructor(private val api: Api) {
                         diaryId = semester.diaryId,
                         conversationId = it.conversationId,
                         conversationName = it.conversationName,
-                        content = it.content,
                         date = it.date?.toLocalDateTime(),
                         folderId = it.folderId,
                         messageID = it.messageId,
@@ -47,22 +46,13 @@ class MessagesRemote @Inject constructor(private val api: Api) {
                 notifyDataChanged()
             }
         }).flatMapObservable { Observable.fromIterable(messages) }
-            .flatMapSingle { api.getMessage(it.messageID ?: 0, it.folderId ?: 0) }
+            .flatMapSingle { api.getMessage(it.messageID ?: 0, it.folderId ?: 0, true, it.realId ?: 0) }
             .map {
                 Message(
                     studentId = semester.studentId,
                     diaryId = semester.diaryId,
-                    conversationId = it.conversationId,
-                    conversationName = it.conversationName,
                     content = it.content,
-                    date = it.date?.toLocalDateTime(),
-                    folderId = it.folderId,
-                    messageID = it.messageId,
-                    realId = it.id,
-                    sender = it.sender,
-                    senderID = it.senderId,
-                    subject = it.subject,
-                    unread = it.unread
+                    realId = it.id
                 )
             }.toList()
     }

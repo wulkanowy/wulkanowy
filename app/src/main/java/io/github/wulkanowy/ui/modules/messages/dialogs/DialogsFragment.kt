@@ -42,8 +42,9 @@ class DialogsFragment : BaseFragment(), DialogsView, MainView.MainChildView, Mai
 
     override fun initView() {
         dialogsAdapter.setOnDialogClickListener { dialog ->
+            dialogsAdapter.updateItemById(dialog.copy(unreadCount = 0))
             context?.startActivity(Intent(context, MessagesActivity::class.java)
-                .putExtra(MessagesActivity.CONVERSATION_ID_KEY, dialog!!.users[0].id.toInt())
+                .putExtra(MessagesActivity.CONVERSATION_ID_KEY, dialog.users[0].id.toInt())
                 .putExtra(MessagesActivity.CONVERSATION_NAME_KEY, dialog.dialogName)
             )
         }

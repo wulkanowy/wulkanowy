@@ -67,7 +67,7 @@ class MessagesRepository @Inject constructor(
                     remote.getMessagesContent(semester, dbMessages)
                         .doOnSuccess { new ->
                             local.updateMessages(dbMessages.map { message ->
-                                message.copy(content = new.single { it.realId == message.messageID }.content)
+                                message.copy(unread = false, content = new.single { it.realId == message.realId }.content)
                                     .apply { id = message.id }
                             }).subscribe()
                         }

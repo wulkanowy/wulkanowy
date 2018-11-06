@@ -77,7 +77,7 @@ class SessionRemote @Inject constructor(private val api: Api) {
     fun initApi(student: Student, reInitialize: Boolean = false) {
         if (if (reInitialize) true else 0 == api.studentId) {
             api.run {
-//                logLevel = HttpLoggingInterceptor.Level.NONE
+                logLevel = HttpLoggingInterceptor.Level.NONE
                 email = student.email
                 password = student.password
                 symbol = student.symbol
