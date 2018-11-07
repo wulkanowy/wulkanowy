@@ -89,7 +89,7 @@ class SessionRemote @Inject constructor(private val api: Api) {
                 notifyDataChanged()
                 setInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
                     Timber.d(it)
-                }).setLevel(HttpLoggingInterceptor.Level.BASIC))
+                }).setLevel(HttpLoggingInterceptor.Level.BODY))
             }
         }
     }
