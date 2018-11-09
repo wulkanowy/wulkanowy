@@ -11,6 +11,7 @@
     <string name="settings_title">Settings</string>
     <string name="more_title">More</string>
     <string name="about_title">About</string>
+    <string name="note_title">Notes and achievements</string>
 
 
     <!--Login form-->
@@ -98,6 +99,9 @@
     <!--About-->
     <string name="about_source_code">Source code</string>
     <string name="about_feedback">Report a bug</string>
+
+    <!--Note-->
+    <string name="note_no_items">No info about notes</string>
 
 
     <!--Generic-->
