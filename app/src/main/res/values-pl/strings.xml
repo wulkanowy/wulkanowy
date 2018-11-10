@@ -73,6 +73,16 @@
     </plurals>
 
 
+    <!--Note notify-->
+    <string name="notify_note_channel">Nowe uwagi</string>
+    <plurals name="notify_note_new_items">
+        <item quantity="one">Dostałeś %1$d uwagę</item>
+        <item quantity="few">"Dostałeś %1$d uwagi</item>
+        <item quantity="many">Dostałeś %1$d uwag</item>
+        <item quantity="other">Dostałeś %1$d uwag</item>
+    </plurals>
+
+
     <!--Timetable-->
     <string name="timetable_lesson">Lekcja</string>
     <string name="timetable_room">Sala</string>
@@ -111,6 +121,20 @@
     <!--Note-->
     <string name="note_no_items">Brak informacji o uwagach</string>
     <string name="note_content">Treść</string>
+    <plurals name="note_number_item">
+        <item quantity="one">%d uwaga</item>
+        <item quantity="few">%d uwagi</item>
+        <item quantity="many">%d uwag</item>
+        <item quantity="other">%d uwag</item>
+    </plurals>
+
+    <plurals name="note_new_items">
+        <item quantity="one">Nowa uwaga</item>
+        <item quantity="few">Nowe uwagi</item>
+        <item quantity="many">Nowych uwag</item>
+        <item quantity="other">Nowych uwag</item>
+    </plurals>
+
 
     <!--Generic-->
     <string name="all_description">Opis</string>

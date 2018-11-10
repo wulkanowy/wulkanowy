@@ -17,9 +17,15 @@ interface NoteDao {
     @Update
     fun update(note: Note)
 
+    @Update
+    fun updateAll(notes: List<Note>)
+
     @Delete
     fun deleteAll(notes: List<Note>)
 
     @Query("SELECT * FROM Notes WHERE semester_id = :semesterId AND student_id = :studentId")
     fun getNotes(semesterId: Int, studentId: Int): Maybe<List<Note>>
+
+    @Query("SELECT * FROM Notes WHERE is_read = 0 AND semester_id = :semesterId AND student_id = :studentId")
+    fun getNewNotes(semesterId: Int, studentId: Int): Maybe<List<Note>>
 }

@@ -39,7 +39,15 @@ class NoteRepository @Inject constructor(
             )
     }
 
+    fun getNewNotes(semester: Semester): Single<List<Note>> {
+        return local.getNewNotes(semester).toSingle(emptyList())
+    }
+
     fun updateNote(note: Note): Completable {
         return local.updateNote(note)
+    }
+
+    fun updateNotes(notes: List<Note>): Completable {
+        return local.updateNotes(notes)
     }
 }
