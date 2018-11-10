@@ -110,6 +110,7 @@
 
     <!--Note-->
     <string name="note_no_items">Brak informacji o uwagach</string>
+    <string name="note_content">Treść</string>
 
     <!--Generic-->
     <string name="all_description">Opis</string>
@@ -118,6 +119,7 @@
     <string name="all_date">Data</string>
     <string name="all_color">Kolor</string>
     <string name="all_details">Szczegóły</string>
+    <string name="all_category">Kategoria</string>
     <string name="all_close">Zamknij</string>
     <string name="all_cancel">Anuluj</string>
     <string name="all_no_data">Brak danych</string>

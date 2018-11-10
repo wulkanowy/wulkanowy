@@ -1,11 +1,14 @@
 package io.github.wulkanowy.ui.modules.note
 
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.ErrorHandler
+import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.repositories.NoteRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.logEvent
+import timber.log.Timber
 import javax.inject.Inject
 
 class NotePresenter @Inject constructor(
@@ -49,6 +52,29 @@ class NotePresenter @Inject constructor(
                 view?.run { showEmpty(isViewEmpty) }
                 errorHandler.proceed(it)
             })
+        )
+    }
+
+    fun onNoteItemSelected(item: AbstractFlexibleItem<*>?) {
+        if (item is NoteItem) {
+            view?.run {
+                showNoteDialog(item.note)
+                if (!item.note.isRead) {
+                    item.note.isRead = true
+                    updateItem(item)
+                    updateNote(item.note)
+                }
+            }
+        }
+    }
+
+    private fun updateNote(note: Note) {
+        disposable.add(noteRepository.updateNote(note)
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
+                Timber.d("Note ${note.id} updated")
+            }) { error -> errorHandler.proceed(error) }
         )
     }
 }

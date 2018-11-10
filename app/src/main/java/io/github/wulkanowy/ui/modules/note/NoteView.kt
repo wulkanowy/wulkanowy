@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.modules.note
 
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.ui.base.BaseView
 
 interface NoteView : BaseView {
@@ -10,6 +12,8 @@ interface NoteView : BaseView {
 
     fun updateData(data: List<NoteItem>)
 
+    fun updateItem(item: AbstractFlexibleItem<*>)
+
     fun clearData()
 
     fun showEmpty(show: Boolean)
@@ -19,4 +23,6 @@ interface NoteView : BaseView {
     fun showContent(show: Boolean)
 
     fun hideRefresh()
+
+    fun showNoteDialog(note: Note)
 }

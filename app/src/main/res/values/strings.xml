@@ -102,6 +102,7 @@
 
     <!--Note-->
     <string name="note_no_items">No info about notes</string>
+    <string name="note_content">Content</string>
 
 
     <!--Generic-->
@@ -111,6 +112,7 @@
     <string name="all_date">Date</string>
     <string name="all_color">Color</string>
     <string name="all_details">Details</string>
+    <string name="all_category">Category</string>
     <string name="all_close">Close</string>
     <string name="all_cancel">Cancel</string>
     <string name="all_no_data">No data</string>

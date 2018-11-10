@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.local.NoteLocal
 import io.github.wulkanowy.data.repositories.remote.NoteRemote
+import io.reactivex.Completable
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -18,7 +19,7 @@ class NoteRepository @Inject constructor(
     private val remote: NoteRemote
 ) {
 
-    fun getNotes(semester: Semester, forceRefresh: Boolean = false): Single<List<Note>> {
+    fun getNotes(semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Note>> {
         return local.getNotes(semester).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
@@ -28,9 +29,17 @@ class NoteRepository @Inject constructor(
                     local.getNotes(semester).toSingle(emptyList())
                         .doOnSuccess { old ->
                             local.deleteNotes(old - new)
-                            local.saveNotes(new - old)
+                            local.saveNotes((new - old)
+                                .onEach {
+                                    if (old.isNotEmpty()) it.isRead = false
+                                    if (notify) it.isNotified = false
+                                })
                         }
                 }.flatMap { local.getNotes(semester).toSingle(emptyList()) }
             )
+    }
+
+    fun updateNote(note: Note): Completable {
+        return local.updateNote(note)
     }
 }

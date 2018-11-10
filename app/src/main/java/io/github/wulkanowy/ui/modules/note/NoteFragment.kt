@@ -10,8 +10,10 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_note.*
 import javax.inject.Inject
 
@@ -43,6 +45,10 @@ class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
     }
 
     override fun initView() {
+        noteAdapter.run {
+            setOnItemClickListener { presenter.onNoteItemSelected(getItem(it)) }
+        }
+
         noteRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = noteAdapter
@@ -50,8 +56,16 @@ class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
         noteSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
+    override fun showNoteDialog(note: Note) {
+        NoteDialog.newInstance(note).show(fragmentManager, note.toString())
+    }
+
     override fun updateData(data: List<NoteItem>) {
         noteAdapter.updateDataSet(data, true)
+    }
+
+    override fun updateItem(item: AbstractFlexibleItem<*>) {
+        noteAdapter.updateItem(item)
     }
 
     override fun clearData() {

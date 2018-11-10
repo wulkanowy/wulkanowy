@@ -1,8 +1,10 @@
 package io.github.wulkanowy.data.repositories.local
 
 import io.github.wulkanowy.data.db.dao.NoteDao
+import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,6 +18,10 @@ class NoteLocal @Inject constructor(private val noteDb: NoteDao) {
 
     fun saveNotes(notes: List<Note>) {
         noteDb.insertAll(notes)
+    }
+
+    fun updateNote(note: Note): Completable {
+        return Completable.fromCallable { noteDb.update(note) }
     }
 
     fun deleteNotes(notes: List<Note>) {

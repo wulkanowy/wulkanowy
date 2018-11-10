@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import io.github.wulkanowy.data.db.entities.Note
 import io.reactivex.Maybe
 
@@ -12,6 +13,9 @@ interface NoteDao {
 
     @Insert
     fun insertAll(notes: List<Note>)
+
+    @Update
+    fun update(note: Note)
 
     @Delete
     fun deleteAll(notes: List<Note>)
