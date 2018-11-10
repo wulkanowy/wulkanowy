@@ -24,7 +24,7 @@ import javax.inject.Inject
 class WulkanowyApp : DaggerApplication() {
 
     @Inject
-    lateinit var pref: PreferencesRepository
+    lateinit var prefRepository: PreferencesRepository
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
@@ -37,7 +37,7 @@ class WulkanowyApp : DaggerApplication() {
         initializeFabric()
         if (DEBUG) enableDebugLog()
         RxJava2Debug.enableRxJava2AssemblyTracking(arrayOf(BuildConfig.APPLICATION_ID))
-        AppCompatDelegate.setDefaultNightMode(pref.currentTheme)
+        AppCompatDelegate.setDefaultNightMode(prefRepository.currentTheme)
     }
 
     private fun enableDebugLog() {
