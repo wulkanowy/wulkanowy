@@ -31,7 +31,6 @@ class NoteRepository @Inject constructor(
                             local.deleteNotes(old - new)
                             local.saveNotes((new - old)
                                 .onEach {
-                                    if (old.isNotEmpty()) it.isRead = false
                                     if (notify) it.isNotified = false
                                 })
                         }

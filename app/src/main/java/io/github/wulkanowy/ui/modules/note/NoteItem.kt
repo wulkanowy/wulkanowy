@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.note
 
 import android.graphics.Typeface.BOLD
+import android.graphics.Typeface.NORMAL
 import android.view.View
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -25,15 +26,16 @@ class NoteItem(val note: Note) : AbstractFlexibleItem<NoteItem.ViewHolder>() {
         holder: NoteItem.ViewHolder, position: Int, payloads: MutableList<Any>?
     ) {
         holder.apply {
-            noteItemDate.text = note.date.toFormattedString()
-            noteItemType.text = note.category
+            noteItemDate.apply {
+                text = note.date.toFormattedString()
+                setTypeface(null, if (note.isRead) NORMAL else BOLD)
+            }
+            noteItemType.apply {
+                text = note.category
+                setTypeface(null, if (note.isRead) NORMAL else BOLD)
+            }
             noteItemTeacher.text = note.teacher
             noteItemContent.text = note.content
-
-            if (!note.isRead) {
-                noteItemDate.setTypeface(null, BOLD)
-                noteItemType.setTypeface(null, BOLD)
-            }
         }
     }
 
