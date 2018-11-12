@@ -15,6 +15,7 @@ import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeModule
 import io.github.wulkanowy.ui.modules.messages.dialogs.DialogsFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
+import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 
@@ -62,4 +63,7 @@ abstract class MainModule {
 
     @ContributesAndroidInjector
     abstract fun bindSettingsFragment(): SettingsFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindNoteFragment(): NoteFragment
 }

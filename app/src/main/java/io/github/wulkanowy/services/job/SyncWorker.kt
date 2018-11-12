@@ -8,11 +8,13 @@ import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.GradeSummaryRepository
 import io.github.wulkanowy.data.repositories.MessagesRepository
+import io.github.wulkanowy.data.repositories.NoteRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.services.notification.GradeNotification
 import io.github.wulkanowy.services.notification.MessageNotification
+import io.github.wulkanowy.services.notification.NoteNotification
 import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
@@ -44,6 +46,10 @@ class SyncWorker : SimpleJobService() {
 
     @Inject
     lateinit var messages: MessagesRepository
+
+    @Inject
+    lateinit var note: NoteRepository
+
 
     @Inject
     lateinit var prefRepository: PreferencesRepository
@@ -79,14 +85,15 @@ class SyncWorker : SimpleJobService() {
                         attendance.getAttendance(it, start, end, true),
                         exam.getExams(it, start, end, true),
                         timetable.getTimetable(it, start, end, true),
-                        messages.getMessages(it, true, true)
+                        messages.getMessages(it, true, true),
+                        note.getNotes(it, true, true)
                     )
                 )
             }
             .subscribe({}, { error = it }))
 
         return if (null === error) {
-            if (prefRepository.notificationsEnable) sendNotifications()
+            if (prefRepository.isNotificationsEnable) sendNotifications()
             Timber.d("Synchronization successful")
             RESULT_SUCCESS
         } else {
@@ -98,6 +105,7 @@ class SyncWorker : SimpleJobService() {
     private fun sendNotifications() {
         sendGradeNotification()
         sendMessageNotification()
+        sendNoteNotification()
     }
 
     private fun sendGradeNotification() {
@@ -127,6 +135,20 @@ class SyncWorker : SimpleJobService() {
                 }
             }, { Timber.e(it, "Message notifications sending failed") })
         )
+    }
+
+    private fun sendNoteNotification() {
+        disposable.add(session.getSemesters()
+            .map { it.single { semester -> semester.current } }
+            .flatMap { note.getNewNotes(it) }
+            .map { it.filter { note -> !note.isNotified } }
+            .subscribe({
+                if (it.isNotEmpty()) {
+                    Timber.d("Found ${it.size} unread notes")
+                    NoteNotification(applicationContext).sendNotification(it)
+                    note.updateNotes(it.map { note -> note.apply { isNotified = true } }).subscribe()
+                }
+            }) { Timber.e("Notifications sending failed") })
     }
 
     override fun onDestroy() {

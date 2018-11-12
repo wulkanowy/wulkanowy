@@ -7,6 +7,8 @@ interface MoreView : BaseView {
 
     val messagesRes: Pair<String, Drawable?>?
 
+    val noteRes: Pair<String, Drawable?>?
+
     val settingsRes: Pair<String, Drawable?>?
 
     val aboutRes: Pair<String, Drawable?>?
@@ -20,5 +22,8 @@ interface MoreView : BaseView {
     fun openAboutView()
 
     fun popView()
+
     fun openMessagesView()
+
+    fun openNoteView()
 }

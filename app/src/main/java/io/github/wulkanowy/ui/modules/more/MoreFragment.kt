@@ -15,6 +15,7 @@ import io.github.wulkanowy.ui.modules.about.AboutFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.messages.dialogs.DialogsFragment
+import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_more.*
@@ -43,11 +44,18 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
             }
         }
 
+    override val noteRes: Pair<String, Drawable?>?
+        get() {
+            return context?.run {
+                getString(R.string.note_title) to ContextCompat.getDrawable(this, R.drawable.ic_menu_main_note_24dp)
+            }
+        }
+
     override val settingsRes: Pair<String, Drawable?>?
         get() {
             return context?.run {
                 getString(R.string.settings_title) to
-                        ContextCompat.getDrawable(this, R.drawable.ic_more_settings_24dp)
+                    ContextCompat.getDrawable(this, R.drawable.ic_more_settings_24dp)
             }
         }
 
@@ -87,6 +95,10 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
 
     override fun openMessagesView() {
         (activity as? MainActivity)?.pushView(DialogsFragment.newInstance())
+    }
+
+    override fun openNoteView() {
+        (activity as? MainActivity)?.pushView(NoteFragment.newInstance())
     }
 
     override fun openSettingsView() {
