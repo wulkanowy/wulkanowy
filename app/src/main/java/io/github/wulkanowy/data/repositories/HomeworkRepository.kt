@@ -6,7 +6,6 @@ import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.local.HomeworkLocal
 import io.github.wulkanowy.data.repositories.remote.HomeworkRemote
-import io.reactivex.Completable
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import java.net.UnknownHostException
@@ -20,7 +19,7 @@ class HomeworkRepository @Inject constructor(
     private val remote: HomeworkRemote
 ) {
 
-    fun getHomework(semester: Semester, date: LocalDate, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Homework>> {
+    fun getHomework(semester: Semester, date: LocalDate, forceRefresh: Boolean = false): Single<List<Homework>> {
         return local.getHomework(semester, date).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
@@ -30,24 +29,8 @@ class HomeworkRepository @Inject constructor(
                     local.getHomework(semester, date).toSingle(emptyList())
                         .doOnSuccess { oldGrades ->
                             local.deleteHomework(oldGrades - newGrades)
-                            local.saveHomework((newGrades - oldGrades)
-                                .onEach {
-                                    if (oldGrades.isNotEmpty()) it.isRead = false
-                                    if (notify) it.isNotified = false
-                                })
+                            local.saveHomework(newGrades - oldGrades)
                         }
                 }.flatMap { local.getHomework(semester, date).toSingle(emptyList()) })
-    }
-
-    fun getNewHomework(semester: Semester): Single<List<Homework>> {
-        return local.getNewHomework(semester).toSingle(emptyList())
-    }
-
-    fun updateHomework(homework: Homework): Completable {
-        return local.updateHomework(homework)
-    }
-
-    fun updateHomeworkList(homework: List<Homework>): Completable {
-        return local.updateHomeworkList(homework)
     }
 }

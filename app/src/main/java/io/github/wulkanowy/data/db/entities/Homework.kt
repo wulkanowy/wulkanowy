@@ -33,10 +33,4 @@ data class Homework(
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
-
-    @ColumnInfo(name = "is_read")
-    var isRead: Boolean = false
-
-    @ColumnInfo(name = "is_notified")
-    var isNotified: Boolean = true
 }
