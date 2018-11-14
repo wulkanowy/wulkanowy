@@ -18,6 +18,8 @@ interface MainView : BaseView {
 
     fun showHomeArrow(show: Boolean)
 
+    fun showAccountManagerDialog()
+
     fun notifyMenuViewReselected()
 
     fun setViewTitle(title: String)

@@ -3,6 +3,8 @@ package io.github.wulkanowy.ui.modules.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation.TitleState.ALWAYS_SHOW
@@ -58,13 +60,14 @@ class MainActivity : BaseActivity(), MainView {
         navController.initialize(startMenuIndex, savedInstanceState)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.action_menu_main, menu)
+        return true
+    }
+
     override fun onStart() {
         super.onStart()
         presenter.onViewStart()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return presenter.onUpNavigate()
     }
 
     override fun initView() {
@@ -103,6 +106,15 @@ class MainActivity : BaseActivity(), MainView {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return if (item?.itemId == R.id.mainMenuAccount) presenter.onAccountManagerSelected()
+        else false
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return presenter.onUpNavigate()
+    }
+
     override fun switchMenuView(position: Int) {
         navController.switchTab(position)
     }
@@ -113,6 +125,9 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun showHomeArrow(show: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(show)
+    }
+
+    override fun showAccountManagerDialog() {
     }
 
     override fun notifyMenuViewReselected() {

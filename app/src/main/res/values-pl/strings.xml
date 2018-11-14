@@ -30,6 +30,10 @@
     <string name="login_field_required">To pole jest wymagane</string>
 
 
+    <!--Main-->
+    <string name="main_account_manager">Menadżer kont</string>
+
+
     <!--Grade-->
     <string name="grade_header">Ocena</string>
     <string name="grade_semester">Semestr %d</string>

@@ -30,6 +30,10 @@
     <string name="login_field_required">This field is required</string>
 
 
+    <!--Main-->
+    <string name="main_account_manager">Account manager</string>
+
+
     <!--Grade-->
     <string name="grade_header">Grade</string>
     <string name="grade_semester">Semester %d</string>
