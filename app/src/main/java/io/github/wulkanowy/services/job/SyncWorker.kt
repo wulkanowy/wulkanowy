@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.GradeSummaryRepository
 import io.github.wulkanowy.data.repositories.MessagesRepository
+import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.NoteRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SessionRepository
@@ -52,6 +53,9 @@ class SyncWorker : SimpleJobService() {
 
 
     @Inject
+    lateinit var homework: HomeworkRepository
+
+    @Inject
     lateinit var prefRepository: PreferencesRepository
 
     private val disposable = CompositeDisposable()
@@ -86,7 +90,9 @@ class SyncWorker : SimpleJobService() {
                         exam.getExams(it, start, end, true),
                         timetable.getTimetable(it, start, end, true),
                         messages.getMessages(it, true, true),
-                        note.getNotes(it, true, true)
+                        note.getNotes(it, true, true),
+                        homework.getHomework(it, LocalDate.now(), true),
+                        homework.getHomework(it, LocalDate.now().plusDays(1), true)
                     )
                 )
             }
