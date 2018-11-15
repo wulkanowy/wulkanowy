@@ -34,6 +34,10 @@ class SessionRepository @Inject constructor(
         return cachedStudents
     }
 
+    fun getStudents(): Single<List<Student>> {
+        return local.getStudents()
+    }
+
     fun saveStudent(student: Student): Completable {
         return remote.getSemesters(student)
             .flatMapCompletable { local.saveSemesters(it) }

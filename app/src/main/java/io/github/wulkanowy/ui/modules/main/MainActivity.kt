@@ -14,6 +14,7 @@ import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
 import io.github.wulkanowy.R
 import io.github.wulkanowy.services.notification.GradeNotification
 import io.github.wulkanowy.ui.base.BaseActivity
+import io.github.wulkanowy.ui.modules.account.AccountDialog
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
@@ -127,7 +128,8 @@ class MainActivity : BaseActivity(), MainView {
         supportActionBar?.setDisplayHomeAsUpEnabled(show)
     }
 
-    override fun showAccountManagerDialog() {
+    override fun showAccountPicker() {
+        navController.showDialogFragment(AccountDialog.newInstance())
     }
 
     override fun notifyMenuViewReselected() {

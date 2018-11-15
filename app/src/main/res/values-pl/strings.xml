@@ -13,6 +13,7 @@
     <string name="about_title">O aplikacji</string>
     <string name="note_title">Uwagi i osiągnięcia</string>
     <string name="homework_title">Zadania domowe</string>
+    <string name="account_title">Wybierz konto</string>
 
 
     <!--Login form-->
@@ -32,7 +33,7 @@
 
 
     <!--Main-->
-    <string name="main_account_manager">Menadżer kont</string>
+    <string name="main_account_picker">Menadżer kont</string>
 
 
     <!--Grade-->

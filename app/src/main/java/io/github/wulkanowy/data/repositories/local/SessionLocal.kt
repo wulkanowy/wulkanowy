@@ -16,10 +16,11 @@ import javax.inject.Singleton
 
 @Singleton
 class SessionLocal @Inject constructor(
-        private val studentDb: StudentDao,
-        private val semesterDb: SemesterDao,
-        private val sharedPref: SharedPrefHelper,
-        private val context: Context) {
+    private val studentDb: StudentDao,
+    private val semesterDb: SemesterDao,
+    private val sharedPref: SharedPrefHelper,
+    private val context: Context
+) {
 
     companion object {
         const val LAST_USER_KEY: String = "last_user_id"
@@ -30,13 +31,17 @@ class SessionLocal @Inject constructor(
 
     fun saveStudent(student: Student): Completable {
         return Single.fromCallable { studentDb.insert(student.copy(password = encrypt(student.password, context))) }
-                .map { sharedPref.putLong(LAST_USER_KEY, it) }
-                .ignoreElement()
+            .map { sharedPref.putLong(LAST_USER_KEY, it) }
+            .ignoreElement()
     }
 
     fun getLastStudent(): Maybe<Student> {
         return studentDb.load(sharedPref.getLong(LAST_USER_KEY, defaultValue = 0))
-                .map { it.apply { password = decrypt(password) } }
+            .map { it.apply { password = decrypt(password) } }
+    }
+
+    fun getStudents(): Single<List<Student>> {
+        return studentDb.loadAll()
     }
 
     fun saveSemesters(semesters: List<Semester>): Completable {

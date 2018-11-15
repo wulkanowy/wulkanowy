@@ -13,6 +13,7 @@
     <string name="about_title">About</string>
     <string name="note_title">Notes and achievements</string>
     <string name="homework_title">Homework</string>
+    <string name="account_title">Choose account</string>
 
 
     <!--Login form-->
@@ -32,7 +33,7 @@
 
 
     <!--Main-->
-    <string name="main_account_manager">Account manager</string>
+    <string name="main_account_picker">Account manager</string>
 
 
     <!--Grade-->

@@ -42,7 +42,7 @@ class MainPresenter @Inject constructor(
     }
 
     fun onAccountManagerSelected(): Boolean {
-        view?.showAccountManagerDialog()
+        view?.showAccountPicker()
         return true
     }
 
