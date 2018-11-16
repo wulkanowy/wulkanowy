@@ -145,6 +145,10 @@
     <string name="homework_no_items">Brak zadań domowych</string>
 
 
+    <!--Account-->
+    <string name="account_add_new">Dodaj konto</string>
+
+
     <!--Generic-->
     <string name="all_content">Treść</string>
     <string name="all_description">Opis</string>

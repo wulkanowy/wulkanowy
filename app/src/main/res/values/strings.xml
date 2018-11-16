@@ -130,6 +130,10 @@
     <string name="homework_no_items">No info about homework</string>
 
 
+    <!--Account-->
+    <string name="account_add_new">Add account</string>
+
+
     <!--Generic-->
     <string name="all_content">Content</string>
     <string name="all_description">Description</string>

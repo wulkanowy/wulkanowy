@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.account
 
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.SessionRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -18,16 +19,18 @@ class AccountPresenter @Inject constructor(
         loadData()
     }
 
-    fun onItemSelected() {
-        view?.dismissView()
+    fun onItemSelected(item: AbstractFlexibleItem<*>) {
+        if (item is AccountScrollableFooter) {
+            view?.openLoginView()
+        }
     }
 
     private fun loadData() {
         disposable.add(sessionRepository.getStudents()
-            .map { it.map { item -> AccountItem(item) } }
+            .map { it.map { item -> AccountItem(item) } to AccountScrollableFooter() }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({ view?.updateData(it) }, { errorHandler.proceed(it) }))
+            .subscribe({ view?.updateData(it.first, it.second) }, { errorHandler.proceed(it) }))
     }
 }
 

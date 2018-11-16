@@ -11,6 +11,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
+import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.dialog_account.*
 import javax.inject.Inject
@@ -42,7 +43,7 @@ class AccountDialog : DaggerAppCompatDialogFragment(), AccountView {
     }
 
     override fun initView() {
-        accountAdapter.setOnItemClickListener { presenter.onItemSelected() }
+        accountAdapter.setOnItemClickListener { presenter.onItemSelected(it) }
 
         accountDialogRecycler.apply {
             layoutManager = SmoothScrollLinearLayoutManager(context)
@@ -50,7 +51,8 @@ class AccountDialog : DaggerAppCompatDialogFragment(), AccountView {
         }
     }
 
-    override fun updateData(data: List<AccountItem>) {
+    override fun updateData(data: List<AccountItem>, footer: AccountScrollableFooter) {
+        accountAdapter.addScrollableFooter(footer)
         accountAdapter.updateDataSet(data)
     }
 
@@ -60,6 +62,13 @@ class AccountDialog : DaggerAppCompatDialogFragment(), AccountView {
 
     override fun dismissView() {
         dismiss()
+    }
+
+    override fun openLoginView() {
+        activity?.also {
+            startActivity(LoginActivity.getStartIntent(it))
+            it.finish()
+        }
     }
 
     override fun onDestroy() {

@@ -28,7 +28,7 @@ class LoginOptionsPresenter @Inject constructor(
             .subscribe({ view?.updateData(it.map { student -> LoginOptionsItem(student) }) }, { errorHandler.proceed(it) }))
     }
 
-    fun onSelectItem(item: AbstractFlexibleItem<*>?) {
+    fun onItemSelected(item: AbstractFlexibleItem<*>?) {
         if (item is LoginOptionsItem) {
             registerStudent(item.student)
         }

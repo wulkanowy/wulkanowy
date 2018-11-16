@@ -39,7 +39,7 @@ class LoginOptionsFragment : BaseFragment(), LoginOptionsView {
     }
 
     override fun initView() {
-        loginAdapter.apply { setOnItemClickListener { presenter.onSelectItem(getItem(it)) } }
+        loginAdapter.apply { setOnItemClickListener { presenter.onItemSelected(it) } }
 
         loginOptionsRecycler.apply {
             adapter = loginAdapter

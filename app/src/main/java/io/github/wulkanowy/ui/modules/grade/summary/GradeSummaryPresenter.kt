@@ -63,7 +63,7 @@ class GradeSummaryPresenter @Inject constructor(
                 view?.run {
                     showEmpty(it.first.isEmpty())
                     showContent(it.first.isNotEmpty())
-                    updateDataSet(it.first, it.second)
+                    updateData(it.first, it.second)
                 }
                 logEvent("Grade summary load", mapOf("items" to it.first.size, "forceRefresh" to forceRefresh))
             }) {
