@@ -9,6 +9,10 @@ import dagger.Module
 import dagger.Provides
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.AppDatabase
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
+import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
+import timber.log.Timber
 import javax.inject.Singleton
 
 @Module
@@ -18,14 +22,19 @@ internal class RepositoryModule {
     @Provides
     fun provideInternetObservingSettings(): InternetObservingSettings {
         return InternetObservingSettings.builder()
-                .strategy(SocketInternetObservingStrategy())
-                .host("www.google.com")
-                .build()
+            .strategy(SocketInternetObservingStrategy())
+            .host("www.google.com")
+            .build()
     }
 
     @Singleton
     @Provides
-    fun provideApi() = Api()
+    fun provideApi(): Api {
+        return Api().apply {
+            logLevel = NONE
+            setInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Timber.d(it) }).setLevel(BASIC))
+        }
+    }
 
     @Singleton
     @Provides

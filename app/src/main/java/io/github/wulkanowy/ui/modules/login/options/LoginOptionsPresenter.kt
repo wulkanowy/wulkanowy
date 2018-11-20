@@ -3,7 +3,8 @@ package io.github.wulkanowy.ui.modules.login.options
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.repositories.SessionRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.logRegister
@@ -11,7 +12,8 @@ import javax.inject.Inject
 
 class LoginOptionsPresenter @Inject constructor(
     private val errorHandler: ErrorHandler,
-    private val repository: SessionRepository,
+    private val studentRepository: StudentRepository,
+    private val semesterRepository: SemesterRepository,
     private val schedulers: SchedulersProvider
 ) : BasePresenter<LoginOptionsView>(errorHandler) {
 
@@ -21,7 +23,7 @@ class LoginOptionsPresenter @Inject constructor(
     }
 
     fun onParentViewLoadData() {
-        disposable.add(repository.cachedStudents
+        disposable.add(studentRepository.cachedStudents
             .observeOn(schedulers.mainThread)
             .subscribeOn(schedulers.backgroundThread)
             .doOnSubscribe { view?.showActionBar(true) }
@@ -35,7 +37,8 @@ class LoginOptionsPresenter @Inject constructor(
     }
 
     private fun registerStudent(student: Student) {
-        disposable.add(repository.saveStudent(student)
+        disposable.add(studentRepository.saveStudent(student.apply { isCurrent = true })
+            .andThen(semesterRepository.getSemesters(student))
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {

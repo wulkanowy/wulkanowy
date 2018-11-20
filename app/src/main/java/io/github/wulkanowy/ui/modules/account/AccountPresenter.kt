@@ -2,14 +2,14 @@ package io.github.wulkanowy.ui.modules.account
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.ErrorHandler
-import io.github.wulkanowy.data.repositories.SessionRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import javax.inject.Inject
 
 class AccountPresenter @Inject constructor(
     private val errorHandler: ErrorHandler,
-    private val sessionRepository: SessionRepository,
+    private val studentRepository: StudentRepository,
     private val schedulers: SchedulersProvider
 ) : BasePresenter<AccountView>(errorHandler) {
 
@@ -26,7 +26,7 @@ class AccountPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        disposable.add(sessionRepository.getStudents()
+        disposable.add(studentRepository.getSavedStudents()
             .map { it.map { item -> AccountItem(item) } to AccountScrollableFooter() }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
