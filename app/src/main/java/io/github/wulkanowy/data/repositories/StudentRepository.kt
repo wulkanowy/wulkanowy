@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories
 
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
+import io.github.wulkanowy.data.ApiHelper
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.local.StudentLocal
 import io.github.wulkanowy.data.repositories.remote.StudentRemote
@@ -15,7 +16,8 @@ import javax.inject.Singleton
 class StudentRepository @Inject constructor(
     private val local: StudentLocal,
     private val remote: StudentRemote,
-    private val settings: InternetObservingSettings
+    private val settings: InternetObservingSettings,
+    private val apiHelper: ApiHelper
 ) {
 
     val isStudentSaved
@@ -26,8 +28,9 @@ class StudentRepository @Inject constructor(
 
     fun getStudents(email: String, password: String, symbol: String, endpoint: String): Single<List<Student>> {
         cachedStudents = ReactiveNetwork.checkInternetConnectivity(settings)
-            .flatMap { isConnected ->
-                if (isConnected) remote.getStudents(email, password, symbol, endpoint)
+            .flatMap {
+                apiHelper.initApi(email, password, symbol, endpoint)
+                if (it) remote.getStudents(email, password, symbol, endpoint)
                 else Single.error(UnknownHostException("No internet connection"))
             }.doOnSuccess { cachedStudents = Single.just(it) }
         return cachedStudents
