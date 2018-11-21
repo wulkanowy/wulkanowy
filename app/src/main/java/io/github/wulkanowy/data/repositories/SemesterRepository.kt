@@ -23,7 +23,7 @@ class SemesterRepository @Inject constructor(
 
     fun getSemesters(student: Student, forceRefresh: Boolean = false): Single<List<Semester>> {
         return Maybe.just(apiHelper.initApi(student))
-            .flatMap { local.getSemesters(student).filter { forceRefresh } }
+            .flatMap { local.getSemesters(student).filter { !forceRefresh } }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
                     if (it) remote.getSemesters(student) else Single.error(UnknownHostException())
