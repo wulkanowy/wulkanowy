@@ -68,14 +68,13 @@ class AccountDialog : DaggerAppCompatDialogFragment(), AccountView {
     override fun openLoginView() {
         activity?.also {
             startActivity(LoginActivity.getStartIntent(it))
-            it.finish()
         }
     }
 
     override fun recreateView() {
         activity?.also {
-            it.finish()
             startActivity(MainActivity.getStartIntent(it))
+            it.finish()
         }
     }
 
