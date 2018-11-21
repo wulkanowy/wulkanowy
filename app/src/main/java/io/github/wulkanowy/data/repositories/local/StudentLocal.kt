@@ -26,8 +26,12 @@ class StudentLocal @Inject constructor(
         get() = sharedPref.getBoolean(STUDENT_SAVED_KEY, false)
 
     fun saveStudent(student: Student): Completable {
-        return Completable.fromCallable { studentDb.insert(student.copy(password = encrypt(student.password, context))) }
-            .doOnComplete { sharedPref.putBoolean(STUDENT_SAVED_KEY, true) }
+        return Completable.fromCallable {
+            studentDb.run {
+                resetCurrent()
+                studentDb.insert(student.copy(password = encrypt(student.password, context)))
+            }
+        }.doOnComplete { sharedPref.putBoolean(STUDENT_SAVED_KEY, true) }
     }
 
     fun getCurrentStudent(): Maybe<Student> {
@@ -36,5 +40,14 @@ class StudentLocal @Inject constructor(
 
     fun getStudents(): Maybe<List<Student>> {
         return studentDb.loadAll()
+    }
+
+    fun setCurrentStudent(student: Student): Completable {
+        return Completable.fromCallable {
+            studentDb.run {
+                resetCurrent()
+                update(student)
+            }
+        }
     }
 }

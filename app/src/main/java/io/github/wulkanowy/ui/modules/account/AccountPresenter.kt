@@ -22,6 +22,15 @@ class AccountPresenter @Inject constructor(
     fun onItemSelected(item: AbstractFlexibleItem<*>) {
         if (item is AccountScrollableFooter) {
             view?.openLoginView()
+        } else if (item is AccountItem) {
+            if (item.student.isCurrent) {
+                view?.dismissView()
+            } else {
+                disposable.add(studentRepository.switchStudent(item.student)
+                    .subscribeOn(schedulers.backgroundThread)
+                    .observeOn(schedulers.mainThread)
+                    .subscribe({ view?.recreateView() }, { errorHandler.proceed(it) }))
+            }
         }
     }
 

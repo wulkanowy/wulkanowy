@@ -1,17 +1,17 @@
 package io.github.wulkanowy.ui.modules.login.options
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.logRegister
 import javax.inject.Inject
 
 class LoginOptionsPresenter @Inject constructor(
-    private val errorHandler: ErrorHandler,
+    private val errorHandler: LoginErrorHandler,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val schedulers: SchedulersProvider
@@ -42,7 +42,7 @@ class LoginOptionsPresenter @Inject constructor(
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {
-                view?.run {
+                view?.apply {
                     showProgress(true)
                     showContent(false)
                     showActionBar(false)
@@ -51,6 +51,13 @@ class LoginOptionsPresenter @Inject constructor(
             .subscribe({
                 logRegister("Success", true, student.symbol, student.endpoint)
                 view?.openMainView()
-            }, { errorHandler.proceed(it) }))
+            }, {
+                errorHandler.proceed(it)
+                view?.apply {
+                    showProgress(false)
+                    showContent(true)
+                    showActionBar(true)
+                }
+            }))
     }
 }

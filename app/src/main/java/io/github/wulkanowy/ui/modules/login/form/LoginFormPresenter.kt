@@ -21,7 +21,7 @@ class LoginFormPresenter @Inject constructor(
         super.onAttachView(view)
         view.run {
             initView()
-            errorHandler.doOnBadCredentials = {
+            errorHandler.onBadCredentials = {
                 setErrorPassIncorrect()
                 showSoftKeyboard()
                 Timber.i("Entered wrong username or password")

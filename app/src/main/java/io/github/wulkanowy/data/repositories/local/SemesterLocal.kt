@@ -15,13 +15,13 @@ class SemesterLocal @Inject constructor(private val semesterDb: SemesterDao) {
     }
 
     fun getSemesters(student: Student): Maybe<List<Semester>> {
-        return semesterDb.getSemester(student.studentId).filter { !it.isEmpty() }
+        return semesterDb.load(student.studentId).filter { !it.isEmpty() }
     }
 
-    fun setCurrentSemester(semesterId: Int) {
+    fun setCurrentSemester(semester: Semester) {
         semesterDb.run {
-            resetCurrentSemester()
-            setCurrentSemester(semesterId)
+            resetCurrent(semester.studentId)
+            update(semester.semesterId, semester.diaryId)
         }
     }
 }

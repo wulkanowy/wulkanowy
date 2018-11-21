@@ -9,7 +9,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-open class ErrorHandler @Inject constructor(private val resources: Resources) {
+open class ErrorHandler @Inject constructor(protected val resources: Resources) {
 
     var showErrorMessage: (String) -> Unit = {}
 

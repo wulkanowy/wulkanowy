@@ -71,6 +71,10 @@ class AccountDialog : DaggerAppCompatDialogFragment(), AccountView {
         }
     }
 
+    override fun recreateView() {
+        activity?.recreate()
+    }
+
     override fun onDestroy() {
         presenter.onDetachView()
         super.onDestroy()

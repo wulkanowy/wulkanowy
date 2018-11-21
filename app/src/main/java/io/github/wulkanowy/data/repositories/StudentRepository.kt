@@ -47,4 +47,8 @@ class StudentRepository @Inject constructor(
     fun saveStudent(student: Student): Completable {
         return local.saveStudent(student)
     }
+
+    fun switchStudent(student: Student): Completable {
+        return local.setCurrentStudent(student)
+    }
 }

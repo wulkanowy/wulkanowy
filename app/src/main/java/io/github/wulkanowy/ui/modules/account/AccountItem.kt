@@ -10,7 +10,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_account.*
 
-class AccountItem(private val student: Student) : AbstractFlexibleItem<AccountItem.ViewHolder>() {
+class AccountItem(val student: Student) : AbstractFlexibleItem<AccountItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_account
 

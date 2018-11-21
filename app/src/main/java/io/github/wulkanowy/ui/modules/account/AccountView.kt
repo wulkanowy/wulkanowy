@@ -11,5 +11,7 @@ interface AccountView : BaseView {
     fun dismissView()
 
     fun openLoginView()
+
+    fun recreateView()
 }
 

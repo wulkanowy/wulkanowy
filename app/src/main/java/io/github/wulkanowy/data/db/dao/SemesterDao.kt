@@ -13,12 +13,12 @@ interface SemesterDao {
     @Insert(onConflict = IGNORE)
     fun insertAll(semester: List<Semester>)
 
+    @Query("UPDATE Semesters SET is_current = 1 WHERE semester_id = :semesterId AND diary_id = :diaryId")
+    fun update(semesterId: Int, diaryId: Int)
+
     @Query("SELECT * FROM Semesters WHERE student_id = :studentId")
-    fun getSemester(studentId: Int): Maybe<List<Semester>>
+    fun load(studentId: Int): Maybe<List<Semester>>
 
-    @Query("UPDATE Semesters SET is_current = 0")
-    fun resetCurrentSemester()
-
-    @Query("UPDATE Semesters SET is_current = 1 WHERE semester_id = :semesterId")
-    fun setCurrentSemester(semesterId: Int)
+    @Query("UPDATE Semesters SET is_current = 0 WHERE student_id = :studentId")
+    fun resetCurrent(studentId: Int)
 }

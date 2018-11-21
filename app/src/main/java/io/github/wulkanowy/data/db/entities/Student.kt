@@ -2,9 +2,10 @@ package io.github.wulkanowy.data.db.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Students")
+@Entity(tableName = "Students", indices = [Index(value = ["email", "symbol", "student_id", "school_id"], unique = true)])
 data class Student(
 
     @PrimaryKey(autoGenerate = true)

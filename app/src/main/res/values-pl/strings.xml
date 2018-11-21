@@ -16,7 +16,7 @@
     <string name="account_title">Wybierz konto</string>
 
 
-    <!--Login form-->
+    <!--Login-->
     <string name="login_header_default">Zaloguj się za pomocą konta ucznia lub rodzica</string>
     <string name="login_header_symbol">Podaj symbol dziennika VULCAN</string>
     <string name="login_nickname_hint">Email lub nick</string>
@@ -30,6 +30,7 @@
     <string name="login_incorrect_password">To hasło jest niepoprawne</string>
     <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprwadź symbol</string>
     <string name="login_field_required">To pole jest wymagane</string>
+    <string name="login_duplicate_student">Ten student jest już zalogowany</string>
 
 
     <!--Main-->
