@@ -45,18 +45,18 @@ before_script:
 
 script:
   - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | bash"
-  - ./gradlew build -x test -x lint -x fabricGenerateResourcesRelease -x packageRelease --stacktrace -PdisablePreDex
+  - ./gradlew build -x test -x lint -x fabricGenerateResourcesRelease -x packageRelease --stacktrace
   - fossa --no-ansi || true
-  - ./gradlew lint -x fabricGenerateResourcesRelease --stacktrace -PdisablePreDex
-  - ./gradlew test -x fabricGenerateResourcesRelease --stacktrace -PdisablePreDex
-  - ./gradlew createDebugCoverageReport --stacktrace -PdisablePreDex -PdisableCrashlytics
-  - ./gradlew jacocoTestReport --stacktrace -PdisablePreDex
-  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ "$TRAVIS_BRANCH" == "master" ]; then bash ./gradlew sonarqube -x test -x lint -x fabricGenerateResourcesRelease -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY -Dsonar.branch.name=$TRAVIS_BRANCH --stacktrace -PdisablePreDex; fi'
+  - ./gradlew lint -x fabricGenerateResourcesRelease --stacktrace
+  - ./gradlew test -x fabricGenerateResourcesRelease --stacktrace
+  - ./gradlew createDebugCoverageReport --stacktrace -PdisableCrashlytics
+  - ./gradlew jacocoTestReport --stacktrace
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ "$TRAVIS_BRANCH" == "master" ]; then bash ./gradlew sonarqube -x test -x lint -x fabricGenerateResourcesRelease -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY -Dsonar.branch.name=$TRAVIS_BRANCH --stacktrace; fi'
   - |
     if [ $TRAVIS_TAG ]; then
       openssl aes-256-cbc -d -in ./app/key-encrypted.p12 -k $ENCRYPT_KEY >> ./app/key.p12
       openssl aes-256-cbc -d -in ./app/upload-key-encrypted.jks -k $ENCRYPT_KEY >> ./app/upload-key.jks
-      ./gradlew publishRelease --stacktrace -PdisablePreDex
+      ./gradlew publishRelease --stacktrace
     fi
 
 after_success:
