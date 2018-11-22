@@ -6,6 +6,10 @@ env:
     - ANDROID_API_LEVEL=28
     - ANDROID_BUILD_TOOLS_VERSION=28.0.3
 
+branches:
+  only:
+  - master
+
 android:
  licenses:
     - 'android-sdk-preview-license-.+'
