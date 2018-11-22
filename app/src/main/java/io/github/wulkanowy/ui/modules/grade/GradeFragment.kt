@@ -98,7 +98,7 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
                         dialog.dismiss()
                     }
                     .setTitle(R.string.grade_switch_semester)
-                    .setNegativeButton(R.string.all_cancel) { dialog, _ -> dialog.dismiss() }
+                    .setNegativeButton(android.R.string.cancel) { _, _ -> }
                     .show()
             }
         }

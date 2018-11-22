@@ -148,6 +148,9 @@
 
     <!--Account-->
     <string name="account_add_new">Dodaj konto</string>
+    <string name="account_logout">Wyloguj</string>
+    <string name="account_confirm">Czy chcesz wylogować aktualnego ucznia?</string>
+    <string name="account_logout_student">Wylogowanie ucznia</string>
 
 
     <!--Generic-->
@@ -161,7 +164,6 @@
     <string name="all_details">Szczegóły</string>
     <string name="all_category">Kategoria</string>
     <string name="all_close">Zamknij</string>
-    <string name="all_cancel">Anuluj</string>
     <string name="all_no_data">Brak danych</string>
     <string name="all_subject">Przedmiot</string>
     <string name="all_prev">Poprzedni</string>

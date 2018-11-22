@@ -20,7 +20,9 @@ class AccountItem(val student: Student) : AbstractFlexibleItem<AccountItem.ViewH
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?, position: Int, payloads: MutableList<Any>?) {
         holder?.apply {
-            accountPickerName.text = student.studentName
+            accountItemName.text = student.studentName
+            accountItemSchool.text = student.schoolName
+            accountItemImage.setBackgroundResource(if (student.isCurrent) R.drawable.ic_account_circular_border else 0)
         }
     }
 

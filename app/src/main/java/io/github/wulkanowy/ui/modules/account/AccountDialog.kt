@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
+import androidx.appcompat.app.AlertDialog
 import dagger.android.support.DaggerAppCompatDialogFragment
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -46,14 +47,15 @@ class AccountDialog : DaggerAppCompatDialogFragment(), AccountView {
     override fun initView() {
         accountAdapter.setOnItemClickListener { presenter.onItemSelected(it) }
 
+        accountDialogAdd.setOnClickListener { presenter.onAddSelected() }
+        accountDialogRemove.setOnClickListener { presenter.onRemoveSelected() }
         accountDialogRecycler.apply {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = accountAdapter
         }
     }
 
-    override fun updateData(data: List<AccountItem>, footer: AccountScrollableFooter) {
-        accountAdapter.addScrollableFooter(footer)
+    override fun updateData(data: List<AccountItem>) {
         accountAdapter.updateDataSet(data)
     }
 
@@ -68,6 +70,17 @@ class AccountDialog : DaggerAppCompatDialogFragment(), AccountView {
     override fun openLoginView() {
         activity?.also {
             startActivity(LoginActivity.getStartIntent(it))
+        }
+    }
+
+    override fun showConfirmDialog() {
+        context?.let {
+            AlertDialog.Builder(it)
+                .setTitle(R.string.account_logout_student)
+                .setMessage(R.string.account_confirm)
+                .setPositiveButton(R.string.account_logout) { _, _ -> presenter.onLogoutConfirm() }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                .show()
         }
     }
 

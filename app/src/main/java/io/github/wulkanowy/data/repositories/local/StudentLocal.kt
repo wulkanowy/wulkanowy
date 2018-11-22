@@ -50,4 +50,8 @@ class StudentLocal @Inject constructor(
             }
         }
     }
+
+    fun logoutCurrentStudent(): Completable {
+        return studentDb.loadCurrent().doOnSuccess { studentDb.delete(it) }.ignoreElement()
+    }
 }

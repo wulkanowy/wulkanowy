@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.FAIL
 import androidx.room.Query
@@ -16,6 +17,9 @@ interface StudentDao {
 
     @Update
     fun update(student: Student)
+
+    @Delete
+    fun delete(student: Student)
 
     @Query("SELECT * FROM Students WHERE is_current = 1")
     fun loadCurrent(): Maybe<Student>

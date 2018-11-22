@@ -23,6 +23,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/accountDialogTitle"
+        android:overScrollMode="never"
         tools:itemCount="3"
         tools:listitem="@layout/item_account" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/accountDialogAdd"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/accountDialogRecycler"
+        android:layout_margin="8dp"
+        android:text="@string/account_add_new" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/accountDialogRemove"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/accountDialogRecycler"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:text="@string/account_logout"
+        android:textColor="@color/colorPrimary" />
 </RelativeLayout>
