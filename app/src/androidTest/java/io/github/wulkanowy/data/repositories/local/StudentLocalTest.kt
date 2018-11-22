@@ -28,7 +28,7 @@ class StudentLocalTest {
         testDb = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
             .build()
         sharedHelper = SharedPrefHelper(context.getSharedPreferences("TEST", Context.MODE_PRIVATE))
-        studentLocal = StudentLocal(testDb.studentDao(), sharedHelper, context)
+        studentLocal = StudentLocal(testDb.studentDao, sharedHelper, context)
     }
 
     @After

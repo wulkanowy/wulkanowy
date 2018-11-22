@@ -48,10 +48,13 @@ class StudentLocal @Inject constructor(
                 resetCurrent()
                 update(student.apply { isCurrent = true })
             }
-        }
+        }.doOnComplete { sharedPref.putBoolean(STUDENT_SAVED_KEY, true) }
     }
 
     fun logoutCurrentStudent(): Completable {
-        return studentDb.loadCurrent().doOnSuccess { studentDb.delete(it) }.ignoreElement()
+        return studentDb.loadCurrent().doOnSuccess {
+            studentDb.delete(it)
+            sharedPref.putBoolean(STUDENT_SAVED_KEY, false)
+        }.ignoreElement()
     }
 }

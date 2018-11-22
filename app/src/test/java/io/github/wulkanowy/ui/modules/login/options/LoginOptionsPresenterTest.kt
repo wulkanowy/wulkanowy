@@ -1,11 +1,11 @@
 package io.github.wulkanowy.ui.modules.login.options
 
 import io.github.wulkanowy.TestSchedulersProvider
-import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.junit.Before
@@ -19,7 +19,7 @@ import org.mockito.MockitoAnnotations
 class LoginOptionsPresenterTest {
 
     @Mock
-    lateinit var errorHandler: ErrorHandler
+    lateinit var errorHandler: LoginErrorHandler
 
     @Mock
     lateinit var loginOptionsView: LoginOptionsView
