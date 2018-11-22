@@ -44,7 +44,7 @@ before_script:
     - adb shell input keyevent 82 &
 
 script:
-  - curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | bash
+  - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | bash"
   - ./gradlew build -x test -x lint -x fabricGenerateResourcesRelease -x packageRelease --stacktrace -PdisablePreDex
   - fossa --no-ansi || true
   - ./gradlew lint -x fabricGenerateResourcesRelease --stacktrace -PdisablePreDex
@@ -52,6 +52,12 @@ script:
   - ./gradlew createDebugCoverageReport --stacktrace -PdisablePreDex -PdisableCrashlytics
   - ./gradlew jacocoTestReport --stacktrace -PdisablePreDex
   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ "$TRAVIS_BRANCH" == "master" ]; then bash ./gradlew -x test -x lint sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY -Dsonar.branch.name=$TRAVIS_BRANCH --stacktrace -PdisablePreDex; fi'
+  - |
+    if [ $TRAVIS_TAG ]; then
+      openssl aes-256-cbc -d -in ./app/key-encrypted.p12 -k $ENCRYPT_KEY >> ./app/key.p12
+      openssl aes-256-cbc -d -in ./app/upload-key-encrypted.jks -k $ENCRYPT_KEY >> ./app/upload-key.jks
+      ./gradlew publishRelease --stacktrace -PdisablePreDex
+    fi
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
