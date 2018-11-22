@@ -45,8 +45,10 @@ before_script:
 
 script:
   - ./gradlew lint -x fabricGenerateResourcesRelease --stacktrace -PdisablePreDex
-  - ./gradlew test jacocoTestReport -x fabricGenerateResourcesRelease --stacktrace --console=plain -PdisablePreDex
-  - ./gradlew createDebugCoverageReport jacocoTestReport --stacktrace -PdisablePreDex -PdisableCrashlytics
+  - ./gradlew test -x fabricGenerateResourcesRelease --stacktrace -PdisablePreDex
+  - ./gradlew createDebugCoverageReport --stacktrace -PdisablePreDex -PdisableCrashlytics
+  - ./gradlew jacocoTestReport --stacktrace -PdisablePreDex
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ "$TRAVIS_BRANCH" == "master" ]; then bash ./gradlew -x test -x lint sonarqube -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY -Dsonar.branch.name=$TRAVIS_BRANCH --stacktrace -PdisablePreDex; fi'
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
