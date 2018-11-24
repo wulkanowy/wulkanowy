@@ -59,7 +59,7 @@ class AccountDialog : DaggerAppCompatDialogFragment(), AccountView {
         accountAdapter.updateDataSet(data)
     }
 
-    override fun showMessage(text: String) {
+    override fun showError(text: String, error: Throwable) {
         Toast.makeText(context, text, LENGTH_LONG).show()
     }
 

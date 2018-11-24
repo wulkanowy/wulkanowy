@@ -9,8 +9,8 @@ abstract class BaseFragment : DaggerFragment(), BaseView {
 
     protected var messageContainer: View? = null
 
-    override fun showMessage(text: String) {
-        if (messageContainer == null) (activity as? BaseActivity)?.showMessage(text)
+    override fun showError(text: String, error: Throwable) {
+        if (messageContainer == null) (activity as? BaseActivity)?.showError(text, error)
         else messageContainer?.also { Snackbar.make(it, text, LENGTH_LONG).show() }
     }
 }

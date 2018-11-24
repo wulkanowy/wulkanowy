@@ -13,7 +13,7 @@ class LoginErrorHandler(resources: Resources) : ErrorHandler(resources) {
     override fun proceed(error: Throwable) {
         when (error) {
             is BadCredentialsException -> onBadCredentials()
-            is SQLiteConstraintException -> showErrorMessage(resources.getString(R.string.login_duplicate_student))
+            is SQLiteConstraintException -> showErrorMessage(resources.getString(R.string.login_duplicate_student), error)
             else -> super.proceed(error)
         }
     }
