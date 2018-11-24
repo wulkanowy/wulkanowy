@@ -19,9 +19,6 @@ interface SemesterDao {
     @Query("SELECT * FROM Semesters WHERE student_id = :studentId")
     fun load(studentId: Int): Maybe<List<Semester>>
 
-    @Query("SELECT * FROM Semesters WHERE student_id = :studentId AND is_current = 1")
-    fun loadCurrent(studentId: Int): Maybe<Semester>
-
     @Query("UPDATE Semesters SET is_current = 0 WHERE student_id = :studentId")
     fun resetCurrent(studentId: Int)
 }

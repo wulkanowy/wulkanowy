@@ -18,10 +18,6 @@ class SemesterLocal @Inject constructor(private val semesterDb: SemesterDao) {
         return semesterDb.load(student.studentId).filter { !it.isEmpty() }
     }
 
-    fun getCurrentSemester(student: Student): Maybe<Semester> {
-        return semesterDb.loadCurrent(student.studentId)
-    }
-
     fun setCurrentSemester(semester: Semester) {
         semesterDb.run {
             resetCurrent(semester.studentId)

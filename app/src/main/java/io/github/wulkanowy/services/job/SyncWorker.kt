@@ -78,7 +78,7 @@ class SyncWorker : SimpleJobService() {
         var error: Throwable? = null
 
         disposable.add(student.getCurrentStudent()
-            .flatMap { semester.getCurrentSemester(it) }
+            .flatMap { semester.getCurrentSemester(it, true) }
             .flatMapPublisher {
                 Single.merge(
                     listOf(
@@ -112,7 +112,7 @@ class SyncWorker : SimpleJobService() {
 
     private fun sendGradeNotifications() {
         disposable.add(student.getCurrentStudent()
-            .flatMap { semester.getCurrentSemester(it) }
+            .flatMap { semester.getCurrentSemester(it, true) }
             .flatMap { gradesDetails.getNewGrades(it) }
             .map { it.filter { grade -> !grade.isNotified } }
             .subscribe({
@@ -126,7 +126,7 @@ class SyncWorker : SimpleJobService() {
 
     private fun sendNoteNotification() {
         disposable.add(student.getCurrentStudent()
-            .flatMap { semester.getCurrentSemester(it) }
+            .flatMap { semester.getCurrentSemester(it, true) }
             .flatMap { note.getNewNotes(it) }
             .map { it.filter { note -> !note.isNotified } }
             .subscribe({

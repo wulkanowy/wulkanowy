@@ -8,6 +8,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.logRegister
+import io.reactivex.Single
 import javax.inject.Inject
 
 class LoginOptionsPresenter @Inject constructor(
@@ -38,7 +39,8 @@ class LoginOptionsPresenter @Inject constructor(
 
     private fun registerStudent(student: Student) {
         disposable.add(studentRepository.saveStudent(student.apply { isCurrent = true })
-            .andThen(semesterRepository.getSemesters(student))
+            .andThen(semesterRepository.getSemesters(student, true))
+            .onErrorResumeNext { studentRepository.logoutCurrentStudent().andThen(Single.error(it)) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {

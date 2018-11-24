@@ -35,8 +35,8 @@ class SemesterRepository @Inject constructor(
                 }.flatMap { local.getSemesters(student).toSingle(emptyList()) })
     }
 
-    fun getCurrentSemester(student: Student): Single<Semester> {
-        return local.getCurrentSemester(student).toSingle()
+    fun getCurrentSemester(student: Student, forceRefresh: Boolean = false): Single<Semester> {
+        return getSemesters(student, forceRefresh).map { item -> item.single { it.isCurrent } }
     }
 }
 
