@@ -90,7 +90,6 @@ dependencies {
 
     implementation 'com.takisoft.preferencex:preferencex:1.0.0'
     implementation "com.mikepenz:aboutlibraries:6.2.0"
-    implementation "com.github.stfalcon:chatkit:0.3.3"
     implementation "com.firebase:firebase-jobdispatcher:0.8.5"
 
     //Do not update dagger https://github.com/google/dagger/issues/1245

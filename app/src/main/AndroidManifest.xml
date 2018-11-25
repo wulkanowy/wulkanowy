@@ -41,7 +41,7 @@
             android:label="@string/main_title"
             android:theme="@style/WulkanowyTheme.NoActionBar" />
         <activity
-            android:name="io.github.wulkanowy.ui.modules.messages.message.MessagesActivity"
+            android:name="io.github.wulkanowy.ui.modules.message.message.MessagesActivity"
             android:parentActivityName=".ui.modules.main.MainActivity"
             android:theme="@style/WulkanowyTheme.ActionBar"
             tools:targetApi="jelly_bean">

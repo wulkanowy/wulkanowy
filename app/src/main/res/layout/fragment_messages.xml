@@ -1,66 +1,33 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/fragment_messages"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/messageTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary"
+        android:elevation="5dp"
+        android:visibility="invisible"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabMaxWidth="0dp"
+        app:tabMode="fixed"
+        app:tabTextColor="@android:color/white" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/messageViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.modules.messages.dialogs.DialogsFragment">
+        android:layout_marginTop="48dp"
+        android:visibility="invisible" />
 
-        <ProgressBar
-            android:id="@+id/dialogProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true" />
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/dialogsSwipe"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.stfalcon.chatkit.dialogs.DialogsList
-                android:id="@+id/dialogsList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:dialogAvatarHeight="55dp"
-                app:dialogAvatarWidth="0dp"
-                app:dialogDividerColor="?android:attr/android:windowBackground"
-                app:dialogTitleTextColor="?android:attr/android:textColorPrimary"
-                app:dialogUnreadBubbleBackgroundColor="@color/colorPrimary"
-                app:dialogUnreadTitleTextColor="?android:attr/textColorPrimary"
-                app:dialogUnreadTitleTextStyle="bold" />
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <LinearLayout
-            android:id="@+id/dialogsEmpty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:visibility="gone">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="100dp"
-                android:minHeight="100dp"
-                app:srcCompat="@drawable/ic_inbox_black_24dp"
-                app:tint="?android:attr/textColorPrimary"
-                tools:ignore="contentDescription" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:text="@string/message_no_items"
-                android:textSize="20sp" />
-        </LinearLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</FrameLayout>
+    <ProgressBar
+        android:id="@+id/messageProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

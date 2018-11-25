@@ -12,9 +12,6 @@ data class Message(
     @ColumnInfo(name = "student_id")
     var studentId: Int? = null,
 
-    @ColumnInfo(name = "diary_id")
-    var diaryId: Int? = null,
-
     @ColumnInfo(name = "real_id")
     val realId: Int? = null,
 
@@ -39,8 +36,6 @@ data class Message(
 
     val subject: String? = null,
 
-    val content: String? = null,
-
     @ColumnInfo(name = "folder_id")
     val folderId: Int? = null
 ) : Serializable {
@@ -50,4 +45,6 @@ data class Message(
 
     @ColumnInfo(name = "is_notified")
     var isNotified: Boolean = true
+
+    var content: String? = null
 }

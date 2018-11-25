@@ -7,7 +7,6 @@ import androidx.room.Query
 import androidx.room.Update
 import io.github.wulkanowy.data.db.entities.Message
 import io.reactivex.Maybe
-import io.reactivex.Single
 
 @Dao
 interface MessagesDao {
@@ -21,18 +20,9 @@ interface MessagesDao {
     @Update
     fun updateAll(messages: List<Message>)
 
-    @Query("SELECT * FROM Messages WHERE student_id = :studentId")
-    fun getAll(studentId: Int): Maybe<List<Message>>
-
-    @Query("SELECT * FROM Messages WHERE student_id = :studentId ORDER BY date DESC LIMIT 0, 1")
-    fun getLast(studentId: Int): Maybe<Message>
+    @Query("SELECT * FROM Messages WHERE student_id = :studentId AND folder_id = :folder ORDER BY date DESC")
+    fun load(studentId: Int, folder: Int): Maybe<List<Message>>
 
     @Query("SELECT * FROM Messages WHERE unread = 1 AND student_id = :studentId")
     fun getNewMessages(studentId: Int): Maybe<List<Message>>
-
-    @Query("SELECT COUNT(id) FROM Messages WHERE student_id = :studentId AND sender_id = :senderId")
-    fun getNumberOfMessages(studentId: Int, senderId: Int): Single<Int>
-
-    @Query("SELECT * FROM Messages WHERE student_id = :studentId AND conversation_id = :conversationId ORDER BY date DESC LIMIT :start, :end")
-    fun getByConversationId(studentId: Int, conversationId: Int, start: Int, end: Int): Maybe<List<Message>>
 }

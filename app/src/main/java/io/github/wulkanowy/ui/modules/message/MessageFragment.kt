@@ -1,0 +1,79 @@
+package io.github.wulkanowy.ui.modules.message
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import io.github.wulkanowy.R
+import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.base.BasePagerAdapter
+import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.modules.message.inbox.InboxFragment
+import io.github.wulkanowy.ui.modules.message.sent.SentFragment
+import io.github.wulkanowy.ui.modules.message.trash.TrashFragment
+import io.github.wulkanowy.utils.setOnSelectPageListener
+import kotlinx.android.synthetic.main.fragment_messages.*
+import javax.inject.Inject
+
+class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
+
+    @Inject
+    lateinit var presenter: MessagePresenter
+
+    @Inject
+    lateinit var pagerAdapter: BasePagerAdapter
+
+    companion object {
+        fun newInstance() = MessageFragment()
+    }
+
+    override val titleStringId: Int
+        get() = R.string.message_title
+
+    override val currentPageIndex: Int
+        get() = messageViewPager.currentItem
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_messages, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        presenter.onAttachView(this)
+    }
+
+    override fun initView() {
+        pagerAdapter.fragments.putAll(mapOf(
+            getString(R.string.message_inbox) to InboxFragment.newInstance(),
+            getString(R.string.message_sent) to SentFragment.newInstance(),
+            getString(R.string.message_trash) to TrashFragment.newInstance()
+        ))
+        messageViewPager.run {
+            adapter = pagerAdapter
+            setOnSelectPageListener { presenter.onPageSelected(it) }
+        }
+        messageTabLayout.setupWithViewPager(messageViewPager)
+    }
+
+    override fun showContent(show: Boolean) {
+        messageViewPager.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        messageTabLayout.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun showProgress(show: Boolean) {
+        messageProgress.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
+    fun onChildFragmentLoaded() {
+        presenter.onChildViewLoaded()
+    }
+
+    override fun notifyChildLoadData(index: Int, forceRefresh: Boolean) {
+        (childFragmentManager.fragments[index] as MessageView.MessageChildView).onParentLoadData(forceRefresh)
+    }
+
+    override fun onDestroyView() {
+        presenter.onDetachView()
+        super.onDestroyView()
+    }
+}

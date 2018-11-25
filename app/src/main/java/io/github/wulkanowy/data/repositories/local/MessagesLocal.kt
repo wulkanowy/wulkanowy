@@ -2,34 +2,21 @@ package io.github.wulkanowy.data.repositories.local
 
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
 import io.reactivex.Completable
 import io.reactivex.Maybe
-import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
 
-    fun getMessages(semester: Semester): Maybe<List<Message>> {
-        return messagesDb.getAll(semester.studentId).filter { !it.isEmpty() }
+    fun getMessages(studentId: Int, folderId: Int): Maybe<List<Message>> {
+        return messagesDb.load(studentId, folderId).filter { !it.isEmpty() }
     }
 
-    fun getLastMessage(semester: Semester): Maybe<Message> {
-        return messagesDb.getLast(semester.studentId)
-    }
-
-    fun getNewMessages(semester: Semester): Maybe<List<Message>> {
-        return messagesDb.getNewMessages(semester.studentId)
-    }
-
-    fun getNumberOfMessages(semester: Semester, senderId: Int): Single<Int> {
-        return messagesDb.getNumberOfMessages(semester.studentId, senderId)
-    }
-
-    fun getMessagesByConversationId(semester: Semester, conversationId: Int, start: Int, end: Int): Maybe<List<Message>> {
-        return messagesDb.getByConversationId(semester.studentId, conversationId, start, end).filter { !it.isEmpty() }
+    fun getNewMessages(student: Student): Maybe<List<Message>> {
+        return messagesDb.getNewMessages(student.studentId)
     }
 
     fun saveMessages(messages: List<Message>): List<Long> {
@@ -38,5 +25,9 @@ class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
 
     fun updateMessages(messages: List<Message>): Completable {
         return Completable.fromCallable { messagesDb.updateAll(messages) }
+    }
+
+    fun deleteMessages(messages: List<Message>) {
+        messagesDb.deleteAll(messages)
     }
 }

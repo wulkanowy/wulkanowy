@@ -7,8 +7,8 @@ import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.GradeSummaryRepository
-import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.data.repositories.HomeworkRepository
+import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.data.repositories.NoteRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -55,7 +55,6 @@ class SyncWorker : SimpleJobService() {
     @Inject
     lateinit var note: NoteRepository
 
-
     @Inject
     lateinit var homework: HomeworkRepository
 
@@ -93,7 +92,7 @@ class SyncWorker : SimpleJobService() {
                         attendance.getAttendance(it, start, end, true),
                         exam.getExams(it, start, end, true),
                         timetable.getTimetable(it, start, end, true),
-                        messages.getMessages(it, true, true),
+                        messages.getReceivedMessages(it.studentId, true, true),
                         note.getNotes(it, true, true),
                         homework.getHomework(it, LocalDate.now(), true),
                         homework.getHomework(it, LocalDate.now().plusDays(1), true)
@@ -134,7 +133,6 @@ class SyncWorker : SimpleJobService() {
 
     private fun sendMessageNotification() {
         disposable.add(student.getCurrentStudent()
-            .flatMap { semester.getCurrentSemester(it) }
             .flatMap { messages.getNewMessages(it) }
             .map { it.filter { message -> !message.isNotified } }
             .subscribe({

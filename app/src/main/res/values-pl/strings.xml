@@ -123,6 +123,9 @@
 
 
     <!--Message-->
+    <string name="message_inbox">Odebrane</string>
+    <string name="message_sent">Wysłane</string>
+    <string name="message_trash">Kosz</string>
     <string name="message_yesterday">Wczoraj</string>
     <string name="message_no_items">Brak wiadomości</string>
     <plurals name="message_number_item">

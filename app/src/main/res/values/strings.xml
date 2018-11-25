@@ -113,6 +113,9 @@
 
 
     <!--Message-->
+    <string name="message_inbox">Inbox</string>
+    <string name="message_sent">Sent</string>
+    <string name="message_trash">Trash</string>
     <string name="message_yesterday">Yesterday</string>
     <string name="message_no_items">No messages</string>
     <plurals name="message_number_item">

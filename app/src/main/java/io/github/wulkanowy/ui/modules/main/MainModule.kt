@@ -14,9 +14,9 @@ import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeModule
-import io.github.wulkanowy.ui.modules.messages.dialogs.DialogsFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
-import io.github.wulkanowy.ui.modules.messages.message.MessagesActivity
+import io.github.wulkanowy.ui.modules.message.MessageFragment
+import io.github.wulkanowy.ui.modules.message.MessageModule
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
@@ -49,8 +49,8 @@ abstract class MainModule {
     abstract fun bindGradeFragment(): GradeFragment
 
     @PerFragment
-    @ContributesAndroidInjector
-    abstract fun binDialogsFragment(): DialogsFragment
+    @ContributesAndroidInjector(modules = [MessageModule::class])
+    abstract fun binMessagesFragment(): MessageFragment
 
     @PerFragment
     @ContributesAndroidInjector

@@ -15,7 +15,7 @@ import io.github.wulkanowy.ui.modules.about.AboutFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.ui.modules.messages.dialogs.DialogsFragment
+import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.utils.setOnItemClickListener
@@ -42,7 +42,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
         get() {
             return context?.run {
                 getString(R.string.message_title) to
-                    ContextCompat.getDrawable(this, R.drawable.ic_inbox_black_24dp)
+                    ContextCompat.getDrawable(this, R.drawable.ic_email_black_24dp)
             }
         }
 
@@ -103,7 +103,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
     }
 
     override fun openMessagesView() {
-        (activity as? MainActivity)?.pushView(DialogsFragment.newInstance())
+        (activity as? MainActivity)?.pushView(MessageFragment.newInstance())
     }
 
     override fun openHomeworkView() {
