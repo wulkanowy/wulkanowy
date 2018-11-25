@@ -2,7 +2,8 @@ package io.github.wulkanowy.ui.modules.messages.message
 
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.MessagesRepository
-import io.github.wulkanowy.data.repositories.SessionRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.messages.Message
 import io.github.wulkanowy.ui.modules.messages.User
@@ -14,7 +15,8 @@ import io.github.wulkanowy.data.db.entities.Message as MessageEntity
 class MessagesPresenter @Inject constructor(
     private val errorHandler: ErrorHandler,
     private val schedulers: SchedulersProvider,
-    private val sessionRepository: SessionRepository,
+    private val studentRepository: StudentRepository,
+    private val semesterRepository: SemesterRepository,
     private val messagesRepository: MessagesRepository
 ) : BasePresenter<MessagesView>(errorHandler) {
 
@@ -38,8 +40,8 @@ class MessagesPresenter @Inject constructor(
     }
 
     private fun loadData(start: Int = 0) {
-        disposable.add(sessionRepository.getSemesters()
-            .map { it.single { semester -> semester.current } }
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { messagesRepository.getMessagesByConversationId(it, conversationId, start, 2) }
             .map { messages -> messages.map { getMappedMessage(it) } }
             .subscribeOn(schedulers.backgroundThread)
@@ -57,8 +59,8 @@ class MessagesPresenter @Inject constructor(
     }
 
     private fun insertNumberOfMessages() {
-        disposable.add(sessionRepository.getSemesters()
-            .map { it.single { semester -> semester.current } }
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { messagesRepository.getNumberOfMessages(it, conversationId) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
