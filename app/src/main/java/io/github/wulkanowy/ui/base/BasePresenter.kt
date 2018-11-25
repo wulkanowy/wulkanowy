@@ -11,7 +11,7 @@ open class BasePresenter<T : BaseView>(private val errorHandler: ErrorHandler) {
 
     open fun onAttachView(view: T) {
         this.view = view
-        errorHandler.showErrorMessage = { view.showMessage(it) }
+        errorHandler.showErrorMessage = { text, error -> view.showError(text, error) }
     }
 
     open fun onDetachView() {
