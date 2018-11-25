@@ -60,6 +60,10 @@ class AccountDialog : DaggerAppCompatDialogFragment(), AccountView {
     }
 
     override fun showError(text: String, error: Throwable) {
+        showMessage(text)
+    }
+
+    override fun showMessage(text: String) {
         Toast.makeText(context, text, LENGTH_LONG).show()
     }
 

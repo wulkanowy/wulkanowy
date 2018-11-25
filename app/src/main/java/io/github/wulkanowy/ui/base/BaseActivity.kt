@@ -23,6 +23,10 @@ abstract class BaseActivity : DaggerAppCompatActivity(), BaseView {
         }.show()
     }
 
+    override fun showMessage(text: String) {
+        Snackbar.make(messageContainer, text, LENGTH_LONG).show()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         invalidateOptionsMenu()

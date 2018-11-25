@@ -58,6 +58,10 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         (activity as? BaseActivity)?.showError(text, error)
     }
 
+    override fun showMessage(text: String) {
+        (activity as? BaseActivity)?.showMessage(text)
+    }
+
     override fun onResume() {
         super.onResume()
         preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
