@@ -6,7 +6,9 @@ import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.Query
 import io.github.wulkanowy.data.db.entities.Semester
 import io.reactivex.Maybe
+import javax.inject.Singleton
 
+@Singleton
 @Dao
 interface SemesterDao {
 

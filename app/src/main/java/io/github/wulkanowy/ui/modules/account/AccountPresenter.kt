@@ -41,7 +41,7 @@ class AccountPresenter @Inject constructor(
             .doFinally { view?.dismissView() }
             .subscribe({
                 view?.apply {
-                    if (it.isEmpty()) openLoginView()
+                    if (it.isEmpty()) openClearLoginView()
                     else recreateView()
                 }
             }, { errorHandler.proceed(it) }))
