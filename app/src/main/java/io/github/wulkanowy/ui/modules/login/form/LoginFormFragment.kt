@@ -73,7 +73,10 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
     @SuppressLint("SetTextI18n")
     override fun showVersion() {
-        loginVersion.text = "${getString(R.string.app_name)} $VERSION_NAME"
+        loginVersion.apply {
+            visibility = VISIBLE
+            text = "${getString(R.string.app_name)} $VERSION_NAME"
+        }
     }
 
     override fun switchOptionsView() {
