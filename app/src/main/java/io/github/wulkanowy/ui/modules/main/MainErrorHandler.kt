@@ -11,10 +11,10 @@ class MainErrorHandler @Inject constructor(resources: Resources) : ErrorHandler(
 
     var onDecryptionFail: () -> Unit = {}
 
-    override fun executeError(error: Throwable) {
+    override fun proceed(error: Throwable) {
         when (error) {
             is ScramblerException -> onDecryptionFail()
-            else -> super.executeError(error)
+            else -> super.proceed(error)
         }
     }
 

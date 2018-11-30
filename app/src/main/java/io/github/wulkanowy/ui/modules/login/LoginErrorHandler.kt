@@ -13,11 +13,11 @@ class LoginErrorHandler @Inject constructor(resources: Resources) : ErrorHandler
 
     var onStudentDuplicate: (String) -> Unit = {}
 
-    override fun executeError(error: Throwable) {
+    override fun proceed(error: Throwable) {
         when (error) {
             is BadCredentialsException -> onBadCredentials()
             is SQLiteConstraintException -> onStudentDuplicate(resources.getString(R.string.login_duplicate_student))
-            else -> super.executeError(error)
+            else -> super.proceed(error)
         }
     }
 

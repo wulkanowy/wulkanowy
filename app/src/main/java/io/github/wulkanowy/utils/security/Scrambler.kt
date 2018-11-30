@@ -65,6 +65,7 @@ fun encrypt(plainText: String, context: Context): String {
 
     return try {
         if (!isKeyPairExists) generateKeyPair(context)
+
         cipher.let {
             if (SDK_INT >= M) {
                 OAEPParameterSpec("SHA-256", "MGF1", SHA1, PSpecified.DEFAULT).let { spec ->
@@ -89,13 +90,13 @@ fun encrypt(plainText: String, context: Context): String {
 fun decrypt(cipherText: String): String {
     if (cipherText.isEmpty()) throw ScramblerException("Text to be encrypted is empty")
 
-    if (SDK_INT < JELLY_BEAN_MR2 || cipherText.length < 250) {
-        return String(decode(cipherText.toByteArray(KEY_CHARSET), DEFAULT), KEY_CHARSET)
-    }
-
-    if (!isKeyPairExists) throw ScramblerException("KeyPair doesn't exist")
-
     return try {
+        if (SDK_INT < JELLY_BEAN_MR2 || cipherText.length < 250) {
+            return String(decode(cipherText.toByteArray(KEY_CHARSET), DEFAULT), KEY_CHARSET)
+        }
+
+        if (!isKeyPairExists) throw ScramblerException("KeyPair doesn't exist")
+
         cipher.let {
             if (SDK_INT >= M) {
                 OAEPParameterSpec("SHA-256", "MGF1", SHA1, PSpecified.DEFAULT).let { spec ->

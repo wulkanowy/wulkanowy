@@ -6,7 +6,7 @@ import io.github.wulkanowy.services.job.ServiceHelper
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.logLogin
-import io.reactivex.Single
+import io.reactivex.Completable
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
@@ -77,12 +77,12 @@ class MainPresenter @Inject constructor(
         disposable.add(studentRepository.getCurrentStudent(false)
             .flatMapCompletable { studentRepository.logoutStudent(it) }
             .andThen(studentRepository.getSavedStudents(false))
-            .flatMap {
-                if (it.isNotEmpty()) studentRepository.switchStudent(it[0]).toSingle { it }
-                else Single.just(it)
+            .flatMapCompletable {
+                if (it.isNotEmpty()) studentRepository.switchStudent(it[0])
+                else Completable.complete()
             }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({ view?.openLoginView() }, { errorHandler.proceed(it) }))
+            .subscribe({ view?.openLoginView() }, { errorHandler.dispatch(it) }))
     }
 }

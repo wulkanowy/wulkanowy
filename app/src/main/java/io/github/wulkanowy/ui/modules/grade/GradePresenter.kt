@@ -84,7 +84,7 @@ class GradePresenter @Inject constructor(
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .subscribe({ view?.run { loadChild(currentPageIndex) } }) {
-                errorHandler.proceed(it)
+                errorHandler.dispatch(it)
                 view?.run {
                     showProgress(false)
                     showEmpty()

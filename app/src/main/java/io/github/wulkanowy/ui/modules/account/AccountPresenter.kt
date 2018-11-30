@@ -44,7 +44,7 @@ class AccountPresenter @Inject constructor(
                     if (it.isEmpty()) openClearLoginView()
                     else recreateView()
                 }
-            }, { errorHandler.proceed(it) }))
+            }, { errorHandler.dispatch(it) }))
     }
 
     fun onItemSelected(item: AbstractFlexibleItem<*>) {
@@ -55,7 +55,7 @@ class AccountPresenter @Inject constructor(
                 disposable.add(studentRepository.switchStudent(item.student)
                     .subscribeOn(schedulers.backgroundThread)
                     .observeOn(schedulers.mainThread)
-                    .subscribe({ view?.recreateView() }, { errorHandler.proceed(it) }))
+                    .subscribe({ view?.recreateView() }, { errorHandler.dispatch(it) }))
             }
         }
     }
@@ -65,7 +65,7 @@ class AccountPresenter @Inject constructor(
             .map { it.map { item -> AccountItem(item) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({ view?.updateData(it) }, { errorHandler.proceed(it) }))
+            .subscribe({ view?.updateData(it) }, { errorHandler.dispatch(it) }))
     }
 }
 

@@ -71,7 +71,7 @@ class GradeSummaryPresenter @Inject constructor(
                 logEvent("Grade summary load", mapOf("items" to it.first.size, "forceRefresh" to forceRefresh))
             }) {
                 view?.run { showEmpty(isViewEmpty) }
-                errorHandler.proceed(it)
+                errorHandler.dispatch(it)
             })
     }
 

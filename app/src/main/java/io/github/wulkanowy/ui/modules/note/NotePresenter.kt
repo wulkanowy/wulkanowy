@@ -52,7 +52,7 @@ class NotePresenter @Inject constructor(
                 logEvent("Note load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
             }, {
                 view?.run { showEmpty(isViewEmpty) }
-                errorHandler.proceed(it)
+                errorHandler.dispatch(it)
             })
         )
     }
@@ -76,7 +76,7 @@ class NotePresenter @Inject constructor(
             .observeOn(schedulers.mainThread)
             .subscribe({
                 Timber.d("Note ${note.id} updated")
-            }) { error -> errorHandler.proceed(error) }
+            }) { error -> errorHandler.dispatch(error) }
         )
     }
 }

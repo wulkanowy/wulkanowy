@@ -54,7 +54,7 @@ class GradeDetailsPresenter @Inject constructor(
                 logEvent("Grade details load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
             }) {
                 view?.run { showEmpty(isViewEmpty) }
-                errorHandler.proceed(it)
+                errorHandler.dispatch(it)
             })
     }
 
@@ -134,7 +134,7 @@ class GradeDetailsPresenter @Inject constructor(
         disposable.add(gradeRepository.updateGrade(grade)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({}) { error -> errorHandler.proceed(error) })
+            .subscribe({}) { error -> errorHandler.dispatch(error) })
         Timber.d("Grade ${grade.id} updated")
     }
 }
