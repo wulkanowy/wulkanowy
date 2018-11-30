@@ -1,13 +1,13 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.main.MainErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
@@ -17,7 +17,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class GradeDetailsPresenter @Inject constructor(
-    private val errorHandler: ErrorHandler,
+    private val errorHandler: MainErrorHandler,
     private val schedulers: SchedulersProvider,
     private val gradeRepository: GradeRepository,
     private val studentRepository: StudentRepository,
