@@ -5,8 +5,9 @@
 [![Bitrise](https://img.shields.io/bitrise/daeff1893f3c8128/master.svg?token=Hjm1ACamk86JDeVVJHOeqQ&style=flat-square)](https://www.bitrise.io/app/daeff1893f3c8128)
 [![Codecov](https://img.shields.io/codecov/c/github/wulkanowy/wulkanowy/master.svg?style=flat-square)](https://codecov.io/gh/wulkanowy/wulkanowy)
 [![BCH compliance](https://bettercodehub.com/edge/badge/wulkanowy/wulkanowy?branch=master)](https://bettercodehub.com/)
-[![Discord](https://img.shields.io/discord/390889354199040011.svg?style=flat-square)](https://discord.gg/vccAQBr)
+[![Sonarcloud](https://sonarcloud.io/dashboard?id=io.github.wulkanowy%3Aapp)](https://sonarcloud.io/api/project_badges/measure?project=io.github.wulkanowy%3Aapp&metric=sqale_rating)
 [![FOSSA Status](https://app.fossa.io/api/projects/custom%2B5644%2Fgit%40github.com%3Awulkanowy%2Fwulkanowy.git.svg?type=shield)](https://app.fossa.io/projects/custom%2B5644%2Fgit%40github.com%3Awulkanowy%2Fwulkanowy.git?ref=badge_shield)
+[![Discord](https://img.shields.io/discord/390889354199040011.svg?style=flat-square)](https://discord.gg/vccAQBr)
 
 [Pobierz wersję beta z Google Play](https://play.google.com/store/apps/details?id=io.github.wulkanowy&amp;utm_source=vcs)
 
