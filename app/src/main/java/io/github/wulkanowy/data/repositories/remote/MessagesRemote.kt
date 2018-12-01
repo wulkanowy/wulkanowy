@@ -40,7 +40,7 @@ class MessagesRemote @Inject constructor(private val api: Api) {
             .flatMapSingle { api.getMessage(it.messageID ?: 0, it.folderId ?: 0, markAsRead, it.realId ?: 0) }
             .map {
                 Message(studentId = studentId, realId = it.id).apply {
-                    content = it.content
+                    content = it.content?.trim()
                 }
             }.toList()
     }
