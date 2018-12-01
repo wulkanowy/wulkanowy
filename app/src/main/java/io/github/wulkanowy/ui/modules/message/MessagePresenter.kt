@@ -31,7 +31,7 @@ class MessagePresenter @Inject constructor(
         disposable.add(studentRepository.getCurrentStudent()
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({ view?.run { loadChild(currentPageIndex) } }) { errorHandler.proceed(it) })
+            .subscribe({ view?.run { loadChild(currentPageIndex) } }) { errorHandler.dispatch(it) })
     }
 
     private fun loadChild(index: Int, forceRefresh: Boolean = false) {

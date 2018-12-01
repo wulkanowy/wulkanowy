@@ -50,7 +50,7 @@ class InboxPresenter @Inject constructor(
                     logEvent("Message inbox load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
-                    errorHandler.proceed(it)
+                    errorHandler.dispatch(it)
                 })
         }
     }

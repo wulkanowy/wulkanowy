@@ -50,7 +50,7 @@ class TrashPresenter @Inject constructor(
                     logEvent("Message trashed load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
-                    errorHandler.proceed(it)
+                    errorHandler.dispatch(it)
                 })
         }
     }
