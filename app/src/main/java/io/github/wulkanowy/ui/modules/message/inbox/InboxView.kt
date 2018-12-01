@@ -25,7 +25,7 @@ interface InboxView : BaseView {
 
     fun showRefresh(show: Boolean)
 
-    fun showMessage(message: Message)
+    fun openMessage(messageId: Long)
 
     fun notifyParentDataLoaded()
 }

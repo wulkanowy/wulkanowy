@@ -23,14 +23,14 @@ abstract class MessageModule {
     }
 
     @PerChildFragment
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindMessageInboxFragment(): InboxFragment
 
     @PerChildFragment
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindMessageSentFragment(): SentFragment
 
     @PerChildFragment
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindMessageTrashFragment(): TrashFragment
 }

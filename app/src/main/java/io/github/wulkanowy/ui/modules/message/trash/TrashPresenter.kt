@@ -56,6 +56,6 @@ class TrashPresenter @Inject constructor(
     }
 
     fun onMessageItemSelected(item: AbstractFlexibleItem<*>) {
-        view?.showMessage((item as MessageItem).message)
+        view?.openMessage((item as MessageItem).message.id)
     }
 }

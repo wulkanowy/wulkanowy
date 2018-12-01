@@ -50,6 +50,31 @@ class MessagesRepository @Inject constructor(
             )
     }
 
+    fun getMessage(studentId: Int, id: Long): Single<List<Message>> {
+        return local.getMessage(id)
+            .filter { messages -> messages.none { it.content.isNullOrEmpty() } }
+            .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
+                .flatMap {
+                    if (it) local.getMessage(id).toSingle(emptyList())
+                    else Single.error(UnknownHostException())
+                }
+                .map { messages -> messages.filter { it.content.isNullOrEmpty() } }
+                .flatMap { dbMessages ->
+                    remote.getMessagesContent(studentId, dbMessages)
+                        .doOnSuccess { new ->
+                            local.updateMessages(dbMessages.map { message ->
+                                message.copy(unread = false).apply {
+                                    this.id = message.id
+                                    content = new.single { this.realId == message.realId }.content
+                                }
+                            }).subscribe()
+                        }
+                }.flatMap {
+                    local.getMessage(id).toSingle(emptyList())
+                }
+            )
+    }
+
     fun getNewMessages(student: Student): Single<List<Message>> {
         return local.getNewMessages(student).toSingle(emptyList())
     }

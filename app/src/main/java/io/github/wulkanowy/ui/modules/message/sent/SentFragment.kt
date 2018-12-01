@@ -10,9 +10,11 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.MessageItem
 import io.github.wulkanowy.ui.modules.message.MessageView
+import io.github.wulkanowy.ui.modules.message.preview.PreviewFragment
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_message_sent.*
 import javax.inject.Inject
@@ -84,8 +86,10 @@ class SentFragment : BaseFragment(), SentView, MessageView.MessageChildView {
         messageSentSwipe.isRefreshing = show
     }
 
-    override fun showMessage(message: Message) {
-//        MessageDialog.newInstance(message).show(fragmentManager, message.toString())
+    override fun openMessage(messageId: Long) {
+        (activity as? MainActivity)?.pushView(PreviewFragment.newInstance().apply {
+            arguments = Bundle().apply { putLong(PreviewFragment.MESSAGE_ID_KEY, messageId) }
+        })
     }
 
     override fun notifyParentDataLoaded() {

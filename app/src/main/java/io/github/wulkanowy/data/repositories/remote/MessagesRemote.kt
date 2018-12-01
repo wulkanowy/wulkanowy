@@ -4,6 +4,7 @@ import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.utils.toLocalDateTime
+import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
 import io.github.wulkanowy.api.messages.Message as ApiMessage
@@ -34,12 +35,13 @@ class MessagesRemote @Inject constructor(private val api: Api) {
         }
     }
 
-    fun getMessageContent(student: Student, message: Message, markAsRead: Boolean = false): Single<Message> {
-        return api.getMessage(message.messageID ?: 0, message.folderId ?: 0, markAsRead, message.realId ?: 0)
+    fun getMessagesContent(studentId: Int, messages: List<Message>, markAsRead: Boolean = false): Single<List<Message>> {
+        return Observable.fromIterable(messages)
+            .flatMapSingle { api.getMessage(it.messageID ?: 0, it.folderId ?: 0, markAsRead, it.realId ?: 0) }
             .map {
-                Message(studentId = student.studentId, realId = it.id).apply {
+                Message(studentId = studentId, realId = it.id).apply {
                     content = it.content
                 }
-            }
+            }.toList()
     }
 }

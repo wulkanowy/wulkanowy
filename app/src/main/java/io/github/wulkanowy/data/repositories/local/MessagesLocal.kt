@@ -11,6 +11,10 @@ import javax.inject.Singleton
 @Singleton
 class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
 
+    fun getMessage(id: Long): Maybe<List<Message>> {
+        return messagesDb.get(id)
+    }
+
     fun getMessages(studentId: Int, folderId: Int): Maybe<List<Message>> {
         return messagesDb.load(studentId, folderId).filter { !it.isEmpty() }
     }
