@@ -15,12 +15,15 @@ class PreviewPresenter @Inject constructor(
     private val studentRepository: StudentRepository
 ) : BasePresenter<PreviewView>(errorHandler) {
 
+    var messageId: Long = 0
+
     fun onAttachView(view: PreviewView, id: Long) {
         super.onAttachView(view)
         loadData(id)
     }
 
     private fun loadData(id: Long) {
+        messageId = id
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()

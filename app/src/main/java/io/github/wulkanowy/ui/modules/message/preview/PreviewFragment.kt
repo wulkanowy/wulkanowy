@@ -46,6 +46,11 @@ class PreviewFragment : BaseFragment(), PreviewView, MainView.TitledView {
         messageProgress.visibility = if (show) View.VISIBLE else View.GONE
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putLong(MESSAGE_ID_KEY, presenter.messageId)
+    }
+
     override fun onDestroyView() {
         presenter.onDetachView()
         super.onDestroyView()
