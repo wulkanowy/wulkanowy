@@ -42,7 +42,7 @@ class PreviewFragment : BaseFragment(), PreviewView, MainView.TitledView {
 
     override fun setData(message: Message) {
         messageSubject.text = if (message.subject.isNotBlank()) message.subject else getString(R.string.message_no_subject)
-        messageAuthor.text = if (message.folderId == 2) getString(R.string.message_to, message.recipient) else getString(R.string.message_from, message.sender)
+        messageAuthor.text = if (message.recipient?.isNotBlank() == true) getString(R.string.message_to, message.recipient) else getString(R.string.message_from, message.sender)
         messageDate.text = getString(R.string.message_date, message.date?.toFormattedString("yyyy-MM-dd HH:mm:ss"))
         messageContent.text = message.content
     }
