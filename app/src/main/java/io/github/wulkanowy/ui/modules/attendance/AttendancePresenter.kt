@@ -56,11 +56,11 @@ class AttendancePresenter @Inject constructor(
     }
 
     fun onViewReselected() {
-        now().previousOrSameSchoolDay.let {
+        now().previousOrSameSchoolDay.also {
             if (currentDate != it) {
                 loadData(it)
                 reloadView()
-            }
+            } else view?.resetView()
         }
     }
 
