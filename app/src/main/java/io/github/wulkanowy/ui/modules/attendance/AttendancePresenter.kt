@@ -56,8 +56,12 @@ class AttendancePresenter @Inject constructor(
     }
 
     fun onViewReselected() {
-        loadData(now().previousOrSameSchoolDay)
-        reloadView()
+        now().previousOrSameSchoolDay.let {
+            if (currentDate != it) {
+                loadData(it)
+                reloadView()
+            }
+        }
     }
 
     fun onAttendanceItemSelected(item: AbstractFlexibleItem<*>?) {

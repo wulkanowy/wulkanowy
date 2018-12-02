@@ -11,6 +11,7 @@ import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
+import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
@@ -54,8 +55,12 @@ class TimetablePresenter @Inject constructor(
     }
 
     fun onViewReselected() {
-        loadData(now().nextOrSameSchoolDay)
-        reloadView()
+        now().previousOrSameSchoolDay.let {
+            if (currentDate != it) {
+                loadData(it)
+                reloadView()
+            }
+        }
     }
 
     fun onTimetableItemSelected(item: AbstractFlexibleItem<*>?) {
