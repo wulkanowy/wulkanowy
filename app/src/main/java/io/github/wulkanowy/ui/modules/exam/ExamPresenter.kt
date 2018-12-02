@@ -13,7 +13,6 @@ import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
-import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
@@ -60,7 +59,7 @@ class ExamPresenter @Inject constructor(
     }
 
     fun onViewReselected() {
-        now().previousOrSameSchoolDay.let {
+        now().nextOrSameSchoolDay.let {
             if (currentDate != it) {
                 loadData(it)
                 reloadView()
