@@ -17,5 +17,5 @@ interface SubjectDao {
     fun deleteAll(subjects: List<Subject>)
 
     @Query("SELECT * FROM Subjects WHERE diary_id = :diaryId AND student_id = :studentId")
-    fun getSubjects(diaryId: Int, studentId: Int): Maybe<List<Subject>>
+    fun loadAll(diaryId: Int, studentId: Int): Maybe<List<Subject>>
 }

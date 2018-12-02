@@ -11,12 +11,8 @@ import javax.inject.Singleton
 class SubjectRemote @Inject constructor(private val api: Api) {
 
     fun getSubjects(semester: Semester): Single<List<Subject>> {
-        return Single.just(api.run {
-            if (diaryId != semester.diaryId) {
-                diaryId = semester.diaryId
-                notifyDataChanged()
-            }
-        }).flatMap { api.getSubjects() }
+        return Single.just(api.apply { diaryId = semester.diaryId })
+            .flatMap { api.getSubjects() }
             .map { subjects ->
                 subjects.map {
                     Subject(

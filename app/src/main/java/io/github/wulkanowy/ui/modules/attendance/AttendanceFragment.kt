@@ -70,7 +70,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.action_menu_attendance_summary, menu)
+        inflater?.inflate(R.menu.action_menu_attendance, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

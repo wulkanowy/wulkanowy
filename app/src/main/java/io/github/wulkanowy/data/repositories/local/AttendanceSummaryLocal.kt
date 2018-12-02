@@ -9,7 +9,7 @@ import javax.inject.Inject
 class AttendanceSummaryLocal @Inject constructor(private val attendanceDb: AttendanceSummaryDao) {
 
     fun getAttendanceSummary(semester: Semester, subjectId: Int): Maybe<List<AttendanceSummary>> {
-        return attendanceDb.getAll(semester.diaryId, semester.studentId, subjectId).filter { !it.isEmpty() }
+        return attendanceDb.loadAll(semester.diaryId, semester.studentId, subjectId).filter { !it.isEmpty() }
     }
 
     fun saveAttendanceSummary(attendance: List<AttendanceSummary>) {

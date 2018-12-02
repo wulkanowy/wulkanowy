@@ -17,5 +17,5 @@ interface AttendanceSummaryDao {
     fun deleteAll(exams: List<AttendanceSummary>)
 
     @Query("SELECT * FROM AttendanceSummary WHERE diary_id = :diaryId AND student_id = :studentId AND subject_id = :subjectId")
-    fun getAll(diaryId: Int, studentId: Int, subjectId: Int): Maybe<List<AttendanceSummary>>
+    fun loadAll(diaryId: Int, studentId: Int, subjectId: Int): Maybe<List<AttendanceSummary>>
 }

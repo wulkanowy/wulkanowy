@@ -4,7 +4,8 @@ import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.repositories.AttendanceSummaryRepository
-import io.github.wulkanowy.data.repositories.SessionRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.SubjectRepostory
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
@@ -18,7 +19,8 @@ class AttendanceSummaryPresenter @Inject constructor(
     private val errorHandler: ErrorHandler,
     private val attendanceSummaryRepository: AttendanceSummaryRepository,
     private val subjectRepository: SubjectRepostory,
-    private val sessionRepository: SessionRepository,
+    private val studentRepository: StudentRepository,
+    private val semesterRepository: SemesterRepository,
     private val schedulers: SchedulersProvider
 ) : BasePresenter<AttendanceSummaryView>(errorHandler) {
 
@@ -46,8 +48,8 @@ class AttendanceSummaryPresenter @Inject constructor(
         currentSubjectId = subjectId
         disposable.apply {
             clear()
-            add(sessionRepository.getSemesters()
-                .map { it.single { semester -> semester.current } }
+            add(studentRepository.getCurrentStudent()
+                .flatMap { semesterRepository.getCurrentSemester(it) }
                 .flatMap { attendanceSummaryRepository.getAttendanceSummary(it, subjectId, forceRefresh) }
                 .map { createAttendanceSummaryItems(it) to AttendanceSummaryScrollableHeader(formatAttendance(it.calculateAttendance())) }
                 .subscribeOn(schedulers.backgroundThread)
@@ -73,7 +75,7 @@ class AttendanceSummaryPresenter @Inject constructor(
                     logEvent("Attendance load", mapOf("forceRefresh" to forceRefresh))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
-                    errorHandler.proceed(it)
+                    errorHandler.dispatch(it)
                 }
             )
         }
@@ -132,8 +134,8 @@ class AttendanceSummaryPresenter @Inject constructor(
     }
 
     private fun loadSubjects() {
-        disposable.add(sessionRepository.getSemesters()
-            .map { it.single { semester -> semester.current } }
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { subjectRepository.getSubjects(it) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
@@ -142,7 +144,7 @@ class AttendanceSummaryPresenter @Inject constructor(
                 view?.updateSubjects(ArrayList(it.map { subject -> subject.name }))
             }, {
                 view?.run { showEmpty(isViewEmpty) }
-                errorHandler.proceed(it)
+                errorHandler.dispatch(it)
             })
         )
     }

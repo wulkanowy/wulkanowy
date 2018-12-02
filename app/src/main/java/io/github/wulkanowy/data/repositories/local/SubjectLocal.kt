@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class SubjectLocal @Inject constructor(private val subjectDao: SubjectDao) {
 
     fun getSubjects(semester: Semester): Maybe<List<Subject>> {
-        return subjectDao.getSubjects(semester.diaryId, semester.studentId)
+        return subjectDao.loadAll(semester.diaryId, semester.studentId)
             .filter { !it.isEmpty() }
     }
 
