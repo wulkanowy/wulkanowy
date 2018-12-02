@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:minWidth="100dp"
             android:minHeight="100dp"
-            app:srcCompat="@drawable/ic_email_black_24dp"
+            app:srcCompat="@drawable/ic_more_messages_24dp"
             app:tint="?android:attr/textColorPrimary"
             tools:ignore="contentDescription" />
 
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="@string/grade_no_items"
+            android:text="@string/message_no_items"
             android:textSize="20sp" />
     </LinearLayout>
 </FrameLayout>

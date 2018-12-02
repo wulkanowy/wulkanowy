@@ -129,7 +129,6 @@
     <string name="message_inbox">Odebrane</string>
     <string name="message_sent">Wysłane</string>
     <string name="message_trash">Kosz</string>
-    <string name="message_yesterday">Wczoraj</string>
     <string name="message_no_items">Brak wiadomości</string>
     <plurals name="message_number_item">
         <item quantity="one">%d wiadomość</item>
@@ -224,6 +223,7 @@
     <string name="pref_services_suspended">Zawieszona na wakacjach</string>
     <string name="pref_services_interval">Interwał aktualizacji</string>
     <string name="pref_services_wifi">Tylko WiFi</string>
+
 
     <!--Colors-->
     <string name="all_black">Czarny</string>

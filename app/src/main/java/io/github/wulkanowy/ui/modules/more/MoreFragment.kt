@@ -42,7 +42,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
         get() {
             return context?.run {
                 getString(R.string.message_title) to
-                    ContextCompat.getDrawable(this, R.drawable.ic_email_black_24dp)
+                    ContextCompat.getDrawable(this, R.drawable.ic_more_messages_24dp)
             }
         }
 

@@ -21,10 +21,6 @@ fun Date.toLocalDateTime(): LocalDateTime {
     return Instant.ofEpochMilli(this.time).atZone(ZoneId.systemDefault()).toLocalDateTime()
 }
 
-fun LocalDateTime?.toDate(): Date? {
-    return DateTimeUtils.toDate(this?.atZone(ZoneId.systemDefault())?.toInstant())
-}
-
 fun String.toLocalDate(format: String = DATE_PATTERN): LocalDate {
     return LocalDate.parse(this, DateTimeFormatter.ofPattern(format))
 }

@@ -119,7 +119,6 @@
     <string name="message_inbox">Inbox</string>
     <string name="message_sent">Sent</string>
     <string name="message_trash">Trash</string>
-    <string name="message_yesterday">Yesterday</string>
     <string name="message_no_items">No messages</string>
     <plurals name="message_number_item">
         <item quantity="one">%d message</item>
@@ -187,6 +186,7 @@
     <string name="widget_timetable_no_items">No lesson</string>
     <string name="widget_timetable_today">Today</string>
     <string name="widget_timetable_tomorrow">Tomorrow</string>
+
 
     <!--Preferences-->
     <string name="pref_view_header">View</string>
