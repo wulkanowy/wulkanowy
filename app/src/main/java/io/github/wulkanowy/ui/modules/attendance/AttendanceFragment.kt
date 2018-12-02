@@ -57,7 +57,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
 
     override fun initView() {
         attendanceAdapter.apply {
-            setOnItemClickListener { presenter.onAttendanceItemSelected(getItem(it)) }
+            setOnItemClickListener { presenter.onAttendanceItemSelected(it) }
         }
 
         attendanceRecycler.run {

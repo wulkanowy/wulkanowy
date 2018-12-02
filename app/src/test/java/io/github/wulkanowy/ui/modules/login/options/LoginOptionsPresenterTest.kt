@@ -1,9 +1,11 @@
 package io.github.wulkanowy.ui.modules.login.options
 
 import io.github.wulkanowy.TestSchedulersProvider
-import io.github.wulkanowy.data.ErrorHandler
+import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.repositories.SessionRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.junit.Before
@@ -17,13 +19,16 @@ import org.mockito.MockitoAnnotations
 class LoginOptionsPresenterTest {
 
     @Mock
-    lateinit var errorHandler: ErrorHandler
+    lateinit var errorHandler: LoginErrorHandler
 
     @Mock
     lateinit var loginOptionsView: LoginOptionsView
 
     @Mock
-    lateinit var repository: SessionRepository
+    lateinit var studentRepository: StudentRepository
+
+    @Mock
+    lateinit var semesterRepository: SemesterRepository
 
     private lateinit var presenter: LoginOptionsPresenter
 
@@ -34,8 +39,9 @@ class LoginOptionsPresenterTest {
     @Before
     fun initPresenter() {
         MockitoAnnotations.initMocks(this)
-        clearInvocations(repository, loginOptionsView)
-        presenter = LoginOptionsPresenter(errorHandler, repository, TestSchedulersProvider())
+        clearInvocations(studentRepository, loginOptionsView)
+        clearInvocations(semesterRepository, loginOptionsView)
+        presenter = LoginOptionsPresenter(errorHandler, studentRepository, semesterRepository, TestSchedulersProvider())
         presenter.onAttachView(loginOptionsView)
     }
 
@@ -46,7 +52,7 @@ class LoginOptionsPresenterTest {
 
     @Test
     fun refreshDataTest() {
-        doReturn(Single.just(listOf(testStudent))).`when`(repository).cachedStudents
+        doReturn(Single.just(listOf(testStudent))).`when`(studentRepository).cachedStudents
         presenter.onParentViewLoadData()
         verify(loginOptionsView).showActionBar(true)
         verify(loginOptionsView).updateData(listOf(LoginOptionsItem(testStudent)))
@@ -54,16 +60,18 @@ class LoginOptionsPresenterTest {
 
     @Test
     fun refreshDataErrorTest() {
-        doReturn(Single.error<List<Student>>(testException)).`when`(repository).cachedStudents
+        doReturn(Single.error<List<Student>>(testException)).`when`(studentRepository).cachedStudents
         presenter.onParentViewLoadData()
         verify(loginOptionsView).showActionBar(true)
-        verify(errorHandler).proceed(testException)
+        verify(errorHandler).dispatch(testException)
     }
 
     @Test
     fun onSelectedStudentTest() {
-        doReturn(Completable.complete()).`when`(repository).saveStudent(testStudent)
-        presenter.onSelectItem(LoginOptionsItem(testStudent))
+        doReturn(Single.just(1L)).`when`(studentRepository).saveStudent(testStudent)
+        doReturn(Single.just(emptyList<Semester>())).`when`(semesterRepository).getSemesters(testStudent, true)
+        doReturn(Completable.complete()).`when`(studentRepository).switchStudent(testStudent)
+        presenter.onItemSelected(LoginOptionsItem(testStudent))
         verify(loginOptionsView).showContent(false)
         verify(loginOptionsView).showProgress(true)
         verify(loginOptionsView).openMainView()
@@ -71,10 +79,12 @@ class LoginOptionsPresenterTest {
 
     @Test
     fun onSelectedStudentErrorTest() {
-        doReturn(Completable.error(testException)).`when`(repository).saveStudent(testStudent)
-        presenter.onSelectItem(LoginOptionsItem(testStudent))
+        doReturn(Single.error<Student>(testException)).`when`(studentRepository).saveStudent(testStudent)
+        doReturn(Single.just(emptyList<Semester>())).`when`(semesterRepository).getSemesters(testStudent, true)
+        doReturn(Completable.complete()).`when`(studentRepository).logoutStudent(testStudent)
+        presenter.onItemSelected(LoginOptionsItem(testStudent))
         verify(loginOptionsView).showContent(false)
         verify(loginOptionsView).showProgress(true)
-        verify(errorHandler).proceed(testException)
+        verify(errorHandler).dispatch(testException)
     }
 }

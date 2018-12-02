@@ -13,14 +13,10 @@ import javax.inject.Singleton
 class AttendanceRemote @Inject constructor(private val api: Api) {
 
     fun getAttendance(semester: Semester, startDate: LocalDate, endDate: LocalDate): Single<List<Attendance>> {
-        return Single.just(api.run {
-            if (diaryId != semester.diaryId) {
-                diaryId = semester.diaryId
-                notifyDataChanged()
-            }
-        }).flatMap { api.getAttendance(startDate, endDate) }.map { attendance ->
-            attendance.map {
-                Attendance(
+        return Single.just(api.apply { diaryId = semester.diaryId })
+            .flatMap { it.getAttendance(startDate, endDate) }.map { attendance ->
+                attendance.map {
+                    Attendance(
                         studentId = semester.studentId,
                         diaryId = semester.diaryId,
                         date = it.date.toLocalDate(),
@@ -33,8 +29,8 @@ class AttendanceRemote @Inject constructor(private val api: Api) {
                         lateness = it.lateness,
                         excused = it.excused,
                         deleted = it.deleted
-                )
+                    )
+                }
             }
-        }
     }
 }

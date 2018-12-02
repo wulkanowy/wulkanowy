@@ -9,6 +9,7 @@ import io.github.wulkanowy.di.scopes.PerActivity
 import io.github.wulkanowy.di.scopes.PerFragment
 import io.github.wulkanowy.ui.modules.about.AboutFragment
 import io.github.wulkanowy.ui.modules.about.AboutModule
+import io.github.wulkanowy.ui.modules.account.AccountDialog
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
@@ -62,12 +63,19 @@ abstract class MainModule {
     @ContributesAndroidInjector(modules = [AboutModule::class])
     abstract fun bindAboutFragment(): AboutFragment
 
+    @PerFragment
     @ContributesAndroidInjector
     abstract fun bindSettingsFragment(): SettingsFragment
 
+    @PerFragment
     @ContributesAndroidInjector
     abstract fun bindNoteFragment(): NoteFragment
 
+    @PerFragment
     @ContributesAndroidInjector
     abstract fun bindHomeworkFragment(): HomeworkFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindsAccountDialog(): AccountDialog
 }

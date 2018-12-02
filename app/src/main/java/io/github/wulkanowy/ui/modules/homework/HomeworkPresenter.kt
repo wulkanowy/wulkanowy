@@ -1,10 +1,11 @@
 package io.github.wulkanowy.ui.modules.homework
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.HomeworkRepository
-import io.github.wulkanowy.data.repositories.SessionRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.main.MainErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.logEvent
@@ -17,10 +18,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class HomeworkPresenter @Inject constructor(
-    private val errorHandler: ErrorHandler,
+    private val errorHandler: MainErrorHandler,
     private val schedulers: SchedulersProvider,
     private val homeworkRepository: HomeworkRepository,
-    private val sessionRepository: SessionRepository
+    private val studentRepository: StudentRepository,
+    private val semesterRepository: SemesterRepository
 ) : BasePresenter<HomeworkView>(errorHandler) {
 
     lateinit var currentDate: LocalDate
@@ -57,9 +59,9 @@ class HomeworkPresenter @Inject constructor(
         currentDate = date
         disposable.apply {
             clear()
-            add(sessionRepository.getSemesters()
+            add(studentRepository.getCurrentStudent()
                 .delay(200, TimeUnit.MILLISECONDS)
-                .map { it.single { semester -> semester.current } }
+                .flatMap { semesterRepository.getCurrentSemester(it) }
                 .flatMap { homeworkRepository.getHomework(it, currentDate, forceRefresh) }
                 .map { items -> items.map { HomeworkItem(it) } }
                 .subscribeOn(schedulers.backgroundThread)
@@ -79,7 +81,7 @@ class HomeworkPresenter @Inject constructor(
                     logEvent("Homework load", mapOf("items" to it.size, "forceRefresh" to forceRefresh, "date" to currentDate.toFormattedString()))
                 }) {
                     view?.run { showEmpty(isViewEmpty()) }
-                    errorHandler.proceed(it)
+                    errorHandler.dispatch(it)
                 })
         }
     }

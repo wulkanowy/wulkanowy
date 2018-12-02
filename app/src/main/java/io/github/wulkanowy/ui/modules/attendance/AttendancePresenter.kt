@@ -1,11 +1,12 @@
 package io.github.wulkanowy.ui.modules.attendance
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.github.wulkanowy.data.repositories.SessionRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.main.MainErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.logEvent
@@ -20,10 +21,11 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class AttendancePresenter @Inject constructor(
-    private val errorHandler: ErrorHandler,
+    private val errorHandler: MainErrorHandler,
     private val schedulers: SchedulersProvider,
     private val attendanceRepository: AttendanceRepository,
-    private val sessionRepository: SessionRepository,
+    private val studentRepository: StudentRepository,
+    private val semesterRepository: SemesterRepository,
     private val prefRepository: PreferencesRepository
 ) : BasePresenter<AttendanceView>(errorHandler) {
 
@@ -71,9 +73,9 @@ class AttendancePresenter @Inject constructor(
         currentDate = date
         disposable.apply {
             clear()
-            add(sessionRepository.getSemesters()
+            add(studentRepository.getCurrentStudent()
                 .delay(200, MILLISECONDS)
-                .map { it.single { semester -> semester.current } }
+                .flatMap { semesterRepository.getCurrentSemester(it) }
                 .flatMap { attendanceRepository.getAttendance(it, date, date, forceRefresh) }
                 .map { list ->
                     if (prefRepository.isShowPresent) list
@@ -98,7 +100,7 @@ class AttendancePresenter @Inject constructor(
                     logEvent("Attendance load", mapOf("items" to it.size, "forceRefresh" to forceRefresh, "date" to currentDate.toFormattedString()))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
-                    errorHandler.proceed(it)
+                    errorHandler.dispatch(it)
                 }
             )
         }

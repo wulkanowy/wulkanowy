@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.RoomDatabase.JournalMode.TRUNCATE
 import androidx.room.TypeConverters
 import io.github.wulkanowy.data.db.dao.AttendanceDao
 import io.github.wulkanowy.data.db.dao.AttendanceSummaryDao
@@ -53,29 +54,30 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         fun newInstance(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
+                .setJournalMode(TRUNCATE)
                 .build()
         }
     }
 
-    abstract fun studentDao(): StudentDao
+    abstract val studentDao: StudentDao
 
-    abstract fun semesterDao(): SemesterDao
+    abstract val semesterDao: SemesterDao
 
-    abstract fun examsDao(): ExamDao
+    abstract val examsDao: ExamDao
 
-    abstract fun timetableDao(): TimetableDao
+    abstract val timetableDao: TimetableDao
 
-    abstract fun attendanceDao(): AttendanceDao
+    abstract val attendanceDao: AttendanceDao
 
-    abstract fun attendanceSummaryDao(): AttendanceSummaryDao
+    abstract val attendanceSummaryDao: AttendanceSummaryDao
 
-    abstract fun gradeDao(): GradeDao
+    abstract val gradeDao: GradeDao
 
-    abstract fun gradeSummaryDao(): GradeSummaryDao
+    abstract val gradeSummaryDao: GradeSummaryDao
 
-    abstract fun noteDao(): NoteDao
+    abstract val noteDao: NoteDao
 
-    abstract fun homeworkDao(): HomeworkDao
+    abstract val homeworkDao: HomeworkDao
 
-    abstract fun subjectDao(): SubjectDao
+    abstract val subjectDao: SubjectDao
 }

@@ -1,12 +1,13 @@
 package io.github.wulkanowy.ui.modules.grade.summary
 
-import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.GradeSummaryRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.github.wulkanowy.data.repositories.SessionRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.main.MainErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
@@ -16,10 +17,11 @@ import java.util.Locale.FRANCE
 import javax.inject.Inject
 
 class GradeSummaryPresenter @Inject constructor(
-    private val errorHandler: ErrorHandler,
+    private val errorHandler: MainErrorHandler,
     private val gradeSummaryRepository: GradeSummaryRepository,
     private val gradeRepository: GradeRepository,
-    private val sessionRepository: SessionRepository,
+    private val studentRepository: StudentRepository,
+    private val semesterRepository: SemesterRepository,
     private val preferencesRepository: PreferencesRepository,
     private val schedulers: SchedulersProvider
 ) : BasePresenter<GradeSummaryView>(errorHandler) {
@@ -30,7 +32,8 @@ class GradeSummaryPresenter @Inject constructor(
     }
 
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
-        disposable.add(sessionRepository.getSemesters()
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getSemesters(it) }
             .map { semester -> semester.first { it.semesterId == semesterId } }
             .flatMap {
                 gradeSummaryRepository.getGradesSummary(it, forceRefresh)
@@ -63,12 +66,12 @@ class GradeSummaryPresenter @Inject constructor(
                 view?.run {
                     showEmpty(it.first.isEmpty())
                     showContent(it.first.isNotEmpty())
-                    updateDataSet(it.first, it.second)
+                    updateData(it.first, it.second)
                 }
                 logEvent("Grade summary load", mapOf("items" to it.first.size, "forceRefresh" to forceRefresh))
             }) {
                 view?.run { showEmpty(isViewEmpty) }
-                errorHandler.proceed(it)
+                errorHandler.dispatch(it)
             })
     }
 

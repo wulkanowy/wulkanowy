@@ -1,21 +1,23 @@
 package io.github.wulkanowy.ui.modules.note
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.repositories.NoteRepository
-import io.github.wulkanowy.data.repositories.SessionRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.main.MainErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.logEvent
 import timber.log.Timber
 import javax.inject.Inject
 
 class NotePresenter @Inject constructor(
-    private val errorHandler: ErrorHandler,
+    private val errorHandler: MainErrorHandler,
     private val schedulers: SchedulersProvider,
-    private val sessionRepository: SessionRepository,
-    private val noteRepository: NoteRepository
+    private val studentRepository: StudentRepository,
+    private val noteRepository: NoteRepository,
+    private val semesterRepository: SemesterRepository
 ) : BasePresenter<NoteView>(errorHandler) {
 
     override fun onAttachView(view: NoteView) {
@@ -29,8 +31,8 @@ class NotePresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        disposable.add(sessionRepository.getSemesters()
-            .map { it.single { semester -> semester.current } }
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { noteRepository.getNotes(it, forceRefresh) }
             .map { items -> items.map { NoteItem(it) } }
             .map { items -> items.sortedByDescending { it.note.date } }
@@ -50,7 +52,7 @@ class NotePresenter @Inject constructor(
                 logEvent("Note load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
             }, {
                 view?.run { showEmpty(isViewEmpty) }
-                errorHandler.proceed(it)
+                errorHandler.dispatch(it)
             })
         )
     }
@@ -74,7 +76,7 @@ class NotePresenter @Inject constructor(
             .observeOn(schedulers.mainThread)
             .subscribe({
                 Timber.d("Note ${note.id} updated")
-            }) { error -> errorHandler.proceed(error) }
+            }) { error -> errorHandler.dispatch(error) }
         )
     }
 }

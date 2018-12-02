@@ -7,7 +7,9 @@ import androidx.room.Query
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.reactivex.Maybe
 import org.threeten.bp.LocalDate
+import javax.inject.Singleton
 
+@Singleton
 @Dao
 interface AttendanceDao {
 
@@ -18,5 +20,5 @@ interface AttendanceDao {
     fun deleteAll(exams: List<Attendance>)
 
     @Query("SELECT * FROM Attendance WHERE diary_id = :diaryId AND student_id = :studentId AND date >= :from AND date <= :end")
-    fun getAttendance(diaryId: Int, studentId: Int, from: LocalDate, end: LocalDate): Maybe<List<Attendance>>
+    fun load(diaryId: Int, studentId: Int, from: LocalDate, end: LocalDate): Maybe<List<Attendance>>
 }
