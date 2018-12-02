@@ -1,17 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
-    android:id="@+id/messageItemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ic_all_divider"
     android:foreground="?attr/selectableItemBackgroundBorderless"
-    android:paddingStart="12dp"
-    android:paddingLeft="12dp"
-    android:paddingTop="7dp"
-    android:paddingEnd="12dp"
-    android:paddingRight="12dp"
-    android:paddingBottom="7dp">
+    android:paddingLeft="16dp"
+    android:paddingTop="10dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/messageItemSender"
@@ -22,9 +18,8 @@
         android:layout_marginRight="40dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/app_name"
-        android:textSize="17sp"
-        tool:ignore="all" />
+        android:textSize="15sp"
+        tool:text="@tools:sample/full_names" />
 
     <TextView
         android:id="@+id/messageItemDate"
@@ -34,26 +29,24 @@
         android:layout_alignParentRight="true"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
         android:layout_toEndOf="@id/messageItemSender"
         android:layout_toRightOf="@id/messageItemSender"
         android:gravity="end"
-        android:text="@string/all_date"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        tool:text="@tools:sample/date/mmddyy" />
 
     <TextView
         android:id="@+id/messageItemSubject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/messageItemSender"
         android:layout_alignStart="@id/messageItemSender"
         android:layout_alignLeft="@id/messageItemSender"
-        android:layout_below="@+id/messageItemSender"
         android:layout_marginTop="5dp"
+        android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/app_name"
         android:textColor="?android:attr/android:textColorSecondary"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tool:text="@tools:sample/lorem" />
 
 </RelativeLayout>
