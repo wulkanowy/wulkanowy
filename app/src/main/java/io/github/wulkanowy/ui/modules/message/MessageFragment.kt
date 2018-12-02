@@ -8,9 +8,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BasePagerAdapter
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.ui.modules.message.inbox.InboxFragment
-import io.github.wulkanowy.ui.modules.message.sent.SentFragment
-import io.github.wulkanowy.ui.modules.message.trash.TrashFragment
+import io.github.wulkanowy.ui.modules.message.tab.MessageTabFragment
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import kotlinx.android.synthetic.main.fragment_messages.*
 import javax.inject.Inject
@@ -44,12 +42,13 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
 
     override fun initView() {
         pagerAdapter.fragments.putAll(mapOf(
-            getString(R.string.message_inbox) to InboxFragment.newInstance(),
-            getString(R.string.message_sent) to SentFragment.newInstance(),
-            getString(R.string.message_trash) to TrashFragment.newInstance()
+            getString(R.string.message_inbox) to MessageTabFragment.newInstance(1),
+            getString(R.string.message_sent) to MessageTabFragment.newInstance(2),
+            getString(R.string.message_trash) to MessageTabFragment.newInstance(3)
         ))
         messageViewPager.run {
             adapter = pagerAdapter
+            offscreenPageLimit = 2
             setOnSelectPageListener { presenter.onPageSelected(it) }
         }
         messageTabLayout.setupWithViewPager(messageViewPager)

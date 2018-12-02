@@ -1,11 +1,10 @@
-package io.github.wulkanowy.ui.modules.message.inbox
+package io.github.wulkanowy.ui.modules.message.tab
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.BaseView
 import io.github.wulkanowy.ui.modules.message.MessageItem
 
-interface InboxView : BaseView {
+interface MessageTabView : BaseView {
 
     val isViewEmpty: Boolean
 

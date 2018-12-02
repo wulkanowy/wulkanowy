@@ -5,25 +5,25 @@
     android:layout_height="match_parent">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/messageInboxSwipe"
+        android:id="@+id/messageTabSwipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/messageInboxRecycler"
+            android:id="@+id/messageTabRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
-        android:id="@+id/messageInboxProgress"
+        android:id="@+id/messageTabProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true" />
 
     <LinearLayout
-        android:id="@+id/messageInboxEmpty"
+        android:id="@+id/messageTabEmpty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"

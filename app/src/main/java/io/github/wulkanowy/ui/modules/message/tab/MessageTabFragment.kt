@@ -1,8 +1,11 @@
-package io.github.wulkanowy.ui.modules.message.trash
+package io.github.wulkanowy.ui.modules.message.tab
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -15,80 +18,85 @@ import io.github.wulkanowy.ui.modules.message.MessageItem
 import io.github.wulkanowy.ui.modules.message.MessageView
 import io.github.wulkanowy.ui.modules.message.preview.PreviewFragment
 import io.github.wulkanowy.utils.setOnItemClickListener
-import kotlinx.android.synthetic.main.fragment_message_trash.*
+import kotlinx.android.synthetic.main.fragment_message_tab.*
 import javax.inject.Inject
 
-class TrashFragment : BaseFragment(), TrashView, MessageView.MessageChildView {
+class MessageTabFragment : BaseFragment(), MessageTabView, MessageView.MessageChildView {
 
     @Inject
-    lateinit var presenter: TrashPresenter
+    lateinit var presenter: MessageTabPresenter
 
     @Inject
-    lateinit var trashAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
+    lateinit var tabAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
-        fun newInstance() = TrashFragment()
+        const val MESSAGE_TAB_FOLDER_ID = "message_tab_folder_id"
+        fun newInstance(folderId: Int): MessageTabFragment {
+            return MessageTabFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(MESSAGE_TAB_FOLDER_ID, folderId)
+                }
+            }
+        }
     }
 
     override val isViewEmpty
-        get() = trashAdapter.isEmpty
+        get() = tabAdapter.isEmpty
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_message_trash, container, false)
+        return inflater.inflate(R.layout.fragment_message_tab, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        messageContainer = messageTrashRecycler
-        presenter.onAttachView(this)
+        messageContainer = messageTabRecycler
+        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getInt(MessageTabFragment.MESSAGE_TAB_FOLDER_ID) ?: 0)
     }
 
     override fun initView() {
-        trashAdapter.run {
+        tabAdapter.run {
             isAutoCollapseOnExpand = true
             isAutoScrollOnExpand = true
             setOnItemClickListener { presenter.onMessageItemSelected(it) }
         }
 
-        messageTrashRecycler.run {
+        messageTabRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
-            adapter = trashAdapter
+            adapter = tabAdapter
         }
-        messageTrashSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+        messageTabSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
     override fun updateData(data: List<MessageItem>) {
-        trashAdapter.updateDataSet(data, true)
+        tabAdapter.updateDataSet(data, true)
     }
 
     override fun updateItem(item: AbstractFlexibleItem<*>) {
-        trashAdapter.updateItem(item)
+        tabAdapter.updateItem(item)
     }
 
     override fun clearView() {
-        trashAdapter.clear()
+        tabAdapter.clear()
     }
 
     override fun showProgress(show: Boolean) {
-        messageTrashProgress.visibility = if (show) View.VISIBLE else View.GONE
+        messageTabProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showContent(show: Boolean) {
-        messageTrashRecycler.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        messageTabRecycler.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showEmpty(show: Boolean) {
-        messageTrashEmpty.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        messageTabEmpty.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showRefresh(show: Boolean) {
-        messageTrashSwipe.isRefreshing = show
+        messageTabSwipe.isRefreshing = show
     }
 
     override fun openMessage(messageId: Long) {
-        (activity as? MainActivity)?.pushView(PreviewFragment.newInstance().apply {
-            arguments = Bundle().apply { putLong(PreviewFragment.MESSAGE_ID_KEY, messageId) }
-        })
+        (activity as? MainActivity)?.pushView(PreviewFragment.newInstance(messageId))
     }
 
     override fun notifyParentDataLoaded() {
@@ -97,6 +105,11 @@ class TrashFragment : BaseFragment(), TrashView, MessageView.MessageChildView {
 
     override fun onParentLoadData(forceRefresh: Boolean) {
         presenter.onParentViewLoadData(forceRefresh)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(MessageTabFragment.MESSAGE_TAB_FOLDER_ID, presenter.folderId)
     }
 
     override fun onDestroyView() {

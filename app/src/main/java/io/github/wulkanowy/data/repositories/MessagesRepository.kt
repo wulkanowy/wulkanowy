@@ -19,26 +19,14 @@ class MessagesRepository @Inject constructor(
     private val remote: MessagesRemote
 ) {
 
-    fun getReceivedMessages(studentId: Int, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
-        return getMessages(studentId, 1, forceRefresh, notify)
-    }
-
-    fun getSentMessages(studentId: Int, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
-        return getMessages(studentId, 2, forceRefresh, notify)
-    }
-
-    fun getTrashedMessages(studentId: Int, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
-        return getMessages(studentId, 3, forceRefresh, notify)
-    }
-
-    private fun getMessages(studentId: Int, folderId: Int, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
+    fun getMessages(studentId: Int, folderId: Int, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
         return local.getMessages(studentId, folderId).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
                     if (it) remote.getMessages(studentId, folderId)
                     else Single.error(UnknownHostException())
                 }.flatMap { new ->
-                    local.getMessages(studentId, 1).toSingle(emptyList())
+                    local.getMessages(studentId, folderId).toSingle(emptyList())
                         .doOnSuccess { old ->
                             local.deleteMessages(old - new)
                             local.saveMessages((new - old)
@@ -46,7 +34,7 @@ class MessagesRepository @Inject constructor(
                                     if (notify) it.isNotified = false
                                 })
                         }
-                }.flatMap { local.getMessages(studentId, 1).toSingle(emptyList()) }
+                }.flatMap { local.getMessages(studentId, folderId).toSingle(emptyList()) }
             )
     }
 

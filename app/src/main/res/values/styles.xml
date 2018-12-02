@@ -36,7 +36,6 @@
     </style>
 
     <style name="WulkanowyTheme.ActionBar" parent="WulkanowyTheme">
-        <item name="colorControlNormal">@android:color/primary_text_dark</item>
-        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
     </style>
 </resources>

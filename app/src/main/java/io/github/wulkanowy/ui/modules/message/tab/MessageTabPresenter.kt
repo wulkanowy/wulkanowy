@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.modules.message.trash
+package io.github.wulkanowy.ui.modules.message.tab
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.ErrorHandler
@@ -10,16 +10,19 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.logEvent
 import javax.inject.Inject
 
-class TrashPresenter @Inject constructor(
+class MessageTabPresenter @Inject constructor(
     private val errorHandler: ErrorHandler,
     private val schedulers: SchedulersProvider,
     private val messagesRepository: MessagesRepository,
     private val studentRepository: StudentRepository
-) : BasePresenter<TrashView>(errorHandler) {
+) : BasePresenter<MessageTabView>(errorHandler) {
 
-    override fun onAttachView(view: TrashView) {
+    var folderId: Int = 0
+
+    fun onAttachView(view: MessageTabView, folderId: Int) {
         super.onAttachView(view)
         view.initView()
+        this.folderId = folderId
     }
 
     fun onSwipeRefresh() {
@@ -30,7 +33,7 @@ class TrashPresenter @Inject constructor(
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()
-                .flatMap { messagesRepository.getTrashedMessages(it.studentId, forceRefresh) }
+                .flatMap { messagesRepository.getMessages(it.studentId, folderId, forceRefresh) }
                 .map { items -> items.map { MessageItem(it) } }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
@@ -47,7 +50,7 @@ class TrashPresenter @Inject constructor(
                         showContent(it.isNotEmpty())
                         updateData(it)
                     }
-                    logEvent("Message trashed load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
+                    logEvent("Message tab load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.dispatch(it)

@@ -22,7 +22,12 @@ class PreviewFragment : BaseFragment(), PreviewView, MainView.TitledView {
 
     companion object {
         const val MESSAGE_ID_KEY = "message_id"
-        fun newInstance() = PreviewFragment()
+
+        fun newInstance(messageId: Long): PreviewFragment {
+            return PreviewFragment().apply {
+                arguments = Bundle().apply { putLong(PreviewFragment.MESSAGE_ID_KEY, messageId) }
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,8 +42,8 @@ class PreviewFragment : BaseFragment(), PreviewView, MainView.TitledView {
 
     override fun setData(message: Message) {
         messageSubject.text = message.subject
-        messageAuthor.text = if (message.sender.isNullOrEmpty()) "Do: ${message.conversationName}" else "Od: ${message.sender}"
-        messageDate.text = "Data: ${message.date?.toFormattedString("yyyy-MM-dd HH:mm:ss")}"
+        messageAuthor.text = if (message.folderId == 2) "Do: ${message.recipient}" else "Od: ${message.sender}"
+        messageDate.text = getString(R.string.all_date) + ": ${message.date?.toFormattedString("yyyy-MM-dd HH:mm:ss")}"
         messageContent.text = message.content
     }
 

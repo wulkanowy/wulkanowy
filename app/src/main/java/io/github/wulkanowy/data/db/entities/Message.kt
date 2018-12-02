@@ -16,7 +16,7 @@ data class Message(
     val realId: Int? = null,
 
     @ColumnInfo(name = "message_id")
-    val messageID: Int? = null,
+    val messageId: Int? = null,
 
     @ColumnInfo(name = "conversation_id")
     val conversationId: Int? = null,
@@ -24,8 +24,14 @@ data class Message(
     @ColumnInfo(name = "conversation_name")
     val conversationName: String? = null,
 
+    @ColumnInfo(name = "recipient_id")
+    val recipientId: Int? = null,
+
+    @ColumnInfo(name = "recipient_name")
+    val recipient: String? = null,
+
     @ColumnInfo(name = "sender_id")
-    val senderID: Int? = null,
+    val senderId: Int? = null,
 
     @ColumnInfo(name = "sender_name")
     val sender: String? = null,
