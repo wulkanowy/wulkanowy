@@ -3,6 +3,8 @@ package io.github.wulkanowy.ui.modules.message
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -55,12 +57,12 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
     }
 
     override fun showContent(show: Boolean) {
-        messageViewPager.visibility = if (show) View.VISIBLE else View.INVISIBLE
-        messageTabLayout.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        messageViewPager.visibility = if (show) VISIBLE else INVISIBLE
+        messageTabLayout.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showProgress(show: Boolean) {
-        messageProgress.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        messageProgress.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     fun onChildFragmentLoaded() {

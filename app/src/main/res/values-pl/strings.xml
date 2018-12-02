@@ -129,7 +129,11 @@
     <string name="message_inbox">Odebrane</string>
     <string name="message_sent">Wysłane</string>
     <string name="message_trash">Kosz</string>
+    <string name="message_no_subject">(brak tematu)</string>
     <string name="message_no_items">Brak wiadomości</string>
+    <string name="message_from">Od: %s</string>
+    <string name="message_to">Do: %s</string>
+    <string name="message_date">Data: %s</string>
     <plurals name="message_number_item">
         <item quantity="one">%d wiadomość</item>
         <item quantity="few">%d wiadomości</item>
