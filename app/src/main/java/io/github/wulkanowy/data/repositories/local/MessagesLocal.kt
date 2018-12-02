@@ -16,7 +16,10 @@ class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
     }
 
     fun getMessages(studentId: Int, folderId: Int): Maybe<List<Message>> {
-        return messagesDb.load(studentId, folderId).filter { !it.isEmpty() }
+        return when(folderId) {
+            3 -> messagesDb.loadDeleted(studentId)
+            else -> messagesDb.load(studentId, folderId)
+        }.filter { !it.isEmpty() }
     }
 
     fun getNewMessages(student: Student): Maybe<List<Message>> {

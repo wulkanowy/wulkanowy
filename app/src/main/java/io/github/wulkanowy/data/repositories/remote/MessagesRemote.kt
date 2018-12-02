@@ -12,25 +12,26 @@ class MessagesRemote @Inject constructor(private val api: Api) {
 
     fun getMessages(studentId: Int, folderId: Int): Single<List<Message>> {
         return when (folderId) {
+            1 -> api.getReceivedMessages()
             2 -> api.getSentMessages()
-            3 -> api.getDeletedMessages()
-            else -> api.getReceivedMessages()
+            else -> api.getDeletedMessages()
         }.map { messages ->
             messages.map {
                 Message(
                     studentId = studentId,
-                    conversationId = it.conversationId,
-                    conversationName = it.conversationName,
-                    date = it.date?.toLocalDateTime(),
-                    folderId = it.folderId,
-                    messageId = it.messageId,
                     realId = it.id,
+                    messageId = it.messageId,
                     sender = it.sender,
                     senderId = it.senderId,
                     recipient = it.recipient,
                     recipientId = it.recipientId,
-                    subject = it.subject,
-                    unread = it.unread
+                    subject = it.subject.trim(),
+                    date = it.date?.toLocalDateTime(),
+                    folderId = it.folderId,
+                    unread = it.unread,
+                    unreadBy = it.unreadBy,
+                    readBy = it.readBy,
+                    removed = it.removed
                 )
             }
         }
@@ -38,7 +39,7 @@ class MessagesRemote @Inject constructor(private val api: Api) {
 
     fun getMessagesContent(studentId: Int, messages: List<Message>, markAsRead: Boolean = false): Single<List<Message>> {
         return Observable.fromIterable(messages)
-            .flatMapSingle { api.getMessage(it.messageId ?: 0, it.folderId ?: 0, markAsRead, it.realId ?: 0) }
+            .flatMapSingle { api.getMessage(it.messageId ?: 0, it.folderId, markAsRead, it.realId ?: 0) }
             .map {
                 Message(studentId = studentId, realId = it.id).apply {
                     content = it.content?.trim()

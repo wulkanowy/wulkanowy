@@ -41,7 +41,7 @@ class PreviewFragment : BaseFragment(), PreviewView, MainView.TitledView {
     }
 
     override fun setData(message: Message) {
-        messageSubject.text = message.subject
+        messageSubject.text = if (message.subject.isBlank()) "(brak tematu)" else message.subject
         messageAuthor.text = if (message.folderId == 2) "Do: ${message.recipient}" else "Od: ${message.sender}"
         messageDate.text = getString(R.string.all_date) + ": ${message.date?.toFormattedString("yyyy-MM-dd HH:mm:ss")}"
         messageContent.text = message.content

@@ -24,8 +24,8 @@ class MessageItem(val message: Message) : AbstractFlexibleItem<MessageItem.ViewH
         position: Int, payloads: MutableList<Any>?
     ) {
         holder.apply {
-            messageItemSender.text = if (!message.sender.isNullOrEmpty()) message.sender else message.conversationName
-            messageItemSubject.text = message.subject
+            messageItemSender.text = if (message.folderId == 2) message.recipient else message.sender
+            messageItemSubject.text = if (message.subject.isBlank()) "(brak tematu)" else message.subject
             messageItemDate.text = message.date?.toFormattedString()
         }
     }

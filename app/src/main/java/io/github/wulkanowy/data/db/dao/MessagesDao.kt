@@ -26,6 +26,9 @@ interface MessagesDao {
     @Query("SELECT * FROM Messages WHERE student_id = :studentId AND folder_id = :folder ORDER BY date DESC")
     fun load(studentId: Int, folder: Int): Maybe<List<Message>>
 
+    @Query("SELECT * FROM Messages WHERE student_id = :studentId AND removed = 1 ORDER BY date DESC")
+    fun loadDeleted(studentId: Int): Maybe<List<Message>>
+
     @Query("SELECT * FROM Messages WHERE unread = 1 AND student_id = :studentId")
     fun getNewMessages(studentId: Int): Maybe<List<Message>>
 }
