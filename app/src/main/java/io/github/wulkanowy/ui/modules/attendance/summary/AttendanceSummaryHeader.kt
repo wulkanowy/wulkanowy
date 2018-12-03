@@ -9,7 +9,8 @@ import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.header_grade_summary.*
 
-class AttendanceSummaryHeader(private val name: String, private val value: String) : AbstractHeaderItem<AttendanceSummaryHeader.ViewHolder>() {
+class AttendanceSummaryHeader(private val name: String, private val value: String) :
+    AbstractHeaderItem<AttendanceSummaryHeader.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.header_grade_summary
 
@@ -17,8 +18,7 @@ class AttendanceSummaryHeader(private val name: String, private val value: Strin
         return ViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?,
-        position: Int, payloads: MutableList<Any>?) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?, position: Int, payloads: MutableList<Any>?) {
         holder?.run {
             gradeSummaryHeaderName.text = name
             gradeSummaryHeaderAverage.text = value
@@ -43,8 +43,8 @@ class AttendanceSummaryHeader(private val name: String, private val value: Strin
         return result
     }
 
-    class ViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?) :
-        FlexibleViewHolder(view, adapter), LayoutContainer {
+    class ViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?) : FlexibleViewHolder(view, adapter),
+        LayoutContainer {
 
         override val containerView: View?
             get() = contentView

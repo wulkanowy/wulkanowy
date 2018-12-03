@@ -9,10 +9,10 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.SubjectRepostory
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.github.wulkanowy.utils.calculateAttendance
+import io.github.wulkanowy.utils.calculatePercentage
 import io.github.wulkanowy.utils.logEvent
 import java.lang.String.format
-import java.util.Locale
+import java.util.Locale.FRANCE
 import javax.inject.Inject
 
 class AttendanceSummaryPresenter @Inject constructor(
@@ -24,9 +24,9 @@ class AttendanceSummaryPresenter @Inject constructor(
     private val schedulers: SchedulersProvider
 ) : BasePresenter<AttendanceSummaryView>(errorHandler) {
 
-    private var subjects: List<Subject> = emptyList()
+    private var subjects = emptyList<Subject>()
 
-    var currentSubjectId: Int = -1
+    var currentSubjectId = -1
         private set
 
     fun onAttachView(view: AttendanceSummaryView, subjectId: Int?) {
@@ -40,7 +40,7 @@ class AttendanceSummaryPresenter @Inject constructor(
         loadData(currentSubjectId, true)
     }
 
-    fun loadForSubject(name: String) {
+    fun onSubjectSelected(name: String) {
         loadData(subjects.singleOrNull { it.name == name }?.realId ?: -1)
     }
 
@@ -51,7 +51,7 @@ class AttendanceSummaryPresenter @Inject constructor(
             add(studentRepository.getCurrentStudent()
                 .flatMap { semesterRepository.getCurrentSemester(it) }
                 .flatMap { attendanceSummaryRepository.getAttendanceSummary(it, subjectId, forceRefresh) }
-                .map { createAttendanceSummaryItems(it) to AttendanceSummaryScrollableHeader(formatAttendance(it.calculateAttendance())) }
+                .map { createAttendanceSummaryItems(it) to AttendanceSummaryScrollableHeader(formatPercentage(it.calculatePercentage())) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doOnSubscribe {
@@ -81,71 +81,70 @@ class AttendanceSummaryPresenter @Inject constructor(
         }
     }
 
+    private fun loadSubjects() {
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
+            .flatMap { subjectRepository.getSubjects(it) }
+            .doOnSuccess { subjects = it }
+            .map { ArrayList(it.map { subject -> subject.name }) }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({ view?.updateSubjects(it) }, {
+                view?.run { showEmpty(isViewEmpty) }
+                errorHandler.dispatch(it)
+            })
+        )
+    }
+
     private fun createAttendanceSummaryItems(attendanceSummary: List<AttendanceSummary>): List<AttendanceSummaryItem> {
         return attendanceSummary.sortedByDescending { it.id }.flatMap { summary ->
             AttendanceSummaryHeader(
                 name = summary.month,
-                value = formatAttendance(summary.calculateAttendance())
+                value = formatPercentage(summary.calculatePercentage())
             ).let {
                 listOf(
                     AttendanceSummaryItem(
                         header = it,
                         name = "Obecność",
-                        value = summary.presence
+                        value = summary.presence.toString()
                     ),
                     AttendanceSummaryItem(
                         header = it,
                         name = "Nieobecność",
-                        value = summary.absence
+                        value = summary.absence.toString()
                     ),
                     AttendanceSummaryItem(
                         header = it,
                         name = "Nieobecność usprawiedliwiona",
-                        value = summary.absenceExcused
+                        value = summary.absenceExcused.toString()
                     ),
                     AttendanceSummaryItem(
                         header = it,
                         name = "Nieobecność z przyczyn szkolnych",
-                        value = summary.absenceForSchoolReasons
+                        value = summary.absenceForSchoolReasons.toString()
                     ),
                     AttendanceSummaryItem(
                         header = it,
                         name = "Zwolnienie",
-                        value = summary.exemption
+                        value = summary.exemption.toString()
                     ),
                     AttendanceSummaryItem(
                         header = it,
                         name = "Spóźnienie",
-                        value = summary.lateness
+                        value = summary.lateness.toString()
                     ),
                     AttendanceSummaryItem(
                         header = it,
                         name = "Spóźnienie usprawiedliwione",
-                        value = summary.latenessExcused
+                        value = summary.latenessExcused.toString()
                     )
                 )
             }
         }
     }
 
-    private fun formatAttendance(attendance: Double, defaultValue: String = "0%"): String {
-        return if (attendance == 0.0) defaultValue
-        else format(Locale.FRANCE, "%.2f", attendance) + "%"
-    }
-
-    private fun loadSubjects() {
-        disposable.add(studentRepository.getCurrentStudent()
-            .flatMap { semesterRepository.getCurrentSemester(it) }
-            .flatMap { subjectRepository.getSubjects(it) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                subjects = it
-                view?.updateSubjects(ArrayList(it.map { subject -> subject.name }))
-            }, {
-                view?.run { showEmpty(isViewEmpty) }
-                errorHandler.dispatch(it)
-            })
-        )
+    private fun formatPercentage(percentage: Double): String {
+        return if (percentage == 0.0) "0%"
+        else "${format(FRANCE, "%.2f", percentage)}%"
     }
 }

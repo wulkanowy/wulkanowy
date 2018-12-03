@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -15,6 +14,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.setOnItemSelectedListener
 import kotlinx.android.synthetic.main.fragment_attendance_summary.*
 import javax.inject.Inject
 
@@ -30,6 +30,7 @@ class AttendanceSummaryFragment : BaseFragment(), AttendanceSummaryView, MainVie
 
     companion object {
         private const val SAVED_SUBJECT_KEY = "CURRENT_SUBJECT"
+
         fun newInstance() = AttendanceSummaryFragment()
     }
 
@@ -65,13 +66,7 @@ class AttendanceSummaryFragment : BaseFragment(), AttendanceSummaryView, MainVie
 
         attendanceSummarySubjects.run {
             adapter = subjectsAdapter
-            onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    presenter.loadForSubject((view as TextView).text.toString())
-                }
-            }
+            setOnItemSelectedListener { presenter.onSubjectSelected((it as TextView).text.toString()) }
         }
     }
 

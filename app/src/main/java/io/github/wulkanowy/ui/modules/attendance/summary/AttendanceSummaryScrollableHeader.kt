@@ -18,10 +18,7 @@ class AttendanceSummaryScrollableHeader(private val finalAttendance: String) :
         return ViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(
-        adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?,
-        position: Int, payloads: MutableList<Any>?
-    ) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?, position: Int, payloads: MutableList<Any>?) {
         holder?.apply {
             attendanceSummaryScrollableHeaderFinal.text = finalAttendance
         }

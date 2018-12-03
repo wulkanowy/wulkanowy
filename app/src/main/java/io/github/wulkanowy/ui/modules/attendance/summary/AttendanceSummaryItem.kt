@@ -9,7 +9,7 @@ import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_grade_summary.*
 
-class AttendanceSummaryItem(header: AttendanceSummaryHeader, private val name: String, private val value: Int) :
+class AttendanceSummaryItem(header: AttendanceSummaryHeader, private val name: String, private val value: String) :
     AbstractSectionableItem<AttendanceSummaryItem.ViewHolder, AttendanceSummaryHeader>(header) {
 
     override fun getLayoutRes() = R.layout.item_grade_summary
@@ -18,12 +18,9 @@ class AttendanceSummaryItem(header: AttendanceSummaryHeader, private val name: S
         return ViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(
-        adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?,
-        position: Int, payloads: MutableList<Any>?
-    ) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?, position: Int, payloads: MutableList<Any>?) {
         holder?.run {
-            gradeSummaryItemGrade.text = value.toString()
+            gradeSummaryItemGrade.text = value
             gradeSummaryItemTitle.text = name
         }
     }
