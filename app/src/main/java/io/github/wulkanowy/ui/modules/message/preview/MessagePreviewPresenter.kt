@@ -35,7 +35,7 @@ class MessagePreviewPresenter @Inject constructor(
                 }
                 .subscribe({
                     view?.setData(it.first())
-                    logEvent("Message load", mapOf("items" to it.size))
+                    logEvent("Message load", mapOf("length" to it.first().content?.length))
                 }) {
                     errorHandler.dispatch(it)
                 })
