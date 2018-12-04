@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.message
 
 import io.github.wulkanowy.data.ErrorHandler
-import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Completable
@@ -9,9 +8,8 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class MessagePresenter @Inject constructor(
-    private val errorHandler: ErrorHandler,
-    private val schedulers: SchedulersProvider,
-    private val studentRepository: StudentRepository
+    errorHandler: ErrorHandler,
+    private val schedulers: SchedulersProvider
 ) : BasePresenter<MessageView>(errorHandler) {
 
     override fun onAttachView(view: MessageView) {
@@ -28,10 +26,7 @@ class MessagePresenter @Inject constructor(
     }
 
     private fun loadData() {
-        disposable.add(studentRepository.getCurrentStudent()
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({ view?.run { loadChild(currentPageIndex) } }) { errorHandler.dispatch(it) })
+        view?.run { loadChild(currentPageIndex) }
     }
 
     private fun loadChild(index: Int, forceRefresh: Boolean = false) {
