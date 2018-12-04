@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.logEvent
+import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
 class MessagePreviewPresenter @Inject constructor(
@@ -33,9 +34,18 @@ class MessagePreviewPresenter @Inject constructor(
                 .doFinally {
                     view?.showProgress(false)
                 }
-                .subscribe({
-                    view?.setData(it.first())
-                    logEvent("Message load", mapOf("length" to it.first().content?.length))
+                .subscribe({ messages ->
+                    view?.run {
+                        messages.first().let {
+                            setSubject(if (it.subject.isNotBlank()) it.subject else noSubjectString)
+                            setDate(it.date?.toFormattedString("yyyy-MM-dd HH:mm:ss"))
+                            setContent(it.content)
+
+                            if (it.recipient?.isNotBlank() == true) setRecipient(it.recipient)
+                            else setSender(it.sender)
+                        }
+                    }
+                    logEvent("Message load", mapOf("length" to messages.first().content?.length))
                 }) {
                     errorHandler.dispatch(it)
                 })

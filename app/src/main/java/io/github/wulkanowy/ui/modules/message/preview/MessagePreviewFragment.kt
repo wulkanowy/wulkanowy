@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.synthetic.main.fragment_message.*
 import javax.inject.Inject
 
@@ -19,6 +17,9 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
 
     override val titleStringId: Int
         get() = R.string.message_title
+
+    override val noSubjectString: String
+        get() = getString(R.string.message_no_subject)
 
     companion object {
         const val MESSAGE_ID_KEY = "message_id"
@@ -40,11 +41,24 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
         presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getLong(MESSAGE_ID_KEY) ?: 0)
     }
 
-    override fun setData(message: Message) {
-        messageSubject.text = if (message.subject.isNotBlank()) message.subject else getString(R.string.message_no_subject)
-        messageAuthor.text = if (message.recipient?.isNotBlank() == true) getString(R.string.message_to, message.recipient) else getString(R.string.message_from, message.sender)
-        messageDate.text = getString(R.string.message_date, message.date?.toFormattedString("yyyy-MM-dd HH:mm:ss"))
-        messageContent.text = message.content
+    override fun setSubject(subject: String) {
+        messageSubject.text = subject
+    }
+
+    override fun setRecipient(recipient: String?) {
+        messageAuthor.text = getString(R.string.message_to, recipient)
+    }
+
+    override fun setSender(sender: String?) {
+        messageAuthor.text = getString(R.string.message_from, sender)
+    }
+
+    override fun setDate(date: String?) {
+        messageDate.text = getString(R.string.message_date, date)
+    }
+
+    override fun setContent(content: String?) {
+        messageContent.text = content
     }
 
     override fun showProgress(show: Boolean) {
