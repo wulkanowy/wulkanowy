@@ -16,7 +16,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.MessageItem
 import io.github.wulkanowy.ui.modules.message.MessageView
-import io.github.wulkanowy.ui.modules.message.preview.PreviewFragment
+import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_message_tab.*
 import javax.inject.Inject
@@ -97,7 +97,7 @@ class MessageTabFragment : BaseFragment(), MessageTabView, MessageView.MessageCh
     }
 
     override fun openMessage(messageId: Long) {
-        (activity as? MainActivity)?.pushView(PreviewFragment.newInstance(messageId))
+        (activity as? MainActivity)?.pushView(MessagePreviewFragment.newInstance(messageId))
     }
 
     override fun notifyParentDataLoaded() {

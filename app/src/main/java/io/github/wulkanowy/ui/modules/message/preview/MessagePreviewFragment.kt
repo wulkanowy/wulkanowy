@@ -12,10 +12,10 @@ import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.synthetic.main.fragment_message.*
 import javax.inject.Inject
 
-class PreviewFragment : BaseFragment(), PreviewView, MainView.TitledView {
+class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.TitledView {
 
     @Inject
-    lateinit var presenter: PreviewPresenter
+    lateinit var presenter: MessagePreviewPresenter
 
     override val titleStringId: Int
         get() = R.string.message_title
@@ -23,9 +23,9 @@ class PreviewFragment : BaseFragment(), PreviewView, MainView.TitledView {
     companion object {
         const val MESSAGE_ID_KEY = "message_id"
 
-        fun newInstance(messageId: Long): PreviewFragment {
-            return PreviewFragment().apply {
-                arguments = Bundle().apply { putLong(PreviewFragment.MESSAGE_ID_KEY, messageId) }
+        fun newInstance(messageId: Long): MessagePreviewFragment {
+            return MessagePreviewFragment().apply {
+                arguments = Bundle().apply { putLong(MessagePreviewFragment.MESSAGE_ID_KEY, messageId) }
             }
         }
     }

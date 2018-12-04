@@ -8,16 +8,16 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.logEvent
 import javax.inject.Inject
 
-class PreviewPresenter @Inject constructor(
+class MessagePreviewPresenter @Inject constructor(
     private val errorHandler: ErrorHandler,
     private val schedulers: SchedulersProvider,
     private val messagesRepository: MessagesRepository,
     private val studentRepository: StudentRepository
-) : BasePresenter<PreviewView>(errorHandler) {
+) : BasePresenter<MessagePreviewView>(errorHandler) {
 
     var messageId: Long = 0
 
-    fun onAttachView(view: PreviewView, id: Long) {
+    fun onAttachView(view: MessagePreviewView, id: Long) {
         super.onAttachView(view)
         loadData(id)
     }
