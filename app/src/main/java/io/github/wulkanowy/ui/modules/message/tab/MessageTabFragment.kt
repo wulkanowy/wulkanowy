@@ -31,6 +31,7 @@ class MessageTabFragment : BaseFragment(), MessageTabView, MessageView.MessageCh
 
     companion object {
         const val MESSAGE_TAB_FOLDER_ID = "message_tab_folder_id"
+
         fun newInstance(folderId: Int): MessageTabFragment {
             return MessageTabFragment().apply {
                 arguments = Bundle().apply {
@@ -53,15 +54,12 @@ class MessageTabFragment : BaseFragment(), MessageTabView, MessageView.MessageCh
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         messageContainer = messageTabRecycler
-        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getInt(MessageTabFragment.MESSAGE_TAB_FOLDER_ID) ?: 0)
+        presenter.onAttachView(this, (savedInstanceState ?: arguments)
+            ?.getInt(MessageTabFragment.MESSAGE_TAB_FOLDER_ID) ?: 0)
     }
 
     override fun initView() {
-        tabAdapter.run {
-            isAutoCollapseOnExpand = true
-            isAutoScrollOnExpand = true
-            setOnItemClickListener { presenter.onMessageItemSelected(it) }
-        }
+        tabAdapter.setOnItemClickListener { presenter.onMessageItemSelected(it) }
 
         messageTabRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
