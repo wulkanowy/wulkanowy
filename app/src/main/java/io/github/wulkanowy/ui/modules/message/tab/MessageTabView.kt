@@ -6,6 +6,8 @@ import io.github.wulkanowy.ui.modules.message.MessageItem
 
 interface MessageTabView : BaseView {
 
+    val noSubjectString: String
+
     val isViewEmpty: Boolean
 
     fun initView()

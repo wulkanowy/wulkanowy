@@ -34,7 +34,7 @@ class MessageTabPresenter @Inject constructor(
             clear()
             add(studentRepository.getCurrentStudent()
                 .flatMap { messagesRepository.getMessages(it.studentId, folderId, forceRefresh) }
-                .map { items -> items.map { MessageItem(it) } }
+                .map { items -> items.map { MessageItem(it, view?.noSubjectString.orEmpty()) } }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {

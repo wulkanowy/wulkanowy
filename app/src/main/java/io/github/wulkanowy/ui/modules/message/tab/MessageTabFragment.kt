@@ -40,6 +40,9 @@ class MessageTabFragment : BaseFragment(), MessageTabView, MessageView.MessageCh
         }
     }
 
+    override val noSubjectString: String
+        get() = getString(R.string.message_no_subject)
+
     override val isViewEmpty
         get() = tabAdapter.isEmpty
 
