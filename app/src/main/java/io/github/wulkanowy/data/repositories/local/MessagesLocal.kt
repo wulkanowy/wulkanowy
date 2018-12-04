@@ -3,7 +3,7 @@ package io.github.wulkanowy.data.repositories.local
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Student
-import io.reactivex.Completable
+import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.reactivex.Maybe
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,10 +15,10 @@ class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
         return messagesDb.get(id)
     }
 
-    fun getMessages(studentId: Int, folderId: Int): Maybe<List<Message>> {
-        return when(folderId) {
-            3 -> messagesDb.loadDeleted(studentId)
-            else -> messagesDb.load(studentId, folderId)
+    fun getMessages(studentId: Int, folder: MessagesRepository.MessageFolder): Maybe<List<Message>> {
+        return when (folder) {
+            MessagesRepository.MessageFolder.TRASHED -> messagesDb.loadDeleted(studentId)
+            else -> messagesDb.load(studentId, folder.id)
         }.filter { !it.isEmpty() }
     }
 

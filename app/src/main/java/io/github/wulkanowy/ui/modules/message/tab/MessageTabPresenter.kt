@@ -17,12 +17,12 @@ class MessageTabPresenter @Inject constructor(
     private val studentRepository: StudentRepository
 ) : BasePresenter<MessageTabView>(errorHandler) {
 
-    var folderId: Int = 0
+    lateinit var folder: MessagesRepository.MessageFolder
 
-    fun onAttachView(view: MessageTabView, folderId: Int) {
+    fun onAttachView(view: MessageTabView, folder: MessagesRepository.MessageFolder) {
         super.onAttachView(view)
         view.initView()
-        this.folderId = folderId
+        this.folder = folder
     }
 
     fun onSwipeRefresh() {
@@ -33,7 +33,7 @@ class MessageTabPresenter @Inject constructor(
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()
-                .flatMap { messagesRepository.getMessages(it.studentId, folderId, forceRefresh) }
+                .flatMap { messagesRepository.getMessages(it.studentId, folder, forceRefresh) }
                 .map { items -> items.map { MessageItem(it, view?.noSubjectString.orEmpty()) } }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)

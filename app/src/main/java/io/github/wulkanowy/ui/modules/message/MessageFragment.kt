@@ -7,6 +7,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BasePagerAdapter
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -44,9 +45,9 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
 
     override fun initView() {
         pagerAdapter.fragments.putAll(mapOf(
-            getString(R.string.message_inbox) to MessageTabFragment.newInstance(1),
-            getString(R.string.message_sent) to MessageTabFragment.newInstance(2),
-            getString(R.string.message_trash) to MessageTabFragment.newInstance(3)
+            getString(R.string.message_inbox) to MessageTabFragment.newInstance(MessagesRepository.MessageFolder.RECEIVED),
+            getString(R.string.message_sent) to MessageTabFragment.newInstance(MessagesRepository.MessageFolder.SENT),
+            getString(R.string.message_trash) to MessageTabFragment.newInstance(MessagesRepository.MessageFolder.TRASHED)
         ))
         messageViewPager.run {
             adapter = pagerAdapter

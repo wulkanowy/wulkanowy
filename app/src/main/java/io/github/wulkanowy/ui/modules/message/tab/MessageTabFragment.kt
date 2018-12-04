@@ -11,6 +11,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
@@ -32,10 +33,10 @@ class MessageTabFragment : BaseFragment(), MessageTabView, MessageView.MessageCh
     companion object {
         const val MESSAGE_TAB_FOLDER_ID = "message_tab_folder_id"
 
-        fun newInstance(folderId: Int): MessageTabFragment {
+        fun newInstance(folder: MessagesRepository.MessageFolder): MessageTabFragment {
             return MessageTabFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(MESSAGE_TAB_FOLDER_ID, folderId)
+                    putString(MESSAGE_TAB_FOLDER_ID, folder.name)
                 }
             }
         }
@@ -54,8 +55,9 @@ class MessageTabFragment : BaseFragment(), MessageTabView, MessageView.MessageCh
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         messageContainer = messageTabRecycler
-        presenter.onAttachView(this, (savedInstanceState ?: arguments)
-            ?.getInt(MessageTabFragment.MESSAGE_TAB_FOLDER_ID) ?: 0)
+        presenter.onAttachView(this, MessagesRepository.MessageFolder.valueOf(
+            (savedInstanceState ?: arguments)?.getString(MessageTabFragment.MESSAGE_TAB_FOLDER_ID) ?: ""
+        ))
     }
 
     override fun initView() {
@@ -110,7 +112,7 @@ class MessageTabFragment : BaseFragment(), MessageTabView, MessageView.MessageCh
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(MessageTabFragment.MESSAGE_TAB_FOLDER_ID, presenter.folderId)
+        outState.putString(MessageTabFragment.MESSAGE_TAB_FOLDER_ID, presenter.folder.name)
     }
 
     override fun onDestroyView() {

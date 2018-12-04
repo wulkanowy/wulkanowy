@@ -92,7 +92,7 @@ class SyncWorker : SimpleJobService() {
                         attendance.getAttendance(it, start, end, true),
                         exam.getExams(it, start, end, true),
                         timetable.getTimetable(it, start, end, true),
-                        messages.getMessages(it.studentId, 1, true, true),
+                        messages.getMessages(it.studentId, MessagesRepository.MessageFolder.RECEIVED, true, true),
                         note.getNotes(it, true, true),
                         homework.getHomework(it, LocalDate.now(), true),
                         homework.getHomework(it, LocalDate.now().plusDays(1), true)

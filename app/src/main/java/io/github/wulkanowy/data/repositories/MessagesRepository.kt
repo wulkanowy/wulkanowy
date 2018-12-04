@@ -18,14 +18,20 @@ class MessagesRepository @Inject constructor(
     private val remote: MessagesRemote
 ) {
 
-    fun getMessages(studentId: Int, folderId: Int, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
-        return local.getMessages(studentId, folderId).filter { !forceRefresh }
+    enum class MessageFolder(val id: Int = 1) {
+        RECEIVED(1),
+        SENT(2),
+        TRASHED(3)
+    }
+
+    fun getMessages(studentId: Int, folder: MessageFolder, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
+        return local.getMessages(studentId, folder).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
-                    if (it) remote.getMessages(studentId, folderId)
+                    if (it) remote.getMessages(studentId, folder)
                     else Single.error(UnknownHostException())
                 }.flatMap { new ->
-                    local.getMessages(studentId, folderId).toSingle(emptyList())
+                    local.getMessages(studentId, folder).toSingle(emptyList())
                         .doOnSuccess { old ->
                             local.deleteMessages(old - new)
                             local.saveMessages((new - old)
@@ -33,7 +39,7 @@ class MessagesRepository @Inject constructor(
                                     if (notify) it.isNotified = false
                                 })
                         }
-                }.flatMap { local.getMessages(studentId, folderId).toSingle(emptyList()) }
+                }.flatMap { local.getMessages(studentId, folder).toSingle(emptyList()) }
             )
     }
 
