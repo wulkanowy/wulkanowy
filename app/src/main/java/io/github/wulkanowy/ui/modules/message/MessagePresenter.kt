@@ -5,7 +5,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Completable
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class MessagePresenter @Inject constructor(
@@ -16,7 +16,7 @@ class MessagePresenter @Inject constructor(
 
     override fun onAttachView(view: MessageView) {
         super.onAttachView(view)
-        disposable.add(Completable.timer(150, TimeUnit.MILLISECONDS, schedulers.mainThread)
+        disposable.add(Completable.timer(150, MILLISECONDS, schedulers.mainThread)
             .subscribe {
                 view.initView()
                 loadData()
