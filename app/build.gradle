@@ -51,7 +51,7 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            buildConfigField "boolean", "FABRIC_ENABLED", fabricApiKey == "null" ? "false" : "true"
+            buildConfigField "boolean", "FABRIC_ENABLED", fabricApiKey != "null" && !project.hasProperty("disableCrashlytics") ? "true" : "false"
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
             testCoverageEnabled = true
