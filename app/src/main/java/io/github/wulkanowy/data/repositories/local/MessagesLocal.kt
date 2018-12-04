@@ -30,8 +30,8 @@ class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
         return messagesDb.insertAll(messages)
     }
 
-    fun updateMessages(messages: List<Message>): Completable {
-        return Completable.fromCallable { messagesDb.updateAll(messages) }
+    fun updateMessages(messages: List<Message>) {
+        return messagesDb.updateAll(messages)
     }
 
     fun deleteMessages(messages: List<Message>) {

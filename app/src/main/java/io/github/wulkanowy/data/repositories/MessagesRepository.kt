@@ -6,7 +6,6 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.local.MessagesLocal
 import io.github.wulkanowy.data.repositories.remote.MessagesRemote
-import io.reactivex.Completable
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -55,7 +54,7 @@ class MessagesRepository @Inject constructor(
                                     this.id = message.id
                                     content = new.single { this.realId == message.realId }.content
                                 }
-                            }).subscribe()
+                            })
                         }
                 }.flatMap {
                     local.getMessage(id).toSingle(emptyList())
@@ -67,7 +66,7 @@ class MessagesRepository @Inject constructor(
         return local.getNewMessages(student).toSingle(emptyList())
     }
 
-    fun updateMessages(messages: List<Message>): Completable {
-        return local.updateMessages(messages)
+    fun updateMessages(messages: List<Message>) {
+        local.updateMessages(messages)
     }
 }
