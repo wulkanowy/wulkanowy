@@ -22,5 +22,5 @@ abstract class MessageModule {
 
     @PerChildFragment
     @ContributesAndroidInjector
-    abstract fun bindMessageInboxFragment(): MessageTabFragment
+    abstract fun bindMessageTabFragment(): MessageTabFragment
 }
