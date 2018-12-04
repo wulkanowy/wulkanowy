@@ -24,9 +24,9 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     companion object {
         const val MESSAGE_ID_KEY = "message_id"
 
-        fun newInstance(messageId: Long): MessagePreviewFragment {
+        fun newInstance(messageId: Int?): MessagePreviewFragment {
             return MessagePreviewFragment().apply {
-                arguments = Bundle().apply { putLong(MessagePreviewFragment.MESSAGE_ID_KEY, messageId) }
+                arguments = Bundle().apply { putInt(MessagePreviewFragment.MESSAGE_ID_KEY, messageId ?: 0) }
             }
         }
     }
@@ -38,7 +38,7 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         messageContainer = message
-        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getLong(MESSAGE_ID_KEY) ?: 0)
+        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getInt(MESSAGE_ID_KEY) ?: 0)
     }
 
     override fun setSubject(subject: String) {
@@ -67,7 +67,7 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putLong(MESSAGE_ID_KEY, presenter.messageId)
+        outState.putInt(MESSAGE_ID_KEY, presenter.messageId)
     }
 
     override fun onDestroyView() {

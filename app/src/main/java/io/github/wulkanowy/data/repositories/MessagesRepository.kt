@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.local.MessagesLocal
 import io.github.wulkanowy.data.repositories.remote.MessagesRemote
+import io.reactivex.Completable
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -43,7 +44,7 @@ class MessagesRepository @Inject constructor(
             )
     }
 
-    fun getMessage(studentId: Int, id: Long): Single<List<Message>> {
+    fun getMessage(studentId: Int, id: Int, markAsRead: Boolean = false): Single<List<Message>> {
         return local.getMessage(id)
             .filter { messages -> messages.none { it.content.isNullOrEmpty() } }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
@@ -53,7 +54,7 @@ class MessagesRepository @Inject constructor(
                 }
                 .map { messages -> messages.filter { it.content.isNullOrEmpty() } }
                 .flatMap { dbMessages ->
-                    remote.getMessagesContent(studentId, dbMessages)
+                    remote.getMessagesContent(studentId, dbMessages, markAsRead)
                         .doOnSuccess { new ->
                             local.updateMessages(dbMessages.map { message ->
                                 message.copy(unread = false).apply {
@@ -70,6 +71,10 @@ class MessagesRepository @Inject constructor(
 
     fun getNewMessages(student: Student): Single<List<Message>> {
         return local.getNewMessages(student).toSingle(emptyList())
+    }
+
+    fun updateMessage(message: Message): Completable {
+        return local.updateMessage(message)
     }
 
     fun updateMessages(messages: List<Message>) {

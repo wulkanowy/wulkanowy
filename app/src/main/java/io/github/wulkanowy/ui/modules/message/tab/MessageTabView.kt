@@ -26,7 +26,7 @@ interface MessageTabView : BaseView {
 
     fun showRefresh(show: Boolean)
 
-    fun openMessage(messageId: Long)
+    fun openMessage(messageId: Int?)
 
     fun notifyParentDataLoaded()
 }

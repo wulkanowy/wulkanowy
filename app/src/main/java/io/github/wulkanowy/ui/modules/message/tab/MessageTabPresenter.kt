@@ -2,12 +2,14 @@ package io.github.wulkanowy.ui.modules.message.tab
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.ErrorHandler
+import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.message.MessageItem
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.logEvent
+import timber.log.Timber
 import javax.inject.Inject
 
 class MessageTabPresenter @Inject constructor(
@@ -59,6 +61,25 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onMessageItemSelected(item: AbstractFlexibleItem<*>) {
-        view?.openMessage((item as MessageItem).message.id)
+        if (item is MessageItem) {
+            view?.run {
+                openMessage(item.message.realId)
+                if (item.message.unread == true) {
+                    item.message = item.message.copy(unread = false)
+                    updateItem(item)
+                    updateMessage(item.message)
+                }
+            }
+        }
+    }
+
+    private fun updateMessage(message: Message) {
+        disposable.add(messagesRepository.updateMessage(message)
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
+                Timber.d("Message ${message.realId} updated")
+            }) { error -> errorHandler.dispatch(error) }
+        )
     }
 }

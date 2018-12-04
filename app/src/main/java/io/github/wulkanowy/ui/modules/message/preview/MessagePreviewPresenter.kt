@@ -16,19 +16,19 @@ class MessagePreviewPresenter @Inject constructor(
     private val studentRepository: StudentRepository
 ) : BasePresenter<MessagePreviewView>(errorHandler) {
 
-    var messageId: Long = 0
+    var messageId: Int = 0
 
-    fun onAttachView(view: MessagePreviewView, id: Long) {
+    fun onAttachView(view: MessagePreviewView, id: Int) {
         super.onAttachView(view)
         loadData(id)
     }
 
-    private fun loadData(id: Long) {
+    private fun loadData(id: Int) {
         messageId = id
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()
-                .flatMap { messagesRepository.getMessage(it.studentId, id) }
+                .flatMap { messagesRepository.getMessage(it.studentId, id, true) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {

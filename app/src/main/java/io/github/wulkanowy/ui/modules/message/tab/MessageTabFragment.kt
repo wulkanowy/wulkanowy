@@ -98,7 +98,7 @@ class MessageTabFragment : BaseFragment(), MessageTabView, MessageView.MessageCh
         messageTabSwipe.isRefreshing = show
     }
 
-    override fun openMessage(messageId: Long) {
+    override fun openMessage(messageId: Int?) {
         (activity as? MainActivity)?.pushView(MessagePreviewFragment.newInstance(messageId))
     }
 
