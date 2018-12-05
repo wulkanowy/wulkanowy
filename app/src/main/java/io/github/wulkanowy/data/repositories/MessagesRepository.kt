@@ -44,27 +44,23 @@ class MessagesRepository @Inject constructor(
             )
     }
 
-    fun getMessage(studentId: Int, id: Int, markAsRead: Boolean = false): Single<List<Message>> {
-        return local.getMessage(id)
-            .filter { messages -> messages.none { it.content.isNullOrEmpty() } }
+    fun getMessage(studentId: Int, messageId: Int, markAsRead: Boolean = false): Single<Message> {
+        return local.getMessage(studentId, messageId)
+            .filter { !it.content.isNullOrEmpty() }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
-                    if (it) local.getMessage(id).toSingle(emptyList())
+                    if (it) local.getMessage(studentId, messageId).toSingle()
                     else Single.error(UnknownHostException())
                 }
-                .map { messages -> messages.filter { it.content.isNullOrEmpty() } }
-                .flatMap { dbMessages ->
-                    remote.getMessagesContent(studentId, dbMessages, markAsRead)
-                        .doOnSuccess { new ->
-                            local.updateMessages(dbMessages.map { message ->
-                                message.copy(unread = false).apply {
-                                    this.id = message.id
-                                    content = new.single { this.realId == message.realId }.content
-                                }
-                            })
-                        }
+                .flatMap { dbMessage ->
+                    remote.getMessagesContent(dbMessage, markAsRead).doOnSuccess {
+                        local.updateMessage(dbMessage.copy(unread = false).apply {
+                            id = dbMessage.id
+                            content = it
+                        })
+                    }
                 }.flatMap {
-                    local.getMessage(id).toSingle(emptyList())
+                    local.getMessage(studentId, messageId).toSingle()
                 }
             )
     }
@@ -74,7 +70,7 @@ class MessagesRepository @Inject constructor(
     }
 
     fun updateMessage(message: Message): Completable {
-        return local.updateMessage(message)
+        return Completable.fromCallable { local.updateMessage(message) }
     }
 
     fun updateMessages(messages: List<Message>) {

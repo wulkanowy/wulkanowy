@@ -23,8 +23,8 @@ interface MessagesDao {
     @Update
     fun updateAll(messages: List<Message>)
 
-    @Query("SELECT * FROM Messages WHERE real_id = :id")
-    fun get(id: Int): Maybe<List<Message>>
+    @Query("SELECT * FROM Messages WHERE student_id = :studentId AND real_id = :id")
+    fun get(studentId: Int, id: Int): Maybe<Message>
 
     @Query("SELECT * FROM Messages WHERE student_id = :studentId AND folder_id = :folder ORDER BY date DESC")
     fun load(studentId: Int, folder: Int): Maybe<List<Message>>

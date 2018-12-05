@@ -28,7 +28,7 @@ class MessagePreviewPresenter @Inject constructor(
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()
-                .flatMap { messagesRepository.getMessage(it.studentId, id, true) }
+                .flatMap { messagesRepository.getMessage(it.studentId, messageId, true) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {
@@ -36,7 +36,7 @@ class MessagePreviewPresenter @Inject constructor(
                 }
                 .subscribe({ messages ->
                     view?.run {
-                        messages.first().let {
+                        messages.let {
                             setSubject(if (it.subject.isNotBlank()) it.subject else noSubjectString)
                             setDate(it.date?.toFormattedString("yyyy-MM-dd HH:mm:ss"))
                             setContent(it.content)
@@ -45,7 +45,7 @@ class MessagePreviewPresenter @Inject constructor(
                             else setSender(it.sender)
                         }
                     }
-                    logEvent("Message load", mapOf("length" to messages.first().content?.length))
+                    logEvent("Message load", mapOf("length" to messages.content?.length))
                 }) {
                     errorHandler.dispatch(it)
                 })
