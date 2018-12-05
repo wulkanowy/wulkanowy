@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.repositories.remote
 
 import io.github.wulkanowy.api.Api
+import io.github.wulkanowy.api.messages.Folder
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.utils.toLocalDateTime
@@ -11,11 +12,7 @@ import io.github.wulkanowy.api.messages.Message as ApiMessage
 class MessagesRemote @Inject constructor(private val api: Api) {
 
     fun getMessages(studentId: Int, folder: MessagesRepository.MessageFolder): Single<List<Message>> {
-        return when (folder) {
-            MessagesRepository.MessageFolder.RECEIVED -> api.getReceivedMessages()
-            MessagesRepository.MessageFolder.SENT -> api.getSentMessages()
-            MessagesRepository.MessageFolder.TRASHED -> api.getDeletedMessages()
-        }.map { messages ->
+        return api.getMessages(Folder.valueOf(folder.name)).map { messages ->
             messages.map {
                 Message(
                     studentId = studentId,
