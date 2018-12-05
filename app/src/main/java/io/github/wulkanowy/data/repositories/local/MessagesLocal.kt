@@ -4,9 +4,7 @@ import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.MessagesRepository
-import io.reactivex.Completable
 import io.reactivex.Maybe
-import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,7 +12,7 @@ import javax.inject.Singleton
 class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
 
     fun getMessage(studentId: Int, id: Int): Maybe<Message> {
-        return messagesDb.get(studentId, id)
+        return messagesDb.loadOne(studentId, id)
     }
 
     fun getMessages(studentId: Int, folder: MessagesRepository.MessageFolder): Maybe<List<Message>> {
@@ -25,7 +23,7 @@ class MessagesLocal @Inject constructor(private val messagesDb: MessagesDao) {
     }
 
     fun getNewMessages(student: Student): Maybe<List<Message>> {
-        return messagesDb.getNewMessages(student.studentId)
+        return messagesDb.loadNewMessages(student.studentId)
     }
 
     fun saveMessages(messages: List<Message>): List<Long> {
