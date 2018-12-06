@@ -10,8 +10,8 @@ import io.github.wulkanowy.data.repositories.SubjectRepostory
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calculatePercentage
+import io.github.wulkanowy.utils.getPolishName
 import io.github.wulkanowy.utils.logEvent
-import io.github.wulkanowy.utils.monthName
 import java.lang.String.format
 import java.util.Locale.FRANCE
 import javax.inject.Inject
@@ -98,7 +98,7 @@ class AttendanceSummaryPresenter @Inject constructor(
     private fun createAttendanceSummaryItems(attendanceSummary: List<AttendanceSummary>): List<AttendanceSummaryItem> {
         return attendanceSummary.sortedByDescending { it.id }.map {
             AttendanceSummaryItem(
-                month = it.monthName,
+                month = it.month.getPolishName(),
                 percentage = formatPercentage(it.calculatePercentage()),
                 present = it.presence.toString(),
                 absence = it.absence.toString(),

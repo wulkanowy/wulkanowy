@@ -1,28 +1,6 @@
 package io.github.wulkanowy.utils
 
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
-import org.threeten.bp.Month
-import org.threeten.bp.format.TextStyle.FULL
-import java.util.Locale
-
-inline val AttendanceSummary.monthName: String
-    get() {
-        return Month.of(when (month) {
-            "I" -> 1
-            "II" -> 2
-            "III" -> 3
-            "IV" -> 4
-            "V" -> 5
-            "VI" -> 6
-            "VII" -> 7
-            "VIII" -> 8
-            "IX" -> 9
-            "X" -> 10
-            "XI" -> 11
-            "XII" -> 12
-            else -> 0
-        }).getDisplayName(FULL, Locale.getDefault())
-    }
 
 /**
  * [UONET+ - Zasady tworzenia podsumowań liczb uczniów obecnych i nieobecnych w tabeli frekwencji]

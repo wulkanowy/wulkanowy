@@ -3,6 +3,7 @@ package io.github.wulkanowy.data.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import org.threeten.bp.Month
 import java.io.Serializable
 
 @Entity(tableName = "AttendanceSummary")
@@ -17,7 +18,7 @@ data class AttendanceSummary(
     @ColumnInfo(name = "subject_id")
     var subjectId: Int = 0,
 
-    val month: String,
+    val month: Month,
 
     val presence: Int,
 
