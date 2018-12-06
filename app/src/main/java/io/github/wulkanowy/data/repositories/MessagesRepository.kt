@@ -37,7 +37,7 @@ class MessagesRepository @Inject constructor(
                             local.deleteMessages(old - new)
                             local.saveMessages((new - old)
                                 .onEach {
-                                    it.isNotified = notify
+                                    it.isNotified = !notify
                                 })
                         }
                 }.flatMap { local.getMessages(studentId, folder).toSingle(emptyList()) }
