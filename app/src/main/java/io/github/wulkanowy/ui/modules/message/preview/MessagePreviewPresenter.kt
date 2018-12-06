@@ -44,7 +44,10 @@ class MessagePreviewPresenter @Inject constructor(
                         }
                     }
                     logEvent("Message load", mapOf("length" to messages.content?.length))
-                }) { errorHandler.dispatch(it) })
+                }) {
+                    view?.showMessageError()
+                    errorHandler.dispatch(it)
+                })
         }
     }
 }

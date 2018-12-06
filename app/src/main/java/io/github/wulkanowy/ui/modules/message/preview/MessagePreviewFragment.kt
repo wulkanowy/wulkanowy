@@ -65,6 +65,10 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
         messageProgress.visibility = if (show) View.VISIBLE else View.GONE
     }
 
+    override fun showMessageError() {
+        messageError.visibility = View.VISIBLE
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(MESSAGE_ID_KEY, presenter.messageId)

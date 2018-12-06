@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
-import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.BaseView
 
 interface MessagePreviewView : BaseView {
@@ -18,4 +17,6 @@ interface MessagePreviewView : BaseView {
     fun setContent(content: String?)
 
     fun showProgress(show: Boolean)
+
+    fun showMessageError()
 }
