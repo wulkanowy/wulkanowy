@@ -65,7 +65,7 @@ class MessageTabPresenter @Inject constructor(
             view?.run {
                 openMessage(item.message.realId)
                 if (item.message.unread == true) {
-                    item.message = item.message.copy(unread = false)
+                    item.message.unread = false
                     updateItem(item)
                     updateMessage(item.message)
                 }

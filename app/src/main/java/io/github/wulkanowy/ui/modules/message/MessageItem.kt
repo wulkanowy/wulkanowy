@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.message
 
-import android.graphics.Typeface
+import android.graphics.Typeface.BOLD
+import android.graphics.Typeface.NORMAL
 import android.view.View
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -12,7 +13,7 @@ import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_message.*
 
-class MessageItem(var message: Message, private val noSubjectString: String) :
+class MessageItem(val message: Message, private val noSubjectString: String) :
     AbstractFlexibleItem<MessageItem.ViewHolder>() {
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
@@ -26,17 +27,19 @@ class MessageItem(var message: Message, private val noSubjectString: String) :
         position: Int, payloads: MutableList<Any>?
     ) {
         holder.apply {
+            val style = if (message.unread == true) BOLD else NORMAL
+
             messageItemAuthor.run {
                 text = if (message.recipient?.isNotBlank() == true) message.recipient else message.sender
-                setTypeface(null, if (message.unread == true) Typeface.BOLD else Typeface.NORMAL)
+                setTypeface(null, style)
             }
             messageItemSubject.run {
                 text = if (message.subject.isNotBlank()) message.subject else noSubjectString
-                setTypeface(null, if (message.unread == true) Typeface.BOLD else Typeface.NORMAL)
+                setTypeface(null, style)
             }
             messageItemDate.run {
                 text = message.date?.toFormattedString()
-                setTypeface(null, if (message.unread == true) Typeface.BOLD else Typeface.NORMAL)
+                setTypeface(null, style)
             }
         }
     }

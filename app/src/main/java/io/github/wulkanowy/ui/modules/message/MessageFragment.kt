@@ -7,13 +7,15 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.repositories.MessagesRepository
+import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.RECEIVED
+import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.SENT
+import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.TRASHED
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BasePagerAdapter
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.tab.MessageTabFragment
 import io.github.wulkanowy.utils.setOnSelectPageListener
-import kotlinx.android.synthetic.main.fragment_messages.*
+import kotlinx.android.synthetic.main.fragment_message.*
 import javax.inject.Inject
 
 class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
@@ -35,7 +37,7 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
         get() = messageViewPager.currentItem
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_messages, container, false)
+        return inflater.inflate(R.layout.fragment_message, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -45,9 +47,9 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
 
     override fun initView() {
         pagerAdapter.fragments.putAll(mapOf(
-            getString(R.string.message_inbox) to MessageTabFragment.newInstance(MessagesRepository.MessageFolder.RECEIVED),
-            getString(R.string.message_sent) to MessageTabFragment.newInstance(MessagesRepository.MessageFolder.SENT),
-            getString(R.string.message_trash) to MessageTabFragment.newInstance(MessagesRepository.MessageFolder.TRASHED)
+            getString(R.string.message_inbox) to MessageTabFragment.newInstance(RECEIVED),
+            getString(R.string.message_sent) to MessageTabFragment.newInstance(SENT),
+            getString(R.string.message_trash) to MessageTabFragment.newInstance(TRASHED)
         ))
         messageViewPager.run {
             adapter = pagerAdapter

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
-import kotlinx.android.synthetic.main.fragment_message.*
+import kotlinx.android.synthetic.main.fragment_message_preview.*
 import javax.inject.Inject
 
 class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.TitledView {
@@ -26,13 +26,13 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
 
         fun newInstance(messageId: Int?): MessagePreviewFragment {
             return MessagePreviewFragment().apply {
-                arguments = Bundle().apply { putInt(MessagePreviewFragment.MESSAGE_ID_KEY, messageId ?: 0) }
+                arguments = Bundle().apply { putInt(MESSAGE_ID_KEY, messageId ?: 0) }
             }
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_message, container, false)
+        return inflater.inflate(R.layout.fragment_message_preview, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

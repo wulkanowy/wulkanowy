@@ -31,9 +31,7 @@ class MessagePreviewPresenter @Inject constructor(
                 .flatMap { messagesRepository.getMessage(it.studentId, messageId, true) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
-                .doFinally {
-                    view?.showProgress(false)
-                }
+                .doFinally { view?.showProgress(false) }
                 .subscribe({ messages ->
                     view?.run {
                         messages.let {
@@ -46,9 +44,7 @@ class MessagePreviewPresenter @Inject constructor(
                         }
                     }
                     logEvent("Message load", mapOf("length" to messages.content?.length))
-                }) {
-                    errorHandler.dispatch(it)
-                })
+                }) { errorHandler.dispatch(it) })
         }
     }
 }
