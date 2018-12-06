@@ -73,7 +73,7 @@ class MessagesRepository @Inject constructor(
         return Completable.fromCallable { local.updateMessage(message) }
     }
 
-    fun updateMessages(messages: List<Message>) {
-        local.updateMessages(messages)
+    fun updateMessages(messages: List<Message>): Completable {
+        return Completable.fromCallable { local.updateMessages(messages) }
     }
 }

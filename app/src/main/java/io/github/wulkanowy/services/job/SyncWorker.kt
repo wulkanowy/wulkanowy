@@ -139,7 +139,7 @@ class SyncWorker : SimpleJobService() {
                 if (it.isNotEmpty()) {
                     Timber.d("Found ${it.size} unread messages")
                     MessageNotification(applicationContext).sendNotification(it)
-                    messages.updateMessages(it.map { message -> message.apply { isNotified = true } })
+                    messages.updateMessages(it.map { message -> message.apply { isNotified = true } }).subscribe()
                 }
             }, { Timber.e(it, "Message notifications sending failed") })
         )
