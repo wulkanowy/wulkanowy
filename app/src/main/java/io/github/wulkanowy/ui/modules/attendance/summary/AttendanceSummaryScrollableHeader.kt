@@ -9,7 +9,7 @@ import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.scrollable_header_attendance_summary.*
 
-class AttendanceSummaryScrollableHeader(private val finalAttendance: String) :
+class AttendanceSummaryScrollableHeader(private val percentage: String) :
     AbstractFlexibleItem<AttendanceSummaryScrollableHeader.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.scrollable_header_attendance_summary
@@ -19,9 +19,7 @@ class AttendanceSummaryScrollableHeader(private val finalAttendance: String) :
     }
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: ViewHolder?, position: Int, payloads: MutableList<Any>?) {
-        holder?.apply {
-            attendanceSummaryScrollableHeaderFinal.text = finalAttendance
-        }
+        holder?.apply { attendanceSummaryScrollableHeaderPercentage.text = percentage }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -30,13 +28,13 @@ class AttendanceSummaryScrollableHeader(private val finalAttendance: String) :
 
         other as AttendanceSummaryScrollableHeader
 
-        if (finalAttendance != other.finalAttendance) return false
+        if (percentage != other.percentage) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        return finalAttendance.hashCode()
+        return percentage.hashCode()
     }
 
     class ViewHolder(view: View?, adapter: FlexibleAdapter<IFlexible<*>>?) : FlexibleViewHolder(view, adapter),

@@ -9,27 +9,25 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/attendanceSummarySubjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/windowBackground"
+            android:elevation="5dp"
+            android:padding="15dp"
+            android:spinnerMode="dialog" />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/attendanceSummarySwipe"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/attendanceSummaryRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/attendanceSummarySubjects"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="?android:attr/windowBackground"
-            android:elevation="10dp"
-            android:padding="15dp"
-            android:spinnerMode="dialog" />
     </LinearLayout>
 
     <ProgressBar

@@ -51,18 +51,16 @@ class AttendanceSummaryFragment : BaseFragment(), AttendanceSummaryView, MainVie
     }
 
     override fun initView() {
-        context?.run {
-            subjectsAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ArrayList<String>())
-            subjectsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
-
-        attendanceSummaryAdapter.setDisplayHeadersAtStartUp(true)
-
         attendanceSummaryRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = attendanceSummaryAdapter
         }
         attendanceSummarySwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+
+        context?.let {
+            subjectsAdapter = ArrayAdapter(it, android.R.layout.simple_spinner_item, ArrayList<String>())
+            subjectsAdapter.setDropDownViewResource(R.layout.item_attendance_summary_subject)
+        }
 
         attendanceSummarySubjects.run {
             adapter = subjectsAdapter

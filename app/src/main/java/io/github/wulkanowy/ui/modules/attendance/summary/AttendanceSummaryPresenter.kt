@@ -11,6 +11,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calculatePercentage
 import io.github.wulkanowy.utils.logEvent
+import io.github.wulkanowy.utils.monthName
 import java.lang.String.format
 import java.util.Locale.FRANCE
 import javax.inject.Inject
@@ -41,6 +42,10 @@ class AttendanceSummaryPresenter @Inject constructor(
     }
 
     fun onSubjectSelected(name: String) {
+        view?.run {
+            showContent(false)
+            showProgress(true)
+        }
         loadData(subjects.singleOrNull { it.name == name }?.realId ?: -1)
     }
 
@@ -54,12 +59,6 @@ class AttendanceSummaryPresenter @Inject constructor(
                 .map { createAttendanceSummaryItems(it) to AttendanceSummaryScrollableHeader(formatPercentage(it.calculatePercentage())) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
-                .doOnSubscribe {
-                    view?.run {
-                        showProgress(!forceRefresh)
-                        showContent(forceRefresh)
-                    }
-                }
                 .doFinally {
                     view?.run {
                         hideRefresh()
@@ -97,49 +96,18 @@ class AttendanceSummaryPresenter @Inject constructor(
     }
 
     private fun createAttendanceSummaryItems(attendanceSummary: List<AttendanceSummary>): List<AttendanceSummaryItem> {
-        return attendanceSummary.sortedByDescending { it.id }.flatMap { summary ->
-            AttendanceSummaryHeader(
-                name = summary.month,
-                value = formatPercentage(summary.calculatePercentage())
-            ).let {
-                listOf(
-                    AttendanceSummaryItem(
-                        header = it,
-                        name = "Obecność",
-                        value = summary.presence.toString()
-                    ),
-                    AttendanceSummaryItem(
-                        header = it,
-                        name = "Nieobecność",
-                        value = summary.absence.toString()
-                    ),
-                    AttendanceSummaryItem(
-                        header = it,
-                        name = "Nieobecność usprawiedliwiona",
-                        value = summary.absenceExcused.toString()
-                    ),
-                    AttendanceSummaryItem(
-                        header = it,
-                        name = "Nieobecność z przyczyn szkolnych",
-                        value = summary.absenceForSchoolReasons.toString()
-                    ),
-                    AttendanceSummaryItem(
-                        header = it,
-                        name = "Zwolnienie",
-                        value = summary.exemption.toString()
-                    ),
-                    AttendanceSummaryItem(
-                        header = it,
-                        name = "Spóźnienie",
-                        value = summary.lateness.toString()
-                    ),
-                    AttendanceSummaryItem(
-                        header = it,
-                        name = "Spóźnienie usprawiedliwione",
-                        value = summary.latenessExcused.toString()
-                    )
-                )
-            }
+        return attendanceSummary.sortedByDescending { it.id }.map {
+            AttendanceSummaryItem(
+                month = it.monthName,
+                percentage = formatPercentage(it.calculatePercentage()),
+                present = it.presence.toString(),
+                absence = it.absence.toString(),
+                excusedAbsence = it.absenceExcused.toString(),
+                schoolAbsence = it.absenceForSchoolReasons.toString(),
+                exemption = it.exemption.toString(),
+                lateness = it.lateness.toString(),
+                excusedLateness = it.latenessExcused.toString()
+            )
         }
     }
 
