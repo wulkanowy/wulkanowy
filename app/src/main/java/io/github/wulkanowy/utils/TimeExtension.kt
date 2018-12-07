@@ -40,7 +40,7 @@ fun LocalDateTime.toFormattedString(format: String = DATE_PATTERN): String = thi
  * https://github.com/ThreeTen/threetenbp/issues/55
  */
 
-fun Month.getPolishName(): String {
+fun Month.getFormattedName(): String {
     return getDisplayName(FULL_STANDALONE, Locale.getDefault())
         .let {
             when (it) {

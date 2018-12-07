@@ -40,6 +40,9 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     override val isViewEmpty: Boolean
         get() = attendanceAdapter.isEmpty
 
+    override val currentStackSize: Int?
+        get() = (activity as? MainActivity)?.currentStackSize
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -96,6 +99,10 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
 
     override fun onFragmentReselected() {
         presenter.onViewReselected()
+    }
+
+    override fun popView() {
+        (activity as? MainActivity)?.popView()
     }
 
     override fun showEmpty(show: Boolean) {

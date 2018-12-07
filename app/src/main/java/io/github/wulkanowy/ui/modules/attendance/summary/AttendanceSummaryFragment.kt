@@ -84,6 +84,10 @@ class AttendanceSummaryFragment : BaseFragment(), AttendanceSummaryView, MainVie
         }
     }
 
+    override fun clearView() {
+        attendanceSummaryAdapter.clear()
+    }
+
     override fun showEmpty(show: Boolean) {
         attendanceSummaryEmpty.visibility = if (show) VISIBLE else GONE
     }
@@ -94,6 +98,10 @@ class AttendanceSummaryFragment : BaseFragment(), AttendanceSummaryView, MainVie
 
     override fun showContent(show: Boolean) {
         attendanceSummaryRecycler.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun showSubjects(show: Boolean) {
+        attendanceSummarySubjects.visibility = if (show) VISIBLE else VISIBLE
     }
 
     override fun hideRefresh() {

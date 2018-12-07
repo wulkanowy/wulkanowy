@@ -19,4 +19,8 @@ interface AttendanceSummaryView : BaseView {
     fun updateDataSet(data: List<AttendanceSummaryItem>, header: AttendanceSummaryScrollableHeader)
 
     fun updateSubjects(data: ArrayList<String>)
+
+    fun showSubjects(show: Boolean)
+
+    fun clearView()
 }

@@ -64,7 +64,7 @@ class ExamPresenter @Inject constructor(
                 loadData(it)
                 reloadView()
                 view?.resetView()
-            } else view?.resetView()
+            } else if (view?.isViewEmpty == false) view?.resetView()
         }
     }
 

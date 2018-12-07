@@ -10,10 +10,11 @@ import io.github.wulkanowy.data.repositories.SubjectRepostory
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calculatePercentage
-import io.github.wulkanowy.utils.getPolishName
+import io.github.wulkanowy.utils.getFormattedName
 import io.github.wulkanowy.utils.logEvent
 import java.lang.String.format
 import java.util.Locale.FRANCE
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class AttendanceSummaryPresenter @Inject constructor(
@@ -45,6 +46,7 @@ class AttendanceSummaryPresenter @Inject constructor(
         view?.run {
             showContent(false)
             showProgress(true)
+            clearView()
         }
         loadData(subjects.singleOrNull { it.name == name }?.realId ?: -1)
     }
@@ -54,6 +56,7 @@ class AttendanceSummaryPresenter @Inject constructor(
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()
+                .delay(200, MILLISECONDS)
                 .flatMap { semesterRepository.getCurrentSemester(it) }
                 .flatMap { attendanceSummaryRepository.getAttendanceSummary(it, subjectId, forceRefresh) }
                 .map { createAttendanceSummaryItems(it) to AttendanceSummaryScrollableHeader(formatPercentage(it.calculatePercentage())) }
@@ -88,17 +91,19 @@ class AttendanceSummaryPresenter @Inject constructor(
             .map { ArrayList(it.map { subject -> subject.name }) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({ view?.updateSubjects(it) }, {
-                view?.run { showEmpty(isViewEmpty) }
-                errorHandler.dispatch(it)
-            })
+            .subscribe({
+                view?.run {
+                    view?.updateSubjects(it)
+                    showSubjects(true)
+                }
+            }, { errorHandler.dispatch(it) })
         )
     }
 
     private fun createAttendanceSummaryItems(attendanceSummary: List<AttendanceSummary>): List<AttendanceSummaryItem> {
         return attendanceSummary.sortedByDescending { it.id }.map {
             AttendanceSummaryItem(
-                month = it.month.getPolishName(),
+                month = it.month.getFormattedName(),
                 percentage = formatPercentage(it.calculatePercentage()),
                 present = it.presence.toString(),
                 absence = it.absence.toString(),
