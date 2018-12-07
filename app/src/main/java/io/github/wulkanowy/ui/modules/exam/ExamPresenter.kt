@@ -63,7 +63,6 @@ class ExamPresenter @Inject constructor(
             if (currentDate != it) {
                 loadData(it)
                 reloadView()
-                view?.resetView()
             } else if (view?.isViewEmpty == false) view?.resetView()
         }
     }
