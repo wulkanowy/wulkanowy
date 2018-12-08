@@ -1,5 +1,8 @@
 package io.github.wulkanowy.ui.modules.attendance.summary
 
+import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.Param.ITEM_ID
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.Subject
@@ -11,7 +14,6 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calculatePercentage
 import io.github.wulkanowy.utils.getFormattedName
-import io.github.wulkanowy.utils.logEvent
 import java.lang.String.format
 import java.util.Locale.FRANCE
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -23,7 +25,8 @@ class AttendanceSummaryPresenter @Inject constructor(
     private val subjectRepository: SubjectRepostory,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
-    private val schedulers: SchedulersProvider
+    private val schedulers: SchedulersProvider,
+    private val analytics: FirebaseAnalytics
 ) : BasePresenter<AttendanceSummaryView>(errorHandler) {
 
     private var subjects = emptyList<Subject>()
@@ -74,7 +77,13 @@ class AttendanceSummaryPresenter @Inject constructor(
                         showContent(it.first.isNotEmpty())
                         updateDataSet(it.first, it.second)
                     }
-                    logEvent("Attendance load", mapOf("forceRefresh" to forceRefresh))
+
+                    Bundle().apply {
+                        putInt("items", it.first.size)
+                        putBoolean("force_refresh", forceRefresh)
+                        putInt(ITEM_ID, subjectId)
+                        analytics.logEvent("load_attendance_summary", this)
+                    }
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.dispatch(it)

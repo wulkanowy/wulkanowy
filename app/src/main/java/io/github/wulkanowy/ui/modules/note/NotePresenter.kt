@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.modules.note
 
+import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.repositories.NoteRepository
@@ -8,7 +10,6 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.main.MainErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.github.wulkanowy.utils.logEvent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -17,7 +18,8 @@ class NotePresenter @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val studentRepository: StudentRepository,
     private val noteRepository: NoteRepository,
-    private val semesterRepository: SemesterRepository
+    private val semesterRepository: SemesterRepository,
+    private val analytics: FirebaseAnalytics
 ) : BasePresenter<NoteView>(errorHandler) {
 
     override fun onAttachView(view: NoteView) {
@@ -49,7 +51,12 @@ class NotePresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     showContent(it.isNotEmpty())
                 }
-                logEvent("Note load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
+
+                Bundle().apply {
+                    putInt("items", it.size)
+                    putBoolean("force_refresh", forceRefresh)
+                    analytics.logEvent("load_note", this)
+                }
             }, {
                 view?.run { showEmpty(isViewEmpty) }
                 errorHandler.dispatch(it)

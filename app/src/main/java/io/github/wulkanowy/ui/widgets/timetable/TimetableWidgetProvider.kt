@@ -8,14 +8,15 @@ import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.widget.RemoteViews
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.android.AndroidInjection
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.SharedPrefHelper
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
-import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
@@ -28,6 +29,9 @@ class TimetableWidgetProvider : AppWidgetProvider() {
 
     @Inject
     lateinit var sharedPref: SharedPrefHelper
+
+    @Inject
+    lateinit var analytics: FirebaseAnalytics
 
     companion object {
         const val EXTRA_TOGGLED_WIDGET_ID = "extraToggledWidget"
@@ -91,7 +95,15 @@ class TimetableWidgetProvider : AppWidgetProvider() {
                     }
                     BUTTON_RESET -> sharedPref.putLong(widgetKey, LocalDate.now().nextOrSameSchoolDay.toEpochDay(), true)
                 }
-                button?.also { btn -> if (btn.isNotBlank()) logEvent("Widget day changed", mapOf("button" to button)) }
+                button?.also { btn ->
+                    if (btn.isNotBlank()) {
+
+                        Bundle().apply {
+                            putString("button", button)
+                            analytics.logEvent("changed_timetable_widget_day", this)
+                        }
+                    }
+                }
             }
         }
         super.onReceive(context, intent)

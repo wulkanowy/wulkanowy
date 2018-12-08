@@ -1,5 +1,10 @@
 package io.github.wulkanowy.ui.modules.login.options
 
+import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.Event.SIGN_UP
+import com.google.firebase.analytics.FirebaseAnalytics.Param.GROUP_ID
+import com.google.firebase.analytics.FirebaseAnalytics.Param.SUCCESS
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -7,7 +12,6 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.github.wulkanowy.utils.logRegister
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -15,7 +19,8 @@ class LoginOptionsPresenter @Inject constructor(
     private val errorHandler: LoginErrorHandler,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
-    private val schedulers: SchedulersProvider
+    private val schedulers: SchedulersProvider,
+    private val analytics: FirebaseAnalytics
 ) : BasePresenter<LoginOptionsView>(errorHandler) {
 
     override fun onAttachView(view: LoginOptionsView) {
@@ -56,7 +61,13 @@ class LoginOptionsPresenter @Inject constructor(
                 }
             }
             .subscribe({
-                logRegister("Success", true, student.symbol, student.endpoint)
+                Bundle().apply {
+                    putBoolean(SUCCESS, true)
+                    putInt("students", 1)
+                    putString("endpoint", student.endpoint)
+                    putString(GROUP_ID, student.symbol)
+                    analytics.logEvent(SIGN_UP, this)
+                }
                 view?.openMainView()
             }, {
                 errorHandler.dispatch(it)

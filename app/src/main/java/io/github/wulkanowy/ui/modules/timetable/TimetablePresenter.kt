@@ -1,5 +1,8 @@
 package io.github.wulkanowy.ui.modules.timetable
 
+import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.Param.START_DATE
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -8,7 +11,6 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.main.MainErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.isHolidays
-import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
@@ -24,7 +26,8 @@ class TimetablePresenter @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val timetableRepository: TimetableRepository,
     private val studentRepository: StudentRepository,
-    private val semesterRepository: SemesterRepository
+    private val semesterRepository: SemesterRepository,
+    private val analytics: FirebaseAnalytics
 ) : BasePresenter<TimetableView>(errorHandler) {
 
     lateinit var currentDate: LocalDate
@@ -40,13 +43,11 @@ class TimetablePresenter @Inject constructor(
     fun onPreviousDay() {
         loadData(currentDate.previousSchoolDay)
         reloadView()
-        logEvent("Timetable day changed", mapOf("button" to "prev", "date" to currentDate.toFormattedString()))
     }
 
     fun onNextDay() {
         loadData(currentDate.nextSchoolDay)
         reloadView()
-        logEvent("Timetable day changed", mapOf("button" to "next", "date" to currentDate.toFormattedString()))
     }
 
     fun onSwipeRefresh() {
@@ -90,7 +91,14 @@ class TimetablePresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    logEvent("Timetable load", mapOf("items" to it.size, "forceRefresh" to forceRefresh, "date" to currentDate.toFormattedString()))
+
+
+                    Bundle().apply {
+                        putInt("items", it.size)
+                        putBoolean("force_refresh", forceRefresh)
+                        putString(START_DATE, currentDate.toFormattedString("yyyy-MM-dd"))
+                        analytics.logEvent("load_attendance", this)
+                    }
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.dispatch(it)

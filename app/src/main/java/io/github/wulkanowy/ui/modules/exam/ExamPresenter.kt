@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.modules.exam
 
+import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.repositories.ExamRepository
@@ -10,7 +12,6 @@ import io.github.wulkanowy.ui.modules.main.MainErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.isHolidays
-import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
@@ -25,7 +26,8 @@ class ExamPresenter @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val examRepository: ExamRepository,
     private val studentRepository: StudentRepository,
-    private val semesterRepository: SemesterRepository
+    private val semesterRepository: SemesterRepository,
+    private val analytics: FirebaseAnalytics
 ) : BasePresenter<ExamView>(errorHandler) {
 
     lateinit var currentDate: LocalDate
@@ -41,13 +43,11 @@ class ExamPresenter @Inject constructor(
     fun onPreviousWeek() {
         loadData(currentDate.minusDays(7))
         reloadView()
-        logEvent("Exam week changed", mapOf("button" to "prev", "date" to currentDate.toFormattedString()))
     }
 
     fun onNextWeek() {
         loadData(currentDate.plusDays(7))
         reloadView()
-        logEvent("Exam week changed", mapOf("button" to "next", "date" to currentDate.toFormattedString()))
     }
 
     fun onSwipeRefresh() {
@@ -92,7 +92,13 @@ class ExamPresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    logEvent("Exam load", mapOf("items" to it.size, "forceRefresh" to forceRefresh, "date" to currentDate.toFormattedString()))
+
+                    Bundle().apply {
+                        putInt("items", it.size)
+                        putBoolean("force_refresh", forceRefresh)
+                        putString(FirebaseAnalytics.Param.START_DATE, currentDate.toFormattedString("yyyy-MM-dd"))
+                        analytics.logEvent("load_exam", this)
+                    }
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.dispatch(it)

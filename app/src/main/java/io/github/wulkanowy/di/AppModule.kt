@@ -3,6 +3,7 @@ package io.github.wulkanowy.di
 import android.content.Context
 import com.firebase.jobdispatcher.FirebaseJobDispatcher
 import com.firebase.jobdispatcher.GooglePlayDriver
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Module
 import dagger.Provides
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -28,4 +29,7 @@ internal class AppModule {
     @Singleton
     @Provides
     fun provideJobDispatcher(context: Context) = FirebaseJobDispatcher(GooglePlayDriver(context))
+
+    @Provides
+    fun provideFirebaseAnalytics(context: Context) = FirebaseAnalytics.getInstance(context)
 }

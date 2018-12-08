@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
+import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.repositories.GradeRepository
@@ -11,7 +13,6 @@ import io.github.wulkanowy.ui.modules.main.MainErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
-import io.github.wulkanowy.utils.logEvent
 import io.github.wulkanowy.utils.valueColor
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,7 +23,8 @@ class GradeDetailsPresenter @Inject constructor(
     private val gradeRepository: GradeRepository,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    private val analytics: FirebaseAnalytics
 ) : BasePresenter<GradeDetailsView>(errorHandler) {
 
     override fun onAttachView(view: GradeDetailsView) {
@@ -51,7 +53,12 @@ class GradeDetailsPresenter @Inject constructor(
                     showContent(it.isNotEmpty())
                     updateData(it)
                 }
-                logEvent("Grade details load", mapOf("items" to it.size, "forceRefresh" to forceRefresh))
+
+                Bundle().apply {
+                    putInt("items", it.size)
+                    putBoolean("force_refresh", forceRefresh)
+                    analytics.logEvent("load_grade_details", this)
+                }
             }) {
                 view?.run { showEmpty(isViewEmpty) }
                 errorHandler.dispatch(it)

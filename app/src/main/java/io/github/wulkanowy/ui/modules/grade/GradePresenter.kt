@@ -1,12 +1,13 @@
 package io.github.wulkanowy.ui.modules.grade
 
+import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.main.MainErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.github.wulkanowy.utils.logEvent
 import io.reactivex.Completable
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
@@ -15,7 +16,8 @@ class GradePresenter @Inject constructor(
     private val errorHandler: MainErrorHandler,
     private val schedulers: SchedulersProvider,
     private val studentRepository: StudentRepository,
-    private val semesterRepository: SemesterRepository
+    private val semesterRepository: SemesterRepository,
+    private val analytics: FirebaseAnalytics
 ) : BasePresenter<GradeView>(errorHandler) {
 
     var selectedIndex = 0
@@ -52,7 +54,11 @@ class GradePresenter @Inject constructor(
                 notifyChildrenSemesterChange()
                 loadChild(it.currentPageIndex)
             }
-            logEvent("Semester changed", mapOf("number" to index + 1))
+
+            Bundle().apply {
+                putInt("number", index + 1)
+                analytics.logEvent("changed_semester", this)
+            }
         }
     }
 

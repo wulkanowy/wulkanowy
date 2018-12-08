@@ -1,18 +1,22 @@
 package io.github.wulkanowy.ui.modules.login.form
 
+import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.Event.SIGN_UP
+import com.google.firebase.analytics.FirebaseAnalytics.Param.GROUP_ID
+import com.google.firebase.analytics.FirebaseAnalytics.Param.SUCCESS
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.github.wulkanowy.utils.logEvent
-import io.github.wulkanowy.utils.logRegister
 import timber.log.Timber
 import javax.inject.Inject
 
 class LoginFormPresenter @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val errorHandler: LoginErrorHandler,
-    private val studentRepository: StudentRepository
+    private val studentRepository: StudentRepository,
+    private val analytics: FirebaseAnalytics
 ) : BasePresenter<LoginFormView>(errorHandler) {
 
     private var wasEmpty = false
@@ -57,15 +61,25 @@ class LoginFormPresenter @Inject constructor(
                     } else if (it.isEmpty() && wasEmpty) {
                         showSymbolInput()
                         setErrorSymbolIncorrect()
-                        logRegister("No student found", false, if (symbol.isEmpty()) "nil" else symbol, endpoint)
+                        Bundle().apply {
+                            putBoolean(SUCCESS, false)
+                            putInt("students", it.size)
+                            putString("endpoint", endpoint)
+                            putString(GROUP_ID, symbol.ifEmpty { "nil" })
+                            analytics.logEvent(SIGN_UP, this)
+                        }
                     } else {
                         switchOptionsView()
-                        logEvent("Found students", mapOf("students" to it.size, "symbol" to it.joinToString { student -> student.symbol }, "endpoint" to endpoint))
                     }
                 }
             }, {
                 errorHandler.dispatch(it)
-                logRegister(it.localizedMessage, false, if (symbol.isEmpty()) "nil" else symbol, endpoint)
+                Bundle().apply {
+                    putBoolean(SUCCESS, false)
+                    putString("endpoint", endpoint)
+                    putString(GROUP_ID, symbol.ifEmpty { "nil" })
+                    analytics.logEvent(SIGN_UP, this)
+                }
             }))
     }
 
