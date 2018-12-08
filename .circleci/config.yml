@@ -153,7 +153,7 @@ jobs:
       - run:
           name: Decrypt keys
           command: |
-            gpg --yes --batch --passphrase=$SERVICES_ENCRYPT_KEY ./app/google-services.json.gpg
+            gpg --yes --batch --passphrase=$SERVICES_ENCRYPT_KEY ./app/src/release/google-services.json.gpg
             openssl aes-256-cbc -d -in ./app/key-encrypted.p12 -k $ENCRYPT_KEY >> ./app/key.p12
             openssl aes-256-cbc -d -in ./app/upload-key-encrypted.jks -k $ENCRYPT_KEY >> ./app/upload-key.jks
       - run:

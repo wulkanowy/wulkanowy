@@ -43,7 +43,7 @@ android {
 
     buildTypes {
         release {
-            buildConfigField "boolean", "FABRIC_ENABLED", "true"
+            buildConfigField "boolean", "CRASHLYTICS_ENABLED", "true"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
