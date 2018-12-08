@@ -1,13 +1,13 @@
 package io.github.wulkanowy.ui.modules.homework
 
-import android.os.Bundle
-import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics.Param.START_DATE
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.main.MainErrorHandler
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
@@ -24,7 +24,7 @@ class HomeworkPresenter @Inject constructor(
     private val homeworkRepository: HomeworkRepository,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
-    private val analytics: FirebaseAnalytics
+    private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<HomeworkView>(errorHandler) {
 
     lateinit var currentDate: LocalDate
@@ -79,12 +79,7 @@ class HomeworkPresenter @Inject constructor(
                         showContent(it.isNotEmpty())
                     }
 
-                    Bundle().apply {
-                        putInt("items", it.size)
-                        putBoolean("force_refresh", forceRefresh)
-                        putString(FirebaseAnalytics.Param.START_DATE, currentDate.toFormattedString("yyyy.MM.dd"))
-                        analytics.logEvent("load_homework", this)
-                    }
+                    analytics.logEvent("load_homework", mapOf("items" to it.size, "force_refresh" to forceRefresh, START_DATE to currentDate.toFormattedString("yyyy-MM-dd")))
                 }) {
                     view?.run { showEmpty(isViewEmpty()) }
                     errorHandler.dispatch(it)

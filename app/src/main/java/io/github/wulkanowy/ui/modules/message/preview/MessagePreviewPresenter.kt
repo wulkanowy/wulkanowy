@@ -1,12 +1,11 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
-import android.os.Bundle
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.Param.START_DATE
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
@@ -16,7 +15,7 @@ class MessagePreviewPresenter @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val messagesRepository: MessagesRepository,
     private val studentRepository: StudentRepository,
-    private val analytics: FirebaseAnalytics
+    private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<MessagePreviewView>(errorHandler) {
 
     var messageId: Int = 0
@@ -47,11 +46,8 @@ class MessagePreviewPresenter @Inject constructor(
                         }
                     }
 
-                    Bundle().apply {
-                        putString(START_DATE, message.date?.toFormattedString("yyyy.MM.dd"))
-                        putInt("lenght", message.content?.length ?: 0)
-                        analytics.logEvent("load_message", this)
-                    }
+                    analytics.logEvent("load_attendance", mapOf(START_DATE to message.date?.toFormattedString("yyyy.MM.dd"), "lenght" to message.content?.length))
+
                 }) {
                     view?.showMessageError()
                     errorHandler.dispatch(it)

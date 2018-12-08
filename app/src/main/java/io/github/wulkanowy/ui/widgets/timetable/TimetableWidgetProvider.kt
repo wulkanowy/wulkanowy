@@ -8,15 +8,14 @@ import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.widget.RemoteViews
-import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.android.AndroidInjection
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.SharedPrefHelper
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
@@ -31,7 +30,7 @@ class TimetableWidgetProvider : AppWidgetProvider() {
     lateinit var sharedPref: SharedPrefHelper
 
     @Inject
-    lateinit var analytics: FirebaseAnalytics
+    lateinit var analytics: FirebaseAnalyticsHelper
 
     companion object {
         const val EXTRA_TOGGLED_WIDGET_ID = "extraToggledWidget"
@@ -98,10 +97,7 @@ class TimetableWidgetProvider : AppWidgetProvider() {
                 button?.also { btn ->
                     if (btn.isNotBlank()) {
 
-                        Bundle().apply {
-                            putString("button", button)
-                            analytics.logEvent("changed_timetable_widget_day", this)
-                        }
+                        analytics.logEvent("changed_timetable_widget_day", mapOf("button" to button))
                     }
                 }
             }

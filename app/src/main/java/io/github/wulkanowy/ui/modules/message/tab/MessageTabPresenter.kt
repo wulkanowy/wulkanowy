@@ -1,8 +1,5 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
-import android.os.Bundle
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.FirebaseAnalytics.Param.SUCCESS
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.Message
@@ -10,6 +7,7 @@ import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.message.MessageItem
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,7 +17,7 @@ class MessageTabPresenter @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val messagesRepository: MessagesRepository,
     private val studentRepository: StudentRepository,
-    private val analytics: FirebaseAnalytics
+    private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<MessageTabView>(errorHandler) {
 
     lateinit var folder: MessagesRepository.MessageFolder
@@ -56,13 +54,8 @@ class MessageTabPresenter @Inject constructor(
                         updateData(it)
                     }
 
+                    analytics.logEvent("load_messages", mapOf("items" to it.size, "folder" to folder.name))
 
-                    Bundle().apply {
-                        putBoolean(SUCCESS, true)
-                        putInt("messages", it.size)
-                        putString("folder", folder.name)
-                        analytics.logEvent("open_message", this)
-                    }
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.dispatch(it)

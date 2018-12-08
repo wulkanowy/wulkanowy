@@ -9,6 +9,7 @@ import dagger.Provides
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.WulkanowyApp
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import javax.inject.Singleton
 
@@ -32,4 +33,7 @@ internal class AppModule {
 
     @Provides
     fun provideFirebaseAnalytics(context: Context) = FirebaseAnalytics.getInstance(context)
+
+    @Provides
+    fun provideFirebaseAnalyticsHelper(analytics: FirebaseAnalytics) = FirebaseAnalyticsHelper(analytics)
 }

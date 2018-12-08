@@ -1,7 +1,5 @@
 package io.github.wulkanowy.ui.modules.attendance
 
-import android.os.Bundle
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.Param.START_DATE
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.repositories.AttendanceRepository
@@ -10,6 +8,7 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.main.MainErrorHandler
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.nextSchoolDay
@@ -29,7 +28,7 @@ class AttendancePresenter @Inject constructor(
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val prefRepository: PreferencesRepository,
-    private val analytics: FirebaseAnalytics
+    private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<AttendanceView>(errorHandler) {
 
     lateinit var currentDate: LocalDate
@@ -106,12 +105,7 @@ class AttendancePresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    Bundle().apply {
-                        putInt("items", it.size)
-                        putBoolean("force_refresh", forceRefresh)
-                        putString(START_DATE, currentDate.toFormattedString("yyyy-MM-dd"))
-                        analytics.logEvent("load_attendance", this)
-                    }
+                    analytics.logEvent("load_attendance", mapOf("items" to it.size, "force_refresh" to forceRefresh, START_DATE to currentDate.toFormattedString("yyyy-MM-dd")))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.dispatch(it)

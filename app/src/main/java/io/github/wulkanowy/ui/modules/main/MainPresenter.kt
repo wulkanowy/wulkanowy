@@ -1,13 +1,12 @@
 package io.github.wulkanowy.ui.modules.main
 
-import android.os.Bundle
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.Event.APP_OPEN
 import com.google.firebase.analytics.FirebaseAnalytics.Param.DESTINATION
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.job.ServiceHelper
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Completable
 import javax.inject.Inject
@@ -18,7 +17,7 @@ class MainPresenter @Inject constructor(
     private val prefRepository: PreferencesRepository,
     private val schedulers: SchedulersProvider,
     private val serviceHelper: ServiceHelper,
-    private val analytics: FirebaseAnalytics
+    private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<MainView>(errorHandler) {
 
     fun onAttachView(view: MainView, initMenuIndex: Int) {
@@ -31,15 +30,12 @@ class MainPresenter @Inject constructor(
         }
         serviceHelper.startFullSyncService()
 
-        Bundle().apply {
-            putString(DESTINATION, when (initMenuIndex) {
-                1 -> "Grades"
-                3 -> "Timetable"
-                4 -> "More"
-                else -> "User action"
-            })
-            analytics.logEvent(APP_OPEN, this)
-        }
+        analytics.logEvent(APP_OPEN, mapOf(DESTINATION to when (initMenuIndex) {
+            1 -> "Grades"
+            3 -> "Timetable"
+            4 -> "More"
+            else -> "User action"
+        }))
     }
 
     fun onViewStart() {

@@ -1,8 +1,5 @@
 package io.github.wulkanowy.ui.modules.attendance.summary
 
-import android.os.Bundle
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.FirebaseAnalytics.Param.ITEM_ID
 import io.github.wulkanowy.data.ErrorHandler
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.Subject
@@ -11,6 +8,7 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.SubjectRepostory
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calculatePercentage
 import io.github.wulkanowy.utils.getFormattedName
@@ -26,7 +24,7 @@ class AttendanceSummaryPresenter @Inject constructor(
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val schedulers: SchedulersProvider,
-    private val analytics: FirebaseAnalytics
+    private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<AttendanceSummaryView>(errorHandler) {
 
     private var subjects = emptyList<Subject>()
@@ -78,12 +76,7 @@ class AttendanceSummaryPresenter @Inject constructor(
                         updateDataSet(it.first, it.second)
                     }
 
-                    Bundle().apply {
-                        putInt("items", it.first.size)
-                        putBoolean("force_refresh", forceRefresh)
-                        putInt(ITEM_ID, subjectId)
-                        analytics.logEvent("load_attendance_summary", this)
-                    }
+                    analytics.logEvent("load_attendance_summary", mapOf("items" to it.first.size, "force_refresh" to forceRefresh, "item_id" to subjectId))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.dispatch(it)

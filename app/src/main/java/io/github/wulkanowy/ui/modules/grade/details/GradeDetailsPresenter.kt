@@ -1,7 +1,5 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
-import android.os.Bundle
-import com.google.firebase.analytics.FirebaseAnalytics
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.repositories.GradeRepository
@@ -10,6 +8,7 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.main.MainErrorHandler
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
@@ -24,7 +23,7 @@ class GradeDetailsPresenter @Inject constructor(
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val analytics: FirebaseAnalytics
+    private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<GradeDetailsView>(errorHandler) {
 
     private var currentSemesterId = 0
@@ -116,11 +115,7 @@ class GradeDetailsPresenter @Inject constructor(
                     updateData(it)
                 }
 
-                Bundle().apply {
-                    putInt("items", it.size)
-                    putBoolean("force_refresh", forceRefresh)
-                    analytics.logEvent("load_grade_details", this)
-                }
+                analytics.logEvent("load_grade_details", mapOf("items" to it.size, "force_refresh" to forceRefresh))
             }) {
                 view?.run { showEmpty(isViewEmpty) }
                 errorHandler.dispatch(it)

@@ -1,13 +1,12 @@
 package io.github.wulkanowy.ui.modules.login.form
 
-import android.os.Bundle
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.FirebaseAnalytics.Event.SIGN_UP
 import com.google.firebase.analytics.FirebaseAnalytics.Param.GROUP_ID
 import com.google.firebase.analytics.FirebaseAnalytics.Param.SUCCESS
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -16,7 +15,7 @@ class LoginFormPresenter @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val errorHandler: LoginErrorHandler,
     private val studentRepository: StudentRepository,
-    private val analytics: FirebaseAnalytics
+    private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<LoginFormView>(errorHandler) {
 
     private var wasEmpty = false
@@ -61,25 +60,14 @@ class LoginFormPresenter @Inject constructor(
                     } else if (it.isEmpty() && wasEmpty) {
                         showSymbolInput()
                         setErrorSymbolIncorrect()
-                        Bundle().apply {
-                            putBoolean(SUCCESS, false)
-                            putInt("students", it.size)
-                            putString("endpoint", endpoint)
-                            putString(GROUP_ID, symbol.ifEmpty { "nil" })
-                            analytics.logEvent(SIGN_UP, this)
-                        }
+                        analytics.logEvent(SIGN_UP, mapOf(SUCCESS to false, "students" to it.size, "endpoint" to endpoint, GROUP_ID to symbol.ifEmpty { "nil" }))
                     } else {
                         switchOptionsView()
                     }
                 }
             }, {
+                analytics.logEvent(SIGN_UP, mapOf(SUCCESS to true, "endpoint" to endpoint, GROUP_ID to symbol.ifEmpty { "nil" }))
                 errorHandler.dispatch(it)
-                Bundle().apply {
-                    putBoolean(SUCCESS, false)
-                    putString("endpoint", endpoint)
-                    putString(GROUP_ID, symbol.ifEmpty { "nil" })
-                    analytics.logEvent(SIGN_UP, this)
-                }
             }))
     }
 
