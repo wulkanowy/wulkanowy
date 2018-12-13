@@ -48,4 +48,3 @@ app/key.p12
 app/upload-key.jks
 *.log
 .idea/assetWizardSettings.xml
-app/google-services-dev.json
