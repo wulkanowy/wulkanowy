@@ -69,7 +69,6 @@ class GradeSummaryPresenter @Inject constructor(
                     showContent(it.first.isNotEmpty())
                     updateData(it.first, it.second)
                 }
-
                 analytics.logEvent("load_grade_summary", mapOf("items" to it.first.size, "force_refresh" to forceRefresh))
             }) {
                 view?.run { showEmpty(isViewEmpty) }

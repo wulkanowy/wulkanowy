@@ -45,9 +45,7 @@ class MessagePreviewPresenter @Inject constructor(
                             else setSender(it.sender)
                         }
                     }
-
                     analytics.logEvent("load_attendance", mapOf(START_DATE to message.date?.toFormattedString("yyyy.MM.dd"), "lenght" to message.content?.length))
-
                 }) {
                     view?.showMessageError()
                     errorHandler.dispatch(it)

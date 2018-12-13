@@ -53,9 +53,7 @@ class MessageTabPresenter @Inject constructor(
                         showContent(it.isNotEmpty())
                         updateData(it)
                     }
-
                     analytics.logEvent("load_messages", mapOf("items" to it.size, "folder" to folder.name))
-
                 }) {
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.dispatch(it)

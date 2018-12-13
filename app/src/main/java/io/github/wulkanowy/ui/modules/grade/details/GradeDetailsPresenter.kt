@@ -114,7 +114,6 @@ class GradeDetailsPresenter @Inject constructor(
                     showContent(it.isNotEmpty())
                     updateData(it)
                 }
-
                 analytics.logEvent("load_grade_details", mapOf("items" to it.size, "force_refresh" to forceRefresh))
             }) {
                 view?.run { showEmpty(isViewEmpty) }

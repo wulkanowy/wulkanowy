@@ -96,7 +96,6 @@ class TimetableWidgetProvider : AppWidgetProvider() {
                 }
                 button?.also { btn ->
                     if (btn.isNotBlank()) {
-
                         analytics.logEvent("changed_timetable_widget_day", mapOf("button" to button))
                     }
                 }

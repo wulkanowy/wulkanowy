@@ -92,7 +92,6 @@ class ExamPresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-
                     analytics.logEvent("load_exam", mapOf("items" to it.size, "force_refresh" to forceRefresh, START_DATE to currentDate.toFormattedString("yyyy-MM-dd")))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }

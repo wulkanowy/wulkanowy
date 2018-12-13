@@ -75,7 +75,6 @@ class AttendanceSummaryPresenter @Inject constructor(
                         showContent(it.first.isNotEmpty())
                         updateDataSet(it.first, it.second)
                     }
-
                     analytics.logEvent("load_attendance_summary", mapOf("items" to it.first.size, "force_refresh" to forceRefresh, "item_id" to subjectId))
                 }) {
                     view?.run { showEmpty(isViewEmpty) }

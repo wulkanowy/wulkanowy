@@ -50,7 +50,6 @@ class NotePresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     showContent(it.isNotEmpty())
                 }
-
                 analytics.logEvent("load_note", mapOf("items" to it.size, "force_refresh" to forceRefresh))
             }, {
                 view?.run { showEmpty(isViewEmpty) }
