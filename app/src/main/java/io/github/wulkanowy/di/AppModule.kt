@@ -32,8 +32,5 @@ internal class AppModule {
     fun provideJobDispatcher(context: Context) = FirebaseJobDispatcher(GooglePlayDriver(context))
 
     @Provides
-    fun provideFirebaseAnalytics(context: Context) = FirebaseAnalytics.getInstance(context)
-
-    @Provides
-    fun provideFirebaseAnalyticsHelper(analytics: FirebaseAnalytics) = FirebaseAnalyticsHelper(analytics)
+    fun provideFirebaseAnalyticsHelper(context: Context) = FirebaseAnalyticsHelper(FirebaseAnalytics.getInstance(context))
 }
