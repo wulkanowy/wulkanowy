@@ -2,15 +2,16 @@ package io.github.wulkanowy.utils
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
-import javax.inject.Inject
+import javax.inject.Singleton
 
-class FirebaseAnalyticsHelper @Inject constructor(private val analytics: FirebaseAnalytics) {
+@Singleton
+class FirebaseAnalyticsHelper(private val analytics: FirebaseAnalytics) {
 
     fun logEvent(name: String, params: Map<String, Any?>) {
         Bundle().apply {
             params.forEach {
                 if (it.value == null) return@forEach
-                when(it.value) {
+                when (it.value) {
                     is String, is String? -> putString(it.key, it.value as String)
                     is Int, is Int? -> putInt(it.key, it.value as Int)
                     is Boolean, is Boolean? -> putBoolean(it.key, it.value as Boolean)
