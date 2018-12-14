@@ -86,6 +86,8 @@ class TimetableWidgetFactory(
                 }
             }
             setOnClickFillInIntent(R.id.timetableWidgetItemContainer, Intent())
+
+            setViewVisibility(R.id.timetableWidgetItemNumber, VISIBLE)
         }
     }
 
