@@ -52,6 +52,9 @@ android {
             buildConfigField "boolean", "CRASHLYTICS_ENABLED", project.hasProperty("enableCrashlytics") ? "true" : "false"
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
+            minifyEnabled true
+            useProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testCoverageEnabled = true
             ext.enableCrashlytics = project.hasProperty("enableCrashlytics")
             multiDexKeepProguard file('proguard-multidex-rules.pro')
