@@ -31,3 +31,6 @@
 -dontwarn io.reactivex.functions.Function
 -dontwarn rx.internal.util.**
 -dontwarn sun.misc.Unsafe
+
+#Confi for API
+-keep class io.github.wulkanowy.api.** {*;}
