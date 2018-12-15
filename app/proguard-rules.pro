@@ -1,30 +1,33 @@
+# Optimizations
 -optimizationpasses 5
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
 -dontskipnonpubliclibraryclassmembers
 -dontpreverify
--verbose
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
-
 -allowaccessmodification
--keepattributes *Annotation*
--renamesourcefileattribute SourceFile
--keepattributes SourceFile,LineNumberTable
 -repackageclasses ''
+-verbose
 
--keep class com.google.firebase.** {*;}
+
+#Config for anallitycs
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 -keep class com.crashlytics.** {*;}
--keep class io.github.wulkanowy.** { *; }
--keep class com.amitshekhar.DebugDBInitProvider
+-keep public class * extends java.lang.Exception
+-dontwarn com.crashlytics.**
 
-# JSR 305 annotations are for embedding nullability information.
+
+#Config for OkHttp
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+-dontwarn okhttp3.internal.platform.ConscryptPlatform
 -dontwarn javax.annotation.**
 
-# A resource is loaded with a relative path so the package of this class must be preserved.
--keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
-# Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
--dontwarn org.codehaus.mojo.animal_sniffer.*
-
-# OkHttp platform used only on JVM and when Conscrypt dependency is available.
--dontwarn okhttp3.internal.platform.ConscryptPlatform
+#Config for ReactiveNetwork
+-dontwarn com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+-dontwarn io.reactivex.functions.Function
+-dontwarn rx.internal.util.**
+-dontwarn sun.misc.Unsafe
