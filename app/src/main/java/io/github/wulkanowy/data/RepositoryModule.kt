@@ -6,6 +6,9 @@ import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy
+import com.readystatesoftware.chuck.api.ChuckCollector
+import com.readystatesoftware.chuck.api.ChuckInterceptor
+import com.readystatesoftware.chuck.api.RetentionManager
 import dagger.Module
 import dagger.Provides
 import io.github.wulkanowy.api.Api
@@ -30,13 +33,23 @@ internal class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideApi(): Api {
+    fun provideApi(chuck: ChuckInterceptor): Api {
         return Api().apply {
             logLevel = NONE
             androidVersion = android.os.Build.VERSION.RELEASE
             buildTag = android.os.Build.MODEL
             setInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Timber.d(it) }).setLevel(BASIC))
+            setInterceptor(chuck, true, 0)
         }
+    }
+
+    @Singleton
+    @Provides
+    fun provideChuckInterceptor(context: Context): ChuckInterceptor {
+        return ChuckInterceptor(context, ChuckCollector(context)
+            .showNotification(true)
+            .retentionManager(RetentionManager(context, ChuckCollector.Period.ONE_HOUR)))
+            .maxContentLength(250000L)
     }
 
     @Singleton
