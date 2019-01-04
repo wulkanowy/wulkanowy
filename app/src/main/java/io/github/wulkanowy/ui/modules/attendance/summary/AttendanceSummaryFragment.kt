@@ -101,7 +101,7 @@ class AttendanceSummaryFragment : BaseSessionFragment(), AttendanceSummaryView, 
     }
 
     override fun showSubjects(show: Boolean) {
-        attendanceSummarySubjects.visibility = if (show) VISIBLE else VISIBLE
+        attendanceSummarySubjects.visibility = if (show) VISIBLE else GONE
     }
 
     override fun hideRefresh() {
