@@ -13,6 +13,7 @@ import dagger.Module
 import dagger.Provides
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.AppDatabase
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
@@ -33,23 +34,24 @@ internal class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideApi(chuck: ChuckInterceptor): Api {
+    fun provideApi(chuckCollector: ChuckCollector, context: Context): Api {
         return Api().apply {
             logLevel = NONE
             androidVersion = android.os.Build.VERSION.RELEASE
             buildTag = android.os.Build.MODEL
             setInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Timber.d(it) }).setLevel(BASIC))
-            setInterceptor(chuck, true, 0)
+
+            // for debug only
+            setInterceptor(ChuckInterceptor(context, chuckCollector).maxContentLength(250000L), true, 0)
         }
     }
 
     @Singleton
     @Provides
-    fun provideChuckInterceptor(context: Context): ChuckInterceptor {
-        return ChuckInterceptor(context, ChuckCollector(context)
-            .showNotification(true)
-            .retentionManager(RetentionManager(context, ChuckCollector.Period.ONE_HOUR)))
-            .maxContentLength(250000L)
+    fun provideChuckCollector(context: Context, prefRepository: PreferencesRepository): ChuckCollector {
+        return ChuckCollector(context)
+            .showNotification(prefRepository.isShowChuckerNotification)
+            .retentionManager(RetentionManager(context, ChuckCollector.Period.ONE_HOUR))
     }
 
     @Singleton
