@@ -2,16 +2,19 @@ package io.github.wulkanowy.ui.modules.grade.summary
 
 import android.view.View
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.items.AbstractSectionableItem
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.GradeSummary
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_grade_summary.*
 
-class GradeSummaryItem(header: GradeSummaryHeader, private val grade: String, private val title: String) :
-    AbstractSectionableItem<GradeSummaryItem.ViewHolder, GradeSummaryHeader>(header) {
+class GradeSummaryItem(
+    private val title: String,
+    private val average: String,
+    private val predicted: String,
+    private val final: String
+) : AbstractFlexibleItem<GradeSummaryItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_grade_summary
 
@@ -24,8 +27,10 @@ class GradeSummaryItem(header: GradeSummaryHeader, private val grade: String, pr
         position: Int, payloads: MutableList<Any>?
     ) {
         holder?.run {
-            gradeSummaryItemGrade.text = grade
             gradeSummaryItemTitle.text = title
+            gradeSummaryItemAverage.text = average
+            gradeSummaryItemPredicted.text = predicted
+            gradeSummaryItemFinal.text = final
         }
     }
 
@@ -35,17 +40,19 @@ class GradeSummaryItem(header: GradeSummaryHeader, private val grade: String, pr
 
         other as GradeSummaryItem
 
-        if (grade != other.grade) return false
+        if (average != other.average) return false
         if (title != other.title) return false
-        if (header != other.header) return false
+        if (predicted != other.predicted) return false
+        if (final != other.final) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = header.hashCode()
-        result = 31 * result + grade.hashCode()
-        result = 31 * result + title.hashCode()
+        var result = title.hashCode()
+        result = 31 * result + average.hashCode()
+        result = 31 * result + predicted.hashCode()
+        result = 31 * result + final.hashCode()
         return result
     }
 
