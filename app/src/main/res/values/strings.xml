@@ -91,10 +91,11 @@
     <string name="timetable_group">Group</string>
     <string name="timetable_time">Hours</string>
     <string name="timetable_changes">Changes</string>
-    <string name="timetable_no_items">No lesson in this day</string>
+    <string name="timetable_no_items">No lessons on this day</string>
 
 
     <!--Attendance-->
+    <string name="attendance_summary_button">Attendance summary</string>
     <string name="attendance_absence_school">Absent for school reasons</string>
     <string name="attendance_absence_excused">Excused absence</string>
     <string name="attendance_absence_unexcused">Unexcused absence</string>
@@ -192,7 +193,7 @@
 
 
     <!--Timetable Widget-->
-    <string name="widget_timetable_no_items">No lesson</string>
+    <string name="widget_timetable_no_items">No lessons</string>
     <string name="widget_timetable_today">Today</string>
     <string name="widget_timetable_tomorrow">Tomorrow</string>
 
@@ -215,7 +216,7 @@
     <string name="pref_services_switch">Automatic update</string>
     <string name="pref_services_suspended">Suspended on holiday</string>
     <string name="pref_services_interval">Updates interval</string>
-    <string name="pref_services_wifi">Only WiFi</string>
+    <string name="pref_services_wifi">Wi-Fi only</string>
 
 
     <!--Colors-->
