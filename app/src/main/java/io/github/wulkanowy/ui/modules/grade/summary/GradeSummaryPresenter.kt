@@ -103,8 +103,8 @@ class GradeSummaryPresenter @Inject constructor(
             GradeSummaryItem(
                 title = it.subject,
                 average = formatAverage(averages.getOrElse(it.subject) { 0.0 }, ""),
-                predicted = it.predictedGrade,
-                final = it.finalGrade
+                predictedGrade = it.predictedGrade,
+                finalGrade = it.finalGrade
             )
         }
     }

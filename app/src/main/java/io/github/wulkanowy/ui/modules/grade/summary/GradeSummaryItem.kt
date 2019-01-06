@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.item_grade_summary.*
 class GradeSummaryItem(
     private val title: String,
     private val average: String,
-    private val predicted: String,
-    private val final: String
+    private val predictedGrade: String,
+    private val finalGrade: String
 ) : AbstractFlexibleItem<GradeSummaryItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_grade_summary
@@ -29,8 +29,8 @@ class GradeSummaryItem(
         holder?.run {
             gradeSummaryItemTitle.text = title
             gradeSummaryItemAverage.text = average
-            gradeSummaryItemPredicted.text = predicted
-            gradeSummaryItemFinal.text = final
+            gradeSummaryItemPredicted.text = predictedGrade
+            gradeSummaryItemFinal.text = finalGrade
         }
     }
 
@@ -42,8 +42,8 @@ class GradeSummaryItem(
 
         if (average != other.average) return false
         if (title != other.title) return false
-        if (predicted != other.predicted) return false
-        if (final != other.final) return false
+        if (predictedGrade != other.predictedGrade) return false
+        if (finalGrade != other.finalGrade) return false
 
         return true
     }
@@ -51,8 +51,8 @@ class GradeSummaryItem(
     override fun hashCode(): Int {
         var result = title.hashCode()
         result = 31 * result + average.hashCode()
-        result = 31 * result + predicted.hashCode()
-        result = 31 * result + final.hashCode()
+        result = 31 * result + predictedGrade.hashCode()
+        result = 31 * result + finalGrade.hashCode()
         return result
     }
 
