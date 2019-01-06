@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -101,7 +102,7 @@ class AttendanceSummaryFragment : BaseSessionFragment(), AttendanceSummaryView, 
     }
 
     override fun showSubjects(show: Boolean) {
-        attendanceSummarySubjectsContainer.visibility = if (show) VISIBLE else GONE
+        attendanceSummarySubjectsContainer.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun hideRefresh() {
