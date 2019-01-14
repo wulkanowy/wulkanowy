@@ -13,6 +13,7 @@ import io.github.wulkanowy.data.db.dao.GradeDao
 import io.github.wulkanowy.data.db.dao.GradeSummaryDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.dao.HomeworkDao
+import io.github.wulkanowy.data.db.dao.LuckyNumberDao
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
@@ -25,6 +26,7 @@ import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Homework
+import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -46,7 +48,8 @@ import javax.inject.Singleton
         Message::class,
         Note::class,
         Homework::class,
-        Subject::class
+        Subject::class,
+        LuckyNumber::class
     ],
     version = 1,
     exportSchema = false
@@ -85,4 +88,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val homeworkDao: HomeworkDao
 
     abstract val subjectDao: SubjectDao
+
+    abstract val luckyNumberDao: LuckyNumberDao
 }
