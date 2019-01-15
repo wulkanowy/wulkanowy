@@ -20,6 +20,7 @@ class LuckyNumberPresenter @Inject constructor(
 
     override fun onAttachView(view: LuckyNumberView) {
         super.onAttachView(view)
+        view.initView()
         loadData()
     }
 
@@ -44,6 +45,7 @@ class LuckyNumberPresenter @Inject constructor(
                         showContent(it.luckyNumber != 0)
                         showEmpty(it.luckyNumber == 0)
                     }
+                    analytics.logEvent("load_lucky_number", mapOf("lucky_number" to it.luckyNumber, "force_refresh" to forceRefresh))
                 }) {
                     errorHandler.dispatch(it)
                 })
