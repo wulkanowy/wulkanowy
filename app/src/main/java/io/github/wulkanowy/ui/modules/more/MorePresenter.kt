@@ -20,6 +20,7 @@ class MorePresenter @Inject constructor(errorHandler: ErrorHandler) : BasePresen
                     messagesRes?.first -> openMessagesView()
                     homeworkRes?.first -> openHomeworkView()
                     noteRes?.first -> openNoteView()
+                    luckyNumberRes?.first -> openLuckyNumberView()
                     settingsRes?.first -> openSettingsView()
                     aboutRes?.first -> openAboutView()
                 }

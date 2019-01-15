@@ -32,4 +32,6 @@ interface MoreView : BaseView {
     fun openHomeworkView()
 
     fun openNoteView()
+
+    fun openLuckyNumberView()
 }

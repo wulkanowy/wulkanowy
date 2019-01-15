@@ -13,6 +13,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.about.AboutFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
+import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
@@ -120,6 +121,10 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
 
     override fun openNoteView() {
         (activity as? MainActivity)?.pushView(NoteFragment.newInstance())
+    }
+
+    override fun openLuckyNumberView() {
+        (activity as? MainActivity)?.pushView(LuckyNumberFragment.newInstance())
     }
 
     override fun openSettingsView() {
