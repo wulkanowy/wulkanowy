@@ -237,4 +237,5 @@
     <string name="error_login_failed">Login is failed. Try again or restart the app</string>
     <string name="error_service_unavailable">The log is not available. Try again later</string>
     <string name="error_unknown">An unexpected error occurred</string>
+    <string name="luckynumber_title">Lucky number</string>
 </resources>

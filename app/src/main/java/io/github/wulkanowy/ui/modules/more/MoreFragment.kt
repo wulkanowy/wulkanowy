@@ -60,6 +60,14 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
             }
         }
 
+    override val luckyNumberRes: Pair<String, Drawable?>?
+        get() {
+            return context?.run {
+                getString(R.string.luckynumber_title) to
+                    ContextCompat.getDrawable(this, R.drawable.ic_more_lucky_number_24dp)
+            }
+        }
+
     override val settingsRes: Pair<String, Drawable?>?
         get() {
             return context?.run {

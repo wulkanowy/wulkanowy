@@ -37,6 +37,7 @@ class MorePresenter @Inject constructor(errorHandler: ErrorHandler) : BasePresen
                 messagesRes?.let { MoreItem(it.first, it.second) },
                 homeworkRes?.let { MoreItem(it.first, it.second) },
                 noteRes?.let { MoreItem(it.first, it.second) },
+                luckyNumberRes?.let { MoreItem(it.first, it.second) },
                 settingsRes?.let { MoreItem(it.first, it.second) },
                 aboutRes?.let { MoreItem(it.first, it.second) })
             )
