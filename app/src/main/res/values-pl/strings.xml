@@ -184,6 +184,10 @@
     <!--Homework-->
     <string name="homework_no_items">Brak zadań domowych</string>
 
+    <!--Lucky number-->
+    <string name="luckynumber_title">Szczęśliwy numerek</string>
+    <string name="luckynumber_header">Dzisiejszym szczęśliwym numerkiem jest</string>
+    <string name="luckynumber_empty">Brak informacji o szczęśliwym numerku</string>
 
     <!--Account-->
     <string name="account_add_new">Dodaj konto</string>
@@ -254,5 +258,4 @@
     <string name="error_login_failed">Logowanie nie powiodło się. Spróbuj ponownie lub zrestartuj aplikację</string>
     <string name="error_service_unavailable">Dziennik jest niedostępny. Spróbuj ponownie później</string>
     <string name="error_unknown">Wystąpił nieoczekiwany błąd</string>
-    <string name="luckynumber_title">Szczęśliwy numerek</string>
 </resources>
