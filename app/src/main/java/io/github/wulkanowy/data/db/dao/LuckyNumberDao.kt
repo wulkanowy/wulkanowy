@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.reactivex.Maybe
+import org.threeten.bp.LocalDate
 import javax.inject.Singleton
 
 @Singleton
@@ -25,7 +26,10 @@ interface LuckyNumberDao {
     @Delete
     fun deleteAll(luckyNumbers: List<LuckyNumber>)
 
-    @Query("SELECT * FROM Notes WHERE student_id = :studentId")
+    @Query("SELECT * FROM LuckyNumbers WHERE student_id = :studentId")
     fun loadAll(studentId: Int): Maybe<List<LuckyNumber>>
+
+    @Query("SELECT * FROM LuckyNumbers WHERE student_id = :studentId AND date = :date")
+    fun loadFromDate(studentId: Int, date: LocalDate): Maybe<List<LuckyNumber>>
 
 }
