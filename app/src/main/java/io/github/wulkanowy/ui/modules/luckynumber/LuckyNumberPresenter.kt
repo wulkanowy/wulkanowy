@@ -30,7 +30,6 @@ class LuckyNumberPresenter @Inject constructor(
             add(studentRepository.getCurrentStudent()
                 .flatMap { semesterRepository.getCurrentSemester(it) }
                 .flatMap { luckyNumberRepository.getLuckyNumbers(it, forceRefresh) }
-                .map { items -> items[0] }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {
@@ -41,11 +40,11 @@ class LuckyNumberPresenter @Inject constructor(
                 }
                 .subscribe({
                     view?.apply {
-                        updateData(it)
-                        showContent(it.luckyNumber != 0)
-                        showEmpty(it.luckyNumber == 0)
+                        if (!it.isEmpty()) updateData(it[0])
+                        showContent(!it.isEmpty())
+                        showEmpty(it.isEmpty())
                     }
-                    analytics.logEvent("load_lucky_number", mapOf("lucky_number" to it.luckyNumber, "force_refresh" to forceRefresh))
+                    analytics.logEvent("load_lucky_number", mapOf("success" to it.isEmpty(), "force_refresh" to forceRefresh))
                 }) {
                     errorHandler.dispatch(it)
                 })

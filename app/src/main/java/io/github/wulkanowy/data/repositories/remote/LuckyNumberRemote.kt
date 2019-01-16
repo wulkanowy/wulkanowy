@@ -15,13 +15,15 @@ class LuckyNumberRemote @Inject constructor(private val api: Api) {
         return Single.just(api.apply { diaryId = semester.diaryId })
             .flatMap { it.getLuckyNumber() }
             .map { luckyNumber ->
-                listOf(
-                    LuckyNumber(
-                        studentId = semester.studentId,
-                        date = LocalDate.now(),
-                        luckyNumber = luckyNumber
+                if (luckyNumber != 0) {
+                    listOf(
+                        LuckyNumber(
+                            studentId = semester.studentId,
+                            date = LocalDate.now(),
+                            luckyNumber = luckyNumber
+                        )
                     )
-                )
+                } else emptyList()
             }
     }
 }
