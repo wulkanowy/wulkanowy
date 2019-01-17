@@ -115,7 +115,7 @@
 
 
     <!--Exam-->
-    <string name="exam_no_items">No exams on this week</string>
+    <string name="exam_no_items">No exams this week</string>
     <string name="exam_type">Type</string>
     <string name="exam_entry_date">Entry date</string>
 
