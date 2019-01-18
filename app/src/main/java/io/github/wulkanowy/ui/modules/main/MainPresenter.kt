@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Completable
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
@@ -36,6 +37,7 @@ class MainPresenter @Inject constructor(
             4 -> "More"
             else -> "User action"
         }))
+        Timber.i("Main view is attached with $initMenuIndex menu index")
     }
 
     fun onViewStart() {
@@ -46,6 +48,7 @@ class MainPresenter @Inject constructor(
                 else showHomeArrow(false)
             }
         }
+        Timber.i("Main view is started")
     }
 
     fun onAccountManagerSelected(): Boolean {
@@ -78,10 +81,12 @@ class MainPresenter @Inject constructor(
     }
 
     fun onLoginSelected() {
+        Timber.i("Attempt to login the student after the session expires")
         disposable.add(studentRepository.getCurrentStudent(false)
             .flatMapCompletable { studentRepository.logoutStudent(it) }
             .andThen(studentRepository.getSavedStudents(false))
             .flatMapCompletable {
+                Timber.i("The number of other students: ${it.size}")
                 if (it.isNotEmpty()) studentRepository.switchStudent(it[0])
                 else Completable.complete()
             }
