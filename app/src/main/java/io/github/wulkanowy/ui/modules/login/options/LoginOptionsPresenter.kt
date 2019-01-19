@@ -69,13 +69,13 @@ class LoginOptionsPresenter @Inject constructor(
                 Timber.i("Registration result: Success")
                 view?.openMainView()
             }, {
+                Timber.i("Registration result: An exception occurred ")
                 errorHandler.dispatch(it)
                 view?.apply {
                     showProgress(false)
                     showContent(true)
                     showActionBar(true)
                 }
-                Timber.i("Registration result: An exception occurred ")
             }))
     }
 }
