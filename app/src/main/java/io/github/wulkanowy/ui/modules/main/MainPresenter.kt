@@ -51,16 +51,19 @@ class MainPresenter @Inject constructor(
     }
 
     fun onAccountManagerSelected(): Boolean {
+        Timber.i("Select account manager")
         view?.showAccountPicker()
         return true
     }
 
     fun onUpNavigate(): Boolean {
+        Timber.i("Up navigate pressed")
         view?.popView()
         return true
     }
 
     fun onBackPressed(default: () -> Unit) {
+        Timber.i("Back pressed in main view")
         view?.run {
             if (isRootView) default()
             else popView()
@@ -81,17 +84,25 @@ class MainPresenter @Inject constructor(
     }
 
     fun onLoginSelected() {
-        Timber.i("Attempt to login the student after the session expires")
+        Timber.i("Attempt to switch the student after the session expires")
         disposable.add(studentRepository.getCurrentStudent(false)
             .flatMapCompletable { studentRepository.logoutStudent(it) }
             .andThen(studentRepository.getSavedStudents(false))
             .flatMapCompletable {
-                Timber.i("The number of other students: ${it.size}")
-                if (it.isNotEmpty()) studentRepository.switchStudent(it[0])
+                if (it.isNotEmpty()) {
+                    Timber.i("Switching current student")
+                    studentRepository.switchStudent(it[0])
+                }
                 else Completable.complete()
             }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({ view?.openLoginView() }, { errorHandler.dispatch(it) }))
+            .subscribe({
+                Timber.i("Switch student result: Open login view")
+                view?.openLoginView()
+            }, {
+                Timber.i("Switch student result: An exception occurred")
+                errorHandler.dispatch(it)
+            }))
     }
 }

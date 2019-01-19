@@ -25,6 +25,7 @@ class LoginPresenter @Inject constructor(errorHandler: ErrorHandler) : BasePrese
     }
 
     fun onBackPressed(default: () -> Unit) {
+        Timber.i("Back pressed in login view")
         view?.run {
             if (currentViewIndex == 1) {
                 switchView(0)
