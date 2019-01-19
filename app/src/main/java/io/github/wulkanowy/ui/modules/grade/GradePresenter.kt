@@ -29,18 +29,18 @@ class GradePresenter @Inject constructor(
 
     fun onAttachView(view: GradeView, savedIndex: Int?) {
         super.onAttachView(view)
+        Timber.i("Grade view is attached")
         disposable.add(Completable.timer(150, MILLISECONDS, schedulers.mainThread)
             .subscribe {
                 selectedIndex = savedIndex ?: 0
                 view.initView()
                 loadData()
             })
-        Timber.i("Grade view is attached")
     }
 
     fun onViewReselected() {
-        view?.run { notifyChildParentReselected(currentPageIndex) }
         Timber.i("Grade view is reselected")
+        view?.run { notifyChildParentReselected(currentPageIndex) }
     }
 
     fun onSemesterSwitch(): Boolean {

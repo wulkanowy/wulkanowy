@@ -24,6 +24,7 @@ class MainPresenter @Inject constructor(
 
     fun onAttachView(view: MainView, initMenuIndex: Int) {
         super.onAttachView(view)
+        Timber.i("Main view is attached with $initMenuIndex menu index")
         view.run {
             cancelNotifications()
             startMenuIndex = if (initMenuIndex != -1) initMenuIndex else prefRepository.startMenuIndex
@@ -37,10 +38,9 @@ class MainPresenter @Inject constructor(
             4 -> "More"
             else -> "User action"
         }))
-        Timber.i("Main view is attached with $initMenuIndex menu index")
     }
 
-    fun onViewStart() {
+    fun onViewChange() {
         view?.apply {
             currentViewTitle?.let { setViewTitle(it) }
             currentStackSize?.let {
@@ -48,7 +48,6 @@ class MainPresenter @Inject constructor(
                 else showHomeArrow(false)
             }
         }
-        Timber.i("Main view is started")
     }
 
     fun onAccountManagerSelected(): Boolean {
@@ -70,6 +69,7 @@ class MainPresenter @Inject constructor(
 
     fun onTabSelected(index: Int, wasSelected: Boolean): Boolean {
         return view?.run {
+            Timber.i("Switch main tab index: $index, reselected: $wasSelected")
             if (wasSelected) {
                 notifyMenuViewReselected()
                 false
