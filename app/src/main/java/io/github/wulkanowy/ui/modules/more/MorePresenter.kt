@@ -17,7 +17,7 @@ class MorePresenter @Inject constructor(errorHandler: ErrorHandler) : BasePresen
 
     fun onItemSelected(item: AbstractFlexibleItem<*>?) {
         if (item is MoreItem) {
-            Timber.i("Select more item ${item.title}")
+            Timber.i("Select more item \"${item.title}\"")
             view?.run {
                 when (item.title) {
                     messagesRes?.first -> openMessagesView()
