@@ -12,7 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class LuckyNumberRemote @Inject constructor(private val api: Api) {
 
-    fun getLuckyNumber(semester: Semester): Maybe<LuckyNumber?> {
+    fun getLuckyNumber(semester: Semester): Maybe<LuckyNumber> {
         return Single.just(api.apply { diaryId = semester.diaryId })
             .flatMapMaybe { it.getLuckyNumber() }
             .map {
