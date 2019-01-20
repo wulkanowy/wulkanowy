@@ -7,6 +7,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.reactivex.MaybeSource
 import javax.inject.Inject
 
 class LuckyNumberPresenter @Inject constructor(
@@ -29,7 +30,7 @@ class LuckyNumberPresenter @Inject constructor(
             clear()
             add(studentRepository.getCurrentStudent()
                 .flatMap { semesterRepository.getCurrentSemester(it) }
-                .flatMap { luckyNumberRepository.getLuckyNumbers(it, forceRefresh) }
+                .flatMapMaybe { luckyNumberRepository.getLuckyNumber(it, forceRefresh) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {
@@ -40,14 +41,21 @@ class LuckyNumberPresenter @Inject constructor(
                 }
                 .subscribe({
                     view?.apply {
-                        if (!it.isEmpty()) updateData(it[0])
-                        showContent(!it.isEmpty())
-                        showEmpty(it.isEmpty())
+                        updateData(it)
+                        showContent(true)
+                        showEmpty(false)
                     }
-                    analytics.logEvent("load_lucky_number", mapOf("success" to it.isEmpty(), "force_refresh" to forceRefresh))
-                }) {
+                    analytics.logEvent("load_lucky_number", mapOf("success" to it, "force_refresh" to forceRefresh))
+                }, {
+                    view?.run { showEmpty(true) }
                     errorHandler.dispatch(it)
+                }, {
+                    view?.run {
+                        showContent(false)
+                        showEmpty(true)
+                    }
                 })
+            )
         }
     }
 

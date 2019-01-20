@@ -12,15 +12,15 @@ import javax.inject.Singleton
 @Singleton
 class LuckyNumberLocal @Inject constructor(private val luckyNumberDb: LuckyNumberDao) {
 
-    fun getLuckyNumbers(semester: Semester, date: LocalDate): Maybe<List<LuckyNumber>> {
-        return luckyNumberDb.loadFromDate(semester.studentId, date).filter { !it.isEmpty() }
+    fun getLuckyNumber(semester: Semester, date: LocalDate): Maybe<LuckyNumber> {
+        return luckyNumberDb.loadFromDate(semester.studentId, date)
     }
 
-    fun saveLuckyNumbers(luckyNumbers: List<LuckyNumber>) {
-        luckyNumberDb.insertAll(luckyNumbers)
+    fun saveLuckyNumber(luckyNumber: LuckyNumber) {
+        luckyNumberDb.insert(luckyNumber)
     }
 
-    fun deleteLuckyNumbers(luckyNumbers: List<LuckyNumber>) {
-        luckyNumberDb.deleteAll(luckyNumbers)
+    fun deleteLuckyNumber(luckyNumber: LuckyNumber) {
+        luckyNumberDb.delete(luckyNumber)
     }
 }

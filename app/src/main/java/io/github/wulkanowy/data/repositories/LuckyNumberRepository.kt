@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.local.LuckyNumberLocal
 import io.github.wulkanowy.data.repositories.remote.LuckyNumberRemote
+import io.reactivex.Maybe
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import java.net.UnknownHostException
@@ -19,19 +20,24 @@ class LuckyNumberRepository @Inject constructor(
     private val remote: LuckyNumberRemote
 ) {
 
-    fun getLuckyNumbers(semester: Semester, forceRefresh: Boolean = false): Single<List<LuckyNumber>> {
-        return local.getLuckyNumbers(semester, LocalDate.now()).filter { !forceRefresh }
+    fun getLuckyNumber(semester: Semester, forceRefresh: Boolean = false): Maybe<LuckyNumber> {
+        return local.getLuckyNumber(semester, LocalDate.now()).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
-                .flatMap {
-                    if (it) remote.getLuckyNumbers(semester)
-                    else Single.error(UnknownHostException())
+                .flatMapMaybe {
+                    if (it) remote.getLuckyNumber(semester)
+                    else Maybe.error(UnknownHostException())
                 }.flatMap { new ->
-                    local.getLuckyNumbers(semester, LocalDate.now()).toSingle(emptyList())
+                    local.getLuckyNumber(semester, LocalDate.now())
                         .doOnSuccess { old ->
-                            local.deleteLuckyNumbers(old - new)
-                            local.saveLuckyNumbers(new - old)
+                            if (new != old) {
+                                local.deleteLuckyNumber(old)
+                                local.saveLuckyNumber(new)
+                            }
                         }
-                }.flatMap { local.getLuckyNumbers(semester, LocalDate.now()).toSingle(emptyList()) }
+                        .doOnComplete {
+                            local.saveLuckyNumber(new)
+                        }
+                }.flatMap { local.getLuckyNumber(semester, LocalDate.now()) }
             )
     }
 }

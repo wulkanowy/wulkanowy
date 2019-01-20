@@ -15,21 +15,12 @@ import javax.inject.Singleton
 interface LuckyNumberDao {
 
     @Insert
-    fun insertAll(luckyNumbers: List<LuckyNumber>)
-
-    @Update
-    fun update(luckyNumber: LuckyNumber)
-
-    @Update
-    fun updateAll(luckyNumbers: List<LuckyNumber>)
+    fun insert(luckyNumber: LuckyNumber)
 
     @Delete
-    fun deleteAll(luckyNumbers: List<LuckyNumber>)
-
-    @Query("SELECT * FROM LuckyNumbers WHERE student_id = :studentId")
-    fun loadAll(studentId: Int): Maybe<List<LuckyNumber>>
+    fun delete(luckyNumber: LuckyNumber)
 
     @Query("SELECT * FROM LuckyNumbers WHERE student_id = :studentId AND date = :date")
-    fun loadFromDate(studentId: Int, date: LocalDate): Maybe<List<LuckyNumber>>
+    fun loadFromDate(studentId: Int, date: LocalDate): Maybe<LuckyNumber>
 
 }
