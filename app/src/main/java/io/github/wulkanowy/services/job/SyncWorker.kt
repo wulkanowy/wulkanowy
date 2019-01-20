@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.GradeSummaryRepository
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.MessagesRepository
+import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.RECEIVED
 import io.github.wulkanowy.data.repositories.NoteRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -83,19 +84,19 @@ class SyncWorker : SimpleJobService() {
         var error: Throwable? = null
 
         disposable.add(student.getCurrentStudent()
-            .flatMap { semester.getCurrentSemester(it, true) }
+            .flatMap { semester.getCurrentSemester(it, true).map { semester -> semester to it } }
             .flatMapPublisher {
                 Single.merge(
                     listOf(
-                        gradesDetails.getGrades(it, true, true),
-                        gradesSummary.getGradesSummary(it, true),
-                        attendance.getAttendance(it, start, end, true),
-                        exam.getExams(it, start, end, true),
-                        timetable.getTimetable(it, start, end, true),
-                        //message.getMessages(it, RECEIVED, true, true),
-                        note.getNotes(it, true, true),
-                        homework.getHomework(it, LocalDate.now(), true),
-                        homework.getHomework(it, LocalDate.now().plusDays(1), true)
+                        gradesDetails.getGrades(it.first, true, true),
+                        gradesSummary.getGradesSummary(it.first, true),
+                        attendance.getAttendance(it.first, start, end, true),
+                        exam.getExams(it.first, start, end, true),
+                        timetable.getTimetable(it.first, start, end, true),
+                        message.getMessages(it.second, RECEIVED, true, true),
+                        note.getNotes(it.first, true, true),
+                        homework.getHomework(it.first, LocalDate.now(), true),
+                        homework.getHomework(it.first, LocalDate.now().plusDays(1), true)
                     )
                 )
             }
@@ -137,7 +138,7 @@ class SyncWorker : SimpleJobService() {
         disposable.add(student.getCurrentStudent()
             .flatMap { message.getNewMessages(it) }
             .map { it.filter { message -> !message.isNotified } }
-            .doOnSuccess{
+            .doOnSuccess {
                 if (it.isNotEmpty()) {
                     Timber.d("Found ${it.size} unread messages")
                     MessageNotification(applicationContext).sendNotification(it)
