@@ -188,6 +188,7 @@
     <string name="luckynumber_title">Szczęśliwy numerek</string>
     <string name="luckynumber_header">Dzisiejszym szczęśliwym numerkiem jest</string>
     <string name="luckynumber_empty">Brak informacji o szczęśliwym numerku</string>
+    <string name="luckynumber_menu_title">Ustawienia szczęśliwego numerka</string>
 
     <!--Account-->
     <string name="account_add_new">Dodaj konto</string>

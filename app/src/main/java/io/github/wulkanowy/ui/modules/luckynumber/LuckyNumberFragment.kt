@@ -2,10 +2,12 @@ package io.github.wulkanowy.ui.modules.luckynumber
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import com.ncapdevi.fragnav.FragNavController
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
@@ -18,12 +20,20 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
     @Inject
     lateinit var presenter: LuckyNumberPresenter
 
+    @Inject
+    lateinit var navController: FragNavController
+
     companion object {
         fun newInstance() = LuckyNumberFragment()
     }
 
     override val titleStringId: Int
         get() = R.string.luckynumber_title
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_luckynumber, container, false)
@@ -34,8 +44,17 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
         presenter.onAttachView(this)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.action_menu_luckynumber, menu)
+    }
+
     override fun initView() {
         luckyNumberSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return if (item?.itemId == R.id.luckyNumberMenuSettings) presenter.onMenuSettings()
+        else false
     }
 
     override fun updateData(data: LuckyNumber) {
@@ -56,6 +75,10 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
 
     override fun showContent(show: Boolean) {
         luckyNumberContent.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showSettings() {
+        navController.showDialogFragment(LuckyNumberSettingsDialog.newInstance())
     }
 
     override fun isViewEmpty(): Boolean {

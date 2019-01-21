@@ -171,6 +171,7 @@
     <string name="luckynumber_title">Lucky number</string>
     <string name="luckynumber_header">Today\'s lucky number is</string>
     <string name="luckynumber_empty">No info about the lucky number</string>
+    <string name="luckynumber_menu_title">Lucky number settings</string>
 
     <!--Account-->
     <string name="account_add_new">Add account</string>

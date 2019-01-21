@@ -17,6 +17,7 @@ import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeModule
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
+import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberSettingsDialog
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.MessageModule
 import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
@@ -94,4 +95,8 @@ abstract class MainModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract fun bindsAccountDialog(): AccountDialog
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindLuckyNumberSettingsDialog(): LuckyNumberSettingsDialog
 }

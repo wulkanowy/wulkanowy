@@ -62,4 +62,9 @@ class LuckyNumberPresenter @Inject constructor(
     fun onSwipeRefresh() {
         loadData(true)
     }
+
+    fun onMenuSettings(): Boolean {
+        view?.showSettings()
+        return true
+    }
 }
