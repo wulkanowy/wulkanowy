@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/luckynumber_header"
+                android:text="@string/lucky_number_header"
                 android:textSize="24sp" />
 
             <TextView
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="@string/luckynumber_empty"
+            android:text="@string/lucky_number_empty"
             android:textSize="20sp" />
 
     </LinearLayout>

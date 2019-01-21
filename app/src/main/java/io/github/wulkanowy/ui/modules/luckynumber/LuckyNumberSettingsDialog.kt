@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.android.support.DaggerAppCompatDialogFragment
 import io.github.wulkanowy.R
-import kotlinx.android.synthetic.main.dialog_luckynumber.*
+import kotlinx.android.synthetic.main.dialog_lucky_number.*
 
 class LuckyNumberSettingsDialog : DaggerAppCompatDialogFragment() {
 
@@ -15,7 +15,7 @@ class LuckyNumberSettingsDialog : DaggerAppCompatDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_luckynumber, container, false)
+        return inflater.inflate(R.layout.dialog_lucky_number, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

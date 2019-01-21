@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/luckynumber_menu_title"
+            android:text="@string/lucky_number_menu_title"
             android:textSize="24sp" />
 
         <Button

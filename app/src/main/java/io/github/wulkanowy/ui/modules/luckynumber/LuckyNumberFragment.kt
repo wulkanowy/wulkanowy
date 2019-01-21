@@ -12,7 +12,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainView
-import kotlinx.android.synthetic.main.fragment_luckynumber.*
+import kotlinx.android.synthetic.main.fragment_lucky_number.*
 import javax.inject.Inject
 
 class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.TitledView {
@@ -28,7 +28,7 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
     }
 
     override val titleStringId: Int
-        get() = R.string.luckynumber_title
+        get() = R.string.lucky_number_title
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,7 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_luckynumber, container, false)
+        return inflater.inflate(R.layout.fragment_lucky_number, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -45,7 +45,7 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.action_menu_luckynumber, menu)
+        inflater?.inflate(R.menu.action_menu_lucky_number, menu)
     }
 
     override fun initView() {
