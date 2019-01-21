@@ -57,4 +57,8 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
     override fun showContent(show: Boolean) {
         luckyNumberContent.visibility = if (show) View.VISIBLE else View.GONE
     }
+
+    override fun isViewEmpty(): Boolean {
+        return luckyNumberText.text == "0"
+    }
 }
