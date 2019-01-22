@@ -45,21 +45,19 @@ class LuckyNumberSettingsPresenter @Inject constructor(
     fun onSave() {
         disposable.apply {
             add(studentRepository.getCurrentStudent()
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .subscribe({
+                .flatMapCompletable {
                     view?.run {
                         val allNotifications = luckyNumberSwitchAllNotifications.isChecked
                         val selfNotifications = luckyNumberSwitchSelfNotifications.isChecked
                         val registerNumber = luckyNumberInputRegisterNumber.text.toString().toIntOrNull()
 
                         studentRepository.updateLuckyNumberSettings(it, allNotifications, selfNotifications, registerNumber)
-                            .subscribeOn(schedulers.backgroundThread)
-                            .observeOn(schedulers.mainThread)
-                            .subscribe({
-                                dismiss()
-                            }, { it -> Single.error<Throwable>(it) })
                     }
+                }
+                .subscribeOn(schedulers.backgroundThread)
+                .observeOn(schedulers.mainThread)
+                .subscribe({
+                    view?.run { dismiss() }
                 }, { errorHandler.dispatch(it) }))
         }
     }
