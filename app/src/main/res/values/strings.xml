@@ -172,6 +172,10 @@
     <string name="lucky_number_header">Today\'s lucky number is</string>
     <string name="lucky_number_empty">No info about the lucky number</string>
     <string name="lucky_number_menu_title">Lucky number settings</string>
+    <string name="lucky_number_settings_all_notifications">Receive notifications with new lucky numbers</string>
+    <string name="lucky_number_settings_self_notifications">Only receive notifications when you\'re the lucky number</string>
+    <string name="lucky_number_settings_register_number">Your register number</string>
+
 
     <!--Account-->
     <string name="account_add_new">Add account</string>
@@ -191,6 +195,7 @@
     <string name="all_details">Details</string>
     <string name="all_category">Category</string>
     <string name="all_close">Close</string>
+    <string name="all_save">Save</string>
     <string name="all_no_data">No data</string>
     <string name="all_subject">Subject</string>
     <string name="all_prev">Prev</string>
