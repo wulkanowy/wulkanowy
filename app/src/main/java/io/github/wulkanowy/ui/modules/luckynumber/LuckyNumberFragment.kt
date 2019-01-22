@@ -7,10 +7,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.ncapdevi.fragnav.FragNavController
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import kotlinx.android.synthetic.main.fragment_lucky_number.*
 import javax.inject.Inject
@@ -19,9 +19,6 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
 
     @Inject
     lateinit var presenter: LuckyNumberPresenter
-
-    @Inject
-    lateinit var navController: FragNavController
 
     companion object {
         fun newInstance() = LuckyNumberFragment()
@@ -78,7 +75,7 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
     }
 
     override fun showSettings() {
-        navController.showDialogFragment(LuckyNumberSettingsDialog.newInstance())
+        (activity as? MainActivity)?.showDialogFragment(LuckyNumberSettingsDialog.newInstance())
     }
 
     override fun isViewEmpty(): Boolean {
