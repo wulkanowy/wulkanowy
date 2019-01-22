@@ -82,6 +82,6 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
     }
 
     override fun isViewEmpty(): Boolean {
-        return luckyNumberText.text == "0"
+        return luckyNumberText.text == ""
     }
 }
