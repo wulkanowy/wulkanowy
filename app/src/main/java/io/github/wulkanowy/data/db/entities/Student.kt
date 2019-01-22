@@ -34,5 +34,14 @@ data class Student(
     var schoolName: String = "",
 
     @ColumnInfo(name = "is_current")
-    var isCurrent: Boolean = false
+    var isCurrent: Boolean = false,
+
+    @ColumnInfo(name = "register_number")
+    var registerNumber: Int? = null,
+
+    @ColumnInfo(name = "lucky_number_all_notifications")
+    var luckyNumberAllNotifications: Boolean = false,
+
+    @ColumnInfo(name = "lucky_number_self_notifications")
+    var luckyNumberSelfNotifications: Boolean = false
 )

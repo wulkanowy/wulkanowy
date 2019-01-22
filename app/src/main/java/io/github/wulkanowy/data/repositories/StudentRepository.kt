@@ -55,4 +55,8 @@ class StudentRepository @Inject constructor(
     fun logoutStudent(student: Student): Completable {
         return local.logoutStudent(student)
     }
+
+    fun updateLuckyNumberSettings(student: Student, allNotifications: Boolean, selfNotifications: Boolean, registerNumber: Int?): Completable {
+        return local.updateLuckyNumberSettings(student, allNotifications, selfNotifications, registerNumber)
+    }
 }

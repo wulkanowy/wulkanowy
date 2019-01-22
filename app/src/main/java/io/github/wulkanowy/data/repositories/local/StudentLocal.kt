@@ -55,4 +55,8 @@ class StudentLocal @Inject constructor(
             if (student.isCurrent) sharedPref.putBoolean(STUDENT_SAVED_KEY, false)
         }
     }
+
+    fun updateLuckyNumberSettings(student: Student, allNotifications: Boolean, selfNotifications: Boolean, registerNumber: Int?): Completable {
+        return Completable.fromCallable { studentDb.updateLuckyNumberSettings(student.studentId, allNotifications, selfNotifications, registerNumber) }
+    }
 }
