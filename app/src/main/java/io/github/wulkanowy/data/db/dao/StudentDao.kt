@@ -30,8 +30,4 @@ interface StudentDao {
 
     @Query("UPDATE Students SET is_current = 0")
     fun resetCurrent()
-
-    @Query("UPDATE Students SET lucky_number_all_notifications = :allNotifications, " +
-        "lucky_number_self_notifications = :selfNotifications, register_number = :registerNumber WHERE student_id = :studentId")
-    fun updateLuckyNumberSettings(studentId: Int, allNotifications: Boolean, selfNotifications: Boolean, registerNumber: Int?)
 }

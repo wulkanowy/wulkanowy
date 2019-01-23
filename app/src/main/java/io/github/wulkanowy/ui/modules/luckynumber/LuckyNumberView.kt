@@ -17,7 +17,5 @@ interface LuckyNumberView : BaseSessionView {
 
     fun showContent(show: Boolean)
 
-    fun showSettings()
-
     fun isViewEmpty(): Boolean
 }
