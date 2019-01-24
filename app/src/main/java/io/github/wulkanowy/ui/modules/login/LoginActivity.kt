@@ -36,7 +36,7 @@ class LoginActivity : BaseActivity(), LoginView {
     }
 
     override fun initAdapter() {
-        loginAdapter.addPages(listOf(
+        loginAdapter.addFragments(listOf(
             LoginFormFragment.newInstance(),
             LoginOptionsFragment.newInstance()
         ))

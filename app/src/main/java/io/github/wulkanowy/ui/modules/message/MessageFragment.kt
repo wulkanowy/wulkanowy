@@ -46,14 +46,10 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
     }
 
     override fun initView() {
-        pagerAdapter.addPages(listOf(
-            MessageTabFragment.newInstance(RECEIVED),
-            MessageTabFragment.newInstance(SENT),
-            MessageTabFragment.newInstance(TRASHED)
-        ), listOf(
-            getString(R.string.message_inbox),
-            getString(R.string.message_sent),
-            getString(R.string.message_trash)
+        pagerAdapter.addFragmentsWithTitle(mapOf(
+            MessageTabFragment.newInstance(RECEIVED) to getString(R.string.message_inbox),
+            MessageTabFragment.newInstance(SENT) to getString(R.string.message_sent),
+            MessageTabFragment.newInstance(TRASHED) to getString(R.string.message_trash)
         ))
 
         messageViewPager.run {

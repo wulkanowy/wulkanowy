@@ -59,12 +59,9 @@ class GradeFragment : BaseSessionFragment(), GradeView, MainView.MainChildView, 
     }
 
     override fun initView() {
-        pagerAdapter.addPages(listOf(
-            GradeDetailsFragment.newInstance(),
-            GradeSummaryFragment.newInstance()
-        ), listOf(
-            getString(R.string.all_details),
-            getString(R.string.grade_menu_summary)
+        pagerAdapter.addFragmentsWithTitle(mapOf(
+            GradeDetailsFragment.newInstance() to getString(R.string.all_details),
+            GradeSummaryFragment.newInstance() to getString(R.string.grade_menu_summary)
         ))
 
         gradeViewPager.run {

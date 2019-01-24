@@ -15,10 +15,12 @@ class BaseFragmentPagerAdapter(private val fragmentManager: FragmentManager) : F
         return fragmentManager.findFragmentByTag("android:switcher:$containerId:$position")
     }
 
-    fun addPages(fragments: List<Fragment>, title: List<String>? = null) {
-        fragments.forEachIndexed { index, fragment ->
-            pages[fragment] = if (title == null) null else title[index]
-        }
+    fun addFragments(fragments: List<Fragment>) {
+        fragments.forEach { pages[it] = null }
+    }
+
+    fun addFragmentsWithTitle(pages: Map<Fragment, String>) {
+        this.pages.putAll(pages)
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
