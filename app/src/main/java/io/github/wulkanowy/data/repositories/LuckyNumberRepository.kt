@@ -37,7 +37,9 @@ class LuckyNumberRepository @Inject constructor(
                             }
                         }
                         .doOnComplete {
-                            local.saveLuckyNumber(new)
+                            local.saveLuckyNumber(new.apply {
+                                if (notify) isNotified = false
+                            })
                         }
                 }.flatMap({ local.getLuckyNumber(semester, LocalDate.now()) }, { Maybe.error(it) },
                     { local.getLuckyNumber(semester, LocalDate.now()) })
