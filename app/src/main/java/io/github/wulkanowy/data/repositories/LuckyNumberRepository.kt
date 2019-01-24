@@ -6,8 +6,8 @@ import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.local.LuckyNumberLocal
 import io.github.wulkanowy.data.repositories.remote.LuckyNumberRemote
+import io.reactivex.Completable
 import io.reactivex.Maybe
-import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -20,7 +20,7 @@ class LuckyNumberRepository @Inject constructor(
     private val remote: LuckyNumberRemote
 ) {
 
-    fun getLuckyNumber(semester: Semester, forceRefresh: Boolean = false): Maybe<LuckyNumber> {
+    fun getLuckyNumber(semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Maybe<LuckyNumber> {
         return local.getLuckyNumber(semester, LocalDate.now()).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMapMaybe {
@@ -31,7 +31,9 @@ class LuckyNumberRepository @Inject constructor(
                         .doOnSuccess { old ->
                             if (new != old) {
                                 local.deleteLuckyNumber(old)
-                                local.saveLuckyNumber(new)
+                                local.saveLuckyNumber(new.apply {
+                                    if (notify) isNotified = false
+                                })
                             }
                         }
                         .doOnComplete {
@@ -40,5 +42,9 @@ class LuckyNumberRepository @Inject constructor(
                 }.flatMap({ local.getLuckyNumber(semester, LocalDate.now()) }, { Maybe.error(it) },
                     { local.getLuckyNumber(semester, LocalDate.now()) })
             )
+    }
+
+    fun updateLuckyNumber(luckyNumber: LuckyNumber): Completable {
+        return local.updateLuckyNumber(luckyNumber)
     }
 }

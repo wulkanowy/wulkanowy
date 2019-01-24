@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.GradeSummaryRepository
 import io.github.wulkanowy.data.repositories.HomeworkRepository
+import io.github.wulkanowy.data.repositories.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.RECEIVED
 import io.github.wulkanowy.data.repositories.NoteRepository
@@ -16,6 +17,7 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.services.notification.GradeNotification
+import io.github.wulkanowy.services.notification.LuckyNumberNotification
 import io.github.wulkanowy.services.notification.MessageNotification
 import io.github.wulkanowy.services.notification.NoteNotification
 import io.github.wulkanowy.utils.friday
@@ -60,6 +62,9 @@ class SyncWorker : SimpleJobService() {
     lateinit var homework: HomeworkRepository
 
     @Inject
+    lateinit var luckyNumber: LuckyNumberRepository
+
+    @Inject
     lateinit var prefRepository: PreferencesRepository
 
     private val disposable = CompositeDisposable()
@@ -96,7 +101,8 @@ class SyncWorker : SimpleJobService() {
                         message.getMessages(it.second, RECEIVED, true, true),
                         note.getNotes(it.first, true, true),
                         homework.getHomework(it.first, LocalDate.now(), true),
-                        homework.getHomework(it.first, LocalDate.now().plusDays(1), true)
+                        homework.getHomework(it.first, LocalDate.now().plusDays(1), true),
+                        luckyNumber.getLuckyNumber(it.first, true, true).toSingle()
                     )
                 )
             }
@@ -116,6 +122,7 @@ class SyncWorker : SimpleJobService() {
         sendGradeNotifications()
         sendMessageNotification()
         sendNoteNotification()
+        sendLuckyNumberNotification()
     }
 
     private fun sendGradeNotifications() {
@@ -165,6 +172,19 @@ class SyncWorker : SimpleJobService() {
             .flatMapCompletable { note.updateNotes(it) }
             .subscribe({}, { Timber.e("Notifications sending failed") })
         )
+    }
+
+    private fun sendLuckyNumberNotification() {
+        disposable.add(student.getCurrentStudent()
+            .flatMap { semester.getCurrentSemester(it) }
+            .flatMapMaybe { luckyNumber.getLuckyNumber(it) }
+            .filter { !it.isNotified }
+            .doOnSuccess {
+                LuckyNumberNotification(applicationContext).sendNotification(it)
+            }
+            .map { it.apply { isNotified = true } }
+            .flatMapCompletable { luckyNumber.updateLuckyNumber(it) }
+            .subscribe({}, { Timber.e("Lucky number notification sending failed") }))
     }
 
     override fun onDestroy() {

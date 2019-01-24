@@ -20,6 +20,10 @@ class LuckyNumberLocal @Inject constructor(private val luckyNumberDb: LuckyNumbe
         luckyNumberDb.insert(luckyNumber)
     }
 
+    fun updateLuckyNumber(luckyNumber: LuckyNumber): Completable {
+        return Completable.fromCallable { luckyNumberDb.update(luckyNumber) }
+    }
+
     fun deleteLuckyNumber(luckyNumber: LuckyNumber) {
         luckyNumberDb.delete(luckyNumber)
     }

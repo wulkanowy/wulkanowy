@@ -17,6 +17,9 @@ interface LuckyNumberDao {
     @Insert
     fun insert(luckyNumber: LuckyNumber)
 
+    @Update
+    fun update(luckyNumber: LuckyNumber)
+
     @Delete
     fun delete(luckyNumber: LuckyNumber)
 
