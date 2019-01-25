@@ -85,31 +85,34 @@ class SyncWorker : SimpleJobService() {
         val end = LocalDate.now().friday
 
         if (start.isHolidays) return RESULT_FAIL_NORETRY
+        if (!student.isStudentSaved) return RESULT_FAIL_RETRY
 
         var error: Throwable? = null
+
+        val notify = prefRepository.isNotificationsEnable
 
         disposable.add(student.getCurrentStudent()
             .flatMap { semester.getCurrentSemester(it, true).map { semester -> semester to it } }
             .flatMapCompletable {
                 Completable.merge(
                     listOf(
-                        gradesDetails.getGrades(it.first, true, true).ignoreElement(),
+                        gradesDetails.getGrades(it.first, true, notify).ignoreElement(),
                         gradesSummary.getGradesSummary(it.first, true).ignoreElement(),
                         attendance.getAttendance(it.first, start, end, true).ignoreElement(),
                         exam.getExams(it.first, start, end, true).ignoreElement(),
                         timetable.getTimetable(it.first, start, end, true).ignoreElement(),
-                        message.getMessages(it.second, RECEIVED, true, true).ignoreElement(),
-                        note.getNotes(it.first, true, true).ignoreElement(),
+                        message.getMessages(it.second, RECEIVED, true, notify).ignoreElement(),
+                        note.getNotes(it.first, true, notify).ignoreElement(),
                         homework.getHomework(it.first, LocalDate.now(), true).ignoreElement(),
                         homework.getHomework(it.first, LocalDate.now().plusDays(1), true).ignoreElement(),
-                        luckyNumber.getLuckyNumber(it.first, true, true).ignoreElement()
+                        luckyNumber.getLuckyNumber(it.first, true, notify).ignoreElement()
                     )
                 )
             }
             .subscribe({}, { error = it }))
 
         return if (null === error) {
-            if (prefRepository.isNotificationsEnable) sendNotifications()
+            if (notify) sendNotifications()
             Timber.d("Synchronization successful")
             RESULT_SUCCESS
         } else {
