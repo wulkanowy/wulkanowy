@@ -10,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:indeterminate="true" />
+        android:indeterminate="true"
+        android:visibility="gone" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/luckyNumberSwipe"
@@ -22,11 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/lucky_number_header"
@@ -36,7 +36,7 @@
                 android:id="@+id/luckyNumberText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="0"
+                tools:text="14"
                 android:textSize="52sp" />
 
         </LinearLayout>

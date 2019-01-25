@@ -45,7 +45,7 @@ class LuckyNumberPresenter @Inject constructor(
                         showContent(true)
                         showEmpty(false)
                     }
-                    analytics.logEvent("load_lucky_number", mapOf("success" to it, "force_refresh" to forceRefresh))
+                    analytics.logEvent("load_lucky_number", mapOf("force_refresh" to forceRefresh))
                 }, {
                     view?.run { showEmpty(isViewEmpty()) }
                     errorHandler.dispatch(it)

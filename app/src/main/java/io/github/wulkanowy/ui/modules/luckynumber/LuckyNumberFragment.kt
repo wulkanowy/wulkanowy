@@ -33,6 +33,8 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
     }
 
     override fun initView() {
+        showContent(false)
+        showProgress(true)
         luckyNumberSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
