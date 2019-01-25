@@ -14,6 +14,7 @@ data class LuckyNumber (
 
     var date: LocalDate,
 
+    @ColumnInfo(name = "lucky_number")
     var luckyNumber: Int
 
 ) : Serializable {

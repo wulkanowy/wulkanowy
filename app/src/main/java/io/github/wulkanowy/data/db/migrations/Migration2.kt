@@ -11,6 +11,6 @@ class Migration2 : Migration(1, 2) {
             "is_notified INTEGER NOT NULL, " +
             "student_id INTEGER NOT NULL, " +
             "date INTEGER NOT NULL, " +
-            "luckyNumber INTEGER NOT NULL)")
+            "lucky_number INTEGER NOT NULL)")
     }
 }
