@@ -7,7 +7,7 @@ import io.github.wulkanowy.di.scopes.PerActivity
 import io.github.wulkanowy.di.scopes.PerFragment
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
 import io.github.wulkanowy.ui.modules.login.form.LoginFormFragment
-import io.github.wulkanowy.ui.modules.login.options.LoginOptionsFragment
+import io.github.wulkanowy.ui.modules.login.studentselect.LoginStudentSelectFragment
 
 @Module
 internal abstract class LoginModule {
@@ -27,5 +27,5 @@ internal abstract class LoginModule {
 
     @PerFragment
     @ContributesAndroidInjector()
-    abstract fun bindLoginOptionsFragment(): LoginOptionsFragment
+    abstract fun bindLoginOptionsFragment(): LoginStudentSelectFragment
 }

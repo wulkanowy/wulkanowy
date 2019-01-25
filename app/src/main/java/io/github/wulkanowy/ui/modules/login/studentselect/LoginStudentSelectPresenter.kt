@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.modules.login.options
+package io.github.wulkanowy.ui.modules.login.studentselect
 
 import com.google.firebase.analytics.FirebaseAnalytics.Event.SIGN_UP
 import com.google.firebase.analytics.FirebaseAnalytics.Param.GROUP_ID
@@ -15,15 +15,15 @@ import io.reactivex.Single
 import timber.log.Timber
 import javax.inject.Inject
 
-class LoginOptionsPresenter @Inject constructor(
+class LoginStudentSelectPresenter @Inject constructor(
     private val errorHandler: LoginErrorHandler,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val schedulers: SchedulersProvider,
     private val analytics: FirebaseAnalyticsHelper
-) : BasePresenter<LoginOptionsView>(errorHandler) {
+) : BasePresenter<LoginStudentSelectView>(errorHandler) {
 
-    override fun onAttachView(view: LoginOptionsView) {
+    override fun onAttachView(view: LoginStudentSelectView) {
         super.onAttachView(view)
         view.run {
             initView()
@@ -35,15 +35,15 @@ class LoginOptionsPresenter @Inject constructor(
     }
 
     fun onParentViewLoadData() {
-        disposable.add(studentRepository.cachedStudents
+        /*disposable.add(studentRepository.cachedStudents
             .observeOn(schedulers.mainThread)
             .subscribeOn(schedulers.backgroundThread)
             .doOnSubscribe { view?.showActionBar(true) }
-            .subscribe({ view?.updateData(it.map { student -> LoginOptionsItem(student) }) }, { errorHandler.dispatch(it) }))
+            .subscribe({ view?.updateData(it.map { student -> LoginStudentSelectItem(student) }) }, { errorHandler.dispatch(it) }))*/
     }
 
     fun onItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is LoginOptionsItem) {
+        if (item is LoginStudentSelectItem) {
             registerStudent(item.student)
         }
     }

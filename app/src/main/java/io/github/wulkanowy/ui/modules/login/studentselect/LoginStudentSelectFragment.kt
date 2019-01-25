@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.modules.login.options
+package io.github.wulkanowy.ui.modules.login.studentselect
 
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
@@ -19,16 +19,16 @@ import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_login_options.*
 import javax.inject.Inject
 
-class LoginOptionsFragment : BaseFragment(), LoginOptionsView {
+class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
 
     @Inject
-    lateinit var presenter: LoginOptionsPresenter
+    lateinit var presenter: LoginStudentSelectPresenter
 
     @Inject
     lateinit var loginAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
-        fun newInstance() = LoginOptionsFragment()
+        fun newInstance() = LoginStudentSelectFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -53,7 +53,7 @@ class LoginOptionsFragment : BaseFragment(), LoginOptionsView {
         presenter.onParentViewLoadData()
     }
 
-    override fun updateData(data: List<LoginOptionsItem>) {
+    override fun updateData(data: List<LoginStudentSelectItem>) {
         loginAdapter.updateDataSet(data, true)
     }
 

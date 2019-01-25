@@ -7,7 +7,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
 import io.github.wulkanowy.ui.modules.login.form.LoginFormFragment
-import io.github.wulkanowy.ui.modules.login.options.LoginOptionsFragment
+import io.github.wulkanowy.ui.modules.login.studentselect.LoginStudentSelectFragment
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
@@ -38,7 +38,7 @@ class LoginActivity : BaseActivity(), LoginView {
     override fun initAdapter() {
         loginAdapter.addFragments(listOf(
             LoginFormFragment.newInstance(),
-            LoginOptionsFragment.newInstance()
+            LoginStudentSelectFragment.newInstance()
         ))
 
         loginViewpager.run {
@@ -52,7 +52,7 @@ class LoginActivity : BaseActivity(), LoginView {
     }
 
     override fun notifyOptionsViewLoadData() {
-        (loginAdapter.getFragmentInstance(1) as? LoginOptionsFragment)?.onParentLoadData()
+        (loginAdapter.getFragmentInstance(1) as? LoginStudentSelectFragment)?.onParentLoadData()
     }
 
     fun onChildFragmentSwitchOptions() {
