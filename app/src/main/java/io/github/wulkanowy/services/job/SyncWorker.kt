@@ -23,7 +23,7 @@ import io.github.wulkanowy.services.notification.NoteNotification
 import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
-import io.reactivex.Single
+import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDate
 import timber.log.Timber
@@ -90,19 +90,19 @@ class SyncWorker : SimpleJobService() {
 
         disposable.add(student.getCurrentStudent()
             .flatMap { semester.getCurrentSemester(it, true).map { semester -> semester to it } }
-            .flatMapPublisher {
-                Single.merge(
+            .flatMapCompletable {
+                Completable.merge(
                     listOf(
-                        gradesDetails.getGrades(it.first, true, true),
-                        gradesSummary.getGradesSummary(it.first, true),
-                        attendance.getAttendance(it.first, start, end, true),
-                        exam.getExams(it.first, start, end, true),
-                        timetable.getTimetable(it.first, start, end, true),
-                        message.getMessages(it.second, RECEIVED, true, true),
-                        note.getNotes(it.first, true, true),
-                        homework.getHomework(it.first, LocalDate.now(), true),
-                        homework.getHomework(it.first, LocalDate.now().plusDays(1), true),
-                        luckyNumber.getLuckyNumber(it.first, true, true).toSingle()
+                        gradesDetails.getGrades(it.first, true, true).ignoreElement(),
+                        gradesSummary.getGradesSummary(it.first, true).ignoreElement(),
+                        attendance.getAttendance(it.first, start, end, true).ignoreElement(),
+                        exam.getExams(it.first, start, end, true).ignoreElement(),
+                        timetable.getTimetable(it.first, start, end, true).ignoreElement(),
+                        message.getMessages(it.second, RECEIVED, true, true).ignoreElement(),
+                        note.getNotes(it.first, true, true).ignoreElement(),
+                        homework.getHomework(it.first, LocalDate.now(), true).ignoreElement(),
+                        homework.getHomework(it.first, LocalDate.now().plusDays(1), true).ignoreElement(),
+                        luckyNumber.getLuckyNumber(it.first, true, true).ignoreElement()
                     )
                 )
             }
