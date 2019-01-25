@@ -10,12 +10,14 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Named
 
 class LoginFormPresenter @Inject constructor(
     private val schedulers: SchedulersProvider,
     private val errorHandler: LoginErrorHandler,
     private val studentRepository: StudentRepository,
-    private val analytics: FirebaseAnalyticsHelper
+    private val analytics: FirebaseAnalyticsHelper,
+    @param:Named("isDebug") private val isDebug: Boolean
 ) : BasePresenter<LoginFormView>(errorHandler) {
 
     private var wasEmpty = false
@@ -56,12 +58,12 @@ class LoginFormPresenter @Inject constructor(
             .subscribe({
                 view?.run {
                     if (it.isEmpty() && !wasEmpty) {
-                        showSymbolInput()
+                        showSymbolInput(true)
                         wasEmpty = true
                         analytics.logEvent("sign_up_send", mapOf(SUCCESS to false, "students" to 0, "endpoint" to endpoint, GROUP_ID to symbol.ifEmpty { "null" }))
                         Timber.i("Login result: Empty student list")
                     } else if (it.isEmpty() && wasEmpty) {
-                        showSymbolInput()
+                        showSymbolInput(true)
                         setErrorSymbolIncorrect()
                         analytics.logEvent("sign_up_send", mapOf(SUCCESS to false, "students" to it.size, "endpoint" to endpoint, GROUP_ID to symbol.ifEmpty { "null" }))
                         Timber.i("Login result: Wrong symbol")

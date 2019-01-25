@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.EditorInfo.IME_NULL
 import android.widget.ArrayAdapter
-import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.BuildConfig.VERSION_NAME
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -28,8 +27,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     companion object {
         fun newInstance() = LoginFormFragment()
     }
-
-    override val isDebug = DEBUG
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_form, container, false)
@@ -63,7 +60,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
     }
 
-    override fun showSymbolInput() {
+    override fun showSymbolInput(show: Boolean) {
         loginHeader.text = getString(R.string.login_header_symbol)
         loginMainForm.visibility = GONE
         loginSymbolInput.visibility = VISIBLE
