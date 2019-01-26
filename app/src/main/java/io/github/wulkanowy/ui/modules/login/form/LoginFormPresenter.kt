@@ -80,14 +80,18 @@ class LoginFormPresenter @Inject constructor(
 
     private fun validateCredentials(login: String, password: String, symbol: String): Boolean {
         var isCorrect = true
+        var isLoginCorrect = true
+        var isPasswordCorrect = true
 
         if (login.isEmpty()) {
             view?.setErrorNicknameRequired()
+            isLoginCorrect = false
             isCorrect = false
         }
 
         if (password.isEmpty()) {
             view?.setErrorPassRequired(focus = isCorrect)
+            isPasswordCorrect = false
             isCorrect = false
         }
 
@@ -98,8 +102,18 @@ class LoginFormPresenter @Inject constructor(
 
         if (password.length < 6 && password.isNotEmpty()) {
             view?.setErrorPassInvalid(focus = isCorrect)
+            isPasswordCorrect = false
             isCorrect = false
         }
-        return isCorrect
+
+        if (isLoginCorrect) {
+            view?.resetNicknameError()
+        }
+
+        if (isPasswordCorrect) {
+            view?.resetPassError()
+        }
+
+        return isCorrect;
     }
 }

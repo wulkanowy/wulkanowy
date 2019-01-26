@@ -66,7 +66,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override fun showSymbolInput() {
         loginHeader.text = getString(R.string.login_header_symbol)
         loginMainForm.visibility = GONE
-        loginSymbolInput.visibility = VISIBLE
+        loginSymbolLayout.visibility = VISIBLE
         loginSymbolEdit.requestFocus()
         showSoftKeyboard()
     }
@@ -86,48 +86,62 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override fun setErrorNicknameRequired() {
         loginNicknameEdit.run {
             requestFocus()
-            error = getString(R.string.login_field_required)
         }
+
+        loginNicknameLayout.error = getString(R.string.login_field_required)
     }
 
     override fun setErrorPassRequired(focus: Boolean) {
         loginPassEdit.run {
             if (focus) requestFocus()
-            error = getString(R.string.login_field_required)
         }
+
+        loginPassLayout.error = getString(R.string.login_field_required)
     }
 
     override fun setErrorPassInvalid(focus: Boolean) {
         loginPassEdit.run {
             if (focus) requestFocus()
-            error = getString(R.string.login_invalid_password)
         }
+
+        loginPassLayout.error = getString(R.string.login_invalid_password)
     }
 
     override fun setErrorSymbolRequire() {
         loginSymbolEdit.run {
             requestFocus()
-            error = getString(R.string.login_field_required)
         }
+
+        loginSymbolLayout.error = getString(R.string.login_field_required)
     }
 
     override fun setErrorPassIncorrect() {
         loginPassEdit.run {
             requestFocus()
-            error = getString(R.string.login_incorrect_password)
         }
+
+        loginPassLayout.error = getString(R.string.login_incorrect_password)
     }
 
     override fun setErrorSymbolIncorrect() {
         loginSymbolEdit.run {
             requestFocus()
-            error = getString(R.string.login_incorrect_symbol)
         }
+
+        loginSymbolLayout.error = getString(R.string.login_incorrect_symbol)
+    }
+
+    override fun resetNicknameError() {
+        loginNicknameLayout.error = null
+    }
+
+    override fun resetPassError() {
+        loginPassLayout.error = null
     }
 
     override fun resetViewErrors() {
-        loginNicknameEdit.error = null
-        loginPassEdit.error = null
+        resetNicknameError()
+        resetPassError()
     }
 
     override fun showSoftKeyboard() {

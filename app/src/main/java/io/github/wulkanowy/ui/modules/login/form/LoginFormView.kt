@@ -22,6 +22,10 @@ interface LoginFormView : BaseView {
 
     fun setErrorSymbolIncorrect()
 
+    fun resetNicknameError()
+
+    fun resetPassError()
+
     fun resetViewErrors()
 
     fun showVersion()
