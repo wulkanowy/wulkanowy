@@ -34,12 +34,9 @@ class LoginStudentSelectPresenter @Inject constructor(
         }
     }
 
-    fun onParentViewLoadData() {
-        /*disposable.add(studentRepository.cachedStudents
-            .observeOn(schedulers.mainThread)
-            .subscribeOn(schedulers.backgroundThread)
-            .doOnSubscribe { view?.showActionBar(true) }
-            .subscribe({ view?.updateData(it.map { student -> LoginStudentSelectItem(student) }) }, { errorHandler.dispatch(it) }))*/
+    fun onParentInitStudentSelectView(students: List<Student>) {
+        view?.showActionBar(true)
+        view?.updateData(students.map { LoginStudentSelectItem(it) })
     }
 
     fun onItemSelected(item: AbstractFlexibleItem<*>?) {

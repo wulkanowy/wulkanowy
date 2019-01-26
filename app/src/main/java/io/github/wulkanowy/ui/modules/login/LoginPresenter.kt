@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.login
 
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import timber.log.Timber
@@ -16,21 +17,32 @@ class LoginPresenter @Inject constructor(errorHandler: ErrorHandler) : BasePrese
         Timber.i("Login view is attached")
     }
 
-    fun onPageSelected(index: Int) {
-        if (index == 1) view?.notifyOptionsViewLoadData()
+    fun onFormViewAccountLogged(students: List<Student>, email: String, pass: String, endpoint: String) {
+        if (!students.isEmpty()) {
+            view?.notifyInitSymbolFragment(email, pass, endpoint)
+            view?.switchView(1)
+        } else {
+            view?.notifyInitStudentSelectFragment(students)
+            view?.switchView(2)
+        }
     }
 
-    fun onChildViewSwitchOptions() {
-        view?.switchView(1)
+    fun onSymbolViewAccountLogged(students: List<Student>) {
+        view?.notifyInitStudentSelectFragment(students)
+        view?.switchView(2)
     }
 
     fun onBackPressed(default: () -> Unit) {
         Timber.i("Back pressed in login view")
         view?.run {
-            if (currentViewIndex == 1) {
-                switchView(0)
-                hideActionBar()
-            } else default()
+            when (currentViewIndex) {
+                2 -> {
+                    switchView(0)
+                    hideActionBar()
+                }
+                1 -> switchView(0)
+                else -> default()
+            }
         }
     }
 }

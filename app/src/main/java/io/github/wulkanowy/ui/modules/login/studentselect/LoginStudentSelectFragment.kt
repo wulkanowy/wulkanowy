@@ -13,10 +13,11 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.setOnItemClickListener
-import kotlinx.android.synthetic.main.fragment_login_options.*
+import kotlinx.android.synthetic.main.fragment_login_student_select.*
 import javax.inject.Inject
 
 class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
@@ -32,7 +33,7 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_login_options, container, false)
+        return inflater.inflate(R.layout.fragment_login_student_select, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -47,10 +48,6 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
             adapter = loginAdapter
             layoutManager = SmoothScrollLinearLayoutManager(context)
         }
-    }
-
-    fun onParentLoadData() {
-        presenter.onParentViewLoadData()
     }
 
     override fun updateData(data: List<LoginStudentSelectItem>) {
@@ -74,6 +71,10 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
 
     override fun showActionBar(show: Boolean) {
         (activity as? AppCompatActivity)?.supportActionBar?.run { if (show) show() else hide() }
+    }
+
+    fun onParentInitStudentSelectFragment(students: List<Student>) {
+        presenter.onParentInitStudentSelectView(students)
     }
 
     override fun onDestroyView() {
