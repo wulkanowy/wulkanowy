@@ -35,8 +35,10 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     fun onParentInitStudentSelectView(students: List<Student>) {
-        view?.showActionBar(true)
-        view?.updateData(students.map { LoginStudentSelectItem(it) })
+        view?.apply {
+            showActionBar(true)
+            updateData(students.map { LoginStudentSelectItem(it) })
+        }
     }
 
     fun onItemSelected(item: AbstractFlexibleItem<*>?) {

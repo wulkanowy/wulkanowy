@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
+import java.io.Serializable
 import javax.inject.Inject
 
 class LoginSymbolPresenter @Inject constructor(
@@ -12,13 +13,9 @@ class LoginSymbolPresenter @Inject constructor(
     private val schedulers: SchedulersProvider
 ) : BasePresenter<LoginSymbolView>(errorHandler) {
 
-    private lateinit var email: String
+    lateinit var loginData: Triple<String, String, String>
 
-    private lateinit var pass: String
-
-    private lateinit var endpoint: String
-
-    override fun onAttachView(view: LoginSymbolView) {
+    fun onAttachView(view: LoginSymbolView, savedLoginData: Serializable?) {
         super.onAttachView(view)
         view.initView()
     }
@@ -29,7 +26,7 @@ class LoginSymbolPresenter @Inject constructor(
             return
         }
 
-        disposable.add(studentRepository.getStudents(email, pass, endpoint, symbol)
+        disposable.add(studentRepository.getStudents(loginData.first, loginData.second, loginData.third, symbol)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {
@@ -53,9 +50,7 @@ class LoginSymbolPresenter @Inject constructor(
     }
 
     fun onParentInitSymbolView(loginData: Triple<String, String, String>) {
-        this.email = loginData.first
-        this.pass = loginData.second
-        this.endpoint = loginData.third
+        this.loginData = loginData
         view?.apply {
             clearAndFocusSymbol()
             showSoftKeyboard()

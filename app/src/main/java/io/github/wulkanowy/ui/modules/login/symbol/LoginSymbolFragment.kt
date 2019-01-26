@@ -24,6 +24,8 @@ class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
     lateinit var presenter: LoginSymbolPresenter
 
     companion object {
+        private const val SAVED_LOGIN_DATA = "LOGIN_DATA"
+
         fun newInstance() = LoginSymbolFragment()
     }
 
@@ -33,7 +35,7 @@ class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.onAttachView(this)
+        presenter.onAttachView(this, savedInstanceState?.getSerializable(SAVED_LOGIN_DATA))
     }
 
     override fun initView() {
@@ -94,6 +96,11 @@ class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
 
     override fun notifyParentAccountLogged(students: List<Student>) {
         (activity as? LoginActivity)?.onSymbolFragmentAccountLogged(students)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(SAVED_LOGIN_DATA, presenter.loginData)
     }
 
     override fun onDestroyView() {
