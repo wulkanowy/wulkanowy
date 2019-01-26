@@ -47,8 +47,8 @@ class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
         }
     }
 
-    fun onParentInitSymbolFragment(email: String, pass: String, endpoint: String) {
-        presenter.onParentInitSymbolView(email, pass, endpoint)
+    fun onParentInitSymbolFragment(loginData: Triple<String, String, String>) {
+        presenter.onParentInitSymbolView(loginData)
     }
 
     override fun setErrorSymbolIncorrect() {

@@ -17,10 +17,10 @@ class LoginPresenter @Inject constructor(errorHandler: ErrorHandler) : BasePrese
         Timber.i("Login view is attached")
     }
 
-    fun onFormViewAccountLogged(students: List<Student>, email: String, pass: String, endpoint: String) {
+    fun onFormViewAccountLogged(students: List<Student>, loginData: Triple<String, String, String>) {
         view?.apply {
             if (!students.isEmpty()) {
-                notifyInitSymbolFragment(email, pass, endpoint)
+                notifyInitSymbolFragment(loginData)
                 switchView(1)
             } else {
                 notifyInitStudentSelectFragment(students)

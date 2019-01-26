@@ -115,10 +115,11 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     }
 
     override fun notifyParentAccountLogged(students: List<Student>) {
-        (activity as? LoginActivity)?.onFormFragmentAccountLogged(students,
+        (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, Triple(
             loginFormName.text.toString(),
             loginFormPass.text.toString(),
-            resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition])
+            resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
+        ))
     }
 
     override fun onDestroyView() {

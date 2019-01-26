@@ -61,16 +61,16 @@ class LoginActivity : BaseActivity(), LoginView {
         presenter.onBackPressed { super.onBackPressed() }
     }
 
-    override fun notifyInitSymbolFragment(email: String, pass: String, endpoint: String) {
-        (loginAdapter.getFragmentInstance(1) as? LoginSymbolFragment)?.onParentInitSymbolFragment(email, pass, endpoint)
+    override fun notifyInitSymbolFragment(loginData: Triple<String, String, String>) {
+        (loginAdapter.getFragmentInstance(1) as? LoginSymbolFragment)?.onParentInitSymbolFragment(loginData)
     }
 
     override fun notifyInitStudentSelectFragment(students: List<Student>) {
         (loginAdapter.getFragmentInstance(2) as? LoginStudentSelectFragment)?.onParentInitStudentSelectFragment(students)
     }
 
-    fun onFormFragmentAccountLogged(students: List<Student>, email: String, pass: String, endpoint: String) {
-        presenter.onFormViewAccountLogged(students, email, pass, endpoint)
+    fun onFormFragmentAccountLogged(students: List<Student>, loginData: Triple<String, String, String>) {
+        presenter.onFormViewAccountLogged(students, loginData)
     }
 
     fun onSymbolFragmentAccountLogged(students: List<Student>) {

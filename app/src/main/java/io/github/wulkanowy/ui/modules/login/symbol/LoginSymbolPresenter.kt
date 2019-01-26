@@ -52,10 +52,10 @@ class LoginSymbolPresenter @Inject constructor(
             }, { errorHandler.dispatch(it) }))
     }
 
-    fun onParentInitSymbolView(email: String, pass: String, endpoint: String) {
-        this.email = email
-        this.pass = pass
-        this.endpoint = endpoint
+    fun onParentInitSymbolView(loginData: Triple<String, String, String>) {
+        this.email = loginData.first
+        this.pass = loginData.second
+        this.endpoint = loginData.third
         view?.apply {
             clearAndFocusSymbol()
             showSoftKeyboard()

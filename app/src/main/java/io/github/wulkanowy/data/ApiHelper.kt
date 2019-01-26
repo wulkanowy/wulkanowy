@@ -18,6 +18,7 @@ class ApiHelper @Inject constructor(private val api: Api) {
             host = URL(student.endpoint).run { host + ":$port".removeSuffix(":-1") }
             ssl = student.endpoint.startsWith("https")
             loginType = Api.LoginType.valueOf(student.loginType)
+            useNewStudent = true
         }
     }
 

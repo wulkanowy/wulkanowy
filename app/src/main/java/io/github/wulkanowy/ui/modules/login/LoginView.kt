@@ -13,7 +13,7 @@ interface LoginView : BaseView {
 
     fun hideActionBar()
 
-    fun notifyInitSymbolFragment(email: String, pass: String, endpoint: String)
+    fun notifyInitSymbolFragment(loginData: Triple<String, String, String>)
 
     fun notifyInitStudentSelectFragment(students: List<Student>)
 }
