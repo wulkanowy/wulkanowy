@@ -13,6 +13,8 @@ interface LoginSymbolView : BaseView {
 
     fun resetViewErrors()
 
+    fun clearAndFocusSymbol()
+
     fun showSoftKeyboard()
 
     fun hideSoftKeyboard()
@@ -22,6 +24,4 @@ interface LoginSymbolView : BaseView {
     fun showContent(show: Boolean)
 
     fun notifyParentAccountLogged(students: List<Student>)
-
-    fun clearSymbol()
 }

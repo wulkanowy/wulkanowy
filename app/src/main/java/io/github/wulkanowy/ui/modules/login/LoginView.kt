@@ -9,9 +9,9 @@ interface LoginView : BaseView {
 
     fun initAdapter()
 
-    fun hideActionBar()
-
     fun switchView(index: Int)
+
+    fun hideActionBar()
 
     fun notifyInitSymbolFragment(email: String, pass: String, endpoint: String)
 

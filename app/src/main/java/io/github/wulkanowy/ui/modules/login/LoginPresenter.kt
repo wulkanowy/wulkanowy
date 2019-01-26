@@ -18,23 +18,27 @@ class LoginPresenter @Inject constructor(errorHandler: ErrorHandler) : BasePrese
     }
 
     fun onFormViewAccountLogged(students: List<Student>, email: String, pass: String, endpoint: String) {
-        if (!students.isEmpty()) {
-            view?.notifyInitSymbolFragment(email, pass, endpoint)
-            view?.switchView(1)
-        } else {
-            view?.notifyInitStudentSelectFragment(students)
-            view?.switchView(2)
+        view?.apply {
+            if (!students.isEmpty()) {
+                notifyInitSymbolFragment(email, pass, endpoint)
+                switchView(1)
+            } else {
+                notifyInitStudentSelectFragment(students)
+                switchView(2)
+            }
         }
     }
 
     fun onSymbolViewAccountLogged(students: List<Student>) {
-        view?.notifyInitStudentSelectFragment(students)
-        view?.switchView(2)
+        view?.apply {
+            notifyInitStudentSelectFragment(students)
+            switchView(2)
+        }
     }
 
     fun onBackPressed(default: () -> Unit) {
         Timber.i("Back pressed in login view")
-        view?.run {
+        view?.apply {
             when (currentViewIndex) {
                 2 -> {
                     switchView(0)

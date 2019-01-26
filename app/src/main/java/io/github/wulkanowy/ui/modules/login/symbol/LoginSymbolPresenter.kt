@@ -56,6 +56,9 @@ class LoginSymbolPresenter @Inject constructor(
         this.email = email
         this.pass = pass
         this.endpoint = endpoint
-        view?.clearSymbol()
+        view?.apply {
+            clearAndFocusSymbol()
+            showSoftKeyboard()
+        }
     }
 }
