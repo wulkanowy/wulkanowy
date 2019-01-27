@@ -85,11 +85,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
     }
 
-    override fun resetViewErrors() {
-        loginFormName.error = null
-        loginFormPass.error = null
-    }
-
     override fun showSoftKeyboard() {
         activity?.showSoftInput()
     }

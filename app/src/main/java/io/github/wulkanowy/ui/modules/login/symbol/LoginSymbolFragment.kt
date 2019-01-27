@@ -67,10 +67,6 @@ class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
         }
     }
 
-    override fun resetViewErrors() {
-        loginSymbolName.error = null
-    }
-
     override fun clearAndFocusSymbol() {
         loginSymbolName.apply {
             text = null

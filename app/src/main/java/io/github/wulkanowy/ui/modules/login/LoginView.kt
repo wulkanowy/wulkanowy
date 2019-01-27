@@ -11,7 +11,7 @@ interface LoginView : BaseView {
 
     fun switchView(index: Int)
 
-    fun hideActionBar()
+    fun showActionBar(show: Boolean)
 
     fun notifyInitSymbolFragment(loginData: Triple<String, String, String>)
 

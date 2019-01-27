@@ -13,6 +13,7 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Single
 import timber.log.Timber
+import java.io.Serializable
 import javax.inject.Inject
 
 class LoginStudentSelectPresenter @Inject constructor(
@@ -23,7 +24,9 @@ class LoginStudentSelectPresenter @Inject constructor(
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<LoginStudentSelectView>(errorHandler) {
 
-    override fun onAttachView(view: LoginStudentSelectView) {
+    var students = emptyList<Student>()
+
+    fun onAttachView(view: LoginStudentSelectView, students: Serializable?) {
         super.onAttachView(view)
         view.run {
             initView()
@@ -32,18 +35,26 @@ class LoginStudentSelectPresenter @Inject constructor(
                 Timber.i("The student already registered in the app was selected")
             }
         }
+
+        if (students is List<*> && students.isNotEmpty()) {
+            loadData(students.filterIsInstance<Student>())
+        }
     }
 
     fun onParentInitStudentSelectView(students: List<Student>) {
-        view?.apply {
-            showActionBar(true)
-            updateData(students.map { LoginStudentSelectItem(it) })
-        }
+        loadData(students)
     }
 
     fun onItemSelected(item: AbstractFlexibleItem<*>?) {
         if (item is LoginStudentSelectItem) {
             registerStudent(item.student)
+        }
+    }
+
+    private fun loadData(students: List<Student>) {
+        this.students = students
+        view?.apply {
+            updateData(students.map { LoginStudentSelectItem(it) })
         }
     }
 

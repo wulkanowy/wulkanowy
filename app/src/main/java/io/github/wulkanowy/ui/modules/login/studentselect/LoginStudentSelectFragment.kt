@@ -18,6 +18,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_login_student_select.*
+import java.io.Serializable
 import javax.inject.Inject
 
 class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
@@ -29,6 +30,8 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
     lateinit var loginAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
+        const val SAVED_STUDENTS = "STUDENTS"
+
         fun newInstance() = LoginStudentSelectFragment()
     }
 
@@ -38,7 +41,7 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.onAttachView(this)
+        presenter.onAttachView(this, savedInstanceState?.getSerializable(SAVED_STUDENTS))
     }
 
     override fun initView() {
@@ -75,6 +78,11 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
 
     fun onParentInitStudentSelectFragment(students: List<Student>) {
         presenter.onParentInitStudentSelectView(students)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(SAVED_STUDENTS, presenter.students as Serializable)
     }
 
     override fun onDestroyView() {

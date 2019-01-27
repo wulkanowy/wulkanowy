@@ -12,7 +12,7 @@ class LoginPresenter @Inject constructor(errorHandler: ErrorHandler) : BasePrese
         super.onAttachView(view)
         view.run {
             initAdapter()
-            hideActionBar()
+            showActionBar(false)
         }
         Timber.i("Login view is attached")
     }
@@ -36,15 +36,20 @@ class LoginPresenter @Inject constructor(errorHandler: ErrorHandler) : BasePrese
         }
     }
 
+    fun onViewSelected(index: Int) {
+        view?.apply {
+            when (index) {
+                0, 1 -> showActionBar(false)
+                2 -> showActionBar(true)
+            }
+        }
+    }
+
     fun onBackPressed(default: () -> Unit) {
         Timber.i("Back pressed in login view")
         view?.apply {
             when (currentViewIndex) {
-                2 -> {
-                    switchView(0)
-                    hideActionBar()
-                }
-                1 -> switchView(0)
+                1, 2 -> switchView(0)
                 else -> default()
             }
         }

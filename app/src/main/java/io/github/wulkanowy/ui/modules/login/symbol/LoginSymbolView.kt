@@ -11,8 +11,6 @@ interface LoginSymbolView : BaseView {
 
     fun setErrorSymbolRequire()
 
-    fun resetViewErrors()
-
     fun clearAndFocusSymbol()
 
     fun showSoftKeyboard()

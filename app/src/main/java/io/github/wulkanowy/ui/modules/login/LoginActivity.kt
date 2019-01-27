@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
 import io.github.wulkanowy.ui.modules.login.form.LoginFormFragment
 import io.github.wulkanowy.ui.modules.login.studentselect.LoginStudentSelectFragment
 import io.github.wulkanowy.ui.modules.login.symbol.LoginSymbolFragment
+import io.github.wulkanowy.utils.setOnSelectPageListener
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -46,6 +47,7 @@ class LoginActivity : BaseActivity(), LoginView {
         loginViewpager.run {
             offscreenPageLimit = 2
             adapter = loginAdapter
+            setOnSelectPageListener { presenter.onViewSelected(it) }
         }
     }
 
@@ -53,8 +55,8 @@ class LoginActivity : BaseActivity(), LoginView {
         loginViewpager.setCurrentItem(index, false)
     }
 
-    override fun hideActionBar() {
-        supportActionBar?.hide()
+    override fun showActionBar(show: Boolean) {
+        supportActionBar?.apply { if (show) show() else hide() }
     }
 
     override fun onBackPressed() {

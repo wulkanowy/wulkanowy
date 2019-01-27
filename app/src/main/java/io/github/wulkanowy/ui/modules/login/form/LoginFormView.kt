@@ -15,8 +15,6 @@ interface LoginFormView : BaseView {
 
     fun setErrorPassIncorrect()
 
-    fun resetViewErrors()
-
     fun showSoftKeyboard()
 
     fun hideSoftKeyboard()
