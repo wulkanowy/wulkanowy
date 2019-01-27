@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.utils.colorStringId
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.valueColor
+import io.github.wulkanowy.utils.valueBgColor
+import io.github.wulkanowy.utils.valueTextColor
 import kotlinx.android.synthetic.main.dialog_grade.*
 
 
@@ -57,7 +59,8 @@ class GradeDetailsDialog : DialogFragment() {
 
         gradeDialogValue.run {
             text = grade.entry
-            setBackgroundResource(grade.valueColor)
+            setBackgroundResource(grade.valueBgColor)
+            setTextColor(ContextCompat.getColor(context, grade.valueTextColor))
         }
 
         gradeDialogTeacherValue.text = if (grade.teacher.isBlank()) {

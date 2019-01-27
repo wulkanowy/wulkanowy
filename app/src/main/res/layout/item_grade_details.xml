@@ -17,11 +17,11 @@
         android:layout_width="45dp"
         android:layout_height="40dp"
         android:layout_centerVertical="true"
-        android:background="@color/grade_default"
+        android:background="@color/grade_bg_default"
         android:gravity="center"
         android:maxLength="5"
         android:text="@string/app_name"
-        android:textColor="@color/grade_text"
+        android:textColor="@color/grade_text_default"
         android:textSize="16sp" />
 
     <TextView
