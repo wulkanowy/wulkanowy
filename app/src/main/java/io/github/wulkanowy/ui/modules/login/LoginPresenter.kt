@@ -19,7 +19,7 @@ class LoginPresenter @Inject constructor(errorHandler: ErrorHandler) : BasePrese
 
     fun onFormViewAccountLogged(students: List<Student>, loginData: Triple<String, String, String>) {
         view?.apply {
-            if (!students.isEmpty()) {
+            if (students.isEmpty()) {
                 notifyInitSymbolFragment(loginData)
                 switchView(1)
             } else {

@@ -46,28 +46,12 @@ class LoginStudentSelectPresenterTest {
         clearInvocations(studentRepository, loginStudentSelectView)
         clearInvocations(semesterRepository, loginStudentSelectView)
         presenter = LoginStudentSelectPresenter(errorHandler, studentRepository, semesterRepository, TestSchedulersProvider(), analytics)
-        presenter.onAttachView(loginStudentSelectView)
+        presenter.onAttachView(loginStudentSelectView, null)
     }
 
     @Test
     fun initViewTest() {
         verify(loginStudentSelectView).initView()
-    }
-
-    @Test
-    fun refreshDataTest() {
-        //doReturn(Single.just(listOf(testStudent))).`when`(studentRepository).cachedStudents
-        presenter.onParentViewLoadData()
-        verify(loginStudentSelectView).showActionBar(true)
-        verify(loginStudentSelectView).updateData(listOf(LoginStudentSelectItem(testStudent)))
-    }
-
-    @Test
-    fun refreshDataErrorTest() {
-        //doReturn(Single.error<List<Student>>(testException)).`when`(studentRepository).cachedStudents
-        presenter.onParentViewLoadData()
-        verify(loginStudentSelectView).showActionBar(true)
-        verify(errorHandler).dispatch(testException)
     }
 
     @Test
