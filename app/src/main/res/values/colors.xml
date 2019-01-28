@@ -5,18 +5,18 @@
     <color name="colorPrimaryLight">#ff6659</color>
     <color name="colorBackgroundBottomNav">#f0f0f0</color>
 
-    <color name="grade_bg_six">#91b43c</color>
-    <color name="grade_bg_five">#2cbd92</color>
-    <color name="grade_bg_four">#50b6d6</color>
-    <color name="grade_bg_three">#d2ab24</color>
-    <color name="grade_bg_two">#9071b3</color>ff00ff
-    <color name="grade_bg_one">#d65757</color>
-    <color name="grade_bg_default">#3d5f9c</color>
+    <color name="grade_bg_six">#03a9f4</color>
+    <color name="grade_bg_five">#4CAF50</color>
+    <color name="grade_bg_four">#CDDC39</color>
+    <color name="grade_bg_three">#FFC107</color>
+    <color name="grade_bg_two">#FF5722</color>ff00ff
+    <color name="grade_bg_one">#E53935</color>
+    <color name="grade_bg_default">#607D8B</color>
 
     <color name="grade_text_six">#ffffff</color>
     <color name="grade_text_five">#ffffff</color>
-    <color name="grade_text_four">#ffffff</color>
-    <color name="grade_text_three">#ffffff</color>
+    <color name="grade_text_four">#000000</color>
+    <color name="grade_text_three">#000000</color>
     <color name="grade_text_two">#ffffff</color>
     <color name="grade_text_one">#ffffff</color>
     <color name="grade_text_default">#ffffff</color>
