@@ -2,6 +2,8 @@ package io.github.wulkanowy.ui.modules.login.form
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -49,7 +51,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
                 resources.getStringArray(R.array.endpoints_values)[loginHostEdit.selectedItemPosition]
             )
         }
-
         loginPassEdit.setOnEditorActionListener { _, id, _ -> onEditAction(id) }
 
         loginHostEdit.apply {
@@ -61,6 +62,36 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
             setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
             setOnEditorActionListener { _, id, _ -> onEditAction(id) }
         }
+
+        loginNicknameEdit.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                resetNicknameError()
+            }
+        })
+
+        loginPassEdit.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                resetPassError()
+            }
+        })
+
+        loginSymbolEdit.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                resetSymbolError()
+            }
+        })
     }
 
     override fun showSymbolInput() {
@@ -139,9 +170,14 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginPassLayout.error = null
     }
 
+    override fun resetSymbolError() {
+        loginSymbolLayout.error = null
+    }
+
     override fun resetViewErrors() {
         resetNicknameError()
         resetPassError()
+        resetSymbolError()
     }
 
     override fun showSoftKeyboard() {

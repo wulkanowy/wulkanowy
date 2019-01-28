@@ -26,6 +26,8 @@ interface LoginFormView : BaseView {
 
     fun resetPassError()
 
+    fun resetSymbolError()
+
     fun resetViewErrors()
 
     fun showVersion()
