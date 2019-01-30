@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.login.form
 
+import com.google.firebase.analytics.FirebaseAnalytics.Param.SUCCESS
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
@@ -50,8 +51,13 @@ class LoginFormPresenter @Inject constructor(
                     showContent(true)
                 }
             }
-            .subscribe({ view?.notifyParentAccountLogged(it) }, {
+            .subscribe({
+                Timber.i("Login result: Success")
+                analytics.logEvent("registration_form", SUCCESS to true, "students" to it.size, "endpoint" to endpoint, "error" to "No error")
+                view?.notifyParentAccountLogged(it)
+            }, {
                 Timber.i("Login result: An exception occurred")
+                analytics.logEvent("registration_form", SUCCESS to false, "students" to -1, "endpoint" to endpoint, "error" to it.localizedMessage)
                 errorHandler.dispatch(it)
             }))
     }

@@ -1,7 +1,5 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
-import com.google.firebase.analytics.FirebaseAnalytics.Event.SIGN_UP
-import com.google.firebase.analytics.FirebaseAnalytics.Param.GROUP_ID
 import com.google.firebase.analytics.FirebaseAnalytics.Param.SUCCESS
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Student
@@ -75,10 +73,11 @@ class LoginStudentSelectPresenter @Inject constructor(
                 Timber.i("Registration started")
             }
             .subscribe({
-                analytics.logEvent(SIGN_UP, mapOf(SUCCESS to true, "endpoint" to student.endpoint, "message" to "Success", GROUP_ID to student.symbol))
+                analytics.logEvent("registration_student_select", SUCCESS to true, "endpoint" to student.endpoint, "symbol" to student.symbol, "error" to "No error")
                 Timber.i("Registration result: Success")
                 view?.openMainView()
             }, {
+                analytics.logEvent("registration_student_select", SUCCESS to false, "endpoint" to student.endpoint, "symbol" to student.symbol, "error" to it.localizedMessage)
                 Timber.i("Registration result: An exception occurred ")
                 errorHandler.dispatch(it)
                 view?.apply {

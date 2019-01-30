@@ -20,9 +20,11 @@ class LoginPresenter @Inject constructor(errorHandler: ErrorHandler) : BasePrese
     fun onFormViewAccountLogged(students: List<Student>, loginData: Triple<String, String, String>) {
         view?.apply {
             if (students.isEmpty()) {
+                Timber.i("Switch to symbol form")
                 notifyInitSymbolFragment(loginData)
                 switchView(1)
             } else {
+                Timber.i("Switch to student select")
                 notifyInitStudentSelectFragment(students)
                 switchView(2)
             }
@@ -31,6 +33,7 @@ class LoginPresenter @Inject constructor(errorHandler: ErrorHandler) : BasePrese
 
     fun onSymbolViewAccountLogged(students: List<Student>) {
         view?.apply {
+            Timber.i("Switch to student select")
             notifyInitStudentSelectFragment(students)
             switchView(2)
         }
