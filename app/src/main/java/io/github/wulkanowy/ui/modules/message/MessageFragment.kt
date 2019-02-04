@@ -12,7 +12,9 @@ import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.SE
 import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.TRASHED
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.modules.message.send.SendMessageFragment
 import io.github.wulkanowy.ui.modules.message.tab.MessageTabFragment
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import kotlinx.android.synthetic.main.fragment_message.*
@@ -58,6 +60,8 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
             setOnSelectPageListener { presenter.onPageSelected(it) }
         }
         messageTabLayout.setupWithViewPager(messageViewPager)
+
+        openSendMessageButton.setOnClickListener { openSendMessage() }
     }
 
     override fun showContent(show: Boolean) {
@@ -75,6 +79,10 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
 
     override fun notifyChildLoadData(index: Int, forceRefresh: Boolean) {
         (pagerAdapter.getFragmentInstance(index) as? MessageView.MessageChildView)?.onParentLoadData(forceRefresh)
+    }
+
+    override fun openSendMessage() {
+        (activity as? MainActivity)?.pushView(SendMessageFragment.newInstance())
     }
 
     override fun onDestroyView() {
