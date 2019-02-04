@@ -147,6 +147,13 @@
         <item quantity="other">You received %1$d messages</item>
     </plurals>
 
+    <!--Send message-->
+    <string name="send_message_title">Send</string>
+    <string name="send_message_from">From</string>
+    <string name="send_message_to">To</string>
+    <string name="send_message_subject">Subject</string>
+    <string name="send_message_content">Content</string>
+
     <!--About-->
     <string name="about_source_code">Source code</string>
     <string name="about_feedback">Report a bug</string>
