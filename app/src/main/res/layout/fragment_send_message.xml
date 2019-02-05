@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/sendMessageContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -24,6 +25,7 @@
                 android:text="@string/send_message_from" />
 
             <TextView
+                android:id="@+id/sendMessageFromTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Jan Kowalski"
@@ -56,4 +58,16 @@
                 android:singleLine="false" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/sendMessageProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

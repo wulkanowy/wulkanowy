@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories
 
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
+import io.github.wulkanowy.api.messages.ReportingUnit
 import io.github.wulkanowy.data.ApiHelper
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Student
@@ -83,5 +84,9 @@ class MessagesRepository @Inject constructor(
 
     fun updateMessages(messages: List<Message>): Completable {
         return Completable.fromCallable { local.updateMessages(messages) }
+    }
+
+    fun getReportingUnits(): Single<List<ReportingUnit>> {
+        return remote.getReportingUnits()
     }
 }

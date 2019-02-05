@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.github.wulkanowy.R
+import io.github.wulkanowy.api.messages.ReportingUnit
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainView
+import kotlinx.android.synthetic.main.fragment_send_message.*
 import javax.inject.Inject
 
 class SendMessageFragment() : BaseSessionFragment(), SendMessageView, MainView.TitledView {
@@ -29,4 +31,23 @@ class SendMessageFragment() : BaseSessionFragment(), SendMessageView, MainView.T
         super.onActivityCreated(savedInstanceState)
         presenter.onAttachView(this)
     }
+
+    override fun initView() {
+        showProgress(true)
+        showContent(false)
+    }
+
+    override fun updateData(reportingUnits: List<ReportingUnit>) {
+        sendMessageFromTextView.text = reportingUnits[0].senderId.toString() // TODO Use sender name here
+    }
+
+    override fun showProgress(show: Boolean) {
+        sendMessageProgress.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showContent(show: Boolean) {
+        sendMessageContent.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+
 }

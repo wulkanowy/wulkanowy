@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories.remote
 
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.api.messages.Folder
+import io.github.wulkanowy.api.messages.ReportingUnit
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.utils.toLocalDateTime
@@ -36,5 +37,9 @@ class MessagesRemote @Inject constructor(private val api: Api) {
 
     fun getMessagesContent(message: Message, markAsRead: Boolean = false): Single<String> {
         return api.getMessageContent(message.messageId ?: 0, message.folderId, markAsRead, message.realId ?: 0)
+    }
+
+    fun getReportingUnits(): Single<List<ReportingUnit>> {
+        return api.getReportingUnits()
     }
 }
