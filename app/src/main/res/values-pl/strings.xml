@@ -102,6 +102,10 @@
     <string name="timetable_changes">Zmiany</string>
     <string name="timetable_no_items">Brak lekcji w tym dniu</string>
 
+    <!--Realized-->
+    <string name="realized_title">Lekcje zeralizowane</string>
+    <string name="realized_button">Zobacz lekcje zeralizowane</string>
+    <string name="realized_no_items">Brak informacji o lekcjach zrealizowanych</string>
 
     <!--Attendance-->
     <string name="attendance_summary_button">Podsumowanie frekwencji</string>

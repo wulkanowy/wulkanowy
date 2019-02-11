@@ -93,6 +93,10 @@
     <string name="timetable_changes">Changes</string>
     <string name="timetable_no_items">No lessons this day</string>
 
+    <!--Realized-->
+    <string name="realized_title">Realized lessons</string>
+    <string name="realized_button">Show realized lessons</string>
+    <string name="realized_no_items">No info about realized lessons</string>
 
     <!--Attendance-->
     <string name="attendance_summary_button">Attendance summary</string>
