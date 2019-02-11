@@ -97,6 +97,9 @@
     <string name="realized_title">Realized lessons</string>
     <string name="realized_button">Show realized lessons</string>
     <string name="realized_no_items">No info about realized lessons</string>
+    <string name="realized_topic">Topic</string>
+    <string name="realized_absence">Absence</string>
+    <string name="realized_resources">Resources</string>
 
     <!--Attendance-->
     <string name="attendance_summary_button">Attendance summary</string>

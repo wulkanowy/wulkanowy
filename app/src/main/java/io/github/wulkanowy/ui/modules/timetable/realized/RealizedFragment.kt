@@ -10,6 +10,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Realized
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_timetable_realized.*
@@ -96,7 +97,7 @@ class RealizedFragment : BaseSessionFragment(), RealizedView, MainView.TitledVie
     }
 
     override fun showRealizedDialog(realized: Realized) {
-//        (activity as? MainActivity)?.showDialogFragment(RealizedDialog.newInstance(realized))
+        (activity as? MainActivity)?.showDialogFragment(RealizedDialog.newInstance(realized))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
