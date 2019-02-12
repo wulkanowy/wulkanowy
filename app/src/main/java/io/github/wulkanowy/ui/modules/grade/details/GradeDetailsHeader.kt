@@ -16,7 +16,8 @@ class GradeDetailsHeader(
     private val number: String,
     private val average: String,
     var newGrades: Int,
-    private val isExpandable: Boolean
+    private val isExpandable: Boolean,
+    private val rippleResourceId: Int?
 ) : AbstractExpandableItem<GradeDetailsHeader.ViewHolder, GradeDetailsItem>() {
 
     init {
@@ -38,6 +39,10 @@ class GradeDetailsHeader(
             gradeHeaderAverage.text = average
             gradeHeaderNumber.text = number
             gradeHeaderNote.visibility = if (newGrades > 0) VISIBLE else GONE
+            gradeHeaderContainer.apply {
+                if (isExpandable) rippleResourceId?.also { setBackgroundResource(it) }
+                else setBackgroundResource(R.drawable.ic_all_divider)
+            }
 
             isViewExpandable = isExpandable
         }

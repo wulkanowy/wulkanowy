@@ -16,6 +16,8 @@ interface GradeDetailsView : BaseSessionView {
 
     val weightString: String
 
+    val rippleResourceId: Int
+
     fun initView()
 
     fun updateData(data: List<GradeDetailsHeader>)
