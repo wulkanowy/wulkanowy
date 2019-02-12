@@ -15,7 +15,7 @@ import io.github.wulkanowy.data.db.dao.HomeworkDao
 import io.github.wulkanowy.data.db.dao.LuckyNumberDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.dao.NoteDao
-import io.github.wulkanowy.data.db.dao.RealizedDao
+import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.dao.SubjectDao
@@ -29,7 +29,7 @@ import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Note
-import io.github.wulkanowy.data.db.entities.Realized
+import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
@@ -54,7 +54,7 @@ import javax.inject.Singleton
         Homework::class,
         Subject::class,
         LuckyNumber::class,
-        Realized::class
+        CompletedLesson::class
     ],
     version = 3,
     exportSchema = false
@@ -100,5 +100,5 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract val luckyNumberDao: LuckyNumberDao
 
-    abstract val realizedDao: RealizedDao
+    abstract val completedLessonsDao: CompletedLessonsDao
 }

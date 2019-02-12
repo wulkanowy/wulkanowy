@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 import org.threeten.bp.LocalDate
 import java.io.Serializable
 
-@Entity(tableName = "Realized")
-data class Realized(
+@Entity(tableName = "CompletedLesson")
+data class CompletedLesson(
 
     @ColumnInfo(name = "student_id")
     var studentId: Int,

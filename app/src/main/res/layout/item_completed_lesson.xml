@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/realized_subitem_container"
+    android:id="@+id/completedLesson_subitem_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ic_all_divider"
@@ -12,10 +12,10 @@
     android:paddingEnd="12dp"
     android:paddingRight="12dp"
     android:paddingBottom="7dp"
-    tools:context=".ui.modules.timetable.realized.RealizedItem">
+    tools:context=".ui.modules.timetable.completed.CompletedLessonItem">
 
     <TextView
-        android:id="@+id/realizedItemNumber"
+        android:id="@+id/completedLessonItemNumber"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerVertical="true"
@@ -26,7 +26,7 @@
         tools:text="1" />
 
     <TextView
-        android:id="@+id/realizedItemSubject"
+        android:id="@+id/completedLessonItemSubject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -34,8 +34,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
-        android:layout_toEndOf="@+id/realizedItemNumber"
-        android:layout_toRightOf="@+id/realizedItemNumber"
+        android:layout_toEndOf="@+id/completedLessonItemNumber"
+        android:layout_toRightOf="@+id/completedLessonItemNumber"
         android:ellipsize="end"
         android:maxLines="1"
         android:textSize="17sp"
@@ -43,14 +43,14 @@
         tools:text="@tools:sample/lorem" />
 
     <TextView
-        android:id="@+id/realizedItemTopic"
+        android:id="@+id/completedLessonItemTopic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/realizedItemSubject"
-        android:layout_alignLeft="@id/realizedItemSubject"
-        android:layout_alignEnd="@+id/realizedItemAlert"
-        android:layout_alignRight="@+id/realizedItemAlert"
-        android:layout_alignBottom="@+id/realizedItemNumber"
+        android:layout_alignStart="@id/completedLessonItemSubject"
+        android:layout_alignLeft="@id/completedLessonItemSubject"
+        android:layout_alignEnd="@+id/completedLessonItemAlert"
+        android:layout_alignRight="@+id/completedLessonItemAlert"
+        android:layout_alignBottom="@+id/completedLessonItemNumber"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
         android:ellipsize="end"
@@ -60,7 +60,7 @@
         tools:text="@tools:sample/lorem" />
 
     <ImageView
-        android:id="@+id/realizedItemAlert"
+        android:id="@+id/completedLessonItemAlert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

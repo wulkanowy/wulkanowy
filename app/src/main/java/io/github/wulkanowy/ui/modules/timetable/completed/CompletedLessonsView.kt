@@ -1,15 +1,15 @@
-package io.github.wulkanowy.ui.modules.timetable.realized
+package io.github.wulkanowy.ui.modules.timetable.completed
 
-import io.github.wulkanowy.data.db.entities.Realized
+import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.ui.base.session.BaseSessionView
 
-interface RealizedView : BaseSessionView {
+interface CompletedLessonsView : BaseSessionView {
 
     val isViewEmpty: Boolean
 
     fun initView()
 
-    fun updateData(data: List<RealizedItem>)
+    fun updateData(data: List<CompletedLessonItem>)
 
     fun clearData()
 
@@ -27,5 +27,5 @@ interface RealizedView : BaseSessionView {
 
     fun showNextButton(show: Boolean)
 
-    fun showRealizedDialog(realized: Realized)
+    fun showCompletedLessonDialog(completedLesson: CompletedLesson)
 }

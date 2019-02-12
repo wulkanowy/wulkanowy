@@ -77,8 +77,8 @@ class TimetablePresenter @Inject constructor(
         }
     }
 
-    fun onRealizedSwitchSelected(): Boolean {
-        view?.openRealizedView()
+    fun onCompletedLessonsSwitchSelected(): Boolean {
+        view?.openCompletedLessonsView()
         return true
     }
 

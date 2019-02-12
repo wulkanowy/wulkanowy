@@ -15,7 +15,7 @@ import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.ui.modules.timetable.realized.RealizedFragment
+import io.github.wulkanowy.ui.modules.timetable.completed.CompletedLessonsFragment
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_timetable.*
 import javax.inject.Inject
@@ -80,7 +80,7 @@ class TimetableFragment : BaseSessionFragment(), TimetableView, MainView.MainChi
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == R.id.timetableMenuRealized) presenter.onRealizedSwitchSelected()
+        return if (item?.itemId == R.id.timetableMenuCompletedLessons) presenter.onCompletedLessonsSwitchSelected()
         else false
     }
 
@@ -136,8 +136,8 @@ class TimetableFragment : BaseSessionFragment(), TimetableView, MainView.MainChi
         (activity as? MainActivity)?.showDialogFragment(TimetableDialog.newInstance(lesson))
     }
 
-    override fun openRealizedView() {
-        (activity as? MainActivity)?.pushView(RealizedFragment.newInstance())
+    override fun openCompletedLessonsView() {
+        (activity as? MainActivity)?.pushView(CompletedLessonsFragment.newInstance())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

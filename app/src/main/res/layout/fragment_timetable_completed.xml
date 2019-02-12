@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.modules.timetable.realized.RealizedFragment">
+    tools:context=".ui.modules.timetable.completed.CompletedLessonsFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -11,25 +11,25 @@
         android:layout_marginBottom="50dp">
 
         <ProgressBar
-            android:id="@+id/realizedProgress"
+            android:id="@+id/completedLessonsProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:indeterminate="true" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/realizedSwipe"
+            android:id="@+id/completedLessonsSwipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/realizedRecycler"
+                android:id="@+id/completedLessonsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
-            android:id="@+id/realizedEmpty"
+            android:id="@+id/completedLessonsEmpty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:minWidth="100dp"
                 android:minHeight="100dp"
-                app:srcCompat="@drawable/ic_menu_main_realized_24dp"
+                app:srcCompat="@drawable/ic_menu_main_lessons_completed_24dp"
                 app:tint="?android:attr/textColorPrimary"
                 tools:ignore="contentDescription" />
 
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="@string/realized_no_items"
+                android:text="@string/completed_lessons_no_items"
                 android:textSize="20sp" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -65,7 +65,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/realizedPreviousButton"
+            android:id="@+id/completedLessonsPreviousButton"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -76,14 +76,14 @@
             android:textAlignment="gravity" />
 
         <TextView
-            android:id="@+id/realizedNavDate"
+            android:id="@+id/completedLessonsNavDate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/app_name" />
 
         <Button
-            android:id="@+id/realizedNextButton"
+            android:id="@+id/completedLessonsNextButton"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.modules.timetable.realized.RealizedDialog">
+    tools:context=".ui.modules.timetable.completed.CompletedLessonDialog">
 
     <LinearLayout
         android:layout_width="300dp"
@@ -26,7 +26,7 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/realizedDialogSubject"
+            android:id="@+id/completedLessonDialogSubject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
@@ -38,11 +38,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/realized_topic"
+            android:text="@string/completed_lessons_topic"
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/realizedDialogTopic"
+            android:id="@+id/completedLessonDialogTopic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
@@ -51,7 +51,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/realizedDialogTeacherTitle"
+            android:id="@+id/completedLessonDialogTeacherTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -59,7 +59,7 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/realizedDialogTeacher"
+            android:id="@+id/completedLessonDialogTeacher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
@@ -68,7 +68,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/realizedDialogChangesTitle"
+            android:id="@+id/completedLessonDialogChangesTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -77,7 +77,7 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/realizedDialogChanges"
+            android:id="@+id/completedLessonDialogChanges"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
@@ -87,16 +87,16 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/realizedDialogAbsenceTitle"
+            android:id="@+id/completedLessonDialogAbsenceTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/realized_absence"
+            android:text="@string/completed_lessons_absence"
             android:textColor="@color/colorPrimary"
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/realizedDialogAbsence"
+            android:id="@+id/completedLessonDialogAbsence"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
@@ -106,15 +106,15 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/realizedDialogResourcesTitle"
+            android:id="@+id/completedLessonDialogResourcesTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/realized_resources"
+            android:text="@string/completed_lessons_resources"
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/realizedDialogResources"
+            android:id="@+id/completedLessonDialogResources"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
@@ -124,7 +124,7 @@
             android:textSize="12sp" />
 
         <Button
-            android:id="@+id/realizedDialogClose"
+            android:id="@+id/completedLessonDialogClose"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

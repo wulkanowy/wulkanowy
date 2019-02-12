@@ -1,8 +1,8 @@
-package io.github.wulkanowy.ui.modules.timetable.realized
+package io.github.wulkanowy.ui.modules.timetable.completed
 
 import com.google.firebase.analytics.FirebaseAnalytics.Param.START_DATE
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import io.github.wulkanowy.data.repositories.RealizedRepository
+import io.github.wulkanowy.data.repositories.CompletedLessonsRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
@@ -21,21 +21,21 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class RealizedPresenter @Inject constructor(
+class CompletedLessonsPresenter @Inject constructor(
     private val errorHandler: SessionErrorHandler,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
-    private val realizedRepository: RealizedRepository,
+    private val completedLessonsRepository: CompletedLessonsRepository,
     private val schedulers: SchedulersProvider,
     private val analytics: FirebaseAnalyticsHelper
-) : BaseSessionPresenter<RealizedView>(errorHandler) {
+) : BaseSessionPresenter<CompletedLessonsView>(errorHandler) {
 
     lateinit var currentDate: LocalDate
         private set
 
-    fun onAttachView(view: RealizedView, date: Long?) {
+    fun onAttachView(view: CompletedLessonsView, date: Long?) {
         super.onAttachView(view)
-        Timber.i("Timetable is attached")
+        Timber.i("Completed lessons is attached")
         view.initView()
         loadData(ofEpochDay(date ?: now().nextOrSameSchoolDay.toEpochDay()))
         reloadView()
@@ -52,28 +52,28 @@ class RealizedPresenter @Inject constructor(
     }
 
     fun onSwipeRefresh() {
-        Timber.i("Force refreshing the timetable")
+        Timber.i("Force refreshing the completed lessons")
         loadData(currentDate, true)
     }
 
-    fun onRealizedItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is RealizedItem) {
-            Timber.i("Select realized item ${item.realized.id}")
-            view?.showRealizedDialog(item.realized)
+    fun onCompletedLessonsItemSelected(item: AbstractFlexibleItem<*>?) {
+        if (item is CompletedLessonItem) {
+            Timber.i("Select completed lessons item ${item.completedLesson.id}")
+            view?.showCompletedLessonDialog(item.completedLesson)
         }
     }
 
     private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
-        Timber.i("Loading timetable data started")
+        Timber.i("Loading completed lessons data started")
         currentDate = date
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()
                 .flatMap { semesterRepository.getCurrentSemester(it) }
                 .delay(200, TimeUnit.MILLISECONDS)
-                .flatMap { realizedRepository.getRealized(it, currentDate, currentDate, forceRefresh) }
-                .map { items -> items.map { RealizedItem(it) } }
-                .map { items -> items.sortedBy { it.realized.number } }
+                .flatMap { completedLessonsRepository.getCompletedLessons(it, currentDate, currentDate, forceRefresh) }
+                .map { items -> items.map { CompletedLessonItem(it) } }
+                .map { items -> items.sortedBy { it.completedLesson.number } }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {
@@ -83,15 +83,15 @@ class RealizedPresenter @Inject constructor(
                     }
                 }
                 .subscribe({
-                    Timber.i("Loading realized lessons result: Success")
+                    Timber.i("Loading completed lessons lessons result: Success")
                     view?.apply {
                         updateData(it)
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    analytics.logEvent("load_realized", "items" to it.size, "force_refresh" to forceRefresh, START_DATE to currentDate.toFormattedString("yyyy-MM-dd"))
+                    analytics.logEvent("load_completed_lessons", "items" to it.size, "force_refresh" to forceRefresh, START_DATE to currentDate.toFormattedString("yyyy-MM-dd"))
                 }) {
-                    Timber.i("Loading realized lessons result: An exception occurred")
+                    Timber.i("Loading completed lessons result: An exception occurred")
                     view?.run { showEmpty(isViewEmpty) }
                     errorHandler.dispatch(it)
                 })
@@ -99,7 +99,7 @@ class RealizedPresenter @Inject constructor(
     }
 
     private fun reloadView() {
-        Timber.i("Reload timetable view with the date ${currentDate.toFormattedString()}")
+        Timber.i("Reload completed lessons view with the date ${currentDate.toFormattedString()}")
         view?.apply {
             showProgress(true)
             showContent(false)

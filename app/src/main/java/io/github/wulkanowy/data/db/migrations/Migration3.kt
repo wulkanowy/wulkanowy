@@ -6,7 +6,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 class Migration3 : Migration(2, 3) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("CREATE TABLE Realized (" +
+        database.execSQL("CREATE TABLE CompletedLesson (" +
             "id INTEGER NOT NULL PRIMARY KEY, " +
             "student_id INTEGER NOT NULL, " +
             "diary_id INTEGER NOT NULL, " +
