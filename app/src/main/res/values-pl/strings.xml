@@ -103,8 +103,8 @@
     <string name="timetable_no_items">Brak lekcji w tym dniu</string>
 
     <!--CompletedLesson-->
-    <string name="completed_lessons_title">Lekcje zeralizowane</string>
-    <string name="completed_lessons_button">Zobacz lekcje zeralizowane</string>
+    <string name="completed_lessons_title">Lekcje zrealizowane</string>
+    <string name="completed_lessons_button">Zobacz lekcje zrealizowane</string>
     <string name="completed_lessons_no_items">Brak informacji o lekcjach zrealizowanych</string>
     <string name="completed_lessons_topic">Temat</string>
     <string name="completed_lessons_absence">Nieobecność</string>
