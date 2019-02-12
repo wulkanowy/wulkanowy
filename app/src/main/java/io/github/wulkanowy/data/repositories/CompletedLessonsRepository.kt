@@ -10,6 +10,7 @@ import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.monday
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
+import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,7 +28,7 @@ class CompletedLessonsRepository @Inject constructor(
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                         .flatMap {
                             if (it) remote.getCompletedLessons(semester, dates.first, dates.second)
-                            else Single.error(UnknownError())
+                            else Single.error(UnknownHostException())
                         }.flatMap { new ->
                             local.getCompletedLessons(semester, dates.first, dates.second)
                                 .toSingle(emptyList())
