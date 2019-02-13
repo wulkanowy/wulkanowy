@@ -2,9 +2,9 @@ package io.github.wulkanowy.ui.modules.timetable
 
 import com.google.firebase.analytics.FirebaseAnalytics.Param.START_DATE
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import io.github.wulkanowy.data.repositories.SemesterRepository
-import io.github.wulkanowy.data.repositories.StudentRepository
-import io.github.wulkanowy.data.repositories.TimetableRepository
+import io.github.wulkanowy.data.repositories.semester.SemesterRepository
+import io.github.wulkanowy.data.repositories.student.StudentRepository
+import io.github.wulkanowy.data.repositories.timetable.TimetableRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
@@ -57,12 +57,16 @@ class TimetablePresenter @Inject constructor(
     }
 
     fun onViewReselected() {
-        Timber.i("Exam view is reselected")
-        now().nextOrSameSchoolDay.also {
-            if (currentDate != it) {
-                loadData(it)
-                reloadView()
-            } else if (view?.isViewEmpty == false) view?.resetView()
+        Timber.i("Timetable view is reselected")
+        view?.also { view ->
+            if (view.currentStackSize == 1) {
+                now().nextOrSameSchoolDay.also {
+                    if (currentDate != it) {
+                        loadData(it)
+                        reloadView()
+                    } else if (!view.isViewEmpty) view.resetView()
+                }
+            } else view.popView()
         }
     }
 
@@ -71,6 +75,11 @@ class TimetablePresenter @Inject constructor(
             Timber.i("Select exam item ${item.lesson.id}")
             view?.showTimetableDialog(item.lesson)
         }
+    }
+
+    fun onCompletedLessonsSwitchSelected(): Boolean {
+        view?.openCompletedLessonsView()
+        return true
     }
 
     private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {

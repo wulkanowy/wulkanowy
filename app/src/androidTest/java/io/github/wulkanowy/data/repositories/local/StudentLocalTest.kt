@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.SharedPrefHelper
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.repositories.student.StudentLocal
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +29,7 @@ class StudentLocalTest {
         testDb = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
             .build()
         sharedHelper = SharedPrefHelper(context.getSharedPreferences("TEST", Context.MODE_PRIVATE))
-        studentLocal = StudentLocal(testDb.studentDao, sharedHelper, context)
+        studentLocal = StudentLocal(testDb.studentDao, context)
     }
 
     @After
@@ -40,7 +41,6 @@ class StudentLocalTest {
     fun saveAndReadTest() {
         studentLocal.saveStudent(Student(email = "test", password = "test123", schoolSymbol = "23", endpoint = "fakelog.cf", loginType = "AUTO", isCurrent = true))
             .blockingGet()
-        assert(studentLocal.isStudentSaved)
 
         val student = studentLocal.getCurrentStudent(true).blockingGet()
         assertEquals("23", student.schoolSymbol)
