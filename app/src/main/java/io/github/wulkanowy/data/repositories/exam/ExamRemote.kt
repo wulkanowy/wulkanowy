@@ -7,7 +7,9 @@ import io.github.wulkanowy.utils.toLocalDate
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ExamRemote @Inject constructor(private val api: Api) {
 
     fun getExams(semester: Semester, startDate: LocalDate, endDate: LocalDate): Single<List<Exam>> {

@@ -6,8 +6,10 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.reactivex.Single
 import javax.inject.Inject
+import javax.inject.Singleton
 import io.github.wulkanowy.api.messages.Message as ApiMessage
 
+@Singleton
 class MessageRemote @Inject constructor(private val api: Api) {
 
     fun getMessages(studentId: Int, folder: MessageRepository.MessageFolder): Single<List<Message>> {

@@ -5,7 +5,9 @@ import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.Semester
 import io.reactivex.Maybe
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AttendanceSummaryLocal @Inject constructor(private val attendanceDb: AttendanceSummaryDao) {
 
     fun getAttendanceSummary(semester: Semester, subjectId: Int): Maybe<List<AttendanceSummary>> {

@@ -8,7 +8,9 @@ import io.github.wulkanowy.utils.toLocalDateTime
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class TimetableRemote @Inject constructor(private val api: Api) {
 
     fun getTimetable(semester: Semester, startDate: LocalDate, endDate: LocalDate): Single<List<Timetable>> {

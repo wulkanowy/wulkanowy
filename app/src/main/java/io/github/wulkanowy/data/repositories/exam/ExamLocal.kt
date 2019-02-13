@@ -6,7 +6,9 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.reactivex.Maybe
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ExamLocal @Inject constructor(private val examDb: ExamDao) {
 
     fun getExams(semester: Semester, startDate: LocalDate, endDate: LocalDate): Maybe<List<Exam>> {
