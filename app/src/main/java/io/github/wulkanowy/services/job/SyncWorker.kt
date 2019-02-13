@@ -85,7 +85,6 @@ class SyncWorker : SimpleJobService() {
         val end = LocalDate.now().friday
 
         if (start.isHolidays) return RESULT_FAIL_NORETRY
-        if (!student.isStudentSaved) return RESULT_FAIL_RETRY
 
         var error: Throwable? = null
 
