@@ -24,6 +24,7 @@ import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDate
 import timber.log.Timber
@@ -90,8 +91,9 @@ class SyncWorker : SimpleJobService() {
 
         val notify = prefRepository.isNotificationsEnable
 
-        disposable.add(student.getCurrentStudent()
-            .flatMap { semester.getCurrentSemester(it, true).map { semester -> semester to it } }
+        disposable.add(student.isStudentSaved()
+            .flatMapMaybe { if (it) student.getCurrentStudent().toMaybe() else Maybe.empty() }
+            .flatMap { semester.getCurrentSemester(it, true).map { semester -> semester to it }.toMaybe() }
             .flatMapCompletable {
                 Completable.merge(
                     listOf(
