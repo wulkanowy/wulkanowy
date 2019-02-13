@@ -38,7 +38,7 @@ class SendMessageFragment() : BaseSessionFragment(), SendMessageView, MainView.T
     }
 
     override fun updateData(reportingUnits: List<ReportingUnit>) {
-        sendMessageFromTextView.text = reportingUnits[0].senderId.toString() // TODO Use sender name here
+        sendMessageFromTextView.text = reportingUnits[0].senderName
     }
 
     override fun showProgress(show: Boolean) {
@@ -49,5 +49,8 @@ class SendMessageFragment() : BaseSessionFragment(), SendMessageView, MainView.T
         sendMessageContent.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDetachView()
+    }
 }
