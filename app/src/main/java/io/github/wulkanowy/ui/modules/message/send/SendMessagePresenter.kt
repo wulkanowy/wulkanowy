@@ -1,9 +1,9 @@
 package io.github.wulkanowy.ui.modules.message.send
 
 import io.github.wulkanowy.api.messages.ReportingUnit
-import io.github.wulkanowy.data.repositories.MessagesRepository
 import io.github.wulkanowy.data.repositories.ReportingUnitRepository
-import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.repositories.message.MessageRepository
+import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
@@ -13,7 +13,7 @@ class SendMessagePresenter @Inject constructor(
     private val errorHandler: SessionErrorHandler,
     private val schedulers: SchedulersProvider,
     private val studentRepository: StudentRepository,
-    private val messagesRepository: MessagesRepository,
+    private val messageRepository: MessageRepository,
     private val reportingUnitRepository: ReportingUnitRepository
 ) : BaseSessionPresenter<SendMessageView>(errorHandler) {
 

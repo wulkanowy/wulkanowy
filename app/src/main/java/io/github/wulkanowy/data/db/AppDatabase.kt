@@ -16,6 +16,7 @@ import io.github.wulkanowy.data.db.dao.LuckyNumberDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.dao.ReportingUnitDao
+import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.dao.SubjectDao
@@ -30,11 +31,13 @@ import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.ReportingUnit
+import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.migrations.Migration2
+import io.github.wulkanowy.data.db.migrations.Migration3
 import javax.inject.Singleton
 
 @Singleton
@@ -53,9 +56,10 @@ import javax.inject.Singleton
         Homework::class,
         Subject::class,
         LuckyNumber::class,
+        CompletedLesson::class,
         ReportingUnit::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -66,7 +70,8 @@ abstract class AppDatabase : RoomDatabase() {
             return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
                 .setJournalMode(TRUNCATE)
                 .addMigrations(
-                    Migration2()
+                    Migration2(),
+                    Migration3()
                 )
                 .build()
         }
@@ -97,6 +102,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val subjectDao: SubjectDao
 
     abstract val luckyNumberDao: LuckyNumberDao
+
+    abstract val completedLessonsDao: CompletedLessonsDao
 
     abstract val reportingUnitDao: ReportingUnitDao
 }

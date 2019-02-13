@@ -13,8 +13,6 @@ import com.google.gson.reflect.TypeToken
 
 class Converters {
 
-    var gson = Gson()
-
     @TypeConverter
     fun timestampToDate(value: Long?): LocalDate? = value?.run {
         DateTimeUtils.toInstant(Date(value)).atZone(ZoneOffset.UTC).toLocalDate()
@@ -43,11 +41,11 @@ class Converters {
 
     @TypeConverter
     fun intListToGson(list: List<Int>): String {
-        return gson.toJson(list)
+        return Gson().toJson(list)
     }
 
     @TypeConverter
     fun gsonToIntList(value: String): List<Int> {
-        return gson.fromJson(value, object : TypeToken<List<Int>>() {}.type)
+        return Gson().fromJson(value, object : TypeToken<List<Int>>() {}.type)
     }
 }

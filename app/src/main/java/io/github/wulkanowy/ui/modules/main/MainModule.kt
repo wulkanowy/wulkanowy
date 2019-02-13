@@ -25,6 +25,7 @@ import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
+import io.github.wulkanowy.ui.modules.timetable.completed.CompletedLessonsFragment
 
 @Module
 abstract class MainModule {
@@ -94,9 +95,13 @@ abstract class MainModule {
 
     @PerFragment
     @ContributesAndroidInjector
+    abstract fun bindCompletedLessonsFragment(): CompletedLessonsFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
     abstract fun bindSendMessageFragment(): SendMessageFragment
 
     @PerFragment
     @ContributesAndroidInjector
-    abstract fun bindsAccountDialog(): AccountDialog
+    abstract fun bindAccountDialog(): AccountDialog
 }

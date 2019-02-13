@@ -5,8 +5,8 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.Inter
 import io.github.wulkanowy.data.ApiHelper
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.repositories.local.ReportingUnitLocal
-import io.github.wulkanowy.data.repositories.remote.ReportingUnitRemote
+import io.github.wulkanowy.data.repositories.reportingunit.ReportingUnitLocal
+import io.github.wulkanowy.data.repositories.reportingunit.ReportingUnitRemote
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
