@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:minWidth="100dp"
                 android:minHeight="100dp"
+                android:id="@+id/completedLessonsInfoImage"
                 app:srcCompat="@drawable/ic_menu_main_lessons_completed_24dp"
                 app:tint="?android:attr/textColorPrimary"
                 tools:ignore="contentDescription" />

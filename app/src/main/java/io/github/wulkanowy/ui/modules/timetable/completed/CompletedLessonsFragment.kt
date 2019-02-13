@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -81,7 +82,10 @@ class CompletedLessonsFragment : BaseSessionFragment(), CompletedLessonsView, Ma
     }
 
     override fun showFeatureDisabled() {
-        completedLessonsInfo.text = getString(R.string.error_feature_disabled)
+        context?.let {
+            completedLessonsInfo.text = getString(R.string.error_feature_disabled)
+            completedLessonsInfoImage.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_all_close_circle_24dp))
+        }
     }
 
     override fun showProgress(show: Boolean) {
