@@ -12,6 +12,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IExpandable
@@ -84,6 +85,10 @@ class GradeDetailsFragment : BaseSessionFragment(), GradeDetailsView, GradeView.
         gradeDetailsRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = gradeDetailsAdapter
+            addItemDecoration(FlexibleItemDecoration(context)
+                .withDefaultDivider(R.layout.header_grade_details)
+                .withDrawDividerOnLastItem(false)
+            )
         }
         gradeDetailsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
