@@ -145,8 +145,7 @@ class GradeDetailsPresenter @Inject constructor(
                     average = formatAverage(average),
                     number = view?.getGradeNumberString(it.value.size).orEmpty(),
                     newGrades = it.value.filter { grade -> !grade.isRead }.size,
-                    isExpandable = preferencesRepository.isGradeExpandable,
-                    rippleResourceId = view?.rippleResourceId
+                    isExpandable = preferencesRepository.isGradeExpandable
                 ).apply {
                     subItems = it.value.map { item ->
                         GradeDetailsItem(

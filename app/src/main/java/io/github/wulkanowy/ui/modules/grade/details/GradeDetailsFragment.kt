@@ -48,11 +48,6 @@ class GradeDetailsFragment : BaseSessionFragment(), GradeDetailsView, GradeView.
     override val weightString: String
         get() = getString(R.string.grade_weight)
 
-    override val rippleResourceId: Int
-        get() = TypedValue().also {
-            context?.theme?.resolveAttribute(android.R.attr.selectableItemBackground, it, true)
-        }.resourceId
-
     override val isViewEmpty
         get() = gradeDetailsAdapter.isEmpty
 
