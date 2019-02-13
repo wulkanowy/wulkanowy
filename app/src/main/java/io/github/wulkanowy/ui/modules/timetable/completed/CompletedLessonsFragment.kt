@@ -80,6 +80,10 @@ class CompletedLessonsFragment : BaseSessionFragment(), CompletedLessonsView, Ma
         completedLessonsEmpty.visibility = if (show) View.VISIBLE else View.GONE
     }
 
+    override fun showFeatureDisabled() {
+        completedLessonsEmptyText.text = getString(R.string.error_feature_disabled)
+    }
+
     override fun showProgress(show: Boolean) {
         completedLessonsProgress.visibility = if (show) View.VISIBLE else View.GONE
     }

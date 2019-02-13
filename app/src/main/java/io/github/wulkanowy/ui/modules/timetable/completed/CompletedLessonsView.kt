@@ -19,6 +19,8 @@ interface CompletedLessonsView : BaseSessionView {
 
     fun showEmpty(show: Boolean)
 
+    fun showFeatureDisabled()
+
     fun showProgress(show: Boolean)
 
     fun showContent(show: Boolean)

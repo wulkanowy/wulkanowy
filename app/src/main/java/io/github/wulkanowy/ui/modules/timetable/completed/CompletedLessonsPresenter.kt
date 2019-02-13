@@ -6,7 +6,6 @@ import io.github.wulkanowy.data.repositories.CompletedLessonsRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
-import io.github.wulkanowy.ui.base.session.SessionErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.isHolidays
@@ -22,11 +21,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CompletedLessonsPresenter @Inject constructor(
-    private val errorHandler: SessionErrorHandler,
+    private val schedulers: SchedulersProvider,
+    private val errorHandler: CompletedLessonsErrorHandler,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val completedLessonsRepository: CompletedLessonsRepository,
-    private val schedulers: SchedulersProvider,
     private val analytics: FirebaseAnalyticsHelper
 ) : BaseSessionPresenter<CompletedLessonsView>(errorHandler) {
 
@@ -39,6 +38,10 @@ class CompletedLessonsPresenter @Inject constructor(
         view.initView()
         loadData(ofEpochDay(date ?: now().nextOrSameSchoolDay.toEpochDay()))
         reloadView()
+        errorHandler.onFeatureDisabled = {
+            this.view?.showFeatureDisabled()
+            Timber.i("Completed lessons feature disabled by school")
+        }
     }
 
     fun onPreviousDay() {
