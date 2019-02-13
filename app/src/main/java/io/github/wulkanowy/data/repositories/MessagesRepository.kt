@@ -85,8 +85,4 @@ class MessagesRepository @Inject constructor(
     fun updateMessages(messages: List<Message>): Completable {
         return Completable.fromCallable { local.updateMessages(messages) }
     }
-
-    fun getReportingUnits(): Single<List<ReportingUnit>> {
-        return remote.getReportingUnits()
-    }
 }

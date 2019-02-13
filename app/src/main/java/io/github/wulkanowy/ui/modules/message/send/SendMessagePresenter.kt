@@ -2,6 +2,8 @@ package io.github.wulkanowy.ui.modules.message.send
 
 import io.github.wulkanowy.api.messages.ReportingUnit
 import io.github.wulkanowy.data.repositories.MessagesRepository
+import io.github.wulkanowy.data.repositories.ReportingUnitRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
@@ -10,7 +12,9 @@ import javax.inject.Inject
 class SendMessagePresenter @Inject constructor(
     private val errorHandler: SessionErrorHandler,
     private val schedulers: SchedulersProvider,
-    private val messagesRepository: MessagesRepository
+    private val studentRepository: StudentRepository,
+    private val messagesRepository: MessagesRepository,
+    private val reportingUnitRepository: ReportingUnitRepository
 ) : BaseSessionPresenter<SendMessageView>(errorHandler) {
 
     private var reportingUnits: List<ReportingUnit> = emptyList()
@@ -24,7 +28,8 @@ class SendMessagePresenter @Inject constructor(
     private fun loadData() {
         disposable.apply {
             clear()
-            add(messagesRepository.getReportingUnits()
+            add(studentRepository.getCurrentStudent()
+                .flatMap { reportingUnitRepository.getReportingUnits(it) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {
@@ -33,12 +38,16 @@ class SendMessagePresenter @Inject constructor(
                     }
                 }
                 .subscribe({
-                    if (it.isEmpty()) throw Exception("Couldn't fetch reporting units") // TODO Choose better exception class
-                    view?.apply {
-                        updateData(it)
-                        showContent(true)
+                    try {
+                        if (it.isEmpty()) throw Exception("Couldn't fetch reporting units") // TODO Choose better exception class
+                        view?.apply {
+                            updateData(it)
+                            showContent(true)
+                        }
+                        updateData(reportingUnits)
+                    } catch (error: Throwable) {
+                        errorHandler.dispatch(error)
                     }
-                    updateData(reportingUnits)
                 }, {
                     errorHandler.dispatch(it)
                 })

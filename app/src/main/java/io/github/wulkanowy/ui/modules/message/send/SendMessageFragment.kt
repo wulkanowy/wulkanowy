@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.github.wulkanowy.R
-import io.github.wulkanowy.api.messages.ReportingUnit
+import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import kotlinx.android.synthetic.main.fragment_send_message.*

@@ -38,8 +38,4 @@ class MessagesRemote @Inject constructor(private val api: Api) {
     fun getMessagesContent(message: Message, markAsRead: Boolean = false): Single<String> {
         return api.getMessageContent(message.messageId ?: 0, message.folderId, markAsRead, message.realId ?: 0)
     }
-
-    fun getReportingUnits(): Single<List<ReportingUnit>> {
-        return api.getReportingUnits()
-    }
 }

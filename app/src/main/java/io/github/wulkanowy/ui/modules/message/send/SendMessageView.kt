@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.send
 
-import io.github.wulkanowy.api.messages.ReportingUnit
+import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.ui.base.session.BaseSessionView
 
 interface SendMessageView : BaseSessionView {
