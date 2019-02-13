@@ -81,7 +81,7 @@ class CompletedLessonsFragment : BaseSessionFragment(), CompletedLessonsView, Ma
     }
 
     override fun showFeatureDisabled() {
-        completedLessonsEmptyText.text = getString(R.string.error_feature_disabled)
+        completedLessonsInfo.text = getString(R.string.error_feature_disabled)
     }
 
     override fun showProgress(show: Boolean) {
