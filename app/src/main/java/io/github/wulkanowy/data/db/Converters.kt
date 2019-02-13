@@ -8,8 +8,12 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Month
 import org.threeten.bp.ZoneOffset
 import java.util.Date
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class Converters {
+
+    var gson = Gson()
 
     @TypeConverter
     fun timestampToDate(value: Long?): LocalDate? = value?.run {
@@ -36,4 +40,14 @@ class Converters {
 
     @TypeConverter
     fun intToMonth(value: Int?) = value?.let { Month.of(it) }
+
+    @TypeConverter
+    fun intListToGson(list: List<Int>): String {
+        return gson.toJson(list)
+    }
+
+    @TypeConverter
+    fun gsonToIntList(value: String): List<Int> {
+        return gson.fromJson(value, object : TypeToken<List<Int>>() {}.type)
+    }
 }
