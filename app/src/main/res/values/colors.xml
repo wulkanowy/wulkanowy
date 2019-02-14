@@ -7,16 +7,16 @@
 
     <color name="grade_bg_six">#03a9f4</color>
     <color name="grade_bg_five">#4caf50</color>
-    <color name="grade_bg_four">#cddc39</color>
-    <color name="grade_bg_three">#ffc107</color>
+    <color name="grade_bg_four">#aeea00</color>
+    <color name="grade_bg_three">#ffa000</color>
     <color name="grade_bg_two">#ff5722</color>
-    <color name="grade_bg_one">#e53935</color>
+    <color name="grade_bg_one">#d32f2f</color>
     <color name="grade_bg_default">#607d8b</color>
 
     <color name="grade_text_six">#ffffff</color>
     <color name="grade_text_five">#ffffff</color>
-    <color name="grade_text_four">#000000</color>
-    <color name="grade_text_three">#000000</color>
+    <color name="grade_text_four">#ffffff</color>
+    <color name="grade_text_three">#ffffff</color>
     <color name="grade_text_two">#ffffff</color>
     <color name="grade_text_one">#ffffff</color>
     <color name="grade_text_default">#ffffff</color>
