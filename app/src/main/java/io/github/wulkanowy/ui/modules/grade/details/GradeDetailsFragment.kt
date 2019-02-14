@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -12,7 +11,6 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IExpandable
@@ -80,7 +78,7 @@ class GradeDetailsFragment : BaseSessionFragment(), GradeDetailsView, GradeView.
         gradeDetailsRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = gradeDetailsAdapter
-            addItemDecoration(FlexibleItemDecoration(context)
+            addItemDecoration(GradeDetailsHeaderItemDecoration(context)
                 .withDefaultDivider(R.layout.header_grade_details)
                 .withDrawDividerOnLastItem(false)
             )
