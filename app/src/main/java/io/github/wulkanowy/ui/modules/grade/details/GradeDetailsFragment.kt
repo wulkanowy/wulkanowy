@@ -80,7 +80,6 @@ class GradeDetailsFragment : BaseSessionFragment(), GradeDetailsView, GradeView.
             adapter = gradeDetailsAdapter
             addItemDecoration(GradeDetailsHeaderItemDecoration(context)
                 .withDefaultDivider(R.layout.header_grade_details)
-                .withDrawDividerOnLastItem(false)
             )
         }
         gradeDetailsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }

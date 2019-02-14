@@ -22,12 +22,12 @@ class GradeDetailsHeaderItemDecoration(context: Context) : FlexibleItemDecoratio
         }
 
         val itemCount = parent.childCount
-        for (i in 1 until itemCount) { //
+        for (i in 1 until itemCount) {
             val child = parent.getChildAt(i)
             val viewHolder = parent.getChildViewHolder(child)
             if (shouldDrawDivider(viewHolder)) {
                 parent.getDecoratedBoundsWithMargins(child, mBounds)
-                val bottom = mBounds.top + Math.round(child.translationY) //
+                val bottom = mBounds.top + Math.round(child.translationY)
                 val top = bottom - mDivider.intrinsicHeight
                 mDivider.setBounds(left, top, right, bottom)
                 mDivider.draw(canvas)
