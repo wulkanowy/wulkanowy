@@ -14,7 +14,8 @@ data class ReportingUnit(
     @ColumnInfo(name = "real_id")
     val realId: Int,
 
-    val short: String,
+    @ColumnInfo(name = "short")
+    val shortName: String,
 
     @ColumnInfo(name = "sender_id")
     val senderId: Int,

@@ -18,7 +18,7 @@ class ReportingUnitRemote @Inject constructor(private val api: Api) {
                     roles = unit.roles,
                     senderId = unit.senderId,
                     senderName = unit.senderName,
-                    short = unit.short
+                    shortName = unit.short
                 )
             }
         }
