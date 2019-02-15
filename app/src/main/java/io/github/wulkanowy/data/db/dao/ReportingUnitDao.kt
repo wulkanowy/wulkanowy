@@ -6,7 +6,9 @@ import androidx.room.Insert
 import androidx.room.Query
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.reactivex.Maybe
+import javax.inject.Singleton
 
+@Singleton
 @Dao
 interface ReportingUnitDao {
 

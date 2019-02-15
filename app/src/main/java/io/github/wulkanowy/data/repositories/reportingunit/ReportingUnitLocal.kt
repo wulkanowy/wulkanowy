@@ -19,6 +19,6 @@ class ReportingUnitLocal @Inject constructor(private val reportingUnitDb: Report
     }
 
     fun deleteReportingUnits(reportingUnits: List<ReportingUnit>) {
-        return reportingUnitDb.deleteAll(reportingUnits)
+        reportingUnitDb.deleteAll(reportingUnits)
     }
 }

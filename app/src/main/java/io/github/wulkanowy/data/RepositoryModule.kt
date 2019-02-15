@@ -125,4 +125,8 @@ internal class RepositoryModule {
     @Singleton
     @Provides
     fun provideReportingUnitDao(database: AppDatabase) = database.reportingUnitDao
+
+    @Singleton
+    @Provides
+    fun provideRecipientDao(database: AppDatabase) = database.recipientDao
 }
