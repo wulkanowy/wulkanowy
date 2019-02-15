@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.message.send
 
 import io.github.wulkanowy.api.messages.ReportingUnit
-import io.github.wulkanowy.data.repositories.ReportingUnitRepository
+import io.github.wulkanowy.data.repositories.reportingunit.ReportingUnitRepository
 import io.github.wulkanowy.data.repositories.message.MessageRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
