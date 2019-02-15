@@ -36,6 +36,7 @@ import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.migrations.Migration2
 import io.github.wulkanowy.data.db.migrations.Migration3
+import io.github.wulkanowy.data.db.migrations.Migration4
 import javax.inject.Singleton
 
 @Singleton
@@ -56,7 +57,7 @@ import javax.inject.Singleton
         LuckyNumber::class,
         CompletedLesson::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -68,7 +69,8 @@ abstract class AppDatabase : RoomDatabase() {
                 .setJournalMode(TRUNCATE)
                 .addMigrations(
                     Migration2(),
-                    Migration3()
+                    Migration3(),
+                    Migration4()
                 )
                 .build()
         }

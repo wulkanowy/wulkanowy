@@ -10,38 +10,38 @@ import java.io.Serializable
 data class Message(
 
     @ColumnInfo(name = "student_id")
-    val studentId: Int?,
+    val studentId: Int,
 
     @ColumnInfo(name = "real_id")
-    val realId: Int?,
+    val realId: Int,
 
     @ColumnInfo(name = "message_id")
-    val messageId: Int?,
+    val messageId: Int,
 
     @ColumnInfo(name = "sender_name")
-    val sender: String?,
+    val sender: String,
 
     @ColumnInfo(name = "sender_id")
-    val senderId: Int?,
+    val senderId: Int,
 
     @ColumnInfo(name = "recipient_id")
-    val recipientId: Int?,
+    val recipientId: Int,
 
     @ColumnInfo(name = "recipient_name")
-    val recipient: String?,
+    val recipient: String,
 
     val subject: String,
 
-    val date: LocalDateTime?,
+    val date: LocalDateTime,
 
     @ColumnInfo(name = "folder_id")
     val folderId: Int,
 
-    val unread: Boolean?,
+    val unread: Boolean,
 
-    val unreadBy: Int?,
+    val unreadBy: Int,
 
-    val readBy: Int?,
+    val readBy: Int,
 
     val removed: Boolean
 ) : Serializable {
