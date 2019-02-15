@@ -9,29 +9,29 @@ import java.io.Serializable
 @Entity(tableName = "Exams")
 data class Exam(
 
-        @ColumnInfo(name = "student_id")
-        val studentId: Int,
+    @ColumnInfo(name = "student_id")
+    val studentId: Int,
 
-        @ColumnInfo(name = "diary_id")
-        val diaryId: Int,
+    @ColumnInfo(name = "diary_id")
+    val diaryId: Int,
 
-        val date: LocalDate,
+    val date: LocalDate,
 
-        @ColumnInfo(name = "entry_date")
-        val entryDate: LocalDate,
+    @ColumnInfo(name = "entry_date")
+    val entryDate: LocalDate,
 
-        val subject: String,
+    val subject: String,
 
-        val group: String,
+    val group: String,
 
-        val type: String,
+    val type: String,
 
-        val description: String,
+    val description: String,
 
-        val teacher: String,
+    val teacher: String,
 
-        @ColumnInfo(name = "teacher_symbol")
-        val teacherSymbol: String
+    @ColumnInfo(name = "teacher_symbol")
+    val teacherSymbol: String
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
