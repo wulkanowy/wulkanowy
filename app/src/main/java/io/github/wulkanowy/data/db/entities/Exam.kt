@@ -10,28 +10,28 @@ import java.io.Serializable
 data class Exam(
 
         @ColumnInfo(name = "student_id")
-        var studentId: Int,
+        val studentId: Int,
 
         @ColumnInfo(name = "diary_id")
-        var diaryId: Int,
+        val diaryId: Int,
 
-        var date: LocalDate,
+        val date: LocalDate,
 
         @ColumnInfo(name = "entry_date")
-        var entryDate: LocalDate,
+        val entryDate: LocalDate,
 
-        var subject: String,
+        val subject: String,
 
-        var group: String,
+        val group: String,
 
-        var type: String,
+        val type: String,
 
-        var description: String,
+        val description: String,
 
-        var teacher: String,
+        val teacher: String,
 
         @ColumnInfo(name = "teacher_symbol")
-        var teacherSymbol: String
+        val teacherSymbol: String
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)

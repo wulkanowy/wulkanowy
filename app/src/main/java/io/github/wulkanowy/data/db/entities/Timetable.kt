@@ -11,10 +11,10 @@ import java.io.Serializable
 data class Timetable(
 
         @ColumnInfo(name = "student_id")
-        var studentId: Int,
+        val studentId: Int,
 
         @ColumnInfo(name = "diary_id")
-        var diaryId: Int,
+        val diaryId: Int,
 
         val number: Int,
 

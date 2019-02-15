@@ -8,18 +8,17 @@ import androidx.room.PrimaryKey
 data class GradeSummary(
 
         @ColumnInfo(name = "semester_id")
-        var semesterId: Int,
+        val semesterId: Int,
 
         @ColumnInfo(name = "student_id")
-        var studentId: Int,
+        val studentId: Int,
 
-        var subject: String,
+        val subject: String,
 
-        var predictedGrade: String,
+        val predictedGrade: String,
 
-        var finalGrade: String
+        val finalGrade: String
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
-
 }

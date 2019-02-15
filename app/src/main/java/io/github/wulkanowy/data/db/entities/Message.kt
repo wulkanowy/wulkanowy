@@ -10,7 +10,7 @@ import java.io.Serializable
 data class Message(
 
     @ColumnInfo(name = "student_id")
-    var studentId: Int?,
+    val studentId: Int?,
 
     @ColumnInfo(name = "real_id")
     val realId: Int?,

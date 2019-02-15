@@ -9,22 +9,22 @@ import androidx.room.PrimaryKey
 data class Semester(
 
     @ColumnInfo(name = "student_id")
-    var studentId: Int,
+    val studentId: Int,
 
     @ColumnInfo(name = "diary_id")
-    var diaryId: Int,
+    val diaryId: Int,
 
     @ColumnInfo(name = "diary_name")
-    var diaryName: String,
+    val diaryName: String,
 
     @ColumnInfo(name = "semester_id")
-    var semesterId: Int,
+    val semesterId: Int,
 
     @ColumnInfo(name = "semester_name")
-    var semesterName: Int,
+    val semesterName: Int,
 
     @ColumnInfo(name = "is_current")
-    var isCurrent: Boolean
+    val isCurrent: Boolean
 ) {
 
     @PrimaryKey(autoGenerate = true)

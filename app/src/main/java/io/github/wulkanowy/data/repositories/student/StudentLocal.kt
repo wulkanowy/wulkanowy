@@ -23,12 +23,12 @@ class StudentLocal @Inject constructor(
 
     fun getStudents(decryptPass: Boolean): Maybe<List<Student>> {
         return studentDb.loadAll()
-            .map { list -> list.map { it.apply { if (decryptPass) password = decrypt(password) } } }
+            .map { list -> list.map { it.apply { if (decryptPass) copy(password = decrypt(password)) } } }
             .filter { !it.isEmpty() }
     }
 
     fun getCurrentStudent(decryptPass: Boolean): Maybe<Student> {
-        return studentDb.loadCurrent().map { it.apply { if (decryptPass) password = decrypt(password) } }
+        return studentDb.loadCurrent().map { it.apply { if (decryptPass) copy(password = decrypt(password)) } }
     }
 
     fun setCurrentStudent(student: Student): Completable {

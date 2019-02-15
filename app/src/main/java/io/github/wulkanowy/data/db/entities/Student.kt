@@ -9,30 +9,30 @@ import java.io.Serializable
 @Entity(tableName = "Students", indices = [Index(value = ["email", "symbol", "student_id", "school_id"], unique = true)])
 data class Student(
 
-    var endpoint: String,
+    val endpoint: String,
 
-    var loginType: String,
+    val loginType: String,
 
-    var email: String,
+    val email: String,
 
-    var password: String,
+    val password: String,
 
-    var symbol: String,
+    val symbol: String,
 
     @ColumnInfo(name = "student_id")
-    var studentId: Int,
+    val studentId: Int,
 
     @ColumnInfo(name = "student_name")
-    var studentName: String,
+    val studentName: String,
 
     @ColumnInfo(name = "school_id")
-    var schoolSymbol: String,
+    val schoolSymbol: String,
 
     @ColumnInfo(name = "school_name")
-    var schoolName: String,
+    val schoolName: String,
 
     @ColumnInfo(name = "is_current")
-    var isCurrent: Boolean
+    val isCurrent: Boolean
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
