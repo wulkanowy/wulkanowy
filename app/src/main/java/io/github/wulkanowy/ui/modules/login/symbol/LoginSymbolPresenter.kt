@@ -29,6 +29,10 @@ class LoginSymbolPresenter @Inject constructor(
         }
     }
 
+    fun onSymbolTextChanged() {
+        view?.clearSymbolError()
+    }
+
     fun attemptLogin(symbol: String) {
         if (symbol.isBlank()) {
             view?.setErrorSymbolRequire()
