@@ -2,9 +2,9 @@ package io.github.wulkanowy.ui.modules.note
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Note
-import io.github.wulkanowy.data.repositories.NoteRepository
-import io.github.wulkanowy.data.repositories.SemesterRepository
-import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.repositories.note.NoteRepository
+import io.github.wulkanowy.data.repositories.semester.SemesterRepository
+import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
@@ -54,7 +54,7 @@ class NotePresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     showContent(it.isNotEmpty())
                 }
-                analytics.logEvent("load_note", mapOf("items" to it.size, "force_refresh" to forceRefresh))
+                analytics.logEvent("load_note", "items" to it.size, "force_refresh" to forceRefresh)
             }, {
                 Timber.i("Loading note result: An exception occurred")
                 view?.run { showEmpty(isViewEmpty) }

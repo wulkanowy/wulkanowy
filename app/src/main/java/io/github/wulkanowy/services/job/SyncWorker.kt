@@ -3,19 +3,20 @@ package io.github.wulkanowy.services.job
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.SimpleJobService
 import dagger.android.AndroidInjection
-import io.github.wulkanowy.data.repositories.AttendanceRepository
-import io.github.wulkanowy.data.repositories.ExamRepository
-import io.github.wulkanowy.data.repositories.GradeRepository
-import io.github.wulkanowy.data.repositories.GradeSummaryRepository
-import io.github.wulkanowy.data.repositories.HomeworkRepository
-import io.github.wulkanowy.data.repositories.LuckyNumberRepository
-import io.github.wulkanowy.data.repositories.MessagesRepository
-import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.RECEIVED
-import io.github.wulkanowy.data.repositories.NoteRepository
-import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.github.wulkanowy.data.repositories.SemesterRepository
-import io.github.wulkanowy.data.repositories.StudentRepository
-import io.github.wulkanowy.data.repositories.TimetableRepository
+import io.github.wulkanowy.data.repositories.attendance.AttendanceRepository
+import io.github.wulkanowy.data.repositories.completedlessons.CompletedLessonsRepository
+import io.github.wulkanowy.data.repositories.exam.ExamRepository
+import io.github.wulkanowy.data.repositories.grade.GradeRepository
+import io.github.wulkanowy.data.repositories.gradessummary.GradeSummaryRepository
+import io.github.wulkanowy.data.repositories.homework.HomeworkRepository
+import io.github.wulkanowy.data.repositories.luckynumber.LuckyNumberRepository
+import io.github.wulkanowy.data.repositories.message.MessageRepository
+import io.github.wulkanowy.data.repositories.message.MessageRepository.MessageFolder.RECEIVED
+import io.github.wulkanowy.data.repositories.note.NoteRepository
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
+import io.github.wulkanowy.data.repositories.semester.SemesterRepository
+import io.github.wulkanowy.data.repositories.student.StudentRepository
+import io.github.wulkanowy.data.repositories.timetable.TimetableRepository
 import io.github.wulkanowy.services.notification.GradeNotification
 import io.github.wulkanowy.services.notification.LuckyNumberNotification
 import io.github.wulkanowy.services.notification.MessageNotification
@@ -24,6 +25,7 @@ import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDate
 import timber.log.Timber
@@ -53,7 +55,7 @@ class SyncWorker : SimpleJobService() {
     lateinit var timetable: TimetableRepository
 
     @Inject
-    lateinit var message: MessagesRepository
+    lateinit var message: MessageRepository
 
     @Inject
     lateinit var note: NoteRepository
@@ -63,6 +65,9 @@ class SyncWorker : SimpleJobService() {
 
     @Inject
     lateinit var luckyNumber: LuckyNumberRepository
+
+    @Inject
+    lateinit var completedLessons: CompletedLessonsRepository
 
     @Inject
     lateinit var prefRepository: PreferencesRepository
@@ -85,14 +90,14 @@ class SyncWorker : SimpleJobService() {
         val end = LocalDate.now().friday
 
         if (start.isHolidays) return RESULT_FAIL_NORETRY
-        if (!student.isStudentSaved) return RESULT_FAIL_RETRY
 
         var error: Throwable? = null
 
         val notify = prefRepository.isNotificationsEnable
 
-        disposable.add(student.getCurrentStudent()
-            .flatMap { semester.getCurrentSemester(it, true).map { semester -> semester to it } }
+        disposable.add(student.isStudentSaved()
+            .flatMapMaybe { if (it) student.getCurrentStudent().toMaybe() else Maybe.empty() }
+            .flatMap { semester.getCurrentSemester(it, true).map { semester -> semester to it }.toMaybe() }
             .flatMapCompletable {
                 Completable.merge(
                     listOf(
@@ -105,7 +110,8 @@ class SyncWorker : SimpleJobService() {
                         note.getNotes(it.first, true, notify).ignoreElement(),
                         homework.getHomework(it.first, LocalDate.now(), true).ignoreElement(),
                         homework.getHomework(it.first, LocalDate.now().plusDays(1), true).ignoreElement(),
-                        luckyNumber.getLuckyNumber(it.first, true, notify).ignoreElement()
+                        luckyNumber.getLuckyNumber(it.first, true, notify).ignoreElement(),
+                        completedLessons.getCompletedLessons(it.first, start, end, true).ignoreElement()
                     )
                 )
             }

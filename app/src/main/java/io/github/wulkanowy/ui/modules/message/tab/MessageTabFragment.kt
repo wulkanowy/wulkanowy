@@ -8,10 +8,11 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.repositories.MessagesRepository
+import io.github.wulkanowy.data.repositories.message.MessageRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
@@ -33,7 +34,7 @@ class MessageTabFragment : BaseSessionFragment(), MessageTabView, MessageView.Me
     companion object {
         const val MESSAGE_TAB_FOLDER_ID = "message_tab_folder_id"
 
-        fun newInstance(folder: MessagesRepository.MessageFolder): MessageTabFragment {
+        fun newInstance(folder: MessageRepository.MessageFolder): MessageTabFragment {
             return MessageTabFragment().apply {
                 arguments = Bundle().apply {
                     putString(MESSAGE_TAB_FOLDER_ID, folder.name)
@@ -55,7 +56,7 @@ class MessageTabFragment : BaseSessionFragment(), MessageTabView, MessageView.Me
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         messageContainer = messageTabRecycler
-        presenter.onAttachView(this, MessagesRepository.MessageFolder.valueOf(
+        presenter.onAttachView(this, MessageRepository.MessageFolder.valueOf(
             (savedInstanceState ?: arguments)?.getString(MessageTabFragment.MESSAGE_TAB_FOLDER_ID) ?: ""
         ))
     }
@@ -66,6 +67,10 @@ class MessageTabFragment : BaseSessionFragment(), MessageTabView, MessageView.Me
         messageTabRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = tabAdapter
+            addItemDecoration(FlexibleItemDecoration(context)
+                .withDefaultDivider()
+                .withDrawDividerOnLastItem(false)
+            )
         }
         messageTabSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }

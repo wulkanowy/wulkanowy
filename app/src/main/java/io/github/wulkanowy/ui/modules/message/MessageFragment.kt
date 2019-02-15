@@ -7,9 +7,9 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.RECEIVED
-import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.SENT
-import io.github.wulkanowy.data.repositories.MessagesRepository.MessageFolder.TRASHED
+import io.github.wulkanowy.data.repositories.message.MessageRepository.MessageFolder.RECEIVED
+import io.github.wulkanowy.data.repositories.message.MessageRepository.MessageFolder.SENT
+import io.github.wulkanowy.data.repositories.message.MessageRepository.MessageFolder.TRASHED
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -46,11 +46,14 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
     }
 
     override fun initView() {
-        pagerAdapter.addFragmentsWithTitle(mapOf(
-            MessageTabFragment.newInstance(RECEIVED) to getString(R.string.message_inbox),
-            MessageTabFragment.newInstance(SENT) to getString(R.string.message_sent),
-            MessageTabFragment.newInstance(TRASHED) to getString(R.string.message_trash)
-        ))
+        pagerAdapter.apply {
+            containerId = messageViewPager.id
+            addFragmentsWithTitle(mapOf(
+                MessageTabFragment.newInstance(RECEIVED) to getString(R.string.message_inbox),
+                MessageTabFragment.newInstance(SENT) to getString(R.string.message_sent),
+                MessageTabFragment.newInstance(TRASHED) to getString(R.string.message_trash)
+            ))
+        }
 
         messageViewPager.run {
             adapter = pagerAdapter

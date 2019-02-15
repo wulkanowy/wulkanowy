@@ -1,36 +1,19 @@
 package io.github.wulkanowy.ui.modules.login.form
 
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseView
 
 interface LoginFormView : BaseView {
 
-    val isDebug: Boolean
-
     fun initView()
 
-    fun switchOptionsView()
-
-    fun setErrorNicknameRequired()
+    fun setErrorNameRequired()
 
     fun setErrorPassRequired(focus: Boolean)
-
-    fun setErrorSymbolRequire()
 
     fun setErrorPassInvalid(focus: Boolean)
 
     fun setErrorPassIncorrect()
-
-    fun setErrorSymbolIncorrect()
-
-    fun resetNicknameError()
-
-    fun resetPassError()
-
-    fun resetSymbolError()
-
-    fun resetViewErrors()
-
-    fun showVersion()
 
     fun showSoftKeyboard()
 
@@ -40,5 +23,7 @@ interface LoginFormView : BaseView {
 
     fun showContent(show: Boolean)
 
-    fun showSymbolInput()
+    fun showVersion()
+
+    fun notifyParentAccountLogged(students: List<Student>)
 }
