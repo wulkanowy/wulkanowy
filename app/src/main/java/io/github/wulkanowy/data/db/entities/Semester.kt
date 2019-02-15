@@ -8,9 +8,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "Semesters", indices = [Index(value = ["student_id", "diary_id", "semester_id"], unique = true)])
 data class Semester(
 
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0,
-
     @ColumnInfo(name = "student_id")
     var studentId: Int,
 
@@ -27,5 +24,9 @@ data class Semester(
     var semesterName: Int,
 
     @ColumnInfo(name = "is_current")
-    var isCurrent: Boolean = false
-)
+    var isCurrent: Boolean
+) {
+
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
+}

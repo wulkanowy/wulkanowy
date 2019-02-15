@@ -16,7 +16,7 @@ data class AttendanceSummary(
     var diaryId: Int,
 
     @ColumnInfo(name = "subject_id")
-    var subjectId: Int = 0,
+    var subjectId: Int,
 
     val month: Month,
 

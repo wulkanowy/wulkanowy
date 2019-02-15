@@ -23,17 +23,17 @@ data class Attendance(
 
     var name: String,
 
-    var presence: Boolean = false,
+    var presence: Boolean,
 
-    var absence: Boolean = false,
+    var absence: Boolean,
 
-    var exemption: Boolean = false,
+    var exemption: Boolean,
 
-    var lateness: Boolean = false,
+    var lateness: Boolean,
 
-    var excused: Boolean = false,
+    var excused: Boolean,
 
-    var deleted: Boolean = false
+    var deleted: Boolean
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)

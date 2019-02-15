@@ -16,11 +16,11 @@ data class Timetable(
         @ColumnInfo(name = "diary_id")
         var diaryId: Int,
 
-        val number: Int = 0,
+        val number: Int,
 
-        val start: LocalDateTime = LocalDateTime.now(),
+        val start: LocalDateTime,
 
-        val end: LocalDateTime = LocalDateTime.now(),
+        val end: LocalDateTime,
 
         val date: LocalDate,
 
@@ -34,9 +34,9 @@ data class Timetable(
 
         val info: String,
 
-        val changes: Boolean = false,
+        val changes: Boolean,
 
-        val canceled: Boolean = false
+        val canceled: Boolean
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)

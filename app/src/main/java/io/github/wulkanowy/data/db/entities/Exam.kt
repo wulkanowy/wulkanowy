@@ -18,7 +18,7 @@ data class Exam(
         var date: LocalDate,
 
         @ColumnInfo(name = "entry_date")
-        var entryDate: LocalDate = LocalDate.now(),
+        var entryDate: LocalDate,
 
         var subject: String,
 
