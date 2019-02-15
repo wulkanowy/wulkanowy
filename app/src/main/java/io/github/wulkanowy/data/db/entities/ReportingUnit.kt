@@ -9,20 +9,20 @@ import java.io.Serializable
 data class ReportingUnit(
 
     @ColumnInfo(name = "student_id")
-    var studentId: Int? = null,
+    val studentId: Int,
 
     @ColumnInfo(name = "real_id")
-    var realId: Int = 0,
+    val realId: Int,
 
-    var short: String = "",
+    val short: String,
 
     @ColumnInfo(name = "sender_id")
-    var senderId: Int = 0,
+    val senderId: Int,
 
     @ColumnInfo(name = "sender_name")
-    var senderName: String = "",
+    val senderName: String,
 
-    var roles: List<Int> = emptyList()
+    val roles: List<Int>
 
 ) : Serializable {
 

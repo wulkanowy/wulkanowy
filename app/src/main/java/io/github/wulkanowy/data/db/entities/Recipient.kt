@@ -9,22 +9,22 @@ import java.io.Serializable
 data class Recipient(
 
     @ColumnInfo(name = "student_id")
-    var studentId: Int,
+    val studentId: Int,
 
     @ColumnInfo(name = "real_id")
-    var realId: String,
+    val realId: String,
 
-    var name: String,
+    val name: String,
 
     @ColumnInfo(name = "login_id")
-    var loginId: Int,
+    val loginId: Int,
 
     @ColumnInfo(name = "unit_id")
-    var unitId: Int,
+    val unitId: Int,
 
-    var role: Int,
+    val role: Int,
 
-    var hash: String
+    val hash: String
 
 ) : Serializable {
 
