@@ -28,7 +28,7 @@ class StudentLocal @Inject constructor(
     }
 
     fun getCurrentStudent(decryptPass: Boolean): Maybe<Student> {
-        return studentDb.loadCurrent().map { it.apply { if (decryptPass) copy(password = decrypt(password)) } }
+        return studentDb.loadCurrent().map { it.run { if (decryptPass) copy(password = decrypt(password)) else this } }
     }
 
     fun setCurrentStudent(student: Student): Completable {
