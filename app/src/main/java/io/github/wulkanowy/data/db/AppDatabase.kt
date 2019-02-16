@@ -16,6 +16,7 @@ import io.github.wulkanowy.data.db.dao.LuckyNumberDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
+import io.github.wulkanowy.data.db.dao.GradeStatisticsDao
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.dao.SubjectDao
@@ -30,6 +31,7 @@ import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.CompletedLesson
+import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
@@ -37,6 +39,7 @@ import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.migrations.Migration2
 import io.github.wulkanowy.data.db.migrations.Migration3
 import io.github.wulkanowy.data.db.migrations.Migration4
+import io.github.wulkanowy.data.db.migrations.Migration5
 import javax.inject.Singleton
 
 @Singleton
@@ -50,6 +53,7 @@ import javax.inject.Singleton
         AttendanceSummary::class,
         Grade::class,
         GradeSummary::class,
+        GradeStatistics::class,
         Message::class,
         Note::class,
         Homework::class,
@@ -57,7 +61,7 @@ import javax.inject.Singleton
         LuckyNumber::class,
         CompletedLesson::class
     ],
-    version = 4,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -67,12 +71,13 @@ abstract class AppDatabase : RoomDatabase() {
         fun newInstance(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
                 .setJournalMode(TRUNCATE)
-                .fallbackToDestructiveMigrationFrom(5)
+                .fallbackToDestructiveMigrationFrom(6)
                 .fallbackToDestructiveMigrationOnDowngrade()
                 .addMigrations(
                     Migration2(),
                     Migration3(),
-                    Migration4()
+                    Migration4(),
+                    Migration5()
                 )
                 .build()
         }
@@ -93,6 +98,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val gradeDao: GradeDao
 
     abstract val gradeSummaryDao: GradeSummaryDao
+
+    abstract val gradeStatistics: GradeStatisticsDao
 
     abstract val messagesDao: MessagesDao
 
