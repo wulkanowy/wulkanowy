@@ -127,7 +127,7 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:text="@string/login_host_hint"
-                android:textColor="?android:textColorSecondary"
+                android:textColor="?android:textColorHint"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/loginFormHostLayout"
                 app:layout_constraintEnd_toEndOf="@+id/loginFormHostLayout"
