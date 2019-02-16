@@ -5,6 +5,8 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface LoginSymbolView : BaseView {
 
+    val symbolNameError: CharSequence?
+
     fun initView()
 
     fun setErrorSymbolIncorrect()

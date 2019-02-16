@@ -30,7 +30,7 @@ class LoginSymbolPresenter @Inject constructor(
     }
 
     fun onSymbolTextChanged() {
-        view?.clearSymbolError()
+        view?.apply { if (symbolNameError != null) clearSymbolError() }
     }
 
     fun attemptLogin(symbol: String) {

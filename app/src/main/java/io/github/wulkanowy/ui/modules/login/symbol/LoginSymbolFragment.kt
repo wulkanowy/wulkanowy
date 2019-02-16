@@ -30,6 +30,9 @@ class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
         fun newInstance() = LoginSymbolFragment()
     }
 
+    override val symbolNameError: CharSequence?
+        get() = loginSymbolNameLayout.error
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_symbol, container, false)
     }
