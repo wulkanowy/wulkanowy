@@ -101,15 +101,26 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/loginFormHost"
+            <LinearLayout
+                android:id="@+id/loginFormHostLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:hint="@string/login_host_hint"
+                android:background="@drawable/ic_login_outlined_border"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginFormPassLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/loginFormPassLayout">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/loginFormHost"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:dropDownWidth="match_parent"
+                    android:hint="@string/login_host_hint"
+                    android:overlapAnchor="false"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/loginFormVersion"
@@ -127,7 +138,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/loginFormSignIn"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginFormHost"
+                app:layout_constraintTop_toBottomOf="@+id/loginFormHostLayout"
                 app:layout_constraintVertical_bias="1"
                 tools:text="Version 1.0.0" />
 
@@ -146,7 +157,7 @@
                 app:backgroundTint="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginFormHost"
+                app:layout_constraintTop_toBottomOf="@+id/loginFormHostLayout"
                 app:layout_constraintVertical_bias="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
