@@ -31,6 +31,13 @@ class LoginFormPresenter @Inject constructor(
         }
     }
 
+    fun onHostSelected() {
+        view?.apply {
+            clearPassError()
+            clearNameError()
+        }
+    }
+
     fun onPassTextChanged() {
         view?.clearPassError()
     }
