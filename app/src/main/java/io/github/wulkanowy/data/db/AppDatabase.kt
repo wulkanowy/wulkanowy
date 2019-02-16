@@ -61,7 +61,7 @@ import javax.inject.Singleton
         LuckyNumber::class,
         CompletedLesson::class
     ],
-    version = 6,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
