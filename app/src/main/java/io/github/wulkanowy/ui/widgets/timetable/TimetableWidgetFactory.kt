@@ -16,7 +16,6 @@ import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.data.repositories.timetable.TimetableRepository
 import io.github.wulkanowy.utils.toFormattedString
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDate
 import timber.log.Timber
@@ -50,10 +49,8 @@ class TimetableWidgetFactory(
         intent?.action?.let { LocalDate.ofEpochDay(sharedPref.getLong(it, 0)) }
             ?.let { date ->
                 disposable.add(studentRepository.isStudentSaved()
-                    .flatMap {
-                        if (it) studentRepository.getCurrentStudent()
-                        else Single.error(IllegalArgumentException("No saved students"))
-                    }.flatMap { semesterRepository.getCurrentSemester(it) }
+                    .flatMap { studentRepository.getCurrentStudent() }
+                    .flatMap { semesterRepository.getCurrentSemester(it) }
                     .flatMap { timetableRepository.getTimetable(it, date, date) }
                     .map { item -> item.sortedBy { it.number } }
                     .subscribe({ lessons = it })
@@ -62,7 +59,7 @@ class TimetableWidgetFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews? {
-        if (position == INVALID_POSITION) return null
+        if (position == INVALID_POSITION || lessons.getOrNull(position) == null) return null
 
         return RemoteViews(context.packageName, R.layout.item_widget_timetable).apply {
             lessons[position].let {
