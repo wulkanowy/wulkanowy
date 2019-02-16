@@ -58,7 +58,7 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     private fun registerStudent(student: Student) {
         disposable.add(studentRepository.saveStudent(student)
-            .map { student.apply { id = it } }
+            .map { student.copy(id = it) }
             .flatMap { semesterRepository.getSemesters(student, true) }
             .onErrorResumeNext { studentRepository.logoutStudent(student).andThen(Single.error(it)) }
             .flatMapCompletable { studentRepository.switchStudent(student) }

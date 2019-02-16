@@ -9,6 +9,9 @@ import java.io.Serializable
 @Entity(tableName = "Students", indices = [Index(value = ["email", "symbol", "student_id", "school_id"], unique = true)])
 data class Student(
 
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+
     val endpoint: String,
 
     val loginType: String,
@@ -33,8 +36,4 @@ data class Student(
 
     @ColumnInfo(name = "is_current")
     val isCurrent: Boolean
-) : Serializable {
-
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
-}
+) : Serializable

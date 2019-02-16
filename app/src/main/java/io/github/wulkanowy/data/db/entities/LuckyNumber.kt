@@ -24,5 +24,4 @@ data class LuckyNumber (
 
     @ColumnInfo(name = "is_notified")
     var isNotified: Boolean = true
-
 }
