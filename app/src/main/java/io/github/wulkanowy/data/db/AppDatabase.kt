@@ -67,6 +67,8 @@ abstract class AppDatabase : RoomDatabase() {
         fun newInstance(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
                 .setJournalMode(TRUNCATE)
+                .fallbackToDestructiveMigrationFrom(5)
+                .fallbackToDestructiveMigrationOnDowngrade()
                 .addMigrations(
                     Migration2(),
                     Migration3(),
