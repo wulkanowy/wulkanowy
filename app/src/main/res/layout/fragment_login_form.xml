@@ -31,6 +31,7 @@
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -40,11 +41,7 @@
             android:id="@+id/loginFormContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp">
+            android:padding="24dp">
 
             <TextView
                 android:id="@+id/loginFormHeader"
@@ -64,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:hint="@string/login_nickname_hint"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginFormHeader">
@@ -82,8 +80,9 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:hint="@string/login_password_hint"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginFormNameLayout"
@@ -105,7 +104,7 @@
                 android:id="@+id/loginFormHostLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="13dp"
                 android:background="@drawable/ic_login_outlined_border"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -116,31 +115,8 @@
                     android:id="@+id/loginFormHost"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:dropDownWidth="match_parent"
-                    android:hint="@string/login_host_hint"
-                    android:overlapAnchor="false"
-                    android:spinnerMode="dropdown" />
+                    android:hint="@string/login_host_hint" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/loginFormVersion"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="64dp"
-                android:maxLines="2"
-                android:textColor="@color/second_text"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/loginFormSignIn"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginFormHostLayout"
-                app:layout_constraintVertical_bias="1"
-                tools:text="Version 1.0.0" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginFormSignIn"
@@ -148,8 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="48dp"
+                android:layout_marginTop="50dp"
                 android:text="@string/login_sign_in"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@android:color/white"
@@ -158,8 +133,23 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginFormHostLayout"
-                app:layout_constraintVertical_bias="1" />
+                app:layout_constraintVertical_bias="0.84" />
 
+            <TextView
+                android:id="@+id/loginFormVersion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:maxLines="2"
+                android:textColor="@color/second_text"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/loginFormSignIn"
+                app:layout_constraintEnd_toStartOf="@+id/loginFormSignIn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/loginFormSignIn"
+                tools:text="Version 1.0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>
