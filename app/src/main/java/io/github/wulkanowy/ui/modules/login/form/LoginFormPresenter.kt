@@ -36,10 +36,7 @@ class LoginFormPresenter @Inject constructor(
     }
 
     fun onNameTextChanged() {
-        view?.apply {
-            clearNameError()
-            clearPassError()
-        }
+        view?.clearNameError()
     }
 
     fun attemptLogin(email: String, password: String, endpoint: String) {
