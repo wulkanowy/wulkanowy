@@ -104,7 +104,7 @@
                 android:id="@+id/loginFormHostLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/ic_login_outlined_border"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -114,9 +114,25 @@
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/loginFormHost"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:hint="@string/login_host_hint" />
+                    android:layout_height="56dp" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginBottom="48dp"
+                android:background="?android:colorBackground"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:text="@string/login_host_hint"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/loginFormHostLayout"
+                app:layout_constraintEnd_toEndOf="@+id/loginFormHostLayout"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/loginFormHostLayout" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginFormSignIn"
@@ -143,7 +159,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:maxLines="2"
-                android:textColor="@color/second_text"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@id/loginFormSignIn"
                 app:layout_constraintEnd_toStartOf="@+id/loginFormSignIn"
