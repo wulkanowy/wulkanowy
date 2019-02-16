@@ -37,7 +37,7 @@ data class Message(
     @ColumnInfo(name = "folder_id")
     val folderId: Int,
 
-    val unread: Boolean,
+    var unread: Boolean,
 
     val unreadBy: Int,
 
