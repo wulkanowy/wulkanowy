@@ -17,7 +17,6 @@ import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.data.repositories.timetable.TimetableRepository
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
-import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDate
 import timber.log.Timber
 
@@ -30,8 +29,6 @@ class TimetableWidgetFactory(
     private val context: Context,
     private val intent: Intent?
 ) : RemoteViewsService.RemoteViewsFactory {
-
-    private val disposable: CompositeDisposable = CompositeDisposable()
 
     private var lessons = emptyList<Timetable>()
 
@@ -46,6 +43,8 @@ class TimetableWidgetFactory(
     override fun getItemId(position: Int) = position.toLong()
 
     override fun onCreate() {}
+
+    override fun onDestroy() {}
 
     override fun onDataSetChanged() {
         intent?.action?.let { LocalDate.ofEpochDay(sharedPref.getLong(it, 0)) }
@@ -92,9 +91,5 @@ class TimetableWidgetFactory(
             }
             setOnClickFillInIntent(R.id.timetableWidgetItemContainer, Intent())
         }
-    }
-
-    override fun onDestroy() {
-        disposable.clear()
     }
 }
