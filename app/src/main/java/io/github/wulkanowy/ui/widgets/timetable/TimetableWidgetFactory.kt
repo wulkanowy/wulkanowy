@@ -15,6 +15,7 @@ import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.data.repositories.timetable.TimetableRepository
+import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDate
@@ -25,6 +26,7 @@ class TimetableWidgetFactory(
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val sharedPref: SharedPrefHelper,
+    private val schedulers: SchedulersProvider,
     private val context: Context,
     private val intent: Intent?
 ) : RemoteViewsService.RemoteViewsFactory {
@@ -48,13 +50,17 @@ class TimetableWidgetFactory(
     override fun onDataSetChanged() {
         intent?.action?.let { LocalDate.ofEpochDay(sharedPref.getLong(it, 0)) }
             ?.let { date ->
-                disposable.add(studentRepository.isStudentSaved()
-                    .flatMap { studentRepository.getCurrentStudent() }
-                    .flatMap { semesterRepository.getCurrentSemester(it) }
-                    .flatMap { timetableRepository.getTimetable(it, date, date) }
-                    .map { item -> item.sortedBy { it.number } }
-                    .subscribe({ lessons = it })
-                    { Timber.e(it, "An error has occurred while downloading data for the widget") })
+                try {
+                    lessons = studentRepository.isStudentSaved()
+                        .flatMap { studentRepository.getCurrentStudent() }
+                        .flatMap { semesterRepository.getCurrentSemester(it) }
+                        .flatMap { timetableRepository.getTimetable(it, date, date) }
+                        .map { item -> item.sortedBy { it.number } }
+                        .subscribeOn(schedulers.backgroundThread)
+                        .blockingGet()
+                } catch (e: Exception) {
+                    Timber.e(e, "An error has occurred while downloading data for the widget")
+                }
             }
     }
 
