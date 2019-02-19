@@ -50,6 +50,8 @@ android {
             versionNameSuffix "-dev"
             testCoverageEnabled = true
             ext.enableCrashlytics = project.hasProperty("enableCrashlytics")
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             multiDexKeepProguard file('proguard-multidex-rules.pro')
         }
     }
