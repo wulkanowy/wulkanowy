@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.modules.grade.statistics.GradeStatisticsFragment">
+    tools:context=".ui.modules.grade.summary.GradeSummaryFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/gradeSummarySwipe"
