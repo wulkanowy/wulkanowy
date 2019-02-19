@@ -3,9 +3,10 @@ package io.github.wulkanowy.data.repositories.note
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.Note
-import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
 import io.reactivex.Completable
 import io.reactivex.Single
+import org.threeten.bp.LocalDateTime.now
 import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,27 +18,29 @@ class NoteRepository @Inject constructor(
     private val remote: NoteRemote
 ) {
 
-    fun getNotes(semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Note>> {
-        return local.getNotes(semester).filter { !forceRefresh }
+    fun getNotes(student: Student, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Note>> {
+        return local.getNotes(student).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
-                    if (it) remote.getNotes(semester)
+                    if (it) remote.getNotes(student)
                     else Single.error(UnknownHostException())
                 }.flatMap { new ->
-                    local.getNotes(semester).toSingle(emptyList())
+                    local.getNotes(student).toSingle(emptyList())
                         .doOnSuccess { old ->
                             local.deleteNotes(old - new)
                             local.saveNotes((new - old)
                                 .onEach {
-                                    if (notify) it.isNotified = false
+                                    if (notify && student.registrationDate >= now()) {
+                                        it.isNotified = false
+                                    } else it.isRead = true
                                 })
                         }
-                }.flatMap { local.getNotes(semester).toSingle(emptyList()) }
+                }.flatMap { local.getNotes(student).toSingle(emptyList()) }
             )
     }
 
-    fun getNewNotes(semester: Semester): Single<List<Note>> {
-        return local.getNewNotes(semester).toSingle(emptyList())
+    fun getNewNotes(student: Student): Single<List<Note>> {
+        return local.getNewNotes(student).toSingle(emptyList())
     }
 
     fun updateNote(note: Note): Completable {

@@ -9,9 +9,6 @@ import java.io.Serializable
 @Entity(tableName = "Notes")
 data class Note(
 
-    @ColumnInfo(name = "semester_id")
-    val semesterId: Int,
-
     @ColumnInfo(name = "student_id")
     val studentId: Int,
 
@@ -32,4 +29,7 @@ data class Note(
 
     @ColumnInfo(name = "is_notified")
     var isNotified: Boolean = true
+
+    @ColumnInfo(name = "semester_id")
+    var semesterId: Int = 0 // unused
 }
