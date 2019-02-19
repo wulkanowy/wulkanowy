@@ -4,8 +4,10 @@ import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
 import io.reactivex.Completable
 import io.reactivex.Single
+import org.threeten.bp.LocalDateTime.now
 import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,7 +19,7 @@ class GradeRepository @Inject constructor(
     private val remote: GradeRemote
 ) {
 
-    fun getGrades(semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Grade>> {
+    fun getGrades(student: Student, semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Grade>> {
         return local.getGrades(semester).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
@@ -29,8 +31,9 @@ class GradeRepository @Inject constructor(
                             local.deleteGrades(oldGrades - newGrades)
                             local.saveGrades((newGrades - oldGrades)
                                 .onEach {
-                                    if (oldGrades.isNotEmpty()) it.isRead = false
-                                    if (notify) it.isNotified = false
+                                    if (notify && student.registrationDate >= now()) {
+                                        it.isNotified = false
+                                    } else it.isRead = true
                                 })
                         }
                 }.flatMap { local.getGrades(semester).toSingle(emptyList()) })

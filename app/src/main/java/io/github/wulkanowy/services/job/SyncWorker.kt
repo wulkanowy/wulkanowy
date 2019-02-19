@@ -101,7 +101,7 @@ class SyncWorker : SimpleJobService() {
             .flatMapCompletable {
                 Completable.merge(
                     listOf(
-                        gradesDetails.getGrades(it.first, true, notify).ignoreElement(),
+                        gradesDetails.getGrades(it.second, it.first, true, notify).ignoreElement(),
                         gradesSummary.getGradesSummary(it.first, true).ignoreElement(),
                         attendance.getAttendance(it.first, start, end, true).ignoreElement(),
                         exam.getExams(it.first, start, end, true).ignoreElement(),
