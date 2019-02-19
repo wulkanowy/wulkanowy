@@ -17,7 +17,9 @@ data class GradeStatistics(
 
     val grade: Int,
 
-    val amount: Int
+    val amount: Int,
+
+    val annual: Boolean
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

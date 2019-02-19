@@ -64,6 +64,6 @@ class GradeStatisticsLocalTest {
     }
 
     private fun getGradeStatistics(subject: String, studentId: Int, semesterId: Int): GradeStatistics {
-        return GradeStatistics(studentId, semesterId, subject, 5, 5)
+        return GradeStatistics(studentId, semesterId, subject, 5, 5, false)
     }
 }

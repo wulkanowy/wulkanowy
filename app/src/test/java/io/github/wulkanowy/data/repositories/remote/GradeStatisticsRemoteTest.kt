@@ -39,7 +39,7 @@ class GradeStatisticsRemoteTest {
         every { semesterMock.semesterName } returns 2
         every { semesterMock.diaryId } returns 1
 
-        val stats = GradeStatisticsRemote(mockApi).getGradeStatistics(semesterMock).blockingGet()
+        val stats = GradeStatisticsRemote(mockApi).getGradeStatistics(semesterMock, false).blockingGet()
         Assert.assertEquals(2, stats.size)
     }
 

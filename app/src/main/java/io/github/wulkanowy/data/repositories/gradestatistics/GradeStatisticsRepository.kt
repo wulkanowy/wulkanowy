@@ -20,7 +20,7 @@ class GradeStatisticsRepository @Inject constructor(
         return local.getGradesStatistics(semester, subjectName).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
-                    if (it) remote.getGradeStatistics(semester)
+                    if (it) remote.getGradeStatistics(semester, false)
                     else Single.error(UnknownHostException())
                 }.flatMap { newGradesStats ->
                     local.getGradesStatistics(semester).toSingle(emptyList())

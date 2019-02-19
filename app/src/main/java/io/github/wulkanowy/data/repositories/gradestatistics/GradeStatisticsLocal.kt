@@ -18,7 +18,7 @@ class GradeStatisticsLocal @Inject constructor(private val gradeStatisticsDb: Gr
     fun getGradesStatistics(semester: Semester, subjectName: String): Maybe<List<GradeStatistics>> {
         return (if ("Wszystkie" == subjectName) gradeStatisticsDb.loadAll(semester.semesterId, semester.studentId).map { list ->
             list.groupBy { it.grade }.map {
-                GradeStatistics(semester.studentId, semester.semesterId, subjectName, it.key, it.value.fold(0) { acc, e -> acc + e.amount })
+                GradeStatistics(semester.studentId, semester.semesterId, subjectName, it.key, it.value.fold(0) { acc, e -> acc + e.amount }, false)
             }
         }
         else gradeStatisticsDb.loadSubject(semester.semesterId, semester.studentId, subjectName)).filter { !it.isEmpty() }

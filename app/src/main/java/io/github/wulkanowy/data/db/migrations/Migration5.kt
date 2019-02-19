@@ -12,6 +12,7 @@ class Migration5 : Migration(4, 5) {
             "`semester_id` INTEGER NOT NULL," +
             "`subject` TEXT NOT NULL," +
             "`grade` INTEGER NOT NULL," +
-            "`amount` INTEGER NOT NULL)")
+            "`amount` INTEGER NOT NULL," +
+            "`annual` INTEGER NOT NULL)")
     }
 }
