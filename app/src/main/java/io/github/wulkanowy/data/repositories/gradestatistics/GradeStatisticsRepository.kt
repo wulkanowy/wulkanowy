@@ -23,7 +23,7 @@ class GradeStatisticsRepository @Inject constructor(
                     if (it) remote.getGradeStatistics(semester)
                     else Single.error(UnknownHostException())
                 }.flatMap { newGradesStats ->
-                    local.getGradesStatistics(semester, subjectName).toSingle(emptyList())
+                    local.getGradesStatistics(semester).toSingle(emptyList())
                         .doOnSuccess { oldGradesStats ->
                             local.deleteGradesStatistics(oldGradesStats - newGradesStats)
                             local.saveGradesStatistics(newGradesStats - oldGradesStats)

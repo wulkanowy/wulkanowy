@@ -7,7 +7,11 @@ interface GradeStatisticsView : BaseSessionView {
 
     fun initView()
 
+    fun updateSubjects(data: ArrayList<String>)
+
     fun updateData(items: List<GradeStatistics>)
+
+    fun showSubjects(show: Boolean)
 
     fun notifyParentDataLoaded(semesterId: Int)
 

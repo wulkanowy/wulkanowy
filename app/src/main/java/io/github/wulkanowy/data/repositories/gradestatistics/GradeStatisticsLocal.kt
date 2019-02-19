@@ -10,9 +10,18 @@ import javax.inject.Singleton
 @Singleton
 class GradeStatisticsLocal @Inject constructor(private val gradeStatisticsDb: GradeStatisticsDao) {
 
-    fun getGradesStatistics(semester: Semester, subjectName: String): Maybe<List<GradeStatistics>> {
-        return gradeStatisticsDb.loadAll(semester.semesterId, semester.studentId, subjectName)
+    fun getGradesStatistics(semester: Semester): Maybe<List<GradeStatistics>> {
+        return gradeStatisticsDb.loadAll(semester.semesterId, semester.studentId)
             .filter { !it.isEmpty() }
+    }
+
+    fun getGradesStatistics(semester: Semester, subjectName: String): Maybe<List<GradeStatistics>> {
+        return (if ("Wszystkie" == subjectName) gradeStatisticsDb.loadAll(semester.semesterId, semester.studentId).map { list ->
+            list.groupBy { it.grade }.map {
+                GradeStatistics(semester.studentId, semester.semesterId, subjectName, it.key, it.value.fold(0) { acc, e -> acc + e.amount })
+            }
+        }
+        else gradeStatisticsDb.loadSubject(semester.semesterId, semester.studentId, subjectName)).filter { !it.isEmpty() }
     }
 
     fun saveGradesStatistics(gradesStatistics: List<GradeStatistics>) {

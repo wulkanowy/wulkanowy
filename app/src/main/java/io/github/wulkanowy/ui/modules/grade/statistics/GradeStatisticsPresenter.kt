@@ -1,8 +1,10 @@
 package io.github.wulkanowy.ui.modules.grade.statistics
 
+import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.repositories.gradestatistics.GradeStatisticsRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
+import io.github.wulkanowy.data.repositories.subject.SubjectRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
@@ -13,11 +15,17 @@ import javax.inject.Inject
 class GradeStatisticsPresenter @Inject constructor(
     private val errorHandler: SessionErrorHandler,
     private val gradeStatisticsRepository: GradeStatisticsRepository,
+    private val subjectRepository: SubjectRepository,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val schedulers: SchedulersProvider,
     private val analytics: FirebaseAnalyticsHelper
 ) : BaseSessionPresenter<GradeStatisticsView>(errorHandler) {
+
+    private var subjects = emptyList<Subject>()
+
+    var currentSubjectName = "Wszystkie"
+        private set
 
     private var currentSemesterId = 0
 
@@ -28,7 +36,8 @@ class GradeStatisticsPresenter @Inject constructor(
 
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         currentSemesterId = semesterId
-        loadData(semesterId, forceRefresh)
+        loadSubjects()
+        loadData(semesterId, currentSubjectName, forceRefresh)
     }
 
     fun onParentViewChangeSemester() {
@@ -42,11 +51,47 @@ class GradeStatisticsPresenter @Inject constructor(
         disposable.clear()
     }
 
-    private fun loadData(semesterId: Int, forceRefresh: Boolean) {
+    fun onSubjectSelected(name: String) {
+        Timber.i("Select attendance summary subject $name")
+        view?.run {
+//            showContent(false)
+//            showProgress(true)
+//            clearView()
+        }
+        (subjects.singleOrNull { it.name == name }?.name).let {
+            if (it != currentSubjectName) loadData(currentSemesterId, name)
+        }
+    }
+
+    private fun loadSubjects() {
+        Timber.i("Loading grade stats subjects started")
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
+            .flatMap { subjectRepository.getSubjects(it) }
+            .doOnSuccess { subjects = it }
+            .map { ArrayList(it.map { subject -> subject.name }) }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
+                Timber.i("Loading grade stats subjects result: Success")
+                view?.run {
+                    updateSubjects(it)
+                    showSubjects(true)
+                }
+            }, {
+                Timber.i("Loading grade stats subjects result: An exception occurred")
+                errorHandler.dispatch(it)
+            })
+        )
+    }
+
+    private fun loadData(semesterId: Int, subjectName: String, forceRefresh: Boolean = false) {
         Timber.i("Loading grade stats data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
-            .flatMap { gradeStatisticsRepository.getGradesStatistics(it.first { item -> item.semesterId == semesterId }, "Język polski", forceRefresh) }
+            .flatMap { gradeStatisticsRepository.getGradesStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, forceRefresh) }
+            .map { list -> list.sortedByDescending { it.grade } }
+            .map { list -> list.filter { it.amount != 0 } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {

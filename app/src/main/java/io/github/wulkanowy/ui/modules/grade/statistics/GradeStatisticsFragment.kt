@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
@@ -16,6 +18,7 @@ import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
+import io.github.wulkanowy.utils.setOnItemSelectedListener
 import kotlinx.android.synthetic.main.fragment_grade_statistics.*
 import kotlinx.android.synthetic.main.fragment_grade_summary.*
 import java.text.DecimalFormat
@@ -26,7 +29,11 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
     @Inject
     lateinit var presenter: GradeStatisticsPresenter
 
+    private lateinit var subjectsAdapter: ArrayAdapter<String>
+
     companion object {
+        private const val SAVED_SUBJECT_KEY = "CURRENT_SUBJECT"
+
         fun newInstance() = GradeStatisticsFragment()
     }
 
@@ -64,15 +71,32 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
                 }
             })
         }
+
+        context?.let {
+            subjectsAdapter = ArrayAdapter(it, android.R.layout.simple_spinner_item, ArrayList<String>())
+            subjectsAdapter.setDropDownViewResource(R.layout.item_attendance_summary_subject)
+        }
+
+        gradeStatisticsSubjects.run {
+            adapter = subjectsAdapter
+            setOnItemSelectedListener { presenter.onSubjectSelected((it as TextView).text.toString()) }
+        }
+    }
+
+    override fun updateSubjects(data: ArrayList<String>) {
+        subjectsAdapter.run {
+            clear()
+            addAll(data)
+            notifyDataSetChanged()
+        }
     }
 
     override fun updateData(items: List<GradeStatistics>) {
-        val chartItems = items.sortedByDescending { it.grade }.filter { it.amount != 0 }
         gradeStatisticsChart.run {
-            data = PieData(PieDataSet(chartItems.map {
+            data = PieData(PieDataSet(items.map {
                 PieEntry(it.amount.toFloat(), it.grade.toString())
             }, "Legenda").apply {
-                setColors(chartItems.map {
+                setColors(items.map {
                     gradeColors.single { color -> color.first == it.grade }.second
                 }.toIntArray(), context)
             }).apply {
@@ -82,6 +106,10 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
             description = Description().apply { text = "" }
             invalidate()
         }
+    }
+
+    override fun showSubjects(show: Boolean) {
+        gradeStatisticsSubjectsContainer.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 
     override fun onParentLoadData(semesterId: Int, forceRefresh: Boolean) {
@@ -102,6 +130,11 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
 
     override fun notifyParentRefresh() {
         (parentFragment as? GradeFragment)?.onChildRefresh()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(GradeStatisticsFragment.SAVED_SUBJECT_KEY, presenter.currentSubjectName)
     }
 
     override fun onDestroyView() {
