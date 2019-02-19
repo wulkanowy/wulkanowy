@@ -20,7 +20,6 @@ import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import kotlinx.android.synthetic.main.fragment_grade_statistics.*
-import kotlinx.android.synthetic.main.fragment_grade_summary.*
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -36,6 +35,9 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
 
         fun newInstance() = GradeStatisticsFragment()
     }
+
+    override val isViewEmpty
+        get() = gradeStatisticsChart.isEmpty
 
     private val gradeColors = listOf(
         6 to R.color.grade_six,
@@ -56,7 +58,7 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        messageContainer = gradeSummaryRecycler
+        messageContainer = gradeStatisticsChart
         presenter.onAttachView(this)
     }
 
@@ -81,6 +83,8 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
             adapter = subjectsAdapter
             setOnItemSelectedListener { presenter.onSubjectSelected((it as TextView).text.toString()) }
         }
+
+        gradeStatisticsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
     override fun updateSubjects(data: ArrayList<String>) {
@@ -96,10 +100,12 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
             data = PieData(PieDataSet(items.map {
                 PieEntry(it.amount.toFloat(), it.grade.toString())
             }, "Legenda").apply {
+                sliceSpace = 1f
                 setColors(items.map {
                     gradeColors.single { color -> color.first == it.grade }.second
                 }.toIntArray(), context)
             }).apply {
+                setTouchEnabled(false)
                 setValueFormatter { value, _, _, _ -> getString(R.string.grade_items_number_prefix, DecimalFormat("##0").format(value)) }
                 centerText = items.fold(0) { acc, it -> acc + it.amount }.let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
             }
@@ -112,12 +118,32 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
         gradeStatisticsSubjectsContainer.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
 
+    override fun clearView() {
+        gradeStatisticsChart.clear()
+    }
+
+    override fun showContent(show: Boolean) {
+        gradeStatisticsChart.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun showEmpty(show: Boolean) {
+        gradeStatisticsEmpty.visibility = if (show) View.VISIBLE else View.INVISIBLE
+    }
+
+    override fun showProgress(show: Boolean) {
+        gradeStatisticsProgress.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showRefresh(show: Boolean) {
+        gradeStatisticsSwipe.isRefreshing = show
+    }
+
     override fun onParentLoadData(semesterId: Int, forceRefresh: Boolean) {
         presenter.onParentViewLoadData(semesterId, forceRefresh)
     }
 
     override fun onParentReselected() {
-        presenter.onParentViewChangeSemester()
+        //
     }
 
     override fun onParentChangeSemester() {

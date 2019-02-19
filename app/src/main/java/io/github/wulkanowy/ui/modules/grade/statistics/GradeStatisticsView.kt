@@ -5,6 +5,8 @@ import io.github.wulkanowy.ui.base.session.BaseSessionView
 
 interface GradeStatisticsView : BaseSessionView {
 
+    val isViewEmpty: Boolean
+
     fun initView()
 
     fun updateSubjects(data: ArrayList<String>)
@@ -16,4 +18,14 @@ interface GradeStatisticsView : BaseSessionView {
     fun notifyParentDataLoaded(semesterId: Int)
 
     fun notifyParentRefresh()
+
+    fun clearView()
+
+    fun showContent(show: Boolean)
+
+    fun showEmpty(show: Boolean)
+
+    fun showProgress(show: Boolean)
+
+    fun showRefresh(show: Boolean)
 }

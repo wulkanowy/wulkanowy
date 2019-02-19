@@ -42,21 +42,27 @@ class GradeStatisticsPresenter @Inject constructor(
 
     fun onParentViewChangeSemester() {
         view?.run {
-//            showProgress(true)
-//            showRefresh(false)
-//            showContent(false)
-//            showEmpty(false)
-//            clearView()
+            showProgress(true)
+            showRefresh(false)
+            showContent(false)
+            showEmpty(false)
+            clearView()
         }
         disposable.clear()
+    }
+
+    fun onSwipeRefresh() {
+        Timber.i("Force refreshing the grade summary")
+        view?.notifyParentRefresh()
     }
 
     fun onSubjectSelected(name: String) {
         Timber.i("Select attendance summary subject $name")
         view?.run {
-//            showContent(false)
-//            showProgress(true)
-//            clearView()
+            showContent(false)
+            showProgress(true)
+            showEmpty(false)
+            clearView()
         }
         (subjects.singleOrNull { it.name == name }?.name).let {
             if (it != currentSubjectName) loadData(currentSemesterId, name)
@@ -97,22 +103,22 @@ class GradeStatisticsPresenter @Inject constructor(
             .observeOn(schedulers.mainThread)
             .doFinally {
                 view?.run {
-//                    showRefresh(false)
-//                    showProgress(false)
+                    showRefresh(false)
+                    showProgress(false)
                     notifyParentDataLoaded(semesterId)
                 }
             }
             .subscribe({
                 Timber.i("Loading grade stats result: Success")
                 view?.run {
-//                    showEmpty(it.isEmpty())
-//                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    showContent(it.isNotEmpty())
                     updateData(it)
                 }
                 analytics.logEvent("load_grade_details", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.i("Loading grade stats result: An exception occurred")
-//                view?.run { showEmpty(isViewEmpty) }
+                view?.run { showEmpty(isViewEmpty) }
                 errorHandler.dispatch(it)
             })
     }
