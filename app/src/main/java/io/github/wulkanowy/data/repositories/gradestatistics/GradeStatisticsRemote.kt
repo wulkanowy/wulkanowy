@@ -12,7 +12,7 @@ class GradeStatisticsRemote @Inject constructor(private val api: Api) {
 
     fun getGradeStatistics(semester: Semester): Single<List<GradeStatistics>> {
         return Single.just(api.apply { diaryId = semester.diaryId })
-            .flatMap { it.getGradesStatistics(semester.semesterId, semester.semesterName == 2) }
+            .flatMap { it.getGradesStatistics(semester.semesterId, false) }
             .map { gradeStatistics ->
                 gradeStatistics.map {
                     GradeStatistics(

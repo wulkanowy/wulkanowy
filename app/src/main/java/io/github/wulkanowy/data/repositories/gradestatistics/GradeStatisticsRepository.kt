@@ -16,18 +16,18 @@ class GradeStatisticsRepository @Inject constructor(
     private val remote: GradeStatisticsRemote
 ) {
 
-    fun getGradesStatistics(semester: Semester, forceRefresh: Boolean = false): Single<List<GradeStatistics>> {
-        return local.getGradesStatistics(semester).filter { !forceRefresh }
+    fun getGradesStatistics(semester: Semester, subjectName: String, forceRefresh: Boolean = false): Single<List<GradeStatistics>> {
+        return local.getGradesStatistics(semester, subjectName).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
                     if (it) remote.getGradeStatistics(semester)
                     else Single.error(UnknownHostException())
                 }.flatMap { newGradesStats ->
-                    local.getGradesStatistics(semester).toSingle(emptyList())
+                    local.getGradesStatistics(semester, subjectName).toSingle(emptyList())
                         .doOnSuccess { oldGradesStats ->
                             local.deleteGradesStatistics(oldGradesStats - newGradesStats)
                             local.saveGradesStatistics(newGradesStats - oldGradesStats)
                         }
-                }.flatMap { local.getGradesStatistics(semester).toSingle(emptyList()) })
+                }.flatMap { local.getGradesStatistics(semester, subjectName).toSingle(emptyList()) })
     }
 }
