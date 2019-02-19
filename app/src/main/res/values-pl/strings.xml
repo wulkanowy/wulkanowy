@@ -62,6 +62,7 @@
     <string name="grade_menu_summary">Podsumowanie</string>
     <string name="grade_menu_statistics">Statystyki</string>
     <string name="grade_menu_read">Oznacz jako przeczytane</string>
+    <string name="grade_items_number_prefix">Ocen: %s</string>
     <plurals name="grade_number_item">
         <item quantity="one">%d ocena</item>
         <item quantity="few">%d oceny</item>

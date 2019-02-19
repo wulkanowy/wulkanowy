@@ -100,10 +100,10 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
                     gradeColors.single { color -> color.first == it.grade }.second
                 }.toIntArray(), context)
             }).apply {
-                setValueFormatter { value, _, _, _ -> "Ocen: " + DecimalFormat("##0").format(value) }
-                centerText = "Oceny cząstkowe"
+                setValueFormatter { value, _, _, _ -> getString(R.string.grade_items_number_prefix, DecimalFormat("##0").format(value)) }
+                centerText = items.fold(0) { acc, it -> acc + it.amount }.let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
             }
-            description = Description().apply { text = "" }
+            description = Description().apply { text = "Oceny cząstkowe" }
             invalidate()
         }
     }

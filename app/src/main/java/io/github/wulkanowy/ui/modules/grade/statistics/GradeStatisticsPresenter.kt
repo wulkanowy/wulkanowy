@@ -87,6 +87,7 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private fun loadData(semesterId: Int, subjectName: String, forceRefresh: Boolean = false) {
         Timber.i("Loading grade stats data started")
+        currentSubjectName = subjectName
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
             .flatMap { gradeStatisticsRepository.getGradesStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, forceRefresh) }
