@@ -71,6 +71,7 @@ class GradeFragment : BaseSessionFragment(), GradeView, MainView.MainChildView, 
 
         gradeViewPager.run {
             adapter = pagerAdapter
+            offscreenPageLimit = 3
             setOnSelectPageListener { presenter.onPageSelected(it) }
         }
         gradeTabLayout.setupWithViewPager(gradeViewPager)
