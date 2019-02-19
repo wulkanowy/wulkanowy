@@ -28,7 +28,7 @@ class GradeStatisticsRemoteTest {
 
     @Test
     fun getGradeStatisticsTest() {
-        every { mockApi.getGradesStatistics(1, true) } returns Single.just(listOf(
+        every { mockApi.getGradesStatistics(1, any()) } returns Single.just(listOf(
             getGradeStatistics("Fizyka"),
             getGradeStatistics("Matematyka")
         ))

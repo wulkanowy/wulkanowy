@@ -33,25 +33,37 @@ class GradeStatisticsLocalTest {
     }
 
     @Test
-    fun saveAndReadTest() {
+    fun saveAndRead_subject() {
         gradeStatisticsLocal.saveGradesStatistics(listOf(
-            getGradeStatistics("Matematyka", 1),
-            getGradeStatistics("Fizyka", 2),
-            getGradeStatistics("Chemia", 2)
+            getGradeStatistics("Matematyka", 2, 1),
+            getGradeStatistics("Fizyka", 1, 2)
         ))
 
         val stats = gradeStatisticsLocal.getGradesStatistics(
-            Semester(1, 2, "", 2, 2, true),
+            Semester(2, 2, "", 1, 2, true),
             "Matematyka"
         ).blockingGet()
-        assertEquals(2, stats.size)
-        assertEquals(stats[0].subject, "Fizyka")
-        assertEquals(stats[1].subject, "Chemia")
+        assertEquals(1, stats.size)
+        assertEquals(stats[0].subject, "Matematyka")
     }
 
-    private fun getGradeStatistics(subject: String, number: Int): GradeStatistics {
-        return GradeStatistics(
-            1, number, subject, 5, 5
-        )
+    @Test
+    fun saveAndRead_all() {
+        gradeStatisticsLocal.saveGradesStatistics(listOf(
+            getGradeStatistics("Matematyka", 2, 1),
+            getGradeStatistics("Chemia", 2, 1),
+            getGradeStatistics("Fizyka", 1, 2)
+        ))
+
+        val stats = gradeStatisticsLocal.getGradesStatistics(
+            Semester(2, 2, "", 1, 2, true),
+            "Wszystkie"
+        ).blockingGet()
+        assertEquals(1, stats.size)
+        assertEquals(stats[0].subject, "Wszystkie")
+    }
+
+    private fun getGradeStatistics(subject: String, studentId: Int, semesterId: Int): GradeStatistics {
+        return GradeStatistics(studentId, semesterId, subject, 5, 5)
     }
 }
