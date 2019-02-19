@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.PieData
@@ -64,6 +63,7 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
 
     override fun initView() {
         gradeStatisticsChart.run {
+            description.isEnabled = false
             animateXY(1000, 1000)
             legend.setCustom(gradeLabels.mapIndexed { i, it ->
                 LegendEntry().apply {
@@ -109,7 +109,6 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
                 setValueFormatter { value, _, _, _ -> getString(R.string.grade_items_number_prefix, DecimalFormat("##0").format(value)) }
                 centerText = items.fold(0) { acc, it -> acc + it.amount }.let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
             }
-            description = Description().apply { text = "Oceny cząstkowe" }
             invalidate()
         }
     }
