@@ -52,12 +52,12 @@ class GradeStatisticsPresenter @Inject constructor(
     }
 
     fun onSwipeRefresh() {
-        Timber.i("Force refreshing the grade summary")
+        Timber.i("Force refreshing the grade stats")
         view?.notifyParentRefresh()
     }
 
     fun onSubjectSelected(name: String) {
-        Timber.i("Select attendance summary subject $name")
+        Timber.i("Select attendance stats subject $name")
         view?.run {
             showContent(false)
             showProgress(true)
@@ -115,7 +115,7 @@ class GradeStatisticsPresenter @Inject constructor(
                     showContent(it.isNotEmpty())
                     updateData(it)
                 }
-                analytics.logEvent("load_grade_details", "items" to it.size, "force_refresh" to forceRefresh)
+                analytics.logEvent("load_grade_statistics", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.i("Loading grade stats result: An exception occurred")
                 view?.run { showEmpty(isViewEmpty) }
