@@ -78,6 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="invisible"
+                    android:background="?android:attr/windowBackground"
                     tools:visibility="visible" />
             </LinearLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -17,6 +17,7 @@ import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
+import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import kotlinx.android.synthetic.main.fragment_grade_statistics.*
 import java.text.DecimalFormat
@@ -39,16 +40,16 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
         get() = gradeStatisticsChart.isEmpty
 
     private val gradeColors = listOf(
-            6 to R.color.grade_six,
-            5 to R.color.grade_five,
-            4 to R.color.grade_four,
-            3 to R.color.grade_three,
-            2 to R.color.grade_two,
-            1 to R.color.grade_one
+        6 to R.color.grade_six,
+        5 to R.color.grade_five,
+        4 to R.color.grade_four,
+        3 to R.color.grade_three,
+        2 to R.color.grade_two,
+        1 to R.color.grade_one
     )
 
     private val gradeLabels = listOf(
-            "6, 6-", "5, 5-, 5+", "4, 4-, 4+", "3, 3-, 3+", "2, 2-, 2+", "1, 1+"
+        "6, 6-", "5, 5-, 5+", "4, 4-, 4+", "3, 3-, 3+", "2, 2-, 2+", "1, 1+"
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -65,13 +66,16 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
         gradeStatisticsChart.run {
             description.isEnabled = false
             animateXY(1000, 1000)
-            legend.setCustom(gradeLabels.mapIndexed { i, it ->
-                LegendEntry().apply {
-                    label = it
-                    formColor = ContextCompat.getColor(context, gradeColors[i].second)
-                    form = Legend.LegendForm.SQUARE
-                }
-            })
+            legend.apply {
+                textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
+                setCustom(gradeLabels.mapIndexed { i, it ->
+                    LegendEntry().apply {
+                        label = it
+                        formColor = ContextCompat.getColor(context, gradeColors[i].second)
+                        form = Legend.LegendForm.SQUARE
+                    }
+                })
+            }
         }
 
         context?.let {
@@ -110,7 +114,8 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
             }).apply {
                 setTouchEnabled(false)
                 setValueFormatter { value, _, _, _ -> getString(R.string.grade_items_number_prefix, DecimalFormat("##0").format(value)) }
-                centerText = items.fold(0) { acc, it -> acc + it.amount }.let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
+                centerText = items.fold(0) { acc, it -> acc + it.amount }
+                    .let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
             }
             invalidate()
         }
