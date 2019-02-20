@@ -1,0 +1,19 @@
+package io.github.wulkanowy.services
+
+import com.squareup.inject.assisted.dagger2.AssistedModule
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.ClassKey
+import dagger.multibindings.IntoMap
+import io.github.wulkanowy.services.sync.factory.InjectableWorkerFactory
+import io.github.wulkanowy.services.sync.workers.FullWorker
+
+@AssistedModule
+@Module(includes = [AssistedInject_ServicesModule::class])
+abstract class ServicesModule {
+
+    @Binds
+    @IntoMap
+    @ClassKey(FullWorker::class)
+    abstract fun bindFullWorker(factory: FullWorker.Factory): InjectableWorkerFactory
+}

@@ -1,10 +1,12 @@
 package io.github.wulkanowy.ui.modules.main
 
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.google.firebase.analytics.FirebaseAnalytics.Event.APP_OPEN
 import com.google.firebase.analytics.FirebaseAnalytics.Param.DESTINATION
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
-import io.github.wulkanowy.services.job.ServiceHelper
+import io.github.wulkanowy.services.sync.workers.FullWorker
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
@@ -18,7 +20,6 @@ class MainPresenter @Inject constructor(
     private val studentRepository: StudentRepository,
     private val prefRepository: PreferencesRepository,
     private val schedulers: SchedulersProvider,
-    private val serviceHelper: ServiceHelper,
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<MainView>(errorHandler) {
 
@@ -30,7 +31,8 @@ class MainPresenter @Inject constructor(
             startMenuIndex = if (initMenuIndex != -1) initMenuIndex else prefRepository.startMenuIndex
             initView()
         }
-        serviceHelper.startFullSyncService()
+
+        WorkManager.getInstance().enqueue(OneTimeWorkRequest.Builder(FullWorker::class.java).build())
 
         analytics.logEvent(APP_OPEN, DESTINATION to when (initMenuIndex) {
             1 -> "Grades"
@@ -92,8 +94,7 @@ class MainPresenter @Inject constructor(
                 if (it.isNotEmpty()) {
                     Timber.i("Switching current student")
                     studentRepository.switchStudent(it[0])
-                }
-                else Completable.complete()
+                } else Completable.complete()
             }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
