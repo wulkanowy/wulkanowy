@@ -1,18 +1,18 @@
 package io.github.wulkanowy.ui.modules.main
 
-import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.google.firebase.analytics.FirebaseAnalytics.Event.APP_OPEN
 import com.google.firebase.analytics.FirebaseAnalytics.Param.DESTINATION
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
-import io.github.wulkanowy.services.sync.workers.FullWorker
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Completable
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
@@ -32,7 +32,11 @@ class MainPresenter @Inject constructor(
             initView()
         }
 
-        WorkManager.getInstance().enqueue(OneTimeWorkRequest.Builder(FullWorker::class.java).build())
+        WorkManager.getInstance()
+            .enqueue(PeriodicWorkRequest.Builder(FullWorker::class.java, 30, TimeUnit.SECONDS).build())
+
+
+        WorkManager.getInstance()
 
         analytics.logEvent(APP_OPEN, DESTINATION to when (initMenuIndex) {
             1 -> "Grades"

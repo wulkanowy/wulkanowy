@@ -1,4 +1,4 @@
-package io.github.wulkanowy.services.sync.factory
+package io.github.wulkanowy.services.factory
 
 import android.content.Context
 import androidx.work.ListenableWorker
