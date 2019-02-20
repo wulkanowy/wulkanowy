@@ -7,7 +7,6 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.threeten.bp.LocalDateTime.now
 import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,13 +30,13 @@ class NoteRepository @Inject constructor(
                             local.deleteNotes(old - new)
                             local.saveNotes((new - old)
                                 .onEach {
-                                    if (notify && student.registrationDate >= now()) {
-                                        it.isNotified = false
-                                    } else it.isRead = true
+                                    if (student.registrationDate <= it.date.atStartOfDay()) {
+                                        if (notify) it.isNotified = false
+                                        it.isRead = false
+                                    }
                                 })
                         }
-                }.flatMap { local.getNotes(student).toSingle(emptyList()) }
-            )
+                }.flatMap { local.getNotes(student).toSingle(emptyList()) })
     }
 
     fun getNewNotes(student: Student): Single<List<Note>> {
