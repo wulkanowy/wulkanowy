@@ -5,6 +5,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.Inter
 import io.github.wulkanowy.data.ApiHelper
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.db.entities.Student
+import io.reactivex.Maybe
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -33,6 +34,21 @@ class ReportingUnitRepository @Inject constructor(
                                     local.saveReportingUnits(new - old)
                                 }
                         }.flatMap { local.getReportingUnits(student).toSingle(emptyList()) }
+                    )
+            }
+    }
+
+    fun getReportingUnit(student: Student, unitId: Int): Maybe<ReportingUnit> {
+        return Maybe.just(apiHelper.initApi(student))
+            .flatMap { _ ->
+                local.getReportingUnit(student, unitId)
+                    .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
+                        .flatMap {
+                            if (it) getReportingUnits(student, true)
+                            else Single.error(UnknownHostException())
+                        }.flatMapMaybe {
+                            local.getReportingUnit(student, unitId)
+                        }
                     )
             }
     }

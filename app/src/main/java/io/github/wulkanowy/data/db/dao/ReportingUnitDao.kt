@@ -20,4 +20,7 @@ interface ReportingUnitDao {
 
     @Query("SELECT * FROM ReportingUnits WHERE student_id = :studentId")
     fun load(studentId: Int): Maybe<List<ReportingUnit>>
+
+    @Query("SELECT * FROM ReportingUnits WHERE student_id = :studentId AND real_id = :unitId")
+    fun loadOne(studentId: Int, unitId: Int): Maybe<ReportingUnit>
 }
