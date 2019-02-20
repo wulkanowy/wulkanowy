@@ -5,17 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.tabs.TabLayout
+    <io.github.wulkanowy.ui.modules.grade.CustomTabLayout
         android:id="@+id/gradeTabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/colorPrimary"
         android:elevation="5dp"
+        app:tabMode="scrollable"
         android:visibility="invisible"
-        app:tabGravity="fill"
         app:tabIndicatorColor="@android:color/white"
-        app:tabMaxWidth="0dp"
-        app:tabMode="fixed"
         app:tabTextColor="@android:color/white" />
 
     <androidx.viewpager.widget.ViewPager
