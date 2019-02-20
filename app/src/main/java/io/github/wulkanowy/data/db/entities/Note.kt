@@ -9,19 +9,16 @@ import java.io.Serializable
 @Entity(tableName = "Notes")
 data class Note(
 
-    @ColumnInfo(name = "semester_id")
-    var semesterId: Int,
-
     @ColumnInfo(name = "student_id")
-    var studentId: Int,
+    val studentId: Int,
 
-    var date: LocalDate,
+    val date: LocalDate,
 
-    var teacher: String,
+    val teacher: String,
 
-    var category: String,
+    val category: String,
 
-    var content: String
+    val content: String
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
