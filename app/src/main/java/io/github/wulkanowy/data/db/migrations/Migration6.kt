@@ -24,5 +24,9 @@ class Migration6 : Migration(5, 6) {
             "unit_id INTEGER NOT NULL," +
             "role INTEGER NOT NULL," +
             "hash TEXT NOT NULL)")
+
+        database.execSQL("DELETE FROM Semesters WHERE 1")
+        database.execSQL("ALTER TABLE Semesters ADD COLUMN class_id INTEGER DEFAULT 0 NOT NULL")
+        database.execSQL("ALTER TABLE Semesters ADD COLUMN unit_id INTEGER DEFAULT 0 NOT NULL")
     }
 }
