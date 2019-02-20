@@ -24,11 +24,7 @@ class GradeWorker @AssistedInject constructor(
     }
 
     override fun createWork(): Single<Result> {
-        return studentRepository.getCurrentStudent()
-            .flatMap { semesterRepository.getCurrentSemester(it) }
-            .flatMap { gradeRepository.getGrades(it, true) }
-            .map { Result.success() }
-            .onErrorReturn { Result.failure() }
+        TODO()
     }
 
     @AssistedInject.Factory
