@@ -39,16 +39,16 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
         get() = gradeStatisticsChart.isEmpty
 
     private val gradeColors = listOf(
-        6 to R.color.grade_six,
-        5 to R.color.grade_five,
-        4 to R.color.grade_four,
-        3 to R.color.grade_three,
-        2 to R.color.grade_two,
-        1 to R.color.grade_one
+            6 to R.color.grade_six,
+            5 to R.color.grade_five,
+            4 to R.color.grade_four,
+            3 to R.color.grade_three,
+            2 to R.color.grade_two,
+            1 to R.color.grade_one
     )
 
     private val gradeLabels = listOf(
-        "6, 6-", "5, 5-, 5+", "4, 4-, 4+", "3, 3-, 3+", "2, 2-, 2+", "1, 1+"
+            "6, 6-", "5, 5-, 5+", "4, 4-, 4+", "3, 3-, 3+", "2, 2-, 2+", "1, 1+"
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -85,6 +85,9 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
         }
 
         gradeStatisticsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+        gradeStatisticsTypeSwitch.setOnCheckedChangeListener { _, checkedId ->
+            presenter.onTypeChange(checkedId == R.id.gradeStatisticsTypeAnnual)
+        }
     }
 
     override fun updateSubjects(data: ArrayList<String>) {

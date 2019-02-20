@@ -63,6 +63,8 @@
     <string name="grade_menu_summary">Summary</string>
     <string name="grade_menu_statistics">Stats</string>
     <string name="grade_menu_read">Mark as read</string>
+    <string name="grade_statistics_partial">Partial grades</string>
+    <string name="grade_statistics_annual">Annual/semester grades</string>
     <plurals name="grade_number_item">
         <item quantity="one">%d grade</item>
         <item quantity="other">%d grades</item>

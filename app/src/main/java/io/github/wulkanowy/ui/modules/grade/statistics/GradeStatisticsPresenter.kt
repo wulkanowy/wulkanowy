@@ -29,6 +29,8 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private var currentSemesterId = 0
 
+    private var currentIsAnnual = false
+
     override fun onAttachView(view: GradeStatisticsView) {
         super.onAttachView(view)
         view.initView()
@@ -37,7 +39,7 @@ class GradeStatisticsPresenter @Inject constructor(
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         currentSemesterId = semesterId
         loadSubjects()
-        loadData(semesterId, currentSubjectName, forceRefresh)
+        loadData(semesterId, currentSubjectName, currentIsAnnual, forceRefresh)
     }
 
     fun onParentViewChangeSemester() {
@@ -65,8 +67,19 @@ class GradeStatisticsPresenter @Inject constructor(
             clearView()
         }
         (subjects.singleOrNull { it.name == name }?.name).let {
-            if (it != currentSubjectName) loadData(currentSemesterId, name)
+            if (it != currentSubjectName) loadData(currentSemesterId, name, currentIsAnnual)
         }
+    }
+
+    fun onTypeChange(annual: Boolean) {
+        Timber.i("Select attendance stats annual: $annual")
+        view?.run {
+            showContent(false)
+            showProgress(true)
+            showEmpty(false)
+            clearView()
+        }
+        loadData(currentSemesterId, currentSubjectName, annual)
     }
 
     private fun loadSubjects() {
@@ -91,12 +104,13 @@ class GradeStatisticsPresenter @Inject constructor(
         )
     }
 
-    private fun loadData(semesterId: Int, subjectName: String, forceRefresh: Boolean = false) {
+    private fun loadData(semesterId: Int, subjectName: String, annual: Boolean, forceRefresh: Boolean = false) {
         Timber.i("Loading grade stats data started")
         currentSubjectName = subjectName
+        currentIsAnnual = annual
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
-            .flatMap { gradeStatisticsRepository.getGradesStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, forceRefresh) }
+            .flatMap { gradeStatisticsRepository.getGradesStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, annual, forceRefresh) }
             .map { list -> list.sortedByDescending { it.grade } }
             .map { list -> list.filter { it.amount != 0 } }
             .subscribeOn(schedulers.backgroundThread)
