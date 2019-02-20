@@ -29,7 +29,4 @@ data class Note(
 
     @ColumnInfo(name = "is_notified")
     var isNotified: Boolean = true
-
-    @ColumnInfo(name = "semester_id")
-    var semesterId: Int = 0 // unused
 }
