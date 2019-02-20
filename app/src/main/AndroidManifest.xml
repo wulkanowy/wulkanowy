@@ -18,9 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
-        android:theme="@style/WulkanowyTheme"
-        android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning">
+        android:theme="@style/WulkanowyTheme">
         <activity
             android:name=".ui.modules.splash.SplashActivity"
             android:screenOrientation="portrait"

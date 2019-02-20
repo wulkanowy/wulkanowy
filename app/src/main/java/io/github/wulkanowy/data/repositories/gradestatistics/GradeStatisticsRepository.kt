@@ -17,7 +17,7 @@ class GradeStatisticsRepository @Inject constructor(
 ) {
 
     fun getGradesStatistics(semester: Semester, subjectName: String, annual: Boolean, forceRefresh: Boolean = false): Single<List<GradeStatistics>> {
-        return local.getGradesStatistics(semester, subjectName, annual).filter { !forceRefresh }
+        return local.getGradesStatistics(semester, annual, subjectName).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
                     if (it) remote.getGradeStatistics(semester, annual)
@@ -28,6 +28,6 @@ class GradeStatisticsRepository @Inject constructor(
                             local.deleteGradesStatistics(oldGradesStats - newGradesStats)
                             local.saveGradesStatistics(newGradesStats - oldGradesStats)
                         }
-                }.flatMap { local.getGradesStatistics(semester, subjectName, annual).toSingle(emptyList()) })
+                }.flatMap { local.getGradesStatistics(semester, annual, subjectName).toSingle(emptyList()) })
     }
 }

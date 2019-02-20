@@ -40,7 +40,7 @@ class GradeStatisticsLocalTest {
         ))
 
         val stats = gradeStatisticsLocal.getGradesStatistics(
-            Semester(2, 2, "", 1, 2, true),
+            Semester(2, 2, "", 1, 2, true), false,
             "Matematyka"
         ).blockingGet()
         assertEquals(1, stats.size)
@@ -56,7 +56,7 @@ class GradeStatisticsLocalTest {
         ))
 
         val stats = gradeStatisticsLocal.getGradesStatistics(
-            Semester(2, 2, "", 1, 2, true),
+            Semester(2, 2, "", 1, 2, true), false,
             "Wszystkie"
         ).blockingGet()
         assertEquals(1, stats.size)

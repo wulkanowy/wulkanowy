@@ -15,7 +15,7 @@ class GradeStatisticsLocal @Inject constructor(private val gradeStatisticsDb: Gr
             .filter { !it.isEmpty() }
     }
 
-    fun getGradesStatistics(semester: Semester, subjectName: String, annual: Boolean): Maybe<List<GradeStatistics>> {
+    fun getGradesStatistics(semester: Semester, annual: Boolean, subjectName: String): Maybe<List<GradeStatistics>> {
         return (if ("Wszystkie" == subjectName) gradeStatisticsDb.loadAll(semester.semesterId, semester.studentId, annual).map { list ->
             list.groupBy { it.grade }.map {
                 GradeStatistics(semester.studentId, semester.semesterId, subjectName, it.key, it.value.fold(0) { acc, e -> acc + e.amount }, false)
