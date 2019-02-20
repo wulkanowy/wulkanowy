@@ -7,7 +7,7 @@ interface SendMessageView : BaseSessionView {
 
     fun initView()
 
-    fun updateData(reportingUnits: List<ReportingUnit>)
+    fun setReportingUnit(unit: ReportingUnit)
 
     fun showProgress(show: Boolean)
 

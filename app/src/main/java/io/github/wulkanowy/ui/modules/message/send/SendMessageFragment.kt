@@ -37,8 +37,8 @@ class SendMessageFragment() : BaseSessionFragment(), SendMessageView, MainView.T
         showContent(false)
     }
 
-    override fun updateData(reportingUnits: List<ReportingUnit>) {
-        sendMessageFromTextView.text = reportingUnits[0].senderName
+    override fun setReportingUnit(unit: ReportingUnit) {
+        sendMessageFromTextView.text = unit.senderName
     }
 
     override fun showProgress(show: Boolean) {
