@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -20,18 +21,21 @@ class SendMessagePresenter @Inject constructor(
     private val semesterRepository: SemesterRepository,
     private val messageRepository: MessageRepository,
     private val reportingUnitRepository: ReportingUnitRepository,
-    private val recipientRepository: RecipientRepository
+    private val recipientRepository: RecipientRepository,
+    private val analytics: FirebaseAnalyticsHelper
 ) : BaseSessionPresenter<SendMessageView>(errorHandler) {
 
     private lateinit var reportingUnit: ReportingUnit
 
     override fun onAttachView(view: SendMessageView) {
+        Timber.i("Send message view is attached")
         super.onAttachView(view)
         view.initView()
         loadRecipients()
     }
 
     private fun loadRecipients() {
+        Timber.i("Loading recipients started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMapMaybe { student ->
                 semesterRepository.getCurrentSemester(student)
@@ -52,17 +56,20 @@ class SendMessagePresenter @Inject constructor(
                     setRecipients(it)
                     showContent(true)
                 }
-                Timber.i("Fetched %s recipients", it.size.toString())
+                Timber.i("Loading recipients result: Success, fetched %s recipients", it.size.toString())
             }, {
+                Timber.i("Loading recipients result: An exception occurred")
                 view?.showContent(true)
                 errorHandler.dispatch(it)
             }, {
+                Timber.i("Loading recipients result: Can't find the reporting unit")
                 view?.showEmpty(true)
             })
         )
     }
 
     fun onSend(subject: String, content: String, recipients: List<Recipient>): Boolean {
+        Timber.i("Sending message")
         disposable.add(messageRepository.sendMessage(subject, content, recipients)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
@@ -70,8 +77,11 @@ class SendMessagePresenter @Inject constructor(
                 view?.showProgress(false)
             }
             .subscribe({
+                Timber.i("Sending message result: Success")
+                analytics.logEvent("send_message", "recipients" to recipients.size)
                 view?.onSuccess()
             }, {
+                Timber.i("Sending message result: An exception occurred")
                 view?.showContent(true)
                 errorHandler.dispatch(it)
             })
