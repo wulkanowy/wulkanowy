@@ -12,6 +12,7 @@ import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.ValueFormatter
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
@@ -68,6 +69,7 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
             setHoleColor(context.getThemeAttrColor(android.R.attr.windowBackground))
             setCenterTextColor(context.getThemeAttrColor(android.R.attr.textColorPrimary))
             animateXY(1000, 1000)
+            minAngleForSlices = 17f
             legend.apply {
                 textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
                 setCustom(gradeLabels.mapIndexed { i, it ->
@@ -112,7 +114,11 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
                 }.toIntArray(), context)
             }).apply {
                 setTouchEnabled(false)
-                setValueFormatter { value, _, _, _ -> getString(R.string.grade_items_number_prefix, DecimalFormat("##0").format(value)) }
+                setValueFormatter(object : ValueFormatter() {
+                    override fun getPieLabel(value: Float, pieEntry: PieEntry): String {
+                        return getString(R.string.grade_items_number_prefix, DecimalFormat("##0").format(value))
+                    }
+                })
                 centerText = items.fold(0) { acc, it -> acc + it.amount }
                     .let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
             }
