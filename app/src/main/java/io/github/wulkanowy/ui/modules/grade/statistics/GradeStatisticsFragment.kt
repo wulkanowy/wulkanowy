@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.statistics
 
+import android.graphics.Color.WHITE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -108,6 +109,7 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
                 PieEntry(it.amount.toFloat(), it.grade.toString())
             }, "Legenda").apply {
                 sliceSpace = 1f
+                valueTextColor = WHITE
                 setColors(items.map {
                     gradeColors.single { color -> color.first == it.grade }.second
                 }.toIntArray(), context)
