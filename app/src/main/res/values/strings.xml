@@ -59,7 +59,6 @@
     <string name="grade_summary_predicted_grade">Predicted grade</string>
     <string name="grade_summary_calculated_average">Calculated average</string>
     <string name="grade_summary_final_average">Final average</string>
-    <string name="grade_items_number_prefix">Grades: %s</string>
     <string name="grade_menu_summary">Summary</string>
     <string name="grade_menu_statistics">Class grades</string>
     <string name="grade_menu_read">Mark as read</string>

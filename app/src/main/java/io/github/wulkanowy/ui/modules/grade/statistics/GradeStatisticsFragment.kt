@@ -21,7 +21,6 @@ import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import kotlinx.android.synthetic.main.fragment_grade_statistics.*
-import java.text.DecimalFormat
 import javax.inject.Inject
 
 class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, GradeView.GradeChildView {
@@ -116,7 +115,7 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
                 setTouchEnabled(false)
                 setValueFormatter(object : ValueFormatter() {
                     override fun getPieLabel(value: Float, pieEntry: PieEntry): String {
-                        return getString(R.string.grade_items_number_prefix, DecimalFormat("##0").format(value))
+                        return resources.getQuantityString(R.plurals.grade_number_item, value.toInt(), value.toInt())
                     }
                 })
                 centerText = items.fold(0) { acc, it -> acc + it.amount }
