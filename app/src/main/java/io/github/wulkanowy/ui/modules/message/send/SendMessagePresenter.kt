@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.send
 
+import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.repositories.message.MessageRepository
 import io.github.wulkanowy.data.repositories.recipient.RecipientRepository
@@ -53,10 +54,28 @@ class SendMessagePresenter @Inject constructor(
                 }
                 Timber.i("Fetched %s recipients", it.size.toString())
             }, {
+                view?.showContent(true)
                 errorHandler.dispatch(it)
             }, {
-                Timber.e("Couldn't fetch the reporting unit")
+                view?.showEmpty(true)
             })
         )
+    }
+
+    fun onSend(subject: String, content: String, recipients: List<Recipient>): Boolean {
+        disposable.add(messageRepository.sendMessage(subject, content, recipients)
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .doFinally {
+                view?.showProgress(false)
+            }
+            .subscribe({
+                view?.onSuccess()
+            }, {
+                view?.showContent(true)
+                errorHandler.dispatch(it)
+            })
+        )
+        return true
     }
 }

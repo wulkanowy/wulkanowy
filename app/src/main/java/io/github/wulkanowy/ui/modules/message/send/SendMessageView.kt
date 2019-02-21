@@ -15,4 +15,12 @@ interface SendMessageView : BaseSessionView {
     fun showProgress(show: Boolean)
 
     fun showContent(show: Boolean)
+
+    fun showEmpty(show: Boolean)
+
+    fun popView()
+
+    fun onSuccess()
+
+    fun hideKeyboard()
 }

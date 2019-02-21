@@ -3,9 +3,14 @@ package io.github.wulkanowy.ui.modules.message.send
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.hootsuite.nachos.ChipConfiguration
 import com.hootsuite.nachos.chip.ChipSpan
@@ -15,11 +20,12 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import kotlinx.android.synthetic.main.fragment_send_message.*
 import javax.inject.Inject
 
-class SendMessageFragment() : BaseSessionFragment(), SendMessageView, MainView.TitledView {
+class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: SendMessagePresenter
@@ -32,6 +38,11 @@ class SendMessageFragment() : BaseSessionFragment(), SendMessageView, MainView.T
 
     override val titleStringId: Int
         get() = R.string.send_message_title
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_send_message, container, false)
@@ -63,6 +74,28 @@ class SendMessageFragment() : BaseSessionFragment(), SendMessageView, MainView.T
         sendMessageRecipientInput.setAdapter(nachosAdapter)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.action_menu_send_message, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return if (item?.itemId == R.id.sendMessageMenuSend) {
+            if (sendMessageRecipientInput.allChips.isEmpty()) {
+                Toast.makeText(context, getString(R.string.send_message_required_recipients), Toast.LENGTH_LONG).show()
+            } else {
+                hideKeyboard()
+                showContent(false)
+                showProgress(true)
+                presenter.onSend(
+                    subject = sendMessageContentInput.text.toString(),
+                    content = sendMessageSubjectInput.text.toString(),
+                    recipients = sendMessageRecipientInput.allChips.map { it.data as Recipient }
+                )
+            }
+            false
+        } else false
+    }
+
     override fun setReportingUnit(unit: ReportingUnit) {
         sendMessageFromTextView.text = unit.senderName
     }
@@ -81,6 +114,24 @@ class SendMessageFragment() : BaseSessionFragment(), SendMessageView, MainView.T
 
     override fun showContent(show: Boolean) {
         sendMessageContent.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showEmpty(show: Boolean) {
+        sendMessageEmpty.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun popView() {
+        (activity as? MainActivity)?.popView()
+    }
+
+    override fun onSuccess() {
+        Toast.makeText(context, getString(R.string.send_message_successful), Toast.LENGTH_LONG).show()
+        popView()
+    }
+
+    override fun hideKeyboard() {
+        (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
     override fun onDestroyView() {

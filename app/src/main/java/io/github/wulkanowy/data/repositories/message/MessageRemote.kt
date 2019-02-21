@@ -2,8 +2,9 @@ package io.github.wulkanowy.data.repositories.message
 
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.api.messages.Folder
-import io.github.wulkanowy.api.messages.ReportingUnit
+import io.github.wulkanowy.api.messages.SentMessage
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime.now
@@ -39,5 +40,22 @@ class MessageRemote @Inject constructor(private val api: Api) {
 
     fun getMessagesContent(message: Message, markAsRead: Boolean = false): Single<String> {
         return api.getMessageContent(message.messageId, message.folderId, markAsRead, message.realId)
+    }
+
+    fun sendMessage(subject: String, content: String, recipients: List<Recipient>): Single<SentMessage> {
+        return api.sendMessage(
+            subject = subject,
+            content = content,
+            recipients = recipients.map {
+                io.github.wulkanowy.api.messages.Recipient(
+                    id = it.realId,
+                    name = it.name,
+                    loginId = it.loginId,
+                    reportingUnitId = it.unitId,
+                    role = it.role,
+                    hash = it.hash
+                )
+            }
+        )
     }
 }

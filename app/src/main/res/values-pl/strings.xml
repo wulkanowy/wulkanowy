@@ -174,6 +174,8 @@
     <string name="send_message_to">Do</string>
     <string name="send_message_subject">Temat</string>
     <string name="send_message_content">Treść</string>
+    <string name="send_message_successful">Wiadomość wysłana pomyślnie</string>
+    <string name="send_message_required_recipients">Musisz wybrać co najmniej 1 adresata</string>
 
     <!--About-->
     <string name="about_source_code">Kod źródłowy</string>
