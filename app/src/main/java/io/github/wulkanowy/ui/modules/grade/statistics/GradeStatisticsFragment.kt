@@ -130,7 +130,7 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
     }
 
     override fun showContent(show: Boolean) {
-        gradeStatisticsChart.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        gradeStatisticsChart.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun showEmpty(show: Boolean) {
