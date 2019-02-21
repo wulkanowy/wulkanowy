@@ -85,6 +85,7 @@
                         android:background="?android:attr/windowBackground"
                         android:minHeight="400dp"
                         android:visibility="gone"
+                        android:layout_margin="10dp"
                         tools:visibility="visible" />
 
                     <ProgressBar
