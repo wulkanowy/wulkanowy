@@ -65,6 +65,8 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
     override fun initView() {
         gradeStatisticsChart.run {
             description.isEnabled = false
+            setHoleColor(context.getThemeAttrColor(android.R.attr.windowBackground))
+            setCenterTextColor(context.getThemeAttrColor(android.R.attr.textColorPrimary))
             animateXY(1000, 1000)
             legend.apply {
                 textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
