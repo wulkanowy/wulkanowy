@@ -24,15 +24,17 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private var subjects = emptyList<Subject>()
 
-    var currentSubjectName = "Wszystkie"
-        private set
-
     private var currentSemesterId = 0
 
-    private var currentIsAnnual = false
+    var currentSubjectName: String = "Wszystkie"
+        private set
 
-    override fun onAttachView(view: GradeStatisticsView) {
+    var currentIsAnnual = false
+        private set
+
+    fun onAttachView(view: GradeStatisticsView, isAnnual: Boolean?) {
         super.onAttachView(view)
+        currentIsAnnual = isAnnual ?: false
         view.initView()
     }
 
@@ -98,7 +100,7 @@ class GradeStatisticsPresenter @Inject constructor(
                     showSubjects(true)
                 }
             }, {
-                Timber.i("Loading grade stats subjects result: An exception occurred")
+                Timber.e("Loading grade stats subjects result: An exception occurred")
                 errorHandler.dispatch(it)
             })
         )
@@ -131,7 +133,7 @@ class GradeStatisticsPresenter @Inject constructor(
                 }
                 analytics.logEvent("load_grade_statistics", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
-                Timber.i("Loading grade stats result: An exception occurred")
+                Timber.e("Loading grade stats result: An exception occurred")
                 view?.run { showEmpty(isViewEmpty) }
                 errorHandler.dispatch(it)
             })

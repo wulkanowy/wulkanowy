@@ -31,7 +31,7 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
     private lateinit var subjectsAdapter: ArrayAdapter<String>
 
     companion object {
-        private const val SAVED_SUBJECT_KEY = "CURRENT_SUBJECT"
+        private const val SAVED_CHART_TYPE = "CURRENT_TYPE"
 
         fun newInstance() = GradeStatisticsFragment()
     }
@@ -59,7 +59,7 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         messageContainer = gradeStatisticsChart
-        presenter.onAttachView(this)
+        presenter.onAttachView(this, savedInstanceState?.getBoolean(SAVED_CHART_TYPE))
     }
 
     override fun initView() {
@@ -89,9 +89,6 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
         }
 
         gradeStatisticsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
-        gradeStatisticsTypeSwitch.setOnCheckedChangeListener { _, checkedId ->
-            presenter.onTypeChange(checkedId == R.id.gradeStatisticsTypeAnnual)
-        }
     }
 
     override fun updateSubjects(data: ArrayList<String>) {
@@ -165,9 +162,16 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
         (parentFragment as? GradeFragment)?.onChildRefresh()
     }
 
+    override fun onResume() {
+        super.onResume()
+        gradeStatisticsTypeSwitch.setOnCheckedChangeListener { _, checkedId ->
+            presenter.onTypeChange(checkedId == R.id.gradeStatisticsTypeAnnual)
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(GradeStatisticsFragment.SAVED_SUBJECT_KEY, presenter.currentSubjectName)
+        outState.putBoolean(GradeStatisticsFragment.SAVED_CHART_TYPE, presenter.currentIsAnnual)
     }
 
     override fun onDestroyView() {
