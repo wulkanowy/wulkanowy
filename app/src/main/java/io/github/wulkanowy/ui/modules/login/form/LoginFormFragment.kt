@@ -45,7 +45,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
             presenter.attemptLogin(
                 loginFormName.text.toString(),
                 loginFormPass.text.toString(),
-                resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
+                getHostTextValue()
             )
         }
 
@@ -56,12 +56,21 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
             if (id == IME_ACTION_DONE || id == IME_NULL) loginFormSignIn.callOnClick() else false
         }
 
-        loginFormHost.setOnItemSelectedListener { presenter.onHostSelected() }
+        loginFormHost.setOnItemSelectedListener { presenter.onHostSelected(isFakelog = getHostTextValue().contains("fakelog")) }
 
         context?.let {
             loginFormHost.adapter = ArrayAdapter.createFromResource(it, R.array.endpoints_keys, android.R.layout.simple_spinner_item)
                 .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
         }
+    }
+
+    private fun getHostTextValue(): String {
+        return resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
+    }
+
+    override fun setDefaultFakelogCredentials(name: String, pass: String) {
+        loginFormName.setText(name)
+        loginFormPass.setText(pass)
     }
 
     override fun setErrorNameRequired() {

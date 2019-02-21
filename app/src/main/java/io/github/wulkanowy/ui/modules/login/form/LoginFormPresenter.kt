@@ -31,10 +31,11 @@ class LoginFormPresenter @Inject constructor(
         }
     }
 
-    fun onHostSelected() {
+    fun onHostSelected(isFakelog: Boolean) {
         view?.apply {
             clearPassError()
             clearNameError()
+            if (isFakelog) setDefaultFakelogCredentials("jan@fakelog.cf", "jan123")
         }
     }
 
