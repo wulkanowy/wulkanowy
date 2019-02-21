@@ -7,6 +7,7 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="bottomNavBackground">@color/bottom_nav_background</item>
         <item name="android:navigationBarColor" tools:targetApi="21">@color/bottom_nav_background</item>
+        <item name="chipBackground">#595959</item>
 
         <!--AboutLibraries specific values-->
         <item name="about_libraries_window_background">@color/about_libraries_window_background_dark</item>

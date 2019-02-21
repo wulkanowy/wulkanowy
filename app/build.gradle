@@ -125,6 +125,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'org.mockito:mockito-android:2.23.4'
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+
+    implementation "com.hootsuite.android:nachos:1.1.1"
 }
 
 apply plugin: 'com.google.gms.google-services'

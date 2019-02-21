@@ -48,6 +48,7 @@ class SendMessagePresenter @Inject constructor(
             .subscribe({
                 view?.apply {
                     setReportingUnit(reportingUnit)
+                    setRecipients(it)
                     showContent(true)
                 }
                 Timber.i("Fetched %s recipients", it.size.toString())
