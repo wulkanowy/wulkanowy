@@ -1,4 +1,4 @@
-package io.github.wulkanowy.services.sync.grade
+package io.github.wulkanowy.services.sync.workers.grade
 
 import android.content.Context
 import androidx.work.RxWorker
@@ -8,7 +8,7 @@ import com.squareup.inject.assisted.AssistedInject
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
-import io.github.wulkanowy.services.factory.InjectableWorkerFactory
+import io.github.wulkanowy.services.sync.factory.InjectableWorkerFactory
 import io.reactivex.Single
 
 class GradeWorker @AssistedInject constructor(
@@ -19,12 +19,8 @@ class GradeWorker @AssistedInject constructor(
     private val gradeRepository: GradeRepository
 ) : RxWorker(appContext, workerParameters) {
 
-    companion object {
-        const val WORKER_TAG = "GradeWorker"
-    }
-
     override fun createWork(): Single<Result> {
-        TODO()
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     @AssistedInject.Factory
