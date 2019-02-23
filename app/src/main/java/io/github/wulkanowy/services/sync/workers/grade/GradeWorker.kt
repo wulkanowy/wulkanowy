@@ -6,6 +6,7 @@ import androidx.work.WorkerParameters
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.factory.InjectableWorkerFactory
@@ -17,15 +18,22 @@ class GradeWorker @AssistedInject constructor(
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val gradeRepository: GradeRepository,
-    private val gradeNotification: GradeNotification
+    private val gradeNotification: GradeNotification,
+    private val sharePreferences: PreferencesRepository
 ) : RxWorker(appContext, workerParameters) {
 
     override fun createWork(): Single<Result> {
         return studentRepository.getCurrentStudent()
             .flatMap { student -> semesterRepository.getCurrentSemester(student).map { student to it } }
-            .flatMap { gradeRepository.getGrades(it.first, it.second, true) }
-            .doOnSuccess { gradeNotification.notify(listOf(it.first())) }
-            .map { Result.success() }
+            .flatMap { data ->
+                gradeRepository.getGrades(data.first, data.second, forceRefresh = true, notify = sharePreferences.isNotificationsEnable)
+                    .flatMap { gradeRepository.getNewGrades(data.second) }
+            }
+            .map { it.filter { grade -> !grade.isNotified } }
+            .flatMapCompletable {
+                if (it.isNotEmpty()) gradeNotification.notify(it)
+                gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true })
+            }.toSingleDefault(Result.success())
             .onErrorReturn { Result.failure() }
     }
 
