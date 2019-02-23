@@ -22,6 +22,7 @@ import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.setOnTextChangedListener
 import kotlinx.android.synthetic.main.fragment_send_message.*
 import javax.inject.Inject
 
@@ -30,7 +31,9 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     @Inject
     lateinit var presenter: SendMessagePresenter
 
-    private lateinit var nachosAdapter: ArrayAdapter<Recipient>
+    private var recipients: List<Recipient> = emptyList()
+
+    private lateinit var recipientsAdapter: ArrayAdapter<Recipient>
 
     companion object {
         fun newInstance() = SendMessageFragment()
@@ -68,10 +71,11 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
                     chip.setShowIconOnLeft(true)
                 }
             }, ChipSpan::class.java)
-            nachosAdapter = ArrayAdapter(it, android.R.layout.simple_dropdown_item_1line)
+            recipientsAdapter = ArrayAdapter(it, android.R.layout.simple_dropdown_item_1line)
         }
 
-        sendMessageRecipientInput.setAdapter(nachosAdapter)
+        sendMessageRecipientInput.setAdapter(recipientsAdapter)
+        sendMessageRecipientInput.setOnTextChangedListener { refreshRecipientsAdapter() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -97,13 +101,18 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     }
 
     override fun setReportingUnit(unit: ReportingUnit) {
-        sendMessageFromTextView.text = unit.senderName
+        sendMessageFromTextView.setText(unit.senderName)
     }
 
     override fun setRecipients(recipients: List<Recipient>) {
-        nachosAdapter.run {
+        this.recipients = recipients
+        refreshRecipientsAdapter()
+    }
+
+    private fun refreshRecipientsAdapter() {
+        recipientsAdapter.run {
             clear()
-            addAll(recipients)
+            addAll(recipients - sendMessageRecipientInput.allChips.map { it.data as Recipient })
             notifyDataSetChanged()
         }
     }
