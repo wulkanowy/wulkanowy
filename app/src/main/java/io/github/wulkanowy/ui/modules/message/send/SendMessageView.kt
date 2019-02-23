@@ -6,6 +6,16 @@ import io.github.wulkanowy.ui.base.session.BaseSessionView
 
 interface SendMessageView : BaseSessionView {
 
+    val formRecipientsData: List<Recipient>
+
+    val formSubjectValue: String
+
+    val formContentValue: String
+
+    val messageRequiredRecipients: String
+
+    val messageContentMinLength: String
+
     fun initView()
 
     fun setReportingUnit(unit: ReportingUnit)

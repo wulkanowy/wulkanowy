@@ -43,6 +43,21 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     override val titleStringId: Int
         get() = R.string.send_message_title
 
+    override val formRecipientsData: List<Recipient>
+        get() = sendMessageRecipientInput.allChips.map { it.data as Recipient }
+
+    override val formSubjectValue: String
+        get() = sendMessageSubjectInput.text.toString()
+
+    override val formContentValue: String
+        get() = sendMessageContentInput.text.toString()
+
+    override val messageRequiredRecipients: String
+        get() = getString(R.string.send_message_content_min_length)
+
+    override val messageContentMinLength: String
+        get() = getString(R.string.send_message_required_recipients)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -83,24 +98,8 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == R.id.sendMessageMenuSend) {
-            when {
-                sendMessageRecipientInput.allChips.isEmpty()
-                -> Toast.makeText(context, getString(R.string.send_message_required_recipients), Toast.LENGTH_LONG).show()
-
-                sendMessageContentInput.text?.length ?: 0 < 3
-                -> Toast.makeText(context, getString(R.string.send_message_content_min_length), Toast.LENGTH_LONG).show()
-
-                else -> {
-                    presenter.onSend(
-                        subject = sendMessageContentInput.text.toString(),
-                        content = sendMessageSubjectInput.text.toString(),
-                        recipients = sendMessageRecipientInput.allChips.map { it.data as Recipient }
-                    )
-                }
-            }
-            false
-        } else false
+        return if (item?.itemId == R.id.sendMessageMenuSend) presenter.onSend()
+        else false
     }
 
     override fun setReportingUnit(unit: ReportingUnit) {
@@ -143,6 +142,10 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
     override fun hideSoftInput() {
         activity?.hideSoftInput()
+    }
+
+    override fun showMessage(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

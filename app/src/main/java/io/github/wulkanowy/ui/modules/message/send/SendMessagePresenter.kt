@@ -74,8 +74,8 @@ class SendMessagePresenter @Inject constructor(
         )
     }
 
-    fun onSend(subject: String, content: String, recipients: List<Recipient>): Boolean {
-        Timber.i("Sending message")
+    private fun sendMessage(subject: String, content: String, recipients: List<Recipient>) {
+        Timber.i("Sending message started")
         disposable.add(messageRepository.sendMessage(subject, content, recipients)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
@@ -99,6 +99,27 @@ class SendMessagePresenter @Inject constructor(
                 errorHandler.dispatch(it)
             })
         )
-        return true
+    }
+
+    fun onSend(): Boolean {
+        view?.run {
+            when {
+                formRecipientsData.isEmpty()
+                -> showMessage(messageRequiredRecipients)
+
+                formContentValue.length < 3
+                -> showMessage(messageContentMinLength)
+
+                else -> {
+                    sendMessage(
+                        subject = formSubjectValue,
+                        content = formContentValue,
+                        recipients = formRecipientsData
+                    )
+                    return true
+                }
+            }
+        }
+        return false
     }
 }
