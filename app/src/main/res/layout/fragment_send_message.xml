@@ -23,6 +23,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:text="@string/send_message_from"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -31,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:enabled="false"
+                android:textColor="@android:color/black"
                 tools:text="Jan Kowalski" />
         </LinearLayout>
 
@@ -55,6 +57,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:text="@string/send_message_to"
+                android:textColor="@android:color/darker_gray"
                 android:textSize="18sp" />
 
             <com.hootsuite.nachos.NachoTextView
