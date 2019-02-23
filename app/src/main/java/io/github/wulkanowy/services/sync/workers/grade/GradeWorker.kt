@@ -19,14 +19,18 @@ class GradeWorker @AssistedInject constructor(
     private val semesterRepository: SemesterRepository,
     private val gradeRepository: GradeRepository,
     private val gradeNotification: GradeNotification,
-    private val sharePreferences: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository
 ) : RxWorker(appContext, workerParameters) {
+
+    companion object {
+        const val WORKER_TAG = "GRADE_SYNC"
+    }
 
     override fun createWork(): Single<Result> {
         return studentRepository.getCurrentStudent()
             .flatMap { student -> semesterRepository.getCurrentSemester(student).map { student to it } }
             .flatMap { data ->
-                gradeRepository.getGrades(data.first, data.second, forceRefresh = true, notify = sharePreferences.isNotificationsEnable)
+                gradeRepository.getGrades(data.first, data.second, forceRefresh = true, notify = preferencesRepository.isNotificationsEnable)
                     .flatMap { gradeRepository.getNewGrades(data.second) }
             }
             .map { it.filter { grade -> !grade.isNotified } }

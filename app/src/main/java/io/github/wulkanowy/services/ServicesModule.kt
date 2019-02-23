@@ -5,8 +5,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.ClassKey
 import dagger.multibindings.IntoMap
+import io.github.wulkanowy.services.sync.base.WorkerConfiguration
 import io.github.wulkanowy.services.sync.factory.InjectableWorkerFactory
 import io.github.wulkanowy.services.sync.workers.grade.GradeWorker
+import io.github.wulkanowy.services.sync.workers.grade.GradeWorkerConfiguration
 
 @AssistedModule
 @Module(includes = [AssistedInject_ServicesModule::class])
@@ -16,4 +18,9 @@ abstract class ServicesModule {
     @IntoMap
     @ClassKey(GradeWorker::class)
     abstract fun provideGradeWorkerFactory(factory: GradeWorker.Factory): InjectableWorkerFactory
+
+    @Binds
+    @IntoMap
+    @ClassKey(GradeWorker::class)
+    abstract fun provideGradeWorkerConfiguration(config: GradeWorkerConfiguration): WorkerConfiguration
 }
