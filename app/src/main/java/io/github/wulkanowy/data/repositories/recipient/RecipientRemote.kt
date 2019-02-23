@@ -17,6 +17,7 @@ class RecipientRemote @Inject constructor(private val api: Api) {
                     Recipient(
                         studentId = api.studentId,
                         name = it.name,
+                        realName = it.realName,
                         realId = it.id,
                         hash = it.hash,
                         loginId = it.loginId,

@@ -16,6 +16,9 @@ data class Recipient(
 
     val name: String,
 
+    @ColumnInfo(name = "real_name")
+    val realName: String,
+
     @ColumnInfo(name = "login_id")
     val loginId: Int,
 

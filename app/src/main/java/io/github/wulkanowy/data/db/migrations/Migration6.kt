@@ -20,6 +20,7 @@ class Migration6 : Migration(5, 6) {
             "student_id INTEGER NOT NULL," +
             "real_id TEXT NOT NULL," +
             "name TEXT NOT NULL," +
+            "real_name TEXT NOT NULL" +
             "login_id INTEGER NOT NULL," +
             "unit_id INTEGER NOT NULL," +
             "role INTEGER NOT NULL," +

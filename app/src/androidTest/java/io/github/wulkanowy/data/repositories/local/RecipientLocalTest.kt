@@ -37,9 +37,9 @@ class RecipientLocalTest {
     @Test
     fun saveAndReadTest() {
         recipientLocal.saveRecipients(listOf(
-            Recipient(1, "2rPracownik", "Kowalski Jan", 3, 4, 2, "hash"),
-            Recipient(1, "3rPracownik", "Kowalska Karolina", 4, 4, 2, "hash"),
-            Recipient(1, "4rPracownik", "Krupa Stanisław", 5, 4, 2, "hash")
+            Recipient(1, "2rPracownik", "Kowalski Jan", "Kowalski Jan [KJ] - Pracownik (Fake123456)", 3, 4, 2, "hash"),
+            Recipient(1, "3rPracownik", "Kowalska Karolina", "Kowalska Karolina [KK] - Pracownik (Fake123456)", 4, 4, 2, "hash"),
+            Recipient(1, "4rPracownik", "Krupa Stanisław", "Krupa Stanisław [KS] - Uczeń (Fake123456)", 5, 4, 2, "hash")
         ))
 
         val recipients = recipientLocal.getRecipients(

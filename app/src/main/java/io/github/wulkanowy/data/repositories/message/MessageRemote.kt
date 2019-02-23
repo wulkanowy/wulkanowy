@@ -49,7 +49,7 @@ class MessageRemote @Inject constructor(private val api: Api) {
             recipients = recipients.map {
                 io.github.wulkanowy.api.messages.Recipient(
                     id = it.realId,
-                    name = it.name,
+                    realName = it.realName,
                     loginId = it.loginId,
                     reportingUnitId = it.unitId,
                     role = it.role,
