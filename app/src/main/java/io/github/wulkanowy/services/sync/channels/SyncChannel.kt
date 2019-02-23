@@ -7,10 +7,11 @@ import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
+import io.github.wulkanowy.R
 import javax.inject.Inject
 
 @TargetApi(26)
-class SyncChannel @Inject constructor(appContext: Context) {
+class SyncChannel @Inject constructor(private val appContext: Context) {
 
     private val notificationManager by lazy { appContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager }
 
@@ -19,8 +20,8 @@ class SyncChannel @Inject constructor(appContext: Context) {
     }
 
     fun create() {
-        notificationManager.createNotificationChannel(NotificationChannel(CHANNEL_ID, "Sync", IMPORTANCE_HIGH)
-            .apply {
+        notificationManager.createNotificationChannel(
+            NotificationChannel(CHANNEL_ID, appContext.getString(R.string.channel_sync), IMPORTANCE_HIGH).apply {
                 enableLights(true)
                 enableVibration(true)
                 lockscreenVisibility = VISIBILITY_PUBLIC

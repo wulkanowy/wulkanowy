@@ -21,7 +21,7 @@ class GradeNotification @Inject constructor(private val appContext: Context) {
     fun notify(grades: List<Grade>) {
         notificationManager.notify(1, NotificationCompat.Builder(appContext, SyncChannel.CHANNEL_ID)
             .setContentTitle(appContext.resources.getQuantityString(R.plurals.grade_new_items, grades.size, grades.size))
-            .setContentText(appContext.resources.getQuantityString(R.plurals.notify_grade_new_items, grades.size, grades.size))
+            .setContentText(appContext.resources.getQuantityString(R.plurals.grade_notify_new_items, grades.size, grades.size))
             .setSmallIcon(R.drawable.ic_stat_notify_grade)
             .setAutoCancel(true)
             .setPriority(PRIORITY_HIGH)

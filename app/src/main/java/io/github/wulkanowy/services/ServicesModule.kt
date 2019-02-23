@@ -15,5 +15,5 @@ abstract class ServicesModule {
     @Binds
     @IntoMap
     @ClassKey(GradeWorker::class)
-    abstract fun bindGradeWorker(factory: GradeWorker.Factory): InjectableWorkerFactory
+    abstract fun provideGradeWorkerFactory(factory: GradeWorker.Factory): InjectableWorkerFactory
 }
