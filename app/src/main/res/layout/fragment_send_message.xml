@@ -10,33 +10,47 @@
         android:id="@+id/sendMessageContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
-            android:orientation="horizontal">
+            android:padding="14dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/send_message_from" />
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/send_message_from"
+                android:textSize="18sp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/sendMessageFromTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:background="@android:color/transparent"
+                android:enabled="false"
                 tools:text="Jan Kowalski" />
         </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/send_message_to">
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/send_message_to"
+                android:textSize="18sp" />
 
             <com.hootsuite.nachos.NachoTextView
                 android:id="@+id/sendMessageRecipientInput"
@@ -44,45 +58,42 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:maxLines="1"
+                android:background="@android:color/transparent"
                 app:chipBackground="?attr/chipBackground"
                 app:chipTextColor="?android:attr/textColorPrimary" />
-        </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/sendMessageSubjectInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/send_message_subject">
+            android:background="@android:color/transparent"
+            android:hint="@string/send_message_subject"
+            android:inputType="text"
+            android:maxLines="1"
+            android:padding="14dp" />
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/sendMessageSubjectInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/sendMessageContentInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/send_message_content">
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/sendMessageContentInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top|start"
-                android:inputType="textMultiLine"
-                android:minLines="2"
-                android:singleLine="false" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:background="@android:color/transparent"
+            android:gravity="top|start"
+            android:hint="@string/send_message_content"
+            android:inputType="textMultiLine"
+            android:padding="14dp"
+            android:singleLine="false" />
     </LinearLayout>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

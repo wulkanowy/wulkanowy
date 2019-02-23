@@ -170,8 +170,8 @@
 
     <!--Send message-->
     <string name="send_message_title">Wyślij</string>
-    <string name="send_message_from">Od</string>
-    <string name="send_message_to">Do</string>
+    <string name="send_message_from">Od:</string>
+    <string name="send_message_to">Do:</string>
     <string name="send_message_subject">Temat</string>
     <string name="send_message_content">Treść</string>
     <string name="send_message_successful">Wiadomość wysłana pomyślnie</string>
