@@ -34,7 +34,5 @@ data class Recipient(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
-    override fun toString(): String {
-        return name
-    }
+    override fun toString() = name
 }

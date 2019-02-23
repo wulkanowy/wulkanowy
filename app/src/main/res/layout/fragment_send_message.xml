@@ -42,7 +42,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="14dp">
+            android:paddingStart="14dp"
+            android:paddingLeft="14dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="14dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -56,9 +61,9 @@
                 android:id="@+id/sendMessageRecipientInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:inputType="text"
                 android:maxLines="1"
-                android:background="@android:color/transparent"
                 app:chipBackground="?attr/chipBackground"
                 app:chipTextColor="?android:attr/textColorPrimary" />
         </LinearLayout>

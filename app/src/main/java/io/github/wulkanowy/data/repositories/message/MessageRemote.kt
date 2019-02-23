@@ -11,6 +11,7 @@ import org.threeten.bp.LocalDateTime.now
 import javax.inject.Inject
 import javax.inject.Singleton
 import io.github.wulkanowy.api.messages.Message as ApiMessage
+import io.github.wulkanowy.api.messages.Recipient as ApiRecipient
 
 @Singleton
 class MessageRemote @Inject constructor(private val api: Api) {
@@ -47,7 +48,7 @@ class MessageRemote @Inject constructor(private val api: Api) {
             subject = subject,
             content = content,
             recipients = recipients.map {
-                io.github.wulkanowy.api.messages.Recipient(
+                ApiRecipient(
                     id = it.realId,
                     realName = it.realName,
                     loginId = it.loginId,

@@ -176,6 +176,7 @@
     <string name="send_message_content">Treść</string>
     <string name="send_message_successful">Wiadomość wysłana pomyślnie</string>
     <string name="send_message_required_recipients">Musisz wybrać co najmniej 1 adresata</string>
+    <string name="send_message_content_min_length">Treść wiadomości musi zawierać co najmniej 3 znaki</string>
 
     <!--About-->
     <string name="about_source_code">Kod źródłowy</string>

@@ -163,6 +163,7 @@
     <string name="send_message_content">Content</string>
     <string name="send_message_successful">Message sent successfully</string>
     <string name="send_message_required_recipients">You need to choose at least 1 recipient</string>
+    <string name="send_message_content_min_length">The message content must be at least 3 characters</string>
 
     <!--About-->
     <string name="about_source_code">Source code</string>

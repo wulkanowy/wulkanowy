@@ -45,6 +45,12 @@ class SendMessagePresenter @Inject constructor(
             }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
+            .doOnSubscribe {
+                view?.run {
+                    showProgress(true)
+                    showContent(false)
+                }
+            }
             .doFinally {
                 view?.run {
                     showProgress(false)
@@ -73,6 +79,13 @@ class SendMessagePresenter @Inject constructor(
         disposable.add(messageRepository.sendMessage(subject, content, recipients)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
+            .doOnSubscribe {
+                view?.run {
+                    hideSoftInput()
+                    showContent(false)
+                    showProgress(true)
+                }
+            }
             .doFinally {
                 view?.showProgress(false)
             }

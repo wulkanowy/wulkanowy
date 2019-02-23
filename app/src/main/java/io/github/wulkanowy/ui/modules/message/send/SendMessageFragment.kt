@@ -8,7 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -22,6 +21,7 @@ import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.setOnTextChangedListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_send_message.*
@@ -58,9 +58,6 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     }
 
     override fun initView() {
-        showProgress(true)
-        showContent(false)
-
         context?.let {
             sendMessageRecipientInput.chipTokenizer = SpanChipTokenizer<ChipSpan>(it, object : ChipSpanChipCreator() {
                 override fun createChip(context: Context, text: CharSequence, data: Any?): ChipSpan {
@@ -87,17 +84,20 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return if (item?.itemId == R.id.sendMessageMenuSend) {
-            if (sendMessageRecipientInput.allChips.isEmpty()) {
-                Toast.makeText(context, getString(R.string.send_message_required_recipients), Toast.LENGTH_LONG).show()
-            } else {
-                hideKeyboard()
-                showContent(false)
-                showProgress(true)
-                presenter.onSend(
-                    subject = sendMessageContentInput.text.toString(),
-                    content = sendMessageSubjectInput.text.toString(),
-                    recipients = sendMessageRecipientInput.allChips.map { it.data as Recipient }
-                )
+            when {
+                sendMessageRecipientInput.allChips.isEmpty()
+                -> Toast.makeText(context, getString(R.string.send_message_required_recipients), Toast.LENGTH_LONG).show()
+
+                sendMessageContentInput.text?.length ?: 0 < 3
+                -> Toast.makeText(context, getString(R.string.send_message_content_min_length), Toast.LENGTH_LONG).show()
+
+                else -> {
+                    presenter.onSend(
+                        subject = sendMessageContentInput.text.toString(),
+                        content = sendMessageSubjectInput.text.toString(),
+                        recipients = sendMessageRecipientInput.allChips.map { it.data as Recipient }
+                    )
+                }
             }
             false
         } else false
@@ -141,9 +141,8 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
         popView()
     }
 
-    override fun hideKeyboard() {
-        (context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-            .hideSoftInputFromWindow(view?.windowToken, 0)
+    override fun hideSoftInput() {
+        activity?.hideSoftInput()
     }
 
     override fun onDestroyView() {

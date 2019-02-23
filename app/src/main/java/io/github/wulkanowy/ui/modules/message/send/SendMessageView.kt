@@ -22,5 +22,5 @@ interface SendMessageView : BaseSessionView {
 
     fun onSuccess()
 
-    fun hideKeyboard()
+    fun hideSoftInput()
 }
