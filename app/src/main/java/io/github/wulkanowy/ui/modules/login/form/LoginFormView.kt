@@ -7,7 +7,13 @@ interface LoginFormView : BaseView {
 
     fun initView()
 
-    fun setDefaultFakelogCredentials(name: String, pass: String)
+    val formNameValue: String
+
+    val formPassValue: String
+
+    val formHostValue: String?
+
+    fun setDefaultCredentials(name: String, pass: String)
 
     fun setErrorNameRequired()
 

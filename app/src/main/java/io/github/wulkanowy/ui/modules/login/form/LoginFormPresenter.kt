@@ -31,11 +31,11 @@ class LoginFormPresenter @Inject constructor(
         }
     }
 
-    fun onHostSelected(isFakelog: Boolean) {
+    fun onHostSelected() {
         view?.apply {
             clearPassError()
             clearNameError()
-            if (isFakelog) setDefaultFakelogCredentials("jan@fakelog.cf", "jan123")
+            if (formHostValue?.contains("fakelog") == true) setDefaultCredentials("jan@fakelog.cf", "jan123")
         }
     }
 
@@ -47,7 +47,11 @@ class LoginFormPresenter @Inject constructor(
         view?.clearNameError()
     }
 
-    fun attemptLogin(email: String, password: String, endpoint: String) {
+    fun attemptLogin() {
+        val email = view?.formNameValue.orEmpty()
+        val password = view?.formPassValue.orEmpty()
+        val endpoint = view?.formHostValue.orEmpty()
+
         if (!validateCredentials(email, password)) return
 
         disposable.add(studentRepository.getStudents(email, password, endpoint)
