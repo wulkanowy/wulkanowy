@@ -23,6 +23,7 @@ import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.setOnTextChangedListener
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_send_message.*
 import javax.inject.Inject
 
@@ -76,6 +77,8 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
         sendMessageRecipientInput.setAdapter(recipientsAdapter)
         sendMessageRecipientInput.setOnTextChangedListener { refreshRecipientsAdapter() }
+
+        (activity as? MainActivity)?.mainBottomNav?.visibility = View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -144,6 +147,7 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     }
 
     override fun onDestroyView() {
+        (activity as? MainActivity)?.mainBottomNav?.visibility = View.VISIBLE
         super.onDestroyView()
         presenter.onDetachView()
     }
