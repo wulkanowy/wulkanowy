@@ -22,19 +22,19 @@ class RecipientRepository @Inject constructor(
     fun getRecipients(student: Student, role: Int, unit: ReportingUnit, forceRefresh: Boolean = false): Single<List<Recipient>> {
         return Single.just(apiHelper.initApi(student))
             .flatMap { _ ->
-                local.getRecipients(student, unit).filter { !forceRefresh }
+                local.getRecipients(student, role, unit).filter { !forceRefresh }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                         .flatMap {
                             if (it) remote.getRecipients(role, unit)
                             else Single.error(UnknownHostException())
                         }.flatMap { new ->
-                            local.getRecipients(student, unit).toSingle(emptyList())
+                            local.getRecipients(student, role, unit).toSingle(emptyList())
                                 .doOnSuccess { old ->
                                     local.deleteRecipients(old - new)
                                     local.saveRecipients(new - old)
                                 }
                         }.flatMap {
-                            local.getRecipients(student, unit).toSingle(emptyList())
+                            local.getRecipients(student, role, unit).toSingle(emptyList())
                         }
                     )
             }

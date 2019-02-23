@@ -39,21 +39,23 @@ class RecipientLocalTest {
         recipientLocal.saveRecipients(listOf(
             Recipient(1, "2rPracownik", "Kowalski Jan", "Kowalski Jan [KJ] - Pracownik (Fake123456)", 3, 4, 2, "hash"),
             Recipient(1, "3rPracownik", "Kowalska Karolina", "Kowalska Karolina [KK] - Pracownik (Fake123456)", 4, 4, 2, "hash"),
-            Recipient(1, "4rPracownik", "Krupa Stanisław", "Krupa Stanisław [KS] - Uczeń (Fake123456)", 5, 4, 2, "hash")
+            Recipient(1, "4rPracownik", "Krupa Stanisław", "Krupa Stanisław [KS] - Uczeń (Fake123456)", 5, 4, 1, "hash")
         ))
 
         val recipients = recipientLocal.getRecipients(
             Student("fakelog.cf", "AUTO", "", "", "", 1, "", "", "", true, LocalDateTime.now()),
+            2,
             ReportingUnit(1, 4, "", 0, "", emptyList())
         ).blockingGet()
 
-        assertEquals(3, recipients.size)
+        assertEquals(2, recipients.size)
         assertEquals(1, recipients[0].studentId)
-        assertEquals("2rPracownik", recipients[0].realId)
-        assertEquals("Kowalska Karolina", recipients[1].name)
-        assertEquals(5, recipients[2].loginId)
-        assertEquals(4, recipients[0].unitId)
-        assertEquals(2, recipients[1].role)
-        assertEquals("hash", recipients[2].hash)
+        assertEquals("3rPracownik", recipients[1].realId)
+        assertEquals("Kowalski Jan", recipients[0].name)
+        assertEquals("Kowalska Karolina [KK] - Pracownik (Fake123456)", recipients[1].realName)
+        assertEquals(3, recipients[0].loginId)
+        assertEquals(4, recipients[1].unitId)
+        assertEquals(2, recipients[0].role)
+        assertEquals("hash", recipients[1].hash)
     }
 }
