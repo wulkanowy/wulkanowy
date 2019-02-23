@@ -16,11 +16,17 @@ class GradeWorker @AssistedInject constructor(
     @Assisted workerParameters: WorkerParameters,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
-    private val gradeRepository: GradeRepository
+    private val gradeRepository: GradeRepository,
+    private val gradeNotification: GradeNotification
 ) : RxWorker(appContext, workerParameters) {
 
     override fun createWork(): Single<Result> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return studentRepository.getCurrentStudent()
+            .flatMap { student -> semesterRepository.getCurrentSemester(student).map { student to it } }
+            .flatMap { gradeRepository.getGrades(it.first, it.second, true) }
+            .doOnSuccess { gradeNotification.notify(listOf(it.first())) }
+            .map { Result.success() }
+            .onErrorReturn { Result.failure() }
     }
 
     @AssistedInject.Factory

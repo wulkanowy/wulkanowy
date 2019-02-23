@@ -32,6 +32,7 @@ class MainPresenter @Inject constructor(
         }
 
         syncManager.initialize()
+        syncManager.start()
 
         analytics.logEvent(APP_OPEN, DESTINATION to when (initMenuIndex) {
             1 -> "Grades"
