@@ -2,7 +2,7 @@ package io.github.wulkanowy.services.sync
 
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.O
-import androidx.work.ExistingPeriodicWorkPolicy.REPLACE
+import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.services.sync.base.WorkerConfiguration
@@ -25,7 +25,7 @@ class SyncManager @Inject constructor(
         if (preferencesRepository.isServiceEnabled) {
             workers.forEach {
                 WorkManager.getInstance()
-                    .enqueueUniquePeriodicWork(it.key.simpleName, REPLACE, it.value.periodicRequest)
+                    .enqueueUniqueWork(it.key.simpleName, ExistingWorkPolicy.REPLACE, it.value.oneTimeRequest)
             }
         }
     }

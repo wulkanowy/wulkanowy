@@ -4,6 +4,7 @@ import androidx.work.BackoffPolicy.EXPONENTIAL
 import androidx.work.Constraints
 import androidx.work.NetworkType.METERED
 import androidx.work.NetworkType.UNMETERED
+import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.services.sync.base.WorkerConfiguration
@@ -23,4 +24,7 @@ class GradeWorkerConfiguration @Inject constructor(private val preferencesReposi
                     .build())
                 .build()
         }
+
+    override val oneTimeRequest: OneTimeWorkRequest
+        get() = OneTimeWorkRequest.from(GradeWorker::class.java)
 }
