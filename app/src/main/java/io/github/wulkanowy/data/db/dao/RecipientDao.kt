@@ -13,7 +13,7 @@ import javax.inject.Singleton
 interface RecipientDao {
 
     @Insert
-    fun insertAll(messages: List<Recipient>): List<Long>
+    fun insertAll(messages: List<Recipient>)
 
     @Delete
     fun deleteAll(messages: List<Recipient>)

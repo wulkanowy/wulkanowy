@@ -22,9 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="48dp"
-        android:visibility="invisible">
-
-    </androidx.viewpager.widget.ViewPager>
+        android:visibility="invisible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/openSendMessageButton"
@@ -33,6 +31,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:clickable="true"
+        android:focusable="true"
         android:tint="#FFFFFF"
         app:srcCompat="@drawable/ic_send_message_24dp" />
 

@@ -15,7 +15,7 @@ class RecipientLocal @Inject constructor(private val recipientDb: RecipientDao) 
         return recipientDb.load(student.studentId, role, unit.realId).filter { !it.isEmpty() }
     }
 
-    fun saveRecipients(recipients: List<Recipient>): List<Long> {
+    fun saveRecipients(recipients: List<Recipient>) {
         return recipientDb.insertAll(recipients)
     }
 

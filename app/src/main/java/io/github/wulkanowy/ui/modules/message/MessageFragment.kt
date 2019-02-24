@@ -64,7 +64,7 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
         }
         messageTabLayout.setupWithViewPager(messageViewPager)
 
-        openSendMessageButton.setOnClickListener { openSendMessage() }
+        openSendMessageButton.setOnClickListener { presenter.onSendMessageButtonClicked() }
     }
 
     override fun showContent(show: Boolean) {

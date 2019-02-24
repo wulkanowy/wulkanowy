@@ -16,11 +16,15 @@ interface SendMessageView : BaseSessionView {
 
     val messageContentMinLength: String
 
+    val messageSuccess: String
+
     fun initView()
 
     fun setReportingUnit(unit: ReportingUnit)
 
     fun setRecipients(recipients: List<Recipient>)
+
+    fun refreshRecipientsAdapter()
 
     fun showProgress(show: Boolean)
 
@@ -30,7 +34,7 @@ interface SendMessageView : BaseSessionView {
 
     fun popView()
 
-    fun onSuccess()
-
     fun hideSoftInput()
+
+    fun showBottomNav(show: Boolean)
 }

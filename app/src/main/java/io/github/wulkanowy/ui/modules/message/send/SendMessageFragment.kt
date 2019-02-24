@@ -58,6 +58,9 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     override val messageContentMinLength: String
         get() = getString(R.string.send_message_content_min_length)
 
+    override val messageSuccess: String
+        get() = getString(R.string.send_message_successful)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -88,9 +91,7 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
         }
 
         sendMessageRecipientInput.setAdapter(recipientsAdapter)
-        sendMessageRecipientInput.setOnTextChangedListener { refreshRecipientsAdapter() }
-
-        (activity as? MainActivity)?.mainBottomNav?.visibility = View.GONE
+        sendMessageRecipientInput.setOnTextChangedListener { presenter.onTypingRecipients() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -108,10 +109,9 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
     override fun setRecipients(recipients: List<Recipient>) {
         this.recipients = recipients
-        refreshRecipientsAdapter()
     }
 
-    private fun refreshRecipientsAdapter() {
+    override fun refreshRecipientsAdapter() {
         recipientsAdapter.run {
             clear()
             addAll(recipients - sendMessageRecipientInput.allChips.map { it.data as Recipient })
@@ -135,13 +135,12 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
         (activity as? MainActivity)?.popView()
     }
 
-    override fun onSuccess() {
-        Toast.makeText(context, getString(R.string.send_message_successful), Toast.LENGTH_LONG).show()
-        popView()
-    }
-
     override fun hideSoftInput() {
         activity?.hideSoftInput()
+    }
+
+    override fun showBottomNav(show: Boolean) {
+        (activity as? MainActivity)?.mainBottomNav?.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun showMessage(text: String) {
@@ -149,7 +148,6 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     }
 
     override fun onDestroyView() {
-        (activity as? MainActivity)?.mainBottomNav?.visibility = View.VISIBLE
         super.onDestroyView()
         presenter.onDetachView()
     }

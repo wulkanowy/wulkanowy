@@ -13,7 +13,7 @@ import javax.inject.Singleton
 interface ReportingUnitDao {
 
     @Insert
-    fun insertAll(reportingUnits: List<ReportingUnit>): List<Long>
+    fun insertAll(reportingUnits: List<ReportingUnit>)
 
     @Delete
     fun deleteAll(reportingUnits: List<ReportingUnit>)

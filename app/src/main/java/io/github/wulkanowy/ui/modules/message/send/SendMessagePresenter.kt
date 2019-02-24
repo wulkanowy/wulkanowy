@@ -30,7 +30,10 @@ class SendMessagePresenter @Inject constructor(
     override fun onAttachView(view: SendMessageView) {
         Timber.i("Send message view is attached")
         super.onAttachView(view)
-        view.initView()
+        view.run {
+            initView()
+            showBottomNav(false)
+        }
         loadRecipients()
     }
 
@@ -60,6 +63,7 @@ class SendMessagePresenter @Inject constructor(
                 view?.apply {
                     setReportingUnit(reportingUnit)
                     setRecipients(it)
+                    refreshRecipientsAdapter()
                     showContent(true)
                 }
                 Timber.i("Loading recipients result: Success, fetched %s recipients", it.size.toString())
@@ -92,7 +96,10 @@ class SendMessagePresenter @Inject constructor(
             .subscribe({
                 Timber.i("Sending message result: Success")
                 analytics.logEvent("send_message", "recipients" to recipients.size)
-                view?.onSuccess()
+                view?.run {
+                    showMessage(messageSuccess)
+                    popView()
+                }
             }, {
                 Timber.i("Sending message result: An exception occurred")
                 view?.showContent(true)
@@ -101,15 +108,15 @@ class SendMessagePresenter @Inject constructor(
         )
     }
 
+    fun onTypingRecipients() {
+        view?.refreshRecipientsAdapter()
+    }
+
     fun onSend(): Boolean {
         view?.run {
             when {
-                formRecipientsData.isEmpty()
-                -> showMessage(messageRequiredRecipients)
-
-                formContentValue.length < 3
-                -> showMessage(messageContentMinLength)
-
+                formRecipientsData.isEmpty() -> showMessage(messageRequiredRecipients)
+                formContentValue.length < 3 -> showMessage(messageContentMinLength)
                 else -> {
                     sendMessage(
                         subject = formSubjectValue,
@@ -121,5 +128,10 @@ class SendMessagePresenter @Inject constructor(
             }
         }
         return false
+    }
+
+    override fun onDetachView() {
+        view?.showBottomNav(true)
+        super.onDetachView()
     }
 }
