@@ -67,6 +67,7 @@
                 android:background="@android:color/transparent"
                 android:inputType="text"
                 android:maxLines="1"
+                android:textColor="?attr/chipTextColor"
                 app:chipBackground="?attr/chipBackgroundColor" />
         </LinearLayout>
 
