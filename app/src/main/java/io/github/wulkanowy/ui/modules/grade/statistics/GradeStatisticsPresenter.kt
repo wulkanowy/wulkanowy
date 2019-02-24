@@ -26,22 +26,21 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private var currentSemesterId = 0
 
-    var currentSubjectName: String = "Wszystkie"
+    private var currentSubjectName: String = "Wszystkie"
+
+    var currentIsSemester = false
         private set
 
-    var currentIsAnnual = false
-        private set
-
-    fun onAttachView(view: GradeStatisticsView, isAnnual: Boolean?) {
+    fun onAttachView(view: GradeStatisticsView, isSemester: Boolean?) {
         super.onAttachView(view)
-        currentIsAnnual = isAnnual ?: false
+        currentIsSemester = isSemester ?: false
         view.initView()
     }
 
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         currentSemesterId = semesterId
         loadSubjects()
-        loadData(semesterId, currentSubjectName, currentIsAnnual, forceRefresh)
+        loadData(semesterId, currentSubjectName, currentIsSemester, forceRefresh)
     }
 
     fun onParentViewChangeSemester() {
@@ -69,19 +68,19 @@ class GradeStatisticsPresenter @Inject constructor(
             clearView()
         }
         (subjects.singleOrNull { it.name == name }?.name).let {
-            if (it != currentSubjectName) loadData(currentSemesterId, name, currentIsAnnual)
+            if (it != currentSubjectName) loadData(currentSemesterId, name, currentIsSemester)
         }
     }
 
-    fun onTypeChange(annual: Boolean) {
-        Timber.i("Select attendance stats annual: $annual")
+    fun onTypeChange(isSemester: Boolean) {
+        Timber.i("Select attendance stats semester: $isSemester")
         view?.run {
             showContent(false)
             showProgress(true)
             showEmpty(false)
             clearView()
         }
-        loadData(currentSemesterId, currentSubjectName, annual)
+        loadData(currentSemesterId, currentSubjectName, isSemester)
     }
 
     private fun loadSubjects() {
@@ -106,13 +105,13 @@ class GradeStatisticsPresenter @Inject constructor(
         )
     }
 
-    private fun loadData(semesterId: Int, subjectName: String, annual: Boolean, forceRefresh: Boolean = false) {
+    private fun loadData(semesterId: Int, subjectName: String, isSemester: Boolean, forceRefresh: Boolean = false) {
         Timber.i("Loading grade stats data started")
         currentSubjectName = subjectName
-        currentIsAnnual = annual
+        currentIsSemester = isSemester
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
-            .flatMap { gradeStatisticsRepository.getGradesStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, annual, forceRefresh) }
+            .flatMap { gradeStatisticsRepository.getGradesStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, isSemester, forceRefresh) }
             .map { list -> list.sortedByDescending { it.grade } }
             .map { list -> list.filter { it.amount != 0 } }
             .subscribeOn(schedulers.backgroundThread)

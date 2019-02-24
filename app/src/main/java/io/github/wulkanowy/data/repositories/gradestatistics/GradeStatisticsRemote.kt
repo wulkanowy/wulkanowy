@@ -10,9 +10,9 @@ import javax.inject.Singleton
 @Singleton
 class GradeStatisticsRemote @Inject constructor(private val api: Api) {
 
-    fun getGradeStatistics(semester: Semester, annual: Boolean): Single<List<GradeStatistics>> {
+    fun getGradeStatistics(semester: Semester, isSemester: Boolean): Single<List<GradeStatistics>> {
         return Single.just(api.apply { diaryId = semester.diaryId })
-            .flatMap { it.getGradesStatistics(semester.semesterId, annual) }
+            .flatMap { it.getGradesStatistics(semester.semesterId, isSemester) }
             .map { gradeStatistics ->
                 gradeStatistics.map {
                     GradeStatistics(
@@ -21,7 +21,7 @@ class GradeStatisticsRemote @Inject constructor(private val api: Api) {
                         subject = it.subject,
                         grade = it.gradeValue,
                         amount = it.amount ?: 0,
-                        annual = annual
+                        semester = isSemester
                     )
                 }
             }

@@ -174,13 +174,13 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
     override fun onResume() {
         super.onResume()
         gradeStatisticsTypeSwitch.setOnCheckedChangeListener { _, checkedId ->
-            presenter.onTypeChange(checkedId == R.id.gradeStatisticsTypeAnnual)
+            presenter.onTypeChange(checkedId == R.id.gradeStatisticsTypeSemester)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(GradeStatisticsFragment.SAVED_CHART_TYPE, presenter.currentIsAnnual)
+        outState.putBoolean(GradeStatisticsFragment.SAVED_CHART_TYPE, presenter.currentIsSemester)
     }
 
     override fun onDestroyView() {

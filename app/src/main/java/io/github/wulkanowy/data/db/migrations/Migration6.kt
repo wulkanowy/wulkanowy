@@ -13,6 +13,6 @@ class Migration6 : Migration(5, 6) {
             "`subject` TEXT NOT NULL," +
             "`grade` INTEGER NOT NULL," +
             "`amount` INTEGER NOT NULL," +
-            "`annual` INTEGER NOT NULL)")
+            "`is_semester` INTEGER NOT NULL)")
     }
 }

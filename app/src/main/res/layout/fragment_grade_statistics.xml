@@ -67,11 +67,11 @@
                         android:text="@string/grade_statistics_partial" />
 
                     <RadioButton
-                        android:id="@+id/gradeStatisticsTypeAnnual"
+                        android:id="@+id/gradeStatisticsTypeSemester"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:tag="annual"
-                        android:text="@string/grade_statistics_annual" />
+                        android:text="@string/grade_statistics_semester" />
                 </RadioGroup>
 
                 <FrameLayout
