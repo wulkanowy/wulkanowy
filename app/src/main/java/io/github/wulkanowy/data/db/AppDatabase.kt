@@ -17,6 +17,8 @@ import io.github.wulkanowy.data.db.dao.HomeworkDao
 import io.github.wulkanowy.data.db.dao.LuckyNumberDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.dao.NoteDao
+import io.github.wulkanowy.data.db.dao.RecipientDao
+import io.github.wulkanowy.data.db.dao.ReportingUnitDao
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.dao.SubjectDao
@@ -32,6 +34,8 @@ import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Note
+import io.github.wulkanowy.data.db.entities.Recipient
+import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
@@ -41,6 +45,7 @@ import io.github.wulkanowy.data.db.migrations.Migration3
 import io.github.wulkanowy.data.db.migrations.Migration4
 import io.github.wulkanowy.data.db.migrations.Migration5
 import io.github.wulkanowy.data.db.migrations.Migration6
+import io.github.wulkanowy.data.db.migrations.Migration7
 import javax.inject.Singleton
 
 @Singleton
@@ -60,7 +65,9 @@ import javax.inject.Singleton
         Homework::class,
         Subject::class,
         LuckyNumber::class,
-        CompletedLesson::class
+        CompletedLesson::class,
+        ReportingUnit::class,
+        Recipient::class
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = false
@@ -69,7 +76,7 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 6
+        const val VERSION_SCHEMA = 7
 
         fun newInstance(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
@@ -81,7 +88,8 @@ abstract class AppDatabase : RoomDatabase() {
                     Migration3(),
                     Migration4(),
                     Migration5(),
-                    Migration6()
+                    Migration6(),
+                    Migration7()
                 )
                 .build()
         }
@@ -116,4 +124,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val luckyNumberDao: LuckyNumberDao
 
     abstract val completedLessonsDao: CompletedLessonsDao
+
+    abstract val reportingUnitDao: ReportingUnitDao
+
+    abstract val recipientDao: RecipientDao
 }
