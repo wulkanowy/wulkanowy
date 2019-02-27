@@ -31,7 +31,27 @@ class LoginFormPresenter @Inject constructor(
         }
     }
 
-    fun attemptLogin(email: String, password: String, endpoint: String) {
+    fun onHostSelected() {
+        view?.apply {
+            clearPassError()
+            clearNameError()
+            if (formHostValue?.contains("fakelog") == true) setDefaultCredentials("jan@fakelog.cf", "jan123")
+        }
+    }
+
+    fun onPassTextChanged() {
+        view?.clearPassError()
+    }
+
+    fun onNameTextChanged() {
+        view?.clearNameError()
+    }
+
+    fun attemptLogin() {
+        val email = view?.formNameValue.orEmpty()
+        val password = view?.formPassValue.orEmpty()
+        val endpoint = view?.formHostValue.orEmpty()
+
         if (!validateCredentials(email, password)) return
 
         disposable.add(studentRepository.getStudents(email, password, endpoint)

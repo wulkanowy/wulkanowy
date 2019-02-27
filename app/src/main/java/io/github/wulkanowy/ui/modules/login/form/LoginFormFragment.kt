@@ -16,6 +16,8 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.hideSoftInput
+import io.github.wulkanowy.utils.setOnItemSelectedListener
+import io.github.wulkanowy.utils.setOnTextChangedListener
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.fragment_login_form.*
 import javax.inject.Inject
@@ -29,6 +31,15 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         fun newInstance() = LoginFormFragment()
     }
 
+    override val formNameValue: String
+        get() = loginFormName.text.toString()
+
+    override val formPassValue: String
+        get() = loginFormPass.text.toString()
+
+    override val formHostValue: String?
+        get() = resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_form, container, false)
     }
@@ -39,13 +50,10 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     }
 
     override fun initView() {
-        loginFormSignIn.setOnClickListener {
-            presenter.attemptLogin(
-                loginFormName.text.toString(),
-                loginFormPass.text.toString(),
-                resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
-            )
-        }
+        loginFormName.setOnTextChangedListener { presenter.onNameTextChanged() }
+        loginFormPass.setOnTextChangedListener { presenter.onPassTextChanged() }
+        loginFormHost.setOnItemSelectedListener { presenter.onHostSelected() }
+        loginFormSignIn.setOnClickListener { presenter.attemptLogin() }
 
         loginFormPass.setOnEditorActionListener { _, id, _ ->
             if (id == IME_ACTION_DONE || id == IME_NULL) loginFormSignIn.callOnClick() else false
@@ -57,32 +65,45 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
     }
 
+    override fun setDefaultCredentials(name: String, pass: String) {
+        loginFormName.setText(name)
+        loginFormPass.setText(pass)
+    }
+
     override fun setErrorNameRequired() {
-        loginFormName.run {
+        loginFormNameLayout.run {
             requestFocus()
             error = getString(R.string.login_field_required)
         }
     }
 
     override fun setErrorPassRequired(focus: Boolean) {
-        loginFormPass.run {
+        loginFormPassLayout.run {
             if (focus) requestFocus()
             error = getString(R.string.login_field_required)
         }
     }
 
     override fun setErrorPassInvalid(focus: Boolean) {
-        loginFormPass.run {
+        loginFormPassLayout.run {
             if (focus) requestFocus()
             error = getString(R.string.login_invalid_password)
         }
     }
 
     override fun setErrorPassIncorrect() {
-        loginFormPass.run {
+        loginFormPassLayout.run {
             requestFocus()
             error = getString(R.string.login_incorrect_password)
         }
+    }
+
+    override fun clearNameError() {
+        loginFormNameLayout.error = null
+    }
+
+    override fun clearPassError() {
+        loginFormPassLayout.error = null
     }
 
     override fun showSoftKeyboard() {
