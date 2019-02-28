@@ -1,8 +1,10 @@
 package io.github.wulkanowy.data.repositories.grade
 
+import android.os.Build.VERSION_CODES.P
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SdkSuppress
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy
 import io.github.wulkanowy.api.Api
@@ -27,6 +29,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import io.github.wulkanowy.api.grades.Grade as GradeApi
 
+@SdkSuppress(minSdkVersion = P)
 @RunWith(AndroidJUnit4::class)
 class GradeRepositoryTest {
 
