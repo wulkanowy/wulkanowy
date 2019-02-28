@@ -25,26 +25,13 @@ fun List<GradeSummary>.calcAverage(): Double {
 inline val Grade.valueBgColor: Int
     get() {
         return when (value) {
-            6 -> R.color.grade_bg_six
-            5 -> R.color.grade_bg_five
-            4 -> R.color.grade_bg_four
-            3 -> R.color.grade_bg_three
-            2 -> R.color.grade_bg_two
-            1 -> R.color.grade_bg_one
-            else -> R.color.grade_bg_default
-        }
-    }
-
-inline val Grade.valueTextColor: Int
-    get() {
-        return when (value) {
-            6 -> R.color.grade_text_six
-            5 -> R.color.grade_text_five
-            4 -> R.color.grade_text_four
-            3 -> R.color.grade_text_three
-            2 -> R.color.grade_text_two
-            1 -> R.color.grade_text_one
-            else -> R.color.grade_text_default
+            6 -> R.color.grade_six
+            5 -> R.color.grade_five
+            4 -> R.color.grade_four
+            3 -> R.color.grade_three
+            2 -> R.color.grade_two
+            1 -> R.color.grade_one
+            else -> R.color.grade_default
         }
     }
 

@@ -24,10 +24,10 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="end"
-                android:background="@color/grade_bg_default"
+                android:background="@color/grade_default"
                 android:gravity="center"
                 android:text="@string/app_name"
-                android:textColor="@color/grade_text_default"
+                android:textColor="@color/grade_default"
                 android:textSize="30sp" />
 
             <TextView

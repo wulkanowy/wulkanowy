@@ -15,7 +15,7 @@ import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_grade_details.*
 
-class GradeDetailsItem(val grade: Grade, private val weightString: String, private val valueBgColor: Int, private val valueTextColor: Int) :
+class GradeDetailsItem(val grade: Grade, private val weightString: String, private val valueBgColor: Int) :
     AbstractFlexibleItem<GradeDetailsItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_grade_details
@@ -33,7 +33,6 @@ class GradeDetailsItem(val grade: Grade, private val weightString: String, priva
             gradeItemValue.run {
                 text = grade.entry
                 setBackgroundResource(valueBgColor)
-                setTextColor(ContextCompat.getColor(context, valueTextColor))
             }
             gradeItemDescription.text = if (grade.description.isNotBlank()) grade.description else grade.gradeSymbol
             gradeItemDate.text = grade.date.toFormattedString()
@@ -52,7 +51,6 @@ class GradeDetailsItem(val grade: Grade, private val weightString: String, priva
         if (grade.id != other.grade.id) return false
         if (weightString != other.weightString) return false
         if (valueBgColor != other.valueBgColor) return false
-        if (valueTextColor != other.valueTextColor) return false
 
         return true
     }
