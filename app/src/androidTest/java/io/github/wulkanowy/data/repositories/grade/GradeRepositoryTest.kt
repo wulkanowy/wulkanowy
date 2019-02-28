@@ -8,6 +8,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strat
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.api.toDate
 import io.github.wulkanowy.data.db.AppDatabase
+import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.mockk.MockKAnnotations
@@ -84,6 +85,49 @@ class GradeRepositoryTest {
         assertFalse { grades[1].isRead }
         assertTrue { grades[2].isRead }
         assertTrue { grades[3].isRead }
+    }
+
+    @Test
+    fun mitigateOldGradesNotifications() {
+        gradeLocal.saveGrades(listOf(
+            createGradeLocal(5, 3, of(2019, 2, 25), "Jedna ocena"),
+            createGradeLocal(4, 4, of(2019, 2, 26), "Druga"),
+            createGradeLocal(3, 5, of(2019, 2, 27), "Trzecia")
+        ))
+
+        every { mockApi.getGrades(1) } returns Single.just(listOf(
+            createGradeApi(5, 2, of(2019, 2, 25), "Ocena ma datę, jest inna, ale nie zostanie powiadomiona"),
+            createGradeApi(4, 3, of(2019, 2, 26), "starszą niż ostatnia lokalnie"),
+            createGradeApi(3, 4, of(2019, 2, 27), "Ta jest z tego samego dnia co ostatnia lokalnie"),
+            createGradeApi(2, 5, of(2019, 2, 28), "Ta jest już w ogóle nowa")
+        ))
+
+        val grades = GradeRepository(settings, gradeLocal, gradeRemote)
+            .getGrades(studentMock, semesterMock, true).blockingGet().sortedByDescending { it.date }
+
+        assertFalse { grades[0].isRead }
+        assertFalse { grades[1].isRead }
+        assertTrue { grades[2].isRead }
+        assertTrue { grades[3].isRead }
+    }
+
+    private fun createGradeLocal(value: Int, weight: Int, date: LocalDate, desc: String): Grade {
+        return Grade(
+            semesterId = 1,
+            studentId = 1,
+            modifier = .0,
+            teacher = "",
+            subject = "",
+            date = date,
+            color = "",
+            comment = "",
+            description = desc,
+            entry = "",
+            gradeSymbol = "",
+            value = value,
+            weight = "",
+            weightValue = weight
+        )
     }
 
     private fun createGradeApi(value: Int, weight: Int, date: LocalDate, desc: String): GradeApi {
