@@ -112,32 +112,4 @@ class GradeRepositoryTest {
         assertTrue { grades[2].isRead }
         assertTrue { grades[3].isRead }
     }
-
-    private fun createGradeLocal(value: Int, weight: Int, date: LocalDate, desc: String): Grade {
-        return Grade(
-            semesterId = 1,
-            studentId = 1,
-            modifier = .0,
-            teacher = "",
-            subject = "",
-            date = date,
-            color = "",
-            comment = "",
-            description = desc,
-            entry = "",
-            gradeSymbol = "",
-            value = value,
-            weight = "",
-            weightValue = weight
-        )
-    }
-
-    private fun createGradeApi(value: Int, weight: Int, date: LocalDate, desc: String): GradeApi {
-        return GradeApi().apply {
-            this.value = value
-            this.weightValue = weight
-            this.date = date.toDate()
-            this.description = desc
-        }
-    }
 }
