@@ -6,13 +6,13 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy
 import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.api.toDate
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.repositories.TestInternetObservingStrategy
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -37,8 +37,7 @@ class GradeRepositoryTest {
     private var mockApi = Api()
 
     private val settings = InternetObservingSettings.builder()
-        .strategy(SocketInternetObservingStrategy())
-        .host("www.google.com")
+        .strategy(TestInternetObservingStrategy())
         .build()
 
     @MockK
