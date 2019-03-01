@@ -13,7 +13,6 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
 import io.github.wulkanowy.utils.valueBgColor
-import io.github.wulkanowy.utils.valueTextColor
 import timber.log.Timber
 import javax.inject.Inject
 
