@@ -31,7 +31,7 @@
             android:title="@string/pref_view_expand_grade"
             app:iconSpaceReserved="false" />
         <ListPreference
-            android:defaultValue="default"
+            android:defaultValue="classic"
             android:entries="@array/grade_color_scheme_entries"
             android:entryValues="@array/grade_color_scheme_values"
             android:key="@string/pref_key_grade_color_scheme"

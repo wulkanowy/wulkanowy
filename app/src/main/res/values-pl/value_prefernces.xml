@@ -25,8 +25,7 @@
     </string-array>
 
     <string-array name="grade_color_scheme_entries">
-        <item>Domyślny</item>
-        <item>Vulcan</item>
+        <item>Klasyczny</item>
         <item>Kolory ocen</item>
     </string-array>
 </resources>

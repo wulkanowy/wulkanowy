@@ -31,7 +31,7 @@ class PreferencesRepository @Inject constructor(
         get() = sharedPref.getString(context.getString(R.string.pref_key_grade_modifier_minus), "0.0")?.toDouble() ?: 0.0
 
     val gradeColorTheme: String
-        get() = sharedPref.getString(context.getString(R.string.pref_key_grade_color_scheme), "default") ?: "default"
+        get() = sharedPref.getString(context.getString(R.string.pref_key_grade_color_scheme), "classic") ?: "classic"
 
 
     val serviceEnablesKey: String = context.getString(R.string.pref_key_services_enable)
