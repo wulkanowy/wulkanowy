@@ -152,7 +152,7 @@ class GradeDetailsPresenter @Inject constructor(
                         GradeDetailsItem(
                             grade = item,
                             weightString = view?.weightString.orEmpty(),
-                            valueBgColor = item.valueBgColor,
+                            valueBgColor = item.valueBgColor
                         )
                     }
                 }
