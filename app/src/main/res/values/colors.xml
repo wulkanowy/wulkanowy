@@ -14,6 +14,12 @@
     <color name="grade_one">#d65757</color>
     <color name="grade_default">#3d5f9c</color>
 
+    <color name="grade_black">#000000</color>
+    <color name="grade_red">#ff0000</color>
+    <color name="grade_blue">#0000ff</color>
+    <color name="grade_green">#00ff00</color>
+    <color name="grade_purple">#800080</color>
+
     <color name="bottom_nav_background">#303030</color>
     <color name="bottom_nav_background_inverse">#ffffff</color>
 

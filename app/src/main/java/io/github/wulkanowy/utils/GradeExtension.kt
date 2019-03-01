@@ -22,9 +22,17 @@ fun List<GradeSummary>.calcAverage(): Double {
     }.average().let { if (it.isNaN()) 0.0 else it }
 }
 
-inline val Grade.valueColor: Int
-    get() {
-        return when (value) {
+fun Grade.getBackgroundColor(theme: String): Int {
+    return when (theme) {
+        "grade_color" -> when (color) {
+            "000000" -> R.color.grade_black
+            "F04C4C" -> R.color.grade_red
+            "20A4F7" -> R.color.grade_blue
+            "6ECD07" -> R.color.grade_green
+            "B16CF1" -> R.color.grade_purple
+            else -> R.color.grade_default
+        }
+        else -> when (value) {
             6 -> R.color.grade_six
             5 -> R.color.grade_five
             4 -> R.color.grade_four
@@ -34,6 +42,7 @@ inline val Grade.valueColor: Int
             else -> R.color.grade_default
         }
     }
+}
 
 inline val Grade.colorStringId: Int
     get() {
