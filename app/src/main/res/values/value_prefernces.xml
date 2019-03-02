@@ -64,7 +64,7 @@
         <item>Grade colors in register</item>
     </string-array>
     <string-array name="grade_color_scheme_values" translatable="false">
-        <item>classic</item>
+        <item>vulcan</item>
         <item>material</item>
         <item>grade_color</item>
     </string-array>

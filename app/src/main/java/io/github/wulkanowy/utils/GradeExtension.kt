@@ -42,12 +42,12 @@ fun Grade.getBackgroundColor(theme: String): Int {
             else -> R.color.grade_default
         }
         else -> when (value) {
-            6 -> R.color.grade_classic_six
-            5 -> R.color.grade_classic_five
-            4 -> R.color.grade_classic_four
-            3 -> R.color.grade_classic_three
-            2 -> R.color.grade_classic_two
-            1 -> R.color.grade_classic_one
+            6 -> R.color.grade_vulcan_six
+            5 -> R.color.grade_vulcan_five
+            4 -> R.color.grade_vulcan_four
+            3 -> R.color.grade_vulcan_three
+            2 -> R.color.grade_vulcan_two
+            1 -> R.color.grade_vulcan_one
             else -> R.color.grade_default
         }
     }
