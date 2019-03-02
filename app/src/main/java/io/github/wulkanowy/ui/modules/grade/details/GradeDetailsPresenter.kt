@@ -151,7 +151,7 @@ class GradeDetailsPresenter @Inject constructor(
                         GradeDetailsItem(
                             grade = item,
                             weightString = view?.weightString.orEmpty(),
-                            valueColor = item.getBackgroundColor(preferencesRepository.gradeColorTheme)
+                            valueBgColor = item.getBackgroundColor(preferencesRepository.gradeColorTheme)
                         )
                     }
                 }

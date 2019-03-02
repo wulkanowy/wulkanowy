@@ -13,7 +13,6 @@ import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.synthetic.main.dialog_grade.*
 
-
 class GradeDetailsDialog : DialogFragment() {
 
     private lateinit var grade: Grade
