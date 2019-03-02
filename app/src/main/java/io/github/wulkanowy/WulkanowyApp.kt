@@ -16,7 +16,7 @@ import io.fabric.sdk.android.Fabric
 import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.di.DaggerAppComponent
-import io.github.wulkanowy.services.sync.factory.MainWorkerFactory
+import io.github.wulkanowy.services.sync.SyncWorkerFactory
 import io.github.wulkanowy.utils.CrashlyticsTree
 import io.github.wulkanowy.utils.DebugLogTree
 import timber.log.Timber
@@ -28,7 +28,7 @@ class WulkanowyApp : DaggerApplication() {
     lateinit var prefRepository: PreferencesRepository
 
     @Inject
-    lateinit var workerFactory: MainWorkerFactory
+    lateinit var workerFactory: SyncWorkerFactory
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
