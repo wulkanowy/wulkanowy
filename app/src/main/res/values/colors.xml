@@ -12,13 +12,13 @@
     <color name="grade_three">#d2ab24</color>
     <color name="grade_two">#9071b3</color>
     <color name="grade_one">#d65757</color>
-    <color name="grade_default">#3d5f9c</color>
+    <color name="grade_default">#455A64</color>
 
-    <color name="grade_black">#000000</color>
-    <color name="grade_red">#F04C4C</color>
-    <color name="grade_blue">#20A4F7</color>
-    <color name="grade_green">#6ECD07</color>
-    <color name="grade_purple">#B16CF1</color>
+    <color name="grade_black">#212121</color>
+    <color name="grade_red">#D50000</color>
+    <color name="grade_blue">#1976D2</color>
+    <color name="grade_green">#689F38</color>
+    <color name="grade_purple">#673AB7</color>
 
     <color name="bottom_nav_background">#303030</color>
     <color name="bottom_nav_background_inverse">#ffffff</color>
