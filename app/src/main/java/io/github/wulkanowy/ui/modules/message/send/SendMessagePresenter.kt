@@ -40,7 +40,7 @@ class SendMessagePresenter @Inject constructor(
                 val messageContent = when (message.sender.isNotEmpty()) {
                     true -> "\n\nOd: ${message.sender}\n"
                     false -> "\n\nDo: ${message.recipient}\n"
-                } + "Data: ${message.date.toFormattedString("yy-MM-dd HH:mm:ss")}\n\n${message.content}"
+                } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}"
                 setContent(messageContent)
             }
         }

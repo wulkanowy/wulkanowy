@@ -2,6 +2,9 @@ package io.github.wulkanowy.ui.modules.message.preview
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import io.github.wulkanowy.R
@@ -17,6 +20,8 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
 
     @Inject
     lateinit var presenter: MessagePreviewPresenter
+
+    private var menuReplyButton: MenuItem? = null
 
     override val titleStringId: Int
         get() = R.string.message_title
@@ -34,6 +39,11 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_message_preview, container, false)
     }
@@ -44,8 +54,15 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getInt(MESSAGE_ID_KEY) ?: 0)
     }
 
-    override fun initView() {
-        messageReplyButton.setOnClickListener { presenter.onReplyButtonClicked() }
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.action_menu_message_preview, menu)
+        menuReplyButton = menu?.findItem(R.id.messagePreviewMenuReply)
+        presenter.onCreateOptionsMenu()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return if (item?.itemId == R.id.messagePreviewMenuReply) presenter.onReply()
+        else false
     }
 
     override fun setSubject(subject: String) {
@@ -73,15 +90,14 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     }
 
     override fun showReplyButton(show: Boolean) {
-        if (show) messageReplyButton.show()
-        else messageReplyButton.hide()
+        menuReplyButton?.isVisible = show
     }
 
     override fun showMessageError() {
         messageError.visibility = View.VISIBLE
     }
 
-    override fun openMessageReply(message: Message) {
+    override fun openMessageReply(message: Message?) {
         (activity as? MainActivity)?.pushView(SendMessageFragment.newInstance(message))
     }
 

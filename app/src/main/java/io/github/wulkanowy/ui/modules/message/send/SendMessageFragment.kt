@@ -42,7 +42,7 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
         fun newInstance() = SendMessageFragment()
 
-        fun newInstance(message: Message): SendMessageFragment {
+        fun newInstance(message: Message?): SendMessageFragment {
             return SendMessageFragment().apply {
                 arguments = Bundle().apply { putSerializable(ARGUMENT_KEY, message) }
             }

@@ -54,18 +54,6 @@
 
     </ScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/messageReplyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="gone"
-        app:srcCompat="@drawable/ic_message_reply_24dp"
-        tools:visibility="visible" />
-
     <LinearLayout
         android:id="@+id/messageError"
         android:layout_width="match_parent"

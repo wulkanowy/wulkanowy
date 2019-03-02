@@ -22,11 +22,10 @@ class MessagePreviewPresenter @Inject constructor(
 
     var messageId: Int = 0
 
-    lateinit var replyMessage: Message
+    private var replyMessage: Message? = null
 
     fun onAttachView(view: MessagePreviewView, id: Int) {
         super.onAttachView(view)
-        view.initView()
         loadData(id)
     }
 
@@ -63,7 +62,13 @@ class MessagePreviewPresenter @Inject constructor(
         }
     }
 
-    fun onReplyButtonClicked() {
-        view?.openMessageReply(replyMessage)
+    fun onReply(): Boolean {
+        if (replyMessage != null) view?.openMessageReply(replyMessage)
+        else return false
+        return true
+    }
+
+    fun onCreateOptionsMenu() {
+        view?.showReplyButton(replyMessage != null)
     }
 }

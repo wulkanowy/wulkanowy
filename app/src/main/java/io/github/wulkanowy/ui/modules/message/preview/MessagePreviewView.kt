@@ -7,8 +7,6 @@ interface MessagePreviewView : BaseSessionView {
 
     val noSubjectString: String
 
-    fun initView()
-
     fun setSubject(subject: String)
 
     fun setRecipient(recipient: String?)
@@ -25,5 +23,5 @@ interface MessagePreviewView : BaseSessionView {
 
     fun showMessageError()
 
-    fun openMessageReply(message: Message)
+    fun openMessageReply(message: Message?)
 }
