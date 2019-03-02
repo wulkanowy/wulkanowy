@@ -1,4 +1,4 @@
-package io.github.wulkanowy.data.repositories.local
+package io.github.wulkanowy.data.repositories.grade
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
