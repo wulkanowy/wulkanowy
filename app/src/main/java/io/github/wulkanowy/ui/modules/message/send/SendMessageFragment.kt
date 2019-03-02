@@ -16,6 +16,7 @@ import com.hootsuite.nachos.chip.ChipSpan
 import com.hootsuite.nachos.chip.ChipSpanChipCreator
 import com.hootsuite.nachos.tokenizer.SpanChipTokenizer
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
@@ -23,6 +24,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.setOnTextChangedListener
+import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_send_message.*
 import javax.inject.Inject
@@ -36,8 +38,23 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
     private lateinit var recipientsAdapter: ArrayAdapter<Recipient>
 
+    override var messageSubject: String? = null
+    override var messageContent: String? = null
+
     companion object {
         fun newInstance() = SendMessageFragment()
+
+        fun newInstance(message: Message): SendMessageFragment {
+            val instance = SendMessageFragment()
+            return instance.apply {
+                messageSubject = "RE: ${message.subject}"
+                messageContent = when (message.sender.isNotEmpty()) {
+                    true -> "\n\nOd: ${message.sender}\n"
+                    false -> "\n\nDo: ${message.recipient}\n"
+                }
+                messageContent += "Data: ${message.date.toFormattedString("yy-MM-dd HH:mm:ss")}\n\n${message.content}"
+            }
+        }
     }
 
     override val titleStringId: Int
@@ -129,6 +146,14 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
     override fun showEmpty(show: Boolean) {
         sendMessageEmpty.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun setSubject(subject: String) {
+        sendMessageSubjectInput.setText(subject)
+    }
+
+    override fun setContent(content: String) {
+        sendMessageContentInput.setText(content)
     }
 
     override fun popView() {

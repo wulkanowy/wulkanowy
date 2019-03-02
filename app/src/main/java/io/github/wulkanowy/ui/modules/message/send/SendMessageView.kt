@@ -6,6 +6,10 @@ import io.github.wulkanowy.ui.base.session.BaseSessionView
 
 interface SendMessageView : BaseSessionView {
 
+    var messageSubject: String?
+
+    var messageContent: String?
+
     val formRecipientsData: List<Recipient>
 
     val formSubjectValue: String
@@ -31,6 +35,10 @@ interface SendMessageView : BaseSessionView {
     fun showContent(show: Boolean)
 
     fun showEmpty(show: Boolean)
+
+    fun setSubject(subject: String)
+
+    fun setContent(content: String)
 
     fun popView()
 

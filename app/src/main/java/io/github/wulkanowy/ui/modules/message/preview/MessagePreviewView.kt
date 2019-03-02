@@ -1,10 +1,13 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
+import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.session.BaseSessionView
 
 interface MessagePreviewView : BaseSessionView {
 
     val noSubjectString: String
+
+    fun initView()
 
     fun setSubject(subject: String)
 
@@ -21,4 +24,6 @@ interface MessagePreviewView : BaseSessionView {
     fun showReplyButton(show: Boolean)
 
     fun showMessageError()
+
+    fun openMessageReply(message: Message)
 }

@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.modules.message.send.SendMessageFragment
 import kotlinx.android.synthetic.main.fragment_message_preview.*
 import javax.inject.Inject
 
@@ -41,6 +44,10 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getInt(MESSAGE_ID_KEY) ?: 0)
     }
 
+    override fun initView() {
+        messageReplyButton.setOnClickListener { presenter.onReplyButtonClicked() }
+    }
+
     override fun setSubject(subject: String) {
         messageSubject.text = subject
     }
@@ -72,6 +79,10 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
 
     override fun showMessageError() {
         messageError.visibility = View.VISIBLE
+    }
+
+    override fun openMessageReply(message: Message) {
+        (activity as? MainActivity)?.pushView(SendMessageFragment.newInstance(message))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

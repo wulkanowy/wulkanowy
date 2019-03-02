@@ -33,6 +33,8 @@ class SendMessagePresenter @Inject constructor(
         view.run {
             initView()
             showBottomNav(false)
+            if (messageSubject !== null) setSubject(messageSubject.orEmpty())
+            if (messageContent !== null) setContent(messageContent.orEmpty())
         }
         loadRecipients()
     }
