@@ -32,19 +32,18 @@ class SendMessagePresenter @Inject constructor(
     fun onAttachView(view: SendMessageView, message: Message?) {
         super.onAttachView(view)
         Timber.i("Send message view is attached")
-        view.run {
+        loadRecipients()
+        view.apply {
             initView()
             showBottomNav(false)
-            if (message !== null) {
+            message?.let {
                 setSubject("RE: ${message.subject}")
-                val messageContent = when (message.sender.isNotEmpty()) {
+                setContent(when (message.sender.isNotEmpty()) {
                     true -> "\n\nOd: ${message.sender}\n"
                     false -> "\n\nDo: ${message.recipient}\n"
-                } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}"
-                setContent(messageContent)
+                } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}")
             }
         }
-        loadRecipients()
     }
 
     private fun loadRecipients() {
