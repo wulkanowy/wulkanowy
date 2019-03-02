@@ -30,16 +30,16 @@ fun Grade.getBackgroundColor(theme: String): Int {
             "20A4F7" -> R.color.grade_blue
             "6ECD07" -> R.color.grade_green
             "B16CF1" -> R.color.grade_purple
-            else -> R.color.grade_default
+            else -> R.color.grade_classic_default
         }
         else -> when (value) {
-            6 -> R.color.grade_six
-            5 -> R.color.grade_five
-            4 -> R.color.grade_four
-            3 -> R.color.grade_three
-            2 -> R.color.grade_two
-            1 -> R.color.grade_one
-            else -> R.color.grade_default
+            6 -> R.color.grade_classic_six
+            5 -> R.color.grade_classic_five
+            4 -> R.color.grade_classic_four
+            3 -> R.color.grade_classic_three
+            2 -> R.color.grade_classic_two
+            1 -> R.color.grade_classic_one
+            else -> R.color.grade_classic_default
         }
     }
 }
