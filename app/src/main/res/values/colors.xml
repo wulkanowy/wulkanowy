@@ -5,14 +5,14 @@
     <color name="colorPrimaryLight">#ff6659</color>
     <color name="colorBackgroundBottomNav">#f0f0f0</color>
 
-    <color name="grade_default">#607d8b</color><!--455A64-->
+    <color name="grade_default">#607d8b</color>
     <color name="grade_text">#ffffff</color>
 
-    <color name="grade_black">#212121</color>
-    <color name="grade_red">#D50000</color>
-    <color name="grade_blue">#1976D2</color>
-    <color name="grade_green">#689F38</color>
-    <color name="grade_purple">#673AB7</color>
+    <color name="grade_black">#424242</color>
+    <color name="grade_red">#F44336</color>
+    <color name="grade_blue">#2196F3</color>
+    <color name="grade_green">#8BC34A</color>
+    <color name="grade_purple">#7E57C2</color>
 
     <color name="grade_material_six">#03a9f4</color>
     <color name="grade_material_five">#4caf50</color>
