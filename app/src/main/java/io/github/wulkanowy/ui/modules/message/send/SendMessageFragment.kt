@@ -24,7 +24,6 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.setOnTextChangedListener
-import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_send_message.*
 import javax.inject.Inject
@@ -38,21 +37,14 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
     private lateinit var recipientsAdapter: ArrayAdapter<Recipient>
 
-    override var messageSubject: String? = null
-    override var messageContent: String? = null
-
     companion object {
+        private const val ARGUMENT_KEY = "Item"
+
         fun newInstance() = SendMessageFragment()
 
         fun newInstance(message: Message): SendMessageFragment {
-            val instance = SendMessageFragment()
-            return instance.apply {
-                messageSubject = "RE: ${message.subject}"
-                messageContent = when (message.sender.isNotEmpty()) {
-                    true -> "\n\nOd: ${message.sender}\n"
-                    false -> "\n\nDo: ${message.recipient}\n"
-                }
-                messageContent += "Data: ${message.date.toFormattedString("yy-MM-dd HH:mm:ss")}\n\n${message.content}"
+            return SendMessageFragment().apply {
+                arguments = Bundle().apply { putSerializable(ARGUMENT_KEY, message) }
             }
         }
     }
@@ -89,7 +81,7 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.onAttachView(this)
+        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getSerializable(ARGUMENT_KEY) as Message?)
     }
 
     override fun initView() {

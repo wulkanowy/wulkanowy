@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.send
 
+import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.repositories.message.MessageRepository
@@ -11,6 +12,7 @@ import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -27,14 +29,20 @@ class SendMessagePresenter @Inject constructor(
 
     private lateinit var reportingUnit: ReportingUnit
 
-    override fun onAttachView(view: SendMessageView) {
+    fun onAttachView(view: SendMessageView, message: Message?) {
         super.onAttachView(view)
         Timber.i("Send message view is attached")
         view.run {
             initView()
             showBottomNav(false)
-            if (messageSubject !== null) setSubject(messageSubject.orEmpty())
-            if (messageContent !== null) setContent(messageContent.orEmpty())
+            if (message !== null) {
+                setSubject("RE: ${message.subject}")
+                val messageContent = when (message.sender.isNotEmpty()) {
+                    true -> "\n\nOd: ${message.sender}\n"
+                    false -> "\n\nDo: ${message.recipient}\n"
+                } + "Data: ${message.date.toFormattedString("yy-MM-dd HH:mm:ss")}\n\n${message.content}"
+                setContent(messageContent)
+            }
         }
         loadRecipients()
     }
