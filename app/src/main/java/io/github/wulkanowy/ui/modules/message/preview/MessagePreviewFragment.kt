@@ -65,6 +65,11 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         messageProgress.visibility = if (show) View.VISIBLE else View.GONE
     }
 
+    override fun showReplyButton(show: Boolean) {
+        if (show) messageReplyButton.show()
+        else messageReplyButton.hide()
+    }
+
     override fun showMessageError() {
         messageError.visibility = View.VISIBLE
     }

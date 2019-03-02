@@ -18,5 +18,7 @@ interface MessagePreviewView : BaseSessionView {
 
     fun showProgress(show: Boolean)
 
+    fun showReplyButton(show: Boolean)
+
     fun showMessageError()
 }
