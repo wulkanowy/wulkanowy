@@ -6,6 +6,7 @@
     <string name="pref_key_grade_modifier_plus">grade_modifier_plus</string>
     <string name="pref_key_grade_modifier_minus">grade_modifier_minus</string>
     <string name="pref_key_expand_grade">expand_grade</string>
+    <string name="pref_key_fill_message_content">fill_message_content</string>
     <string name="pref_key_services_enable">services_enable</string>
     <string name="pref_key_services_interval">services_interval</string>
     <string name="pref_key_services_wifi_only">services_disable_wifi_only</string>

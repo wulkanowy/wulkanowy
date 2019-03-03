@@ -30,6 +30,9 @@ class PreferencesRepository @Inject constructor(
     val gradeMinusModifier: Double
         get() = sharedPref.getString(context.getString(R.string.pref_key_grade_modifier_minus), "0.0")?.toDouble() ?: 0.0
 
+    val fillMessageContent: Boolean
+        get() = sharedPref.getBoolean(context.getString(R.string.pref_key_fill_message_content), false)
+
     val serviceEnablesKey: String = context.getString(R.string.pref_key_services_enable)
     val isServiceEnabled: Boolean
         get() = sharedPref.getBoolean(serviceEnablesKey, true)

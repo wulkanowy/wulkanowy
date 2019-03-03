@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.repositories.message.MessageRepository
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.recipient.RecipientRepository
 import io.github.wulkanowy.data.repositories.reportingunit.ReportingUnitRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
@@ -24,6 +25,7 @@ class SendMessagePresenter @Inject constructor(
     private val messageRepository: MessageRepository,
     private val reportingUnitRepository: ReportingUnitRepository,
     private val recipientRepository: RecipientRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val analytics: FirebaseAnalyticsHelper
 ) : BaseSessionPresenter<SendMessageView>(errorHandler) {
 
@@ -38,10 +40,12 @@ class SendMessagePresenter @Inject constructor(
             showBottomNav(false)
             message?.let {
                 setSubject("RE: ${message.subject}")
-                setContent(when (message.sender.isNotEmpty()) {
-                    true -> "\n\nOd: ${message.sender}\n"
-                    false -> "\n\nDo: ${message.recipient}\n"
-                } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}")
+                if (preferencesRepository.fillMessageContent) {
+                    setContent(when (message.sender.isNotEmpty()) {
+                        true -> "\n\nOd: ${message.sender}\n"
+                        false -> "\n\nDo: ${message.recipient}\n"
+                    } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}")
+                }
             }
         }
     }
