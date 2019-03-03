@@ -1,4 +1,4 @@
-package io.github.wulkanowy.data.repositories.local
+package io.github.wulkanowy.data.repositories.attendance
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -6,7 +6,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
-import io.github.wulkanowy.data.repositories.attendance.AttendanceLocal
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -41,7 +40,7 @@ class AttendanceLocalTest {
         ))
 
         val attendance = attendanceLocal
-                .getAttendance(Semester(1, 2, "", 1, 3, true),
+            .getAttendance(Semester(1, 2, "", 1, 3, true, 1, 1),
                         LocalDate.of(2018, 9, 10),
                         LocalDate.of(2018, 9, 14)
                 )

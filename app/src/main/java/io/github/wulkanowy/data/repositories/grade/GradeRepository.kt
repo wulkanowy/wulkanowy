@@ -27,10 +27,11 @@ class GradeRepository @Inject constructor(
                 }.flatMap { newGrades ->
                     local.getGrades(semester).toSingle(emptyList())
                         .doOnSuccess { oldGrades ->
+                            val notifyBreakDate = oldGrades.maxBy { it.date }?.date ?: student.registrationDate.toLocalDate()
                             local.deleteGrades(oldGrades - newGrades)
                             local.saveGrades((newGrades - oldGrades)
                                 .onEach {
-                                    if (it.date.atStartOfDay() >= student.registrationDate) it.apply {
+                                    if (it.date.atStartOfDay() >= notifyBreakDate) it.apply {
                                         isRead = false
                                         if (notify) isNotified = false
                                     }

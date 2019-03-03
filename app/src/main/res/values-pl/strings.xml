@@ -29,7 +29,7 @@
     <string name="login_progress">Logowanie&#8230;</string>
     <string name="login_sync">Synchronizacja</string>
     <string name="login_invalid_password">To hasło jest za krótkie</string>
-    <string name="login_incorrect_password">To hasło jest niepoprawne</string>
+    <string name="login_incorrect_password">Dane logowania są niepoprawne</string>
     <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprwadź symbol</string>
     <string name="login_field_required">To pole jest wymagane</string>
     <string name="login_duplicate_student">Ten student jest już zalogowany</string>
@@ -153,6 +153,16 @@
         <item quantity="many">Dostałeś %1$d wiadomości</item>
     </plurals>
 
+    <!--Send message-->
+    <string name="send_message_title">Wyślij</string>
+    <string name="send_message_from">Od:</string>
+    <string name="send_message_to">Do:</string>
+    <string name="send_message_subject">Temat</string>
+    <string name="send_message_content">Treść</string>
+    <string name="send_message_successful">Wiadomość wysłana pomyślnie</string>
+    <string name="send_message_required_recipients">Musisz wybrać co najmniej 1 adresata</string>
+    <string name="send_message_content_min_length">Treść wiadomości musi zawierać co najmniej 3 znaki</string>
+
 
     <!--Note-->
     <string name="note_no_items">Brak informacji o uwagach</string>
@@ -224,7 +234,7 @@
 
 
     <!--Preferences-->
-    <string name="pref_view_header">Widok</string>
+    <string name="pref_view_header">Wygląd</string>
     <string name="pref_view_list">Domyślny widok</string>
     <string name="pref_view_summary">Pokazuj podsumowanie w ocenach</string>
     <string name="pref_view_present">Pokazuj obecność we frekwencji</string>
@@ -232,6 +242,7 @@
     <string name="pref_view_grade_modifier_plus">Wartość plusa</string>
     <string name="pref_view_grade_modifier_minus">Wartość minusa</string>
     <string name="pref_view_expand_grade">Rozwiń oceny</string>
+    <string name="pref_grade_color_scheme">Schemat kolorów ocen</string>
 
     <string name="pref_notify_header">Powiadomienia</string>
     <string name="pref_notify_switch">Pokazuj powiadomienia</string>

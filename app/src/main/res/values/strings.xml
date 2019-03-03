@@ -29,7 +29,7 @@
     <string name="login_progress">Logging in&#8230;</string>
     <string name="login_sync">Synchronization&#8230;</string>
     <string name="login_invalid_password">This password is too short</string>
-    <string name="login_incorrect_password">This password is incorrect</string>
+    <string name="login_incorrect_password">Login details are incorrect</string>
     <string name="login_incorrect_symbol">Student not found. Check the symbol</string>
     <string name="login_field_required">This field is required</string>
     <string name="login_duplicate_student">This student has already been logged in</string>
@@ -144,6 +144,16 @@
         <item quantity="other">You received %1$d messages</item>
     </plurals>
 
+    <!--Send message-->
+    <string name="send_message_title">Send</string>
+    <string name="send_message_from">From:</string>
+    <string name="send_message_to">To:</string>
+    <string name="send_message_subject">Subject</string>
+    <string name="send_message_content">Content</string>
+    <string name="send_message_successful">Message sent successfully</string>
+    <string name="send_message_required_recipients">You need to choose at least 1 recipient</string>
+    <string name="send_message_content_min_length">The message content must be at least 3 characters</string>
+
 
     <!--Note-->
     <string name="note_no_items">No info about notes</string>
@@ -209,7 +219,7 @@
 
 
     <!--Preferences-->
-    <string name="pref_view_header">View</string>
+    <string name="pref_view_header">Appearance</string>
     <string name="pref_view_list">Default view</string>
     <string name="pref_view_summary">Show the summary in the grades</string>
     <string name="pref_view_present">Show presence in attendance</string>
@@ -217,6 +227,7 @@
     <string name="pref_view_grade_modifier_plus">Value of the plus</string>
     <string name="pref_view_grade_modifier_minus">Value of the minus</string>
     <string name="pref_view_expand_grade">Expand grades</string>
+    <string name="pref_grade_color_scheme">Grades color scheme</string>
 
     <string name="pref_notify_header">Notifications</string>
     <string name="pref_notify_switch">Show notifications</string>

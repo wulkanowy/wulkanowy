@@ -1,6 +1,8 @@
 package io.github.wulkanowy.data.db
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.threeten.bp.DateTimeUtils
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
@@ -36,4 +38,14 @@ class Converters {
 
     @TypeConverter
     fun intToMonth(value: Int?) = value?.let { Month.of(it) }
+
+    @TypeConverter
+    fun intListToGson(list: List<Int>): String {
+        return Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun gsonToIntList(value: String): List<Int> {
+        return Gson().fromJson(value, object : TypeToken<List<Int>>() {}.type)
+    }
 }

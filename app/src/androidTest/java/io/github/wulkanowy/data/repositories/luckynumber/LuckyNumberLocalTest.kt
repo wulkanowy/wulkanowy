@@ -1,4 +1,4 @@
-package io.github.wulkanowy.data.repositories.local
+package io.github.wulkanowy.data.repositories.luckynumber
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -6,7 +6,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Semester
-import io.github.wulkanowy.data.repositories.luckynumber.LuckyNumberLocal
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -37,7 +36,7 @@ class LuckyNumberLocalTest {
     fun saveAndReadTest() {
         luckyNumberLocal.saveLuckyNumber(LuckyNumber(1, LocalDate.of(2019, 1, 20), 14))
 
-        val luckyNumber = luckyNumberLocal.getLuckyNumber(Semester(1, 1, "", 1, 3, true),
+        val luckyNumber = luckyNumberLocal.getLuckyNumber(Semester(1, 1, "", 1, 3, true, 1, 1),
             LocalDate.of(2019, 1, 20)
         ).blockingGet()
 
