@@ -24,6 +24,8 @@ interface SendMessageView : BaseSessionView {
 
     fun setRecipients(recipients: List<Recipient>)
 
+    fun setSelectedRecipients(recipients: List<Recipient>)
+
     fun refreshRecipientsAdapter()
 
     fun showProgress(show: Boolean)

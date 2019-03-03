@@ -14,6 +14,7 @@ import io.github.wulkanowy.ui.base.session.SessionErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
+import io.reactivex.Single
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,6 +40,7 @@ class SendMessagePresenter @Inject constructor(
             initView()
             showBottomNav(false)
             message?.let {
+                loadMessageRecipients(Single.just(message))
                 setSubject("RE: ${message.subject}")
                 if (preferencesRepository.fillMessageContent) {
                     setContent(when (message.sender.isNotEmpty()) {
@@ -89,6 +91,25 @@ class SendMessagePresenter @Inject constructor(
                 view?.showEmpty(true)
             })
         )
+    }
+
+    private fun loadMessageRecipients(message: Single<Message>) {
+        disposable.add(message
+            .flatMap {
+                studentRepository.getCurrentStudent()
+                    .flatMap { student ->
+                        recipientRepository.getMessageRecipients(student, it)
+                    }
+            }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
+                view?.apply {
+                    setSelectedRecipients(it)
+                }
+            }, {
+                errorHandler.dispatch(it)
+            }))
     }
 
     private fun sendMessage(subject: String, content: String, recipients: List<Recipient>) {

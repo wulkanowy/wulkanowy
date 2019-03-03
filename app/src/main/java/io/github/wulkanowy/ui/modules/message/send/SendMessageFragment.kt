@@ -120,6 +120,10 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
         this.recipients = recipients
     }
 
+    override fun setSelectedRecipients(recipients: List<Recipient>) {
+        TODO("not implemented")
+    }
+
     override fun refreshRecipientsAdapter() {
         recipientsAdapter.run {
             clear()
