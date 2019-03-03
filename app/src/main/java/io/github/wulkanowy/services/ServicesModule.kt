@@ -14,6 +14,7 @@ import io.github.wulkanowy.services.sync.works.ExamWork
 import io.github.wulkanowy.services.sync.works.GradeSummaryWork
 import io.github.wulkanowy.services.sync.works.GradeWork
 import io.github.wulkanowy.services.sync.works.NoteWork
+import io.github.wulkanowy.services.sync.works.TimetableWork
 import io.github.wulkanowy.services.sync.works.Work
 import javax.inject.Singleton
 
@@ -58,4 +59,8 @@ abstract class ServicesModule {
     @Binds
     @IntoSet
     abstract fun provideAttendanceSummaryWork(work: AttendanceSummaryWork): Work
+
+    @Binds
+    @IntoSet
+    abstract fun provideTimetableWork(work: TimetableWork): Work
 }

@@ -21,7 +21,7 @@ class NewEntriesChannel @Inject constructor(
 
     fun create() {
         notificationManager.createNotificationChannel(
-            NotificationChannel(CHANNEL_ID, context.getString(R.string.channel_sync), IMPORTANCE_HIGH).apply {
+            NotificationChannel(CHANNEL_ID, context.getString(R.string.channel_new_entries), IMPORTANCE_HIGH).apply {
                 enableLights(true)
                 enableVibration(true)
                 lockscreenVisibility = VISIBILITY_PUBLIC
