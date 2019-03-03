@@ -232,10 +232,7 @@
     <string name="pref_view_summary">Show the summary in the grades</string>
     <string name="pref_view_present">Show presence in attendance</string>
     <string name="pref_view_theme_dark">Dark theme (Beta)</string>
-    <string name="pref_view_grade_modifier_plus">Value of the plus</string>
-    <string name="pref_view_grade_modifier_minus">Value of the minus</string>
     <string name="pref_view_expand_grade">Expand grades</string>
-    <string name="pref_view_fill_message_content">Reply with message history</string>
 
     <string name="pref_notify_header">Notifications</string>
     <string name="pref_notify_switch">Show notifications</string>
@@ -246,6 +243,11 @@
     <string name="pref_services_suspended">Suspended on holiday</string>
     <string name="pref_services_interval">Updates interval</string>
     <string name="pref_services_wifi">Wi-Fi only</string>
+
+    <string name="pref_other_header">Other</string>
+    <string name="pref_other_grade_modifier_plus">Value of the plus</string>
+    <string name="pref_other_grade_modifier_minus">Value of the minus</string>
+    <string name="pref_other_fill_message_content">Reply with message history</string>
 
 
     <!--Colors-->

@@ -24,15 +24,6 @@ class PreferencesRepository @Inject constructor(
     val currentTheme: Int
         get() = sharedPref.getString(currentThemeKey, "1")?.toInt() ?: 1
 
-    val gradePlusModifier: Double
-        get() = sharedPref.getString(context.getString(R.string.pref_key_grade_modifier_plus), "0.0")?.toDouble() ?: 0.0
-
-    val gradeMinusModifier: Double
-        get() = sharedPref.getString(context.getString(R.string.pref_key_grade_modifier_minus), "0.0")?.toDouble() ?: 0.0
-
-    val fillMessageContent: Boolean
-        get() = sharedPref.getBoolean(context.getString(R.string.pref_key_fill_message_content), false)
-
     val serviceEnablesKey: String = context.getString(R.string.pref_key_services_enable)
     val isServiceEnabled: Boolean
         get() = sharedPref.getBoolean(serviceEnablesKey, true)
@@ -51,4 +42,14 @@ class PreferencesRepository @Inject constructor(
     val isShowChuckerNotificationKey: String = context.getString(R.string.pref_key_debug_chucker_notification)
     val isShowChuckerNotification: Boolean
         get() = sharedPref.getBoolean(isShowChuckerNotificationKey, false)
+
+    val gradePlusModifier: Double
+        get() = sharedPref.getString(context.getString(R.string.pref_key_grade_modifier_plus), "0.0")?.toDouble() ?: 0.0
+
+    val gradeMinusModifier: Double
+        get() = sharedPref.getString(context.getString(R.string.pref_key_grade_modifier_minus), "0.0")?.toDouble()
+            ?: 0.0
+
+    val fillMessageContent: Boolean
+        get() = sharedPref.getBoolean(context.getString(R.string.pref_key_fill_message_content), false)
 }
