@@ -69,7 +69,7 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
             setHoleColor(context.getThemeAttrColor(android.R.attr.windowBackground))
             setCenterTextColor(context.getThemeAttrColor(android.R.attr.textColorPrimary))
             animateXY(1000, 1000)
-            minAngleForSlices = 17f
+            minAngleForSlices = 25f
             legend.apply {
                 textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
                 setCustom(gradeLabels.mapIndexed { i, it ->
@@ -108,6 +108,7 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
             data = PieData(PieDataSet(items.map {
                 PieEntry(it.amount.toFloat(), it.grade.toString())
             }, "Legenda").apply {
+                valueTextSize = 12f
                 sliceSpace = 1f
                 valueTextColor = WHITE
                 setColors(items.map {
