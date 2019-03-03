@@ -9,6 +9,7 @@ import com.squareup.inject.assisted.AssistedInject
 import io.github.wulkanowy.services.sync.works.Work
 import io.reactivex.Completable
 import io.reactivex.Single
+import timber.log.Timber
 
 class SyncWorker @AssistedInject constructor(
     @Assisted appContext: Context,
@@ -19,7 +20,10 @@ class SyncWorker @AssistedInject constructor(
     override fun createWork(): Single<Result> {
         return Completable.mergeDelayError(works.map { it.create() })
             .toSingleDefault(Result.success())
-            .onErrorReturn { Result.failure() }
+            .onErrorReturn {
+                Timber.e(it, "There was an error during synchronization")
+                Result.retry()
+            }
     }
 
     @AssistedInject.Factory
