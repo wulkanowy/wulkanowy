@@ -41,12 +41,12 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
         get() = gradeStatisticsChart.isEmpty
 
     private val gradeColors = listOf(
-        6 to R.color.grade_six,
-        5 to R.color.grade_five,
-        4 to R.color.grade_four,
-        3 to R.color.grade_three,
-        2 to R.color.grade_two,
-        1 to R.color.grade_one
+        6 to R.color.grade_material_six,
+        5 to R.color.grade_material_five,
+        4 to R.color.grade_material_four,
+        3 to R.color.grade_material_three,
+        2 to R.color.grade_material_two,
+        1 to R.color.grade_material_one
     )
 
     private val gradeLabels = listOf(
