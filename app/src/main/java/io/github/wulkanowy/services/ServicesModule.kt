@@ -1,5 +1,6 @@
 package io.github.wulkanowy.services
 
+import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import com.squareup.inject.assisted.dagger2.AssistedModule
@@ -27,6 +28,11 @@ abstract class ServicesModule {
         @Singleton
         @Provides
         fun provideNotificationManagerCompat(context: Context) = NotificationManagerCompat.from(context)
+
+        @JvmStatic
+        @Singleton
+        @Provides
+        fun provideNotificationManager(context: Context) = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
     @Binds

@@ -256,7 +256,7 @@
 
 
     <!--Notification Channels-->
-    <string name="channel_sync">Nowe wpisy</string>
+    <string name="channel_new_entries">Nowe wpisy w dzienniku</string>
 
 
     <!--Colors-->

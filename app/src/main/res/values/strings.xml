@@ -241,7 +241,7 @@
 
 
     <!--Notification Channels-->
-    <string name="channel_sync">New entries</string>
+    <string name="channel_new_entries">New entries in register</string>
 
 
     <!--Colors-->

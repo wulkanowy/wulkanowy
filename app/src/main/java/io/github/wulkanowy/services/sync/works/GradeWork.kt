@@ -12,7 +12,7 @@ import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
-import io.github.wulkanowy.services.sync.channels.SyncChannel
+import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
 import io.github.wulkanowy.utils.getCompatColor
@@ -42,7 +42,7 @@ class GradeWork @Inject constructor(
     }
 
     private fun notify(grades: List<Grade>) {
-        notificationManager.notify(1, NotificationCompat.Builder(context, SyncChannel.CHANNEL_ID)
+        notificationManager.notify(1, NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
             .setContentTitle(context.resources.getQuantityString(R.plurals.grade_new_items, grades.size, grades.size))
             .setContentText(context.resources.getQuantityString(R.plurals.grade_notify_new_items, grades.size, grades.size))
             .setSmallIcon(R.drawable.ic_stat_notify_grade)
