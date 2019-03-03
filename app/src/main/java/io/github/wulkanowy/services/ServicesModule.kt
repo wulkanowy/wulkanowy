@@ -10,6 +10,7 @@ import dagger.Provides
 import dagger.multibindings.IntoSet
 import io.github.wulkanowy.services.sync.works.AttendanceSummaryWork
 import io.github.wulkanowy.services.sync.works.AttendanceWork
+import io.github.wulkanowy.services.sync.works.CompletedLessonWork
 import io.github.wulkanowy.services.sync.works.ExamWork
 import io.github.wulkanowy.services.sync.works.GradeSummaryWork
 import io.github.wulkanowy.services.sync.works.GradeWork
@@ -68,4 +69,8 @@ abstract class ServicesModule {
     @Binds
     @IntoSet
     abstract fun provideLuckyNumberWork(work: LuckyNumberWork): Work
+
+    @Binds
+    @IntoSet
+    abstract fun provideCompletedLessonWork(work: CompletedLessonWork): Work
 }
