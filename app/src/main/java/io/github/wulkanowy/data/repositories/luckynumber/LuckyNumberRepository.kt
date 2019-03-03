@@ -45,6 +45,6 @@ class LuckyNumberRepository @Inject constructor(
     }
 
     fun updateLuckyNumber(luckyNumber: LuckyNumber): Completable {
-        return local.updateLuckyNumber(luckyNumber)
+        return Completable.fromCallable { local.updateLuckyNumber(luckyNumber) }
     }
 }

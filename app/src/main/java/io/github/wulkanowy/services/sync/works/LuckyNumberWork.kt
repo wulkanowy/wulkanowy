@@ -1,0 +1,57 @@
+package io.github.wulkanowy.services.sync.works
+
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.content.Context
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.DEFAULT_ALL
+import androidx.core.app.NotificationCompat.PRIORITY_HIGH
+import androidx.core.app.NotificationManagerCompat
+import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.LuckyNumber
+import io.github.wulkanowy.data.repositories.luckynumber.LuckyNumberRepository
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
+import io.github.wulkanowy.data.repositories.semester.SemesterRepository
+import io.github.wulkanowy.data.repositories.student.StudentRepository
+import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
+import io.github.wulkanowy.ui.modules.main.MainActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
+import io.github.wulkanowy.utils.getCompatColor
+import io.reactivex.Completable
+import javax.inject.Inject
+
+class LuckyNumberWork @Inject constructor(
+    private val context: Context,
+    private val notificationManager: NotificationManagerCompat,
+    private val studentRepository: StudentRepository,
+    private val semesterRepository: SemesterRepository,
+    private val luckyNumberRepository: LuckyNumberRepository,
+    private val preferencesRepository: PreferencesRepository
+) : Work {
+
+    override fun create(): Completable {
+        return studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
+            .flatMapMaybe { luckyNumberRepository.getLuckyNumber(it, true, preferencesRepository.isNotificationsEnable) }
+            .flatMapCompletable {
+                notify(it)
+                luckyNumberRepository.updateLuckyNumber(it.apply { isNotified = true })
+            }
+    }
+
+    private fun notify(luckyNumber: LuckyNumber) {
+        notificationManager.notify(3, NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
+            .setContentTitle(context.getString(R.string.lucky_number_notify_new_item_title))
+            .setContentText(context.getString(R.string.lucky_number_notify_new_item, luckyNumber.luckyNumber))
+            .setSmallIcon(R.drawable.ic_stat_notify_lucky_number)
+            .setAutoCancel(true)
+            .setDefaults(DEFAULT_ALL)
+            .setPriority(PRIORITY_HIGH)
+            .setColor(context.getCompatColor(R.color.colorPrimary))
+            .setContentIntent(
+                PendingIntent.getActivity(context, 0,
+                    MainActivity.getStartIntent(context).putExtra(EXTRA_START_MENU_INDEX, 4), FLAG_UPDATE_CURRENT)
+            )
+            .build())
+    }
+}
