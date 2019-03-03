@@ -10,7 +10,7 @@ import javax.inject.Inject
 class SyncWorkerFactory @Inject constructor(private val syncWorkerFactory: SyncWorker.Factory) : WorkerFactory() {
 
     override fun createWorker(appContext: Context, workerClassName: String, workerParameters: WorkerParameters): ListenableWorker? {
-        return if (workerClassName == SyncWorker::class.qualifiedName) {
+        return if (workerClassName == SyncWorker::class.java.name) {
             syncWorkerFactory.create(appContext, workerParameters)
         } else {
             Timber.e(IllegalArgumentException("Unknown worker class name: $workerClassName"))

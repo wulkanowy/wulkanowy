@@ -31,7 +31,7 @@ class GradeRepository @Inject constructor(
                             local.deleteGrades(oldGrades - newGrades)
                             local.saveGrades((newGrades - oldGrades)
                                 .onEach {
-                                    if (it.date.atStartOfDay() >= notifyBreakDate) it.apply {
+                                    if (it.date >= notifyBreakDate) it.apply {
                                         isRead = false
                                         if (notify) isNotified = false
                                     }

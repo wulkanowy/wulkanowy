@@ -7,6 +7,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
+import io.github.wulkanowy.services.sync.works.AttendanceWork
 import io.github.wulkanowy.services.sync.works.GradeWork
 import io.github.wulkanowy.services.sync.works.NoteWork
 import io.github.wulkanowy.services.sync.works.Work
@@ -32,4 +33,8 @@ abstract class ServicesModule {
     @Binds
     @IntoSet
     abstract fun provideNoteWork(work: NoteWork): Work
+
+    @Binds
+    @IntoSet
+    abstract fun provideAttendanceWork(work: AttendanceWork): Work
 }
