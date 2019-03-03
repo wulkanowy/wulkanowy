@@ -11,18 +11,18 @@ import javax.inject.Singleton
 class RecipientRemote @Inject constructor(private val api: Api) {
 
     fun getRecipients(role: Int, unit: ReportingUnit): Single<List<Recipient>> {
-        return api.getRecipients(role, unit.realId)
+        return api.getRecipients(unit.realId, role)
             .map { recipients ->
                 recipients.map {
                     Recipient(
                         studentId = api.studentId,
-                        name = it.name,
-                        realName = it.realName,
                         realId = it.id,
+                        realName = it.name,
+                        name = it.shortName,
                         hash = it.hash,
                         loginId = it.loginId,
                         role = it.role,
-                        unitId = it.reportingUnitId
+                        unitId = it.reportingUnitId ?: 0
                     )
                 }
             }
