@@ -30,7 +30,7 @@ class GradeRepository @Inject constructor(
                             local.deleteGrades(oldGrades - newGrades)
                             local.saveGrades((newGrades - oldGrades)
                                 .onEach {
-                                    if (it.date.atStartOfDay() >= student.registrationDate) it.apply {
+                                    if (it.date.atStartOfDay() <= student.registrationDate) it.apply {
                                         isRead = false
                                         if (notify) isNotified = false
                                     }
@@ -39,15 +39,19 @@ class GradeRepository @Inject constructor(
                 }.flatMap { local.getGrades(semester).toSingle(emptyList()) })
     }
 
-    fun getNewGrades(semester: Semester): Single<List<Grade>> {
-        return local.getNewGrades(semester).toSingle(emptyList())
+    fun getUnreadGrades(semester: Semester): Single<List<Grade>> {
+        return local.getGrades(semester).map { it.filter { grade -> !grade.isRead } }.toSingle(emptyList())
+    }
+
+    fun getUnnotifiedGrades(semester: Semester): Single<List<Grade>> {
+        return local.getGrades(semester).map { it.filter { grade -> !grade.isNotified } }.toSingle(emptyList())
     }
 
     fun updateGrade(grade: Grade): Completable {
-        return local.updateGrade(grade)
+        return Completable.fromCallable { local.updateGrades(listOf(grade)) }
     }
 
     fun updateGrades(grades: List<Grade>): Completable {
-        return local.updateGrades(grades)
+        return Completable.fromCallable { local.updateGrades(grades) }
     }
 }
