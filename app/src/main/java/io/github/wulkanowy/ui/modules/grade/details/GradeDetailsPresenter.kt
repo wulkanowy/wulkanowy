@@ -12,7 +12,7 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
-import io.github.wulkanowy.utils.valueColor
+import io.github.wulkanowy.utils.getBackgroundColor
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -42,7 +42,7 @@ class GradeDetailsPresenter @Inject constructor(
         if (item is GradeDetailsItem) {
             Timber.i("Select grade item ${item.grade.id}")
             view?.apply {
-                showGradeDialog(item.grade)
+                showGradeDialog(item.grade, preferencesRepository.gradeColorTheme)
                 if (!item.grade.isRead) {
                     item.grade.isRead = true
                     updateItem(item)
@@ -151,7 +151,7 @@ class GradeDetailsPresenter @Inject constructor(
                         GradeDetailsItem(
                             grade = item,
                             weightString = view?.weightString.orEmpty(),
-                            valueColor = item.valueColor
+                            valueBgColor = item.getBackgroundColor(preferencesRepository.gradeColorTheme)
                         )
                     }
                 }

@@ -24,6 +24,9 @@ class PreferencesRepository @Inject constructor(
     val currentTheme: Int
         get() = sharedPref.getString(currentThemeKey, "1")?.toInt() ?: 1
 
+    val gradeColorTheme: String
+        get() = sharedPref.getString(context.getString(R.string.pref_key_grade_color_scheme), "vulcan") ?: "vulcan"
+
     val serviceEnablesKey: String = context.getString(R.string.pref_key_services_enable)
     val isServiceEnabled: Boolean
         get() = sharedPref.getBoolean(serviceEnablesKey, true)
