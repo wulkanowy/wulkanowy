@@ -18,6 +18,7 @@ import io.github.wulkanowy.services.sync.works.HomeworkWork
 import io.github.wulkanowy.services.sync.works.LuckyNumberWork
 import io.github.wulkanowy.services.sync.works.MessageWork
 import io.github.wulkanowy.services.sync.works.NoteWork
+import io.github.wulkanowy.services.sync.works.RecipientWork
 import io.github.wulkanowy.services.sync.works.TimetableWork
 import io.github.wulkanowy.services.sync.works.Work
 import javax.inject.Singleton
@@ -83,4 +84,8 @@ abstract class ServicesModule {
     @Binds
     @IntoSet
     abstract fun provideMessageWork(work: MessageWork): Work
+
+    @Binds
+    @IntoSet
+    abstract fun provideRecipientWork(work: RecipientWork): Work
 }
