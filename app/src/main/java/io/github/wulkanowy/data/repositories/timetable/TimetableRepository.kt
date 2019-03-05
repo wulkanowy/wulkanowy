@@ -33,7 +33,16 @@ class TimetableRepository @Inject constructor(
                                 .toSingle(emptyList())
                                 .doOnSuccess { oldTimetable ->
                                     local.deleteTimetable(oldTimetable - newTimetable)
-                                    local.saveTimetable(newTimetable - oldTimetable)
+                                    local.saveTimetable((newTimetable - oldTimetable).map { item ->
+                                        item.apply {
+                                            if (room.isEmpty()) {
+                                                oldTimetable.singleOrNull { it.room.isNotEmpty() && it.start == this.start }
+                                                    ?.let {
+                                                        return@map copy(room = it.room)
+                                                    }
+                                            }
+                                        }
+                                    })
                                 }
                         }.flatMap {
                             local.getTimetable(semester, dates.first, dates.second)
