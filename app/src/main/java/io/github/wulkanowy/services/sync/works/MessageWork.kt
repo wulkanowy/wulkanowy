@@ -20,6 +20,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_ME
 import io.github.wulkanowy.utils.getCompatColor
 import io.reactivex.Completable
 import javax.inject.Inject
+import kotlin.random.Random
 
 class MessageWork @Inject constructor(
     private val context: Context,
@@ -38,7 +39,7 @@ class MessageWork @Inject constructor(
     }
 
     private fun notify(messages: List<Message>) {
-        notificationManager.notify(4, NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
+        notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
             .setContentTitle(context.resources.getQuantityString(R.plurals.message_new_items, messages.size, messages.size))
             .setContentText(context.resources.getQuantityString(R.plurals.message_notify_new_items, messages.size, messages.size))
             .setSmallIcon(R.drawable.ic_stat_notify_message)

@@ -15,6 +15,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getCompatColor
 import io.reactivex.Completable
 import javax.inject.Inject
+import kotlin.random.Random
 
 class NoteWork @Inject constructor(
     private val context: Context,
@@ -33,7 +34,7 @@ class NoteWork @Inject constructor(
     }
 
     private fun notify(notes: List<Note>) {
-        notificationManager.notify(2, NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
+        notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
             .setContentTitle(context.resources.getQuantityString(R.plurals.note_new_items, notes.size, notes.size))
             .setContentText(context.resources.getQuantityString(R.plurals.note_notify_new_items, notes.size, notes.size))
             .setSmallIcon(R.drawable.ic_stat_notify_note)

@@ -19,6 +19,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_ME
 import io.github.wulkanowy.utils.getCompatColor
 import io.reactivex.Completable
 import javax.inject.Inject
+import kotlin.random.Random
 
 class LuckyNumberWork @Inject constructor(
     private val context: Context,
@@ -36,7 +37,7 @@ class LuckyNumberWork @Inject constructor(
     }
 
     private fun notify(luckyNumber: LuckyNumber) {
-        notificationManager.notify(3, NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
+        notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
             .setContentTitle(context.getString(R.string.lucky_number_notify_new_item_title))
             .setContentText(context.getString(R.string.lucky_number_notify_new_item, luckyNumber.luckyNumber))
             .setSmallIcon(R.drawable.ic_stat_notify_lucky_number)

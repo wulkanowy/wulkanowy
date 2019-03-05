@@ -19,6 +19,7 @@ import io.github.wulkanowy.utils.getCompatColor
 import io.reactivex.Completable
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
+import kotlin.random.Random
 
 class GradeWork @Inject constructor(
     private val context: Context,
@@ -38,7 +39,7 @@ class GradeWork @Inject constructor(
     }
 
     private fun notify(grades: List<Grade>) {
-        notificationManager.notify(1, NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
+        notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
             //.setContentTitle(context.resources.getQuantityString(R.plurals.grade_new_items, grades.size, grades.size))
             .setContentTitle(LocalDateTime.now().toString())
             .setContentText(context.resources.getQuantityString(R.plurals.grade_notify_new_items, grades.size, grades.size))
