@@ -33,7 +33,7 @@ class MainPresenter @Inject constructor(
 
         syncManager.run {
             initialize()
-            startSyncWorker()
+            if (prefRepository.isServiceEnabled) startSyncWorker()
         }
 
         analytics.logEvent(APP_OPEN, DESTINATION to when (initMenuIndex) {
