@@ -31,9 +31,9 @@ class MainPresenter @Inject constructor(
             initView()
         }
 
-        syncManager.apply {
+        syncManager.run {
             initialize()
-            start()
+            startSyncWorker()
         }
 
         analytics.logEvent(APP_OPEN, DESTINATION to when (initMenuIndex) {

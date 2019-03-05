@@ -4,6 +4,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.O
 import androidx.work.BackoffPolicy.EXPONENTIAL
 import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy.KEEP
 import androidx.work.ExistingPeriodicWorkPolicy.REPLACE
 import androidx.work.NetworkType.METERED
 import androidx.work.NetworkType.UNMETERED
@@ -26,13 +27,17 @@ class SyncManager @Inject constructor(
         Timber.i("SyncManager was initialized")
     }
 
-    fun start() {
-        workManager.enqueueUniquePeriodicWork(SyncWorker::class.java.simpleName, REPLACE,
+    fun startSyncWorker(restart: Boolean = false) {
+        workManager.enqueueUniquePeriodicWork(SyncWorker::class.java.simpleName, if (restart) REPLACE else KEEP,
             PeriodicWorkRequest.Builder(SyncWorker::class.java, preferencesRepository.servicesInterval, MINUTES)
                 .setBackoffCriteria(EXPONENTIAL, 30, MINUTES)
                 .setConstraints(Constraints.Builder()
                     .setRequiredNetworkType(if (preferencesRepository.isServicesOnlyWifi) METERED else UNMETERED)
                     .build())
                 .build())
+    }
+
+    fun stopSyncWorker() {
+        workManager.cancelUniqueWork(SyncWorker::class.java.simpleName)
     }
 }
