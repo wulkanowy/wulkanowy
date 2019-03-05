@@ -15,14 +15,16 @@ import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SyncManager @Inject constructor(
     private val workManager: WorkManager,
-    private val newEntriesChannel: NewEntriesChannel,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    newEntriesChannel: NewEntriesChannel
 ) {
 
-    fun initialize() {
+    init {
         if (SDK_INT >= O) newEntriesChannel.create()
         Timber.i("SyncManager was initialized")
     }

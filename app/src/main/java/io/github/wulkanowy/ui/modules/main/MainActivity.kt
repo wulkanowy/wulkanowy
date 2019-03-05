@@ -163,9 +163,6 @@ class MainActivity : BaseActivity(), MainView {
         presenter.onBackPressed { super.onBackPressed() }
     }
 
-    override fun cancelNotifications() {
-    }
-
     override fun openLoginView() {
         startActivity(LoginActivity.getStartIntent(this)
             .apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) })

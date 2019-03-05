@@ -26,15 +26,11 @@ class MainPresenter @Inject constructor(
         super.onAttachView(view)
         Timber.i("Main view is attached with $initMenuIndex menu index")
         view.run {
-            cancelNotifications()
             startMenuIndex = if (initMenuIndex != -1) initMenuIndex else prefRepository.startMenuIndex
             initView()
         }
 
-        syncManager.run {
-            initialize()
-            if (prefRepository.isServiceEnabled) startSyncWorker()
-        }
+        if (prefRepository.isServiceEnabled) syncManager.startSyncWorker()
 
         analytics.logEvent(APP_OPEN, DESTINATION to when (initMenuIndex) {
             1 -> "Grades"
