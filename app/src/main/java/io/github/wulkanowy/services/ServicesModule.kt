@@ -3,6 +3,7 @@ package io.github.wulkanowy.services
 import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
+import androidx.work.WorkManager
 import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.Binds
 import dagger.Module
@@ -29,6 +30,10 @@ abstract class ServicesModule {
 
     @Module
     companion object {
+
+        @JvmStatic
+        @Provides
+        fun provideWorkManager() = WorkManager.getInstance()
 
         @JvmStatic
         @Singleton

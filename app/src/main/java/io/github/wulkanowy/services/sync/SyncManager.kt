@@ -2,15 +2,21 @@ package io.github.wulkanowy.services.sync
 
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.O
-import androidx.work.ExistingWorkPolicy.REPLACE
-import androidx.work.OneTimeWorkRequest
+import androidx.work.BackoffPolicy.EXPONENTIAL
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy.REPLACE
+import androidx.work.NetworkType.METERED
+import androidx.work.NetworkType.UNMETERED
+import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
 import timber.log.Timber
+import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
 
 class SyncManager @Inject constructor(
+    private val workManager: WorkManager,
     private val newEntriesChannel: NewEntriesChannel,
     private val preferencesRepository: PreferencesRepository
 ) {
@@ -21,7 +27,12 @@ class SyncManager @Inject constructor(
     }
 
     fun start() {
-        WorkManager.getInstance()
-            .enqueueUniqueWork(SyncWorker::class.java.simpleName, REPLACE, OneTimeWorkRequest.from(SyncWorker::class.java))
+        workManager.enqueueUniquePeriodicWork(SyncWorker::class.java.simpleName, REPLACE,
+            PeriodicWorkRequest.Builder(SyncWorker::class.java, preferencesRepository.servicesInterval, MINUTES)
+                .setBackoffCriteria(EXPONENTIAL, 30, MINUTES)
+                .setConstraints(Constraints.Builder()
+                    .setRequiredNetworkType(if (preferencesRepository.isServicesOnlyWifi) METERED else UNMETERED)
+                    .build())
+                .build())
     }
 }
