@@ -9,10 +9,11 @@ import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.app.NotificationManagerCompat
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
 import io.github.wulkanowy.data.repositories.message.MessageRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
-import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
@@ -23,17 +24,13 @@ import javax.inject.Inject
 class MessageWork @Inject constructor(
     private val context: Context,
     private val notificationManager: NotificationManagerCompat,
-    private val studentRepository: StudentRepository,
     private val messageRepository: MessageRepository,
     private val preferencesRepository: PreferencesRepository
 ) : Work {
 
-    override fun create(): Completable {
-        return studentRepository.getCurrentStudent()
-            .flatMap { student ->
-                messageRepository.getMessages(student, RECEIVED, true, preferencesRepository.isNotificationsEnable)
-                    .flatMap { messageRepository.getUnnotifiedMessages(student) }
-            }
+    override fun create(student: Student, semester: Semester): Completable {
+        return messageRepository.getMessages(student, RECEIVED, true, preferencesRepository.isNotificationsEnable)
+            .flatMap { messageRepository.getUnnotifiedMessages(student) }
             .flatMapCompletable {
                 if (it.isNotEmpty()) notify(it)
                 messageRepository.updateMessages(it.onEach { message -> message.isNotified = true })

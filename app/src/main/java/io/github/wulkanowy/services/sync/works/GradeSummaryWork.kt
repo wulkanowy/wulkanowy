@@ -1,21 +1,14 @@
 package io.github.wulkanowy.services.sync.works
 
+import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.gradessummary.GradeSummaryRepository
-import io.github.wulkanowy.data.repositories.semester.SemesterRepository
-import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.reactivex.Completable
 import javax.inject.Inject
 
-class GradeSummaryWork @Inject constructor(
-    private val studentRepository: StudentRepository,
-    private val semesterRepository: SemesterRepository,
-    private val gradeSummaryRepository: GradeSummaryRepository
-) : Work {
+class GradeSummaryWork @Inject constructor(private val gradeSummaryRepository: GradeSummaryRepository) : Work {
 
-    override fun create(): Completable {
-        return studentRepository.getCurrentStudent()
-            .flatMap { semesterRepository.getCurrentSemester(it) }
-            .flatMap { gradeSummaryRepository.getGradesSummary(it, true) }
-            .ignoreElement()
+    override fun create(student: Student, semester: Semester): Completable {
+        return gradeSummaryRepository.getGradesSummary(semester, true).ignoreElement()
     }
 }

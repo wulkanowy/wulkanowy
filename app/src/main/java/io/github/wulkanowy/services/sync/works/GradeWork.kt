@@ -8,10 +8,10 @@ import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.app.NotificationManagerCompat
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
-import io.github.wulkanowy.data.repositories.semester.SemesterRepository
-import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
@@ -22,19 +22,13 @@ import javax.inject.Inject
 class GradeWork @Inject constructor(
     private val context: Context,
     private val notificationManager: NotificationManagerCompat,
-    private val studentRepository: StudentRepository,
-    private val semesterRepository: SemesterRepository,
     private val gradeRepository: GradeRepository,
     private val preferencesRepository: PreferencesRepository
 ) : Work {
 
-    override fun create(): Completable {
-        return studentRepository.getCurrentStudent()
-            .flatMap { semesterRepository.getCurrentSemester(it).map { semester -> it to semester } }
-            .flatMap { data ->
-                gradeRepository.getGrades(data.first, data.second, true, preferencesRepository.isNotificationsEnable)
-                    .flatMap { gradeRepository.getUnnotifiedGrades(data.second) }
-            }
+    override fun create(student: Student, semester: Semester): Completable {
+        return gradeRepository.getGrades(student, semester, true, preferencesRepository.isNotificationsEnable)
+            .flatMap { gradeRepository.getUnnotifiedGrades(semester) }
             .flatMapCompletable {
                 if (it.isNotEmpty()) notify(it)
                 gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true })

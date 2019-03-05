@@ -6,10 +6,10 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Note
+import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.note.NoteRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
-import io.github.wulkanowy.data.repositories.semester.SemesterRepository
-import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getCompatColor
@@ -19,19 +19,14 @@ import javax.inject.Inject
 class NoteWork @Inject constructor(
     private val context: Context,
     private val notificationManager: NotificationManagerCompat,
-    private val studentRepository: StudentRepository,
-    private val semesterRepository: SemesterRepository,
     private val noteRepository: NoteRepository,
     private val preferencesRepository: PreferencesRepository
 ) : Work {
 
-    override fun create(): Completable {
-        return studentRepository.getCurrentStudent()
-            .flatMap { semesterRepository.getCurrentSemester(it).map { semester -> it to semester } }
-            .flatMap { data ->
-                noteRepository.getNotes(data.first, data.second, true, preferencesRepository.isNotificationsEnable)
-                    .flatMap { noteRepository.getUnnotifiedNotes(data.first) }
-            }.flatMapCompletable {
+    override fun create(student: Student, semester: Semester): Completable {
+        return noteRepository.getNotes(student, semester, true, preferencesRepository.isNotificationsEnable)
+            .flatMap { noteRepository.getUnnotifiedNotes(student) }
+            .flatMapCompletable {
                 if (it.isNotEmpty()) notify(it)
                 noteRepository.updateNotes(it.onEach { note -> note.isNotified = true })
             }
