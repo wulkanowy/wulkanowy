@@ -14,6 +14,7 @@ import io.github.wulkanowy.services.sync.works.AttendanceSummaryWork
 import io.github.wulkanowy.services.sync.works.AttendanceWork
 import io.github.wulkanowy.services.sync.works.CompletedLessonWork
 import io.github.wulkanowy.services.sync.works.ExamWork
+import io.github.wulkanowy.services.sync.works.GradeStatisticsWork
 import io.github.wulkanowy.services.sync.works.GradeSummaryWork
 import io.github.wulkanowy.services.sync.works.GradeWork
 import io.github.wulkanowy.services.sync.works.HomeworkWork
@@ -94,4 +95,8 @@ abstract class ServicesModule {
     @Binds
     @IntoSet
     abstract fun provideRecipientWork(work: RecipientWork): Work
+
+    @Binds
+    @IntoSet
+    abstract fun provideGradeStatistics(work: GradeStatisticsWork): Work
 }
