@@ -68,8 +68,9 @@ class MessageRepository @Inject constructor(
             }
     }
 
-    fun getUnnotifiedMessages(student: Student): Single<List<Message>> {
-        return local.getMessages(student, RECEIVED).map { it.filter { message -> !message.isNotified } }
+    fun getNotNotifiedMessages(student: Student): Single<List<Message>> {
+        return local.getMessages(student, RECEIVED)
+            .map { it.filter { message -> !message.isNotified && message.unread } }
             .toSingle(emptyList())
     }
 

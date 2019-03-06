@@ -44,7 +44,7 @@ class GradeRepository @Inject constructor(
         return local.getGrades(semester).map { it.filter { grade -> !grade.isRead } }.toSingle(emptyList())
     }
 
-    fun getUnnotifiedGrades(semester: Semester): Single<List<Grade>> {
+    fun getNotNotifiedGrades(semester: Semester): Single<List<Grade>> {
         return local.getGrades(semester).map { it.filter { grade -> !grade.isNotified } }.toSingle(emptyList())
     }
 

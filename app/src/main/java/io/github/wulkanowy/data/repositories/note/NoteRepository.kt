@@ -39,7 +39,7 @@ class NoteRepository @Inject constructor(
                 }.flatMap { local.getNotes(student).toSingle(emptyList()) })
     }
 
-    fun getUnnotifiedNotes(student: Student): Single<List<Note>> {
+    fun getNotNotifiedNotes(student: Student): Single<List<Note>> {
         return local.getNotes(student).map { it.filter { note -> !note.isNotified } }.toSingle(emptyList())
     }
 

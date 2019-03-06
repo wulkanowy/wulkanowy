@@ -30,7 +30,7 @@ class GradeWork @Inject constructor(
 
     override fun create(student: Student, semester: Semester): Completable {
         return gradeRepository.getGrades(student, semester, true, preferencesRepository.isNotificationsEnable)
-            .flatMap { gradeRepository.getUnnotifiedGrades(semester) }
+            .flatMap { gradeRepository.getNotNotifiedGrades(semester) }
             .flatMapCompletable {
                 if (it.isNotEmpty()) notify(it)
                 gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true })

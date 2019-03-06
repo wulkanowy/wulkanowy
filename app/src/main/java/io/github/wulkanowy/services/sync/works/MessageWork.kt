@@ -31,7 +31,7 @@ class MessageWork @Inject constructor(
 
     override fun create(student: Student, semester: Semester): Completable {
         return messageRepository.getMessages(student, RECEIVED, true, preferencesRepository.isNotificationsEnable)
-            .flatMap { messageRepository.getUnnotifiedMessages(student) }
+            .flatMap { messageRepository.getNotNotifiedMessages(student) }
             .flatMapCompletable {
                 if (it.isNotEmpty()) notify(it)
                 messageRepository.updateMessages(it.onEach { message -> message.isNotified = true })
