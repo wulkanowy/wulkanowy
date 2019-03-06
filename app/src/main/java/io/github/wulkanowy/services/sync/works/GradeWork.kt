@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.DEFAULT_ALL
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.app.NotificationManagerCompat
 import io.github.wulkanowy.R
@@ -17,7 +18,6 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
 import io.github.wulkanowy.utils.getCompatColor
 import io.reactivex.Completable
-import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -32,20 +32,19 @@ class GradeWork @Inject constructor(
         return gradeRepository.getGrades(student, semester, true, preferencesRepository.isNotificationsEnable)
             .flatMap { gradeRepository.getUnnotifiedGrades(semester) }
             .flatMapCompletable {
-                //if (it.isNotEmpty()) notify(it)
-                notify(it)
+                if (it.isNotEmpty()) notify(it)
                 gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true })
             }
     }
 
     private fun notify(grades: List<Grade>) {
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
-            //.setContentTitle(context.resources.getQuantityString(R.plurals.grade_new_items, grades.size, grades.size))
-            .setContentTitle(LocalDateTime.now().toString())
+            .setContentTitle(context.resources.getQuantityString(R.plurals.grade_new_items, grades.size, grades.size))
             .setContentText(context.resources.getQuantityString(R.plurals.grade_notify_new_items, grades.size, grades.size))
             .setSmallIcon(R.drawable.ic_stat_notify_grade)
             .setAutoCancel(true)
             .setPriority(PRIORITY_HIGH)
+            .setDefaults(DEFAULT_ALL)
             .setColor(context.getCompatColor(R.color.colorPrimary))
             .setContentIntent(
                 PendingIntent.getActivity(context, 0,
