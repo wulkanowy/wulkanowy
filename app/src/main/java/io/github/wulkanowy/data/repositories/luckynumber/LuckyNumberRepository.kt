@@ -44,6 +44,10 @@ class LuckyNumberRepository @Inject constructor(
             )
     }
 
+    fun getNotNotifiedLuckyNumber(semester: Semester): Maybe<LuckyNumber> {
+        return local.getLuckyNumber(semester, LocalDate.now()).filter { !it.isNotified }
+    }
+
     fun updateLuckyNumber(luckyNumber: LuckyNumber): Completable {
         return Completable.fromCallable { local.updateLuckyNumber(luckyNumber) }
     }

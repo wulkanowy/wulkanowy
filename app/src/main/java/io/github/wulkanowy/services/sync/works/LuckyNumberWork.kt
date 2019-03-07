@@ -30,6 +30,7 @@ class LuckyNumberWork @Inject constructor(
 
     override fun create(student: Student, semester: Semester): Completable {
         return luckyNumberRepository.getLuckyNumber(semester, true, preferencesRepository.isNotificationsEnable)
+            .flatMap { luckyNumberRepository.getNotNotifiedLuckyNumber(semester) }
             .flatMapCompletable {
                 notify(it)
                 luckyNumberRepository.updateLuckyNumber(it.apply { isNotified = true })
