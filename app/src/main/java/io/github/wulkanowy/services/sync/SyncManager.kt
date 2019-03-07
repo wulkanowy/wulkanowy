@@ -12,6 +12,8 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
+import io.github.wulkanowy.utils.isHolidays
+import org.threeten.bp.LocalDate.now
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
@@ -26,17 +28,20 @@ class SyncManager @Inject constructor(
 
     init {
         if (SDK_INT >= O) newEntriesChannel.create()
+        if (now().isHolidays) stopSyncWorker()
         Timber.i("SyncManager was initialized")
     }
 
     fun startSyncWorker(restart: Boolean = false) {
-        workManager.enqueueUniquePeriodicWork(SyncWorker::class.java.simpleName, if (restart) REPLACE else KEEP,
-            PeriodicWorkRequest.Builder(SyncWorker::class.java, preferencesRepository.servicesInterval, MINUTES)
-                .setBackoffCriteria(EXPONENTIAL, 30, MINUTES)
-                .setConstraints(Constraints.Builder()
-                    .setRequiredNetworkType(if (preferencesRepository.isServicesOnlyWifi) METERED else UNMETERED)
+        if (preferencesRepository.isServiceEnabled && !now().isHolidays) {
+            workManager.enqueueUniquePeriodicWork(SyncWorker::class.java.simpleName, if (restart) REPLACE else KEEP,
+                PeriodicWorkRequest.Builder(SyncWorker::class.java, preferencesRepository.servicesInterval, MINUTES)
+                    .setBackoffCriteria(EXPONENTIAL, 30, MINUTES)
+                    .setConstraints(Constraints.Builder()
+                        .setRequiredNetworkType(if (preferencesRepository.isServicesOnlyWifi) METERED else UNMETERED)
+                        .build())
                     .build())
-                .build())
+        }
     }
 
     fun stopSyncWorker() {

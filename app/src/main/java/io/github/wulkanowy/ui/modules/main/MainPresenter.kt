@@ -30,7 +30,7 @@ class MainPresenter @Inject constructor(
             initView()
         }
 
-        if (prefRepository.isServiceEnabled) syncManager.startSyncWorker()
+        syncManager.startSyncWorker()
 
         analytics.logEvent(APP_OPEN, DESTINATION to when (initMenuIndex) {
             1 -> "Grades"
