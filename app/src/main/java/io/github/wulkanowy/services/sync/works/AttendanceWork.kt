@@ -6,13 +6,13 @@ import io.github.wulkanowy.data.repositories.attendance.AttendanceRepository
 import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.monday
 import io.reactivex.Completable
-import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDate.now
 import javax.inject.Inject
 
 class AttendanceWork @Inject constructor(private val attendanceRepository: AttendanceRepository) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return attendanceRepository.getAttendance(semester, LocalDate.now().monday, LocalDate.now().friday, true)
+        return attendanceRepository.getAttendance(semester, now().monday, now().friday, true)
             .ignoreElement()
     }
 }

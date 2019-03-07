@@ -6,7 +6,7 @@ import io.github.wulkanowy.data.repositories.completedlessons.CompletedLessonsRe
 import io.github.wulkanowy.utils.friday
 import io.github.wulkanowy.utils.monday
 import io.reactivex.Completable
-import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDate.now
 import javax.inject.Inject
 
 class CompletedLessonWork @Inject constructor(
@@ -14,7 +14,7 @@ class CompletedLessonWork @Inject constructor(
 ) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return completedLessonsRepository.getCompletedLessons(semester, LocalDate.now().monday, LocalDate.now().friday, true)
+        return completedLessonsRepository.getCompletedLessons(semester, now().monday, now().friday, true)
             .ignoreElement()
     }
 }

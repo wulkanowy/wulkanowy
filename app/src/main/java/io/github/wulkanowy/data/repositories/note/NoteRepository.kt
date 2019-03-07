@@ -30,7 +30,7 @@ class NoteRepository @Inject constructor(
                             local.deleteNotes(old - new)
                             local.saveNotes((new - old)
                                 .onEach {
-                                    if (it.date.atStartOfDay() >= student.registrationDate) it.apply {
+                                    if (it.date >= student.registrationDate.toLocalDate()) it.apply {
                                         isRead = false
                                         if (notify) isNotified = false
                                     }
