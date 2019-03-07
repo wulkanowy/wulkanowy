@@ -30,6 +30,9 @@ import javax.inject.Inject
 class TimetableWidgetProvider : BroadcastReceiver() {
 
     @Inject
+    lateinit var appWidgetManager: AppWidgetManager
+
+    @Inject
     lateinit var sharedPref: SharedPrefHelper
 
     @Inject
@@ -102,7 +105,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                 }, FLAG_UPDATE_CURRENT))
         }.also {
             sharedPref.putLong(createWidgetKey(appWidgetId), date.toEpochDay(), true)
-            AppWidgetManager.getInstance(context).apply {
+            appWidgetManager.apply {
                 notifyAppWidgetViewDataChanged(appWidgetId, R.id.timetableWidgetList)
                 updateAppWidget(appWidgetId, it)
             }
