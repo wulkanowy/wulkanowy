@@ -63,14 +63,16 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                 updateWidget(context, appWidgetId, now().nextOrSameSchoolDay)
             }
         } else {
+            val buttonType = intent.getStringExtra(EXTRA_BUTTON_TYPE)
             val toggledWidgetId = intent.getIntExtra(EXTRA_TOGGLED_WIDGET_ID, 0)
             val savedDate = LocalDate.ofEpochDay(sharedPref.getLong(createWidgetKey(toggledWidgetId), 0))
-            val date = when (intent.getStringExtra(EXTRA_BUTTON_TYPE)) {
+            val date = when (buttonType) {
                 BUTTON_RESET -> now().nextOrSameSchoolDay
                 BUTTON_NEXT -> savedDate.nextSchoolDay
                 BUTTON_PREV -> savedDate.previousSchoolDay
                 else -> now().nextOrSameSchoolDay
             }
+            if (!buttonType.isNullOrBlank()) analytics.logEvent("changed_timetable_widget_day", "button" to buttonType)
             updateWidget(context, toggledWidgetId, date)
         }
     }
