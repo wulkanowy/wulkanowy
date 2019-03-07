@@ -36,10 +36,8 @@ class TimetableRepository @Inject constructor(
                                     local.saveTimetable((newTimetable - oldTimetable).map { item ->
                                         item.apply {
                                             if (room.isEmpty()) {
-                                                oldTimetable.singleOrNull { it.room.isNotEmpty() && it.start == this.start }
-                                                    ?.let {
-                                                        return@map copy(room = it.room)
-                                                    }
+                                                oldTimetable.singleOrNull { it.start == this.start && it.room.isNotEmpty() }
+                                                    ?.let { return@map copy(room = it.room) }
                                             }
                                         }
                                     })
