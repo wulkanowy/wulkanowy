@@ -142,10 +142,6 @@ class SendMessagePresenter @Inject constructor(
         )
     }
 
-    fun onTypingRecipients() {
-        view?.refreshRecipientsAdapter()
-    }
-
     fun onSend(): Boolean {
         view?.run {
             when {

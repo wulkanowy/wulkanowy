@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.message.send
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -10,11 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import com.hootsuite.nachos.ChipConfiguration
-import com.hootsuite.nachos.chip.ChipSpan
-import com.hootsuite.nachos.chip.ChipSpanChipCreator
-import com.hootsuite.nachos.tokenizer.SpanChipTokenizer
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
@@ -23,7 +17,6 @@ import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.hideSoftInput
-import io.github.wulkanowy.utils.setOnTextChangedListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_send_message.*
 import javax.inject.Inject
@@ -53,7 +46,14 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
         get() = R.string.send_message_title
 
     override val formRecipientsData: List<Recipient>
-        get() = sendMessageRecipientInput.allChips.map { it.data as Recipient }
+        get() {
+            val list: MutableList<Recipient> = mutableListOf()
+            for (i in 0..sendMessageRecipientInputChips.childCount) {
+                val recipient: Recipient? = (sendMessageRecipientInputChips.getChildAt(i) as? RecipientChip)?.recipient
+                if (recipient !== null) list.add(recipient)
+            }
+            return list
+        }
 
     override val formSubjectValue: String
         get() = sendMessageSubjectInput.text.toString()
@@ -86,21 +86,18 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
     override fun initView() {
         context?.let {
-            sendMessageRecipientInput.chipTokenizer = SpanChipTokenizer<ChipSpan>(it, object : ChipSpanChipCreator() {
-                override fun createChip(context: Context, text: CharSequence, data: Any?): ChipSpan {
-                    return ChipSpan(context, text, ContextCompat.getDrawable(context, R.drawable.ic_all_account_24dp), data)
-                }
-
-                override fun configureChip(chip: ChipSpan, chipConfiguration: ChipConfiguration) {
-                    super.configureChip(chip, chipConfiguration)
-                    chip.setShowIconOnLeft(true)
-                }
-            }, ChipSpan::class.java)
             recipientsAdapter = ArrayAdapter(it, android.R.layout.simple_dropdown_item_1line)
         }
 
         sendMessageRecipientInput.setAdapter(recipientsAdapter)
-        sendMessageRecipientInput.setOnTextChangedListener { presenter.onTypingRecipients() }
+        sendMessageRecipientInput.setOnItemClickListener { parent, view, position, id ->
+            sendMessageRecipientInput.text = null
+            context?.let {
+                val chip = RecipientChip(it, parent.getItemAtPosition(position) as Recipient)
+                sendMessageRecipientInputChips.addView(chip)
+                refreshRecipientsAdapter()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -127,7 +124,7 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     override fun refreshRecipientsAdapter() {
         recipientsAdapter.run {
             clear()
-            addAll(recipients - sendMessageRecipientInput.allChips.map { it.data as Recipient })
+            addAll(recipients - formRecipientsData)
             notifyDataSetChanged()
         }
     }

@@ -97,7 +97,6 @@ dependencies {
     implementation "com.aurelhubert:ahbottomnavigation:2.3.4"
     implementation 'com.ncapdevi:frag-nav:3.1.0'
 
-    implementation "com.hootsuite.android:nachos:1.1.1"
     implementation 'com.github.PhilJay:MPAndroidChart:971640b29d'
 
     implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.2'

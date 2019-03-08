@@ -60,15 +60,32 @@
                 android:textColor="@android:color/darker_gray"
                 android:textSize="18sp" />
 
-            <com.hootsuite.nachos.NachoTextView
-                android:id="@+id/sendMessageRecipientInput"
+            <HorizontalScrollView
+                android:id="@+id/sendMessageRecipientInputChipView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/sendMessageRecipientInputChips"
+                    style="@style/Widget.MaterialComponents.Chip.Entry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:textAppearanceSmall">
+
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sendMessageRecipientInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textColor="?attr/chipTextColor"
-                app:chipBackground="?attr/chipBackgroundColor" />
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/sendMessageRecipientInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <View
