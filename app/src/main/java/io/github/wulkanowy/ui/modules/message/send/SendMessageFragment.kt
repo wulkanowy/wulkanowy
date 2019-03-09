@@ -41,7 +41,7 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
         get() = R.string.send_message_title
 
     override val formRecipientsData: List<Recipient>
-        get() = (sendMessageRecipientsInput.selectedChipList as List<RecipientChip>).map { it.recipient }
+        get() = (sendMessageRecipientsInput.selectedChipList).map { (it as RecipientChip).recipient }
 
     override val formSubjectValue: String
         get() = sendMessageSubjectInput.text.toString()
@@ -92,7 +92,9 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     }
 
     override fun setSelectedRecipients(recipients: List<Recipient>) {
-        TODO("not implemented")
+        context?.let { context ->
+            recipients.map { sendMessageRecipientsInput.addChip(RecipientChip(context, it)) }
+        }
     }
 
     override fun showProgress(show: Boolean) {

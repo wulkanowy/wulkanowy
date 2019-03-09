@@ -29,7 +29,7 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/sendMessageFromTextView"
                 android:layout_width="match_parent"
-                android:layout_height="38dp"
+                android:layout_height="30dp"
                 android:background="@android:color/transparent"
                 android:enabled="false"
                 android:textColor="?android:attr/textColorPrimaryNoDisable"
@@ -43,30 +43,30 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="58dp"
             android:paddingStart="14dp"
             android:paddingLeft="14dp"
-            android:paddingTop="14dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="14dp">
+            tools:ignore="RtlSymmetry">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:text="@string/send_message_to"
                 android:textColor="@android:color/darker_gray"
+                android:textAlignment="center"
                 android:textSize="18sp" />
 
             <com.pchmn.materialchips.ChipsInput
                 android:id="@+id/sendMessageRecipientsInput"
                 android:layout_width="match_parent"
-                android:layout_height="38dp"
-                android:lines="1"
-                android:maxLines="1"
-                app:maxRows="1">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                app:horizontalScroll="true"
+                tools:layout_height="30dp">
 
             </com.pchmn.materialchips.ChipsInput>
         </LinearLayout>
@@ -79,7 +79,7 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/sendMessageSubjectInput"
             android:layout_width="match_parent"
-            android:layout_height="66dp"
+            android:layout_height="58dp"
             android:background="@android:color/transparent"
             android:hint="@string/send_message_subject"
             android:inputType="text"
