@@ -46,6 +46,9 @@ class GradeDetailsFragment : BaseSessionFragment(), GradeDetailsView, GradeView.
     override val weightString: String
         get() = getString(R.string.grade_weight)
 
+    override val noDescriptionString: String
+        get() = getString(R.string.all_no_description)
+
     override val isViewEmpty
         get() = gradeDetailsAdapter.isEmpty
 
@@ -120,6 +123,10 @@ class GradeDetailsFragment : BaseSessionFragment(), GradeDetailsView, GradeView.
 
     override fun showProgress(show: Boolean) {
         gradeDetailsProgress.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun enableSwipe(enable: Boolean) {
+        gradeDetailsSwipe.isEnabled = enable
     }
 
     override fun showContent(show: Boolean) {

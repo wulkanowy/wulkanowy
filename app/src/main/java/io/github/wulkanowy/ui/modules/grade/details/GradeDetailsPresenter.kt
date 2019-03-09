@@ -62,7 +62,7 @@ class GradeDetailsPresenter @Inject constructor(
         Timber.i("Select mark grades as read")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
-            .flatMap { gradeRepository.getNewGrades(it.first { item -> item.semesterId == currentSemesterId }) }
+            .flatMap { gradeRepository.getUnreadGrades(it.first { item -> item.semesterId == currentSemesterId }) }
             .map { it.map { grade -> grade.apply { isRead = true } } }
             .flatMapCompletable {
                 Timber.i("Mark as read ${it.size} grades")
@@ -97,6 +97,7 @@ class GradeDetailsPresenter @Inject constructor(
     fun onParentViewChangeSemester() {
         view?.run {
             showProgress(true)
+            enableSwipe(false)
             showRefresh(false)
             showContent(false)
             showEmpty(false)
@@ -119,6 +120,7 @@ class GradeDetailsPresenter @Inject constructor(
                 view?.run {
                     showRefresh(false)
                     showProgress(false)
+                    enableSwipe(true)
                     notifyParentDataLoaded(semesterId)
                 }
             }
@@ -150,8 +152,9 @@ class GradeDetailsPresenter @Inject constructor(
                     subItems = it.value.map { item ->
                         GradeDetailsItem(
                             grade = item,
+                            valueBgColor = item.getBackgroundColor(preferencesRepository.gradeColorTheme),
                             weightString = view?.weightString.orEmpty(),
-                            valueBgColor = item.getBackgroundColor(preferencesRepository.gradeColorTheme)
+                            noDescriptionString = view?.noDescriptionString.orEmpty()
                         )
                     }
                 }
