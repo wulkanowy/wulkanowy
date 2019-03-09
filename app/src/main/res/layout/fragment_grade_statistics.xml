@@ -56,7 +56,9 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:paddingTop="5dp">
+                    android:paddingTop="5dp"
+                    android:visibility="invisible"
+                    tools:visibility="visible">
 
                     <RadioButton
                         android:id="@+id/gradeStatisticsTypePartial"
