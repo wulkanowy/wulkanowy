@@ -89,6 +89,7 @@ class MessageTabFragment : BaseSessionFragment(), MessageTabView, MessageView.Me
 
     override fun showProgress(show: Boolean) {
         messageTabProgress.visibility = if (show) VISIBLE else GONE
+        messageTabSwipe.isEnabled = !show
     }
 
     override fun showContent(show: Boolean) {

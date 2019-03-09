@@ -95,6 +95,7 @@ class AttendanceSummaryFragment : BaseSessionFragment(), AttendanceSummaryView, 
 
     override fun showProgress(show: Boolean) {
         attendanceSummaryProgress.visibility = if (show) VISIBLE else GONE
+        attendanceSummarySwipe.isEnabled = !show
     }
 
     override fun showContent(show: Boolean) {

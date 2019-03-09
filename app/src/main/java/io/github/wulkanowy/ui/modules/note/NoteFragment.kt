@@ -84,6 +84,7 @@ class NoteFragment : BaseSessionFragment(), NoteView, MainView.TitledView {
 
     override fun showProgress(show: Boolean) {
         noteProgress.visibility = if (show) VISIBLE else GONE
+        noteSwipe.isEnabled = !show
     }
 
     override fun showContent(show: Boolean) {
