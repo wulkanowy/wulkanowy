@@ -86,7 +86,10 @@ class HomeworkFragment : BaseSessionFragment(), HomeworkView, MainView.TitledVie
 
     override fun showProgress(show: Boolean) {
         homeworkProgress.visibility = if (show) View.VISIBLE else View.GONE
-        homeworkSwipe.isEnabled = !show
+    }
+
+    override fun enableSwipe(enable: Boolean) {
+        homeworkSwipe.isEnabled = enable
     }
 
     override fun showContent(show: Boolean) {

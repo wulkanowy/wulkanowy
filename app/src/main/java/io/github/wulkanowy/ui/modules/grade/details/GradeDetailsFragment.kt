@@ -120,7 +120,10 @@ class GradeDetailsFragment : BaseSessionFragment(), GradeDetailsView, GradeView.
 
     override fun showProgress(show: Boolean) {
         gradeDetailsProgress.visibility = if (show) VISIBLE else GONE
-        gradeDetailsSwipe.isEnabled = !show
+    }
+
+    override fun enableSwipe(enable: Boolean) {
+        gradeDetailsSwipe.isEnabled = enable
     }
 
     override fun showContent(show: Boolean) {

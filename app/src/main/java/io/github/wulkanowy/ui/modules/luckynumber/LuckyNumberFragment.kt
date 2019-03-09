@@ -52,7 +52,10 @@ class LuckyNumberFragment : BaseSessionFragment(), LuckyNumberView, MainView.Tit
 
     override fun showProgress(show: Boolean) {
         luckyNumberProgress.visibility = if (show) View.VISIBLE else View.GONE
-        luckyNumberSwipe.isEnabled = !show
+    }
+
+    override fun enableSwipe(enable: Boolean) {
+        luckyNumberSwipe.isEnabled = enable
     }
 
     override fun showContent(show: Boolean) {
