@@ -1,35 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/loginStudentSelectProgressContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/loginStudentSelectProgressText"
-            android:layout_centerHorizontal="true"
-            android:indeterminate="true"
-            android:minWidth="220dp"
-            android:minHeight="30dp" />
-
-        <TextView
-            android:id="@+id/loginStudentSelectProgressText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            android:text="@string/login_sync" />
-    </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/loginStudentSelectProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/loginStudentSelectRecycler"
@@ -37,4 +18,4 @@
         android:layout_height="match_parent"
         tools:itemCount="5"
         tools:listitem="@layout/item_login_student_select" />
-</LinearLayout>
+</FrameLayout>

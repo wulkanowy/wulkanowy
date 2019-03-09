@@ -65,7 +65,7 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
     }
 
     override fun showProgress(show: Boolean) {
-        loginStudentSelectProgressContainer.visibility = if (show) VISIBLE else GONE
+        loginStudentSelectProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showContent(show: Boolean) {
