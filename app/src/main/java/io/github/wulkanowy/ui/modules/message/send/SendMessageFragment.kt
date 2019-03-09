@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
@@ -26,10 +25,6 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     @Inject
     lateinit var presenter: SendMessagePresenter
 
-    private var recipients: List<Recipient> = emptyList()
-
-    private lateinit var recipientsAdapter: ArrayAdapter<Recipient>
-
     companion object {
         private const val ARGUMENT_KEY = "Item"
 
@@ -46,14 +41,7 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
         get() = R.string.send_message_title
 
     override val formRecipientsData: List<Recipient>
-        get() {
-            val list: MutableList<Recipient> = mutableListOf()
-            for (i in 0..sendMessageRecipientInputChips.childCount) {
-                val recipient: Recipient? = (sendMessageRecipientInputChips.getChildAt(i) as? RecipientChip)?.recipient
-                if (recipient !== null) list.add(recipient)
-            }
-            return list
-        }
+        get() = (sendMessageRecipientsInput.selectedChipList as List<RecipientChip>).map { it.recipient }
 
     override val formSubjectValue: String
         get() = sendMessageSubjectInput.text.toString()
@@ -84,22 +72,6 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
         presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getSerializable(ARGUMENT_KEY) as Message?)
     }
 
-    override fun initView() {
-        context?.let {
-            recipientsAdapter = ArrayAdapter(it, android.R.layout.simple_dropdown_item_1line)
-        }
-
-        sendMessageRecipientInput.setAdapter(recipientsAdapter)
-        sendMessageRecipientInput.setOnItemClickListener { parent, view, position, id ->
-            sendMessageRecipientInput.text = null
-            context?.let {
-                val chip = RecipientChip(it, parent.getItemAtPosition(position) as Recipient)
-                sendMessageRecipientInputChips.addView(chip)
-                refreshRecipientsAdapter()
-            }
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.action_menu_send_message, menu)
     }
@@ -114,19 +86,13 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     }
 
     override fun setRecipients(recipients: List<Recipient>) {
-        this.recipients = recipients
+        context?.let { context ->
+            sendMessageRecipientsInput.filterableList = recipients.map { RecipientChip(context, it) }
+        }
     }
 
     override fun setSelectedRecipients(recipients: List<Recipient>) {
         TODO("not implemented")
-    }
-
-    override fun refreshRecipientsAdapter() {
-        recipientsAdapter.run {
-            clear()
-            addAll(recipients - formRecipientsData)
-            notifyDataSetChanged()
-        }
     }
 
     override fun showProgress(show: Boolean) {

@@ -18,15 +18,11 @@ interface SendMessageView : BaseSessionView {
 
     val messageSuccess: String
 
-    fun initView()
-
     fun setReportingUnit(unit: ReportingUnit)
 
     fun setRecipients(recipients: List<Recipient>)
 
     fun setSelectedRecipients(recipients: List<Recipient>)
-
-    fun refreshRecipientsAdapter()
 
     fun showProgress(show: Boolean)
 

@@ -37,7 +37,6 @@ class SendMessagePresenter @Inject constructor(
         Timber.i("Send message view is attached")
         loadRecipients()
         view.apply {
-            initView()
             showBottomNav(false)
             message?.let {
                 loadMessageRecipients(Single.just(message))
@@ -79,7 +78,6 @@ class SendMessagePresenter @Inject constructor(
                 view?.apply {
                     setReportingUnit(reportingUnit)
                     setRecipients(it)
-                    refreshRecipientsAdapter()
                     showContent(true)
                 }
             }, {
@@ -162,6 +160,7 @@ class SendMessagePresenter @Inject constructor(
 
     override fun onDetachView() {
         view?.showBottomNav(true)
+        view?.hideSoftInput()
         super.onDetachView()
     }
 }

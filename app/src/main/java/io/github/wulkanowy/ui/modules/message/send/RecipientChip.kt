@@ -1,22 +1,20 @@
 package io.github.wulkanowy.ui.modules.message.send
 
-import android.annotation.SuppressLint
 import android.content.Context
-import androidx.appcompat.view.ContextThemeWrapper
-import androidx.core.content.ContextCompat
-import com.google.android.material.chip.Chip
-import io.github.wulkanowy.R
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import com.pchmn.materialchips.model.ChipInterface
 import io.github.wulkanowy.data.db.entities.Recipient
 
-@SuppressLint("ViewConstructor", "PrivateResource")
-class RecipientChip(context: Context, var recipient: Recipient) :
-    Chip(ContextThemeWrapper(context, R.style.Theme_MaterialComponents_Light)) {
+class RecipientChip(var context: Context, var recipient: Recipient) : ChipInterface {
 
-    val id: Long = recipient.id
+    override fun getAvatarDrawable(): Drawable? = null
 
-    init {
-        text = recipient.name
-        chipIcon = ContextCompat.getDrawable(context, R.drawable.ic_all_account_24dp)
-        setTextAppearance(R.style.TextAppearance_AppCompat_Small)
-    }
+    override fun getAvatarUri(): Uri? = null
+
+    override fun getId(): Any = recipient.id
+
+    override fun getLabel(): String = recipient.name
+
+    override fun getInfo(): String = recipient.realName
 }
