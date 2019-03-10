@@ -10,8 +10,9 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.utils.colorStringId
 import io.github.wulkanowy.utils.getBackgroundColor
-import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.synthetic.main.dialog_grade.*
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 class GradeDetailsDialog : DialogFragment() {
 
@@ -49,9 +50,11 @@ class GradeDetailsDialog : DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+
         gradeDialogSubject.text = grade.subject
         gradeDialogWeightValue.text = grade.weight
-        gradeDialogDateValue.text = grade.date.toFormattedString()
+        gradeDialogDateValue.text = grade.date.format(dateFormat)
         gradeDialogColorValue.text = getString(grade.colorStringId)
 
         gradeDialogCommentValue.apply {
