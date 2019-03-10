@@ -19,6 +19,6 @@ interface CompletedLessonsDao {
     @Delete
     fun deleteAll(exams: List<CompletedLesson>)
 
-    @Query("SELECT * FROM CompletedLesson WHERE diary_id = :diaryId AND student_id = :studentId AND date >= :from AND date <= :end")
+    @Query("SELECT * FROM `CompletedLesson` WHERE `diary_id` = :diaryId AND `student_id` = :studentId AND `date` >= :from AND `date` <= :end")
     fun loadAll(diaryId: Int, studentId: Int, from: LocalDate, end: LocalDate): Maybe<List<CompletedLesson>>
 }

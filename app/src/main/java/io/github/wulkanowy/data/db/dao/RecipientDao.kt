@@ -18,6 +18,6 @@ interface RecipientDao {
     @Delete
     fun deleteAll(messages: List<Recipient>)
 
-    @Query("SELECT * FROM Recipients WHERE student_id = :studentId AND role = :role AND unit_id = :unitId")
+    @Query("SELECT * FROM `Recipients` WHERE `student_id` = :studentId AND `role` = :role AND `unit_id` = :unitId")
     fun load(studentId: Int, role: Int, unitId: Int): Maybe<List<Recipient>>
 }

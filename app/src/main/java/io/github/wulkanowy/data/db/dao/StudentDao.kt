@@ -19,15 +19,15 @@ interface StudentDao {
     @Delete
     fun delete(student: Student)
 
-    @Query("SELECT * FROM Students WHERE is_current = 1")
+    @Query("SELECT * FROM `Students` WHERE `is_current` = 1")
     fun loadCurrent(): Maybe<Student>
 
-    @Query("SELECT * FROM Students")
+    @Query("SELECT * FROM `Students`")
     fun loadAll(): Maybe<List<Student>>
 
-    @Query("UPDATE Students SET is_current = 1 WHERE student_id = :studentId")
+    @Query("UPDATE `Students` SET `is_current` = 1 WHERE `student_id` = :studentId")
     fun updateCurrent(studentId: Int)
 
-    @Query("UPDATE Students SET is_current = 0")
+    @Query("UPDATE `Students` SET `is_current` = 0")
     fun resetCurrent()
 }

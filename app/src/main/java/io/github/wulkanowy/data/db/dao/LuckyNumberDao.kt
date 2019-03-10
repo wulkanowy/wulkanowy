@@ -23,7 +23,7 @@ interface LuckyNumberDao {
     @Delete
     fun delete(luckyNumber: LuckyNumber)
 
-    @Query("SELECT * FROM LuckyNumbers WHERE student_id = :studentId AND date = :date")
+    @Query("SELECT * FROM `LuckyNumbers` WHERE `student_id` = :studentId AND `date` = :date")
     fun load(studentId: Int, date: LocalDate): Maybe<LuckyNumber>
 
 }
