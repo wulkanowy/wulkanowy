@@ -114,14 +114,15 @@ class TimetableDialog : DialogFragment() {
             }
         }
 
-        lesson.let {
-            if (it.info.isBlank()) {
+        lesson.run {
+            if (info.isBlank()) {
                 timetableDialogChangesTitle.visibility = GONE
                 timetableDialogChanges.visibility = GONE
             } else timetableDialogChanges.text = when (true) {
-                it.canceled && !it.changes -> "Lekcja odwołana: ${it.info}"
-                it.changes && it.teacher.isNotBlank() -> "Zastępstwo: ${it.teacher}"
-                else -> it.info.capitalize()
+                canceled && !changes -> "Lekcja odwołana: $info"
+                changes && teacher.isNotBlank() -> "Zastępstwo: $teacher"
+                changes && teacher.isBlank() -> "Zastępstwo, ${info.decapitalize()}"
+                else -> info.capitalize()
             }
         }
 

@@ -81,8 +81,9 @@ class TimetableWidgetFactory(
                     setViewVisibility(R.id.timetableWidgetItemDescription, VISIBLE)
                     setTextViewText(R.id.timetableWidgetItemDescription, it.run {
                         when (true) {
-                            canceled && !changes -> "Lekcja odwołana: ${it.info}"
+                            canceled && !changes -> "Lekcja odwołana: $info"
                             changes && teacher.isNotBlank() -> "Zastępstwo: $teacher"
+                            changes && teacher.isBlank() -> "Zastępstwo, ${info.decapitalize()}"
                             else -> it.info.capitalize()
                         }
                     })
