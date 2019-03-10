@@ -79,7 +79,13 @@ class TimetableWidgetFactory(
 
                 if (it.info.isNotBlank()) {
                     setViewVisibility(R.id.timetableWidgetItemDescription, VISIBLE)
-                    setTextViewText(R.id.timetableWidgetItemDescription, it.info.capitalize())
+                    setTextViewText(R.id.timetableWidgetItemDescription, it.run {
+                        when (true) {
+                            canceled && !changes -> "Lekcja odwołana: ${it.info}"
+                            changes && teacher.isNotBlank() -> "Zastępstwo: $teacher"
+                            else -> it.info.capitalize()
+                        }
+                    })
                 } else setViewVisibility(R.id.timetableWidgetItemDescription, GONE)
 
                 if (it.canceled) {
