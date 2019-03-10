@@ -13,7 +13,8 @@ import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_grade_details.*
-import java.text.DateFormat
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 class GradeDetailsItem(
     val grade: Grade,
@@ -33,7 +34,7 @@ class GradeDetailsItem(
         adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder,
         position: Int, payloads: MutableList<Any>?
     ) {
-        val dateFormat: DateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM)
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
         holder.run {
             gradeItemValue.run {
                 text = grade.entry
@@ -44,7 +45,7 @@ class GradeDetailsItem(
                 grade.gradeSymbol.isNotBlank() -> grade.gradeSymbol
                 else -> noDescriptionString
             }
-            gradeItemDate.text = dateFormat.format(grade.date)
+            gradeItemDate.text = grade.date.format(dateFormat)
             gradeItemWeight.text = "$weightString: ${grade.weight}"
             gradeItemNote.visibility = if (!grade.isRead) VISIBLE else GONE
         }
