@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Attendance
-import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.synthetic.main.dialog_attendance.*
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 class AttendanceDialog : DialogFragment() {
 
@@ -39,9 +40,11 @@ class AttendanceDialog : DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val dateFormat: DateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+
         attendanceDialogSubject.text = attendance.subject
         attendanceDialogDescription.text = attendance.name
-        attendanceDialogDate.text = attendance.date.toFormattedString()
+        attendanceDialogDate.text = attendance.date.format(dateFormat)
         attendanceDialogNumber.text = attendance.number.toString()
         attendanceDialogClose.setOnClickListener { dismiss() }
     }
