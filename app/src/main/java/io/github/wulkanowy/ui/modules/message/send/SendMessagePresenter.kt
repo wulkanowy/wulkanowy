@@ -14,7 +14,7 @@ import io.github.wulkanowy.ui.base.session.SessionErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
-import io.reactivex.Single
+import io.reactivex.Completable
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,16 +30,13 @@ class SendMessagePresenter @Inject constructor(
     private val analytics: FirebaseAnalyticsHelper
 ) : BaseSessionPresenter<SendMessageView>(errorHandler) {
 
-    private lateinit var reportingUnit: ReportingUnit
-
     fun onAttachView(view: SendMessageView, message: Message?) {
         super.onAttachView(view)
         Timber.i("Send message view is attached")
-        loadRecipients()
+        loadData(message)
         view.apply {
             showBottomNav(false)
             message?.let {
-                loadMessageRecipients(Single.just(message))
                 setSubject("RE: ${message.subject}")
                 if (preferencesRepository.fillMessageContent) {
                     setContent(when (message.sender.isNotEmpty()) {
@@ -51,14 +48,31 @@ class SendMessagePresenter @Inject constructor(
         }
     }
 
-    private fun loadRecipients() {
+    private fun loadData(message: Message?) {
+        var reportingUnit: ReportingUnit? = null
+        var recipients: List<Recipient> = emptyList()
+        var selectedRecipient: List<Recipient> = emptyList()
+
         Timber.i("Loading recipients started")
         disposable.add(studentRepository.getCurrentStudent()
-            .flatMapMaybe { student ->
-                semesterRepository.getCurrentSemester(student)
-                    .flatMapMaybe { reportingUnitRepository.getReportingUnit(student, it.unitId) }
+            .flatMap { semesterRepository.getCurrentSemester(it).map { semester -> it to semester } }
+            .flatMapCompletable { (student, semester) ->
+                reportingUnitRepository.getReportingUnit(student, semester.unitId)
                     .doOnSuccess { reportingUnit = it }
                     .flatMap { recipientRepository.getRecipients(student, 2, it).toMaybe() }
+                    .doOnSuccess {
+                        Timber.i("Loading recipients result: Success, fetched %d recipients", it.size)
+                        recipients = it
+                    }
+                    .flatMapCompletable {
+                        if (message == null) Completable.complete()
+                        else recipientRepository.getMessageRecipients(student, message)
+                            .doOnSuccess {
+                                Timber.i("Loaded message recipients to reply result: Success, fetched %d recipients", it.size)
+                                selectedRecipient = it
+                            }
+                            .ignoreElement()
+                    }
             }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
@@ -68,44 +82,22 @@ class SendMessagePresenter @Inject constructor(
                     showContent(false)
                 }
             }
-            .doFinally {
-                view?.run {
-                    showProgress(false)
-                }
-            }
+            .doFinally { view?.run { showProgress(false) } }
             .subscribe({
-                Timber.i("Loading recipients result: Success, fetched %s recipients", it.size.toString())
                 view?.apply {
-                    setReportingUnit(reportingUnit)
-                    setRecipients(it)
-                    showContent(true)
-                }
-            }, {
-                Timber.i("Loading recipients result: An exception occurred")
-                view?.showContent(true)
-                errorHandler.dispatch(it)
-            }, {
-                Timber.i("Loading recipients result: Can't find the reporting unit")
-                view?.showEmpty(true)
-            })
-        )
-    }
-
-    private fun loadMessageRecipients(message: Single<Message>) {
-        disposable.add(message
-            .flatMap {
-                studentRepository.getCurrentStudent()
-                    .flatMap { student ->
-                        recipientRepository.getMessageRecipients(student, it)
+                    if (reportingUnit !== null) {
+                        reportingUnit?.let { setReportingUnit(it) }
+                        setRecipients(recipients)
+                        if (selectedRecipient.isNotEmpty()) setSelectedRecipients(selectedRecipient)
+                        showContent(true)
+                    } else {
+                        Timber.e("Loading recipients result: Can't find the reporting unit")
+                        view?.showEmpty(true)
                     }
-            }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                view?.apply {
-                    setSelectedRecipients(it)
                 }
             }, {
+                Timber.e("Loading recipients result: An exception occurred")
+                view?.showContent(true)
                 errorHandler.dispatch(it)
             }))
     }
@@ -159,8 +151,10 @@ class SendMessagePresenter @Inject constructor(
     }
 
     override fun onDetachView() {
-        view?.showBottomNav(true)
-        view?.hideSoftInput()
+        view?.run {
+            showBottomNav(true)
+            hideSoftInput()
+        }
         super.onDetachView()
     }
 }
