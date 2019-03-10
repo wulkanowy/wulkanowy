@@ -1,10 +1,12 @@
 package io.github.wulkanowy.ui.modules.timetable
 
 import android.annotation.SuppressLint
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
@@ -42,8 +44,45 @@ class TimetableDialog : DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        timetableDialogSubject.text = lesson.subject
         timetableDialogTime.text = "${lesson.start.toFormattedString("HH:mm")} - ${lesson.end.toFormattedString("HH:mm")}"
+
+        lesson.run {
+            timetableDialogSubject.text = subject
+
+            if (subjectOld.isNotBlank() && subjectOld != subject) {
+                timetableDialogSubject.run {
+                    paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    text = subjectOld
+                }
+                timetableDialogSubjectNew.run {
+                    visibility = VISIBLE
+                    text = subject
+                }
+            }
+        }
+
+        lesson.run {
+            when {
+                teacherOld.isNotBlank() && teacherOld != teacher -> {
+                    timetableDialogTeacher.run {
+                        visibility = VISIBLE
+                        paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                        text = teacherOld
+                    }
+                    if (teacher.isNotBlank()) {
+                        timetableDialogTeacherNew.run {
+                            visibility = VISIBLE
+                            text = teacher
+                        }
+                    }
+                }
+                teacher.isNotBlank() -> timetableDialogTeacher.text = teacher
+                else -> {
+                    timetableDialogTeacherTitle.visibility = GONE
+                    timetableDialogTeacher.visibility = GONE
+                }
+            }
+        }
 
         lesson.group.let {
             if (it.isBlank()) {
@@ -52,25 +91,38 @@ class TimetableDialog : DialogFragment() {
             } else timetableDialogGroup.text = it
         }
 
-        lesson.room.let {
-            if (it.isBlank()) {
-                timetableDialogRoomTitle.visibility = GONE
-                timetableDialogRoom.visibility = GONE
-            } else timetableDialogRoom.text = it
+        lesson.run {
+            when {
+                roomOld.isNotBlank() && roomOld != room -> {
+                    timetableDialogRoom.run {
+                        visibility = VISIBLE
+                        paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                        text = roomOld
+                    }
+                    if (room.isNotBlank()) {
+                        timetableDialogRoomNew.run {
+                            visibility = VISIBLE
+                            text = room
+                        }
+                    }
+                }
+                room.isNotBlank() -> timetableDialogRoom.text = room
+                else -> {
+                    timetableDialogRoomTitle.visibility = GONE
+                    timetableDialogRoom.visibility = GONE
+                }
+            }
         }
 
-        lesson.teacher.let {
-            if (it.isBlank()) {
-                timetableDialogTeacherTitle.visibility = GONE
-                timetableDialogTeacher.visibility = GONE
-            } else timetableDialogTeacher.text = it
-        }
-
-        lesson.info.let {
-            if (it.isBlank()) {
+        lesson.let {
+            if (it.info.isBlank()) {
                 timetableDialogChangesTitle.visibility = GONE
                 timetableDialogChanges.visibility = GONE
-            } else timetableDialogChanges.text = it
+            } else timetableDialogChanges.text = when (true) {
+                it.canceled && !it.changes -> "Lekcja odwołana: ${it.info}"
+                it.changes && it.teacher.isNotBlank() -> "Zastępstwo: ${it.teacher}"
+                else -> it.info.capitalize()
+            }
         }
 
         timetableDialogClose.setOnClickListener { dismiss() }
