@@ -98,7 +98,7 @@
             android:title="@string/pref_other_grade_modifier_minus"
             app:iconSpaceReserved="false" />
         <SwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="@string/pref_key_fill_message_content"
             android:title="@string/pref_other_fill_message_content"
             app:iconSpaceReserved="false" />

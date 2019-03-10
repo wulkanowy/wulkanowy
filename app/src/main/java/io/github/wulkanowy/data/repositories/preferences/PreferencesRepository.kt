@@ -54,5 +54,5 @@ class PreferencesRepository @Inject constructor(
             ?: 0.0
 
     val fillMessageContent: Boolean
-        get() = sharedPref.getBoolean(context.getString(R.string.pref_key_fill_message_content), false)
+        get() = sharedPref.getBoolean(context.getString(R.string.pref_key_fill_message_content), true)
 }
