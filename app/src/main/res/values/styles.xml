@@ -1,4 +1,4 @@
-<resources>chip_detailed_backgroundColor
+<resources>
 
     <style name="WulkanowyTheme" parent="@style/Theme.AppCompat.DayNight">
         <item name="colorPrimary">@color/colorPrimary</item>
