@@ -86,15 +86,11 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
     }
 
     override fun setRecipients(recipients: List<Recipient>) {
-        context?.let { context ->
-            sendMessageRecipientsInput.filterableList = recipients.map { RecipientChip(context, it) }
-        }
+        sendMessageRecipientsInput.filterableList = recipients.map { RecipientChip(it) }
     }
 
     override fun setSelectedRecipients(recipients: List<Recipient>) {
-        context?.let { context ->
-            recipients.map { sendMessageRecipientsInput.addChip(RecipientChip(context, it)) }
-        }
+        recipients.map { sendMessageRecipientsInput.addChip(RecipientChip(it)) }
     }
 
     override fun showProgress(show: Boolean) {

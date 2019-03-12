@@ -1,12 +1,11 @@
 package io.github.wulkanowy.ui.modules.message.send
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import com.pchmn.materialchips.model.ChipInterface
 import io.github.wulkanowy.data.db.entities.Recipient
 
-class RecipientChip(var context: Context, var recipient: Recipient) : ChipInterface {
+class RecipientChip(var recipient: Recipient) : ChipInterface {
 
     override fun getAvatarDrawable(): Drawable? = null
 
