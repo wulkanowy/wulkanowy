@@ -29,12 +29,14 @@ class AboutPresenter @Inject constructor(
                     openSourceWebView()
                 }
                 SPECIAL2 -> {
+                    Timber.i("Opening home page")
+                    analytics.logEvent("open_page", "name" to "home")
+                    openHomepageWebView()
+                }
+                SPECIAL3 -> {
                     Timber.i("Opening issues page")
                     analytics.logEvent("open_page", "name" to "issues")
                     openIssuesWebView()
-                }
-                SPECIAL3 -> {
-                    //empty for now
                 }
             }
         }

@@ -7,4 +7,6 @@ interface AboutView : BaseView {
     fun openSourceWebView()
 
     fun openIssuesWebView()
+
+    fun openHomepageWebView()
 }
