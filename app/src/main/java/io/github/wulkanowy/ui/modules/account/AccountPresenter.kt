@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.account
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -13,6 +14,7 @@ import javax.inject.Inject
 class AccountPresenter @Inject constructor(
     private val errorHandler: ErrorHandler,
     private val studentRepository: StudentRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val syncManager: SyncManager,
     private val schedulers: SchedulersProvider
 ) : BasePresenter<AccountView>(errorHandler) {
@@ -54,7 +56,7 @@ class AccountPresenter @Inject constructor(
                         openClearLoginView()
                     } else {
                         Timber.i("Logout result: Switch to another student")
-                        recreateView()
+                        recreateView(preferencesRepository.isAMOLEDMode)
                     }
                 }
             }, {
@@ -75,7 +77,7 @@ class AccountPresenter @Inject constructor(
                     .observeOn(schedulers.mainThread)
                     .subscribe({
                         Timber.i("Change a student result: Success")
-                        view?.recreateView()
+                        view?.recreateView(preferencesRepository.isAMOLEDMode)
                     }, {
                         Timber.i("Change a student result: An exception occurred")
                         errorHandler.dispatch(it)

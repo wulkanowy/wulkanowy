@@ -16,6 +16,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_IS_AMOLED
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_login_student_select.*
 import java.io.Serializable
@@ -57,9 +58,10 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
         loginAdapter.updateDataSet(data, true)
     }
 
-    override fun openMainView() {
+    override fun openMainView(isAMOLEDMode: Boolean) {
         activity?.let {
             startActivity(MainActivity.getStartIntent(it)
+                .putExtra(EXTRA_IS_AMOLED, isAMOLEDMode)
                 .apply { addFlags(FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_NEW_TASK) })
         }
     }

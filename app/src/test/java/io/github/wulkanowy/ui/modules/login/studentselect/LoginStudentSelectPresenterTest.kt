@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.login.studentselect
 
 import io.github.wulkanowy.TestSchedulersProvider
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
@@ -25,6 +26,9 @@ class LoginStudentSelectPresenterTest {
     lateinit var loginStudentSelectView: LoginStudentSelectView
 
     @Mock
+    lateinit var preferencesRepository: PreferencesRepository
+
+    @Mock
     lateinit var studentRepository: StudentRepository
 
     @Mock
@@ -40,7 +44,7 @@ class LoginStudentSelectPresenterTest {
     fun initPresenter() {
         MockitoAnnotations.initMocks(this)
         clearInvocations(studentRepository, loginStudentSelectView)
-        presenter = LoginStudentSelectPresenter(errorHandler, studentRepository, TestSchedulersProvider(), analytics)
+        presenter = LoginStudentSelectPresenter(errorHandler, studentRepository, preferencesRepository, TestSchedulersProvider(), analytics)
         presenter.onAttachView(loginStudentSelectView, null)
     }
 
@@ -56,7 +60,7 @@ class LoginStudentSelectPresenterTest {
         presenter.onItemSelected(LoginStudentSelectItem(testStudent))
         verify(loginStudentSelectView).showContent(false)
         verify(loginStudentSelectView).showProgress(true)
-        verify(loginStudentSelectView).openMainView()
+        verify(loginStudentSelectView).openMainView(false)
     }
 
     @Test

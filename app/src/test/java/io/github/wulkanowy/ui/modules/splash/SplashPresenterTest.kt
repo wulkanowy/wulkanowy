@@ -1,8 +1,10 @@
 package io.github.wulkanowy.ui.modules.splash
 
 import io.github.wulkanowy.TestSchedulersProvider
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.mockk.every
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
@@ -20,6 +22,9 @@ class SplashPresenterTest {
     lateinit var studentRepository: StudentRepository
 
     @Mock
+    lateinit var preferencesRepository: PreferencesRepository
+
+    @Mock
     lateinit var errorHandler: ErrorHandler
 
     private lateinit var presenter: SplashPresenter
@@ -27,7 +32,7 @@ class SplashPresenterTest {
     @Before
     fun initPresenter() {
         MockitoAnnotations.initMocks(this)
-        presenter = SplashPresenter(studentRepository, errorHandler, TestSchedulersProvider())
+        presenter = SplashPresenter(studentRepository, errorHandler, preferencesRepository, TestSchedulersProvider())
     }
 
     @Test
@@ -41,6 +46,6 @@ class SplashPresenterTest {
     fun testMainMainView() {
         doReturn(Single.just(true)).`when`(studentRepository).isStudentSaved()
         presenter.onAttachView(splashView)
-        verify(splashView).openMainView()
+        verify(splashView).openMainView(false)
     }
 }

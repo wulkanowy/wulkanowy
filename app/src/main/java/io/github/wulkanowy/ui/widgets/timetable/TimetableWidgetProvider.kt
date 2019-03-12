@@ -14,8 +14,10 @@ import android.widget.RemoteViews
 import dagger.android.AndroidInjection
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.SharedPrefHelper
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.main.MainActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_IS_AMOLED
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
@@ -34,6 +36,9 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
     @Inject
     lateinit var sharedPref: SharedPrefHelper
+
+    @Inject
+    lateinit var preferencesRepository: PreferencesRepository
 
     @Inject
     lateinit var analytics: FirebaseAnalyticsHelper
@@ -102,6 +107,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             setPendingIntentTemplate(R.id.timetableWidgetList,
                 PendingIntent.getActivity(context, 1, MainActivity.getStartIntent(context).apply {
                     putExtra(EXTRA_START_MENU_INDEX, 3)
+                    putExtra(EXTRA_IS_AMOLED, preferencesRepository.isAMOLEDMode)
                 }, FLAG_UPDATE_CURRENT))
         }.also {
             sharedPref.putLong(createWidgetKey(appWidgetId), date.toEpochDay(), true)

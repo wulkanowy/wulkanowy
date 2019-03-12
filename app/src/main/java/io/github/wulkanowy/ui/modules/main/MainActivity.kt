@@ -38,6 +38,7 @@ class MainActivity : BaseActivity(), MainView {
 
     companion object {
         const val EXTRA_START_MENU_INDEX = "extraStartMenuIndex"
+        const val EXTRA_IS_AMOLED = "extraIsAmoled"
 
         fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
@@ -55,6 +56,7 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (intent.getBooleanExtra(EXTRA_IS_AMOLED, false)) setTheme(R.style.WulkanowyTheme_Black)
         setContentView(R.layout.activity_main)
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer

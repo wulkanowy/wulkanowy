@@ -6,5 +6,5 @@ interface SplashView : BaseView {
 
     fun openLoginView()
 
-    fun openMainView()
+    fun openMainView(isAMOLEDMode: Boolean)
 }

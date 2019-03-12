@@ -3,6 +3,7 @@
     <string name="pref_key_start_menu">start_menu</string>
     <string name="pref_key_attendance_present">attendance_present</string>
     <string name="pref_key_theme">theme</string>
+    <string name="pref_key_theme_amoled">theme_amoled</string>
     <string name="pref_key_grade_modifier_plus">grade_modifier_plus</string>
     <string name="pref_key_grade_modifier_minus">grade_modifier_minus</string>
     <string name="pref_key_grade_color_scheme">grade_color_scheme</string>
