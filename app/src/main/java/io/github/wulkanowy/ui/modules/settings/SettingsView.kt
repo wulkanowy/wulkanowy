@@ -6,7 +6,7 @@ interface SettingsView : BaseView {
 
     fun setTheme(theme: Int)
 
-    fun setAMOLEDMode(isAMOLEDMode: Boolean)
+    fun setAMOLEDMode(theme: Int, isAMOLEDMode: Boolean)
 
     fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean)
 }

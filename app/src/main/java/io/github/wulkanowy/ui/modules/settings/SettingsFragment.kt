@@ -52,7 +52,8 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         activity?.recreate()
     }
 
-    override fun setAMOLEDMode(isAMOLEDMode: Boolean) {
+    override fun setAMOLEDMode(theme: Int, isAMOLEDMode: Boolean) {
+        AppCompatDelegate.setDefaultNightMode(theme)
         context?.let {
             activity?.run {
                 finish()

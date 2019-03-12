@@ -31,8 +31,11 @@ class SettingsPresenter @Inject constructor(
             when (key) {
                 serviceEnableKey -> syncManager.run { if (isServiceEnabled) startSyncWorker() else stopSyncWorker() }
                 servicesIntervalKey, servicesOnlyWifiKey -> syncManager.startSyncWorker(true)
-                currentThemeKey -> view?.setTheme(currentTheme)
-                isAMOLEDKey -> view?.setAMOLEDMode(preferencesRepository.isAMOLEDMode)
+                currentThemeKey -> when {
+                    preferencesRepository.isAMOLEDMode -> view?.setAMOLEDMode(currentTheme, preferencesRepository.isAMOLEDMode)
+                    else -> view?.setTheme(currentTheme)
+                }
+                isAMOLEDKey -> view?.setAMOLEDMode(currentTheme, preferencesRepository.isAMOLEDMode)
                 isDebugNotificationEnableKey -> chuckCollector.showNotification(isDebugNotificationEnable)
             }
         }
