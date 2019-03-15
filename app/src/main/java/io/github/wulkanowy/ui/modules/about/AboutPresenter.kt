@@ -24,9 +24,9 @@ class AboutPresenter @Inject constructor(
         view?.run {
             when (type) {
                 SPECIAL1 -> {
-                    Timber.i("Opening github page")
-                    analytics.logEvent("open_page", "name" to "github")
-                    openSourceWebView()
+                    Timber.i("Opening discord invide page")
+                    analytics.logEvent("open_page", "name" to "discord")
+                    openDiscordInviteView()
                 }
                 SPECIAL2 -> {
                     Timber.i("Opening home page")

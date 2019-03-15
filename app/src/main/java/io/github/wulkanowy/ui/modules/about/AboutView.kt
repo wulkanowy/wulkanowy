@@ -4,7 +4,7 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface AboutView : BaseView {
 
-    fun openSourceWebView()
+    fun openDiscordInviteView()
 
     fun openIssuesWebView()
 

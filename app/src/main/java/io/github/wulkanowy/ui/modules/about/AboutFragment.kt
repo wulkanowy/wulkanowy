@@ -36,7 +36,7 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
                 .withAboutVersionShown(true)
                 .withAboutIconShown(true)
                 .withLicenseShown(true)
-                .withAboutSpecial1(getString(R.string.about_source_code))
+                .withAboutSpecial1(getString(R.string.about_discord_invite))
                 .withAboutSpecial2(getString(R.string.about_homepage))
                 .withAboutSpecial3(getString(R.string.about_feedback))
                 .withFields(R.string::class.java.fields)
@@ -53,8 +53,8 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
         fragmentCompat.onViewCreated(view, savedInstanceState)
     }
 
-    override fun openSourceWebView() {
-        startActivity(Intent.parseUri("https://github.com/wulkanowy/wulkanowy", 0))
+    override fun openDiscordInviteView() {
+        startActivity(Intent.parseUri("https://discord.gg/vccAQBr", 0))
     }
 
     override fun openHomepageWebView() {
