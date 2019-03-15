@@ -1,44 +1,36 @@
 package io.github.wulkanowy.ui.modules.message.send
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
-import io.github.wulkanowy.ui.base.session.BaseSessionFragment
-import io.github.wulkanowy.ui.modules.main.MainActivity
-import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.utils.hideSoftInput
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_send_message.*
+import io.github.wulkanowy.utils.showSoftInput
+import kotlinx.android.synthetic.main.activity_send_message.*
 import javax.inject.Inject
 
-class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.TitledView {
+class SendMessageActivity : BaseActivity(), SendMessageView {
 
     @Inject
     lateinit var presenter: SendMessagePresenter
 
     companion object {
-        private const val ARGUMENT_KEY = "Item"
+        private const val EXTRA_MESSAGE = "EXTRA_MESSAGE"
 
-        fun newInstance() = SendMessageFragment()
+        fun getStartIntent(context: Context) = Intent(context, SendMessageActivity::class.java)
 
-        fun newInstance(message: Message?): SendMessageFragment {
-            return SendMessageFragment().apply {
-                arguments = Bundle().apply { putSerializable(ARGUMENT_KEY, message) }
-            }
+        fun getStartIntent(context: Context, message: Message?): Intent {
+            return getStartIntent(context).putExtra(EXTRA_MESSAGE, message)
         }
     }
-
-    override val titleStringId: Int
-        get() = R.string.send_message_title
 
     override val formRecipientsData: List<Recipient>
         get() = (sendMessageRecipientsInput.selectedChipList).map { (it as RecipientChip).recipient }
@@ -60,20 +52,13 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
+        setContentView(R.layout.activity_send_message)
+        presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_MESSAGE) as? Message)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_send_message, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getSerializable(ARGUMENT_KEY) as Message?)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.action_menu_send_message, menu)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.action_menu_send_message, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -113,24 +98,20 @@ class SendMessageFragment : BaseSessionFragment(), SendMessageView, MainView.Tit
         sendMessageContentInput.setText(content)
     }
 
-    override fun popView() {
-        (activity as? MainActivity)?.popView()
-    }
-
-    override fun hideSoftInput() {
-        activity?.hideSoftInput()
-    }
-
-    override fun showBottomNav(show: Boolean) {
-        (activity as? MainActivity)?.mainBottomNav?.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
     override fun showMessage(text: String) {
-        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun showSoftInput(show: Boolean) {
+        if (show) showSoftInput() else hideSoftInput()
+    }
+
+    override fun popView() {
+        onBackPressed()
+    }
+
+    override fun onDestroy() {
         presenter.onDetachView()
+        super.onDestroy()
     }
 }

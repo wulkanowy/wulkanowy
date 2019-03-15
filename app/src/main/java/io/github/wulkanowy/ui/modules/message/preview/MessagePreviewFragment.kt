@@ -10,9 +10,8 @@ import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
-import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.ui.modules.message.send.SendMessageFragment
+import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import kotlinx.android.synthetic.main.fragment_message_preview.*
 import javax.inject.Inject
 
@@ -98,7 +97,7 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     }
 
     override fun openMessageReply(message: Message?) {
-        (activity as? MainActivity)?.pushView(SendMessageFragment.newInstance(message))
+        context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, message)) }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

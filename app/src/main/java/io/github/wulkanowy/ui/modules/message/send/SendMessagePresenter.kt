@@ -9,8 +9,8 @@ import io.github.wulkanowy.data.repositories.recipient.RecipientRepository
 import io.github.wulkanowy.data.repositories.reportingunit.ReportingUnitRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
-import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
-import io.github.wulkanowy.ui.base.session.SessionErrorHandler
+import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
@@ -19,7 +19,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class SendMessagePresenter @Inject constructor(
-    private val errorHandler: SessionErrorHandler,
+    private val errorHandler: ErrorHandler,
     private val schedulers: SchedulersProvider,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
@@ -28,14 +28,13 @@ class SendMessagePresenter @Inject constructor(
     private val recipientRepository: RecipientRepository,
     private val preferencesRepository: PreferencesRepository,
     private val analytics: FirebaseAnalyticsHelper
-) : BaseSessionPresenter<SendMessageView>(errorHandler) {
+) : BasePresenter<SendMessageView>(errorHandler) {
 
     fun onAttachView(view: SendMessageView, message: Message?) {
         super.onAttachView(view)
         Timber.i("Send message view is attached")
         loadData(message)
         view.apply {
-            showBottomNav(false)
             message?.let {
                 setSubject("RE: ${message.subject}")
                 if (preferencesRepository.fillMessageContent) {
@@ -109,7 +108,7 @@ class SendMessagePresenter @Inject constructor(
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {
                 view?.run {
-                    hideSoftInput()
+                    showSoftInput(false)
                     showContent(false)
                     showProgress(true)
                 }
@@ -148,13 +147,5 @@ class SendMessagePresenter @Inject constructor(
             }
         }
         return false
-    }
-
-    override fun onDetachView() {
-        view?.run {
-            showBottomNav(true)
-            hideSoftInput()
-        }
-        super.onDetachView()
     }
 }

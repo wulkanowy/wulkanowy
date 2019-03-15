@@ -2,9 +2,9 @@ package io.github.wulkanowy.ui.modules.message.send
 
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
-import io.github.wulkanowy.ui.base.session.BaseSessionView
+import io.github.wulkanowy.ui.base.BaseView
 
-interface SendMessageView : BaseSessionView {
+interface SendMessageView : BaseView {
 
     val formRecipientsData: List<Recipient>
 
@@ -34,9 +34,7 @@ interface SendMessageView : BaseSessionView {
 
     fun setContent(content: String)
 
+    fun showSoftInput(show: Boolean)
+
     fun popView()
-
-    fun hideSoftInput()
-
-    fun showBottomNav(show: Boolean)
 }
