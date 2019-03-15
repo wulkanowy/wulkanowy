@@ -1,12 +1,14 @@
 package io.github.wulkanowy.ui.modules.about
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.mikepenz.aboutlibraries.LibsFragmentCompat
+import io.github.wulkanowy.BuildConfig
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -61,8 +63,25 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
         startActivity(Intent.parseUri("https://wulkanowy.github.io/", 0))
     }
 
-    override fun openIssuesWebView() {
-        startActivity(Intent.parseUri("https://github.com/wulkanowy/wulkanowy/issues", 0))
+    override fun openEmailClientView() {
+        Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, Array(1) { "wulkanowyinc@gmail.com" })
+            putExtra(Intent.EXTRA_SUBJECT, "Zgłoszenie błędu")
+            putExtra(Intent.EXTRA_TEXT,"Tu umieść treść zgłoszenia\n\n" + "-".repeat(40) + "\n" + """
+                Build: ${BuildConfig.VERSION_CODE}
+                SDK: ${android.os.Build.VERSION.SDK_INT}
+                Device: ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}
+            """.trimIndent())
+
+            context?.let {
+                if (resolveActivity(it.packageManager) != null) {
+                    startActivity(Intent.createChooser(this, getString(R.string.about_feedback)))
+                } else {
+                    startActivity(Intent.parseUri("https://github.com/wulkanowy/wulkanowy/issues", 0))
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

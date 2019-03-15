@@ -34,9 +34,9 @@ class AboutPresenter @Inject constructor(
                     openHomepageWebView()
                 }
                 SPECIAL3 -> {
-                    Timber.i("Opening issues page")
-                    analytics.logEvent("open_page", "name" to "issues")
-                    openIssuesWebView()
+                    Timber.i("Opening email client")
+                    analytics.logEvent("open_page", "name" to "email")
+                    openEmailClientView()
                 }
             }
         }

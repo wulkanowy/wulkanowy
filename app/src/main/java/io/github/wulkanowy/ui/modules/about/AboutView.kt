@@ -6,7 +6,7 @@ interface AboutView : BaseView {
 
     fun openDiscordInviteView()
 
-    fun openIssuesWebView()
+    fun openEmailClientView()
 
     fun openHomepageWebView()
 }
