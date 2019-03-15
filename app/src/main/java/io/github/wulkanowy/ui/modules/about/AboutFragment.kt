@@ -64,7 +64,7 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
     }
 
     override fun openEmailClientView() {
-        Intent(Intent.ACTION_SENDTO).apply {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, Array(1) { "wulkanowyinc@gmail.com" })
             putExtra(Intent.EXTRA_SUBJECT, "Zgłoszenie błędu")
@@ -73,13 +73,13 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
                 SDK: ${android.os.Build.VERSION.SDK_INT}
                 Device: ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}
             """.trimIndent())
+        }
 
-            context?.let {
-                if (resolveActivity(it.packageManager) != null) {
-                    startActivity(Intent.createChooser(this, getString(R.string.about_feedback)))
-                } else {
-                    startActivity(Intent.parseUri("https://github.com/wulkanowy/wulkanowy/issues", 0))
-                }
+        context?.let {
+            if (intent.resolveActivity(it.packageManager) != null) {
+                startActivity(Intent.createChooser(intent, getString(R.string.about_feedback)))
+            } else {
+                startActivity(Intent.parseUri("https://github.com/wulkanowy/wulkanowy/issues", 0))
             }
         }
     }
