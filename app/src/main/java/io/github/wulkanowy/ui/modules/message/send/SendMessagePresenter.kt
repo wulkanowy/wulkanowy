@@ -111,10 +111,8 @@ class SendMessagePresenter @Inject constructor(
                     showSoftInput(false)
                     showContent(false)
                     showProgress(true)
+                    showActionBar(false)
                 }
-            }
-            .doFinally {
-                view?.showProgress(false)
             }
             .subscribe({
                 Timber.i("Sending message result: Success")
@@ -125,7 +123,11 @@ class SendMessagePresenter @Inject constructor(
                 }
             }, {
                 Timber.i("Sending message result: An exception occurred")
-                view?.showContent(true)
+                view?.run {
+                    showContent(true)
+                    showProgress(false)
+                    showActionBar(true)
+                }
                 errorHandler.dispatch(it)
             })
         )

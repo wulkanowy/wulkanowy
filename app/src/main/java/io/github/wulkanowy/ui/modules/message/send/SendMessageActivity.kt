@@ -53,8 +53,9 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_message)
-        setSupportActionBar(sendToolbar)
+        setSupportActionBar(sendMessageToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        messageContainer = sendMessageContainer
 
         presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_MESSAGE) as? Message)
     }
@@ -91,6 +92,10 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
 
     override fun showEmpty(show: Boolean) {
         sendMessageEmpty.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showActionBar(show: Boolean) {
+        supportActionBar?.apply { if (show) show() else hide() }
     }
 
     override fun setSubject(subject: String) {

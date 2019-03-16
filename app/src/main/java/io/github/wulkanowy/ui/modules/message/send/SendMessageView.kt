@@ -30,6 +30,8 @@ interface SendMessageView : BaseView {
 
     fun showEmpty(show: Boolean)
 
+    fun showActionBar(show: Boolean)
+
     fun setSubject(subject: String)
 
     fun setContent(content: String)

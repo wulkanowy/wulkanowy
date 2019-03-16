@@ -3,18 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/sendMessageContainer"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/sendAppBarContainer"
+        android:id="@+id/sendMessageAppBarContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/WulkanowyTheme.ActionBar"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/sendToolbar"
+            android:id="@+id/sendMessageToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -23,7 +24,7 @@
         android:id="@+id/sendMessageContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/sendAppBarContainer"
+        android:layout_below="@id/sendMessageAppBarContainer"
         android:orientation="vertical">
 
         <LinearLayout
@@ -124,7 +125,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/sendAppBarContainer">
+        android:layout_below="@id/sendMessageAppBarContainer">
 
         <LinearLayout
             android:id="@+id/sendMessageEmpty"
