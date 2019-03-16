@@ -46,7 +46,7 @@ class MessagePreviewPresenter @Inject constructor(
                         message.let {
                             setSubject(if (it.subject.isNotBlank()) it.subject else noSubjectString)
                             setDate(it.date.toFormattedString("yyyy-MM-dd HH:mm:ss"))
-                            setContent(it.content)
+                            setContent(it.content.orEmpty())
                             showReplyButton(true)
 
                             if (it.recipient.isNotBlank()) setRecipient(it.recipient)

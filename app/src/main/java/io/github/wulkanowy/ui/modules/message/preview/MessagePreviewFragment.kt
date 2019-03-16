@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -15,6 +16,7 @@ import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import kotlinx.android.synthetic.main.fragment_message_preview.*
 import javax.inject.Inject
 
+@SuppressLint("SetTextI18n")
 class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainView.TitledView {
 
     @Inject
@@ -68,19 +70,19 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         messageSubject.text = subject
     }
 
-    override fun setRecipient(recipient: String?) {
-        messageAuthor.text = getString(R.string.message_to, recipient)
+    override fun setRecipient(recipient: String) {
+        messageAuthor.text = "${getString(R.string.message_to)} $recipient"
     }
 
-    override fun setSender(sender: String?) {
-        messageAuthor.text = getString(R.string.message_from, sender)
+    override fun setSender(sender: String) {
+        messageAuthor.text = "${getString(R.string.message_from)} $sender"
     }
 
-    override fun setDate(date: String?) {
+    override fun setDate(date: String) {
         messageDate.text = getString(R.string.message_date, date)
     }
 
-    override fun setContent(content: String?) {
+    override fun setContent(content: String) {
         messageContent.text = content
     }
 

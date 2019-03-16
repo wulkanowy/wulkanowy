@@ -42,13 +42,13 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
         get() = sendMessageContentInput.text.toString()
 
     override val messageRequiredRecipients: String
-        get() = getString(R.string.send_message_required_recipients)
+        get() = getString(R.string.message_required_recipients)
 
     override val messageContentMinLength: String
-        get() = getString(R.string.send_message_content_min_length)
+        get() = getString(R.string.message_content_min_length)
 
     override val messageSuccess: String
-        get() = getString(R.string.send_message_successful)
+        get() = getString(R.string.message_send_successful)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

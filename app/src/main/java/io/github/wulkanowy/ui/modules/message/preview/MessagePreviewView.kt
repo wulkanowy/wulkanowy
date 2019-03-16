@@ -9,13 +9,13 @@ interface MessagePreviewView : BaseSessionView {
 
     fun setSubject(subject: String)
 
-    fun setRecipient(recipient: String?)
+    fun setRecipient(recipient: String)
 
-    fun setSender(sender: String?)
+    fun setSender(sender: String)
 
-    fun setDate(date: String?)
+    fun setDate(date: String)
 
-    fun setContent(content: String?)
+    fun setContent(content: String)
 
     fun showProgress(show: Boolean)
 
