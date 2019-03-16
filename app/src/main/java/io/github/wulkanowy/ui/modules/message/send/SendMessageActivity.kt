@@ -53,6 +53,9 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_message)
+        setSupportActionBar(sendToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_MESSAGE) as? Message)
     }
 
