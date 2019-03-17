@@ -15,22 +15,16 @@ class RecipientChip(var recipient: Recipient) : ChipInterface {
 
     override fun getLabel(): String = recipient.name
 
-    override fun getInfo(): String = recipient.realName.getRecipientInfo()
-
-    private fun String.getRecipientInfo(): String {
-        return substringBeforeLast('-').let {
-            when {
-                (it == this) -> this
-                (it.indexOf('(') != -1) -> this.substringFrom('(')
-                (it.indexOf('[') != -1) -> this.substringFrom('[')
-                else -> this.substringAfter('-')
+    override fun getInfo(): String {
+        return recipient.realName.run {
+            substringBeforeLast("-").let { sub ->
+                when {
+                    (sub == this) -> this
+                    (sub.indexOf('(') != -1) -> indexOf("(").let { substring(if (it != -1) it else 0) }
+                    (sub.indexOf('[') != -1) -> indexOf("[").let { substring(if (it != -1) it else 0) }
+                    else -> substringAfter('-')
+                }
             }
-        }.trim()
-    }
-
-    private fun String.substringFrom(char: Char): String {
-        indexOf(char).let {
-            return substring(if (it != -1) it else 0)
         }
     }
 }

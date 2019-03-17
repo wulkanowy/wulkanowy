@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
@@ -83,15 +85,15 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
     }
 
     override fun showProgress(show: Boolean) {
-        sendMessageProgress.visibility = if (show) View.VISIBLE else View.GONE
+        sendMessageProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showContent(show: Boolean) {
-        sendMessageContent.visibility = if (show) View.VISIBLE else View.GONE
+        sendMessageContent.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showEmpty(show: Boolean) {
-        sendMessageEmpty.visibility = if (show) View.VISIBLE else View.GONE
+        sendMessageEmpty.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showActionBar(show: Boolean) {
@@ -107,7 +109,7 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
     }
 
     override fun showMessage(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, text, LENGTH_LONG).show()
     }
 
     override fun showSoftInput(show: Boolean) {
