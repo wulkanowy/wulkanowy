@@ -7,6 +7,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
@@ -51,7 +53,7 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        messageContainer = message
+        messageContainer = messagePreviewContainer
         presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getInt(MESSAGE_ID_KEY) ?: 0)
     }
 
@@ -67,27 +69,27 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     }
 
     override fun setSubject(subject: String) {
-        messageSubject.text = subject
+        messagePreviewSubject.text = subject
     }
 
     override fun setRecipient(recipient: String) {
-        messageAuthor.text = "${getString(R.string.message_to)} $recipient"
+        messagePreviewAuthor.text = "${getString(R.string.message_to)} $recipient"
     }
 
     override fun setSender(sender: String) {
-        messageAuthor.text = "${getString(R.string.message_from)} $sender"
+        messagePreviewAuthor.text = "${getString(R.string.message_from)} $sender"
     }
 
     override fun setDate(date: String) {
-        messageDate.text = getString(R.string.message_date, date)
+        messagePreviewDate.text = getString(R.string.message_date, date)
     }
 
     override fun setContent(content: String) {
-        messageContent.text = content
+        messagePreviewContent.text = content
     }
 
     override fun showProgress(show: Boolean) {
-        messageProgress.visibility = if (show) View.VISIBLE else View.GONE
+        messagePreviewProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showReplyButton(show: Boolean) {
@@ -95,7 +97,7 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     }
 
     override fun showMessageError() {
-        messageError.visibility = View.VISIBLE
+        messagePreviewError.visibility = VISIBLE
     }
 
     override fun openMessageReply(message: Message?) {

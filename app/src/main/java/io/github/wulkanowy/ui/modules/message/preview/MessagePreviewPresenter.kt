@@ -63,9 +63,10 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     fun onReply(): Boolean {
-        if (replyMessage != null) view?.openMessageReply(replyMessage)
-        else return false
-        return true
+        return if (replyMessage != null) {
+            view?.openMessageReply(replyMessage)
+            true
+        } else false
     }
 
     fun onCreateOptionsMenu() {
