@@ -22,7 +22,7 @@ interface GradeDao {
     @Delete
     fun deleteAll(grades: List<Grade>)
 
-    @Query("SELECT * FROM `Grades` WHERE `semester_id` = :semesterId AND `student_id` = :studentId")
+    @Query("SELECT * FROM Grades WHERE semester_id = :semesterId AND student_id = :studentId")
     fun loadAll(semesterId: Int, studentId: Int): Maybe<List<Grade>>
 
 }

@@ -22,7 +22,7 @@ interface NoteDao {
     @Delete
     fun deleteAll(notes: List<Note>)
 
-    @Query("SELECT * FROM `Notes` WHERE `student_id` = :studentId")
+    @Query("SELECT * FROM Notes WHERE student_id = :studentId")
     fun loadAll(studentId: Int): Maybe<List<Note>>
 
 }
