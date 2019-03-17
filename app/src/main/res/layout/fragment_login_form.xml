@@ -70,6 +70,7 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1" />
 
+                <requestFocus />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
