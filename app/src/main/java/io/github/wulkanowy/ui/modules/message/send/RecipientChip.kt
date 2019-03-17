@@ -24,7 +24,7 @@ class RecipientChip(var recipient: Recipient) : ChipInterface {
                     (sub.indexOf('[') != -1) -> indexOf("[").let { substring(if (it != -1) it else 0) }
                     else -> substringAfter('-')
                 }
-            }
+            }.trim()
         }
     }
 }
