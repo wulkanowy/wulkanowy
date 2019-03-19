@@ -29,6 +29,8 @@ class GradeFragment : BaseSessionFragment(), GradeView, MainView.MainChildView, 
     @Inject
     lateinit var pagerAdapter: BaseFragmentPagerAdapter
 
+    private var semesterSwitchMenu: MenuItem? = null
+
     companion object {
         private const val SAVED_SEMESTER_KEY = "CURRENT_SEMESTER"
 
@@ -57,6 +59,7 @@ class GradeFragment : BaseSessionFragment(), GradeView, MainView.MainChildView, 
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.action_menu_grade, menu)
+        semesterSwitchMenu = menu?.findItem(R.id.gradeMenuSemester)
     }
 
     override fun initView() {
@@ -75,6 +78,7 @@ class GradeFragment : BaseSessionFragment(), GradeView, MainView.MainChildView, 
             setOnSelectPageListener { presenter.onPageSelected(it) }
         }
         gradeTabLayout.setupWithViewPager(gradeViewPager)
+        gradeSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -97,6 +101,18 @@ class GradeFragment : BaseSessionFragment(), GradeView, MainView.MainChildView, 
 
     override fun showEmpty() {
         gradeEmpty.visibility = VISIBLE
+    }
+
+    override fun showRefresh(show: Boolean) {
+        gradeSwipe.isRefreshing = show
+    }
+
+    override fun showSemesterSwitch(show: Boolean) {
+        semesterSwitchMenu?.isVisible = show
+    }
+
+    override fun enableSwipe(enable: Boolean) {
+        gradeSwipe.isEnabled = enable
     }
 
     override fun showSemesterDialog(selectedIndex: Int) {

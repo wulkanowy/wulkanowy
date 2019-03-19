@@ -33,7 +33,11 @@ class GradePresenter @Inject constructor(
         disposable.add(Completable.timer(150, MILLISECONDS, schedulers.mainThread)
             .subscribe {
                 selectedIndex = savedIndex ?: 0
-                view.initView()
+                view.run {
+                    initView()
+                    enableSwipe(false)
+                    showSemesterSwitch(false)
+                }
                 loadData()
             })
     }
@@ -77,6 +81,10 @@ class GradePresenter @Inject constructor(
         loadChild(index)
     }
 
+    fun onSwipeRefresh() {
+        loadData()
+    }
+
     private fun loadData() {
         Timber.i("Loading grade data started")
         disposable.add(studentRepository.getCurrentStudent()
@@ -89,10 +97,13 @@ class GradePresenter @Inject constructor(
             }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
+            .doFinally { view?.showRefresh(false) }
             .subscribe({
                 view?.run {
                     Timber.i("Loading grade result: Attempt load index $currentPageIndex")
                     loadChild(currentPageIndex)
+                    enableSwipe(false)
+                    showSemesterSwitch(true)
                 }
             }) {
                 Timber.i("Loading grade result: An exception occurred")
@@ -100,6 +111,7 @@ class GradePresenter @Inject constructor(
                 view?.run {
                     showProgress(false)
                     showEmpty()
+                    enableSwipe(true)
                 }
             })
     }
