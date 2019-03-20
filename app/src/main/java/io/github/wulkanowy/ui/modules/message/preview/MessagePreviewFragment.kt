@@ -66,8 +66,11 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == R.id.messagePreviewMenuReply) presenter.onReply()
-        else false
+        return when {
+            item?.itemId == R.id.messagePreviewMenuReply -> presenter.onReply()
+            item?.itemId == R.id.messagePreviewMenuForward -> presenter.onForward()
+            else -> false
+        }
     }
 
     override fun setSubject(subject: String) {
@@ -104,6 +107,10 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     }
 
     override fun openMessageReply(message: Message?) {
+        context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, message, true)) }
+    }
+
+    override fun openMessageForward(message: Message?) {
         context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, message)) }
     }
 

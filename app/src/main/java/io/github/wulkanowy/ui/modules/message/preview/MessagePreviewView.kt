@@ -24,4 +24,6 @@ interface MessagePreviewView : BaseSessionView {
     fun showMessageError()
 
     fun openMessageReply(message: Message?)
+
+    fun openMessageForward(message: Message?)
 }
