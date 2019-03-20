@@ -55,8 +55,8 @@ class MainActivity : BaseActivity(), MainView {
     override var startMenuIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         if (intent.getBooleanExtra(EXTRA_IS_AMOLED, false)) setTheme(R.style.WulkanowyTheme_Black)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer
