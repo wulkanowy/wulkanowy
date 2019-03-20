@@ -12,7 +12,7 @@ interface GradeView : BaseSessionView {
 
     fun showProgress(show: Boolean)
 
-    fun showEmpty()
+    fun showEmpty(show: Boolean)
 
     fun showRefresh(show: Boolean)
 

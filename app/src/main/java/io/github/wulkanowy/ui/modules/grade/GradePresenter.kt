@@ -36,10 +36,13 @@ class GradePresenter @Inject constructor(
                 view.run {
                     initView()
                     enableSwipe(false)
-                    showSemesterSwitch(false)
                 }
                 loadData()
             })
+    }
+
+    fun onCreateMenu() {
+        if (semesters.isEmpty()) view?.showSemesterSwitch(false)
     }
 
     fun onViewReselected() {
@@ -48,7 +51,7 @@ class GradePresenter @Inject constructor(
     }
 
     fun onSemesterSwitch(): Boolean {
-        view?.showSemesterDialog(selectedIndex - 1)
+        if (semesters.isNotEmpty()) view?.showSemesterDialog(selectedIndex - 1)
         return true
     }
 
@@ -73,6 +76,7 @@ class GradePresenter @Inject constructor(
         view?.apply {
             showContent(true)
             showProgress(false)
+            showEmpty(false)
             loadedSemesterId[currentPageIndex] = semesterId
         }
     }
@@ -110,7 +114,7 @@ class GradePresenter @Inject constructor(
                 errorHandler.dispatch(it)
                 view?.run {
                     showProgress(false)
-                    showEmpty()
+                    showEmpty(true)
                     enableSwipe(true)
                 }
             })

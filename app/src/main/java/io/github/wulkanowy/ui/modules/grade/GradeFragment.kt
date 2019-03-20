@@ -60,6 +60,7 @@ class GradeFragment : BaseSessionFragment(), GradeView, MainView.MainChildView, 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.action_menu_grade, menu)
         semesterSwitchMenu = menu?.findItem(R.id.gradeMenuSemester)
+        presenter.onCreateMenu()
     }
 
     override fun initView() {
@@ -99,8 +100,8 @@ class GradeFragment : BaseSessionFragment(), GradeView, MainView.MainChildView, 
         gradeProgress.visibility = if (show) VISIBLE else INVISIBLE
     }
 
-    override fun showEmpty() {
-        gradeEmpty.visibility = VISIBLE
+    override fun showEmpty(show: Boolean) {
+        gradeEmpty.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showRefresh(show: Boolean) {
