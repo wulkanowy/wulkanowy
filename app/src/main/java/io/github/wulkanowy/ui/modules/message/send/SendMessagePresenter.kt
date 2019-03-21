@@ -38,7 +38,7 @@ class SendMessagePresenter @Inject constructor(
             message?.let {
                 setSubject(when (reply) {
                     true -> "RE: "
-                    false -> "FE: "
+                    false -> "FW: "
                 } + message.subject)
                 if (preferencesRepository.fillMessageContent || !reply) {
                     setContent(
