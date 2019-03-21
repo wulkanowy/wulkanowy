@@ -29,5 +29,7 @@ interface MessagePreviewView : BaseSessionView {
 
     fun openMessageReply(message: Message?)
 
+    fun openMessageForward(message: Message?)
+
     fun popView()
 }

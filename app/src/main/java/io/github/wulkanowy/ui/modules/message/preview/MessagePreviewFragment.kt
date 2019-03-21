@@ -26,6 +26,7 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     lateinit var presenter: MessagePreviewPresenter
 
     private var menuReplyButton: MenuItem? = null
+    private var menuForwardButton: MenuItem? = null
     private var menuDeleteButton: MenuItem? = null
 
     override val titleStringId: Int
@@ -65,6 +66,7 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.action_menu_message_preview, menu)
         menuReplyButton = menu?.findItem(R.id.messagePreviewMenuReply)
+        menuForwardButton = menu?.findItem(R.id.messagePreviewMenuForward)
         menuDeleteButton = menu?.findItem(R.id.messagePreviewMenuDelete)
         presenter.onCreateOptionsMenu()
     }
@@ -72,6 +74,7 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.messagePreviewMenuReply -> presenter.onReply()
+            R.id.messagePreviewMenuForward -> presenter.onForward()
             R.id.messagePreviewMenuDelete -> presenter.deleteMessage()
             else -> false
         }
@@ -107,6 +110,7 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
 
     override fun showOptions(show: Boolean) {
         menuReplyButton?.isVisible = show
+        menuForwardButton?.isVisible = show
         menuDeleteButton?.isVisible = show
     }
 
@@ -115,6 +119,10 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     }
 
     override fun openMessageReply(message: Message?) {
+        context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, message, true)) }
+    }
+
+    override fun openMessageForward(message: Message?) {
         context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, message)) }
     }
 

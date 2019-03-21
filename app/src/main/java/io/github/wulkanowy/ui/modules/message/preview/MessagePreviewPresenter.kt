@@ -69,6 +69,13 @@ class MessagePreviewPresenter @Inject constructor(
         } else false
     }
 
+    fun onForward(): Boolean {
+        return if (message != null) {
+            view?.openMessageForward(message)
+            true
+        } else false
+    }
+
     fun deleteMessage(): Boolean {
         message?.let {
             disposable.add(messageRepository.deleteMessage(it)

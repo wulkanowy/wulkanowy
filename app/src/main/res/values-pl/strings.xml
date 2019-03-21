@@ -140,6 +140,7 @@
     <string name="message_to">Do:</string>
     <string name="message_date">Data: %s</string>
     <string name="message_reply">Odpowiedz</string>
+    <string name="message_forward">Prześlij dalej</string>
     <string name="message_delete">Usuń</string>
     <string name="message_delete_success">Wiadomość usunięta pomyślnie</string>
     <string name="message_subject">Temat</string>
