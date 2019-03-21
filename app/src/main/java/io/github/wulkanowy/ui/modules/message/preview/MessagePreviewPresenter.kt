@@ -47,7 +47,7 @@ class MessagePreviewPresenter @Inject constructor(
                             setSubject(if (it.subject.isNotBlank()) it.subject else noSubjectString)
                             setDate(it.date.toFormattedString("yyyy-MM-dd HH:mm:ss"))
                             setContent(it.content.orEmpty())
-                            showReplyButton(true)
+                            showOptions(true)
 
                             if (it.recipient.isNotBlank()) setRecipient(it.recipient)
                             else setSender(it.sender)
@@ -70,6 +70,6 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     fun onCreateOptionsMenu() {
-        view?.showReplyButton(replyMessage != null)
+        view?.showOptions(replyMessage != null)
     }
 }
