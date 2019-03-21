@@ -66,9 +66,9 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when {
-            item?.itemId == R.id.messagePreviewMenuReply -> presenter.onReply()
-            item?.itemId == R.id.messagePreviewMenuForward -> presenter.onForward()
+        return when (item?.itemId) {
+            R.id.messagePreviewMenuReply -> presenter.onReply()
+            R.id.messagePreviewMenuForward -> presenter.onForward()
             else -> false
         }
     }
