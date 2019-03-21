@@ -89,4 +89,12 @@ class MessageRepository @Inject constructor(
                 else Single.error(UnknownHostException())
             }
     }
+
+    fun deleteMessage(message: Message): Single<Boolean> {
+        return ReactiveNetwork.checkInternetConnectivity(settings)
+            .flatMap {
+                if (it) remote.deleteMessage(message)
+                else Single.error(UnknownHostException())
+            }
+    }
 }

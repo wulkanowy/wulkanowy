@@ -22,7 +22,7 @@ class MessagePreviewPresenter @Inject constructor(
 
     var messageId: Int = 0
 
-    private var replyMessage: Message? = null
+    private var message: Message? = null
 
     fun onAttachView(view: MessagePreviewView, id: Int) {
         super.onAttachView(view)
@@ -41,7 +41,7 @@ class MessagePreviewPresenter @Inject constructor(
                 .doFinally { view?.showProgress(false) }
                 .subscribe({ message ->
                     Timber.i("Loading message $id preview result: Success ")
-                    replyMessage = message
+                    this@MessagePreviewPresenter.message = message
                     view?.run {
                         message.let {
                             setSubject(if (it.subject.isNotBlank()) it.subject else noSubjectString)
@@ -63,13 +63,47 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     fun onReply(): Boolean {
-        return if (replyMessage != null) {
-            view?.openMessageReply(replyMessage)
+        return if (message != null) {
+            view?.openMessageReply(message)
             true
         } else false
     }
 
+    fun deleteMessage(): Boolean {
+        message?.let {
+            disposable.add(messageRepository.deleteMessage(it)
+                .subscribeOn(schedulers.backgroundThread)
+                .observeOn(schedulers.mainThread)
+                .doOnSubscribe {
+                    view?.run {
+                        showContent(false)
+                        showProgress(true)
+                        showOptions(false)
+                    }
+                }
+                .doFinally {
+                    view?.showProgress(false)
+                }
+                .subscribe({ success ->
+                    if (success) {
+                        view?.run {
+                            showMessage(deleteMessageSuccessString)
+                            popView()
+                        }
+                    } else {
+                        view?.showMessageError()
+                    }
+
+                }, { error ->
+                    view?.showMessageError()
+                    errorHandler.dispatch(error)
+                })
+            )
+        }
+        return true
+    }
+
     fun onCreateOptionsMenu() {
-        view?.showOptions(replyMessage != null)
+        view?.showOptions(message != null)
     }
 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import kotlinx.android.synthetic.main.fragment_message_preview.*
@@ -32,6 +33,9 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
 
     override val noSubjectString: String
         get() = getString(R.string.message_no_subject)
+
+    override val deleteMessageSuccessString: String
+        get() = getString(R.string.message_delete_success)
 
     companion object {
         const val MESSAGE_ID_KEY = "message_id"
@@ -66,8 +70,11 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == R.id.messagePreviewMenuReply) presenter.onReply()
-        else false
+        return when (item?.itemId) {
+            R.id.messagePreviewMenuReply -> presenter.onReply()
+            R.id.messagePreviewMenuDelete -> presenter.deleteMessage()
+            else -> false
+        }
     }
 
     override fun setSubject(subject: String) {
@@ -94,6 +101,10 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         messagePreviewProgress.visibility = if (show) VISIBLE else GONE
     }
 
+    override fun showContent(show: Boolean) {
+        messagePreviewContentContainer.visibility = if (show) VISIBLE else GONE
+    }
+
     override fun showOptions(show: Boolean) {
         menuReplyButton?.isVisible = show
         menuDeleteButton?.isVisible = show
@@ -105,6 +116,10 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
 
     override fun openMessageReply(message: Message?) {
         context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, message)) }
+    }
+
+    override fun popView() {
+        (activity as MainActivity).popView()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
