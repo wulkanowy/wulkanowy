@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/luckyNumberWidgetContainer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
     android:padding="10dp"
@@ -13,25 +13,33 @@
         android:id="@+id/luckyNumberWidgetImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:contentDescription="@string/lucky_number_title"
         android:src="@drawable/ic_widget_clover_24dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/luckyNumberWidgetTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/luckyNumberWidgetImage"
+        android:layout_centerInParent="true"
+        android:gravity="center"
         android:labelFor="@id/luckyNumberWidgetImage"
         android:text="@string/lucky_number_title"
         android:textAlignment="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/luckyNumberWidgetNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/luckyNumberWidgetTitle"
+        android:layout_centerInParent="true"
+        android:gravity="center"
         android:textAlignment="center"
         android:textSize="25sp"
         tools:text="13" />
-</LinearLayout>
+</RelativeLayout>
