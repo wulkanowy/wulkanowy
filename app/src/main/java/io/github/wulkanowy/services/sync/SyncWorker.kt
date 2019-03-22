@@ -35,7 +35,7 @@ class SyncWorker @AssistedInject constructor(
     override fun createWork(): Single<Result> {
         return studentRepository.isStudentSaved()
             .flatMapCompletable { isSaved ->
-                if (!isSaved) {
+                if (isSaved) {
                     studentRepository.getCurrentStudent()
                         .flatMapCompletable { student ->
                             semesterRepository.getCurrentSemester(student)
