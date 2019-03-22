@@ -58,7 +58,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     private fun onUpdate(context: Context, intent: Intent) {
         intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS).forEach { appWidgetId ->
             RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
-                setTextViewText(R.id.luckyNumberWidgetNumber, getLuckyNumber()?.luckyNumber?.toString() ?: context.getString(R.string.lucky_number_empty))
+                setTextViewText(R.id.luckyNumberWidgetNumber, getLuckyNumber()?.luckyNumber?.toString() ?: "Brak")
                 setStyles(this, intent)
                 setOnClickPendingIntent(R.id.luckyNumberWidgetContainer,
                     PendingIntent.getActivity(context, 2, MainActivity.getStartIntent(context).apply {
