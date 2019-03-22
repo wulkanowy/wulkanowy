@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -90,11 +91,13 @@ class MessageRepository @Inject constructor(
             }
     }
 
-    fun deleteMessage(message: Message): Single<Boolean> {
+    fun deleteMessage(message: Message): Maybe<Boolean> {
         return ReactiveNetwork.checkInternetConnectivity(settings)
             .flatMap {
                 if (it) remote.deleteMessage(message)
                 else Single.error(UnknownHostException())
             }
+            .filter { it }
+            .doOnSuccess { local.deleteMessages(listOf(message)) }
     }
 }

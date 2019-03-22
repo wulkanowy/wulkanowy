@@ -77,8 +77,8 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     fun deleteMessage(): Boolean {
-        message?.let {
-            disposable.add(messageRepository.deleteMessage(it)
+        message?.let { message ->
+            disposable.add(messageRepository.deleteMessage(message)
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doOnSubscribe {
@@ -91,19 +91,16 @@ class MessagePreviewPresenter @Inject constructor(
                 .doFinally {
                     view?.showProgress(false)
                 }
-                .subscribe({ success ->
-                    if (success) {
-                        view?.run {
-                            showMessage(deleteMessageSuccessString)
-                            popView()
-                        }
-                    } else {
-                        view?.showMessageError()
+                .subscribe({
+                    view?.run {
+                        showMessage(deleteMessageSuccessString)
+                        popView()
                     }
-
                 }, { error ->
                     view?.showMessageError()
                     errorHandler.dispatch(error)
+                }, {
+                    view?.showMessageError()
                 })
             )
         }
