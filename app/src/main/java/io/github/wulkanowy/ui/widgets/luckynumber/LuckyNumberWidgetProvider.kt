@@ -1,10 +1,14 @@
 package io.github.wulkanowy.ui.widgets.luckynumber
 
+import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.content.BroadcastReceiver
+import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import dagger.android.AndroidInjection
 import io.github.wulkanowy.R
@@ -15,9 +19,10 @@ import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.SchedulersProvider
+import timber.log.Timber
 import javax.inject.Inject
 
-class LuckyNumberWidgetProvider : BroadcastReceiver() {
+class LuckyNumberWidgetProvider : AppWidgetProvider() {
 
     @Inject
     lateinit var studentRepository: StudentRepository
@@ -46,6 +51,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
         when (intent.action) {
             AppWidgetManager.ACTION_APPWIDGET_UPDATE -> onUpdate(context, intent)
             AppWidgetManager.ACTION_APPWIDGET_DELETED -> onDelete(intent)
+            AppWidgetManager.ACTION_APPWIDGET_OPTIONS_CHANGED -> onOptionsChange(context, intent)
         }
     }
 
@@ -53,15 +59,13 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
         intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS).forEach { appWidgetId ->
             RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
                 setTextViewText(R.id.luckyNumberWidgetNumber, getLuckyNumber()?.luckyNumber?.toString() ?: context.getString(R.string.lucky_number_empty))
+                setStyles(this, intent)
                 setOnClickPendingIntent(R.id.luckyNumberWidgetContainer,
                     PendingIntent.getActivity(context, 2, MainActivity.getStartIntent(context).apply {
                         putExtra(MainActivity.EXTRA_START_MENU_INDEX, 4)
                     }, PendingIntent.FLAG_UPDATE_CURRENT))
             }.also {
-                appWidgetManager.apply {
-                    notifyAppWidgetViewDataChanged(appWidgetId, R.id.luckyNumberWidgetContainer)
-                    updateAppWidget(appWidgetId, it)
-                }
+                appWidgetManager.updateAppWidget(appWidgetId, it)
             }
         }
     }
@@ -79,5 +83,47 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
             .flatMapMaybe { luckyNumberRepository.getLuckyNumber(it) }
             .subscribeOn(schedulers.backgroundThread)
             .blockingGet()
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private fun onOptionsChange(context: Context, intent: Intent) {
+        intent.extras?.let { extras ->
+            RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
+                setStyles(this, intent)
+            }.also {
+                appWidgetManager.updateAppWidget(extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID), it)
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private fun setStyles(views: RemoteViews, intent: Intent) {
+        intent.extras?.getBundle(AppWidgetManager.EXTRA_APPWIDGET_OPTIONS)?.let {
+            val minWidth = it.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+            val maxWidth = it.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)
+            val minHeight = it.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+            val maxHeight = it.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+
+            Timber.d("New measurement: ")
+            Timber.d("minWidth: %d", minWidth)
+            Timber.d("maxWidth: %d", maxWidth)
+            Timber.d("minHeight: %d", minHeight)
+            Timber.d("maxHeight: %d", maxHeight)
+
+            when {
+                maxWidth > 220 && maxHeight > 220 -> {
+                    views.setViewVisibility(R.id.luckyNumberWidgetImage, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
+                }
+                maxWidth > 110 && maxHeight > 120 -> {
+                    views.setViewVisibility(R.id.luckyNumberWidgetImage, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
+                }
+                else -> {
+                    views.setViewVisibility(R.id.luckyNumberWidgetImage, GONE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
+                }
+            }
+        }
     }
 }

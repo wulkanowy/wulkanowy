@@ -15,14 +15,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@string/lucky_number_title"
-        android:src="@drawable/ic_widget_clover_24dp" />
+        android:src="@drawable/ic_widget_clover_24dp"
+        android:visibility="gone" />
 
     <TextView
+        android:id="@+id/luckyNumberWidgetTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:labelFor="@id/luckyNumberWidgetImage"
         android:text="@string/lucky_number_title"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/luckyNumberWidgetNumber"
