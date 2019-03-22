@@ -53,8 +53,8 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
         intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS).forEach { appWidgetId ->
             RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
                 setTextViewText(R.id.luckyNumberWidgetNumber, getLuckyNumber()?.luckyNumber?.toString() ?: context.getString(R.string.lucky_number_empty))
-                setPendingIntentTemplate(R.id.luckyNumberWidgetContainer,
-                    PendingIntent.getActivity(context, 1, MainActivity.getStartIntent(context).apply {
+                setOnClickPendingIntent(R.id.luckyNumberWidgetContainer,
+                    PendingIntent.getActivity(context, 2, MainActivity.getStartIntent(context).apply {
                         putExtra(MainActivity.EXTRA_START_MENU_INDEX, 4)
                     }, PendingIntent.FLAG_UPDATE_CURRENT))
             }.also {
