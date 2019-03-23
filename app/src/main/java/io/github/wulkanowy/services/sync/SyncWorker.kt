@@ -37,21 +37,18 @@ class SyncWorker @AssistedInject constructor(
     override fun createWork(): Single<Result> {
         Timber.i("SyncWorker is starting")
         return studentRepository.isStudentSaved()
-            .flatMapCompletable { isSaved ->
-                if (isSaved) {
-                    studentRepository.getCurrentStudent()
-                        .flatMapCompletable { student ->
-                            semesterRepository.getCurrentSemester(student)
-                                .flatMapCompletable { semester ->
-                                    Completable.mergeDelayError(Flowable.fromIterable(works.map { work ->
-                                        work.create(student, semester)
-                                            .doOnSubscribe { Timber.i("${work::class.java.simpleName} is starting") }
-                                            .doOnError { Timber.i("${work::class.java.simpleName} result: An exception occurred") }
-                                            .doOnComplete { Timber.i("${work::class.java.simpleName} result: Success") }
-                                    }), 3)
-                                }
-                        }
-                } else Completable.complete()
+            .filter { false }
+            .flatMap { studentRepository.getCurrentStudent().toMaybe() }
+            .flatMapCompletable { student ->
+                semesterRepository.getCurrentSemester(student)
+                    .flatMapCompletable { semester ->
+                        Completable.mergeDelayError(Flowable.fromIterable(works.map { work ->
+                            work.create(student, semester)
+                                .doOnSubscribe { Timber.i("${work::class.java.simpleName} is starting") }
+                                .doOnError { Timber.i("${work::class.java.simpleName} result: An exception occurred") }
+                                .doOnComplete { Timber.i("${work::class.java.simpleName} result: Success") }
+                        }), 3)
+                    }
             }
             .toSingleDefault(Result.success())
             .onErrorReturn {
