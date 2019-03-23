@@ -59,7 +59,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS).forEach { appWidgetId ->
             RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
                 setTextViewText(R.id.luckyNumberWidgetNumber, getLuckyNumber()?.luckyNumber?.toString() ?: "Brak")
-                setStyles(this, intent)
                 setOnClickPendingIntent(R.id.luckyNumberWidgetContainer,
                     PendingIntent.getActivity(context, 2, MainActivity.getStartIntent(context).apply {
                         putExtra(MainActivity.EXTRA_START_MENU_INDEX, 4)
@@ -99,29 +98,40 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun setStyles(views: RemoteViews, intent: Intent) {
         intent.extras?.getBundle(AppWidgetManager.EXTRA_APPWIDGET_OPTIONS)?.let {
-            val minWidth = it.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
             val maxWidth = it.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)
-            val minHeight = it.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
             val maxHeight = it.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
 
             Timber.d("New measurement: ")
-            Timber.d("minWidth: %d", minWidth)
-            Timber.d("maxWidth: %d", maxWidth)
-            Timber.d("minHeight: %d", minHeight)
-            Timber.d("maxHeight: %d", maxHeight)
+            Timber.d("max: %dx%d", maxWidth, maxHeight)
 
             when {
-                maxWidth > 220 && maxHeight > 220 -> {
-                    views.setViewVisibility(R.id.luckyNumberWidgetImage, VISIBLE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
-                }
-                maxWidth > 110 && maxHeight > 120 -> {
-                    views.setViewVisibility(R.id.luckyNumberWidgetImage, VISIBLE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
-                }
-                else -> {
+                // 1x1
+                maxWidth < 110 && maxHeight < 110 -> {
+                    Timber.d("Size: 1x1")
                     views.setViewVisibility(R.id.luckyNumberWidgetImage, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                }
+                // 1x2
+                maxWidth < 110 && maxHeight > 110 -> {
+                    Timber.d("Size: 1x2")
+                    views.setViewVisibility(R.id.luckyNumberWidgetImage, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                }
+                // 2x1
+                maxWidth > 110 && maxHeight < 110 -> {
+                    Timber.d("Size: 2x1")
+                    views.setViewVisibility(R.id.luckyNumberWidgetImage, GONE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                }
+                // 2x2 and bigger
+                else -> {
+                    Timber.d("Size: 2x2 and bigger")
+                    views.setViewVisibility(R.id.luckyNumberWidgetImage, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
                 }
             }
         }
