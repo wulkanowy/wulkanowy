@@ -47,7 +47,7 @@ class MessagePreviewPresenter @Inject constructor(
                             setSubject(if (it.subject.isNotBlank()) it.subject else noSubjectString)
                             setDate(it.date.toFormattedString("yyyy-MM-dd HH:mm:ss"))
                             setContent(it.content.orEmpty())
-                            showOptions(true)
+                            onCreateOptionsMenu()
 
                             if (it.recipient.isNotBlank()) setRecipient(it.recipient)
                             else setSender(it.sender)
@@ -108,6 +108,12 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     fun onCreateOptionsMenu() {
-        view?.showOptions(message != null)
+        view?.run {
+            message?.let {
+                showOptions(true)
+                setOptionsLabels(it.removed)
+            }
+
+        }
     }
 }

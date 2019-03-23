@@ -114,6 +114,14 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         menuDeleteButton?.isVisible = show
     }
 
+    override fun setOptionsLabels(removed: Boolean) {
+        if (removed) {
+            menuDeleteButton?.setTitle(R.string.message_delete_forever)
+        } else {
+            menuDeleteButton?.setTitle(R.string.message_move_to_bin)
+        }
+    }
+
     override fun showMessageError() {
         messagePreviewError.visibility = VISIBLE
     }
