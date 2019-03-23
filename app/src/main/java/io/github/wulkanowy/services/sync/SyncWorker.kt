@@ -40,7 +40,7 @@ class SyncWorker @AssistedInject constructor(
             .filter { true }
             .flatMap { studentRepository.getCurrentStudent().toMaybe() }
             .flatMapCompletable { student ->
-                semesterRepository.getCurrentSemester(student)
+                semesterRepository.getCurrentSemester(student, true)
                     .flatMapCompletable { semester ->
                         Completable.mergeDelayError(Flowable.fromIterable(works.map { work ->
                             work.create(student, semester)
