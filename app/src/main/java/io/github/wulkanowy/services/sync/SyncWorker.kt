@@ -35,6 +35,7 @@ class SyncWorker @AssistedInject constructor(
 ) : RxWorker(appContext, workerParameters) {
 
     override fun createWork(): Single<Result> {
+        Timber.i("SyncWorker is starting")
         return studentRepository.isStudentSaved()
             .flatMapCompletable { isSaved ->
                 if (isSaved) {
@@ -42,7 +43,12 @@ class SyncWorker @AssistedInject constructor(
                         .flatMapCompletable { student ->
                             semesterRepository.getCurrentSemester(student)
                                 .flatMapCompletable { semester ->
-                                    Completable.mergeDelayError(Flowable.fromIterable(works.map { it.create(student, semester) }), 3)
+                                    Completable.mergeDelayError(Flowable.fromIterable(works.map { work ->
+                                        work.create(student, semester)
+                                            .doOnSubscribe { Timber.i("${work::class.java.simpleName} is starting") }
+                                            .doOnError { Timber.i("${work::class.java.simpleName} result: An exception occurred") }
+                                            .doOnComplete { Timber.i("${work::class.java.simpleName} result: Success") }
+                                    }), 3)
                                 }
                         }
                 } else Completable.complete()
@@ -53,7 +59,10 @@ class SyncWorker @AssistedInject constructor(
                 if (it is FeatureDisabledException) Result.success()
                 else Result.retry()
             }
-            .doOnSuccess { if (preferencesRepository.isDebugNotificationEnable) notify(it) }
+            .doOnSuccess {
+                if (preferencesRepository.isDebugNotificationEnable) notify(it)
+                Timber.i("SyncWorker result: $it")
+            }
     }
 
     private fun notify(result: Result) {
