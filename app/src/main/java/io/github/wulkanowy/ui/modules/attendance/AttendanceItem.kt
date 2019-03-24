@@ -41,7 +41,9 @@ class AttendanceItem(val attendance: Attendance) : AbstractFlexibleItem<Attendan
     }
 
     override fun hashCode(): Int {
-        return attendance.hashCode()
+        var result = attendance.hashCode()
+        result = 31 * result + attendance.id.toInt()
+        return result
     }
 
     class ViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {

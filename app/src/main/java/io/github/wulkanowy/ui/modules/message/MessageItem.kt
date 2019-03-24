@@ -13,8 +13,8 @@ import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_message.*
 
-class MessageItem(val message: Message, private val noSubjectString: String)
-    : AbstractFlexibleItem<MessageItem.ViewHolder>() {
+class MessageItem(val message: Message, private val noSubjectString: String) :
+    AbstractFlexibleItem<MessageItem.ViewHolder>() {
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
         return ViewHolder(view, adapter)

@@ -15,8 +15,8 @@ import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_timetable.*
 
-class TimetableItem(val lesson: Timetable, private val roomText: String)
-    : AbstractFlexibleItem<TimetableItem.ViewHolder>() {
+class TimetableItem(val lesson: Timetable, private val roomText: String) :
+    AbstractFlexibleItem<TimetableItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_timetable
 
@@ -49,7 +49,9 @@ class TimetableItem(val lesson: Timetable, private val roomText: String)
     }
 
     override fun hashCode(): Int {
-        return lesson.hashCode()
+        var result = lesson.hashCode()
+        result = 31 * result + lesson.id.toInt()
+        return result
     }
 
     class ViewHolder(val view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {

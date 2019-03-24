@@ -38,7 +38,9 @@ class AccountItem(val student: Student) : AbstractFlexibleItem<AccountItem.ViewH
     }
 
     override fun hashCode(): Int {
-        return student.hashCode()
+        var result = student.hashCode()
+        result = 31 * result + student.id.toInt()
+        return result
     }
 
     class ViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {

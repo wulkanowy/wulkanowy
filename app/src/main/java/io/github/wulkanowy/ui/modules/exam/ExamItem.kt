@@ -38,7 +38,9 @@ class ExamItem(header: ExamHeader, val exam: Exam) : AbstractSectionableItem<Exa
     }
 
     override fun hashCode(): Int {
-        return exam.hashCode()
+        var result = exam.hashCode()
+        result = 31 * result + exam.id.toInt()
+        return result
     }
 
     class ViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
