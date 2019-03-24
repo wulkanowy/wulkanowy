@@ -10,9 +10,8 @@ import io.github.wulkanowy.data.db.entities.Homework
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_homework.*
 
-class HomeworkItem(
-    header: HomeworkHeader, val homework: Homework
-) : AbstractSectionableItem<HomeworkItem.ViewHolder, HomeworkHeader>(header) {
+class HomeworkItem(header: HomeworkHeader, val homework: Homework)
+    : AbstractSectionableItem<HomeworkItem.ViewHolder, HomeworkHeader>(header) {
 
     override fun getLayoutRes() = R.layout.item_homework
 
@@ -20,10 +19,7 @@ class HomeworkItem(
         return ViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(
-        adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder,
-        position: Int, payloads: MutableList<Any>?
-    ) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>?) {
         holder.apply {
             homeworkItemSubject.text = homework.subject
             homeworkItemTeacher.text = homework.teacher
@@ -45,9 +41,7 @@ class HomeworkItem(
         return homework.hashCode()
     }
 
-    class ViewHolder(val view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter),
-        LayoutContainer {
-
+    class ViewHolder(val view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
         override val containerView: View
             get() = contentView
     }

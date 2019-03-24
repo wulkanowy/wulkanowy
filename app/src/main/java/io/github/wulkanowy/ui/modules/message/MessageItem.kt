@@ -13,19 +13,16 @@ import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_message.*
 
-class MessageItem(val message: Message, private val noSubjectString: String) :
-    AbstractFlexibleItem<MessageItem.ViewHolder>() {
+class MessageItem(val message: Message, private val noSubjectString: String)
+    : AbstractFlexibleItem<MessageItem.ViewHolder>() {
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
         return ViewHolder(view, adapter)
     }
 
-    override fun getLayoutRes(): Int = R.layout.item_message
+    override fun getLayoutRes() = R.layout.item_message
 
-    override fun bindViewHolder(
-        adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder,
-        position: Int, payloads: MutableList<Any>?
-    ) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>?) {
         holder.apply {
             val style = if (message.unread) BOLD else NORMAL
 
@@ -58,9 +55,7 @@ class MessageItem(val message: Message, private val noSubjectString: String) :
         return message.hashCode()
     }
 
-    class ViewHolder(val view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter),
-        LayoutContainer {
-
+    class ViewHolder(val view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
         override val containerView: View
             get() = contentView
     }

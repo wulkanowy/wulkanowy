@@ -14,14 +14,13 @@ import kotlinx.android.synthetic.main.item_attendance.*
 
 class AttendanceItem(val attendance: Attendance) : AbstractFlexibleItem<AttendanceItem.ViewHolder>() {
 
+    override fun getLayoutRes() = R.layout.item_attendance
+
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
         return ViewHolder(view, adapter)
     }
 
-    override fun getLayoutRes(): Int = R.layout.item_attendance
-
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder,
-                                position: Int, payloads: MutableList<Any>?) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>?) {
         holder.apply {
             attendanceItemNumber.text = attendance.number.toString()
             attendanceItemSubject.text = attendance.subject
@@ -37,6 +36,7 @@ class AttendanceItem(val attendance: Attendance) : AbstractFlexibleItem<Attendan
         other as AttendanceItem
 
         if (attendance != other.attendance) return false
+
         return true
     }
 
@@ -44,9 +44,7 @@ class AttendanceItem(val attendance: Attendance) : AbstractFlexibleItem<Attendan
         return attendance.hashCode()
     }
 
-    class ViewHolder(val view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter),
-            LayoutContainer {
-
+    class ViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
         override val containerView: View
             get() = contentView
     }
