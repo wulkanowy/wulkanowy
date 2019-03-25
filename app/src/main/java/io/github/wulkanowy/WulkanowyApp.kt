@@ -23,6 +23,7 @@ import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
 import java.io.IOException
+import java.lang.Exception
 import javax.inject.Inject
 
 class WulkanowyApp : DaggerApplication() {
@@ -45,7 +46,7 @@ class WulkanowyApp : DaggerApplication() {
         if (DEBUG) enableDebugLog()
         AppCompatDelegate.setDefaultNightMode(prefRepository.currentTheme)
         WorkManager.initialize(this, Configuration.Builder().setWorkerFactory(workerFactory).build())
-        RxJavaPlugins.setErrorHandler(this::onError)
+        RxJavaPlugins.setErrorHandler(::onError)
     }
 
     private fun enableDebugLog() {
