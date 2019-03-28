@@ -11,6 +11,7 @@ import androidx.work.WorkerParameters
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.wulkanowy.R
+import io.github.wulkanowy.api.interceptor.FeatureDisabledException
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -33,19 +34,31 @@ class SyncWorker @AssistedInject constructor(
 ) : RxWorker(appContext, workerParameters) {
 
     override fun createWork(): Single<Result> {
-        return studentRepository.getCurrentStudent()
+        Timber.i("SyncWorker is starting")
+        return studentRepository.isStudentSaved()
+            .filter { true }
+            .flatMap { studentRepository.getCurrentStudent().toMaybe() }
             .flatMapCompletable { student ->
                 semesterRepository.getCurrentSemester(student, true)
                     .flatMapCompletable { semester ->
-                        Completable.mergeDelayError(works.map { it.create(student, semester) })
+                        Completable.mergeDelayError(works.map { work ->
+                            work.create(student, semester)
+                                .doOnSubscribe { Timber.i("${work::class.java.simpleName} is starting") }
+                                .doOnError { Timber.i("${work::class.java.simpleName} result: An exception occurred") }
+                                .doOnComplete { Timber.i("${work::class.java.simpleName} result: Success") }
+                        })
                     }
             }
             .toSingleDefault(Result.success())
             .onErrorReturn {
                 Timber.e(it, "There was an error during synchronization")
-                Result.retry()
+                if (it is FeatureDisabledException) Result.success()
+                else Result.retry()
             }
-            .doOnSuccess { if (preferencesRepository.isDebugNotificationEnable) notify(it) }
+            .doOnSuccess {
+                if (preferencesRepository.isDebugNotificationEnable) notify(it)
+                Timber.i("SyncWorker result: $it")
+            }
     }
 
     private fun notify(result: Result) {
