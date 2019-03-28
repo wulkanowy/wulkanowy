@@ -34,4 +34,6 @@ interface MessagePreviewView : BaseSessionView {
     fun openMessageForward(message: Message?)
 
     fun popView()
+
+    fun notifyParentMessageDeleted()
 }

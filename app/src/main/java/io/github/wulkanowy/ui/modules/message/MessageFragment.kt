@@ -75,12 +75,20 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
         messageProgress.visibility = if (show) VISIBLE else INVISIBLE
     }
 
+    fun onDeleteMessage() {
+        presenter.onDeleteMessage()
+    }
+
     fun onChildFragmentLoaded() {
         presenter.onChildViewLoaded()
     }
 
+    override fun notifyChildMessageDeleted() {
+        (pagerAdapter.getFragmentInstance(0) as? MessageTabFragment)?.onParentDeleteMessage()
+    }
+
     override fun notifyChildLoadData(index: Int, forceRefresh: Boolean) {
-        (pagerAdapter.getFragmentInstance(index) as? MessageView.MessageChildView)?.onParentLoadData(forceRefresh)
+        (pagerAdapter.getFragmentInstance(index) as? MessageTabFragment)?.onParentLoadData(forceRefresh)
     }
 
     override fun openSendMessage() {

@@ -43,6 +43,10 @@ class MessagePresenter @Inject constructor(
         }
     }
 
+    fun onDeleteMessage(){
+        view?.notifyChildMessageDeleted()
+    }
+
     fun onSendMessageButtonClicked() {
         view?.openSendMessage()
     }

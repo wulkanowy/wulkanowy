@@ -93,6 +93,7 @@ class MessagePreviewPresenter @Inject constructor(
                 }
                 .subscribe({
                     view?.run {
+                        notifyParentMessageDeleted()
                         showMessage(deleteMessageSuccessString)
                         popView()
                     }

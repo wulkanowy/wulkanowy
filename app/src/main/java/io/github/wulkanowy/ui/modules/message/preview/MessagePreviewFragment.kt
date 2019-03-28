@@ -15,6 +15,7 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import kotlinx.android.synthetic.main.fragment_message_preview.*
 import javax.inject.Inject
@@ -136,6 +137,10 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
 
     override fun popView() {
         (activity as MainActivity).popView()
+    }
+
+    override fun notifyParentMessageDeleted() {
+        fragmentManager?.fragments?.forEach { if (it is MessageFragment) it.onDeleteMessage() }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
