@@ -91,16 +91,12 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     private fun updateWidget(context: Context, appWidgetId: Int, date: LocalDate) {
         RemoteViews(context.packageName, R.layout.widget_timetable).apply {
             setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
-            setTextViewText(R.id.timetableWidgetDay, date.weekDayName.capitalize())
-            setTextViewText(R.id.timetableWidgetDate, date.toFormattedString())
+            setTextViewText(R.id.timetableWidgetDate, "${date.weekDayName.capitalize()}  ${date.toFormattedString()}")
             setRemoteAdapter(R.id.timetableWidgetList, Intent(context, TimetableWidgetService::class.java)
                 .apply { action = appWidgetId.toString() })
             setOnClickPendingIntent(R.id.timetableWidgetNext, createNavIntent(context, appWidgetId, appWidgetId, BUTTON_NEXT))
             setOnClickPendingIntent(R.id.timetableWidgetPrev, createNavIntent(context, -appWidgetId, appWidgetId, BUTTON_PREV))
-            createNavIntent(context, Int.MAX_VALUE - appWidgetId, appWidgetId, BUTTON_RESET).also {
-                setOnClickPendingIntent(R.id.timetableWidgetDate, it)
-                setOnClickPendingIntent(R.id.timetableWidgetDay, it)
-            }
+            setOnClickPendingIntent(R.id.timetableWidgetDate, createNavIntent(context, Int.MAX_VALUE - appWidgetId, appWidgetId, BUTTON_RESET))
 
             setOnClickPendingIntent(R.id.timetableWidgetAccount, PendingIntent.getActivity(context, -Int.MAX_VALUE + appWidgetId,
                 Intent(context, TimetableWidgetAccountActivity::class.java).apply {

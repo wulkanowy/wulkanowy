@@ -11,51 +11,49 @@
         android:layout_height="56dp"
         android:background="@color/colorPrimary">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/timetableWidgetDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_toStartOf="@id/timetableWidgetPrev"
-            android:layout_toLeftOf="@id/timetableWidgetPrev"
-            android:layout_toEndOf="@id/timetableWidgetAccount"
-            android:layout_toRightOf="@id/timetableWidgetAccount"
-            android:orientation="vertical">
+            android:layout_marginTop="5dp"
+            android:layout_toStartOf="@id/timetableWidgetAccount"
+            android:layout_toLeftOf="@id/timetableWidgetAccount"
+            android:layout_toEndOf="@id/timetableWidgetNext"
+            android:layout_toRightOf="@id/timetableWidgetNext"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            tools:text="30.03.2019 Poniedziałek" />
 
-            <TextView
-                android:id="@+id/timetableWidgetDay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:gravity="center_horizontal"
-                android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:textSize="15sp"
-                tools:text="Poniedziałek" />
-
-            <TextView
-                android:id="@+id/timetableWidgetDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="3dp"
-                android:gravity="center_horizontal"
-                android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                tools:text="12.03.2019" />
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/timetableWidgetDate"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_toStartOf="@id/timetableWidgetAccount"
+            android:layout_toLeftOf="@id/timetableWidgetAccount"
+            android:layout_toEndOf="@id/timetableWidgetNext"
+            android:layout_toRightOf="@id/timetableWidgetNext"
+            android:text="Jan Kowalski"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            tools:text="Jan Kowalski" />
 
         <ImageButton
             android:id="@+id/timetableWidgetAccount"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
             android:background="@color/colorPrimary"
             android:scaleType="fitXY"
             android:src="@drawable/ic_widget_account"
@@ -63,15 +61,11 @@
 
         <ImageButton
             android:id="@+id/timetableWidgetPrev"
-            android:layout_width="70dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_toStartOf="@id/timetableWidgetNext"
-            android:layout_toLeftOf="@id/timetableWidgetNext"
             android:backgroundTint="@color/colorPrimaryDark"
             android:contentDescription="@string/all_prev"
             android:src="@drawable/ic_widget_chevron_24dp"
@@ -79,19 +73,16 @@
 
         <ImageButton
             android:id="@+id/timetableWidgetNext"
-            android:layout_width="70dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_toEndOf="@id/timetableWidgetPrev"
+            android:layout_toRightOf="@id/timetableWidgetPrev"
             android:backgroundTint="@color/colorPrimaryDark"
             android:contentDescription="@string/all_next"
             android:rotation="180"
             android:src="@drawable/ic_widget_chevron_24dp"
             tools:targetApi="lollipop" />
-
     </RelativeLayout>
 
     <ListView
