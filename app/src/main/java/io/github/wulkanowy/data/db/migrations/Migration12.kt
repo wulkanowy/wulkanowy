@@ -54,7 +54,7 @@ class Migration12 : Migration(11, 12) {
 
     private fun updateStudentsWithClassId(database: SupportSQLiteDatabase, students: List<Int>) {
         students.forEach {
-            database.execSQL("UPDATE Students SET class_id = (SELECT class_id FROM Semesters WHERE student_id = $it) WHERE student_id = $it")
+            database.execSQL("UPDATE Students SET class_id = IFNULL((SELECT class_id FROM Semesters WHERE student_id = $it), 0) WHERE student_id = $it")
         }
     }
 
