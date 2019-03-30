@@ -29,6 +29,7 @@ class ApiHelper @Inject constructor(private val api: Api) {
             this.symbol = symbol
             host = URL(endpoint).run { host + ":$port".removeSuffix(":-1") }
             ssl = endpoint.startsWith("https")
+            useNewStudent = true
         }
     }
 }
