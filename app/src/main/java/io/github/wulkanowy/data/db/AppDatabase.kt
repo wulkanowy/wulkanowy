@@ -75,7 +75,7 @@ import javax.inject.Singleton
         Recipient::class
     ],
     version = AppDatabase.VERSION_SCHEMA,
-    exportSchema = false
+    exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

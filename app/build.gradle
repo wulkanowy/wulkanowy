@@ -25,6 +25,15 @@ android {
                 fabric_api_key: System.getenv("FABRIC_API_KEY") ?: "null",
                 crashlytics_enabled: project.hasProperty("enableCrashlytics")
         ]
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
     signingConfigs {
@@ -137,6 +146,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation "io.mockk:mockk-android:1.9.2"
     androidTestImplementation 'org.mockito:mockito-android:2.25.1'
+    androidTestImplementation "androidx.room:room-testing:2.1.0-alpha06"
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 }
 
