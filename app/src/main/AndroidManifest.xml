@@ -46,7 +46,7 @@
             android:label="@string/send_message_title"
             android:theme="@style/WulkanowyTheme.NoActionBar" />
         <activity
-            android:name=".ui.widgets.timetable.TimetableWidgetAccountActivity"
+            android:name=".ui.modules.timetablewidget.TimetableWidgetConfigureActivity"
             android:noHistory="true"
             android:excludeFromRecents="true"
             android:theme="@style/WulkanowyTheme.TimetableWidgetAccount">
@@ -60,7 +60,7 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver
-            android:name=".ui.widgets.timetable.TimetableWidgetProvider"
+            android:name=".ui.modules.timetablewidget.TimetableWidgetProvider"
             android:exported="true"
             android:label="@string/timetable_title">
             <intent-filter>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".ui.widgets.timetable.TimetableWidgetProvider">
+    tools:context=".ui.modules.timetablewidget.TimetableWidgetProvider">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,6 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/timetableWidgetName"
             android:layout_below="@id/timetableWidgetDate"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
@@ -38,7 +39,6 @@
             android:layout_toLeftOf="@id/timetableWidgetAccount"
             android:layout_toEndOf="@id/timetableWidgetNext"
             android:layout_toRightOf="@id/timetableWidgetNext"
-            android:text="Jan Kowalski"
             android:textColor="@android:color/white"
             android:textSize="13sp"
             tools:text="Jan Kowalski" />

@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.widgets.timetable
+package io.github.wulkanowy.ui.modules.timetablewidget
 
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
@@ -51,7 +51,9 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
         const val BUTTON_RESET = "buttonReset"
 
-        fun createWidgetKey(appWidgetId: Int) = "timetable_widget_$appWidgetId"
+        fun createDateWidgetKey(appWidgetId: Int) = "timetable_widget_date_$appWidgetId"
+
+        fun createStudentWidgetKey(appWidgetId: Int) = "timetable_widget_student_$appWidgetId"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -70,7 +72,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
         } else {
             val buttonType = intent.getStringExtra(EXTRA_BUTTON_TYPE)
             val toggledWidgetId = intent.getIntExtra(EXTRA_TOGGLED_WIDGET_ID, 0)
-            val savedDate = LocalDate.ofEpochDay(sharedPref.getLong(createWidgetKey(toggledWidgetId), 0))
+            val savedDate = LocalDate.ofEpochDay(sharedPref.getLong(createDateWidgetKey(toggledWidgetId), 0))
             val date = when (buttonType) {
                 BUTTON_RESET -> now().nextOrSameSchoolDay
                 BUTTON_NEXT -> savedDate.nextSchoolDay
@@ -84,7 +86,10 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
     private fun onDelete(intent: Intent) {
         intent.getIntExtra(EXTRA_APPWIDGET_ID, 0).let {
-            if (it != 0) sharedPref.delete(createWidgetKey(it))
+            if (it != 0) {
+                sharedPref.delete(createDateWidgetKey(it))
+                sharedPref.delete(createStudentWidgetKey(it))
+            }
         }
     }
 
@@ -99,7 +104,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             setOnClickPendingIntent(R.id.timetableWidgetDate, createNavIntent(context, Int.MAX_VALUE - appWidgetId, appWidgetId, BUTTON_RESET))
 
             setOnClickPendingIntent(R.id.timetableWidgetAccount, PendingIntent.getActivity(context, -Int.MAX_VALUE + appWidgetId,
-                Intent(context, TimetableWidgetAccountActivity::class.java).apply {
+                Intent(context, TimetableWidgetConfigureActivity::class.java).apply {
                     addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
                     putExtra(EXTRA_APPWIDGET_ID, appWidgetId)
                 }, FLAG_UPDATE_CURRENT))
@@ -109,7 +114,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                     putExtra(EXTRA_START_MENU_INDEX, 3)
                 }, FLAG_UPDATE_CURRENT))
         }.also {
-            sharedPref.putLong(createWidgetKey(appWidgetId), date.toEpochDay(), true)
+            sharedPref.putLong(createDateWidgetKey(appWidgetId), date.toEpochDay(), true)
             appWidgetManager.apply {
                 notifyAppWidgetViewDataChanged(appWidgetId, R.id.timetableWidgetList)
                 updateAppWidget(appWidgetId, it)

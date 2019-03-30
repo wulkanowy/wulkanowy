@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.widgets.timetable
+package io.github.wulkanowy.ui.modules.timetablewidget
 
 import android.view.View
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -10,7 +10,8 @@ import io.github.wulkanowy.data.db.entities.Student
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_account.*
 
-class TimetableWidgetAccountItem(val student: Student) : AbstractFlexibleItem<TimetableWidgetAccountItem.ViewHolder>() {
+class TimetableWidgetConfigureItem(val student: Student) :
+    AbstractFlexibleItem<TimetableWidgetConfigureItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_account
 
@@ -30,7 +31,7 @@ class TimetableWidgetAccountItem(val student: Student) : AbstractFlexibleItem<Ti
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as TimetableWidgetAccountItem
+        other as TimetableWidgetConfigureItem
 
         if (student != other.student) return false
 

@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.widgets.timetable
+package io.github.wulkanowy.ui.modules.timetablewidget
 
 import android.content.Context
 import android.content.Intent
@@ -15,6 +15,7 @@ import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.data.repositories.timetable.TimetableRepository
+import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.createDateWidgetKey
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
 import io.reactivex.Single
@@ -49,7 +50,7 @@ class TimetableWidgetFactory(
 
     override fun onDataSetChanged() {
         intent?.action?.let { widgetId ->
-            val date = LocalDate.ofEpochDay(sharedPref.getLong(TimetableWidgetProvider.createWidgetKey(widgetId.toInt()), 0))
+            val date = LocalDate.ofEpochDay(sharedPref.getLong(createDateWidgetKey(widgetId.toInt()), 0))
             val studentId = sharedPref.getLong("timetable_widget_student_$widgetId", 0)
 
             try {
