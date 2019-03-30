@@ -50,23 +50,24 @@ class Migration12Test {
         assertEquals(2, students.size)
 
         students[0].run {
-            assertEquals(studentId, 1)
-            assertEquals(classId, 5)
+            assertEquals(1, studentId)
+            assertEquals(5, classId)
         }
 
         students[1].run {
-            assertEquals(studentId, 2)
-            assertEquals(classId, 6)
+            assertEquals(2, studentId)
+            assertEquals(6, classId)
         }
     }
 
     @Test
-    fun migrate11To12_studentWithDoubledSemestersIsCurrent() {
+    fun migrate11To12_removeStudentsWithoutClassId() {
         helper.createDatabase(dbName, 11).apply {
             // user 1
             createStudent(this, 1, true)
-            createSemester(this, 1, true, 5, 2)
-            createSemester(this, 1, true, 6, 3)
+            createSemester(this, 1, false, 0, 2)
+            createStudent(this, 2, true)
+            createSemester(this, 2, true, 1, 2)
             close()
         }
 
@@ -78,8 +79,42 @@ class Migration12Test {
         assertEquals(1, students.size)
 
         students[0].run {
+            assertEquals(2, studentId)
+            assertEquals(1, classId)
+        }
+    }
+
+    @Test
+    fun migrate11To12_ensureThereIsOnlyOneCurrentStudent() {
+        helper.createDatabase(dbName, 11).apply {
+            // user 1
+            createStudent(this, 1, true)
+            createSemester(this, 1, true, 5, 2)
+            createStudent(this, 2, true)
+            createSemester(this, 2, true, 6, 2)
+            createStudent(this, 3, true)
+            createSemester(this, 3, false, 7, 2)
+            close()
+        }
+
+        helper.runMigrationsAndValidate(dbName, 12, true, Migration12())
+
+        val db = getMigratedRoomDatabase()
+        val students = db.studentDao.loadAll().blockingGet()
+
+        assertEquals(3, students.size)
+
+        students[0].run {
             assertEquals(studentId, 1)
-            assertEquals(classId, 5)
+            assertEquals(false, isCurrent)
+        }
+        students[1].run {
+            assertEquals(studentId, 2)
+            assertEquals(false, isCurrent)
+        }
+        students[2].run {
+            assertEquals(studentId, 3)
+            assertEquals(true, isCurrent)
         }
     }
 
