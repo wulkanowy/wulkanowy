@@ -1,6 +1,8 @@
 package io.github.wulkanowy.ui.widgets.timetable
 
+import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
+import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -8,6 +10,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.SharedPrefHelper
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.utils.SchedulersProvider
@@ -24,6 +27,9 @@ class TimetableWidgetAccountActivity : BaseActivity() {
     lateinit var studentRepository: StudentRepository
 
     @Inject
+    lateinit var sharedPref: SharedPrefHelper
+
+    @Inject
     lateinit var adapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     @Inject
@@ -36,9 +42,18 @@ class TimetableWidgetAccountActivity : BaseActivity() {
         timetableWidgetAccountActivityRecycler.adapter = adapter
         timetableWidgetAccountActivityRecycler.layoutManager = SmoothScrollLinearLayoutManager(this)
 
-        adapter.setOnItemClickListener {
-            intent.extras?.getInt(EXTRA_APPWIDGET_ID)?.let {
-                setResult(RESULT_OK, Intent().apply { putExtra(EXTRA_APPWIDGET_ID, it) })
+        adapter.setOnItemClickListener { item ->
+            if (item is TimetableWidgetAccountItem) {
+                intent.extras?.getInt(EXTRA_APPWIDGET_ID)?.let {
+                    sharedPref.putLong("timetable_widget_student_$it", item.student.id)
+                    setResult(RESULT_OK, Intent().apply { putExtra(EXTRA_APPWIDGET_ID, it) })
+
+                    val intent = Intent(this, TimetableWidgetProvider::class.java).apply {
+                        action = ACTION_APPWIDGET_UPDATE
+                        putExtra(EXTRA_APPWIDGET_IDS, intArrayOf(it))
+                    }
+                    sendBroadcast(intent)
+                }
             }
             finish()
         }

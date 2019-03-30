@@ -94,7 +94,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             setTextViewText(R.id.timetableWidgetDay, date.weekDayName.capitalize())
             setTextViewText(R.id.timetableWidgetDate, date.toFormattedString())
             setRemoteAdapter(R.id.timetableWidgetList, Intent(context, TimetableWidgetService::class.java)
-                .apply { action = createWidgetKey(appWidgetId) })
+                .apply { action = appWidgetId.toString() })
             setOnClickPendingIntent(R.id.timetableWidgetNext, createNavIntent(context, appWidgetId, appWidgetId, BUTTON_NEXT))
             setOnClickPendingIntent(R.id.timetableWidgetPrev, createNavIntent(context, -appWidgetId, appWidgetId, BUTTON_PREV))
             createNavIntent(context, Int.MAX_VALUE - appWidgetId, appWidgetId, BUTTON_RESET).also {
@@ -105,6 +105,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             setOnClickPendingIntent(R.id.timetableWidgetAccount, PendingIntent.getActivity(context, -Int.MAX_VALUE + appWidgetId,
                 Intent(context, TimetableWidgetAccountActivity::class.java).apply {
                     addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
+                    putExtra(EXTRA_APPWIDGET_ID, appWidgetId)
                 }, FLAG_UPDATE_CURRENT))
 
             setPendingIntentTemplate(R.id.timetableWidgetList,

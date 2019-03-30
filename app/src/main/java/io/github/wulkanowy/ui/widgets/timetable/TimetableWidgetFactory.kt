@@ -48,24 +48,27 @@ class TimetableWidgetFactory(
     override fun onDestroy() {}
 
     override fun onDataSetChanged() {
-        intent?.action?.let { LocalDate.ofEpochDay(sharedPref.getLong(it, 0)) }
-            ?.let { date ->
-                try {
-                    lessons = studentRepository.isStudentSaved()
-                        .flatMap { isSaved ->
-                            if (isSaved) {
-                                studentRepository.getCurrentStudent()
-                                    .flatMap { semesterRepository.getCurrentSemester(it) }
-                                    .flatMap { timetableRepository.getTimetable(it, date, date) }
-                            } else Single.just(emptyList())
-                        }
-                        .map { item -> item.sortedBy { it.number } }
-                        .subscribeOn(schedulers.backgroundThread)
-                        .blockingGet()
-                } catch (e: Exception) {
-                    Timber.e(e, "An error has occurred while downloading data for the widget")
-                }
+        intent?.action?.let { widgetId ->
+            val date = LocalDate.ofEpochDay(sharedPref.getLong(TimetableWidgetProvider.createWidgetKey(widgetId.toInt()), 0))
+            val studentId = sharedPref.getLong("timetable_widget_student_$widgetId", 0)
+
+            try {
+                lessons = studentRepository.isStudentSaved()
+                    .flatMap { isSaved ->
+                        if (isSaved) {
+                            studentRepository.getSavedStudents()
+                                .map { it.single { student -> student.id == studentId } }
+                                .flatMap { semesterRepository.getCurrentSemester(it) }
+                                .flatMap { timetableRepository.getTimetable(it, date, date) }
+                        } else Single.just(emptyList())
+                    }
+                    .map { item -> item.sortedBy { it.number } }
+                    .subscribeOn(schedulers.backgroundThread)
+                    .blockingGet()
+            } catch (e: Exception) {
+                Timber.e(e, "An error has occurred while downloading data for the widget")
             }
+        }
     }
 
     override fun getViewAt(position: Int): RemoteViews? {
