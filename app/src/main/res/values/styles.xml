@@ -40,4 +40,9 @@
     <style name="WulkanowyTheme.ActionBar" parent="WulkanowyTheme">
         <item name="colorControlNormal">@android:color/white</item>
     </style>
+
+    <style name="WulkanowyTheme.TimetableWidgetAccount" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

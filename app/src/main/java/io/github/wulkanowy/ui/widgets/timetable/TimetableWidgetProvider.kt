@@ -10,6 +10,8 @@ import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.widget.RemoteViews
 import dagger.android.AndroidInjection
 import io.github.wulkanowy.R
@@ -99,6 +101,12 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                 setOnClickPendingIntent(R.id.timetableWidgetDate, it)
                 setOnClickPendingIntent(R.id.timetableWidgetDay, it)
             }
+
+            setOnClickPendingIntent(R.id.timetableWidgetAccount, PendingIntent.getActivity(context, -Int.MAX_VALUE + appWidgetId,
+                Intent(context, TimetableWidgetAccountActivity::class.java).apply {
+                    addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
+                }, FLAG_UPDATE_CURRENT))
+
             setPendingIntentTemplate(R.id.timetableWidgetList,
                 PendingIntent.getActivity(context, 1, MainActivity.getStartIntent(context).apply {
                     putExtra(EXTRA_START_MENU_INDEX, 3)

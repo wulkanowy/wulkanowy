@@ -45,6 +45,14 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/send_message_title"
             android:theme="@style/WulkanowyTheme.NoActionBar" />
+        <activity
+            android:name=".ui.widgets.timetable.TimetableWidgetAccountActivity"
+            android:noHistory="true"
+            android:theme="@style/WulkanowyTheme.TimetableWidgetAccount">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".services.widgets.TimetableWidgetService"
