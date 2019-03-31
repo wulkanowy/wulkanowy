@@ -113,9 +113,9 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     private fun initOptions() {
-        view?.run {
+        view?.apply {
+            showOptions(message != null)
             message?.let {
-                showOptions(true)
                 when (it.removed) {
                     true -> setDeletedOptionsLabels()
                     false -> setNotDeletedOptionsLabels()
