@@ -15,7 +15,8 @@ import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.data.repositories.timetable.TimetableRepository
-import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.createDateWidgetKey
+import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getDateWidgetKey
+import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getStudentWidgetKey
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
 import io.reactivex.Single
@@ -50,11 +51,11 @@ class TimetableWidgetFactory(
 
     override fun onDataSetChanged() {
         intent?.action?.let { widgetId ->
-            val date = LocalDate.ofEpochDay(sharedPref.getLong(createDateWidgetKey(widgetId.toInt()), 0))
-            val studentId = sharedPref.getLong("timetable_widget_student_$widgetId", 0)
+            val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(widgetId.toInt()), 0))
+            val studentId = sharedPref.getLong(getStudentWidgetKey(widgetId.toInt()), 0)
 
-            try {
-                lessons = studentRepository.isStudentSaved()
+            lessons = try {
+                studentRepository.isStudentSaved()
                     .flatMap { isSaved ->
                         if (isSaved) {
                             studentRepository.getSavedStudents()
@@ -68,6 +69,7 @@ class TimetableWidgetFactory(
                     .blockingGet()
             } catch (e: Exception) {
                 Timber.e(e, "An error has occurred while downloading data for the widget")
+                emptyList()
             }
         }
     }

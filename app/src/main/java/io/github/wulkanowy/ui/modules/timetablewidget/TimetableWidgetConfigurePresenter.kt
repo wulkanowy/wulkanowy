@@ -5,7 +5,7 @@ import io.github.wulkanowy.data.db.SharedPrefHelper
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.createStudentWidgetKey
+import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getStudentWidgetKey
 import io.github.wulkanowy.utils.SchedulersProvider
 import javax.inject.Inject
 
@@ -28,9 +28,9 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
     fun onItemSelect(item: AbstractFlexibleItem<*>) {
         if (item is TimetableWidgetConfigureItem) {
             widgetId?.also {
-                sharedPref.putLong(createStudentWidgetKey(it), item.student.id)
+                sharedPref.putLong(getStudentWidgetKey(it), item.student.id)
                 view?.apply {
-                    updateTimetableWidget(it, item.student)
+                    updateTimetableWidget(it)
                     setSuccessResult(it)
                 }
             }

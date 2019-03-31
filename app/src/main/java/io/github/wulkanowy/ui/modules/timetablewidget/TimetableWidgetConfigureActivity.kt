@@ -12,10 +12,8 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
-import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.EXTRA_STUDENT
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.activity_timetable_widget_configure.*
-import java.io.Serializable
 import javax.inject.Inject
 
 class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigureView {
@@ -46,13 +44,11 @@ class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigur
         configureAdapter.updateDataSet(data)
     }
 
-    override fun updateTimetableWidget(widgetId: Int, student: Serializable) {
+    override fun updateTimetableWidget(widgetId: Int) {
         sendBroadcast(Intent(this, TimetableWidgetProvider::class.java)
             .apply {
                 action = ACTION_APPWIDGET_UPDATE
                 putExtra(EXTRA_APPWIDGET_IDS, intArrayOf(widgetId))
-                putExtra(EXTRA_STUDENT, student)
-
             })
     }
 
@@ -72,27 +68,4 @@ class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigur
         super.onDestroy()
         presenter.onDetachView()
     }
-
-    /*private fun doo() {
-        setResult(RESULT_CANCELED)
-        setContentView(R.layout.activity_timetable_widget_configure)
-        timetableWidgetAccountActivityRecycler.adapter = adapter
-        timetableWidgetAccountActivityRecycler.layoutManager = SmoothScrollLinearLayoutManager(this)
-
-        adapter.setOnItemClickListener { item ->
-            if (item is TimetableWidgetConfigureItem) {
-                intent.extras?.getInt(EXTRA_APPWIDGET_ID)?.let {
-                    sharedPref.putLong("timetable_widget_student_$it", item.student.id)
-                    setResult(RESULT_OK, Intent().apply { putExtra(EXTRA_APPWIDGET_ID, it) })
-
-                    val intent = Intent(this, TimetableWidgetProvider::class.java).apply {
-                        action = ACTION_APPWIDGET_UPDATE
-                        putExtra(EXTRA_APPWIDGET_IDS, intArrayOf(it))
-                    }
-                    sendBroadcast(intent)
-                }
-            }
-            finish()
-        }
-    }*/
 }
