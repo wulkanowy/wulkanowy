@@ -1,12 +1,10 @@
 package io.github.wulkanowy.ui.modules.timetablewidget
 
-import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.content.Intent
 import android.os.Bundle
-import android.widget.RemoteViews
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -14,8 +12,10 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
+import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.EXTRA_STUDENT
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.activity_timetable_widget_configure.*
+import java.io.Serializable
 import javax.inject.Inject
 
 class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigureView {
@@ -46,16 +46,14 @@ class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigur
         configureAdapter.updateDataSet(data)
     }
 
-    override fun updateTimetableWidget(widgetId: Int, name: String) {
+    override fun updateTimetableWidget(widgetId: Int, student: Serializable) {
         sendBroadcast(Intent(this, TimetableWidgetProvider::class.java)
             .apply {
                 action = ACTION_APPWIDGET_UPDATE
                 putExtra(EXTRA_APPWIDGET_IDS, intArrayOf(widgetId))
-            })
+                putExtra(EXTRA_STUDENT, student)
 
-        AppWidgetManager.getInstance(applicationContext)
-            .partiallyUpdateAppWidget(widgetId, RemoteViews(this.packageName, R.layout.widget_timetable)
-                .apply { setTextViewText(R.id.timetableWidgetName, name) })
+            })
     }
 
     override fun setSuccessResult(widgetId: Int) {

@@ -16,6 +16,7 @@ import android.widget.RemoteViews
 import dagger.android.AndroidInjection
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.SharedPrefHelper
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
@@ -41,6 +42,8 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     lateinit var analytics: FirebaseAnalyticsHelper
 
     companion object {
+        const val EXTRA_STUDENT = "extraStudent"
+
         const val EXTRA_TOGGLED_WIDGET_ID = "extraToggledWidget"
 
         const val EXTRA_BUTTON_TYPE = "extraButtonType"
@@ -65,9 +68,10 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     }
 
     private fun onUpdate(context: Context, intent: Intent) {
+        val student = (intent.getSerializableExtra(EXTRA_STUDENT) as? Student)
         if (intent.getStringExtra(EXTRA_BUTTON_TYPE) === null) {
             intent.getIntArrayExtra(EXTRA_APPWIDGET_IDS)?.forEach { appWidgetId ->
-                updateWidget(context, appWidgetId, now().nextOrSameSchoolDay)
+                updateWidget(context, appWidgetId, now().nextOrSameSchoolDay, student)
             }
         } else {
             val buttonType = intent.getStringExtra(EXTRA_BUTTON_TYPE)
@@ -80,7 +84,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                 else -> now().nextOrSameSchoolDay
             }
             if (!buttonType.isNullOrBlank()) analytics.logEvent("changed_timetable_widget_day", "button" to buttonType)
-            updateWidget(context, toggledWidgetId, date)
+            updateWidget(context, toggledWidgetId, date, student)
         }
     }
 
@@ -93,10 +97,11 @@ class TimetableWidgetProvider : BroadcastReceiver() {
         }
     }
 
-    private fun updateWidget(context: Context, appWidgetId: Int, date: LocalDate) {
+    private fun updateWidget(context: Context, appWidgetId: Int, date: LocalDate, student: Student?) {
         RemoteViews(context.packageName, R.layout.widget_timetable).apply {
             setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
             setTextViewText(R.id.timetableWidgetDate, "${date.weekDayName.capitalize()}  ${date.toFormattedString()}")
+            student?.let { setTextViewText(R.id.timetableWidgetName, it.studentName) }
             setRemoteAdapter(R.id.timetableWidgetList, Intent(context, TimetableWidgetService::class.java)
                 .apply { action = appWidgetId.toString() })
             setOnClickPendingIntent(R.id.timetableWidgetNext, createNavIntent(context, appWidgetId, appWidgetId, BUTTON_NEXT))
@@ -117,7 +122,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             sharedPref.putLong(createDateWidgetKey(appWidgetId), date.toEpochDay(), true)
             appWidgetManager.apply {
                 notifyAppWidgetViewDataChanged(appWidgetId, R.id.timetableWidgetList)
-                updateAppWidget(appWidgetId, it)
+                partiallyUpdateAppWidget(appWidgetId, it)
             }
         }
     }

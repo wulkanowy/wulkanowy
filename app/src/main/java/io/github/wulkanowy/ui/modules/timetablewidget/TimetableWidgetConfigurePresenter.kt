@@ -30,7 +30,7 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
             widgetId?.also {
                 sharedPref.putLong(createStudentWidgetKey(it), item.student.id)
                 view?.apply {
-                    updateTimetableWidget(it, item.student.studentName)
+                    updateTimetableWidget(it, item.student)
                     setSuccessResult(it)
                 }
             }
