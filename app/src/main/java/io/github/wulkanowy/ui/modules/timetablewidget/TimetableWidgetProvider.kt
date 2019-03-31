@@ -24,8 +24,8 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
+import io.github.wulkanowy.utils.shortcutWeekDayName
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.weekDayName
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
 import javax.inject.Inject
@@ -100,7 +100,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     private fun updateWidget(context: Context, appWidgetId: Int, date: LocalDate, student: Student?) {
         RemoteViews(context.packageName, R.layout.widget_timetable).apply {
             setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
-            setTextViewText(R.id.timetableWidgetDate, "${date.weekDayName.capitalize()}  ${date.toFormattedString()}")
+            setTextViewText(R.id.timetableWidgetDate, "${date.shortcutWeekDayName.capitalize()} ${date.toFormattedString()}")
             student?.let { setTextViewText(R.id.timetableWidgetName, it.studentName) }
             setRemoteAdapter(R.id.timetableWidgetList, Intent(context, TimetableWidgetService::class.java)
                 .apply { action = appWidgetId.toString() })

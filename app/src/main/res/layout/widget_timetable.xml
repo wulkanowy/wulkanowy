@@ -11,51 +11,46 @@
         android:layout_height="56dp"
         android:background="@color/colorPrimary">
 
-        <TextView
-            android:id="@+id/timetableWidgetDate"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_centerVertical="true"
             android:layout_toStartOf="@id/timetableWidgetAccount"
             android:layout_toLeftOf="@id/timetableWidgetAccount"
             android:layout_toEndOf="@id/timetableWidgetNext"
             android:layout_toRightOf="@id/timetableWidgetNext"
-            android:maxLines="1"
-            android:textColor="@android:color/white"
-            android:textSize="15sp"
-            tools:text="30.03.2019 Poniedziałek" />
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/timetableWidgetName"
-            android:layout_below="@id/timetableWidgetDate"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="3dp"
-            android:layout_toStartOf="@id/timetableWidgetAccount"
-            android:layout_toLeftOf="@id/timetableWidgetAccount"
-            android:layout_toEndOf="@id/timetableWidgetNext"
-            android:layout_toRightOf="@id/timetableWidgetNext"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"
-            tools:text="Jan Kowalski" />
+            <TextView
+                android:id="@+id/timetableWidgetDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                tools:text="30.03.2019 Poniedziałek" />
+
+            <TextView
+                android:id="@+id/timetableWidgetName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                tools:text="Jan Kowalski" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/timetableWidgetAccount"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/colorPrimary"
-            android:scaleType="fitXY"
+            android:background="?android:selectableItemBackground"
             android:src="@drawable/ic_widget_account"
             tools:ignore="ContentDescription" />
 
@@ -64,8 +59,8 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:backgroundTint="@color/colorPrimaryDark"
             android:contentDescription="@string/all_prev"
             android:src="@drawable/ic_widget_chevron_24dp"
