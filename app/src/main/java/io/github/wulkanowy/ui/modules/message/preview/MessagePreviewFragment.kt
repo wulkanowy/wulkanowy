@@ -139,8 +139,8 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         (activity as MainActivity).popView()
     }
 
-    override fun notifyParentMessageDeleted() {
-        fragmentManager?.fragments?.forEach { if (it is MessageFragment) it.onDeleteMessage() }
+    override fun notifyParentMessageDeleted(message: Message) {
+        fragmentManager?.fragments?.forEach { if (it is MessageFragment) it.onDeleteMessage(message) }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -7,6 +7,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
 import io.github.wulkanowy.data.repositories.message.MessageFolder.SENT
 import io.github.wulkanowy.data.repositories.message.MessageFolder.TRASHED
@@ -75,16 +76,16 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
         messageProgress.visibility = if (show) VISIBLE else INVISIBLE
     }
 
-    fun onDeleteMessage() {
-        presenter.onDeleteMessage()
+    fun onDeleteMessage(message: Message) {
+        presenter.onDeleteMessage(message)
     }
 
     fun onChildFragmentLoaded() {
         presenter.onChildViewLoaded()
     }
 
-    override fun notifyChildMessageDeleted() {
-        (pagerAdapter.getFragmentInstance(0) as? MessageTabFragment)?.onParentDeleteMessage()
+    override fun notifyChildMessageDeleted(tabId: Int) {
+        (pagerAdapter.getFragmentInstance(tabId) as? MessageTabFragment)?.onParentDeleteMessage()
     }
 
     override fun notifyChildLoadData(index: Int, forceRefresh: Boolean) {

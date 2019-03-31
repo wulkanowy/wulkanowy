@@ -98,6 +98,12 @@ class MessageRepository @Inject constructor(
                 else Single.error(UnknownHostException())
             }
             .filter { it }
-            .doOnSuccess { local.deleteMessages(listOf(message)) }
+            .doOnSuccess {
+                if (!message.removed) local.updateMessages(listOf(message.copy(removed = true).apply {
+                    id = message.id
+                    content = message.content
+                }))
+                else local.deleteMessages(listOf(message))
+            }
     }
 }
