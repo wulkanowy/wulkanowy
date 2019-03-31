@@ -25,7 +25,9 @@ interface MessagePreviewView : BaseSessionView {
 
     fun showOptions(show: Boolean)
 
-    fun setOptionsLabels(removed: Boolean)
+    fun setDeletedOptionsLabels()
+
+    fun setNotDeletedOptionsLabels()
 
     fun showMessageError()
 

@@ -47,7 +47,7 @@ class MessagePreviewPresenter @Inject constructor(
                             setSubject(if (it.subject.isNotBlank()) it.subject else noSubjectString)
                             setDate(it.date.toFormattedString("yyyy-MM-dd HH:mm:ss"))
                             setContent(it.content.orEmpty())
-                            onCreateOptionsMenu()
+                            initOptions()
 
                             if (it.recipient.isNotBlank()) setRecipient(it.recipient)
                             else setSender(it.sender)
@@ -76,7 +76,7 @@ class MessagePreviewPresenter @Inject constructor(
         } else false
     }
 
-    fun deleteMessage(): Boolean {
+    private fun deleteMessage() {
         message?.let { message ->
             disposable.add(messageRepository.deleteMessage(message)
                 .subscribeOn(schedulers.backgroundThread)
@@ -105,16 +105,27 @@ class MessagePreviewPresenter @Inject constructor(
                 })
             )
         }
+    }
+
+    fun onMessageDelete(): Boolean {
+        deleteMessage()
         return true
     }
 
-    fun onCreateOptionsMenu() {
+    private fun initOptions() {
         view?.run {
             message?.let {
                 showOptions(true)
-                setOptionsLabels(it.removed)
+                when (it.removed) {
+                    true -> setDeletedOptionsLabels()
+                    false -> setNotDeletedOptionsLabels()
+                }
             }
 
         }
+    }
+
+    fun onCreateOptionsMenu() {
+        initOptions()
     }
 }

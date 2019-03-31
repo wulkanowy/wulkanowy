@@ -76,7 +76,7 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         return when (item?.itemId) {
             R.id.messagePreviewMenuReply -> presenter.onReply()
             R.id.messagePreviewMenuForward -> presenter.onForward()
-            R.id.messagePreviewMenuDelete -> presenter.deleteMessage()
+            R.id.messagePreviewMenuDelete -> presenter.onMessageDelete()
             else -> false
         }
     }
@@ -115,12 +115,12 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         menuDeleteButton?.isVisible = show
     }
 
-    override fun setOptionsLabels(removed: Boolean) {
-        if (removed) {
-            menuDeleteButton?.setTitle(R.string.message_delete_forever)
-        } else {
-            menuDeleteButton?.setTitle(R.string.message_move_to_bin)
-        }
+    override fun setDeletedOptionsLabels() {
+        menuDeleteButton?.setTitle(R.string.message_delete_forever)
+    }
+
+    override fun setNotDeletedOptionsLabels() {
+        menuDeleteButton?.setTitle(R.string.message_move_to_bin)
     }
 
     override fun showMessageError() {
