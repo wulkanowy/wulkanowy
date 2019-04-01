@@ -12,6 +12,7 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
+import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.activity_timetable_widget_configure.*
 import javax.inject.Inject
@@ -62,6 +63,10 @@ class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigur
 
     override fun finishView() {
         finish()
+    }
+
+    override fun openLoginView() {
+        startActivity(LoginActivity.getStartIntent(this))
     }
 
     override fun onDestroy() {

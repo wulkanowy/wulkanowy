@@ -13,4 +13,6 @@ interface TimetableWidgetConfigureView : BaseView {
     fun setSuccessResult(widgetId: Int)
 
     fun finishView()
+
+    fun openLoginView()
 }

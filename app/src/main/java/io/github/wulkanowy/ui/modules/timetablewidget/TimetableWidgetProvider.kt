@@ -28,8 +28,10 @@ import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.shortcutWeekDayName
 import io.github.wulkanowy.utils.toFormattedString
+import io.reactivex.Maybe
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
+import timber.log.Timber
 import javax.inject.Inject
 
 class TimetableWidgetProvider : BroadcastReceiver() {
@@ -148,11 +150,19 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     private fun getStudent(id: Long): Student? {
         if (id == 0L) return null
         return try {
-            studentRepository.getSavedStudents(false)
-                .map { it.single { student -> student.id == id } }
+            studentRepository.isStudentSaved()
+                .filter { true }
+                .flatMap { studentRepository.getSavedStudents(false).toMaybe() }
+                .flatMap {
+                    val student = it.singleOrNull { student -> student.id == id }
+
+                    if (student != null) Maybe.just(student)
+                    else Maybe.empty()
+                }
                 .subscribeOn(schedulers.backgroundThread)
                 .blockingGet()
         } catch (e: Exception) {
+            Timber.e(e, "An error has occurred in timetable widget provider")
             null
         }
     }

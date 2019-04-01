@@ -43,6 +43,11 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
             .map { it.map { student -> TimetableWidgetConfigureItem(student) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.backgroundThread)
-            .subscribe({ view?.updateData(it) }, { errorHandler.dispatch(it) }))
+            .subscribe({
+                view?.apply {
+                    if (it.isNotEmpty()) updateData(it)
+                    else openLoginView()
+                }
+            }, { errorHandler.dispatch(it) }))
     }
 }

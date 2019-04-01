@@ -19,7 +19,7 @@ import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Co
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getStudentWidgetKey
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
-import io.reactivex.Single
+import io.reactivex.Maybe
 import org.threeten.bp.LocalDate
 import timber.log.Timber
 
@@ -54,21 +54,24 @@ class TimetableWidgetFactory(
             val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(widgetId.toInt()), 0))
             val studentId = sharedPref.getLong(getStudentWidgetKey(widgetId.toInt()), 0)
 
+
             lessons = try {
                 studentRepository.isStudentSaved()
-                    .flatMap { isSaved ->
-                        if (isSaved) {
-                            studentRepository.getSavedStudents()
-                                .map { it.single { student -> student.id == studentId } }
-                                .flatMap { semesterRepository.getCurrentSemester(it) }
-                                .flatMap { timetableRepository.getTimetable(it, date, date) }
-                        } else Single.just(emptyList())
+                    .filter { true }
+                    .flatMap { studentRepository.getSavedStudents().toMaybe() }
+                    .flatMap {
+                        val student = it.singleOrNull { student -> student.id == studentId }
+
+                        if (student != null) Maybe.just(student)
+                        else Maybe.empty()
                     }
+                    .flatMap { semesterRepository.getCurrentSemester(it).toMaybe() }
+                    .flatMap { timetableRepository.getTimetable(it, date, date).toMaybe() }
                     .map { item -> item.sortedBy { it.number } }
                     .subscribeOn(schedulers.backgroundThread)
-                    .blockingGet()
+                    .blockingGet(emptyList())
             } catch (e: Exception) {
-                Timber.e(e, "An error has occurred while downloading data for the widget")
+                Timber.e(e, "An error has occurred in timetable widget factory")
                 emptyList()
             }
         }
