@@ -51,8 +51,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:background="?android:selectableItemBackground"
-            android:src="@drawable/ic_widget_account"
-            tools:ignore="ContentDescription" />
+            android:contentDescription="@string/account_title"
+            android:src="@drawable/ic_widget_account" />
 
         <ImageButton
             android:id="@+id/timetableWidgetPrev"
