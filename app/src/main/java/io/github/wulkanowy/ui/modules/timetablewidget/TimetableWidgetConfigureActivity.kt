@@ -13,6 +13,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.login.LoginActivity
+import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.EXTRA_FROM_PROVIDER
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.activity_timetable_widget_configure.*
 import javax.inject.Inject
@@ -30,7 +31,8 @@ class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigur
         setResult(RESULT_CANCELED)
         setContentView(R.layout.activity_timetable_widget_configure)
 
-        presenter.onAttachView(this, intent.extras?.getInt(EXTRA_APPWIDGET_ID))
+        val extras = intent.extras
+        presenter.onAttachView(this, extras?.getInt(EXTRA_APPWIDGET_ID), extras?.getBoolean(EXTRA_FROM_PROVIDER))
     }
 
     override fun initView() {

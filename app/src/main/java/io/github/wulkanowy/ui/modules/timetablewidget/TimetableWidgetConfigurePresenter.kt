@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.timetablewidget
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.SharedPrefHelper
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -18,24 +19,20 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
 
     private var widgetId: Int? = null
 
-    fun onAttachView(view: TimetableWidgetConfigureView, widgetId: Int?) {
+    private var isFromProvider = false
+
+    fun onAttachView(view: TimetableWidgetConfigureView, widgetId: Int?, isFromProvider: Boolean?) {
         super.onAttachView(view)
         this.widgetId = widgetId
+        this.isFromProvider = isFromProvider ?: false
         view.initView()
         loadData()
     }
 
     fun onItemSelect(item: AbstractFlexibleItem<*>) {
         if (item is TimetableWidgetConfigureItem) {
-            widgetId?.also {
-                sharedPref.putLong(getStudentWidgetKey(it), item.student.id)
-                view?.apply {
-                    updateTimetableWidget(it)
-                    setSuccessResult(it)
-                }
-            }
+            registerStudent(item.student)
         }
-        view?.finishView()
     }
 
     private fun loadData() {
@@ -44,10 +41,22 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.backgroundThread)
             .subscribe({
-                view?.apply {
-                    if (it.isNotEmpty()) updateData(it)
-                    else openLoginView()
+                when {
+                    it.isEmpty() -> view?.openLoginView()
+                    it.size == 1 && !isFromProvider -> registerStudent(it.single().student)
+                    else -> view?.updateData(it)
                 }
             }, { errorHandler.dispatch(it) }))
+    }
+
+    private fun registerStudent(student: Student) {
+        widgetId?.also {
+            sharedPref.putLong(getStudentWidgetKey(it), student.id)
+            view?.apply {
+                updateTimetableWidget(it)
+                setSuccessResult(it)
+            }
+        }
+        view?.finishView()
     }
 }

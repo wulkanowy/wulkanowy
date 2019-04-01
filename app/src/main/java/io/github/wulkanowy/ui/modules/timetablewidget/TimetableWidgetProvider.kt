@@ -52,6 +52,8 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     lateinit var analytics: FirebaseAnalyticsHelper
 
     companion object {
+        const val EXTRA_FROM_PROVIDER = "extraFromProvider"
+
         const val EXTRA_TOGGLED_WIDGET_ID = "extraToggledWidget"
 
         const val EXTRA_BUTTON_TYPE = "extraButtonType"
@@ -123,6 +125,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                 Intent(context, TimetableWidgetConfigureActivity::class.java).apply {
                     addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
                     putExtra(EXTRA_APPWIDGET_ID, appWidgetId)
+                    putExtra(EXTRA_FROM_PROVIDER, true)
                 }, FLAG_UPDATE_CURRENT))
 
             setPendingIntentTemplate(R.id.timetableWidgetList,
