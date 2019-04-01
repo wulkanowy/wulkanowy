@@ -31,8 +31,9 @@ class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigur
         setResult(RESULT_CANCELED)
         setContentView(R.layout.activity_timetable_widget_configure)
 
-        val extras = intent.extras
-        presenter.onAttachView(this, extras?.getInt(EXTRA_APPWIDGET_ID), extras?.getBoolean(EXTRA_FROM_PROVIDER))
+        intent.extras.let {
+            presenter.onAttachView(this, it?.getInt(EXTRA_APPWIDGET_ID), it?.getBoolean(EXTRA_FROM_PROVIDER))
+        }
     }
 
     override fun initView() {

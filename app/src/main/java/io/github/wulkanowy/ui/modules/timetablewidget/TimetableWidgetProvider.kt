@@ -116,7 +116,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             setTextViewText(R.id.timetableWidgetDate, "${date.shortcutWeekDayName.capitalize()} ${date.toFormattedString()}")
             setTextViewText(R.id.timetableWidgetName, student?.studentName ?: context.getString(R.string.all_no_data))
             setRemoteAdapter(R.id.timetableWidgetList, Intent(context, TimetableWidgetService::class.java)
-                .apply { action = appWidgetId.toString() })
+                .apply { putExtra(EXTRA_APPWIDGET_ID, appWidgetId) })
             setOnClickPendingIntent(R.id.timetableWidgetNext, createNavIntent(context, appWidgetId, appWidgetId, BUTTON_NEXT))
             setOnClickPendingIntent(R.id.timetableWidgetPrev, createNavIntent(context, -appWidgetId, appWidgetId, BUTTON_PREV))
             setOnClickPendingIntent(R.id.timetableWidgetDate, createNavIntent(context, Int.MAX_VALUE - appWidgetId, appWidgetId, BUTTON_RESET))
@@ -157,10 +157,10 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                 .filter { true }
                 .flatMap { studentRepository.getSavedStudents(false).toMaybe() }
                 .flatMap {
-                    val student = it.singleOrNull { student -> student.id == id }
-
-                    if (student != null) Maybe.just(student)
-                    else Maybe.empty()
+                    it.singleOrNull { student -> student.id == id }.let { student ->
+                        if (student != null) Maybe.just(student)
+                        else Maybe.empty()
+                    }
                 }
                 .subscribeOn(schedulers.backgroundThread)
                 .blockingGet()

@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetablewidget
 
+import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
 import android.graphics.Paint.ANTI_ALIAS_FLAG
@@ -50,20 +51,21 @@ class TimetableWidgetFactory(
     override fun onDestroy() {}
 
     override fun onDataSetChanged() {
-        intent?.action?.let { widgetId ->
-            val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(widgetId.toInt()), 0))
-            val studentId = sharedPref.getLong(getStudentWidgetKey(widgetId.toInt()), 0)
-
+        intent?.extras?.getInt(EXTRA_APPWIDGET_ID)?.let { appWidgetId ->
+            val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(appWidgetId), 0))
+            val studentId = sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0)
 
             lessons = try {
                 studentRepository.isStudentSaved()
                     .filter { true }
                     .flatMap { studentRepository.getSavedStudents().toMaybe() }
                     .flatMap {
-                        val student = it.singleOrNull { student -> student.id == studentId }
+                        if (studentId == 0L) throw IllegalArgumentException("Student id is 0")
 
-                        if (student != null) Maybe.just(student)
-                        else Maybe.empty()
+                        it.singleOrNull { student -> student.id == studentId }.let { student ->
+                            if (student != null) Maybe.just(student)
+                            else Maybe.empty()
+                        }
                     }
                     .flatMap { semesterRepository.getCurrentSemester(it).toMaybe() }
                     .flatMap { timetableRepository.getTimetable(it, date, date).toMaybe() }

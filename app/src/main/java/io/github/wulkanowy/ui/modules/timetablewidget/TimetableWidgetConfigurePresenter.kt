@@ -39,7 +39,7 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
         disposable.add(studentRepository.getSavedStudents(false)
             .map { it.map { student -> TimetableWidgetConfigureItem(student) } }
             .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
             .subscribe({
                 when {
                     it.isEmpty() -> view?.openLoginView()
