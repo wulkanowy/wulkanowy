@@ -4,7 +4,9 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Test
+import kotlin.test.assertTrue
 
 class Migration13Test : AbstractMigrationTest() {
 
@@ -64,6 +66,68 @@ class Migration13Test : AbstractMigrationTest() {
         }
     }
 
+    @Test
+    fun markAtLeastAndOnlyOneSemesterAtCurrent() {
+        helper.createDatabase(dbName, 12).apply {
+            createStudent(this, 1, "", 5)
+            createSemester(this, 1, 5, 1, 1, false)
+            createSemester(this, 1, 5, 2, 1, false)
+            createSemester(this, 1, 5, 3, 2, false)
+            createSemester(this, 1, 5, 4, 2, false)
+
+            createStudent(this, 2, "", 5)
+            createSemester(this, 2, 5, 5, 5, true)
+            createSemester(this, 2, 5, 6, 5, true)
+            createSemester(this, 2, 5, 7, 55, true)
+            createSemester(this, 2, 5, 8, 55, true)
+
+            createStudent(this, 3, "", 5)
+            createSemester(this, 3, 5, 11, 99, false)
+            createSemester(this, 3, 5, 12, 99, false)
+            createSemester(this, 3, 5, 13, 100, false)
+            createSemester(this, 3, 5, 14, 100, true)
+            close()
+        }
+
+        helper.runMigrationsAndValidate(dbName, 13, true, Migration13())
+
+        val db = getMigratedRoomDatabase()
+
+        val semesters1 = db.semesterDao.loadAll(1, 5).blockingGet()
+        assertTrue { semesters1.single { it.isCurrent }.isCurrent }
+        semesters1[0].run {
+            assertFalse(isCurrent)
+            assertEquals(1, semesterId)
+            assertEquals(1, diaryId)
+        }
+        semesters1[2].run {
+            assertFalse(isCurrent)
+            assertEquals(3, semesterId)
+            assertEquals(2, diaryId)
+        }
+        semesters1[3].run {
+            assertTrue(isCurrent)
+            assertEquals(4, semesterId)
+            assertEquals(2, diaryId)
+        }
+
+        db.semesterDao.loadAll(2, 5).blockingGet().let {
+            assertTrue { it.single { it.isCurrent }.isCurrent }
+            assertFalse(it[0].isCurrent)
+            assertFalse(it[1].isCurrent)
+            assertFalse(it[2].isCurrent)
+            assertTrue(it[3].isCurrent)
+        }
+
+        db.semesterDao.loadAll(2, 5).blockingGet().let {
+            assertTrue { it.single { it.isCurrent }.isCurrent }
+            assertFalse(it[0].isCurrent)
+            assertFalse(it[1].isCurrent)
+            assertFalse(it[2].isCurrent)
+            assertTrue(it[3].isCurrent)
+        }
+    }
+
     private fun createStudent(db: SupportSQLiteDatabase, studentId: Int, schoolName: String = "", classId: Int = -1) {
         db.insert("Students", SQLiteDatabase.CONFLICT_FAIL, ContentValues().apply {
             put("endpoint", "https://fakelog.cf")
@@ -78,6 +142,19 @@ class Migration13Test : AbstractMigrationTest() {
             put("school_name", schoolName)
             put("is_current", false)
             put("registration_date", "0")
+        })
+    }
+
+    private fun createSemester(db: SupportSQLiteDatabase, studentId: Int, classId: Int, semesterId: Int, diaryId: Int, isCurrent: Boolean = false) {
+        db.insert("Semesters", SQLiteDatabase.CONFLICT_FAIL, ContentValues().apply {
+            put("student_id", studentId)
+            put("diary_id", diaryId)
+            put("diary_name", "IA")
+            put("semester_id", semesterId)
+            put("semester_name", "1")
+            put("is_current", isCurrent)
+            put("class_id", classId)
+            put("unit_id", "99")
         })
     }
 }
