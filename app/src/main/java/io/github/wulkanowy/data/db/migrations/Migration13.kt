@@ -6,17 +6,33 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 class Migration13 : Migration(12, 13) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
-        addClassNameToStudents(database)
-        markAtLeastAndOnlyOneSemesterAtCurrent(database, getStudentsIds(database))
+        addClassNameToStudents(database, getStudentsIds(database))
+        markAtLeastAndOnlyOneSemesterAtCurrent(database, getStudentsAndClassIds(database))
     }
 
-    private fun addClassNameToStudents(database: SupportSQLiteDatabase) {
+    private fun addClassNameToStudents(database: SupportSQLiteDatabase, students: List<Pair<Int, String>>) {
         database.execSQL("ALTER TABLE Students ADD COLUMN class_name TEXT DEFAULT \"\" NOT NULL")
-        database.execSQL("UPDATE Students SET class_name = SUBSTR(school_name, 1, INSTR(school_name, ' - ') - 1)")
-        database.execSQL("UPDATE Students SET school_name = SUBSTR(school_name, INSTR(school_name, ' - ') + 3) WHERE school_name LIKE 'Klasa %'")
+
+        students.forEach { (id, name) ->
+            val schoolName = name.substringAfter(" - ")
+            val className = name.substringBefore(" - ", "")
+            database.execSQL("UPDATE Students SET class_name = '$className' WHERE id = '$id'")
+            database.execSQL("UPDATE Students SET school_name = '$schoolName' WHERE id = '$id'")
+        }
     }
 
-    private fun getStudentsIds(database: SupportSQLiteDatabase): List<Pair<Int, Int>> {
+    private fun getStudentsIds(database: SupportSQLiteDatabase): MutableList<Pair<Int, String>> {
+        val students = mutableListOf<Pair<Int, String>>()
+        val studentsCursor = database.query("SELECT student_id, school_name FROM Students")
+        if (studentsCursor.moveToFirst()) {
+            do {
+                students.add(studentsCursor.getInt(0) to studentsCursor.getString(1))
+            } while (studentsCursor.moveToNext())
+        }
+        return students
+    }
+
+    private fun getStudentsAndClassIds(database: SupportSQLiteDatabase): List<Pair<Int, Int>> {
         val students = mutableListOf<Pair<Int, Int>>()
         val studentsCursor = database.query("SELECT student_id, class_id FROM Students")
         if (studentsCursor.moveToFirst()) {
@@ -29,8 +45,8 @@ class Migration13 : Migration(12, 13) {
 
     private fun markAtLeastAndOnlyOneSemesterAtCurrent(database: SupportSQLiteDatabase, students: List<Pair<Int, Int>>) {
         students.forEach { (studentId, classId) ->
-            database.execSQL("UPDATE Semesters SET is_current = 0 WHERE student_id = $studentId AND class_id = $classId")
-            database.execSQL("UPDATE Semesters SET is_current = 1 WHERE id = (SELECT id FROM Semesters WHERE student_id = $studentId AND class_id = $classId ORDER BY semester_id DESC)")
+            database.execSQL("UPDATE Semesters SET is_current = 0 WHERE student_id = '$studentId' AND class_id = '$classId'")
+            database.execSQL("UPDATE Semesters SET is_current = 1 WHERE id = (SELECT id FROM Semesters WHERE student_id = '$studentId' AND class_id = '$classId' ORDER BY semester_id DESC)")
         }
     }
 }
