@@ -29,19 +29,19 @@ class Migration13Test : AbstractMigrationTest() {
 
         students[0].run {
             assertEquals(1, studentId)
-            assertEquals("Klasa A", className)
+            assertEquals("A", className)
             assertEquals("Publiczna szkoła Wulkanowego nr 1 w fakelog.cf", schoolName)
         }
 
         students[1].run {
             assertEquals(2, studentId)
-            assertEquals("Klasa B", className)
+            assertEquals("B", className)
             assertEquals("Publiczna szkoła Wulkanowego-fejka nr 1 w fakelog.cf", schoolName)
         }
 
         students[2].run {
             assertEquals(2, studentId)
-            assertEquals("Klasa C", className)
+            assertEquals("C", className)
             assertEquals("Publiczna szkoła Wulkanowego-fejka nr 2 w fakelog.cf", schoolName)
         }
     }

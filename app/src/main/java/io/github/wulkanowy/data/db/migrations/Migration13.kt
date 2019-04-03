@@ -16,7 +16,7 @@ class Migration13 : Migration(12, 13) {
 
         students.forEach { (id, name) ->
             val schoolName = name.substringAfter(" - ")
-            val className = name.substringBefore(" - ", "")
+            val className = name.substringBefore(" - ", "").replace("Klasa ", "")
             database.execSQL("UPDATE Students SET class_name = '$className' WHERE id = '$id'")
             database.execSQL("UPDATE Students SET school_name = '$schoolName' WHERE id = '$id'")
         }
