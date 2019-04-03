@@ -14,8 +14,9 @@ class Migration13Test : AbstractMigrationTest() {
     @Test
     fun studentsWithSchoolNameWithClassName() {
         helper.createDatabase(dbName, 12).apply {
-            createStudent(this, 1, "Klasa A - Publiczna szkoła Wulkanowego nr 1 w fakelog.cf")
-            createStudent(this, 2, "Klasa B - Publiczna szkoła Wulkanowego-fejka nr 1 w fakelog.cf")
+            createStudent(this, 1, "Klasa A - Publiczna szkoła Wulkanowego nr 1 w fakelog.cf", 1, 1)
+            createStudent(this, 2, "Klasa B - Publiczna szkoła Wulkanowego-fejka nr 1 w fakelog.cf", 2, 1)
+            createStudent(this, 2, "Klasa C - Publiczna szkoła Wulkanowego-fejka nr 2 w fakelog.cf", 1, 2)
             close()
         }
 
@@ -24,7 +25,7 @@ class Migration13Test : AbstractMigrationTest() {
         val db = getMigratedRoomDatabase()
         val students = db.studentDao.loadAll().blockingGet()
 
-        assertEquals(2, students.size)
+        assertEquals(3, students.size)
 
         students[0].run {
             assertEquals(1, studentId)
@@ -37,13 +38,19 @@ class Migration13Test : AbstractMigrationTest() {
             assertEquals("Klasa B", className)
             assertEquals("Publiczna szkoła Wulkanowego-fejka nr 1 w fakelog.cf", schoolName)
         }
+
+        students[2].run {
+            assertEquals(2, studentId)
+            assertEquals("Klasa C", className)
+            assertEquals("Publiczna szkoła Wulkanowego-fejka nr 2 w fakelog.cf", schoolName)
+        }
     }
 
     @Test
     fun studentsWithSchoolNameWithoutClassName() {
         helper.createDatabase(dbName, 12).apply {
-            createStudent(this, 1, "Publiczna szkoła Wulkanowego nr 1 w fakelog.cf")
-            createStudent(this, 2, "Publiczna szkoła Wulkanowego-fejka nr 1 w fakelog.cf")
+            createStudent(this, 1, "Publiczna szkoła Wulkanowego nr 1 w fakelog.cf", 1)
+            createStudent(this, 2, "Publiczna szkoła Wulkanowego-fejka nr 1 w fakelog.cf", 1)
             close()
         }
 
@@ -132,7 +139,7 @@ class Migration13Test : AbstractMigrationTest() {
         }
     }
 
-    private fun createStudent(db: SupportSQLiteDatabase, studentId: Int, schoolName: String = "", classId: Int = -1) {
+    private fun createStudent(db: SupportSQLiteDatabase, studentId: Int, schoolName: String = "", classId: Int = -1, schoolId: Int = 123) {
         db.insert("Students", SQLiteDatabase.CONFLICT_FAIL, ContentValues().apply {
             put("endpoint", "https://fakelog.cf")
             put("loginType", "STANDARD")
@@ -142,7 +149,7 @@ class Migration13Test : AbstractMigrationTest() {
             put("student_id", studentId)
             put("class_id", classId)
             put("student_name", "Jan Kowalski")
-            put("school_id", "000123")
+            put("school_id", schoolId)
             put("school_name", schoolName)
             put("is_current", false)
             put("registration_date", "0")
