@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 13,
-    "identityHash": "8908573328160e6d951b07c146e8e18a",
+    "identityHash": "18643bb64804b8268ec9395e3dd55ecb",
     "entities": [
       {
         "tableName": "Students",
@@ -117,7 +117,7 @@
       },
       {
         "tableName": "Semesters",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `diary_name` TEXT NOT NULL, `semester_id` INTEGER NOT NULL, `semester_name` INTEGER NOT NULL, `is_current` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `diary_name` TEXT NOT NULL, `school_year` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `semester_name` INTEGER NOT NULL, `is_current` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -144,6 +144,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "schoolYear",
+            "columnName": "school_year",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "semesterId",
             "columnName": "semester_id",
             "affinity": "INTEGER",
@@ -158,6 +164,18 @@
           {
             "fieldPath": "isCurrent",
             "columnName": "is_current",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "start",
+            "columnName": "start",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "end",
+            "columnName": "end",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1332,7 +1350,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"8908573328160e6d951b07c146e8e18a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"18643bb64804b8268ec9395e3dd55ecb\")"
     ]
   }
 }

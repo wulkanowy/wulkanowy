@@ -7,6 +7,7 @@ class Migration13 : Migration(12, 13) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
         addClassNameToStudents(database, getStudentsIds(database))
+        updateSemestersTable(database)
         markAtLeastAndOnlyOneSemesterAtCurrent(database, getStudentsAndClassIds(database))
     }
 
@@ -30,6 +31,12 @@ class Migration13 : Migration(12, 13) {
             } while (studentsCursor.moveToNext())
         }
         return students
+    }
+
+    private fun updateSemestersTable(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE Semesters ADD COLUMN school_year INTEGER DEFAULT 1970 NOT NULL")
+        database.execSQL("ALTER TABLE Semesters ADD COLUMN start INTEGER DEFAULT 0 NOT NULL")
+        database.execSQL("ALTER TABLE Semesters ADD COLUMN `end` INTEGER DEFAULT 0 NOT NULL")
     }
 
     private fun getStudentsAndClassIds(database: SupportSQLiteDatabase): List<Pair<Int, Int>> {

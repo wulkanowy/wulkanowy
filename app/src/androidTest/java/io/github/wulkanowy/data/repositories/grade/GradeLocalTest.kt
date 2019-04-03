@@ -40,7 +40,7 @@ class GradeLocalTest {
         ))
 
         val grades = gradeLocal
-            .getGrades(Semester(1, 2, "", 2, 3, true, 1, 1))
+            .getGrades(Semester(1, 2, "", 2, 3, 2019, true, LocalDate.now(), LocalDate.now(), 1, 1))
             .blockingGet()
 
         assertEquals(2, grades.size)

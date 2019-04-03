@@ -6,6 +6,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Test
+import org.threeten.bp.LocalDate.of
 import kotlin.test.assertTrue
 
 class Migration13Test : AbstractMigrationTest() {
@@ -113,6 +114,9 @@ class Migration13Test : AbstractMigrationTest() {
 
         db.semesterDao.loadAll(2, 5).blockingGet().let {
             assertTrue { it.single { it.isCurrent }.isCurrent }
+            assertEquals(1970, it[0].schoolYear)
+            assertEquals(of(1970, 1, 1), it[0].end)
+            assertEquals(of(1970, 1, 1), it[0].start)
             assertFalse(it[0].isCurrent)
             assertFalse(it[1].isCurrent)
             assertFalse(it[2].isCurrent)
