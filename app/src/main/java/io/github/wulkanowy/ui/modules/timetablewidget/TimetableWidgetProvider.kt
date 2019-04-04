@@ -119,15 +119,16 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                 .apply { putExtra(EXTRA_APPWIDGET_ID, appWidgetId) })
             setOnClickPendingIntent(R.id.timetableWidgetNext, createNavIntent(context, appWidgetId, appWidgetId, BUTTON_NEXT))
             setOnClickPendingIntent(R.id.timetableWidgetPrev, createNavIntent(context, -appWidgetId, appWidgetId, BUTTON_PREV))
-            setOnClickPendingIntent(R.id.timetableWidgetDate, createNavIntent(context, Int.MAX_VALUE - appWidgetId, appWidgetId, BUTTON_RESET))
-
+            createNavIntent(context, Int.MAX_VALUE - appWidgetId, appWidgetId, BUTTON_RESET).let {
+                setOnClickPendingIntent(R.id.timetableWidgetDate, it)
+                setOnClickPendingIntent(R.id.timetableWidgetName, it)
+            }
             setOnClickPendingIntent(R.id.timetableWidgetAccount, PendingIntent.getActivity(context, -Int.MAX_VALUE + appWidgetId,
                 Intent(context, TimetableWidgetConfigureActivity::class.java).apply {
                     addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
                     putExtra(EXTRA_APPWIDGET_ID, appWidgetId)
                     putExtra(EXTRA_FROM_PROVIDER, true)
                 }, FLAG_UPDATE_CURRENT))
-
             setPendingIntentTemplate(R.id.timetableWidgetList,
                 PendingIntent.getActivity(context, 1, MainActivity.getStartIntent(context).apply {
                     putExtra(EXTRA_START_MENU_INDEX, 3)
