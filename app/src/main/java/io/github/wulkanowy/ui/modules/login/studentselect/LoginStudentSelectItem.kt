@@ -12,16 +12,15 @@ import kotlinx.android.synthetic.main.item_login_student_select.*
 
 class LoginStudentSelectItem(val student: Student) : AbstractFlexibleItem<LoginStudentSelectItem.ItemViewHolder>() {
 
-    override fun getLayoutRes(): Int = R.layout.item_login_student_select
+    override fun getLayoutRes() = R.layout.item_login_student_select
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ItemViewHolder {
         return ItemViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ItemViewHolder, position: Int, payloads: MutableList<Any>?) {
-        holder.run {
-            loginItemName.text = student.studentName
-            loginItemSchool.text = student.schoolName
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ItemViewHolder, position: Int, payloads: MutableList<Any>) {
+        holder.apply {
+            loginItemCheck.text = student.studentName
         }
     }
 
@@ -41,6 +40,11 @@ class LoginStudentSelectItem(val student: Student) : AbstractFlexibleItem<LoginS
     }
 
     class ItemViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
+
+        init {
+            loginItemCheck.setOnClickListener { onClick(loginItemContainer) }
+        }
+
         override val containerView: View
             get() = itemView
     }

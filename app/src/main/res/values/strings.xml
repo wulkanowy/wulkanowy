@@ -3,7 +3,7 @@
 
 
     <!--Activity/Fragment title-->
-    <string name="login_title">Select student</string>
+    <string name="login_title">Login</string>
     <string name="main_title">Wulkanowy</string>
     <string name="grade_title">Grades</string>
     <string name="attendance_title">Attendance</string>
@@ -33,6 +33,7 @@
     <string name="login_field_required">This field is required</string>
     <string name="login_duplicate_student">This student has already been logged in</string>
     <string name="login_symbol_helper">The symbol is located on the register page in the Mobile Access tab</string>
+    <string name="login_select_student">Select students to log in to the application</string>
 
 
     <!--Main-->

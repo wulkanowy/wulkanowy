@@ -14,10 +14,10 @@ import javax.inject.Singleton
 interface StudentDao {
 
     @Insert(onConflict = ABORT)
-    fun insert(student: Student): Long
+    fun insertAll(student: List<Student>): List<Long>
 
     @Delete
-    fun delete(student: Student)
+    fun deleteAll(students: List<Student>)
 
     @Query("SELECT * FROM Students WHERE is_current = 1")
     fun loadCurrent(): Maybe<Student>

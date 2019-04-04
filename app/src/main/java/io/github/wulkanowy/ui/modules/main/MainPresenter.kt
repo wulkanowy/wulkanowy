@@ -86,7 +86,7 @@ class MainPresenter @Inject constructor(
     fun onLoginSelected() {
         Timber.i("Attempt to switch the student after the session expires")
         disposable.add(studentRepository.getCurrentStudent(false)
-            .flatMapCompletable { studentRepository.logoutStudent(it) }
+            .flatMapCompletable { studentRepository.logoutStudents(listOf(it)) }
             .andThen(studentRepository.getSavedStudents(false))
             .flatMapCompletable {
                 if (it.isNotEmpty()) {

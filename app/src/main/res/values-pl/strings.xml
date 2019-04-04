@@ -3,7 +3,7 @@
 
 
     <!--Activity/Fragment title-->
-    <string name="login_title">Wybierz ucznia</string>
+    <string name="login_title">Logowanie</string>
     <string name="main_title">Wulkanowy</string>
     <string name="grade_title">Oceny</string>
     <string name="attendance_title">Frekwencja</string>
@@ -33,6 +33,7 @@
     <string name="login_field_required">To pole jest wymagane</string>
     <string name="login_duplicate_student">Ten student jest już zalogowany</string>
     <string name="login_symbol_helper">Symbol znajduje się na stronie dziennika w zakładce Dostęp Mobilny</string>
+    <string name="login_select_student">Wybierz uczniów do zalogowania w aplikacji</string>
 
 
     <!--Main-->

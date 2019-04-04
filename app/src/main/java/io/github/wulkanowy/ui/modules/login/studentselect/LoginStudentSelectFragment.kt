@@ -45,6 +45,7 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
     }
 
     override fun initView() {
+        loginStudentSelectSignIn.setOnClickListener { presenter.onSignIn() }
         loginAdapter.apply { setOnItemClickListener { presenter.onItemSelected(it) } }
 
         loginStudentSelectRecycler.apply {

@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
-import com.google.firebase.analytics.FirebaseAnalytics.Param.SUCCESS
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -8,7 +7,6 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.reactivex.Single
 import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
@@ -21,6 +19,8 @@ class LoginStudentSelectPresenter @Inject constructor(
 ) : BasePresenter<LoginStudentSelectView>(errorHandler) {
 
     var students = emptyList<Student>()
+
+    var selectedStudents = mutableListOf<Student>()
 
     fun onAttachView(view: LoginStudentSelectView, students: Serializable?) {
         super.onAttachView(view)
@@ -37,13 +37,18 @@ class LoginStudentSelectPresenter @Inject constructor(
         }
     }
 
+    fun onSignIn() {
+        registerStudents()
+    }
+
     fun onParentInitStudentSelectView(students: List<Student>) {
         loadData(students)
     }
 
     fun onItemSelected(item: AbstractFlexibleItem<*>?) {
         if (item is LoginStudentSelectItem) {
-            registerStudent(item.student)
+            selectedStudents.removeAll { it == item.student }
+                .let { if (!it) selectedStudents.add(item.student) }
         }
     }
 
@@ -54,11 +59,11 @@ class LoginStudentSelectPresenter @Inject constructor(
         }
     }
 
-    private fun registerStudent(student: Student) {
-        disposable.add(studentRepository.saveStudent(student)
-            .map { student.apply { id = it } }
-            .onErrorResumeNext { studentRepository.logoutStudent(student).andThen(Single.error(it)) }
-            .flatMapCompletable { studentRepository.switchStudent(student) }
+    private fun registerStudents() {
+        disposable.add(studentRepository.saveStudents(selectedStudents)
+            .flatMapCompletable {
+                studentRepository.switchStudent(selectedStudents.first().apply { id = it.first() })
+            }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {
@@ -70,11 +75,11 @@ class LoginStudentSelectPresenter @Inject constructor(
                 Timber.i("Registration started")
             }
             .subscribe({
-                analytics.logEvent("registration_student_select", SUCCESS to true, "endpoint" to student.endpoint, "symbol" to student.symbol, "error" to "No error")
+                //analytics.logEvent("registration_student_select", SUCCESS to true, "endpoint" to student.endpoint, "symbol" to student.symbol, "error" to "No error")
                 Timber.i("Registration result: Success")
                 view?.openMainView()
             }, {
-                analytics.logEvent("registration_student_select", SUCCESS to false, "endpoint" to student.endpoint, "symbol" to student.symbol, "error" to it.localizedMessage)
+                //  analytics.logEvent("registration_student_select", SUCCESS to false, "endpoint" to student.endpoint, "symbol" to student.symbol, "error" to it.localizedMessage)
                 Timber.i("Registration result: An exception occurred ")
                 errorHandler.dispatch(it)
                 view?.apply {

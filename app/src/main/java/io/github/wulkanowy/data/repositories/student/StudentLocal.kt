@@ -17,8 +17,8 @@ class StudentLocal @Inject constructor(
     private val context: Context
 ) {
 
-    fun saveStudent(student: Student): Single<Long> {
-        return Single.fromCallable { studentDb.insert(student.copy(password = encrypt(student.password, context))) }
+    fun saveStudents(students: List<Student>): Single<List<Long>> {
+        return Single.fromCallable { studentDb.insertAll(students.map { it.copy(password = encrypt(it.password, context)) }) }
     }
 
     fun getStudents(decryptPass: Boolean): Maybe<List<Student>> {
@@ -40,7 +40,7 @@ class StudentLocal @Inject constructor(
         }
     }
 
-    fun logoutStudent(student: Student): Completable {
-        return Completable.fromCallable { studentDb.delete(student) }
+    fun logoutStudents(students: List<Student>): Completable {
+        return Completable.fromCallable { studentDb.deleteAll(students) }
     }
 }
