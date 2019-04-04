@@ -10,7 +10,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_account.*
 
-class TimetableWidgetConfigureItem(val student: Student) :
+class TimetableWidgetConfigureItem(val student: Student, private val isCurrent: Boolean) :
     AbstractFlexibleItem<TimetableWidgetConfigureItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_account
@@ -23,7 +23,7 @@ class TimetableWidgetConfigureItem(val student: Student) :
         holder.apply {
             accountItemName.text = student.studentName
             accountItemSchool.text = student.schoolName
-            accountItemImage.setBackgroundResource(0)
+            accountItemImage.setBackgroundResource(if (isCurrent) R.drawable.ic_account_circular_border else 0)
         }
     }
 

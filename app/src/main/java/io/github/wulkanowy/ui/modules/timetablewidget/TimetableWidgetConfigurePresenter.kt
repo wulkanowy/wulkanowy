@@ -17,13 +17,13 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
     private val sharedPref: SharedPrefHelper
 ) : BasePresenter<TimetableWidgetConfigureView>(errorHandler) {
 
-    private var widgetId: Int? = null
+    private var appWidgetId: Int? = null
 
     private var isFromProvider = false
 
-    fun onAttachView(view: TimetableWidgetConfigureView, widgetId: Int?, isFromProvider: Boolean?) {
+    fun onAttachView(view: TimetableWidgetConfigureView, appWidgetId: Int?, isFromProvider: Boolean?) {
         super.onAttachView(view)
-        this.widgetId = widgetId
+        this.appWidgetId = appWidgetId
         this.isFromProvider = isFromProvider ?: false
         view.initView()
         loadData()
@@ -37,7 +37,10 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
 
     private fun loadData() {
         disposable.add(studentRepository.getSavedStudents(false)
-            .map { it.map { student -> TimetableWidgetConfigureItem(student) } }
+            .map { it to appWidgetId?.let { id -> sharedPref.getLong(getStudentWidgetKey(id), 0) } }
+            .map { (students, currentStudentId) ->
+                students.map { student -> TimetableWidgetConfigureItem(student, student.id == currentStudentId) }
+            }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .subscribe({
@@ -50,7 +53,7 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
     }
 
     private fun registerStudent(student: Student) {
-        widgetId?.also {
+        appWidgetId?.also {
             sharedPref.putLong(getStudentWidgetKey(it), student.id)
             view?.apply {
                 updateTimetableWidget(it)

@@ -30,7 +30,7 @@
                 android:maxLines="1"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
-                tools:text="30.03.2019 Poniedziałek" />
+                tools:text="Pon. 30.03.2019" />
 
             <TextView
                 android:id="@+id/timetableWidgetName"
