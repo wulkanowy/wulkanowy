@@ -80,13 +80,13 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     private fun onUpdate(context: Context, intent: Intent) {
         if (intent.getStringExtra(EXTRA_BUTTON_TYPE) === null) {
             intent.getIntArrayExtra(EXTRA_APPWIDGET_IDS)?.forEach { appWidgetId ->
-                val student = getStudent(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0))
+                val student = getStudent(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)
                 updateWidget(context, appWidgetId, now().nextOrSameSchoolDay, student)
             }
         } else {
             val buttonType = intent.getStringExtra(EXTRA_BUTTON_TYPE)
             val toggledWidgetId = intent.getIntExtra(EXTRA_TOGGLED_WIDGET_ID, 0)
-            val student = getStudent(sharedPref.getLong(getStudentWidgetKey(toggledWidgetId), 0))
+            val student = getStudent(sharedPref.getLong(getStudentWidgetKey(toggledWidgetId), 0), toggledWidgetId)
             val savedDate = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(toggledWidgetId), 0))
             val date = when (buttonType) {
                 BUTTON_RESET -> now().nextOrSameSchoolDay
@@ -151,17 +151,22 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             }, FLAG_UPDATE_CURRENT)
     }
 
-    private fun getStudent(id: Long): Student? {
-        if (id == 0L) return null
+    private fun getStudent(id: Long, appWidgetId: Int): Student? {
         return try {
             studentRepository.isStudentSaved()
                 .filter { true }
                 .flatMap { studentRepository.getSavedStudents(false).toMaybe() }
-                .flatMap {
-                    it.singleOrNull { student -> student.id == id }.let { student ->
-                        if (student != null) Maybe.just(student)
-                        else Maybe.empty()
-                    }
+                .flatMap { students ->
+                    students.singleOrNull { student -> student.id == id }
+                        .let { student ->
+                            if (student != null) {
+                                Maybe.just(student)
+                            } else {
+                                studentRepository.getCurrentStudent(false)
+                                    .toMaybe()
+                                    .doOnSuccess { sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id) }
+                            }
+                        }
                 }
                 .subscribeOn(schedulers.backgroundThread)
                 .blockingGet()

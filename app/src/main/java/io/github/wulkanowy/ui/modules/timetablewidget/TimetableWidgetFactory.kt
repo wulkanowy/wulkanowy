@@ -62,10 +62,11 @@ class TimetableWidgetFactory(
                     .flatMap {
                         if (studentId == 0L) throw IllegalArgumentException("Student id is 0")
 
-                        it.singleOrNull { student -> student.id == studentId }.let { student ->
-                            if (student != null) Maybe.just(student)
-                            else Maybe.empty()
-                        }
+                        it.singleOrNull { student -> student.id == studentId }
+                            .let { student ->
+                                if (student != null) Maybe.just(student)
+                                else Maybe.empty()
+                            }
                     }
                     .flatMap { semesterRepository.getCurrentSemester(it).toMaybe() }
                     .flatMap { timetableRepository.getTimetable(it, date, date).toMaybe() }
