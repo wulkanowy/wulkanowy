@@ -234,8 +234,6 @@
 
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Brak lekcji</string>
-    <string name="widget_timetable_today">Dziś</string>
-    <string name="widget_timetable_tomorrow">Jutro</string>
 
 
     <!--Preferences-->

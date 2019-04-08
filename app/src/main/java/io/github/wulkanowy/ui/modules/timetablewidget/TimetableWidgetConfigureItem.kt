@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.modules.account
+package io.github.wulkanowy.ui.modules.timetablewidget
 
 import android.annotation.SuppressLint
 import android.view.View
@@ -11,7 +11,8 @@ import io.github.wulkanowy.data.db.entities.Student
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_account.*
 
-class AccountItem(val student: Student) : AbstractFlexibleItem<AccountItem.ViewHolder>() {
+class TimetableWidgetConfigureItem(val student: Student, private val isCurrent: Boolean) :
+    AbstractFlexibleItem<TimetableWidgetConfigureItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_account
 
@@ -20,11 +21,11 @@ class AccountItem(val student: Student) : AbstractFlexibleItem<AccountItem.ViewH
     }
 
     @SuppressLint("SetTextI18n")
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>?) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         holder.apply {
             accountItemName.text = "${student.studentName} ${student.className}"
             accountItemSchool.text = student.schoolName
-            accountItemImage.setBackgroundResource(if (student.isCurrent) R.drawable.ic_account_circular_border else 0)
+            accountItemImage.setBackgroundResource(if (isCurrent) R.drawable.ic_account_circular_border else 0)
         }
     }
 
@@ -32,7 +33,7 @@ class AccountItem(val student: Student) : AbstractFlexibleItem<AccountItem.ViewH
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as AccountItem
+        other as TimetableWidgetConfigureItem
 
         if (student != other.student) return false
 
