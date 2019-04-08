@@ -40,7 +40,7 @@ class StudentLocal @Inject constructor(
         }
     }
 
-    fun logoutStudents(students: List<Student>): Completable {
-        return Completable.fromCallable { studentDb.deleteAll(students) }
+    fun logoutStudent(student: Student): Completable {
+        return Completable.fromCallable { studentDb.delete(student) }
     }
 }

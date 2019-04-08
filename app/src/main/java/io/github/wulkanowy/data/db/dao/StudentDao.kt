@@ -17,7 +17,7 @@ interface StudentDao {
     fun insertAll(student: List<Student>): List<Long>
 
     @Delete
-    fun deleteAll(students: List<Student>)
+    fun delete(student: Student)
 
     @Query("SELECT * FROM Students WHERE is_current = 1")
     fun loadCurrent(): Maybe<Student>

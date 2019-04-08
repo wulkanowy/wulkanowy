@@ -49,7 +49,7 @@ class StudentRepository @Inject constructor(
         return local.setCurrentStudent(student)
     }
 
-    fun logoutStudents(students: List<Student>): Completable {
-        return local.logoutStudents(students)
+    fun logoutStudent(student: Student): Completable {
+        return local.logoutStudent(student)
     }
 }
