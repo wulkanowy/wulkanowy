@@ -35,6 +35,7 @@
     <string name="login_duplicate_student">Ten student jest już zalogowany</string>
     <string name="login_symbol_helper">Symbol znajduje się na stronie dziennika w zakładce Dostęp Mobilny</string>
     <string name="login_select_student">Wybierz uczniów do zalogowania w aplikacji</string>
+    <string name="login_no_select_student">Nie wybrano żadnego ucznia</string>
 
 
     <!--Main-->

@@ -38,7 +38,8 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     fun onSignIn() {
-        registerStudents()
+        if (selectedStudents.isNotEmpty()) registerStudents()
+        else view?.showNoSelectedMessage()
     }
 
     fun onParentInitStudentSelectView(students: List<Student>) {

@@ -13,4 +13,6 @@ interface LoginStudentSelectView : BaseView {
     fun showProgress(show: Boolean)
 
     fun showContent(show: Boolean)
+
+    fun showNoSelectedMessage()
 }
