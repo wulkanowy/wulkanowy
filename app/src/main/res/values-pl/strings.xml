@@ -26,6 +26,7 @@
     <string name="login_password_hint">Hasło</string>
     <string name="login_host_hint">Dziennik</string>
     <string name="login_symbol_hint">Symbol</string>
+    <string name="login_privacy_policy"><a href="https://wulkanowy.github.io/polityka-prywatnosci.html">Polityka prywatności</a></string>
     <string name="login_sign_in">Zaloguj</string>
     <string name="login_invalid_password">To hasło jest za krótkie</string>
     <string name="login_incorrect_password">Dane logowania są niepoprawne</string>
@@ -141,6 +142,10 @@
     <string name="message_date">Data: %s</string>
     <string name="message_reply">Odpowiedz</string>
     <string name="message_forward">Prześlij dalej</string>
+    <string name="message_delete">Usuń</string>
+    <string name="message_move_to_bin">Przenieś do kosza</string>
+    <string name="message_delete_forever">Usuń trwale</string>
+    <string name="message_delete_success">Wiadomość usunięta pomyślnie</string>
     <string name="message_subject">Temat</string>
     <string name="message_content">Treść</string>
     <string name="message_send_successful">Wiadomość wysłana pomyślnie</string>
@@ -229,8 +234,6 @@
 
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Brak lekcji</string>
-    <string name="widget_timetable_today">Dziś</string>
-    <string name="widget_timetable_tomorrow">Jutro</string>
 
 
     <!--Preferences-->

@@ -35,4 +35,5 @@
         <item name="android:navigationBarColor" tools:targetApi="21">@android:color/black</item>
         <item name="bottomNavBackground">@android:color/black</item>
     </style>
+
 </resources>
