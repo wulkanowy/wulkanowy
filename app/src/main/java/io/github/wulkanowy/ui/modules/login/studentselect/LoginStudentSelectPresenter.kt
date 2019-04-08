@@ -63,9 +63,8 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     private fun registerStudents(students: List<Student>) {
         disposable.add(studentRepository.saveStudents(students)
-            .flatMapCompletable {
-                studentRepository.switchStudent(students.first().apply { id = it.first() })
-            }
+            .map { students.first().apply { id = it.first() } }
+            .flatMapCompletable { studentRepository.switchStudent(it) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {
