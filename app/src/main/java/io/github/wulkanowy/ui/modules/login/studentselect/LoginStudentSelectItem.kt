@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
+import android.annotation.SuppressLint
 import android.view.View
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -18,9 +19,11 @@ class LoginStudentSelectItem(val student: Student) : AbstractFlexibleItem<LoginS
         return ItemViewHolder(view, adapter)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ItemViewHolder, position: Int, payloads: MutableList<Any>) {
         holder.apply {
-            loginItemCheck.text = student.studentName
+            loginItemName.text = "${student.studentName} ${student.className}"
+            loginItemSchool.text = student.schoolName
         }
     }
 
@@ -41,11 +44,16 @@ class LoginStudentSelectItem(val student: Student) : AbstractFlexibleItem<LoginS
 
     class ItemViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
 
-        init {
-            loginItemCheck.setOnClickListener { onClick(loginItemContainer) }
-        }
-
         override val containerView: View
             get() = itemView
+
+        init {
+            loginItemCheck.setOnClickListener { super.onClick(loginItemContainer) }
+        }
+
+        override fun onClick(view: View?) {
+            super.onClick(view)
+            loginItemCheck.apply { isChecked = !isChecked }
+        }
     }
 }

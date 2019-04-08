@@ -1,20 +1,42 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:paddingStart="16dp"
-    android:paddingLeft="16dp"
-    android:paddingEnd="16dp"
     android:id="@+id/loginItemContainer"
-    android:paddingRight="16dp">
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="?selectableItemBackground"
+    android:orientation="horizontal">
 
     <CheckBox
         android:id="@+id/loginItemCheck"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="32dp"
-        android:paddingLeft="32dp"
+        android:layout_width="26dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        tools:text=" " />
+
+    <TextView
+        android:id="@+id/loginItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/loginItemCheck"
+        android:layout_toRightOf="@id/loginItemCheck"
         android:textSize="16sp"
-        tools:ignore="RtlSymmetry"
+        app:firstBaselineToTopHeight="32dp"
         tools:text="Jan Kowalski" />
-</FrameLayout>
+
+    <TextView
+        android:id="@+id/loginItemSchool"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginItemName"
+        android:layout_toEndOf="@id/loginItemCheck"
+        android:layout_toRightOf="@id/loginItemCheck"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="12sp"
+        app:firstBaselineToTopHeight="20dp"
+        tools:text="Szkoła Wulkanowego nr 1" />
+</RelativeLayout>
