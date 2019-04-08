@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
+import com.google.firebase.analytics.FirebaseAnalytics.Param.SUCCESS
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -38,7 +39,7 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     fun onSignIn() {
-        if (selectedStudents.isNotEmpty()) registerStudents()
+        if (selectedStudents.isNotEmpty()) registerStudents(selectedStudents)
         else view?.showNoSelectedMessage()
     }
 
@@ -60,10 +61,10 @@ class LoginStudentSelectPresenter @Inject constructor(
         }
     }
 
-    private fun registerStudents() {
-        disposable.add(studentRepository.saveStudents(selectedStudents)
+    private fun registerStudents(students: List<Student>) {
+        disposable.add(studentRepository.saveStudents(students)
             .flatMapCompletable {
-                studentRepository.switchStudent(selectedStudents.first().apply { id = it.first() })
+                studentRepository.switchStudent(students.first().apply { id = it.first() })
             }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
@@ -75,13 +76,13 @@ class LoginStudentSelectPresenter @Inject constructor(
                 Timber.i("Registration started")
             }
             .subscribe({
-                //analytics.logEvent("registration_student_select", SUCCESS to true, "endpoint" to student.endpoint, "symbol" to student.symbol, "error" to "No error")
+                students.forEach { analytics.logEvent("registration_student_select", SUCCESS to true, "endpoint" to it.endpoint, "symbol" to it.symbol, "error" to "No error") }
                 Timber.i("Registration result: Success")
                 view?.openMainView()
-            }, {
-                //  analytics.logEvent("registration_student_select", SUCCESS to false, "endpoint" to student.endpoint, "symbol" to student.symbol, "error" to it.localizedMessage)
+            }, { error ->
+                students.forEach { analytics.logEvent("registration_student_select", SUCCESS to false, "endpoint" to it.endpoint, "symbol" to it.symbol, "error" to error.localizedMessage) }
                 Timber.i("Registration result: An exception occurred ")
-                errorHandler.dispatch(it)
+                errorHandler.dispatch(error)
                 view?.apply {
                     showProgress(false)
                     showContent(true)
