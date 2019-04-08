@@ -70,7 +70,6 @@ class LoginStudentSelectPresenter @Inject constructor(
                 view?.apply {
                     showProgress(true)
                     showContent(false)
-                    showActionBar(false)
                 }
                 Timber.i("Registration started")
             }
@@ -85,7 +84,6 @@ class LoginStudentSelectPresenter @Inject constructor(
                 view?.apply {
                     showProgress(false)
                     showContent(true)
-                    showActionBar(true)
                 }
             }))
     }

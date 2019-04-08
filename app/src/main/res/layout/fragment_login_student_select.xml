@@ -14,6 +14,7 @@
         android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loginStudentSelectContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -41,12 +42,14 @@
             android:id="@+id/loginStudentSelectRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="112dp"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@id/loginStudentSelectSignIn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_max="392dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginStudentSelectHeader"
+            tools:itemCount="3"
             tools:listitem="@layout/item_login_student_select" />
 
         <com.google.android.material.button.MaterialButton

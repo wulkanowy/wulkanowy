@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.WalledGardenInternetObservingStrategy
+import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.strategy.SocketInternetObservingStrategy
 import com.readystatesoftware.chuck.api.ChuckCollector
 import com.readystatesoftware.chuck.api.ChuckInterceptor
 import com.readystatesoftware.chuck.api.RetentionManager
@@ -27,7 +27,8 @@ internal class RepositoryModule {
     @Provides
     fun provideInternetObservingSettings(): InternetObservingSettings {
         return InternetObservingSettings.builder()
-            .strategy(WalledGardenInternetObservingStrategy())
+            .strategy(SocketInternetObservingStrategy())
+            .host("www.google.com")
             .build()
     }
 
