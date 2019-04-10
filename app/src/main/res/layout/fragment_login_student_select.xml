@@ -43,14 +43,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="144dp"
-            android:overScrollMode="never"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@id/loginStudentSelectSignIn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_max="392dp"
+            app:layout_constraintHeight_max="432dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginStudentSelectHeader"
-            tools:itemCount="3"
+            tools:itemCount="6"
             tools:listitem="@layout/item_login_student_select" />
 
         <com.google.android.material.button.MaterialButton

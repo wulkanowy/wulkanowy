@@ -54,7 +54,7 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
     }
 
     override fun updateData(data: List<LoginStudentSelectItem>) {
-        loginAdapter.updateDataSet(data, true)
+        loginAdapter.updateDataSet(data)
     }
 
     override fun openMainView() {

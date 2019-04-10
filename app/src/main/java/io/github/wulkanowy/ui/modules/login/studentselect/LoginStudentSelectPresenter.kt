@@ -45,6 +45,7 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     fun onParentInitStudentSelectView(students: List<Student>) {
         loadData(students)
+        if (students.size == 1) registerStudents(students)
     }
 
     fun onItemSelected(item: AbstractFlexibleItem<*>?) {
