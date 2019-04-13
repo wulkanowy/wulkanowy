@@ -17,6 +17,9 @@ class PreferencesRepository @Inject constructor(
     val isShowPresent: Boolean
         get() = sharedPref.getBoolean(context.getString(R.string.pref_key_attendance_present), true)
 
+    val isAllYearGradeSummary: Boolean
+        get() = sharedPref.getBoolean(context.getString(R.string.pref_key_grade_summary_mode), false)
+
     val isGradeExpandable: Boolean
         get() = !sharedPref.getBoolean(context.getString(R.string.pref_key_expand_grade), false)
 
