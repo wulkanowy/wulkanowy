@@ -26,8 +26,8 @@
             android:title="@string/pref_view_present"
             app:iconSpaceReserved="false" />
         <SwitchPreference
-            android:key="@string/pref_key_grade_summary_mode"
-            android:title="@string/pref_view_grade_summary_mode"
+            android:key="@string/pref_key_grade_average_mode"
+            android:title="@string/pref_view_grade_average_mode"
             android:defaultValue="false"
             app:iconSpaceReserved="false" />
         <SwitchPreference

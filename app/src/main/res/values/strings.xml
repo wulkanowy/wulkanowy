@@ -224,7 +224,7 @@
     <!--Preferences-->
     <string name="pref_view_header">Appearance</string>
     <string name="pref_view_list">Default view</string>
-    <string name="pref_view_grade_summary_mode">Show the year-round average of grades</string>
+    <string name="pref_view_grade_average_mode">Show the year-round average of grades</string>
     <string name="pref_view_present">Show presence in attendance</string>
     <string name="pref_view_theme_dark">Dark theme (Beta)</string>
     <string name="pref_view_expand_grade">Expand grades</string>
