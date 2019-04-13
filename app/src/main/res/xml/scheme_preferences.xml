@@ -26,6 +26,11 @@
             android:title="@string/pref_view_present"
             app:iconSpaceReserved="false" />
         <SwitchPreference
+            android:key="@string/pref_key_grade_summary_mode"
+            android:title="@string/pref_view_grade_summary_mode"
+            android:defaultValue="false"
+            app:iconSpaceReserved="false" />
+        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_key_expand_grade"
             android:title="@string/pref_view_expand_grade"
@@ -36,7 +41,7 @@
             android:entryValues="@array/grade_color_scheme_values"
             android:key="@string/pref_key_grade_color_scheme"
             android:summary="%s"
-            android:title="@string/pref_grade_color_scheme"
+            android:title="@string/pref_view_grade_color_scheme"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory
