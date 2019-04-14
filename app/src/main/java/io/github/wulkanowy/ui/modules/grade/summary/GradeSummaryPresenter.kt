@@ -38,37 +38,37 @@ class GradeSummaryPresenter @Inject constructor(
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it).map { semesters -> semesters to it } }
             .map { (semesters, student) ->
-                if (!preferencesRepository.isAllYearGradeAverage) {
-                    semesters.filter { it.semesterId == semesterId } to student
-                } else {
-                    val diaryId = semesters.first { it.semesterId == semesterId }.diaryId
-                    semesters.filter { it.diaryId == diaryId } to student
-                }
+                val diaryId = semesters.first { it.semesterId == semesterId }.diaryId
+                semesters.filter { it.diaryId == diaryId } to student
             }
             .flatMap { (semesters, student) ->
                 gradeSummaryRepository.getGradesSummary(semesters.first { it.semesterId == semesterId }, forceRefresh)
                     .flatMap { gradesSummary ->
-                        if (preferencesRepository.isAllYearGradeAverage) {
-                            gradeRepository.getGrades(student, semesters.first(), forceRefresh)
-                                .flatMap {
-                                    gradeRepository.getGrades(student, semesters.last(), forceRefresh)
-                                        .map { grades -> grades + it }
-                                }
-                        } else {
-                            gradeRepository.getGrades(student, semesters.first { it.semesterId == semesterId }, forceRefresh)
-                        }.map { grades ->
-                            grades.map { item -> item.changeModifier(preferencesRepository.gradePlusModifier, preferencesRepository.gradeMinusModifier) }
-                                .groupBy { grade -> grade.subject }
-                                .mapValues { entry -> entry.value.calcAverage() }
-                                .filterValues { value -> value != 0.0 }
-                                .let { averages ->
-                                    createGradeSummaryItems(gradesSummary, averages) to
-                                        GradeSummaryScrollableHeader(
-                                            formatAverage(gradesSummary.calcAverage()),
-                                            formatAverage(averages.values.average())
-                                        )
-                                }
-                        }
+                        gradeRepository.getGrades(student, semesters.first(), forceRefresh)
+                            .flatMap { firstGrades ->
+                                gradeRepository.getGrades(student, semesters.last(), forceRefresh)
+                                    .map { secondGrades -> firstGrades + secondGrades }
+                            }
+                            .map {
+                                if (!preferencesRepository.isAllYearGradeAverage) {
+                                    it.filter { grade -> grade.semesterId == semesterId }
+                                } else it
+                            }
+                            .map { grades ->
+                                val plusModifier = preferencesRepository.gradePlusModifier
+                                val minusModifier = preferencesRepository.gradeMinusModifier
+                                grades.map { item -> item.changeModifier(plusModifier, minusModifier) }
+                                    .groupBy { grade -> grade.subject }
+                                    .mapValues { entry -> entry.value.calcAverage() }
+                                    .filterValues { value -> value != 0.0 }
+                                    .let { averages ->
+                                        createGradeSummaryItems(gradesSummary, averages) to
+                                            GradeSummaryScrollableHeader(
+                                                formatAverage(gradesSummary.calcAverage()),
+                                                formatAverage(averages.values.average())
+                                            )
+                                    }
+                            }
                     }
             }
             .subscribeOn(schedulers.backgroundThread)
@@ -80,14 +80,14 @@ class GradeSummaryPresenter @Inject constructor(
                     enableSwipe(true)
                     notifyParentDataLoaded(semesterId)
                 }
-            }.subscribe({
+            }.subscribe({ (gradeSummaryItems, gradeSummaryHeader) ->
                 Timber.i("Loading grade summary result: Success")
                 view?.run {
-                    showEmpty(it.first.isEmpty())
-                    showContent(it.first.isNotEmpty())
-                    updateData(it.first, it.second)
+                    showEmpty(gradeSummaryItems.isEmpty())
+                    showContent(gradeSummaryItems.isNotEmpty())
+                    updateData(gradeSummaryItems, gradeSummaryHeader)
                 }
-                analytics.logEvent("load_grade_summary", "items" to it.first.size, "force_refresh" to forceRefresh)
+                analytics.logEvent("load_grade_summary", "items" to gradeSummaryItems.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.i("Loading grade summary result: An exception occurred")
                 view?.run { showEmpty(isViewEmpty) }
