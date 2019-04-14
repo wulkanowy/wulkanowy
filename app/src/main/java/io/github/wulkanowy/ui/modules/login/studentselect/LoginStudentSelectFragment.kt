@@ -72,8 +72,8 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
         loginStudentSelectContent.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun showNoSelectedMessage() {
-        showMessage(getString(R.string.login_no_select_student))
+    override fun enableSignIn(enable: Boolean) {
+        loginStudentSelectSignIn.isEnabled = enable
     }
 
     fun onParentInitStudentSelectFragment(students: List<Student>) {

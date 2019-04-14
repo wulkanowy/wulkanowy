@@ -14,5 +14,5 @@ interface LoginStudentSelectView : BaseView {
 
     fun showContent(show: Boolean)
 
-    fun showNoSelectedMessage()
+    fun enableSignIn(enable: Boolean)
 }

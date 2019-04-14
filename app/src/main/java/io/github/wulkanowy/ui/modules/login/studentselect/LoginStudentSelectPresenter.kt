@@ -27,6 +27,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         super.onAttachView(view)
         view.run {
             initView()
+            enableSignIn(false)
             errorHandler.onStudentDuplicate = {
                 showMessage(it)
                 Timber.i("The student already registered in the app was selected")
@@ -39,8 +40,7 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     fun onSignIn() {
-        if (selectedStudents.isNotEmpty()) registerStudents(selectedStudents)
-        else view?.showNoSelectedMessage()
+        registerStudents(selectedStudents)
     }
 
     fun onParentInitStudentSelectView(students: List<Student>) {
@@ -52,6 +52,8 @@ class LoginStudentSelectPresenter @Inject constructor(
         if (item is LoginStudentSelectItem) {
             selectedStudents.removeAll { it == item.student }
                 .let { if (!it) selectedStudents.add(item.student) }
+
+            view?.enableSignIn(selectedStudents.isNotEmpty())
         }
     }
 
