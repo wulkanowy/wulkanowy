@@ -128,7 +128,21 @@ class GradeSummaryPresenter @Inject constructor(
     }
 
     private fun getAllYearAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
-        TODO()
+        val selectedSemester = semesters.first { it.semesterId == semesterId }
+        val firstSemester = semesters.first { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
+        val plusModifier = preferencesRepository.gradePlusModifier
+        val minusModifier = preferencesRepository.gradeMinusModifier
+
+        return gradeRepository.getGrades(student, selectedSemester, forceRefresh)
+            .flatMap { firstGrades ->
+                if (selectedSemester == firstSemester) Single.just(firstGrades)
+                else gradeRepository.getGrades(student, firstSemester, forceRefresh)
+                    .map { secondGrades -> secondGrades + firstGrades }
+            }.map { grades ->
+                grades.map { it.changeModifier(plusModifier, minusModifier) }
+                    .groupBy { it.subject }
+                    .mapValues { it.value.calcAverage() }
+            }
     }
 
     private fun getModdedAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
