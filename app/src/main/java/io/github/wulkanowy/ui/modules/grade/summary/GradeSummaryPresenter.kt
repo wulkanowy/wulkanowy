@@ -49,11 +49,11 @@ class GradeSummaryPresenter @Inject constructor(
                                 gradeRepository.getGrades(student, semesters.last(), forceRefresh)
                                     .map { secondGrades -> firstGrades + secondGrades }
                             }
-                            .map {
+                            /*.map {
                                 if (!preferencesRepository.isAllYearGradeAverage) {
                                     it.filter { grade -> grade.semesterId == semesterId }
                                 } else it
-                            }
+                            }*/
                             .map { grades ->
                                 val plusModifier = preferencesRepository.gradePlusModifier
                                 val minusModifier = preferencesRepository.gradeMinusModifier

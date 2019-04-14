@@ -26,14 +26,16 @@
             android:title="@string/pref_view_present"
             app:iconSpaceReserved="false" />
         <SwitchPreference
-            android:key="@string/pref_key_grade_average_mode"
-            android:title="@string/pref_view_grade_average_mode"
-            android:defaultValue="false"
-            app:iconSpaceReserved="false" />
-        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_key_expand_grade"
             android:title="@string/pref_view_expand_grade"
+            app:iconSpaceReserved="false" />
+        <ListPreference
+            android:defaultValue="only_last_semester"
+            android:entries="@array/grade_average_mode_entries"
+            android:entryValues="@array/grade_average_mode_values"
+            android:summary="%s"
+            android:title="@string/pref_view_grade_average_mode"
             app:iconSpaceReserved="false" />
         <ListPreference
             android:defaultValue="vulcan"
