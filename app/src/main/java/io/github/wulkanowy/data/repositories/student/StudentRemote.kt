@@ -10,11 +10,11 @@ import javax.inject.Singleton
 @Singleton
 class StudentRemote @Inject constructor(private val api: Api) {
 
-    fun getStudents(email: String, password: String, endpoint: String): Single<List<Student>> {
+    fun getStudents(password: String, endpoint: String): Single<List<Student>> {
         return api.getStudents().map { students ->
             students.map { student ->
                 Student(
-                    email = email,
+                    email = student.email,
                     password = password,
                     symbol = student.symbol,
                     studentId = student.studentId,
