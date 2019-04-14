@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.summary
 
+import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.gradessummary.GradeSummaryRepository
@@ -37,40 +38,6 @@ class GradeSummaryPresenter @Inject constructor(
         Timber.i("Loading grade summary data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it).map { semesters -> semesters to it } }
-            .map { (semesters, student) ->
-                val diaryId = semesters.first { it.semesterId == semesterId }.diaryId
-                semesters.filter { it.diaryId == diaryId } to student
-            }
-            .flatMap { (semesters, student) ->
-                gradeSummaryRepository.getGradesSummary(semesters.first { it.semesterId == semesterId }, forceRefresh)
-                    .flatMap { gradesSummary ->
-                        gradeRepository.getGrades(student, semesters.first(), forceRefresh)
-                            .flatMap { firstGrades ->
-                                gradeRepository.getGrades(student, semesters.last(), forceRefresh)
-                                    .map { secondGrades -> firstGrades + secondGrades }
-                            }
-                            /*.map {
-                                if (!preferencesRepository.isAllYearGradeAverage) {
-                                    it.filter { grade -> grade.semesterId == semesterId }
-                                } else it
-                            }*/
-                            .map { grades ->
-                                val plusModifier = preferencesRepository.gradePlusModifier
-                                val minusModifier = preferencesRepository.gradeMinusModifier
-                                grades.map { item -> item.changeModifier(plusModifier, minusModifier) }
-                                    .groupBy { grade -> grade.subject }
-                                    .mapValues { entry -> entry.value.calcAverage() }
-                                    .filterValues { value -> value != 0.0 }
-                                    .let { averages ->
-                                        createGradeSummaryItems(gradesSummary, averages) to
-                                            GradeSummaryScrollableHeader(
-                                                formatAverage(gradesSummary.calcAverage()),
-                                                formatAverage(averages.values.average())
-                                            )
-                                    }
-                            }
-                    }
-            }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {
@@ -85,7 +52,7 @@ class GradeSummaryPresenter @Inject constructor(
                 view?.run {
                     showEmpty(gradeSummaryItems.isEmpty())
                     showContent(gradeSummaryItems.isNotEmpty())
-                    updateData(gradeSummaryItems, gradeSummaryHeader)
+                    //updateData(gradeSummaryItems, gradeSummaryHeader)
                 }
                 analytics.logEvent("load_grade_summary", "items" to gradeSummaryItems.size, "force_refresh" to forceRefresh)
             }) {
@@ -118,16 +85,30 @@ class GradeSummaryPresenter @Inject constructor(
         disposable.clear()
     }
 
-    private fun createGradeSummaryItems(gradesSummary: List<GradeSummary>, averages: Map<String, Double>)
-        : List<GradeSummaryItem> {
-        return gradesSummary.filter { !checkEmpty(it, averages) }.map {
-            GradeSummaryItem(
-                title = it.subject,
-                average = formatAverage(averages.getOrElse(it.subject) { 0.0 }, ""),
-                predictedGrade = it.predictedGrade,
-                finalGrade = it.finalGrade
-            )
-        }
+    private fun createGradeSummaryItemsAndHeader(gradesSummary: List<GradeSummary>, grades: List<Grade>)
+        : Pair<List<GradeSummaryItem>, GradeSummaryScrollableHeader> {
+        val plusModifier = preferencesRepository.gradePlusModifier
+        val minusModifier = preferencesRepository.gradeMinusModifier
+
+        return grades.map { item -> item.changeModifier(plusModifier, minusModifier) }
+            .groupBy { grade -> grade.subject }
+            .mapValues { entry -> entry.value.calcAverage() }
+            .filterValues { value -> value != 0.0 }
+            .let { averages ->
+                gradesSummary.filter { !checkEmpty(it, averages) }
+                    .map {
+                        GradeSummaryItem(
+                            title = it.subject,
+                            average = formatAverage(averages.getOrElse(it.subject) { 0.0 }, ""),
+                            predictedGrade = it.predictedGrade,
+                            finalGrade = it.finalGrade
+                        )
+                    }.let {
+                        it to GradeSummaryScrollableHeader(
+                            formatAverage(gradesSummary.calcAverage()),
+                            formatAverage(averages.values.average()))
+                    }
+            }
     }
 
     private fun checkEmpty(gradeSummary: GradeSummary, averages: Map<String, Double>): Boolean {

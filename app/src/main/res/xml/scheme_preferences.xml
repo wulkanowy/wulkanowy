@@ -34,6 +34,7 @@
             android:defaultValue="only_last_semester"
             android:entries="@array/grade_average_mode_entries"
             android:entryValues="@array/grade_average_mode_values"
+            android:key="@string/pref_key_grade_average_mode"
             android:summary="%s"
             android:title="@string/pref_view_grade_average_mode"
             app:iconSpaceReserved="false" />
