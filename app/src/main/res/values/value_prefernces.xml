@@ -76,7 +76,7 @@
         <item>Average of grades from the whole year</item>
     </string-array>
     <string-array name="grade_average_mode_values" translatable="false">
-        <item>only_last_semester</item>
+        <item>only_one_semester</item>
         <item>all_year</item>
     </string-array>
 </resources>

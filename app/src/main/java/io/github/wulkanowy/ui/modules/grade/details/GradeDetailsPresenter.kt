@@ -2,20 +2,16 @@ package io.github.wulkanowy.ui.modules.grade.details
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Grade
-import io.github.wulkanowy.data.db.entities.Semester
-import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
+import io.github.wulkanowy.ui.modules.grade.GradeAverageStrategy
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.github.wulkanowy.utils.calcAverage
-import io.github.wulkanowy.utils.changeModifier
 import io.github.wulkanowy.utils.getBackgroundColor
-import io.reactivex.Single
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,6 +22,7 @@ class GradeDetailsPresenter @Inject constructor(
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val preferencesRepository: PreferencesRepository,
+    private val averageStrategy: GradeAverageStrategy,
     private val analytics: FirebaseAnalyticsHelper
 ) : BaseSessionPresenter<GradeDetailsView>(errorHandler) {
 
@@ -114,7 +111,7 @@ class GradeDetailsPresenter @Inject constructor(
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it).map { semester -> it to semester } }
             .flatMap { (student, semesters) ->
-                getModdedAverage(student, semesters, semesterId, forceRefresh)
+                averageStrategy.getGradeAverage(student, semesters, semesterId, forceRefresh)
                     .flatMap { averages ->
                         gradeRepository.getGrades(student, semesters.first { semester -> semester.semesterId == semesterId })
                             .map { it.sortedByDescending { grade -> grade.date } }
@@ -171,44 +168,6 @@ class GradeDetailsPresenter @Inject constructor(
                     )
                 }
             }
-        }
-    }
-
-    private fun getOnlyOneSemesterAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
-        val selectedSemester = semesters.first { it.semesterId == semesterId }
-        val plusModifier = preferencesRepository.gradePlusModifier
-        val minusModifier = preferencesRepository.gradeMinusModifier
-
-        return gradeRepository.getGrades(student, selectedSemester, forceRefresh)
-            .map { grades ->
-                grades.map { it.changeModifier(plusModifier, minusModifier) }
-                    .groupBy { it.subject }
-                    .mapValues { it.value.calcAverage() }
-            }
-    }
-
-    private fun getAllYearAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
-        val selectedSemester = semesters.first { it.semesterId == semesterId }
-        val firstSemester = semesters.first { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
-        val plusModifier = preferencesRepository.gradePlusModifier
-        val minusModifier = preferencesRepository.gradeMinusModifier
-
-        return gradeRepository.getGrades(student, selectedSemester, forceRefresh)
-            .flatMap { firstGrades ->
-                if (selectedSemester == firstSemester) Single.just(firstGrades)
-                else gradeRepository.getGrades(student, firstSemester, forceRefresh)
-                    .map { secondGrades -> secondGrades + firstGrades }
-            }.map { grades ->
-                grades.map { it.changeModifier(plusModifier, minusModifier) }
-                    .groupBy { it.subject }
-                    .mapValues { it.value.calcAverage() }
-            }
-    }
-
-    private fun getModdedAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
-        return when (preferencesRepository.gradeAverageMode) {
-            "all_year" -> getAllYearAverage(student, semesters, semesterId, forceRefresh)
-            else -> getOnlyOneSemesterAverage(student, semesters, semesterId, forceRefresh)
         }
     }
 
