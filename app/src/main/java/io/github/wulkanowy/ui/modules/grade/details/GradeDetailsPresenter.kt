@@ -2,6 +2,8 @@ package io.github.wulkanowy.ui.modules.grade.details
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
@@ -13,6 +15,7 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
 import io.github.wulkanowy.utils.getBackgroundColor
+import io.reactivex.Single
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -109,11 +112,16 @@ class GradeDetailsPresenter @Inject constructor(
     private fun loadData(semesterId: Int, forceRefresh: Boolean) {
         Timber.i("Loading grade details data started")
         disposable.add(studentRepository.getCurrentStudent()
-            .flatMap { semesterRepository.getSemesters(it).map { semester -> semester to it } }
-            .flatMap { gradeRepository.getGrades(it.second, it.first.first { item -> item.semesterId == semesterId }, forceRefresh) }
-            .map { it.sortedByDescending { grade -> grade.date } }
-            .map { it.map { item -> item.changeModifier(preferencesRepository.gradePlusModifier, preferencesRepository.gradeMinusModifier) } }
-            .map { createGradeItems(it.groupBy { grade -> grade.subject }.toSortedMap()) }
+            .flatMap { semesterRepository.getSemesters(it).map { semester -> it to semester } }
+            .flatMap { (student, semesters) ->
+                getModdedAverage(student, semesters, semesterId, forceRefresh)
+                    .flatMap { averages ->
+                        gradeRepository.getGrades(student, semesters.first { semester -> semester.semesterId == semesterId })
+                            .map { it.sortedByDescending { grade -> grade.date } }
+                            .map { it.groupBy { grade -> grade.subject }.toSortedMap() }
+                            .map { createGradeItems(it, averages) }
+                    }
+            }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {
@@ -139,32 +147,74 @@ class GradeDetailsPresenter @Inject constructor(
             })
     }
 
-    private fun createGradeItems(items: Map<String, List<Grade>>): List<GradeDetailsHeader> {
+    private fun createGradeItems(items: Map<String, List<Grade>>, averages: Map<String, Double>): List<GradeDetailsHeader> {
+        val isGradeExpandable = preferencesRepository.isGradeExpandable
+        val gradeColorTheme = preferencesRepository.gradeColorTheme
+
+        val noDescriptionString = view?.noDescriptionString.orEmpty()
+        val weightString = view?.weightString.orEmpty()
+
         return items.map {
-            it.value.calcAverage().let { average ->
-                GradeDetailsHeader(
-                    subject = it.key,
-                    average = formatAverage(average),
-                    number = view?.getGradeNumberString(it.value.size).orEmpty(),
-                    newGrades = it.value.filter { grade -> !grade.isRead }.size,
-                    isExpandable = preferencesRepository.isGradeExpandable
-                ).apply {
-                    subItems = it.value.map { item ->
-                        GradeDetailsItem(
-                            grade = item,
-                            valueBgColor = item.getBackgroundColor(preferencesRepository.gradeColorTheme),
-                            weightString = view?.weightString.orEmpty(),
-                            noDescriptionString = view?.noDescriptionString.orEmpty()
-                        )
-                    }
+            GradeDetailsHeader(
+                subject = it.key,
+                average = formatAverage(averages[it.key]),
+                number = view?.getGradeNumberString(it.value.size).orEmpty(),
+                newGrades = it.value.filter { grade -> !grade.isRead }.size,
+                isExpandable = isGradeExpandable
+            ).apply {
+                subItems = it.value.map { item ->
+                    GradeDetailsItem(
+                        grade = item,
+                        valueBgColor = item.getBackgroundColor(gradeColorTheme),
+                        weightString = weightString,
+                        noDescriptionString = noDescriptionString
+                    )
                 }
             }
         }
     }
 
-    private fun formatAverage(average: Double): String {
+    private fun getOnlyOneSemesterAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
+        val selectedSemester = semesters.first { it.semesterId == semesterId }
+        val plusModifier = preferencesRepository.gradePlusModifier
+        val minusModifier = preferencesRepository.gradeMinusModifier
+
+        return gradeRepository.getGrades(student, selectedSemester, forceRefresh)
+            .map { grades ->
+                grades.map { it.changeModifier(plusModifier, minusModifier) }
+                    .groupBy { it.subject }
+                    .mapValues { it.value.calcAverage() }
+            }
+    }
+
+    private fun getAllYearAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
+        val selectedSemester = semesters.first { it.semesterId == semesterId }
+        val firstSemester = semesters.first { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
+        val plusModifier = preferencesRepository.gradePlusModifier
+        val minusModifier = preferencesRepository.gradeMinusModifier
+
+        return gradeRepository.getGrades(student, selectedSemester, forceRefresh)
+            .flatMap { firstGrades ->
+                if (selectedSemester == firstSemester) Single.just(firstGrades)
+                else gradeRepository.getGrades(student, firstSemester, forceRefresh)
+                    .map { secondGrades -> secondGrades + firstGrades }
+            }.map { grades ->
+                grades.map { it.changeModifier(plusModifier, minusModifier) }
+                    .groupBy { it.subject }
+                    .mapValues { it.value.calcAverage() }
+            }
+    }
+
+    private fun getModdedAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
+        return when (preferencesRepository.gradeAverageMode) {
+            "all_year" -> getAllYearAverage(student, semesters, semesterId, forceRefresh)
+            else -> getOnlyOneSemesterAverage(student, semesters, semesterId, forceRefresh)
+        }
+    }
+
+    private fun formatAverage(average: Double?): String {
         return view?.run {
-            if (average == 0.0) emptyAverageString
+            if (average == null || average == .0) emptyAverageString
             else averageString.format(average)
         }.orEmpty()
     }
