@@ -16,7 +16,8 @@ class GradeAverageStrategy @Inject constructor(
     fun getGradeAverage(student: Student, semesters: List<Semester>, selectedSemesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
         return when (preferencesRepository.gradeAverageMode) {
             "all_year" -> getAllYearAverage(student, semesters, selectedSemesterId, forceRefresh)
-            else -> getOnlyOneSemesterAverage(student, semesters, selectedSemesterId, forceRefresh)
+            "only_one_semester" -> getOnlyOneSemesterAverage(student, semesters, selectedSemesterId, forceRefresh)
+            else -> throw IllegalArgumentException("Incorrect grade average mode: ${preferencesRepository.gradeAverageMode} ")
         }
     }
 
