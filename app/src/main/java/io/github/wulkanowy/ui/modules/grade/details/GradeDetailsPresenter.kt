@@ -8,7 +8,7 @@ import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
-import io.github.wulkanowy.ui.modules.grade.GradeAverageStrategy
+import io.github.wulkanowy.ui.modules.grade.GradeAverageProvider
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.getBackgroundColor
@@ -22,7 +22,7 @@ class GradeDetailsPresenter @Inject constructor(
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val averageStrategy: GradeAverageStrategy,
+    private val averageProvider: GradeAverageProvider,
     private val analytics: FirebaseAnalyticsHelper
 ) : BaseSessionPresenter<GradeDetailsView>(errorHandler) {
 
@@ -111,7 +111,7 @@ class GradeDetailsPresenter @Inject constructor(
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it).map { semester -> it to semester } }
             .flatMap { (student, semesters) ->
-                averageStrategy.getGradeAverage(student, semesters, semesterId, forceRefresh)
+                averageProvider.getGradeAverage(student, semesters, semesterId, forceRefresh)
                     .flatMap { averages ->
                         gradeRepository.getGrades(student, semesters.first { semester -> semester.semesterId == semesterId })
                             .map { it.sortedByDescending { grade -> grade.date } }

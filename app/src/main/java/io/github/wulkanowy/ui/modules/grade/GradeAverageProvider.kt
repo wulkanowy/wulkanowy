@@ -9,7 +9,7 @@ import io.github.wulkanowy.utils.changeModifier
 import io.reactivex.Single
 import javax.inject.Inject
 
-class GradeAverageStrategy @Inject constructor(
+class GradeAverageProvider @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
     private val gradeRepository: GradeRepository
 ) {
@@ -30,7 +30,7 @@ class GradeAverageStrategy @Inject constructor(
         return gradeRepository.getGrades(student, selectedSemester, forceRefresh)
             .flatMap { firstGrades ->
                 if (selectedSemester == firstSemester) Single.just(firstGrades)
-                else gradeRepository.getGrades(student, firstSemester, forceRefresh)
+                else gradeRepository.getGrades(student, firstSemester)
                     .map { secondGrades -> secondGrades + firstGrades }
             }.map { grades ->
                 grades.map { it.changeModifier(plusModifier, minusModifier) }
