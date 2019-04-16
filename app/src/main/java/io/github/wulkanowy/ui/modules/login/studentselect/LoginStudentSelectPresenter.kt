@@ -3,7 +3,6 @@ package io.github.wulkanowy.ui.modules.login.studentselect
 import com.google.firebase.analytics.FirebaseAnalytics.Param.SUCCESS
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
@@ -17,7 +16,6 @@ import javax.inject.Inject
 class LoginStudentSelectPresenter @Inject constructor(
     private val errorHandler: LoginErrorHandler,
     private val studentRepository: StudentRepository,
-    private val preferencesRepository: PreferencesRepository,
     private val schedulers: SchedulersProvider,
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<LoginStudentSelectView>(errorHandler) {
@@ -74,7 +72,7 @@ class LoginStudentSelectPresenter @Inject constructor(
             .subscribe({
                 analytics.logEvent("registration_student_select", SUCCESS to true, "endpoint" to student.endpoint, "symbol" to student.symbol, "error" to "No error")
                 Timber.i("Registration result: Success")
-                view?.openMainView(preferencesRepository.isAMOLEDMode)
+                view?.openMainView()
             }, {
                 analytics.logEvent("registration_student_select", SUCCESS to false, "endpoint" to student.endpoint, "symbol" to student.symbol, "error" to it.localizedMessage)
                 Timber.i("Registration result: An exception occurred ")

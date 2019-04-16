@@ -9,9 +9,6 @@ import dagger.android.support.AndroidSupportInjection
 import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
-import io.github.wulkanowy.ui.modules.main.MainActivity
-import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_IS_AMOLED
-import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
@@ -50,19 +47,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     override fun setTheme(theme: Int) {
         AppCompatDelegate.setDefaultNightMode(theme)
         activity?.recreate()
-    }
-
-    override fun setAMOLEDMode(theme: Int, isAMOLEDMode: Boolean) {
-        AppCompatDelegate.setDefaultNightMode(theme)
-        context?.let {
-            activity?.run {
-                finish()
-                startActivity(MainActivity.getStartIntent(it)
-                    .putExtra(EXTRA_START_MENU_INDEX, 4)
-                    .putExtra(EXTRA_IS_AMOLED, isAMOLEDMode)
-                )
-            }
-        }
     }
 
     override fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean) {

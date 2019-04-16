@@ -23,10 +23,8 @@ class SplashActivity : BaseActivity(), SplashView {
         finish()
     }
 
-    override fun openMainView(isAMOLEDMode: Boolean) {
-        startActivity(MainActivity.getStartIntent(this)
-            .putExtra(MainActivity.EXTRA_IS_AMOLED, isAMOLEDMode)
-        )
+    override fun openMainView() {
+        startActivity(MainActivity.getStartIntent(this))
         finish()
     }
 

@@ -37,8 +37,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="WulkanowyTheme.Black" parent="WulkanowyTheme.NoActionBar" />
-
     <style name="WulkanowyTheme.ActionBar" parent="WulkanowyTheme">
         <item name="colorControlNormal">@android:color/white</item>
     </style>

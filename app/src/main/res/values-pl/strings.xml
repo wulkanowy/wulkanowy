@@ -241,8 +241,7 @@
     <string name="pref_view_list">Domyślny widok</string>
     <string name="pref_view_summary">Pokazuj podsumowanie w ocenach</string>
     <string name="pref_view_present">Pokazuj obecność we frekwencji</string>
-    <string name="pref_view_theme_dark">Ciemny motyw</string>
-    <string name="pref_view_theme_amoled">Tryb AMOLED (Beta)</string>
+    <string name="pref_view_app_theme">Motyw apliakcji</string>
     <string name="pref_view_expand_grade">Rozwiń oceny</string>
     <string name="pref_grade_color_scheme">Schemat kolorów ocen</string>
 

@@ -8,7 +8,7 @@ interface LoginStudentSelectView : BaseView {
 
     fun updateData(data: List<LoginStudentSelectItem>)
 
-    fun openMainView(isAMOLEDMode: Boolean)
+    fun openMainView()
 
     fun showProgress(show: Boolean)
 

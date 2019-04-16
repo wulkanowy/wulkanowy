@@ -2,8 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="pref_key_start_menu">start_menu</string>
     <string name="pref_key_attendance_present">attendance_present</string>
-    <string name="pref_key_theme">theme</string>
-    <string name="pref_key_theme_amoled">theme_amoled</string>
+    <string name="pref_key_app_theme">app_theme</string>
     <string name="pref_key_grade_color_scheme">grade_color_scheme</string>
     <string name="pref_key_expand_grade">expand_grade</string>
     <string name="pref_key_services_enable">services_enable</string>

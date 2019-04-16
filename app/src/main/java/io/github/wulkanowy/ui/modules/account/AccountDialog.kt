@@ -16,7 +16,6 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity
-import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_IS_AMOLED
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.dialog_account.*
 import javax.inject.Inject
@@ -98,11 +97,9 @@ class AccountDialog : DaggerAppCompatDialogFragment(), AccountView {
         }
     }
 
-    override fun recreateView(isAMOLEDMode: Boolean) {
+    override fun recreateView() {
         activity?.also {
-            startActivity(MainActivity.getStartIntent(it)
-                .putExtra(EXTRA_IS_AMOLED, isAMOLEDMode)
-            )
+            startActivity(MainActivity.getStartIntent(it))
             it.finish()
         }
     }
