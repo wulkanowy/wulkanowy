@@ -9,7 +9,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainModule
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
-import io.github.wulkanowy.ui.widgets.luckynumber.LuckyNumberWidgetProvider
+import io.github.wulkanowy.ui.modules.luckynumberwidget.LuckyNumberWidgetProvider
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetConfigureActivity
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider
 

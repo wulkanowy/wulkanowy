@@ -73,7 +73,7 @@
         </receiver>
 
         <receiver
-            android:name=".ui.widgets.luckynumber.LuckyNumberWidgetProvider"
+            android:name=".ui.modules.luckynumberwidget.LuckyNumberWidgetProvider"
             android:label="@string/lucky_number_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

@@ -8,7 +8,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".ui.widgets.luckynumber.LuckyNumberWidgetProvider">
+    tools:context=".ui.modules.luckynumberwidget.LuckyNumberWidgetProvider">
 
     <ImageView
         android:id="@+id/luckyNumberWidgetImage"

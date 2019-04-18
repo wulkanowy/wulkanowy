@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.widgets.luckynumber
+package io.github.wulkanowy.ui.modules.luckynumberwidget
 
 import android.annotation.TargetApi
 import android.app.PendingIntent
@@ -71,7 +71,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
 
     private fun onDelete(intent: Intent) {
         intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0).let {
-            if (it != 0) sharedPref.delete(LuckyNumberWidgetProvider.createWidgetKey(it))
+            if (it != 0) sharedPref.delete(createWidgetKey(it))
         }
     }
 
