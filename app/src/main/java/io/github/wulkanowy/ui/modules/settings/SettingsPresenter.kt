@@ -32,6 +32,7 @@ class SettingsPresenter @Inject constructor(
                 serviceEnableKey -> syncManager.run { if (isServiceEnabled) startSyncWorker() else stopSyncWorker() }
                 servicesIntervalKey, servicesOnlyWifiKey -> syncManager.startSyncWorker(true)
                 isDebugNotificationEnableKey -> chuckCollector.showNotification(isDebugNotificationEnable)
+                appThemeKey -> view?.recreateView()
             }
         }
         analytics.logEvent("setting_changed", "name" to key)

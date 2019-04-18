@@ -29,6 +29,10 @@ class SplashActivity : BaseActivity(), SplashView {
     }
 
     override fun showError(text: String, error: Throwable) {
+        showMessage(text)
+    }
+
+    override fun showMessage(text: String) {
         Toast.makeText(this, text, LENGTH_LONG).show()
     }
 

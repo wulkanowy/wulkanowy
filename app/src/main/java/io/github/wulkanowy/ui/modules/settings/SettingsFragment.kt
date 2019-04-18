@@ -3,12 +3,13 @@ package io.github.wulkanowy.ui.modules.settings
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatDelegate
 import com.takisoft.preferencex.PreferenceFragmentCompat
 import dagger.android.support.AndroidSupportInjection
 import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
@@ -44,9 +45,12 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         presenter.onSharedPreferenceChanged(key)
     }
 
-    override fun setTheme(theme: Int) {
-        AppCompatDelegate.setDefaultNightMode(theme)
-        activity?.recreate()
+    override fun recreateView() {
+        activity?.run {
+            startActivity(MainActivity.getStartIntent(this)
+                .putExtra(EXTRA_START_MENU_INDEX, 4))
+            finish()
+        }
     }
 
     override fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean) {
