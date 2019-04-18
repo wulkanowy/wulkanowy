@@ -66,6 +66,6 @@ class WulkanowyApp : DaggerApplication() {
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder().create(this)
+        return DaggerAppComponent.factory().create(this)
     }
 }
