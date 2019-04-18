@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
+import android.annotation.SuppressLint
 import android.view.View
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -12,15 +13,16 @@ import kotlinx.android.synthetic.main.item_login_student_select.*
 
 class LoginStudentSelectItem(val student: Student) : AbstractFlexibleItem<LoginStudentSelectItem.ItemViewHolder>() {
 
-    override fun getLayoutRes(): Int = R.layout.item_login_student_select
+    override fun getLayoutRes() = R.layout.item_login_student_select
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ItemViewHolder {
         return ItemViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ItemViewHolder, position: Int, payloads: MutableList<Any>?) {
-        holder.run {
-            loginItemName.text = student.studentName
+    @SuppressLint("SetTextI18n")
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ItemViewHolder, position: Int, payloads: MutableList<Any>) {
+        holder.apply {
+            loginItemName.text = "${student.studentName} ${student.className}"
             loginItemSchool.text = student.schoolName
         }
     }
@@ -41,7 +43,17 @@ class LoginStudentSelectItem(val student: Student) : AbstractFlexibleItem<LoginS
     }
 
     class ItemViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
+
         override val containerView: View
             get() = itemView
+
+        init {
+            loginItemCheck.setOnClickListener { super.onClick(loginItemContainer) }
+        }
+
+        override fun onClick(view: View?) {
+            super.onClick(view)
+            loginItemCheck.apply { isChecked = !isChecked }
+        }
     }
 }

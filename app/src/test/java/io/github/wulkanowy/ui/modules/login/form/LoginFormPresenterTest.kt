@@ -53,7 +53,7 @@ class LoginFormPresenterTest {
         `when`(loginFormView.formNameValue).thenReturn("")
         `when`(loginFormView.formPassValue).thenReturn("test123")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
-        presenter.attemptLogin()
+        presenter.onSignInClick()
 
         verify(loginFormView).setErrorNameRequired()
         verify(loginFormView, never()).setErrorPassRequired(false)
@@ -65,7 +65,7 @@ class LoginFormPresenterTest {
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
-        presenter.attemptLogin()
+        presenter.onSignInClick()
 
         verify(loginFormView, never()).setErrorNameRequired()
         verify(loginFormView).setErrorPassRequired(true)
@@ -77,7 +77,7 @@ class LoginFormPresenterTest {
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
-        presenter.attemptLogin()
+        presenter.onSignInClick()
 
         verify(loginFormView, never()).setErrorNameRequired()
         verify(loginFormView, never()).setErrorPassRequired(true)
@@ -86,14 +86,14 @@ class LoginFormPresenterTest {
 
     @Test
     fun loginTest() {
-        val studentTest = Student(email = "test@", password = "123", endpoint = "https://fakelog.cf", loginType = "AUTO", studentName = "", schoolSymbol = "", schoolName = "", studentId = 0, isCurrent = false, symbol = "", registrationDate = now())
+        val studentTest = Student(email = "test@", password = "123", endpoint = "https://fakelog.cf", loginType = "AUTO", studentName = "", schoolSymbol = "", schoolName = "", studentId = 0, classId = 1, isCurrent = false, symbol = "", registrationDate = now(), className = "")
         doReturn(Single.just(listOf(studentTest)))
             .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString())
 
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
-        presenter.attemptLogin()
+        presenter.onSignInClick()
 
         verify(loginFormView).hideSoftKeyboard()
         verify(loginFormView).showProgress(true)
@@ -109,7 +109,7 @@ class LoginFormPresenterTest {
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
-        presenter.attemptLogin()
+        presenter.onSignInClick()
 
         verify(loginFormView).hideSoftKeyboard()
         verify(loginFormView).showProgress(true)
@@ -125,8 +125,8 @@ class LoginFormPresenterTest {
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
-        presenter.attemptLogin()
-        presenter.attemptLogin()
+        presenter.onSignInClick()
+        presenter.onSignInClick()
 
         verify(loginFormView, times(2)).hideSoftKeyboard()
         verify(loginFormView, times(2)).showProgress(true)
@@ -143,7 +143,7 @@ class LoginFormPresenterTest {
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
-        presenter.attemptLogin()
+        presenter.onSignInClick()
 
         verify(loginFormView).hideSoftKeyboard()
         verify(loginFormView).showProgress(true)

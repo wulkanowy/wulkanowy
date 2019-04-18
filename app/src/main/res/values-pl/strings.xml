@@ -3,7 +3,7 @@
 
 
     <!--Activity/Fragment title-->
-    <string name="login_title">Wybierz ucznia</string>
+    <string name="login_title">Logowanie</string>
     <string name="main_title">Wulkanowy</string>
     <string name="grade_title">Oceny</string>
     <string name="attendance_title">Frekwencja</string>
@@ -31,8 +31,10 @@
     <string name="login_incorrect_password">Dane logowania są niepoprawne</string>
     <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprawdź symbol</string>
     <string name="login_field_required">To pole jest wymagane</string>
-    <string name="login_duplicate_student">Ten student jest już zalogowany</string>
+    <string name="login_duplicate_student">Wybrany uczeń jest już zalogowany</string>
     <string name="login_symbol_helper">Symbol znajduje się na stronie dziennika w zakładce Dostęp Mobilny</string>
+    <string name="login_select_student">Wybierz uczniów do zalogowania w aplikacji</string>
+    <string name="login_privacy_policy">Polityka prywatności</string>
 
 
     <!--Main-->
@@ -141,6 +143,10 @@
     <string name="message_date">Data: %s</string>
     <string name="message_reply">Odpowiedz</string>
     <string name="message_forward">Prześlij dalej</string>
+    <string name="message_delete">Usuń</string>
+    <string name="message_move_to_bin">Przenieś do kosza</string>
+    <string name="message_delete_forever">Usuń trwale</string>
+    <string name="message_delete_success">Wiadomość usunięta pomyślnie</string>
     <string name="message_subject">Temat</string>
     <string name="message_content">Treść</string>
     <string name="message_send_successful">Wiadomość wysłana pomyślnie</string>
@@ -229,18 +235,16 @@
 
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Brak lekcji</string>
-    <string name="widget_timetable_today">Dziś</string>
-    <string name="widget_timetable_tomorrow">Jutro</string>
 
 
     <!--Preferences-->
     <string name="pref_view_header">Wygląd</string>
     <string name="pref_view_list">Domyślny widok</string>
-    <string name="pref_view_summary">Pokazuj podsumowanie w ocenach</string>
+    <string name="pref_view_grade_average_mode">Obliczanie średniej końcoworocznej</string>
     <string name="pref_view_present">Pokazuj obecność we frekwencji</string>
     <string name="pref_view_theme_dark">Ciemny motyw (Beta)</string>
     <string name="pref_view_expand_grade">Rozwiń oceny</string>
-    <string name="pref_grade_color_scheme">Schemat kolorów ocen</string>
+    <string name="pref_view_grade_color_scheme">Schemat kolorów ocen</string>
 
     <string name="pref_notify_header">Powiadomienia</string>
     <string name="pref_notify_switch">Pokazuj powiadomienia</string>

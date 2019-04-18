@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -28,7 +29,7 @@ class MessageRepository @Inject constructor(
                 local.getMessages(student, folder).filter { !forceRefresh }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                         .flatMap {
-                            if (it) remote.getMessages(student.studentId, folder)
+                            if (it) remote.getMessages(student, folder)
                             else Single.error(UnknownHostException())
                         }.flatMap { new ->
                             local.getMessages(student, folder).toSingle(emptyList())
@@ -87,6 +88,22 @@ class MessageRepository @Inject constructor(
             .flatMap {
                 if (it) remote.sendMessage(subject, content, recipients)
                 else Single.error(UnknownHostException())
+            }
+    }
+
+    fun deleteMessage(message: Message): Maybe<Boolean> {
+        return ReactiveNetwork.checkInternetConnectivity(settings)
+            .flatMap {
+                if (it) remote.deleteMessage(message)
+                else Single.error(UnknownHostException())
+            }
+            .filter { it }
+            .doOnSuccess {
+                if (!message.removed) local.updateMessages(listOf(message.copy(removed = true).apply {
+                    id = message.id
+                    content = message.content
+                }))
+                else local.deleteMessages(listOf(message))
             }
     }
 }

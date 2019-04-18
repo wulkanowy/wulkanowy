@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.login.form
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,7 +54,8 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginFormName.setOnTextChangedListener { presenter.onNameTextChanged() }
         loginFormPass.setOnTextChangedListener { presenter.onPassTextChanged() }
         loginFormHost.setOnItemSelectedListener { presenter.onHostSelected() }
-        loginFormSignIn.setOnClickListener { presenter.attemptLogin() }
+        loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
+        loginFormPrivacyLink.setOnClickListener { presenter.onPrivacyLinkClick() }
 
         loginFormPass.setOnEditorActionListener { _, id, _ ->
             if (id == IME_ACTION_DONE || id == IME_NULL) loginFormSignIn.callOnClick() else false
@@ -130,12 +132,20 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
     }
 
+    override fun showPrivacyPolicy() {
+        loginFormPrivacyLink.visibility = VISIBLE
+    }
+
     override fun notifyParentAccountLogged(students: List<Student>) {
         (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, Triple(
             loginFormName.text.toString(),
             loginFormPass.text.toString(),
             resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
         ))
+    }
+
+    override fun openPrivacyPolicyPage() {
+        startActivity(Intent.parseUri("https://wulkanowy.github.io/polityka-prywatnosci.html", 0))
     }
 
     override fun onDestroyView() {

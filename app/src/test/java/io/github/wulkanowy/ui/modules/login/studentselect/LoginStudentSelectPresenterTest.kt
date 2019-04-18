@@ -32,7 +32,7 @@ class LoginStudentSelectPresenterTest {
 
     private lateinit var presenter: LoginStudentSelectPresenter
 
-    private val testStudent by lazy { Student(email = "test", password = "test123", endpoint = "https://fakelog.cf", loginType = "AUTO", symbol = "", isCurrent = false, studentId = 0, schoolName = "", schoolSymbol = "", studentName = "", registrationDate = now()) }
+    private val testStudent by lazy { Student(email = "test", password = "test123", endpoint = "https://fakelog.cf", loginType = "AUTO", symbol = "", isCurrent = false, studentId = 0, schoolName = "", schoolSymbol = "", classId = 1, studentName = "", registrationDate = now(), className = "") }
 
     private val testException by lazy { RuntimeException("Problem") }
 
@@ -51,9 +51,10 @@ class LoginStudentSelectPresenterTest {
 
     @Test
     fun onSelectedStudentTest() {
-        doReturn(Single.just(1L)).`when`(studentRepository).saveStudent(testStudent)
+        doReturn(Single.just(listOf(1L))).`when`(studentRepository).saveStudents(listOf(testStudent))
         doReturn(Completable.complete()).`when`(studentRepository).switchStudent(testStudent)
         presenter.onItemSelected(LoginStudentSelectItem(testStudent))
+        presenter.onSignIn()
         verify(loginStudentSelectView).showContent(false)
         verify(loginStudentSelectView).showProgress(true)
         verify(loginStudentSelectView).openMainView()
@@ -61,9 +62,10 @@ class LoginStudentSelectPresenterTest {
 
     @Test
     fun onSelectedStudentErrorTest() {
-        doReturn(Single.error<Student>(testException)).`when`(studentRepository).saveStudent(testStudent)
+        doReturn(Single.error<Student>(testException)).`when`(studentRepository).saveStudents(listOf(testStudent))
         doReturn(Completable.complete()).`when`(studentRepository).logoutStudent(testStudent)
         presenter.onItemSelected(LoginStudentSelectItem(testStudent))
+        presenter.onSignIn()
         verify(loginStudentSelectView).showContent(false)
         verify(loginStudentSelectView).showProgress(true)
         verify(errorHandler).dispatch(testException)

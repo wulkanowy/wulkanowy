@@ -3,7 +3,7 @@
 
 
     <!--Activity/Fragment title-->
-    <string name="login_title">Select student</string>
+    <string name="login_title">Login</string>
     <string name="main_title">Wulkanowy</string>
     <string name="grade_title">Grades</string>
     <string name="attendance_title">Attendance</string>
@@ -31,8 +31,10 @@
     <string name="login_incorrect_password">Login details are incorrect</string>
     <string name="login_incorrect_symbol">Student not found. Check the symbol</string>
     <string name="login_field_required">This field is required</string>
-    <string name="login_duplicate_student">This student has already been logged in</string>
+    <string name="login_duplicate_student">The selected student is already logged in</string>
     <string name="login_symbol_helper">The symbol is located on the register page in the Mobile Access tab</string>
+    <string name="login_select_student">Select students to log in to the application</string>
+    <string name="login_privacy_policy">Privacy policy</string>
 
 
     <!--Main-->
@@ -135,6 +137,10 @@
     <string name="message_date">Date: %s</string>
     <string name="message_reply">Reply</string>
     <string name="message_forward">Forward</string>
+    <string name="message_delete">Delete</string>
+    <string name="message_move_to_bin">Move to trash</string>
+    <string name="message_delete_forever">Delete permanently</string>
+    <string name="message_delete_success">Message deleted successfully</string>
     <string name="message_subject">Subject</string>
     <string name="message_content">Content</string>
     <string name="message_send_successful">Message sent successfully</string>
@@ -214,18 +220,16 @@
 
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">No lessons</string>
-    <string name="widget_timetable_today">Today</string>
-    <string name="widget_timetable_tomorrow">Tomorrow</string>
 
 
     <!--Preferences-->
     <string name="pref_view_header">Appearance</string>
     <string name="pref_view_list">Default view</string>
-    <string name="pref_view_summary">Show the summary in the grades</string>
+    <string name="pref_view_grade_average_mode">Calculation of the end-of-year average</string>
     <string name="pref_view_present">Show presence in attendance</string>
     <string name="pref_view_theme_dark">Dark theme (Beta)</string>
     <string name="pref_view_expand_grade">Expand grades</string>
-    <string name="pref_grade_color_scheme">Grades color scheme</string>
+    <string name="pref_view_grade_color_scheme">Grades color scheme</string>
 
     <string name="pref_notify_header">Notifications</string>
     <string name="pref_notify_switch">Show notifications</string>
