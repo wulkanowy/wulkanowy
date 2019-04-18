@@ -26,7 +26,7 @@ class StudentRepository @Inject constructor(
         return ReactiveNetwork.checkInternetConnectivity(settings)
             .flatMap {
                 apiHelper.initApi(email, password, symbol, endpoint)
-                if (it) remote.getStudents(password, endpoint)
+                if (it) remote.getStudents(email, password, endpoint)
                 else Single.error(UnknownHostException("No internet connection"))
             }
     }
