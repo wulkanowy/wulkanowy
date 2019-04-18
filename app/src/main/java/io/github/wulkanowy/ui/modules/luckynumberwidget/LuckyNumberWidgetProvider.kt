@@ -19,6 +19,7 @@ import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.reactivex.Maybe
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -58,7 +59,9 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     private fun onUpdate(context: Context, intent: Intent) {
         intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS).forEach { appWidgetId ->
             RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
-                setTextViewText(R.id.luckyNumberWidgetNumber, getLuckyNumber()?.luckyNumber?.toString() ?: "Brak")
+                setTextViewText(R.id.luckyNumberWidgetNumber,
+                    getLuckyNumber(sharedPref.getLong(createWidgetKey(appWidgetId), 0), appWidgetId)?.luckyNumber?.toString() ?: "Brak"
+                )
                 setOnClickPendingIntent(R.id.luckyNumberWidgetContainer,
                     PendingIntent.getActivity(context, 2, MainActivity.getStartIntent(context).apply {
                         putExtra(MainActivity.EXTRA_START_MENU_INDEX, 4)
@@ -75,13 +78,31 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         }
     }
 
-    private fun getLuckyNumber(): LuckyNumber? {
-        return studentRepository.isStudentSaved()
-            .flatMap { studentRepository.getCurrentStudent() }
-            .flatMap { semesterRepository.getCurrentSemester(it) }
-            .flatMapMaybe { luckyNumberRepository.getLuckyNumber(it) }
-            .subscribeOn(schedulers.backgroundThread)
-            .blockingGet()
+    private fun getLuckyNumber(studentId: Long, appWidgetId: Int): LuckyNumber? {
+        return try {
+            studentRepository.isStudentSaved()
+                .filter { true }
+                .flatMap { studentRepository.getSavedStudents().toMaybe() }
+                .flatMap { students ->
+                    students.singleOrNull { student -> student.id == studentId }
+                        .let { student ->
+                            if (student != null) {
+                                Maybe.just(student)
+                            } else {
+                                studentRepository.getCurrentStudent(false)
+                                    .toMaybe()
+                                    .doOnSuccess { sharedPref.putLong(createWidgetKey(appWidgetId), it.id) }
+                            }
+                        }
+                }
+                .flatMap { semesterRepository.getCurrentSemester(it).toMaybe() }
+                .flatMap { luckyNumberRepository.getLuckyNumber(it) }
+                .subscribeOn(schedulers.backgroundThread)
+                .blockingGet()
+        } catch (e: Exception) {
+            Timber.e(e, "An error has occurred in lucky number provider")
+            null
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
