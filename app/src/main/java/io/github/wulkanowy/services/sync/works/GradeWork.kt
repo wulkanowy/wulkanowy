@@ -48,8 +48,7 @@ class GradeWork @Inject constructor(
             .setColor(context.getCompatColor(R.color.colorPrimary))
             .setContentIntent(
                 PendingIntent.getActivity(context, 0,
-                    MainActivity.getStartIntent(context).putExtra(EXTRA_START_MENU_INDEX, 0), FLAG_UPDATE_CURRENT)
-            )
+                    MainActivity.getStartIntent(context).putExtra(EXTRA_START_MENU_INDEX, 0), FLAG_UPDATE_CURRENT))
             .setStyle(NotificationCompat.InboxStyle().run {
                 setSummaryText(context.resources.getQuantityString(R.plurals.grade_number_item, grades.size, grades.size))
                 grades.forEach { addLine("${it.subject}: ${it.entry}") }
