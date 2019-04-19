@@ -8,8 +8,6 @@ import dagger.android.support.AndroidSupportInjection
 import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
-import io.github.wulkanowy.ui.modules.main.MainActivity
-import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
@@ -46,11 +44,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     }
 
     override fun recreateView() {
-        activity?.run {
-            startActivity(MainActivity.getStartIntent(this)
-                .putExtra(EXTRA_START_MENU_INDEX, 4))
-            finish()
-        }
+        activity?.recreate()
     }
 
     override fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean) {
