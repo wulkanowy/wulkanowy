@@ -79,7 +79,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            android:text="@string/grade_summary_final_average"
+            android:text="@string/grade_summary_final_grade"
             android:textSize="14sp" />
 
         <TextView
