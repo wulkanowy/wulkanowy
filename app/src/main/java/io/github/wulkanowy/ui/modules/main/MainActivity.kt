@@ -75,7 +75,7 @@ class MainActivity : BaseActivity(), MainView {
         mainBottomNav.run {
             addItems(
                 mutableListOf(
-                    AHBottomNavigationItem(R.string.grade_title, R.drawable.ic_menu_main_grade_26dp, 0),
+                    AHBottomNavigationItem(R.string.grade_title, R.drawable.ic_menu_main_grade_24dp, 0),
                     AHBottomNavigationItem(R.string.attendance_title, R.drawable.ic_menu_main_attendance_24dp, 0),
                     AHBottomNavigationItem(R.string.exam_title, R.drawable.ic_menu_main_exam_24dp, 0),
                     AHBottomNavigationItem(R.string.timetable_title, R.drawable.ic_menu_main_timetable_24dp, 0),
