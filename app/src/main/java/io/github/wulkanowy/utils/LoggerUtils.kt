@@ -27,30 +27,30 @@ class CrashlyticsTree : Timber.Tree() {
 class ActivityLifecycleLogger : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityPaused(activity: Activity?) {
-        activity?.let { Timber.i("${it::class.java.simpleName} PAUSED") }
+        activity?.let { Timber.d("${it::class.java.simpleName} PAUSED") }
     }
 
     override fun onActivityResumed(activity: Activity?) {
-        activity?.let { Timber.i("${it::class.java.simpleName} RESUMED") }
+        activity?.let { Timber.d("${it::class.java.simpleName} RESUMED") }
     }
 
     override fun onActivityStarted(activity: Activity?) {
-        activity?.let { Timber.i("${it::class.java.simpleName} STARTED") }
+        activity?.let { Timber.d("${it::class.java.simpleName} STARTED") }
     }
 
     override fun onActivityDestroyed(activity: Activity?) {
-        activity?.let { Timber.i("${it::class.java.simpleName} DESTROYED") }
+        activity?.let { Timber.d("${it::class.java.simpleName} DESTROYED") }
     }
 
     override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
-        activity?.let { Timber.i("${it::class.java.simpleName} SAVED INSTANCE STATE") }
+        activity?.let { Timber.d("${it::class.java.simpleName} SAVED INSTANCE STATE") }
     }
 
     override fun onActivityStopped(activity: Activity?) {
-        activity?.let { Timber.i("${it::class.java.simpleName} STOPPED") }
+        activity?.let { Timber.d("${it::class.java.simpleName} STOPPED") }
     }
 
     override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-        activity?.let { Timber.i("${it::class.java.simpleName} CREATED") }
+        activity?.let { Timber.d("${it::class.java.simpleName} CREATED") }
     }
 }
