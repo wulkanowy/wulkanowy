@@ -33,7 +33,7 @@
         android:clickable="true"
         android:focusable="true"
         android:tint="#FFFFFF"
-        app:srcCompat="@drawable/ic_send_message_24dp" />
+        app:srcCompat="@drawable/ic_create_message_24dp" />
 
     <ProgressBar
         android:id="@+id/messageProgress"
