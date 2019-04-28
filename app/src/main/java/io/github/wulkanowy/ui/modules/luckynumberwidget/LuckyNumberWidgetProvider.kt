@@ -11,7 +11,7 @@ import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_OPTIONS
 import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
 import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
-import android.appwidget.AppWidgetProvider
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -32,7 +32,7 @@ import io.reactivex.Maybe
 import timber.log.Timber
 import javax.inject.Inject
 
-class LuckyNumberWidgetProvider : AppWidgetProvider() {
+class LuckyNumberWidgetProvider : BroadcastReceiver() {
 
     @Inject
     lateinit var studentRepository: StudentRepository
