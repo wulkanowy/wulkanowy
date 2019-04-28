@@ -22,11 +22,12 @@
     <TextView
         android:id="@+id/loginItemName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="38dp"
         android:layout_toEndOf="@id/loginItemCheck"
         android:layout_toRightOf="@id/loginItemCheck"
         android:textSize="16sp"
-        app:firstBaselineToTopHeight="32dp"
+        app:lastBaselineToBottomHeight="6dp"
+        android:gravity="bottom"
         tools:text="Jan Kowalski" />
 
     <TextView
@@ -38,6 +39,7 @@
         android:layout_toRightOf="@id/loginItemCheck"
         android:textColor="?android:textColorSecondary"
         android:textSize="12sp"
-        app:firstBaselineToTopHeight="16dp"
+        app:firstBaselineToTopHeight="14dp"
         tools:text="Szkoła Wulkanowego nr 1" />
+
 </RelativeLayout>
