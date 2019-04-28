@@ -132,13 +132,12 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
             val maxWidth = it.getInt(OPTION_APPWIDGET_MAX_WIDTH)
             val maxHeight = it.getInt(OPTION_APPWIDGET_MAX_HEIGHT)
 
-            Timber.d("New measurement: ")
-            Timber.d("max: %dx%d", maxWidth, maxHeight)
+            Timber.d("New luckynumber widget measurement: %dx%d", maxWidth, maxHeight)
 
             when {
                 // 1x1 // 150x150
                 maxWidth < 150 && maxHeight < 110 -> {
-                    Timber.d("Size: 1x1")
+                    Timber.d("Luckynumber widget size: 1x1")
                     views.setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
@@ -146,7 +145,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
                 }
                 // 1x2
                 maxWidth < 150 && maxHeight > 110 -> {
-                    Timber.d("Size: 1x2")
+                    Timber.d("Luckynumber widget size: 1x2")
                     views.setViewVisibility(R.id.luckyNumberWidgetImageTop, VISIBLE)
                     views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
@@ -154,7 +153,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
                 }
                 // 2x1
                 maxWidth > 150 && maxHeight < 110 -> {
-                    Timber.d("Size: 2x1")
+                    Timber.d("Luckynumber widget size: 2x1")
                     views.setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, VISIBLE)
                     views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
@@ -162,7 +161,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
                 }
                 // 2x2 and bigger
                 else -> {
-                    Timber.d("Size: 2x2 and bigger")
+                    Timber.d("Luckynumber widget size: 2x2 and bigger")
                     views.setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
