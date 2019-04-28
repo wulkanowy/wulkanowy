@@ -4,7 +4,7 @@
     android:id="@+id/luckyNumberWidgetContainer"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/white"
+    android:background="@drawable/background_rounded_corner"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="10dp"
