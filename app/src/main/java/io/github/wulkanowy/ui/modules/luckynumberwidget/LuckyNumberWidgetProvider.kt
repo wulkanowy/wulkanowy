@@ -3,6 +3,14 @@ package io.github.wulkanowy.ui.modules.luckynumberwidget
 import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_DELETED
+import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_OPTIONS_CHANGED
+import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
+import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
+import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
+import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_OPTIONS
+import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
+import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
@@ -18,6 +26,7 @@ import io.github.wulkanowy.data.repositories.luckynumber.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.main.MainActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Maybe
 import timber.log.Timber
@@ -47,24 +56,25 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         fun createWidgetKey(appWidgetId: Int) = "lucky_number_widget_$appWidgetId"
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
         when (intent.action) {
-            AppWidgetManager.ACTION_APPWIDGET_UPDATE -> onUpdate(context, intent)
-            AppWidgetManager.ACTION_APPWIDGET_DELETED -> onDelete(intent)
-            AppWidgetManager.ACTION_APPWIDGET_OPTIONS_CHANGED -> onOptionsChange(context, intent)
+            ACTION_APPWIDGET_UPDATE -> onUpdate(context, intent)
+            ACTION_APPWIDGET_DELETED -> onDelete(intent)
+            ACTION_APPWIDGET_OPTIONS_CHANGED -> onOptionsChange(context, intent)
         }
     }
 
     private fun onUpdate(context: Context, intent: Intent) {
-        intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS).forEach { appWidgetId ->
+        intent.getIntArrayExtra(EXTRA_APPWIDGET_IDS).forEach { appWidgetId ->
             RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
                 setTextViewText(R.id.luckyNumberWidgetNumber,
                     getLuckyNumber(sharedPref.getLong(createWidgetKey(appWidgetId), 0), appWidgetId)?.luckyNumber?.toString() ?: "#"
                 )
                 setOnClickPendingIntent(R.id.luckyNumberWidgetContainer,
                     PendingIntent.getActivity(context, 2, MainActivity.getStartIntent(context).apply {
-                        putExtra(MainActivity.EXTRA_START_MENU_INDEX, 4)
+                        putExtra(EXTRA_START_MENU_INDEX, 4)
                     }, PendingIntent.FLAG_UPDATE_CURRENT))
             }.also {
                 appWidgetManager.updateAppWidget(appWidgetId, it)
@@ -73,7 +83,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     }
 
     private fun onDelete(intent: Intent) {
-        intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0).let {
+        intent.getIntExtra(EXTRA_APPWIDGET_ID, 0).let {
             if (it != 0) sharedPref.delete(createWidgetKey(it))
         }
     }
@@ -111,16 +121,16 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
             RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
                 setStyles(this, intent)
             }.also {
-                appWidgetManager.updateAppWidget(extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID), it)
+                appWidgetManager.updateAppWidget(extras.getInt(EXTRA_APPWIDGET_ID), it)
             }
         }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun setStyles(views: RemoteViews, intent: Intent) {
-        intent.extras?.getBundle(AppWidgetManager.EXTRA_APPWIDGET_OPTIONS)?.let {
-            val maxWidth = it.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)
-            val maxHeight = it.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+        intent.extras?.getBundle(EXTRA_APPWIDGET_OPTIONS)?.let {
+            val maxWidth = it.getInt(OPTION_APPWIDGET_MAX_WIDTH)
+            val maxHeight = it.getInt(OPTION_APPWIDGET_MAX_HEIGHT)
 
             Timber.d("New measurement: ")
             Timber.d("max: %dx%d", maxWidth, maxHeight)

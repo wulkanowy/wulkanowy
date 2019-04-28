@@ -1,7 +1,8 @@
 package io.github.wulkanowy.ui.modules.luckynumberwidget
 
-import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
+import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -48,8 +49,8 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity(), LuckyNumberWidgetConf
     override fun updateLuckyNumberWidget(widgetId: Int) {
         sendBroadcast(Intent(this, LuckyNumberWidgetProvider::class.java)
             .apply {
-                action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-                putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(widgetId))
+                action = ACTION_APPWIDGET_UPDATE
+                putExtra(EXTRA_APPWIDGET_IDS, intArrayOf(widgetId))
             })
     }
 
