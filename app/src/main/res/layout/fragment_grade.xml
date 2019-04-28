@@ -9,12 +9,13 @@
         android:id="@+id/gradeTabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/colorPrimary"
+        android:background="?colorPrimary"
         android:elevation="5dp"
         android:visibility="invisible"
         app:tabIndicatorColor="@android:color/white"
         app:tabMode="scrollable"
         app:tabTextColor="@android:color/white"
+        tools:ignore="UnusedAttribute"
         tools:visibility="visible" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -46,15 +47,14 @@
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="invisible"
+        tools:ignore="UseCompoundDrawables"
         tools:visibility="visible">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="100dp"
-            android:minHeight="100dp"
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             app:srcCompat="@drawable/ic_menu_main_grade_26dp"
-            app:tint="?android:attr/textColorPrimary"
+            app:tint="?colorOnBackground"
             tools:ignore="contentDescription" />
 
         <TextView

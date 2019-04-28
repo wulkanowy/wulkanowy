@@ -32,5 +32,8 @@
     <color name="filterable_list_backgroundColor_inverse">#393939</color>
     <color name="filterable_list_textColor_inverse">#fefefe</color>
 
+    <color name="colorDivider">#1f000000</color>
+    <color name="colorDividerInverse">#1fffffff</color>
+
     <color name="spinner_stroke">#61000000</color>
 </resources>

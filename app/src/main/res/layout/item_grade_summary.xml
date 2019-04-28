@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:textSize="12sp"
-            tools:text="@string/aboutlibrary_lib_version" />
+            tools:text="4,55" />
     </LinearLayout>
 
     <LinearLayout
@@ -63,7 +63,7 @@
             android:layout_marginRight="25dp"
             android:gravity="end"
             android:textSize="12sp"
-            tools:text="@string/aboutlibrary_lib_version" />
+            tools:text="5" />
     </LinearLayout>
 
     <LinearLayout
@@ -94,6 +94,6 @@
             android:layout_marginRight="25dp"
             android:gravity="end"
             android:textSize="12sp"
-            tools:text="@string/aboutlibrary_lib_version" />
+            tools:text="5" />
     </LinearLayout>
 </LinearLayout>

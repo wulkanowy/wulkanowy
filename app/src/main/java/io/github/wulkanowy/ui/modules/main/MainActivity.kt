@@ -83,8 +83,7 @@ class MainActivity : BaseActivity(), MainView {
                 )
             )
             accentColor = ContextCompat.getColor(context, R.color.colorPrimary)
-            inactiveColor = getThemeAttrColor(android.R.attr.textColorSecondary)
-            defaultBackgroundColor = getThemeAttrColor(R.attr.bottomNavBackground)
+            inactiveColor = getThemeAttrColor(android.R.attr.textColorPrimary)
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false

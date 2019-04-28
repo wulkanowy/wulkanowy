@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,14 +9,16 @@
         android:id="@+id/messageTabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/colorPrimary"
+        android:background="?colorPrimary"
         android:elevation="5dp"
         android:visibility="invisible"
         app:tabGravity="fill"
         app:tabIndicatorColor="@android:color/white"
         app:tabMaxWidth="0dp"
         app:tabMode="fixed"
-        app:tabTextColor="@android:color/white" />
+        app:tabTextColor="@android:color/white"
+        tools:ignore="UnusedAttribute"
+        tools:visibility="visible" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/messageViewPager"
@@ -41,5 +44,4 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

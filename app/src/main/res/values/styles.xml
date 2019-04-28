@@ -4,6 +4,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorSecondary">@android:color/white</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="colorDivider">@color/colorDivider</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="WulkanowyTheme.SplashScreen" parent="WulkanowyTheme.NoActionBar">
