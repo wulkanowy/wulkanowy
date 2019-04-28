@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/sendMessageContainer"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -11,13 +11,12 @@
         android:id="@+id/sendMessageAppBarContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/WulkanowyTheme.ActionBar"
-        app:elevation="0dp">
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/sendMessageToolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="wrap_content" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
@@ -38,7 +37,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:text="@string/message_from"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="?android:textColorHint"
                 android:textSize="18sp" />
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -46,8 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:background="@android:color/transparent"
-                android:enabled="false"
-                android:textColor="?android:attr/textColorPrimaryNoDisable"
+                android:textColor="?android:textColorPrimary"
                 tools:text="Jan Kowalski" />
         </LinearLayout>
 
@@ -71,7 +69,7 @@
                 android:layout_marginRight="10dp"
                 android:text="@string/message_to"
                 android:textAlignment="center"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="?android:textColorHint"
                 android:textSize="18sp" />
 
             <com.pchmn.materialchips.ChipsInput
@@ -111,15 +109,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            android:gravity="top|start"
+            android:gravity="start"
             android:hint="@string/message_content"
             android:inputType="textMultiLine"
             android:paddingStart="14dp"
             android:paddingLeft="14dp"
             android:paddingTop="18dp"
             android:paddingEnd="14dp"
-            android:paddingRight="14dp"
-            android:singleLine="false" />
+            android:paddingRight="14dp" />
     </LinearLayout>
 
     <FrameLayout
