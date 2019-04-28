@@ -43,6 +43,6 @@
         android:gravity="center"
         android:textAlignment="center"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:textSize="34sp"
         tools:text="13" />
 </RelativeLayout>
