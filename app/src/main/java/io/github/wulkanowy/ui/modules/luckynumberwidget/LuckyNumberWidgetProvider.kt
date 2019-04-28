@@ -150,7 +150,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                 // 2x2 and bigger
                 else -> {
                     Timber.d("Size: 2x2 and bigger")
-                    views.setViewVisibility(R.id.luckyNumberWidgetImage, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetImage, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
                     views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
                 }
