@@ -60,7 +60,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS).forEach { appWidgetId ->
             RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
                 setTextViewText(R.id.luckyNumberWidgetNumber,
-                    getLuckyNumber(sharedPref.getLong(createWidgetKey(appWidgetId), 0), appWidgetId)?.luckyNumber?.toString() ?: "Brak"
+                    getLuckyNumber(sharedPref.getLong(createWidgetKey(appWidgetId), 0), appWidgetId)?.luckyNumber?.toString() ?: "#"
                 )
                 setOnClickPendingIntent(R.id.luckyNumberWidgetContainer,
                     PendingIntent.getActivity(context, 2, MainActivity.getStartIntent(context).apply {
@@ -129,28 +129,32 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                 // 1x1
                 maxWidth < 110 && maxHeight < 110 -> {
                     Timber.d("Size: 1x1")
-                    views.setViewVisibility(R.id.luckyNumberWidgetImage, GONE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
                 }
                 // 1x2
                 maxWidth < 110 && maxHeight > 110 -> {
                     Timber.d("Size: 1x2")
-                    views.setViewVisibility(R.id.luckyNumberWidgetImage, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetImageTop, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
                 }
                 // 2x1
                 maxWidth > 110 && maxHeight < 110 -> {
                     Timber.d("Size: 2x1")
-                    views.setViewVisibility(R.id.luckyNumberWidgetImage, GONE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, VISIBLE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
                 }
                 // 2x2 and bigger
                 else -> {
                     Timber.d("Size: 2x2 and bigger")
-                    views.setViewVisibility(R.id.luckyNumberWidgetImage, GONE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
+                    views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
                     views.setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
                     views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
                 }
