@@ -7,6 +7,10 @@ import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity.FragmentEnum
+import io.github.wulkanowy.ui.modules.message.MessageFragment
+import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Completable
@@ -22,12 +26,22 @@ class MainPresenter @Inject constructor(
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<MainView>(errorHandler) {
 
-    fun onAttachView(view: MainView, initMenuIndex: Int) {
+    fun onAttachView(view: MainView, initMenuIndex: Int, initMenuFragment: MainActivity.FragmentEnum?) {
         super.onAttachView(view)
-        view.run {
+        view.apply {
             startMenuIndex = if (initMenuIndex != -1) initMenuIndex else prefRepository.startMenuIndex
+            startMenuFragment = when (initMenuFragment) {
+                FragmentEnum.LUCKY_NUMBER -> LuckyNumberFragment.newInstance()
+                FragmentEnum.MESSAGE -> MessageFragment.newInstance()
+                FragmentEnum.NOTE -> NoteFragment.newInstance()
+                else -> null
+            }
+
             initView()
             Timber.i("Main view was initialized with $startMenuIndex menu index")
+            startMenuFragment?.let {
+                Timber.i("Main view was initialized with ${it::class.java.simpleName} fragment")
+            }
         }
 
         syncManager.startSyncWorker()

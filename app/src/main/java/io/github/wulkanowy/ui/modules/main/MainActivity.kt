@@ -41,8 +41,15 @@ class MainActivity : BaseActivity(), MainView {
 
     companion object {
         const val EXTRA_START_MENU_INDEX = "extraStartMenuIndex"
+        const val EXTRA_START_MENU_FRAGMENT = "extraStartMenuFragment"
 
         fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
+    }
+
+    enum class FragmentEnum {
+        LUCKY_NUMBER,
+        MESSAGE,
+        NOTE,
     }
 
     override val isRootView: Boolean
@@ -56,14 +63,21 @@ class MainActivity : BaseActivity(), MainView {
 
     override var startMenuIndex = 0
 
+    override var startMenuFragment: Fragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer
 
-        presenter.onAttachView(this, intent.getIntExtra(EXTRA_START_MENU_INDEX, -1))
+        presenter.onAttachView(
+            this,
+            intent.getIntExtra(EXTRA_START_MENU_INDEX, -1),
+            intent.getSerializableExtra(EXTRA_START_MENU_FRAGMENT) as FragmentEnum?)
+
         navController.initialize(startMenuIndex, savedInstanceState)
+        startMenuFragment?.let { pushView(it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

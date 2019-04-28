@@ -1,10 +1,13 @@
 package io.github.wulkanowy.ui.modules.main
 
+import androidx.fragment.app.Fragment
 import io.github.wulkanowy.ui.base.BaseView
 
 interface MainView : BaseView {
 
     var startMenuIndex: Int
+
+    var startMenuFragment: Fragment?
 
     val isRootView: Boolean
 
@@ -25,7 +28,6 @@ interface MainView : BaseView {
     fun setViewTitle(title: String)
 
     fun popView()
-
     fun openLoginView()
 
     interface MainChildView {
