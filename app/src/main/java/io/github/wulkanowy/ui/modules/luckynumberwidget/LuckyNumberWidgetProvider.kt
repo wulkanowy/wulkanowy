@@ -138,34 +138,42 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
                 // 1x1 // 150x150
                 maxWidth < 150 && maxHeight < 110 -> {
                     Timber.d("Luckynumber widget size: 1x1")
-                    views.setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                    views.run {
+                        setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
+                        setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
+                        setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
+                        setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                    }
                 }
                 // 1x2
                 maxWidth < 150 && maxHeight > 110 -> {
                     Timber.d("Luckynumber widget size: 1x2")
-                    views.setViewVisibility(R.id.luckyNumberWidgetImageTop, VISIBLE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                    views.run {
+                        setViewVisibility(R.id.luckyNumberWidgetImageTop, VISIBLE)
+                        setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
+                        setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
+                        setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                    }
                 }
                 // 2x1
                 maxWidth > 150 && maxHeight < 110 -> {
                     Timber.d("Luckynumber widget size: 2x1")
-                    views.setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, VISIBLE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                    views.run {
+                        setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
+                        setViewVisibility(R.id.luckyNumberWidgetImageLeft, VISIBLE)
+                        setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
+                        setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                    }
                 }
                 // 2x2 and bigger
                 else -> {
                     Timber.d("Luckynumber widget size: 2x2 and bigger")
-                    views.setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
-                    views.setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                    views.run {
+                        setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
+                        setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
+                        setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
+                        setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+                    }
                 }
             }
         }
