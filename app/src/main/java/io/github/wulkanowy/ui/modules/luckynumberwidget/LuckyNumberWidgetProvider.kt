@@ -77,6 +77,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
                         putExtra(EXTRA_START_MENU_INDEX, 4)
                     }, PendingIntent.FLAG_UPDATE_CURRENT))
             }.also {
+                setStyles(it, intent)
                 appWidgetManager.updateAppWidget(appWidgetId, it)
             }
         }
@@ -115,65 +116,63 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun onOptionsChange(context: Context, intent: Intent) {
         intent.extras?.let { extras ->
             RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
                 setStyles(this, intent)
-            }.also {
-                appWidgetManager.updateAppWidget(extras.getInt(EXTRA_APPWIDGET_ID), it)
+                appWidgetManager.updateAppWidget(extras.getInt(EXTRA_APPWIDGET_ID), this)
             }
         }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun setStyles(views: RemoteViews, intent: Intent) {
-        intent.extras?.getBundle(EXTRA_APPWIDGET_OPTIONS)?.let {
-            val maxWidth = it.getInt(OPTION_APPWIDGET_MAX_WIDTH)
-            val maxHeight = it.getInt(OPTION_APPWIDGET_MAX_HEIGHT)
+        val options = intent.extras?.getBundle(EXTRA_APPWIDGET_OPTIONS)
 
-            Timber.d("New luckynumber widget measurement: %dx%d", maxWidth, maxHeight)
+        val maxWidth = options?.getInt(OPTION_APPWIDGET_MAX_WIDTH) ?: 150
+        val maxHeight = options?.getInt(OPTION_APPWIDGET_MAX_HEIGHT) ?: 40
 
-            when {
-                // 1x1 // 150x150
-                maxWidth < 150 && maxHeight < 110 -> {
-                    Timber.d("Luckynumber widget size: 1x1")
-                    views.run {
-                        setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
-                        setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
-                        setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
-                        setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
-                    }
+        Timber.d("New luckynumber widget measurement: %dx%d", maxWidth, maxHeight)
+
+        when {
+            // 1x1
+            maxWidth < 150 && maxHeight < 110 -> {
+                Timber.d("Luckynumber widget size: 1x1")
+                views.run {
+                    setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
+                    setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
+                    setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
+                    setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
                 }
-                // 1x2
-                maxWidth < 150 && maxHeight > 110 -> {
-                    Timber.d("Luckynumber widget size: 1x2")
-                    views.run {
-                        setViewVisibility(R.id.luckyNumberWidgetImageTop, VISIBLE)
-                        setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
-                        setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
-                        setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
-                    }
+            }
+            // 1x2
+            maxWidth < 150 && maxHeight > 110 -> {
+                Timber.d("Luckynumber widget size: 1x2")
+                views.run {
+                    setViewVisibility(R.id.luckyNumberWidgetImageTop, VISIBLE)
+                    setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
+                    setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
+                    setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
                 }
-                // 2x1
-                maxWidth > 150 && maxHeight < 110 -> {
-                    Timber.d("Luckynumber widget size: 2x1")
-                    views.run {
-                        setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
-                        setViewVisibility(R.id.luckyNumberWidgetImageLeft, VISIBLE)
-                        setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
-                        setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
-                    }
+            }
+            // 2x1
+            maxWidth >= 150 && maxHeight <= 110 -> {
+                Timber.d("Luckynumber widget size: 2x1")
+                views.run {
+                    setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
+                    setViewVisibility(R.id.luckyNumberWidgetImageLeft, VISIBLE)
+                    setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
+                    setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
                 }
-                // 2x2 and bigger
-                else -> {
-                    Timber.d("Luckynumber widget size: 2x2 and bigger")
-                    views.run {
-                        setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
-                        setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
-                        setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
-                        setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
-                    }
+            }
+            // 2x2 and bigger
+            else -> {
+                Timber.d("Luckynumber widget size: 2x2 and bigger")
+                views.run {
+                    setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
+                    setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
+                    setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
+                    setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
                 }
             }
         }
