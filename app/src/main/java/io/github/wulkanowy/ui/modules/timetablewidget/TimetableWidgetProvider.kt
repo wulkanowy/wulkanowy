@@ -20,7 +20,8 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.main.MainActivity
-import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
+import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU
+import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
@@ -131,7 +132,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                 }, FLAG_UPDATE_CURRENT))
             setPendingIntentTemplate(R.id.timetableWidgetList,
                 PendingIntent.getActivity(context, 1, MainActivity.getStartIntent(context).apply {
-                    putExtra(EXTRA_START_MENU_INDEX, 3)
+                    putExtra(EXTRA_START_MENU, MainView.MenuView.TIMETABLE)
                 }, FLAG_UPDATE_CURRENT))
         }.also {
             sharedPref.putLong(getDateWidgetKey(appWidgetId), date.toEpochDay(), true)
