@@ -28,6 +28,7 @@ interface MainView : BaseView {
     fun setViewTitle(title: String)
 
     fun popView()
+
     fun openLoginView()
 
     interface MainChildView {
