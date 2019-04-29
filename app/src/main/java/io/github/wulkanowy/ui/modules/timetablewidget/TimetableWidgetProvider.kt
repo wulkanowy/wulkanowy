@@ -151,20 +151,22 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             }, FLAG_UPDATE_CURRENT)
     }
 
-    private fun getStudent(id: Long, appWidgetId: Int): Student? {
+    private fun getStudent(studentId: Long, appWidgetId: Int): Student? {
         return try {
             studentRepository.isStudentSaved()
                 .filter { true }
                 .flatMap { studentRepository.getSavedStudents(false).toMaybe() }
                 .flatMap { students ->
-                    students.singleOrNull { student -> student.id == id }
+                    students.singleOrNull { student -> student.id == studentId }
                         .let { student ->
-                            if (student != null) {
-                                Maybe.just(student)
-                            } else {
-                                studentRepository.getCurrentStudent(false)
-                                    .toMaybe()
-                                    .doOnSuccess { sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id) }
+                            when {
+                                student != null -> Maybe.just(student)
+                                studentId != 0L -> {
+                                    studentRepository.getCurrentStudent(false)
+                                        .toMaybe()
+                                        .doOnSuccess { sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id) }
+                                }
+                                else -> null
                             }
                         }
                 }
