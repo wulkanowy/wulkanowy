@@ -26,7 +26,9 @@ import io.github.wulkanowy.data.repositories.luckynumber.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.main.MainActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_FRAGMENT
 import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
+import io.github.wulkanowy.ui.modules.main.MainActivity.FragmentEnum
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Maybe
 import timber.log.Timber
@@ -73,8 +75,9 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
                     getLuckyNumber(sharedPref.getLong(createWidgetKey(appWidgetId), 0), appWidgetId)?.luckyNumber?.toString() ?: "#"
                 )
                 setOnClickPendingIntent(R.id.luckyNumberWidgetContainer,
-                    PendingIntent.getActivity(context, 2, MainActivity.getStartIntent(context).apply {
+                    PendingIntent.getActivity(context, FragmentEnum.LUCKY_NUMBER.ordinal, MainActivity.getStartIntent(context).apply {
                         putExtra(EXTRA_START_MENU_INDEX, 4)
+                        putExtra(EXTRA_START_MENU_FRAGMENT, FragmentEnum.LUCKY_NUMBER)
                     }, PendingIntent.FLAG_UPDATE_CURRENT))
             }.also {
                 setStyles(it, intent)
