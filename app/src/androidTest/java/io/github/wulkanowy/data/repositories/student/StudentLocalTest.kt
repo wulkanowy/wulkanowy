@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.SharedPrefHelper
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.sdk.Sdk
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -39,7 +40,7 @@ class StudentLocalTest {
 
     @Test
     fun saveAndReadTest() {
-        studentLocal.saveStudents(listOf(Student(email = "test", password = "test123", schoolSymbol = "23", endpoint = "fakelog.cf", loginType = "AUTO", isCurrent = true, studentName = "", schoolName = "", studentId = 0, classId = 1, symbol = "", registrationDate = now(), className = "")))
+        studentLocal.saveStudents(listOf(Student(email = "test", password = "test123", schoolSymbol = "23", scrapperBaseUrl = "fakelog.cf", loginType = "AUTO", isCurrent = true, studentName = "", schoolName = "", studentId = 0, classId = 1, symbol = "", registrationDate = now(), className = "", loginMode = "", certificateKey = "", certificate = "", apiKey = "", apiBaseUrl = "")))
             .blockingGet()
 
         val student = studentLocal.getCurrentStudent(true).blockingGet()

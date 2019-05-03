@@ -6,10 +6,10 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.TestInternetObservingStrategy
+import io.github.wulkanowy.sdk.Sdk
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -28,7 +28,7 @@ import kotlin.test.assertEquals
 class TimetableRepositoryTest {
 
     @SpyK
-    private var mockApi = Api()
+    private var mockSdk = Sdk()
 
     private val settings = InternetObservingSettings.builder()
         .strategy(TestInternetObservingStrategy())
@@ -48,7 +48,7 @@ class TimetableRepositoryTest {
         MockKAnnotations.init(this)
         testDb = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase::class.java).build()
         timetableLocal = TimetableLocal(testDb.timetableDao)
-        timetableRemote = TimetableRemote(mockApi)
+        timetableRemote = TimetableRemote(mockSdk)
 
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 2
@@ -67,7 +67,7 @@ class TimetableRepositoryTest {
             createTimetableLocal(1, of(2019, 3, 5, 9, 40), "213", "W-F")
         ))
 
-        every { mockApi.getTimetable(any(), any()) } returns Single.just(listOf(
+        every { mockSdk.getTimetable(any(), any()) } returns Single.just(listOf(
             createTimetableRemote(1, of(2019, 3, 5, 8, 0), "", "Przyroda"),
             createTimetableRemote(1, of(2019, 3, 5, 8, 50), "", "Religia"),
             createTimetableRemote(1, of(2019, 3, 5, 9, 40), "", "W-F")

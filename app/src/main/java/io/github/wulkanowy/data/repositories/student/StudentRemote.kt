@@ -1,17 +1,17 @@
 package io.github.wulkanowy.data.repositories.student
 
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime.now
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class StudentRemote @Inject constructor(private val api: Api) {
+class StudentRemote @Inject constructor(private val sdk: Sdk) {
 
-    fun getStudents(email: String, password: String, endpoint: String): Single<List<Student>> {
-        return api.getStudents().map { students ->
+    fun getStudents(email: String, password: String, endpoint: String, apiKey: String): Single<List<Student>> {
+        return sdk.getStudents().map { students ->
             students.map { student ->
                 Student(
                     email = email,
@@ -23,10 +23,15 @@ class StudentRemote @Inject constructor(private val api: Api) {
                     schoolName = student.schoolName,
                     className = student.className,
                     classId = student.classId,
-                    endpoint = endpoint,
+                    scrapperBaseUrl = endpoint,
                     loginType = student.loginType.name,
                     isCurrent = false,
-                    registrationDate = now()
+                    registrationDate = now(),
+                    apiBaseUrl = student.apiHost,
+                    apiKey = apiKey,
+                    certificate = student.certificate,
+                    certificateKey = student.certificateKey,
+                    loginMode = student.loginMode.name
                 )
             }
         }

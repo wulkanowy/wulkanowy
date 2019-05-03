@@ -38,6 +38,9 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override val formPassValue: String
         get() = loginFormPass.text.toString()
 
+    override val formApiKey: String
+        get() = loginFormApiKey.text.toString()
+
     override val formHostValue: String?
         get() = resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
 

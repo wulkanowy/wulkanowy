@@ -1,8 +1,8 @@
 package io.github.wulkanowy.data.repositories.timetable
 
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.toLocalDate
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.reactivex.Single
@@ -11,10 +11,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TimetableRemote @Inject constructor(private val api: Api) {
+class TimetableRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getTimetable(semester: Semester, startDate: LocalDate, endDate: LocalDate): Single<List<Timetable>> {
-        return Single.just(api.apply { diaryId = semester.diaryId })
+        return Single.just(sdk.apply { diaryId = semester.diaryId })
             .flatMap { it.getTimetable(startDate, endDate) }
             .map { lessons ->
                 lessons.map {

@@ -78,11 +78,11 @@ class LoginStudentSelectPresenter @Inject constructor(
                 Timber.i("Registration started")
             }
             .subscribe({
-                students.forEach { analytics.logEvent("registration_student_select", SUCCESS to true, "endpoint" to it.endpoint, "symbol" to it.symbol, "error" to "No error") }
+                students.forEach { analytics.logEvent("registration_student_select", SUCCESS to true, "scrapperBaseUrl" to it.scrapperBaseUrl, "symbol" to it.symbol, "error" to "No error") }
                 Timber.i("Registration result: Success")
                 view?.openMainView()
             }, { error ->
-                students.forEach { analytics.logEvent("registration_student_select", SUCCESS to false, "endpoint" to it.endpoint, "symbol" to it.symbol, "error" to error.localizedMessage) }
+                students.forEach { analytics.logEvent("registration_student_select", SUCCESS to false, "scrapperBaseUrl" to it.scrapperBaseUrl, "symbol" to it.symbol, "error" to error.localizedMessage) }
                 Timber.i("Registration result: An exception occurred ")
                 errorHandler.dispatch(error)
                 view?.apply {

@@ -2,7 +2,7 @@ package io.github.wulkanowy.data.repositories.student
 
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
-import io.github.wulkanowy.data.ApiHelper
+import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import io.reactivex.Completable
@@ -17,16 +17,16 @@ class StudentRepository @Inject constructor(
     private val local: StudentLocal,
     private val remote: StudentRemote,
     private val settings: InternetObservingSettings,
-    private val apiHelper: ApiHelper
+    private val sdkHelper: SdkHelper
 ) {
 
     fun isStudentSaved(): Single<Boolean> = local.getStudents(false).isEmpty.map { !it }
 
-    fun getStudents(email: String, password: String, endpoint: String, symbol: String = ""): Single<List<Student>> {
+    fun getStudents(email: String, password: String, endpoint: String, apiKey: String, symbol: String = ""): Single<List<Student>> {
         return ReactiveNetwork.checkInternetConnectivity(settings)
             .flatMap {
-                apiHelper.initApi(email, password, symbol, endpoint)
-                if (it) remote.getStudents(email, password, endpoint)
+                sdkHelper.initApi(email, password, symbol, endpoint, apiKey)
+                if (it) remote.getStudents(email, password, endpoint, apiKey)
                 else Single.error(UnknownHostException("No internet connection"))
             }
     }

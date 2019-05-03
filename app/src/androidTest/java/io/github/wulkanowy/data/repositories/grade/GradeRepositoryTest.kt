@@ -6,11 +6,11 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.TestInternetObservingStrategy
+import io.github.wulkanowy.sdk.Sdk
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -32,7 +32,7 @@ import io.github.wulkanowy.api.grades.Grade as GradeApi
 class GradeRepositoryTest {
 
     @SpyK
-    private var mockApi = Api()
+    private var mockSdk = Sdk()
 
     private val settings = InternetObservingSettings.builder()
         .strategy(TestInternetObservingStrategy())
@@ -55,9 +55,9 @@ class GradeRepositoryTest {
         MockKAnnotations.init(this)
         testDb = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase::class.java).build()
         gradeLocal = GradeLocal(testDb.gradeDao)
-        gradeRemote = GradeRemote(mockApi)
+        gradeRemote = GradeRemote(mockSdk)
 
-        every { mockApi.diaryId } returns 1
+        every { mockSdk.diaryId } returns 1
         every { studentMock.registrationDate } returns LocalDateTime.of(2019, 2, 27, 12, 0)
         every { semesterMock.studentId } returns 1
         every { semesterMock.semesterId } returns 1
@@ -71,7 +71,7 @@ class GradeRepositoryTest {
 
     @Test
     fun markOlderThanRegisterDateAsRead() {
-        every { mockApi.getGrades(1) } returns Single.just(listOf(
+        every { mockSdk.getGrades(1) } returns Single.just(listOf(
             createGradeApi(5, 4.0, of(2019, 2, 25), "Ocena pojawiła się"),
             createGradeApi(5, 4.0, of(2019, 2, 26), "przed zalogowanie w aplikacji"),
             createGradeApi(5, 4.0, of(2019, 2, 27), "Ocena z dnia logowania"),
@@ -95,7 +95,7 @@ class GradeRepositoryTest {
             createGradeLocal(3, 5.0, of(2019, 2, 27), "Trzecia")
         ))
 
-        every { mockApi.getGrades(1) } returns Single.just(listOf(
+        every { mockSdk.getGrades(1) } returns Single.just(listOf(
             createGradeApi(5, 2.0, of(2019, 2, 25), "Ocena ma datę, jest inna, ale nie zostanie powiadomiona"),
             createGradeApi(4, 3.0, of(2019, 2, 26), "starszą niż ostatnia lokalnie"),
             createGradeApi(3, 4.0, of(2019, 2, 27), "Ta jest z tego samego dnia co ostatnia lokalnie"),
@@ -119,7 +119,7 @@ class GradeRepositoryTest {
             createGradeLocal(3, 5.0, of(2019, 2, 26), "Jakaś inna ocena")
         ))
 
-        every { mockApi.getGrades(1) } returns Single.just(listOf(
+        every { mockSdk.getGrades(1) } returns Single.just(listOf(
             createGradeApi(5, 3.0, of(2019, 2, 25), "Taka sama ocena"),
             createGradeApi(3, 5.0, of(2019, 2, 26), "Jakaś inna ocena")
         ))
@@ -137,7 +137,7 @@ class GradeRepositoryTest {
             createGradeLocal(3, 5.0, of(2019, 2, 26), "Jakaś inna ocena")
         ))
 
-        every { mockApi.getGrades(1) } returns Single.just(listOf(
+        every { mockSdk.getGrades(1) } returns Single.just(listOf(
             createGradeApi(5, 3.0, of(2019, 2, 25), "Taka sama ocena"),
             createGradeApi(5, 3.0, of(2019, 2, 25), "Taka sama ocena"),
             createGradeApi(3, 5.0, of(2019, 2, 26), "Jakaś inna ocena")
@@ -153,7 +153,7 @@ class GradeRepositoryTest {
     fun emptyLocal() {
         gradeLocal.saveGrades(listOf())
 
-        every { mockApi.getGrades(1) } returns Single.just(listOf(
+        every { mockSdk.getGrades(1) } returns Single.just(listOf(
             createGradeApi(5, 3.0, of(2019, 2, 25), "Taka sama ocena"),
             createGradeApi(5, 3.0, of(2019, 2, 25), "Taka sama ocena"),
             createGradeApi(3, 5.0, of(2019, 2, 26), "Jakaś inna ocena")
@@ -172,7 +172,7 @@ class GradeRepositoryTest {
             createGradeLocal(3, 5.0, of(2019, 2, 26), "Jakaś inna ocena")
         ))
 
-        every { mockApi.getGrades(1) } returns Single.just(listOf())
+        every { mockSdk.getGrades(1) } returns Single.just(listOf())
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
             .getGrades(studentMock, semesterMock, true).blockingGet()

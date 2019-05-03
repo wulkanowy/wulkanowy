@@ -56,10 +56,11 @@ class LoginFormPresenter @Inject constructor(
         val email = view?.formNameValue.orEmpty()
         val password = view?.formPassValue.orEmpty()
         val endpoint = view?.formHostValue.orEmpty()
+        val apiKey = view?.formApiKey.orEmpty()
 
         if (!validateCredentials(email, password)) return
 
-        disposable.add(studentRepository.getStudents(email, password, endpoint)
+        disposable.add(studentRepository.getStudents(email, password, endpoint, apiKey)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {
@@ -78,11 +79,11 @@ class LoginFormPresenter @Inject constructor(
             }
             .subscribe({
                 Timber.i("Login result: Success")
-                analytics.logEvent("registration_form", SUCCESS to true, "students" to it.size, "endpoint" to endpoint, "error" to "No error")
+                analytics.logEvent("registration_form", SUCCESS to true, "students" to it.size, "scrapperBaseUrl" to endpoint, "error" to "No error")
                 view?.notifyParentAccountLogged(it)
             }, {
                 Timber.i("Login result: An exception occurred")
-                analytics.logEvent("registration_form", SUCCESS to false, "students" to -1, "endpoint" to endpoint, "error" to it.localizedMessage)
+                analytics.logEvent("registration_form", SUCCESS to false, "students" to -1, "scrapperBaseUrl" to endpoint, "error" to it.localizedMessage)
                 errorHandler.dispatch(it)
             }))
     }

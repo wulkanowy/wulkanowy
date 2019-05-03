@@ -41,7 +41,7 @@ class LoginSymbolPresenter @Inject constructor(
 
         disposable.add(
             Single.fromCallable { if (loginData == null) throw IllegalArgumentException("Login data is null") else loginData }
-                .flatMap { studentRepository.getStudents(it.first, it.second, it.third, symbol) }
+                .flatMap { studentRepository.getStudents(it.first, it.second, it.third, "", symbol) } //TODO: provide api key
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doOnSubscribe {
@@ -59,7 +59,7 @@ class LoginSymbolPresenter @Inject constructor(
                     }
                 }
                 .subscribe({
-                    analytics.logEvent("registration_symbol", SUCCESS to true, "students" to it.size, "endpoint" to loginData?.third, "symbol" to symbol, "error" to "No error")
+                    analytics.logEvent("registration_symbol", SUCCESS to true, "students" to it.size, "scrapperBaseUrl" to loginData?.third, "symbol" to symbol, "error" to "No error")
                     view?.apply {
                         if (it.isEmpty()) {
                             Timber.i("Login with symbol result: Empty student list")
@@ -71,7 +71,7 @@ class LoginSymbolPresenter @Inject constructor(
                     }
                 }, {
                     Timber.i("Login with symbol result: An exception occurred")
-                    analytics.logEvent("registration_symbol", SUCCESS to false, "students" to -1, "endpoint" to loginData?.third, "symbol" to symbol, "error" to it.localizedMessage)
+                    analytics.logEvent("registration_symbol", SUCCESS to false, "students" to -1, "scrapperBaseUrl" to loginData?.third, "symbol" to symbol, "error" to it.localizedMessage)
                     errorHandler.dispatch(it)
                 }))
     }

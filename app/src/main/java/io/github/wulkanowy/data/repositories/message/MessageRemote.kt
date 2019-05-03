@@ -1,11 +1,11 @@
 package io.github.wulkanowy.data.repositories.message
 
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.api.messages.Folder
 import io.github.wulkanowy.api.messages.SentMessage
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime.now
@@ -15,10 +15,10 @@ import io.github.wulkanowy.api.messages.Message as ApiMessage
 import io.github.wulkanowy.api.messages.Recipient as ApiRecipient
 
 @Singleton
-class MessageRemote @Inject constructor(private val api: Api) {
+class MessageRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getMessages(student: Student, folder: MessageFolder): Single<List<Message>> {
-        return api.getMessages(Folder.valueOf(folder.name)).map { messages ->
+        return sdk.getMessages(Folder.valueOf(folder.name)).map { messages ->
             messages.map {
                 Message(
                     studentId = student.id.toInt(),
@@ -40,11 +40,11 @@ class MessageRemote @Inject constructor(private val api: Api) {
     }
 
     fun getMessagesContent(message: Message, markAsRead: Boolean = false): Single<String> {
-        return api.getMessageContent(message.messageId, message.folderId, markAsRead, message.realId)
+        return sdk.getMessageContent(message.messageId, message.folderId, markAsRead, message.realId)
     }
 
     fun sendMessage(subject: String, content: String, recipients: List<Recipient>): Single<SentMessage> {
-        return api.sendMessage(
+        return sdk.sendMessage(
             subject = subject,
             content = content,
             recipients = recipients.map {
@@ -61,6 +61,6 @@ class MessageRemote @Inject constructor(private val api: Api) {
     }
 
     fun deleteMessage(message: Message): Single<Boolean> {
-        return api.deleteMessages(listOf(Pair(message.realId, message.folderId)))
+        return sdk.deleteMessages(listOf(Pair(message.realId, message.folderId)))
     }
 }

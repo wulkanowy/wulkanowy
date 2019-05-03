@@ -3,7 +3,7 @@ package io.github.wulkanowy.data.repositories.message
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.api.messages.SentMessage
-import io.github.wulkanowy.data.ApiHelper
+import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
@@ -21,11 +21,11 @@ class MessageRepository @Inject constructor(
     private val settings: InternetObservingSettings,
     private val local: MessageLocal,
     private val remote: MessageRemote,
-    private val apiHelper: ApiHelper
+    private val sdkHelper: SdkHelper
 ) {
 
     fun getMessages(student: Student, folder: MessageFolder, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
-        return Single.just(apiHelper.initApi(student))
+        return Single.just(sdkHelper.initApi(student))
             .flatMap { _ ->
                 local.getMessages(student, folder).filter { !forceRefresh }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
@@ -47,7 +47,7 @@ class MessageRepository @Inject constructor(
     }
 
     fun getMessage(student: Student, messageId: Int, markAsRead: Boolean = false): Single<Message> {
-        return Single.just(apiHelper.initApi(student))
+        return Single.just(sdkHelper.initApi(student))
             .flatMap { _ ->
                 local.getMessage(student, messageId)
                     .filter { !it.content.isNullOrEmpty() }

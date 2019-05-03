@@ -11,6 +11,8 @@ interface LoginFormView : BaseView {
 
     val formPassValue: String
 
+    val formApiKey: String
+
     val formHostValue: String?
 
     fun setDefaultCredentials(name: String, pass: String)

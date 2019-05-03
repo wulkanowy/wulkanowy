@@ -1,8 +1,8 @@
 package io.github.wulkanowy.data.repositories.attendance
 
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.toLocalDate
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
@@ -10,10 +10,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AttendanceRemote @Inject constructor(private val api: Api) {
+class AttendanceRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getAttendance(semester: Semester, startDate: LocalDate, endDate: LocalDate): Single<List<Attendance>> {
-        return Single.just(api.apply { diaryId = semester.diaryId })
+        return Single.just(sdk.apply { diaryId = semester.diaryId })
             .flatMap { it.getAttendance(startDate, endDate) }.map { attendance ->
                 attendance.map {
                     Attendance(
