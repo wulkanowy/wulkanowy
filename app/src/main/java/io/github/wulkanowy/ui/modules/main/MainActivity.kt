@@ -22,8 +22,12 @@ import io.github.wulkanowy.ui.modules.account.AccountDialog
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
+import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
+import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
+import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
+import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.safelyPopFragment
@@ -40,9 +44,15 @@ class MainActivity : BaseActivity(), MainView {
     lateinit var navController: FragNavController
 
     companion object {
-        const val EXTRA_START_MENU_INDEX = "extraStartMenuIndex"
+        const val EXTRA_START_MENU = "extraStartMenu"
 
-        fun getStartIntent(context: Context) = Intent(context, MainActivity::class.java)
+        fun getStartIntent(context: Context, startMenu: MainView.MenuView? = null, clear: Boolean = false): Intent {
+            return Intent(context, MainActivity::class.java)
+                .apply {
+                    if (clear) flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
+                    startMenu?.let { putExtra(EXTRA_START_MENU, it) }
+                }
+        }
     }
 
     override val isRootView: Boolean
@@ -56,14 +66,27 @@ class MainActivity : BaseActivity(), MainView {
 
     override var startMenuIndex = 0
 
+    override var startMenuMoreIndex = -1
+
+    private val moreMenuFragments = listOf<Fragment>(
+        MessageFragment.newInstance(),
+        HomeworkFragment.newInstance(),
+        NoteFragment.newInstance(),
+        LuckyNumberFragment.newInstance()
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer
 
-        presenter.onAttachView(this, intent.getIntExtra(EXTRA_START_MENU_INDEX, -1))
-        navController.initialize(startMenuIndex, savedInstanceState)
+        presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.MenuView)
+
+        navController.run {
+            initialize(startMenuIndex, savedInstanceState)
+            pushFragment(moreMenuFragments.getOrNull(startMenuMoreIndex))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -74,7 +97,7 @@ class MainActivity : BaseActivity(), MainView {
     override fun initView() {
         mainBottomNav.run {
             addItems(
-                mutableListOf(
+                listOf(
                     AHBottomNavigationItem(R.string.grade_title, R.drawable.ic_menu_main_grade_26dp, 0),
                     AHBottomNavigationItem(R.string.attendance_title, R.drawable.ic_menu_main_attendance_24dp, 0),
                     AHBottomNavigationItem(R.string.exam_title, R.drawable.ic_menu_main_exam_24dp, 0),
@@ -170,6 +193,7 @@ class MainActivity : BaseActivity(), MainView {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         navController.onSaveInstanceState(outState)
+        intent.removeExtra(EXTRA_START_MENU)
     }
 
     override fun onDestroy() {
