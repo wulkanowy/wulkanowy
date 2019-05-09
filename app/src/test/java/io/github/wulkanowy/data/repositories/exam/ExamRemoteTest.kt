@@ -1,8 +1,8 @@
 package io.github.wulkanowy.data.repositories.exam
 
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.api.exams.Exam
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.sdk.Sdk
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -17,7 +17,7 @@ import java.sql.Date
 class ExamRemoteTest {
 
     @SpyK
-    private var mockApi = Api()
+    private var mockSdk = Sdk()
 
     @MockK
     private lateinit var semesterMock: Semester
@@ -29,7 +29,7 @@ class ExamRemoteTest {
 
     @Test
     fun getExamsTest() {
-        every { mockApi.getExams(
+        every { mockSdk.getExams(
                 LocalDate.of(2018, 9, 10),
                 LocalDate.of(2018, 9, 15)
         ) } returns Single.just(listOf(
@@ -37,11 +37,11 @@ class ExamRemoteTest {
                 getExam("2018-09-17")
         ))
 
-        every { mockApi.diaryId } returns 1
+        every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 1
 
-        val exams = ExamRemote(mockApi).getExams(semesterMock,
+        val exams = ExamRemote(mockSdk).getExams(semesterMock,
                 LocalDate.of(2018, 9, 10),
                 LocalDate.of(2018, 9, 15)
         ).blockingGet()

@@ -1,8 +1,8 @@
 package io.github.wulkanowy.data.repositories.gradestatistics
 
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.api.grades.GradeStatistics
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.sdk.Sdk
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -15,7 +15,7 @@ import org.junit.Test
 class GradeStatisticsRemoteTest {
 
     @SpyK
-    private var mockApi = Api()
+    private var mockSdk = Sdk()
 
     @MockK
     private lateinit var semesterMock: Semester
@@ -27,18 +27,18 @@ class GradeStatisticsRemoteTest {
 
     @Test
     fun getGradeStatisticsTest() {
-        every { mockApi.getGradesStatistics(1, any()) } returns Single.just(listOf(
+        every { mockSdk.getGradesStatistics(1, any()) } returns Single.just(listOf(
             getGradeStatistics("Fizyka"),
             getGradeStatistics("Matematyka")
         ))
 
-        every { mockApi.diaryId } returns 1
+        every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
         every { semesterMock.semesterId } returns 1
         every { semesterMock.semesterName } returns 2
         every { semesterMock.diaryId } returns 1
 
-        val stats = GradeStatisticsRemote(mockApi).getGradeStatistics(semesterMock, false).blockingGet()
+        val stats = GradeStatisticsRemote(mockSdk).getGradeStatistics(semesterMock, false).blockingGet()
         Assert.assertEquals(2, stats.size)
     }
 

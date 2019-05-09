@@ -1,8 +1,8 @@
 package io.github.wulkanowy.data.repositories.attendance
 
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.api.attendance.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.sdk.Sdk
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -17,7 +17,7 @@ import java.sql.Date
 class AttendanceRemoteTest {
 
     @SpyK
-    private var mockApi = Api()
+    private var mockSdk = Sdk()
 
     @MockK
     private lateinit var semesterMock: Semester
@@ -29,7 +29,7 @@ class AttendanceRemoteTest {
 
     @Test
     fun getAttendanceTest() {
-        every { mockApi.getAttendance(
+        every { mockSdk.getAttendance(
                 LocalDate.of(2018, 9, 10),
                 LocalDate.of(2018, 9, 15)
         ) } returns Single.just(listOf(
@@ -37,11 +37,11 @@ class AttendanceRemoteTest {
                 getAttendance("2018-09-17")
         ))
 
-        every { mockApi.diaryId } returns 1
+        every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 1
 
-        val attendance = AttendanceRemote(mockApi).getAttendance(semesterMock,
+        val attendance = AttendanceRemote(mockSdk).getAttendance(semesterMock,
                 LocalDate.of(2018, 9, 10),
                 LocalDate.of(2018, 9, 15)).blockingGet()
         assertEquals(2, attendance.size)

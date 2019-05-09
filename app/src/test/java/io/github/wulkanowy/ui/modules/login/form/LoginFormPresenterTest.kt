@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules.login.form
 import io.github.wulkanowy.TestSchedulersProvider
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
+import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.reactivex.Single
@@ -86,7 +87,7 @@ class LoginFormPresenterTest {
 
     @Test
     fun loginTest() {
-        val studentTest = Student(email = "test@", password = "123", scrapperBaseUrl = "https://fakelog.cf", loginType = "AUTO", studentName = "", schoolSymbol = "", schoolName = "", studentId = 0, classId = 1, isCurrent = false, symbol = "", registrationDate = now(), className = "")
+        val studentTest = Student(email = "test@", password = "123", scrapperBaseUrl = "https://fakelog.cf", loginType = "AUTO", studentName = "", schoolSymbol = "", schoolName = "", studentId = 0, classId = 1, isCurrent = false, symbol = "", registrationDate = now(), className = "", apiBaseUrl = "", apiKey = "", certificate = "", certificateKey = "", loginMode = "")
         doReturn(Single.just(listOf(studentTest)))
             .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString())
 

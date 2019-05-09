@@ -1,8 +1,8 @@
 package io.github.wulkanowy.data.repositories.completedlessons
 
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.api.timetable.CompletedLesson
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.sdk.Sdk
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -17,7 +17,7 @@ import java.sql.Date
 class CompletedLessonsRemoteTest {
 
     @SpyK
-    private var mockApi = Api()
+    private var mockSdk = Sdk()
 
     @MockK
     private lateinit var semesterMock: Semester
@@ -30,7 +30,7 @@ class CompletedLessonsRemoteTest {
     @Test
     fun getCompletedLessonsTest() {
         every {
-            mockApi.getCompletedLessons(
+            mockSdk.getCompletedLessons(
                 LocalDate.of(2018, 9, 10),
                 LocalDate.of(2018, 9, 15)
             )
@@ -39,11 +39,11 @@ class CompletedLessonsRemoteTest {
             getCompletedLesson("2018-09-17")
         ))
 
-        every { mockApi.diaryId } returns 1
+        every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 1
 
-        val completed = CompletedLessonsRemote(mockApi).getCompletedLessons(semesterMock,
+        val completed = CompletedLessonsRemote(mockSdk).getCompletedLessons(semesterMock,
             LocalDate.of(2018, 9, 10),
             LocalDate.of(2018, 9, 15)
         ).blockingGet()

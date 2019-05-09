@@ -64,7 +64,7 @@ class GradeExtensionTest {
             studentId = 1,
             subject = "",
             entry = "",
-            value = value,
+            value = value.toDouble(),
             modifier = modifier,
             comment = "",
             color = "",

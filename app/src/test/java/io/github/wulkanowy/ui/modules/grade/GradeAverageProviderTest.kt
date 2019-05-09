@@ -25,7 +25,7 @@ class GradeAverageProviderTest {
 
     private lateinit var gradeAverageProvider: GradeAverageProvider
 
-    private val student = Student("", "", "", "", "", 101, "", "", "", "", 1, true, LocalDateTime.now())
+    private val student = Student("", "", "", "", "", "", "", "", "", "", 101, "", "", "", "", 1, true, LocalDateTime.now())
 
     private val semesters = mutableListOf(
         Semester(101, 10, "", 1, 21, 1, false, now(), now(), 1, 1),
@@ -34,17 +34,17 @@ class GradeAverageProviderTest {
     )
 
     private val firstGrades = listOf(
-        getGrade(101, 22, "Matematyka", 4, .0, 1.0),
-        getGrade(101, 22, "Matematyka", 3, .0, 1.0),
-        getGrade(101, 22, "Fizyka", 6, .0, 1.0),
-        getGrade(101, 22, "Fizyka", 1, .0, 1.0)
+        getGrade(101, 22, "Matematyka", 4.0, .0, 1.0),
+        getGrade(101, 22, "Matematyka", 3.0, .0, 1.0),
+        getGrade(101, 22, "Fizyka", 6.0, .0, 1.0),
+        getGrade(101, 22, "Fizyka", 1.0, .0, 1.0)
     )
 
     private val secondGrade = listOf(
-        getGrade(101, 23, "Matematyka", 2, .0, 1.0),
-        getGrade(101, 23, "Matematyka", 3, .0, 1.0),
-        getGrade(101, 23, "Fizyka", 4, .0, 1.0),
-        getGrade(101, 23, "Fizyka", 2, .0, 1.0)
+        getGrade(101, 23, "Matematyka", 2.0, .0, 1.0),
+        getGrade(101, 23, "Matematyka", 3.0, .0, 1.0),
+        getGrade(101, 23, "Fizyka", 4.0, .0, 1.0),
+        getGrade(101, 23, "Fizyka", 2.0, .0, 1.0)
     )
 
     @Before
@@ -103,7 +103,7 @@ class GradeAverageProviderTest {
         gradeAverageProvider.getGradeAverage(student, semesters, semesters[2].semesterId, true).blockingGet()
     }
 
-    private fun getGrade(studentId: Int, semesterId: Int, subject: String, value: Int, modifier: Double, weight: Double): Grade {
+    private fun getGrade(studentId: Int, semesterId: Int, subject: String, value: Double, modifier: Double, weight: Double): Grade {
         return Grade(
             studentId = studentId,
             semesterId = semesterId,
