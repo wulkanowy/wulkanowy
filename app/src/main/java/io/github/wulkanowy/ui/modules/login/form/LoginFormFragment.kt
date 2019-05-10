@@ -145,7 +145,13 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     }
 
     override fun openPrivacyPolicyPage() {
-        startActivity(Intent.parseUri("https://wulkanowy.github.io/polityka-prywatnosci.html", 0))
+        val webAddress = "https://wulkanowy.github.io/polityka-prywatnosci.html"
+        val intent = Intent.parseUri(webAddress, 0)
+
+        activity?.let {
+            if (intent.resolveActivity(it.packageManager) != null) startActivity(intent)
+            else showMessage(webAddress)
+        }
     }
 
     override fun onDestroyView() {
