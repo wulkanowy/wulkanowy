@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.grade
 
-import io.github.wulkanowy.api.toDate
 import org.threeten.bp.LocalDate
 import io.github.wulkanowy.sdk.pojo.Grade as GradeRemote
 import io.github.wulkanowy.data.db.entities.Grade as GradeLocal
@@ -29,7 +28,7 @@ fun createGradeApi(value: Int, weight: Double, date: LocalDate, desc: String): G
         subject = "",
         color = "",
         comment = "",
-        date = date.toDate(),
+        date = date,
         description = desc,
         entry = "",
         modifier = .0,
