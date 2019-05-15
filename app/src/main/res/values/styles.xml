@@ -8,6 +8,7 @@
         <item name="colorError">@color/colorError</item>
         <item name="colorDivider">@color/colorDivider</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MaterialComponents.Dark.ActionBar</item>
         <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
     </style>
