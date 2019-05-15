@@ -1,13 +1,15 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="WulkanowyTheme" parent="@style/Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorSecondary">@android:color/white</item>
         <item name="colorAccent">@color/colorPrimary</item>
-        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="colorError">@color/colorError</item>
         <item name="colorDivider">@color/colorDivider</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
     </style>
 
     <style name="WulkanowyTheme.SplashScreen" parent="WulkanowyTheme.NoActionBar">

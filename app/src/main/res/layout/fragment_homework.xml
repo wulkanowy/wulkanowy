@@ -34,7 +34,8 @@
             android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:layout_width="100dp"
@@ -70,7 +71,8 @@
             android:layout_weight="1"
             android:gravity="start|center_vertical"
             android:insetLeft="8dp"
-            android:text="@string/all_prev" />
+            android:text="@string/all_prev"
+            android:textColor="?android:textColorPrimary" />
 
         <TextView
             android:id="@+id/homeworkNavDate"
@@ -88,6 +90,7 @@
             android:layout_weight="1"
             android:gravity="end|center_vertical"
             android:insetRight="8dp"
-            android:text="@string/all_next" />
+            android:text="@string/all_next"
+            android:textColor="?android:textColorPrimary" />
     </LinearLayout>
 </FrameLayout>
