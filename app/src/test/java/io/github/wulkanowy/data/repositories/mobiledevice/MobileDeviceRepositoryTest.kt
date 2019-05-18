@@ -12,7 +12,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
-import org.threeten.bp.LocalDate.of
+import org.threeten.bp.LocalDateTime.of
 
 class MobileDeviceRepositoryTest {
 
@@ -58,7 +58,7 @@ class MobileDeviceRepositoryTest {
             studentId = 1,
             deviceId = 1,
             name = "",
-            date = of(2019, 5, day)
+            date = of(2019, 5, day, 0, 0, 0)
         )
     }
 }

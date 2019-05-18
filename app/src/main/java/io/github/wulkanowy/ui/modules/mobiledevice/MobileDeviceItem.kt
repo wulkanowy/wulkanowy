@@ -21,7 +21,7 @@ class MobileDeviceItem(val device: MobileDevice) : AbstractFlexibleItem<MobileDe
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>?) {
         holder.apply {
-            mobileDeviceItemDate.text = device.date.toFormattedString()
+            mobileDeviceItemDate.text = device.date.toFormattedString("dd.MM.yyyy HH:mm:ss")
             mobileDeviceItemName.text = device.name
         }
     }

@@ -1,9 +1,9 @@
 package io.github.wulkanowy.data.repositories.mobiledevice
 
 import io.github.wulkanowy.api.Api
-import io.github.wulkanowy.api.toLocalDate
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.utils.toLocalDateTime
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,7 +18,7 @@ class MobileDeviceRemote @Inject constructor(private val api: Api) {
                 devices.map {
                     MobileDevice(
                         studentId = semester.studentId,
-                        date = it.date.toLocalDate(),
+                        date = it.date.toLocalDateTime(),
                         deviceId = it.id,
                         name = it.name
                     )

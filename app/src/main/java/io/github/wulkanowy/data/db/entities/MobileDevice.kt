@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import java.io.Serializable
 
 @Entity(tableName = "MobileDevices")
@@ -17,7 +18,7 @@ data class MobileDevice(
 
     val name: String,
 
-    val date: LocalDate
+    val date: LocalDateTime
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
