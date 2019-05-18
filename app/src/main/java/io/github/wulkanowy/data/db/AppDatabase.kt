@@ -16,6 +16,7 @@ import io.github.wulkanowy.data.db.dao.GradeSummaryDao
 import io.github.wulkanowy.data.db.dao.HomeworkDao
 import io.github.wulkanowy.data.db.dao.LuckyNumberDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
+import io.github.wulkanowy.data.db.dao.MobileDeviceDao
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.dao.RecipientDao
 import io.github.wulkanowy.data.db.dao.ReportingUnitDao
@@ -33,6 +34,7 @@ import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
@@ -73,7 +75,8 @@ import javax.inject.Singleton
         LuckyNumber::class,
         CompletedLesson::class,
         ReportingUnit::class,
-        Recipient::class
+        Recipient::class,
+        MobileDevice::class
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -82,7 +85,7 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 13
+        const val VERSION_SCHEMA = 14
 
         fun newInstance(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
@@ -140,4 +143,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val reportingUnitDao: ReportingUnitDao
 
     abstract val recipientDao: RecipientDao
+
+    abstract val mobileDeviceDao: MobileDeviceDao
 }
