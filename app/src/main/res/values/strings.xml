@@ -187,6 +187,10 @@
     <string name="lucky_number_notify_new_item_title">Lucky number for today</string>
     <string name="lucky_number_notify_new_item">Today\'s lucky number is: %d</string>
 
+    <!--Mobile devices-->
+    <string name="mobile_devices_title">Mobile devices</string>
+    <string name="mobile_devices_no_items">No devices</string>
+
 
     <!--Account-->
     <string name="account_add_new">Add account</string>

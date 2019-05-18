@@ -24,6 +24,7 @@ class MorePresenter @Inject constructor(errorHandler: ErrorHandler) : BasePresen
                     homeworkRes?.first -> openHomeworkView()
                     noteRes?.first -> openNoteView()
                     luckyNumberRes?.first -> openLuckyNumberView()
+                    mobileDevicesRes?.first -> openMobileDevicesView()
                     settingsRes?.first -> openSettingsView()
                     aboutRes?.first -> openAboutView()
                 }
@@ -44,6 +45,7 @@ class MorePresenter @Inject constructor(errorHandler: ErrorHandler) : BasePresen
                 homeworkRes?.let { MoreItem(it.first, it.second) },
                 noteRes?.let { MoreItem(it.first, it.second) },
                 luckyNumberRes?.let { MoreItem(it.first, it.second) },
+                mobileDevicesRes?.let { MoreItem(it.first, it.second) },
                 settingsRes?.let { MoreItem(it.first, it.second) },
                 aboutRes?.let { MoreItem(it.first, it.second) })
             )
