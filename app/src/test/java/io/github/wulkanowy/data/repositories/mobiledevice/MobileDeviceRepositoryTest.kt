@@ -2,7 +2,7 @@ package io.github.wulkanowy.data.repositories.mobiledevice
 
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.MobileDevice
-import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.repositories.UnitTestInternetObservingStrategy
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -17,7 +17,7 @@ import org.threeten.bp.LocalDate.of
 class MobileDeviceRepositoryTest {
 
     @Mock
-    private lateinit var student: Student
+    private lateinit var semester: Semester
 
     @Mock
     private lateinit var mobileDeviceRemote: MobileDeviceRemote
@@ -44,10 +44,10 @@ class MobileDeviceRepositoryTest {
             getDeviceEntity(2)
         )
 
-        doReturn(Maybe.empty<MobileDevice>()).`when`(mobileDeviceLocal).getDevices(student)
-        doReturn(Single.just(devices)).`when`(mobileDeviceRemote).getDevices(student)
+        doReturn(Maybe.empty<MobileDevice>()).`when`(mobileDeviceLocal).getDevices(semester)
+        doReturn(Single.just(devices)).`when`(mobileDeviceRemote).getDevices(semester)
 
-        mobileDeviceRepository.getDevices(student).blockingGet()
+        mobileDeviceRepository.getDevices(semester).blockingGet()
 
         verify(mobileDeviceLocal).deleteDevices(emptyList())
         verify(mobileDeviceLocal).saveDevices(devices)
