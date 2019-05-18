@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories.mobiledevice
 
 import io.github.wulkanowy.data.db.dao.MobileDeviceDao
 import io.github.wulkanowy.data.db.entities.MobileDevice
+import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.reactivex.Maybe
 import javax.inject.Inject
@@ -18,7 +19,7 @@ class MobileDeviceLocal @Inject constructor(private val mobileDb: MobileDeviceDa
         mobileDb.deleteAll(devices)
     }
 
-    fun getDevices(student: Student): Maybe<List<MobileDevice>> {
-        return mobileDb.loadAll(student.studentId).filter { it.isNotEmpty() }
+    fun getDevices(semester: Semester): Maybe<List<MobileDevice>> {
+        return mobileDb.loadAll(semester.studentId).filter { it.isNotEmpty() }
     }
 }

@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.mobiledevice
 
 import io.github.wulkanowy.data.repositories.mobiledevice.MobileDeviceRepository
+import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
@@ -13,6 +14,7 @@ class MobileDevicePresenter @Inject constructor(
     private val errorHandler: SessionErrorHandler,
     private val schedulers: SchedulersProvider,
     private val studentRepository: StudentRepository,
+    private val semesterRepository: SemesterRepository,
     private val mobileDeviceRepository: MobileDeviceRepository,
     private val analytics: FirebaseAnalyticsHelper
 ) : BaseSessionPresenter<MobileDeviceView>(errorHandler) {
@@ -27,6 +29,7 @@ class MobileDevicePresenter @Inject constructor(
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading devices data started")
         disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { mobileDeviceRepository.getDevices(it) }
             .map { items -> items.map { MobileDeviceItem(it) } }
             .subscribeOn(schedulers.backgroundThread)

@@ -3,7 +3,7 @@ package io.github.wulkanowy.data.repositories.mobiledevice
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.MobileDevice
-import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.utils.uniqueSubtract
 import io.reactivex.Single
 import java.net.UnknownHostException
@@ -17,19 +17,19 @@ class MobileDeviceRepository @Inject constructor(
     private val remote: MobileDeviceRemote
 ) {
 
-    fun getDevices(student: Student, forceRefresh: Boolean = false): Single<List<MobileDevice>> {
-        return local.getDevices(student).filter { !forceRefresh }
+    fun getDevices(semester: Semester, forceRefresh: Boolean = false): Single<List<MobileDevice>> {
+        return local.getDevices(semester).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
-                    if (it) remote.getDevices(student)
+                    if (it) remote.getDevices(semester)
                     else Single.error(UnknownHostException())
                 }.flatMap { new ->
-                    local.getDevices(student).toSingle(emptyList())
+                    local.getDevices(semester).toSingle(emptyList())
                         .doOnSuccess { old ->
                             local.deleteDevices(old uniqueSubtract new)
                             local.saveDevices(new uniqueSubtract old)
                         }
                 }
-            ).flatMap { local.getDevices(student).toSingle(emptyList()) }
+            ).flatMap { local.getDevices(semester).toSingle(emptyList()) }
     }
 }
