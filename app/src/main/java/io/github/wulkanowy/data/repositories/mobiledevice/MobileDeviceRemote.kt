@@ -25,4 +25,9 @@ class MobileDeviceRemote @Inject constructor(private val api: Api) {
                 }
             }
     }
+
+    fun unregisterDevice(semester: Semester, device: MobileDevice): Single<Boolean> {
+        return Single.just(api.apply { diaryId = semester.diaryId })
+            .flatMap { api.unregisterDevice(device.deviceId) }
+    }
 }

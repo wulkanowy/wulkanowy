@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -22,7 +21,7 @@ class MobileDeviceFragment : BaseSessionFragment(), MobileDeviceView, MainView.T
     lateinit var presenter: MobileDevicePresenter
 
     @Inject
-    lateinit var devicesAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
+    lateinit var devicesAdapter: MobileDeviceAdapter<AbstractFlexibleItem<*>>
 
     companion object {
         fun newInstance() = MobileDeviceFragment()
@@ -53,6 +52,7 @@ class MobileDeviceFragment : BaseSessionFragment(), MobileDeviceView, MainView.T
             )
         }
         mobileDevicesSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+        devicesAdapter.setListener { presenter.unregisterDevice(it) }
     }
 
     override fun updateData(data: List<MobileDeviceItem>) {
@@ -64,7 +64,7 @@ class MobileDeviceFragment : BaseSessionFragment(), MobileDeviceView, MainView.T
     }
 
     override fun showEmpty(show: Boolean) {
-        mobileDevicesEmpty.visibility = if (show) View.VISIBLE else View.GONE
+        mobileDevicesEmpty.visibility = if (show) VISIBLE else GONE
     }
 
     override fun hideRefresh() {

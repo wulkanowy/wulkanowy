@@ -32,4 +32,8 @@ class MobileDeviceRepository @Inject constructor(
                 }
             ).flatMap { local.getDevices(semester).toSingle(emptyList()) }
     }
+
+    fun unregister(semester: Semester, device: MobileDevice): Single<Boolean> {
+        return remote.unregisterDevice(semester, device)
+    }
 }

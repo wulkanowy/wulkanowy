@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.mobiledevice
 
+import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.repositories.mobiledevice.MobileDeviceRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -56,5 +57,24 @@ class MobileDevicePresenter @Inject constructor(
                 view?.run { showEmpty(isViewEmpty) }
                 errorHandler.dispatch(it)
             })
+    }
+
+    fun unregisterDevice(device: MobileDevice) {
+        Timber.i("Mobile device unregister started")
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
+            .flatMap { mobileDeviceRepository.unregister(it, device) }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
+                loadData(it)
+                view?.run {
+                    if (it) showMessage("Chyba się udało")
+                    else showMessage("Nie udało się")
+                }
+            }) {
+                errorHandler.dispatch(it)
+            }
+        )
     }
 }

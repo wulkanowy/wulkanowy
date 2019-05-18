@@ -30,4 +30,14 @@
         android:lineSpacingMultiplier="1.2"
         android:text="@string/all_description"
         android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/mobileDeviceItemUnregister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/mobile_devices_unregister"
+        tools:ignore="RelativeOverlap" />
 </RelativeLayout>

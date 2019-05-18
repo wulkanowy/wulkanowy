@@ -9,6 +9,7 @@ import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.WulkanowyApp
+import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceAdapter
 import io.github.wulkanowy.utils.SchedulersProvider
 import javax.inject.Named
 import javax.inject.Singleton
@@ -26,6 +27,9 @@ internal class AppModule {
 
     @Provides
     fun provideFlexibleAdapter() = FlexibleAdapter<AbstractFlexibleItem<*>>(null, null, true)
+
+    @Provides
+    fun provideMobileDeviceFlexibleAdapter() = MobileDeviceAdapter<AbstractFlexibleItem<*>>()
 
     @Singleton
     @Provides
