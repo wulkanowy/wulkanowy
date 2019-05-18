@@ -30,9 +30,9 @@ class MobileDeviceItem(val device: MobileDevice) : AbstractFlexibleItem<MobileDe
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as MobileDevice
+        other as MobileDeviceItem
 
-        if (device.id != other.id) return false
+        if (device.id != other.device.id) return false
         return true
     }
 
