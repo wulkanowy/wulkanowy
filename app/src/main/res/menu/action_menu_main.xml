@@ -6,5 +6,6 @@
         android:icon="@drawable/ic_all_account_24dp"
         android:orderInCategory="2"
         android:title="@string/main_account_picker"
+        app:iconTint="?colorOnSurface"
         app:showAsAction="always" />
 </menu>

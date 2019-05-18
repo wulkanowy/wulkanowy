@@ -1,18 +1,20 @@
 package io.github.wulkanowy.ui.modules.main
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation.TitleState.ALWAYS_SHOW
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
+import com.google.android.material.elevation.ElevationOverlayProvider
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
 import io.github.wulkanowy.R
@@ -94,6 +96,9 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     override fun initView() {
+        val elevationProvider = ElevationOverlayProvider(this)
+
+        mainAppBarContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(8f))
         mainBottomNav.run {
             addItems(
                 listOf(
@@ -104,15 +109,13 @@ class MainActivity : BaseActivity(), MainView {
                     AHBottomNavigationItem(R.string.more_title, R.drawable.ic_menu_main_more_24dp, 0)
                 )
             )
-            accentColor = ContextCompat.getColor(context, R.color.colorPrimary)
-            inactiveColor = getThemeAttrColor(android.R.attr.textColorPrimary)
+            accentColor = getThemeAttrColor(R.attr.colorSecondary)
+            defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(1f)
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false
             setTitleTextSizeInSp(10f, 10f)
-            setOnTabSelectedListener { position, wasSelected ->
-                presenter.onTabSelected(position, wasSelected)
-            }
+            setOnTabSelectedListener { position, wasSelected -> presenter.onTabSelected(position, wasSelected) }
         }
 
         navController.run {
@@ -151,6 +154,11 @@ class MainActivity : BaseActivity(), MainView {
 
     override fun showAccountPicker() {
         navController.showDialogFragment(AccountDialog.newInstance())
+    }
+
+    @TargetApi(LOLLIPOP)
+    override fun showActionBarElevation(show: Boolean) {
+        mainAppBarContainer.elevation = if (show) 10f else 0f
     }
 
     fun showExpiredDialog() {

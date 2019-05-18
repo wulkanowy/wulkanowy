@@ -6,5 +6,6 @@
         android:icon="@drawable/ic_menu_main_lessons_completed_24dp"
         android:orderInCategory="1"
         android:title="@string/completed_lessons_button"
+        app:iconTint="?colorOnSurface"
         app:showAsAction="ifRoom" />
 </menu>

@@ -9,12 +9,12 @@
         android:id="@+id/gradeTabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="?colorPrimary"
-        android:elevation="5dp"
+        android:background="?colorSurface"
+        android:elevation="4dp"
         android:visibility="invisible"
-        app:tabIndicatorColor="@android:color/white"
+        app:tabIndicatorColor="?colorSecondary"
         app:tabMode="scrollable"
-        app:tabTextColor="@android:color/white"
+        app:tabSelectedTextColor="?colorSecondary"
         tools:ignore="UnusedAttribute"
         tools:visibility="visible" />
 

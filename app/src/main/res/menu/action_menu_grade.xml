@@ -6,5 +6,6 @@
         android:icon="@drawable/ic_menu_grade_semester_24dp"
         android:orderInCategory="1"
         android:title="@string/grade_switch_semester"
+        app:iconTint="?colorOnSurface"
         app:showAsAction="ifRoom" />
 </menu>
