@@ -3,6 +3,8 @@ package io.github.wulkanowy.ui.modules.mobiledevice
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
@@ -50,13 +52,39 @@ class MobileDeviceFragment : BaseSessionFragment(), MobileDeviceView, MainView.T
                 .withDrawDividerOnLastItem(false)
             )
         }
+        mobileDevicesSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
     override fun updateData(data: List<MobileDeviceItem>) {
         devicesAdapter.updateDataSet(data, true)
     }
 
+    override fun clearData() {
+        devicesAdapter.clear()
+    }
+
     override fun showEmpty(show: Boolean) {
         mobileDevicesEmpty.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun hideRefresh() {
+        mobileDevicesSwipe.isRefreshing = false
+    }
+
+    override fun showProgress(show: Boolean) {
+        mobileDevicesProgress.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun enableSwipe(enable: Boolean) {
+        mobileDevicesSwipe.isEnabled = enable
+    }
+
+    override fun showContent(show: Boolean) {
+        mobileDevicesRecycler.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun onDestroyView() {
+        presenter.onDetachView()
+        super.onDestroyView()
     }
 }

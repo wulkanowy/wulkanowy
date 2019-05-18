@@ -26,18 +26,29 @@ class MobileDevicePresenter @Inject constructor(
         loadData()
     }
 
+    fun onSwipeRefresh() {
+        loadData(true)
+    }
+
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading devices data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
-            .flatMap { mobileDeviceRepository.getDevices(it) }
+            .flatMap { mobileDeviceRepository.getDevices(it, forceRefresh) }
             .map { items -> items.map { MobileDeviceItem(it) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({
+            .doFinally {
+                view?.run {
+                    hideRefresh()
+                    showProgress(false)
+                    enableSwipe(true)
+                }
+            }.subscribe({
                 view?.run {
                     updateData(it)
                     showEmpty(it.isEmpty())
+                    showContent(it.isNotEmpty())
                 }
                 analytics.logEvent("load_devices", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
