@@ -52,7 +52,7 @@ class MobileDeviceFragment : BaseSessionFragment(), MobileDeviceView, MainView.T
             )
         }
         mobileDevicesSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
-        devicesAdapter.setListener { presenter.unregisterDevice(it) }
+        devicesAdapter.onDeviceUnregisterListener = { presenter.unregisterDevice(it) }
     }
 
     override fun updateData(data: List<MobileDeviceItem>) {
