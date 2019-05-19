@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobileDevice_subitem_container"
     android:layout_width="match_parent"
@@ -31,7 +32,7 @@
         android:text="@string/all_description"
         android:textSize="14sp" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/mobileDeviceItemUnregister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,5 +40,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
         android:text="@string/mobile_devices_unregister"
+        app:srcCompat="@drawable/ic_message_delete_24dp"
         tools:ignore="RelativeOverlap" />
 </RelativeLayout>
