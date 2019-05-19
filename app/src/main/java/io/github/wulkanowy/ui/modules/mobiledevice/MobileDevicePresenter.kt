@@ -77,4 +77,20 @@ class MobileDevicePresenter @Inject constructor(
             }
         )
     }
+
+    fun registerDevice() {
+        Timber.i("Mobile device registartion started")
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
+            .flatMap { mobileDeviceRepository.register(it) }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
+                view?.showTokenDialog(it)
+                analytics.logEvent("device_register", "symbol" to it.second.substring(0, 3))
+            }) {
+                errorHandler.dispatch(it)
+            }
+        )
+    }
 }

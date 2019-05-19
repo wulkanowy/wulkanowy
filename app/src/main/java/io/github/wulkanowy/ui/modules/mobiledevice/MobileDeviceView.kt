@@ -21,4 +21,6 @@ interface MobileDeviceView : BaseSessionView {
     fun enableSwipe(enable: Boolean)
 
     fun showContent(show: Boolean)
+
+    fun showTokenDialog(token: Triple<String, String, String>)
 }

@@ -6,11 +6,14 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import kotlinx.android.synthetic.main.fragment_mobile_device.*
 import javax.inject.Inject
@@ -52,6 +55,10 @@ class MobileDeviceFragment : BaseSessionFragment(), MobileDeviceView, MainView.T
             )
         }
         mobileDevicesSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+        mobileDeviceAddButton.setOnClickListener {
+            Toast.makeText(context, "Trwa generowanie tokenu", LENGTH_LONG).show()
+            presenter.registerDevice()
+        }
         devicesAdapter.onDeviceUnregisterListener = { presenter.unregisterDevice(it) }
     }
 
@@ -81,6 +88,10 @@ class MobileDeviceFragment : BaseSessionFragment(), MobileDeviceView, MainView.T
 
     override fun showContent(show: Boolean) {
         mobileDevicesRecycler.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun showTokenDialog(token: Triple<String, String, String>) {
+        (activity as? MainActivity)?.showDialogFragment(MobileDeviceDialog.newInstance(token))
     }
 
     override fun onDestroyView() {

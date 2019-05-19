@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.repositories.mobiledevice
 
 import io.github.wulkanowy.api.Api
+import io.github.wulkanowy.api.mobile.TokenResponse
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.utils.toLocalDateTime
@@ -29,5 +30,13 @@ class MobileDeviceRemote @Inject constructor(private val api: Api) {
     fun unregisterDevice(semester: Semester, device: MobileDevice): Single<Boolean> {
         return Single.just(api.apply { diaryId = semester.diaryId })
             .flatMap { api.unregisterDevice(device.deviceId) }
+    }
+
+    fun getToken(semester: Semester): Single<Triple<String, String, String>> {
+        return Single.just(api.apply { diaryId = semester.diaryId })
+            .flatMap { api.getToken() }
+            .map {
+                Triple(it.pin, it.token, it.symbol)
+            }
     }
 }

@@ -51,4 +51,15 @@
             android:text="@string/mobile_devices_no_items"
             android:textSize="20sp" />
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mobileDeviceAddButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:tint="#FFFFFF"
+        app:srcCompat="@drawable/ic_all_add_24dp" />
 </FrameLayout>
