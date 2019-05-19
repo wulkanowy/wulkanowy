@@ -7,7 +7,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -56,10 +56,13 @@ class MobileDeviceFragment : BaseSessionFragment(), MobileDeviceView, MainView.T
         }
         mobileDevicesSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         mobileDeviceAddButton.setOnClickListener {
-            Toast.makeText(context, "Trwa generowanie tokenu", LENGTH_LONG).show()
+            Toast.makeText(context, "Trwa generowanie tokenu", LENGTH_SHORT).show()
             presenter.registerDevice()
         }
-        devicesAdapter.onDeviceUnregisterListener = { presenter.unregisterDevice(it) }
+        devicesAdapter.onDeviceUnregisterListener = {
+            Toast.makeText(context, "Trwa wyrejestrowywanie urządzenia", LENGTH_SHORT).show()
+            presenter.unregisterDevice(it)
+        }
     }
 
     override fun updateData(data: List<MobileDeviceItem>) {

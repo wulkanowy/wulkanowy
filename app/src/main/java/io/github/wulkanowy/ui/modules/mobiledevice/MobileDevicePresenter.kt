@@ -63,14 +63,24 @@ class MobileDevicePresenter @Inject constructor(
         Timber.i("Mobile device unregister started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
-            .flatMap { mobileDeviceRepository.unregister(it, device) }
+            .flatMap { semester ->
+                mobileDeviceRepository.unregister(semester, device)
+                .flatMap { mobileDeviceRepository.getDevices(semester, it) }
+            }
+            .map { items -> items.map { MobileDeviceItem(it) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({
-                loadData(it)
+            .doFinally {
                 view?.run {
-                    if (it) showMessage("Chyba się udało")
-                    else showMessage("Nie udało się")
+                    showProgress(false)
+                    enableSwipe(true)
+                }
+            }
+            .subscribe({
+                view?.run {
+                    updateData(it)
+                    showEmpty(it.isEmpty())
+                    showContent(it.isNotEmpty())
                 }
             }) {
                 errorHandler.dispatch(it)
