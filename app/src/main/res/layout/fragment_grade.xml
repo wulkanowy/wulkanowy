@@ -13,6 +13,8 @@
         android:elevation="4dp"
         android:visibility="invisible"
         app:tabMode="scrollable"
+        app:tabSelectedTextColor="?colorPrimary"
+        app:tabTextColor="?colorOnSurface"
         tools:ignore="UnusedAttribute"
         tools:visibility="visible" />
 
