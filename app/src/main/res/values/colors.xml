@@ -2,8 +2,6 @@
 <resources>
     <color name="colorPrimary">#d32f2f</color>
     <color name="colorPrimaryLight">#e57373</color>
-    <color name="colorPrimaryDark">#9a0007</color>
-    <color name="colorBackgroundBottomNav">#f0f0f0</color>
     <color name="colorError">#ff5722</color>
     <color name="colorErrorLight">#e84853</color>
 
