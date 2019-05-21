@@ -14,10 +14,10 @@ class ThemeManager @Inject constructor(private val preferencesRepository: Prefer
         if (isThemeApplicable(activity)) {
             activity.delegate.apply {
                 when (preferencesRepository.appTheme) {
-                    "light" -> setLocalNightMode(MODE_NIGHT_NO)
-                    "dark" -> setLocalNightMode(MODE_NIGHT_YES)
+                    "light" -> localNightMode = MODE_NIGHT_NO
+                    "dark" -> localNightMode = MODE_NIGHT_YES
                     "black" -> {
-                        setLocalNightMode(MODE_NIGHT_YES)
+                        localNightMode = MODE_NIGHT_YES
                         activity.setTheme(R.style.WulkanowyTheme_Black)
                     }
                 }

@@ -95,10 +95,15 @@ class MainActivity : BaseActivity(), MainView {
         return true
     }
 
+    @TargetApi(LOLLIPOP)
     override fun initView() {
         val elevationProvider = ElevationOverlayProvider(this)
 
-        mainAppBarContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(8f))
+        mainAppBarContainer.apply {
+            stateListAnimator = null
+            setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(8f))
+        }
+
         mainBottomNav.run {
             addItems(
                 listOf(
@@ -110,6 +115,7 @@ class MainActivity : BaseActivity(), MainView {
                 )
             )
             accentColor = getThemeAttrColor(R.attr.colorPrimary)
+            inactiveColor = getThemeAttrColor(R.attr.colorOnSurface)
             defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(1f)
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
@@ -119,7 +125,7 @@ class MainActivity : BaseActivity(), MainView {
         }
 
         navController.run {
-            setOnViewChangeListener { presenter.onViewChange() }
+            setOnViewChangeListener { presenter.onViewChange(it) }
             fragmentHideStrategy = HIDE
             rootFragments = listOf(
                 GradeFragment.newInstance(),

@@ -29,7 +29,6 @@ class MainPresenter @Inject constructor(
                 startMenuIndex = main
                 startMenuMoreIndex = more
             }
-            showActionBarElevation(startMenuIndex != 0)
             initView()
             Timber.i("Main view was initialized with $startMenuIndex menu index and $startMenuMoreIndex more index")
         }
@@ -38,8 +37,9 @@ class MainPresenter @Inject constructor(
         analytics.logEvent(APP_OPEN, DESTINATION to initMenu?.name)
     }
 
-    fun onViewChange() {
+    fun onViewChange(index: Int) {
         view?.apply {
+            if (index != -1) showActionBarElevation(index != 0)
             currentViewTitle?.let { setViewTitle(it) }
             currentStackSize?.let {
                 if (it > 1) showHomeArrow(true)
@@ -71,7 +71,6 @@ class MainPresenter @Inject constructor(
     fun onTabSelected(index: Int, wasSelected: Boolean): Boolean {
         return view?.run {
             Timber.i("Switch main tab index: $index, reselected: $wasSelected")
-            showActionBarElevation(index != 0)
             if (wasSelected) {
                 notifyMenuViewReselected()
                 false

@@ -3,14 +3,14 @@ package io.github.wulkanowy.utils
 import androidx.fragment.app.Fragment
 import com.ncapdevi.fragnav.FragNavController
 
-inline fun FragNavController.setOnViewChangeListener(crossinline listener: (fragment: Fragment?) -> Unit) {
+inline fun FragNavController.setOnViewChangeListener(crossinline listener: (index: Int) -> Unit) {
     transactionListener = object : FragNavController.TransactionListener {
         override fun onFragmentTransaction(fragment: Fragment?, transactionType: FragNavController.TransactionType) {
-            listener(fragment)
+            listener(-1)
         }
 
         override fun onTabTransaction(fragment: Fragment?, index: Int) {
-            listener(fragment)
+            listener(index)
         }
     }
 }
