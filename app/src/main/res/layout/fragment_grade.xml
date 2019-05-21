@@ -12,9 +12,7 @@
         android:background="?colorSurface"
         android:elevation="4dp"
         android:visibility="invisible"
-        app:tabIndicatorColor="?colorSecondary"
         app:tabMode="scrollable"
-        app:tabSelectedTextColor="?colorSecondary"
         tools:ignore="UnusedAttribute"
         tools:visibility="visible" />
 

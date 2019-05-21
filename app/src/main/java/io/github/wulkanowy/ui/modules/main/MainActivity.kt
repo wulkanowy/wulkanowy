@@ -109,7 +109,7 @@ class MainActivity : BaseActivity(), MainView {
                     AHBottomNavigationItem(R.string.more_title, R.drawable.ic_menu_main_more_24dp, 0)
                 )
             )
-            accentColor = getThemeAttrColor(R.attr.colorSecondary)
+            accentColor = getThemeAttrColor(R.attr.colorPrimary)
             defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(1f)
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
