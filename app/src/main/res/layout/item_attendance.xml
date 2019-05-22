@@ -13,16 +13,32 @@
     android:paddingBottom="7dp"
     tools:context=".ui.modules.attendance.AttendanceItem">
 
-    <TextView
-        android:id="@+id/attendanceItemNumber"
+    <RelativeLayout
+        android:id="@+id/attendanceItemNumberContainer"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_centerVertical="true"
-        android:gravity="center"
-        android:maxLength="2"
-        android:text="0"
-        android:textSize="32sp"
-        tools:ignore="all" />
+        android:layout_centerVertical="true">
+
+        <CheckBox
+            android:id="@+id/attendanceItemExcuseCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/attendanceItemNumber"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:maxLength="2"
+            android:text="0"
+            android:textSize="32sp"
+            tools:ignore="all" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/attendanceItemSubject"
@@ -33,8 +49,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
-        android:layout_toEndOf="@+id/attendanceItemNumber"
-        android:layout_toRightOf="@+id/attendanceItemNumber"
+        android:layout_toEndOf="@+id/attendanceItemNumberContainer"
+        android:layout_toRightOf="@+id/attendanceItemNumberContainer"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/app_name"
@@ -47,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/attendanceItemSubject"
         android:layout_alignLeft="@id/attendanceItemSubject"
-        android:layout_alignBottom="@+id/attendanceItemNumber"
+        android:layout_alignBottom="@+id/attendanceItemNumberContainer"
         android:maxLines="1"
         android:text="@string/app_name"
         android:textColor="?android:attr/android:textColorSecondary"
