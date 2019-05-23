@@ -31,6 +31,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
+import io.github.wulkanowy.utils.convertDpToPixels
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.safelyPopFragment
 import io.github.wulkanowy.utils.setOnViewChangeListener
@@ -101,7 +102,7 @@ class MainActivity : BaseActivity(), MainView {
 
         mainAppBarContainer.apply {
             if (SDK_INT >= LOLLIPOP) stateListAnimator = null
-            setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(8f))
+            setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(convertDpToPixels(4f)))
         }
 
         mainBottomNav.run {
@@ -116,7 +117,7 @@ class MainActivity : BaseActivity(), MainView {
             )
             accentColor = getThemeAttrColor(R.attr.colorPrimary)
             inactiveColor = getThemeAttrColor(R.attr.colorOnSurface)
-            defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(1f)
+            defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(convertDpToPixels(1f))
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false
@@ -163,7 +164,7 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     override fun showActionBarElevation(show: Boolean) {
-        ViewCompat.setElevation(mainAppBarContainer, if (show) 10f else 0f)
+        ViewCompat.setElevation(mainAppBarContainer, if (show) convertDpToPixels(4f) else 0f)
     }
 
     fun showExpiredDialog() {

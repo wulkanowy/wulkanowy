@@ -2,6 +2,7 @@ package io.github.wulkanowy.utils
 
 import android.content.Context
 import android.content.Intent
+import android.util.DisplayMetrics.DENSITY_DEFAULT
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
@@ -26,3 +27,5 @@ fun Context.openInternetBrowser(uri: String, onActivityNotFound: (uri: String) -
         else onActivityNotFound(uri)
     }
 }
+
+fun Context.convertDpToPixels(dp: Float) = dp * resources.displayMetrics.densityDpi / DENSITY_DEFAULT
