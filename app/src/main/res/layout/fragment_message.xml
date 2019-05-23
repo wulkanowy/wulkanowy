@@ -9,14 +9,15 @@
         android:id="@+id/messageTabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="?colorPrimary"
-        android:elevation="5dp"
+        android:background="?colorSurface"
+        android:elevation="4dp"
         android:visibility="invisible"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@android:color/white"
+        app:tabIndicatorColor="?colorPrimary"
         app:tabMaxWidth="0dp"
         app:tabMode="fixed"
-        app:tabTextColor="@android:color/white"
+        app:tabSelectedTextColor="?colorPrimary"
+        app:tabTextColor="?colorOnSurface"
         tools:ignore="UnusedAttribute"
         tools:visibility="visible" />
 
@@ -35,7 +36,7 @@
         android:layout_margin="16dp"
         android:clickable="true"
         android:focusable="true"
-        android:tint="#FFFFFF"
+        android:tint="?colorOnSecondary"
         app:srcCompat="@drawable/ic_send_message_24dp" />
 
     <ProgressBar

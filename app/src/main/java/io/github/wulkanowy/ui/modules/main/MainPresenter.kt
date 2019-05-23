@@ -22,7 +22,7 @@ class MainPresenter @Inject constructor(
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<MainView>(errorHandler) {
 
-    fun onAttachView(view: MainView, initMenu: MainView.MenuView?) {
+    fun onAttachView(view: MainView, initMenu: MainView.Section?) {
         super.onAttachView(view)
         view.apply {
             getProperViewIndexes(initMenu).let { (main, more) ->
@@ -37,9 +37,9 @@ class MainPresenter @Inject constructor(
         analytics.logEvent(APP_OPEN, DESTINATION to initMenu?.name)
     }
 
-    fun onViewChange(index: Int) {
+    fun onViewChange(section: MainView.Section?) {
         view?.apply {
-            if (index != -1) showActionBarElevation(index != 0)
+            showActionBarElevation(section != MainView.Section.GRADE && section != MainView.Section.MESSAGE)
             currentViewTitle?.let { setViewTitle(it) }
             currentStackSize?.let {
                 if (it > 1) showHomeArrow(true)
@@ -103,10 +103,10 @@ class MainPresenter @Inject constructor(
             }))
     }
 
-    private fun getProperViewIndexes(initMenu: MainView.MenuView?): Pair<Int, Int> {
+    private fun getProperViewIndexes(initMenu: MainView.Section?): Pair<Int, Int> {
         return when {
             initMenu?.id in 0..3 -> initMenu!!.id to -1
-            (initMenu?.id ?: 0) > 3 -> 4 to initMenu!!.id - 4
+            (initMenu?.id ?: 0) > 3 -> 4 to initMenu!!.id
             else -> prefRepository.startMenuIndex to -1
         }
     }

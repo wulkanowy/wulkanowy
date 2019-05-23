@@ -49,7 +49,7 @@ class MainActivity : BaseActivity(), MainView {
     companion object {
         const val EXTRA_START_MENU = "extraStartMenu"
 
-        fun getStartIntent(context: Context, startMenu: MainView.MenuView? = null, clear: Boolean = false): Intent {
+        fun getStartIntent(context: Context, startMenu: MainView.Section? = null, clear: Boolean = false): Intent {
             return Intent(context, MainActivity::class.java)
                 .apply {
                     if (clear) flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
@@ -71,11 +71,11 @@ class MainActivity : BaseActivity(), MainView {
 
     override var startMenuMoreIndex = -1
 
-    private val moreMenuFragments = listOf<Fragment>(
-        MessageFragment.newInstance(),
-        HomeworkFragment.newInstance(),
-        NoteFragment.newInstance(),
-        LuckyNumberFragment.newInstance()
+    private val moreMenuFragments = mapOf<Int, Fragment>(
+        MainView.Section.MESSAGE.id to MessageFragment.newInstance(),
+        MainView.Section.HOMEWORK.id to HomeworkFragment.newInstance(),
+        MainView.Section.NOTE.id to NoteFragment.newInstance(),
+        MainView.Section.LUCKY_NUMBER.id to LuckyNumberFragment.newInstance()
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,11 +84,11 @@ class MainActivity : BaseActivity(), MainView {
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer
 
-        presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.MenuView)
+        presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.Section)
 
         navController.run {
             initialize(startMenuIndex, savedInstanceState)
-            pushFragment(moreMenuFragments.getOrNull(startMenuMoreIndex))
+            pushFragment(moreMenuFragments[startMenuMoreIndex])
         }
     }
 
