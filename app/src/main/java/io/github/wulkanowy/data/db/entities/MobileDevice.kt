@@ -3,7 +3,6 @@ package io.github.wulkanowy.data.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import java.io.Serializable
 
@@ -13,7 +12,7 @@ data class MobileDevice(
     @ColumnInfo(name = "student_id")
     val studentId: Int,
 
-    @ColumnInfo(name = "column_id")
+    @ColumnInfo(name = "device_id")
     val deviceId: Int,
 
     val name: String,

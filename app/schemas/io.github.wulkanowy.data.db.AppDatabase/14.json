@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 14,
-    "identityHash": "24540ba9bdce73dbd2f5949c64021eca",
+    "identityHash": "ae9846fcce0c5abee8caff42a136a6fa",
     "entities": [
       {
         "tableName": "Students",
@@ -1348,7 +1348,7 @@
       },
       {
         "tableName": "MobileDevices",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `column_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `date` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `device_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `date` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -1364,7 +1364,7 @@
           },
           {
             "fieldPath": "deviceId",
-            "columnName": "column_id",
+            "columnName": "device_id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1394,7 +1394,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"24540ba9bdce73dbd2f5949c64021eca\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ae9846fcce0c5abee8caff42a136a6fa\")"
     ]
   }
 }

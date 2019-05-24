@@ -10,7 +10,7 @@ class Migration14 : Migration(13, 14) {
             CREATE TABLE IF NOT EXISTS MobileDevices (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 student_id INTEGER NOT NULL,
-                column_id INTEGER NOT NULL,
+                device_id INTEGER NOT NULL,
                 name TEXT NOT NULL,
                 date INTEGER NOT NULL
             )
