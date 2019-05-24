@@ -4,7 +4,8 @@
         <item name="colorPrimary">@color/colorPrimaryLight</item>
         <item name="colorSecondary">@color/colorPrimaryLight</item>
         <item name="colorError">@color/colorErrorLight</item>
-        <item name="colorDivider">@color/colorDivider</item>
+        <item name="colorDivider">@color/colorDividerInverse</item>
+        <item name="colorStroke">@color/colorStrokeInverse</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>

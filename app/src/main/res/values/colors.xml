@@ -6,6 +6,11 @@
     <color name="colorError">#ff5722</color>
     <color name="colorErrorLight">#e84853</color>
 
+    <color name="colorDivider">#1f000000</color>
+    <color name="colorDividerInverse">#1fffffff</color>
+    <color name="colorStroke">#61000000</color>
+    <color name="colorStrokeInverse">#61FFFFFF</color>
+
     <color name="grade_black">#424242</color>
     <color name="grade_red">#F44336</color>
     <color name="grade_blue">#2196F3</color>
@@ -33,9 +38,4 @@
     <color name="chip_detailed_backgroundColor">#fefefe</color>
     <color name="filterable_list_backgroundColor_inverse">#393939</color>
     <color name="filterable_list_textColor_inverse">#fefefe</color>
-
-    <color name="colorDivider">#1f000000</color>
-    <color name="colorDividerInverse">#1fffffff</color>
-
-    <color name="spinner_stroke">#61000000</color>
 </resources>
