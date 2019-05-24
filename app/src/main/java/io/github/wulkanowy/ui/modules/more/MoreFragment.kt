@@ -43,21 +43,21 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
         get() {
             return context?.run {
                 getString(R.string.message_title) to
-                    ContextCompat.getDrawable(this, R.drawable.ic_more_messages_24dp)
+                    ContextCompat.getDrawable(this, R.drawable.ic_more_messages)
             }
         }
 
     override val homeworkRes: Pair<String, Drawable?>?
         get() {
             return context?.run {
-                getString(R.string.homework_title) to ContextCompat.getDrawable(this, R.drawable.ic_menu_main_homework_24dp)
+                getString(R.string.homework_title) to ContextCompat.getDrawable(this, R.drawable.ic_more_homework)
             }
         }
 
     override val noteRes: Pair<String, Drawable?>?
         get() {
             return context?.run {
-                getString(R.string.note_title) to ContextCompat.getDrawable(this, R.drawable.ic_menu_main_note_24dp)
+                getString(R.string.note_title) to ContextCompat.getDrawable(this, R.drawable.ic_more_note)
             }
         }
 
@@ -65,7 +65,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
         get() {
             return context?.run {
                 getString(R.string.lucky_number_title) to
-                    ContextCompat.getDrawable(this, R.drawable.ic_more_lucky_number_24dp)
+                    ContextCompat.getDrawable(this, R.drawable.ic_more_lucky_number)
             }
         }
 
@@ -73,7 +73,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
         get() {
             return context?.run {
                 getString(R.string.settings_title) to
-                    ContextCompat.getDrawable(this, R.drawable.ic_more_settings_24dp)
+                    ContextCompat.getDrawable(this, R.drawable.ic_more_settings)
             }
         }
 
@@ -81,7 +81,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
         get() {
             return context?.run {
                 getString(R.string.about_title) to
-                    ContextCompat.getDrawable(this, R.drawable.ic_all_about_24dp)
+                    ContextCompat.getDrawable(this, R.drawable.ic_all_about)
             }
         }
 

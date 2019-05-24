@@ -54,7 +54,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/ic_more_lucky_number_24dp"
+            app:srcCompat="@drawable/ic_more_lucky_number"
             app:tint="?colorOnBackground"
             tools:ignore="ContentDescription" />
 

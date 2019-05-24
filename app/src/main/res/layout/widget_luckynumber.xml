@@ -18,7 +18,7 @@
         android:layout_marginBottom="20dp"
         android:contentDescription="@string/lucky_number_title"
         android:gravity="center"
-        android:src="@drawable/ic_widget_clover_24dp"
+        android:src="@drawable/ic_widget_clover"
         android:visibility="gone"
         tools:visibility="visible" />
 
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/luckyNumberWidgetNumber"
         android:contentDescription="@string/lucky_number_title"
-        android:src="@drawable/ic_widget_clover_24dp"
+        android:src="@drawable/ic_widget_clover"
         android:visibility="gone"
         tools:visibility="visible" />
 

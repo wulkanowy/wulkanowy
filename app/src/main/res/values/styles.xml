@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@android:color/darker_gray</item>
         <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorOnSecondary">@android:color/white</item>
         <item name="colorError">@color/colorError</item>
         <item name="colorDivider">@color/colorDivider</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>

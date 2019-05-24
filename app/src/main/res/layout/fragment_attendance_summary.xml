@@ -70,7 +70,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/ic_menu_main_attendance_24dp"
+            app:srcCompat="@drawable/ic_main_attendance"
             app:tint="?colorOnBackground"
             tools:ignore="contentDescription" />
 

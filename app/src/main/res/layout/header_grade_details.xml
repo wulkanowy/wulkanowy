@@ -55,6 +55,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/ic_all_round_note_24dp"
+        app:srcCompat="@drawable/ic_all_round_note"
         tools:ignore="contentDescription" />
 </RelativeLayout>

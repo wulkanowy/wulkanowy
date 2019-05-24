@@ -41,7 +41,7 @@ class GradeWork @Inject constructor(
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
             .setContentTitle(context.resources.getQuantityString(R.plurals.grade_new_items, grades.size, grades.size))
             .setContentText(context.resources.getQuantityString(R.plurals.grade_notify_new_items, grades.size, grades.size))
-            .setSmallIcon(R.drawable.ic_stat_notify_grade)
+            .setSmallIcon(R.drawable.ic_stat_grade)
             .setAutoCancel(true)
             .setPriority(PRIORITY_HIGH)
             .setDefaults(DEFAULT_ALL)

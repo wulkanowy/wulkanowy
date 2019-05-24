@@ -84,7 +84,7 @@ class CompletedLessonsFragment : BaseSessionFragment(), CompletedLessonsView, Ma
     override fun showFeatureDisabled() {
         context?.let {
             completedLessonsInfo.text = getString(R.string.error_feature_disabled)
-            completedLessonsInfoImage.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_all_close_circle_24dp))
+            completedLessonsInfoImage.setImageDrawable(ContextCompat.getDrawable(it, R.drawable.ic_all_close_circle))
         }
     }
 

@@ -53,7 +53,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/ic_menu_main_grade_26dp"
+            app:srcCompat="@drawable/ic_main_grade"
             app:tint="?colorOnBackground"
             tools:ignore="contentDescription" />
 

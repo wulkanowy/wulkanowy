@@ -41,7 +41,7 @@ class NoteWork @Inject constructor(
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
             .setContentTitle(context.resources.getQuantityString(R.plurals.note_new_items, notes.size, notes.size))
             .setContentText(context.resources.getQuantityString(R.plurals.note_notify_new_items, notes.size, notes.size))
-            .setSmallIcon(R.drawable.ic_stat_notify_note)
+            .setSmallIcon(R.drawable.ic_stat_note)
             .setAutoCancel(true)
             .setDefaults(DEFAULT_ALL)
             .setPriority(PRIORITY_HIGH)

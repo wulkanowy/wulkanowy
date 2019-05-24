@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/attendanceMenuSummary"
-        android:icon="@drawable/ic_menu_main_attendance_summary_24dp"
+        android:icon="@drawable/ic_menu_attendance_summary"
         android:orderInCategory="1"
         app:iconTint="?colorOnSurface"
         android:title="@string/attendance_summary_button"

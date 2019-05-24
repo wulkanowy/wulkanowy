@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/gradeMenuSemester"
-        android:icon="@drawable/ic_menu_grade_semester_24dp"
+        android:icon="@drawable/ic_menu_grade_semester"
         android:orderInCategory="1"
         android:title="@string/grade_switch_semester"
         app:iconTint="?colorOnSurface"

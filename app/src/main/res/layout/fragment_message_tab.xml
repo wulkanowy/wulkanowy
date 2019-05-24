@@ -34,7 +34,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/ic_more_messages_24dp"
+            app:srcCompat="@drawable/ic_more_messages"
             app:tint="?colorOnBackground"
             tools:ignore="contentDescription" />
 

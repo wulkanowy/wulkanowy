@@ -108,11 +108,11 @@ class MainActivity : BaseActivity(), MainView {
         mainBottomNav.run {
             addItems(
                 listOf(
-                    AHBottomNavigationItem(R.string.grade_title, R.drawable.ic_menu_main_grade_26dp, 0),
-                    AHBottomNavigationItem(R.string.attendance_title, R.drawable.ic_menu_main_attendance_24dp, 0),
-                    AHBottomNavigationItem(R.string.exam_title, R.drawable.ic_menu_main_exam_24dp, 0),
-                    AHBottomNavigationItem(R.string.timetable_title, R.drawable.ic_menu_main_timetable_24dp, 0),
-                    AHBottomNavigationItem(R.string.more_title, R.drawable.ic_menu_main_more_24dp, 0)
+                    AHBottomNavigationItem(R.string.grade_title, R.drawable.ic_main_grade, 0),
+                    AHBottomNavigationItem(R.string.attendance_title, R.drawable.ic_main_attendance, 0),
+                    AHBottomNavigationItem(R.string.exam_title, R.drawable.ic_main_exam, 0),
+                    AHBottomNavigationItem(R.string.timetable_title, R.drawable.ic_main_timetable, 0),
+                    AHBottomNavigationItem(R.string.more_title, R.drawable.ic_main_more, 0)
                 )
             )
             accentColor = getThemeAttrColor(R.attr.colorPrimary)

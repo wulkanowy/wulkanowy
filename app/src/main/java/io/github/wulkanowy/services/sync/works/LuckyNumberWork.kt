@@ -41,7 +41,7 @@ class LuckyNumberWork @Inject constructor(
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewEntriesChannel.CHANNEL_ID)
             .setContentTitle(context.getString(R.string.lucky_number_notify_new_item_title))
             .setContentText(context.getString(R.string.lucky_number_notify_new_item, luckyNumber.luckyNumber))
-            .setSmallIcon(R.drawable.ic_stat_notify_lucky_number)
+            .setSmallIcon(R.drawable.ic_stat_luckynumber)
             .setAutoCancel(true)
             .setDefaults(DEFAULT_ALL)
             .setPriority(PRIORITY_HIGH)
