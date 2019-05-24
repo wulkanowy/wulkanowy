@@ -14,11 +14,13 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.android.material.elevation.ElevationOverlayProvider
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
+import io.github.wulkanowy.utils.convertDpToPixels
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import kotlinx.android.synthetic.main.fragment_grade_statistics.*
@@ -28,6 +30,9 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
 
     @Inject
     lateinit var presenter: GradeStatisticsPresenter
+
+    @Inject
+    lateinit var elevationProvider: ElevationOverlayProvider
 
     private lateinit var subjectsAdapter: ArrayAdapter<String>
 
@@ -81,14 +86,13 @@ class GradeStatisticsFragment : BaseSessionFragment(), GradeStatisticsView, Grad
             setCenterTextColor(context.getThemeAttrColor(android.R.attr.textColorPrimary))
             animateXY(1000, 1000)
             minAngleForSlices = 25f
-            legend.apply {
-                textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
-            }
+            legend.textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
         }
 
         context?.let {
             subjectsAdapter = ArrayAdapter(it, android.R.layout.simple_spinner_item, ArrayList<String>())
             subjectsAdapter.setDropDownViewResource(R.layout.item_attendance_summary_subject)
+            gradeStatisticsSubjectsContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.convertDpToPixels(1f)))
         }
 
         gradeStatisticsSubjects.run {

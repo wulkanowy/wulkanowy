@@ -55,12 +55,12 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
+        android:id="@+id/attendanceNavContainer"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
-        android:background="?android:windowBackground"
+        android:elevation="8dp"
         android:orientation="horizontal"
-        android:elevation="10dp"
         tools:ignore="UnusedAttribute">
 
         <com.google.android.material.button.MaterialButton

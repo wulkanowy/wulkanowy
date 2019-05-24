@@ -9,12 +9,14 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.google.android.material.elevation.ElevationOverlayProvider
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.convertDpToPixels
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import kotlinx.android.synthetic.main.fragment_attendance_summary.*
 import javax.inject.Inject
@@ -26,6 +28,9 @@ class AttendanceSummaryFragment : BaseSessionFragment(), AttendanceSummaryView, 
 
     @Inject
     lateinit var attendanceSummaryAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
+
+    @Inject
+    lateinit var elevationProvider: ElevationOverlayProvider
 
     private lateinit var subjectsAdapter: ArrayAdapter<String>
 
@@ -61,6 +66,7 @@ class AttendanceSummaryFragment : BaseSessionFragment(), AttendanceSummaryView, 
         context?.let {
             subjectsAdapter = ArrayAdapter(it, android.R.layout.simple_spinner_item, ArrayList<String>())
             subjectsAdapter.setDropDownViewResource(R.layout.item_attendance_summary_subject)
+            attendanceSummarySubjectsContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.convertDpToPixels(1f)))
         }
 
         attendanceSummarySubjects.run {

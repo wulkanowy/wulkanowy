@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.elevation.ElevationOverlayProvider
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -17,6 +18,7 @@ import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.convertDpToPixels
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_attendance.*
 import javax.inject.Inject
@@ -28,6 +30,9 @@ class AttendanceFragment : BaseSessionFragment(), AttendanceView, MainView.MainC
 
     @Inject
     lateinit var attendanceAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
+
+    @Inject
+    lateinit var elevationProvider: ElevationOverlayProvider
 
     companion object {
         private const val SAVED_DATE_KEY = "CURRENT_DATE"
@@ -60,9 +65,7 @@ class AttendanceFragment : BaseSessionFragment(), AttendanceView, MainView.MainC
     }
 
     override fun initView() {
-        attendanceAdapter.apply {
-            setOnItemClickListener { presenter.onAttendanceItemSelected(it) }
-        }
+        attendanceAdapter.setOnItemClickListener { presenter.onAttendanceItemSelected(it) }
 
         attendanceRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
@@ -75,6 +78,10 @@ class AttendanceFragment : BaseSessionFragment(), AttendanceView, MainView.MainC
         attendanceSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         attendancePreviousButton.setOnClickListener { presenter.onPreviousDay() }
         attendanceNextButton.setOnClickListener { presenter.onNextDay() }
+
+        context?.let {
+            attendanceNavContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.convertDpToPixels(8f)))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

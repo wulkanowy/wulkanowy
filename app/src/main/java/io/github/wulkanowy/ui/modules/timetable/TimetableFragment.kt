@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.elevation.ElevationOverlayProvider
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -17,6 +18,7 @@ import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.timetable.completed.CompletedLessonsFragment
+import io.github.wulkanowy.utils.convertDpToPixels
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_timetable.*
 import javax.inject.Inject
@@ -28,6 +30,9 @@ class TimetableFragment : BaseSessionFragment(), TimetableView, MainView.MainChi
 
     @Inject
     lateinit var timetableAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
+
+    @Inject
+    lateinit var elevationProvider: ElevationOverlayProvider
 
     companion object {
         private const val SAVED_DATE_KEY = "CURRENT_DATE"
@@ -78,6 +83,10 @@ class TimetableFragment : BaseSessionFragment(), TimetableView, MainView.MainChi
         timetableSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         timetablePreviousButton.setOnClickListener { presenter.onPreviousDay() }
         timetableNextButton.setOnClickListener { presenter.onNextDay() }
+
+        context?.let {
+            timetableNavContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.convertDpToPixels(8f)))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

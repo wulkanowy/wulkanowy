@@ -46,6 +46,9 @@ class MainActivity : BaseActivity(), MainView {
     @Inject
     lateinit var navController: FragNavController
 
+    @Inject
+    lateinit var elevationProvider: ElevationOverlayProvider
+
     companion object {
         const val EXTRA_START_MENU = "extraStartMenu"
 
@@ -98,8 +101,6 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     override fun initView() {
-        val elevationProvider = ElevationOverlayProvider(this)
-
         mainAppBarContainer.apply {
             if (SDK_INT >= LOLLIPOP) stateListAnimator = null
             setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(convertDpToPixels(4f)))
@@ -117,7 +118,7 @@ class MainActivity : BaseActivity(), MainView {
             )
             accentColor = getThemeAttrColor(R.attr.colorPrimary)
             inactiveColor = getThemeAttrColor(R.attr.colorOnSurface)
-            defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(convertDpToPixels(1f))
+            defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(convertDpToPixels(8f))
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false

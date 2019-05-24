@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.elevation.ElevationOverlayProvider
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -13,6 +14,7 @@ import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.ui.base.session.BaseSessionFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.convertDpToPixels
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_homework.*
 import javax.inject.Inject
@@ -24,6 +26,9 @@ class HomeworkFragment : BaseSessionFragment(), HomeworkView, MainView.TitledVie
 
     @Inject
     lateinit var homeworkAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
+
+    @Inject
+    lateinit var elevationProvider: ElevationOverlayProvider
 
     companion object {
         private const val SAVED_DATE_KEY = "CURRENT_DATE"
@@ -60,6 +65,10 @@ class HomeworkFragment : BaseSessionFragment(), HomeworkView, MainView.TitledVie
         homeworkSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         homeworkPreviousButton.setOnClickListener { presenter.onPreviousDay() }
         homeworkNextButton.setOnClickListener { presenter.onNextDay() }
+
+        context?.let {
+            homeworkNavContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.convertDpToPixels(8f)))
+        }
     }
 
     override fun updateData(data: List<HomeworkItem>) {

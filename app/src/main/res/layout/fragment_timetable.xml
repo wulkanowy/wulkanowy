@@ -58,8 +58,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
-        android:background="?android:windowBackground"
-        android:elevation="10dp"
+        android:elevation="8dp"
+        android:id="@+id/timetableNavContainer"
         android:orientation="horizontal"
         tools:ignore="UnusedAttribute">
 
