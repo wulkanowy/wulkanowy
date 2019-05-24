@@ -28,9 +28,6 @@ internal class AppModule {
     @Provides
     fun provideFlexibleAdapter() = FlexibleAdapter<AbstractFlexibleItem<*>>(null, null, true)
 
-    @Provides
-    fun provideMobileDeviceFlexibleAdapter() = MobileDeviceAdapter<AbstractFlexibleItem<*>>()
-
     @Singleton
     @Provides
     fun provideFirebaseAnalytics(context: Context) = FirebaseAnalytics.getInstance(context)
