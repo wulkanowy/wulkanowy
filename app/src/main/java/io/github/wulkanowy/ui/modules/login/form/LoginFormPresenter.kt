@@ -81,7 +81,7 @@ class LoginFormPresenter @Inject constructor(
                 view?.notifyParentAccountLogged(it)
             }, {
                 Timber.i("Login result: An exception occurred")
-                analytics.logEvent("registration_form", "success" to false, "students" to -1, "endpoint" to endpoint, "error" to it.localizedMessage)
+                analytics.logEvent("registration_form", "success" to false, "students" to -1, "endpoint" to endpoint, "error" to it.localizedMessage.ifEmpty { "No message" })
                 errorHandler.dispatch(it)
             }))
     }

@@ -82,7 +82,7 @@ class HomeworkPresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    analytics.logEvent("load_homework", "items" to it.size, "force_refresh" to forceRefresh, "start_date" to currentDate.toFormattedString("yyyy-MM-dd"))
+                    analytics.logEvent("load_homework", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
                     Timber.i("Loading homework result: An exception occurred")
                     view?.run { showEmpty(isViewEmpty()) }

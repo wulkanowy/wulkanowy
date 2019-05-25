@@ -95,7 +95,7 @@ class ExamPresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    analytics.logEvent("load_exam", "items" to it.size, "force_refresh" to forceRefresh, "start_date" to currentDate.toFormattedString("yyyy-MM-dd"))
+                    analytics.logEvent("load_exam", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
                     Timber.i("Loading exam result: An exception occurred")
                     view?.run { showEmpty(isViewEmpty) }

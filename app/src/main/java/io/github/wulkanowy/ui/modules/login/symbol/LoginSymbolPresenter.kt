@@ -70,7 +70,7 @@ class LoginSymbolPresenter @Inject constructor(
                     }
                 }, {
                     Timber.i("Login with symbol result: An exception occurred")
-                    analytics.logEvent("registration_symbol", "success" to false, "students" to -1, "endpoint" to loginData?.third, "symbol" to symbol, "error" to it.localizedMessage)
+                    analytics.logEvent("registration_symbol", "success" to false, "students" to -1, "endpoint" to loginData?.third, "symbol" to symbol, "error" to it.localizedMessage.ifEmpty { "No message" })
                     errorHandler.dispatch(it)
                 }))
     }

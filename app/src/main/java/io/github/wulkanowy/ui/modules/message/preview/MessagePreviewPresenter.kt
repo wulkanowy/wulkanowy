@@ -52,7 +52,7 @@ class MessagePreviewPresenter @Inject constructor(
                             else setSender(it.sender)
                         }
                     }
-                    analytics.logEvent("load_message_preview", "start_date" to message.date.toFormattedString("yyyy.MM.dd"), "length" to message.content?.length)
+                    analytics.logEvent("load_message_preview", "length" to message.content?.length)
                 }) {
                     Timber.i("Loading message $id preview result: An exception occurred ")
                     view?.showMessageError()
