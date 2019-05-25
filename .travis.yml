@@ -48,13 +48,13 @@ before_script:
 script:
   - ./gradlew dependencies --stacktrace --daemon
   - fossa --no-ansi || true
-  - ./gradlew lint -x fabricGenerateResourcesFdroidRelease -x fabricGenerateResourcesPlayRelease --stacktrace --daemon
-  - ./gradlew test -x fabricGenerateResourcesFdroidRelease -x fabricGenerateResourcesPlayRelease --stacktrace --daemon
+  - ./gradlew lintPlayRelease -x fabricGenerateResourcesPlayRelease --stacktrace --daemon
+  - ./gradlew testPlayDebugUnitTest -x fabricGenerateResourcesPlay --stacktrace --daemon
   - ./gradlew createPlayDebugCoverageReport --stacktrace --daemon
   - ./gradlew jacocoTestReport --stacktrace --daemon
   - if [ -z ${SONAR_HOST+x} ]; then echo "sonar scan skipped"; else
       git fetch --unshallow;
-      ./gradlew sonarqube -x test -x lint -x fabricGenerateResourcesFdroidRelease -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY -Dsonar.branch.name=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} --stacktrace --daemon;
+      ./gradlew sonarqube -x test -x lint -x fabricGenerateResourcesPlayRelease -x fabricGenerateResourcesFdroidRelease -Dsonar.host.url=$SONAR_HOST -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_KEY -Dsonar.branch.name=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} --stacktrace --daemon;
     fi
   - |
     if [ $TRAVIS_TAG ]; then
