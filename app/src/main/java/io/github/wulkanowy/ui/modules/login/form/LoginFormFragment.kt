@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.login.form
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +10,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.EditorInfo.IME_NULL
 import android.widget.ArrayAdapter
-import androidx.core.view.ViewCompat
 import io.github.wulkanowy.BuildConfig.VERSION_NAME
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
-import io.github.wulkanowy.utils.convertDpToPixels
-import io.github.wulkanowy.utils.getCompatDrawable
-import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.setOnItemSelectedListener
@@ -69,10 +64,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         context?.let {
             loginFormHost.adapter = ArrayAdapter.createFromResource(it, R.array.endpoints_keys, android.R.layout.simple_spinner_item)
                 .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
-
-            val drawable = it.getCompatDrawable(R.drawable.ic_login_outlined_border) as GradientDrawable
-            drawable.setStroke(it.convertDpToPixels(1.5f).toInt(), it.getThemeAttrColor(R.attr.colorStroke))
-            ViewCompat.setBackground(loginFormHost, drawable)
         }
     }
 

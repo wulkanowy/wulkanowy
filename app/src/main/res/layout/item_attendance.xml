@@ -60,6 +60,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/ic_all_note"
+        app:srcCompat="@drawable/ic_all_mark"
+        app:tint="?colorPrimary"
         tools:ignore="contentDescription" />
 </RelativeLayout>

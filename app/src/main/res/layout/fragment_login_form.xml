@@ -124,6 +124,7 @@
                     android:id="@+id/loginFormHost"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
+                    android:background="@drawable/ic_login_outlined_border"
                     android:entries="@array/endpoints_keys" />
             </LinearLayout>
 
