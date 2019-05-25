@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.homework
 
-import com.google.firebase.analytics.FirebaseAnalytics.Param.START_DATE
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.homework.HomeworkRepository
@@ -8,13 +7,7 @@ import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
 import io.github.wulkanowy.ui.base.session.SessionErrorHandler
-import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
-import io.github.wulkanowy.utils.SchedulersProvider
-import io.github.wulkanowy.utils.friday
-import io.github.wulkanowy.utils.isHolidays
-import io.github.wulkanowy.utils.monday
-import io.github.wulkanowy.utils.nextOrSameSchoolDay
-import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.*
 import org.threeten.bp.LocalDate
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -89,7 +82,7 @@ class HomeworkPresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    analytics.logEvent("load_homework", "items" to it.size, "force_refresh" to forceRefresh, START_DATE to currentDate.toFormattedString("yyyy-MM-dd"))
+                    analytics.logEvent("load_homework", "items" to it.size, "force_refresh" to forceRefresh, "start_date" to currentDate.toFormattedString("yyyy-MM-dd"))
                 }) {
                     Timber.i("Loading homework result: An exception occurred")
                     view?.run { showEmpty(isViewEmpty()) }
