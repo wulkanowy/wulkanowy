@@ -10,8 +10,9 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="50dp">
 
-        <ProgressBar
+        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
             android:id="@+id/completedLessonsProgress"
+            style="@style/Widget.MaterialProgressBar.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -59,12 +60,12 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
+        android:id="@+id/completedLessonsNavContainer"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
-        android:id="@+id/completedLessonsNavContainer"
-        android:orientation="horizontal"
         android:elevation="8dp"
+        android:orientation="horizontal"
         tools:ignore="UnusedAttribute">
 
         <com.google.android.material.button.MaterialButton
