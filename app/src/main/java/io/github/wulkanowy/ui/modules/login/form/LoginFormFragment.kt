@@ -38,7 +38,11 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         get() = loginFormPass.text.toString()
 
     override val formHostValue: String?
-        get() = null
+        get() = hostValues.getOrNull(hostKeys.indexOf(loginFormHost.text.toString()))
+
+    private lateinit var hostKeys: Array<String>
+
+    private lateinit var hostValues: Array<String>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_form, container, false)
@@ -50,8 +54,12 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     }
 
     override fun initView() {
+        hostKeys = resources.getStringArray(R.array.endpoints_keys)
+        hostValues = resources.getStringArray(R.array.endpoints_values)
+
         loginFormName.setOnTextChangedListener { presenter.onNameTextChanged() }
         loginFormPass.setOnTextChangedListener { presenter.onPassTextChanged() }
+        loginFormHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
         loginFormPrivacyLink.setOnClickListener { presenter.onPrivacyLinkClick() }
 
@@ -60,13 +68,12 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
 
         context?.let {
-            val adapter = ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, resources.getStringArray(R.array.endpoints_keys))
-            loginFormHost.setAdapter(adapter)
+            loginFormHost.setAdapter(ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, hostKeys))
             loginFormHost.keyListener = null
         }
     }
 
-    override fun setDefaultCredentials(name: String, pass: String) {
+    override fun setCredentials(name: String, pass: String) {
         loginFormName.setText(name)
         loginFormPass.setText(pass)
     }
