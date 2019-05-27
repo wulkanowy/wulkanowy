@@ -17,7 +17,6 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.openInternetBrowser
-import io.github.wulkanowy.utils.setOnItemSelectedListener
 import io.github.wulkanowy.utils.setOnTextChangedListener
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.fragment_login_form.*
@@ -39,7 +38,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         get() = loginFormPass.text.toString()
 
     override val formHostValue: String?
-        get() = resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
+        get() = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_form, container, false)
@@ -53,7 +52,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override fun initView() {
         loginFormName.setOnTextChangedListener { presenter.onNameTextChanged() }
         loginFormPass.setOnTextChangedListener { presenter.onPassTextChanged() }
-        loginFormHost.setOnItemSelectedListener { presenter.onHostSelected() }
         loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
         loginFormPrivacyLink.setOnClickListener { presenter.onPrivacyLinkClick() }
 
@@ -62,8 +60,9 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
 
         context?.let {
-            loginFormHost.adapter = ArrayAdapter.createFromResource(it, R.array.endpoints_keys, android.R.layout.simple_spinner_item)
-                .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+            val adapter = ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, resources.getStringArray(R.array.endpoints_keys))
+            loginFormHost.setAdapter(adapter)
+            loginFormHost.keyListener = null
         }
     }
 
@@ -140,7 +139,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, Triple(
             loginFormName.text.toString(),
             loginFormPass.text.toString(),
-            resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
+            resources.getStringArray(R.array.endpoints_values)[1]
         ))
     }
 
