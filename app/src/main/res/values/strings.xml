@@ -114,6 +114,8 @@
         <item quantity="other">%1$d absences</item>
     </plurals>
 
+    <string name="attendance_excuse">Excuse</string>
+
 
     <!--Attendance summary-->
     <string name="attendance_summary_final">Attendance</string>
