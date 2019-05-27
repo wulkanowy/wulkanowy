@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/attendanceMenuSummary"
         android:icon="@drawable/ic_menu_main_attendance_summary_24dp"
         android:orderInCategory="1"
         android:title="@string/attendance_summary_button"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/attendanceMenuExcuse"
+        android:icon="@drawable/ic_menu_main_attendance_excuse_24dp"
+        android:orderInCategory="2"
+        android:title="@string/attendance_excuse"
+        android:visible="false"
+        app:showAsAction="ifRoom"
+        tools:visible="true" />
 </menu>
