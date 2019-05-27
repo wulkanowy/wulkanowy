@@ -12,7 +12,7 @@ import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.github.wulkanowy.R
-import io.github.wulkanowy.utils.logger.FragmentLifecycleLogger
+import io.github.wulkanowy.utils.FragmentLifecycleLogger
 import javax.inject.Inject
 
 abstract class BaseActivity : AppCompatActivity(), BaseView, HasSupportFragmentInjector {

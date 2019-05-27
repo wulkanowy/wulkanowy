@@ -1,4 +1,4 @@
-package io.github.wulkanowy.utils.logger
+package io.github.wulkanowy.utils
 
 import android.app.Activity
 import android.app.Application
@@ -10,6 +10,13 @@ import androidx.fragment.app.FragmentManager
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+
+class DebugLogTree : Timber.DebugTree() {
+
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        super.log(priority, "Wulkanowy", message, t)
+    }
+}
 
 class ActivityLifecycleLogger : Application.ActivityLifecycleCallbacks {
 

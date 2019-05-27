@@ -12,10 +12,10 @@ import eu.davidea.flexibleadapter.utils.Log
 import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.di.DaggerAppComponent
 import io.github.wulkanowy.services.sync.SyncWorkerFactory
-import io.github.wulkanowy.utils.logger.ActivityLifecycleLogger
-import io.github.wulkanowy.utils.logger.CrashlyticsTree
-import io.github.wulkanowy.utils.logger.DebugLogTree
-import io.github.wulkanowy.utils.logger.initCrashlytics
+import io.github.wulkanowy.utils.ActivityLifecycleLogger
+import io.github.wulkanowy.utils.CrashlyticsTree
+import io.github.wulkanowy.utils.DebugLogTree
+import io.github.wulkanowy.utils.initCrashlytics
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
