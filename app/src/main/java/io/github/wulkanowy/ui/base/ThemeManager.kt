@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ThemeManager @Inject constructor(private val preferencesRepository: PreferencesRepository) {
 
     fun applyTheme(activity: AppCompatActivity) {
