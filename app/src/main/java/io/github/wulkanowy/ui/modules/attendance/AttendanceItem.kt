@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.attendance
 
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -26,6 +27,8 @@ class AttendanceItem(val attendance: Attendance) : AbstractFlexibleItem<Attendan
             attendanceItemSubject.text = attendance.subject
             attendanceItemDescription.text = attendance.name
             attendanceItemAlert.visibility = attendance.run { if (absence && !excused) VISIBLE else INVISIBLE }
+            attendanceItemNumber.visibility = if (attendance.excusable) GONE else VISIBLE
+            attendanceItemExcuseCheckbox.visibility = if (attendance.excusable) VISIBLE else GONE
         }
     }
 
@@ -45,6 +48,9 @@ class AttendanceItem(val attendance: Attendance) : AbstractFlexibleItem<Attendan
         result = 31 * result + attendance.id.toInt()
         return result
     }
+
+    private val Attendance.excusable: Boolean
+        get() = (absence || lateness) && !excused
 
     class ViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
         override val containerView: View
