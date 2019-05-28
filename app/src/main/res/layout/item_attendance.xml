@@ -19,6 +19,7 @@
         android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:gravity="center"
+        android:includeFontPadding="false"
         android:maxLength="2"
         android:textSize="32sp"
         tools:text="5" />
