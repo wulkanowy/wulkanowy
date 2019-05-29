@@ -67,6 +67,12 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
             if (id == IME_ACTION_DONE || id == IME_NULL) loginFormSignIn.callOnClick() else false
         }
 
+        loginFormHost.apply {
+            setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
+            setText(hostKeys.getOrElse(0) { "" })
+            keyListener = null
+        }
+
         context?.let {
             loginFormHost.setAdapter(ArrayAdapter(it, R.layout.support_simple_spinner_dropdown_item, hostKeys))
             loginFormHost.keyListener = null
