@@ -20,7 +20,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.main.MainActivity
-import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
+import io.github.wulkanowy.ui.modules.main.MainView.MenuView
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
@@ -130,9 +130,8 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                     putExtra(EXTRA_FROM_PROVIDER, true)
                 }, FLAG_UPDATE_CURRENT))
             setPendingIntentTemplate(R.id.timetableWidgetList,
-                PendingIntent.getActivity(context, 1, MainActivity.getStartIntent(context).apply {
-                    putExtra(EXTRA_START_MENU_INDEX, 3)
-                }, FLAG_UPDATE_CURRENT))
+                PendingIntent.getActivity(context, MenuView.TIMETABLE.id,
+                    MainActivity.getStartIntent(context, MenuView.TIMETABLE, true), FLAG_UPDATE_CURRENT))
         }.also {
             sharedPref.putLong(getDateWidgetKey(appWidgetId), date.toEpochDay(), true)
             appWidgetManager.apply {
@@ -151,20 +150,23 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             }, FLAG_UPDATE_CURRENT)
     }
 
-    private fun getStudent(id: Long, appWidgetId: Int): Student? {
+    private fun getStudent(studentId: Long, appWidgetId: Int): Student? {
         return try {
             studentRepository.isStudentSaved()
                 .filter { true }
                 .flatMap { studentRepository.getSavedStudents(false).toMaybe() }
                 .flatMap { students ->
-                    students.singleOrNull { student -> student.id == id }
+                    students.singleOrNull { student -> student.id == studentId }
                         .let { student ->
-                            if (student != null) {
-                                Maybe.just(student)
-                            } else {
-                                studentRepository.getCurrentStudent(false)
-                                    .toMaybe()
-                                    .doOnSuccess { sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id) }
+                            when {
+                                student != null -> Maybe.just(student)
+                                studentId != 0L -> {
+                                    studentRepository.isCurrentStudentSet()
+                                        .filter { true }
+                                        .flatMap { studentRepository.getCurrentStudent(false).toMaybe() }
+                                        .doOnSuccess { sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id) }
+                                }
+                                else -> Maybe.empty()
                             }
                         }
                 }

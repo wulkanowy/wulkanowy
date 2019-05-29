@@ -15,7 +15,7 @@ import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.EXTRA_FROM_PROVIDER
 import io.github.wulkanowy.utils.setOnItemClickListener
-import kotlinx.android.synthetic.main.activity_timetable_widget_configure.*
+import kotlinx.android.synthetic.main.activity_widget_configure.*
 import javax.inject.Inject
 
 class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigureView {
@@ -29,7 +29,7 @@ class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigur
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(RESULT_CANCELED)
-        setContentView(R.layout.activity_timetable_widget_configure)
+        setContentView(R.layout.activity_widget_configure)
 
         intent.extras.let {
             presenter.onAttachView(this, it?.getInt(EXTRA_APPWIDGET_ID), it?.getBoolean(EXTRA_FROM_PROVIDER))
@@ -37,7 +37,7 @@ class TimetableWidgetConfigureActivity : BaseActivity(), TimetableWidgetConfigur
     }
 
     override fun initView() {
-        timetableWidgetConfigureRecycler.apply {
+        widgetConfigureRecycler.apply {
             adapter = configureAdapter
             layoutManager = SmoothScrollLinearLayoutManager(context)
         }

@@ -16,7 +16,7 @@ import io.github.wulkanowy.data.repositories.message.MessageRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
-import io.github.wulkanowy.ui.modules.main.MainActivity.Companion.EXTRA_START_MENU_INDEX
+import io.github.wulkanowy.ui.modules.main.MainView.MenuView
 import io.github.wulkanowy.utils.getCompatColor
 import io.reactivex.Completable
 import javax.inject.Inject
@@ -48,8 +48,8 @@ class MessageWork @Inject constructor(
             .setPriority(PRIORITY_HIGH)
             .setColor(context.getCompatColor(R.color.colorPrimary))
             .setContentIntent(
-                PendingIntent.getActivity(context, 0, MainActivity.getStartIntent(context)
-                    .putExtra(EXTRA_START_MENU_INDEX, 4), FLAG_UPDATE_CURRENT)
+                PendingIntent.getActivity(context, MenuView.MESSAGE.id,
+                    MainActivity.getStartIntent(context, MenuView.MESSAGE, true), FLAG_UPDATE_CURRENT)
             )
             .setStyle(NotificationCompat.InboxStyle().run {
                 setSummaryText(context.resources.getQuantityString(R.plurals.message_number_item, messages.size, messages.size))

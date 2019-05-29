@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
+import io.github.wulkanowy.utils.uniqueSubtract
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -34,8 +35,8 @@ class MessageRepository @Inject constructor(
                         }.flatMap { new ->
                             local.getMessages(student, folder).toSingle(emptyList())
                                 .doOnSuccess { old ->
-                                    local.deleteMessages(old - new)
-                                    local.saveMessages((new - old)
+                                    local.deleteMessages(old.uniqueSubtract(new))
+                                    local.saveMessages(new.uniqueSubtract(old)
                                         .onEach {
                                             it.isNotified = !notify
                                         })
@@ -45,14 +46,14 @@ class MessageRepository @Inject constructor(
             }
     }
 
-    fun getMessage(student: Student, messageId: Int, markAsRead: Boolean = false): Single<Message> {
+    fun getMessage(student: Student, messageDbId: Long, markAsRead: Boolean = false): Single<Message> {
         return Single.just(apiHelper.initApi(student))
             .flatMap { _ ->
-                local.getMessage(student, messageId)
+                local.getMessage(messageDbId)
                     .filter { !it.content.isNullOrEmpty() }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                         .flatMap {
-                            if (it) local.getMessage(student, messageId).toSingle()
+                            if (it) local.getMessage(messageDbId).toSingle()
                             else Single.error(UnknownHostException())
                         }
                         .flatMap { dbMessage ->
@@ -63,7 +64,7 @@ class MessageRepository @Inject constructor(
                                 }))
                             }
                         }.flatMap {
-                            local.getMessage(student, messageId).toSingle()
+                            local.getMessage(messageDbId).toSingle()
                         }
                     )
             }
