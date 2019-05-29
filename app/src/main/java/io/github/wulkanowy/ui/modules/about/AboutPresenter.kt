@@ -26,8 +26,7 @@ class AboutPresenter @Inject constructor(
                 feedbackRes?.first -> openEmailClient()
                 discordRes?.first -> openDiscordInvite()
                 homepageRes?.first -> openHomepage()
-                licensesRes?.first -> {
-                }
+                licensesRes?.first -> openLicenses()
                 privacyRes?.first -> openPrivacyPolicy()
             }
         }
