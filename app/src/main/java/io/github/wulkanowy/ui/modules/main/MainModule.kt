@@ -8,7 +8,6 @@ import dagger.android.ContributesAndroidInjector
 import io.github.wulkanowy.R
 import io.github.wulkanowy.di.scopes.PerFragment
 import io.github.wulkanowy.ui.modules.about.AboutFragment
-import io.github.wulkanowy.ui.modules.about.AboutModule
 import io.github.wulkanowy.ui.modules.account.AccountDialog
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
@@ -77,7 +76,7 @@ abstract class MainModule {
     abstract fun bindTimetableFragment(): TimetableFragment
 
     @PerFragment
-    @ContributesAndroidInjector(modules = [AboutModule::class])
+    @ContributesAndroidInjector
     abstract fun bindAboutFragment(): AboutFragment
 
     @PerFragment
