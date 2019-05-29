@@ -11,7 +11,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_about.*
 
 class AboutItem(
-    private val title: String,
+    val title: String,
     private val summary: String,
     private val image: Drawable?
 ) : AbstractFlexibleItem<AboutItem.ViewHolder>() {

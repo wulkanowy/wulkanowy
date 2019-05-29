@@ -1,8 +1,15 @@
 package io.github.wulkanowy.ui.modules.about
 
 import android.content.Intent
+import android.content.Intent.ACTION_SENDTO
+import android.content.Intent.EXTRA_EMAIL
+import android.content.Intent.EXTRA_SUBJECT
+import android.content.Intent.EXTRA_TEXT
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build.MANUFACTURER
+import android.os.Build.MODEL
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +24,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.openInternetBrowser
+import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_about.*
 import javax.inject.Inject
 
@@ -75,6 +83,8 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
     }
 
     override fun initView() {
+        aboutAdapter.setOnItemClickListener { presenter.onItemSelected(it) }
+
         aboutRecycler.apply {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = aboutAdapter
@@ -89,33 +99,43 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
         }
     }
 
-    override fun openDiscordInviteView() {
+    override fun openDiscordInvite() {
         context?.openInternetBrowser("https://discord.gg/vccAQBr", ::showMessage)
     }
 
-    override fun openHomepageWebView() {
+    override fun openHomepage() {
         context?.openInternetBrowser("https://wulkanowy.github.io/", ::showMessage)
     }
 
-    override fun openEmailClientView() {
-        val intent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:")
-            putExtra(Intent.EXTRA_EMAIL, Array(1) { "wulkanowyinc@gmail.com" })
-            putExtra(Intent.EXTRA_SUBJECT, "Zgłoszenie błędu")
-            putExtra(Intent.EXTRA_TEXT, "Tu umieść treść zgłoszenia\n\n" + "-".repeat(40) + "\n" + """
-                Build: $VERSION_CODE
-                SDK: ${android.os.Build.VERSION.SDK_INT}
-                Device: ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL}
-            """.trimIndent())
-        }
+    override fun openEmailClient() {
+        val intent = Intent(ACTION_SENDTO)
+            .apply {
+                data = Uri.parse("mailto:")
+                putExtra(EXTRA_EMAIL, arrayOf("wulkanowyinc@gmail.com"))
+                putExtra(EXTRA_SUBJECT, "Zgłoszenie błędu")
+                putExtra(EXTRA_TEXT, "Tu umieść treść zgłoszenia\n\n${"-".repeat(40)}\n " +
+                    """
+                        Build: $VERSION_CODE
+                        SDK: $SDK_INT
+                        Device: $MANUFACTURER $MODEL
+                    """.trimIndent())
+            }
 
         context?.let {
             if (intent.resolveActivity(it.packageManager) != null) {
-                //startActivity(Intent.createChooser(intent, getString(R.string.about_feedback)))
+                startActivity(Intent.createChooser(intent, getString(R.string.about_feedback)))
             } else {
                 it.openInternetBrowser("https://github.com/wulkanowy/wulkanowy/issues", ::showMessage)
             }
         }
+    }
+
+    override fun openLicenses() {
+        showMessage("Not implemented")
+    }
+
+    override fun openPrivacyPolicy() {
+        context?.openInternetBrowser("https://wulkanowy.github.io/polityka-prywatnosci.html", ::showMessage)
     }
 
     override fun onDestroyView() {

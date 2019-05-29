@@ -16,17 +16,16 @@ class MorePresenter @Inject constructor(errorHandler: ErrorHandler) : BasePresen
     }
 
     fun onItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is MoreItem) {
-            Timber.i("Select more item \"${item.title}\"")
-            view?.run {
-                when (item.title) {
-                    messagesRes?.first -> openMessagesView()
-                    homeworkRes?.first -> openHomeworkView()
-                    noteRes?.first -> openNoteView()
-                    luckyNumberRes?.first -> openLuckyNumberView()
-                    settingsRes?.first -> openSettingsView()
-                    aboutRes?.first -> openAboutView()
-                }
+        if (item !is MoreItem) return
+        Timber.i("Select more item \"${item.title}\"")
+        view?.run {
+            when (item.title) {
+                messagesRes?.first -> openMessagesView()
+                homeworkRes?.first -> openHomeworkView()
+                noteRes?.first -> openNoteView()
+                luckyNumberRes?.first -> openLuckyNumberView()
+                settingsRes?.first -> openSettingsView()
+                aboutRes?.first -> openAboutView()
             }
         }
     }

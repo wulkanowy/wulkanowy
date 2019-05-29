@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.about
 
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
@@ -16,6 +17,20 @@ class AboutPresenter @Inject constructor(
         view.initView()
         Timber.i("About view was initialized")
         loadData()
+    }
+
+    fun onItemSelected(item: AbstractFlexibleItem<*>) {
+        if (item !is AboutItem) return
+        view?.apply {
+            when (item.title) {
+                feedbackRes?.first -> openEmailClient()
+                discordRes?.first -> openDiscordInvite()
+                homepageRes?.first -> openHomepage()
+                licensesRes?.first -> {
+                }
+                privacyRes?.first -> openPrivacyPolicy()
+            }
+        }
     }
 
     private fun loadData() {
