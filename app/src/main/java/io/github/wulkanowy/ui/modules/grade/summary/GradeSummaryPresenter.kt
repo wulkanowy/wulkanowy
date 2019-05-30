@@ -97,7 +97,7 @@ class GradeSummaryPresenter @Inject constructor(
                     .map {
                         GradeSummaryItem(
                             title = it.subject,
-                            average = formatAverage(filteredAverages.getOrElse(it.subject) { 0.0 }, ""),
+                            average = if (.0 != it.average) formatAverage(it.average) else formatAverage(filteredAverages.getOrElse(it.subject) { 0.0 }, ""),
                             predictedGrade = it.predictedGrade,
                             finalGrade = it.finalGrade
                         )

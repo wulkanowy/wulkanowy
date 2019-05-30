@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules.grade
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
+import io.github.wulkanowy.data.repositories.gradessummary.GradeSummaryRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
@@ -11,7 +12,8 @@ import javax.inject.Inject
 
 class GradeAverageProvider @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
-    private val gradeRepository: GradeRepository
+    private val gradeRepository: GradeRepository,
+    private val gradeSummaryRepository: GradeSummaryRepository
 ) {
     fun getGradeAverage(student: Student, semesters: List<Semester>, selectedSemesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
         return when (preferencesRepository.gradeAverageMode) {
