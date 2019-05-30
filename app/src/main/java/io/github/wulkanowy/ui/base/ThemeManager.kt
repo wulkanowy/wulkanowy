@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.base
 
 import android.content.pm.PackageManager.GET_ACTIVITIES
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import io.github.wulkanowy.R
@@ -12,19 +13,20 @@ import javax.inject.Singleton
 @Singleton
 class ThemeManager @Inject constructor(private val preferencesRepository: PreferencesRepository) {
 
-    fun applyTheme(activity: AppCompatActivity) {
+    fun applyActivityTheme(activity: AppCompatActivity) {
         if (isThemeApplicable(activity)) {
-            activity.delegate.apply {
-                when (preferencesRepository.appTheme) {
-                    "light" -> localNightMode = MODE_NIGHT_NO
-                    "dark" -> localNightMode = MODE_NIGHT_YES
-                    "black" -> {
-                        localNightMode = MODE_NIGHT_YES
-                        activity.setTheme(R.style.WulkanowyTheme_Black)
-                    }
-                }
-            }
+            applyDefaultTheme()
+            if (preferencesRepository.appTheme == "black") activity.setTheme(R.style.WulkanowyTheme_Black)
         }
+    }
+
+    fun applyDefaultTheme() {
+        AppCompatDelegate.setDefaultNightMode(
+            when (preferencesRepository.appTheme) {
+                "light" -> MODE_NIGHT_NO
+                else -> MODE_NIGHT_YES
+            }
+        )
     }
 
     private fun isThemeApplicable(activity: AppCompatActivity): Boolean {

@@ -16,6 +16,7 @@ import io.github.wulkanowy.BuildConfig.CRASHLYTICS_ENABLED
 import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.di.DaggerAppComponent
 import io.github.wulkanowy.services.sync.SyncWorkerFactory
+import io.github.wulkanowy.ui.base.ThemeManager
 import io.github.wulkanowy.utils.ActivityLifecycleLogger
 import io.github.wulkanowy.utils.CrashlyticsTree
 import io.github.wulkanowy.utils.DebugLogTree
@@ -30,6 +31,9 @@ class WulkanowyApp : DaggerApplication() {
     @Inject
     lateinit var workerFactory: SyncWorkerFactory
 
+    @Inject
+    lateinit var themeManager: ThemeManager
+
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
@@ -40,6 +44,7 @@ class WulkanowyApp : DaggerApplication() {
         AndroidThreeTen.init(this)
         WorkManager.initialize(this, Configuration.Builder().setWorkerFactory(workerFactory).build())
         RxJavaPlugins.setErrorHandler(::onError)
+        themeManager.applyDefaultTheme()
 
         initCrashlytics()
         initLogging()

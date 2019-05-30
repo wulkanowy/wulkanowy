@@ -34,7 +34,7 @@ abstract class BaseActivity : AppCompatActivity(), BaseView, HasSupportFragmentI
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        themeManager.applyTheme(this)
+        themeManager.applyActivityTheme(this)
         super.onCreate(savedInstanceState)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleLogger, true)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
