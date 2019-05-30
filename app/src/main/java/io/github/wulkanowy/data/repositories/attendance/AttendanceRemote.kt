@@ -28,7 +28,8 @@ class AttendanceRemote @Inject constructor(private val api: Api) {
                         exemption = it.exemption,
                         lateness = it.lateness,
                         excused = it.excused,
-                        deleted = it.deleted
+                        deleted = it.deleted,
+                        excusable = it.excusable
                     )
                 }
             }

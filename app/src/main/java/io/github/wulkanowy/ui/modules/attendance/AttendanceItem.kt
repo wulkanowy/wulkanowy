@@ -49,9 +49,6 @@ class AttendanceItem(val attendance: Attendance) : AbstractFlexibleItem<Attendan
         return result
     }
 
-    private val Attendance.excusable: Boolean
-        get() = (absence || lateness) && !excused
-
     class ViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
         override val containerView: View
             get() = contentView

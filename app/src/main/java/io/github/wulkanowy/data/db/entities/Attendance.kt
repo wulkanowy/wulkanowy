@@ -33,7 +33,9 @@ data class Attendance(
 
     val excused: Boolean,
 
-    val deleted: Boolean
+    val deleted: Boolean,
+
+    val excusable: Boolean
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
