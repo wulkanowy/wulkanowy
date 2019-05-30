@@ -46,7 +46,6 @@ class MainActivity : BaseActivity(), MainView {
     @Inject
     lateinit var navController: FragNavController
 
-    @Inject
     lateinit var elevationProvider: ElevationOverlayProvider
 
     companion object {
@@ -86,6 +85,7 @@ class MainActivity : BaseActivity(), MainView {
         setContentView(R.layout.activity_main)
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer
+        if (!::elevationProvider.isInitialized) elevationProvider = ElevationOverlayProvider(this)
 
         presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.Section)
 
