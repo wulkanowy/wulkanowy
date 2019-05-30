@@ -155,6 +155,7 @@ class GradeAverageProviderTest {
             average = value,
             pointsSum = "",
             proposedPoints = "",
+            finalPoints = "",
             finalGrade = "",
             predictedGrade = "",
             position = 0

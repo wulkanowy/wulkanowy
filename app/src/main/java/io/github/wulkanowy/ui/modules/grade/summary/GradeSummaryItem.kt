@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.summary
 
+import android.annotation.SuppressLint
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -23,13 +24,14 @@ class GradeSummaryItem(
         return ViewHolder(view, adapter)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>?) {
         holder.run {
             gradeSummaryItemTitle.text = summary.subject
             gradeSummaryItemPoints.text = summary.pointsSum
             gradeSummaryItemAverage.text = average
-            gradeSummaryItemPredicted.text = summary.predictedGrade
-            gradeSummaryItemFinal.text = summary.finalGrade
+            gradeSummaryItemPredicted.text = "${summary.predictedGrade} ${summary.proposedPoints}".trim()
+            gradeSummaryItemFinal.text = "${summary.finalGrade} ${summary.finalPoints}".trim()
 
             gradeSummaryItemPointsContainer.visibility = if (summary.pointsSum.isBlank()) GONE else VISIBLE
         }

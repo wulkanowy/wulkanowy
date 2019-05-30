@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 14,
-    "identityHash": "3e81aa951a76b88c3e1e2d6137dff92a",
+    "identityHash": "b22945c41e7841ff2e6b16af346dde0c",
     "entities": [
       {
         "tableName": "Students",
@@ -704,7 +704,7 @@
       },
       {
         "tableName": "GradesSummary",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `position` INTEGER NOT NULL, `subject` TEXT NOT NULL, `predicted_grade` TEXT NOT NULL, `final_grade` TEXT NOT NULL, `proposed_points` TEXT NOT NULL, `points_sum` TEXT NOT NULL, `average` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `position` INTEGER NOT NULL, `subject` TEXT NOT NULL, `predicted_grade` TEXT NOT NULL, `final_grade` TEXT NOT NULL, `proposed_points` TEXT NOT NULL, `final_points` TEXT NOT NULL, `points_sum` TEXT NOT NULL, `average` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -751,6 +751,12 @@
           {
             "fieldPath": "proposedPoints",
             "columnName": "proposed_points",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "finalPoints",
+            "columnName": "final_points",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1374,7 +1380,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"3e81aa951a76b88c3e1e2d6137dff92a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b22945c41e7841ff2e6b16af346dde0c')"
     ]
   }
 }

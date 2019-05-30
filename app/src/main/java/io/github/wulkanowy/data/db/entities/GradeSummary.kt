@@ -26,6 +26,9 @@ data class GradeSummary(
     @ColumnInfo(name = "proposed_points")
     val proposedPoints: String,
 
+    @ColumnInfo(name = "final_points")
+    val finalPoints: String,
+
     @ColumnInfo(name = "points_sum")
     val pointsSum: String,
 

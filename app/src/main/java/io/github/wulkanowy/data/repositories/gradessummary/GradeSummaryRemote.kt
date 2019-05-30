@@ -24,6 +24,7 @@ class GradeSummaryRemote @Inject constructor(private val api: Api) {
                         finalGrade = it.final,
                         pointsSum = it.pointsSum,
                         proposedPoints = it.proposedPoints,
+                        finalPoints = it.finalPoints,
                         average = it.average
                     )
                 }

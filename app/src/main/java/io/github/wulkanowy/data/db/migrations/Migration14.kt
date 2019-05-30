@@ -17,6 +17,7 @@ class Migration14 : Migration(13, 14) {
                 predicted_grade TEXT NOT NULL,
                 final_grade TEXT NOT NULL,
                 proposed_points TEXT NOT NULL,
+                final_points TEXT NOT NULL,
                 points_sum TEXT NOT NULL,
                 average REAL NOT NULL
             )

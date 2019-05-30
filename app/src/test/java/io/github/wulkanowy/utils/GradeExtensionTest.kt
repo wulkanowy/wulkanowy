@@ -86,6 +86,7 @@ class GradeExtensionTest {
             predictedGrade = "",
             finalGrade = finalGrade,
             proposedPoints = "",
+            finalPoints = "",
             pointsSum = "",
             average = .0
         )
