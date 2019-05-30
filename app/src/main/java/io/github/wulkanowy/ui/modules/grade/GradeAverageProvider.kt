@@ -31,16 +31,19 @@ class GradeAverageProvider @Inject constructor(
         val plusModifier = preferencesRepository.gradePlusModifier
         val minusModifier = preferencesRepository.gradeMinusModifier
 
-        return getAverageFromGradeSummary(selectedSemester, forceRefresh).switchIfEmpty(gradeRepository.getGrades(student, selectedSemester, forceRefresh)
-            .flatMap { firstGrades ->
-                if (selectedSemester == firstSemester) Single.just(firstGrades)
-                else gradeRepository.getGrades(student, firstSemester)
-                    .map { secondGrades -> secondGrades + firstGrades }
-            }.map { grades ->
-                grades.map { it.changeModifier(plusModifier, minusModifier) }
-                    .groupBy { it.subject }
-                    .mapValues { it.value.calcAverage() }
-            })
+        return getAverageFromGradeSummary(selectedSemester, forceRefresh)
+            .switchIfEmpty(gradeRepository.getGrades(student, selectedSemester, forceRefresh)
+                .flatMap { firstGrades ->
+                    if (selectedSemester == firstSemester) Single.just(firstGrades)
+                    else {
+                        gradeRepository.getGrades(student, firstSemester)
+                            .map { secondGrades -> secondGrades + firstGrades }
+                    }
+                }.map { grades ->
+                    grades.map { it.changeModifier(plusModifier, minusModifier) }
+                        .groupBy { it.subject }
+                        .mapValues { it.value.calcAverage() }
+                })
     }
 
     private fun getOnlyOneSemesterAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
@@ -48,20 +51,22 @@ class GradeAverageProvider @Inject constructor(
         val plusModifier = preferencesRepository.gradePlusModifier
         val minusModifier = preferencesRepository.gradeMinusModifier
 
-        return getAverageFromGradeSummary(selectedSemester, forceRefresh).switchIfEmpty(gradeRepository.getGrades(student, selectedSemester, forceRefresh)
-            .map { grades ->
-                grades.map { it.changeModifier(plusModifier, minusModifier) }
-                    .groupBy { it.subject }
-                    .mapValues {
-                        it.value.calcAverage()
-                    }
-            })
+        return getAverageFromGradeSummary(selectedSemester, forceRefresh)
+            .switchIfEmpty(gradeRepository.getGrades(student, selectedSemester, forceRefresh)
+                .map { grades ->
+                    grades.map { it.changeModifier(plusModifier, minusModifier) }
+                        .groupBy { it.subject }
+                        .mapValues { it.value.calcAverage() }
+                })
     }
 
     private fun getAverageFromGradeSummary(selectedSemester: Semester, forceRefresh: Boolean): Maybe<Map<String, Double>> {
-        return gradeSummaryRepository.getGradesSummary(selectedSemester, forceRefresh).toMaybe().flatMap {
-            if (it.any { summary -> summary.average != .0 }) Maybe.just(it.map { summary -> summary.subject to summary.average }.toMap())
-            else Maybe.empty()
-        }
+        return gradeSummaryRepository.getGradesSummary(selectedSemester, forceRefresh)
+            .toMaybe()
+            .flatMap {
+                if (it.any { summary -> summary.average != .0 }) {
+                    Maybe.just(it.map { summary -> summary.subject to summary.average }.toMap())
+                } else Maybe.empty()
+            }
     }
 }
