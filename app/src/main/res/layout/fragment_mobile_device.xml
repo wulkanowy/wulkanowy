@@ -1,9 +1,36 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    tools:context=".ui.modules.mobiledevice.MobileDeviceFragment"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.modules.mobiledevice.MobileDeviceFragment">
+
+    <LinearLayout
+        android:id="@+id/mobileDevicesEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/mobile_devices_no_items"
+            android:textSize="20sp" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="100dp"
+            android:minHeight="100dp"
+            app:srcCompat="@drawable/ic_menu_main_mobile_devices_24dp"
+            app:tint="?android:attr/textColorPrimary"
+            tools:ignore="contentDescription" />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/mobileDevicesProgress"
@@ -25,33 +52,6 @@
             tools:listitem="@layout/item_mobile_device" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <LinearLayout
-        android:id="@+id/mobileDevicesEmpty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:visibility="gone">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="100dp"
-            android:minHeight="100dp"
-            app:srcCompat="@drawable/ic_menu_main_mobile_devices_24dp"
-            app:tint="?android:attr/textColorPrimary"
-            tools:ignore="contentDescription" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="@string/mobile_devices_no_items"
-            android:textSize="20sp" />
-    </LinearLayout>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/mobileDeviceAddButton"
         android:layout_width="wrap_content"
@@ -62,4 +62,4 @@
         android:focusable="true"
         android:tint="#FFFFFF"
         app:srcCompat="@drawable/ic_all_add_24dp" />
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
