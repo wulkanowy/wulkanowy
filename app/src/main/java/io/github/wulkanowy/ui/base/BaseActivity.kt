@@ -62,7 +62,7 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>> : AppCompatActivity
         AlertDialog.Builder(this)
             .setTitle(R.string.main_session_expired)
             .setMessage(R.string.main_session_relogin)
-            .setPositiveButton(R.string.main_log_in) { _, _ -> presenter.onLoginSelected() }
+            .setPositiveButton(R.string.main_log_in) { _, _ -> presenter.onExpiredLoginSelected() }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .show()
     }

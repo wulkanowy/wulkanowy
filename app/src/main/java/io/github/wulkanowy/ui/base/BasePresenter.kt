@@ -25,7 +25,7 @@ open class BasePresenter<T : BaseView>(
         }
     }
 
-    fun onLoginSelected() {
+    fun onExpiredLoginSelected() {
         Timber.i("Attempt to switch the student after the session expires")
         disposable.add(studentRepository.getCurrentStudent(false)
             .flatMapCompletable { studentRepository.logoutStudent(it) }
