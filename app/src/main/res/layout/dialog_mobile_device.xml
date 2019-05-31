@@ -49,22 +49,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PIN"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/mobileDeviceDialogPin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="@string/all_no_data"
-                    android:textIsSelectable="true"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:text="Token"
                     android:textSize="17sp" />
 
@@ -86,6 +70,22 @@
 
                 <TextView
                     android:id="@+id/mobileDeviceDialogSymbol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="@string/all_no_data"
+                    android:textIsSelectable="true"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="PIN"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/mobileDeviceDialogPin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"

@@ -30,7 +30,7 @@ class MobileDeviceTokenPresenter @Inject constructor(
         Timber.i("Mobile device registration started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
-            .flatMap { mobileDeviceRepository.register(it) }
+            .flatMap { mobileDeviceRepository.getToken(it) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {

@@ -42,9 +42,9 @@ class MobileDeviceTokenDialog : DaggerDialogFragment(), MobileDeviceTokenVIew {
     }
 
     override fun updateData(token: Triple<String, String, String>) {
-        mobileDeviceDialogPin.text = token.first
-        mobileDeviceDialogToken.text = token.second
-        mobileDeviceDialogSymbol.text = token.third
+        mobileDeviceDialogToken.text = token.first
+        mobileDeviceDialogSymbol.text = token.second
+        mobileDeviceDialogPin.text = token.third
     }
 
     override fun hideLoading() {

@@ -37,7 +37,7 @@ class MobileDeviceRepository @Inject constructor(
         return remote.unregisterDevice(semester, device)
     }
 
-    fun register(semester: Semester): Single<Triple<String, String, String>> {
+    fun getToken(semester: Semester): Single<Triple<String, String, String>> {
         return remote.getToken(semester)
     }
 }
