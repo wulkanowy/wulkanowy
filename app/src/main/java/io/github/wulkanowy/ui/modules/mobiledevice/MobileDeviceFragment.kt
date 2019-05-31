@@ -6,12 +6,11 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
+import eu.davidea.flexibleadapter.helpers.UndoHelper
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -58,17 +57,20 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
         }
         mobileDevicesSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         mobileDeviceAddButton.setOnClickListener { presenter.onRegisterDevice() }
-        devicesAdapter.onDeviceUnregisterListener = { presenter.onUnregister(it) }
-    }
+        devicesAdapter.isPermanentDelete = false
+        devicesAdapter.onDeviceUnregisterListener = { device, position ->
+            UndoHelper(devicesAdapter, object: UndoHelper.OnActionListener {
+                override fun onActionConfirmed(action: Int, event: Int) {
+                    presenter.onUnregisterConfirmed(device)
+                }
 
-    override fun showUnregisterConfirmDialog(device: MobileDevice) {
-        context?.let {
-            AlertDialog.Builder(it)
-                .setTitle(R.string.mobile_device_removal)
-                .setMessage(R.string.mobile_device_removal_confirm)
-                .setPositiveButton(R.string.mobile_devices_unregister) { _, _ -> presenter.onUnregisterConfirmed(device) }
-                .setNegativeButton(android.R.string.cancel) { _, _ -> }
-                .show()
+                override fun onActionCanceled(action: Int, positions: MutableList<Int>?) {
+                    devicesAdapter.restoreDeletedItems()
+                }
+            })
+                .withConsecutive(false)
+                .withAction(UndoHelper.Action.REMOVE)
+                .start(listOf(position), mobileDevicesRecycler, R.string.mobile_device_removed, R.string.all_undo, 3000)
         }
     }
 

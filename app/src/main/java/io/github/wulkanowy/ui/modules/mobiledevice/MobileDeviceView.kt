@@ -24,6 +24,4 @@ interface MobileDeviceView : BaseView {
     fun showContent(show: Boolean)
 
     fun showTokenDialog()
-
-    fun showUnregisterConfirmDialog(device: MobileDevice)
 }
