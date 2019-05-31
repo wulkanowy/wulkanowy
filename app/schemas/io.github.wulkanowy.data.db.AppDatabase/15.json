@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 14,
-    "identityHash": "b22945c41e7841ff2e6b16af346dde0c",
+    "version": 15,
+    "identityHash": "84b300bf53c7dd70b60a29a842275bb2",
     "entities": [
       {
         "tableName": "Students",
@@ -1375,12 +1375,56 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "MobileDevices",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `device_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `date` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "studentId",
+            "columnName": "student_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceId",
+            "columnName": "device_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b22945c41e7841ff2e6b16af346dde0c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '84b300bf53c7dd70b60a29a842275bb2')"
     ]
   }
 }

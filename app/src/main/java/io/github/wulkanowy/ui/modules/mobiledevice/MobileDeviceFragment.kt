@@ -12,13 +12,13 @@ import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
-import io.github.wulkanowy.ui.base.session.BaseSessionFragment
+import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import kotlinx.android.synthetic.main.fragment_mobile_device.*
 import javax.inject.Inject
 
-class MobileDeviceFragment : BaseSessionFragment(), MobileDeviceView, MainView.TitledView {
+class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: MobileDevicePresenter

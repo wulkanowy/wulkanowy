@@ -1,8 +1,8 @@
 package io.github.wulkanowy.ui.modules.mobiledevice
 
-import io.github.wulkanowy.ui.base.session.BaseSessionView
+import io.github.wulkanowy.ui.base.BaseView
 
-interface MobileDeviceView : BaseSessionView {
+interface MobileDeviceView : BaseView {
 
     val isViewEmpty: Boolean
 
