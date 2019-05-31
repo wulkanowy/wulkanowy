@@ -22,5 +22,5 @@ interface MobileDeviceView : BaseView {
 
     fun showContent(show: Boolean)
 
-    fun showTokenDialog(token: Triple<String, String, String>)
+    fun showTokenDialog()
 }

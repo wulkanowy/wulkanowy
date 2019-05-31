@@ -15,6 +15,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.modules.mobiledevice.token.MobileDeviceTokenDialog
 import kotlinx.android.synthetic.main.fragment_mobile_device.*
 import javax.inject.Inject
 
@@ -55,10 +56,7 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
             )
         }
         mobileDevicesSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
-        mobileDeviceAddButton.setOnClickListener {
-            Toast.makeText(context, "Trwa generowanie tokenu", LENGTH_SHORT).show()
-            presenter.registerDevice()
-        }
+        mobileDeviceAddButton.setOnClickListener { presenter.onRegisterDevice() }
         devicesAdapter.onDeviceUnregisterListener = {
             Toast.makeText(context, "Trwa wyrejestrowywanie urządzenia", LENGTH_SHORT).show()
             presenter.unregisterDevice(it)
@@ -93,8 +91,8 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
         mobileDevicesRecycler.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun showTokenDialog(token: Triple<String, String, String>) {
-        (activity as? MainActivity)?.showDialogFragment(MobileDeviceDialog.newInstance(token))
+    override fun showTokenDialog() {
+        (activity as? MainActivity)?.showDialogFragment(MobileDeviceTokenDialog.newInstance())
     }
 
     override fun onDestroyView() {
