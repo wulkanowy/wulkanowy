@@ -8,6 +8,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
+import eu.davidea.flexibleadapter.helpers.EmptyViewHelper
 import eu.davidea.flexibleadapter.helpers.UndoHelper
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
@@ -55,6 +56,7 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
                 .withDrawDividerOnLastItem(false)
             )
         }
+        EmptyViewHelper.create(devicesAdapter, mobileDevicesEmpty)
         mobileDevicesSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         mobileDeviceAddButton.setOnClickListener { presenter.onRegisterDevice() }
         devicesAdapter.isPermanentDelete = false
@@ -82,15 +84,12 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
         devicesAdapter.clear()
     }
 
-    override fun showEmpty(show: Boolean) {
-        mobileDevicesEmpty.visibility = if (show) VISIBLE else GONE
-    }
-
     override fun hideRefresh() {
         mobileDevicesSwipe.isRefreshing = false
     }
 
     override fun showProgress(show: Boolean) {
+        mobileDevicesEmpty.visibility = if (!show) VISIBLE else GONE
         mobileDevicesProgress.visibility = if (show) VISIBLE else GONE
     }
 

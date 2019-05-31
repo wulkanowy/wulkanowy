@@ -5,6 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.modules.mobiledevice.MobileDeviceFragment">
 
+    <ProgressBar
+        android:id="@+id/mobileDevicesProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        tools:visibility="invisible" />
+
     <LinearLayout
         android:id="@+id/mobileDevicesEmpty"
         android:layout_width="match_parent"
@@ -12,7 +20,8 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:alpha="0.0">
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,14 +40,6 @@
             app:tint="?android:attr/textColorPrimary"
             tools:ignore="contentDescription" />
     </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/mobileDevicesProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        tools:visibility="invisible" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/mobileDevicesSwipe"

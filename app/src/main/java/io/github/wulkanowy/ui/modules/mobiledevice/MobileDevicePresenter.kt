@@ -48,13 +48,11 @@ class MobileDevicePresenter @Inject constructor(
             }.subscribe({
                 view?.run {
                     updateData(it)
-                    showEmpty(it.isEmpty())
                     showContent(it.isNotEmpty())
                 }
                 analytics.logEvent("load_devices", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.i("Loading mobile devices result: An exception occurred")
-                view?.run { showEmpty(isViewEmpty) }
                 errorHandler.dispatch(it)
             })
     }
@@ -83,7 +81,6 @@ class MobileDevicePresenter @Inject constructor(
             .subscribe({
                 view?.run {
                     updateData(it)
-                    showEmpty(it.isEmpty())
                     showContent(it.isNotEmpty())
                 }
             }) {
