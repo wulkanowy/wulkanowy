@@ -49,7 +49,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Token"
+                    android:text="@string/mobile_device_token"
                     android:textSize="17sp" />
 
                 <TextView
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Symbol"
+                    android:text="@string/mobile_device_symbol"
                     android:textSize="17sp" />
 
                 <TextView
@@ -81,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="PIN"
+                    android:text="@string/mobile_device_pin"
                     android:textSize="17sp" />
 
                 <TextView
