@@ -63,7 +63,11 @@ class MobileDevicePresenter @Inject constructor(
         view?.showTokenDialog()
     }
 
-    fun unregisterDevice(device: MobileDevice) {
+    fun onUnregister(device: MobileDevice) {
+        view?.showUnregisterConfirmDialog(device)
+    }
+
+    fun onUnregisterConfirmed(device: MobileDevice) {
         Timber.i("Mobile device unregister started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }

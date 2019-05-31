@@ -23,10 +23,7 @@ class MobileDeviceItem(val device: MobileDevice) : AbstractFlexibleItem<MobileDe
         holder.apply {
             mobileDeviceItemDate.text = device.date.toFormattedString("dd.MM.yyyy HH:mm:ss")
             mobileDeviceItemName.text = device.name
-            mobileDeviceItemUnregister.setOnClickListener {
-                (adapter as MobileDeviceAdapter).onDeviceUnregisterListener(device)
-                it.isEnabled = false
-            }
+            mobileDeviceItemUnregister.setOnClickListener { (adapter as MobileDeviceAdapter).onDeviceUnregisterListener(device) }
         }
     }
 

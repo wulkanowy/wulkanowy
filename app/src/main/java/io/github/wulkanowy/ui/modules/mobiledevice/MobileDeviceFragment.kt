@@ -6,12 +6,12 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
-import android.widget.Toast.LENGTH_SHORT
+import androidx.appcompat.app.AlertDialog
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -57,9 +57,17 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
         }
         mobileDevicesSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         mobileDeviceAddButton.setOnClickListener { presenter.onRegisterDevice() }
-        devicesAdapter.onDeviceUnregisterListener = {
-            Toast.makeText(context, "Trwa wyrejestrowywanie urządzenia", LENGTH_SHORT).show()
-            presenter.unregisterDevice(it)
+        devicesAdapter.onDeviceUnregisterListener = { presenter.onUnregister(it) }
+    }
+
+    override fun showUnregisterConfirmDialog(device: MobileDevice) {
+        context?.let {
+            AlertDialog.Builder(it)
+                .setTitle(R.string.mobile_device_removal)
+                .setMessage(R.string.mobile_device_removal_confirm)
+                .setPositiveButton(R.string.mobile_devices_unregister) { _, _ -> presenter.onUnregisterConfirmed(device) }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                .show()
         }
     }
 

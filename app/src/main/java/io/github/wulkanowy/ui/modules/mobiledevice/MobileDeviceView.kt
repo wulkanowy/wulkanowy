@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.mobiledevice
 
+import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.ui.base.BaseView
 
 interface MobileDeviceView : BaseView {
@@ -23,4 +24,6 @@ interface MobileDeviceView : BaseView {
     fun showContent(show: Boolean)
 
     fun showTokenDialog()
+
+    fun showUnregisterConfirmDialog(device: MobileDevice)
 }
