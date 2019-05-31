@@ -44,20 +44,16 @@ class GradeSummaryItem(
         other as GradeSummaryItem
 
         if (average != other.average) return false
-        if (summary.subject != other.summary.subject) return false
-        if (summary.predictedGrade != other.summary.predictedGrade) return false
-        if (summary.finalGrade != other.summary.finalGrade) return false
-        if (summary.pointsSum != other.summary.pointsSum) return false
+        if (summary != other.summary) return false
+        if (summary.id != other.summary.id) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = summary.subject.hashCode()
+        var result = summary.hashCode()
+        result = 31 * result + summary.id.hashCode()
         result = 31 * result + average.hashCode()
-        result = 31 * result + summary.predictedGrade.hashCode()
-        result = 31 * result + summary.finalGrade.hashCode()
-        result = 31 * result + summary.pointsSum.hashCode()
         return result
     }
 
