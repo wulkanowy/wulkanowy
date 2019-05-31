@@ -94,7 +94,7 @@ dependencies {
 
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "com.google.android.material:material:1.1.0-alpha06"
+    implementation "com.google.android.material:material:1.1.0-alpha07"
     implementation 'com.github.wulkanowy:MaterialChipsInput:b72fd0ee6f'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
@@ -106,9 +106,9 @@ dependencies {
     implementation "androidx.room:room-rxjava2:2.1.0-rc01"
     kapt "androidx.room:room-compiler:2.1.0-rc01"
 
-    implementation "com.google.dagger:dagger-android-support:2.23"
-    kapt "com.google.dagger:dagger-compiler:2.23"
-    kapt "com.google.dagger:dagger-android-processor:2.23"
+    implementation "com.google.dagger:dagger-android-support:2.23.1"
+    kapt "com.google.dagger:dagger-compiler:2.23.1"
+    kapt "com.google.dagger:dagger-android-processor:2.23.1"
     implementation 'com.squareup.inject:assisted-inject-annotations-dagger2:0.4.0'
     kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.4.0'
 
