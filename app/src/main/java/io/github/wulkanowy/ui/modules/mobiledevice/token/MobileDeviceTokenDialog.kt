@@ -1,6 +1,8 @@
 package io.github.wulkanowy.ui.modules.mobiledevice.token
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -8,6 +10,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import dagger.android.support.DaggerDialogFragment
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.repositories.mobiledevice.MobileDeviceRemote
 import io.github.wulkanowy.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.dialog_mobile_device.*
 import javax.inject.Inject
@@ -41,10 +44,14 @@ class MobileDeviceTokenDialog : DaggerDialogFragment(), MobileDeviceTokenVIew {
         mobileDeviceDialogClose.setOnClickListener { dismiss() }
     }
 
-    override fun updateData(token: Triple<String, String, String>) {
-        mobileDeviceDialogToken.text = token.first
-        mobileDeviceDialogSymbol.text = token.second
-        mobileDeviceDialogPin.text = token.third
+    override fun updateData(token: MobileDeviceRemote.Token) {
+        mobileDeviceDialogToken.text = token.token
+        mobileDeviceDialogSymbol.text = token.symbol
+        mobileDeviceDialogPin.text = token.pin
+
+        mobileDeviceQr.setImageBitmap(Base64.decode(token.qr, Base64.DEFAULT).let {
+            BitmapFactory.decodeByteArray(it, 0, it.size)
+        })
     }
 
     override fun hideLoading() {

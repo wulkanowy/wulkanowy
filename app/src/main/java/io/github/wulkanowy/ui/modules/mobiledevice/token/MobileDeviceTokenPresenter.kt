@@ -41,7 +41,7 @@ class MobileDeviceTokenPresenter @Inject constructor(
                     updateData(it)
                     showContent()
                 }
-                analytics.logEvent("device_register", "symbol" to it.second.substring(0, 3))
+                analytics.logEvent("device_register", "symbol" to it.token.substring(0, 3))
             }) {
                 errorHandler.dispatch(it)
             }

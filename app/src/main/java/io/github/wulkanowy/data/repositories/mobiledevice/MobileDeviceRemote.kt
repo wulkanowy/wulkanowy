@@ -31,11 +31,18 @@ class MobileDeviceRemote @Inject constructor(private val api: Api) {
             .flatMap { api.unregisterDevice(device.deviceId) }
     }
 
-    fun getToken(semester: Semester): Single<Triple<String, String, String>> {
+    data class Token(val token: String, val symbol: String, val pin: String, val qr: String)
+
+    fun getToken(semester: Semester): Single<Token> {
         return Single.just(api.apply { diaryId = semester.diaryId })
             .flatMap { api.getToken() }
             .map {
-                Triple(it.token, it.symbol, it.pin)
+                Token(
+                    token = it.token,
+                    symbol = it.symbol,
+                    pin = it.pin,
+                    qr = it.qrCodeImage
+                )
             }
     }
 }
