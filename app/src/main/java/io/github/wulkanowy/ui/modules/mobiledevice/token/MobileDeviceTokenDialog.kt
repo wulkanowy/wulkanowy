@@ -83,4 +83,9 @@ class MobileDeviceTokenDialog : DaggerDialogFragment(), MobileDeviceTokenVIew {
     override fun openClearLoginView() {
         (activity as? BaseActivity<*>)?.openClearLoginView()
     }
+
+    override fun onDestroyView() {
+        presenter.onDetachView()
+        super.onDestroyView()
+    }
 }
