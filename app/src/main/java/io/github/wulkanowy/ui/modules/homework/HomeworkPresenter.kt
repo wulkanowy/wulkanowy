@@ -5,22 +5,28 @@ import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.homework.HomeworkRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
-import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
-import io.github.wulkanowy.ui.base.session.SessionErrorHandler
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
+import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.friday
+import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.monday
+import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class HomeworkPresenter @Inject constructor(
-    private val errorHandler: SessionErrorHandler,
-    private val schedulers: SchedulersProvider,
+    schedulers: SchedulersProvider,
+    errorHandler: ErrorHandler,
+    studentRepository: StudentRepository,
     private val homeworkRepository: HomeworkRepository,
-    private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val analytics: FirebaseAnalyticsHelper
-) : BaseSessionPresenter<HomeworkView>(errorHandler) {
+) : BasePresenter<HomeworkView>(errorHandler, studentRepository, schedulers) {
 
     lateinit var currentDate: LocalDate
         private set

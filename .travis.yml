@@ -11,10 +11,9 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-#branches:
-#  only:
-#    - master
-#    - 0.8.x
+branches:
+  only:
+    - develop
 
 android:
  licenses:
@@ -48,7 +47,7 @@ before_script:
 script:
   - ./gradlew dependencies --stacktrace --daemon
   - fossa --no-ansi || true
-  - ./gradlew lintPlayRelease -x fabricGenerateResourcesPlayRelease --stacktrace --daemon
+  #- ./gradlew lintPlayRelease -x fabricGenerateResourcesPlayRelease --stacktrace --daemon
   - ./gradlew testPlayDebugUnitTest -x fabricGenerateResourcesPlay --stacktrace --daemon
   - ./gradlew createPlayDebugCoverageReport --stacktrace --daemon
   - ./gradlew jacocoTestReport --stacktrace --daemon

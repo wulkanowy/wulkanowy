@@ -10,12 +10,12 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class LoginFormPresenter @Inject constructor(
-    private val schedulers: SchedulersProvider,
-    private val errorHandler: LoginErrorHandler,
-    private val studentRepository: StudentRepository,
+    schedulers: SchedulersProvider,
+    studentRepository: StudentRepository,
+    private val loginErrorHandler: LoginErrorHandler,
     private val analytics: FirebaseAnalyticsHelper,
     @param:Named("isDebug") private val isDebug: Boolean
-) : BasePresenter<LoginFormView>(errorHandler) {
+) : BasePresenter<LoginFormView>(loginErrorHandler, studentRepository, schedulers) {
 
     override fun onAttachView(view: LoginFormView) {
         super.onAttachView(view)
@@ -23,7 +23,7 @@ class LoginFormPresenter @Inject constructor(
             initView()
             if (isDebug) showVersion() else showPrivacyPolicy()
 
-            errorHandler.onBadCredentials = {
+            loginErrorHandler.onBadCredentials = {
                 setErrorPassIncorrect()
                 showSoftKeyboard()
                 Timber.i("Entered wrong username or password")
@@ -82,7 +82,7 @@ class LoginFormPresenter @Inject constructor(
             }, {
                 Timber.i("Login result: An exception occurred")
                 analytics.logEvent("registration_form", "success" to false, "students" to -1, "endpoint" to endpoint, "error" to it.localizedMessage.ifEmpty { "No message" })
-                errorHandler.dispatch(it)
+                loginErrorHandler.dispatch(it)
             }))
     }
 
