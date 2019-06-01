@@ -49,7 +49,8 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/mobileDeviceQr"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"/>
 
                 <TextView
                     android:layout_width="wrap_content"
