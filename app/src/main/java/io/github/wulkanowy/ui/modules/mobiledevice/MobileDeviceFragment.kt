@@ -80,7 +80,7 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
     }
 
     override fun updateData(data: List<MobileDeviceItem>) {
-        devicesAdapter.updateDataSet(data, false)
+        devicesAdapter.updateDataSet(data)
     }
 
     override fun clearData() {

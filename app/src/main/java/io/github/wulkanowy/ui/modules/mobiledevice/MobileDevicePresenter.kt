@@ -32,7 +32,7 @@ class MobileDevicePresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        Timber.i("Loading devices data started")
+        Timber.i("Loading mobile devices data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { mobileDeviceRepository.getDevices(it, forceRefresh) }
@@ -63,7 +63,7 @@ class MobileDevicePresenter @Inject constructor(
     }
 
     fun onUnregister(device: MobileDevice) {
-        Timber.i("Mobile device unregisterDevice started")
+        Timber.i("Unregister device started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { semester ->

@@ -27,22 +27,22 @@ class MobileDeviceTokenPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        Timber.i("Mobile device registration started")
+        Timber.i("Mobile device registration data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { mobileDeviceRepository.getToken(it) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .doFinally {
-                view?.hideLoading()
-            }
+            .doFinally { view?.hideLoading() }
             .subscribe({
+                Timber.i("Mobile device registration result: Success")
                 view?.run {
                     updateData(it)
                     showContent()
                 }
                 analytics.logEvent("device_register", "symbol" to it.token.substring(0, 3))
             }) {
+                Timber.i("Mobile device registration result: An exception occurred")
                 view?.closeDialog()
                 errorHandler.dispatch(it)
             }

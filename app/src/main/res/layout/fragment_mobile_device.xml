@@ -30,7 +30,7 @@
             android:text="@string/mobile_devices_no_items"
             android:textSize="20sp" />
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="100dp"
