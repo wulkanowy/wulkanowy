@@ -1,11 +1,7 @@
 package io.github.wulkanowy.ui.modules.about
 
-import com.mikepenz.aboutlibraries.Libs
-import com.mikepenz.aboutlibraries.Libs.SpecialButton.SPECIAL1
-import com.mikepenz.aboutlibraries.Libs.SpecialButton.SPECIAL2
-import com.mikepenz.aboutlibraries.Libs.SpecialButton.SPECIAL3
-import io.github.wulkanowy.data.repositories.student.StudentRepository
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
