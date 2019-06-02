@@ -30,8 +30,6 @@ interface MainView : BaseView {
 
     fun popView()
 
-    fun openLoginView()
-
     interface MainChildView {
 
         fun onFragmentReselected()

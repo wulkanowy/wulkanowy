@@ -9,7 +9,7 @@ import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -25,7 +25,6 @@ import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
-import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
@@ -38,10 +37,10 @@ import io.github.wulkanowy.utils.setOnViewChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : BaseActivity(), MainView {
+class MainActivity : BaseActivity<MainPresenter>(), MainView {
 
     @Inject
-    lateinit var presenter: MainPresenter
+    override lateinit var presenter: MainPresenter
 
     @Inject
     lateinit var navController: FragNavController
@@ -168,15 +167,6 @@ class MainActivity : BaseActivity(), MainView {
         ViewCompat.setElevation(mainAppBarContainer, if (show) convertDpToPixels(4f) else 0f)
     }
 
-    fun showExpiredDialog() {
-        AlertDialog.Builder(this)
-            .setTitle(R.string.main_session_expired)
-            .setMessage(R.string.main_session_relogin)
-            .setPositiveButton(R.string.main_log_in) { _, _ -> presenter.onLoginSelected() }
-            .setNegativeButton(android.R.string.cancel) { _, _ -> }
-            .show()
-    }
-
     override fun notifyMenuViewReselected() {
         (navController.currentStack?.getOrNull(0) as? MainView.MainChildView)?.onFragmentReselected()
     }
@@ -197,19 +187,9 @@ class MainActivity : BaseActivity(), MainView {
         presenter.onBackPressed { super.onBackPressed() }
     }
 
-    override fun openLoginView() {
-        startActivity(LoginActivity.getStartIntent(this)
-            .apply { addFlags(FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_NEW_TASK) })
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         navController.onSaveInstanceState(outState)
         intent.removeExtra(EXTRA_START_MENU)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.onDetachView()
     }
 }
