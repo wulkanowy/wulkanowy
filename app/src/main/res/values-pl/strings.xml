@@ -21,7 +21,7 @@
 
     <!--Login-->
     <string name="login_header_default">Zaloguj się za pomocą konta ucznia lub rodzica</string>
-    <string name="login_header_symbol">Podaj symbol dziennika VULCAN</string>
+    <string name="login_header_symbol">Podaj symbol</string>
     <string name="login_nickname_hint">Email lub nick</string>
     <string name="login_password_hint">Hasło</string>
     <string name="login_host_hint">Dziennik</string>
@@ -32,7 +32,7 @@
     <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprawdź symbol</string>
     <string name="login_field_required">To pole jest wymagane</string>
     <string name="login_duplicate_student">Wybrany uczeń jest już zalogowany</string>
-    <string name="login_symbol_helper">Symbol znajduje się na stronie dziennika w zakładce Dostęp Mobilny</string>
+    <string name="login_symbol_helper">Symbol znajdziesz na stronie dziennika w Uczeń -> Dostęp Mobilny -> Zarejestruj urządzenie mobilne</string>
     <string name="login_select_student">Wybierz uczniów do zalogowania w aplikacji</string>
     <string name="login_privacy_policy">Polityka prywatności</string>
 
@@ -57,6 +57,7 @@
     <string name="grade_no_average">Brak średniej</string>
     <string name="grade_predicted">Przewidywana: %1$s</string>
     <string name="grade_final">Końcowa: %1$s</string>
+    <string name="grade_summary_points">Suma punktów</string>
     <string name="grade_summary_final_grade">Ocena końcowa</string>
     <string name="grade_summary_predicted_grade">Przewidywana ocena</string>
     <string name="grade_summary_calculated_average">Obliczona średnia</string>
@@ -203,6 +204,17 @@
     <string name="lucky_number_notify_new_item">Dziś szczęśliwym numerkiem jest: %d</string>
 
 
+    <!--Mobile devices-->
+    <string name="mobile_devices_title">Dostęp mobilny</string>
+    <string name="mobile_devices_no_items">Brak urządzeń</string>
+    <string name="mobile_devices_unregister">Wyrejestruj</string>
+    <string name="mobile_device_removed">Urządzenie usunięte</string>
+    <string name="mobile_device_qr">Kod QR</string>
+    <string name="mobile_device_token">Token</string>
+    <string name="mobile_device_symbol">Symbol</string>
+    <string name="mobile_device_pin">PIN</string>
+
+
     <!--Account-->
     <string name="account_add_new">Dodaj konto</string>
     <string name="account_logout">Wyloguj</string>
@@ -278,6 +290,7 @@
 
     <!--Others-->
     <string name="all_copied">Skopiowano</string>
+    <string name="all_undo">Cofnij</string>
 
 
     <!--Errors-->

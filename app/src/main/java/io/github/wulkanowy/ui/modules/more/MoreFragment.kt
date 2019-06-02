@@ -17,6 +17,7 @@ import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
+import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.utils.setOnItemClickListener
@@ -69,6 +70,14 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
             }
         }
 
+    override val mobileDevicesRes: Pair<String, Drawable?>?
+        get() {
+            return context?.run {
+                getString(R.string.mobile_devices_title) to
+                    ContextCompat.getDrawable(this, R.drawable.ic_menu_main_mobile_devices_24dp)
+            }
+        }
+
     override val settingsRes: Pair<String, Drawable?>?
         get() {
             return context?.run {
@@ -104,7 +113,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
     }
 
     override fun onFragmentReselected() {
-        presenter.onViewReselected()
+        if (::presenter.isInitialized) presenter.onViewReselected()
     }
 
     override fun updateData(data: List<MoreItem>) {
@@ -125,6 +134,10 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
 
     override fun openLuckyNumberView() {
         (activity as? MainActivity)?.pushView(LuckyNumberFragment.newInstance())
+    }
+
+    override fun openMobileDevicesView() {
+        (activity as? MainActivity)?.pushView(MobileDeviceFragment.newInstance())
     }
 
     override fun openSettingsView() {

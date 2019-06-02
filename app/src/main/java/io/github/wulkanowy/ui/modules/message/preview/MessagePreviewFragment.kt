@@ -12,7 +12,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.ui.base.session.BaseSessionFragment
+import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
@@ -20,14 +20,15 @@ import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import kotlinx.android.synthetic.main.fragment_message_preview.*
 import javax.inject.Inject
 
-@SuppressLint("SetTextI18n")
-class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainView.TitledView {
+class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: MessagePreviewPresenter
 
     private var menuReplyButton: MenuItem? = null
+
     private var menuForwardButton: MenuItem? = null
+
     private var menuDeleteButton: MenuItem? = null
 
     override val titleStringId: Int
@@ -42,9 +43,9 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     companion object {
         const val MESSAGE_ID_KEY = "message_id"
 
-        fun newInstance(messageId: Int?): MessagePreviewFragment {
+        fun newInstance(messageId: Long): MessagePreviewFragment {
             return MessagePreviewFragment().apply {
-                arguments = Bundle().apply { putInt(MESSAGE_ID_KEY, messageId ?: 0) }
+                arguments = Bundle().apply { putLong(MESSAGE_ID_KEY, messageId) }
             }
         }
     }
@@ -61,7 +62,7 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         messageContainer = messagePreviewContainer
-        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getInt(MESSAGE_ID_KEY) ?: 0)
+        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getLong(MESSAGE_ID_KEY) ?: 0L)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -85,10 +86,12 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
         messagePreviewSubject.text = subject
     }
 
+    @SuppressLint("SetTextI18n")
     override fun setRecipient(recipient: String) {
         messagePreviewAuthor.text = "${getString(R.string.message_to)} $recipient"
     }
 
+    @SuppressLint("SetTextI18n")
     override fun setSender(sender: String) {
         messagePreviewAuthor.text = "${getString(R.string.message_from)} $sender"
     }
@@ -145,7 +148,7 @@ class MessagePreviewFragment : BaseSessionFragment(), MessagePreviewView, MainVi
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(MESSAGE_ID_KEY, presenter.messageId)
+        outState.putLong(MESSAGE_ID_KEY, presenter.messageId)
     }
 
     override fun onDestroyView() {

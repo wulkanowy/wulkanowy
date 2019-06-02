@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 14,
-    "identityHash": "7c7a66785eaee32d1103477010bc6a3d",
+    "identityHash": "b22945c41e7841ff2e6b16af346dde0c",
     "entities": [
       {
         "tableName": "Students",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `scrapperBaseUrl` TEXT NOT NULL, `apiBaseUrl` TEXT NOT NULL, `loginType` TEXT NOT NULL, `loginMode` TEXT NOT NULL, `certificateKey` TEXT NOT NULL, `certificate` TEXT NOT NULL, `apiKey` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `symbol` TEXT NOT NULL, `student_id` INTEGER NOT NULL, `student_name` TEXT NOT NULL, `school_id` TEXT NOT NULL, `school_name` TEXT NOT NULL, `class_name` TEXT NOT NULL, `class_id` INTEGER NOT NULL, `is_current` INTEGER NOT NULL, `registration_date` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `endpoint` TEXT NOT NULL, `loginType` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `symbol` TEXT NOT NULL, `student_id` INTEGER NOT NULL, `student_name` TEXT NOT NULL, `school_id` TEXT NOT NULL, `school_name` TEXT NOT NULL, `class_name` TEXT NOT NULL, `class_id` INTEGER NOT NULL, `is_current` INTEGER NOT NULL, `registration_date` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,44 +15,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "scrapperBaseUrl",
-            "columnName": "scrapperBaseUrl",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "apiBaseUrl",
-            "columnName": "apiBaseUrl",
+            "fieldPath": "endpoint",
+            "columnName": "endpoint",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "loginType",
             "columnName": "loginType",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "loginMode",
-            "columnName": "loginMode",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "certificateKey",
-            "columnName": "certificateKey",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "certificate",
-            "columnName": "certificate",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "apiKey",
-            "columnName": "apiKey",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -618,7 +588,7 @@
       },
       {
         "tableName": "Grades",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_read` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `entry` TEXT NOT NULL, `value` REAL NOT NULL, `modifier` REAL NOT NULL, `comment` TEXT NOT NULL, `color` TEXT NOT NULL, `grade_symbol` TEXT NOT NULL, `description` TEXT NOT NULL, `weight` TEXT NOT NULL, `weightValue` REAL NOT NULL, `date` INTEGER NOT NULL, `teacher` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_read` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `entry` TEXT NOT NULL, `value` INTEGER NOT NULL, `modifier` REAL NOT NULL, `comment` TEXT NOT NULL, `color` TEXT NOT NULL, `grade_symbol` TEXT NOT NULL, `description` TEXT NOT NULL, `weight` TEXT NOT NULL, `weightValue` REAL NOT NULL, `date` INTEGER NOT NULL, `teacher` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -665,7 +635,7 @@
           {
             "fieldPath": "value",
             "columnName": "value",
-            "affinity": "REAL",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -734,7 +704,7 @@
       },
       {
         "tableName": "GradesSummary",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `predictedGrade` TEXT NOT NULL, `finalGrade` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `position` INTEGER NOT NULL, `subject` TEXT NOT NULL, `predicted_grade` TEXT NOT NULL, `final_grade` TEXT NOT NULL, `proposed_points` TEXT NOT NULL, `final_points` TEXT NOT NULL, `points_sum` TEXT NOT NULL, `average` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -755,6 +725,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "subject",
             "columnName": "subject",
             "affinity": "TEXT",
@@ -762,14 +738,38 @@
           },
           {
             "fieldPath": "predictedGrade",
-            "columnName": "predictedGrade",
+            "columnName": "predicted_grade",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "finalGrade",
-            "columnName": "finalGrade",
+            "columnName": "final_grade",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "proposedPoints",
+            "columnName": "proposed_points",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "finalPoints",
+            "columnName": "final_points",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pointsSum",
+            "columnName": "points_sum",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "average",
+            "columnName": "average",
+            "affinity": "REAL",
             "notNull": true
           }
         ],
@@ -1380,7 +1380,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7c7a66785eaee32d1103477010bc6a3d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b22945c41e7841ff2e6b16af346dde0c')"
     ]
   }
 }

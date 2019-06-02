@@ -100,11 +100,12 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
                             when {
                                 student != null -> Maybe.just(student)
                                 studentId != 0L -> {
-                                    studentRepository.getCurrentStudent(false)
-                                        .toMaybe()
+                                    studentRepository.isCurrentStudentSet()
+                                        .filter { true }
+                                        .flatMap { studentRepository.getCurrentStudent(false).toMaybe() }
                                         .doOnSuccess { sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id) }
                                 }
-                                else -> null
+                                else -> Maybe.empty()
                             }
                         }
                 }

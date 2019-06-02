@@ -13,7 +13,7 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.repositories.message.MessageFolder
-import io.github.wulkanowy.ui.base.session.BaseSessionFragment
+import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.MessageItem
@@ -22,7 +22,7 @@ import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_message_tab.*
 import javax.inject.Inject
 
-class MessageTabFragment : BaseSessionFragment(), MessageTabView {
+class MessageTabFragment : BaseFragment(), MessageTabView {
 
     @Inject
     lateinit var presenter: MessageTabPresenter
@@ -56,7 +56,7 @@ class MessageTabFragment : BaseSessionFragment(), MessageTabView {
         super.onActivityCreated(savedInstanceState)
         messageContainer = messageTabRecycler
         presenter.onAttachView(this, MessageFolder.valueOf(
-            (savedInstanceState ?: arguments)?.getString(MessageTabFragment.MESSAGE_TAB_FOLDER_ID).orEmpty()
+            (savedInstanceState ?: arguments)?.getString(MESSAGE_TAB_FOLDER_ID).orEmpty()
         ))
     }
 
@@ -106,7 +106,7 @@ class MessageTabFragment : BaseSessionFragment(), MessageTabView {
         messageTabSwipe.isRefreshing = show
     }
 
-    override fun openMessage(messageId: Int?) {
+    override fun openMessage(messageId: Long) {
         (activity as? MainActivity)?.pushView(MessagePreviewFragment.newInstance(messageId))
     }
 
@@ -124,7 +124,7 @@ class MessageTabFragment : BaseSessionFragment(), MessageTabView {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(MessageTabFragment.MESSAGE_TAB_FOLDER_ID, presenter.folder.name)
+        outState.putString(MESSAGE_TAB_FOLDER_ID, presenter.folder.name)
     }
 
     override fun onDestroyView() {

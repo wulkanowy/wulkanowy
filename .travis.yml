@@ -13,8 +13,7 @@ cache:
 
 branches:
   only:
-    - master
-    - 0.7.x
+    - develop
 
 android:
  licenses:
@@ -48,7 +47,7 @@ before_script:
 script:
   - ./gradlew dependencies --stacktrace --daemon
   - fossa --no-ansi || true
-  - ./gradlew lint -x fabricGenerateResourcesRelease --stacktrace --daemon
+  #- ./gradlew lint -x fabricGenerateResourcesRelease --stacktrace --daemon
   - ./gradlew test -x fabricGenerateResourcesRelease --stacktrace --daemon
   - ./gradlew createDebugCoverageReport --stacktrace --daemon
   - ./gradlew jacocoTestReport --stacktrace --daemon

@@ -1,19 +1,6 @@
-Wersja 0.8.1
-
-Uwaga! Po tej aktualizacji wymagane jest ponowne przypięcie widżetu planu lekcji!
-
-Dodaliśmy:
-- przesyłanie dalej i usuwanie wiadomości
-- opcję zmiany ucznia w widżecie
-- opcję liczenia średniej ocen z całego roku
-- tryb AMOLED
-- logowanie wielu uczniów jednocześnie
-- widżet szczęśliwego numerka
-
-Zoptymalizowaliśmy:
-- przełączanie kont
+Wersja 0.8.4
 
 Naprawiliśmy:
-- synchronizację zdublowanych ocen
+- synchronizację w tle dla użytkowników używających danych pakietowych
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases
