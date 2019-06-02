@@ -13,93 +13,89 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:text="@string/all_details"
             android:textSize="20sp" />
 
-        <FrameLayout
+        <ProgressBar
+            android:id="@+id/mobileDeviceDialogProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            tools:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/mobileDeviceDialogMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/mobileDeviceDialogContent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-            <ProgressBar
-                android:id="@+id/mobileDeviceDialogProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                tools:visibility="invisible"
-                android:indeterminate="true" />
-
-            <TextView
-                android:id="@+id/mobileDeviceDialogMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:visibility="gone" />
-
-            <LinearLayout
+            <ImageView
+                android:id="@+id/mobileDeviceQr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/mobileDeviceDialogContent"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/mobile_device_qr"
+                android:paddingBottom="12dp" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/mobileDeviceQr"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mobile_device_token"
+                android:textSize="17sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mobile_device_token"
-                    android:textSize="17sp" />
+            <TextView
+                android:id="@+id/mobileDeviceDialogToken"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@string/all_no_data"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/mobileDeviceDialogToken"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="@string/all_no_data"
-                    android:textIsSelectable="true"
-                    android:textSize="12sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/mobile_device_symbol"
+                android:textSize="17sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/mobile_device_symbol"
-                    android:textSize="17sp" />
+            <TextView
+                android:id="@+id/mobileDeviceDialogSymbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@string/all_no_data"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
 
-                <TextView
-                    android:id="@+id/mobileDeviceDialogSymbol"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="@string/all_no_data"
-                    android:textIsSelectable="true"
-                    android:textSize="12sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/mobile_device_pin"
+                android:textSize="17sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/mobile_device_pin"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:id="@+id/mobileDeviceDialogPin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="@string/all_no_data"
-                    android:textIsSelectable="true"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </FrameLayout>
+            <TextView
+                android:id="@+id/mobileDeviceDialogPin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="@string/all_no_data"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/mobileDeviceDialogClose"
