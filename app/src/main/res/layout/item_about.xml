@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="?selectableItemBackground"
-    android:orientation="vertical">
+    android:background="?selectableItemBackground">
 
     <ImageView
         android:id="@+id/aboutItemImage"
@@ -28,6 +27,7 @@
         android:layout_marginRight="16dp"
         android:layout_toEndOf="@id/aboutItemImage"
         android:layout_toRightOf="@id/aboutItemImage"
+        android:ellipsize="end"
         android:gravity="bottom"
         android:maxLines="1"
         android:textSize="16sp"
@@ -42,10 +42,11 @@
         android:layout_marginRight="16dp"
         android:layout_toEndOf="@id/aboutItemImage"
         android:layout_toRightOf="@id/aboutItemImage"
+        android:ellipsize="end"
         android:gravity="bottom"
         android:maxLines="1"
         android:textColor="?android:textColorSecondary"
-        android:textSize="12sp"
+        android:textSize="14sp"
         tools:text="@tools:sample/lorem" />
 
 </RelativeLayout>
