@@ -46,6 +46,7 @@ class MobileDevicePresenter @Inject constructor(
                     enableSwipe(true)
                 }
             }.subscribe({
+                Timber.i("Loading mobile devices result: Success")
                 view?.run {
                     updateData(it)
                     showContent(it.isNotEmpty())
@@ -61,12 +62,12 @@ class MobileDevicePresenter @Inject constructor(
         view?.showTokenDialog()
     }
 
-    fun onUnregisterConfirmed(device: MobileDevice) {
-        Timber.i("Mobile device unregister started")
+    fun onUnregister(device: MobileDevice) {
+        Timber.i("Mobile device unregisterDevice started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { semester ->
-                mobileDeviceRepository.unregister(semester, device)
+                mobileDeviceRepository.unregisterDevice(semester, device)
                 .flatMap { mobileDeviceRepository.getDevices(semester, it) }
             }
             .map { items -> items.map { MobileDeviceItem(it) } }
@@ -79,11 +80,13 @@ class MobileDevicePresenter @Inject constructor(
                 }
             }
             .subscribe({
+                Timber.i("Unregister device result: Success")
                 view?.run {
                     updateData(it)
                     showContent(it.isNotEmpty())
                 }
             }) {
+                Timber.i("Unregister device result: An exception occurred")
                 errorHandler.dispatch(it)
             }
         )

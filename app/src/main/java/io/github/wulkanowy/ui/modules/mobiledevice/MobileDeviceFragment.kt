@@ -59,25 +59,28 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
         EmptyViewHelper.create(devicesAdapter, mobileDevicesEmpty)
         mobileDevicesSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         mobileDeviceAddButton.setOnClickListener { presenter.onRegisterDevice() }
-        devicesAdapter.isPermanentDelete = false
-        devicesAdapter.onDeviceUnregisterListener = { device, position ->
-            UndoHelper(devicesAdapter, object: UndoHelper.OnActionListener {
-                override fun onActionConfirmed(action: Int, event: Int) {
-                    presenter.onUnregisterConfirmed(device)
-                }
+        devicesAdapter.run {
+            isPermanentDelete = false
+            onDeviceUnregisterListener = { device, position ->
+                val onActionListener = object : UndoHelper.OnActionListener {
+                    override fun onActionConfirmed(action: Int, event: Int) {
+                        presenter.onUnregister(device)
+                    }
 
-                override fun onActionCanceled(action: Int, positions: MutableList<Int>?) {
-                    devicesAdapter.restoreDeletedItems()
+                    override fun onActionCanceled(action: Int, positions: MutableList<Int>?) {
+                        devicesAdapter.restoreDeletedItems()
+                    }
                 }
-            })
-                .withConsecutive(false)
-                .withAction(UndoHelper.Action.REMOVE)
-                .start(listOf(position), mobileDevicesRecycler, R.string.mobile_device_removed, R.string.all_undo, 3000)
+                UndoHelper(devicesAdapter, onActionListener)
+                    .withConsecutive(false)
+                    .withAction(UndoHelper.Action.REMOVE)
+                    .start(listOf(position), mobileDevicesRecycler, R.string.mobile_device_removed, R.string.all_undo, 3000)
+            }
         }
     }
 
     override fun updateData(data: List<MobileDeviceItem>) {
-        devicesAdapter.updateDataSet(data, true)
+        devicesAdapter.updateDataSet(data, false)
     }
 
     override fun clearData() {
@@ -89,7 +92,6 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
     }
 
     override fun showProgress(show: Boolean) {
-        mobileDevicesEmpty.visibility = if (!show) VISIBLE else GONE
         mobileDevicesProgress.visibility = if (show) VISIBLE else GONE
     }
 

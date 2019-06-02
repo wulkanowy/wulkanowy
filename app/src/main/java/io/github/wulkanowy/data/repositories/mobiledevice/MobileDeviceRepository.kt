@@ -4,6 +4,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.pojos.MobileDeviceToken
 import io.github.wulkanowy.utils.uniqueSubtract
 import io.reactivex.Single
 import java.net.UnknownHostException
@@ -33,11 +34,11 @@ class MobileDeviceRepository @Inject constructor(
             ).flatMap { local.getDevices(semester).toSingle(emptyList()) }
     }
 
-    fun unregister(semester: Semester, device: MobileDevice): Single<Boolean> {
+    fun unregisterDevice(semester: Semester, device: MobileDevice): Single<Boolean> {
         return remote.unregisterDevice(semester, device)
     }
 
-    fun getToken(semester: Semester): Single<MobileDeviceRemote.Token> {
+    fun getToken(semester: Semester): Single<MobileDeviceToken> {
         return remote.getToken(semester)
     }
 }

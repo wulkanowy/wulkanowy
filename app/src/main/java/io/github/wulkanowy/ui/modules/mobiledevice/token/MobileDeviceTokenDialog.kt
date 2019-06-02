@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import dagger.android.support.DaggerDialogFragment
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.pojos.MobileDeviceToken
 import io.github.wulkanowy.data.repositories.mobiledevice.MobileDeviceRemote
 import io.github.wulkanowy.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.dialog_mobile_device.*
@@ -22,9 +23,7 @@ class MobileDeviceTokenDialog : DaggerDialogFragment(), MobileDeviceTokenVIew {
     lateinit var presenter: MobileDeviceTokenPresenter
 
     companion object {
-        fun newInstance(): MobileDeviceTokenDialog {
-            return MobileDeviceTokenDialog()
-        }
+        fun newInstance(): MobileDeviceTokenDialog = MobileDeviceTokenDialog()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +44,7 @@ class MobileDeviceTokenDialog : DaggerDialogFragment(), MobileDeviceTokenVIew {
         mobileDeviceDialogClose.setOnClickListener { dismiss() }
     }
 
-    override fun updateData(token: MobileDeviceRemote.Token) {
+    override fun updateData(token: MobileDeviceToken) {
         mobileDeviceDialogToken.text = token.token
         mobileDeviceDialogSymbol.text = token.symbol
         mobileDeviceDialogPin.text = token.pin

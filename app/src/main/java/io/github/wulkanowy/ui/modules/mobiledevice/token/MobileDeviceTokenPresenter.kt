@@ -23,10 +23,10 @@ class MobileDeviceTokenPresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         Timber.i("Mobile device view was initialized")
-        obtainToken()
+        loadData()
     }
 
-    private fun obtainToken() {
+    private fun loadData() {
         Timber.i("Mobile device registration started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }

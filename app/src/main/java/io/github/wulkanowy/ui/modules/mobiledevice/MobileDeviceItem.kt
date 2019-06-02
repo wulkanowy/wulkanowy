@@ -23,7 +23,9 @@ class MobileDeviceItem(val device: MobileDevice) : AbstractFlexibleItem<MobileDe
         holder.apply {
             mobileDeviceItemDate.text = device.date.toFormattedString("dd.MM.yyyy HH:mm:ss")
             mobileDeviceItemName.text = device.name
-            mobileDeviceItemUnregister.setOnClickListener { (adapter as MobileDeviceAdapter).onDeviceUnregisterListener(device, holder.flexibleAdapterPosition) }
+            mobileDeviceItemUnregister.setOnClickListener {
+                (adapter as MobileDeviceAdapter).onDeviceUnregisterListener(device, holder.flexibleAdapterPosition)
+            }
         }
     }
 
@@ -44,6 +46,7 @@ class MobileDeviceItem(val device: MobileDevice) : AbstractFlexibleItem<MobileDe
     }
 
     class ViewHolder(val view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
+
         override val containerView: View
             get() = contentView
     }
