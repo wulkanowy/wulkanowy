@@ -19,7 +19,6 @@
         android:layout_toStartOf="@id/mobileDeviceItemUnregister"
         android:layout_toLeftOf="@id/mobileDeviceItemUnregister"
         android:ellipsize="end"
-        android:lineSpacingMultiplier="1.2"
         android:maxLines="1"
         android:text="@string/all_description"
         android:textSize="16sp" />
@@ -38,10 +37,10 @@
         android:layout_toStartOf="@id/mobileDeviceItemUnregister"
         android:layout_toLeftOf="@id/mobileDeviceItemUnregister"
         android:text="@string/all_date"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="?android:textColorSecondary"
         android:textSize="14sp" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <ImageButton
         android:id="@+id/mobileDeviceItemUnregister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,10 +49,9 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="?selectableItemBackgroundBorderless"
         android:contentDescription="@string/mobile_devices_unregister"
         android:padding="10dp"
         app:srcCompat="@drawable/ic_message_delete_24dp"
-        app:tint="?android:attr/android:textColorSecondary"
-        tools:ignore="RelativeOverlap" />
+        app:tint="?android:textColorSecondary" />
 </RelativeLayout>
