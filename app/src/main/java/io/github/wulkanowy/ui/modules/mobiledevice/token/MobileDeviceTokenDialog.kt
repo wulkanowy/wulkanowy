@@ -8,6 +8,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import dagger.android.support.DaggerDialogFragment
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.repositories.mobiledevice.MobileDeviceRemote
@@ -62,18 +63,16 @@ class MobileDeviceTokenDialog : DaggerDialogFragment(), MobileDeviceTokenVIew {
         mobileDeviceDialogContent.visibility = VISIBLE
     }
 
+    override fun closeDialog() {
+        dismiss()
+    }
+
     override fun showError(text: String, error: Throwable) {
-        mobileDeviceDialogMessage.run {
-            this.visibility = VISIBLE
-            this.text = text
-        }
+        showMessage(text)
     }
 
     override fun showMessage(text: String) {
-        mobileDeviceDialogMessage.run {
-            this.visibility = VISIBLE
-            this.text = text
-        }
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
 
     override fun showExpiredDialog() {

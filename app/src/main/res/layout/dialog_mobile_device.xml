@@ -2,52 +2,31 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.modules.mobiledevice.token.MobileDeviceTokenDialog">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="@string/all_details"
-            android:textSize="20sp" />
-
-        <ProgressBar
-            android:id="@+id/mobileDeviceDialogProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            tools:visibility="invisible" />
-
-        <TextView
-            android:id="@+id/mobileDeviceDialogMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/mobileDeviceDialogContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone"
+            android:visibility="invisible"
             tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/mobileDeviceQr"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
+                android:layout_gravity="center"
                 android:contentDescription="@string/mobile_device_qr"
-                android:paddingBottom="12dp" />
+                android:layout_marginBottom="12dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -95,17 +74,25 @@
                 android:text="@string/all_no_data"
                 android:textIsSelectable="true"
                 android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/mobileDeviceDialogClose"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="15dp"
+                android:text="@string/all_close"
+                android:textAllCaps="true"
+                android:textSize="15sp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/mobileDeviceDialogClose"
-            style="@style/Widget.AppCompat.Button.Borderless"
+        <ProgressBar
+            android:id="@+id/mobileDeviceDialogProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="15dp"
-            android:text="@string/all_close"
-            android:textAllCaps="true"
-            android:textSize="15sp" />
-    </LinearLayout>
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            tools:visibility="invisible" />
+    </FrameLayout>
 </ScrollView>

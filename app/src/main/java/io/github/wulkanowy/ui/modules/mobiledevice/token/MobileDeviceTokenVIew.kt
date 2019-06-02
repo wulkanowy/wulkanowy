@@ -11,5 +11,7 @@ interface MobileDeviceTokenVIew : BaseView {
 
     fun showContent()
 
+    fun closeDialog()
+
     fun updateData(token: MobileDeviceRemote.Token)
 }
