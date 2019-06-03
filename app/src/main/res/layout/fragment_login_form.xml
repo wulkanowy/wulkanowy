@@ -93,7 +93,6 @@
                     android:id="@+id/loginFormPass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="@string/login_sign_in"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     app:fontFamily="sans-serif" />
@@ -115,18 +114,15 @@
                 app:layout_constraintBottom_toTopOf="@+id/loginFormHostLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginFormPassLayout"
-                app:passwordToggleEnabled="true">
+                app:layout_constraintTop_toBottomOf="@+id/loginFormPassLayout">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/loginFormApiKey"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeActionLabel="@string/login_sign_in"
-                    android:imeOptions="actionDone"
-                    android:maxLines="1"
-                    app:fontFamily="sans-serif" />
-
+                    android:inputType="text"
+                    android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
