@@ -10,19 +10,5 @@ Naprawiliśmy:
 - błędne wyświetlanie średniej
 - synchronizację w tle na danych komórkowych przy domyślnych ustawieniach
 - rzadkie błędy podczas ładowania szczęśliwego numerka
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
-- test999999999999999999999
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases
