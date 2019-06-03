@@ -1,0 +1,18 @@
+apply plugin: "com.star-zero.gradle.githook"
+
+githook {
+    failOnMissingHooksDir = false
+    hooks {
+        "pre-push" {
+            task = "playPublishLint"
+        }
+    }
+}
+
+task playPublishLint {
+    doLast {
+        if (file('src/main/play/release-notes/pl-PL/default.txt').text.length() > 500) {
+            throw new GradleException('Release notes content has reached the limit of 500 characters!')
+        }
+    }
+}
