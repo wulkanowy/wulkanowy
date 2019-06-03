@@ -4,15 +4,11 @@ import android.content.Context
 import androidx.multidex.MultiDex
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
 import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.utils.Log
-import io.fabric.sdk.android.Fabric
-import io.github.wulkanowy.BuildConfig.CRASHLYTICS_ENABLED
 import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.di.DaggerAppComponent
 import io.github.wulkanowy.services.sync.SyncWorkerFactory
@@ -20,6 +16,7 @@ import io.github.wulkanowy.ui.base.ThemeManager
 import io.github.wulkanowy.utils.ActivityLifecycleLogger
 import io.github.wulkanowy.utils.CrashlyticsTree
 import io.github.wulkanowy.utils.DebugLogTree
+import io.github.wulkanowy.utils.initCrashlytics
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
@@ -46,7 +43,7 @@ class WulkanowyApp : DaggerApplication() {
         RxJavaPlugins.setErrorHandler(::onError)
         themeManager.applyDefaultTheme()
 
-        initCrashlytics()
+        initCrashlytics(applicationContext)
         initLogging()
     }
 
@@ -58,12 +55,6 @@ class WulkanowyApp : DaggerApplication() {
             Timber.plant(CrashlyticsTree())
         }
         registerActivityLifecycleCallbacks(ActivityLifecycleLogger())
-    }
-
-    private fun initCrashlytics() {
-        Fabric.with(Fabric.Builder(this).kits(
-            Crashlytics.Builder().core(CrashlyticsCore.Builder().disabled(!CRASHLYTICS_ENABLED).build()).build()
-        ).debuggable(DEBUG).build())
     }
 
     private fun onError(error: Throwable) {
