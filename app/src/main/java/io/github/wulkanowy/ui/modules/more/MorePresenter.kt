@@ -30,7 +30,8 @@ class MorePresenter @Inject constructor(
                 homeworkRes?.first -> openHomeworkView()
                 noteRes?.first -> openNoteView()
                 luckyNumberRes?.first -> openLuckyNumberView()
-                mobileDevicesRes?.first -> openMobileDevicesView()settingsRes?.first -> openSettingsView()
+                mobileDevicesRes?.first -> openMobileDevicesView()
+                settingsRes?.first -> openSettingsView()
                 aboutRes?.first -> openAboutView()
             }
         }
