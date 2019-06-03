@@ -31,7 +31,7 @@ class GradeAverageProvider @Inject constructor(
         val plusModifier = preferencesRepository.gradePlusModifier
         val minusModifier = preferencesRepository.gradeMinusModifier
 
-        return getAverageFromGradeSummary(selectedSemester, forceRefresh)
+        return getAverageFromGradeSummary(selectedSemester)
             .switchIfEmpty(gradeRepository.getGrades(student, selectedSemester, forceRefresh)
                 .flatMap { firstGrades ->
                     if (selectedSemester == firstSemester) Single.just(firstGrades)
@@ -51,7 +51,7 @@ class GradeAverageProvider @Inject constructor(
         val plusModifier = preferencesRepository.gradePlusModifier
         val minusModifier = preferencesRepository.gradeMinusModifier
 
-        return getAverageFromGradeSummary(selectedSemester, forceRefresh)
+        return getAverageFromGradeSummary(selectedSemester)
             .switchIfEmpty(gradeRepository.getGrades(student, selectedSemester, forceRefresh)
                 .map { grades ->
                     grades.map { it.changeModifier(plusModifier, minusModifier) }
@@ -60,8 +60,8 @@ class GradeAverageProvider @Inject constructor(
                 })
     }
 
-    private fun getAverageFromGradeSummary(selectedSemester: Semester, forceRefresh: Boolean): Maybe<Map<String, Double>> {
-        return gradeSummaryRepository.getGradesSummary(selectedSemester, forceRefresh)
+    private fun getAverageFromGradeSummary(selectedSemester: Semester): Maybe<Map<String, Double>> {
+        return gradeSummaryRepository.getGradesSummary(selectedSemester)
             .toMaybe()
             .flatMap {
                 if (it.any { summary -> summary.average != .0 }) {
