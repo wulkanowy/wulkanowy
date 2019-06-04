@@ -68,7 +68,7 @@ class GradeAverageProviderTest {
     @Test
     fun onlyOneSemesterTest() {
         doReturn("only_one_semester").`when`(preferencesRepository).gradeAverageMode
-        doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeSummaryRepository).getGradesSummary(semesters[2], false)
+        doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeSummaryRepository).getGradesSummary(semesters[2], true)
 
         val averages = gradeAverageProvider.getGradeAverage(student, semesters, semesters[2].semesterId, true)
             .blockingGet()
@@ -81,7 +81,7 @@ class GradeAverageProviderTest {
     @Test
     fun allYearFirstSemesterTest() {
         doReturn("all_year").`when`(preferencesRepository).gradeAverageMode
-        doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeSummaryRepository).getGradesSummary(semesters[1], false)
+        doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeSummaryRepository).getGradesSummary(semesters[1], true)
 
         val averages = gradeAverageProvider.getGradeAverage(student, semesters, semesters[1].semesterId, true)
             .blockingGet()
@@ -95,7 +95,7 @@ class GradeAverageProviderTest {
     fun allYearSecondSemesterTest() {
         doReturn("all_year").`when`(preferencesRepository).gradeAverageMode
         doReturn(Single.just(firstGrades)).`when`(gradeRepository).getGrades(student, semesters[1], false)
-        doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeSummaryRepository).getGradesSummary(semesters[2], false)
+        doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeSummaryRepository).getGradesSummary(semesters[2], true)
 
         val averages = gradeAverageProvider.getGradeAverage(student, semesters, semesters[2].semesterId, true)
             .blockingGet()
@@ -119,7 +119,7 @@ class GradeAverageProviderTest {
         doReturn(Single.just(listOf(
             getSummary(22, "Matematyka", 3.1),
             getSummary(22, "Fizyka", 3.26)
-        ))).`when`(gradeSummaryRepository).getGradesSummary(semesters[2], false)
+        ))).`when`(gradeSummaryRepository).getGradesSummary(semesters[2], true)
 
         val averages = gradeAverageProvider.getGradeAverage(student, semesters, semesters[2].semesterId, true)
             .blockingGet()
@@ -137,7 +137,7 @@ class GradeAverageProviderTest {
         doReturn(Single.just(listOf(
             getSummary(22, "Matematyka", 3.1),
             getSummary(22, "Fizyka", 3.26)
-        ))).`when`(gradeSummaryRepository).getGradesSummary(semesters[2], false)
+        ))).`when`(gradeSummaryRepository).getGradesSummary(semesters[2], true)
 
         val averages = gradeAverageProvider.getGradeAverage(student, semesters, semesters[2].semesterId, true)
             .blockingGet()
