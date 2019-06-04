@@ -105,6 +105,11 @@
             app:title="@string/pref_view_grade_average_mode"
             app:useSimpleSummaryProvider="true" />
         <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="@string/pref_key_grade_average_force_calc"
+            app:title="@string/pref_view_grade_average_force_calc"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_fill_message_content"
