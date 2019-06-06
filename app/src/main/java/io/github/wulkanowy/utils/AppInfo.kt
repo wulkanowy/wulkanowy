@@ -12,17 +12,17 @@ import javax.inject.Singleton
 @Singleton
 open class AppInfo {
 
-    open val isCrashlyticsEnabled = CRASHLYTICS_ENABLED
+    open val isCrashlyticsEnabled get() = CRASHLYTICS_ENABLED
 
-    open val isDebug = DEBUG
+    open val isDebug get() = DEBUG
 
-    open val versionCode = VERSION_CODE
+    open val versionCode get() = VERSION_CODE
 
-    open val versionName = VERSION_NAME
+    open val versionName get() = VERSION_NAME
 
-    open val systemVersion = SDK_INT
+    open val systemVersion get() = SDK_INT
 
-    open val systemManufacturer: String = MANUFACTURER
+    open val systemManufacturer: String get() = MANUFACTURER
 
-    open val systemModel: String = MODEL
+    open val systemModel: String get() = MODEL
 }
