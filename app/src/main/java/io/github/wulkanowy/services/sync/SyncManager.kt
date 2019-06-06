@@ -10,29 +10,33 @@ import androidx.work.NetworkType.CONNECTED
 import androidx.work.NetworkType.UNMETERED
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
+import io.github.wulkanowy.data.db.SharedPrefHelper
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.services.sync.channels.DebugChannel
 import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.isHolidays
 import org.threeten.bp.LocalDate.now
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
 class SyncManager @Inject constructor(
     private val workManager: WorkManager,
     private val preferencesRepository: PreferencesRepository,
+    sharedPrefHelper: SharedPrefHelper,
     newEntriesChannel: NewEntriesChannel,
     debugChannel: DebugChannel,
-    @Named("isDebug") isDebug: Boolean
+    appInfo: AppInfo
 ) {
 
     init {
-        if (SDK_INT >= O) newEntriesChannel.create()
-        if (SDK_INT >= O && isDebug) debugChannel.create()
+        if (SDK_INT > O) {
+            newEntriesChannel.create()
+            if (appInfo.isDebug) debugChannel.create()
+        }
         if (now().isHolidays) stopSyncWorker()
         Timber.i("SyncManager was initialized")
     }
@@ -40,7 +44,7 @@ class SyncManager @Inject constructor(
     fun startSyncWorker(restart: Boolean = false) {
         if (preferencesRepository.isServiceEnabled && !now().isHolidays) {
             workManager.enqueueUniquePeriodicWork(SyncWorker::class.java.simpleName, if (restart) REPLACE else KEEP,
-                PeriodicWorkRequest.Builder(SyncWorker::class.java, preferencesRepository.servicesInterval, MINUTES, 10, MINUTES)
+                PeriodicWorkRequest.Builder(SyncWorker::class.java, preferencesRepository.servicesInterval, MINUTES)
                     .setBackoffCriteria(EXPONENTIAL, 30, MINUTES)
                     .setConstraints(Constraints.Builder()
                         .setRequiredNetworkType(if (preferencesRepository.isServicesOnlyWifi) UNMETERED else CONNECTED)
