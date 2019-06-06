@@ -32,12 +32,24 @@ class SyncManager @Inject constructor(
     appInfo: AppInfo
 ) {
 
+    companion object {
+
+        private const val APP_VERSION_CODE_KEY = "app_version_code"
+    }
+
     init {
+        if (now().isHolidays) stopSyncWorker()
+
         if (SDK_INT > O) {
             newEntriesChannel.create()
             if (appInfo.isDebug) debugChannel.create()
         }
-        if (now().isHolidays) stopSyncWorker()
+
+        if (sharedPrefHelper.getLong(APP_VERSION_CODE_KEY, -1L) != appInfo.versionCode.toLong()) {
+            startSyncWorker(true)
+            sharedPrefHelper.putLong(APP_VERSION_CODE_KEY, appInfo.versionCode.toLong(), true)
+        }
+
         Timber.i("SyncManager was initialized")
     }
 
