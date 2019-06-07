@@ -1,6 +1,8 @@
 package io.github.wulkanowy
 
 import android.content.Context
+import android.util.Log.INFO
+import android.util.Log.VERBOSE
 import androidx.multidex.MultiDex
 import androidx.work.Configuration
 import androidx.work.WorkManager
@@ -9,11 +11,11 @@ import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.utils.Log
-import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.di.DaggerAppComponent
 import io.github.wulkanowy.services.sync.SyncWorkerFactory
 import io.github.wulkanowy.ui.base.ThemeManager
 import io.github.wulkanowy.utils.ActivityLifecycleLogger
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.CrashlyticsTree
 import io.github.wulkanowy.utils.DebugLogTree
 import io.github.wulkanowy.utils.initCrashlytics
@@ -31,6 +33,9 @@ class WulkanowyApp : DaggerApplication() {
     @Inject
     lateinit var themeManager: ThemeManager
 
+    @Inject
+    lateinit var appInfo: AppInfo
+
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
@@ -39,16 +44,24 @@ class WulkanowyApp : DaggerApplication() {
     override fun onCreate() {
         super.onCreate()
         AndroidThreeTen.init(this)
-        WorkManager.initialize(this, Configuration.Builder().setWorkerFactory(workerFactory).build())
         RxJavaPlugins.setErrorHandler(::onError)
         themeManager.applyDefaultTheme()
 
-        initCrashlytics(applicationContext)
+        initWorkManager()
         initLogging()
+        initCrashlytics(this, appInfo)
+    }
+
+    private fun initWorkManager() {
+        WorkManager.initialize(this,
+            Configuration.Builder()
+                .setWorkerFactory(workerFactory)
+                .setMinimumLoggingLevel(if (appInfo.isDebug) VERBOSE else INFO)
+                .build())
     }
 
     private fun initLogging() {
-        if (DEBUG) {
+        if (appInfo.isDebug) {
             Timber.plant(DebugLogTree())
             FlexibleAdapter.enableLogs(Log.Level.DEBUG)
         } else {

@@ -6,10 +6,10 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import dagger.android.support.AndroidSupportInjection
-import io.github.wulkanowy.BuildConfig.DEBUG
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.AppInfo
 import javax.inject.Inject
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener,
@@ -17,6 +17,9 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
     @Inject
     lateinit var presenter: SettingsPresenter
+
+    @Inject
+    lateinit var appInfo: AppInfo
 
     companion object {
         fun newInstance() = SettingsFragment()
@@ -37,7 +40,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.scheme_preferences, rootKey)
-        findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible = DEBUG
+        findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible = appInfo.isDebug
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {

@@ -18,10 +18,10 @@
         android:id="@+id/mobileDevicesEmpty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.0"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp"
+        android:visibility="gone"
         tools:ignore="UseCompoundDrawables">
 
         <TextView

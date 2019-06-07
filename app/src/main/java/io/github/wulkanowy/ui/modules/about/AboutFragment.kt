@@ -17,8 +17,7 @@ import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import io.github.wulkanowy.BuildConfig.VERSION_CODE
-import io.github.wulkanowy.BuildConfig.VERSION_NAME
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -35,6 +34,9 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
 
     @Inject
     lateinit var aboutAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
+
+    @Inject
+    lateinit var appInfo: AppInfo
 
     override val versionRes: Triple<String, String, Drawable?>?
         get() = context?.run {
@@ -115,9 +117,9 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
                 putExtra(EXTRA_SUBJECT, "Zgłoszenie błędu")
                 putExtra(EXTRA_TEXT, "Tu umieść treść zgłoszenia\n\n${"-".repeat(40)}\n " +
                     """
-                        Build: $VERSION_CODE
-                        SDK: $SDK_INT
-                        Device: $MANUFACTURER $MODEL
+                        Build: ${appInfo.versionCode}
+                        SDK: ${appInfo.systemVersion}
+                        Device: ${appInfo.systemManufacturer} ${appInfo.systemModel}
                     """.trimIndent())
             }
 
