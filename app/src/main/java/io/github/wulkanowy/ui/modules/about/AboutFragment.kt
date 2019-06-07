@@ -7,9 +7,6 @@ import android.content.Intent.EXTRA_SUBJECT
 import android.content.Intent.EXTRA_TEXT
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build.MANUFACTURER
-import android.os.Build.MODEL
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +14,10 @@ import android.view.ViewGroup
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.setOnItemClickListener
@@ -40,7 +37,7 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
 
     override val versionRes: Triple<String, String, Drawable?>?
         get() = context?.run {
-            Triple(getString(R.string.about_version), "$VERSION_NAME ($VERSION_CODE)", getCompatDrawable(R.drawable.ic_all_about))
+            Triple(getString(R.string.about_version), "${appInfo.versionName} (${appInfo.versionCode})", getCompatDrawable(R.drawable.ic_all_about))
         }
 
     override val feedbackRes: Triple<String, String, Drawable?>?
