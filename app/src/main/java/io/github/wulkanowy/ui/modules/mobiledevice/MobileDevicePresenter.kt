@@ -71,7 +71,10 @@ class MobileDevicePresenter @Inject constructor(
     }
 
     fun onUnregisterCancelled() {
-        view?.restoreDeleteItem()
+        view?.run {
+            restoreDeleteItem()
+            showEmpty(isViewEmpty)
+        }
     }
 
     fun onUnregisterConfirmed(device: MobileDevice) {
