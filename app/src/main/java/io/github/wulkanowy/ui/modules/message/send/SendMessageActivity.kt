@@ -7,8 +7,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
+import com.google.android.material.chip.Chip
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
@@ -64,6 +66,16 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
         messageContainer = sendMessageContainer
 
         presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_MESSAGE) as? Message, intent.getSerializableExtra(EXTRA_REPLY) as? Boolean)
+
+        val array = arrayOf("Cos", "cos2", "fsafsa")
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, array)
+
+        sendMessageToInput.setAdapter(adapter)
+
+        sendMessageToInput.setOnItemClickListener { parent, view, position, id ->
+            sendMessageToChips.addView(Chip(this).apply { text = parent.getItemAtPosition(position) as String })
+            sendMessageToInput.text = null
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

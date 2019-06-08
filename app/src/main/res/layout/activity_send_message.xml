@@ -93,10 +93,24 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:minHeight="58dp"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="@id/sendMessageContent"
             app:layout_constraintStart_toEndOf="@id/sendMessageToHint"
-            app:layout_constraintTop_toBottomOf="@id/sendMessageFromDivider" />
+            app:layout_constraintTop_toBottomOf="@id/sendMessageFromDivider">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/sendMessageToChips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <AutoCompleteTextView
+                android:id="@+id/sendMessageToInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:completionThreshold="1"
+                android:minWidth="50dp" />
+        </LinearLayout>
 
         <View
             android:id="@+id/sendMessageToDivider"
