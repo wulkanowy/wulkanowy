@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.reactivex.Single
 import org.junit.Before
@@ -34,13 +35,16 @@ class LoginFormPresenterTest {
     @Mock
     lateinit var analytics: FirebaseAnalyticsHelper
 
+    @Mock
+    lateinit var appInfo: AppInfo
+
     private lateinit var presenter: LoginFormPresenter
 
     @Before
     fun initPresenter() {
         MockitoAnnotations.initMocks(this)
         clearInvocations(repository, loginFormView)
-        presenter = LoginFormPresenter(TestSchedulersProvider(), repository, errorHandler, analytics, false)
+        presenter = LoginFormPresenter(TestSchedulersProvider(), repository, errorHandler, analytics, appInfo)
         presenter.onAttachView(loginFormView)
     }
 
@@ -89,7 +93,7 @@ class LoginFormPresenterTest {
     fun loginTest() {
         val studentTest = Student(email = "test@", password = "123", scrapperBaseUrl = "https://fakelog.cf", loginType = "AUTO", studentName = "", schoolSymbol = "", schoolName = "", studentId = 0, classId = 1, isCurrent = false, symbol = "", registrationDate = now(), className = "", apiBaseUrl = "", apiKey = "", certificate = "", certificateKey = "", loginMode = "")
         doReturn(Single.just(listOf(studentTest)))
-            .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString())
+            .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString(), anyString())
 
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
@@ -106,7 +110,7 @@ class LoginFormPresenterTest {
     @Test
     fun loginEmptyTest() {
         doReturn(Single.just(emptyList<Student>()))
-            .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString())
+            .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString(), anyString())
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
@@ -122,7 +126,7 @@ class LoginFormPresenterTest {
     @Test
     fun loginEmptyTwiceTest() {
         doReturn(Single.just(emptyList<Student>()))
-            .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString())
+            .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString(), anyString())
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
@@ -140,7 +144,7 @@ class LoginFormPresenterTest {
     fun loginErrorTest() {
         val testException = RuntimeException("test")
         doReturn(Single.error<List<Student>>(testException))
-            .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString())
+            .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString(), anyString())
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
@@ -154,4 +158,3 @@ class LoginFormPresenterTest {
         verify(errorHandler).dispatch(testException)
     }
 }
-
