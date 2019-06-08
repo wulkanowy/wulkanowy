@@ -39,13 +39,13 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
     }
 
     override val formRecipientsData: List<Recipient>
-        get() = (sendMessageRecipientsInput.selectedChipList).map { (it as RecipientChip).recipient }
+        get() = emptyList()
 
     override val formSubjectValue: String
-        get() = sendMessageSubjectInput.text.toString()
+        get() = sendMessageSubject.text.toString()
 
     override val formContentValue: String
-        get() = sendMessageContentInput.text.toString()
+        get() = sendMessageMessageContent.text.toString()
 
     override val messageRequiredRecipients: String
         get() = getString(R.string.message_required_recipients)
@@ -81,15 +81,13 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
     }
 
     override fun setReportingUnit(unit: ReportingUnit) {
-        sendMessageFromTextView.setText(unit.senderName)
+        sendMessageFrom.text = unit.senderName
     }
 
     override fun setRecipients(recipients: List<Recipient>) {
-        sendMessageRecipientsInput.filterableList = recipients.map { RecipientChip(it) }
     }
 
     override fun setSelectedRecipients(recipients: List<Recipient>) {
-        recipients.map { sendMessageRecipientsInput.addChip(RecipientChip(it)) }
     }
 
     override fun showProgress(show: Boolean) {
@@ -109,11 +107,11 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
     }
 
     override fun setSubject(subject: String) {
-        sendMessageSubjectInput.setText(subject)
+        sendMessageSubject.setText(subject)
     }
 
     override fun setContent(content: String) {
-        sendMessageContentInput.setText(content)
+        sendMessageMessageContent.setText(content)
     }
 
     override fun showMessage(text: String) {
