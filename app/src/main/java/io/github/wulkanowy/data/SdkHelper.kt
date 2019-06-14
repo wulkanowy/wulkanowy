@@ -33,6 +33,8 @@ class SdkHelper @Inject constructor(private val api: Sdk) {
             this.password = password
             this.symbol = symbol
             this.apiKey = apiKey
+            certKey = "" // clear certificate on getStudent()
+            certificate = ""
             scrapperHost = URL(endpoint).run { host + ":$port".removeSuffix(":-1") }
             ssl = endpoint.startsWith("https")
             mode = Sdk.Mode.HYBRID // TODO provide switch
