@@ -20,8 +20,8 @@ class HomeworkRemote @Inject constructor(private val sdk: Sdk) {
                     Homework(
                         semesterId = semester.semesterId,
                         studentId = semester.studentId,
-                        date = it.date.toLocalDate(),
-                        entryDate = it.entryDate.toLocalDate(),
+                        date = it.date,
+                        entryDate = it.entryDate,
                         subject = it.subject,
                         content = it.content,
                         teacher = it.teacher,

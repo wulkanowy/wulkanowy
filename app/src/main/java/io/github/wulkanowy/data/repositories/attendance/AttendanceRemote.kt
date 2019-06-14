@@ -14,12 +14,12 @@ class AttendanceRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getAttendance(semester: Semester, startDate: LocalDate, endDate: LocalDate): Single<List<Attendance>> {
         return Single.just(sdk.apply { diaryId = semester.diaryId })
-            .flatMap { it.getAttendance(startDate, endDate) }.map { attendance ->
+            .flatMap { it.getAttendance(startDate, endDate, semester.semesterId) }.map { attendance ->
                 attendance.map {
                     Attendance(
                         studentId = semester.studentId,
                         diaryId = semester.diaryId,
-                        date = it.date.toLocalDate(),
+                        date = it.date,
                         number = it.number,
                         subject = it.subject,
                         name = it.name,

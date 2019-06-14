@@ -13,12 +13,12 @@ class NoteRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getNotes(semester: Semester): Single<List<Note>> {
         return Single.just(sdk.apply { diaryId = semester.diaryId })
-            .flatMap { it.getNotes() }
+            .flatMap { it.getNotes(semester.semesterId) }
             .map { notes ->
                 notes.map {
                     Note(
                         studentId = semester.studentId,
-                        date = it.date.toLocalDate(),
+                        date = it.date,
                         teacher = it.teacher,
                         category = it.category,
                         content = it.content

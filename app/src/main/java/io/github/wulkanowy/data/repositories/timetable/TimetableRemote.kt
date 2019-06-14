@@ -3,8 +3,6 @@ package io.github.wulkanowy.data.repositories.timetable
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.toLocalDate
-import io.github.wulkanowy.utils.toLocalDateTime
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
@@ -22,9 +20,9 @@ class TimetableRemote @Inject constructor(private val sdk: Sdk) {
                         studentId = semester.studentId,
                         diaryId = semester.diaryId,
                         number = it.number,
-                        start = it.start.toLocalDateTime(),
-                        end = it.end.toLocalDateTime(),
-                        date = it.date.toLocalDate(),
+                        start = it.start,
+                        end = it.end,
+                        date = it.date,
                         subject = it.subject,
                         subjectOld = it.subjectOld,
                         group = it.group,

@@ -18,7 +18,7 @@ class GradeSummaryRemote @Inject constructor(private val sdk: Sdk) {
                     GradeSummary(
                         semesterId = semester.semesterId,
                         studentId = semester.studentId,
-                        position = it.order,
+                        position = 0,
                         subject = it.name,
                         predictedGrade = it.predicted,
                         finalGrade = it.final,
