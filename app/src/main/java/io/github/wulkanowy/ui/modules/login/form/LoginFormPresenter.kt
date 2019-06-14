@@ -52,10 +52,10 @@ class LoginFormPresenter @Inject constructor(
     }
 
     fun onSignInClick() {
-        val email = view?.formNameValue.orEmpty()
-        val password = view?.formPassValue.orEmpty()
-        val endpoint = view?.formHostValue.orEmpty()
-        val apiKey = view?.formApiKey.orEmpty()
+        val email = view?.formNameValue.orEmpty().trim()
+        val password = view?.formPassValue.orEmpty().trim()
+        val endpoint = view?.formHostValue.orEmpty().trim()
+        val apiKey = view?.formApiKey.orEmpty().trim()
 
         if (!validateCredentials(email, password)) return
 
