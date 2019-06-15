@@ -45,14 +45,14 @@ class MessagePreviewPresenter @Inject constructor(
                         message.let {
                             setSubject(if (it.subject.isNotBlank()) it.subject else noSubjectString)
                             setDate(it.date.toFormattedString("yyyy-MM-dd HH:mm:ss"))
-                            setContent(it.content.orEmpty())
+                            setContent(it.content)
                             initOptions()
 
                             if (it.recipient.isNotBlank()) setRecipient(it.recipient)
                             else setSender(it.sender)
                         }
                     }
-                    analytics.logEvent("load_message_preview", "length" to message.content?.length)
+                    analytics.logEvent("load_message_preview", "length" to message.content.length)
                 }) {
                     Timber.i("Loading message $id preview result: An exception occurred ")
                     view?.showMessageError()

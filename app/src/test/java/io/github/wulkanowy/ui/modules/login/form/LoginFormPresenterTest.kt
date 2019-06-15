@@ -91,7 +91,7 @@ class LoginFormPresenterTest {
 
     @Test
     fun loginTest() {
-        val studentTest = Student(email = "test@", password = "123", scrapperBaseUrl = "https://fakelog.cf", loginType = "AUTO", studentName = "", schoolSymbol = "", schoolName = "", studentId = 0, classId = 1, isCurrent = false, symbol = "", registrationDate = now(), className = "", apiBaseUrl = "", apiKey = "", certificate = "", certificateKey = "", loginMode = "")
+        val studentTest = Student(email = "test@", password = "123", scrapperBaseUrl = "https://fakelog.cf", loginType = "AUTO", studentName = "", schoolSymbol = "", schoolName = "", studentId = 0, classId = 1, isCurrent = false, symbol = "", registrationDate = now(), className = "", apiBaseUrl = "", apiKey = "", certificate = "", certificateKey = "", loginMode = "", userLoginId = 0)
         doReturn(Single.just(listOf(studentTest)))
             .`when`(repository).getStudents(anyString(), anyString(), anyString(), anyString(), anyString())
 

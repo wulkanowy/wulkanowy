@@ -32,7 +32,8 @@ class ExamRemoteTest {
         every {
             mockSdk.getExams(
                 of(2018, 9, 10),
-                of(2018, 9, 15)
+                of(2018, 9, 15),
+                1
             )
         } returns Single.just(listOf(
             getExam(of(2018, 9, 10)),

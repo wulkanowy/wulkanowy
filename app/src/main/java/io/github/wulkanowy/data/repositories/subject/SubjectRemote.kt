@@ -19,7 +19,7 @@ class SubjectRemote @Inject constructor(private val sdk: Sdk) {
                         studentId = semester.studentId,
                         diaryId = semester.diaryId,
                         name = it.name,
-                        realId = it.value
+                        realId = it.id
                     )
                 }
             }

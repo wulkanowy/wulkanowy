@@ -50,7 +50,7 @@ class MessageRepository @Inject constructor(
         return Single.just(sdkHelper.initApi(student))
             .flatMap { _ ->
                 local.getMessage(messageDbId)
-                    .filter { !it.content.isNullOrEmpty() }
+                    .filter { it.content.isNotEmpty() }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                         .flatMap {
                             if (it) local.getMessage(messageDbId).toSingle()

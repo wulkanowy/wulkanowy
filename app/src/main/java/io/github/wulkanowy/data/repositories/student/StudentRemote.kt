@@ -18,6 +18,7 @@ class StudentRemote @Inject constructor(private val sdk: Sdk) {
                     password = password,
                     symbol = student.symbol,
                     studentId = student.studentId,
+                    userLoginId = student.userLoginId,
                     studentName = student.studentName,
                     schoolSymbol = student.schoolSymbol,
                     schoolName = student.schoolName,

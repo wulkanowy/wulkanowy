@@ -32,6 +32,7 @@ class GradeStatisticsRemoteTest {
             getGradeStatistics("Matematyka")
         ))
 
+        every { mockSdk.schoolSymbol } returns ""
         every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
         every { semesterMock.semesterId } returns 1

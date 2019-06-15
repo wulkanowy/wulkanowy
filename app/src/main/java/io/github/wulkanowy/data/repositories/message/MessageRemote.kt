@@ -6,7 +6,6 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.toLocalDateTime
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime.now
 import javax.inject.Inject
@@ -18,7 +17,7 @@ import io.github.wulkanowy.api.messages.Recipient as ApiRecipient
 class MessageRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getMessages(student: Student, folder: MessageFolder): Single<List<Message>> {
-        return sdk.getMessages(Folder.valueOf(folder.name)).map { messages ->
+        return sdk.getMessages(Folder.valueOf(folder.name), now().minusMonths(6), now(), student.userLoginId).map { messages ->
             messages.map {
                 Message(
                     studentId = student.id.toInt(),
@@ -28,7 +27,8 @@ class MessageRemote @Inject constructor(private val sdk: Sdk) {
                     senderId = it.senderId ?: 0,
                     recipient = it.recipient.orEmpty(),
                     subject = it.subject.trim(),
-                    date = it.date?.toLocalDateTime() ?: now(),
+                    date = it.date?: now(),
+                    content = it.content.orEmpty(),
                     folderId = it.folderId,
                     unread = it.unread ?: false,
                     unreadBy = it.unreadBy ?: 0,

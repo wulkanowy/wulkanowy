@@ -1,8 +1,8 @@
 package io.github.wulkanowy.data.repositories.attendance
 
-import io.github.wulkanowy.api.attendance.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.sdk.pojo.Attendance
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -12,7 +12,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDate
-import java.sql.Date
+import org.threeten.bp.LocalDate.of
 
 class AttendanceRemoteTest {
 
@@ -29,12 +29,15 @@ class AttendanceRemoteTest {
 
     @Test
     fun getAttendanceTest() {
-        every { mockSdk.getAttendance(
-                LocalDate.of(2018, 9, 10),
-                LocalDate.of(2018, 9, 15)
-        ) } returns Single.just(listOf(
-                getAttendance("2018-09-10"),
-                getAttendance("2018-09-17")
+        every {
+            mockSdk.getAttendance(
+                of(2018, 9, 10),
+                of(2018, 9, 15),
+                1
+            )
+        } returns Single.just(listOf(
+            getAttendance(of(2018, 9, 10)),
+            getAttendance(of(2018, 9, 17))
         ))
 
         every { mockSdk.diaryId } returns 1
@@ -42,16 +45,26 @@ class AttendanceRemoteTest {
         every { semesterMock.diaryId } returns 1
 
         val attendance = AttendanceRemote(mockSdk).getAttendance(semesterMock,
-                LocalDate.of(2018, 9, 10),
-                LocalDate.of(2018, 9, 15)).blockingGet()
+            of(2018, 9, 10),
+            of(2018, 9, 15)
+        ).blockingGet()
         assertEquals(2, attendance.size)
     }
 
-    private fun getAttendance(dateString: String): Attendance {
-        return Attendance().apply {
-            subject = "Fizyka"
-            name = "Obecność"
-            date = Date.valueOf(dateString)
-        }
+    private fun getAttendance(date: LocalDate): Attendance {
+        return Attendance(
+            subject = "Fizyka",
+            name = "Obecność",
+            date = date,
+            number = 0,
+            deleted = false,
+            excusable = false,
+            excused = false,
+            exemption = false,
+            lateness = false,
+            presence = false,
+            categoryId = 1,
+            absence = false
+        )
     }
 }

@@ -13,7 +13,7 @@ class ExamRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getExams(semester: Semester, startDate: LocalDate, endDate: LocalDate): Single<List<Exam>> {
         return Single.just(sdk.apply { diaryId = semester.diaryId })
-            .flatMap { it.getExams(startDate, endDate) }.map { exams ->
+            .flatMap { it.getExams(startDate, endDate, semester.semesterId) }.map { exams ->
                 exams.map {
                     Exam(
                         studentId = semester.studentId,
