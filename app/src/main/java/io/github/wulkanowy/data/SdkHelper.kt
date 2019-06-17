@@ -18,6 +18,7 @@ class SdkHelper @Inject constructor(private val api: Sdk) {
             scrapperHost = URL(student.scrapperBaseUrl).run { host + ":$port".removeSuffix(":-1") }
             ssl = student.scrapperBaseUrl.startsWith("https")
             loginType = Sdk.ScrapperLoginType.valueOf(student.loginType)
+            loginId = student.userLoginId
 
             mode = Sdk.Mode.HYBRID // TODO provide switch
             apiBaseUrl = student.apiBaseUrl

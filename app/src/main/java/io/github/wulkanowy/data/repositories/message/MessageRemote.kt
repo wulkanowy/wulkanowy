@@ -17,7 +17,7 @@ import io.github.wulkanowy.api.messages.Recipient as ApiRecipient
 class MessageRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getMessages(student: Student, folder: MessageFolder): Single<List<Message>> {
-        return sdk.getMessages(Folder.valueOf(folder.name), now().minusMonths(6), now(), student.userLoginId).map { messages ->
+        return sdk.getMessages(Folder.valueOf(folder.name), now().minusMonths(6), now()).map { messages ->
             messages.map {
                 Message(
                     studentId = student.id.toInt(),

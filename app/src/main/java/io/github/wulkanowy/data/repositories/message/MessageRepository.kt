@@ -60,7 +60,7 @@ class MessageRepository @Inject constructor(
                             remote.getMessagesContent(dbMessage, markAsRead).doOnSuccess {
                                 local.updateMessages(listOf(dbMessage.copy(unread = false).apply {
                                     id = dbMessage.id
-                                    content = it
+                                    content = content.ifBlank { it }
                                 }))
                             }
                         }.flatMap {

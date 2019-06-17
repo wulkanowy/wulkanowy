@@ -98,8 +98,8 @@ play {
 }
 
 dependencies {
-    implementation "com.github.wulkanowy:api:157874b"
-    implementation "io.github.wulkanowy:sdk:ff6cdb9"
+    implementation "io.github.wulkanowy:api:0.9.3"
+    implementation "io.github.wulkanowy:sdk:a4f830e"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "androidx.core:core:1.0.2"
