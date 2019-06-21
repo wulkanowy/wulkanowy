@@ -1,8 +1,8 @@
 package io.github.wulkanowy.data.repositories.exam
 
-import io.github.wulkanowy.sdk.pojo.Exam
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.sdk.pojo.Exam
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -43,11 +43,13 @@ class ExamRemoteTest {
         every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 1
+        every { semesterMock.semesterId } returns 1
 
-        val exams = ExamRemote(mockSdk).getExams(semesterMock,
-            of(2018, 9, 10),
-            of(2018, 9, 15)
-        ).blockingGet()
+        val exams = ExamRemote(mockSdk)
+            .getExams(semesterMock,
+                of(2018, 9, 10),
+                of(2018, 9, 15)
+            ).blockingGet()
         assertEquals(2, exams.size)
     }
 

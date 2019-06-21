@@ -32,11 +32,8 @@ class GradeStatisticsRemoteTest {
             getGradeStatistics("Matematyka")
         ))
 
-        every { mockSdk.schoolSymbol } returns ""
-        every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
         every { semesterMock.semesterId } returns 1
-        every { semesterMock.semesterName } returns 2
         every { semesterMock.diaryId } returns 1
 
         val stats = GradeStatisticsRemote(mockSdk).getGradeStatistics(semesterMock, false).blockingGet()

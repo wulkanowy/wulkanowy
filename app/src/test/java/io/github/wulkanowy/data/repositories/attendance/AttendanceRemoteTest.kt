@@ -43,6 +43,7 @@ class AttendanceRemoteTest {
         every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 1
+        every { semesterMock.semesterId } returns 1
 
         val attendance = AttendanceRemote(mockSdk).getAttendance(semesterMock,
             of(2018, 9, 10),

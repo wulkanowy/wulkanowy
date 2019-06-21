@@ -1,8 +1,8 @@
 package io.github.wulkanowy.data.repositories.student
 
 import io.github.wulkanowy.api.Api
-import io.github.wulkanowy.api.register.Student
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.sdk.pojo.Student
 import io.reactivex.Single
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -23,11 +23,31 @@ class StudentRemoteTest {
 
     @Test
     fun testRemoteAll() {
-        doReturn(Single.just(listOf(Student("", "", 1, "test", "", "", "", 1, Api.LoginType.AUTO))))
-            .`when`(mockSdk).getStudents()
+        doReturn(Single.just(listOf(getStudent("test")))).`when`(mockSdk).getStudents()
 
         val students = StudentRemote(mockSdk).getStudents("", "", "", "").blockingGet()
         assertEquals(1, students.size)
         assertEquals("test", students.first().studentName)
+    }
+
+    private fun getStudent(name: String): Student {
+        return Student(
+            email = "",
+            symbol = "",
+            studentId = 0,
+            userLoginId = 0,
+            studentName = name,
+            schoolSymbol = "",
+            schoolName = "",
+            className = "",
+            classId = 0,
+            certificate = "",
+            certificateKey = "",
+            loginMode = Sdk.Mode.SCRAPPER,
+            apiHost = "",
+            loginType = Api.LoginType.STANDARD,
+            scrapperHost = "",
+            ssl = false
+        )
     }
 }

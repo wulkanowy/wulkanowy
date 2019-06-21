@@ -39,8 +39,6 @@ class CompletedLessonsRemoteTest {
             getCompletedLesson("2018-09-17")
         ))
 
-        every { mockSdk.schoolSymbol } returns ""
-        every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 1
 
