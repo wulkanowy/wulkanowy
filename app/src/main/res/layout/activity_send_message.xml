@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="?colorSurface"
         android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
-        app:layout_constraintBottom_toTopOf="@id/sendMessageContent"
+        app:layout_constraintBottom_toTopOf="@id/sendMessageScroll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,8 +24,8 @@
             android:layout_height="wrap_content" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/sendMessageContent"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/sendMessageScroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,140 +33,132 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sendMessageAppBar">
 
-        <TextView
-            android:id="@+id/sendMessageFromHint"
-            android:layout_width="wrap_content"
-            android:layout_height="58dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:gravity="center_vertical"
-            android:text="@string/message_from"
-            android:textColor="?android:textColorHint"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/sendMessageFrom"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/sendMessageContent" />
-
-        <TextView
-            android:id="@+id/sendMessageFrom"
-            android:layout_width="0dp"
-            android:layout_height="58dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:gravity="center_vertical"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/sendMessageFromHint"
-            app:layout_constraintTop_toTopOf="@id/sendMessageContent"
-            tools:text="Jan Kowalski" />
-
-        <View
-            android:id="@+id/sendMessageFromDivider"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/sendMessageContent"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?colorDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sendMessageFrom" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/sendMessageToHint"
-            android:layout_width="wrap_content"
-            android:layout_height="58dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:gravity="center_vertical"
-            android:text="@string/message_to"
-            android:textColor="?android:textColorHint"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="@id/sendMessageContent"
-            app:layout_constraintTop_toBottomOf="@id/sendMessageFromDivider" />
-
-        <LinearLayout
-            android:id="@+id/sendMessageTo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:minHeight="58dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@id/sendMessageContent"
-            app:layout_constraintStart_toEndOf="@id/sendMessageToHint"
-            app:layout_constraintTop_toBottomOf="@id/sendMessageFromDivider">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/sendMessageToChips"
+            <TextView
+                android:id="@+id/sendMessageFromHint"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="58dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/message_from"
+                android:textColor="?android:textColorHint"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@id/sendMessageFrom"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <AutoCompleteTextView
-                android:id="@+id/sendMessageToInput"
+            <TextView
+                android:id="@+id/sendMessageFrom"
+                android:layout_width="0dp"
+                android:layout_height="58dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center_vertical"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/sendMessageFromHint"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Jan Kowalski" />
+
+            <View
+                android:id="@+id/sendMessageFromDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?colorDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sendMessageFrom" />
+
+            <TextView
+                android:id="@+id/sendMessageToHint"
                 android:layout_width="wrap_content"
+                android:layout_height="58dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/message_to"
+                android:textColor="?android:textColorHint"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sendMessageFromDivider" />
+
+            <io.github.wulkanowy.materialchipsinput.MaterialChipInput
+                android:id="@+id/sendMessageTo"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:minHeight="58dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/sendMessageToHint"
+                app:layout_constraintTop_toBottomOf="@id/sendMessageFromDivider" />
+
+            <View
+                android:id="@+id/sendMessageToDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?colorDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sendMessageTo" />
+
+            <EditText
+                android:id="@+id/sendMessageSubject"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:background="@android:color/transparent"
-                android:completionThreshold="1"
-                android:minWidth="50dp" />
-        </LinearLayout>
+                android:gravity="center_vertical"
+                android:hint="@string/message_subject"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLines="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sendMessageToDivider"
+                tools:targetApi="o" />
 
-        <View
-            android:id="@+id/sendMessageToDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?colorDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sendMessageTo" />
+            <View
+                android:id="@+id/sendMessageSubjectDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?colorDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sendMessageSubject" />
 
-        <EditText
-            android:id="@+id/sendMessageSubject"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@android:color/transparent"
-            android:gravity="center_vertical"
-            android:hint="@string/message_subject"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:maxLines="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sendMessageToDivider"
-            tools:targetApi="o" />
+            <EditText
+                android:id="@+id/sendMessageMessageContent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                android:gravity="start"
+                android:hint="@string/message_content"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:paddingStart="16dp"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="16dp"
+                android:paddingRight="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sendMessageSubjectDivider"
+                tools:targetApi="o" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View
-            android:id="@+id/sendMessageSubjectDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?colorDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sendMessageSubject" />
-
-        <EditText
-            android:id="@+id/sendMessageMessageContent"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@android:color/transparent"
-            android:gravity="start"
-            android:hint="@string/message_content"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine"
-            android:paddingStart="16dp"
-            android:paddingLeft="16dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="16dp"
-            android:paddingRight="16dp"
-            app:layout_constraintBottom_toBottomOf="@id/sendMessageContent"
-            app:layout_constraintEnd_toEndOf="@id/sendMessageContent"
-            app:layout_constraintStart_toStartOf="@id/sendMessageContent"
-            app:layout_constraintTop_toBottomOf="@id/sendMessageSubjectDivider"
-            tools:targetApi="o" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/sendMessageEmpty"

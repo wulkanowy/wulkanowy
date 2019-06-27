@@ -1,22 +1,15 @@
 package io.github.wulkanowy.ui.modules.message.send
 
-import android.graphics.drawable.Drawable
-import android.net.Uri
-import com.pchmn.materialchips.model.ChipInterface
 import io.github.wulkanowy.data.db.entities.Recipient
+import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 
-class RecipientChip(var recipient: Recipient) : ChipInterface {
+class RecipientChip(var recipient: Recipient) : MaterialChipItem {
 
-    override fun getAvatarDrawable(): Drawable? = null
+    override val title: String
+        get() = recipient.name
 
-    override fun getAvatarUri(): Uri? = null
-
-    override fun getId(): Any = recipient.id
-
-    override fun getLabel(): String = recipient.name
-
-    override fun getInfo(): String {
-        return recipient.realName.run {
+    override val summary: String
+        get() = recipient.realName.run {
             substringBeforeLast("-").let { sub ->
                 when {
                     (sub == this) -> this
@@ -26,5 +19,4 @@ class RecipientChip(var recipient: Recipient) : ChipInterface {
                 }
             }.trim()
         }
-    }
 }

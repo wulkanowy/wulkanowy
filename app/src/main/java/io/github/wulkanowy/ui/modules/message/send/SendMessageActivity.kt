@@ -7,19 +7,19 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
-import com.google.android.material.chip.Chip
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
+import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.activity_send_message.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageView {
 
@@ -61,22 +61,22 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_message)
-        setSupportActionBar(sendMessageToolbar)
+        // setSupportActionBar(sendMessageToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         messageContainer = sendMessageContainer
 
         presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_MESSAGE) as? Message, intent.getSerializableExtra(EXTRA_REPLY) as? Boolean)
 
-        val array = arrayOf("Cos", "cos2", "fsafsa")
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, array)
+        val list = mutableListOf<ChipItem>()
 
-        sendMessageToInput.setAdapter(adapter)
-
-        sendMessageToInput.setOnItemClickListener { parent, view, position, id ->
-            sendMessageToChips.addView(Chip(this).apply { text = parent.getItemAtPosition(position) as String })
-            sendMessageToInput.text = null
+        repeat(30) {
+            list.add(ChipItem("", Random.nextInt().toString()))
         }
+
+        sendMessageTo.itemList = list
     }
+
+    data class ChipItem(override val summary: String, override val title: String) : MaterialChipItem
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.action_menu_send_message, menu)
