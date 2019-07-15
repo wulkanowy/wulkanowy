@@ -4,16 +4,16 @@
 [![F-Droid](https://img.shields.io/f-droid/v/io.github.wulkanowy.svg)](https://f-droid.org/packages/io.github.wulkanowy/)
 [![Last release](https://img.shields.io/github/release/wulkanowy/wulkanowy.svg?logo=github)](https://github.com/wulkanowy/wulkanowy/releases)
 
-[Polish version of README](README.md)
+[Polska wersja README](README.md)
 
 # Wulkanowy
 
-Unofficial VULCAN UONET register application for student and parent
+Unofficial android VULCAN UONET+ register client for student and parent
 
 ## Features
 
 * logging in using the email and password
-* functions from the register website
+* functions from the register website:
     * grades
     * grade statistics
     * attendance
@@ -26,17 +26,23 @@ Unofficial VULCAN UONET register application for student and parent
     * notes
     * lucky number
 * calculation of the average
-* notifications eg about a new grade
+* notifications, e.g. about a new grade
 * dark and black (AMOLED) theme
 * offline mode
 * no ads
 
 ## Download
 
-[Development versions](https://wulkanowy.github.io/#download)  
+You can download the current beta from the Google Play or Fdroid store
 
-[Beta version (Google Play)](https://play.google.com/store/apps/details?id=io.github.wulkanowy)
-
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
+      alt="Get it on Google Play"
+      height="80">](https://play.google.com/store/apps/details?id=io.github.wulkanowy)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+    alt="Get it on Fdroid"
+    height="80">](https://f-droid.org/packages/io.github.wulkanowy/)
+    
+You can also download a [development version](https://wulkanowy.github.io/#download) that includes new features prepared for the next release
 
 ## Built With
 

@@ -8,12 +8,12 @@
 
 # Wulkanowy
 
-Nieoficjalna aplikacja dziennika VULCAN UONET dla ucznia i rodzica
+Nieoficjalny klient dziennika VULCAN UONET+ dla ucznia i rodzica
 
 ## Funkcje
 
 * logowanie za pomocą e-maila i hasła
-* funkcje z strony internetowej dziennika
+* funkcje ze strony internetowej dziennika:
     * oceny
     * statystyki ocen
     * frekwencja
@@ -33,9 +33,17 @@ Nieoficjalna aplikacja dziennika VULCAN UONET dla ucznia i rodzica
 
 ## Pobierz
 
-[Wersja rozwojowa](https://wulkanowy.github.io/#download)  
+Aktualną wersję beta możesz pobrać ze sklepu Google Play lub Fdroid
 
-[Wersja beta (Google Play)](https://play.google.com/store/apps/details?id=io.github.wulkanowy)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
+      alt="Pobierz z Google Play"
+      height="80">](https://play.google.com/store/apps/details?id=io.github.wulkanowy)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+    alt="Pobierz z Fdroid"
+    height="80">](https://f-droid.org/packages/io.github.wulkanowy/)
+
+
+Możesz także pobrać [wersję rozwojową](https://wulkanowy.github.io/#download), która zawiera nowe funkcje przygotowywane do następnego wydania
 
 
 ## Zbudowana za pomocą
