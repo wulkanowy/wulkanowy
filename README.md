@@ -4,50 +4,52 @@
 [![F-Droid](https://img.shields.io/f-droid/v/io.github.wulkanowy.svg)](https://f-droid.org/packages/io.github.wulkanowy/)
 [![Last release](https://img.shields.io/github/release/wulkanowy/wulkanowy.svg?logo=github)](https://github.com/wulkanowy/wulkanowy/releases)
 
+[English version of README](README.en.md)
+
 # Wulkanowy
 
-Unofficial VULCAN UONET register application for student and parent
+Nieoficjalna aplikacja dziennika VULCAN UONET dla ucznia i rodzica
 
-## Features
+## Funkcje
 
-* logging in using the email and password
-* functions from the register website
-    * grades
-    * grade statistics
-    * attendance
-    * percentage of attendance
-    * exams
-    * timetable
-    * completed lessons
-    * messages
-    * homework
-    * notes
-    * lucky number
-* calculation of the average
-* notifications eg about a new grade
-* dark and black (AMOLED) theme
-* offline mode
-* no ads
+* logowanie za pomocą e-maila i hasła
+* funkcje z strony internetowej dziennika
+    * oceny
+    * statystyki ocen
+    * frekwencja
+    * procent frekwencji
+    * sprawdziany
+    * plan lekcji
+    * lekcje zrealizowane
+    * wiadomości
+    * zadania domowe
+    * uwagi
+    * szczęśliwy numerek
+* obliczanie średniej
+* powiadomienia np. o nowej ocenie
+* ciemny i czarny (AMOLED) motyw
+* tryb offilne
+* brak reklam
 
-## Download
+## Pobierz
 
-[Development versions](https://wulkanowy.github.io/#download)  
+[Wersja rozwojowa](https://wulkanowy.github.io/#download)  
 
-[Beta version (Google Play)](https://play.google.com/store/apps/details?id=io.github.wulkanowy)
+[Wersja beta (Google Play)](https://play.google.com/store/apps/details?id=io.github.wulkanowy)
 
 
-## Built With
+## Zbudowana za pomocą
 
-* [RxJava 2](https://github.com/ReactiveX/RxJava) Library for composing asynchronous and event-based programs by using observable sequences
-* [Dagger 2](https://github.com/google/dagger) A fast dependency injector for Java and Android
-* [Room](https://developer.android.com/topic/libraries/architecture/room) Provides an abstraction layer over SQLite
-* [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) Makes it easy to schedule deferrable, asynchronous tasks that are expected to run even if the app exits or device restarts
-* [MVP](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) Design pattern
+* [RxJava 2](https://github.com/ReactiveX/RxJava) Biblioteka do tworzenia programów asynchronicznych i opartych na zdarzeniach za pomocą obserwowalnych sekwencji
+* [Dagger 2](https://github.com/google/dagger) Wstrzykiwanie zależności dla Androdia i Javy
+* [Room](https://developer.android.com/topic/libraries/architecture/room) Dostarcza warstwę abstrakcji dla SQLite
+* [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) Ułatwia planowanie odroczonych, asynchronicznych zadań, które mają być uruchamiane nawet po zamknięciu aplikacji lub ponownym uruchomieniu urządzenia
+* [MVP](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) Wzorzec projektowy
 
-## Contributing
+## Współpraca
 
-Please contribute to the project either by creating a PR or submitting an issue on GitHub.
+Wnieś swój wkład w projekt, tworząc PR lub wysyłając issue na GitHub.
 
-## License
+## Licencja
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details
+Ten projekt jest licencjonowany w ramach Apache License 2.0 - szczegóły w pliku [LICENSE.md](LICENSE.md)
