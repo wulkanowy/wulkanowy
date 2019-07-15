@@ -1,12 +1,11 @@
+[Polska wersja README](README.md)
+
+# Wulkanowy
 [![Travis](https://img.shields.io/travis/com/wulkanowy/wulkanowy/master.svg?style=flat-square)](https://travis-ci.com/wulkanowy/wulkanowy)
 [![Codecov](https://img.shields.io/codecov/c/github/wulkanowy/wulkanowy/master.svg?style=flat-square)](https://codecov.io/gh/wulkanowy/wulkanowy)
 [![Discord](https://img.shields.io/discord/390889354199040011.svg?style=flat-square)](https://discord.gg/vccAQBr)
 [![F-Droid](https://img.shields.io/f-droid/v/io.github.wulkanowy.svg)](https://f-droid.org/packages/io.github.wulkanowy/)
 [![Last release](https://img.shields.io/github/release/wulkanowy/wulkanowy.svg?logo=github)](https://github.com/wulkanowy/wulkanowy/releases)
-
-[Polska wersja README](README.md)
-
-# Wulkanowy
 
 Unofficial android VULCAN UONET+ register client for student and parent
 
