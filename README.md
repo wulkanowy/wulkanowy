@@ -47,11 +47,10 @@ Możesz także pobrać [wersję rozwojową](https://wulkanowy.github.io/#downloa
 
 ## Zbudowana za pomocą
 
-* [RxJava 2](https://github.com/ReactiveX/RxJava) Biblioteka do tworzenia programów asynchronicznych i opartych na zdarzeniach za pomocą obserwowalnych sekwencji
-* [Dagger 2](https://github.com/google/dagger) Wstrzykiwanie zależności dla Androdia i Javy
-* [Room](https://developer.android.com/topic/libraries/architecture/room) Dostarcza warstwę abstrakcji dla SQLite
-* [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) Ułatwia planowanie odroczonych, asynchronicznych zadań, które mają być uruchamiane nawet po zamknięciu aplikacji lub ponownym uruchomieniu urządzenia
-* [MVP](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) Wzorzec projektowy
+* [RxJava 2](https://github.com/ReactiveX/RxJava)
+* [Dagger 2](https://github.com/google/dagger)
+* [Room](https://developer.android.com/topic/libraries/architecture/room)
+* [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) 
 
 ## Współpraca
 

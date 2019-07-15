@@ -45,11 +45,10 @@ You can also download a [development version](https://wulkanowy.github.io/#downl
 
 ## Built With
 
-* [RxJava 2](https://github.com/ReactiveX/RxJava) Library for composing asynchronous and event-based programs by using observable sequences
-* [Dagger 2](https://github.com/google/dagger) A fast dependency injector for Java and Android
-* [Room](https://developer.android.com/topic/libraries/architecture/room) Provides an abstraction layer over SQLite
-* [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) Makes it easy to schedule deferrable, asynchronous tasks that are expected to run even if the app exits or device restarts
-* [MVP](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) Design pattern
+* [RxJava 2](https://github.com/ReactiveX/RxJava)
+* [Dagger 2](https://github.com/google/dagger)
+* [Room](https://developer.android.com/topic/libraries/architecture/room)
+* [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) 
 
 ## Contributing
 
