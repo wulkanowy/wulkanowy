@@ -59,4 +59,4 @@ Wnieś swój wkład w projekt, tworząc PR lub wysyłając issue na GitHub.
 
 ## Licencja
 
-Ten projekt jest licencjonowany w ramach Apache License 2.0 - szczegóły w pliku [LICENSE.md](LICENSE.md)
+Ten projekt jest licencjonowany w ramach Apache License 2.0 - szczegóły w pliku [LICENSE](LICENSE)
