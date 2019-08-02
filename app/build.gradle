@@ -100,10 +100,10 @@ play {
 ext {
     work_manager = "2.1.0"
     room = "2.1.0"
-    dagger = "2.23.2"
+    dagger = "2.24"
     chucker = "2.0.4"
     mockk = "1.9.2"
-    mockito_core = "3.0.2"
+    mockito_core = "3.0.4"
 }
 
 dependencies {
@@ -147,7 +147,7 @@ dependencies {
 
     implementation "com.github.pwittchen:reactivenetwork-rx2:3.0.3"
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
-    implementation "io.reactivex.rxjava2:rxjava:2.2.10"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.11"
 
     implementation "com.google.code.gson:gson:2.8.5"
     implementation "com.jakewharton.threetenabp:threetenabp:1.2.1"
@@ -167,7 +167,7 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockk"
     testImplementation "org.threeten:threetenbp:1.4.0"
     testImplementation "org.mockito:mockito-core:$mockito_core"
-    testImplementation("org.mockito:mockito-inline:3.0.2") {
+    testImplementation("org.mockito:mockito-inline:3.0.4") {
         exclude group: "org.mockito", module: "mockito-core"
     }
 
@@ -178,7 +178,7 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$room"
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     androidTestImplementation "org.mockito:mockito-core:$mockito_core"
-    androidTestImplementation("org.mockito:mockito-android:3.0.2") {
+    androidTestImplementation("org.mockito:mockito-android:3.0.4") {
         exclude group: 'org.mockito', module: 'mockito-core'
     }
 }
