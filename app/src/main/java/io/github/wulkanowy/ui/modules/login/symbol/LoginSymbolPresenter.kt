@@ -41,7 +41,7 @@ class LoginSymbolPresenter @Inject constructor(
 
         disposable.add(
             Single.fromCallable { if (loginData == null) throw IllegalArgumentException("Login data is null") else loginData }
-                .flatMap { studentRepository.getStudents(it.first, it.second, it.third, "", symbol) } //TODO: provide api key
+                .flatMap { studentRepository.getStudents(it.first, it.second, it.third, symbol) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doOnSubscribe {

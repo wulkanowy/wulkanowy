@@ -7,6 +7,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
+import io.github.wulkanowy.ui.modules.login.advanced.LoginAdvancedFragment
 import io.github.wulkanowy.ui.modules.login.form.LoginFormFragment
 import io.github.wulkanowy.ui.modules.login.studentselect.LoginStudentSelectFragment
 import io.github.wulkanowy.ui.modules.login.symbol.LoginSymbolFragment
@@ -43,7 +44,8 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginView {
             addFragments(listOf(
                 LoginFormFragment.newInstance(),
                 LoginSymbolFragment.newInstance(),
-                LoginStudentSelectFragment.newInstance()
+                LoginStudentSelectFragment.newInstance(),
+                LoginAdvancedFragment.newInstance()
             ))
         }
 
@@ -80,5 +82,9 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginView {
 
     fun onSymbolFragmentAccountLogged(students: List<Student>) {
         presenter.onSymbolViewAccountLogged(students)
+    }
+
+    fun onAdvancedLoginClick() {
+        presenter.onAdvancedLoginClick()
     }
 }

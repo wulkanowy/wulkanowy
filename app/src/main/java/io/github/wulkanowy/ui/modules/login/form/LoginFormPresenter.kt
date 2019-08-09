@@ -36,6 +36,10 @@ class LoginFormPresenter @Inject constructor(
         view?.openPrivacyPolicyPage()
     }
 
+    fun onAdvancedLoginClick() {
+        view?.openAdvancedLogin()
+    }
+
     fun onHostSelected() {
         view?.apply {
             clearPassError()
@@ -56,11 +60,10 @@ class LoginFormPresenter @Inject constructor(
         val email = view?.formNameValue.orEmpty().trim()
         val password = view?.formPassValue.orEmpty().trim()
         val endpoint = view?.formHostValue.orEmpty().trim()
-        val apiKey = view?.formApiKey.orEmpty().trim()
 
         if (!validateCredentials(email, password)) return
 
-        disposable.add(studentRepository.getStudents(email, password, endpoint, apiKey)
+        disposable.add(studentRepository.getStudents(email, password, endpoint)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {

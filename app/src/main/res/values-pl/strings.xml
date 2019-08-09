@@ -34,6 +34,7 @@
     <string name="login_duplicate_student">Wybrany uczeń jest już zalogowany</string>
     <string name="login_symbol_helper">Symbol znajdziesz na stronie dziennika w Uczeń -> Dostęp Mobilny -> Zarejestruj urządzenie mobilne</string>
     <string name="login_select_student">Wybierz uczniów do zalogowania w aplikacji</string>
+    <string name="login_advanced">Logowanie zaawansowane</string>
     <string name="login_privacy_policy">Polityka prywatności</string>
 
 
@@ -301,4 +302,7 @@
     <string name="error_service_unavailable">Dziennik jest niedostępny. Spróbuj ponownie później</string>
     <string name="error_unknown">Wystąpił nieoczekiwany błąd</string>
     <string name="error_feature_disabled">Funkcja wyłączona przez szkołę</string>
+    <string name="login_type_api">Mobile API</string>
+    <string name="login_type_scrapper">Scrapper</string>
+    <string name="login_type_hybrid">Hybrid</string>
 </resources>

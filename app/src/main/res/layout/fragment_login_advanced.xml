@@ -1,8 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/loginFormProgress"
@@ -43,6 +43,41 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
+            <RadioGroup
+                android:id="@+id/loginTypeSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintBottom_toTopOf="@+id/loginFormNameLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginFormHeader"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="24dp">
+
+                <RadioButton
+                    android:id="@+id/loginTypeApi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="api"
+                    android:text="@string/login_type_api" />
+
+                <RadioButton
+                    android:id="@+id/loginTypeScrapper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="scrapper"
+                    android:text="@string/login_type_scrapper" />
+
+                <RadioButton
+                    android:id="@+id/loginTypeHybrid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tag="hybrid"
+                    android:checked="true"
+                    android:text="@string/login_type_hybrid" />
+            </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginFormNameLayout"
@@ -51,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginLeft="24dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
                 android:hint="@string/login_nickname_hint"
@@ -59,7 +94,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/loginFormPassLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginFormHeader">
+                app:layout_constraintTop_toBottomOf="@+id/loginTypeSwitch">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/loginFormName"
@@ -83,7 +118,7 @@
                 android:layout_marginRight="24dp"
                 android:hint="@string/login_password_hint"
                 app:errorEnabled="true"
-                app:layout_constraintBottom_toTopOf="@+id/loginFormHostLayout"
+                app:layout_constraintBottom_toTopOf="@+id/loginFormApiKeyLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginFormNameLayout"
@@ -93,12 +128,37 @@
                     android:id="@+id/loginFormPass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeActionLabel="@string/login_sign_in"
-                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     app:fontFamily="sans-serif" />
 
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/loginFormApiKeyLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:hint="API Key"
+                app:errorEnabled="true"
+                app:layout_constraintBottom_toTopOf="@+id/loginFormHostLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginFormPassLayout">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/loginFormApiKey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="@string/login_sign_in"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -141,6 +201,25 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/loginFormHostLayout" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginFormSignIn"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/login_sign_in"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:backgroundTint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginFormHostLayout" />
+
             <TextView
                 android:id="@+id/loginFormVersion"
                 android:layout_width="0dp"
@@ -177,43 +256,6 @@
                 app:layout_constraintStart_toStartOf="@id/loginFormHostLayout"
                 app:layout_constraintTop_toTopOf="@+id/loginFormSignIn"
                 tools:visibility="visible" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginFormAdvancedButton"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:text="@string/login_advanced"
-                android:textAppearance="?android:textAppearance"
-                android:textColor="@color/colorPrimary"
-                app:backgroundTint="?android:windowBackground"
-                app:fontFamily="sans-serif-medium"
-                app:layout_constraintBottom_toBottomOf="@id/loginFormSignIn"
-                app:layout_constraintEnd_toStartOf="@+id/loginFormSignIn"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@id/loginFormHostLayout"
-                app:layout_constraintTop_toTopOf="@+id/loginFormSignIn" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginFormSignIn"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="48dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
-                android:layout_marginBottom="16dp"
-                android:text="@string/login_sign_in"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                app:backgroundTint="@color/colorPrimary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginFormHostLayout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

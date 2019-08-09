@@ -41,9 +41,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override val formPassValue: String
         get() = loginFormPass.text.toString()
 
-    override val formApiKey: String
-        get() = loginFormApiKey.text.toString()
-
     override val formHostValue: String?
         get() = resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
 
@@ -61,6 +58,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginFormPass.setOnTextChangedListener { presenter.onPassTextChanged() }
         loginFormHost.setOnItemSelectedListener { presenter.onHostSelected() }
         loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
+        loginFormAdvancedButton.setOnClickListener { presenter.onAdvancedLoginClick() }
         loginFormPrivacyLink.setOnClickListener { presenter.onPrivacyLinkClick() }
 
         loginFormPass.setOnEditorActionListener { _, id, _ ->
@@ -152,6 +150,10 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
     override fun openPrivacyPolicyPage() {
         context?.openInternetBrowser("https://wulkanowy.github.io/polityka-prywatnosci.html", ::showMessage)
+    }
+
+    override fun openAdvancedLogin() {
+        (activity as? LoginActivity)?.onAdvancedLoginClick()
     }
 
     override fun onDestroyView() {

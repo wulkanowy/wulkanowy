@@ -6,11 +6,13 @@ import dagger.android.ContributesAndroidInjector
 import io.github.wulkanowy.di.scopes.PerActivity
 import io.github.wulkanowy.di.scopes.PerFragment
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
+import io.github.wulkanowy.ui.modules.login.advanced.LoginAdvancedFragment
 import io.github.wulkanowy.ui.modules.login.form.LoginFormFragment
 import io.github.wulkanowy.ui.modules.login.studentselect.LoginStudentSelectFragment
 import io.github.wulkanowy.ui.modules.login.symbol.LoginSymbolFragment
 
 @Module
+@Suppress("unused")
 internal abstract class LoginModule {
 
     @Module
@@ -25,6 +27,10 @@ internal abstract class LoginModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract fun bindLoginFormFragment(): LoginFormFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindLoginAdvancedFragment(): LoginAdvancedFragment
 
     @PerFragment
     @ContributesAndroidInjector
