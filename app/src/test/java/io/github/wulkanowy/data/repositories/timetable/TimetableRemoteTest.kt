@@ -30,12 +30,14 @@ class TimetableRemoteTest {
 
     @Test
     fun getTimetableTest() {
-        every { mockSdk.getTimetable(
+        every {
+            mockSdk.getTimetable(
                 of(2018, 9, 10),
                 of(2018, 9, 15)
-        ) } returns Single.just(listOf(
-                getTimetable(of(2018, 9, 10)),
-                getTimetable(of(2018, 9, 17))
+            )
+        } returns Single.just(listOf(
+            getTimetable(of(2018, 9, 10)),
+            getTimetable(of(2018, 9, 17))
         ))
 
         every { mockSdk.diaryId } returns 1
@@ -43,8 +45,8 @@ class TimetableRemoteTest {
         every { semesterMock.diaryId } returns 1
 
         val timetable = TimetableRemote(mockSdk).getTimetable(semesterMock,
-                of(2018, 9, 10),
-                of(2018, 9, 15)
+            of(2018, 9, 10),
+            of(2018, 9, 15)
         ).blockingGet()
         assertEquals(2, timetable.size)
     }
@@ -64,7 +66,8 @@ class TimetableRemoteTest {
             info = "",
             room = "",
             end = now(),
-            start = now()
+            start = now(),
+            studentPlan = true
         )
     }
 }

@@ -62,17 +62,17 @@ class TimetableRepositoryTest {
     @Test
     fun copyDetailsToCompletedFromPrevious() {
         timetableLocal.saveTimetable(listOf(
-            createTimetableLocal(1, of(2019, 3, 5, 8, 0), "123", "Przyroda"),
-            createTimetableLocal(2, of(2019, 3, 5, 8, 50), "321", "Religia"),
-            createTimetableLocal(3, of(2019, 3, 5, 9, 40), "213", "W-F"),
-            createTimetableLocal(4, of(2019, 3, 5, 10, 30), "213", "W-F", "Jan Kowalski")
+            createTimetableLocal(of(2019, 3, 5, 8, 0), 1, "123", "Przyroda"),
+            createTimetableLocal(of(2019, 3, 5, 8, 50), 2, "321", "Religia"),
+            createTimetableLocal(of(2019, 3, 5, 9, 40), 3, "213", "W-F"),
+            createTimetableLocal(of(2019, 3, 5, 10, 30),3, "213", "W-F", "Jan Kowalski")
         ))
 
         every { mockSdk.getTimetable(any(), any()) } returns Single.just(listOf(
-            createTimetableRemote(1, of(2019, 3, 5, 8, 0), "", "Przyroda"),
-            createTimetableRemote(2, of(2019, 3, 5, 8, 50), "", "Religia"),
-            createTimetableRemote(3, of(2019, 3, 5, 9, 40), "", "W-F"),
-            createTimetableRemote(4, of(2019, 3, 5, 10, 30), "", "W-F")
+            createTimetableRemote(of(2019, 3, 5, 8, 0), 1, "", "Przyroda"),
+            createTimetableRemote(of(2019, 3, 5, 8, 50), 2, "", "Religia"),
+            createTimetableRemote(of(2019, 3, 5, 9, 40), 3, "", "W-F"),
+            createTimetableRemote(of(2019, 3, 5, 10, 30), 4, "", "W-F")
         ))
 
         val lessons = TimetableRepository(settings, timetableLocal, timetableRemote)

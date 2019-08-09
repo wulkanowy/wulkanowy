@@ -108,7 +108,8 @@ abstract class AppDatabase : RoomDatabase() {
                     Migration12(),
                     Migration13(),
                     Migration14(),
-                    Migration15()
+                    Migration15()//,
+                    //Migration16() TODO
                 )
                 .build()
         }

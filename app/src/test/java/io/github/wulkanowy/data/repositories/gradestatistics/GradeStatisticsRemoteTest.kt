@@ -1,8 +1,8 @@
 package io.github.wulkanowy.data.repositories.gradestatistics
 
-import io.github.wulkanowy.api.grades.GradeStatistics
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.sdk.pojo.GradeStatistics
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -41,10 +41,12 @@ class GradeStatisticsRemoteTest {
     }
 
     private fun getGradeStatistics(subjectName: String): GradeStatistics {
-        return GradeStatistics().apply {
-            subject = subjectName
-            gradeValue = 5
-            amount = 10
-        }
+        return GradeStatistics(
+            subject = subjectName,
+            gradeValue = 5,
+            amount = 10,
+            grade = "",
+            semesterId = 1
+        )
     }
 }
