@@ -107,8 +107,8 @@ ext {
 }
 
 dependencies {
-    implementation "io.github.wulkanowy:api:0.9.3"
-    implementation "io.github.wulkanowy:sdk:fee70eb"
+    implementation "io.github.wulkanowy:api:e0e1222"
+    implementation "io.github.wulkanowy:sdk:b429b0a"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "androidx.core:core:1.0.2"

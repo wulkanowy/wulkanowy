@@ -3,7 +3,6 @@ package io.github.wulkanowy.data.repositories.completedlessons
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.toLocalDate
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
@@ -21,7 +20,7 @@ class CompletedLessonsRemote @Inject constructor(private val sdk: Sdk) {
                     CompletedLesson(
                         studentId = semester.studentId,
                         diaryId = semester.diaryId,
-                        date = it.date.toLocalDate(),
+                        date = it.date,
                         number = it.number,
                         subject = it.subject,
                         topic = it.topic,
