@@ -71,7 +71,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
 
         val list = mutableListOf<ChipItem>()
 
-        repeat(30) {
+        repeat(60) {
             list.add(ChipItem("", Random.nextInt().toString()))
         }
 
@@ -99,9 +99,13 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
             } else false
         }
 
-        sendMessageTo.onTextChangeListener = {
-            sendMessageScroll.scrollTo(0, sendMessageScroll.bottom)
-        }
+        /*sendMessageTo.onTextChangeListener = {
+            val visible = Rect().apply {
+                sendMessageTo.getLocalVisibleRect(this)
+            }
+
+            sendMessageScroll.scrollTo(0, sendMessageTo.top)
+        }*/
     }
 
     data class ChipItem(override val summary: String, override val title: String) : MaterialChipItem
