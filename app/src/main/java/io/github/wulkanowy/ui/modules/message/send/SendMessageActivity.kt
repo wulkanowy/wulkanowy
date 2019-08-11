@@ -2,9 +2,11 @@ package io.github.wulkanowy.ui.modules.message.send
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.TouchDelegate
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
@@ -74,6 +76,21 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
         }
 
         sendMessageTo.itemList = list
+
+        sendMessageContent.post {
+            sendMessageMessageContent.post {
+                val sendContentRect = Rect()
+                sendMessageContent.getHitRect(sendContentRect)
+
+                val contentRect = Rect()
+                sendMessageMessageContent.getHitRect(contentRect)
+
+                contentRect.top = contentRect.bottom
+                contentRect.bottom = sendContentRect.bottom
+
+                sendMessageContent.touchDelegate = TouchDelegate(contentRect, sendMessageMessageContent)
+            }
+        }
     }
 
     data class ChipItem(override val summary: String, override val title: String) : MaterialChipItem
