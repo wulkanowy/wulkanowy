@@ -91,6 +91,17 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
                 sendMessageContent.touchDelegate = TouchDelegate(contentRect, sendMessageMessageContent)
             }
         }
+
+        sendMessageScroll.setOnTouchListener { _, _ ->
+            if (sendMessageTo.isDropdownListVisible) {
+                sendMessageTo.hideDropdownList()
+                true
+            } else false
+        }
+
+        sendMessageTo.onTextChangeListener = {
+            sendMessageScroll.scrollTo(0, sendMessageScroll.bottom)
+        }
     }
 
     data class ChipItem(override val summary: String, override val title: String) : MaterialChipItem
