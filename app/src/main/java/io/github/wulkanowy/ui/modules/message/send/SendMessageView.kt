@@ -6,6 +6,8 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface SendMessageView : BaseView {
 
+    val isDropdownListVisible: Boolean
+
     val formRecipientsData: List<Recipient>
 
     val formSubjectValue: String
@@ -17,6 +19,8 @@ interface SendMessageView : BaseView {
     val messageContentMinLength: String
 
     val messageSuccess: String
+
+    fun initView()
 
     fun setReportingUnit(unit: ReportingUnit)
 
@@ -37,6 +41,10 @@ interface SendMessageView : BaseView {
     fun setContent(content: String)
 
     fun showSoftInput(show: Boolean)
+
+    fun hideDropdownList()
+
+    fun scrollToRecipients()
 
     fun popView()
 }

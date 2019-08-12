@@ -32,6 +32,7 @@ class SendMessagePresenter @Inject constructor(
 
     fun onAttachView(view: SendMessageView, message: Message?, reply: Boolean?) {
         super.onAttachView(view)
+        view.initView()
         Timber.i("Send message view was initialized")
         loadData(message, reply)
         view.apply {
@@ -52,6 +53,19 @@ class SendMessagePresenter @Inject constructor(
                 }
             }
         }
+    }
+
+    fun onTouchScroll(): Boolean {
+        return view?.run {
+            if (isDropdownListVisible) {
+                hideDropdownList()
+                true
+            } else false
+        } == true
+    }
+
+    fun onRecipientsTextChange() {
+        view?.scrollToRecipients()
     }
 
     fun onUpNavigate(): Boolean {

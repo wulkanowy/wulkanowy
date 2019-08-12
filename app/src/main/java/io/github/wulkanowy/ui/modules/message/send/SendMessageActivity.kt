@@ -15,14 +15,12 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
-import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.activity_send_message.*
 import javax.inject.Inject
-import kotlin.random.Random
 
 class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageView {
 
@@ -42,6 +40,9 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
                 .putExtra(EXTRA_REPLY, reply)
         }
     }
+
+    override val isDropdownListVisible: Boolean
+        get() = sendMessageTo.isDropdownListVisible
 
     override val formRecipientsData: List<Recipient>
         get() = emptyList()
@@ -69,57 +70,13 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
         messageContainer = sendMessageContainer
 
         presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_MESSAGE) as? Message, intent.getSerializableExtra(EXTRA_REPLY) as? Boolean)
-
-        val list = mutableListOf<ChipItem>()
-
-        repeat(60) {
-            list.add(ChipItem("", Random.nextInt().toString()))
-        }
-
-        sendMessageTo.itemList = list
-
-        setUpExtendedHitRect()
-
-
-        sendMessageScroll.setOnTouchListener { _, _ ->
-            if (sendMessageTo.isDropdownListVisible) {
-                sendMessageTo.hideDropdownList()
-                true
-            } else false
-        }
-
-        sendMessageTo.onTextChangeListener = {
-            sendMessageScroll.post {
-                sendMessageScroll.scrollTo(0, sendMessageTo.bottom - dpToPx(53f).toInt())
-            }
-        }
     }
 
-    private fun setUpExtendedHitRect() {
-        fun extendHitRect() {
-            val containerHitRect = Rect().apply {
-                sendMessageContent.getHitRect(this)
-            }
-
-            val contentHitRect = Rect().apply {
-                sendMessageMessageContent.getHitRect(this)
-            }
-
-            contentHitRect.top = contentHitRect.bottom
-            contentHitRect.bottom = containerHitRect.bottom
-
-            sendMessageContent.touchDelegate = TouchDelegate(contentHitRect, sendMessageMessageContent)
-        }
-
-        sendMessageMessageContent.post {
-            sendMessageMessageContent.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-                extendHitRect()
-            }
-            extendHitRect()
-        }
+    override fun initView() {
+        setUpExtendedHitArea()
+        sendMessageScroll.setOnTouchListener { _, _ -> presenter.onTouchScroll() }
+        sendMessageTo.onTextChangeListener = { _ -> presenter.onRecipientsTextChange() }
     }
-
-    data class ChipItem(override val summary: String, override val title: String) : MaterialChipItem
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.action_menu_send_message, menu)
@@ -177,7 +134,41 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
         if (show) showSoftInput() else hideSoftInput()
     }
 
+    override fun hideDropdownList() {
+        sendMessageTo.hideDropdownList()
+    }
+
+    override fun scrollToRecipients() {
+        sendMessageScroll.post {
+            sendMessageScroll.scrollTo(0, sendMessageTo.bottom - dpToPx(53f).toInt())
+        }
+    }
+
     override fun popView() {
         onBackPressed()
+    }
+
+    private fun setUpExtendedHitArea() {
+        fun extendHitArea() {
+            val containerHitRect = Rect().apply {
+                sendMessageContent.getHitRect(this)
+            }
+
+            val contentHitRect = Rect().apply {
+                sendMessageMessageContent.getHitRect(this)
+            }
+
+            contentHitRect.top = contentHitRect.bottom
+            contentHitRect.bottom = containerHitRect.bottom
+
+            sendMessageContent.touchDelegate = TouchDelegate(contentHitRect, sendMessageMessageContent)
+        }
+
+        sendMessageMessageContent.post {
+            sendMessageMessageContent.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+                extendHitArea()
+            }
+            extendHitArea()
+        }
     }
 }
