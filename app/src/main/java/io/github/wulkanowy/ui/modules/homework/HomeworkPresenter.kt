@@ -16,6 +16,7 @@ import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDate.ofEpochDay
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -38,8 +39,8 @@ class HomeworkPresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         Timber.i("Homework view was initialized")
-        loadData(LocalDate.ofEpochDay(date ?: baseDate.toEpochDay()))
-        setBaseDate()
+        loadData(ofEpochDay(date ?: baseDate.toEpochDay()))
+        if (currentDate.isHolidays) setBaseDateOnHolidays()
         reloadView()
     }
 
@@ -65,7 +66,7 @@ class HomeworkPresenter @Inject constructor(
         }
     }
 
-    private fun setBaseDate() {
+    private fun setBaseDateOnHolidays() {
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .subscribeOn(schedulers.backgroundThread)

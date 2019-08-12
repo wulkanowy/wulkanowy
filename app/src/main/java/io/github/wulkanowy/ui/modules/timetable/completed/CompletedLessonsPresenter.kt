@@ -39,7 +39,7 @@ class CompletedLessonsPresenter @Inject constructor(
         Timber.i("Completed lessons is attached")
         view.initView()
         loadData(ofEpochDay(date ?: baseDate.toEpochDay()))
-        setBaseDate()
+        if (currentDate.isHolidays) setBaseDateOnHolidays()
         reloadView()
         completedLessonsErrorHandler.onFeatureDisabled = {
             this.view?.showFeatureDisabled()
@@ -69,7 +69,7 @@ class CompletedLessonsPresenter @Inject constructor(
         }
     }
 
-    private fun setBaseDate() {
+    private fun setBaseDateOnHolidays() {
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .subscribeOn(schedulers.backgroundThread)

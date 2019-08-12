@@ -41,7 +41,7 @@ class ExamPresenter @Inject constructor(
         view.initView()
         Timber.i("Exam view was initialized")
         loadData(ofEpochDay(date ?: baseDate.toEpochDay()))
-        setBaseDate()
+        if (currentDate.isHolidays) setBaseDateOnHolidays()
         reloadView()
     }
 
@@ -77,12 +77,12 @@ class ExamPresenter @Inject constructor(
         }
     }
 
-    private fun setBaseDate() {
+    private fun setBaseDateOnHolidays() {
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({ it ->
+            .subscribe({
                 baseDate = baseDate.getLastSchoolDayIfHoliday(it.schoolYear)
                 currentDate = baseDate
                 refreshNavigation()
