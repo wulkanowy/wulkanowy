@@ -9,7 +9,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.github.wulkanowy.utils.getCorrectedDate
+import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
@@ -93,7 +93,7 @@ class AttendancePresenter @Inject constructor(
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .subscribe({
-                baseDate = baseDate.getCorrectedDate(it.schoolYear)
+                baseDate = baseDate.getLastSchoolDayIfHoliday(it.schoolYear)
                 currentDate = baseDate
                 refreshNavigation()
             }) {

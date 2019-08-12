@@ -4,7 +4,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.of
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Month.JANUARY
@@ -163,13 +162,13 @@ class TimeExtensionTest {
 
     @Test
     fun getCorrectedDate_holidays() {
-        assertEquals(of(2019, 6, 21), of(2019, 8, 9).getCorrectedDate(2018))
-        assertEquals(of(2018, 6, 22), of(2019, 8, 9).getCorrectedDate(2017))
+        assertEquals(of(2019, 6, 21), of(2019, 8, 9).getLastSchoolDayIfHoliday(2018))
+        assertEquals(of(2018, 6, 22), of(2019, 8, 9).getLastSchoolDayIfHoliday(2017))
     }
 
     @Test
     fun getCorrectedDate_schoolYear() {
-        assertEquals(of(2019, 5, 1), of(2019, 5, 1).getCorrectedDate(2018))
-        assertEquals(of(2018, 5, 1), of(2019, 5, 1).getCorrectedDate(2017))
+        assertEquals(of(2019, 5, 1), of(2019, 5, 1).getLastSchoolDayIfHoliday(2018))
+        assertEquals(of(2018, 5, 1), of(2019, 5, 1).getLastSchoolDayIfHoliday(2017))
     }
 }

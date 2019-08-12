@@ -129,7 +129,7 @@ fun Int.getSchoolYearByMonth(monthValue: Int): Int {
     }
 }
 
-fun LocalDate.getCorrectedDate(schoolYear: Int): LocalDate {
+fun LocalDate.getLastSchoolDayIfHoliday(schoolYear: Int): LocalDate {
     val date = LocalDate.of(schoolYear.getSchoolYearByMonth(monthValue), monthValue, dayOfMonth)
 
     if (date.isHolidays) {
