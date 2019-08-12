@@ -25,6 +25,12 @@
     <string name="login_nickname_hint">Email or nick</string>
     <string name="login_password_hint">Password</string>
     <string name="login_host_hint">Register</string>
+    <string name="login_type_api">Mobile API</string>
+    <string name="login_type_scrapper">Scrapper</string>
+    <string name="login_type_hybrid">Hybrid</string>
+    <string name="login_token_hint">Token</string>
+    <string name="login_pin_hint">PIN</string>
+    <string name="login_api_key_hint">API key</string>
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Sign in</string>
     <string name="login_invalid_password">This password is too short</string>
@@ -286,7 +292,4 @@
     <string name="error_service_unavailable">The log is not available. Try again later</string>
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
-    <string name="login_type_api">Mobile API</string>
-    <string name="login_type_scrapper">Scrapper</string>
-    <string name="login_type_hybrid">Hybrid</string>
 </resources>
