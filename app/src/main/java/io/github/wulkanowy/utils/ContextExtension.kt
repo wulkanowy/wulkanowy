@@ -31,4 +31,4 @@ fun Context.openInternetBrowser(uri: String, onActivityNotFound: (uri: String) -
     }
 }
 
-fun Context.convertDpToPixels(dp: Float) = dp * resources.displayMetrics.densityDpi / DENSITY_DEFAULT
+fun Context.dpToPx(dp: Float) = dp * resources.displayMetrics.densityDpi / DENSITY_DEFAULT

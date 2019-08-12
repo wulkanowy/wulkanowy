@@ -18,7 +18,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.convertDpToPixels
+import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_attendance.*
 import javax.inject.Inject
@@ -80,7 +80,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
         attendanceNextButton.setOnClickListener { presenter.onNextDay() }
 
         context?.let {
-            attendanceNavContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.convertDpToPixels(8f)))
+            attendanceNavContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.dpToPx(8f)))
         }
     }
 

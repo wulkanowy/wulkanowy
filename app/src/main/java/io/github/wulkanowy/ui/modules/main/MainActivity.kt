@@ -9,7 +9,6 @@ import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -30,7 +29,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
-import io.github.wulkanowy.utils.convertDpToPixels
+import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.safelyPopFragment
 import io.github.wulkanowy.utils.setOnViewChangeListener
@@ -102,7 +101,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     override fun initView() {
         mainAppBarContainer.apply {
             if (SDK_INT >= LOLLIPOP) stateListAnimator = null
-            setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(convertDpToPixels(4f)))
+            setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(dpToPx(4f)))
         }
 
         mainBottomNav.run {
@@ -117,7 +116,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             )
             accentColor = getThemeAttrColor(R.attr.colorPrimary)
             inactiveColor = getThemeAttrColor(R.attr.colorOnSurface)
-            defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(convertDpToPixels(8f))
+            defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(dpToPx(8f))
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false
@@ -164,7 +163,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     }
 
     override fun showActionBarElevation(show: Boolean) {
-        ViewCompat.setElevation(mainAppBarContainer, if (show) convertDpToPixels(4f) else 0f)
+        ViewCompat.setElevation(mainAppBarContainer, if (show) dpToPx(4f) else 0f)
     }
 
     override fun notifyMenuViewReselected() {

@@ -18,7 +18,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.timetable.completed.CompletedLessonsFragment
-import io.github.wulkanowy.utils.convertDpToPixels
+import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_timetable.*
 import javax.inject.Inject
@@ -85,7 +85,7 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
         timetableNextButton.setOnClickListener { presenter.onNextDay() }
 
         context?.let {
-            timetableNavContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.convertDpToPixels(8f)))
+            timetableNavContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.dpToPx(8f)))
         }
     }
 

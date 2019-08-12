@@ -17,7 +17,7 @@ import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 import io.github.wulkanowy.ui.base.BaseActivity
-import io.github.wulkanowy.utils.convertDpToPixels
+import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.activity_send_message.*
@@ -90,7 +90,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
 
         sendMessageTo.onTextChangeListener = {
             sendMessageScroll.post {
-                sendMessageScroll.scrollTo(0, sendMessageTo.bottom - convertDpToPixels(53f).toInt())
+                sendMessageScroll.scrollTo(0, sendMessageTo.bottom - dpToPx(53f).toInt())
             }
         }
     }

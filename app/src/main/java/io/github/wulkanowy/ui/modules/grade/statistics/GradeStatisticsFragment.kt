@@ -20,7 +20,7 @@ import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
-import io.github.wulkanowy.utils.convertDpToPixels
+import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import kotlinx.android.synthetic.main.fragment_grade_statistics.*
@@ -92,7 +92,7 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         context?.let {
             subjectsAdapter = ArrayAdapter(it, android.R.layout.simple_spinner_item, ArrayList<String>())
             subjectsAdapter.setDropDownViewResource(R.layout.item_attendance_summary_subject)
-            gradeStatisticsSubjectsContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.convertDpToPixels(1f)))
+            gradeStatisticsSubjectsContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.dpToPx(1f)))
         }
 
         gradeStatisticsSubjects.run {
