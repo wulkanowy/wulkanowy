@@ -77,7 +77,7 @@ class CompletedLessonsPresenter @Inject constructor(
             .subscribe({
                 baseDate = baseDate.getLastSchoolDayIfHoliday(it.schoolYear)
                 currentDate = baseDate
-                refreshNavigation()
+                reloadNavigation()
             }) {
                 Timber.i("Loading semester result: An exception occurred")
             })
@@ -127,12 +127,11 @@ class CompletedLessonsPresenter @Inject constructor(
             showContent(false)
             showEmpty(false)
             clearData()
-            refreshNavigation()
+            reloadNavigation()
         }
     }
 
-
-    private fun refreshNavigation() {
+    private fun reloadNavigation() {
         view?.apply {
             showPreButton(!currentDate.minusDays(1).isHolidays)
             showNextButton(!currentDate.plusDays(1).isHolidays)
