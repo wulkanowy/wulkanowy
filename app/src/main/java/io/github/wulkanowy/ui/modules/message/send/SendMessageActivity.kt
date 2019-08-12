@@ -64,7 +64,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_message)
-        // setSupportActionBar(sendMessageToolbar)
+        //setSupportActionBar(sendMessageToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         messageContainer = sendMessageContainer
 
@@ -78,20 +78,8 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
 
         sendMessageTo.itemList = list
 
-        sendMessageContent.post {
-            sendMessageMessageContent.post {
-                val sendContentRect = Rect()
-                sendMessageContent.getHitRect(sendContentRect)
+        setUpExtendedHitRect()
 
-                val contentRect = Rect()
-                sendMessageMessageContent.getHitRect(contentRect)
-
-                contentRect.top = contentRect.bottom
-                contentRect.bottom = sendContentRect.bottom
-
-                sendMessageContent.touchDelegate = TouchDelegate(contentRect, sendMessageMessageContent)
-            }
-        }
 
         sendMessageScroll.setOnTouchListener { _, _ ->
             if (sendMessageTo.isDropdownListVisible) {
@@ -104,6 +92,30 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
             sendMessageScroll.post {
                 sendMessageScroll.scrollTo(0, sendMessageTo.bottom - convertDpToPixels(53f).toInt())
             }
+        }
+    }
+
+    private fun setUpExtendedHitRect() {
+        fun extendHitRect() {
+            val containerHitRect = Rect().apply {
+                sendMessageContent.getHitRect(this)
+            }
+
+            val contentHitRect = Rect().apply {
+                sendMessageMessageContent.getHitRect(this)
+            }
+
+            contentHitRect.top = contentHitRect.bottom
+            contentHitRect.bottom = containerHitRect.bottom
+
+            sendMessageContent.touchDelegate = TouchDelegate(contentHitRect, sendMessageMessageContent)
+        }
+
+        sendMessageMessageContent.post {
+            sendMessageMessageContent.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+                extendHitRect()
+            }
+            extendHitRect()
         }
     }
 
