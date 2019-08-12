@@ -91,8 +91,7 @@ class LoginFormPresenterTest {
     @Test
     fun loginTest() {
         val studentTest = Student(email = "test@", password = "123", scrapperBaseUrl = "https://fakelog.cf", loginType = "AUTO", studentName = "", schoolSymbol = "", schoolName = "", studentId = 0, classId = 1, isCurrent = false, symbol = "", registrationDate = now(), className = "", apiBaseUrl = "", apiKey = "", certificate = "", certificateKey = "", loginMode = "", userLoginId = 0)
-        doReturn(Single.just(listOf(studentTest)))
-            .`when`(repository).getStudents(anyString(), anyString(), anyString())
+        doReturn(Single.just(listOf(studentTest))).`when`(repository).getStudentsScrapper(anyString(), anyString(), anyString(), anyString())
 
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
@@ -109,7 +108,7 @@ class LoginFormPresenterTest {
     @Test
     fun loginEmptyTest() {
         doReturn(Single.just(emptyList<Student>()))
-            .`when`(repository).getStudents(anyString(), anyString(), anyString())
+            .`when`(repository).getStudentsScrapper(anyString(), anyString(), anyString(), anyString())
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
@@ -125,7 +124,7 @@ class LoginFormPresenterTest {
     @Test
     fun loginEmptyTwiceTest() {
         doReturn(Single.just(emptyList<Student>()))
-            .`when`(repository).getStudents(anyString(), anyString(), anyString())
+            .`when`(repository).getStudentsScrapper(anyString(), anyString(), anyString(), anyString())
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
@@ -142,8 +141,7 @@ class LoginFormPresenterTest {
     @Test
     fun loginErrorTest() {
         val testException = RuntimeException("test")
-        doReturn(Single.error<List<Student>>(testException))
-            .`when`(repository).getStudents(anyString(), anyString(), anyString())
+        doReturn(Single.error<List<Student>>(testException)).`when`(repository).getStudentsScrapper(anyString(), anyString(), anyString(), anyString())
         `when`(loginFormView.formNameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
