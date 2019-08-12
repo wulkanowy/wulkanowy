@@ -12,8 +12,9 @@ class Migration16 : Migration(15, 16) {
     }
 
     private fun migrateMessages(database: SupportSQLiteDatabase) {
+        database.execSQL("DROP TABLE Messages")
         database.execSQL("""
-            CREATE TABLE IF NOT EXISTS Messages_tmp (
+            CREATE TABLE IF NOT EXISTS Messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 is_notified INTEGER NOT NULL,
                 student_id INTEGER NOT NULL,
@@ -32,14 +33,12 @@ class Migration16 : Migration(15, 16) {
                 removed INTEGER NOT NULL
             )
         """)
-        database.execSQL("INSERT INTO Messages_tmp SELECT * FROM Messages")
-        database.execSQL("DROP TABLE Messages")
-        database.execSQL("ALTER TABLE Messages_tmp RENAME TO Messages")
     }
 
     private fun migrateGrades(database: SupportSQLiteDatabase) {
+        database.execSQL("DROP TABLE Grades")
         database.execSQL("""
-            CREATE TABLE IF NOT EXISTS Grades_tmp (
+            CREATE TABLE IF NOT EXISTS Grades (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 is_read INTEGER NOT NULL,
                 is_notified INTEGER NOT NULL,
@@ -59,9 +58,6 @@ class Migration16 : Migration(15, 16) {
                 teacher TEXT NOT NULL
             )
         """)
-        database.execSQL("INSERT INTO Grades_tmp SELECT * FROM Grades")
-        database.execSQL("DROP TABLE Grades")
-        database.execSQL("ALTER TABLE Grades_tmp RENAME TO Grades")
     }
 
     private fun migrateStudents(database: SupportSQLiteDatabase) {
@@ -102,7 +98,7 @@ class Migration16 : Migration(15, 16) {
             INSERT INTO Students_tmp(
             id, scrapperBaseUrl, apiBaseUrl, loginType, loginMode, certificateKey, certificate, apiKey, email, password, symbol, student_id, user_login_id, student_name, school_id, school_name, school_id, school_name, class_name, class_id, is_current, registration_date)
             SELECT
-            id, scrapperBaseUrl, apiBaseUrl, loginType, loginMode, certificateKey, certificate, apiKey, email, password, symbol, student_id, user_login_id, student_name, school_id, school_name, school_id, school_name, class_name, class_id, is_current, registration_date
+            id, endpoint, apiBaseUrl, loginType, "SCRAPPER", certificateKey, certificate, apiKey, email, password, symbol, student_id, user_login_id, student_name, school_id, school_name, school_id, school_name, class_name, class_id, is_current, registration_date
             FROM Students
         """)
         database.execSQL("DROP TABLE Students")
