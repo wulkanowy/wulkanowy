@@ -22,7 +22,7 @@ class RecipientRepository @Inject constructor(
 ) {
 
     fun getRecipients(student: Student, role: Int, unit: ReportingUnit, forceRefresh: Boolean = false): Single<List<Recipient>> {
-        return Single.just(sdkHelper.initApi(student))
+        return Single.just(sdkHelper.init(student))
             .flatMap { _ ->
                 local.getRecipients(student, role, unit).filter { !forceRefresh }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
@@ -43,7 +43,7 @@ class RecipientRepository @Inject constructor(
     }
 
     fun getMessageRecipients(student: Student, message: Message): Single<List<Recipient>> {
-        return Single.just(sdkHelper.initApi(student))
+        return Single.just(sdkHelper.init(student))
             .flatMap { ReactiveNetwork.checkInternetConnectivity(settings) }
             .flatMap {
                 if (it) remote.getMessageRecipients(message)

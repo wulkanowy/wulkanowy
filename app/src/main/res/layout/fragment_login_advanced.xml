@@ -172,10 +172,10 @@
                 android:layout_marginRight="24dp"
                 android:background="@drawable/ic_login_outlined_border"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/loginFormSignIn"
+                app:layout_constraintBottom_toTopOf="@+id/loginFormPinLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginFormPassLayout">
+                app:layout_constraintTop_toBottomOf="@+id/loginFormApiKeyLayout">
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/loginFormHost"
@@ -200,6 +200,87 @@
                 app:layout_constraintEnd_toEndOf="@+id/loginFormHostLayout"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/loginFormHostLayout" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/loginFormPinLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:hint="PIN"
+                app:errorEnabled="true"
+                app:layout_constraintBottom_toTopOf="@+id/loginFormHostLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginFormSymbolLayout">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/loginFormPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="@string/login_sign_in"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/loginFormSymbolLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:hint="Symbol"
+                app:errorEnabled="true"
+                app:layout_constraintBottom_toTopOf="@+id/loginFormTokenLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginFormPinLayout">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/loginFormSymbol"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="@string/login_sign_in"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/loginFormTokenLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:hint="Token"
+                app:errorEnabled="true"
+                app:layout_constraintBottom_toTopOf="@+id/loginFormSignIn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginFormSymbolLayout">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/loginFormToken"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="@string/login_sign_in"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginFormSignIn"

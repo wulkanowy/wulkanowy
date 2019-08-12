@@ -22,7 +22,7 @@ class SemesterRepository @Inject constructor(
 ) {
 
     fun getSemesters(student: Student, forceRefresh: Boolean = false): Single<List<Semester>> {
-        return Maybe.just(sdkHelper.initApi(student))
+        return Maybe.just(sdkHelper.init(student))
             .flatMap { local.getSemesters(student).filter { !forceRefresh } }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {

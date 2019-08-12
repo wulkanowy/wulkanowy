@@ -4,8 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.login.LoginActivity
+import io.github.wulkanowy.utils.hideSoftInput
+import io.github.wulkanowy.utils.setOnItemSelectedListener
+import io.github.wulkanowy.utils.setOnTextChangedListener
+import io.github.wulkanowy.utils.showSoftInput
+import kotlinx.android.synthetic.main.fragment_login_advanced.*
 import javax.inject.Inject
 
 class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
@@ -17,6 +26,34 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         fun newInstance() = LoginAdvancedFragment()
     }
 
+    override val formLoginType: String
+        get() = when(loginTypeSwitch.checkedRadioButtonId) {
+            R.id.loginTypeApi -> "API"
+            R.id.loginTypeScrapper -> "SCRAPPER"
+            else -> "HYBRID"
+        }
+
+    override val formNameValue: String
+        get() = loginFormName.text.toString().trim()
+
+    override val formPassValue: String
+        get() = loginFormPass.text.toString().trim()
+
+    override val formApiValue: String
+        get() = loginFormApiKey.text.toString().trim()
+
+    override val formHostValue: String?
+        get() = resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
+
+    override val formPinValue: String
+        get() = loginFormPin.text.toString().trim()
+
+    override val formSymbolValue: String
+        get() = loginFormSymbol.text.toString().trim()
+
+    override val formTokenValue: String
+        get() = loginFormToken.text.toString().trim()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_advanced, container, false)
     }
@@ -24,6 +61,122 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         presenter.onAttachView(this)
+    }
+
+    override fun initView() {
+        loginFormName.setOnTextChangedListener { presenter.onNameTextChanged() }
+        loginFormPass.setOnTextChangedListener { presenter.onPassTextChanged() }
+        loginFormHost.setOnItemSelectedListener { presenter.onHostSelected() }
+        loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
+
+        loginFormApiKey.setOnEditorActionListener { _, id, _ ->
+            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) loginFormSignIn.callOnClick() else false
+        }
+
+        context?.let {
+            loginFormHost.adapter = ArrayAdapter.createFromResource(it, R.array.endpoints_keys, android.R.layout.simple_spinner_item)
+                .apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+        }
+    }
+
+    override fun setDefaultCredentials(name: String, pass: String) {
+        loginFormName.setText(name)
+        loginFormPass.setText(pass)
+    }
+
+    override fun setErrorNameRequired() {
+        loginFormNameLayout.run {
+            requestFocus()
+            error = getString(R.string.login_field_required)
+        }
+    }
+
+    override fun setErrorPassRequired(focus: Boolean) {
+        loginFormPassLayout.run {
+            if (focus) requestFocus()
+            error = getString(R.string.login_field_required)
+        }
+    }
+
+    override fun setErrorPassInvalid(focus: Boolean) {
+        loginFormPassLayout.run {
+            if (focus) requestFocus()
+            error = getString(R.string.login_invalid_password)
+        }
+    }
+
+    override fun setErrorPassIncorrect() {
+        loginFormPassLayout.run {
+            requestFocus()
+            error = getString(R.string.login_incorrect_password)
+        }
+    }
+
+    override fun setErrorApiKeyInvalid() {
+        loginFormApiKeyLayout.run {
+            requestFocus()
+            error = "API key is invalid"
+        }
+    }
+
+    override fun setErrorApiKeyRequired() {
+        loginFormApiKeyLayout.run {
+            requestFocus()
+            error = "API key is required"
+        }
+    }
+
+    override fun setErrorPinRequired() {
+        loginFormPinLayout.run {
+            requestFocus()
+            error = "PIN is required"
+        }
+    }
+
+    override fun setErrorSymbolRequired() {
+        loginFormSymbolLayout.run {
+            requestFocus()
+            error = "Symbol is required"
+        }
+    }
+
+    override fun setErrorTokenRequired() {
+        loginFormTokenLayout.run {
+            requestFocus()
+            error = "Token is required"
+        }
+    }
+
+    override fun clearNameError() {
+        loginFormNameLayout.error = null
+    }
+
+    override fun clearPassError() {
+        loginFormPassLayout.error = null
+    }
+
+    override fun showSoftKeyboard() {
+        activity?.showSoftInput()
+    }
+
+    override fun hideSoftKeyboard() {
+        activity?.hideSoftInput()
+    }
+
+    override fun showProgress(show: Boolean) {
+        loginFormProgress.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showContent(show: Boolean) {
+        loginFormContainer.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun notifyParentAccountLogged(students: List<Student>) {
+        (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, Triple(
+            loginFormName.text.toString(),
+            loginFormPass.text.toString(),
+            resources.getStringArray(R.array.endpoints_values)[loginFormHost.selectedItemPosition]
+        ))
     }
 
     override fun onDestroyView() {

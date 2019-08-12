@@ -204,7 +204,7 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(GradeStatisticsFragment.SAVED_CHART_TYPE, presenter.currentIsSemester)
+        outState.putBoolean(SAVED_CHART_TYPE, presenter.currentIsSemester)
     }
 
     override fun onDestroyView() {

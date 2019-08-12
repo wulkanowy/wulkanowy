@@ -48,7 +48,7 @@ class SemesterRepositoryTest {
             createSemesterEntity(true)
         )
 
-        doNothing().`when`(sdkHelper).initApi(student)
+        doNothing().`when`(sdkHelper).init(student)
         doReturn(Maybe.empty<Semester>()).`when`(semesterLocal).getSemesters(student)
         doReturn(Single.just(semesters)).`when`(semesterRemote).getSemesters(student)
 
@@ -65,7 +65,7 @@ class SemesterRepositoryTest {
             createSemesterEntity(true)
         )
 
-        doNothing().`when`(sdkHelper).initApi(student)
+        doNothing().`when`(sdkHelper).init(student)
         doReturn(Maybe.empty<Semester>()).`when`(semesterLocal).getSemesters(student)
         doReturn(Single.just(semesters)).`when`(semesterRemote).getSemesters(student)
 

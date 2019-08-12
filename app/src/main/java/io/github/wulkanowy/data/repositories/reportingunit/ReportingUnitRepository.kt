@@ -21,7 +21,7 @@ class ReportingUnitRepository @Inject constructor(
 ) {
 
     fun getReportingUnits(student: Student, forceRefresh: Boolean = false): Single<List<ReportingUnit>> {
-        return Single.just(sdkHelper.initApi(student))
+        return Single.just(sdkHelper.init(student))
             .flatMap { _ ->
                 local.getReportingUnits(student).filter { !forceRefresh }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
@@ -40,7 +40,7 @@ class ReportingUnitRepository @Inject constructor(
     }
 
     fun getReportingUnit(student: Student, unitId: Int): Maybe<ReportingUnit> {
-        return Maybe.just(sdkHelper.initApi(student))
+        return Maybe.just(sdkHelper.init(student))
             .flatMap { _ ->
                 local.getReportingUnit(student, unitId)
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)

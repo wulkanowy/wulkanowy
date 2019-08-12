@@ -25,7 +25,7 @@ class MessageRepository @Inject constructor(
 ) {
 
     fun getMessages(student: Student, folder: MessageFolder, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
-        return Single.just(sdkHelper.initApi(student))
+        return Single.just(sdkHelper.init(student))
             .flatMap { _ ->
                 local.getMessages(student, folder).filter { !forceRefresh }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
@@ -47,7 +47,7 @@ class MessageRepository @Inject constructor(
     }
 
     fun getMessage(student: Student, messageDbId: Long, markAsRead: Boolean = false): Single<Message> {
-        return Single.just(sdkHelper.initApi(student))
+        return Single.just(sdkHelper.init(student))
             .flatMap { _ ->
                 local.getMessage(messageDbId)
                     .filter { it.content.isNotEmpty() }

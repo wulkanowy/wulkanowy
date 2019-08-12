@@ -63,7 +63,7 @@ class LoginFormPresenter @Inject constructor(
 
         if (!validateCredentials(email, password)) return
 
-        disposable.add(studentRepository.getStudents(email, password, endpoint)
+        disposable.add(studentRepository.getStudentsScrapper(email, password, endpoint)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {
