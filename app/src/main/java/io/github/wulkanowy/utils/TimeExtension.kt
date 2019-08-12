@@ -122,7 +122,7 @@ inline val LocalDate.lastSchoolDay: LocalDate
         .with(next(FRIDAY))
 
 
-fun Int.getSchoolYearByMonth(monthValue: Int): Int {
+private fun Int.getSchoolYearByMonth(monthValue: Int): Int {
     return when (monthValue) {
         in 9..12 -> this
         else -> this + 1
