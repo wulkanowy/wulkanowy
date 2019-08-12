@@ -17,6 +17,7 @@ import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 import io.github.wulkanowy.ui.base.BaseActivity
+import io.github.wulkanowy.utils.convertDpToPixels
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.activity_send_message.*
@@ -99,13 +100,11 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
             } else false
         }
 
-        /*sendMessageTo.onTextChangeListener = {
-            val visible = Rect().apply {
-                sendMessageTo.getLocalVisibleRect(this)
+        sendMessageTo.onTextChangeListener = {
+            sendMessageScroll.post {
+                sendMessageScroll.scrollTo(0, sendMessageTo.bottom - convertDpToPixels(53f).toInt())
             }
-
-            sendMessageScroll.scrollTo(0, sendMessageTo.top)
-        }*/
+        }
     }
 
     data class ChipItem(override val summary: String, override val title: String) : MaterialChipItem
