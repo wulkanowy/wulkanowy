@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.message.send
 
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
+import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 import io.github.wulkanowy.ui.base.BaseView
 
 interface SendMessageView : BaseView {
@@ -24,9 +25,9 @@ interface SendMessageView : BaseView {
 
     fun setReportingUnit(unit: ReportingUnit)
 
-    fun setRecipients(recipients: List<Recipient>)
+    fun setRecipients(recipients: List<MaterialChipItem>)
 
-    fun setSelectedRecipients(recipients: List<Recipient>)
+    fun setSelectedRecipients(recipients: List<MaterialChipItem>)
 
     fun showProgress(show: Boolean)
 

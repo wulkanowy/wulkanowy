@@ -15,6 +15,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
+import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.hideSoftInput
@@ -96,10 +97,11 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
         sendMessageFrom.text = unit.senderName
     }
 
-    override fun setRecipients(recipients: List<Recipient>) {
+    override fun setRecipients(recipients: List<MaterialChipItem>) {
+        sendMessageTo.itemList = recipients
     }
 
-    override fun setSelectedRecipients(recipients: List<Recipient>) {
+    override fun setSelectedRecipients(recipients: List<MaterialChipItem>) {
     }
 
     override fun showProgress(show: Boolean) {

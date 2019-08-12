@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.repositories.recipient.RecipientRepository
 import io.github.wulkanowy.data.repositories.reportingunit.ReportingUnitRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
+import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
@@ -75,8 +76,8 @@ class SendMessagePresenter @Inject constructor(
 
     private fun loadData(message: Message?, reply: Boolean?) {
         var reportingUnit: ReportingUnit? = null
-        var recipients: List<Recipient> = emptyList()
-        var selectedRecipient: List<Recipient> = emptyList()
+        var recipientChips: List<MaterialChipItem> = emptyList()
+        var selectedRecipientChips: List<MaterialChipItem> = emptyList()
 
         Timber.i("Loading recipients started")
         disposable.add(studentRepository.getCurrentStudent()
@@ -87,14 +88,14 @@ class SendMessagePresenter @Inject constructor(
                     .flatMap { recipientRepository.getRecipients(student, 2, it).toMaybe() }
                     .doOnSuccess {
                         Timber.i("Loading recipients result: Success, fetched %d recipients", it.size)
-                        recipients = it
+                        recipientChips = createChips(it)
                     }
                     .flatMapCompletable {
                         if (message == null || reply != true) Completable.complete()
                         else recipientRepository.getMessageRecipients(student, message)
                             .doOnSuccess {
                                 Timber.i("Loaded message recipients to reply result: Success, fetched %d recipients", it.size)
-                                selectedRecipient = it
+                                selectedRecipientChips = createChips(it)
                             }
                             .ignoreElement()
                     }
@@ -109,11 +110,11 @@ class SendMessagePresenter @Inject constructor(
             }
             .doFinally { view?.run { showProgress(false) } }
             .subscribe({
-                view?.apply {
+                view?.run {
                     if (reportingUnit !== null) {
                         reportingUnit?.let { setReportingUnit(it) }
-                        setRecipients(recipients)
-                        if (selectedRecipient.isNotEmpty()) setSelectedRecipients(selectedRecipient)
+                        setRecipients(recipientChips)
+                        if (selectedRecipientChips.isNotEmpty()) setSelectedRecipients(selectedRecipientChips)
                         showContent(true)
                     } else {
                         Timber.e("Loading recipients result: Can't find the reporting unit")
@@ -175,5 +176,30 @@ class SendMessagePresenter @Inject constructor(
             }
         }
         return false
+    }
+
+    private fun createChips(recipients: List<Recipient>): List<MaterialChipItem> {
+        fun generateCorrectSummary(recipientRealName: String): String {
+            val substring = recipientRealName.substringBeforeLast("-")
+            return when {
+                substring == recipientRealName -> recipientRealName
+                substring.indexOf("(") != -1 -> {
+                    recipientRealName.indexOf("(")
+                        .let { recipientRealName.substring(if (it != -1) it else 0) }
+                }
+                substring.indexOf("[") != -1 -> {
+                    recipientRealName.indexOf("[")
+                        .let { recipientRealName.substring(if (it != -1) it else 0) }
+                }
+                else -> recipientRealName.substringAfter("-")
+            }.trim()
+        }
+
+        return recipients.map {
+            MaterialChipItem(
+                title = it.name,
+                summary = generateCorrectSummary(it.realName)
+            )
+        }
     }
 }
