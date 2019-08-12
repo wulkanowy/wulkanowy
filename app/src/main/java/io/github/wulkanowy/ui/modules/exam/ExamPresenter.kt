@@ -82,10 +82,10 @@ class ExamPresenter @Inject constructor(
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({ semester ->
-                baseDate = baseDate.getCorrectedDate(semester.schoolYear)
+            .subscribe({ it ->
+                baseDate = baseDate.getCorrectedDate(it.schoolYear)
                 currentDate = baseDate
-                view?.let { refreshNavigation(it) }
+                refreshNavigation()
             }) {
                 Timber.i("Loading semester result: An exception occurred")
             })
@@ -143,12 +143,12 @@ class ExamPresenter @Inject constructor(
             showContent(false)
             showEmpty(false)
             clearData()
-            refreshNavigation(this)
+            refreshNavigation()
         }
     }
 
-    private fun refreshNavigation(view: ExamView) {
-        view.apply {
+    private fun refreshNavigation() {
+        view?.apply {
             showPreButton(!currentDate.minusDays(7).isHolidays)
             showNextButton(!currentDate.plusDays(7).isHolidays)
             updateNavigationWeek("${currentDate.monday.toFormattedString("dd.MM")} - " +

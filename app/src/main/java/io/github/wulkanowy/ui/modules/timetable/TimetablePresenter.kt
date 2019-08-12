@@ -90,10 +90,10 @@ class TimetablePresenter @Inject constructor(
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({ semester ->
-                baseDate = baseDate.getCorrectedDate(semester.schoolYear)
+            .subscribe({
+                baseDate = baseDate.getCorrectedDate(it.schoolYear)
                 currentDate = baseDate
-                view?.let { refreshNavigation(it) }
+                refreshNavigation()
             }) {
                 Timber.i("Loading semester result: An exception occurred")
             })
@@ -143,14 +143,14 @@ class TimetablePresenter @Inject constructor(
             showContent(false)
             showEmpty(false)
             clearData()
-            refreshNavigation(this)
+            refreshNavigation()
         }
     }
 
-    private fun refreshNavigation(view: TimetableView) {
-        view.apply {
-            showNextButton(!currentDate.plusDays(1).isHolidays)
+    private fun refreshNavigation() {
+        view?.apply {
             showPreButton(!currentDate.minusDays(1).isHolidays)
+            showNextButton(!currentDate.plusDays(1).isHolidays)
             updateNavigationDay(currentDate.toFormattedString("EEEE\ndd.MM.YYYY").capitalize())
         }
     }
