@@ -74,7 +74,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
     override fun initView() {
         setUpExtendedHitArea()
         sendMessageScroll.setOnTouchListener { _, _ -> presenter.onTouchScroll() }
-        sendMessageTo.onTextChangeListener = { _ -> presenter.onRecipientsTextChange() }
+        sendMessageTo.onTextChangeListener = presenter::onRecipientsTextChange
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

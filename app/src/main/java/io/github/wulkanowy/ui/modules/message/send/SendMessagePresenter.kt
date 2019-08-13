@@ -64,7 +64,8 @@ class SendMessagePresenter @Inject constructor(
         } == true
     }
 
-    fun onRecipientsTextChange() {
+    fun onRecipientsTextChange(text: String) {
+        if (text.isBlank()) return
         view?.scrollToRecipients()
     }
 
