@@ -13,9 +13,7 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
-import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.hideSoftInput
@@ -45,8 +43,8 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
     override val isDropdownListVisible: Boolean
         get() = sendMessageTo.isDropdownListVisible
 
-    override val formRecipientsData: List<Recipient>
-        get() = emptyList()
+    override val formRecipientsData: List<RecipientChipItem>
+        get() = sendMessageTo.addedChipItems as List<RecipientChipItem>
 
     override val formSubjectValue: String
         get() = sendMessageSubject.text.toString()
@@ -66,7 +64,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_message)
-        //setSupportActionBar(sendMessageToolbar)
+        setSupportActionBar(sendMessageToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         messageContainer = sendMessageContainer
 
@@ -97,11 +95,12 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
         sendMessageFrom.text = unit.senderName
     }
 
-    override fun setRecipients(recipients: List<MaterialChipItem>) {
-        sendMessageTo.itemList = recipients
+    override fun setRecipients(recipients: List<RecipientChipItem>) {
+        sendMessageTo.filterableChipItems = recipients
     }
 
-    override fun setSelectedRecipients(recipients: List<MaterialChipItem>) {
+    override fun setSelectedRecipients(recipients: List<RecipientChipItem>) {
+        sendMessageTo.addChips(recipients)
     }
 
     override fun showProgress(show: Boolean) {

@@ -7,15 +7,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <View
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/sendMessageAppBar"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="wrap_content"
         android:background="?colorSurface"
+        android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
         app:layout_constraintBottom_toTopOf="@id/sendMessageScroll"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/sendMessageToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <io.github.wulkanowy.materialchipsinput.ConsumedNestedScrollView
         android:id="@+id/sendMessageScroll"
@@ -117,9 +124,9 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:background="@android:color/transparent"
-                    android:imeOptions="flagNoExtractUi"
                     android:gravity="center_vertical"
                     android:hint="@string/message_subject"
+                    android:imeOptions="flagNoExtractUi"
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:maxLines="1"
@@ -143,8 +150,8 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:gravity="start"
-                    android:imeOptions="flagNoExtractUi"
                     android:hint="@string/message_content"
+                    android:imeOptions="flagNoExtractUi"
                     android:importantForAutofill="no"
                     android:inputType="textMultiLine"
                     android:minHeight="58dp"

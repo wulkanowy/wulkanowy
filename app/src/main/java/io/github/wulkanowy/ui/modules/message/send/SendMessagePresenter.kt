@@ -9,7 +9,6 @@ import io.github.wulkanowy.data.repositories.recipient.RecipientRepository
 import io.github.wulkanowy.data.repositories.reportingunit.ReportingUnitRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
-import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
@@ -74,10 +73,28 @@ class SendMessagePresenter @Inject constructor(
         return true
     }
 
+    fun onSend(): Boolean {
+        view?.run {
+            when {
+                formRecipientsData.isEmpty() -> showMessage(messageRequiredRecipients)
+                formContentValue.length < 3 -> showMessage(messageContentMinLength)
+                else -> {
+                    sendMessage(
+                        subject = formSubjectValue,
+                        content = formContentValue,
+                        recipients = formRecipientsData.map { it.recipient }
+                    )
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     private fun loadData(message: Message?, reply: Boolean?) {
         var reportingUnit: ReportingUnit? = null
-        var recipientChips: List<MaterialChipItem> = emptyList()
-        var selectedRecipientChips: List<MaterialChipItem> = emptyList()
+        var recipientChips: List<RecipientChipItem> = emptyList()
+        var selectedRecipientChips: List<RecipientChipItem> = emptyList()
 
         Timber.i("Loading recipients started")
         disposable.add(studentRepository.getCurrentStudent()
@@ -160,25 +177,7 @@ class SendMessagePresenter @Inject constructor(
         )
     }
 
-    fun onSend(): Boolean {
-        view?.run {
-            when {
-                formRecipientsData.isEmpty() -> showMessage(messageRequiredRecipients)
-                formContentValue.length < 3 -> showMessage(messageContentMinLength)
-                else -> {
-                    sendMessage(
-                        subject = formSubjectValue,
-                        content = formContentValue,
-                        recipients = formRecipientsData
-                    )
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-    private fun createChips(recipients: List<Recipient>): List<MaterialChipItem> {
+    private fun createChips(recipients: List<Recipient>): List<RecipientChipItem> {
         fun generateCorrectSummary(recipientRealName: String): String {
             val substring = recipientRealName.substringBeforeLast("-")
             return when {
@@ -196,9 +195,10 @@ class SendMessagePresenter @Inject constructor(
         }
 
         return recipients.map {
-            MaterialChipItem(
+            RecipientChipItem(
                 title = it.name,
-                summary = generateCorrectSummary(it.realName)
+                summary = generateCorrectSummary(it.realName),
+                recipient = it
             )
         }
     }
