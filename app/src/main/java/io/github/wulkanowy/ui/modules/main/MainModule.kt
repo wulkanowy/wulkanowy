@@ -9,6 +9,8 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.di.scopes.PerActivity
 import io.github.wulkanowy.di.scopes.PerFragment
 import io.github.wulkanowy.ui.modules.about.AboutFragment
+import io.github.wulkanowy.ui.modules.about.license.LicenseFragment
+import io.github.wulkanowy.ui.modules.about.license.LicenseModule
 import io.github.wulkanowy.ui.modules.account.AccountDialog
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
@@ -20,9 +22,9 @@ import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.MessageModule
 import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
-import io.github.wulkanowy.ui.modules.mobiledevice.token.MobileDeviceTokenDialog
 import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceFragment
 import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceModule
+import io.github.wulkanowy.ui.modules.mobiledevice.token.MobileDeviceTokenDialog
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
@@ -116,4 +118,8 @@ abstract class MainModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract fun bindMobileDeviceDialog(): MobileDeviceTokenDialog
+
+    @PerFragment
+    @ContributesAndroidInjector(modules = [LicenseModule::class])
+    abstract fun bindLicenseFragment(): LicenseFragment
 }

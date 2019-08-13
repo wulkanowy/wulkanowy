@@ -1,0 +1,48 @@
+package io.github.wulkanowy.ui.modules.about.license
+
+import android.view.View
+import com.mikepenz.aboutlibraries.entity.Library
+import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import eu.davidea.flexibleadapter.items.IFlexible
+import eu.davidea.viewholders.FlexibleViewHolder
+import io.github.wulkanowy.R
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.license_item.*
+
+class LicenseItem(private val library: Library) : AbstractFlexibleItem<LicenseItem.ViewHolder>() {
+
+    override fun getLayoutRes() = R.layout.license_item
+
+    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
+        return ViewHolder(view, adapter)
+    }
+
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        with(holder) {
+            licenseItemName.text = library.libraryName
+            licenseItemSummary.text = library.license?.licenseName
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as LicenseItem
+
+        if (library != other.library) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return library.hashCode()
+    }
+
+    class ViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>) : FlexibleViewHolder(view, adapter),
+        LayoutContainer {
+
+        override val containerView: View? get() = contentView
+    }
+}

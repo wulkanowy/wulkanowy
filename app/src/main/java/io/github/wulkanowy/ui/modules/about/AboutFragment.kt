@@ -16,6 +16,8 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.about.license.LicenseFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.getCompatDrawable
@@ -130,7 +132,7 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
     }
 
     override fun openLicenses() {
-        showMessage("Not implemented")
+        (activity as? MainActivity)?.pushView(LicenseFragment.newInstance())
     }
 
     override fun openPrivacyPolicy() {

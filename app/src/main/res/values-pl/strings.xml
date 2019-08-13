@@ -12,6 +12,7 @@
     <string name="settings_title">Ustawienia</string>
     <string name="more_title">Więcej</string>
     <string name="about_title">O aplikacji</string>
+    <string name="license_title">Licencje</string>
     <string name="message_title">Wiadomości</string>
     <string name="send_message_title">Nowa wiadomość</string>
     <string name="note_title">Uwagi i osiągnięcia</string>
