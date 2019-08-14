@@ -8,11 +8,11 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.license_item.*
+import kotlinx.android.synthetic.main.item_license.*
 
-class LicenseItem(private val library: Library) : AbstractFlexibleItem<LicenseItem.ViewHolder>() {
+class LicenseItem(val library: Library) : AbstractFlexibleItem<LicenseItem.ViewHolder>() {
 
-    override fun getLayoutRes() = R.layout.license_item
+    override fun getLayoutRes() = R.layout.item_license
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
         return ViewHolder(view, adapter)

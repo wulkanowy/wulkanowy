@@ -15,6 +15,8 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.openInternetBrowser
+import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_license.*
 import javax.inject.Inject
 
@@ -55,10 +57,15 @@ class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = licenseAdapter
         }
+        licenseAdapter.setOnItemClickListener(presenter::onItemSelected)
     }
 
     override fun updateData(data: List<LicenseItem>) {
         licenseAdapter.updateDataSet(data)
+    }
+
+    override fun openWebsite(uri: String) {
+        context?.openInternetBrowser(uri, ::showMessage)
     }
 
     override fun showProgress(show: Boolean) {

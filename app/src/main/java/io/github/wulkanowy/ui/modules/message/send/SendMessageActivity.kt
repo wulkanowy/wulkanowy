@@ -43,6 +43,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
     override val isDropdownListVisible: Boolean
         get() = sendMessageTo.isDropdownListVisible
 
+    @Suppress("UNCHECKED_CAST")
     override val formRecipientsData: List<RecipientChipItem>
         get() = sendMessageTo.addedChipItems as List<RecipientChipItem>
 

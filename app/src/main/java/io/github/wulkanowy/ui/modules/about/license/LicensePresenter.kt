@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.about.license
 
+import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -17,6 +18,11 @@ class LicensePresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         loadData()
+    }
+
+    fun onItemSelected(item: AbstractFlexibleItem<*>) {
+        if (item !is LicenseItem) return
+        view?.run { openWebsite(item.library.libraryWebsite) }
     }
 
     private fun loadData() {
