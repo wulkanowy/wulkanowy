@@ -27,11 +27,31 @@ class AboutPresenter @Inject constructor(
         if (item !is AboutItem) return
         view?.run {
             when (item.title) {
-                feedbackRes?.first -> openEmailClient()
-                discordRes?.first -> openDiscordInvite()
-                homepageRes?.first -> openHomepage()
-                licensesRes?.first -> openLicenses()
-                privacyRes?.first -> openPrivacyPolicy()
+                feedbackRes?.first -> {
+                    Timber.i("Opening email client ")
+                    openEmailClient()
+                    analytics.logEvent("about_open", "name" to "feedback")
+                }
+                discordRes?.first -> {
+                    Timber.i("Opening discord")
+                    openDiscordInvite()
+                    analytics.logEvent("about_open", "name" to "discord")
+                }
+                homepageRes?.first -> {
+                    Timber.i("Opening homepage")
+                    openHomepage()
+                    analytics.logEvent("about_open", "name" to "homepage")
+                }
+                licensesRes?.first -> {
+                    Timber.i("Opening licenses view")
+                    openLicenses()
+                    analytics.logEvent("about_open", "name" to "licenses")
+                }
+                privacyRes?.first -> {
+                    Timber.i("Opening privacy page ")
+                    openPrivacyPolicy()
+                    analytics.logEvent("about_open", "name" to "privacy")
+                }
             }
         }
     }
