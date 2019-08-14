@@ -14,12 +14,10 @@ class AboutScrollableHeader : AbstractFlexibleItem<AboutScrollableHeader.ViewHol
 
     override fun getLayoutRes() = R.layout.scrollable_header_about
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
-        return ViewHolder(view, adapter)
-    }
+    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>) = ViewHolder(view, adapter)
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
-        holder.apply {
+        with(holder) {
             val context = contentView.context
             val drawable = ResourcesCompat.getDrawableForDensity(context.resources, context.applicationInfo.icon, 640, null)
 
@@ -33,14 +31,11 @@ class AboutScrollableHeader : AbstractFlexibleItem<AboutScrollableHeader.ViewHol
         return true
     }
 
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
-    }
+    override fun hashCode() = javaClass.hashCode()
 
     class ViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>) : FlexibleViewHolder(view, adapter),
         LayoutContainer {
 
-        override val containerView: View?
-            get() = contentView
+        override val containerView: View? get() = contentView
     }
 }

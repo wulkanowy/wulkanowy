@@ -67,12 +67,11 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
             Triple(getString(R.string.about_privacy), getString(R.string.about_privacy_summary), getCompatDrawable(R.drawable.ic_about_privacy))
         }
 
+    override val titleStringId get() = R.string.about_title
+
     companion object {
         fun newInstance() = AboutFragment()
     }
-
-    override val titleStringId: Int
-        get() = R.string.about_title
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_about, container, false)
@@ -84,16 +83,16 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
     }
 
     override fun initView() {
-        aboutAdapter.setOnItemClickListener { presenter.onItemSelected(it) }
+        aboutAdapter.setOnItemClickListener(presenter::onItemSelected)
 
-        aboutRecycler.apply {
+        with(aboutRecycler) {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = aboutAdapter
         }
     }
 
     override fun updateData(header: AboutScrollableHeader, items: List<AboutItem>) {
-        aboutAdapter.apply {
+        with(aboutAdapter) {
             removeAllScrollableHeaders()
             addScrollableHeader(header)
             updateDataSet(items)

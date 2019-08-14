@@ -25,7 +25,7 @@ class AboutPresenter @Inject constructor(
 
     fun onItemSelected(item: AbstractFlexibleItem<*>) {
         if (item !is AboutItem) return
-        view?.apply {
+        view?.run {
             when (item.title) {
                 feedbackRes?.first -> openEmailClient()
                 discordRes?.first -> openDiscordInvite()
@@ -37,7 +37,7 @@ class AboutPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        view?.apply {
+        view?.run {
             updateData(AboutScrollableHeader(), listOfNotNull(
                 versionRes?.let { (title, summary, image) -> AboutItem(title, summary, image) },
                 feedbackRes?.let { (title, summary, image) -> AboutItem(title, summary, image) },

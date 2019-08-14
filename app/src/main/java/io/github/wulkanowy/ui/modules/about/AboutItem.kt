@@ -18,12 +18,10 @@ class AboutItem(
 
     override fun getLayoutRes() = R.layout.item_about
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
-        return ViewHolder(view, adapter)
-    }
+    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>) = ViewHolder(view, adapter)
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
-        holder.apply {
+        with(holder) {
             aboutItemImage.setImageDrawable(image)
             aboutItemTitle.text = title
             aboutItemSummary.text = summary
@@ -53,7 +51,6 @@ class AboutItem(
     class ViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>) : FlexibleViewHolder(view, adapter),
         LayoutContainer {
 
-        override val containerView: View?
-            get() = contentView
+        override val containerView: View? get() = contentView
     }
 }

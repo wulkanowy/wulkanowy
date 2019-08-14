@@ -14,9 +14,7 @@ class LicenseItem(val library: Library) : AbstractFlexibleItem<LicenseItem.ViewH
 
     override fun getLayoutRes() = R.layout.item_license
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
-        return ViewHolder(view, adapter)
-    }
+    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>) = ViewHolder(view, adapter)
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         with(holder) {
@@ -36,9 +34,7 @@ class LicenseItem(val library: Library) : AbstractFlexibleItem<LicenseItem.ViewH
         return true
     }
 
-    override fun hashCode(): Int {
-        return library.hashCode()
-    }
+    override fun hashCode() = library.hashCode()
 
     class ViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>) : FlexibleViewHolder(view, adapter),
         LayoutContainer {

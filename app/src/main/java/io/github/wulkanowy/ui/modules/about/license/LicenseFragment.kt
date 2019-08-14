@@ -39,7 +39,6 @@ class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
         }
 
     companion object {
-
         fun newInstance() = LicenseFragment()
     }
 
