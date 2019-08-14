@@ -24,6 +24,7 @@ class LicensePresenter @Inject constructor(
             .map { it.map { library -> LicenseItem(library) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
+            .doOnEvent { _, _ -> view?.showProgress(false) }
             .subscribe({ view?.run { updateData(it) } }, { errorHandler.dispatch(it) }))
     }
 }

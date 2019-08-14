@@ -10,4 +10,6 @@ interface LicenseView : BaseView {
     fun initView()
 
     fun updateData(data: List<LicenseItem>)
+
+    fun showProgress(show: Boolean)
 }

@@ -3,6 +3,8 @@ package io.github.wulkanowy.ui.modules.about.license
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
@@ -57,6 +59,10 @@ class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
 
     override fun updateData(data: List<LicenseItem>) {
         licenseAdapter.updateDataSet(data)
+    }
+
+    override fun showProgress(show: Boolean) {
+        licenseProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun onDestroyView() {
