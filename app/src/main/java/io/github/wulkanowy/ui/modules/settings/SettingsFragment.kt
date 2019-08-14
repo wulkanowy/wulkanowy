@@ -25,8 +25,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         fun newInstance() = SettingsFragment()
     }
 
-    override val titleStringId: Int
-        get() = R.string.settings_title
+    override val titleStringId get() = R.string.settings_title
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
