@@ -27,6 +27,10 @@ class LicensePresenter @Inject constructor(
 
     private fun loadData() {
         disposable.add(Single.fromCallable { view?.appLibraries }
+            .map {
+                val exclude = listOf("Android-Iconics", "CircleImageView", "FastAdapter", "Jsoup", "okio", "Retrofit")
+                it.filter { library -> !exclude.contains(library.libraryName) }
+            }
             .map { it.map { library -> LicenseItem(library) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
