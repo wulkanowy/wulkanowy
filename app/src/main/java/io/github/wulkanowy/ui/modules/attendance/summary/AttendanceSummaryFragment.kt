@@ -16,7 +16,6 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import kotlinx.android.synthetic.main.fragment_attendance_summary.*
 import javax.inject.Inject
@@ -66,7 +65,6 @@ class AttendanceSummaryFragment : BaseFragment(), AttendanceSummaryView, MainVie
         context?.let {
             subjectsAdapter = ArrayAdapter(it, android.R.layout.simple_spinner_item, ArrayList<String>())
             subjectsAdapter.setDropDownViewResource(R.layout.item_attendance_summary_subject)
-            attendanceSummarySubjectsContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.dpToPx(1f)))
         }
 
         attendanceSummarySubjects.run {

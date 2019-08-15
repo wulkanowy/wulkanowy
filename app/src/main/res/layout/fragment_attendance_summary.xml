@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <io.github.wulkanowy.ui.widgets.MaterialLinearLayout
             android:id="@+id/attendanceSummarySubjectsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                 android:paddingRight="30dp"
                 android:paddingBottom="10dp"
                 android:spinnerMode="dialog" />
-        </LinearLayout>
+        </io.github.wulkanowy.ui.widgets.MaterialLinearLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/attendanceSummarySwipe"

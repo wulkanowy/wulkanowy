@@ -13,7 +13,6 @@ import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_timetable_completed.*
@@ -64,10 +63,6 @@ class CompletedLessonsFragment : BaseFragment(), CompletedLessonsView, MainView.
         completedLessonsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         completedLessonsPreviousButton.setOnClickListener { presenter.onPreviousDay() }
         completedLessonsNextButton.setOnClickListener { presenter.onNextDay() }
-
-        context?.let {
-            completedLessonsNavContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.dpToPx(8f)))
-        }
     }
 
     override fun updateData(data: List<CompletedLessonItem>) {

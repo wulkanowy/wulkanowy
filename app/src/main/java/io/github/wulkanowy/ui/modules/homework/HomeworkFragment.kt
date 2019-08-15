@@ -14,7 +14,6 @@ import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_homework.*
 import javax.inject.Inject
@@ -65,10 +64,6 @@ class HomeworkFragment : BaseFragment(), HomeworkView, MainView.TitledView {
         homeworkSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         homeworkPreviousButton.setOnClickListener { presenter.onPreviousDay() }
         homeworkNextButton.setOnClickListener { presenter.onNextDay() }
-
-        context?.let {
-            homeworkNavContainer.setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(it.dpToPx(8f)))
-        }
     }
 
     override fun updateData(data: List<HomeworkItem>) {

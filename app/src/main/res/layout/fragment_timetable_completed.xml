@@ -59,7 +59,7 @@
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <LinearLayout
+    <io.github.wulkanowy.ui.widgets.MaterialLinearLayout
         android:id="@+id/completedLessonsNavContainer"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -97,5 +97,5 @@
             android:insetRight="8dp"
             android:text="@string/all_next"
             android:textColor="?android:textColorPrimary" />
-    </LinearLayout>
+    </io.github.wulkanowy.ui.widgets.MaterialLinearLayout>
 </FrameLayout>

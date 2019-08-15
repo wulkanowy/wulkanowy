@@ -18,7 +18,6 @@ import io.github.wulkanowy.ui.modules.grade.details.GradeDetailsFragment
 import io.github.wulkanowy.ui.modules.grade.statistics.GradeStatisticsFragment
 import io.github.wulkanowy.ui.modules.grade.summary.GradeSummaryFragment
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import kotlinx.android.synthetic.main.fragment_grade.*
 import javax.inject.Inject
@@ -85,7 +84,7 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
         }
         gradeTabLayout.apply {
             setupWithViewPager(gradeViewPager)
-            setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(context.dpToPx(4f)))
+            //setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(context.dpToPx(4f)))
         }
 
         gradeSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }

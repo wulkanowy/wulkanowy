@@ -101,7 +101,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     override fun initView() {
         mainAppBarContainer.apply {
             if (SDK_INT >= LOLLIPOP) stateListAnimator = null
-            setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(dpToPx(4f)))
+            //setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(dpToPx(4f)))
         }
 
         mainBottomNav.run {
@@ -116,7 +116,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
             )
             accentColor = getThemeAttrColor(R.attr.colorPrimary)
             inactiveColor = getThemeAttrColor(R.attr.colorOnSurface)
-            defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(dpToPx(8f))
+            //defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(dpToPx(8f))
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false
