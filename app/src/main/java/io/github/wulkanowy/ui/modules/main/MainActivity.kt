@@ -17,6 +17,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.elevation.ElevationOverlayProvider
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
+import dagger.Lazy
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.account.AccountDialog
@@ -44,7 +45,8 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     @Inject
     lateinit var navController: FragNavController
 
-    lateinit var elevationProvider: ElevationOverlayProvider
+    @Inject
+    lateinit var overlayProvider: Lazy<ElevationOverlayProvider>
 
     companion object {
         const val EXTRA_START_MENU = "extraStartMenu"
@@ -58,14 +60,11 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         }
     }
 
-    override val isRootView: Boolean
-        get() = navController.isRootFragment
+    override val isRootView get() = navController.isRootFragment
 
-    override val currentViewTitle: String?
-        get() = (navController.currentFrag as? MainView.TitledView)?.titleStringId?.let { getString(it) }
+    override val currentStackSize get() = navController.currentStack?.size
 
-    override val currentStackSize: Int?
-        get() = navController.currentStack?.size
+    override val currentViewTitle get() = (navController.currentFrag as? MainView.TitledView)?.titleStringId?.let { getString(it) }
 
     override var startMenuIndex = 0
 
@@ -83,11 +82,10 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         setContentView(R.layout.activity_main)
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer
-        if (!::elevationProvider.isInitialized) elevationProvider = ElevationOverlayProvider(this)
 
         presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.Section)
 
-        navController.run {
+        with(navController) {
             initialize(startMenuIndex, savedInstanceState)
             pushFragment(moreMenuFragments[startMenuMoreIndex])
         }
@@ -99,33 +97,31 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     }
 
     override fun initView() {
-        mainAppBarContainer.apply {
+        with(mainAppBarContainer) {
             if (SDK_INT >= LOLLIPOP) stateListAnimator = null
-            //setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(dpToPx(4f)))
+            setBackgroundColor(overlayProvider.get().compositeOverlayWithThemeSurfaceColorIfNeeded(dpToPx(4f)))
         }
 
-        mainBottomNav.run {
-            addItems(
-                listOf(
-                    AHBottomNavigationItem(R.string.grade_title, R.drawable.ic_main_grade, 0),
-                    AHBottomNavigationItem(R.string.attendance_title, R.drawable.ic_main_attendance, 0),
-                    AHBottomNavigationItem(R.string.exam_title, R.drawable.ic_main_exam, 0),
-                    AHBottomNavigationItem(R.string.timetable_title, R.drawable.ic_main_timetable, 0),
-                    AHBottomNavigationItem(R.string.more_title, R.drawable.ic_main_more, 0)
-                )
-            )
+        with(mainBottomNav) {
+            addItems(listOf(
+                AHBottomNavigationItem(R.string.grade_title, R.drawable.ic_main_grade, 0),
+                AHBottomNavigationItem(R.string.attendance_title, R.drawable.ic_main_attendance, 0),
+                AHBottomNavigationItem(R.string.exam_title, R.drawable.ic_main_exam, 0),
+                AHBottomNavigationItem(R.string.timetable_title, R.drawable.ic_main_timetable, 0),
+                AHBottomNavigationItem(R.string.more_title, R.drawable.ic_main_more, 0)
+            ))
             accentColor = getThemeAttrColor(R.attr.colorPrimary)
             inactiveColor = getThemeAttrColor(R.attr.colorOnSurface)
-            //defaultBackgroundColor = elevationProvider.getSurfaceColorWithOverlayIfNeeded(dpToPx(8f))
+            defaultBackgroundColor = overlayProvider.get().compositeOverlayWithThemeSurfaceColorIfNeeded(dpToPx(8f))
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false
             setTitleTextSizeInSp(10f, 10f)
-            setOnTabSelectedListener { position, wasSelected -> presenter.onTabSelected(position, wasSelected) }
+            setOnTabSelectedListener(presenter::onTabSelected)
         }
 
-        navController.run {
-            setOnViewChangeListener { presenter.onViewChange(it) }
+        with(navController) {
+            setOnViewChangeListener(presenter::onViewChange)
             fragmentHideStrategy = HIDE
             rootFragments = listOf(
                 GradeFragment.newInstance(),
