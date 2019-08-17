@@ -11,7 +11,7 @@ interface LicenseView : BaseView {
 
     fun updateData(data: List<LicenseItem>)
 
-    fun openWebsite(uri: String)
+    fun openLicense(licenseHtml: String)
 
     fun showProgress(show: Boolean)
 }

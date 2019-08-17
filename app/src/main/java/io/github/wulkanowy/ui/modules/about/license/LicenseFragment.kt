@@ -6,6 +6,9 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
 import dagger.Lazy
@@ -15,7 +18,6 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_license.*
 import javax.inject.Inject
@@ -63,8 +65,15 @@ class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
         licenseAdapter.updateDataSet(data)
     }
 
-    override fun openWebsite(uri: String) {
-        context?.openInternetBrowser(uri, ::showMessage)
+    override fun openLicense(licenseHtml: String) {
+        context?.let {
+            AlertDialog.Builder(it).apply {
+                setTitle(R.string.license_dialog_title)
+                setMessage(HtmlCompat.fromHtml(licenseHtml, FROM_HTML_MODE_LEGACY))
+                setPositiveButton(android.R.string.ok) { _, _ -> }
+                show()
+            }
+        }
     }
 
     override fun showProgress(show: Boolean) {

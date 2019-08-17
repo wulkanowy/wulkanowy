@@ -22,7 +22,7 @@ class LicensePresenter @Inject constructor(
 
     fun onItemSelected(item: AbstractFlexibleItem<*>) {
         if (item !is LicenseItem) return
-        view?.run { openWebsite(item.library.libraryWebsite) }
+        view?.run { item.library.license?.licenseDescription?.let { openLicense(it) } }
     }
 
     private fun loadData() {

@@ -221,6 +221,10 @@
     <string name="about_licenses_summary">Licenses of libraries used in the application</string>
 
 
+    <!--Licenses-->
+    <string name="license_dialog_title">License</string>
+
+
     <!--Generic-->
     <string name="all_content">Content</string>
     <string name="all_description">Description</string>

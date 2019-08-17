@@ -237,6 +237,10 @@
     <string name="about_licenses_summary">Licencje użytych bibliotek w aplikacji</string>
 
 
+    <!--Licenses-->
+    <string name="license_dialog_title">Licencja</string>
+
+
     <!--Generic-->
     <string name="all_content">Treść</string>
     <string name="all_description">Opis</string>
