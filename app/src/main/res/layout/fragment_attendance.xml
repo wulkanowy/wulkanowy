@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="50dp">
@@ -53,7 +53,7 @@
                 android:text="@string/attendance_no_items"
                 android:textSize="20sp" />
         </LinearLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
 
     <io.github.wulkanowy.ui.widgets.MaterialLinearLayout
         android:id="@+id/attendanceNavContainer"

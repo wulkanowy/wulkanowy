@@ -22,7 +22,7 @@
             tools:listitem="@layout/item_attendance_summary"
             tools:visibility="visible">
 
-            <androidx.appcompat.widget.AppCompatSpinner
+            <Spinner
                 android:id="@+id/attendanceSummarySubjects"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

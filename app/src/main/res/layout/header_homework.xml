@@ -29,5 +29,4 @@
         android:gravity="end"
         android:textSize="13sp"
         tools:text="22.02.2022" />
-
 </LinearLayout>

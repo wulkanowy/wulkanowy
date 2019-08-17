@@ -48,5 +48,4 @@
         android:textColor="?android:textColorSecondary"
         android:textSize="14sp"
         tools:text="@tools:sample/lorem" />
-
 </RelativeLayout>
