@@ -9,7 +9,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -17,7 +17,7 @@
             android:text="@string/all_details"
             android:textSize="20sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogChangesTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             android:textColor="?colorPrimary"
             android:textSize="17sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogChanges"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,14 +35,14 @@
             android:textIsSelectable="true"
             android:textSize="12sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/timetable_lesson"
             android:textSize="17sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogSubject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:textIsSelectable="true"
             android:textSize="12sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogSubjectNew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             android:textSize="12sp"
             android:visibility="gone" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogTeacherTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             android:text="@string/all_teacher"
             android:textSize="17sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogTeacher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
             android:textIsSelectable="true"
             android:textSize="12sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogTeacherNew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
             android:textSize="12sp"
             android:visibility="gone" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogGroupTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
             android:text="@string/timetable_group"
             android:textSize="17sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
             android:textIsSelectable="true"
             android:textSize="12sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogRoomTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
             android:text="@string/timetable_room"
             android:textSize="17sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogRoom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
             android:textIsSelectable="true"
             android:textSize="12sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogRoomNew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -135,14 +135,14 @@
             android:textSize="12sp"
             android:visibility="gone" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/timetable_time"
             android:textSize="17sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/timetableDialogTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -159,6 +159,5 @@
             android:layout_gravity="end"
             android:layout_marginTop="15dp"
             android:text="@string/all_close" />
-
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -12,7 +12,7 @@
     android:paddingBottom="10dp"
     tools:context=".ui.modules.exam.ExamHeader">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/examHeaderDay"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         android:textSize="18sp"
         tools:text="Monday" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/examHeaderDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

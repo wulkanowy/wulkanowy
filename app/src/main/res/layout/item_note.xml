@@ -6,7 +6,7 @@
     android:background="?selectableItemBackground"
     tools:context=".ui.modules.note.NoteItem">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/noteItemDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:textSize="15sp"
         tools:text="@tools:sample/date/ddmmyy" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/noteItemTeacher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
         android:textSize="13sp"
         tools:text="@tools:sample/full_names" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/noteItemType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
         android:textSize="13sp"
         tools:text="@tools:sample/lorem" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/noteItemContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

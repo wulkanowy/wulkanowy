@@ -10,7 +10,7 @@
     android:paddingEnd="16dp"
     android:paddingRight="16dp">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/licenseItemName"
         android:layout_width="match_parent"
         android:layout_height="28dp"
@@ -18,7 +18,7 @@
         android:textSize="16sp"
         tools:text="@tools:sample/lorem" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/licenseItemSummary"
         android:layout_width="match_parent"
         android:layout_height="20dp"

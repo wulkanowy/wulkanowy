@@ -9,7 +9,7 @@
     android:paddingBottom="10dp"
     tools:context=".ui.modules.message.MessageItem">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/messageItemAuthor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         android:textSize="15sp"
         tools:text="@tools:sample/full_names" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/messageItemDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         android:textSize="13sp"
         tools:text="@tools:sample/date/ddmmyy" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/messageItemSubject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

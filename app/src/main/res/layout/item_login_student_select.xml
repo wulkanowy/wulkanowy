@@ -17,7 +17,7 @@
         android:background="@android:color/transparent"
         tools:text=" " />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/loginItemName"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
@@ -31,7 +31,7 @@
         android:textSize="16sp"
         tools:text="@tools:sample/full_names" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/loginItemSchool"
         android:layout_width="wrap_content"
         android:layout_height="20dp"

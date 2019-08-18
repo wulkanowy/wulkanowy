@@ -5,7 +5,7 @@
     android:layout_width="280dp"
     android:layout_height="wrap_content">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/widgetConfigureTitle"
         android:layout_width="match_parent"
         android:layout_height="64dp"

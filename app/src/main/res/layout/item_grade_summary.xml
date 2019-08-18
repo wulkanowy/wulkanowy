@@ -16,7 +16,7 @@
         android:paddingRight="20dp"
         android:paddingBottom="7dp">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/gradeSummaryItemTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             android:textSize="17sp"
             tools:text="@tools:sample/lorem" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/gradeSummaryItemAverage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:minHeight="35dp"
         android:orientation="horizontal">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -53,7 +53,7 @@
             android:text="@string/grade_summary_points"
             android:textSize="14sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/gradeSummaryItemPoints"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
         android:minHeight="35dp"
         android:orientation="horizontal">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -84,7 +84,7 @@
             android:text="@string/grade_summary_predicted_grade"
             android:textSize="14sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/gradeSummaryItemPredicted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
         android:minHeight="35dp"
         android:orientation="horizontal">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -115,7 +115,7 @@
             android:text="@string/grade_summary_final_grade"
             android:textSize="14sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/gradeSummaryItemFinal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

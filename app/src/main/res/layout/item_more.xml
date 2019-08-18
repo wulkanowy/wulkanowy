@@ -21,7 +21,7 @@
         app:tint="?colorOnBackground"
         tools:ignore="ContentDescription" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/moreItemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

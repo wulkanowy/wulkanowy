@@ -6,7 +6,7 @@
     android:background="?selectableItemBackground"
     tools:context=".ui.modules.exam.ExamItem">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/examItemSubject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:textSize="15sp"
         tools:text="@tools:sample/lorem" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/examItemType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:textSize="13sp"
         tools:text="@tools:sample/lorem" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/examItemTeacher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

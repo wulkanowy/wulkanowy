@@ -6,7 +6,7 @@
     android:layout_height="64dp"
     tools:context=".ui.modules.mobiledevice.MobileDeviceItem">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/mobileDeviceItemName"
         android:layout_width="match_parent"
         android:layout_height="32dp"
@@ -20,7 +20,7 @@
         android:textSize="16sp"
         tools:text="@tools:sample/lorem/random" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/mobileDeviceItemDate"
         android:layout_width="match_parent"
         android:layout_height="20dp"
