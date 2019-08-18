@@ -5,7 +5,7 @@
         android:id="@+id/attendanceMenuSummary"
         android:icon="@drawable/ic_menu_attendance_summary"
         android:orderInCategory="1"
-        app:iconTint="?colorOnSurface"
         android:title="@string/attendance_summary_button"
+        app:iconTint="@color/mtrl_on_surface_emphasis_medium"
         app:showAsAction="ifRoom" />
 </menu>
