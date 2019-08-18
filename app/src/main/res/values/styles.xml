@@ -1,16 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="WulkanowyTheme" parent="@style/Theme.MaterialComponents.Light">
+    <style name="BaseWulkanowyTheme" parent="@style/Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@android:color/darker_gray</item>
         <item name="colorSecondary">@color/colorPrimary</item>
         <item name="colorOnSecondary">@android:color/white</item>
         <item name="colorError">@color/colorError</item>
         <item name="colorDivider">@color/colorDivider</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/darker_gray</item>
         <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:preferenceStyle">@style/PreferenceThemeOverlay</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
     </style>
+
+    <style name="WulkanowyTheme" parent="BaseWulkanowyTheme" />
 
     <style name="WulkanowyTheme.NoActionBar" parent="WulkanowyTheme">
         <item name="windowActionBar">false</item>
@@ -19,7 +20,7 @@
 
     <style name="WulkanowyTheme.SplashScreen" parent="WulkanowyTheme.NoActionBar">
         <item name="android:windowBackground">@drawable/layer_splash_background</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark</item>
     </style>
 
     <style name="WulkanowyTheme.WidgetAccountSwitcher" parent="Theme.MaterialComponents.Light.Dialog">
