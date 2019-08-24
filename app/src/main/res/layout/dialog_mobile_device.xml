@@ -29,13 +29,13 @@
                 android:contentDescription="@string/mobile_device_qr"
                 tools:src="@tools:sample/avatars" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/mobile_device_token"
                 android:textSize="17sp" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/mobileDeviceDialogToken"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,14 +44,14 @@
                 android:textIsSelectable="true"
                 android:textSize="12sp" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/mobile_device_symbol"
                 android:textSize="17sp" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/mobileDeviceDialogSymbol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,14 +60,14 @@
                 android:textIsSelectable="true"
                 android:textSize="12sp" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/mobile_device_pin"
                 android:textSize="17sp" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/mobileDeviceDialogPin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

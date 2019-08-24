@@ -22,7 +22,7 @@
         app:tint="#7E7E7E"
         tools:ignore="ContentDescription" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/accountItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         android:textSize="16sp"
         tools:text="@tools:sample/full_names" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/accountItemSchool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

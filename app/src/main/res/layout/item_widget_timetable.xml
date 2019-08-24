@@ -9,7 +9,7 @@
     android:orientation="horizontal"
     tools:context=".ui.modules.timetablewidget.TimetableWidgetFactory">
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/timetableWidgetItemNumber"
         android:layout_width="45dp"
         android:layout_height="45dp"
@@ -22,7 +22,7 @@
         android:textSize="25sp"
         tools:text="1" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/timetableWidgetItemTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         android:textSize="13sp"
         tools:text="08:00 - 08:45" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/timetableWidgetItemSubject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         android:textSize="13sp"
         tools:text="@tools:sample/lorem" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/timetableWidgetItemDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
         android:textSize="12sp"
         tools:text="Lekcja odwołana: uczniowie zwolnieni do domu" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/timetableWidgetItemRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

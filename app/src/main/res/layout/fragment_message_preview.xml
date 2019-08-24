@@ -16,7 +16,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/messagePreviewSubject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
                 android:textSize="22sp"
                 tools:text="@tools:sample/lorem" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/messagePreviewAuthor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:textSize="15sp"
                 tools:text="@tools:sample/full_names" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/messagePreviewDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                 android:textSize="15sp"
                 tools:text="@tools:sample/date/ddmmyy" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/messagePreviewContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             app:tint="?colorOnBackground"
             tools:ignore="contentDescription" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

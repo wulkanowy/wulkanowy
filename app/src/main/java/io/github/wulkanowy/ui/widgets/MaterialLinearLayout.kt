@@ -1,11 +1,12 @@
 package io.github.wulkanowy.ui.widgets
 
 import android.content.Context
+import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.util.AttributeSet
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.MaterialShapeUtils
 
 class MaterialLinearLayout : LinearLayout {
 
@@ -20,8 +21,11 @@ class MaterialLinearLayout : LinearLayout {
         ViewCompat.setBackground(this, drawable)
     }
 
+    @RequiresApi(LOLLIPOP)
     override fun setElevation(elevation: Float) {
         super.setElevation(elevation)
-        MaterialShapeUtils.setElevation(this, elevation)
+        if (background is MaterialShapeDrawable) {
+            (background as MaterialShapeDrawable).elevation = elevation
+        }
     }
 }

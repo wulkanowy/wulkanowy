@@ -8,7 +8,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -16,7 +16,7 @@
         android:text="@string/attendance_title"
         android:textSize="16sp" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/attendanceSummaryScrollableHeaderPercentage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

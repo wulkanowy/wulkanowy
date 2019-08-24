@@ -45,7 +45,7 @@
                 app:tint="?colorOnBackground"
                 tools:ignore="contentDescription" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -75,7 +75,7 @@
             android:text="@string/all_prev"
             android:textColor="?android:textColorPrimary" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/timetableNavDate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

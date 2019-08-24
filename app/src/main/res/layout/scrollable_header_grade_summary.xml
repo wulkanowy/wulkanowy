@@ -15,7 +15,7 @@
         android:layout_marginRight="5dp"
         android:orientation="vertical">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -23,7 +23,7 @@
             android:text="@string/grade_summary_calculated_average"
             android:textSize="16sp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/gradeSummaryScrollableHeaderCalculated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -46,7 +46,7 @@
             android:text="@string/grade_summary_final_average"
             android:textSize="16sp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/gradeSummaryScrollableHeaderFinal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

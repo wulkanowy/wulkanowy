@@ -22,10 +22,8 @@ class ThemeManager @Inject constructor(private val preferencesRepository: Prefer
 
     fun applyDefaultTheme() {
         AppCompatDelegate.setDefaultNightMode(
-            when (preferencesRepository.appTheme) {
-                "light" -> MODE_NIGHT_NO
-                else -> MODE_NIGHT_YES
-            }
+            if (preferencesRepository.appTheme == "light") MODE_NIGHT_NO
+            else MODE_NIGHT_YES
         )
     }
 

@@ -6,7 +6,7 @@
     android:background="?selectableItemBackground"
     tools:context=".ui.modules.homework.HomeworkItem">
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/homeworkItemSubject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         android:textSize="17sp"
         tools:text="@tools:sample/lorem" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/homeworkItemTeacher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         android:textSize="13sp"
         tools:text="@tools:sample/lorem" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/homeworkItemContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

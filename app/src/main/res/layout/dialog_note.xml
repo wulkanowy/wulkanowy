@@ -9,7 +9,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -17,13 +17,13 @@
             android:text="@string/all_details"
             android:textSize="20sp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/all_category"
             android:textSize="17sp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/noteDialogCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,14 +32,14 @@
             android:textIsSelectable="true"
             android:textSize="12sp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/all_teacher"
             android:textSize="17sp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/noteDialogTeacher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,14 +48,14 @@
             android:textIsSelectable="true"
             android:textSize="12sp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/all_date"
             android:textSize="17sp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/noteDialogDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,14 +64,14 @@
             android:textIsSelectable="true"
             android:textSize="12sp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/all_content"
             android:textSize="17sp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/noteDialogContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
