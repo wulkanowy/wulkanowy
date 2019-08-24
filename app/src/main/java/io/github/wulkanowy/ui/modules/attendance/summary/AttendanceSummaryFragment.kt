@@ -9,7 +9,6 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.google.android.material.elevation.ElevationOverlayProvider
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -27,9 +26,6 @@ class AttendanceSummaryFragment : BaseFragment(), AttendanceSummaryView, MainVie
 
     @Inject
     lateinit var attendanceSummaryAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
-
-    @Inject
-    lateinit var elevationProvider: ElevationOverlayProvider
 
     private lateinit var subjectsAdapter: ArrayAdapter<String>
 

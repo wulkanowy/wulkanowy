@@ -14,7 +14,6 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.google.android.material.elevation.ElevationOverlayProvider
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -29,9 +28,6 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
 
     @Inject
     lateinit var presenter: GradeStatisticsPresenter
-
-    @Inject
-    lateinit var elevationProvider: ElevationOverlayProvider
 
     private lateinit var subjectsAdapter: ArrayAdapter<String>
 

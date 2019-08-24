@@ -10,7 +10,6 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.elevation.ElevationOverlayProvider
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
@@ -29,9 +28,6 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
 
     @Inject
     lateinit var pagerAdapter: BaseFragmentPagerAdapter
-
-    @Inject
-    lateinit var elevationProvider: ElevationOverlayProvider
 
     private var semesterSwitchMenu: MenuItem? = null
 
@@ -82,11 +78,8 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
             offscreenPageLimit = 3
             setOnSelectPageListener { presenter.onPageSelected(it) }
         }
-        gradeTabLayout.apply {
-            setupWithViewPager(gradeViewPager)
-            //setBackgroundColor(elevationProvider.getSurfaceColorWithOverlayIfNeeded(context.dpToPx(4f)))
-        }
 
+        gradeTabLayout.setupWithViewPager(gradeViewPager)
         gradeSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 

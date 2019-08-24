@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.elevation.ElevationOverlayProvider
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -29,9 +28,6 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
 
     @Inject
     lateinit var attendanceAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
-
-    @Inject
-    lateinit var elevationProvider: ElevationOverlayProvider
 
     companion object {
         private const val SAVED_DATE_KEY = "CURRENT_DATE"

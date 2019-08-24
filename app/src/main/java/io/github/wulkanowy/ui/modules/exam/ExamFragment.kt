@@ -7,7 +7,6 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import com.google.android.material.elevation.ElevationOverlayProvider
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -28,9 +27,6 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
 
     @Inject
     lateinit var examAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
-
-    @Inject
-    lateinit var elevationProvider: ElevationOverlayProvider
 
     companion object {
         private const val SAVED_DATE_KEY = "CURRENT_DATE"

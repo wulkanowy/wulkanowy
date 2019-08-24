@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.elevation.ElevationOverlayProvider
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -25,9 +24,6 @@ class HomeworkFragment : BaseFragment(), HomeworkView, MainView.TitledView {
 
     @Inject
     lateinit var homeworkAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
-
-    @Inject
-    lateinit var elevationProvider: ElevationOverlayProvider
 
     companion object {
         private const val SAVED_DATE_KEY = "CURRENT_DATE"
