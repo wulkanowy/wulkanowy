@@ -39,7 +39,7 @@ class MorePresenter @Inject constructor(
 
     fun onViewReselected() {
         Timber.i("More view is reselected")
-        view?.popView()
+        view?.popView(2)
     }
 
     private fun loadData() {

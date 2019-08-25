@@ -114,8 +114,8 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
         (activity as? MainActivity)?.pushView(AboutFragment.newInstance())
     }
 
-    override fun popView() {
-        (activity as? MainActivity)?.popView()
+    override fun popView(depth: Int) {
+        (activity as? MainActivity)?.popView(depth)
     }
 
     override fun onDestroyView() {

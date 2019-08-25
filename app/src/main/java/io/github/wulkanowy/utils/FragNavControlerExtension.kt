@@ -16,6 +16,6 @@ inline fun FragNavController.setOnViewChangeListener(crossinline listener: (sect
     }
 }
 
-fun FragNavController.safelyPopFragment() {
-    if (!isRootFragment) popFragment()
+fun FragNavController.safelyPopFragments(depth: Int) {
+    if (!isRootFragment) popFragments(depth)
 }

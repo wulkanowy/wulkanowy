@@ -33,7 +33,7 @@ import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
-import io.github.wulkanowy.utils.safelyPopFragment
+import io.github.wulkanowy.utils.safelyPopFragments
 import io.github.wulkanowy.utils.setOnViewChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -175,8 +175,8 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         navController.pushFragment(fragment)
     }
 
-    override fun popView() {
-        navController.safelyPopFragment()
+    override fun popView(depth: Int) {
+        navController.safelyPopFragments(depth)
     }
 
     override fun onBackPressed() {

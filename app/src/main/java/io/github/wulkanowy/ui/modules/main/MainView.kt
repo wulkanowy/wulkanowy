@@ -28,7 +28,7 @@ interface MainView : BaseView {
 
     fun setViewTitle(title: String)
 
-    fun popView()
+    fun popView(depth: Int = 1)
 
     interface MainChildView {
 
