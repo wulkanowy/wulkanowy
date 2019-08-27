@@ -161,8 +161,9 @@
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginFormHostLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -170,36 +171,19 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
-                android:background="@drawable/ic_login_outlined_border"
+                android:hint="@string/login_host_hint"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@+id/loginFormPinLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginFormApiKeyLayout">
 
-                <androidx.appcompat.widget.AppCompatSpinner
+                <AutoCompleteTextView
                     android:id="@+id/loginFormHost"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:entries="@array/endpoints_keys" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginBottom="48dp"
-                android:background="?android:windowBackground"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:text="@string/login_host_hint"
-                android:textColor="?android:textColorHint"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/loginFormHostLayout"
-                app:layout_constraintEnd_toEndOf="@+id/loginFormHostLayout"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/loginFormHostLayout" />
+                    android:layout_height="wrap_content"
+                    tools:ignore="LabelFor" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginFormPinLayout"
