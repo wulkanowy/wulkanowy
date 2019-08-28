@@ -1,28 +1,27 @@
 package io.github.wulkanowy.ui.modules.main
 
-import com.google.firebase.analytics.FirebaseAnalytics.Event.APP_OPEN
-import com.google.firebase.analytics.FirebaseAnalytics.Param.DESTINATION
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.ui.modules.main.MainView.Section.GRADE
+import io.github.wulkanowy.ui.modules.main.MainView.Section.MESSAGE
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.reactivex.Completable
 import timber.log.Timber
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
-    private val errorHandler: ErrorHandler,
-    private val studentRepository: StudentRepository,
+    schedulers: SchedulersProvider,
+    errorHandler: ErrorHandler,
+    studentRepository: StudentRepository,
     private val prefRepository: PreferencesRepository,
     private val syncManager: SyncManager,
-    private val schedulers: SchedulersProvider,
     private val analytics: FirebaseAnalyticsHelper
-) : BasePresenter<MainView>(errorHandler) {
+) : BasePresenter<MainView>(errorHandler, studentRepository, schedulers) {
 
-    fun onAttachView(view: MainView, initMenu: MainView.MenuView?) {
+    fun onAttachView(view: MainView, initMenu: MainView.Section?) {
         super.onAttachView(view)
         view.apply {
             getProperViewIndexes(initMenu).let { (main, more) ->
@@ -34,11 +33,12 @@ class MainPresenter @Inject constructor(
         }
 
         syncManager.startSyncWorker()
-        analytics.logEvent(APP_OPEN, DESTINATION to initMenu?.name)
+        analytics.logEvent("app_open", "destination" to initMenu?.name)
     }
 
-    fun onViewChange() {
+    fun onViewChange(section: MainView.Section?) {
         view?.apply {
+            showActionBarElevation(section != GRADE && section != MESSAGE)
             currentViewTitle?.let { setViewTitle(it) }
             currentStackSize?.let {
                 if (it > 1) showHomeArrow(true)
@@ -80,32 +80,10 @@ class MainPresenter @Inject constructor(
         } == true
     }
 
-    fun onLoginSelected() {
-        Timber.i("Attempt to switch the student after the session expires")
-        disposable.add(studentRepository.getCurrentStudent(false)
-            .flatMapCompletable { studentRepository.logoutStudent(it) }
-            .andThen(studentRepository.getSavedStudents(false))
-            .flatMapCompletable {
-                if (it.isNotEmpty()) {
-                    Timber.i("Switching current student")
-                    studentRepository.switchStudent(it[0])
-                } else Completable.complete()
-            }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                Timber.i("Switch student result: Open login view")
-                view?.openLoginView()
-            }, {
-                Timber.i("Switch student result: An exception occurred")
-                errorHandler.dispatch(it)
-            }))
-    }
-
-    private fun getProperViewIndexes(initMenu: MainView.MenuView?): Pair<Int, Int> {
-        return when {
-            initMenu?.id in 0..3 -> initMenu!!.id to -1
-            (initMenu?.id ?: 0) > 3 -> 4 to initMenu!!.id - 4
+    private fun getProperViewIndexes(initMenu: MainView.Section?): Pair<Int, Int> {
+        return when (initMenu?.id) {
+            in 0..3 -> initMenu!!.id to -1
+            in 4..10 -> 4 to initMenu!!.id
             else -> prefRepository.startMenuIndex to -1
         }
     }

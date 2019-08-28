@@ -1,22 +1,62 @@
+[English version of README](README.en.md)
+
 # Wulkanowy
-
-[![CircleCI](https://img.shields.io/circleci/project/github/wulkanowy/wulkanowy/master.svg?style=flat-square)](https://circleci.com/gh/wulkanowy/wulkanowy)
 [![Travis](https://img.shields.io/travis/com/wulkanowy/wulkanowy/master.svg?style=flat-square)](https://travis-ci.com/wulkanowy/wulkanowy)
-[![Bitrise](https://img.shields.io/bitrise/daeff1893f3c8128/master.svg?token=Hjm1ACamk86JDeVVJHOeqQ&style=flat-square)](https://www.bitrise.io/app/daeff1893f3c8128)
 [![Codecov](https://img.shields.io/codecov/c/github/wulkanowy/wulkanowy/master.svg?style=flat-square)](https://codecov.io/gh/wulkanowy/wulkanowy)
-[![BCH compliance](https://bettercodehub.com/edge/badge/wulkanowy/wulkanowy?branch=master)](https://bettercodehub.com/)
-[![Sonarcloud](https://sonarcloud.io/api/project_badges/measure?project=io.github.wulkanowy%3Aapp&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=io.github.wulkanowy%3Aapp)
-[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B5644%2Fgithub.com%2Fwulkanowy%2Fwulkanowy.svg?type=shield)](https://app.fossa.com/projects/custom%2B5644%2Fgithub.com%2Fwulkanowy%2Fwulkanowy?ref=badge_shield)
 [![Discord](https://img.shields.io/discord/390889354199040011.svg?style=flat-square)](https://discord.gg/vccAQBr)
+[![F-Droid](https://img.shields.io/f-droid/v/io.github.wulkanowy.svg)](https://f-droid.org/packages/io.github.wulkanowy/)
+[![Last release](https://img.shields.io/github/release/wulkanowy/wulkanowy.svg?logo=github)](https://github.com/wulkanowy/wulkanowy/releases)
 
-[Pobierz wersję beta z Google Play](https://play.google.com/store/apps/details?id=io.github.wulkanowy&amp;utm_source=vcs)
+Nieoficjalny klient dziennika VULCAN UONET+ dla ucznia i rodzica
 
-[Pobierz wersję DEV](https://bitrise-redirector.herokuapp.com/v0.1/apps/f841f20d8f8b1dc8/builds/master/artifacts/0)
-[(Więcej wersji DEV)](https://wulkanowy.github.io/dev.html)
+## Funkcje
 
-Androidowy klient dziennika VULCAN UONET+.
+* logowanie za pomocą e-maila i hasła
+* funkcje ze strony internetowej dziennika:
+    * oceny
+    * statystyki ocen
+    * frekwencja
+    * procent frekwencji
+    * sprawdziany
+    * plan lekcji
+    * lekcje zrealizowane
+    * wiadomości
+    * zadania domowe
+    * uwagi
+    * szczęśliwy numerek
+* obliczanie średniej
+* powiadomienia np. o nowej ocenie
+* ciemny i czarny (AMOLED) motyw
+* tryb offilne
+* brak reklam
+
+## Pobierz
+
+Aktualną wersję beta możesz pobrać ze sklepu Google Play lub Fdroid
+
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
+      alt="Pobierz z Google Play"
+      height="80">](https://play.google.com/store/apps/details?id=io.github.wulkanowy)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+    alt="Pobierz z Fdroid"
+    height="80">](https://f-droid.org/packages/io.github.wulkanowy/)
 
 
-## License
+Możesz także pobrać [wersję rozwojową](https://wulkanowy.github.io/#download), która zawiera nowe funkcje przygotowywane do następnego wydania
 
-[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B5644%2Fgithub.com%2Fwulkanowy%2Fwulkanowy.svg?type=large)](https://app.fossa.com/projects/custom%2B5644%2Fgithub.com%2Fwulkanowy%2Fwulkanowy?ref=badge_large)
+
+## Zbudowana za pomocą
+
+* [Wulkanowy API](https://github.com/wulkanowy/api)
+* [RxJava 2](https://github.com/ReactiveX/RxJava)
+* [Dagger 2](https://github.com/google/dagger)
+* [Room](https://developer.android.com/topic/libraries/architecture/room)
+* [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) 
+
+## Współpraca
+
+Wnieś swój wkład w projekt, tworząc PR lub wysyłając issue na GitHub.
+
+## Licencja
+
+Ten projekt jest licencjonowany w ramach Apache License 2.0 - szczegóły w pliku [LICENSE](LICENSE)

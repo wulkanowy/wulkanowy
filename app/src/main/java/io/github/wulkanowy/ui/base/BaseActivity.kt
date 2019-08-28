@@ -1,24 +1,31 @@
 package io.github.wulkanowy.ui.base
 
+import android.app.ActivityManager
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.LOLLIPOP
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import io.github.wulkanowy.R
+import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.FragmentLifecycleLogger
+import io.github.wulkanowy.utils.getThemeAttrColor
 import javax.inject.Inject
 
-abstract class BaseActivity : AppCompatActivity(), BaseView, HasSupportFragmentInjector {
+abstract class BaseActivity<T : BasePresenter<out BaseView>> : AppCompatActivity(), BaseView, HasAndroidInjector {
 
     @Inject
-    lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     lateinit var fragmentLifecycleLogger: FragmentLifecycleLogger
@@ -28,12 +35,19 @@ abstract class BaseActivity : AppCompatActivity(), BaseView, HasSupportFragmentI
 
     protected var messageContainer: View? = null
 
+    abstract var presenter: T
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        themeManager.applyTheme(this)
+        themeManager.applyActivityTheme(this)
         super.onCreate(savedInstanceState)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleLogger, true)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+
+        if (SDK_INT >= LOLLIPOP) {
+            @Suppress("DEPRECATION")
+            setTaskDescription(ActivityManager.TaskDescription(null, null, getThemeAttrColor(R.attr.colorSurface)))
+        }
     }
 
     override fun showError(text: String, error: Throwable) {
@@ -51,10 +65,25 @@ abstract class BaseActivity : AppCompatActivity(), BaseView, HasSupportFragmentI
         else Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
+    override fun showExpiredDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.main_session_expired)
+            .setMessage(R.string.main_session_relogin)
+            .setPositiveButton(R.string.main_log_in) { _, _ -> presenter.onExpiredLoginSelected() }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> }
+            .show()
+    }
+
+    override fun openClearLoginView() {
+        startActivity(LoginActivity.getStartIntent(this)
+            .apply { addFlags(FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_NEW_TASK) })
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         invalidateOptionsMenu()
+        presenter.onDetachView()
     }
 
-    override fun supportFragmentInjector() = supportFragmentInjector
+    override fun androidInjector() = androidInjector
 }

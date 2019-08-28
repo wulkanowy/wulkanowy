@@ -4,8 +4,6 @@
     package="io.github.wulkanowy"
     android:installLocation="internalOnly">
 
-    <uses-sdk tools:overrideLibrary="com.readystatesoftware.chuck" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -45,6 +43,7 @@
             android:name=".ui.modules.message.send.SendMessageActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/send_message_title"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/WulkanowyTheme.NoActionBar" />
         <activity
             android:name=".ui.modules.timetablewidget.TimetableWidgetConfigureActivity"
@@ -80,7 +79,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/provider_widget_timetable" />
         </receiver>
-
         <receiver
             android:name=".ui.modules.luckynumberwidget.LuckyNumberWidgetProvider"
             android:label="@string/lucky_number_title">

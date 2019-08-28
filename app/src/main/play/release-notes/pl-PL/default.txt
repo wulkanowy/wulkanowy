@@ -1,6 +1,6 @@
-Wersja 0.8.4
+Wersja 0.9.4
 
-Naprawiliśmy:
-- synchronizację w tle dla użytkowników używających danych pakietowych
+- naprawienie nawigacji we frekwencji, sprawdzianach, planie lekcji na wakacjach
+- wyświetlanie szczęśliwego numerka po ostatniej aktualizacji dziennika VULCAN (19.06)
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

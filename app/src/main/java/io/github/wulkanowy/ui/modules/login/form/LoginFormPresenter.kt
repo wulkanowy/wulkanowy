@@ -1,30 +1,30 @@
 package io.github.wulkanowy.ui.modules.login.form
 
-import com.google.firebase.analytics.FirebaseAnalytics.Param.SUCCESS
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.ifNullOrBlank
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Named
 
 class LoginFormPresenter @Inject constructor(
-    private val schedulers: SchedulersProvider,
-    private val errorHandler: LoginErrorHandler,
-    private val studentRepository: StudentRepository,
+    schedulers: SchedulersProvider,
+    studentRepository: StudentRepository,
+    private val loginErrorHandler: LoginErrorHandler,
     private val analytics: FirebaseAnalyticsHelper,
-    @param:Named("isDebug") private val isDebug: Boolean
-) : BasePresenter<LoginFormView>(errorHandler) {
+    private val appInfo: AppInfo
+) : BasePresenter<LoginFormView>(loginErrorHandler, studentRepository, schedulers) {
 
     override fun onAttachView(view: LoginFormView) {
         super.onAttachView(view)
         view.run {
             initView()
-            if (isDebug) showVersion() else showPrivacyPolicy()
+            if (appInfo.isDebug) showVersion() else showPrivacyPolicy()
 
-            errorHandler.onBadCredentials = {
+            loginErrorHandler.onBadCredentials = {
                 setErrorPassIncorrect()
                 showSoftKeyboard()
                 Timber.i("Entered wrong username or password")
@@ -40,7 +40,7 @@ class LoginFormPresenter @Inject constructor(
         view?.apply {
             clearPassError()
             clearNameError()
-            if (formHostValue?.contains("fakelog") == true) setDefaultCredentials("jan@fakelog.cf", "jan123")
+            if (formHostValue?.contains("fakelog") == true) setCredentials("jan@fakelog.cf", "jan123")
         }
     }
 
@@ -78,12 +78,12 @@ class LoginFormPresenter @Inject constructor(
             }
             .subscribe({
                 Timber.i("Login result: Success")
-                analytics.logEvent("registration_form", SUCCESS to true, "students" to it.size, "endpoint" to endpoint, "error" to "No error")
+                analytics.logEvent("registration_form", "success" to true, "students" to it.size, "endpoint" to endpoint, "error" to "No error")
                 view?.notifyParentAccountLogged(it)
             }, {
                 Timber.i("Login result: An exception occurred")
-                analytics.logEvent("registration_form", SUCCESS to false, "students" to -1, "endpoint" to endpoint, "error" to it.localizedMessage)
-                errorHandler.dispatch(it)
+                analytics.logEvent("registration_form", "success" to false, "students" to -1, "endpoint" to endpoint, "error" to it.message.ifNullOrBlank { "No message" })
+                loginErrorHandler.dispatch(it)
             }))
     }
 

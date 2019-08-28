@@ -12,6 +12,7 @@
     <string name="settings_title">Ustawienia</string>
     <string name="more_title">Więcej</string>
     <string name="about_title">O aplikacji</string>
+    <string name="license_title">Licencje</string>
     <string name="message_title">Wiadomości</string>
     <string name="send_message_title">Nowa wiadomość</string>
     <string name="note_title">Uwagi i osiągnięcia</string>
@@ -57,6 +58,7 @@
     <string name="grade_no_average">Brak średniej</string>
     <string name="grade_predicted">Przewidywana: %1$s</string>
     <string name="grade_final">Końcowa: %1$s</string>
+    <string name="grade_summary_points">Suma punktów</string>
     <string name="grade_summary_final_grade">Ocena końcowa</string>
     <string name="grade_summary_predicted_grade">Przewidywana ocena</string>
     <string name="grade_summary_calculated_average">Obliczona średnia</string>
@@ -203,6 +205,17 @@
     <string name="lucky_number_notify_new_item">Dziś szczęśliwym numerkiem jest: %d</string>
 
 
+    <!--Mobile devices-->
+    <string name="mobile_devices_title">Dostęp mobilny</string>
+    <string name="mobile_devices_no_items">Brak urządzeń</string>
+    <string name="mobile_devices_unregister">Wyrejestruj</string>
+    <string name="mobile_device_removed">Urządzenie usunięte</string>
+    <string name="mobile_device_qr">Kod QR</string>
+    <string name="mobile_device_token">Token</string>
+    <string name="mobile_device_symbol">Symbol</string>
+    <string name="mobile_device_pin">PIN</string>
+
+
     <!--Account-->
     <string name="account_add_new">Dodaj konto</string>
     <string name="account_logout">Wyloguj</string>
@@ -211,9 +224,21 @@
 
 
     <!--About-->
-    <string name="about_discord_invite">Discord</string>
+    <string name="about_version">Wersja aplikacji</string>
     <string name="about_feedback">Zgłoś błąd</string>
+    <string name="about_feedback_summary">Wyślij zgłoszenie o błedzię poprzez e-maila</string>
+    <string name="about_discord">Serwer discord</string>
+    <string name="about_discord_summary">Dołącz do społeczności wulkanowego</string>
+    <string name="about_privacy">Polityka prywatności</string>
+    <string name="about_privacy_summary">Zasady zbierania danych osobowych</string>
     <string name="about_homepage">Strona domowa</string>
+    <string name="about_homepage_summary">Odwiedź stronę i pomóż rozwijać aplikację</string>
+    <string name="about_licenses">Licencje</string>
+    <string name="about_licenses_summary">Licencje użytych bibliotek w aplikacji</string>
+
+
+    <!--Licenses-->
+    <string name="license_dialog_title">Licencja</string>
 
 
     <!--Generic-->
@@ -241,6 +266,7 @@
     <string name="pref_view_header">Wygląd</string>
     <string name="pref_view_list">Domyślny widok</string>
     <string name="pref_view_grade_average_mode">Obliczanie średniej końcoworocznej</string>
+    <string name="pref_view_grade_average_force_calc">Wymuś obliczanie średniej przez aplikację</string>
     <string name="pref_view_present">Pokazuj obecność we frekwencji</string>
     <string name="pref_view_app_theme">Motyw aplikacji</string>
     <string name="pref_view_expand_grade">Rozwiń oceny</string>
@@ -278,11 +304,12 @@
 
     <!--Others-->
     <string name="all_copied">Skopiowano</string>
+    <string name="all_undo">Cofnij</string>
 
 
     <!--Errors-->
     <string name="error_no_internet">Brak połączenia z internetem</string>
-    <string name="error_timeout">Zbyt długie oczekiwanie na połączenie</string>
+    <string name="error_timeout">Zbyt długie oczekiwanie na połączenie z dziennikiem</string>
     <string name="error_login_failed">Logowanie nie powiodło się. Spróbuj ponownie lub zrestartuj aplikację</string>
     <string name="error_service_unavailable">Dziennik jest niedostępny. Spróbuj ponownie później</string>
     <string name="error_unknown">Wystąpił nieoczekiwany błąd</string>

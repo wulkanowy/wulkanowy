@@ -12,6 +12,7 @@
     <string name="settings_title">Settings</string>
     <string name="more_title">More</string>
     <string name="about_title">About</string>
+    <string name="license_title">Licenses</string>
     <string name="message_title">Messages</string>
     <string name="send_message_title">New message</string>
     <string name="note_title">Notes and achievements</string>
@@ -57,6 +58,7 @@
     <string name="grade_no_average">No average</string>
     <string name="grade_predicted">Predicted: %1$s</string>
     <string name="grade_final">Final: %1$s</string>
+    <string name="grade_summary_points">Total points</string>
     <string name="grade_summary_final_grade">Final grade</string>
     <string name="grade_summary_predicted_grade">Predicted grade</string>
     <string name="grade_summary_calculated_average">Calculated average</string>
@@ -187,6 +189,16 @@
     <string name="lucky_number_notify_new_item_title">Lucky number for today</string>
     <string name="lucky_number_notify_new_item">Today\'s lucky number is: %d</string>
 
+    <!--Mobile devices-->
+    <string name="mobile_devices_title">Mobile devices</string>
+    <string name="mobile_devices_no_items">No devices</string>
+    <string name="mobile_devices_unregister">Unregister</string>
+    <string name="mobile_device_removed">Device removed</string>
+    <string name="mobile_device_qr">QR code</string>
+    <string name="mobile_device_token">Token</string>
+    <string name="mobile_device_symbol">Symbol</string>
+    <string name="mobile_device_pin">PIN</string>
+
 
     <!--Account-->
     <string name="account_add_new">Add account</string>
@@ -196,9 +208,21 @@
 
 
     <!--About-->
-    <string name="about_discord_invite">Discord</string>
+    <string name="about_version">App version</string>
     <string name="about_feedback">Report a bug</string>
+    <string name="about_feedback_summary">Send a bug report via e-mail</string>
+    <string name="about_discord">Discord server</string>
+    <string name="about_discord_summary">Join the wulkanowy community</string>
+    <string name="about_privacy">Privacy policy</string>
+    <string name="about_privacy_summary">Rules for collecting personal data</string>
     <string name="about_homepage">Homepage</string>
+    <string name="about_homepage_summary">Visit the website and help develop the application</string>
+    <string name="about_licenses">Licenses</string>
+    <string name="about_licenses_summary">Licenses of libraries used in the application</string>
+
+
+    <!--Licenses-->
+    <string name="license_dialog_title">License</string>
 
 
     <!--Generic-->
@@ -226,6 +250,7 @@
     <string name="pref_view_header">Appearance</string>
     <string name="pref_view_list">Default view</string>
     <string name="pref_view_grade_average_mode">Calculation of the end-of-year average</string>
+    <string name="pref_view_grade_average_force_calc">Force average calculation by app</string>
     <string name="pref_view_present">Show presence in attendance</string>
     <string name="pref_view_app_theme">Application theme</string>
     <string name="pref_view_expand_grade">Expand grades</string>
@@ -263,11 +288,12 @@
 
     <!--Others-->
     <string name="all_copied">Copied</string>
+    <string name="all_undo">Undo</string>
 
 
     <!--Errors-->
     <string name="error_no_internet">No internet connection</string>
-    <string name="error_timeout">Too long wait for connection</string>
+    <string name="error_timeout">Too long waiting time for connection to the register</string>
     <string name="error_login_failed">Login is failed. Try again or restart the app</string>
     <string name="error_service_unavailable">The log is not available. Try again later</string>
     <string name="error_unknown">An unexpected error occurred</string>

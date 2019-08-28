@@ -1,33 +1,36 @@
 package io.github.wulkanowy.ui.modules.homework
 
-import com.google.firebase.analytics.FirebaseAnalytics.Param.START_DATE
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.homework.HomeworkRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
-import io.github.wulkanowy.ui.base.session.BaseSessionPresenter
-import io.github.wulkanowy.ui.base.session.SessionErrorHandler
+import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.friday
+import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDate.ofEpochDay
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class HomeworkPresenter @Inject constructor(
-    private val errorHandler: SessionErrorHandler,
-    private val schedulers: SchedulersProvider,
+    schedulers: SchedulersProvider,
+    errorHandler: ErrorHandler,
+    studentRepository: StudentRepository,
     private val homeworkRepository: HomeworkRepository,
-    private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
     private val analytics: FirebaseAnalyticsHelper
-) : BaseSessionPresenter<HomeworkView>(errorHandler) {
+) : BasePresenter<HomeworkView>(errorHandler, studentRepository, schedulers) {
+
+    private var baseDate: LocalDate = LocalDate.now().nextOrSameSchoolDay
 
     lateinit var currentDate: LocalDate
         private set
@@ -36,7 +39,8 @@ class HomeworkPresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         Timber.i("Homework view was initialized")
-        loadData(LocalDate.ofEpochDay(date ?: LocalDate.now().nextOrSameSchoolDay.toEpochDay()))
+        loadData(ofEpochDay(date ?: baseDate.toEpochDay()))
+        if (currentDate.isHolidays) setBaseDateOnHolidays()
         reloadView()
     }
 
@@ -60,6 +64,20 @@ class HomeworkPresenter @Inject constructor(
             Timber.i("Select homework item ${item.homework.id}")
             view?.showTimetableDialog(item.homework)
         }
+    }
+
+    private fun setBaseDateOnHolidays() {
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { semesterRepository.getCurrentSemester(it) }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
+                baseDate = baseDate.getLastSchoolDayIfHoliday(it.schoolYear)
+                currentDate = baseDate
+                reloadNavigation()
+            }) {
+                Timber.i("Loading semester result: An exception occurred")
+            })
     }
 
     private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
@@ -89,7 +107,7 @@ class HomeworkPresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
                     }
-                    analytics.logEvent("load_homework", "items" to it.size, "force_refresh" to forceRefresh, START_DATE to currentDate.toFormattedString("yyyy-MM-dd"))
+                    analytics.logEvent("load_homework", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
                     Timber.i("Loading homework result: An exception occurred")
                     view?.run { showEmpty(isViewEmpty()) }
@@ -114,8 +132,14 @@ class HomeworkPresenter @Inject constructor(
             showContent(false)
             showEmpty(false)
             clearData()
-            showNextButton(!currentDate.plusDays(7).isHolidays)
+            reloadNavigation()
+        }
+    }
+
+    private fun reloadNavigation() {
+        view?.apply {
             showPreButton(!currentDate.minusDays(7).isHolidays)
+            showNextButton(!currentDate.plusDays(7).isHolidays)
             updateNavigationWeek("${currentDate.monday.toFormattedString("dd.MM")} - " +
                 currentDate.friday.toFormattedString("dd.MM"))
         }

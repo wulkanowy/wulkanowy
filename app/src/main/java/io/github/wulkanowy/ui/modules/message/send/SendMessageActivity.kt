@@ -2,30 +2,33 @@ package io.github.wulkanowy.ui.modules.message.send
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.TouchDelegate
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.ui.base.BaseActivity
+import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.activity_send_message.*
 import javax.inject.Inject
 
-class SendMessageActivity : BaseActivity(), SendMessageView {
+class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageView {
 
     @Inject
-    lateinit var presenter: SendMessagePresenter
+    override lateinit var presenter: SendMessagePresenter
 
     companion object {
         private const val EXTRA_MESSAGE = "EXTRA_MESSAGE"
+
         private const val EXTRA_REPLY = "EXTRA_REPLY"
 
         fun getStartIntent(context: Context) = Intent(context, SendMessageActivity::class.java)
@@ -37,14 +40,18 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
         }
     }
 
-    override val formRecipientsData: List<Recipient>
-        get() = (sendMessageRecipientsInput.selectedChipList).map { (it as RecipientChip).recipient }
+    override val isDropdownListVisible: Boolean
+        get() = sendMessageTo.isDropdownListVisible
+
+    @Suppress("UNCHECKED_CAST")
+    override val formRecipientsData: List<RecipientChipItem>
+        get() = sendMessageTo.addedChipItems as List<RecipientChipItem>
 
     override val formSubjectValue: String
-        get() = sendMessageSubjectInput.text.toString()
+        get() = sendMessageSubject.text.toString()
 
     override val formContentValue: String
-        get() = sendMessageContentInput.text.toString()
+        get() = sendMessageMessageContent.text.toString()
 
     override val messageRequiredRecipients: String
         get() = getString(R.string.message_required_recipients)
@@ -65,6 +72,12 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
         presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_MESSAGE) as? Message, intent.getSerializableExtra(EXTRA_REPLY) as? Boolean)
     }
 
+    override fun initView() {
+        setUpExtendedHitArea()
+        sendMessageScroll.setOnTouchListener { _, _ -> presenter.onTouchScroll() }
+        sendMessageTo.onTextChangeListener = presenter::onRecipientsTextChange
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.action_menu_send_message, menu)
         return true
@@ -80,15 +93,15 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
     }
 
     override fun setReportingUnit(unit: ReportingUnit) {
-        sendMessageFromTextView.setText(unit.senderName)
+        sendMessageFrom.text = unit.senderName
     }
 
-    override fun setRecipients(recipients: List<Recipient>) {
-        sendMessageRecipientsInput.filterableList = recipients.map { RecipientChip(it) }
+    override fun setRecipients(recipients: List<RecipientChipItem>) {
+        sendMessageTo.filterableChipItems = recipients
     }
 
-    override fun setSelectedRecipients(recipients: List<Recipient>) {
-        recipients.map { sendMessageRecipientsInput.addChip(RecipientChip(it)) }
+    override fun setSelectedRecipients(recipients: List<RecipientChipItem>) {
+        sendMessageTo.addChips(recipients)
     }
 
     override fun showProgress(show: Boolean) {
@@ -108,11 +121,11 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
     }
 
     override fun setSubject(subject: String) {
-        sendMessageSubjectInput.setText(subject)
+        sendMessageSubject.setText(subject)
     }
 
     override fun setContent(content: String) {
-        sendMessageContentInput.setText(content)
+        sendMessageMessageContent.setText(content)
     }
 
     override fun showMessage(text: String) {
@@ -123,12 +136,41 @@ class SendMessageActivity : BaseActivity(), SendMessageView {
         if (show) showSoftInput() else hideSoftInput()
     }
 
+    override fun hideDropdownList() {
+        sendMessageTo.hideDropdownList()
+    }
+
+    override fun scrollToRecipients() {
+        sendMessageScroll.post {
+            sendMessageScroll.scrollTo(0, sendMessageTo.bottom - dpToPx(53f).toInt())
+        }
+    }
+
     override fun popView() {
         onBackPressed()
     }
 
-    override fun onDestroy() {
-        presenter.onDetachView()
-        super.onDestroy()
+    private fun setUpExtendedHitArea() {
+        fun extendHitArea() {
+            val containerHitRect = Rect().apply {
+                sendMessageContent.getHitRect(this)
+            }
+
+            val contentHitRect = Rect().apply {
+                sendMessageMessageContent.getHitRect(this)
+            }
+
+            contentHitRect.top = contentHitRect.bottom
+            contentHitRect.bottom = containerHitRect.bottom
+
+            sendMessageContent.touchDelegate = TouchDelegate(contentHitRect, sendMessageMessageContent)
+        }
+
+        sendMessageMessageContent.post {
+            sendMessageMessageContent.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+                extendHitArea()
+            }
+            extendHitArea()
+        }
     }
 }
