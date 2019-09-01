@@ -71,6 +71,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
 
         with(loginFormHost) {
+            isSaveEnabled = false
             setText(hostKeys.getOrElse(0) { "" })
             setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
             keyListener = null
