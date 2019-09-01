@@ -126,16 +126,14 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
             getString(R.string.grade_semester, 2)
         )
 
-        context?.let {
-            AlertDialog.Builder(it)
-                .setSingleChoiceItems(choices, selectedIndex) { dialog, which ->
-                    presenter.onSemesterSelected(which)
-                    dialog.dismiss()
-                }
-                .setTitle(R.string.grade_switch_semester)
-                .setNegativeButton(android.R.string.cancel) { _, _ -> }
-                .show()
-        }
+        AlertDialog.Builder(requireContext())
+            .setSingleChoiceItems(choices, selectedIndex) { dialog, which ->
+                presenter.onSemesterSelected(which)
+                dialog.dismiss()
+            }
+            .setTitle(R.string.grade_switch_semester)
+            .setNegativeButton(android.R.string.cancel) { _, _ -> }
+            .show()
     }
 
     fun onChildRefresh() {
