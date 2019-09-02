@@ -69,7 +69,9 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
 
         with(loginFormHost) {
+            //Bug with filter in ExposedDropdownMenu on restoring state
             isSaveEnabled = false
+
             setText(hostKeys.getOrElse(0) { "" })
             setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
             keyListener = null
