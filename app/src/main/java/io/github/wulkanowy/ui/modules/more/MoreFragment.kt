@@ -54,6 +54,9 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
     override val mobileDevicesRes: Pair<String, Drawable?>?
         get() = context?.run { getString(R.string.mobile_devices_title) to getCompatDrawable(R.drawable.ic_more_mobile_devices) }
 
+    override val teachersRes: Pair<String, Drawable?>?
+        get() = context?.run {  getString(R.string.teachers_title) to getCompatDrawable((R.drawable.ic_more_teachers)) }
+
     override val settingsRes: Pair<String, Drawable?>?
         get() = context?.run { getString(R.string.settings_title) to getCompatDrawable(R.drawable.ic_more_settings) }
 
@@ -103,6 +106,10 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
     }
 
     override fun openMobileDevicesView() {
+        (activity as? MainActivity)?.pushView(MobileDeviceFragment.newInstance())
+    }
+
+    override fun openTeachersView() {
         (activity as? MainActivity)?.pushView(MobileDeviceFragment.newInstance())
     }
 
