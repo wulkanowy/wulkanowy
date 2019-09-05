@@ -22,7 +22,7 @@ class TeacherPresenter @Inject constructor(
     override fun onAttachView(view: TeacherView) {
         super.onAttachView(view)
         view.initView()
-        Timber.i("Teachers view was initialized")
+        Timber.i("Teacher view was initialized")
         loadData()
     }
 

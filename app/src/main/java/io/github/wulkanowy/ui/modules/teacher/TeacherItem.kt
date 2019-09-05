@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.item_teacher.*
 
 class TeacherItem(val teacher: Teacher) : AbstractFlexibleItem<TeacherItem.ViewHolder>() {
 
-    override fun getLayoutRes() = R.layout.item_note
+    override fun getLayoutRes() = R.layout.item_teacher
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): TeacherItem.ViewHolder {
         return TeacherItem.ViewHolder(view, adapter)

@@ -15,7 +15,8 @@ data class Teacher(
 
     val name: String,
 
-    val short: String
+    @ColumnInfo(name = "short_name")
+    val shortName: String
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)

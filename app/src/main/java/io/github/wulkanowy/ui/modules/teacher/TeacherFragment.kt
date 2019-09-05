@@ -9,15 +9,9 @@ import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.ui.modules.note.NoteDialog
-import io.github.wulkanowy.ui.modules.note.NoteFragment
-import io.github.wulkanowy.ui.modules.note.NoteItem
-import io.github.wulkanowy.utils.setOnItemClickListener
-import kotlinx.android.synthetic.main.fragment_note.*
+import kotlinx.android.synthetic.main.fragment_teacher.*
 import javax.inject.Inject
 
 class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView {
@@ -28,17 +22,17 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView {
     lateinit var teacherAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
-        fun newInstance() = NoteFragment()
+        fun newInstance() = TeacherFragment()
     }
 
     override val titleStringId: Int
-        get() = R.string.note_title
+        get() = R.string.teachers_title
 
     override val isViewEmpty: Boolean
         get() = teacherAdapter.isEmpty
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_note, container, false)
+        return inflater.inflate(R.layout.fragment_teacher, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -47,7 +41,7 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView {
     }
 
     override fun initView() {
-        noteRecycler.run {
+        teacherRecycler.run {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = teacherAdapter
             addItemDecoration(FlexibleItemDecoration(context)
@@ -55,7 +49,7 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView {
                 .withDrawDividerOnLastItem(false)
             )
         }
-        noteSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+        teacherSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
     override fun updateData(data: List<TeacherItem>) {
@@ -71,23 +65,23 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView {
     }
 
     override fun showEmpty(show: Boolean) {
-        noteEmpty.visibility = if (show) View.VISIBLE else View.GONE
+        teacherEmpty.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun showProgress(show: Boolean) {
-        noteProgress.visibility = if (show) View.VISIBLE else View.GONE
+        teacherProgress.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun enableSwipe(enable: Boolean) {
-        noteSwipe.isEnabled = enable
+        teacherSwipe.isEnabled = enable
     }
 
     override fun showContent(show: Boolean) {
-        noteRecycler.visibility = if (show) View.VISIBLE else View.GONE
+        teacherRecycler.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     override fun hideRefresh() {
-        noteSwipe.isRefreshing = false
+        teacherSwipe.isRefreshing = false
     }
 
     override fun onDestroyView() {
