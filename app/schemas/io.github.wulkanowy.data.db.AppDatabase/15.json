@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 15,
-    "identityHash": "75ac5b73e540806f45d11a01532cb74e",
+    "identityHash": "84b300bf53c7dd70b60a29a842275bb2",
     "entities": [
       {
         "tableName": "Students",
@@ -110,7 +110,7 @@
               "school_id",
               "class_id"
             ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Students_email_symbol_student_id_school_id_class_id` ON `${TABLE_NAME}` (`email`, `symbol`, `student_id`, `school_id`, `class_id`)"
+            "createSql": "CREATE UNIQUE INDEX `index_Students_email_symbol_student_id_school_id_class_id` ON `${TABLE_NAME}` (`email`, `symbol`, `student_id`, `school_id`, `class_id`)"
           }
         ],
         "foreignKeys": []
@@ -207,7 +207,7 @@
               "diary_id",
               "semester_id"
             ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Semesters_student_id_diary_id_semester_id` ON `${TABLE_NAME}` (`student_id`, `diary_id`, `semester_id`)"
+            "createSql": "CREATE UNIQUE INDEX `index_Semesters_student_id_diary_id_semester_id` ON `${TABLE_NAME}` (`student_id`, `diary_id`, `semester_id`)"
           }
         ],
         "foreignKeys": []
@@ -1419,56 +1419,12 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "Teachers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `name` TEXT NOT NULL, `short_name` TEXT NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "studentId",
-            "columnName": "student_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "subject",
-            "columnName": "subject",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "shortName",
-            "columnName": "short_name",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '75ac5b73e540806f45d11a01532cb74e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '84b300bf53c7dd70b60a29a842275bb2')"
     ]
   }
 }
