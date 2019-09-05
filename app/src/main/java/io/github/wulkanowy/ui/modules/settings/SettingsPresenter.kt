@@ -41,6 +41,6 @@ class SettingsPresenter @Inject constructor(
                 else -> Unit
             }
         }
-        analytics.logEvent("setting_changed", "subject" to key)
+        analytics.logEvent("setting_changed", "name" to key)
     }
 }

@@ -13,7 +13,7 @@ class SyncWorkerFactory @Inject constructor(private val syncWorkerFactory: SyncW
         return if (workerClassName == SyncWorker::class.java.name) {
             syncWorkerFactory.create(appContext, workerParameters)
         } else {
-            Timber.e(IllegalArgumentException("Unknown worker class subject: $workerClassName"))
+            Timber.e(IllegalArgumentException("Unknown worker class name: $workerClassName"))
             null
         }
     }

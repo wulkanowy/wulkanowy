@@ -30,27 +30,27 @@ class AboutPresenter @Inject constructor(
                 feedbackRes?.first -> {
                     Timber.i("Opening email client ")
                     openEmailClient()
-                    analytics.logEvent("about_open", "subject" to "feedback")
+                    analytics.logEvent("about_open", "name" to "feedback")
                 }
                 discordRes?.first -> {
                     Timber.i("Opening discord")
                     openDiscordInvite()
-                    analytics.logEvent("about_open", "subject" to "discord")
+                    analytics.logEvent("about_open", "name" to "discord")
                 }
                 homepageRes?.first -> {
                     Timber.i("Opening homepage")
                     openHomepage()
-                    analytics.logEvent("about_open", "subject" to "homepage")
+                    analytics.logEvent("about_open", "name" to "homepage")
                 }
                 licensesRes?.first -> {
                     Timber.i("Opening licenses view")
                     openLicenses()
-                    analytics.logEvent("about_open", "subject" to "licenses")
+                    analytics.logEvent("about_open", "name" to "licenses")
                 }
                 privacyRes?.first -> {
                     Timber.i("Opening privacy page ")
                     openPrivacyPolicy()
-                    analytics.logEvent("about_open", "subject" to "privacy")
+                    analytics.logEvent("about_open", "name" to "privacy")
                 }
             }
         }
