@@ -23,6 +23,7 @@ import io.github.wulkanowy.data.db.dao.ReportingUnitDao
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.dao.SubjectDao
+import io.github.wulkanowy.data.db.dao.TeacherDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
@@ -41,6 +42,7 @@ import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
+import io.github.wulkanowy.data.db.entities.Teacher
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.migrations.Migration10
 import io.github.wulkanowy.data.db.migrations.Migration11
@@ -78,7 +80,8 @@ import javax.inject.Singleton
         CompletedLesson::class,
         ReportingUnit::class,
         Recipient::class,
-        MobileDevice::class
+        MobileDevice::class,
+        Teacher::class
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -149,4 +152,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val recipientDao: RecipientDao
 
     abstract val mobileDeviceDao: MobileDeviceDao
+
+    abstract val teacherDao: TeacherDao
 }

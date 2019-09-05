@@ -19,6 +19,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
+import io.github.wulkanowy.ui.modules.teacher.TeacherFragment
 import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_more.*
@@ -110,7 +111,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
     }
 
     override fun openTeachersView() {
-        (activity as? MainActivity)?.pushView(MobileDeviceFragment.newInstance())
+        (activity as? MainActivity)?.pushView(TeacherFragment.newInstance())
     }
 
     override fun openSettingsView() {
