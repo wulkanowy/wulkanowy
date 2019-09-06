@@ -22,7 +22,7 @@ class TeacherItem(val teacher: Teacher) : AbstractFlexibleItem<TeacherItem.ViewH
         holder.apply {
             teacherItemName.text = teacher.name
             teacherItemSubject.text = teacher.subject
-            teacherItemShortName.text = "[${teacher.shortName}]"
+            teacherItemShortName.text = containerView.context.getString(R.string.teacher_short_name, teacher.shortName)
         }
     }
 

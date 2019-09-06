@@ -199,6 +199,10 @@
     <string name="mobile_device_symbol">Symbol</string>
     <string name="mobile_device_pin">PIN</string>
 
+    <!--Teacher-->
+    <string name="teachers_title">Teachers</string>
+    <string name="teacher_short_name" translatable="false">[%s]</string>
+
 
     <!--Account-->
     <string name="account_add_new">Add account</string>
@@ -298,5 +302,4 @@
     <string name="error_service_unavailable">The log is not available. Try again later</string>
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
-    <string name="teachers_title">Teachers</string>
 </resources>
