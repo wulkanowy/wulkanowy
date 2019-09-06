@@ -24,7 +24,7 @@ class TimetableWidgetConfigureItem(val student: Student, private val isCurrent: 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         val context = holder.contentView.context
 
-        val colorImage = if (student.isCurrent) context.getThemeAttrColor(R.attr.colorPrimary)
+        val colorImage = if (isCurrent) context.getThemeAttrColor(R.attr.colorPrimary)
         else ColorUtils.setAlphaComponent(context.getThemeAttrColor(R.attr.colorOnSurface), 153)
 
         with(holder) {
