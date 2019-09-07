@@ -216,6 +216,11 @@
     <string name="mobile_device_pin">PIN</string>
 
 
+    <!--Teacher-->
+    <string name="teachers_title">Nauczyciele</string>
+    <string name="teacher_no_items">Brak informacji o nauczycielach</string>
+
+
     <!--Account-->
     <string name="account_add_new">Dodaj konto</string>
     <string name="account_logout">Wyloguj</string>
@@ -314,5 +319,4 @@
     <string name="error_service_unavailable">Dziennik jest niedostępny. Spróbuj ponownie później</string>
     <string name="error_unknown">Wystąpił nieoczekiwany błąd</string>
     <string name="error_feature_disabled">Funkcja wyłączona przez szkołę</string>
-    <string name="teachers_title">Nauczyciele</string>
 </resources>

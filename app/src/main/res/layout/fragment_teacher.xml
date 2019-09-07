@@ -30,13 +30,13 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/ic_more_note"
+            app:srcCompat="@drawable/ic_more_teachers"
             app:tint="?colorOnBackground"
             tools:ignore="contentDescription" />
 
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="@string/note_no_items"
+            android:text="@string/teacher_no_items"
             android:textSize="20sp" />
     </LinearLayout>
 </FrameLayout>

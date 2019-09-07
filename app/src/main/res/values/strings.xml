@@ -199,8 +199,10 @@
     <string name="mobile_device_symbol">Symbol</string>
     <string name="mobile_device_pin">PIN</string>
 
+
     <!--Teacher-->
     <string name="teachers_title">Teachers</string>
+    <string name="teacher_no_items">No info about teachers</string>
 
 
     <!--Account-->
