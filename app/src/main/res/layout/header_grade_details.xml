@@ -48,7 +48,7 @@
         android:textSize="12sp"
         tools:text="12 grades" />
 
-    <TextView
+    <ImageView
         android:id="@+id/gradeHeaderNote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
