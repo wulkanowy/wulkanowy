@@ -36,7 +36,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/ic_more_teachers"
+            app:srcCompat="@drawable/ic_more_teacher"
             app:tint="?colorOnBackground"
             tools:ignore="contentDescription" />
 
