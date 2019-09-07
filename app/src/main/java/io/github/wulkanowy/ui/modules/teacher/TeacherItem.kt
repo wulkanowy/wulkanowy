@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.teacher
 
+import android.annotation.SuppressLint
 import android.view.View
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -18,11 +19,12 @@ class TeacherItem(val teacher: Teacher) : AbstractFlexibleItem<TeacherItem.ViewH
         return TeacherItem.ViewHolder(view, adapter)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: TeacherItem.ViewHolder, position: Int, payloads: MutableList<Any>?) {
         holder.apply {
             teacherItemName.text = teacher.name
             teacherItemSubject.text = teacher.subject
-            teacherItemShortName.text = containerView.context.getString(R.string.teacher_short_name, teacher.shortName)
+            teacherItemShortName.text = "[" + teacher.shortName + "]"
         }
     }
 

@@ -201,7 +201,6 @@
 
     <!--Teacher-->
     <string name="teachers_title">Teachers</string>
-    <string name="teacher_short_name" translatable="false">[%s]</string>
 
 
     <!--Account-->
