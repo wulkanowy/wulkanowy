@@ -24,7 +24,7 @@ class TeacherItem(val teacher: Teacher) : AbstractFlexibleItem<TeacherItem.ViewH
         holder.apply {
             teacherItemName.text = teacher.name
             teacherItemSubject.text = teacher.subject
-            teacherItemShortName.text = "[" + teacher.shortName + "]"
+            teacherItemShortName.text = "[${teacher.shortName}]"
         }
     }
 
