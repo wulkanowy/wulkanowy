@@ -30,5 +30,3 @@ class SemesterRemote @Inject constructor(private val sdk: Sdk) {
         }
     }
 }
-
-

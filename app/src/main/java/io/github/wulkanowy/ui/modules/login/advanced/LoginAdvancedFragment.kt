@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.hideSoftInput
-import io.github.wulkanowy.utils.setOnTextChangedListener
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.fragment_login_advanced.*
 import javax.inject.Inject
@@ -70,8 +70,8 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         hostKeys = resources.getStringArray(R.array.endpoints_keys)
         hostValues = resources.getStringArray(R.array.endpoints_values)
 
-        loginFormName.setOnTextChangedListener { presenter.onNameTextChanged() }
-        loginFormPass.setOnTextChangedListener { presenter.onPassTextChanged() }
+        loginFormName.doOnTextChanged { _, _, _, _ -> presenter.onNameTextChanged() }
+        loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
         loginFormHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
 

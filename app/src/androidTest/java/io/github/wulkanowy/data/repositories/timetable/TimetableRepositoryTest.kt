@@ -60,7 +60,7 @@ class TimetableRepositoryTest {
     }
 
     @Test
-    fun copyDetailsToCompletedFromPrevious() {
+    fun copyRoomToCompletedFromPrevious() {
         timetableLocal.saveTimetable(listOf(
             createTimetableLocal(of(2019, 3, 5, 8, 0), 1, "123", "Przyroda"),
             createTimetableLocal(of(2019, 3, 5, 8, 50), 2, "321", "Religia"),
@@ -83,7 +83,32 @@ class TimetableRepositoryTest {
         assertEquals("123", lessons[0].room)
         assertEquals("321", lessons[1].room)
         assertEquals("213", lessons[2].room)
+    }
 
-        assertEquals("", lessons[3].teacher)
+    @Test
+    fun copyTeacherToCompletedFromPrevious() {
+        timetableLocal.saveTimetable(listOf(
+            createTimetableLocal(of(2019, 3, 5, 8, 0), 1, "123", "Przyroda", "Jan Garnkiewicz", false),
+            createTimetableLocal(of(2019, 3, 5, 8, 50), 2, "321", "Religia", "Paweł Jumper", false),
+            createTimetableLocal(of(2019, 3, 5, 9, 40), 3, "213", "W-F", "", true),
+            createTimetableLocal(of(2019, 3, 5, 10, 30), 4, "213", "W-F", "", false)
+        ))
+
+        every { mockSdk.getTimetable(any(), any()) } returns Single.just(listOf(
+            createTimetableRemote(of(2019, 3, 5, 8, 0), 1, "", "Przyroda", "", true), // should override local
+            createTimetableRemote(of(2019, 3, 5, 8, 50), 2, "", "Religia", "", false),
+            createTimetableRemote(of(2019, 3, 5, 9, 40), 3, "", "W-F", "Jan Garnkiewicz", false),
+            createTimetableRemote(of(2019, 3, 5, 10, 30), 4, "", "W-F", "Paweł Jumper", false)
+        ))
+
+        val lessons = TimetableRepository(settings, timetableLocal, timetableRemote)
+            .getTimetable(semesterMock, LocalDate.of(2019, 3, 5), LocalDate.of(2019, 3, 5), true)
+            .blockingGet()
+
+        assertEquals(4, lessons.size)
+        assertEquals("", lessons[0].teacher)
+        assertEquals("Paweł Jumper", lessons[1].teacher)
+        assertEquals("Jan Garnkiewicz", lessons[2].teacher)
+        assertEquals("Paweł Jumper", lessons[3].teacher)
     }
 }
