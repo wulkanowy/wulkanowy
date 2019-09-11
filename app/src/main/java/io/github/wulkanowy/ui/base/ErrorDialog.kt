@@ -1,19 +1,11 @@
 package io.github.wulkanowy.ui.base
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
-import androidx.core.content.getSystemService
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
-import kotlinx.android.synthetic.main.dialog_error.*
-import java.io.PrintWriter
-import java.io.StringWriter
 
 class ErrorDialog : DialogFragment() {
 
@@ -43,7 +35,7 @@ class ErrorDialog : DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        StringWriter().let { writer ->
+        /*StringWriter().let { writer ->
             error.printStackTrace(PrintWriter(writer))
 
             errorDialogContent.text = writer.toString()
@@ -54,7 +46,7 @@ class ErrorDialog : DialogFragment() {
                 Toast.makeText(context, R.string.all_copied, LENGTH_LONG).show()
             }
         }
-        errorDialogCancel.setOnClickListener { dismiss() }
+        errorDialogCancel.setOnClickListener { dismiss() }*/
     }
 }
 
