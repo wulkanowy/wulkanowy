@@ -10,6 +10,8 @@ apply from: 'hooks.gradle'
 
 android {
     compileSdkVersion 29
+    buildToolsVersion '29.0.2'
+
     defaultConfig {
         applicationId "io.github.wulkanowy"
         testApplicationId "io.github.tests.wulkanowy"
