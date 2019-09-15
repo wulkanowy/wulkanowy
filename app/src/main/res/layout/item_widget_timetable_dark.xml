@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/timetableWidgetItemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ic_all_divider"
     android:minHeight="45dp"
+    android:orientation="vertical"
     tools:context=".ui.modules.timetablewidget.TimetableWidgetFactory">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#121212">
+        android:background="@color/colorWidgetBackground">
 
         <TextView
             android:id="@+id/timetableWidgetItemNumber"
@@ -87,4 +87,9 @@
             android:textSize="12sp"
             tools:text="Sala 25" />
     </RelativeLayout>
-</FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorDividerInverse" />
+</LinearLayout>

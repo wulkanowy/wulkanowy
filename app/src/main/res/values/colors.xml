@@ -30,4 +30,11 @@
     <color name="grade_vulcan_two">#9071b3</color>
     <color name="grade_vulcan_one">#d65757</color>
     <color name="grade_vulcan_default">#3d5f9c</color>
+
+
+    <!--Dark color resource for app widgets-->
+
+    <color name="colorWidgetBackground">#121212</color>
+    <color name="colorWidgetTopBar">#272727</color>
+    <color name="colorWidgetNavButton">#383838</color>
 </resources>
