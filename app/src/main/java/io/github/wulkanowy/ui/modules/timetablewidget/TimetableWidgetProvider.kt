@@ -114,7 +114,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
     @SuppressLint("DefaultLocale")
     private fun updateWidget(context: Context, appWidgetId: Int, date: LocalDate, student: Student?) {
-        RemoteViews(context.packageName, R.layout.widget_timetable).apply {
+        RemoteViews(context.packageName, R.layout.widget_timetable_dark).apply {
             setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
             setTextViewText(R.id.timetableWidgetDate, "${date.shortcutWeekDayName.capitalize()} ${date.toFormattedString()}")
             setTextViewText(R.id.timetableWidgetName, student?.studentName ?: context.getString(R.string.all_no_data))

@@ -81,7 +81,7 @@ class TimetableWidgetFactory(
     override fun getViewAt(position: Int): RemoteViews? {
         if (position == INVALID_POSITION || lessons.getOrNull(position) == null) return null
 
-        return RemoteViews(context.packageName, R.layout.item_widget_timetable).apply {
+        return RemoteViews(context.packageName, R.layout.item_widget_timetable_dark).apply {
             lessons[position].let {
                 setTextViewText(R.id.timetableWidgetItemSubject, it.subject)
                 setTextViewText(R.id.timetableWidgetItemNumber, it.number.toString())
