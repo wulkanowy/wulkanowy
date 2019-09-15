@@ -70,7 +70,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
 
     private fun onUpdate(context: Context, intent: Intent) {
         intent.getIntArrayExtra(EXTRA_APPWIDGET_IDS)?.forEach { appWidgetId ->
-            RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
+            RemoteViews(context.packageName, R.layout.widget_luckynumber_dark).apply {
                 setTextViewText(R.id.luckyNumberWidgetNumber,
                     getLuckyNumber(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)?.luckyNumber?.toString() ?: "#"
                 )
@@ -124,7 +124,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
 
     private fun onOptionsChange(context: Context, intent: Intent) {
         intent.extras?.let { extras ->
-            RemoteViews(context.packageName, R.layout.widget_luckynumber).apply {
+            RemoteViews(context.packageName, R.layout.widget_luckynumber_dark).apply {
                 setStyles(this, intent)
                 appWidgetManager.updateAppWidget(extras.getInt(EXTRA_APPWIDGET_ID), this)
             }
