@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
+import androidx.appcompat.app.AlertDialog
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -38,11 +39,26 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
     }
 
     override fun initView() {
-        widgetConfigureRecycler.apply {
+        with(widgetConfigureRecycler) {
             adapter = configureAdapter
             layoutManager = SmoothScrollLinearLayoutManager(context)
         }
-        configureAdapter.setOnItemClickListener { presenter.onItemSelect(it) }
+
+        configureAdapter.setOnItemClickListener(presenter::onItemSelect)
+    }
+
+    override fun showThemeDialog() {
+        val items = arrayOf(
+            getString(R.string.widget_timetable_theme_light),
+            getString(R.string.widget_timetable_theme_dark)
+        )
+
+        AlertDialog.Builder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
+            .setTitle(R.string.widget_timetable_theme_title)
+            .setSingleChoiceItems(items, 0) { _, which ->
+                presenter.onThemeSelect(which)
+            }
+            .show()
     }
 
     override fun updateData(data: List<TimetableWidgetConfigureItem>) {

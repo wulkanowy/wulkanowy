@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetablewidget
 
+import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
@@ -36,6 +37,8 @@ class TimetableWidgetFactory(
 
     private var lessons = emptyList<Timetable>()
 
+    private var layoutId: Int? = null
+
     override fun getLoadingView() = null
 
     override fun hasStableIds() = true
@@ -52,6 +55,9 @@ class TimetableWidgetFactory(
 
     override fun onDataSetChanged() {
         intent?.extras?.getInt(EXTRA_APPWIDGET_ID)?.let { appWidgetId ->
+            /*val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
+            layoutId = if (savedTheme == 0L) R.layout.item_widget_timetable else R.layout.item_widget_timetable_dark*/
+
             val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(appWidgetId), 0))
             val studentId = sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0)
 
@@ -78,10 +84,11 @@ class TimetableWidgetFactory(
         }
     }
 
+    @SuppressLint("DefaultLocale")
     override fun getViewAt(position: Int): RemoteViews? {
         if (position == INVALID_POSITION || lessons.getOrNull(position) == null) return null
 
-        return RemoteViews(context.packageName, R.layout.item_widget_timetable_dark).apply {
+        return RemoteViews(context.packageName, R.layout.item_widget_timetable).apply {
             lessons[position].let {
                 setTextViewText(R.id.timetableWidgetItemSubject, it.subject)
                 setTextViewText(R.id.timetableWidgetItemNumber, it.number.toString())

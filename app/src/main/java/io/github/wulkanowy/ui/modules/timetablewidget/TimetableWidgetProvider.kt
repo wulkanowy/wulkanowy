@@ -69,6 +69,8 @@ class TimetableWidgetProvider : BroadcastReceiver() {
         fun getDateWidgetKey(appWidgetId: Int) = "timetable_widget_date_$appWidgetId"
 
         fun getStudentWidgetKey(appWidgetId: Int) = "timetable_widget_student_$appWidgetId"
+
+        fun getThemeWidgetKey(appWidgetId: Int) = "timetable_widget_theme_$appWidgetId"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -114,7 +116,10 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
     @SuppressLint("DefaultLocale")
     private fun updateWidget(context: Context, appWidgetId: Int, date: LocalDate, student: Student?) {
-        RemoteViews(context.packageName, R.layout.widget_timetable_dark).apply {
+        val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
+        val layoutId = if (savedTheme == 0L) R.layout.widget_timetable else R.layout.widget_timetable_dark
+
+        RemoteViews(context.packageName, layoutId).apply {
             setEmptyView(R.id.timetableWidgetList, R.id.timetableWidgetEmpty)
             setTextViewText(R.id.timetableWidgetDate, "${date.shortcutWeekDayName.capitalize()} ${date.toFormattedString()}")
             setTextViewText(R.id.timetableWidgetName, student?.studentName ?: context.getString(R.string.all_no_data))
