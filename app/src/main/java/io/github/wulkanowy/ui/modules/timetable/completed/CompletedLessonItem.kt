@@ -9,6 +9,7 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.CompletedLesson
+import io.github.wulkanowy.utils.getThemeAttrColor
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_completed_lesson.*
 
@@ -23,6 +24,11 @@ class CompletedLessonItem(val completedLesson: CompletedLesson) : AbstractFlexib
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: CompletedLessonItem.ViewHolder?, position: Int, payloads: MutableList<Any>?) {
         holder?.apply {
             completedLessonItemNumber.text = completedLesson.number.toString()
+            if (completedLesson.substitution.isNotEmpty()) {
+                completedLessonItemNumber.setTextColor(holder.contentView.context.getThemeAttrColor(R.attr.colorTimetableChange))
+            } else {
+                completedLessonItemNumber.setTextColor(holder.contentView.context.getThemeAttrColor(android.R.attr.textColorPrimary))
+            }
             completedLessonItemSubject.text = completedLesson.subject
             completedLessonItemTopic.text = completedLesson.topic
             completedLessonItemAlert.visibility = if (completedLesson.substitution.isNotEmpty()) VISIBLE else GONE
