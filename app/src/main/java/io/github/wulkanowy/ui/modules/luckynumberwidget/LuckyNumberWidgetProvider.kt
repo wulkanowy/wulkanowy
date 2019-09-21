@@ -57,6 +57,8 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
     companion object {
 
         fun getStudentWidgetKey(appWidgetId: Int) = "lucky_number_widget_student_$appWidgetId"
+
+        fun getThemeWidgetKey(appWidgetId: Int) = "lucky_number_widget_theme_$appWidgetId"
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -71,11 +73,14 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
 
     private fun onUpdate(context: Context, intent: Intent) {
         intent.getIntArrayExtra(EXTRA_APPWIDGET_IDS)?.forEach { appWidgetId ->
+            val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
+            val layoutId = if (savedTheme == 0L) R.layout.widget_luckynumber else R.layout.widget_luckynumber_dark
+
             val luckyNumber = getLuckyNumber(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)
             val appIntent = PendingIntent.getActivity(context, MainView.Section.LUCKY_NUMBER.id,
                 MainActivity.getStartIntent(context, MainView.Section.LUCKY_NUMBER, true), FLAG_UPDATE_CURRENT)
 
-            val remoteView = RemoteViews(context.packageName, R.layout.widget_luckynumber_dark).apply {
+            val remoteView = RemoteViews(context.packageName, layoutId).apply {
                 setTextViewText(R.id.luckyNumberWidgetNumber, luckyNumber?.luckyNumber?.toString() ?: "#")
                 setOnClickPendingIntent(R.id.luckyNumberWidgetContainer, appIntent)
             }
@@ -122,7 +127,10 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
 
     private fun onOptionsChange(context: Context, intent: Intent) {
         intent.extras?.getInt(EXTRA_APPWIDGET_ID)?.let { appWidgetId ->
-            val remoteView = RemoteViews(context.packageName, R.layout.widget_luckynumber_dark)
+            val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
+            val layoutId = if (savedTheme == 0L) R.layout.widget_luckynumber else R.layout.widget_luckynumber_dark
+
+            val remoteView = RemoteViews(context.packageName, layoutId)
 
             setStyles(remoteView, intent)
             appWidgetManager.updateAppWidget(appWidgetId, remoteView)

@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -42,6 +43,20 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
         }
 
         configureAdapter.setOnItemClickListener(presenter::onItemSelect)
+    }
+
+    override fun showThemeDialog() {
+        val items = arrayOf(
+            getString(R.string.widget_timetable_theme_light),
+            getString(R.string.widget_timetable_theme_dark)
+        )
+
+        AlertDialog.Builder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
+            .setTitle(R.string.widget_timetable_theme_title)
+            .setSingleChoiceItems(items, 0) { _, which ->
+                presenter.onThemeSelect(which)
+            }
+            .show()
     }
 
     override fun updateData(data: List<LuckyNumberWidgetConfigureItem>) {
