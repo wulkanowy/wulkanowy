@@ -82,7 +82,7 @@
         android:maxLines="1"
         android:textColor="?android:textColorSecondary"
         android:textSize="13sp"
-        tools:text="Room 22"
+        tools:text="22"
         tools:visibility="gone" />
 
     <TextView
