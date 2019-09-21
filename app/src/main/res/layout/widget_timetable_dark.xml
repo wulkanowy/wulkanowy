@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/widget_timetable_no_items"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         tools:visibility="invisible" />
 </FrameLayout>
