@@ -14,6 +14,7 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_timetable.*
@@ -47,9 +48,9 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
                 timetableItemTeacher.visibility = GONE
 
                 if (lesson.canceled) {
-                    timetableItemDescription.setTextColor(getColorByThemeAttr(holder.view.context, R.attr.colorPrimary))
+                    timetableItemDescription.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorPrimary))
                 } else {
-                    timetableItemDescription.setTextColor(getColorByThemeAttr(holder.view.context, R.attr.colorTimetableChange))
+                    timetableItemDescription.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
                 }
             } else {
                 timetableItemDescription.visibility = GONE
@@ -59,32 +60,32 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
             }
 
             if (lesson.canceled) {
-                timetableItemNumber.setTextColor(getColorByThemeAttr(holder.view.context, R.attr.colorPrimary))
-                timetableItemSubject.setTextColor(getColorByThemeAttr(holder.view.context, R.attr.colorPrimary))
+                timetableItemNumber.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorPrimary))
+                timetableItemSubject.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorPrimary))
             } else {
                 if (lesson.changes || lesson.info.isNotBlank()) {
-                    timetableItemNumber.setTextColor(getColorByThemeAttr(holder.view.context, R.attr.colorTimetableChange))
+                    timetableItemNumber.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
                 } else {
-                    timetableItemNumber.setTextColor(getPrimaryTextColor(holder.view.context))
+                    timetableItemNumber.setTextColor(holder.view.context.getThemeAttrColor(android.R.attr.textColorPrimary))
                 }
 
                 if (lesson.subjectOld.isNotBlank() && lesson.subjectOld != lesson.subject) {
-                    timetableItemSubject.setTextColor(getColorByThemeAttr(holder.view.context, R.attr.colorTimetableChange))
+                    timetableItemSubject.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
                 } else {
-                    timetableItemSubject.setTextColor(getPrimaryTextColor(holder.view.context))
+                    timetableItemSubject.setTextColor(holder.view.context.getThemeAttrColor(android.R.attr.textColorPrimary))
                 }
 
                 if (lesson.roomOld.isNotBlank() && lesson.roomOld != lesson.room) {
-                    timetableItemRoom.setTextColor(getColorByThemeAttr(holder.view.context, R.attr.colorTimetableChange))
+                    timetableItemRoom.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
                 } else {
-                    timetableItemRoom.setTextColor(getSecondaryTextColor(holder.view.context))
+                    timetableItemRoom.setTextColor(holder.view.context.getThemeAttrColor(android.R.attr.textColorSecondary))
                 }
 
 
                 if (lesson.teacherOld.isNotBlank() && lesson.teacherOld != lesson.teacher) {
-                    timetableItemTeacher.setTextColor(getColorByThemeAttr(holder.view.context, R.attr.colorTimetableChange))
+                    timetableItemTeacher.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
                 } else {
-                    timetableItemTeacher.setTextColor(getSecondaryTextColor(holder.view.context))
+                    timetableItemTeacher.setTextColor(holder.view.context.getThemeAttrColor(android.R.attr.textColorPrimary))
                 }
             }
         }
@@ -109,28 +110,5 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
     class ViewHolder(val view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter), LayoutContainer {
         override val containerView: View
             get() = contentView
-    }
-
-    private fun getColorByThemeAttr(context: Context, attr: Int): Int {
-        val typedValue = TypedValue()
-        val theme = context.theme
-        theme.resolveAttribute(attr, typedValue, true)
-        return typedValue.data
-    }
-
-    private fun getPrimaryTextColor(context: Context): Int {
-        val typedValue = TypedValue()
-        val theme = context.theme
-        theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true)
-        val arr = context.theme.obtainStyledAttributes(typedValue.data, intArrayOf(android.R.attr.textColorPrimary))
-        return arr.getColor(0, -1)
-    }
-
-    private fun getSecondaryTextColor(context: Context): Int {
-        val typedValue = TypedValue()
-        val theme = context.theme
-        theme.resolveAttribute(android.R.attr.textColorSecondary, typedValue, true)
-        val arr = context.theme.obtainStyledAttributes(typedValue.data, intArrayOf(android.R.attr.textColorSecondary))
-        return arr.getColor(0, -1)
     }
 }
