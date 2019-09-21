@@ -26,7 +26,7 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView {
     }
 
     override val titleStringId: Int
-        get() = R.string.teachers_title
+        get() = R.string.all_teacher
 
     override val isViewEmpty: Boolean
         get() = teacherAdapter.isEmpty
