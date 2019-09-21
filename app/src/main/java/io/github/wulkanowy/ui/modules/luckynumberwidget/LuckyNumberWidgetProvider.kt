@@ -55,6 +55,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
     lateinit var sharedPref: SharedPrefProvider
 
     companion object {
+
         fun getStudentWidgetKey(appWidgetId: Int) = "lucky_number_widget_student_$appWidgetId"
     }
 
@@ -70,24 +71,23 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
 
     private fun onUpdate(context: Context, intent: Intent) {
         intent.getIntArrayExtra(EXTRA_APPWIDGET_IDS)?.forEach { appWidgetId ->
-            RemoteViews(context.packageName, R.layout.widget_luckynumber_dark).apply {
-                setTextViewText(R.id.luckyNumberWidgetNumber,
-                    getLuckyNumber(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)?.luckyNumber?.toString() ?: "#"
-                )
-                setOnClickPendingIntent(R.id.luckyNumberWidgetContainer,
-                    PendingIntent.getActivity(context, MainView.Section.LUCKY_NUMBER.id,
-                        MainActivity.getStartIntent(context, MainView.Section.LUCKY_NUMBER, true), FLAG_UPDATE_CURRENT))
-            }.also {
-                setStyles(it, intent)
-                appWidgetManager.updateAppWidget(appWidgetId, it)
+            val luckyNumber = getLuckyNumber(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)
+            val appIntent = PendingIntent.getActivity(context, MainView.Section.LUCKY_NUMBER.id,
+                MainActivity.getStartIntent(context, MainView.Section.LUCKY_NUMBER, true), FLAG_UPDATE_CURRENT)
+
+            val remoteView = RemoteViews(context.packageName, R.layout.widget_luckynumber_dark).apply {
+                setTextViewText(R.id.luckyNumberWidgetNumber, luckyNumber?.luckyNumber?.toString() ?: "#")
+                setOnClickPendingIntent(R.id.luckyNumberWidgetContainer, appIntent)
             }
+
+            setStyles(remoteView, intent)
+            appWidgetManager.updateAppWidget(appWidgetId, remoteView)
         }
     }
 
     private fun onDelete(intent: Intent) {
-        intent.getIntExtra(EXTRA_APPWIDGET_ID, 0).let {
-            if (it != 0) sharedPref.delete(getStudentWidgetKey(it))
-        }
+        val appWidgetId = intent.getIntExtra(EXTRA_APPWIDGET_ID, 0)
+        if (appWidgetId != 0) sharedPref.delete(getStudentWidgetKey(appWidgetId))
     }
 
     private fun getLuckyNumber(studentId: Long, appWidgetId: Int): LuckyNumber? {
@@ -96,19 +96,17 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
                 .filter { true }
                 .flatMap { studentRepository.getSavedStudents().toMaybe() }
                 .flatMap { students ->
-                    students.singleOrNull { student -> student.id == studentId }
-                        .let { student ->
-                            when {
-                                student != null -> Maybe.just(student)
-                                studentId != 0L -> {
-                                    studentRepository.isCurrentStudentSet()
-                                        .filter { true }
-                                        .flatMap { studentRepository.getCurrentStudent(false).toMaybe() }
-                                        .doOnSuccess { sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id) }
-                                }
-                                else -> Maybe.empty()
-                            }
+                    val student = students.singleOrNull { student -> student.id == studentId }
+                    when {
+                        student != null -> Maybe.just(student)
+                        studentId != 0L -> {
+                            studentRepository.isCurrentStudentSet()
+                                .filter { true }
+                                .flatMap { studentRepository.getCurrentStudent(false).toMaybe() }
+                                .doOnSuccess { sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id) }
                         }
+                        else -> Maybe.empty()
+                    }
                 }
                 .flatMap { semesterRepository.getCurrentSemester(it).toMaybe() }
                 .flatMap { luckyNumberRepository.getLuckyNumber(it) }
@@ -123,11 +121,11 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
     }
 
     private fun onOptionsChange(context: Context, intent: Intent) {
-        intent.extras?.let { extras ->
-            RemoteViews(context.packageName, R.layout.widget_luckynumber_dark).apply {
-                setStyles(this, intent)
-                appWidgetManager.updateAppWidget(extras.getInt(EXTRA_APPWIDGET_ID), this)
-            }
+        intent.extras?.getInt(EXTRA_APPWIDGET_ID)?.let { appWidgetId ->
+            val remoteView = RemoteViews(context.packageName, R.layout.widget_luckynumber_dark)
+
+            setStyles(remoteView, intent)
+            appWidgetManager.updateAppWidget(appWidgetId, remoteView)
         }
     }
 
@@ -144,7 +142,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
             // 1x1
             maxWidth < 150 && maxHeight < 110 -> {
                 Timber.d("Lucky number widget size: 1x1")
-                views.run {
+                with(views) {
                     setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
                     setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
                     setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
@@ -154,7 +152,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
             // 1x2
             maxWidth < 150 && maxHeight > 110 -> {
                 Timber.d("Lucky number widget size: 1x2")
-                views.run {
+                with(views) {
                     setViewVisibility(R.id.luckyNumberWidgetImageTop, VISIBLE)
                     setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
                     setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
@@ -164,7 +162,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
             // 2x1
             maxWidth >= 150 && maxHeight <= 110 -> {
                 Timber.d("Lucky number widget size: 2x1")
-                views.run {
+                with(views) {
                     setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
                     setViewVisibility(R.id.luckyNumberWidgetImageLeft, VISIBLE)
                     setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
@@ -174,7 +172,7 @@ class LuckyNumberWidgetProvider : BroadcastReceiver() {
             // 2x2 and bigger
             else -> {
                 Timber.d("Lucky number widget size: 2x2 and bigger")
-                views.run {
+                with(views) {
                     setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
                     setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
                     setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)

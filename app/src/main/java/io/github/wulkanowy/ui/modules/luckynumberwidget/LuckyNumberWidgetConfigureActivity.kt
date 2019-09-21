@@ -36,11 +36,12 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
     }
 
     override fun initView() {
-        widgetConfigureRecycler.apply {
+        with(widgetConfigureRecycler) {
             adapter = configureAdapter
             layoutManager = SmoothScrollLinearLayoutManager(context)
         }
-        configureAdapter.setOnItemClickListener { presenter.onItemSelect(it) }
+
+        configureAdapter.setOnItemClickListener(presenter::onItemSelect)
     }
 
     override fun updateData(data: List<LuckyNumberWidgetConfigureItem>) {

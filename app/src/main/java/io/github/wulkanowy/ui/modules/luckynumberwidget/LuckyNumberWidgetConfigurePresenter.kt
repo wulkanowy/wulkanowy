@@ -50,11 +50,11 @@ class LuckyNumberWidgetConfigurePresenter @Inject constructor(
     }
 
     private fun registerStudent(student: Student) {
-        appWidgetId?.also {
-            sharedPref.putLong(getStudentWidgetKey(it), student.id)
-            view?.apply {
-                updateLuckyNumberWidget(it)
-                setSuccessResult(it)
+        appWidgetId?.let { id ->
+            sharedPref.putLong(getStudentWidgetKey(id), student.id)
+            view?.run {
+                updateLuckyNumberWidget(id)
+                setSuccessResult(id)
             }
         }
         view?.finishView()
