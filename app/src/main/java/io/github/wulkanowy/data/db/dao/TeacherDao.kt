@@ -18,6 +18,6 @@ interface TeacherDao {
     @Delete
     fun deleteAll(devices: List<Teacher>)
 
-    @Query("SELECT * FROM Teachers WHERE student_id = :studentId")
-    fun loadAll(studentId: Int): Maybe<List<Teacher>>
+    @Query("SELECT * FROM Teachers WHERE student_id = :studentId AND class_id = :classId")
+    fun loadAll(studentId: Int, classId: Int): Maybe<List<Teacher>>
 }

@@ -10,6 +10,7 @@ class Migration16 : Migration(15, 16) {
             CREATE TABLE IF NOT EXISTS Teachers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 student_id INTEGER NOT NULL,
+                class_id INTEGER NOT NULL,
                 subject TEXT NOT NULL,
                 name TEXT NOT NULL,
                 short_name TEXT NOT NULL

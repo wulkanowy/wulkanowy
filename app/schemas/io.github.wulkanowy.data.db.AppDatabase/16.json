@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 16,
-    "identityHash": "75ac5b73e540806f45d11a01532cb74e",
+    "identityHash": "92490bb628715605f7a6776d0e730eae",
     "entities": [
       {
         "tableName": "Students",
@@ -1422,7 +1422,7 @@
       },
       {
         "tableName": "Teachers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `name` TEXT NOT NULL, `short_name` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `name` TEXT NOT NULL, `short_name` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -1433,6 +1433,12 @@
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "classId",
+            "columnName": "class_id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1468,7 +1474,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '75ac5b73e540806f45d11a01532cb74e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '92490bb628715605f7a6776d0e730eae')"
     ]
   }
 }

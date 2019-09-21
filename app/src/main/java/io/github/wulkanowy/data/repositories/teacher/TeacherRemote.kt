@@ -19,7 +19,8 @@ class TeacherRemote @Inject constructor(private val api: Api) {
                         studentId = semester.studentId,
                         name = it.name,
                         subject = it.subject,
-                        shortName = it.short
+                        shortName = it.short,
+                        classId = semester.classId
                     )
                 }
             }

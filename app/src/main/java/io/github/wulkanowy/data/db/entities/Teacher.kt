@@ -11,6 +11,9 @@ data class Teacher(
     @ColumnInfo(name = "student_id")
     val studentId: Int,
 
+    @ColumnInfo(name = "class_id")
+    val classId: Int,
+
     val subject: String,
 
     val name: String,

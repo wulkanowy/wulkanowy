@@ -16,6 +16,6 @@ class TeacherLocal @Inject constructor(private val teacherDb: TeacherDao)  {
     }
 
     fun getTeachers(semester: Semester): Maybe<List<Teacher>> {
-        return teacherDb.loadAll(semester.studentId).filter { it.isNotEmpty() }
+        return teacherDb.loadAll(semester.studentId, semester.classId).filter { it.isNotEmpty() }
     }
 }
