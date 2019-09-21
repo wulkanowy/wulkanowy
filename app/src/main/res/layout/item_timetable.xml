@@ -116,7 +116,7 @@
         android:layout_marginBottom="4dp"
         android:layout_toEndOf="@+id/timetableItemTimeStart"
         android:layout_toRightOf="@+id/timetableItemTimeStart"
-        android:textColor="@color/timetable_change_color"
+        android:textColor="?colorTimetableChange"
         android:textSize="13sp"
         tools:text="Lekcja odwołana: uczniowie zwolnieni do domu"
         tools:visibility="visible"/>
