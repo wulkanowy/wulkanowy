@@ -62,22 +62,22 @@
         android:layout_gravity="bottom"
         android:elevation="8dp"
         android:orientation="horizontal"
+        android:gravity="center"
         tools:ignore="UnusedAttribute">
-
-        <com.google.android.material.button.MaterialButton
+        <ImageButton
             android:id="@+id/timetablePreviousButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:iconGravity="start"
-            android:layout_gravity="start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="start|center_vertical"
-            android:insetLeft="4dp"
-            android:insetTop="4dp"
-            android:insetRight="4dp"
-            android:insetBottom="4dp"
-            app:icon="@drawable/ic_chevron_left" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingLeft="12dp"
+            android:paddingTop="8dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="8dp"
+            android:scaleType="fitStart"
+            android:tint="?colorPrimary"
+            app:srcCompat="@drawable/ic_chevron_left"
+            android:contentDescription="@string/all_prev"/>
 
         <TextView
             android:id="@+id/timetableNavDate"
@@ -88,19 +88,19 @@
             android:text="@string/app_name"
             android:textSize="20sp" />
 
-        <com.google.android.material.button.MaterialButton
+        <ImageButton
             android:id="@+id/timetableNextButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:iconGravity="end"
-            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="end|center_vertical"
-            android:insetLeft="4dp"
-            android:insetTop="4dp"
-            android:insetRight="4dp"
-            android:insetBottom="4dp"
-            app:icon="@drawable/ic_chevron_right" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingLeft="12dp"
+            android:paddingTop="8dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="8dp"
+            android:scaleType="fitEnd"
+            android:tint="?colorPrimary"
+            app:srcCompat="@drawable/ic_chevron_right"
+            android:contentDescription="@string/all_next" />
     </io.github.wulkanowy.ui.widgets.MaterialLinearLayout>
 </FrameLayout>
