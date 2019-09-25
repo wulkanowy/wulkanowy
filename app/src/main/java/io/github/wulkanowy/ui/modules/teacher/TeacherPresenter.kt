@@ -35,6 +35,7 @@ class TeacherPresenter @Inject constructor(
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { teacherRepository.getTeachers(it, forceRefresh) }
+            .map { it.filter { teacher ->  teacher.name != null && teacher.subject != null } }
             .map { items -> items.map { TeacherItem(it) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
