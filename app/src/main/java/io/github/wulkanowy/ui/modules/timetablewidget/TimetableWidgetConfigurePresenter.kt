@@ -48,6 +48,10 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
         registerStudent(selectedStudent)
     }
 
+    fun onDismissThemeView(){
+        view?.finishView()
+    }
+
     private fun loadData() {
         disposable.add(studentRepository.getSavedStudents(false)
             .map { it to appWidgetId?.let { id -> sharedPref.getLong(getStudentWidgetKey(id), 0) } }

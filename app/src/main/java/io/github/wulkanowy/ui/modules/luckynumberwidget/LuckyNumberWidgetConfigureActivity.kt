@@ -26,6 +26,8 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
     @Inject
     override lateinit var presenter: LuckyNumberWidgetConfigurePresenter
 
+    private var dialog: AlertDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(RESULT_CANCELED)
@@ -51,9 +53,10 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
             getString(R.string.widget_timetable_theme_dark)
         )
 
-        AlertDialog.Builder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
+       dialog =  AlertDialog.Builder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
             .setTitle(R.string.widget_timetable_theme_title)
-            .setSingleChoiceItems(items, 0) { _, which ->
+           .setOnDismissListener { presenter.onDismissThemeView() }
+            .setSingleChoiceItems(items, -1) { _, which ->
                 presenter.onThemeSelect(which)
             }
             .show()
@@ -85,5 +88,10 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
 
     override fun openLoginView() {
         startActivity(LoginActivity.getStartIntent(this))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dialog?.dismiss()
     }
 }

@@ -28,6 +28,8 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
     @Inject
     override lateinit var presenter: TimetableWidgetConfigurePresenter
 
+    private var dialog: AlertDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(RESULT_CANCELED)
@@ -53,9 +55,10 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
             getString(R.string.widget_timetable_theme_dark)
         )
 
-        AlertDialog.Builder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
+        dialog = AlertDialog.Builder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
             .setTitle(R.string.widget_timetable_theme_title)
-            .setSingleChoiceItems(items, 0) { _, which ->
+            .setOnDismissListener { presenter.onDismissThemeView() }
+            .setSingleChoiceItems(items, -1) { _, which ->
                 presenter.onThemeSelect(which)
             }
             .show()
@@ -87,5 +90,10 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
 
     override fun openLoginView() {
         startActivity(LoginActivity.getStartIntent(this))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dialog?.dismiss()
     }
 }
