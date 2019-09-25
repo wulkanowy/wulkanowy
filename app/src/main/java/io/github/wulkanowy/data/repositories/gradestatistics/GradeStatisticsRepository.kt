@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories.gradestatistics
 
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
+import io.github.wulkanowy.data.db.entities.GradePointsStatistics
 import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.utils.uniqueSubtract
@@ -30,5 +31,20 @@ class GradeStatisticsRepository @Inject constructor(
                             local.saveGradesStatistics(new.uniqueSubtract(old))
                         }
                 }.flatMap { local.getGradesStatistics(semester, isSemester, subjectName).toSingle(emptyList()) })
+    }
+
+    fun getGradesPointsStatistics(semester: Semester, subjectName: String, forceRefresh: Boolean): Single<List<GradePointsStatistics>> {
+        return local.getGradesPointsStatistics(semester, subjectName).filter { !forceRefresh }
+            .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
+                .flatMap {
+                    if (it) remote.getGradePointsStatistics(semester)
+                    else Single.error(UnknownHostException())
+                }.flatMap { new ->
+                    local.getGradesPointsStatistics(semester).toSingle(emptyList())
+                        .doOnSuccess { old ->
+                            local.deleteGradesPointsStatistics(old.uniqueSubtract(new))
+                            local.saveGradesPointsStatistics(new.uniqueSubtract(old))
+                        }
+                }.flatMap { local.getGradesPointsStatistics(semester, subjectName).toSingle(emptyList()) })
     }
 }
