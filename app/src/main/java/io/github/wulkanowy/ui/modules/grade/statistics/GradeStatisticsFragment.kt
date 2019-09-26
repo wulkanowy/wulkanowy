@@ -67,6 +67,11 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         1 to R.color.grade_material_one
     )
 
+    private val gradePointsColors = listOf(
+        Color.parseColor("#37c69c"),
+        Color.parseColor("#d8b12a")
+    )
+
     private val gradeLabels = listOf(
         "6, 6-", "5, 5-, 5+", "4, 4-, 4+", "3, 3-, 3+", "2, 2-, 2+", "1, 1+"
     )
@@ -174,10 +179,7 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
                 valueFormatter = object : ValueFormatter() {
                     override fun getBarLabel(barEntry: BarEntry) = "${barEntry.y}%"
                 }
-                setColors(
-                    Color.parseColor("#d8b12a"),
-                    Color.parseColor("#37c69c")
-                )
+                colors = gradePointsColors
             }).apply {
                 barWidth = 0.5f
                 setFitBars(true)
@@ -193,12 +195,12 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
                 setCustom(listOf(
                     LegendEntry().apply {
                         label = "Średnia klasy"
-                        formColor = Color.parseColor("#d8b12a")
+                        formColor = gradePointsColors[0]
                         form = Legend.LegendForm.SQUARE
                     },
                     LegendEntry().apply {
                         label = "Uczeń"
-                        formColor = Color.parseColor("#37c69c")
+                        formColor = gradePointsColors[1]
                         form = Legend.LegendForm.SQUARE
                     }
                 ))
