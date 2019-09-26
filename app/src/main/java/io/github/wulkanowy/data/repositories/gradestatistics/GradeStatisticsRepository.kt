@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.db.entities.GradePointsStatistics
 import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.utils.uniqueSubtract
+import io.reactivex.Maybe
 import io.reactivex.Single
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -33,18 +34,18 @@ class GradeStatisticsRepository @Inject constructor(
                 }.flatMap { local.getGradesStatistics(semester, isSemester, subjectName).toSingle(emptyList()) })
     }
 
-    fun getGradesPointsStatistics(semester: Semester, subjectName: String, forceRefresh: Boolean): Single<List<GradePointsStatistics>> {
+    fun getGradesPointsStatistics(semester: Semester, subjectName: String, forceRefresh: Boolean): Maybe<GradePointsStatistics> {
         return local.getGradesPointsStatistics(semester, subjectName).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
-                .flatMap {
-                    if (it) remote.getGradePointsStatistics(semester)
-                    else Single.error(UnknownHostException())
+                .flatMapMaybe {
+                    if (it) remote.getGradePointsStatistics(semester).toMaybe()
+                    else Maybe.error(UnknownHostException())
                 }.flatMap { new ->
-                    local.getGradesPointsStatistics(semester).toSingle(emptyList())
+                    local.getGradesPointsStatistics(semester).defaultIfEmpty(emptyList())
                         .doOnSuccess { old ->
                             local.deleteGradesPointsStatistics(old.uniqueSubtract(new))
                             local.saveGradesPointsStatistics(new.uniqueSubtract(old))
                         }
-                }.flatMap { local.getGradesPointsStatistics(semester, subjectName).toSingle(emptyList()) })
+                }.flatMap { local.getGradesPointsStatistics(semester, subjectName) })
     }
 }

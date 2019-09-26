@@ -114,7 +114,7 @@ class GradeStatisticsPresenter @Inject constructor(
     private fun loadDataByType(semesterId: Int, subjectName: String, type: ViewType, forceRefresh: Boolean = false) {
         currentSubjectName = subjectName
         currentType = type
-        when(type) {
+        when (type) {
             ViewType.SEMESTER -> loadData(semesterId, subjectName, true, forceRefresh)
             ViewType.PARTIAL -> loadData(semesterId, subjectName, false, forceRefresh)
             ViewType.POINTS -> loadPointsData(semesterId, subjectName, forceRefresh)
@@ -157,7 +157,7 @@ class GradeStatisticsPresenter @Inject constructor(
         Timber.i("Loading grade points stats data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
-            .flatMap { gradeStatisticsRepository.getGradesPointsStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, forceRefresh) }
+            .flatMapMaybe { gradeStatisticsRepository.getGradesPointsStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, forceRefresh) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {
@@ -171,15 +171,22 @@ class GradeStatisticsPresenter @Inject constructor(
             .subscribe({
                 Timber.i("Loading grade points stats result: Success")
                 view?.run {
-                    showEmpty(it.isEmpty())
-                    showContent(it.isNotEmpty())
-                    updateBarData(it.singleOrNull(), preferencesRepository.gradeColorTheme)
+                    showEmpty(false)
+                    showContent(true)
+                    updateBarData(it, preferencesRepository.gradeColorTheme)
                 }
-                analytics.logEvent("load_grade_points_statistics", "items" to it.size, "force_refresh" to forceRefresh)
-            }) {
+                analytics.logEvent("load_grade_points_statistics", "force_refresh" to forceRefresh)
+            }, {
                 Timber.e("Loading grade points stats result: An exception occurred")
                 view?.run { showEmpty(isBarViewEmpty) }
                 errorHandler.dispatch(it)
+            }, {
+                Timber.d("Loading grade points stats result: No point stats found")
+                view?.run {
+                    showContent(false)
+                    showEmpty(true)
+                }
             })
+        )
     }
 }

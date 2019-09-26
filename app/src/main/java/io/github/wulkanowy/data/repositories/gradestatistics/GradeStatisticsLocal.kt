@@ -32,13 +32,14 @@ class GradeStatisticsLocal @Inject constructor(
         else gradeStatisticsDb.loadSubject(semester.semesterId, semester.studentId, subjectName, isSemester)).filter { it.isNotEmpty() }
     }
 
-    fun getGradesPointsStatistics(semester: Semester, subjectName: String): Maybe<List<GradePointsStatistics>> {
+    fun getGradesPointsStatistics(semester: Semester, subjectName: String): Maybe<GradePointsStatistics> {
         return when (subjectName) {
-            "Wszystkie" -> gradePointsStatisticsDb.loadAll(semester.semesterId, semester.studentId).map { list ->
-                listOf(GradePointsStatistics(semester.studentId, semester.semesterId, subjectName,
+            "Wszystkie" -> gradePointsStatisticsDb.loadAll(semester.semesterId, semester.studentId).flatMap { list ->
+                if (list.isEmpty()) return@flatMap Maybe.empty<GradePointsStatistics>()
+                Maybe.just(GradePointsStatistics(semester.studentId, semester.semesterId, subjectName,
                     list.fold(.0) { acc, e -> acc + e.others }, list.fold(.0) { acc, e -> acc + e.student }))
             }
-            else -> gradePointsStatisticsDb.loadSubject(semester.semesterId, semester.studentId, subjectName).filter { it.isNotEmpty() }
+            else -> gradePointsStatisticsDb.loadSubject(semester.semesterId, semester.studentId, subjectName)
         }
     }
 
