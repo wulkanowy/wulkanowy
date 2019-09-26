@@ -93,6 +93,7 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
 
         with(gradeStatisticsChartPoints) {
             description.isEnabled = false
+
             animateXY(1000, 1000)
             legend.textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
         }
@@ -171,6 +172,7 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
 
         val dataset = BarDataSet(items ?: listOf(), "Legenda").apply {
             valueTextSize = 12f
+            valueTextColor = requireContext().getThemeAttrColor(android.R.attr.textColorPrimary)
             valueFormatter = (object : ValueFormatter() {
                 override fun getBarLabel(barEntry: BarEntry): String {
                     return "${barEntry.y}%"
@@ -189,6 +191,12 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
                 setFitBars(true)
             }
             setTouchEnabled(false)
+            xAxis.setDrawLabels(false)
+            xAxis.setDrawGridLines(false)
+            with(requireContext().getThemeAttrColor(android.R.attr.textColorPrimary)) {
+                axisLeft.textColor = this
+                axisRight.textColor = this
+            }
             legend.apply {
                 setCustom(listOf(
                     LegendEntry().apply {
