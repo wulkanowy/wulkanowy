@@ -173,11 +173,9 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         val dataset = BarDataSet(items ?: listOf(), "Legenda").apply {
             valueTextSize = 12f
             valueTextColor = requireContext().getThemeAttrColor(android.R.attr.textColorPrimary)
-            valueFormatter = (object : ValueFormatter() {
-                override fun getBarLabel(barEntry: BarEntry): String {
-                    return "${barEntry.y}%"
-                }
-            })
+            valueFormatter = object : ValueFormatter() {
+                override fun getBarLabel(barEntry: BarEntry) = "${barEntry.y}%"
+            }
             setColors(
                 Color.parseColor("#d8b12a"),
                 Color.parseColor("#37c69c")
