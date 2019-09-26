@@ -173,7 +173,7 @@ class GradeStatisticsPresenter @Inject constructor(
                 view?.run {
                     showEmpty(false)
                     showContent(true)
-                    updateBarData(it, preferencesRepository.gradeColorTheme)
+                    updateBarData(it)
                 }
                 analytics.logEvent("load_grade_points_statistics", "force_refresh" to forceRefresh)
             }, {

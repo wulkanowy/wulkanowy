@@ -160,31 +160,25 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         }
     }
 
-    override fun updateBarData(item: GradePointsStatistics?, theme: String) {
+    override fun updateBarData(item: GradePointsStatistics) {
         gradeStatisticsChart.visibility = View.GONE
-
-        val items = item?.run {
-            listOf(
-                BarEntry(1f, others.toFloat()),
-                BarEntry(2f, student.toFloat())
-            )
-        }
-
-        val dataset = BarDataSet(items ?: listOf(), "Legenda").apply {
-            valueTextSize = 12f
-            valueTextColor = requireContext().getThemeAttrColor(android.R.attr.textColorPrimary)
-            valueFormatter = object : ValueFormatter() {
-                override fun getBarLabel(barEntry: BarEntry) = "${barEntry.y}%"
-            }
-            setColors(
-                Color.parseColor("#d8b12a"),
-                Color.parseColor("#37c69c")
-            )
-        }
 
         with(gradeStatisticsChartPoints) {
             visibility = View.VISIBLE
-            data = BarData(dataset).apply {
+            data = BarData(BarDataSet(listOf(
+                BarEntry(1f, item.others.toFloat()),
+                BarEntry(2f, item.student.toFloat())
+            ), "Legenda").apply {
+                valueTextSize = 12f
+                valueTextColor = requireContext().getThemeAttrColor(android.R.attr.textColorPrimary)
+                valueFormatter = object : ValueFormatter() {
+                    override fun getBarLabel(barEntry: BarEntry) = "${barEntry.y}%"
+                }
+                setColors(
+                    Color.parseColor("#d8b12a"),
+                    Color.parseColor("#37c69c")
+                )
+            }).apply {
                 barWidth = 0.5f
                 setFitBars(true)
             }

@@ -16,7 +16,7 @@ interface GradeStatisticsView : BaseView {
 
     fun updatePieData(items: List<GradeStatistics>, theme: String)
 
-    fun updateBarData(item: GradePointsStatistics?, theme: String)
+    fun updateBarData(item: GradePointsStatistics)
 
     fun showSubjects(show: Boolean)
 
