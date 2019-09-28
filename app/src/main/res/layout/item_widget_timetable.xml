@@ -27,7 +27,7 @@
             android:includeFontPadding="false"
             android:maxLength="2"
             android:textSize="32sp"
-            android:textColor="@android:color/primary_text_light"
+            android:textColor="@android:color/black"
             tools:text="5" />
 
         <TextView
@@ -44,7 +44,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="15sp"
-            android:textColor="@android:color/primary_text_light"
+            android:textColor="@android:color/black"
             tools:text="@tools:sample/lorem" />
 
         <TextView
