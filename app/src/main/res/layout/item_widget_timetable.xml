@@ -14,8 +14,8 @@
         android:background="@android:color/white"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
-        android:paddingLeft="8dp"
-        android:paddingStart="8dp"
+        android:paddingLeft="6dp"
+        android:paddingStart="6dp"
         android:paddingEnd="12dp"
         android:paddingRight="12dp">
 
@@ -26,7 +26,7 @@
             android:gravity="center"
             android:includeFontPadding="false"
             android:maxLength="2"
-            android:textSize="32sp"
+            android:textSize="28sp"
             android:textColor="@android:color/black"
             tools:text="5" />
 
@@ -53,8 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/timetableWidgetItemNumber"
             android:layout_toRightOf="@id/timetableWidgetItemNumber"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
             android:layout_alignTop="@id/timetableWidgetItemNumber"
             android:maxLines="1"
             android:textColor="@android:color/black"
@@ -66,8 +66,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/timetableWidgetItemNumber"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
             android:layout_toEndOf="@id/timetableWidgetItemNumber"
             android:layout_toRightOf="@id/timetableWidgetItemNumber"
             android:maxLines="1"
