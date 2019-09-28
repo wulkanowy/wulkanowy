@@ -107,14 +107,14 @@
         android:layout_alignTop="@+id/timetableItemTimeFinish"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/timetableItemTimeStart"
         android:layout_toRightOf="@+id/timetableItemTimeStart"
         android:textColor="?colorTimetableChange"
         android:textSize="13sp"
         tools:text="Lekcja odwołana: uczniowie zwolnieni do domu"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
 </RelativeLayout>

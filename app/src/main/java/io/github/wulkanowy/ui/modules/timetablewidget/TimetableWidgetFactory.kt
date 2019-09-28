@@ -21,6 +21,7 @@ import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Co
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getStudentWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getThemeWidgetKey
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toFormattedString
 import io.reactivex.Maybe
 import org.threeten.bp.LocalDate
@@ -93,31 +94,62 @@ class TimetableWidgetFactory(
 
             setTextViewText(R.id.timetableWidgetItemSubject, lesson.subject)
             setTextViewText(R.id.timetableWidgetItemNumber, lesson.number.toString())
-            setTextViewText(R.id.timetableWidgetItemTime, lesson.start.toFormattedString("HH:mm") +
-                " - ${lesson.end.toFormattedString("HH:mm")}")
+            setTextViewText(R.id.timetableWidgetItemTimeStart, lesson.start.toFormattedString("HH:mm"))
+            setTextViewText(R.id.timetableWidgetItemTimeFinish, lesson.end.toFormattedString("HH:mm"))
 
-            if (lesson.room.isNotBlank()) {
-                setTextViewText(R.id.timetableWidgetItemRoom, "${context.getString(R.string.timetable_room)} ${lesson.room}")
-            } else setTextViewText(R.id.timetableWidgetItemRoom, "")
-
-            if (lesson.info.isNotBlank()) {
+            if (lesson.info.isNotBlank() && !lesson.changes) {
+                setTextViewText(R.id.timetableWidgetItemDescription, lesson.info)
                 setViewVisibility(R.id.timetableWidgetItemDescription, VISIBLE)
-                setTextViewText(R.id.timetableWidgetItemDescription,
-                    with(lesson) {
-                        when (true) {
-                            canceled && !changes -> "Lekcja odwołana: ${lesson.info}"
-                            changes && teacher.isNotBlank() -> "Zastępstwo: ${lesson.teacher}"
-                            changes && teacher.isBlank() -> "Zastępstwo, ${lesson.info.decapitalize()}"
-                            else -> info.capitalize()
-                        }
-                    })
-            } else setViewVisibility(R.id.timetableWidgetItemDescription, GONE)
+                setViewVisibility(R.id.timetableWidgetItemRoom, GONE)
+                setViewVisibility(R.id.timetableWidgetItemTeacher, GONE)
+            } else {
+                setViewVisibility(R.id.timetableWidgetItemDescription, GONE)
+                setViewVisibility(R.id.timetableWidgetItemRoom, VISIBLE)
+                setViewVisibility(R.id.timetableWidgetItemTeacher, VISIBLE)
+            }
 
             if (lesson.canceled) {
                 setInt(R.id.timetableWidgetItemSubject, "setPaintFlags",
                     STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG)
+                setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(R.color.colorPrimary))
+                setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(R.color.colorPrimary))
+                setTextColor(R.id.timetableWidgetItemDescription, context.getCompatColor(R.color.colorPrimary))
             } else {
                 setInt(R.id.timetableWidgetItemSubject, "setPaintFlags", ANTI_ALIAS_FLAG)
+                setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(android.R.color.black))
+                setTextColor(R.id.timetableWidgetItemDescription, context.getCompatColor(R.color.timetable_change_dark))
+
+                if (lesson.changes || (lesson.info.isNotBlank() && !lesson.canceled)) {
+                    setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(R.color.timetable_change_dark))
+                } else {
+                    setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(android.R.color.black))
+                }
+
+                if (lesson.subjectOld.isNotBlank() && lesson.subject != lesson.subjectOld) {
+                    setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(R.color.timetable_change_dark))
+                } else {
+                    setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(android.R.color.black))
+                }
+
+                var teacherChange: Boolean = lesson.teacherOld.isNotBlank() && lesson.teacher != lesson.teacherOld
+
+                if (lesson.room.isNotBlank()) {
+                    if (teacherChange) {
+                        setTextViewText(R.id.timetableWidgetItemRoom, lesson.room)
+                    } else {
+                        setTextViewText(R.id.timetableWidgetItemRoom, "${context.getString(R.string.timetable_room)} ${lesson.room}")
+                    }
+
+                    if (lesson.roomOld.isNotBlank() && lesson.room != lesson.roomOld) {
+                        setTextColor(R.id.timetableWidgetItemRoom, context.getCompatColor(R.color.timetable_change_dark))
+                    } else {
+                        setTextColor(R.id.timetableWidgetItemRoom, context.getCompatColor(android.R.color.black))
+                    }
+                } else setTextViewText(R.id.timetableWidgetItemRoom, "")
+
+                if (teacherChange) {
+                    setTextViewText(R.id.timetableWidgetItemTeacher, lesson.teacher)
+                } else setTextViewText(R.id.timetableWidgetItemTeacher, "")
             }
 
             setOnClickFillInIntent(R.id.timetableWidgetItemContainer, Intent())
