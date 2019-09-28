@@ -154,7 +154,7 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
             presenter.onDateSet(year, month + 1, dayOfMonth)
         }
         val datePickerDialog = DatePickerDialog(requireContext(), dateSetListener,
-            currentDate.year - 1, currentDate.monthValue, currentDate.dayOfMonth)
+            currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
 
         datePickerDialog.datePicker.maxDate = LocalDate.of(baseDate.year, 12, 31).toDate().time
         datePickerDialog.datePicker.minDate = LocalDate.of(baseDate.year, 1, 1).toDate().time
