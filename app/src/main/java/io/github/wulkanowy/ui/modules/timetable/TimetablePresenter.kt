@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetable
 
+import android.app.DatePickerDialog
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -16,6 +17,7 @@ import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
+import org.threeten.bp.LocalDate.of
 import org.threeten.bp.LocalDate.ofEpochDay
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -51,6 +53,15 @@ class TimetablePresenter @Inject constructor(
 
     fun onNextDay() {
         loadData(currentDate.nextSchoolDay)
+        reloadView()
+    }
+
+    fun onPickDate() {
+        view?.showDatePickerDialog(currentDate, baseDate)
+    }
+
+    fun onDateSet(year: Int, month: Int, day: Int) {
+        loadData(of(year, month, day))
         reloadView()
     }
 

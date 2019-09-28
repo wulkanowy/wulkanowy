@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetable
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -12,6 +13,7 @@ import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
+import io.github.wulkanowy.api.toDate
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
@@ -20,6 +22,8 @@ import io.github.wulkanowy.ui.modules.timetable.completed.CompletedLessonsFragme
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_timetable.*
+import org.threeten.bp.LocalDate
+import java.util.Date
 import javax.inject.Inject
 
 class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
@@ -74,6 +78,7 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
 
         timetableSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
         timetablePreviousButton.setOnClickListener { presenter.onPreviousDay() }
+        timetableNavDate.setOnClickListener {presenter.onPickDate() }
         timetableNextButton.setOnClickListener { presenter.onNextDay() }
 
         timetableNavContainer.setElevationCompat(requireContext().dpToPx(8f))
@@ -142,6 +147,16 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
 
     override fun showTimetableDialog(lesson: Timetable) {
         (activity as? MainActivity)?.showDialogFragment(TimetableDialog.newInstance(lesson))
+    }
+
+    override fun showDatePickerDialog(currentDate: LocalDate, baseDate: LocalDate) {
+        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            presenter.onDateSet(year, month + 1, dayOfMonth)
+        }
+        val datePickerDialog = DatePickerDialog(requireContext(), dateSetListener,
+            currentDate.year - 1, currentDate.monthValue, currentDate.dayOfMonth)
+
+        datePickerDialog.show()
     }
 
     override fun openCompletedLessonsView() {
