@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.attendance
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,14 +7,15 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
-import io.github.wulkanowy.api.toDate
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.utils.SchooldaysRangeLimiter
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -149,13 +149,12 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
         val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             presenter.onDateSet(year, month + 1, dayOfMonth)
         }
-        val datePickerDialog = DatePickerDialog(requireContext(), dateSetListener,
+        val datePickerDialog = DatePickerDialog.newInstance(dateSetListener,
             currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
 
-        datePickerDialog.datePicker.maxDate = LocalDate.of(baseDate.year, 12, 31).toDate().time
-        datePickerDialog.datePicker.minDate = LocalDate.of(baseDate.year, 1, 1).toDate().time
+        datePickerDialog.setDateRangeLimiter(SchooldaysRangeLimiter(baseDate.year))
 
-        datePickerDialog.show()
+        datePickerDialog.show(requireFragmentManager(), "Datepickerdialog")
     }
 
     override fun openSummaryView() {

@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.timetable
 
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -13,9 +12,9 @@ import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
-import io.github.wulkanowy.api.toDate
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.utils.SchooldaysRangeLimiter
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.timetable.completed.CompletedLessonsFragment
@@ -149,16 +148,15 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate, baseDate: LocalDate) {
-        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        val dateSetListener = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             presenter.onDateSet(year, month + 1, dayOfMonth)
         }
-        val datePickerDialog = DatePickerDialog(requireContext(), dateSetListener,
+        val datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(dateSetListener,
             currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
 
-        datePickerDialog.datePicker.maxDate = LocalDate.of(baseDate.year, 12, 31).toDate().time
-        datePickerDialog.datePicker.minDate = LocalDate.of(baseDate.year, 1, 1).toDate().time
+        datePickerDialog.setDateRangeLimiter(SchooldaysRangeLimiter(baseDate.year))
 
-        datePickerDialog.show()
+        datePickerDialog.show(requireFragmentManager(), "Datepickerdialog")
     }
 
     override fun openCompletedLessonsView() {
