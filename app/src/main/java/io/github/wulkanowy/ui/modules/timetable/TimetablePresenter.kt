@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.timetable
 
-import android.app.DatePickerDialog
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository

@@ -23,7 +23,6 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_timetable.*
 import org.threeten.bp.LocalDate
-import java.util.Date
 import javax.inject.Inject
 
 class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,

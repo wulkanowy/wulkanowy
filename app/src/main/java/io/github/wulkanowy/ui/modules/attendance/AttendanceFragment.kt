@@ -22,7 +22,6 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_attendance.*
-import kotlinx.android.synthetic.main.fragment_timetable.*
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
