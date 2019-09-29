@@ -108,7 +108,7 @@ class TimetableWidgetFactory(
             updateDescription(this, lesson)
 
             if (lesson.canceled) {
-                updateStylesCanceled(this, lesson)
+                updateStylesCanceled(this)
             } else {
                 updateStylesNotCanceled(this, lesson)
             }
@@ -132,7 +132,7 @@ class TimetableWidgetFactory(
         }
     }
 
-    private fun updateStylesCanceled(remoteViews: RemoteViews, lesson: Timetable) {
+    private fun updateStylesCanceled(remoteViews: RemoteViews) {
         remoteViews.apply {
             setInt(R.id.timetableWidgetItemSubject, "setPaintFlags",
                 STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG)
