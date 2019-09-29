@@ -64,32 +64,40 @@ class TimetableWidgetFactory(
             val date = LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(appWidgetId), 0))
             val studentId = sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0)
 
-            val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
-            layoutId = if (savedTheme == 0L) R.layout.item_widget_timetable else R.layout.item_widget_timetable_dark
+            updateTheme(appWidgetId)
 
-            primaryColor = if (savedTheme == 0L) R.color.colorPrimary else R.color.colorPrimaryLight
-            textColor = if (savedTheme == 0L) android.R.color.black else android.R.color.white
-            timetableChangeColor = if (savedTheme == 0L) R.color.timetable_change_dark else R.color.timetable_change_light
+            updateLessons(date, studentId)
+        }
+    }
 
-            lessons = try {
-                studentRepository.isStudentSaved()
-                    .filter { true }
-                    .flatMap { studentRepository.getSavedStudents().toMaybe() }
-                    .flatMap {
-                        val student = it.singleOrNull { student -> student.id == studentId }
+    private fun updateTheme(appWidgetId: Int) {
+        val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
+        layoutId = if (savedTheme == 0L) R.layout.item_widget_timetable else R.layout.item_widget_timetable_dark
 
-                        if (student != null) Maybe.just(student)
-                        else Maybe.empty()
-                    }
-                    .flatMap { semesterRepository.getCurrentSemester(it).toMaybe() }
-                    .flatMap { timetableRepository.getTimetable(it, date, date).toMaybe() }
-                    .map { item -> item.sortedBy { it.number } }
-                    .subscribeOn(schedulers.backgroundThread)
-                    .blockingGet(emptyList())
-            } catch (e: Exception) {
-                Timber.e(e, "An error has occurred in timetable widget factory")
-                emptyList()
-            }
+        primaryColor = if (savedTheme == 0L) R.color.colorPrimary else R.color.colorPrimaryLight
+        textColor = if (savedTheme == 0L) android.R.color.black else android.R.color.white
+        timetableChangeColor = if (savedTheme == 0L) R.color.timetable_change_dark else R.color.timetable_change_light
+    }
+
+    private fun updateLessons(date: LocalDate, studentId: Long) {
+        lessons = try {
+            studentRepository.isStudentSaved()
+                .filter { true }
+                .flatMap { studentRepository.getSavedStudents().toMaybe() }
+                .flatMap {
+                    val student = it.singleOrNull { student -> student.id == studentId }
+
+                    if (student != null) Maybe.just(student)
+                    else Maybe.empty()
+                }
+                .flatMap { semesterRepository.getCurrentSemester(it).toMaybe() }
+                .flatMap { timetableRepository.getTimetable(it, date, date).toMaybe() }
+                .map { item -> item.sortedBy { it.number } }
+                .subscribeOn(schedulers.backgroundThread)
+                .blockingGet(emptyList())
+        } catch (e: Exception) {
+            Timber.e(e, "An error has occurred in timetable widget factory")
+            emptyList()
         }
     }
 
