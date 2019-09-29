@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -114,10 +115,10 @@ class CompletedLessonsFragment : BaseFragment(), CompletedLessonsView, MainView.
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
-        val dateSetListener = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             presenter.onDateSet(year, month + 1, dayOfMonth)
         }
-        val datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(dateSetListener,
+        val datePickerDialog = DatePickerDialog.newInstance(dateSetListener,
             currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
 
         datePickerDialog.setDateRangeLimiter(SchooldaysRangeLimiter())
