@@ -89,6 +89,16 @@ class TimetableWidgetFactory(
     override fun getViewAt(position: Int): RemoteViews? {
         if (position == INVALID_POSITION || lessons.getOrNull(position) == null) return null
 
+        var savedTheme: Long? = null
+
+        intent?.extras?.getInt(EXTRA_APPWIDGET_ID)?.let { appWidgetId ->
+            savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
+        }
+
+        val primaryColor = if (savedTheme!! == 0L) R.color.colorPrimary else R.color.colorPrimaryLight
+        val textColor = if (savedTheme!! == 0L) android.R.color.black else android.R.color.white
+        val timetableChangeColor = if (savedTheme!! == 0L) R.color.timetable_change_dark else R.color.timetable_change_light
+
         return RemoteViews(context.packageName, layoutId!!).apply {
             val lesson = lessons[position]
 
@@ -111,24 +121,24 @@ class TimetableWidgetFactory(
             if (lesson.canceled) {
                 setInt(R.id.timetableWidgetItemSubject, "setPaintFlags",
                     STRIKE_THRU_TEXT_FLAG or ANTI_ALIAS_FLAG)
-                setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(R.color.colorPrimary))
-                setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(R.color.colorPrimary))
-                setTextColor(R.id.timetableWidgetItemDescription, context.getCompatColor(R.color.colorPrimary))
+                setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(primaryColor))
+                setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(primaryColor))
+                setTextColor(R.id.timetableWidgetItemDescription, context.getCompatColor(primaryColor))
             } else {
                 setInt(R.id.timetableWidgetItemSubject, "setPaintFlags", ANTI_ALIAS_FLAG)
-                setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(android.R.color.black))
-                setTextColor(R.id.timetableWidgetItemDescription, context.getCompatColor(R.color.timetable_change_dark))
+                setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(textColor))
+                setTextColor(R.id.timetableWidgetItemDescription, context.getCompatColor(timetableChangeColor))
 
                 if (lesson.changes || (lesson.info.isNotBlank() && !lesson.canceled)) {
-                    setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(R.color.timetable_change_dark))
+                    setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(timetableChangeColor))
                 } else {
-                    setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(android.R.color.black))
+                    setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(textColor))
                 }
 
                 if (lesson.subjectOld.isNotBlank() && lesson.subject != lesson.subjectOld) {
-                    setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(R.color.timetable_change_dark))
+                    setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(timetableChangeColor))
                 } else {
-                    setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(android.R.color.black))
+                    setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(textColor))
                 }
 
                 var teacherChange: Boolean = lesson.teacherOld.isNotBlank() && lesson.teacher != lesson.teacherOld
@@ -141,9 +151,9 @@ class TimetableWidgetFactory(
                     }
 
                     if (lesson.roomOld.isNotBlank() && lesson.room != lesson.roomOld) {
-                        setTextColor(R.id.timetableWidgetItemRoom, context.getCompatColor(R.color.timetable_change_dark))
+                        setTextColor(R.id.timetableWidgetItemRoom, context.getCompatColor(timetableChangeColor))
                     } else {
-                        setTextColor(R.id.timetableWidgetItemRoom, context.getCompatColor(android.R.color.black))
+                        setTextColor(R.id.timetableWidgetItemRoom, context.getCompatColor(textColor))
                     }
                 } else setTextViewText(R.id.timetableWidgetItemRoom, "")
 
