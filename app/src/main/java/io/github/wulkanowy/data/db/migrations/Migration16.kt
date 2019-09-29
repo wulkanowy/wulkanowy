@@ -11,9 +11,9 @@ class Migration16 : Migration(15, 16) {
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 student_id INTEGER NOT NULL,
                 class_id INTEGER NOT NULL,
-                subject TEXT,
-                name TEXT,
-                short_name TEXT
+                subject TEXT NOT NULL,
+                name TEXT NOT NULL,
+                short_name TEXT NOT NULL
             )
         """)
     }

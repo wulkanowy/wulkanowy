@@ -24,10 +24,14 @@ class TeacherItem(val teacher: Teacher) : AbstractFlexibleItem<TeacherItem.ViewH
     @SuppressLint("SetTextI18n")
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: TeacherItem.ViewHolder, position: Int, payloads: MutableList<Any>?) {
         holder.apply {
-            teacherItemName.text = teacher.name!!
-            teacherItemSubject.text = teacher.subject!!
-            teacherItemShortName.visibility = if (teacher.shortName == null) GONE else VISIBLE
-            teacherItemShortName.text = "[${teacher.shortName}]"
+            teacherItemName.text = teacher.name
+            teacherItemSubject.text = teacher.subject
+            if (teacher.shortName.isNotBlank()) {
+                teacherItemShortName.visibility = VISIBLE
+                teacherItemShortName.text = "[${teacher.shortName}]"
+            } else {
+                teacherItemShortName.visibility = GONE
+            }
         }
     }
 

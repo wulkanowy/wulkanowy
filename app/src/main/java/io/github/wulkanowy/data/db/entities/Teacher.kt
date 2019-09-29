@@ -14,12 +14,12 @@ data class Teacher(
     @ColumnInfo(name = "class_id")
     val classId: Int,
 
-    val subject: String?,
+    val subject: String,
 
-    val name: String?,
+    val name: String,
 
     @ColumnInfo(name = "short_name")
-    val shortName: String?
+    val shortName: String
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
