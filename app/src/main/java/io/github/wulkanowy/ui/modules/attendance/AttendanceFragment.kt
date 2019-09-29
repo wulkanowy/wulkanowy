@@ -152,7 +152,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
         val datePickerDialog = DatePickerDialog.newInstance(dateSetListener,
             currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
 
-        datePickerDialog.setDateRangeLimiter(SchooldaysRangeLimiter(baseDate.year))
+        datePickerDialog.setDateRangeLimiter(SchooldaysRangeLimiter())
 
         datePickerDialog.show(requireFragmentManager(), "Datepickerdialog")
     }
