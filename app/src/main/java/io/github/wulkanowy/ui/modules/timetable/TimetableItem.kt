@@ -129,7 +129,7 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
             if (lesson.teacherOld.isNotBlank() && lesson.teacherOld != lesson.teacher) {
                 timetableItemTeacher.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
             } else {
-                timetableItemTeacher.setTextColor(holder.view.context.getThemeAttrColor(android.R.attr.textColorPrimary))
+                timetableItemTeacher.setTextColor(holder.view.context.getThemeAttrColor(android.R.attr.textColorSecondary))
             }
         }
     }
