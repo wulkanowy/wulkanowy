@@ -14,6 +14,7 @@ class TeacherPresenter @Inject constructor(
     schedulers: SchedulersProvider,
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
+
     private val semesterRepository: SemesterRepository,
     private val teacherRepository: TeacherRepository,
     private val analytics: FirebaseAnalyticsHelper
@@ -35,8 +36,8 @@ class TeacherPresenter @Inject constructor(
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { teacherRepository.getTeachers(it, forceRefresh) }
-            .map { it.filter { teacher ->  teacher.name.isNotBlank() && teacher.subject.isNotBlank() } }
-            .map { items -> items.map { TeacherItem(it) } }
+            .map { it.filter { teacher ->  teacher.name.isNotBlank() } }
+            .map { items -> items.map { TeacherItem(it, view?.noSubjectString.orEmpty()) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {

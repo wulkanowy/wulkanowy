@@ -203,6 +203,7 @@
     <!--Teacher-->
     <string name="teachers_title">Teachers</string>
     <string name="teacher_no_items">No info about teachers</string>
+    <string name="teacher_no_subject">No subject</string>
 
 
     <!--Account-->

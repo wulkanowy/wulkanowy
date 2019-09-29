@@ -13,7 +13,7 @@ import io.github.wulkanowy.data.db.entities.Teacher
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_teacher.*
 
-class TeacherItem(val teacher: Teacher) : AbstractFlexibleItem<TeacherItem.ViewHolder>() {
+class TeacherItem(val teacher: Teacher, private val noSubjectText: String) : AbstractFlexibleItem<TeacherItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_teacher
 
@@ -25,7 +25,7 @@ class TeacherItem(val teacher: Teacher) : AbstractFlexibleItem<TeacherItem.ViewH
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: TeacherItem.ViewHolder, position: Int, payloads: MutableList<Any>?) {
         holder.apply {
             teacherItemName.text = teacher.name
-            teacherItemSubject.text = teacher.subject
+            teacherItemSubject.text = if (teacher.subject.isNotBlank()) teacher.subject else noSubjectText
             if (teacher.shortName.isNotBlank()) {
                 teacherItemShortName.visibility = VISIBLE
                 teacherItemShortName.text = "[${teacher.shortName}]"

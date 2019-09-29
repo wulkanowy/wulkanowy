@@ -7,6 +7,8 @@ interface TeacherView : BaseView {
 
     val isViewEmpty: Boolean
 
+    val noSubjectString: String
+
     fun initView()
 
     fun updateData(data: List<TeacherItem>)

@@ -219,6 +219,7 @@
     <!--Teacher-->
     <string name="teachers_title">Nauczyciele</string>
     <string name="teacher_no_items">Brak informacji o nauczycielach</string>
+    <string name="teacher_no_subject">Brak przedmiotu</string>
 
 
     <!--Account-->
