@@ -10,7 +10,7 @@ import java.util.Calendar
 @Suppress("UNUSED_PARAMETER")
 class SchooldaysRangeLimiter() : DateRangeLimiter {
 
-    val now: LocalDate
+    private val now: LocalDate
         get() = LocalDate.now()
 
     constructor(parcel: Parcel) : this()
