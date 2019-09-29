@@ -36,7 +36,7 @@ interface AttendanceView : BaseView {
 
     fun showAttendanceDialog(lesson: Attendance)
 
-    fun showDatePickerDialog(currentDate: LocalDate, baseDate: LocalDate)
+    fun showDatePickerDialog(currentDate: LocalDate)
 
     fun openSummaryView()
 

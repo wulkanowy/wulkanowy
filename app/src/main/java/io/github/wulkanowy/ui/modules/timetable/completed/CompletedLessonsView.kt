@@ -34,5 +34,5 @@ interface CompletedLessonsView : BaseView {
 
     fun showCompletedLessonDialog(completedLesson: CompletedLesson)
 
-    fun showDatePickerDialog(currentDate: LocalDate, baseDate: LocalDate)
+    fun showDatePickerDialog(currentDate: LocalDate)
 }

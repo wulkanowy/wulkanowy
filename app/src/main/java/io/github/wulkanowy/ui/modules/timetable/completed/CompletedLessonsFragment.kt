@@ -113,7 +113,7 @@ class CompletedLessonsFragment : BaseFragment(), CompletedLessonsView, MainView.
         (activity as? MainActivity)?.showDialogFragment(CompletedLessonDialog.newInstance(completedLesson))
     }
 
-    override fun showDatePickerDialog(currentDate: LocalDate, baseDate: LocalDate) {
+    override fun showDatePickerDialog(currentDate: LocalDate) {
         val dateSetListener = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             presenter.onDateSet(year, month + 1, dayOfMonth)
         }

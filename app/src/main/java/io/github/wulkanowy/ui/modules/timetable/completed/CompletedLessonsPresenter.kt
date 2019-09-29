@@ -58,7 +58,7 @@ class CompletedLessonsPresenter @Inject constructor(
     }
 
     fun onPickDate() {
-        view?.showDatePickerDialog(currentDate, baseDate)
+        view?.showDatePickerDialog(currentDate)
     }
 
     fun onDateSet(year: Int, month: Int, day: Int) {

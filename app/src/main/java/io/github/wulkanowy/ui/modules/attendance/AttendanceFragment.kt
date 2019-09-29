@@ -145,7 +145,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
         (activity as? MainActivity)?.showDialogFragment(AttendanceDialog.newInstance(lesson))
     }
 
-    override fun showDatePickerDialog(currentDate: LocalDate, baseDate: LocalDate) {
+    override fun showDatePickerDialog(currentDate: LocalDate) {
         val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             presenter.onDateSet(year, month + 1, dayOfMonth)
         }
