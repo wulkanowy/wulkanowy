@@ -3,16 +3,15 @@ package io.github.wulkanowy.utils
 import android.os.Parcel
 import android.os.Parcelable
 import com.wdullaer.materialdatetimepicker.date.DateRangeLimiter
+import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import java.util.Calendar
 
 @Suppress("UNUSED_PARAMETER")
 class SchooldaysRangeLimiter() : DateRangeLimiter {
-    var year: Int = LocalDate.now().year
 
-    constructor(year: Int) : this() {
-        this.year = year
-    }
+    val now: LocalDate
+        get() = LocalDate.now()
 
     constructor(parcel: Parcel) : this()
 
@@ -21,26 +20,27 @@ class SchooldaysRangeLimiter() : DateRangeLimiter {
     }
 
     override fun isOutOfRange(year: Int, month: Int, day: Int): Boolean {
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
-        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        return dayOfWeek == Calendar.SUNDAY || dayOfWeek == Calendar.SATURDAY
+        val date = LocalDate.of(year, month + 1, day)
+        val dayOfWeek = date.dayOfWeek
+        return dayOfWeek == DayOfWeek.SUNDAY || dayOfWeek == DayOfWeek.SATURDAY || date.isHolidays
     }
 
     override fun getStartDate(): Calendar {
-        val output = Calendar.getInstance()
-        output.set(Calendar.YEAR, year)
-        output.set(Calendar.DAY_OF_MONTH, 1)
-        output.set(Calendar.MONTH, Calendar.JANUARY)
-        return output
+        val startYear = if (now.monthValue <= 6) now.year - 1 else now.year
+        val startOfSchoolYear = now.withYear(startYear).firstSchoolDay
+
+        val calendar = Calendar.getInstance()
+        calendar.set(startOfSchoolYear.year, startOfSchoolYear.monthValue - 1, startOfSchoolYear.dayOfMonth)
+        return calendar
     }
 
     override fun getEndDate(): Calendar {
-        val output = Calendar.getInstance()
-        output.set(Calendar.YEAR, year)
-        output.set(Calendar.DAY_OF_MONTH, 31)
-        output.set(Calendar.MONTH, Calendar.DECEMBER)
-        return output
+        val endYear = if (now.monthValue > 6) now.year + 1 else now.year
+        val endOfSchoolYear = now.withYear(endYear).lastSchoolDay
+
+        val calendar = Calendar.getInstance()
+        calendar.set(endOfSchoolYear.year, endOfSchoolYear.monthValue - 1, endOfSchoolYear.dayOfMonth)
+        return calendar
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

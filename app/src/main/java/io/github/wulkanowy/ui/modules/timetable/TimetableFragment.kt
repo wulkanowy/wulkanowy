@@ -154,7 +154,7 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
         val datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(dateSetListener,
             currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
 
-        datePickerDialog.setDateRangeLimiter(SchooldaysRangeLimiter(baseDate.year))
+        datePickerDialog.setDateRangeLimiter(SchooldaysRangeLimiter())
 
         datePickerDialog.show(requireFragmentManager(), "Datepickerdialog")
     }
