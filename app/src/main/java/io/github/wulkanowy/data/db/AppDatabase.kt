@@ -24,6 +24,7 @@ import io.github.wulkanowy.data.db.dao.ReportingUnitDao
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.dao.SubjectDao
+import io.github.wulkanowy.data.db.dao.TeacherDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
@@ -43,6 +44,7 @@ import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
+import io.github.wulkanowy.data.db.entities.Teacher
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.migrations.Migration10
 import io.github.wulkanowy.data.db.migrations.Migration11
@@ -51,6 +53,7 @@ import io.github.wulkanowy.data.db.migrations.Migration13
 import io.github.wulkanowy.data.db.migrations.Migration14
 import io.github.wulkanowy.data.db.migrations.Migration15
 import io.github.wulkanowy.data.db.migrations.Migration16
+import io.github.wulkanowy.data.db.migrations.Migration17
 import io.github.wulkanowy.data.db.migrations.Migration2
 import io.github.wulkanowy.data.db.migrations.Migration3
 import io.github.wulkanowy.data.db.migrations.Migration4
@@ -82,7 +85,8 @@ import javax.inject.Singleton
         CompletedLesson::class,
         ReportingUnit::class,
         Recipient::class,
-        MobileDevice::class
+        MobileDevice::class,
+        Teacher::class
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -91,7 +95,7 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 16
+        const val VERSION_SCHEMA = 17
 
         fun newInstance(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
@@ -113,7 +117,8 @@ abstract class AppDatabase : RoomDatabase() {
                     Migration13(),
                     Migration14(),
                     Migration15(),
-                    Migration16()
+                    Migration16(),
+                    Migration17()
                 )
                 .build()
         }
@@ -156,4 +161,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val recipientDao: RecipientDao
 
     abstract val mobileDeviceDao: MobileDeviceDao
+
+    abstract val teacherDao: TeacherDao
 }
