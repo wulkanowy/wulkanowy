@@ -74,7 +74,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
 
         attendanceSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
         attendancePreviousButton.setOnClickListener { presenter.onPreviousDay() }
-        attendanceNavDate.setOnClickListener {presenter.onPickDate() }
+        attendanceNavDate.setOnClickListener { presenter.onPickDate() }
         attendanceNextButton.setOnClickListener { presenter.onNextDay() }
 
         attendanceNavContainer.setElevationCompat(requireContext().dpToPx(8f))
