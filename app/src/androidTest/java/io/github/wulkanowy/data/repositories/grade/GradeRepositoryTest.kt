@@ -25,7 +25,6 @@ import org.threeten.bp.LocalDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import io.github.wulkanowy.api.grades.Grade as GradeApi
 
 @SdkSuppress(minSdkVersion = P)
 @RunWith(AndroidJUnit4::class)

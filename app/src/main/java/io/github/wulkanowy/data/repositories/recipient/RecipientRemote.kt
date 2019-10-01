@@ -7,7 +7,7 @@ import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
-import io.github.wulkanowy.api.messages.Recipient as ApiRecipient
+import io.github.wulkanowy.sdk.pojo.Recipient as SdkRecipient
 
 @Singleton
 class RecipientRemote @Inject constructor(private val sdk: Sdk) {
@@ -26,7 +26,7 @@ class RecipientRemote @Inject constructor(private val sdk: Sdk) {
             }
     }
 
-    private fun ApiRecipient.toRecipient(): Recipient {
+    private fun SdkRecipient.toRecipient(): Recipient {
         return Recipient(
             studentId = sdk.studentId,
             realId = id,

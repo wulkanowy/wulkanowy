@@ -1,17 +1,16 @@
 package io.github.wulkanowy.data.repositories.message
 
-import io.github.wulkanowy.api.messages.Folder
-import io.github.wulkanowy.api.messages.SentMessage
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.sdk.messages.Folder
+import io.github.wulkanowy.sdk.pojo.SentMessage
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime.now
 import javax.inject.Inject
 import javax.inject.Singleton
-import io.github.wulkanowy.api.messages.Message as ApiMessage
-import io.github.wulkanowy.api.messages.Recipient as ApiRecipient
+import io.github.wulkanowy.sdk.pojo.Recipient as SdkRecipient
 
 @Singleton
 class MessageRemote @Inject constructor(private val sdk: Sdk) {
@@ -27,7 +26,7 @@ class MessageRemote @Inject constructor(private val sdk: Sdk) {
                     senderId = it.senderId ?: 0,
                     recipient = it.recipient.orEmpty(),
                     subject = it.subject.trim(),
-                    date = it.date?: now(),
+                    date = it.date ?: now(),
                     content = it.content.orEmpty(),
                     folderId = it.folderId,
                     unread = it.unread ?: false,
@@ -48,13 +47,14 @@ class MessageRemote @Inject constructor(private val sdk: Sdk) {
             subject = subject,
             content = content,
             recipients = recipients.map {
-                ApiRecipient(
+                SdkRecipient(
                     id = it.realId,
                     name = it.realName,
                     loginId = it.loginId,
                     reportingUnitId = it.unitId,
                     role = it.role,
-                    hash = it.hash
+                    hash = it.hash,
+                    shortName = "" //TODO
                 )
             }
         )

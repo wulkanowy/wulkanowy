@@ -11,7 +11,7 @@ import androidx.work.WorkerParameters
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import io.github.wulkanowy.R
-import io.github.wulkanowy.api.interceptor.FeatureDisabledException
+import io.github.wulkanowy.sdk.exception.FeatureDisabledException
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -78,4 +78,3 @@ class SyncWorker @AssistedInject constructor(
         fun create(appContext: Context, workerParameters: WorkerParameters): ListenableWorker
     }
 }
-

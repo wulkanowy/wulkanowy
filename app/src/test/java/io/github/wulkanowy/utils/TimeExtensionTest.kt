@@ -51,7 +51,7 @@ class TimeExtensionTest {
         Locale.setDefault(Locale.forLanguageTag("PL"))
         assertEquals("Styczeń", JANUARY.getFormattedName())
         Locale.setDefault(Locale.forLanguageTag("US"))
-        assertEquals("Jan", JANUARY.getFormattedName())
+        assertEquals("January", JANUARY.getFormattedName())
     }
 
     @Test
@@ -59,7 +59,7 @@ class TimeExtensionTest {
         Locale.setDefault(Locale.forLanguageTag("PL"))
         assertEquals("poniedziałek", of(2018, 10, 1).weekDayName)
         Locale.setDefault(Locale.forLanguageTag("US"))
-        assertEquals("Mon", of(2018, 10, 1).weekDayName)
+        assertEquals("Monday", of(2018, 10, 1).weekDayName)
     }
 
     @Test

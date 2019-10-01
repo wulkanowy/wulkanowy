@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.student
 
-import io.github.wulkanowy.api.Api
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Student
 import io.reactivex.Single
@@ -45,7 +44,7 @@ class StudentRemoteTest {
             certificateKey = "",
             loginMode = Sdk.Mode.SCRAPPER,
             apiHost = "",
-            loginType = Api.LoginType.STANDARD,
+            loginType = Sdk.ScrapperLoginType.STANDARD,
             scrapperHost = "",
             ssl = false
         )
