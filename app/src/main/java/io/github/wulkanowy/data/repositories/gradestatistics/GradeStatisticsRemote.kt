@@ -20,7 +20,7 @@ class GradeStatisticsRemote @Inject constructor(private val sdk: Sdk) {
                         studentId = semester.studentId,
                         subject = it.subject,
                         grade = it.gradeValue,
-                        amount = it.amount ?: 0,
+                        amount = it.amount,
                         semester = isSemester
                     )
                 }
