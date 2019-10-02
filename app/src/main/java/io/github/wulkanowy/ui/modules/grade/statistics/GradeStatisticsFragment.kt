@@ -130,19 +130,21 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
             else -> materialGradeColors
         }
 
+        val dataset = PieDataSet(items.map {
+            PieEntry(it.amount.toFloat(), it.grade.toString())
+        }, "Legenda").apply {
+            valueTextSize = 12f
+            sliceSpace = 1f
+            valueTextColor = WHITE
+            setColors(items.map {
+                gradeColors.single { color -> color.first == it.grade }.second
+            }.toIntArray(), context)
+        }
+
         gradeStatisticsChartPoints.visibility = View.GONE
         gradeStatisticsChart.run {
             visibility = View.VISIBLE
-            data = PieData(PieDataSet(items.map {
-                PieEntry(it.amount.toFloat(), it.grade.toString())
-            }, "Legenda").apply {
-                valueTextSize = 12f
-                sliceSpace = 1f
-                valueTextColor = WHITE
-                setColors(items.map {
-                    gradeColors.single { color -> color.first == it.grade }.second
-                }.toIntArray(), context)
-            }).apply {
+            data = PieData(dataset).apply {
                 setTouchEnabled(false)
                 setValueFormatter(object : ValueFormatter() {
                     override fun getPieLabel(value: Float, pieEntry: PieEntry): String {
@@ -168,43 +170,43 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
     override fun updateBarData(item: GradePointsStatistics) {
         gradeStatisticsChart.visibility = View.GONE
 
+        val dataset = BarDataSet(listOf(
+            BarEntry(1f, item.others.toFloat()),
+            BarEntry(2f, item.student.toFloat())
+        ), "Legenda").apply {
+            valueTextSize = 12f
+            valueTextColor = requireContext().getThemeAttrColor(android.R.attr.textColorPrimary)
+            valueFormatter = object : ValueFormatter() {
+                override fun getBarLabel(barEntry: BarEntry) = "${barEntry.y}%"
+            }
+            colors = gradePointsColors
+        }
+
         with(gradeStatisticsChartPoints) {
             visibility = View.VISIBLE
-            data = BarData(BarDataSet(listOf(
-                BarEntry(1f, item.others.toFloat()),
-                BarEntry(2f, item.student.toFloat())
-            ), "Legenda").apply {
-                valueTextSize = 12f
-                valueTextColor = requireContext().getThemeAttrColor(android.R.attr.textColorPrimary)
-                valueFormatter = object : ValueFormatter() {
-                    override fun getBarLabel(barEntry: BarEntry) = "${barEntry.y}%"
-                }
-                colors = gradePointsColors
-            }).apply {
+            data = BarData(dataset).apply {
                 barWidth = 0.5f
                 setFitBars(true)
             }
             setTouchEnabled(false)
             xAxis.setDrawLabels(false)
             xAxis.setDrawGridLines(false)
-            with(requireContext().getThemeAttrColor(android.R.attr.textColorPrimary)) {
-                axisLeft.textColor = this
-                axisRight.textColor = this
+            requireContext().getThemeAttrColor(android.R.attr.textColorPrimary).let {
+                axisLeft.textColor = it
+                axisRight.textColor = it
             }
-            legend.apply {
-                setCustom(listOf(
-                    LegendEntry().apply {
-                        label = "Średnia klasy"
-                        formColor = gradePointsColors[0]
-                        form = Legend.LegendForm.SQUARE
-                    },
-                    LegendEntry().apply {
-                        label = "Uczeń"
-                        formColor = gradePointsColors[1]
-                        form = Legend.LegendForm.SQUARE
-                    }
-                ))
-            }
+            legend.setCustom(listOf(
+                LegendEntry().apply {
+                    label = "Średnia klasy"
+                    formColor = gradePointsColors[0]
+                    form = Legend.LegendForm.SQUARE
+                },
+                LegendEntry().apply {
+                    label = "Uczeń"
+                    formColor = gradePointsColors[1]
+                    form = Legend.LegendForm.SQUARE
+                }
+            ))
             invalidate()
         }
     }

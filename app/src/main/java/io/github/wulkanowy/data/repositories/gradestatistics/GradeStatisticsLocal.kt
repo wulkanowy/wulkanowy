@@ -24,12 +24,15 @@ class GradeStatisticsLocal @Inject constructor(
     }
 
     fun getGradesStatistics(semester: Semester, isSemester: Boolean, subjectName: String): Maybe<List<GradeStatistics>> {
-        return (if ("Wszystkie" == subjectName) gradeStatisticsDb.loadAll(semester.semesterId, semester.studentId, isSemester).map { list ->
-            list.groupBy { it.grade }.map {
-                GradeStatistics(semester.studentId, semester.semesterId, subjectName, it.key, it.value.fold(0) { acc, e -> acc + e.amount }, false)
+        return when (subjectName) {
+            "Wszystkie" -> gradeStatisticsDb.loadAll(semester.semesterId, semester.studentId, isSemester).map { list ->
+                list.groupBy { it.grade }.map {
+                    GradeStatistics(semester.studentId, semester.semesterId, subjectName, it.key,
+                        it.value.fold(0) { acc, e -> acc + e.amount }, false)
+                }
             }
-        }
-        else gradeStatisticsDb.loadSubject(semester.semesterId, semester.studentId, subjectName, isSemester)).filter { it.isNotEmpty() }
+            else -> gradeStatisticsDb.loadSubject(semester.semesterId, semester.studentId, subjectName, isSemester)
+        }.filter { it.isNotEmpty() }
     }
 
     fun getGradesPointsStatistics(semester: Semester, subjectName: String): Maybe<GradePointsStatistics> {
@@ -37,7 +40,9 @@ class GradeStatisticsLocal @Inject constructor(
             "Wszystkie" -> gradePointsStatisticsDb.loadAll(semester.semesterId, semester.studentId).flatMap { list ->
                 if (list.isEmpty()) return@flatMap Maybe.empty<GradePointsStatistics>()
                 Maybe.just(GradePointsStatistics(semester.studentId, semester.semesterId, subjectName,
-                    list.fold(.0) { acc, e -> acc + e.others }, list.fold(.0) { acc, e -> acc + e.student }))
+                    list.fold(.0) { acc, e -> acc + e.others },
+                    list.fold(.0) { acc, e -> acc + e.student })
+                )
             }
             else -> gradePointsStatisticsDb.loadSubject(semester.semesterId, semester.studentId, subjectName)
         }
