@@ -53,6 +53,7 @@ class GradeDetailsPresenter @Inject constructor(
                         }
                     }
                     updateGrade(item.grade)
+                    loadData(currentSemesterId, false)
                 }
             }
         }
@@ -131,6 +132,7 @@ class GradeDetailsPresenter @Inject constructor(
             }
             .subscribe({
                 Timber.i("Loading grade details result: Success")
+                updateMarkAsDoneButton(it)
                 view?.run {
                     showEmpty(it.isEmpty())
                     showContent(it.isNotEmpty())
@@ -176,6 +178,10 @@ class GradeDetailsPresenter @Inject constructor(
             if (average == null || average == .0) emptyAverageString
             else averageString.format(average)
         }.orEmpty()
+    }
+
+    private fun updateMarkAsDoneButton(headers: List<GradeDetailsHeader>) {
+        view?.enableMarkAsDoneButton(headers.any { gradeDetailsHeader -> gradeDetailsHeader.newGrades > 0 })
     }
 
     private fun updateGrade(grade: Grade) {
