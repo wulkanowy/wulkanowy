@@ -14,10 +14,8 @@ class GradeStatisticsRemote @Inject constructor(private val api: Api) {
     fun getGradeStatistics(semester: Semester, isSemester: Boolean): Single<List<GradeStatistics>> {
         return Single.just(api.apply { diaryId = semester.diaryId })
             .flatMap {
-                when (isSemester) {
-                    true -> it.getGradesAnnualStatistics(semester.semesterId)
-                    else -> it.getGradesPartialStatistics(semester.semesterId)
-                }
+                if (isSemester) it.getGradesAnnualStatistics(semester.semesterId)
+                else it.getGradesPartialStatistics(semester.semesterId)
             }
             .map { gradeStatistics ->
                 gradeStatistics.map {
