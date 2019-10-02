@@ -48,10 +48,18 @@ class MobileDeviceTokenDialog : DaggerDialogFragment(), MobileDeviceTokenVIew {
     }
 
     override fun updateData(token: MobileDeviceToken) {
-        mobileDeviceDialogToken.text = token.token
-        mobileDeviceDialogSymbol.text = token.symbol
-        mobileDeviceDialogPin.text = token.pin
-        clickCopy(token)
+        with(mobileDeviceDialogToken) {
+            text = token.token
+            setOnClickListener { clickCopy(token.token) }
+        }
+        with(mobileDeviceDialogSymbol) {
+            text = token.symbol
+            setOnClickListener { clickCopy(token.symbol) }
+        }
+        with(mobileDeviceDialogPin) {
+            text = token.pin
+            setOnClickListener { clickCopy(token.pin) }
+        }
 
         mobileDeviceQr.setImageBitmap(Base64.decode(token.qr, Base64.DEFAULT).let {
             BitmapFactory.decodeByteArray(it, 0, it.size)
@@ -90,21 +98,10 @@ class MobileDeviceTokenDialog : DaggerDialogFragment(), MobileDeviceTokenVIew {
         presenter.onDetachView()
         super.onDestroyView()
     }
-    fun clickCopy(token: MobileDeviceToken){
-        mobileDeviceDialogToken.setOnClickListener{
-            val clip = ClipData.newPlainText("wulkanowy", token.token)
-            activity?.getSystemService<ClipboardManager>()?.setPrimaryClip(clip)
-            Toast.makeText(context, R.string.all_copied, Toast.LENGTH_LONG).show()
-        }
-        mobileDeviceDialogSymbol.setOnClickListener{
-            val clip = ClipData.newPlainText("wulkanowy", token.symbol)
-            activity?.getSystemService<ClipboardManager>()?.setPrimaryClip(clip)
-            Toast.makeText(context, R.string.all_copied, Toast.LENGTH_LONG).show()
-        }
-        mobileDeviceDialogPin.setOnClickListener{
-            val clip = ClipData.newPlainText("wulkanowy", token.pin)
-            activity?.getSystemService<ClipboardManager>()?.setPrimaryClip(clip)
-            Toast.makeText(context, R.string.all_copied, Toast.LENGTH_LONG).show()
-        }
+
+    fun clickCopy(text: String) {
+        val clip = ClipData.newPlainText("wulkanowy", text)
+        activity?.getSystemService<ClipboardManager>()?.setPrimaryClip(clip)
+        Toast.makeText(context, R.string.all_copied, Toast.LENGTH_LONG).show()
     }
 }
