@@ -18,6 +18,8 @@ interface GradeDetailsView : BaseView {
 
     val noDescriptionString: String
 
+    var newGrades: Boolean
+
     fun initView()
 
     fun updateData(data: List<GradeDetailsHeader>)
@@ -49,6 +51,4 @@ interface GradeDetailsView : BaseView {
     fun getGradeNumberString(number: Int): String
 
     fun getHeaderOfItem(item: AbstractFlexibleItem<*>): IExpandable<*, out IFlexible<*>>?
-
-    fun enableMarkAsDoneButton(enable: Boolean)
 }

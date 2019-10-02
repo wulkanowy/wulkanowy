@@ -132,7 +132,7 @@ class GradeDetailsPresenter @Inject constructor(
             }
             .subscribe({
                 Timber.i("Loading grade details result: Success")
-                updateMarkAsDoneButton(it)
+                enableMarkAsDoneButton(it)
                 view?.run {
                     showEmpty(it.isEmpty())
                     showContent(it.isNotEmpty())
@@ -180,8 +180,8 @@ class GradeDetailsPresenter @Inject constructor(
         }.orEmpty()
     }
 
-    private fun updateMarkAsDoneButton(headers: List<GradeDetailsHeader>) {
-        view?.enableMarkAsDoneButton(headers.any { gradeDetailsHeader -> gradeDetailsHeader.newGrades > 0 })
+    private fun enableMarkAsDoneButton(headers: List<GradeDetailsHeader>) {
+        view?.newGrades = headers.any { gradeDetailsHeader -> gradeDetailsHeader.newGrades > 0 }
     }
 
     private fun updateGrade(grade: Grade) {

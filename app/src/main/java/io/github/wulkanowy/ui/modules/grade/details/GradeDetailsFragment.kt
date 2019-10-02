@@ -59,6 +59,15 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         setHasOptionsMenu(true)
     }
 
+    private var _newGrades: Boolean = false
+
+    override var newGrades: Boolean
+        get() = _newGrades
+        set(value) {
+            _newGrades = value
+            updateMarkAsDoneButton()
+        }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_grade_details, container, false)
     }
@@ -72,6 +81,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.action_menu_grade_details, menu)
         gradeDetailsMenu = menu
+        updateMarkAsDoneButton()
     }
 
     override fun initView() {
@@ -168,10 +178,9 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         (parentFragment as? GradeFragment)?.onChildRefresh()
     }
 
-    override fun enableMarkAsDoneButton(enable: Boolean) {
-        if (gradeDetailsMenu == null) return
-        val item = gradeDetailsMenu!!.findItem(R.id.gradeDetailsMenuRead)
-        item.isEnabled = enable
+    private fun updateMarkAsDoneButton() {
+        val item: MenuItem? = gradeDetailsMenu?.findItem(R.id.gradeDetailsMenuRead)
+        item?.isEnabled = newGrades
     }
 
     override fun onDestroyView() {
