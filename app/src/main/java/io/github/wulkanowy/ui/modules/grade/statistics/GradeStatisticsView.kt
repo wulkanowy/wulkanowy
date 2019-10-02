@@ -26,7 +26,9 @@ interface GradeStatisticsView : BaseView {
 
     fun clearView()
 
-    fun showContent(show: Boolean)
+    fun showPieContent(show: Boolean)
+
+    fun showBarContent(show: Boolean)
 
     fun showEmpty(show: Boolean)
 

@@ -50,7 +50,7 @@ class GradeStatisticsPresenter @Inject constructor(
             showProgress(true)
             enableSwipe(false)
             showRefresh(false)
-            showContent(false)
+            showBarContent(false)
             showEmpty(false)
             clearView()
         }
@@ -65,7 +65,8 @@ class GradeStatisticsPresenter @Inject constructor(
     fun onSubjectSelected(name: String?) {
         Timber.i("Select grade stats subject $name")
         view?.run {
-            showContent(false)
+            showBarContent(false)
+            showPieContent(false)
             showProgress(true)
             enableSwipe(false)
             showEmpty(false)
@@ -80,7 +81,8 @@ class GradeStatisticsPresenter @Inject constructor(
         Timber.i("Select grade stats semester: $type")
         disposable.clear()
         view?.run {
-            showContent(false)
+            showBarContent(false)
+            showPieContent(false)
             showProgress(true)
             enableSwipe(false)
             showEmpty(false)
@@ -142,7 +144,8 @@ class GradeStatisticsPresenter @Inject constructor(
                 Timber.i("Loading grade stats result: Success")
                 view?.run {
                     showEmpty(it.isEmpty())
-                    showContent(it.isNotEmpty())
+                    showBarContent(false)
+                    showPieContent(it.isNotEmpty())
                     updatePieData(it, preferencesRepository.gradeColorTheme)
                 }
                 analytics.logEvent("load_grade_statistics", "items" to it.size, "force_refresh" to forceRefresh)
@@ -172,7 +175,8 @@ class GradeStatisticsPresenter @Inject constructor(
                 Timber.i("Loading grade points stats result: Success")
                 view?.run {
                     showEmpty(false)
-                    showContent(true)
+                    showPieContent(false)
+                    showBarContent(true)
                     updateBarData(it)
                 }
                 analytics.logEvent("load_grade_points_statistics", "force_refresh" to forceRefresh)
@@ -183,7 +187,7 @@ class GradeStatisticsPresenter @Inject constructor(
             }, {
                 Timber.d("Loading grade points stats result: No point stats found")
                 view?.run {
-                    showContent(false)
+                    showBarContent(false)
                     showEmpty(true)
                 }
             })

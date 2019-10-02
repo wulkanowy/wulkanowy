@@ -141,9 +141,7 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
             }.toIntArray(), context)
         }
 
-        gradeStatisticsChartPoints.visibility = View.GONE
-        gradeStatisticsChart.run {
-            visibility = View.VISIBLE
+        with(gradeStatisticsChart) {
             data = PieData(dataset).apply {
                 setTouchEnabled(false)
                 setValueFormatter(object : ValueFormatter() {
@@ -168,8 +166,6 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
     }
 
     override fun updateBarData(item: GradePointsStatistics) {
-        gradeStatisticsChart.visibility = View.GONE
-
         val dataset = BarDataSet(listOf(
             BarEntry(1f, item.others.toFloat()),
             BarEntry(2f, item.student.toFloat())
@@ -183,7 +179,6 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         }
 
         with(gradeStatisticsChartPoints) {
-            visibility = View.VISIBLE
             data = BarData(dataset).apply {
                 barWidth = 0.5f
                 setFitBars(true)
@@ -221,8 +216,11 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         gradeStatisticsChartPoints.clear()
     }
 
-    override fun showContent(show: Boolean) {
+    override fun showPieContent(show: Boolean) {
         gradeStatisticsChart.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showBarContent(show: Boolean) {
         gradeStatisticsChartPoints.visibility = if (show) View.VISIBLE else View.GONE
     }
 
