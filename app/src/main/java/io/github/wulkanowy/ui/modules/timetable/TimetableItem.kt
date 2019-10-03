@@ -44,8 +44,8 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
         holder.apply {
             timetableItemNumber.text = lesson.number.toString()
             timetableItemSubject.text = lesson.subject
-            timetableItemRoom.text = if (lesson.room.isNotBlank()) lesson.room else ""
-            timetableItemTeacher.text = if (lesson.teacher.isNotBlank()) lesson.teacher else ""
+            timetableItemRoom.text = lesson.room
+            timetableItemTeacher.text = lesson.teacher
             timetableItemTimeStart.text = lesson.start.toFormattedString("HH:mm")
             timetableItemTimeFinish.text = lesson.end.toFormattedString("HH:mm")
         }
