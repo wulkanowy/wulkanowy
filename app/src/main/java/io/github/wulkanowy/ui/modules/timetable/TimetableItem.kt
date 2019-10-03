@@ -28,19 +28,19 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
     @SuppressLint("SetTextI18n")
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>?) {
         with (holder) {
-            updateFields(this, lesson)
+            updateFields(this)
 
             timetableItemSubject.paintFlags =
                 if (lesson.canceled) timetableItemSubject.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 else timetableItemSubject.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
 
-            updateDescription(this, lesson)
+            updateDescription(this)
 
-            updateColors(this, lesson)
+            updateColors(this)
         }
     }
 
-    private fun updateFields(holder: ViewHolder, lesson: Timetable) {
+    private fun updateFields(holder: ViewHolder) {
         with (holder) {
             timetableItemNumber.text = lesson.number.toString()
             timetableItemSubject.text = lesson.subject
@@ -51,10 +51,10 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
         }
     }
 
-    private fun updateDescription(holder: ViewHolder, lesson: Timetable) {
+    private fun updateDescription(holder: ViewHolder) {
         with (holder) {
             if (lesson.info.isNotBlank() && !lesson.changes) {
-                updateDescriptionNoChanges(holder, lesson)
+                updateDescriptionNoChanges(holder)
             } else {
                 timetableItemDescription.visibility = GONE
 
@@ -64,7 +64,7 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
         }
     }
 
-    private fun updateDescriptionNoChanges(holder: ViewHolder, lesson: Timetable) {
+    private fun updateDescriptionNoChanges(holder: ViewHolder) {
         with (holder) {
             timetableItemDescription.visibility = VISIBLE
             timetableItemDescription.text = lesson.info
@@ -79,21 +79,21 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
         }
     }
 
-    private fun updateColors(holder: ViewHolder, lesson: Timetable) {
+    private fun updateColors(holder: ViewHolder) {
         with (holder) {
             if (lesson.canceled) {
                 timetableItemNumber.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorPrimary))
                 timetableItemSubject.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorPrimary))
             } else {
-                updateNumberColor(this, lesson)
-                updateSubjectColor(this, lesson)
-                updateRoomColor(this, lesson)
-                updateTeacherColor(this, lesson)
+                updateNumberColor(this)
+                updateSubjectColor(this)
+                updateRoomColor(this)
+                updateTeacherColor(this)
             }
         }
     }
 
-    private fun updateNumberColor(holder: ViewHolder, lesson: Timetable) {
+    private fun updateNumberColor(holder: ViewHolder) {
         with (holder) {
             timetableItemNumber.setTextColor(holder.view.context.getThemeAttrColor(
                 if (lesson.changes || lesson.info.isNotBlank()) R.attr.colorTimetableChange
@@ -102,7 +102,7 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
         }
     }
 
-    private fun updateSubjectColor(holder: ViewHolder, lesson: Timetable) {
+    private fun updateSubjectColor(holder: ViewHolder) {
         with (holder) {
             timetableItemSubject.setTextColor(holder.view.context.getThemeAttrColor(
                 if (lesson.subjectOld.isNotBlank() && lesson.subjectOld != lesson.subject) R.attr.colorTimetableChange
@@ -111,7 +111,7 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
         }
     }
 
-    private fun updateRoomColor(holder: ViewHolder, lesson: Timetable) {
+    private fun updateRoomColor(holder: ViewHolder) {
         with (holder) {
             timetableItemRoom.setTextColor(holder.view.context.getThemeAttrColor(
                 if (lesson.roomOld.isNotBlank() && lesson.roomOld != lesson.room) R.attr.colorTimetableChange
@@ -120,7 +120,7 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
         }
     }
 
-    private fun updateTeacherColor(holder: ViewHolder, lesson: Timetable) {
+    private fun updateTeacherColor(holder: ViewHolder) {
         with (holder) {
             timetableItemTeacher.setTextColor(holder.view.context.getThemeAttrColor(
                 if (lesson.teacherOld.isNotBlank() && lesson.teacherOld != lesson.teacher) R.attr.colorTimetableChange
