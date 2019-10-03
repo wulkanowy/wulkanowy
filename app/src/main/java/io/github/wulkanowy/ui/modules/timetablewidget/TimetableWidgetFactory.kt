@@ -171,48 +171,39 @@ class TimetableWidgetFactory(
     }
 
     private fun updateNotCanceledLessonNumberColor(remoteViews: RemoteViews, lesson: Timetable) {
-        with(remoteViews) {
-            if (lesson.changes || (lesson.info.isNotBlank() && !lesson.canceled)) {
-                setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(timetableChangeColor!!))
-            } else {
-                setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(textColor!!))
-            }
-        }
+        remoteViews.setTextColor(R.id.timetableWidgetItemNumber, context.getCompatColor(
+            if (lesson.changes || (lesson.info.isNotBlank() && !lesson.canceled)) timetableChangeColor!!
+            else textColor!!
+        ))
     }
 
     private fun updateNotCanceledSubjectColor(remoteViews: RemoteViews, lesson: Timetable) {
-        with(remoteViews) {
-            if (lesson.subjectOld.isNotBlank() && lesson.subject != lesson.subjectOld) {
-                setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(timetableChangeColor!!))
-            } else {
-                setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(textColor!!))
-            }
-        }
+        remoteViews.setTextColor(R.id.timetableWidgetItemSubject, context.getCompatColor(
+            if (lesson.subjectOld.isNotBlank() && lesson.subject != lesson.subjectOld) timetableChangeColor!!
+            else textColor!!
+        ))
     }
 
     private fun updateNotCanceledRoom(remoteViews: RemoteViews, lesson: Timetable, teacherChange: Boolean) {
         with(remoteViews) {
             if (lesson.room.isNotBlank()) {
-                if (teacherChange) {
-                    setTextViewText(R.id.timetableWidgetItemRoom, lesson.room)
-                } else {
-                    setTextViewText(R.id.timetableWidgetItemRoom, "${context.getString(R.string.timetable_room)} ${lesson.room}")
-                }
+                setTextViewText(R.id.timetableWidgetItemRoom,
+                    if (teacherChange) lesson.room
+                    else "${context.getString(R.string.timetable_room)} ${lesson.room}"
+                )
 
-                if (lesson.roomOld.isNotBlank() && lesson.room != lesson.roomOld) {
-                    setTextColor(R.id.timetableWidgetItemRoom, context.getCompatColor(timetableChangeColor!!))
-                } else {
-                    setTextColor(R.id.timetableWidgetItemRoom, context.getCompatColor(textColor!!))
-                }
+                setTextColor(R.id.timetableWidgetItemRoom, context.getCompatColor(
+                    if (lesson.roomOld.isNotBlank() && lesson.room != lesson.roomOld) timetableChangeColor!!
+                    else textColor!!
+                ))
             } else setTextViewText(R.id.timetableWidgetItemRoom, "")
         }
     }
 
     private fun updateNotCanceledTeacher(remoteViews: RemoteViews, lesson: Timetable, teacherChange: Boolean) {
-        with(remoteViews) {
-            if (teacherChange) {
-                setTextViewText(R.id.timetableWidgetItemTeacher, lesson.teacher)
-            } else setTextViewText(R.id.timetableWidgetItemTeacher, "")
-        }
+        remoteViews.setTextViewText(R.id.timetableWidgetItemTeacher,
+            if (teacherChange) lesson.teacher
+            else ""
+        )
     }
 }
