@@ -181,7 +181,7 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     private fun enableMarkAsDoneButton(headers: List<GradeDetailsHeader>) {
-        view?.newGrades = headers.any { gradeDetailsHeader -> gradeDetailsHeader.newGrades > 0 }
+        view?.isNewGrades = headers.any { gradeDetailsHeader -> gradeDetailsHeader.newGrades > 0 }
     }
 
     private fun updateGrade(grade: Grade) {

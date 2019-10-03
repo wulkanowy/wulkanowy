@@ -18,7 +18,7 @@ interface GradeDetailsView : BaseView {
 
     val noDescriptionString: String
 
-    var newGrades: Boolean
+    var isNewGrades: Boolean
 
     fun initView()
 

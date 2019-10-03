@@ -59,12 +59,12 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         setHasOptionsMenu(true)
     }
 
-    private var _newGrades: Boolean = false
+    private var _isNewGrades: Boolean = false
 
-    override var newGrades: Boolean
-        get() = _newGrades
+    override var isNewGrades: Boolean
+        get() = _isNewGrades
         set(value) {
-            _newGrades = value
+            _isNewGrades = value
             updateMarkAsDoneButton()
         }
 
@@ -180,7 +180,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
 
     private fun updateMarkAsDoneButton() {
         val item: MenuItem? = gradeDetailsMenu?.findItem(R.id.gradeDetailsMenuRead)
-        item?.isEnabled = newGrades
+        item?.isEnabled = isNewGrades
     }
 
     override fun onDestroyView() {
