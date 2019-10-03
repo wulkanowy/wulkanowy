@@ -72,11 +72,10 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
             timetableItemRoom.visibility = GONE
             timetableItemTeacher.visibility = GONE
 
-            if (lesson.canceled) {
-                timetableItemDescription.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorPrimary))
-            } else {
-                timetableItemDescription.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
-            }
+            timetableItemDescription.setTextColor(holder.view.context.getThemeAttrColor(
+                if (lesson.canceled) R.attr.colorPrimary
+                else R.attr.colorTimetableChange
+            ))
         }
     }
 
@@ -96,41 +95,37 @@ class TimetableItem(val lesson: Timetable, private val roomText: String) :
 
     private fun updateNumberColor(holder: ViewHolder, lesson: Timetable) {
         holder.apply {
-            if (lesson.changes || lesson.info.isNotBlank()) {
-                timetableItemNumber.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
-            } else {
-                timetableItemNumber.setTextColor(holder.view.context.getThemeAttrColor(android.R.attr.textColorPrimary))
-            }
+            timetableItemNumber.setTextColor(holder.view.context.getThemeAttrColor(
+                if (lesson.changes || lesson.info.isNotBlank()) R.attr.colorTimetableChange
+                else android.R.attr.textColorPrimary
+            ))
         }
     }
 
     private fun updateSubjectColor(holder: ViewHolder, lesson: Timetable) {
         holder.apply {
-            if (lesson.subjectOld.isNotBlank() && lesson.subjectOld != lesson.subject) {
-                timetableItemSubject.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
-            } else {
-                timetableItemSubject.setTextColor(holder.view.context.getThemeAttrColor(android.R.attr.textColorPrimary))
-            }
+            timetableItemSubject.setTextColor(holder.view.context.getThemeAttrColor(
+                if (lesson.subjectOld.isNotBlank() && lesson.subjectOld != lesson.subject) R.attr.colorTimetableChange
+                else android.R.attr.textColorPrimary
+            ))
         }
     }
 
     private fun updateRoomColor(holder: ViewHolder, lesson: Timetable) {
         holder.apply {
-            if (lesson.roomOld.isNotBlank() && lesson.roomOld != lesson.room) {
-                timetableItemRoom.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
-            } else {
-                timetableItemRoom.setTextColor(holder.view.context.getThemeAttrColor(android.R.attr.textColorSecondary))
-            }
+            timetableItemRoom.setTextColor(holder.view.context.getThemeAttrColor(
+                if (lesson.roomOld.isNotBlank() && lesson.roomOld != lesson.room) R.attr.colorTimetableChange
+                else android.R.attr.textColorSecondary
+            ))
         }
     }
 
     private fun updateTeacherColor(holder: ViewHolder, lesson: Timetable) {
         holder.apply {
-            if (lesson.teacherOld.isNotBlank() && lesson.teacherOld != lesson.teacher) {
-                timetableItemTeacher.setTextColor(holder.view.context.getThemeAttrColor(R.attr.colorTimetableChange))
-            } else {
-                timetableItemTeacher.setTextColor(holder.view.context.getThemeAttrColor(android.R.attr.textColorSecondary))
-            }
+            timetableItemTeacher.setTextColor(holder.view.context.getThemeAttrColor(
+                if (lesson.teacherOld.isNotBlank() && lesson.teacherOld != lesson.teacher) R.attr.colorTimetableChange
+                else android.R.attr.textColorSecondary
+            ))
         }
     }
 
