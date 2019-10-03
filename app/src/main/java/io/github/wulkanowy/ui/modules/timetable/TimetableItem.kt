@@ -27,17 +27,16 @@ class TimetableItem(val lesson: Timetable) :
 
     @SuppressLint("SetTextI18n")
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>?) {
-        with (holder) {
-            updateFields(this)
+        updateFields(holder)
 
+        with (holder) {
             timetableItemSubject.paintFlags =
                 if (lesson.canceled) timetableItemSubject.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 else timetableItemSubject.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-
-            updateDescription(this)
-
-            updateColors(this)
         }
+
+        updateDescription(holder)
+        updateColors(holder)
     }
 
     private fun updateFields(holder: ViewHolder) {
