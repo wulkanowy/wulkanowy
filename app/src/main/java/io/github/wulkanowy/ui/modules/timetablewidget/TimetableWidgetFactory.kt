@@ -42,7 +42,9 @@ class TimetableWidgetFactory(
     private var layoutId: Int? = null
 
     private var primaryColor: Int? = null
+
     private var textColor: Int? = null
+    
     private var timetableChangeColor: Int? = null
 
     override fun getLoadingView() = null
