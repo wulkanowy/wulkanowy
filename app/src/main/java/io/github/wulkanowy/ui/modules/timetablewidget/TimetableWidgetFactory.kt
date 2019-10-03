@@ -159,13 +159,10 @@ class TimetableWidgetFactory(
             setTextColor(R.id.timetableWidgetItemDescription, context.getCompatColor(timetableChangeColor!!))
 
             updateNotCanceledLessonNumberColor(this, lesson)
-
             updateNotCanceledSubjectColor(this, lesson)
 
             val teacherChange = lesson.teacherOld.isNotBlank() && lesson.teacher != lesson.teacherOld
-
             updateNotCanceledRoom(this, lesson, teacherChange)
-
             updateNotCanceledTeacher(this, lesson, teacherChange)
         }
     }
