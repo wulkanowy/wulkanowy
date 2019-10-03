@@ -99,7 +99,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="-1dp"
             android:layout_toEndOf="@id/timetableWidgetItemRoom"
             android:layout_toRightOf="@id/timetableWidgetItemRoom"
             android:ellipsize="end"
