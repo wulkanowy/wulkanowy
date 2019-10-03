@@ -24,11 +24,10 @@ class CompletedLessonItem(val completedLesson: CompletedLesson) : AbstractFlexib
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>?, holder: CompletedLessonItem.ViewHolder?, position: Int, payloads: MutableList<Any>?) {
         holder?.apply {
             completedLessonItemNumber.text = completedLesson.number.toString()
-            if (completedLesson.substitution.isNotEmpty()) {
-                completedLessonItemNumber.setTextColor(holder.contentView.context.getThemeAttrColor(R.attr.colorTimetableChange))
-            } else {
-                completedLessonItemNumber.setTextColor(holder.contentView.context.getThemeAttrColor(android.R.attr.textColorPrimary))
-            }
+            completedLessonItemNumber.setTextColor(holder.contentView.context.getThemeAttrColor(
+                if (completedLesson.substitution.isNotEmpty()) R.attr.colorTimetableChange
+                else android.R.attr.textColorPrimary
+            ))
             completedLessonItemSubject.text = completedLesson.subject
             completedLessonItemTopic.text = completedLesson.topic
             completedLessonItemAlert.visibility = if (completedLesson.substitution.isNotEmpty()) VISIBLE else GONE
