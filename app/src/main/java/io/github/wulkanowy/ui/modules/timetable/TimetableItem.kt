@@ -16,7 +16,7 @@ import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_timetable.*
 
-class TimetableItem(val lesson: Timetable, private val roomText: String) :
+class TimetableItem(val lesson: Timetable) :
     AbstractFlexibleItem<TimetableItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_timetable
