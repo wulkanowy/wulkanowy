@@ -75,11 +75,11 @@ class TimetableDialog : DialogFragment() {
         when {
             info.isNotBlank() -> {
                 if (canceled) {
-                    timetableDialogChangesTitle.setTextColor(context!!.getThemeAttrColor(R.attr.colorPrimary))
-                    timetableDialogChanges.setTextColor(context!!.getThemeAttrColor(R.attr.colorPrimary))
+                    timetableDialogChangesTitle.setTextColor(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+                    timetableDialogChanges.setTextColor(requireContext().getThemeAttrColor(R.attr.colorPrimary))
                 } else {
-                    timetableDialogChangesTitle.setTextColor(context!!.getThemeAttrColor(R.attr.colorTimetableChange))
-                    timetableDialogChanges.setTextColor(context!!.getThemeAttrColor(R.attr.colorTimetableChange))
+                    timetableDialogChangesTitle.setTextColor(requireContext().getThemeAttrColor(R.attr.colorTimetableChange))
+                    timetableDialogChanges.setTextColor(requireContext().getThemeAttrColor(R.attr.colorTimetableChange))
                 }
 
                 timetableDialogChanges.text = when {
