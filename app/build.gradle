@@ -125,7 +125,7 @@ configurations.all {
 }
 
 dependencies {
-    implementation "io.github.wulkanowy:api:b7cbd9a"
+    implementation "io.github.wulkanowy:api:0.10.2"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "androidx.core:core-ktx:1.1.0"
