@@ -8,12 +8,10 @@ import org.threeten.bp.LocalDate
 import java.util.Calendar
 
 @Suppress("UNUSED_PARAMETER")
-class SchooldaysRangeLimiter() : DateRangeLimiter {
+class SchooldaysRangeLimiter : DateRangeLimiter {
 
     private val now: LocalDate
         get() = LocalDate.now()
-
-    constructor(parcel: Parcel) : this()
 
     override fun setToNearestDate(day: Calendar): Calendar {
         return day
@@ -53,7 +51,7 @@ class SchooldaysRangeLimiter() : DateRangeLimiter {
 
     companion object CREATOR : Parcelable.Creator<SchooldaysRangeLimiter> {
         override fun createFromParcel(parcel: Parcel): SchooldaysRangeLimiter {
-            return SchooldaysRangeLimiter(parcel)
+            return SchooldaysRangeLimiter()
         }
 
         override fun newArray(size: Int): Array<SchooldaysRangeLimiter?> {
