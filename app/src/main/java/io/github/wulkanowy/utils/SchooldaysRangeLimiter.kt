@@ -13,9 +13,7 @@ class SchooldaysRangeLimiter : DateRangeLimiter {
     private val now: LocalDate
         get() = LocalDate.now()
 
-    override fun setToNearestDate(day: Calendar): Calendar {
-        return day
-    }
+    override fun setToNearestDate(day: Calendar): Calendar = day
 
     override fun isOutOfRange(year: Int, month: Int, day: Int): Boolean {
         val date = LocalDate.of(year, month + 1, day)
