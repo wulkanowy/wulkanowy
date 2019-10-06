@@ -26,6 +26,8 @@ class GradeDetailsPresenter @Inject constructor(
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<GradeDetailsView>(errorHandler, studentRepository, schedulers) {
 
+    private var isNewGrades: Boolean = false
+
     private var currentSemesterId = 0
 
     override fun onAttachView(view: GradeDetailsView) {
@@ -107,6 +109,10 @@ class GradeDetailsPresenter @Inject constructor(
         disposable.clear()
     }
 
+    fun updateMarkAsDoneButton() {
+        view?.enableMarkAsDoneButton(isNewGrades)
+    }
+
     private fun loadData(semesterId: Int, forceRefresh: Boolean) {
         Timber.i("Loading grade details data started")
         disposable.add(studentRepository.getCurrentStudent()
@@ -132,7 +138,8 @@ class GradeDetailsPresenter @Inject constructor(
             }
             .subscribe({
                 Timber.i("Loading grade details result: Success")
-                enableMarkAsDoneButton(it)
+                isNewGrades = it.any { gradeDetailsHeader -> gradeDetailsHeader.newGrades > 0 }
+                updateMarkAsDoneButton()
                 view?.run {
                     showEmpty(it.isEmpty())
                     showContent(it.isNotEmpty())
@@ -178,10 +185,6 @@ class GradeDetailsPresenter @Inject constructor(
             if (average == null || average == .0) emptyAverageString
             else averageString.format(average)
         }.orEmpty()
-    }
-
-    private fun enableMarkAsDoneButton(headers: List<GradeDetailsHeader>) {
-        view?.isNewGrades = headers.any { gradeDetailsHeader -> gradeDetailsHeader.newGrades > 0 }
     }
 
     private fun updateGrade(grade: Grade) {

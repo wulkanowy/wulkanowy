@@ -18,8 +18,6 @@ interface GradeDetailsView : BaseView {
 
     val noDescriptionString: String
 
-    var isNewGrades: Boolean
-
     fun initView()
 
     fun updateData(data: List<GradeDetailsHeader>)
@@ -47,6 +45,8 @@ interface GradeDetailsView : BaseView {
     fun notifyParentDataLoaded(semesterId: Int)
 
     fun notifyParentRefresh()
+
+    fun enableMarkAsDoneButton(enable: Boolean)
 
     fun getGradeNumberString(number: Int): String
 
