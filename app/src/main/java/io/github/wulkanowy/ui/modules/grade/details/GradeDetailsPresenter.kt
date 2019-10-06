@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
+import android.widget.Toast
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
@@ -26,7 +27,7 @@ class GradeDetailsPresenter @Inject constructor(
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<GradeDetailsView>(errorHandler, studentRepository, schedulers) {
 
-    private var isNewGrades: Boolean = false
+    private var newGradesAmount: Int = 0
 
     private var currentSemesterId = 0
 
@@ -54,8 +55,9 @@ class GradeDetailsPresenter @Inject constructor(
                             updateItem(header)
                         }
                     }
+                    newGradesAmount--
+                    updateMarkAsDoneButton()
                     updateGrade(item.grade)
-                    loadData(currentSemesterId, false)
                 }
             }
         }
@@ -110,7 +112,7 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     fun updateMarkAsDoneButton() {
-        view?.enableMarkAsDoneButton(isNewGrades)
+        view?.enableMarkAsDoneButton(newGradesAmount > 0)
     }
 
     private fun loadData(semesterId: Int, forceRefresh: Boolean) {
@@ -138,7 +140,7 @@ class GradeDetailsPresenter @Inject constructor(
             }
             .subscribe({
                 Timber.i("Loading grade details result: Success")
-                isNewGrades = it.any { gradeDetailsHeader -> gradeDetailsHeader.newGrades > 0 }
+                newGradesAmount  = it.sumBy { gradeDetailsHeader -> gradeDetailsHeader.newGrades }
                 updateMarkAsDoneButton()
                 view?.run {
                     showEmpty(it.isEmpty())
