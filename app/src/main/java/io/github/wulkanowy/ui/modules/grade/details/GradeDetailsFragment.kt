@@ -170,8 +170,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
     }
 
     override fun enableMarkAsDoneButton(enable: Boolean) {
-        val item: MenuItem? = gradeDetailsMenu?.findItem(R.id.gradeDetailsMenuRead)
-        item?.isEnabled = enable
+        gradeDetailsMenu?.findItem(R.id.gradeDetailsMenuRead)?.isEnabled = enable
     }
 
     override fun onDestroyView() {
