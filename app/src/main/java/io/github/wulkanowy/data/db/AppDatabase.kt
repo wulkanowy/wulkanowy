@@ -6,11 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabase.JournalMode.TRUNCATE
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import io.github.wulkanowy.data.db.dao.AttendanceDao
 import io.github.wulkanowy.data.db.dao.AttendanceSummaryDao
 import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
 import io.github.wulkanowy.data.db.dao.ExamDao
 import io.github.wulkanowy.data.db.dao.GradeDao
+import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradeStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradeSummaryDao
 import io.github.wulkanowy.data.db.dao.HomeworkDao
@@ -30,6 +32,7 @@ import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.data.db.entities.GradePointsStatistics
 import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Homework
@@ -52,6 +55,7 @@ import io.github.wulkanowy.data.db.migrations.Migration14
 import io.github.wulkanowy.data.db.migrations.Migration15
 import io.github.wulkanowy.data.db.migrations.Migration16
 import io.github.wulkanowy.data.db.migrations.Migration17
+import io.github.wulkanowy.data.db.migrations.Migration18
 import io.github.wulkanowy.data.db.migrations.Migration2
 import io.github.wulkanowy.data.db.migrations.Migration3
 import io.github.wulkanowy.data.db.migrations.Migration4
@@ -74,6 +78,7 @@ import javax.inject.Singleton
         Grade::class,
         GradeSummary::class,
         GradeStatistics::class,
+        GradePointsStatistics::class,
         Message::class,
         Note::class,
         Homework::class,
@@ -92,31 +97,36 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 17
+        const val VERSION_SCHEMA = 18
+
+        fun getMigrations(): Array<Migration> {
+            return arrayOf(
+                Migration2(),
+                Migration3(),
+                Migration4(),
+                Migration5(),
+                Migration6(),
+                Migration7(),
+                Migration8(),
+                Migration9(),
+                Migration10(),
+                Migration11(),
+                Migration12(),
+                Migration13(),
+                Migration14(),
+                Migration15(),
+                Migration16(),
+                Migration17(),
+                Migration18()
+            )
+        }
 
         fun newInstance(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
                 .setJournalMode(TRUNCATE)
                 .fallbackToDestructiveMigrationFrom(VERSION_SCHEMA + 1)
                 .fallbackToDestructiveMigrationOnDowngrade()
-                .addMigrations(
-                    Migration2(),
-                    Migration3(),
-                    Migration4(),
-                    Migration5(),
-                    Migration6(),
-                    Migration7(),
-                    Migration8(),
-                    Migration9(),
-                    Migration10(),
-                    Migration11(),
-                    Migration12(),
-                    Migration13(),
-                    Migration14(),
-                    Migration15(),
-                    Migration16(),
-                    Migration17()
-                )
+                .addMigrations(*getMigrations())
                 .build()
         }
     }
@@ -138,6 +148,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val gradeSummaryDao: GradeSummaryDao
 
     abstract val gradeStatistics: GradeStatisticsDao
+
+    abstract val gradePointsStatistics: GradePointsStatisticsDao
 
     abstract val messagesDao: MessagesDao
 

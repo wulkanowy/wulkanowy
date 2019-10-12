@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories.gradestatistics
 
+import io.github.wulkanowy.data.db.entities.GradePointsStatistics
 import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.sdk.Sdk
@@ -12,7 +13,10 @@ class GradeStatisticsRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getGradeStatistics(semester: Semester, isSemester: Boolean): Single<List<GradeStatistics>> {
         return Single.just(sdk.apply { diaryId = semester.diaryId })
-            .flatMap { it.getGradesStatistics(semester.semesterId, isSemester) }
+            .flatMap {
+                if (isSemester) it.getGradesAnnualStatistics(semester.semesterId)
+                else it.getGradesPartialStatistics(semester.semesterId)
+            }
             .map { gradeStatistics ->
                 gradeStatistics.map {
                     GradeStatistics(
@@ -22,6 +26,22 @@ class GradeStatisticsRemote @Inject constructor(private val sdk: Sdk) {
                         grade = it.gradeValue,
                         amount = it.amount,
                         semester = isSemester
+                    )
+                }
+            }
+    }
+
+    fun getGradePointsStatistics(semester: Semester): Single<List<GradePointsStatistics>> {
+        return Single.just(sdk.apply { diaryId = semester.diaryId })
+            .flatMap { it.getGradesPointsStatistics(semester.semesterId) }
+            .map { gradePointsStatistics ->
+                gradePointsStatistics.map {
+                    GradePointsStatistics(
+                        semesterId = semester.semesterId,
+                        studentId = semester.studentId,
+                        subject = it.subject,
+                        others = it.others,
+                        student = it.student
                     )
                 }
             }
