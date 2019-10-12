@@ -23,7 +23,7 @@ class LoginAdvancedPresenter @Inject constructor(
         super.onAttachView(view)
         view.run {
             initView()
-
+            showOnlyHybridModeInputs()
             loginErrorHandler.onBadCredentials = {
                 setErrorPassIncorrect()
                 showSoftKeyboard()
@@ -37,6 +37,16 @@ class LoginAdvancedPresenter @Inject constructor(
             clearPassError()
             clearNameError()
             if (formHostValue?.contains("fakelog") == true) setDefaultCredentials("jan@fakelog.cf", "jan123")
+        }
+    }
+
+    fun onLoginModeSelected(type: Sdk.Mode) {
+        view?.run {
+            when (type) {
+                Sdk.Mode.API -> showOnlyMobileApiModeInputs()
+                Sdk.Mode.SCRAPPER -> showOnlyScrapperModeInputs()
+                Sdk.Mode.HYBRID -> showOnlyHybridModeInputs()
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.hideSoftInput
@@ -74,9 +75,16 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
         loginFormHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
-
         loginFormApiKey.setOnEditorActionListener { _, id, _ ->
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) loginFormSignIn.callOnClick() else false
+        }
+
+        loginTypeSwitch.setOnCheckedChangeListener { _, checkedId ->
+            presenter.onLoginModeSelected(when (checkedId) {
+                R.id.loginTypeApi -> Sdk.Mode.API
+                R.id.loginTypeScrapper -> Sdk.Mode.SCRAPPER
+                else -> Sdk.Mode.HYBRID
+            })
         }
 
         with(loginFormHost) {
@@ -160,6 +168,36 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
 
     override fun clearPassError() {
         loginFormPassLayout.error = null
+    }
+
+    override fun showOnlyHybridModeInputs() {
+        loginFormNameLayout.visibility = View.VISIBLE
+        loginFormPassLayout.visibility = View.VISIBLE
+        loginFormApiKeyLayout.visibility = View.VISIBLE
+        loginFormHostLayout.visibility = View.VISIBLE
+        loginFormPinLayout.visibility = View.GONE
+        loginFormSymbolLayout.visibility = View.VISIBLE
+        loginFormTokenLayout.visibility = View.GONE
+    }
+
+    override fun showOnlyScrapperModeInputs() {
+        loginFormNameLayout.visibility = View.VISIBLE
+        loginFormPassLayout.visibility = View.VISIBLE
+        loginFormApiKeyLayout.visibility = View.GONE
+        loginFormHostLayout.visibility = View.VISIBLE
+        loginFormPinLayout.visibility = View.GONE
+        loginFormSymbolLayout.visibility = View.VISIBLE
+        loginFormTokenLayout.visibility = View.GONE
+    }
+
+    override fun showOnlyMobileApiModeInputs() {
+        loginFormNameLayout.visibility = View.GONE
+        loginFormPassLayout.visibility = View.GONE
+        loginFormApiKeyLayout.visibility = View.GONE
+        loginFormHostLayout.visibility = View.GONE
+        loginFormPinLayout.visibility = View.VISIBLE
+        loginFormSymbolLayout.visibility = View.VISIBLE
+        loginFormTokenLayout.visibility = View.VISIBLE
     }
 
     override fun showSoftKeyboard() {

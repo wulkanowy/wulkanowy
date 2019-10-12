@@ -32,4 +32,7 @@ interface LoginAdvancedView : BaseView {
     fun setErrorPinRequired()
     fun setErrorSymbolRequired()
     fun setErrorTokenRequired()
+    fun showOnlyHybridModeInputs()
+    fun showOnlyScrapperModeInputs()
+    fun showOnlyMobileApiModeInputs()
 }
