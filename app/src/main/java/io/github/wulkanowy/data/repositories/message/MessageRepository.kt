@@ -5,6 +5,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.Inter
 import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
+import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
 import io.github.wulkanowy.sdk.pojo.SentMessage
@@ -24,13 +25,13 @@ class MessageRepository @Inject constructor(
     private val sdkHelper: SdkHelper
 ) {
 
-    fun getMessages(student: Student, folder: MessageFolder, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
+    fun getMessages(student: Student, semester: Semester, folder: MessageFolder, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Message>> {
         return Single.just(sdkHelper.init(student))
             .flatMap { _ ->
                 local.getMessages(student, folder).filter { !forceRefresh }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                         .flatMap {
-                            if (it) remote.getMessages(student, folder)
+                            if (it) remote.getMessages(student, semester, folder)
                             else Single.error(UnknownHostException())
                         }.flatMap { new ->
                             local.getMessages(student, folder).toSingle(emptyList())

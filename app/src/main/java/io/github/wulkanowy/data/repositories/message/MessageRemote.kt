@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories.message
 
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
+import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.messages.Folder
@@ -15,8 +16,8 @@ import io.github.wulkanowy.sdk.pojo.Recipient as SdkRecipient
 @Singleton
 class MessageRemote @Inject constructor(private val sdk: Sdk) {
 
-    fun getMessages(student: Student, folder: MessageFolder): Single<List<Message>> {
-        return sdk.getMessages(Folder.valueOf(folder.name), now().minusMonths(6), now()).map { messages ->
+    fun getMessages(student: Student, semester: Semester, folder: MessageFolder): Single<List<Message>> {
+        return sdk.getMessages(Folder.valueOf(folder.name), semester.start.atStartOfDay(), semester.end.atStartOfDay()).map { messages ->
             messages.map {
                 Message(
                     studentId = student.id.toInt(),
