@@ -110,7 +110,7 @@ play {
 }
 
 ext {
-    work_manager = "2.2.0"
+    work_manager = "2.3.0-alpha02"
     room = "2.2.0"
     dagger = "2.24"
     chucker = "2.0.4"
@@ -126,11 +126,11 @@ dependencies {
     implementation "io.github.wulkanowy:api:0.11.0"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "androidx.core:core-ktx:1.1.0"
-    implementation "androidx.activity:activity-ktx:1.0.0"
+    implementation "androidx.core:core-ktx:1.2.0-beta01"
+    implementation "androidx.activity:activity-ktx:1.1.0-beta01"
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "androidx.appcompat:appcompat-resources:1.1.0"
-    implementation "androidx.fragment:fragment-ktx:1.1.0"
+    implementation "androidx.fragment:fragment-ktx:1.2.0-beta02"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation "androidx.multidex:multidex:2.0.1"
 
