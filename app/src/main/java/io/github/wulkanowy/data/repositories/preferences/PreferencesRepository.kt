@@ -2,13 +2,16 @@ package io.github.wulkanowy.data.repositories.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build.VERSION_CODES.Q
 import io.github.wulkanowy.R
+import io.github.wulkanowy.utils.AppInfo
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class PreferencesRepository @Inject constructor(
     private val sharedPref: SharedPreferences,
+    private val appInfo: AppInfo,
     val context: Context
 ) {
     val startMenuIndex: Int
@@ -28,7 +31,10 @@ class PreferencesRepository @Inject constructor(
 
     val appThemeKey: String = context.getString(R.string.pref_key_app_theme)
     val appTheme: String
-        get() = sharedPref.getString(appThemeKey, "light") ?: "light"
+        get() {
+            val defaultValue = if (appInfo.systemVersion >= Q) "system" else "light"
+            return sharedPref.getString(appThemeKey, defaultValue) ?: defaultValue
+        }
 
     val gradeColorTheme: String
         get() = sharedPref.getString(context.getString(R.string.pref_key_grade_color_scheme), "vulcan") ?: "vulcan"

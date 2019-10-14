@@ -11,6 +11,7 @@
     </string-array>
 
     <string-array name="app_theme_entries" tools:ignore="InconsistentArrays">
+        <item>Motyw systemu</item>
         <item>Jasny</item>
         <item>Ciemny</item>
         <item>Czarny (AMOLED)</item>
