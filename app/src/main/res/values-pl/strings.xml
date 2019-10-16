@@ -217,10 +217,17 @@
     <string name="mobile_device_pin">PIN</string>
 
 
+    <string name="schoolandteachers_title">Szkoła i nauczyciele</string>
+
+
     <!--Teacher-->
     <string name="teachers_title">Nauczyciele</string>
     <string name="teacher_no_items">Brak informacji o nauczycielach</string>
     <string name="teacher_no_subject">Brak przedmiotu</string>
+
+
+    <!--School-->
+    <string name="school_title">Szkoła</string>
 
 
     <!--Account-->

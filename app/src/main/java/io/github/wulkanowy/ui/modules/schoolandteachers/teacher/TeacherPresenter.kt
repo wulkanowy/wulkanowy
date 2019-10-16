@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.modules.teacher
+package io.github.wulkanowy.ui.modules.schoolandteachers.teacher
 
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -31,12 +31,16 @@ class TeacherPresenter @Inject constructor(
         loadData(true)
     }
 
+    fun onParentViewLoadData(forceRefresh: Boolean) {
+        loadData(forceRefresh)
+    }
+
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading teachers data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMap { teacherRepository.getTeachers(it, forceRefresh) }
-            .map { it.filter { teacher ->  teacher.name.isNotBlank() } }
+            .map { it.filter { teacher -> teacher.name.isNotBlank() } }
             .map { items -> items.map { TeacherItem(it, view?.noSubjectString.orEmpty()) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
@@ -45,6 +49,7 @@ class TeacherPresenter @Inject constructor(
                     hideRefresh()
                     showProgress(false)
                     enableSwipe(true)
+                    notifyParentDataLoaded()
                 }
             }.subscribe({
                 Timber.i("Loading teachers result: Success")

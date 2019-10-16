@@ -10,7 +10,7 @@
     android:paddingEnd="12dp"
     android:paddingRight="12dp"
     android:paddingBottom="7dp"
-    tools:context=".ui.modules.teacher.TeacherItem">
+    tools:context=".ui.modules.schoolandteachers.teacher.TeacherItem">
 
     <TextView
         android:id="@+id/teacherItemName"
