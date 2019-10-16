@@ -28,7 +28,7 @@ class PreferencesRepository @Inject constructor(
 
     val appThemeKey = context.getString(R.string.pref_key_app_theme)
     val appTheme: String
-        get() = getString(R.string.pref_key_app_theme, R.string.pref_default_app_theme)
+        get() = getString(appThemeKey, R.string.pref_default_app_theme)
 
     val gradeColorTheme: String
         get() = getString(R.string.pref_key_grade_color_scheme, R.string.pref_default_grade_color_scheme)
@@ -39,7 +39,7 @@ class PreferencesRepository @Inject constructor(
 
     val servicesIntervalKey = context.getString(R.string.pref_key_services_interval)
     val servicesInterval: Long
-        get() = getString(R.string.pref_key_services_interval, R.string.pref_default_services_interval).toLong()
+        get() = getString(servicesIntervalKey, R.string.pref_default_services_interval).toLong()
 
     val servicesOnlyWifiKey = context.getString(R.string.pref_key_services_wifi_only)
     val isServicesOnlyWifi: Boolean
@@ -61,7 +61,9 @@ class PreferencesRepository @Inject constructor(
     val fillMessageContent: Boolean
         get() = getBoolean(R.string.pref_key_fill_message_content, R.bool.pref_default_fill_message_content)
 
-    private fun getString(id: Int, default: Int) = sharedPref.getString(context.getString(id), context.getString(default)) ?: context.getString(default)
+    private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
+
+    private fun getString(id: String, default: Int) = sharedPref.getString(id, context.getString(default)) ?: context.getString(default)
 
     private fun getBoolean(id: Int, default: Int) = getBoolean(context.getString(id), default)
 
