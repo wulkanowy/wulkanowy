@@ -22,7 +22,7 @@ class SchoolPresenter @Inject constructor(
     override fun onAttachView(view: SchoolView) {
         super.onAttachView(view)
         view.initView()
-        Timber.i("Teacher view was initialized")
+        Timber.i("School view was initialized")
         loadData()
     }
 
@@ -35,7 +35,7 @@ class SchoolPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        Timber.i("Loading teachers data started")
+        Timber.i("Loading school info started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getCurrentSemester(it) }
             .flatMapMaybe { schoolRepository.getSchoolInfo(it, forceRefresh) }
@@ -52,14 +52,19 @@ class SchoolPresenter @Inject constructor(
                 Timber.i("Loading teachers result: Success")
                 view?.run {
                     updateData(it)
-                    // TODO
-//                    showContent(it.isNotEmpty())
-//                    showEmpty(it.isEmpty())
+                    showContent(true)
+                    showEmpty(false)
                 }
-                analytics.logEvent("load_teachers","force_refresh" to forceRefresh)
-            }) {
-                Timber.i("Loading teachers result: An exception occurred")
+                analytics.logEvent("load_school", "force_refresh" to forceRefresh)
+            }, {
+                Timber.i("Loading school result: An exception occurred")
                 errorHandler.dispatch(it)
-            })
+            }, {
+                Timber.i("Loading school result: No school info found")
+                view?.run {
+                    showContent(false)
+                    showEmpty(true)
+                }
+            }))
     }
 }
