@@ -34,7 +34,6 @@ class SchoolPresenter @Inject constructor(
         loadData(forceRefresh)
     }
 
-
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading teachers data started")
         disposable.add(studentRepository.getCurrentStudent()

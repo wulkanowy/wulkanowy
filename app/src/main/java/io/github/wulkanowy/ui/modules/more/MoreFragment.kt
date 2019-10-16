@@ -57,7 +57,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
         get() = context?.run { getString(R.string.mobile_devices_title) to getCompatDrawable(R.drawable.ic_more_mobile_devices) }
 
     override val schoolAndTeachersRes: Pair<String, Drawable?>?
-        get() = context?.run {  getString(R.string.schoolandteachers_title) to getCompatDrawable((R.drawable.ic_more_teacher)) }
+        get() = context?.run { getString(R.string.schoolandteachers_title) to getCompatDrawable((R.drawable.ic_more_schoolandteachers)) }
 
     override val settingsRes: Pair<String, Drawable?>?
         get() = context?.run { getString(R.string.settings_title) to getCompatDrawable(R.drawable.ic_more_settings) }
