@@ -1,12 +1,83 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:text="@string/school_title"
+    <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+        android:id="@+id/schoolProgress"
+        style="@style/Widget.MaterialProgressBar.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/schoolSwipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/schoolContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/schoolName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Nazwa szkoły" />
+
+            <TextView
+                android:id="@+id/schoolAddress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Adres szkoły" />
+
+            <TextView
+                android:id="@+id/schoolTelephone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Telefon" />
+
+            <TextView
+                android:id="@+id/schoolHeadmaster"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Imię i nazwisko dyrektora" />
+
+            <TextView
+                android:id="@+id/schoolPedagogue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Imię i nazwisko pedagoga" />
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/schoolEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="gone"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/ic_more_teacher"
+            app:tint="?colorOnBackground"
+            tools:ignore="contentDescription" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/teacher_no_items"
+            android:textSize="20sp" />
+    </LinearLayout>
+</FrameLayout>
