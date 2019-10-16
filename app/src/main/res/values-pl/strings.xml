@@ -331,4 +331,9 @@
     <string name="error_service_unavailable">Dziennik jest niedostępny. Spróbuj ponownie później</string>
     <string name="error_unknown">Wystąpił nieoczekiwany błąd</string>
     <string name="error_feature_disabled">Funkcja wyłączona przez szkołę</string>
+    <string name="school_name">Nazwa szkoły</string>
+    <string name="school_address">Adres szkoły</string>
+    <string name="school_telephone">Telefon</string>
+    <string name="school_headmaster">Imię i nazwisko dyrektora</string>
+    <string name="school_pedagogue">Imię i nazwisko pedagoga</string>
 </resources>

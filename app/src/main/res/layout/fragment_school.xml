@@ -51,7 +51,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Nazwa szkoły"
+                    android:text="@string/school_name"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -77,7 +77,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Adres szkoły"
+                    android:text="@string/school_address"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -103,7 +103,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Telefon"
+                    android:text="@string/school_telephone"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -129,7 +129,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Imię i nazwisko dyrektora"
+                    android:text="@string/school_headmaster"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -155,7 +155,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Imię i nazwisko pedagoga"
+                    android:text="@string/school_pedagogue"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="12sp" />
             </LinearLayout>
