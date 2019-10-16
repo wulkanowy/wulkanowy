@@ -26,31 +26,31 @@
             <TextView
                 android:id="@+id/schoolName"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Nazwa szkoły" />
 
             <TextView
                 android:id="@+id/schoolAddress"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Adres szkoły" />
 
             <TextView
                 android:id="@+id/schoolTelephone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Telefon" />
 
             <TextView
                 android:id="@+id/schoolHeadmaster"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Imię i nazwisko dyrektora" />
 
             <TextView
                 android:id="@+id/schoolPedagogue"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Imię i nazwisko pedagoga" />
         </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
