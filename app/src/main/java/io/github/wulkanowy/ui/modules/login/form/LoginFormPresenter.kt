@@ -22,6 +22,7 @@ class LoginFormPresenter @Inject constructor(
         super.onAttachView(view)
         view.run {
             initView()
+            showContact(false)
             if (appInfo.isDebug) showVersion() else showPrivacyPolicy()
 
             loginErrorHandler.onBadCredentials = {
@@ -86,6 +87,7 @@ class LoginFormPresenter @Inject constructor(
                 Timber.i("Login result: An exception occurred")
                 analytics.logEvent("registration_form", "success" to false, "students" to -1, "endpoint" to endpoint, "error" to it.message.ifNullOrBlank { "No message" })
                 loginErrorHandler.dispatch(it)
+                view?.showContact(true)
             }))
     }
 

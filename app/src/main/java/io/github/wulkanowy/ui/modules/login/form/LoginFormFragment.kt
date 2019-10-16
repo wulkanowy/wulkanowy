@@ -154,6 +154,10 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         context?.openInternetBrowser("https://wulkanowy.github.io/polityka-prywatnosci.html", ::showMessage)
     }
 
+    override fun showContact(show: Boolean) {
+        loginFormContact.visibility = if (show) VISIBLE else GONE
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDetachView()
