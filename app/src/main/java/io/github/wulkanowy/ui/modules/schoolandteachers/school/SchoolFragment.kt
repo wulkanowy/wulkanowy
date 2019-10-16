@@ -39,8 +39,8 @@ class SchoolFragment : BaseFragment(), SchoolView, MainView.TitledView, SchoolAn
 
     override fun updateData(data: SchoolInfo) {
         schoolName.text = data.name
-        schoolAddress.text = data.address
-        schoolTelephone.text = data.contact
+        schoolAddress.text = data.address.ifBlank { "-" }
+        schoolTelephone.text = data.contact.ifBlank { "-" }
         schoolHeadmaster.text = data.headmaster
         schoolPedagogue.text = data.pedagogue
     }
