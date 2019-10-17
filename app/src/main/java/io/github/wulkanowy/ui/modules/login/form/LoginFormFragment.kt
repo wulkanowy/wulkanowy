@@ -25,6 +25,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.text.Html
+import io.github.wulkanowy.utils.openEmail
 
 class LoginFormFragment : BaseFragment(), LoginFormView {
 
@@ -174,12 +175,11 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     }
 
     override fun openEmail() {
-        val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-            "mailto", "wulkanowyinc@gmail.com", null))
-        val text = requireContext().getString(R.string.login_email_text, appInfo.systemModel, appInfo.systemVersion.toString(), appInfo.versionName)
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, requireContext().getString(R.string.login_email_subject))
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf("wulkanowyinc@gmail.com"))
-        emailIntent.putExtra(Intent.EXTRA_TEXT, text)
-        startActivity(Intent.createChooser(emailIntent, requireContext().getString(R.string.login_email_intent_title)))
+        context?.openEmail(
+            requireContext().getString(R.string.login_email_intent_title),
+            "wulkanowyinc@gmail.com",
+            requireContext().getString(R.string.login_email_subject),
+            requireContext().getString(R.string.login_email_text, appInfo.systemModel, appInfo.systemVersion.toString(), appInfo.versionName)
+        )
     }
 }
