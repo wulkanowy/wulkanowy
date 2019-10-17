@@ -35,6 +35,12 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
+                <View
+                    android:id="@+id/loginSymbolContactTopDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider" />
+
                 <TextView
                     android:id="@+id/loginSymbolContactHeader"
                     android:layout_width="match_parent"
@@ -81,7 +87,7 @@
                 </LinearLayout>
 
                 <View
-                    android:id="@+id/loginSymbolContactDivider"
+                    android:id="@+id/loginSymbolContactBottomDivider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="8dp"
