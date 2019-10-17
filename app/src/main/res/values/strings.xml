@@ -39,6 +39,8 @@
     <string name="login_contact_header">Trouble signing in? Contact us!</string>
     <string name="login_contact_email">Email</string>
     <string name="login_contact_discord">Discord</string>
+    <string name="login_email_intent_title">Send email</string>
+    <string name="login_email_subject" translatable="false">Zgłoszenie: Problemy z logowaniem</string>
 
 
     <!--Main-->

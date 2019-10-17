@@ -44,4 +44,8 @@ interface LoginFormView : BaseView {
     fun openPrivacyPolicyPage()
 
     fun showContact(show: Boolean)
+
+    fun openDiscordInvite()
+
+    fun openEmail()
 }

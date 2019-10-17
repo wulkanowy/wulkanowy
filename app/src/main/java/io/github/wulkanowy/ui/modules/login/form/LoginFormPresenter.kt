@@ -91,6 +91,14 @@ class LoginFormPresenter @Inject constructor(
             }))
     }
 
+    fun onDiscordClick() {
+        view?.openDiscordInvite()
+    }
+
+    fun onEmailClick() {
+        view?.openEmail()
+    }
+
     private fun validateCredentials(login: String, password: String): Boolean {
         var isCorrect = true
 
