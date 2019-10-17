@@ -21,10 +21,6 @@ import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.fragment_login_form.*
 import javax.inject.Inject
-import android.content.Intent
-import android.net.Uri
-import android.os.Build
-import android.text.Html
 import io.github.wulkanowy.utils.openEmail
 
 class LoginFormFragment : BaseFragment(), LoginFormView {
