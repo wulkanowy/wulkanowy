@@ -42,18 +42,18 @@
                 android:paddingBottom="8dp">
 
                 <TextView
-                    android:id="@+id/schoolName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    tools:text="@tools:sample/full_names" />
-
-                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/school_name"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/schoolName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    tools:text="@tools:sample/full_names" />
             </LinearLayout>
 
             <LinearLayout
@@ -66,13 +66,6 @@
                 android:paddingEnd="12dp"
                 android:paddingRight="12dp"
                 android:paddingBottom="7dp">
-
-                <TextView
-                    android:id="@+id/schoolAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    tools:text="@tools:sample/full_names" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -80,6 +73,13 @@
                     android:text="@string/school_address"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/schoolAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    tools:text="@tools:sample/full_names" />
             </LinearLayout>
 
             <LinearLayout
@@ -92,13 +92,6 @@
                 android:paddingEnd="12dp"
                 android:paddingRight="12dp"
                 android:paddingBottom="7dp">
-
-                <TextView
-                    android:id="@+id/schoolTelephone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    tools:text="@tools:sample/full_names" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -106,6 +99,13 @@
                     android:text="@string/school_telephone"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/schoolTelephone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    tools:text="@tools:sample/full_names" />
             </LinearLayout>
 
             <LinearLayout
@@ -118,13 +118,6 @@
                 android:paddingEnd="12dp"
                 android:paddingRight="12dp"
                 android:paddingBottom="7dp">
-
-                <TextView
-                    android:id="@+id/schoolHeadmaster"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    tools:text="@tools:sample/full_names" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -132,6 +125,13 @@
                     android:text="@string/school_headmaster"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/schoolHeadmaster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    tools:text="@tools:sample/full_names" />
             </LinearLayout>
 
             <LinearLayout
@@ -146,18 +146,18 @@
                 android:paddingBottom="7dp">
 
                 <TextView
-                    android:id="@+id/schoolPedagogue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="17sp"
-                    tools:text="@tools:sample/full_names" />
-
-                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/school_pedagogue"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/schoolPedagogue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    tools:text="@tools:sample/full_names" />
             </LinearLayout>
         </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
