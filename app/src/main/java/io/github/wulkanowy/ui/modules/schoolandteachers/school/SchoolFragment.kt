@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.SchoolInfo
+import io.github.wulkanowy.data.db.entities.School
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersChildView
@@ -37,7 +37,7 @@ class SchoolFragment : BaseFragment(), SchoolView, MainView.TitledView, SchoolAn
         schoolSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
     }
 
-    override fun updateData(data: SchoolInfo) {
+    override fun updateData(data: School) {
         schoolName.text = data.name
         schoolAddress.text = data.address.ifBlank { "-" }
         schoolTelephone.text = data.contact.ifBlank { "-" }

@@ -22,7 +22,7 @@ import io.github.wulkanowy.data.db.dao.MobileDeviceDao
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.dao.RecipientDao
 import io.github.wulkanowy.data.db.dao.ReportingUnitDao
-import io.github.wulkanowy.data.db.dao.SchoolInfoDao
+import io.github.wulkanowy.data.db.dao.SchoolDao
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.dao.SubjectDao
@@ -43,7 +43,7 @@ import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
-import io.github.wulkanowy.data.db.entities.SchoolInfo
+import io.github.wulkanowy.data.db.entities.School
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
@@ -91,7 +91,7 @@ import javax.inject.Singleton
         Recipient::class,
         MobileDevice::class,
         Teacher::class,
-        SchoolInfo::class
+        School::class
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -174,5 +174,5 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract val teacherDao: TeacherDao
 
-    abstract val schoolInfoDao: SchoolInfoDao
+    abstract val schoolDao: SchoolDao
 }

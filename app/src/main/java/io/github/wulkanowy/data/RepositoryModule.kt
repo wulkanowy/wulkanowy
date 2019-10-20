@@ -147,5 +147,5 @@ internal class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideSchoolInfoDao(database: AppDatabase) = database.schoolInfoDao
+    fun provideSchoolInfoDao(database: AppDatabase) = database.schoolDao
 }

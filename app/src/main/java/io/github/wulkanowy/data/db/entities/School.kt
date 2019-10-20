@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity(tableName = "SchoolInfo")
-data class SchoolInfo(
+@Entity(tableName = "School")
+data class School(
 
     @ColumnInfo(name = "student_id")
     val studentId: Int,

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 18,
-    "identityHash": "86c693fe89b0b372dc897d4ac4c5fcba",
+    "identityHash": "73b1dcfe0cf84170ba102b2818dd0191",
     "entities": [
       {
         "tableName": "Students",
@@ -1521,7 +1521,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "SchoolInfo",
+        "tableName": "School",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `address` TEXT NOT NULL, `contact` TEXT NOT NULL, `headmaster` TEXT NOT NULL, `pedagogue` TEXT NOT NULL)",
         "fields": [
           {
@@ -1586,7 +1586,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '86c693fe89b0b372dc897d4ac4c5fcba')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '73b1dcfe0cf84170ba102b2818dd0191')"
     ]
   }
 }
