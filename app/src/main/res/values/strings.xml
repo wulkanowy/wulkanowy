@@ -200,9 +200,12 @@
     <string name="mobile_device_symbol">Symbol</string>
     <string name="mobile_device_pin">PIN</string>
 
+
+    <!--School and teachers-->
     <string name="schoolandteachers_title">School and teachers</string>
 
-    <!-- School -->
+
+    <!--School-->
     <string name="school_title">School</string>
     <string name="school_name">School name</string>
     <string name="school_address">School address</string>
