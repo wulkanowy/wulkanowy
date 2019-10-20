@@ -52,6 +52,7 @@
                     android:id="@+id/schoolName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textSize="17sp"
                     tools:text="@tools:sample/full_names" />
             </LinearLayout>
@@ -78,6 +79,7 @@
                     android:id="@+id/schoolAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textSize="17sp"
                     tools:text="@tools:sample/full_names" />
             </LinearLayout>
@@ -104,6 +106,7 @@
                     android:id="@+id/schoolTelephone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textSize="17sp"
                     tools:text="@tools:sample/full_names" />
             </LinearLayout>
@@ -130,6 +133,7 @@
                     android:id="@+id/schoolHeadmaster"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textSize="17sp"
                     tools:text="@tools:sample/full_names" />
             </LinearLayout>
@@ -156,6 +160,7 @@
                     android:id="@+id/schoolPedagogue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textSize="17sp"
                     tools:text="@tools:sample/full_names" />
             </LinearLayout>
