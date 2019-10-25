@@ -90,6 +90,7 @@
                 </LinearLayout>
 
                 <ImageButton
+                    android:id="@+id/schoolAddressButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_school_directions"
@@ -97,8 +98,8 @@
                     android:tint="?colorPrimary"
                     android:padding="4dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
 
@@ -135,6 +136,7 @@
                 </LinearLayout>
 
                 <ImageButton
+                    android:id="@+id/schoolTelephoneButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_school_phone"
@@ -142,8 +144,8 @@
                     android:tint="?colorPrimary"
                     android:padding="4dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
 
