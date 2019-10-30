@@ -11,14 +11,13 @@ import io.github.wulkanowy.ui.modules.login.form.LoginFormFragment
 import io.github.wulkanowy.ui.modules.login.studentselect.LoginStudentSelectFragment
 import io.github.wulkanowy.ui.modules.login.symbol.LoginSymbolFragment
 
-@Module
 @Suppress("unused")
+@Module(includes = [LoginModule.Static::class])
 internal abstract class LoginModule {
 
     @Module
-    companion object {
+    object Static {
 
-        @JvmStatic
         @PerActivity
         @Provides
         fun provideLoginAdapter(activity: LoginActivity) = BaseFragmentPagerAdapter(activity.supportFragmentManager)

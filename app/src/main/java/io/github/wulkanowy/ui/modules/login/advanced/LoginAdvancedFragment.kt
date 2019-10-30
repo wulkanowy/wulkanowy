@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
+import io.github.wulkanowy.ui.modules.login.form.LoginSymbolAdapter
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.fragment_login_advanced.*
@@ -68,8 +68,8 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     }
 
     override fun initView() {
-        hostKeys = resources.getStringArray(R.array.endpoints_keys)
-        hostValues = resources.getStringArray(R.array.endpoints_values)
+        hostKeys = resources.getStringArray(R.array.hosts_keys)
+        hostValues = resources.getStringArray(R.array.hosts_values)
 
         loginFormName.doOnTextChanged { _, _, _, _ -> presenter.onNameTextChanged() }
         loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
@@ -89,8 +89,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
 
         with(loginFormHost) {
             setText(hostKeys.getOrElse(0) { "" })
-            setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
-            keyListener = null
+            setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
         }
     }
 
@@ -220,7 +219,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, Triple(
             loginFormName.text.toString(),
             loginFormPass.text.toString(),
-            resources.getStringArray(R.array.endpoints_values)[1]
+            resources.getStringArray(R.array.hosts_values)[1]
         ))
     }
 
