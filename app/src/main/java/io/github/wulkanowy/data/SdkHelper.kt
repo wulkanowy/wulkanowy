@@ -24,9 +24,8 @@ class SdkHelper @Inject constructor(private val sdk: Sdk) {
 
             mode = Sdk.Mode.valueOf(student.loginMode)
             apiBaseUrl = student.apiBaseUrl
-            apiKey = student.apiKey
             certKey = student.certificateKey
-            certificate = student.certificate
+            privateKey = student.privateKey
         }
     }
 
@@ -39,7 +38,7 @@ class SdkHelper @Inject constructor(private val sdk: Sdk) {
             this.apiKey = apiKey
 
             certKey = "" // clear certificate on getStudent()
-            certificate = ""
+            privateKey = ""
         }
     }
 

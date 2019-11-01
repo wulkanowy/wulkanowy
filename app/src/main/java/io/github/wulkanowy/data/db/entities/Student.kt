@@ -20,9 +20,8 @@ data class Student(
 
     val certificateKey: String,
 
-    val certificate: String,
-
-    val apiKey: String,
+    @ColumnInfo(name = "private_key")
+    val privateKey: String,
 
     val email: String,
 

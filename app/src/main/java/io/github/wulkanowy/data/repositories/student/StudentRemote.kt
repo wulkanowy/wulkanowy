@@ -11,19 +11,15 @@ import io.github.wulkanowy.sdk.pojo.Student as SdkStudent
 @Singleton
 class StudentRemote @Inject constructor(private val sdk: Sdk) {
 
-    fun getStudents(apiKey: String): Single<List<Student>> {
-        return sdk.getStudents().map { mapStudents(it, "", "", "", apiKey) }
+    fun getStudents(): Single<List<Student>> {
+        return sdk.getStudents().map { mapStudents(it, "", "", "") }
     }
 
     fun getStudents(email: String, password: String, endpoint: String): Single<List<Student>> {
-        return sdk.getStudents().map { mapStudents(it, email, password, endpoint, "") }
+        return sdk.getStudents().map { mapStudents(it, email, password, endpoint) }
     }
 
-    fun getStudents(email: String, password: String, endpoint: String, apiKey: String): Single<List<Student>> {
-        return sdk.getStudents().map { mapStudents(it, email, password, endpoint, apiKey) }
-    }
-
-    private fun mapStudents(students: List<SdkStudent>, email: String, password: String, endpoint: String, apiKey: String): List<Student> {
+    private fun mapStudents(students: List<SdkStudent>, email: String, password: String, endpoint: String): List<Student> {
         return students.map { student ->
             Student(
                 email = email,
@@ -41,8 +37,7 @@ class StudentRemote @Inject constructor(private val sdk: Sdk) {
                 isCurrent = false,
                 registrationDate = now(),
                 apiBaseUrl = student.apiHost,
-                apiKey = apiKey,
-                certificate = student.certificate,
+                privateKey = student.privateKey,
                 certificateKey = student.certificateKey,
                 loginMode = student.loginMode.name
             )
