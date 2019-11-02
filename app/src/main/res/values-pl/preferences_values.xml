@@ -16,10 +16,10 @@
         <item>Czarny (AMOLED)</item>
     </string-array>
 
-    <string-array name="app_language_entries">
+    <string-array name="app_language_entries" tools:ignore="InconsistentArrays">
         <item>Język systemu</item>
         <item>Polski</item>
-        <item>Angielski</item>
+        <item>English</item>
     </string-array>
 
     <string-array name="grade_modifier_entries">
