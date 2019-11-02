@@ -16,7 +16,7 @@
         <item>Czarny (AMOLED)</item>
     </string-array>
 
-    <string-array name="app_language_entries" tools:ignore="InconsistentArrays">
+    <string-array name="app_language_entries">
         <item>Język systemu</item>
         <item>Polski</item>
         <item>English</item>
