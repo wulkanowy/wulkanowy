@@ -15,10 +15,10 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.utils.SchooldaysRangeLimiter
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.timetable.completed.CompletedLessonsFragment
+import io.github.wulkanowy.utils.SchooldaysRangeLimiter
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_timetable.*
@@ -153,9 +153,12 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
         val datePickerDialog = DatePickerDialog.newInstance(dateSetListener,
             currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
 
-        datePickerDialog.setDateRangeLimiter(SchooldaysRangeLimiter())
-
-        datePickerDialog.show(requireFragmentManager(), "Datepickerdialog")
+        with(datePickerDialog) {
+            setDateRangeLimiter(SchooldaysRangeLimiter())
+            version = DatePickerDialog.Version.VERSION_2
+            scrollOrientation = DatePickerDialog.ScrollOrientation.VERTICAL
+            show(this@TimetableFragment.parentFragmentManager, null)
+        }
     }
 
     override fun openCompletedLessonsView() {

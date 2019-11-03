@@ -121,9 +121,12 @@ class CompletedLessonsFragment : BaseFragment(), CompletedLessonsView, MainView.
         val datePickerDialog = DatePickerDialog.newInstance(dateSetListener,
             currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
 
-        datePickerDialog.setDateRangeLimiter(SchooldaysRangeLimiter())
-
-        datePickerDialog.show(requireFragmentManager(), "Datepickerdialog")
+        with(datePickerDialog) {
+            setDateRangeLimiter(SchooldaysRangeLimiter())
+            version = DatePickerDialog.Version.VERSION_2
+            scrollOrientation = DatePickerDialog.ScrollOrientation.VERTICAL
+            show(this@CompletedLessonsFragment.parentFragmentManager, null)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -15,6 +15,5 @@
 
     <style name="WulkanowyTheme.Black" parent="WulkanowyTheme.NoActionBar">
         <item name="colorSurface">@android:color/black</item>
-        <item name="mdtp_theme_dark">true</item>
     </style>
 </resources>

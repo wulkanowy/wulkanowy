@@ -15,10 +15,10 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.utils.SchooldaysRangeLimiter
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.SchooldaysRangeLimiter
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_attendance.*
@@ -152,9 +152,12 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
         val datePickerDialog = DatePickerDialog.newInstance(dateSetListener,
             currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
 
-        datePickerDialog.setDateRangeLimiter(SchooldaysRangeLimiter())
-
-        datePickerDialog.show(requireFragmentManager(), "Datepickerdialog")
+        with(datePickerDialog) {
+            setDateRangeLimiter(SchooldaysRangeLimiter())
+            version = DatePickerDialog.Version.VERSION_2
+            scrollOrientation = DatePickerDialog.ScrollOrientation.VERTICAL
+            show(this@AttendanceFragment.parentFragmentManager, null)
+        }
     }
 
     override fun openSummaryView() {

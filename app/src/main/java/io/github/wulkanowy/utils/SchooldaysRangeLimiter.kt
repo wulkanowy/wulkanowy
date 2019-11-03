@@ -10,8 +10,7 @@ import java.util.Calendar
 @Suppress("UNUSED_PARAMETER")
 class SchooldaysRangeLimiter : DateRangeLimiter {
 
-    private val now: LocalDate
-        get() = LocalDate.now()
+    private val now = LocalDate.now()
 
     override fun setToNearestDate(day: Calendar): Calendar = day
 
@@ -39,21 +38,14 @@ class SchooldaysRangeLimiter : DateRangeLimiter {
         return calendar
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
+    override fun writeToParcel(parcel: Parcel, flags: Int) {}
 
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<SchooldaysRangeLimiter> {
-        override fun createFromParcel(parcel: Parcel): SchooldaysRangeLimiter {
-            return SchooldaysRangeLimiter()
-        }
 
-        override fun newArray(size: Int): Array<SchooldaysRangeLimiter?> {
-            return arrayOfNulls(size)
-        }
+        override fun createFromParcel(parcel: Parcel): SchooldaysRangeLimiter = SchooldaysRangeLimiter()
+
+        override fun newArray(size: Int): Array<SchooldaysRangeLimiter?> = arrayOfNulls(size)
     }
 }
