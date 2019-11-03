@@ -1,7 +1,9 @@
-Wersja 0.10
+Wersja 0.12.0
 
-- odświeżyliśmy wygląd aplikacji
-- poprawiliśmy wyświetlanie nauczycieli w planie lekcji
-- naprawiliśmy szczęsliwy numerek
+- wsparcie dla dziennika Lubelskiego Portalu Oświatowego
+- naprawa problemów z wyświetlaniem ocen punktowych
+- automatyczne przełączanie motywu na androidzie 10
+- wyświetlanie pomocy przy problemach z logowaniem
+- wyświetlanie informacji o szkole
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

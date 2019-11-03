@@ -6,8 +6,6 @@ import org.threeten.bp.LocalDate
 
 interface TimetableView : BaseView {
 
-    val roomString: String
-
     val isViewEmpty: Boolean
 
     val currentStackSize: Int?

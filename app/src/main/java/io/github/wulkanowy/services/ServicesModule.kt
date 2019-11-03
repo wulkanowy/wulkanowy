@@ -21,6 +21,7 @@ import io.github.wulkanowy.services.sync.works.LuckyNumberWork
 import io.github.wulkanowy.services.sync.works.MessageWork
 import io.github.wulkanowy.services.sync.works.NoteWork
 import io.github.wulkanowy.services.sync.works.RecipientWork
+import io.github.wulkanowy.services.sync.works.TeacherWork
 import io.github.wulkanowy.services.sync.works.TimetableWork
 import io.github.wulkanowy.services.sync.works.Work
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
@@ -28,17 +29,15 @@ import javax.inject.Singleton
 
 @Suppress("unused")
 @AssistedModule
-@Module(includes = [AssistedInject_ServicesModule::class])
+@Module(includes = [AssistedInject_ServicesModule::class, ServicesModule.Static::class])
 abstract class ServicesModule {
 
     @Module
-    companion object {
+    object Static {
 
-        @JvmStatic
         @Provides
         fun provideWorkManager(context: Context) = WorkManager.getInstance(context)
 
-        @JvmStatic
         @Singleton
         @Provides
         fun provideNotificationManager(context: Context) = NotificationManagerCompat.from(context)
@@ -74,6 +73,10 @@ abstract class ServicesModule {
     @Binds
     @IntoSet
     abstract fun provideTimetableWork(work: TimetableWork): Work
+
+    @Binds
+    @IntoSet
+    abstract fun provideTeacherWork(work: TeacherWork): Work
 
     @Binds
     @IntoSet
