@@ -10,13 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Dao
-interface TeacherDao {
-
-    @Insert
-    fun insertAll(teachers: List<Teacher>)
-
-    @Delete
-    fun deleteAll(teachers: List<Teacher>)
+interface TeacherDao : BaseDao<Teacher> {
 
     @Query("SELECT * FROM Teachers WHERE student_id = :studentId AND class_id = :classId")
     fun loadAll(studentId: Int, classId: Int): Maybe<List<Teacher>>
