@@ -3,9 +3,8 @@ package io.github.wulkanowy.data.db.dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Update
-import java.io.Serializable
 
-interface BaseDao<in T : Serializable> {
+interface BaseDao<T> {
 
     @Insert
     fun insertAll(items: List<T>): List<Long>

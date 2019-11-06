@@ -1,8 +1,6 @@
 package io.github.wulkanowy.data.db.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
 import io.github.wulkanowy.data.db.entities.Teacher
 import io.reactivex.Maybe

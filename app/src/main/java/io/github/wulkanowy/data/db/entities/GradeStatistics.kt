@@ -3,7 +3,6 @@ package io.github.wulkanowy.data.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.Serializable
 
 @Entity(tableName = "GradesStatistics")
 data class GradeStatistics(
@@ -22,7 +21,7 @@ data class GradeStatistics(
 
     @ColumnInfo(name = "is_semester")
     val semester: Boolean
-): Serializable {
+) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 }
