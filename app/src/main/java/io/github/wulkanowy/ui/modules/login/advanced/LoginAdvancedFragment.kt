@@ -27,7 +27,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     }
 
     override val formLoginType: String
-        get() = when(loginTypeSwitch.checkedRadioButtonId) {
+        get() = when (loginTypeSwitch.checkedRadioButtonId) {
             R.id.loginTypeApi -> "API"
             R.id.loginTypeScrapper -> "SCRAPPER"
             else -> "HYBRID"
@@ -73,6 +73,10 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
 
         loginFormName.doOnTextChanged { _, _, _, _ -> presenter.onNameTextChanged() }
         loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
+        loginFormApiKey.doOnTextChanged { _, _, _, _ -> presenter.onApiKeyTextChanged() }
+        loginFormPin.doOnTextChanged { _, _, _, _ -> presenter.onPinTextChanged() }
+        loginFormSymbol.doOnTextChanged { _, _, _, _ -> presenter.onSymbolTextChanged() }
+        loginFormToken.doOnTextChanged { _, _, _, _ -> presenter.onTokenTextChanged() }
         loginFormHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
         loginFormApiKey.setOnEditorActionListener { _, id, _ ->
@@ -167,6 +171,22 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
 
     override fun clearPassError() {
         loginFormPassLayout.error = null
+    }
+
+    override fun clearApiKeyError() {
+        loginFormApiKeyLayout.error = null
+    }
+
+    override fun clearPinKeyError() {
+        loginFormPinLayout.error = null
+    }
+
+    override fun clearSymbolError() {
+        loginFormSymbolLayout.error = null
+    }
+
+    override fun clearTokenError() {
+        loginFormTokenLayout.error = null
     }
 
     override fun showOnlyHybridModeInputs() {

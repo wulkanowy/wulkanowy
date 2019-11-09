@@ -58,6 +58,22 @@ class LoginAdvancedPresenter @Inject constructor(
         view?.clearNameError()
     }
 
+    fun onApiKeyTextChanged() {
+        view?.clearApiKeyError()
+    }
+
+    fun onPinTextChanged() {
+        view?.clearPinKeyError()
+    }
+
+    fun onSymbolTextChanged() {
+        view?.clearSymbolError()
+    }
+
+    fun onTokenTextChanged() {
+        view?.clearTokenError()
+    }
+
     fun onSignInClick() {
         if (!validateCredentials()) return
 
