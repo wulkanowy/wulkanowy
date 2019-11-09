@@ -192,7 +192,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     override fun showOnlyMobileApiModeInputs() {
         loginFormNameLayout.visibility = View.GONE
         loginFormPassLayout.visibility = View.GONE
-        loginFormApiKeyLayout.visibility = View.GONE
+        loginFormApiKeyLayout.visibility = View.VISIBLE
         loginFormHostLayout.visibility = View.GONE
         loginFormPinLayout.visibility = View.VISIBLE
         loginFormSymbolLayout.visibility = View.VISIBLE
