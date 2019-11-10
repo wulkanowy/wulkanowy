@@ -178,7 +178,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:hint="@string/login_host_hint"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@+id/loginFormPinLayout"
