@@ -64,13 +64,12 @@ class Migration19 : Migration(18, 19) {
         database.execSQL("""
             CREATE TABLE IF NOT EXISTS Students_tmp (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                scrapperBaseUrl TEXT NOT NULL,
-                apiBaseUrl TEXT NOT NULL,
-                loginType TEXT NOT NULL,
-                loginMode TEXT NOT NULL,
-                certificateKey TEXT NOT NULL,
-                privateKey TEXT NOT NULL,
-                apiKey TEXT NOT NULL,
+                scrapper_base_url TEXT NOT NULL,
+                api_base_url TEXT NOT NULL,
+                login_type TEXT NOT NULL,
+                login_mode TEXT NOT NULL,
+                certificate_key TEXT NOT NULL,
+                private_key TEXT NOT NULL,
                 email TEXT NOT NULL,
                 password TEXT NOT NULL,
                 symbol TEXT NOT NULL,
@@ -91,14 +90,13 @@ class Migration19 : Migration(18, 19) {
         database.execSQL("ALTER TABLE Students ADD COLUMN loginMode TEXT NOT NULL DEFAULT \"\";")
         database.execSQL("ALTER TABLE Students ADD COLUMN certificateKey TEXT NOT NULL DEFAULT \"\";")
         database.execSQL("ALTER TABLE Students ADD COLUMN privateKey TEXT NOT NULL DEFAULT \"\";")
-        database.execSQL("ALTER TABLE Students ADD COLUMN apiKey TEXT NOT NULL DEFAULT \"\";")
         database.execSQL("ALTER TABLE Students ADD COLUMN user_login_id INTEGER NOT NULL DEFAULT 0;")
 
         database.execSQL("""
             INSERT INTO Students_tmp(
-            id, scrapperBaseUrl, apiBaseUrl, loginType, loginMode, certificateKey, privateKey, apiKey, email, password, symbol, student_id, user_login_id, student_name, school_id, school_name, school_id, school_name, class_name, class_id, is_current, registration_date)
+            id, scrapper_base_url, api_base_url, login_type, login_mode, certificate_key, private_key, email, password, symbol, student_id, user_login_id, student_name, school_id, school_name, school_id, school_name, class_name, class_id, is_current, registration_date)
             SELECT
-            id, endpoint, apiBaseUrl, loginType, "SCRAPPER", certificateKey, privateKey, apiKey, email, password, symbol, student_id, user_login_id, student_name, school_id, school_name, school_id, school_name, class_name, class_id, is_current, registration_date
+            id, endpoint, apiBaseUrl, loginType, "SCRAPPER", certificateKey, privateKey, email, password, symbol, student_id, user_login_id, student_name, school_id, school_name, school_id, school_name, class_name, class_id, is_current, registration_date
             FROM Students
         """)
         database.execSQL("DROP TABLE Students")

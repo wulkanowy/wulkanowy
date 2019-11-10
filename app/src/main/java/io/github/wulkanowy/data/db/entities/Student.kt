@@ -10,14 +10,19 @@ import java.io.Serializable
 @Entity(tableName = "Students", indices = [Index(value = ["email", "symbol", "student_id", "school_id", "class_id"], unique = true)])
 data class Student(
 
+    @ColumnInfo(name = "scrapper_base_url")
     val scrapperBaseUrl: String,
 
+    @ColumnInfo(name = "api_base_url")
     val apiBaseUrl: String,
 
+    @ColumnInfo(name = "login_type")
     val loginType: String,
 
+    @ColumnInfo(name = "login_mode")
     val loginMode: String,
 
+    @ColumnInfo(name = "certificate_key")
     val certificateKey: String,
 
     @ColumnInfo(name = "private_key")
