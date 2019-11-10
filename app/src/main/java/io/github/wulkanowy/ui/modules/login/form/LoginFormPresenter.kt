@@ -23,7 +23,7 @@ class LoginFormPresenter @Inject constructor(
         view.run {
             initView()
             showContact(false)
-            if (appInfo.isDebug) showVersion() else showPrivacyPolicy()
+            showVersion()
 
             loginErrorHandler.onBadCredentials = {
                 setErrorPassIncorrect()

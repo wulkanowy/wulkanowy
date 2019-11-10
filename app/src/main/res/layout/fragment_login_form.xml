@@ -1,8 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <me.zhanghai.android.materialprogressbar.MaterialProgressBar
         android:id="@+id/loginFormProgress"
@@ -196,39 +196,6 @@
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/loginFormVersion"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
-                android:maxLines="2"
-                android:textColor="?android:textColorSecondary"
-                android:textSize="12sp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@id/loginFormSignIn"
-                app:layout_constraintEnd_toStartOf="@+id/loginFormSignIn"
-                app:layout_constraintStart_toStartOf="@id/loginFormHostLayout"
-                app:layout_constraintTop_toTopOf="@+id/loginFormSignIn"
-                tools:text="Version 1.0.0" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/loginFormPrivacyLink"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
-                android:gravity="start|center_vertical"
-                android:text="@string/login_privacy_policy"
-                android:visibility="invisible"
-                app:fontFamily="sans-serif-medium"
-                app:layout_constraintBottom_toBottomOf="@id/loginFormSignIn"
-                app:layout_constraintEnd_toStartOf="@+id/loginFormSignIn"
-                app:layout_constraintStart_toStartOf="@id/loginFormHostLayout"
-                app:layout_constraintTop_toTopOf="@+id/loginFormSignIn"
-                tools:visibility="visible" />
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginFormAdvancedButton"
                 style="@style/Widget.MaterialComponents.Button"
@@ -260,6 +227,31 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginFormHostLayout" />
+
+            <TextView
+                android:id="@+id/loginFormPrivacyLink"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/login_privacy_policy"
+                app:fontFamily="sans-serif-medium"
+                app:layout_constraintStart_toStartOf="@id/loginFormAdvancedButton"
+                app:layout_constraintTop_toBottomOf="@+id/loginFormAdvancedButton"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/loginFormVersion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:maxLines="2"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="@+id/loginFormSignIn"
+                app:layout_constraintTop_toBottomOf="@id/loginFormSignIn"
+                tools:text="Version 1.0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>
