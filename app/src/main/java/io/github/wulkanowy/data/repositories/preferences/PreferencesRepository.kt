@@ -65,6 +65,9 @@ class PreferencesRepository @Inject constructor(
     val fillMessageContent: Boolean
         get() = getBoolean(R.string.pref_key_fill_message_content, R.bool.pref_default_fill_message_content)
 
+    val treatZeroWeightAsOne: Boolean
+        get() = getBoolean(R.string.pref_key_treat_zero_weight_as_one, R.bool.pref_default_treat_zero_weight_as_one)
+
     private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
 
     private fun getString(id: String, default: Int) = sharedPref.getString(id, context.getString(default)) ?: context.getString(default)

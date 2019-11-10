@@ -42,7 +42,7 @@ class GradeAverageProvider @Inject constructor(
                 }.map { grades ->
                     grades.map { it.changeModifier(plusModifier, minusModifier) }
                         .groupBy { it.subject }
-                        .mapValues { it.value.calcAverage() }
+                        .mapValues { it.value.calcAverage(preferencesRepository) }
                 })
     }
 
@@ -56,7 +56,7 @@ class GradeAverageProvider @Inject constructor(
                 .map { grades ->
                     grades.map { it.changeModifier(plusModifier, minusModifier) }
                         .groupBy { it.subject }
-                        .mapValues { it.value.calcAverage() }
+                        .mapValues { it.value.calcAverage(preferencesRepository) }
                 })
     }
 

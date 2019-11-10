@@ -16,4 +16,5 @@
     <string name="pref_default_grade_modifier_plus">0.0</string>
     <string name="pref_default_grade_modifier_minus">0.0</string>
     <bool name="pref_default_fill_message_content">true</bool>
+    <bool name="pref_default_treat_zero_weight_as_one">true</bool>
 </resources>

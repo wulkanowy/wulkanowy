@@ -316,6 +316,7 @@
     <string name="pref_other_grade_modifier_plus">Wartość plusa</string>
     <string name="pref_other_grade_modifier_minus">Wartość minusa</string>
     <string name="pref_other_fill_message_content">Odpowiadaj z historią wiadomości</string>
+    <string name="pref_other_treat_zero_weight_as_one">Traktuj wagę 0 jako 1 w podsumowaniu</string>
 
 
     <!--Notification Channels-->

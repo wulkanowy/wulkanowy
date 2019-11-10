@@ -3,14 +3,18 @@ package io.github.wulkanowy.utils
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 
-fun List<Grade>.calcAverage(): Double {
+fun List<Grade>.calcAverage(preferencesRepository: PreferencesRepository): Double {
     var counter = 0.0
     var denominator = 0.0
+    var finalWeightValue = 1.0
 
     forEach {
-        counter += (it.value + it.modifier) * it.weightValue
-        denominator += it.weightValue
+        if (it.weightValue != 0.0 || !preferencesRepository.treatZeroWeightAsOne)
+            finalWeightValue = it.weightValue
+        counter += (it.value + it.modifier) * finalWeightValue
+        denominator += finalWeightValue
     }
     return if (denominator != 0.0) counter / denominator else 0.0
 }

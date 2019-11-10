@@ -302,6 +302,7 @@
     <string name="pref_other_grade_modifier_plus">Value of the plus</string>
     <string name="pref_other_grade_modifier_minus">Value of the minus</string>
     <string name="pref_other_fill_message_content">Reply with message history</string>
+    <string name="pref_other_treat_zero_weight_as_one">Treat weight 0 as 1 in summary</string>
 
 
     <!--Notification Channels-->

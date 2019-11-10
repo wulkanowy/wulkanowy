@@ -122,5 +122,10 @@
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_fill_message_content"
             app:title="@string/pref_other_fill_message_content" />
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/pref_default_treat_zero_weight_as_one"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_key_treat_zero_weight_as_one"
+            app:title="@string/pref_other_treat_zero_weight_as_one" />
     </PreferenceCategory>
 </PreferenceScreen>
