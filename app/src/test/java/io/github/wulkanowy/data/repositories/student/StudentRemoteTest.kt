@@ -24,7 +24,7 @@ class StudentRemoteTest {
     fun testRemoteAll() {
         doReturn(Single.just(listOf(getStudent("test")))).`when`(mockSdk).getStudents()
 
-        val students = StudentRemote(mockSdk).getStudents("", "", "", "").blockingGet()
+        val students = StudentRemote(mockSdk).getStudents("", "", "").blockingGet()
         assertEquals(1, students.size)
         assertEquals("test", students.first().studentName)
     }
@@ -40,8 +40,8 @@ class StudentRemoteTest {
             schoolName = "",
             className = "",
             classId = 0,
-            certificate = "",
             certificateKey = "",
+            privateKey = "",
             loginMode = Sdk.Mode.SCRAPPER,
             apiHost = "",
             loginType = Sdk.ScrapperLoginType.STANDARD,
