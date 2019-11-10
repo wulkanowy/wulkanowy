@@ -23,7 +23,7 @@ class LoginAdvancedPresenter @Inject constructor(
         super.onAttachView(view)
         view.run {
             initView()
-            showOnlyHybridModeInputs()
+            showOnlyScrapperModeInputs()
             loginErrorHandler.onBadCredentials = {
                 setErrorPassIncorrect()
                 showSoftKeyboard()

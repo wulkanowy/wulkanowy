@@ -68,6 +68,7 @@
                     android:id="@+id/loginTypeScrapper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:tag="scrapper"
                     android:text="@string/login_type_scrapper" />
 
@@ -76,7 +77,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:tag="hybrid"
-                    android:checked="true"
                     android:text="@string/login_type_hybrid" />
             </RadioGroup>
 
