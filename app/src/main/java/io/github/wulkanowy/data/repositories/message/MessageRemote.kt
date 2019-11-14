@@ -5,7 +5,7 @@ import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.sdk.messages.Folder
+import io.github.wulkanowy.sdk.pojo.Folder
 import io.github.wulkanowy.sdk.pojo.SentMessage
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime.now
