@@ -36,7 +36,9 @@ class LoginAdvancedPresenter @Inject constructor(
         view?.apply {
             clearPassError()
             clearNameError()
-            if (formHostValue?.contains("fakelog") == true) setDefaultCredentials("jan@fakelog.cf", "jan123")
+            if (formHostValue?.contains("fakelog") == true) {
+                setDefaultCredentials("jan@fakelog.cf", "jan123", "powiatwulkanowy", "012345678901234567890123456789AB", "FK100000", "999999")
+            }
         }
     }
 

@@ -23,7 +23,7 @@ interface LoginAdvancedView : BaseView {
 
     fun initView()
 
-    fun setDefaultCredentials(name: String, pass: String)
+    fun setDefaultCredentials(name: String, pass: String, symbol: String, apiKey: String, token: String, pin: String)
 
     fun setErrorNameRequired()
 

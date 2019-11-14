@@ -97,9 +97,13 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         }
     }
 
-    override fun setDefaultCredentials(name: String, pass: String) {
+    override fun setDefaultCredentials(name: String, pass: String, symbol: String, apiKey: String, token: String, pin: String) {
         loginFormName.setText(name)
         loginFormPass.setText(pass)
+        loginFormToken.setText(token)
+        loginFormApiKey.setText(apiKey)
+        loginFormSymbol.setText(symbol)
+        loginFormPin.setText(pin)
     }
 
     override fun setErrorNameRequired() {
