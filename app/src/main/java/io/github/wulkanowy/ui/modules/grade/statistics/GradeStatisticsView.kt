@@ -32,6 +32,12 @@ interface GradeStatisticsView : BaseView {
 
     fun showEmpty(show: Boolean)
 
+    fun showErrorView(show: Boolean)
+
+    fun setErrorDetails(message: String)
+
+    fun showErrorDetailsDialog(error: Throwable)
+
     fun showProgress(show: Boolean)
 
     fun enableSwipe(enable: Boolean)
