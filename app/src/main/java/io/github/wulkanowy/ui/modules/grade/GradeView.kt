@@ -12,15 +12,15 @@ interface GradeView : BaseView {
 
     fun showProgress(show: Boolean)
 
-    fun showEmpty(show: Boolean)
+    fun showErrorView(show: Boolean)
 
-    fun showRefresh(show: Boolean)
+    fun setErrorDetails(message: String)
+
+    fun showErrorDetailsDialog(error: Throwable)
 
     fun showSemesterSwitch(show: Boolean)
 
     fun showSemesterDialog(selectedIndex: Int)
-
-    fun enableSwipe(enable: Boolean)
 
     fun notifyChildLoadData(index: Int, semesterId: Int, forceRefresh: Boolean)
 
