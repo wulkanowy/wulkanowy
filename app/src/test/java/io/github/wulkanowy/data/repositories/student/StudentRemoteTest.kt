@@ -7,6 +7,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
+import org.mockito.Mockito.anyBoolean
+import org.mockito.Mockito.anyString
 import org.mockito.Mockito.doReturn
 import org.mockito.MockitoAnnotations
 
@@ -22,9 +24,9 @@ class StudentRemoteTest {
 
     @Test
     fun testRemoteAll() {
-        doReturn(Single.just(listOf(getStudent("test")))).`when`(mockSdk).getStudents()
+        doReturn(Single.just(listOf(getStudent("test")))).`when`(mockSdk).getStudentsFromScrapper(anyString(), anyString(), anyBoolean(), anyString(), anyString())
 
-        val students = StudentRemote(mockSdk).getStudents("", "", "").blockingGet()
+        val students = StudentRemote(mockSdk).getStudentsScrapper("", "", "http://fakelog.cf", "").blockingGet()
         assertEquals(1, students.size)
         assertEquals("test", students.first().studentName)
     }

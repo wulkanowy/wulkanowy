@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime.now
+import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
 import io.github.wulkanowy.sdk.pojo.Student as SdkStudent
@@ -11,12 +12,17 @@ import io.github.wulkanowy.sdk.pojo.Student as SdkStudent
 @Singleton
 class StudentRemote @Inject constructor(private val sdk: Sdk) {
 
-    fun getStudents(): Single<List<Student>> {
-        return sdk.getStudents().map { mapStudents(it, "", "", "") }
+    fun getStudentsMobileApi(token: String, pin: String, symbol: String, apiKey: String): Single<List<Student>> {
+        return sdk.getStudentsFromMobileApi(token, pin, symbol, apiKey).map { mapStudents(it, "", "", "") }
     }
 
-    fun getStudents(email: String, password: String, endpoint: String): Single<List<Student>> {
-        return sdk.getStudents().map { mapStudents(it, email, password, endpoint) }
+    fun getStudentsScrapper(email: String, password: String, endpoint: String, symbol: String): Single<List<Student>> {
+        return sdk.getStudentsFromScrapper(email, password, endpoint.startsWith("https"), URL(endpoint)
+            .run { host + ":$port".removeSuffix(":-1") }, symbol).map { mapStudents(it, email, password, endpoint) }
+    }
+
+    fun getStudentsHybrid(email: String, password: String, endpoint: String, symbol: String, apiKey: String): Single<List<Student>> {
+        return sdk.getStudentsHybrid(email, password, apiKey, true, endpoint, symbol).map { mapStudents(it, email, password, endpoint) }
     }
 
     private fun mapStudents(students: List<SdkStudent>, email: String, password: String, endpoint: String): List<Student> {

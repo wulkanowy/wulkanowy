@@ -28,35 +28,4 @@ class SdkHelper @Inject constructor(private val sdk: Sdk) {
             privateKey = student.privateKey
         }
     }
-
-    fun initApi(pin: String, symbol: String, token: String, apiKey: String) {
-        sdk.apply {
-            this.mode = Sdk.Mode.API
-            this.pin = pin
-            this.symbol = symbol
-            this.token = token
-            this.apiKey = apiKey
-
-            certKey = "" // clear certificate on getStudent()
-            privateKey = ""
-        }
-    }
-
-    fun initScrapper(email: String, password: String, endpoint: String, symbol: String) {
-        sdk.apply {
-            this.mode = Sdk.Mode.SCRAPPER
-            this.email = email
-            this.password = password
-            this.symbol = symbol
-
-            scrapperHost = URL(endpoint).run { host + ":$port".removeSuffix(":-1") }
-            ssl = endpoint.startsWith("https")
-        }
-    }
-
-    fun initHybrid(email: String, password: String, symbol: String, endpoint: String, apiKey: String) {
-        initApi("", symbol, "", apiKey)
-        initScrapper(email, password, endpoint, symbol)
-        sdk.mode = Sdk.Mode.HYBRID
-    }
 }
