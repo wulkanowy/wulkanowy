@@ -25,6 +25,8 @@ class GradeSummaryPresenter @Inject constructor(
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<GradeSummaryView>(errorHandler, studentRepository, schedulers) {
 
+    private lateinit var lastError: Throwable
+
     override fun onAttachView(view: GradeSummaryView) {
         super.onAttachView(view)
         view.initView()
@@ -61,7 +63,17 @@ class GradeSummaryPresenter @Inject constructor(
                 analytics.logEvent("load_grade_summary", "items" to gradeSummaryItems.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.i("Loading grade summary result: An exception occurred")
-                view?.run { showEmpty(isViewEmpty) }
+                view?.run {
+                    if (isViewEmpty) {
+                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                            lastError = error
+                            setErrorDetails(message)
+                            showErrorView(true)
+                            showEmpty(false)
+                        }
+                    } else errorHandler.showErrorMessage = ::showError
+                }
+
                 errorHandler.dispatch(it)
             })
     }
@@ -69,6 +81,18 @@ class GradeSummaryPresenter @Inject constructor(
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the grade summary")
         view?.notifyParentRefresh()
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        view?.notifyParentRefresh()
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     fun onParentViewReselected() {

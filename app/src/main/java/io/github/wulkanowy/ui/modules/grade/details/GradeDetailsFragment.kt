@@ -132,18 +132,6 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         gradeDetailsProgress.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun showErrorView(show: Boolean) {
-        gradeDetailsError.visibility = if (show) VISIBLE else GONE
-    }
-
-    override fun setErrorDetails(message: String) {
-        gradeDetailsErrorMessage.text = message
-    }
-
-    override fun showErrorDetailsDialog(error: Throwable) {
-        ErrorDialog.newInstance(error).show(childFragmentManager, error.toString())
-    }
-
     override fun enableSwipe(enable: Boolean) {
         gradeDetailsSwipe.isEnabled = enable
     }
@@ -154,6 +142,18 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
 
     override fun showEmpty(show: Boolean) {
         gradeDetailsEmpty.visibility = if (show) VISIBLE else INVISIBLE
+    }
+
+    override fun showErrorView(show: Boolean) {
+        gradeDetailsError.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun setErrorDetails(message: String) {
+        gradeDetailsErrorMessage.text = message
+    }
+
+    override fun showErrorDetailsDialog(error: Throwable) {
+        showErrorDialog(error)
     }
 
     override fun showRefresh(show: Boolean) {
