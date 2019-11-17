@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
-import android.widget.Toast
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
@@ -30,6 +29,8 @@ class GradeDetailsPresenter @Inject constructor(
     private var newGradesAmount: Int = 0
 
     private var currentSemesterId = 0
+
+    private lateinit var lastError: Throwable
 
     override fun onAttachView(view: GradeDetailsView) {
         super.onAttachView(view)
@@ -90,6 +91,18 @@ class GradeDetailsPresenter @Inject constructor(
         view?.notifyParentRefresh()
     }
 
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        view?.notifyParentRefresh()
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
+    }
+
     fun onParentViewReselected() {
         view?.run {
             if (!isViewEmpty) {
@@ -140,7 +153,7 @@ class GradeDetailsPresenter @Inject constructor(
             }
             .subscribe({
                 Timber.i("Loading grade details result: Success")
-                newGradesAmount  = it.sumBy { gradeDetailsHeader -> gradeDetailsHeader.newGrades }
+                newGradesAmount = it.sumBy { gradeDetailsHeader -> gradeDetailsHeader.newGrades }
                 updateMarkAsDoneButton()
                 view?.run {
                     showEmpty(it.isEmpty())
@@ -150,7 +163,17 @@ class GradeDetailsPresenter @Inject constructor(
                 analytics.logEvent("load_grade_details", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.i("Loading grade details result: An exception occurred")
-                view?.run { showEmpty(isViewEmpty) }
+                view?.run {
+                    if (isViewEmpty) {
+                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                            lastError = error
+                            setErrorDetails(message)
+                            showErrorView(true)
+                            showEmpty(false)
+                        }
+                    } else errorHandler.showErrorMessage = ::showError
+                }
+
                 errorHandler.dispatch(it)
             })
     }
