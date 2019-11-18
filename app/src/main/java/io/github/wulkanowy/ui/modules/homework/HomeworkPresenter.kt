@@ -35,6 +35,8 @@ class HomeworkPresenter @Inject constructor(
     lateinit var currentDate: LocalDate
         private set
 
+    private lateinit var lastError: Throwable
+
     fun onAttachView(view: HomeworkView, date: Long?) {
         super.onAttachView(view)
         view.initView()
@@ -57,6 +59,18 @@ class HomeworkPresenter @Inject constructor(
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the homework")
         loadData(currentDate, true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(currentDate, true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     fun onHomeworkItemSelected(item: AbstractFlexibleItem<*>?) {
@@ -105,12 +119,23 @@ class HomeworkPresenter @Inject constructor(
                     view?.apply {
                         updateData(it)
                         showEmpty(it.isEmpty())
+                        showErrorView(false)
                         showContent(it.isNotEmpty())
                     }
                     analytics.logEvent("load_homework", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
                     Timber.i("Loading homework result: An exception occurred")
-                    view?.run { showEmpty(isViewEmpty()) }
+                    view?.run {
+                        if (isViewEmpty) {
+                            errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                                lastError = error
+                                setErrorDetails(message)
+                                showErrorView(true)
+                                showEmpty(false)
+                            }
+                        } else errorHandler.showErrorMessage = ::showError
+                    }
+
                     errorHandler.dispatch(it)
                 })
         }
@@ -131,6 +156,7 @@ class HomeworkPresenter @Inject constructor(
             enableSwipe(false)
             showContent(false)
             showEmpty(false)
+            showErrorView(false)
             clearData()
             reloadNavigation()
         }
