@@ -72,6 +72,8 @@ class MessageTabFragment : BaseFragment(), MessageTabView {
             )
         }
         messageTabSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+        messageTabErrorRetry.setOnClickListener { presenter.onRetry() }
+        messageTabErrorDetails.setOnClickListener { presenter.onDetailsClick() }
     }
 
     override fun updateData(data: List<MessageItem>) {
@@ -100,6 +102,18 @@ class MessageTabFragment : BaseFragment(), MessageTabView {
 
     override fun showEmpty(show: Boolean) {
         messageTabEmpty.visibility = if (show) VISIBLE else INVISIBLE
+    }
+
+    override fun showErrorView(show: Boolean) {
+        messageTabError.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun setErrorDetails(message: String) {
+        messageTabErrorMessage.text = message
+    }
+
+    override fun showErrorDetailsDialog(error: Throwable) {
+        showErrorDialog(error)
     }
 
     override fun showRefresh(show: Boolean) {

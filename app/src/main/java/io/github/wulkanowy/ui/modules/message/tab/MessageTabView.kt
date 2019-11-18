@@ -26,6 +26,12 @@ interface MessageTabView : BaseView {
 
     fun showEmpty(show: Boolean)
 
+    fun showErrorView(show: Boolean)
+
+    fun setErrorDetails(message: String)
+
+    fun showErrorDetailsDialog(error: Throwable)
+
     fun showRefresh(show: Boolean)
 
     fun openMessage(messageId: Long)
