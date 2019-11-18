@@ -33,6 +33,8 @@ class AttendanceSummaryPresenter @Inject constructor(
     var currentSubjectId = -1
         private set
 
+    private lateinit var lastError: Throwable
+
     fun onAttachView(view: AttendanceSummaryView, subjectId: Int?) {
         super.onAttachView(view)
         view.initView()
@@ -46,6 +48,18 @@ class AttendanceSummaryPresenter @Inject constructor(
         loadData(currentSubjectId, true)
     }
 
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(currentSubjectId, true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
+    }
+
     fun onSubjectSelected(name: String?) {
         Timber.i("Select attendance summary subject $name")
         view?.run {
@@ -53,6 +67,7 @@ class AttendanceSummaryPresenter @Inject constructor(
             showProgress(true)
             enableSwipe(false)
             showEmpty(false)
+            showErrorView(false)
             clearView()
         }
         (subjects.singleOrNull { it.name == name }?.realId ?: -1).let {
@@ -89,7 +104,17 @@ class AttendanceSummaryPresenter @Inject constructor(
                     analytics.logEvent("load_attendance_summary", "items" to it.first.size, "force_refresh" to forceRefresh, "item_id" to subjectId)
                 }) {
                     Timber.i("Loading attendance summary result: An exception occurred")
-                    view?.run { showEmpty(isViewEmpty) }
+                    view?.run {
+                        if (isViewEmpty) {
+                            errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                                lastError = error
+                                setErrorDetails(message)
+                                showErrorView(true)
+                                showEmpty(false)
+                            }
+                        } else errorHandler.showErrorMessage = ::showError
+                    }
+
                     errorHandler.dispatch(it)
                 }
             )
