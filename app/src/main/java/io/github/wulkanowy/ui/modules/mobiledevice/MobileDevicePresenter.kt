@@ -20,6 +20,8 @@ class MobileDevicePresenter @Inject constructor(
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<MobileDeviceView>(errorHandler, studentRepository, schedulers) {
 
+    private lateinit var lastError: Throwable
+
     override fun onAttachView(view: MobileDeviceView) {
         super.onAttachView(view)
         view.initView()
@@ -29,6 +31,18 @@ class MobileDevicePresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         loadData(true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
@@ -51,11 +65,21 @@ class MobileDevicePresenter @Inject constructor(
                     updateData(it)
                     showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
+                    showErrorView(false)
                 }
                 analytics.logEvent("load_devices", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.i("Loading mobile devices result: An exception occurred")
-                view?.run { showEmpty(isViewEmpty) }
+                view?.run {
+                    if (isViewEmpty) {
+                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                            lastError = error
+                            setErrorDetails(message)
+                            showErrorView(true)
+                            showEmpty(false)
+                        }
+                    } else errorHandler.showErrorMessage = ::showError
+                }
                 errorHandler.dispatch(it)
             })
     }
