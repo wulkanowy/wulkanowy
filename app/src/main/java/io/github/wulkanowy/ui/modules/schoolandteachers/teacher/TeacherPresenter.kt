@@ -19,6 +19,8 @@ class TeacherPresenter @Inject constructor(
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<TeacherView>(errorHandler, studentRepository, schedulers) {
 
+    private lateinit var lastError: Throwable
+
     override fun onAttachView(view: TeacherView) {
         super.onAttachView(view)
         view.initView()
@@ -28,6 +30,18 @@ class TeacherPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         loadData(true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     fun onParentViewLoadData(forceRefresh: Boolean) {
@@ -56,11 +70,21 @@ class TeacherPresenter @Inject constructor(
                     updateData(it)
                     showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
+                    showErrorView(false)
                 }
                 analytics.logEvent("load_teachers", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.i("Loading teachers result: An exception occurred")
-                view?.run { showEmpty(isViewEmpty) }
+                view?.run {
+                    if (isViewEmpty) {
+                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                            lastError = error
+                            setErrorDetails(message)
+                            showErrorView(true)
+                            showEmpty(false)
+                        }
+                    } else errorHandler.showErrorMessage = ::showError
+                }
                 errorHandler.dispatch(it)
             })
     }

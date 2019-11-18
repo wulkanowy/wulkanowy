@@ -23,6 +23,8 @@ class SchoolPresenter @Inject constructor(
 
     private var contact: String? = null
 
+    private lateinit var lastError: Throwable
+
     override fun onAttachView(view: SchoolView) {
         super.onAttachView(view)
         view.initView()
@@ -32,6 +34,18 @@ class SchoolPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         loadData(true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     fun onParentViewLoadData(forceRefresh: Boolean) {
@@ -68,20 +82,29 @@ class SchoolPresenter @Inject constructor(
                     updateData(it)
                     showContent(true)
                     showEmpty(false)
+                    showErrorView(false)
                 }
                 analytics.logEvent("load_school", "force_refresh" to forceRefresh)
             }, {
                 Timber.i("Loading school result: An exception occurred")
                 view?.run {
-                    showContent(!isViewEmpty())
-                    showEmpty(isViewEmpty())
+                    if (isViewEmpty) {
+                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                            lastError = error
+                            setErrorDetails(message)
+                            showErrorView(true)
+                            showEmpty(false)
+                            showContent(false)
+                        }
+                    } else errorHandler.showErrorMessage = ::showError
                 }
                 errorHandler.dispatch(it)
             }, {
                 Timber.i("Loading school result: No school info found")
                 view?.run {
-                    showContent(!isViewEmpty())
-                    showEmpty(isViewEmpty())
+                    showContent(!isViewEmpty)
+                    showEmpty(isViewEmpty)
+                    showErrorView(false)
                 }
             }))
     }
