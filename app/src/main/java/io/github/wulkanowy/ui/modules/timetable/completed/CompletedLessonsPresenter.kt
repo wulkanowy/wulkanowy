@@ -34,6 +34,8 @@ class CompletedLessonsPresenter @Inject constructor(
     lateinit var currentDate: LocalDate
         private set
 
+    private lateinit var lastError: Throwable
+
     fun onAttachView(view: CompletedLessonsView, date: Long?) {
         super.onAttachView(view)
         Timber.i("Completed lessons is attached")
@@ -69,6 +71,18 @@ class CompletedLessonsPresenter @Inject constructor(
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the completed lessons")
         loadData(currentDate, true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(currentDate, true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     fun onCompletedLessonsItemSelected(item: AbstractFlexibleItem<*>?) {
@@ -117,12 +131,23 @@ class CompletedLessonsPresenter @Inject constructor(
                     view?.apply {
                         updateData(it)
                         showEmpty(it.isEmpty())
+                        showErrorView(false)
                         showContent(it.isNotEmpty())
                     }
                     analytics.logEvent("load_completed_lessons", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
                     Timber.i("Loading completed lessons result: An exception occurred")
-                    view?.run { showEmpty(isViewEmpty) }
+                    view?.run {
+                        if (isViewEmpty) {
+                            completedLessonsErrorHandler.showErrorMessage = { message: String, error: Throwable ->
+                                lastError = error
+                                setErrorDetails(message)
+                                showErrorView(true)
+                                showEmpty(false)
+                            }
+                        } else completedLessonsErrorHandler.showErrorMessage = ::showError
+                    }
+
                     completedLessonsErrorHandler.dispatch(it)
                 })
         }
@@ -135,6 +160,7 @@ class CompletedLessonsPresenter @Inject constructor(
             enableSwipe(false)
             showContent(false)
             showEmpty(false)
+            showErrorView(false)
             clearData()
             reloadNavigation()
         }

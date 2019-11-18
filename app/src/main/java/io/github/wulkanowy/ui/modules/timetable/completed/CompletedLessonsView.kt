@@ -20,6 +20,12 @@ interface CompletedLessonsView : BaseView {
 
     fun showEmpty(show: Boolean)
 
+    fun showErrorView(show: Boolean)
+
+    fun setErrorDetails(message: String)
+
+    fun showErrorDetailsDialog(error: Throwable)
+
     fun showFeatureDisabled()
 
     fun showProgress(show: Boolean)
