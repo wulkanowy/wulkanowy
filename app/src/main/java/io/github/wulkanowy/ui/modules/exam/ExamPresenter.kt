@@ -36,6 +36,8 @@ class ExamPresenter @Inject constructor(
     lateinit var currentDate: LocalDate
         private set
 
+    private lateinit var lastError: Throwable
+
     fun onAttachView(view: ExamView, date: Long?) {
         super.onAttachView(view)
         view.initView()
@@ -58,6 +60,18 @@ class ExamPresenter @Inject constructor(
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the exam")
         loadData(currentDate, true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(currentDate, true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     fun onExamItemSelected(item: AbstractFlexibleItem<*>?) {
@@ -121,7 +135,17 @@ class ExamPresenter @Inject constructor(
                     analytics.logEvent("load_exam", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
                     Timber.i("Loading exam result: An exception occurred")
-                    view?.run { showEmpty(isViewEmpty) }
+                    view?.run {
+                        if (isViewEmpty) {
+                            errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                                lastError = error
+                                setErrorDetails(message)
+                                showErrorView(true)
+                                showEmpty(false)
+                            }
+                        } else errorHandler.showErrorMessage = ::showError
+                    }
+
                     errorHandler.dispatch(it)
                 })
         }
@@ -142,6 +166,7 @@ class ExamPresenter @Inject constructor(
             enableSwipe(false)
             showContent(false)
             showEmpty(false)
+            showErrorView(false)
             clearData()
             reloadNavigation()
         }

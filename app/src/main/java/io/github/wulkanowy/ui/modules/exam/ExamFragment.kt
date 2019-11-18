@@ -61,6 +61,9 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
         }
 
         examSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
+        examErrorRetry.setOnClickListener { presenter.onRetry() }
+        examErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+
         examPreviousButton.setOnClickListener { presenter.onPreviousWeek() }
         examNextButton.setOnClickListener { presenter.onNextWeek() }
 
@@ -93,6 +96,18 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
 
     override fun showEmpty(show: Boolean) {
         examEmpty.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun showErrorView(show: Boolean) {
+        examError.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun setErrorDetails(message: String) {
+        examErrorMessage.text = message
+    }
+
+    override fun showErrorDetailsDialog(error: Throwable) {
+        showErrorDialog(error)
     }
 
     override fun showProgress(show: Boolean) {
