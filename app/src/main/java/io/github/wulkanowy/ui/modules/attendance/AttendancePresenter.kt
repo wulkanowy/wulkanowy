@@ -37,6 +37,8 @@ class AttendancePresenter @Inject constructor(
     lateinit var currentDate: LocalDate
         private set
 
+    private lateinit var lastError: Throwable
+
     fun onAttachView(view: AttendanceView, date: Long?) {
         super.onAttachView(view)
         view.initView()
@@ -68,6 +70,18 @@ class AttendancePresenter @Inject constructor(
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the attendance")
         loadData(currentDate, true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(currentDate, true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     fun onViewReselected() {
@@ -144,7 +158,17 @@ class AttendancePresenter @Inject constructor(
                     analytics.logEvent("load_attendance", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
                     Timber.i("Loading attendance result: An exception occurred")
-                    view?.run { showEmpty(isViewEmpty) }
+                    view?.run {
+                        if (isViewEmpty) {
+                            errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                                lastError = error
+                                setErrorDetails(message)
+                                showErrorView(true)
+                                showEmpty(false)
+                            }
+                        } else errorHandler.showErrorMessage = ::showError
+                    }
+
                     errorHandler.dispatch(it)
                 }
             )
@@ -158,6 +182,7 @@ class AttendancePresenter @Inject constructor(
             enableSwipe(false)
             showContent(false)
             showEmpty(false)
+            showErrorView(false)
             clearData()
             reloadNavigation()
         }
