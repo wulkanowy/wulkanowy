@@ -37,6 +37,8 @@ class TimetablePresenter @Inject constructor(
     lateinit var currentDate: LocalDate
         private set
 
+    private lateinit var lastError: Throwable
+
     fun onAttachView(view: TimetableView, date: Long?) {
         super.onAttachView(view)
         view.initView()
@@ -68,6 +70,18 @@ class TimetablePresenter @Inject constructor(
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the timetable")
         loadData(currentDate, true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(currentDate, true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     fun onViewReselected() {
@@ -135,12 +149,23 @@ class TimetablePresenter @Inject constructor(
                     view?.apply {
                         updateData(it)
                         showEmpty(it.isEmpty())
+                        showErrorView(false)
                         showContent(it.isNotEmpty())
                     }
                     analytics.logEvent("load_timetable", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
                     Timber.i("Loading timetable result: An exception occurred")
-                    view?.run { showEmpty(isViewEmpty) }
+                    view?.run {
+                        if (isViewEmpty) {
+                            errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                                lastError = error
+                                setErrorDetails(message)
+                                showErrorView(true)
+                                showEmpty(false)
+                            }
+                        } else errorHandler.showErrorMessage = ::showError
+                    }
+
                     errorHandler.dispatch(it)
                 })
         }
@@ -153,6 +178,7 @@ class TimetablePresenter @Inject constructor(
             enableSwipe(false)
             showContent(false)
             showEmpty(false)
+            showErrorView(false)
             clearData()
             reloadNavigation()
         }

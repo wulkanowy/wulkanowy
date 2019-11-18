@@ -56,7 +56,6 @@
                 android:textSize="20sp" />
         </LinearLayout>
 
-
         <LinearLayout
             android:id="@+id/examError"
             android:layout_width="match_parent"

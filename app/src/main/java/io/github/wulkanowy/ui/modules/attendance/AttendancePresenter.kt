@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.attendance
 
+import android.annotation.SuppressLint
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.repositories.attendance.AttendanceRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
@@ -189,6 +190,7 @@ class AttendancePresenter @Inject constructor(
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun reloadNavigation() {
         view?.apply {
             showPreButton(!currentDate.minusDays(1).isHolidays)
