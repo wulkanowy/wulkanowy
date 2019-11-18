@@ -23,9 +23,24 @@ class MessagePreviewPresenter @Inject constructor(
 
     private var message: Message? = null
 
+    private lateinit var lastError: Throwable
+
     fun onAttachView(view: MessagePreviewView, id: Long) {
         super.onAttachView(view)
+        view.initView()
         loadData(id)
+    }
+
+    private fun onMessageLoadRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(messageId)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     private fun loadData(id: Long) {
@@ -55,7 +70,16 @@ class MessagePreviewPresenter @Inject constructor(
                     analytics.logEvent("load_message_preview", "length" to message.content?.length)
                 }) {
                     Timber.i("Loading message $id preview result: An exception occurred ")
-                    view?.showMessageError()
+                    view?.run {
+                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                            lastError = error
+                            view.run {
+                                setErrorDetails(message)
+                                showErrorView(true)
+                                setErrorRetryCallback { onMessageLoadRetry() }
+                            }
+                        }
+                    }
                     errorHandler.dispatch(it)
                 })
         }
@@ -85,6 +109,7 @@ class MessagePreviewPresenter @Inject constructor(
                         showContent(false)
                         showProgress(true)
                         showOptions(false)
+                        showErrorView(false)
                     }
                 }
                 .doFinally {
@@ -97,10 +122,22 @@ class MessagePreviewPresenter @Inject constructor(
                         popView()
                     }
                 }, { error ->
-                    view?.showMessageError()
+                    view?.run {
+                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                            lastError = error
+                            view.run {
+                                setErrorDetails(message)
+                                showErrorView(true)
+                                setErrorRetryCallback {
+                                    showErrorView(false)
+                                    onMessageDelete()
+                                }
+                            }
+                        }
+                    }
                     errorHandler.dispatch(error)
                 }, {
-                    view?.showMessageError()
+                    view?.showErrorView(true)
                 })
             )
         }
