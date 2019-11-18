@@ -19,6 +19,8 @@ class LuckyNumberPresenter @Inject constructor(
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<LuckyNumberView>(errorHandler, studentRepository, schedulers) {
 
+    private lateinit var lastError: Throwable
+
     override fun onAttachView(view: LuckyNumberView) {
         super.onAttachView(view)
         view.run {
@@ -52,17 +54,28 @@ class LuckyNumberPresenter @Inject constructor(
                         updateData(it)
                         showContent(true)
                         showEmpty(false)
+                        showErrorView(false)
                     }
                     analytics.logEvent("load_lucky_number", "lucky_number" to it.luckyNumber, "force_refresh" to forceRefresh)
                 }, {
                     Timber.i("Loading lucky number result: An exception occurred")
-                    view?.run { showEmpty(isViewEmpty()) }
+                    view?.run {
+                        if (isViewEmpty) {
+                            errorHandler.showErrorMessage = { message: String, error: Throwable ->
+                                lastError = error
+                                setErrorDetails(message)
+                                showErrorView(true)
+                                showEmpty(false)
+                            }
+                        } else errorHandler.showErrorMessage = ::showError
+                    }
                     errorHandler.dispatch(it)
                 }, {
                     Timber.i("Loading lucky number result: No lucky number found")
                     view?.run {
                         showContent(false)
                         showEmpty(true)
+                        showEmpty(false)
                     }
                 })
             )
@@ -72,5 +85,17 @@ class LuckyNumberPresenter @Inject constructor(
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the lucky number")
         loadData(true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 }
