@@ -153,6 +153,7 @@ class AttendancePresenter @Inject constructor(
                     view?.apply {
                         updateData(it)
                         showEmpty(it.isEmpty())
+                        showErrorView(false)
                         showContent(it.isNotEmpty())
                     }
                     analytics.logEvent("load_attendance", "items" to it.size, "force_refresh" to forceRefresh)

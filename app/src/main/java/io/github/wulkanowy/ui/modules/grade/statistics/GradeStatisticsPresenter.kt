@@ -163,6 +163,7 @@ class GradeStatisticsPresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     showBarContent(false)
                     showPieContent(it.isNotEmpty())
+                    showErrorView(false)
                     updatePieData(it, preferencesRepository.gradeColorTheme)
                 }
                 analytics.logEvent("load_grade_statistics", "items" to it.size, "force_refresh" to forceRefresh)
@@ -204,6 +205,7 @@ class GradeStatisticsPresenter @Inject constructor(
                     showEmpty(false)
                     showPieContent(false)
                     showBarContent(true)
+                    showErrorView(false)
                     updateBarData(it)
                 }
                 analytics.logEvent("load_grade_points_statistics", "force_refresh" to forceRefresh)

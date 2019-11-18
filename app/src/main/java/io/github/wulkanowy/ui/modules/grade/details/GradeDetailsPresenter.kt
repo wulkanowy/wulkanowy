@@ -157,6 +157,7 @@ class GradeDetailsPresenter @Inject constructor(
                 updateMarkAsDoneButton()
                 view?.run {
                     showEmpty(it.isEmpty())
+                    showErrorView(false)
                     showContent(it.isNotEmpty())
                     updateData(it)
                 }

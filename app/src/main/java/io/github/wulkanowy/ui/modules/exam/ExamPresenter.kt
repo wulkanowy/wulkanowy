@@ -130,6 +130,7 @@ class ExamPresenter @Inject constructor(
                     view?.apply {
                         updateData(it)
                         showEmpty(it.isEmpty())
+                        showErrorView(false)
                         showContent(it.isNotEmpty())
                     }
                     analytics.logEvent("load_exam", "items" to it.size, "force_refresh" to forceRefresh)
