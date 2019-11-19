@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">Wulkanowy</string>
+
 
     <!--Activity/Fragment title-->
 
@@ -9,8 +10,8 @@
     <string name="main_title">Wulkanowy</string>
     <string name="grade_title">Оценки</string>
     <string name="attendance_title">Посещаемость</string>
-    <string name="exam_title">Письменные работы</string>
-    <string name="timetable_title">Расписание уроков</string>
+    <string name="exam_title">Тесты</string>
+    <string name="timetable_title">Расписание</string>
     <string name="settings_title">Настройки</string>
     <string name="more_title">Ещё</string>
     <string name="about_title">О приложении</string>
@@ -33,14 +34,14 @@
     <string name="login_sign_in">Войти</string>
     <string name="login_invalid_password">Слишком короткий пароль</string>
     <string name="login_incorrect_password">Указаны неверные данные</string>
-    <string name="login_incorrect_symbol">Ученик не был найден. Пожалуйста, проверьте \"symbol\"</string>
+    <string name="login_incorrect_symbol">Не удалось найти ученика. Пожалуйста, проверьте \"symbol\"</string>
     <string name="login_field_required">Это поле обязательно</string>
     <string name="login_duplicate_student">Данный ученик уже авторизован</string>
     <string name="login_symbol_helper">Вы можете найти \"symbol\" в Uczeń -&gt; Dostęp Mobilny -&gt; Zarejestruj urządzenie mobilne</string>
     <string name="login_select_student">Выберите учеников для авторизации в приложении</string>
     <string name="login_privacy_policy">Политика приватности</string>
     <string name="login_contact_header">Проблемы с авторизацией? Свяжитесь с нами!</string>
-    <string name="login_contact_email">Email</string>
+    <string name="login_contact_email">Электронная почта</string>
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Отправить письмо</string>
 
@@ -85,7 +86,7 @@
         <item quantity="other">%d оценок</item>
     </plurals>
     <plurals name="grade_new_items">
-        <item quantity="one">Новая оценка</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Новая оценка</item>
         <item quantity="few">Новые оценки</item>
         <item quantity="many">Новые оценки</item>
         <item quantity="other">Новые оценки</item>
@@ -124,11 +125,11 @@
     <string name="attendance_absence_school">Отсутствие по школьным причинам</string>
     <string name="attendance_absence_excused">Оправданное отсутствие</string>
     <string name="attendance_absence_unexcused">Неоправданное отсутствие</string>
-    <string name="attendance_exemption">Освобождён</string>
+    <string name="attendance_exemption">Освобождение</string>
     <string name="attendance_excused_lateness">Оправданное опоздание</string>
     <string name="attendance_unexcused_lateness">Неоправданное опоздание</string>
     <string name="attendance_present">Присутствие</string>
-    <string name="attendance_number">Номер урока</string>
+    <string name="attendance_number">Урок №</string>
     <string name="attendance_no_items">Данные не найдены</string>
     <plurals name="attendance_number_absences">
         <item quantity="one">%1$d отсутствие</item>
@@ -145,7 +146,7 @@
 
     <!--Exam-->
 
-    <string name="exam_no_items">Письменные работы на этой неделе не запланированы</string>
+    <string name="exam_no_items">Тесты на этой неделе не запланированы</string>
     <string name="exam_type">Тип</string>
     <string name="exam_entry_date">Дата записи</string>
 
@@ -179,7 +180,7 @@
         <item quantity="other">%d сообщений</item>
     </plurals>
     <plurals name="message_new_items">
-        <item quantity="one">Новое сообщение</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Новое сообщение</item>
         <item quantity="few">Новые сообщения</item>
         <item quantity="many">Новые сообщения</item>
         <item quantity="other">Новые сообщения</item>
@@ -190,7 +191,10 @@
         <item quantity="many">Вы получили %1$d новых сообщений</item>
         <item quantity="other">Вы получили %1$d новых сообщений</item>
     </plurals>
+
+
     <!--Note-->
+
     <string name="note_no_items">Нет данных о предупреждениях</string>
     <plurals name="note_number_item">
         <item quantity="one">%d предупреждение</item>
@@ -199,7 +203,7 @@
         <item quantity="other">%d предупреждений</item>
     </plurals>
     <plurals name="note_new_items">
-        <item quantity="one">Новое предупреждение</item>
+        <item quantity="one" tools:ignore="ImpliedQuantity">Новое предупреждение</item>
         <item quantity="few">Новые предупреждения</item>
         <item quantity="many">Новых предупреждений</item>
         <item quantity="other">Новых предупреждений</item>
@@ -320,7 +324,7 @@
     <!--Preferences-->
 
     <string name="pref_view_header">Внешний вид</string>
-    <string name="pref_view_list">Вид по умолчанию</string>
+    <string name="pref_view_list">При входе открывать</string>
     <string name="pref_view_grade_average_mode">Рассчитывание средней годовой оценки</string>
     <string name="pref_view_grade_average_force_calc">Принудительно высчитать среднюю оценку через приложение</string>
     <string name="pref_view_present">Показывать присутствия в посещаемости</string>
@@ -372,4 +376,5 @@
     <string name="error_service_unavailable">Дневник недоступен. Попробуйте позже</string>
     <string name="error_unknown">Произошла неожиданная ошибка</string>
     <string name="error_feature_disabled">Функция была выключена школой</string>
+
 </resources>
