@@ -110,8 +110,8 @@ play {
 }
 
 ext {
-    work_manager = "2.3.0-alpha03"
-    room = "2.2.1"
+    work_manager = "2.3.0-beta01"
+    room = "2.2.2"
     dagger = "2.25.2"
     chucker = "2.0.4"
     mockk = "1.9.2"
@@ -125,7 +125,7 @@ dependencies {
     implementation "io.github.wulkanowy:api:0.12.0"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "androidx.core:core-ktx:1.2.0-beta02"
+    implementation "androidx.core:core-ktx:1.2.0-rc01"
     implementation "androidx.activity:activity-ktx:1.1.0-rc02"
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "androidx.appcompat:appcompat-resources:1.1.0"
@@ -134,7 +134,7 @@ dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
 
     implementation "androidx.preference:preference-ktx:1.1.0"
-    implementation "androidx.recyclerview:recyclerview:1.1.0-rc01"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.viewpager:viewpager:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha03"
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"
