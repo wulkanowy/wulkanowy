@@ -31,14 +31,8 @@ class GradePresenter @Inject constructor(
         super.onAttachView(view)
         selectedIndex = savedIndex ?: 0
         view.initView()
-        errorHandler.showErrorMessage = { message: String, throwable: Throwable ->
-            lastError = throwable
-            with(view) {
-                showErrorView(true)
-                setErrorDetails(message)
-            }
-        }
         Timber.i("Grade view was initialized with $selectedIndex index")
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData()
     }
 
@@ -122,6 +116,14 @@ class GradePresenter @Inject constructor(
                 Timber.i("Loading grade result: An exception occurred")
                 errorHandler.dispatch(it)
             })
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        lastError = error
+        view?.run {
+            showErrorView(true)
+            setErrorDetails(message)
+        }
     }
 
     private fun loadChild(index: Int, forceRefresh: Boolean = false) {

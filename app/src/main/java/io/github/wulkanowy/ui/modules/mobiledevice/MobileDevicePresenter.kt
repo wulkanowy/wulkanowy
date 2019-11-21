@@ -26,6 +26,7 @@ class MobileDevicePresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         Timber.i("Mobile device view was initialized")
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData()
     }
 
@@ -70,18 +71,19 @@ class MobileDevicePresenter @Inject constructor(
                 analytics.logEvent("load_devices", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.i("Loading mobile devices result: An exception occurred")
-                view?.run {
-                    if (isViewEmpty) {
-                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                            lastError = error
-                            setErrorDetails(message)
-                            showErrorView(true)
-                            showEmpty(false)
-                        }
-                    } else errorHandler.showErrorMessage = ::showError
-                }
                 errorHandler.dispatch(it)
             })
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            if (isViewEmpty) {
+                lastError = error
+                setErrorDetails(message)
+                showErrorView(true)
+                showEmpty(false)
+            } else showError(message, error)
+        }
     }
 
     fun onRegisterDevice() {

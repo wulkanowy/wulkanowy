@@ -39,6 +39,7 @@ class GradeStatisticsPresenter @Inject constructor(
         super.onAttachView(view)
         currentType = type ?: ViewType.PARTIAL
         view.initView()
+        errorHandler.showErrorMessage = ::showErrorViewOnError
     }
 
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
@@ -169,17 +170,6 @@ class GradeStatisticsPresenter @Inject constructor(
                 analytics.logEvent("load_grade_statistics", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.e("Loading grade stats result: An exception occurred")
-                view?.run {
-                    if (isPieViewEmpty) {
-                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                            lastError = error
-                            setErrorDetails(message)
-                            showErrorView(true)
-                            showEmpty(false)
-                        }
-                    } else errorHandler.showErrorMessage = ::showError
-                }
-
                 errorHandler.dispatch(it)
             })
     }
@@ -211,17 +201,6 @@ class GradeStatisticsPresenter @Inject constructor(
                 analytics.logEvent("load_grade_points_statistics", "force_refresh" to forceRefresh)
             }, {
                 Timber.e("Loading grade points stats result: An exception occurred")
-                view?.run {
-                    if (isBarViewEmpty) {
-                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                            lastError = error
-                            setErrorDetails(message)
-                            showErrorView(true)
-                            showEmpty(false)
-                        }
-                    } else errorHandler.showErrorMessage = ::showError
-                }
-
                 errorHandler.dispatch(it)
             }, {
                 Timber.d("Loading grade points stats result: No point stats found")
@@ -231,5 +210,16 @@ class GradeStatisticsPresenter @Inject constructor(
                 }
             })
         )
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            if (isBarViewEmpty || isPieViewEmpty) {
+                lastError = error
+                setErrorDetails(message)
+                showErrorView(true)
+                showEmpty(false)
+            } else showError(message, error)
+        }
     }
 }

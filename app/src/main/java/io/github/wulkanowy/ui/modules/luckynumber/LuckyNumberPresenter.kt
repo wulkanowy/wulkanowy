@@ -29,6 +29,7 @@ class LuckyNumberPresenter @Inject constructor(
             enableSwipe(false)
         }
         Timber.i("Lucky number view was initialized")
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData()
     }
 
@@ -59,16 +60,6 @@ class LuckyNumberPresenter @Inject constructor(
                     analytics.logEvent("load_lucky_number", "lucky_number" to it.luckyNumber, "force_refresh" to forceRefresh)
                 }, {
                     Timber.i("Loading lucky number result: An exception occurred")
-                    view?.run {
-                        if (isViewEmpty) {
-                            errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                                lastError = error
-                                setErrorDetails(message)
-                                showErrorView(true)
-                                showEmpty(false)
-                            }
-                        } else errorHandler.showErrorMessage = ::showError
-                    }
                     errorHandler.dispatch(it)
                 }, {
                     Timber.i("Loading lucky number result: No lucky number found")
@@ -79,6 +70,17 @@ class LuckyNumberPresenter @Inject constructor(
                     }
                 })
             )
+        }
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            if (isViewEmpty) {
+                lastError = error
+                setErrorDetails(message)
+                showErrorView(true)
+                showEmpty(false)
+            } else showError(message, error)
         }
     }
 

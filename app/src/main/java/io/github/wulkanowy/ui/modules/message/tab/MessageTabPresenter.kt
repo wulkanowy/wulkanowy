@@ -28,6 +28,7 @@ class MessageTabPresenter @Inject constructor(
     fun onAttachView(view: MessageTabView, folder: MessageFolder) {
         super.onAttachView(view)
         view.initView()
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         this.folder = folder
     }
 
@@ -98,18 +99,19 @@ class MessageTabPresenter @Inject constructor(
                     analytics.logEvent("load_messages", "items" to it.size, "folder" to folder.name)
                 }) {
                     Timber.i("Loading $folder message result: An exception occurred")
-                    view?.run {
-                        if (isViewEmpty) {
-                            errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                                lastError = error
-                                setErrorDetails(message)
-                                showErrorView(true)
-                                showEmpty(false)
-                            }
-                        } else errorHandler.showErrorMessage = ::showError
-                    }
                     errorHandler.dispatch(it)
                 })
+        }
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            if (isViewEmpty) {
+                lastError = error
+                setErrorDetails(message)
+                showErrorView(true)
+                showEmpty(false)
+            } else showError(message, error)
         }
     }
 

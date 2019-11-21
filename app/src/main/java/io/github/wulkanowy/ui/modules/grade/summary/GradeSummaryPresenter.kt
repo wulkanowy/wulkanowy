@@ -30,6 +30,7 @@ class GradeSummaryPresenter @Inject constructor(
     override fun onAttachView(view: GradeSummaryView) {
         super.onAttachView(view)
         view.initView()
+        errorHandler.showErrorMessage = ::showErrorViewOnError
     }
 
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
@@ -64,19 +65,19 @@ class GradeSummaryPresenter @Inject constructor(
                 analytics.logEvent("load_grade_summary", "items" to gradeSummaryItems.size, "force_refresh" to forceRefresh)
             }) {
                 Timber.i("Loading grade summary result: An exception occurred")
-                view?.run {
-                    if (isViewEmpty) {
-                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                            lastError = error
-                            setErrorDetails(message)
-                            showErrorView(true)
-                            showEmpty(false)
-                        }
-                    } else errorHandler.showErrorMessage = ::showError
-                }
-
                 errorHandler.dispatch(it)
             })
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            if (isViewEmpty) {
+                lastError = error
+                setErrorDetails(message)
+                showErrorView(true)
+                showEmpty(false)
+            } else showError(message, error)
+        }
     }
 
     fun onSwipeRefresh() {

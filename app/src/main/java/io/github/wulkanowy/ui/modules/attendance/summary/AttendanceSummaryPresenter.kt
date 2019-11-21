@@ -39,6 +39,7 @@ class AttendanceSummaryPresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         Timber.i("Attendance summary view was initialized with subject id ${subjectId ?: -1}")
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData(subjectId ?: -1)
         loadSubjects()
     }
@@ -104,20 +105,20 @@ class AttendanceSummaryPresenter @Inject constructor(
                     analytics.logEvent("load_attendance_summary", "items" to it.first.size, "force_refresh" to forceRefresh, "item_id" to subjectId)
                 }) {
                     Timber.i("Loading attendance summary result: An exception occurred")
-                    view?.run {
-                        if (isViewEmpty) {
-                            errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                                lastError = error
-                                setErrorDetails(message)
-                                showErrorView(true)
-                                showEmpty(false)
-                            }
-                        } else errorHandler.showErrorMessage = ::showError
-                    }
-
                     errorHandler.dispatch(it)
                 }
             )
+        }
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            if (isViewEmpty) {
+                lastError = error
+                setErrorDetails(message)
+                showErrorView(true)
+                showEmpty(false)
+            } else showError(message, error)
         }
     }
 

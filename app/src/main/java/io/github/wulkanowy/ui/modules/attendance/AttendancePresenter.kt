@@ -44,6 +44,7 @@ class AttendancePresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         Timber.i("Attendance view was initialized")
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData(ofEpochDay(date ?: baseDate.toEpochDay()))
         if (currentDate.isHolidays) setBaseDateOnHolidays()
         reloadView()
@@ -160,20 +161,20 @@ class AttendancePresenter @Inject constructor(
                     analytics.logEvent("load_attendance", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
                     Timber.i("Loading attendance result: An exception occurred")
-                    view?.run {
-                        if (isViewEmpty) {
-                            errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                                lastError = error
-                                setErrorDetails(message)
-                                showErrorView(true)
-                                showEmpty(false)
-                            }
-                        } else errorHandler.showErrorMessage = ::showError
-                    }
-
                     errorHandler.dispatch(it)
                 }
             )
+        }
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            if (isViewEmpty) {
+                lastError = error
+                setErrorDetails(message)
+                showErrorView(true)
+                showEmpty(false)
+            } else showError(message, error)
         }
     }
 

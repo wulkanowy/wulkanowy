@@ -25,9 +25,12 @@ class MessagePreviewPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
+    private var retryCallback: () -> Unit = {}
+
     fun onAttachView(view: MessagePreviewView, id: Long) {
         super.onAttachView(view)
         view.initView()
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData(id)
     }
 
@@ -70,16 +73,7 @@ class MessagePreviewPresenter @Inject constructor(
                     analytics.logEvent("load_message_preview", "length" to message.content?.length)
                 }) {
                     Timber.i("Loading message $id preview result: An exception occurred ")
-                    view?.run {
-                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                            lastError = error
-                            view.run {
-                                setErrorDetails(message)
-                                showErrorView(true)
-                                setErrorRetryCallback { onMessageLoadRetry() }
-                            }
-                        }
-                    }
+                    retryCallback = { onMessageLoadRetry() }
                     errorHandler.dispatch(it)
                 })
         }
@@ -122,24 +116,21 @@ class MessagePreviewPresenter @Inject constructor(
                         popView()
                     }
                 }, { error ->
-                    view?.run {
-                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                            lastError = error
-                            view.run {
-                                setErrorDetails(message)
-                                showErrorView(true)
-                                setErrorRetryCallback {
-                                    showErrorView(false)
-                                    onMessageDelete()
-                                }
-                            }
-                        }
-                    }
+                    retryCallback = { onMessageDelete() }
                     errorHandler.dispatch(error)
                 }, {
                     view?.showErrorView(true)
                 })
             )
+        }
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            lastError = error
+            setErrorDetails(message)
+            showErrorView(true)
+            setErrorRetryCallback { retryCallback() }
         }
     }
 

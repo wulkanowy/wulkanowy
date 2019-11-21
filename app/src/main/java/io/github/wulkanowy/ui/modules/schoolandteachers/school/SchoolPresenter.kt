@@ -29,6 +29,7 @@ class SchoolPresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         Timber.i("School view was initialized")
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData()
     }
 
@@ -53,7 +54,7 @@ class SchoolPresenter @Inject constructor(
     }
 
     fun onAddressSelected() {
-        address?.let{ view?.openMapsLocation(it) }
+        address?.let { view?.openMapsLocation(it) }
     }
 
     fun onTelephoneSelected() {
@@ -87,17 +88,6 @@ class SchoolPresenter @Inject constructor(
                 analytics.logEvent("load_school", "force_refresh" to forceRefresh)
             }, {
                 Timber.i("Loading school result: An exception occurred")
-                view?.run {
-                    if (isViewEmpty) {
-                        errorHandler.showErrorMessage = { message: String, error: Throwable ->
-                            lastError = error
-                            setErrorDetails(message)
-                            showErrorView(true)
-                            showEmpty(false)
-                            showContent(false)
-                        }
-                    } else errorHandler.showErrorMessage = ::showError
-                }
                 errorHandler.dispatch(it)
             }, {
                 Timber.i("Loading school result: No school info found")
@@ -107,5 +97,17 @@ class SchoolPresenter @Inject constructor(
                     showErrorView(false)
                 }
             }))
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            if (isViewEmpty) {
+                lastError = error
+                setErrorDetails(message)
+                showErrorView(true)
+                showEmpty(false)
+                showContent(false)
+            } else showError(message, error)
+        }
     }
 }
