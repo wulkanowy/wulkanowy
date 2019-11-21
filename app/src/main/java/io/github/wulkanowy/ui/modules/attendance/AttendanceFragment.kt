@@ -131,10 +131,6 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
         attendanceErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showProgress(show: Boolean) {
         attendanceProgress.visibility = if (show) VISIBLE else GONE
     }

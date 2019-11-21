@@ -16,8 +16,6 @@ interface GradeView : BaseView {
 
     fun setErrorDetails(message: String)
 
-    fun showErrorDetailsDialog(error: Throwable)
-
     fun showSemesterSwitch(show: Boolean)
 
     fun showSemesterDialog(selectedIndex: Int)

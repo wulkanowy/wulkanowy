@@ -92,10 +92,6 @@ class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
         noteErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showProgress(show: Boolean) {
         noteProgress.visibility = if (show) VISIBLE else GONE
     }

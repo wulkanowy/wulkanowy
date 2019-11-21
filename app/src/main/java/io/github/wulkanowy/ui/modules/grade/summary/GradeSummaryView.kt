@@ -30,8 +30,6 @@ interface GradeSummaryView : BaseView {
 
     fun setErrorDetails(message: String)
 
-    fun showErrorDetailsDialog(error: Throwable)
-
     fun showEmpty(show: Boolean)
 
     fun notifyParentDataLoaded(semesterId: Int)

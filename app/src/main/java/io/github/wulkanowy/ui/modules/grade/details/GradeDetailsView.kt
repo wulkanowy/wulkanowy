@@ -42,8 +42,6 @@ interface GradeDetailsView : BaseView {
 
     fun setErrorDetails(message: String)
 
-    fun showErrorDetailsDialog(error: Throwable)
-
     fun enableSwipe(enable: Boolean)
 
     fun showRefresh(show: Boolean)

@@ -106,10 +106,6 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
         examErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showProgress(show: Boolean) {
         examProgress.visibility = if (show) VISIBLE else GONE
     }

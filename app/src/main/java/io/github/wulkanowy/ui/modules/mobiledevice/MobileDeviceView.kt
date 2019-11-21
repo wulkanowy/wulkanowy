@@ -29,8 +29,6 @@ interface MobileDeviceView : BaseView {
 
     fun setErrorDetails(message: String)
 
-    fun showErrorDetailsDialog(error: Throwable)
-
     fun showUndo(position: Int, device: MobileDevice)
 
     fun showTokenDialog()

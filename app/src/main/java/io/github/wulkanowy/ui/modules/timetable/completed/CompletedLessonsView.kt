@@ -24,8 +24,6 @@ interface CompletedLessonsView : BaseView {
 
     fun setErrorDetails(message: String)
 
-    fun showErrorDetailsDialog(error: Throwable)
-
     fun showFeatureDisabled()
 
     fun showProgress(show: Boolean)

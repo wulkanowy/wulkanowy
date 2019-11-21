@@ -152,10 +152,6 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         gradeDetailsErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showRefresh(show: Boolean) {
         gradeDetailsSwipe.isRefreshing = show
     }

@@ -63,10 +63,6 @@ class LuckyNumberFragment : BaseFragment(), LuckyNumberView, MainView.TitledView
         luckyNumberErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showProgress(show: Boolean) {
         luckyNumberProgress.visibility = if (show) VISIBLE else GONE
     }

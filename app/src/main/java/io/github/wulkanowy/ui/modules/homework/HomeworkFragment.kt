@@ -97,10 +97,6 @@ class HomeworkFragment : BaseFragment(), HomeworkView, MainView.TitledView {
         homeworkErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showProgress(show: Boolean) {
         homeworkProgress.visibility = if (show) VISIBLE else GONE
     }

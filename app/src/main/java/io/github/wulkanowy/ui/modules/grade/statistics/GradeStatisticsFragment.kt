@@ -238,10 +238,6 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         gradeStatisticsErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showProgress(show: Boolean) {
         gradeStatisticsProgress.visibility = if (show) View.VISIBLE else View.GONE
     }

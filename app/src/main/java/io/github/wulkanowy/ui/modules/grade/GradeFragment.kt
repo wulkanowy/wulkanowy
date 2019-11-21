@@ -114,10 +114,6 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
         gradeErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        ErrorDialog.newInstance(error).show(childFragmentManager, error.toString())
-    }
-
     override fun showSemesterSwitch(show: Boolean) {
         semesterSwitchMenu?.isVisible = show
     }

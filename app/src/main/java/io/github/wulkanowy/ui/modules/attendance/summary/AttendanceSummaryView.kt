@@ -22,8 +22,6 @@ interface AttendanceSummaryView : BaseView {
 
     fun setErrorDetails(message: String)
 
-    fun showErrorDetailsDialog(error: Throwable)
-
     fun updateDataSet(data: List<AttendanceSummaryItem>, header: AttendanceSummaryScrollableHeader)
 
     fun updateSubjects(data: ArrayList<String>)

@@ -99,10 +99,6 @@ class CompletedLessonsFragment : BaseFragment(), CompletedLessonsView, MainView.
         completedLessonErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showFeatureDisabled() {
         completedLessonsInfo.text = getString(R.string.error_feature_disabled)
         completedLessonsInfoImage.setImageDrawable(requireContext().getCompatDrawable(R.drawable.ic_all_close_circle))

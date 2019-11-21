@@ -142,10 +142,6 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
         messagePreviewErrorRetry.setOnClickListener { callback() }
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun openMessageReply(message: Message?) {
         context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, message, true)) }
     }

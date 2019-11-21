@@ -115,10 +115,6 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
         mobileDevicesErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun enableSwipe(enable: Boolean) {
         mobileDevicesSwipe.isEnabled = enable
     }

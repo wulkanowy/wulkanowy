@@ -30,8 +30,6 @@ interface MessageTabView : BaseView {
 
     fun setErrorDetails(message: String)
 
-    fun showErrorDetailsDialog(error: Throwable)
-
     fun showRefresh(show: Boolean)
 
     fun openMessage(messageId: Long)

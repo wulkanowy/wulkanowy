@@ -33,8 +33,6 @@ interface MessagePreviewView : BaseView {
 
     fun setErrorRetryCallback(callback: () -> Unit)
 
-    fun showErrorDetailsDialog(error: Throwable)
-
     fun showOptions(show: Boolean)
 
     fun setDeletedOptionsLabels()

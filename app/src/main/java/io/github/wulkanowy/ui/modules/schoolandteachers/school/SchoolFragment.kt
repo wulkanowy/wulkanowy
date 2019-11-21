@@ -70,10 +70,6 @@ class SchoolFragment : BaseFragment(), SchoolView, MainView.TitledView, SchoolAn
         schoolErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showProgress(show: Boolean) {
         schoolProgress.visibility = if (show) VISIBLE else GONE
     }

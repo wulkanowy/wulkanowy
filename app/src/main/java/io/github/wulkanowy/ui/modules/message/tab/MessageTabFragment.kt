@@ -112,10 +112,6 @@ class MessageTabFragment : BaseFragment(), MessageTabView {
         messageTabErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showRefresh(show: Boolean) {
         messageTabSwipe.isRefreshing = show
     }

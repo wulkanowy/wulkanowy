@@ -92,10 +92,6 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
         gradeSummaryErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showProgress(show: Boolean) {
         gradeSummaryProgress.visibility = if (show) VISIBLE else GONE
     }

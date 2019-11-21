@@ -28,8 +28,6 @@ interface TimetableView : BaseView {
 
     fun setErrorDetails(message: String)
 
-    fun showErrorDetailsDialog(error: Throwable)
-
     fun showProgress(show: Boolean)
 
     fun enableSwipe(enable: Boolean)

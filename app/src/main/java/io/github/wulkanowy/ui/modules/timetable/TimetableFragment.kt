@@ -135,10 +135,6 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
         timetableErrorMessage.text = message
     }
 
-    override fun showErrorDetailsDialog(error: Throwable) {
-        showErrorDialog(error)
-    }
-
     override fun showProgress(show: Boolean) {
         timetableProgress.visibility = if (show) VISIBLE else GONE
     }

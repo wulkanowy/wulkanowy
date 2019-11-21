@@ -27,7 +27,8 @@ interface TeacherView : BaseView, SchoolAndTeachersChildView {
     fun showContent(show: Boolean)
 
     fun showEmpty(show: Boolean)
+
     fun showErrorView(show: Boolean)
+
     fun setErrorDetails(message: String)
-    fun showErrorDetailsDialog(error: Throwable)
 }
