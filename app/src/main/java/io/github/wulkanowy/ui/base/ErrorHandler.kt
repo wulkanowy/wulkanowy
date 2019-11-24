@@ -8,6 +8,7 @@ import io.github.wulkanowy.sdk.exception.ServiceUnavailableException
 import io.github.wulkanowy.sdk.exception.BadCredentialsException
 import io.github.wulkanowy.sdk.exception.NotLoggedInException
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
+import io.github.wulkanowy.sdk.exception.FeatureNotAvailableException
 import io.github.wulkanowy.utils.security.ScramblerException
 import timber.log.Timber
 import java.net.SocketTimeoutException
@@ -38,6 +39,7 @@ open class ErrorHandler @Inject constructor(protected val resources: Resources, 
                 is FeatureDisabledException -> showErrorMessage(getString(R.string.error_feature_disabled), error)
                 is ScramblerException, is BadCredentialsException -> onSessionExpired()
                 is NoCurrentStudentException -> onNoCurrentStudent()
+                is FeatureNotAvailableException -> showErrorMessage(getString(R.string.error_feature_not_available), error)
                 else -> showErrorMessage(getString(R.string.error_unknown), error)
             }
         }

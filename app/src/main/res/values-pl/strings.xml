@@ -353,4 +353,5 @@
     <string name="error_service_unavailable">Dziennik jest niedostępny. Spróbuj ponownie później</string>
     <string name="error_unknown">Wystąpił nieoczekiwany błąd</string>
     <string name="error_feature_disabled">Funkcja wyłączona przez szkołę</string>
+    <string name="error_feature_not_available">Funkcja niedostępna w tym trybie</string>
 </resources>
