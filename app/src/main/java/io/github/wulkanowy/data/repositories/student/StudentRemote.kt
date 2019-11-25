@@ -4,7 +4,6 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime.now
-import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
 import io.github.wulkanowy.sdk.pojo.Student as SdkStudent
@@ -16,17 +15,15 @@ class StudentRemote @Inject constructor(private val sdk: Sdk) {
         return sdk.getStudentsFromMobileApi(token, pin, symbol, apiKey).map { mapStudents(it, "", "", "") }
     }
 
-    fun getStudentsScrapper(email: String, password: String, endpoint: String, symbol: String): Single<List<Student>> {
-        return sdk.getStudentsFromScrapper(email, password, endpoint.startsWith("https"), URL(endpoint)
-            .run { host + ":$port".removeSuffix(":-1") }, symbol).map { mapStudents(it, email, password, endpoint) }
+    fun getStudentsScrapper(email: String, password: String, scrapperBaseUrl: String, symbol: String): Single<List<Student>> {
+        return sdk.getStudentsFromScrapper(email, password, scrapperBaseUrl, symbol).map { mapStudents(it, email, password, scrapperBaseUrl) }
     }
 
-    fun getStudentsHybrid(email: String, password: String, endpoint: String, symbol: String, apiKey: String): Single<List<Student>> {
-        return sdk.getStudentsHybrid(email, password, apiKey, endpoint.startsWith("https"), URL(endpoint)
-            .run { host + ":$port".removeSuffix(":-1") }, symbol).map { mapStudents(it, email, password, endpoint) }
+    fun getStudentsHybrid(email: String, password: String, scrapperBaseUrl: String, symbol: String, apiKey: String): Single<List<Student>> {
+        return sdk.getStudentsHybrid(email, password, apiKey, scrapperBaseUrl, symbol).map { mapStudents(it, email, password, scrapperBaseUrl) }
     }
 
-    private fun mapStudents(students: List<SdkStudent>, email: String, password: String, endpoint: String): List<Student> {
+    private fun mapStudents(students: List<SdkStudent>, email: String, password: String, scrapperBaseUrl: String): List<Student> {
         return students.map { student ->
             Student(
                 email = email,
@@ -39,11 +36,11 @@ class StudentRemote @Inject constructor(private val sdk: Sdk) {
                 schoolName = student.schoolName,
                 className = student.className,
                 classId = student.classId,
-                scrapperBaseUrl = endpoint,
+                scrapperBaseUrl = scrapperBaseUrl,
                 loginType = student.loginType.name,
                 isCurrent = false,
                 registrationDate = now(),
-                apiBaseUrl = student.apiHost,
+                apiBaseUrl = student.mobileBaseUrl,
                 privateKey = student.privateKey,
                 certificateKey = student.certificateKey,
                 loginMode = student.loginMode.name
