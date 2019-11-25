@@ -22,7 +22,8 @@ class StudentRemote @Inject constructor(private val sdk: Sdk) {
     }
 
     fun getStudentsHybrid(email: String, password: String, endpoint: String, symbol: String, apiKey: String): Single<List<Student>> {
-        return sdk.getStudentsHybrid(email, password, apiKey, true, endpoint, symbol).map { mapStudents(it, email, password, endpoint) }
+        return sdk.getStudentsHybrid(email, password, apiKey, endpoint.startsWith("https"), URL(endpoint)
+            .run { host + ":$port".removeSuffix(":-1") }, symbol).map { mapStudents(it, email, password, endpoint) }
     }
 
     private fun mapStudents(students: List<SdkStudent>, email: String, password: String, endpoint: String): List<Student> {
