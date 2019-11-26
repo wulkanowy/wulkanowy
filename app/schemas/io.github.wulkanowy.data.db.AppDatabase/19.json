@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 19,
-    "identityHash": "7437b83af9277ef6c31f7f2dc915311f",
+    "identityHash": "294f40cebf8314f9776208827240e65f",
     "entities": [
       {
         "tableName": "Students",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `scrapper_base_url` TEXT NOT NULL, `api_base_url` TEXT NOT NULL, `login_type` TEXT NOT NULL, `login_mode` TEXT NOT NULL, `certificate_key` TEXT NOT NULL, `private_key` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `symbol` TEXT NOT NULL, `student_id` INTEGER NOT NULL, `user_login_id` INTEGER NOT NULL, `student_name` TEXT NOT NULL, `school_id` TEXT NOT NULL, `school_name` TEXT NOT NULL, `class_name` TEXT NOT NULL, `class_id` INTEGER NOT NULL, `is_current` INTEGER NOT NULL, `registration_date` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `scrapper_base_url` TEXT NOT NULL, `mobile_base_url` TEXT NOT NULL, `login_type` TEXT NOT NULL, `login_mode` TEXT NOT NULL, `certificate_key` TEXT NOT NULL, `private_key` TEXT NOT NULL, `is_parent` INTEGER NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `symbol` TEXT NOT NULL, `student_id` INTEGER NOT NULL, `user_login_id` INTEGER NOT NULL, `student_name` TEXT NOT NULL, `school_id` TEXT NOT NULL, `school_name` TEXT NOT NULL, `class_name` TEXT NOT NULL, `class_id` INTEGER NOT NULL, `is_current` INTEGER NOT NULL, `registration_date` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -21,8 +21,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "apiBaseUrl",
-            "columnName": "api_base_url",
+            "fieldPath": "mobileBaseUrl",
+            "columnName": "mobile_base_url",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -48,6 +48,12 @@
             "fieldPath": "privateKey",
             "columnName": "private_key",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isParent",
+            "columnName": "is_parent",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -1616,7 +1622,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7437b83af9277ef6c31f7f2dc915311f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '294f40cebf8314f9776208827240e65f')"
     ]
   }
 }

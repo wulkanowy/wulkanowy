@@ -22,7 +22,7 @@ class SdkHelper @Inject constructor(private val sdk: Sdk) {
             loginId = student.userLoginId
 
             mode = Sdk.Mode.valueOf(student.loginMode)
-            apiBaseUrl = student.apiBaseUrl
+            mobileBaseUrl = student.mobileBaseUrl
             certKey = student.certificateKey
             privateKey = student.privateKey
         }

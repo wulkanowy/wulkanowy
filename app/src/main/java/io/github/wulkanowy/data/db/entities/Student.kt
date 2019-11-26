@@ -13,8 +13,8 @@ data class Student(
     @ColumnInfo(name = "scrapper_base_url")
     val scrapperBaseUrl: String,
 
-    @ColumnInfo(name = "api_base_url")
-    val apiBaseUrl: String,
+    @ColumnInfo(name = "mobile_base_url")
+    val mobileBaseUrl: String,
 
     @ColumnInfo(name = "login_type")
     val loginType: String,
@@ -27,6 +27,9 @@ data class Student(
 
     @ColumnInfo(name = "private_key")
     val privateKey: String,
+
+    @ColumnInfo(name = "is_parent")
+    val isParent: Boolean,
 
     val email: String,
 

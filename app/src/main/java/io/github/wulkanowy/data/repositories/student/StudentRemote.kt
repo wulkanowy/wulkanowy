@@ -28,6 +28,7 @@ class StudentRemote @Inject constructor(private val sdk: Sdk) {
             Student(
                 email = email,
                 password = password,
+                isParent = student.isParent,
                 symbol = student.symbol,
                 studentId = student.studentId,
                 userLoginId = student.userLoginId,
@@ -40,7 +41,7 @@ class StudentRemote @Inject constructor(private val sdk: Sdk) {
                 loginType = student.loginType.name,
                 isCurrent = false,
                 registrationDate = now(),
-                apiBaseUrl = student.mobileBaseUrl,
+                mobileBaseUrl = student.mobileBaseUrl,
                 privateKey = student.privateKey,
                 certificateKey = student.certificateKey,
                 loginMode = student.loginMode.name
