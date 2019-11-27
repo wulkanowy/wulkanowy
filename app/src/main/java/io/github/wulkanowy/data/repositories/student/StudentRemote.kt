@@ -11,16 +11,16 @@ import io.github.wulkanowy.sdk.pojo.Student as SdkStudent
 @Singleton
 class StudentRemote @Inject constructor(private val sdk: Sdk) {
 
-    fun getStudentsMobileApi(token: String, pin: String, symbol: String, apiKey: String): Single<List<Student>> {
-        return sdk.getStudentsFromMobileApi(token, pin, symbol, apiKey).map { mapStudents(it, "", "") }
+    fun getStudentsMobileApi(token: String, pin: String, symbol: String): Single<List<Student>> {
+        return sdk.getStudentsFromMobileApi(token, pin, symbol).map { mapStudents(it, "", "") }
     }
 
     fun getStudentsScrapper(email: String, password: String, scrapperBaseUrl: String, symbol: String): Single<List<Student>> {
         return sdk.getStudentsFromScrapper(email, password, scrapperBaseUrl, symbol).map { mapStudents(it, email, password) }
     }
 
-    fun getStudentsHybrid(email: String, password: String, scrapperBaseUrl: String, symbol: String, apiKey: String): Single<List<Student>> {
-        return sdk.getStudentsHybrid(email, password, scrapperBaseUrl, symbol, apiKey).map { mapStudents(it, email, password) }
+    fun getStudentsHybrid(email: String, password: String, scrapperBaseUrl: String, symbol: String): Single<List<Student>> {
+        return sdk.getStudentsHybrid(email, password, scrapperBaseUrl, symbol).map { mapStudents(it, email, password) }
     }
 
     private fun mapStudents(students: List<SdkStudent>, email: String, password: String): List<Student> {

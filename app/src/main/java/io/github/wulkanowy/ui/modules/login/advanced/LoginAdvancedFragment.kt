@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -39,9 +38,6 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     override val formPassValue: String
         get() = loginFormPass.text.toString().trim()
 
-    override val formApiValue: String
-        get() = loginFormApiKey.text.toString().trim()
-
     private lateinit var hostKeys: Array<String>
 
     private lateinit var hostValues: Array<String>
@@ -73,15 +69,11 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
 
         loginFormName.doOnTextChanged { _, _, _, _ -> presenter.onNameTextChanged() }
         loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
-        loginFormApiKey.doOnTextChanged { _, _, _, _ -> presenter.onApiKeyTextChanged() }
         loginFormPin.doOnTextChanged { _, _, _, _ -> presenter.onPinTextChanged() }
         loginFormSymbol.doOnTextChanged { _, _, _, _ -> presenter.onSymbolTextChanged() }
         loginFormToken.doOnTextChanged { _, _, _, _ -> presenter.onTokenTextChanged() }
         loginFormHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
-        loginFormApiKey.setOnEditorActionListener { _, id, _ ->
-            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) loginFormSignIn.callOnClick() else false
-        }
 
         loginTypeSwitch.setOnCheckedChangeListener { _, checkedId ->
             presenter.onLoginModeSelected(when (checkedId) {
@@ -97,11 +89,10 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         }
     }
 
-    override fun setDefaultCredentials(name: String, pass: String, symbol: String, apiKey: String, token: String, pin: String) {
+    override fun setDefaultCredentials(name: String, pass: String, symbol: String, token: String, pin: String) {
         loginFormName.setText(name)
         loginFormPass.setText(pass)
         loginFormToken.setText(token)
-        loginFormApiKey.setText(apiKey)
         loginFormSymbol.setText(symbol)
         loginFormPin.setText(pin)
     }
@@ -134,20 +125,6 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         }
     }
 
-    override fun setErrorApiKeyInvalid() {
-        loginFormApiKeyLayout.run {
-            requestFocus()
-            error = "API key is invalid"
-        }
-    }
-
-    override fun setErrorApiKeyRequired() {
-        loginFormApiKeyLayout.run {
-            requestFocus()
-            error = "API key is required"
-        }
-    }
-
     override fun setErrorPinRequired() {
         loginFormPinLayout.run {
             requestFocus()
@@ -177,10 +154,6 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         loginFormPassLayout.error = null
     }
 
-    override fun clearApiKeyError() {
-        loginFormApiKeyLayout.error = null
-    }
-
     override fun clearPinKeyError() {
         loginFormPinLayout.error = null
     }
@@ -196,7 +169,6 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     override fun showOnlyHybridModeInputs() {
         loginFormNameLayout.visibility = View.VISIBLE
         loginFormPassLayout.visibility = View.VISIBLE
-        loginFormApiKeyLayout.visibility = View.VISIBLE
         loginFormHostLayout.visibility = View.VISIBLE
         loginFormPinLayout.visibility = View.GONE
         loginFormSymbolLayout.visibility = View.VISIBLE
@@ -206,7 +178,6 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     override fun showOnlyScrapperModeInputs() {
         loginFormNameLayout.visibility = View.VISIBLE
         loginFormPassLayout.visibility = View.VISIBLE
-        loginFormApiKeyLayout.visibility = View.GONE
         loginFormHostLayout.visibility = View.VISIBLE
         loginFormPinLayout.visibility = View.GONE
         loginFormSymbolLayout.visibility = View.VISIBLE
@@ -216,7 +187,6 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     override fun showOnlyMobileApiModeInputs() {
         loginFormNameLayout.visibility = View.GONE
         loginFormPassLayout.visibility = View.GONE
-        loginFormApiKeyLayout.visibility = View.VISIBLE
         loginFormHostLayout.visibility = View.GONE
         loginFormPinLayout.visibility = View.VISIBLE
         loginFormSymbolLayout.visibility = View.VISIBLE

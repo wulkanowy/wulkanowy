@@ -120,7 +120,7 @@
                 android:layout_marginRight="24dp"
                 android:hint="@string/login_password_hint"
                 app:errorEnabled="true"
-                app:layout_constraintBottom_toTopOf="@+id/loginFormApiKeyLayout"
+                app:layout_constraintBottom_toTopOf="@+id/loginFormHostLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginFormNameLayout"
@@ -141,33 +141,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/loginFormApiKeyLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
-                android:hint="@string/login_api_key_hint"
-                app:errorEnabled="true"
-                app:layout_constraintBottom_toTopOf="@+id/loginFormHostLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginFormPassLayout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/loginFormApiKey"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeActionLabel="@string/login_sign_in"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/loginFormHostLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
@@ -183,7 +156,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/loginFormTokenLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginFormApiKeyLayout">
+                app:layout_constraintTop_toBottomOf="@+id/loginFormPassLayout">
 
                 <AutoCompleteTextView
                     android:id="@+id/loginFormHost"

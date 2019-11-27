@@ -22,9 +22,9 @@ class StudentRepository @Inject constructor(
 
     fun isCurrentStudentSet(): Single<Boolean> = local.getCurrentStudent(false).isEmpty.map { !it }
 
-    fun getStudentsApi(pin: String, symbol: String, token: String, apiKey: String): Single<List<Student>> {
+    fun getStudentsApi(pin: String, symbol: String, token: String): Single<List<Student>> {
         return ReactiveNetwork.checkInternetConnectivity(settings).flatMap {
-            if (it) remote.getStudentsMobileApi(token, pin, symbol, apiKey)
+            if (it) remote.getStudentsMobileApi(token, pin, symbol)
             else Single.error(UnknownHostException("No internet connection"))
         }
     }
@@ -36,9 +36,9 @@ class StudentRepository @Inject constructor(
         }
     }
 
-    fun getStudentsHybrid(email: String, password: String, endpoint: String, symbol: String, apiKey: String): Single<List<Student>> {
+    fun getStudentsHybrid(email: String, password: String, endpoint: String, symbol: String): Single<List<Student>> {
         return ReactiveNetwork.checkInternetConnectivity(settings).flatMap {
-            if (it) remote.getStudentsHybrid(email, password, endpoint, symbol, apiKey)
+            if (it) remote.getStudentsHybrid(email, password, endpoint, symbol)
             else Single.error(UnknownHostException("No internet connection"))
         }
     }

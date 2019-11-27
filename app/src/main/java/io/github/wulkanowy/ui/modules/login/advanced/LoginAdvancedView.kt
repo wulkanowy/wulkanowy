@@ -11,8 +11,6 @@ interface LoginAdvancedView : BaseView {
 
     val formHostValue: String?
 
-    val formApiValue: String
-
     val formLoginType: String
 
     val formPinValue: String
@@ -23,7 +21,7 @@ interface LoginAdvancedView : BaseView {
 
     fun initView()
 
-    fun setDefaultCredentials(name: String, pass: String, symbol: String, apiKey: String, token: String, pin: String)
+    fun setDefaultCredentials(name: String, pass: String, symbol: String, token: String, pin: String)
 
     fun setErrorNameRequired()
 
@@ -36,8 +34,6 @@ interface LoginAdvancedView : BaseView {
     fun clearNameError()
 
     fun clearPassError()
-
-    fun clearApiKeyError()
 
     fun clearPinKeyError()
 
@@ -54,10 +50,6 @@ interface LoginAdvancedView : BaseView {
     fun showContent(show: Boolean)
 
     fun notifyParentAccountLogged(students: List<Student>)
-
-    fun setErrorApiKeyInvalid()
-
-    fun setErrorApiKeyRequired()
 
     fun setErrorPinRequired()
 

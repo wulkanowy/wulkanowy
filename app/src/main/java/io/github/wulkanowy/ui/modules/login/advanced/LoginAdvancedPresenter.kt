@@ -37,7 +37,7 @@ class LoginAdvancedPresenter @Inject constructor(
             clearPassError()
             clearNameError()
             if (formHostValue?.contains("fakelog") == true) {
-                setDefaultCredentials("jan@fakelog.cf", "jan123", "powiatwulkanowy", "012345678901234567890123456789AB", "FK100000", "999999")
+                setDefaultCredentials("jan@fakelog.cf", "jan123", "powiatwulkanowy", "FK100000", "999999")
             }
         }
     }
@@ -58,10 +58,6 @@ class LoginAdvancedPresenter @Inject constructor(
 
     fun onNameTextChanged() {
         view?.clearNameError()
-    }
-
-    fun onApiKeyTextChanged() {
-        view?.clearApiKeyError()
     }
 
     fun onPinTextChanged() {
@@ -116,12 +112,10 @@ class LoginAdvancedPresenter @Inject constructor(
         val symbol = view?.formSymbolValue.orEmpty()
         val token = view?.formTokenValue.orEmpty()
 
-        val apiKey = view?.formApiValue.orEmpty()
-
         return when (Sdk.Mode.valueOf(view?.formLoginType ?: "")) {
-            Sdk.Mode.API -> studentRepository.getStudentsApi(pin, symbol, token, apiKey)
+            Sdk.Mode.API -> studentRepository.getStudentsApi(pin, symbol, token)
             Sdk.Mode.SCRAPPER -> studentRepository.getStudentsScrapper(email, password, endpoint, symbol)
-            Sdk.Mode.HYBRID -> studentRepository.getStudentsHybrid(email, password, endpoint, symbol, apiKey)
+            Sdk.Mode.HYBRID -> studentRepository.getStudentsHybrid(email, password, endpoint, symbol)
         }
     }
 
@@ -133,22 +127,10 @@ class LoginAdvancedPresenter @Inject constructor(
         val symbol = view?.formSymbolValue.orEmpty()
         val token = view?.formTokenValue.orEmpty()
 
-        val apiKey = view?.formApiValue.orEmpty()
-
         var isCorrect = true
 
         when (Sdk.Mode.valueOf(view?.formLoginType ?: "")) {
             Sdk.Mode.API -> {
-                if (apiKey.isEmpty()) {
-                    view?.setErrorApiKeyRequired()
-                    isCorrect = false
-                }
-
-                if (apiKey.length != 32 && apiKey.isNotEmpty()) {
-                    view?.setErrorApiKeyInvalid()
-                    isCorrect = false
-                }
-
                 if (pin.isEmpty()) {
                     view?.setErrorPinRequired()
                     isCorrect = false
@@ -181,16 +163,6 @@ class LoginAdvancedPresenter @Inject constructor(
                 }
             }
             Sdk.Mode.HYBRID -> {
-                if (apiKey.isEmpty()) {
-                    view?.setErrorApiKeyRequired()
-                    isCorrect = false
-                }
-
-                if (apiKey.length != 32 && apiKey.isNotEmpty()) {
-                    view?.setErrorApiKeyInvalid()
-                    isCorrect = false
-                }
-
                 if (login.isEmpty()) {
                     view?.setErrorNameRequired()
                     isCorrect = false
