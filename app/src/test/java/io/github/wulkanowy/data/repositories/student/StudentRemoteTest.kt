@@ -1,7 +1,9 @@
 package io.github.wulkanowy.data.repositories.student
 
+import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Student
+import io.mockk.impl.annotations.SpyK
 import io.reactivex.Single
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -24,7 +26,7 @@ class StudentRemoteTest {
 
     @Test
     fun testRemoteAll() {
-        doReturn(Single.just(listOf(getStudent("test")))).`when`(mockSdk).getStudentsFromScrapper(anyString(), anyString(), anyBoolean(), anyString(), anyString())
+        doReturn(Single.just(listOf(getStudent("test")))).`when`(mockSdk).getStudentsFromScrapper(anyString(), anyString(), anyString(), anyString())
 
         val students = StudentRemote(mockSdk).getStudentsScrapper("", "", "http://fakelog.cf", "").blockingGet()
         assertEquals(1, students.size)
@@ -45,10 +47,10 @@ class StudentRemoteTest {
             certificateKey = "",
             privateKey = "",
             loginMode = Sdk.Mode.SCRAPPER,
-            apiHost = "",
+            mobileBaseUrl = "",
             loginType = Sdk.ScrapperLoginType.STANDARD,
-            scrapperHost = "",
-            ssl = false
+            scrapperBaseUrl = "",
+            isParent = false
         )
     }
 }

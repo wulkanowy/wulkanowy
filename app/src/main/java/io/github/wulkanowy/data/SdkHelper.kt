@@ -32,7 +32,7 @@ class SdkHelper @Inject constructor(private val sdk: Sdk) {
     fun changeSemester(semester: Semester): Sdk {
         return sdk.apply {
             schoolYear = semester.schoolYear
-            diaryId = schoolYear
+            diaryId = semester.diaryId
         }
     }
 }

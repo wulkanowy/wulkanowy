@@ -1,12 +1,14 @@
 package io.github.wulkanowy.data.repositories.attendance
 
+import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Attendance
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
+import io.mockk.just
+import io.mockk.runs
 import io.reactivex.Single
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -16,8 +18,10 @@ import org.threeten.bp.LocalDate.of
 
 class AttendanceRemoteTest {
 
-    @SpyK
-    private var mockSdk = Sdk()
+    @MockK
+    private lateinit var mockSdk: Sdk
+
+    private lateinit var mockHelper: SdkHelper
 
     @MockK
     private lateinit var semesterMock: Semester
@@ -25,6 +29,7 @@ class AttendanceRemoteTest {
     @Before
     fun initApi() {
         MockKAnnotations.init(this)
+        mockHelper = SdkHelper(mockSdk)
     }
 
     @Test
@@ -43,9 +48,12 @@ class AttendanceRemoteTest {
         every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 1
+        every { semesterMock.schoolYear } returns 2019
         every { semesterMock.semesterId } returns 1
+        every { mockSdk setProperty "schoolYear" value 2019 } just runs
+        every { mockSdk setProperty "diaryId" value 1 } just runs
 
-        val attendance = AttendanceRemote(mockSdk).getAttendance(semesterMock,
+        val attendance = AttendanceRemote(mockHelper).getAttendance(semesterMock,
             of(2018, 9, 10),
             of(2018, 9, 15)
         ).blockingGet()

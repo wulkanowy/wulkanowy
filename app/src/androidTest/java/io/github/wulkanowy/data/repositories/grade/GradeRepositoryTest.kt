@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
+import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -15,6 +16,8 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK
+import io.mockk.just
+import io.mockk.runs
 import io.reactivex.Single
 import org.junit.After
 import org.junit.Before
@@ -30,8 +33,10 @@ import kotlin.test.assertTrue
 @RunWith(AndroidJUnit4::class)
 class GradeRepositoryTest {
 
-    @SpyK
-    private var mockSdk = Sdk()
+    @MockK
+    private lateinit var mockSdk: Sdk
+
+    private lateinit var mockHelper: SdkHelper
 
     private val settings = InternetObservingSettings.builder()
         .strategy(TestInternetObservingStrategy())
@@ -54,13 +59,17 @@ class GradeRepositoryTest {
         MockKAnnotations.init(this)
         testDb = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase::class.java).build()
         gradeLocal = GradeLocal(testDb.gradeDao)
-        gradeRemote = GradeRemote(mockSdk)
+        mockHelper = SdkHelper(mockSdk)
+        gradeRemote = GradeRemote(mockHelper)
 
         every { mockSdk.diaryId } returns 1
         every { studentMock.registrationDate } returns LocalDateTime.of(2019, 2, 27, 12, 0)
         every { semesterMock.studentId } returns 1
         every { semesterMock.semesterId } returns 1
         every { semesterMock.diaryId } returns 1
+        every { semesterMock.schoolYear } returns 2019
+        every { mockSdk setProperty "schoolYear" value 2019 } just runs
+        every { mockSdk setProperty "diaryId" value 1 } just runs
     }
 
     @After

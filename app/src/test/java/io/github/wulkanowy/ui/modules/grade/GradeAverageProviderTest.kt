@@ -30,7 +30,7 @@ class GradeAverageProviderTest {
 
     private lateinit var gradeAverageProvider: GradeAverageProvider
 
-    private val student = Student("", "", "", "", "", "", "", "", "", 101, 0, "", "", "", "", 1, true, LocalDateTime.now())
+    private val student = Student("", "", "", "", "", "", false, "", "", "", 101, 0, "", "", "", "", 1, true, LocalDateTime.now())
 
     private val semesters = mutableListOf(
         Semester(101, 10, "", 1, 21, 1, false, now(), now(), 1, 1),
