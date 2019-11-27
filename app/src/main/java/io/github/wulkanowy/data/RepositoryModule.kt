@@ -14,9 +14,6 @@ import dagger.Provides
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.sdk.Sdk
-import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
-import okhttp3.logging.HttpLoggingInterceptor.Level.BASIC
 import timber.log.Timber
 import javax.inject.Singleton
 
@@ -35,13 +32,12 @@ internal class RepositoryModule {
     @Provides
     fun provideSdk(chuckCollector: ChuckCollector, context: Context): Sdk {
         return Sdk().apply {
-            logLevel = NONE
             androidVersion = android.os.Build.VERSION.RELEASE
             buildTag = android.os.Build.MODEL
-            setInterceptor(HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Timber.d(it) }).setLevel(BASIC))
+            setSimpleHttpLogger { Timber.d(it) }
 
             // for debug only
-            setInterceptor(ChuckInterceptor(context, chuckCollector).maxContentLength(250000L), true, 0)
+            addInterceptor(ChuckInterceptor(context, chuckCollector).maxContentLength(250000L), true)
         }
     }
 

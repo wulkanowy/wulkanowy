@@ -12,18 +12,18 @@ import io.github.wulkanowy.sdk.pojo.Student as SdkStudent
 class StudentRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getStudentsMobileApi(token: String, pin: String, symbol: String, apiKey: String): Single<List<Student>> {
-        return sdk.getStudentsFromMobileApi(token, pin, symbol, apiKey).map { mapStudents(it, "", "", "") }
+        return sdk.getStudentsFromMobileApi(token, pin, symbol, apiKey).map { mapStudents(it, "", "") }
     }
 
     fun getStudentsScrapper(email: String, password: String, scrapperBaseUrl: String, symbol: String): Single<List<Student>> {
-        return sdk.getStudentsFromScrapper(email, password, scrapperBaseUrl, symbol).map { mapStudents(it, email, password, scrapperBaseUrl) }
+        return sdk.getStudentsFromScrapper(email, password, scrapperBaseUrl, symbol).map { mapStudents(it, email, password) }
     }
 
     fun getStudentsHybrid(email: String, password: String, scrapperBaseUrl: String, symbol: String, apiKey: String): Single<List<Student>> {
-        return sdk.getStudentsHybrid(email, password, apiKey, scrapperBaseUrl, symbol).map { mapStudents(it, email, password, scrapperBaseUrl) }
+        return sdk.getStudentsHybrid(email, password, scrapperBaseUrl, symbol, apiKey).map { mapStudents(it, email, password) }
     }
 
-    private fun mapStudents(students: List<SdkStudent>, email: String, password: String, scrapperBaseUrl: String): List<Student> {
+    private fun mapStudents(students: List<SdkStudent>, email: String, password: String): List<Student> {
         return students.map { student ->
             Student(
                 email = email,
@@ -37,7 +37,7 @@ class StudentRemote @Inject constructor(private val sdk: Sdk) {
                 schoolName = student.schoolName,
                 className = student.className,
                 classId = student.classId,
-                scrapperBaseUrl = scrapperBaseUrl,
+                scrapperBaseUrl = student.scrapperBaseUrl,
                 loginType = student.loginType.name,
                 isCurrent = false,
                 registrationDate = now(),
