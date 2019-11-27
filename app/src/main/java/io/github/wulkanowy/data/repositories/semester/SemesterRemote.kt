@@ -12,19 +12,19 @@ class SemesterRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getSemesters(student: Student): Single<List<Semester>> {
         return sdk.getSemesters().map { semesters ->
-            semesters.map { semester ->
+            semesters.map {
                 Semester(
                     studentId = student.studentId,
-                    diaryId = semester.diaryId,
-                    diaryName = semester.diaryName,
-                    schoolYear = semester.schoolYear,
-                    semesterId = semester.semesterId,
-                    semesterName = semester.semesterNumber,
-                    isCurrent = semester.current,
-                    start = semester.start,
-                    end = semester.end,
-                    classId = semester.classId,
-                    unitId = semester.unitId
+                    diaryId = it.diaryId,
+                    diaryName = it.diaryName,
+                    schoolYear = it.schoolYear,
+                    semesterId = it.semesterId,
+                    semesterName = it.semesterNumber,
+                    isCurrent = it.current,
+                    start = it.start,
+                    end = it.end,
+                    classId = it.classId,
+                    unitId = it.unitId
                 )
             }
         }

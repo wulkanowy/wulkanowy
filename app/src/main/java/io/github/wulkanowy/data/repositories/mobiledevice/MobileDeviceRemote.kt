@@ -1,19 +1,18 @@
 package io.github.wulkanowy.data.repositories.mobiledevice
 
+import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.pojos.MobileDeviceToken
-import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MobileDeviceRemote @Inject constructor(private val sdk: Sdk) {
+class MobileDeviceRemote @Inject constructor(private val sdk: SdkHelper) {
 
     fun getDevices(semester: Semester): Single<List<MobileDevice>> {
-        return Single.just(sdk.apply { diaryId = semester.diaryId })
-            .flatMap { sdk.getRegisteredDevices() }
+        return sdk.changeSemester(semester).getRegisteredDevices()
             .map { devices ->
                 devices.map {
                     MobileDevice(
@@ -27,13 +26,11 @@ class MobileDeviceRemote @Inject constructor(private val sdk: Sdk) {
     }
 
     fun unregisterDevice(semester: Semester, device: MobileDevice): Single<Boolean> {
-        return Single.just(sdk.apply { diaryId = semester.diaryId })
-            .flatMap { sdk.unregisterDevice(device.deviceId) }
+        return sdk.changeSemester(semester).unregisterDevice(device.deviceId)
     }
 
     fun getToken(semester: Semester): Single<MobileDeviceToken> {
-        return Single.just(sdk.apply { diaryId = semester.diaryId })
-            .flatMap { sdk.getToken() }
+        return sdk.changeSemester(semester).getToken()
             .map {
                 MobileDeviceToken(
                     token = it.token,

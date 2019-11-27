@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data
 
+import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
 import javax.inject.Inject
@@ -25,6 +26,13 @@ class SdkHelper @Inject constructor(private val sdk: Sdk) {
             mobileBaseUrl = student.mobileBaseUrl
             certKey = student.certificateKey
             privateKey = student.privateKey
+        }
+    }
+
+    fun changeSemester(semester: Semester): Sdk {
+        return sdk.apply {
+            schoolYear = semester.schoolYear
+            diaryId = schoolYear
         }
     }
 }

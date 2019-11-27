@@ -1,18 +1,18 @@
 package io.github.wulkanowy.data.repositories.grade
 
+import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.Semester
-import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GradeRemote @Inject constructor(private val sdk: Sdk) {
+class GradeRemote @Inject constructor(private val sdk: SdkHelper) {
 
     fun getGrades(semester: Semester): Single<List<Grade>> {
-        return Single.just(sdk.apply { diaryId = semester.diaryId })
-            .flatMap { it.getGrades(semester.semesterId) }.map { grades ->
+        return sdk.changeSemester(semester).getGrades(semester.semesterId)
+            .map { grades ->
                 grades.map {
                     Grade(
                         studentId = semester.studentId,

@@ -1,18 +1,17 @@
 package io.github.wulkanowy.data.repositories.gradessummary
 
+import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Semester
-import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GradeSummaryRemote @Inject constructor(private val sdk: Sdk) {
+class GradeSummaryRemote @Inject constructor(private val sdk: SdkHelper) {
 
     fun getGradeSummary(semester: Semester): Single<List<GradeSummary>> {
-        return Single.just(sdk.apply { diaryId = semester.diaryId })
-            .flatMap { it.getGradesSummary(semester.semesterId) }
+        return sdk.changeSemester(semester).getGradesSummary(semester.semesterId)
             .map { gradesSummary ->
                 gradesSummary.map {
                     GradeSummary(
