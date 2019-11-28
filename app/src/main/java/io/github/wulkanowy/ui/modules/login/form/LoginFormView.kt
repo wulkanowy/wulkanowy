@@ -35,10 +35,7 @@ interface LoginFormView : BaseView {
 
     fun showContent(show: Boolean)
 
-    // TODO
     fun showVersion()
-
-//    fun showPrivacyPolicy()
 
     fun notifyParentAccountLogged(students: List<Student>, loginData: Triple<String, String, String>)
 

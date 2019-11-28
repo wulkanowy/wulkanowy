@@ -22,7 +22,7 @@ class StudentLocal @Inject constructor(
         return Single.fromCallable {
             studentDb.insertAll(students.map {
                 if (Sdk.Mode.valueOf(it.loginMode) != Sdk.Mode.API) it.copy(password = encrypt(it.password, context))
-                else it.copy()
+                else it
             })
         }
     }

@@ -3,7 +3,6 @@ package io.github.wulkanowy.ui.modules.login.form
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
@@ -14,8 +13,7 @@ class LoginFormPresenter @Inject constructor(
     schedulers: SchedulersProvider,
     studentRepository: StudentRepository,
     private val loginErrorHandler: LoginErrorHandler,
-    private val analytics: FirebaseAnalyticsHelper,
-    private val appInfo: AppInfo
+    private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<LoginFormView>(loginErrorHandler, studentRepository, schedulers) {
 
     override fun onAttachView(view: LoginFormView) {

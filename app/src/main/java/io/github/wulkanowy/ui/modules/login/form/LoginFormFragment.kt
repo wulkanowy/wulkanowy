@@ -135,15 +135,8 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
     @SuppressLint("SetTextI18n")
     override fun showVersion() {
-        with(loginFormVersion) {
-//            visibility = VISIBLE
-            text = "v${appInfo.versionName}"
-        }
+        loginFormVersion.text = "v${appInfo.versionName}"
     }
-
-//    override fun showPrivacyPolicy() {
-//        loginFormPrivacyLink.visibility = VISIBLE
-//    }
 
     override fun notifyParentAccountLogged(students: List<Student>, loginData: Triple<String, String, String>) {
         (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, loginData)
