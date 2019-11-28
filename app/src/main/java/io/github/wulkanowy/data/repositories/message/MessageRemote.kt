@@ -55,7 +55,7 @@ class MessageRemote @Inject constructor(private val sdk: Sdk) {
                     reportingUnitId = it.unitId,
                     role = it.role,
                     hash = it.hash,
-                    shortName = "" //TODO
+                    shortName = it.name
                 )
             }
         )
