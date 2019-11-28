@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.gradestatistics
 
-import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.GradePointsStatistics
@@ -8,9 +7,6 @@ import io.github.wulkanowy.sdk.pojo.GradeStatistics
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
-import io.mockk.just
-import io.mockk.runs
 import io.reactivex.Single
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -21,15 +17,12 @@ class GradeStatisticsRemoteTest {
     @MockK
     private lateinit var mockSdk: Sdk
 
-    private lateinit var mockHelper: SdkHelper
-
     @MockK
     private lateinit var semesterMock: Semester
 
     @Before
     fun initApi() {
         MockKAnnotations.init(this)
-        mockHelper = SdkHelper(mockSdk)
     }
 
     @Test
@@ -40,13 +33,12 @@ class GradeStatisticsRemoteTest {
         ))
 
         every { semesterMock.studentId } returns 1
-        every { semesterMock.semesterId } returns 1
         every { semesterMock.diaryId } returns 1
         every { semesterMock.schoolYear } returns 2019
-        every { mockSdk setProperty "schoolYear" value 2019 } just runs
-        every { mockSdk setProperty "diaryId" value 1 } just runs
+        every { semesterMock.semesterId } returns 1
+        every { mockSdk.switchDiary(any(), any()) } returns mockSdk
 
-        val stats = GradeStatisticsRemote(mockHelper).getGradeStatistics(semesterMock, false).blockingGet()
+        val stats = GradeStatisticsRemote(mockSdk).getGradeStatistics(semesterMock, false).blockingGet()
         assertEquals(2, stats.size)
     }
 
@@ -57,16 +49,13 @@ class GradeStatisticsRemoteTest {
             getGradePointsStatistics("Matematyka")
         ))
 
-        every { mockSdk.diaryId } returns 1
         every { semesterMock.studentId } returns 1
-        every { semesterMock.semesterId } returns 1
-        every { semesterMock.semesterName } returns 2
         every { semesterMock.diaryId } returns 1
         every { semesterMock.schoolYear } returns 2019
-        every { mockSdk setProperty "schoolYear" value 2019 } just runs
-        every { mockSdk setProperty "diaryId" value 1 } just runs
+        every { semesterMock.semesterId } returns 1
+        every { mockSdk.switchDiary(any(), any()) } returns mockSdk
 
-        val stats = GradeStatisticsRemote(mockHelper).getGradePointsStatistics(semesterMock).blockingGet()
+        val stats = GradeStatisticsRemote(mockSdk).getGradePointsStatistics(semesterMock).blockingGet()
         assertEquals(2, stats.size)
     }
 

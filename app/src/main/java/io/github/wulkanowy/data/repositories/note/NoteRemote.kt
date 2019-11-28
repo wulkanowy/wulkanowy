@@ -1,17 +1,17 @@
 package io.github.wulkanowy.data.repositories.note
 
-import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NoteRemote @Inject constructor(private val sdk: SdkHelper) {
+class NoteRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getNotes(semester: Semester): Single<List<Note>> {
-        return sdk.changeSemester(semester).getNotes(semester.semesterId)
+        return sdk.switchDiary(semester.diaryId, semester.schoolYear).getNotes(semester.semesterId)
             .map { notes ->
                 notes.map {
                     Note(

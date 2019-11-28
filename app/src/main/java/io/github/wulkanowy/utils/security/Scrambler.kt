@@ -14,7 +14,6 @@ import android.security.keystore.KeyProperties.DIGEST_SHA512
 import android.security.keystore.KeyProperties.ENCRYPTION_PADDING_RSA_OAEP
 import android.security.keystore.KeyProperties.PURPOSE_DECRYPT
 import android.security.keystore.KeyProperties.PURPOSE_ENCRYPT
-import android.util.Base64
 import android.util.Base64.DEFAULT
 import android.util.Base64.decode
 import android.util.Base64.encode

@@ -1,15 +1,15 @@
 package io.github.wulkanowy.data.repositories.school
 
-import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.School
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
 import javax.inject.Inject
 
-class SchoolRemote @Inject constructor(private val sdk: SdkHelper) {
+class SchoolRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getSchoolInfo(semester: Semester): Single<School> {
-        return sdk.changeSemester(semester).getSchool()
+        return sdk.switchDiary(semester.diaryId, semester.schoolYear).getSchool()
             .map {
                 School(
                     studentId = semester.studentId,

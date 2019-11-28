@@ -33,8 +33,6 @@ class TimetableRepositoryTest {
     @MockK
     private lateinit var mockSdk: Sdk
 
-    private lateinit var mockHelper: SdkHelper
-
     private val settings = InternetObservingSettings.builder()
         .strategy(TestInternetObservingStrategy())
         .build()
@@ -53,15 +51,13 @@ class TimetableRepositoryTest {
         MockKAnnotations.init(this)
         testDb = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase::class.java).build()
         timetableLocal = TimetableLocal(testDb.timetableDao)
-        mockHelper = SdkHelper(mockSdk)
-        timetableRemote = TimetableRemote(mockHelper)
+        timetableRemote = TimetableRemote(mockSdk)
 
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 2
         every { semesterMock.schoolYear } returns 2019
         every { semesterMock.semesterId } returns 1
-        every { mockSdk setProperty "schoolYear" value 2019 } just runs
-        every { mockSdk setProperty "diaryId" value 2 } just runs
+        every { mockSdk.switchDiary(any(), any()) } returns mockSdk
     }
 
     @After

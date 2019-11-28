@@ -1,18 +1,18 @@
 package io.github.wulkanowy.data.repositories.attendance
 
-import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AttendanceRemote @Inject constructor(private val sdk: SdkHelper) {
+class AttendanceRemote @Inject constructor(private val sdk: Sdk) {
 
     fun getAttendance(semester: Semester, startDate: LocalDate, endDate: LocalDate): Single<List<Attendance>> {
-        return sdk.changeSemester(semester).getAttendance(startDate, endDate, semester.semesterId)
+        return sdk.switchDiary(semester.diaryId, semester.schoolYear).getAttendance(startDate, endDate, semester.semesterId)
             .map { attendance ->
                 attendance.map {
                     Attendance(

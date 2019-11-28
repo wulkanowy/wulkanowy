@@ -1,15 +1,11 @@
 package io.github.wulkanowy.data.repositories.completedlessons
 
-import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.CompletedLesson
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.SpyK
-import io.mockk.just
-import io.mockk.runs
 import io.reactivex.Single
 import org.junit.Assert
 import org.junit.Before
@@ -22,15 +18,12 @@ class CompletedLessonsRemoteTest {
     @MockK
     private lateinit var mockSdk: Sdk
 
-    private lateinit var mockHelper: SdkHelper
-
     @MockK
     private lateinit var semesterMock: Semester
 
     @Before
     fun initApi() {
         MockKAnnotations.init(this)
-        mockHelper = SdkHelper(mockSdk)
     }
 
     @Test
@@ -48,10 +41,10 @@ class CompletedLessonsRemoteTest {
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 1
         every { semesterMock.schoolYear } returns 2019
-        every { mockSdk setProperty "schoolYear" value 2019 } just runs
-        every { mockSdk setProperty "diaryId" value 1 } just runs
+        every { semesterMock.semesterId } returns 1
+        every { mockSdk.switchDiary(any(), any()) } returns mockSdk
 
-        val completed = CompletedLessonsRemote(mockHelper).getCompletedLessons(semesterMock,
+        val completed = CompletedLessonsRemote(mockSdk).getCompletedLessons(semesterMock,
             of(2018, 9, 10),
             of(2018, 9, 15)
         ).blockingGet()

@@ -3,12 +3,12 @@ package io.github.wulkanowy.ui.base
 import android.content.res.Resources
 import com.readystatesoftware.chuck.api.ChuckCollector
 import io.github.wulkanowy.R
-import io.github.wulkanowy.sdk.exception.FeatureDisabledException
-import io.github.wulkanowy.sdk.exception.ServiceUnavailableException
-import io.github.wulkanowy.sdk.exception.BadCredentialsException
-import io.github.wulkanowy.sdk.exception.NotLoggedInException
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
+import io.github.wulkanowy.sdk.exception.BadCredentialsException
+import io.github.wulkanowy.sdk.exception.FeatureDisabledException
 import io.github.wulkanowy.sdk.exception.FeatureNotAvailableException
+import io.github.wulkanowy.sdk.exception.NotLoggedInException
+import io.github.wulkanowy.sdk.exception.ServiceUnavailableException
 import io.github.wulkanowy.utils.security.ScramblerException
 import timber.log.Timber
 import java.net.SocketTimeoutException

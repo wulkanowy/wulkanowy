@@ -36,8 +36,6 @@ class GradeRepositoryTest {
     @MockK
     private lateinit var mockSdk: Sdk
 
-    private lateinit var mockHelper: SdkHelper
-
     private val settings = InternetObservingSettings.builder()
         .strategy(TestInternetObservingStrategy())
         .build()
@@ -59,17 +57,14 @@ class GradeRepositoryTest {
         MockKAnnotations.init(this)
         testDb = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase::class.java).build()
         gradeLocal = GradeLocal(testDb.gradeDao)
-        mockHelper = SdkHelper(mockSdk)
-        gradeRemote = GradeRemote(mockHelper)
+        gradeRemote = GradeRemote(mockSdk)
 
-        every { mockSdk.diaryId } returns 1
         every { studentMock.registrationDate } returns LocalDateTime.of(2019, 2, 27, 12, 0)
         every { semesterMock.studentId } returns 1
-        every { semesterMock.semesterId } returns 1
         every { semesterMock.diaryId } returns 1
         every { semesterMock.schoolYear } returns 2019
-        every { mockSdk setProperty "schoolYear" value 2019 } just runs
-        every { mockSdk setProperty "diaryId" value 1 } just runs
+        every { semesterMock.semesterId } returns 1
+        every { mockSdk.switchDiary(any(), any()) } returns mockSdk
     }
 
     @After
