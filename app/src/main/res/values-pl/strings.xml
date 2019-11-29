@@ -41,7 +41,7 @@
     <string name="login_duplicate_student">Wybrany uczeń jest już zalogowany</string>
     <string name="login_symbol_helper">Symbol znajdziesz na stronie dziennika w Uczeń -> Dostęp Mobilny -> Zarejestruj urządzenie mobilne</string>
     <string name="login_select_student">Wybierz uczniów do zalogowania w aplikacji</string>
-    <string name="login_advanced">Logowanie zaawansowane</string>
+    <string name="login_advanced">Inne opcje</string>
     <string name="login_privacy_policy">Polityka prywatności</string>
     <string name="login_contact_header">Problemy z logowaniem? Napisz do nas!</string>
     <string name="login_contact_email">Email</string>
