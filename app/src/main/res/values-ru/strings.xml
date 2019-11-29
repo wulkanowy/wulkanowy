@@ -5,7 +5,6 @@
 
 
     <!--Activity/Fragment title-->
-
     <string name="login_title">Авторизация</string>
     <string name="main_title">Wulkanowy</string>
     <string name="grade_title">Оценки</string>
@@ -24,7 +23,6 @@
 
 
     <!--Login-->
-
     <string name="login_header_default">Авторизируйтесь при помощи аккаунта ученика или родителя</string>
     <string name="login_header_symbol">Впишите \"symbol\"</string>
     <string name="login_nickname_hint">Электронная почта или имя пользователя</string>
@@ -47,7 +45,6 @@
 
 
     <!--Main-->
-
     <string name="main_account_picker">Менеджер аккаунтов</string>
     <string name="main_log_in">Войти</string>
     <string name="main_session_expired">Сеанс истёк</string>
@@ -55,7 +52,6 @@
 
 
     <!--Grade-->
-
     <string name="grade_header">Оценка</string>
     <string name="grade_semester">Семестр %d</string>
     <string name="grade_switch_semester">Сменить семестр</string>
@@ -100,7 +96,6 @@
 
 
     <!--Timetable-->
-
     <string name="timetable_lesson">Урок</string>
     <string name="timetable_room">Аудитория</string>
     <string name="timetable_group">Группа</string>
@@ -110,7 +105,6 @@
 
 
     <!--CompletedLesson-->
-
     <string name="completed_lessons_title">Проведённые уроки</string>
     <string name="completed_lessons_button">Просмотреть проведённые уроки</string>
     <string name="completed_lessons_no_items">Нет информации о проведённых уроках</string>
@@ -120,7 +114,6 @@
 
 
     <!--Attendance-->
-
     <string name="attendance_summary_button">Итоговая посещаемость</string>
     <string name="attendance_absence_school">Отсутствие по школьным причинам</string>
     <string name="attendance_absence_excused">Оправданное отсутствие</string>
@@ -140,19 +133,16 @@
 
 
     <!--Attendance summary-->
-
     <string name="attendance_summary_final">Посещаемость</string>
 
 
     <!--Exam-->
-
     <string name="exam_no_items">Тесты на этой неделе не запланированы</string>
     <string name="exam_type">Тип</string>
     <string name="exam_entry_date">Дата записи</string>
 
 
     <!--Message-->
-
     <string name="message_inbox">Полученные</string>
     <string name="message_sent">Отправленные</string>
     <string name="message_trash">Корзина</string>
@@ -194,7 +184,6 @@
 
 
     <!--Note-->
-
     <string name="note_no_items">Нет данных о предупреждениях</string>
     <plurals name="note_number_item">
         <item quantity="one">%d предупреждение</item>
@@ -217,12 +206,10 @@
 
 
     <!--Homework-->
-
     <string name="homework_no_items">Нет домашних заданий</string>
 
 
     <!--Lucky number-->
-
     <string name="lucky_number_title">Счастливый номер</string>
     <string name="lucky_number_header">Сегодняшний счастливый номер</string>
     <string name="lucky_number_empty">Нет данных о счастливом номере</string>
@@ -231,7 +218,6 @@
 
 
     <!--Mobile devices-->
-
     <string name="mobile_devices_title">Мобильные устройства</string>
     <string name="mobile_devices_no_items">Нет устройств</string>
     <string name="mobile_devices_unregister">Удалить</string>
@@ -243,12 +229,10 @@
 
 
     <!--School and teachers-->
-
     <string name="schoolandteachers_title">Школа и учителя</string>
 
 
     <!--School-->
-
     <string name="school_title">Школа</string>
     <string name="school_no_info">Нет информации о школе</string>
     <string name="school_name">Название школы</string>
@@ -261,14 +245,12 @@
 
 
     <!--Teacher-->
-
     <string name="teachers_title">Учителя</string>
     <string name="teacher_no_items">Нет информации о учителях</string>
     <string name="teacher_no_subject">Нет предмета</string>
 
 
     <!--Account-->
-
     <string name="account_add_new">Добавить аккаунт</string>
     <string name="account_logout">Выйти</string>
     <string name="account_confirm">Вы точно хотите выйти из данного аккаунта?</string>
@@ -276,7 +258,6 @@
 
 
     <!--About-->
-
     <string name="about_version">Версия приложения</string>
     <string name="about_feedback">Сообщить о ошибке</string>
     <string name="about_feedback_summary">Отправить сообщение о ошибке через электронную почту</string>
@@ -291,12 +272,10 @@
 
 
     <!--Licenses-->
-
     <string name="license_dialog_title">Лицензия</string>
 
 
     <!--Generic-->
-
     <string name="all_content">Содержание</string>
     <string name="all_description">Описание</string>
     <string name="all_no_description">Нет описания</string>
@@ -314,7 +293,6 @@
 
 
     <!--Timetable Widget-->
-
     <string name="widget_timetable_no_items">Нет уроков</string>
     <string name="widget_timetable_theme_title">Выбрать тему</string>
     <string name="widget_timetable_theme_light">Светлая</string>
@@ -322,7 +300,6 @@
 
 
     <!--Preferences-->
-
     <string name="pref_view_header">Внешний вид</string>
     <string name="pref_view_list">При входе открывать</string>
     <string name="pref_view_grade_average_mode">Рассчитывание средней годовой оценки</string>
@@ -347,13 +324,11 @@
 
 
     <!--Notification Channels-->
-
     <string name="channel_new_entries">Новые данные в дневнике</string>
     <string name="channel_debug">Дебаг</string>
 
 
     <!--Colors-->
-
     <string name="all_black">Чёрный</string>
     <string name="all_red">Красный</string>
     <string name="all_blue">Голубой</string>
@@ -363,13 +338,11 @@
 
 
     <!--Others-->
-
     <string name="all_copied">Скопировано</string>
     <string name="all_undo">Отменить</string>
 
 
     <!--Errors-->
-
     <string name="error_no_internet">Нет интернет-подключения</string>
     <string name="error_timeout">Слишком долгое ожидание соединения с дневником</string>
     <string name="error_login_failed">Авторизация не удалась. Пожалуйста, попробуйте ещё раз или перезапустите дневник</string>
