@@ -76,8 +76,8 @@
     <string name="grade_menu_summary">Итоги</string>
     <string name="grade_menu_statistics">Класс</string>
     <string name="grade_menu_read">Пометить как \"прочитанное*</string>
-    <string name="grade_statistics_partial">Частичные оценки</string>
-    <string name="grade_statistics_semester">Семестровые оценки</string>
+    <string name="grade_statistics_partial">Частичные</string>
+    <string name="grade_statistics_semester">Семестровые</string>
     <string name="grade_statistics_points">Очки</string>
     <plurals name="grade_number_item">
         <item quantity="one">%d оценка</item>
