@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -82,6 +83,8 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
                 else -> Sdk.Mode.HYBRID
             })
         }
+
+        loginFormSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
 
         with(loginFormHost) {
             setText(hostKeys.getOrElse(0) { "" })

@@ -210,14 +210,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginFormTokenLayout">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <AutoCompleteTextView
                     android:id="@+id/loginFormSymbol"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeActionLabel="@string/login_sign_in"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:maxLines="1" />
+                    android:inputType="textAutoComplete|textNoSuggestions"
+                    android:maxLines="1"
+                    tools:ignore="LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
