@@ -103,7 +103,7 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         const val VERSION_SCHEMA = 19
 
-        fun getMigrations(): Array<Migration> {
+        fun getMigrations(sharedPrefProvider: SharedPrefProvider): Array<Migration> {
             return arrayOf(
                 Migration2(),
                 Migration3(),
@@ -122,16 +122,16 @@ abstract class AppDatabase : RoomDatabase() {
                 Migration16(),
                 Migration17(),
                 Migration18(),
-                Migration19()
+                Migration19(sharedPrefProvider)
             )
         }
 
-        fun newInstance(context: Context): AppDatabase {
+        fun newInstance(context: Context, sharedPrefProvider: SharedPrefProvider): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
                 .setJournalMode(TRUNCATE)
                 .fallbackToDestructiveMigrationFrom(VERSION_SCHEMA + 1)
                 .fallbackToDestructiveMigrationOnDowngrade()
-                .addMigrations(*getMigrations())
+                .addMigrations(*getMigrations(sharedPrefProvider))
                 .build()
         }
     }

@@ -12,6 +12,7 @@ import com.readystatesoftware.chuck.api.RetentionManager
 import dagger.Module
 import dagger.Provides
 import io.github.wulkanowy.data.db.AppDatabase
+import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.sdk.Sdk
 import timber.log.Timber
@@ -51,7 +52,7 @@ internal class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(context: Context) = AppDatabase.newInstance(context)
+    fun provideDatabase(context: Context, sharedPrefProvider: SharedPrefProvider) = AppDatabase.newInstance(context, sharedPrefProvider)
 
     @Singleton
     @Provides

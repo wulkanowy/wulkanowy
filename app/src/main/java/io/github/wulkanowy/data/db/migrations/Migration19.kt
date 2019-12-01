@@ -2,13 +2,15 @@ package io.github.wulkanowy.data.db.migrations
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import io.github.wulkanowy.data.db.SharedPrefProvider
 
-class Migration19 : Migration(18, 19) {
+class Migration19(private val sharedPrefProvider: SharedPrefProvider) : Migration(18, 19) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
         migrateMessages(database)
         migrateGrades(database)
         migrateStudents(database)
+        migrateSharedPreferences()
     }
 
     private fun migrateMessages(database: SupportSQLiteDatabase) {
@@ -104,5 +106,14 @@ class Migration19 : Migration(18, 19) {
         database.execSQL("DROP TABLE Students")
         database.execSQL("ALTER TABLE Students_tmp RENAME TO Students")
         database.execSQL("CREATE UNIQUE INDEX index_Students_email_symbol_student_id_school_id_class_id ON Students (email, symbol, student_id, school_id, class_id)")
+    }
+
+    private fun migrateSharedPreferences() {
+        if (sharedPrefProvider.getString("grade_modifier_plus", "0.0") == "0.0") {
+            sharedPrefProvider.putString("grade_modifier_plus", "0.33")
+        }
+        if (sharedPrefProvider.getString("grade_modifier_minus", "0.0") == "0.0") {
+            sharedPrefProvider.putString("grade_modifier_minus", "0.33")
+        }
     }
 }
