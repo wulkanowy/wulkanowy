@@ -131,21 +131,21 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     override fun setErrorPinRequired() {
         loginFormPinLayout.run {
             requestFocus()
-            error = "PIN is required"
+            error = getString(R.string.login_field_required)
         }
     }
 
     override fun setErrorSymbolRequired() {
         loginFormSymbolLayout.run {
             requestFocus()
-            error = "Symbol is required"
+            error = getString(R.string.login_field_required)
         }
     }
 
     override fun setErrorTokenRequired() {
         loginFormTokenLayout.run {
             requestFocus()
-            error = "Token is required"
+            error = getString(R.string.login_field_required)
         }
     }
 
