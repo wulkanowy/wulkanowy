@@ -37,7 +37,7 @@
                 android:text="@string/login_header_default"
                 android:textSize="16sp"
                 app:fontFamily="sans-serif-light"
-                app:layout_constraintBottom_toTopOf="@+id/loginFormNameLayout"
+                app:layout_constraintBottom_toTopOf="@+id/loginTypeSwitch"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
