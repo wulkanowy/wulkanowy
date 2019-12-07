@@ -93,6 +93,10 @@ class LoginSymbolPresenter @Inject constructor(
         view?.openDiscordInvite()
     }
 
+    fun onFaqClick() {
+        view?.openFaqPage()
+    }
+
     fun onEmailClick() {
         view?.openEmail()
     }

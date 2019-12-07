@@ -31,5 +31,7 @@ interface LoginSymbolView : BaseView {
 
     fun openDiscordInvite()
 
+    fun openFaqPage()
+
     fun openEmail()
 }
