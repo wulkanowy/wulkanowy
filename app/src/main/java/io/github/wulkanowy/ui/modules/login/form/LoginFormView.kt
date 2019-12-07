@@ -47,5 +47,7 @@ interface LoginFormView : BaseView {
 
     fun openDiscordInvite()
 
+    fun openFaqPage()
+
     fun openEmail()
 }
