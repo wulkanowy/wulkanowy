@@ -50,7 +50,6 @@ class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
 
     override fun initView() {
         loginSymbolSignIn.setOnClickListener { presenter.attemptLogin(loginSymbolName.text.toString()) }
-        loginSymbolContactDiscord.setOnClickListener { presenter.onDiscordClick() }
         loginSymbolFaq.setOnClickListener { presenter.onFaqClick() }
         loginSymbolContactEmail.setOnClickListener { presenter.onEmailClick() }
 
@@ -125,10 +124,6 @@ class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDetachView()
-    }
-
-    override fun openDiscordInvite() {
-        context?.openInternetBrowser("https://discord.gg/S2AZQSP", ::showMessage)
     }
 
     override fun openFaqPage() {

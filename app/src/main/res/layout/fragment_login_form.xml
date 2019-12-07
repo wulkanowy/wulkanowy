@@ -81,17 +81,6 @@
                         android:layout_weight="1"
                         android:text="@string/about_faq"
                         app:icon="@drawable/ic_about_faq" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/loginFormContactDiscord"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_weight="1"
-                        android:text="@string/login_contact_discord"
-                        app:icon="@drawable/ic_about_discord" />
                 </LinearLayout>
 
                 <View

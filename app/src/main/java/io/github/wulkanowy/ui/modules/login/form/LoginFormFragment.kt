@@ -62,7 +62,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginFormHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
         loginFormPrivacyLink.setOnClickListener { presenter.onPrivacyLinkClick() }
-        loginFormContactDiscord.setOnClickListener { presenter.onDiscordClick() }
         loginFormFaq.setOnClickListener { presenter.onFaqClick() }
         loginFormContactEmail.setOnClickListener { presenter.onEmailClick() }
 
@@ -160,10 +159,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.onDetachView()
-    }
-
-    override fun openDiscordInvite() {
-        context?.openInternetBrowser("https://discord.gg/S2AZQSP", ::showMessage)
     }
 
     override fun openFaqPage() {
