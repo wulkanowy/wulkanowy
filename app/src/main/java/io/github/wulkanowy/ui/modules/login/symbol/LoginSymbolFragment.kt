@@ -128,7 +128,7 @@ class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
     }
 
     override fun openDiscordInvite() {
-        context?.openInternetBrowser("https://discord.gg/vccAQBr", ::showMessage)
+        context?.openInternetBrowser("https://discord.gg/S2AZQSP", ::showMessage)
     }
 
     override fun openFaqPage() {
