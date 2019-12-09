@@ -93,8 +93,8 @@ class LoginFormPresenter @Inject constructor(
             }))
     }
 
-    fun onDiscordClick() {
-        view?.openDiscordInvite()
+    fun onFaqClick() {
+        view?.openFaqPage()
     }
 
     fun onEmailClick() {
