@@ -90,6 +90,8 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
             )
         }
         gradeDetailsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+        gradeDetailsErrorRetry.setOnClickListener { presenter.onRetry() }
+        gradeDetailsErrorDetails.setOnClickListener { presenter.onDetailsClick() }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -139,6 +141,14 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
 
     override fun showEmpty(show: Boolean) {
         gradeDetailsEmpty.visibility = if (show) VISIBLE else INVISIBLE
+    }
+
+    override fun showErrorView(show: Boolean) {
+        gradeDetailsError.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun setErrorDetails(message: String) {
+        gradeDetailsErrorMessage.text = message
     }
 
     override fun showRefresh(show: Boolean) {

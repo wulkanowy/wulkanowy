@@ -26,6 +26,12 @@
     <string name="login_nickname_hint">Email or nick</string>
     <string name="login_password_hint">Password</string>
     <string name="login_host_hint">Register</string>
+    <string name="login_type_api">Mobile API</string>
+    <string name="login_type_scrapper">Scrapper</string>
+    <string name="login_type_hybrid">Hybrid</string>
+    <string name="login_token_hint">Token</string>
+    <string name="login_pin_hint">PIN</string>
+    <string name="login_api_key_hint">API key</string>
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Sign in</string>
     <string name="login_invalid_password">This password is too short</string>
@@ -35,7 +41,14 @@
     <string name="login_duplicate_student">The selected student is already logged in</string>
     <string name="login_symbol_helper">The symbol can be found on the register page in Uczeń -> Dostęp Mobilny -> Zarejestruj urządzenie mobilne</string>
     <string name="login_select_student">Select students to log in to the application</string>
+    <string name="login_advanced">Other options</string>
     <string name="login_privacy_policy">Privacy policy</string>
+    <string name="login_contact_header">Trouble signing in? Contact us!</string>
+    <string name="login_contact_email">Email</string>
+    <string name="login_contact_discord">Discord</string>
+    <string name="login_email_intent_title">Send email</string>
+    <string name="login_email_subject" translatable="false">Zgłoszenie: Problemy z logowaniem</string>
+    <string name="login_email_text" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\n\nOpis problemu:</string>
 
 
     <!--Main-->
@@ -203,6 +216,22 @@
     <string name="mobile_device_pin">PIN</string>
 
 
+    <!--School and teachers-->
+    <string name="schoolandteachers_title">School and teachers</string>
+
+
+    <!--School-->
+    <string name="school_title">School</string>
+    <string name="school_no_info">No info about school</string>
+    <string name="school_name">School name</string>
+    <string name="school_address">School address</string>
+    <string name="school_telephone">Telephone</string>
+    <string name="school_headmaster">Name of headmaster</string>
+    <string name="school_pedagogue">Name of pedagogue</string>
+    <string name="school_address_button">Show on map</string>
+    <string name="school_telephone_button">Call</string>
+
+
     <!--Teacher-->
     <string name="teachers_title">Teachers</string>
     <string name="teacher_no_items">No info about teachers</string>
@@ -220,8 +249,10 @@
     <string name="about_version">App version</string>
     <string name="about_feedback">Report a bug</string>
     <string name="about_feedback_summary">Send a bug report via e-mail</string>
+    <string name="about_faq">FAQ</string>
+    <string name="about_faq_summary">Read Frequently Asked Questions</string>
     <string name="about_discord">Discord server</string>
-    <string name="about_discord_summary">Join the wulkanowy community</string>
+    <string name="about_discord_summary">Join the Wulkanowy community</string>
     <string name="about_privacy">Privacy policy</string>
     <string name="about_privacy_summary">Rules for collecting personal data</string>
     <string name="about_homepage">Homepage</string>
@@ -236,6 +267,7 @@
 
     <!--Generic-->
     <string name="all_content">Content</string>
+    <string name="all_retry">Retry</string>
     <string name="all_description">Description</string>
     <string name="all_no_description">No description</string>
     <string name="all_teacher">Teacher</string>
@@ -267,6 +299,7 @@
     <string name="pref_view_app_theme">Application theme</string>
     <string name="pref_view_expand_grade">Expand grades</string>
     <string name="pref_view_grade_color_scheme">Grades color scheme</string>
+    <string name="pref_view_app_language">App language</string>
 
     <string name="pref_notify_header">Notifications</string>
     <string name="pref_notify_switch">Show notifications</string>
@@ -310,4 +343,5 @@
     <string name="error_service_unavailable">The log is not available. Try again later</string>
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
+    <string name="error_feature_not_available">Feature not available in this mode</string>
 </resources>

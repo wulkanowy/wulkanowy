@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
+import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 
@@ -25,6 +26,7 @@ fun Fragment.toSection(): MainView.Section? {
         is LuckyNumberFragment -> MainView.Section.LUCKY_NUMBER
         is SettingsFragment -> MainView.Section.SETTINGS
         is AboutFragment -> MainView.Section.ABOUT
+        is SchoolAndTeachersFragment -> MainView.Section.SCHOOL
         else -> null
     }
 }

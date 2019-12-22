@@ -56,6 +56,8 @@ class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
             )
         }
         noteSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+        noteErrorRetry.setOnClickListener { presenter.onRetry() }
+        noteErrorDetails.setOnClickListener { presenter.onDetailsClick() }
     }
 
     override fun showNoteDialog(note: Note) {
@@ -76,6 +78,14 @@ class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
 
     override fun showEmpty(show: Boolean) {
         noteEmpty.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun showErrorView(show: Boolean) {
+        noteError.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun setErrorDetails(message: String) {
+        noteErrorMessage.text = message
     }
 
     override fun showProgress(show: Boolean) {

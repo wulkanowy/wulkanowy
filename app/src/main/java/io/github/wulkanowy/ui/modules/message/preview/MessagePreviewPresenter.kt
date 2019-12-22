@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.data.repositories.message.MessageRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -23,9 +24,27 @@ class MessagePreviewPresenter @Inject constructor(
 
     private var message: Message? = null
 
+    private lateinit var lastError: Throwable
+
+    private var retryCallback: () -> Unit = {}
+
     fun onAttachView(view: MessagePreviewView, id: Long) {
         super.onAttachView(view)
+        view.initView()
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData(id)
+    }
+
+    private fun onMessageLoadRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(messageId)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     private fun loadData(id: Long) {
@@ -45,17 +64,17 @@ class MessagePreviewPresenter @Inject constructor(
                         message.let {
                             setSubject(if (it.subject.isNotBlank()) it.subject else noSubjectString)
                             setDate(it.date.toFormattedString("yyyy-MM-dd HH:mm:ss"))
-                            setContent(it.content.orEmpty())
+                            setContent(it.content)
                             initOptions()
 
-                            if (it.recipient.isNotBlank()) setRecipient(it.recipient)
+                            if (it.folderId == MessageFolder.SENT.id) setRecipient(it.recipient)
                             else setSender(it.sender)
                         }
                     }
-                    analytics.logEvent("load_message_preview", "length" to message.content?.length)
+                    analytics.logEvent("load_message_preview", "length" to message.content.length)
                 }) {
                     Timber.i("Loading message $id preview result: An exception occurred ")
-                    view?.showMessageError()
+                    retryCallback = { onMessageLoadRetry() }
                     errorHandler.dispatch(it)
                 })
         }
@@ -85,6 +104,7 @@ class MessagePreviewPresenter @Inject constructor(
                         showContent(false)
                         showProgress(true)
                         showOptions(false)
+                        showErrorView(false)
                     }
                 }
                 .doFinally {
@@ -97,12 +117,21 @@ class MessagePreviewPresenter @Inject constructor(
                         popView()
                     }
                 }, { error ->
-                    view?.showMessageError()
+                    retryCallback = { onMessageDelete() }
                     errorHandler.dispatch(error)
                 }, {
-                    view?.showMessageError()
+                    view?.showErrorView(true)
                 })
             )
+        }
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            lastError = error
+            setErrorDetails(message)
+            showErrorView(true)
+            setErrorRetryCallback { retryCallback() }
         }
     }
 

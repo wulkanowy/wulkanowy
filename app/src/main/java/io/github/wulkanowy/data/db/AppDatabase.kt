@@ -22,6 +22,7 @@ import io.github.wulkanowy.data.db.dao.MobileDeviceDao
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.dao.RecipientDao
 import io.github.wulkanowy.data.db.dao.ReportingUnitDao
+import io.github.wulkanowy.data.db.dao.SchoolDao
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.dao.SubjectDao
@@ -42,6 +43,7 @@ import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
+import io.github.wulkanowy.data.db.entities.School
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
@@ -55,6 +57,8 @@ import io.github.wulkanowy.data.db.migrations.Migration14
 import io.github.wulkanowy.data.db.migrations.Migration15
 import io.github.wulkanowy.data.db.migrations.Migration16
 import io.github.wulkanowy.data.db.migrations.Migration17
+import io.github.wulkanowy.data.db.migrations.Migration18
+import io.github.wulkanowy.data.db.migrations.Migration19
 import io.github.wulkanowy.data.db.migrations.Migration2
 import io.github.wulkanowy.data.db.migrations.Migration3
 import io.github.wulkanowy.data.db.migrations.Migration4
@@ -87,7 +91,8 @@ import javax.inject.Singleton
         ReportingUnit::class,
         Recipient::class,
         MobileDevice::class,
-        Teacher::class
+        Teacher::class,
+        School::class
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -96,9 +101,9 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 17
+        const val VERSION_SCHEMA = 19
 
-        fun getMigrations(): Array<Migration> {
+        fun getMigrations(sharedPrefProvider: SharedPrefProvider): Array<Migration> {
             return arrayOf(
                 Migration2(),
                 Migration3(),
@@ -115,16 +120,18 @@ abstract class AppDatabase : RoomDatabase() {
                 Migration14(),
                 Migration15(),
                 Migration16(),
-                Migration17()
+                Migration17(),
+                Migration18(),
+                Migration19(sharedPrefProvider)
             )
         }
 
-        fun newInstance(context: Context): AppDatabase {
+        fun newInstance(context: Context, sharedPrefProvider: SharedPrefProvider): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
                 .setJournalMode(TRUNCATE)
                 .fallbackToDestructiveMigrationFrom(VERSION_SCHEMA + 1)
                 .fallbackToDestructiveMigrationOnDowngrade()
-                .addMigrations(*getMigrations())
+                .addMigrations(*getMigrations(sharedPrefProvider))
                 .build()
         }
     }
@@ -168,4 +175,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val mobileDeviceDao: MobileDeviceDao
 
     abstract val teacherDao: TeacherDao
+
+    abstract val schoolDao: SchoolDao
 }

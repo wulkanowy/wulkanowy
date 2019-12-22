@@ -92,7 +92,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView,
     override fun initView() {
         with(mainToolbar) {
             if (SDK_INT >= LOLLIPOP) stateListAnimator = null
-            setBackgroundColor(overlayProvider.get().getSurfaceColorWithOverlayIfNeeded(dpToPx(4f)))
+            setBackgroundColor(overlayProvider.get().compositeOverlayWithThemeSurfaceColorIfNeeded(dpToPx(4f)))
         }
 
         val toggle = ActionBarDrawerToggle(this, mainDrawer, mainToolbar, R.string.main_open_drawer, R.string.main_close_drawer)
