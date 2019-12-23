@@ -27,10 +27,6 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
     @Inject
     lateinit var devicesAdapter: MobileDeviceAdapter<AbstractFlexibleItem<*>>
 
-    companion object {
-        fun newInstance() = MobileDeviceFragment()
-    }
-
     override val titleStringId: Int
         get() = R.string.mobile_devices_title
 

@@ -8,8 +8,6 @@ interface TimetableView : BaseView {
 
     val isViewEmpty: Boolean
 
-    val currentStackSize: Int?
-
     fun initView()
 
     fun updateData(data: List<TimetableItem>)

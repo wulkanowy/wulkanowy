@@ -18,10 +18,6 @@ class LuckyNumberFragment : BaseFragment(), LuckyNumberView, MainView.TitledView
     @Inject
     lateinit var presenter: LuckyNumberPresenter
 
-    companion object {
-        fun newInstance() = LuckyNumberFragment()
-    }
-
     override val titleStringId: Int
         get() = R.string.lucky_number_title
 

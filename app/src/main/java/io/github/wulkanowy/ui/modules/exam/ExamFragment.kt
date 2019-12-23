@@ -21,7 +21,7 @@ import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_exam.*
 import javax.inject.Inject
 
-class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.TitledView {
+class ExamFragment : BaseFragment(), ExamView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: ExamPresenter
@@ -30,9 +30,8 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
     lateinit var examAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
-        private const val SAVED_DATE_KEY = "CURRENT_DATE"
 
-        fun newInstance() = ExamFragment()
+        private const val SAVED_DATE_KEY = "CURRENT_DATE"
     }
 
     override val titleStringId get() = R.string.exam_title
@@ -88,10 +87,6 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
 
     override fun resetView() {
         examRecycler.scrollToPosition(0)
-    }
-
-    override fun onFragmentReselected() {
-        if (::presenter.isInitialized) presenter.onViewReselected()
     }
 
     override fun showEmpty(show: Boolean) {

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawerMenuGrade"
+            android:icon="@drawable/ic_main_grade"
+            android:title="@string/grade_title" />
+        <item
+            android:id="@+id/drawerMenuAttendance"
+            android:icon="@drawable/ic_main_attendance"
+            android:title="@string/attendance_title" />
+        <item
+            android:id="@+id/drawerMenuExam"
+            android:icon="@drawable/ic_main_exam"
+            android:title="@string/exam_title" />
+        <item
+            android:id="@+id/drawerMenuTimetable"
+            android:icon="@drawable/ic_main_timetable"
+            android:title="@string/timetable_title" />
+        <item
+            android:id="@+id/drawerMenuMessage"
+            android:icon="@drawable/ic_more_messages"
+            android:title="@string/message_title" />
+        <item
+            android:id="@+id/drawerMenuHomework"
+            android:icon="@drawable/ic_more_homework"
+            android:title="@string/homework_title" />
+        <item
+            android:id="@+id/drawerMenuNote"
+            android:icon="@drawable/ic_more_note"
+            android:title="@string/note_title" />
+        <item
+            android:id="@+id/drawerMenuLuckyNumber"
+            android:icon="@drawable/ic_more_lucky_number"
+            android:title="@string/lucky_number_title" />
+        <item
+            android:id="@+id/drawerMenuMobileDevices"
+            android:icon="@drawable/ic_more_mobile_devices"
+            android:title="@string/mobile_devices_title" />
+        <item
+            android:id="@+id/drawerMenuSettings"
+            android:icon="@drawable/ic_more_settings"
+            android:title="@string/settings_title" />
+        <item
+            android:id="@+id/drawerMenuAbout"
+            android:icon="@drawable/ic_all_about"
+            android:title="@string/about_title" />
+    </group>
+
+</menu>

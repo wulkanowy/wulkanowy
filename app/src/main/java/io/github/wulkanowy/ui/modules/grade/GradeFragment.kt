@@ -22,7 +22,7 @@ import io.github.wulkanowy.utils.setOnSelectPageListener
 import kotlinx.android.synthetic.main.fragment_grade.*
 import javax.inject.Inject
 
-class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainView.TitledView {
+class GradeFragment : BaseFragment(), GradeView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: GradePresenter
@@ -33,9 +33,8 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
     private var semesterSwitchMenu: MenuItem? = null
 
     companion object {
-        private const val SAVED_SEMESTER_KEY = "CURRENT_SEMESTER"
 
-        fun newInstance() = GradeFragment()
+        private const val SAVED_SEMESTER_KEY = "CURRENT_SEMESTER"
     }
 
     override val titleStringId get() = R.string.grade_title
@@ -90,10 +89,6 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.gradeMenuSemester) presenter.onSemesterSwitch()
         else false
-    }
-
-    override fun onFragmentReselected() {
-        if (::presenter.isInitialized) presenter.onViewReselected()
     }
 
     override fun showContent(show: Boolean) {

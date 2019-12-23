@@ -25,12 +25,8 @@ class MainPresenter @Inject constructor(
     fun onAttachView(view: MainView, initMenu: MainView.Section?) {
         super.onAttachView(view)
         view.apply {
-            getProperViewIndexes(initMenu).let { (main, more) ->
-                startMenuIndex = main
-                startMenuMoreIndex = more
-            }
             initView()
-            Timber.i("Main view was initialized with $startMenuIndex menu index and $startMenuMoreIndex more index")
+            //Timber.i("Main view was initialized with $startMenuIndex menu index and $startMenuMoreIndex more index")
         }
 
         syncManager.startSyncWorker()
@@ -41,10 +37,6 @@ class MainPresenter @Inject constructor(
         view?.apply {
             showActionBarElevation(section != GRADE && section != MESSAGE && section != SCHOOL)
             currentViewTitle?.let { setViewTitle(it) }
-            currentStackSize?.let {
-                if (it > 1) showHomeArrow(true)
-                else showHomeArrow(false)
-            }
         }
     }
 
@@ -54,38 +46,23 @@ class MainPresenter @Inject constructor(
         return true
     }
 
-    fun onUpNavigate(): Boolean {
-        Timber.i("Up navigate pressed")
-        view?.popView()
-        return true
-    }
-
     fun onBackPressed(default: () -> Unit) {
         Timber.i("Back pressed in main view")
         view?.run {
-            if (isRootView) default()
-            else popView()
-        }
-    }
-
-    fun onTabSelected(index: Int, wasSelected: Boolean): Boolean {
-        return view?.run {
-            Timber.i("Switch main tab index: $index, reselected: $wasSelected")
-            if (wasSelected) {
-                notifyMenuViewReselected()
-                false
-            } else {
-                switchMenuView(index)
-                true
+            when {
+                isDrawerOpened -> closeDrawer()
+                isRootView -> default()
+                else -> popView()
             }
-        } == true
+        }
     }
 
-    private fun getProperViewIndexes(initMenu: MainView.Section?): Pair<Int, Int> {
-        return when (initMenu?.id) {
-            in 0..3 -> initMenu!!.id to -1
-            in 4..10 -> 4 to initMenu!!.id
-            else -> prefRepository.startMenuIndex to -1
+    fun onDrawerMenuSelected(index: Int): Boolean {
+        Timber.i("Switch menu drawer index: $index")
+        view?.run {
+            switchMenuView(index)
+            closeDrawer()
         }
+        return true
     }
 }

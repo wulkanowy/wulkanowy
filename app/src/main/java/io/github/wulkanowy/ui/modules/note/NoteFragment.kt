@@ -27,10 +27,6 @@ class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
     @Inject
     lateinit var noteAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
-    companion object {
-        fun newInstance() = NoteFragment()
-    }
-
     override val titleStringId: Int
         get() = R.string.note_title
 

@@ -40,11 +40,6 @@ class GradePresenter @Inject constructor(
         if (semesters.isEmpty()) view?.showSemesterSwitch(false)
     }
 
-    fun onViewReselected() {
-        Timber.i("Grade view is reselected")
-        view?.run { notifyChildParentReselected(currentPageIndex) }
-    }
-
     fun onSemesterSwitch(): Boolean {
         if (semesters.isNotEmpty()) view?.showSemesterDialog(selectedIndex - 1)
         return true

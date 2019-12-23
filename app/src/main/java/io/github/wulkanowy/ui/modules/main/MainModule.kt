@@ -24,7 +24,6 @@ import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
 import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceFragment
 import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceModule
 import io.github.wulkanowy.ui.modules.mobiledevice.token.MobileDeviceTokenDialog
-import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersModule
@@ -72,10 +71,6 @@ abstract class MainModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract fun bindMessagePreviewFragment(): MessagePreviewFragment
-
-    @PerFragment
-    @ContributesAndroidInjector
-    abstract fun bindMoreFragment(): MoreFragment
 
     @PerFragment
     @ContributesAndroidInjector

@@ -29,10 +29,6 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
     @Inject
     lateinit var pagerAdapter: BaseFragmentPagerAdapter
 
-    companion object {
-        fun newInstance() = MessageFragment()
-    }
-
     override val titleStringId get() = R.string.message_title
 
     override val currentPageIndex get() = messageViewPager.currentItem

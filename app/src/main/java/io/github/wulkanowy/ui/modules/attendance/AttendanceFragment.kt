@@ -28,8 +28,7 @@ import kotlinx.android.synthetic.main.fragment_attendance.*
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
-class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildView,
-    MainView.TitledView {
+class AttendanceFragment : BaseFragment(), AttendanceView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: AttendancePresenter
@@ -38,16 +37,13 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     lateinit var attendanceAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
-        private const val SAVED_DATE_KEY = "CURRENT_DATE"
 
-        fun newInstance() = AttendanceFragment()
+        private const val SAVED_DATE_KEY = "CURRENT_DATE"
     }
 
     override val titleStringId get() = R.string.attendance_title
 
     override val isViewEmpty get() = attendanceAdapter.isEmpty
-
-    override val currentStackSize get() = (activity as? MainActivity)?.currentStackSize
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,10 +105,6 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
 
     override fun resetView() {
         attendanceRecycler.smoothScrollToPosition(0)
-    }
-
-    override fun onFragmentReselected() {
-        if (::presenter.isInitialized) presenter.onViewReselected()
     }
 
     override fun popView() {
