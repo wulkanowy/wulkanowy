@@ -56,8 +56,6 @@
     <string name="main_log_in">Log in</string>
     <string name="main_session_expired">Session expired</string>
     <string name="main_session_relogin">Session expired, log in again</string>
-    <string name="main_open_drawer">Open menu</string>
-    <string name="main_close_drawer">Close menu</string>
 
 
     <!--Grade-->

@@ -74,6 +74,10 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
 
     override val titleStringId get() = R.string.about_title
 
+    companion object {
+        fun newInstance() = AboutFragment()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_about, container, false)
     }

@@ -54,8 +54,6 @@
     <string name="main_log_in">Zaloguj się</string>
     <string name="main_session_expired">Sesja wygasła</string>
     <string name="main_session_relogin">Sesja wygasła, zaloguj się ponownie</string>
-    <string name="main_open_drawer">Otwórz menu</string>
-    <string name="main_close_drawer">Zamknij menu</string>
 
 
     <!--Grade-->

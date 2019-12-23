@@ -29,8 +29,9 @@ class HomeworkFragment : BaseFragment(), HomeworkView, MainView.TitledView {
     lateinit var homeworkAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
-
         private const val SAVED_DATE_KEY = "CURRENT_DATE"
+
+        fun newInstance() = HomeworkFragment()
     }
 
     override val titleStringId get() = R.string.homework_title

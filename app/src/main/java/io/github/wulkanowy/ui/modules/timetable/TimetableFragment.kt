@@ -27,7 +27,8 @@ import kotlinx.android.synthetic.main.fragment_timetable.*
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
-class TimetableFragment : BaseFragment(), TimetableView, MainView.TitledView {
+class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
+    MainView.TitledView {
 
     @Inject
     lateinit var presenter: TimetablePresenter
@@ -36,13 +37,16 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.TitledView {
     lateinit var timetableAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
     companion object {
-
         private const val SAVED_DATE_KEY = "CURRENT_DATE"
+
+        fun newInstance() = TimetableFragment()
     }
 
     override val titleStringId get() = R.string.timetable_title
 
     override val isViewEmpty get() = timetableAdapter.isEmpty
+
+    override val currentStackSize get() = (activity as? MainActivity)?.currentStackSize
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,6 +113,10 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.TitledView {
 
     override fun resetView() {
         timetableRecycler.smoothScrollToPosition(0)
+    }
+
+    override fun onFragmentReselected() {
+        if (::presenter.isInitialized) presenter.onViewReselected()
     }
 
     override fun popView() {
