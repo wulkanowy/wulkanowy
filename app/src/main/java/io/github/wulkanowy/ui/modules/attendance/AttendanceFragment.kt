@@ -10,11 +10,10 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
-import eu.davidea.flexibleadapter.FlexibleAdapter
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -198,7 +197,6 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
         input.layoutParams = params
         container.addView(input)
 
-
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.attendance_excuse_dialog_title)
             .setView(container)
@@ -208,6 +206,8 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
             }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .show()
+
+        input.requestFocus()
     }
 
     override fun openSummaryView() {
