@@ -32,6 +32,7 @@ class AttendanceItem(val attendance: Attendance) :
             attendanceItemNumber.visibility = GONE
             attendanceItemExcuseInfo.visibility = GONE
             attendanceItemExcuseCheckbox.visibility = GONE
+            attendanceItemExcuseCheckbox.isChecked = false
             attendanceItemExcuseCheckbox.setOnCheckedChangeListener { _, checked ->
                 (adapter as AttendanceAdapter).onExcuseCheckboxSelect(attendance, checked)
             }

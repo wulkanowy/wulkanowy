@@ -41,7 +41,7 @@ class AttendancePresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
-    private var attendanceToExcuseList: List<Attendance> = ArrayList()
+    private val attendanceToExcuseList = mutableListOf<Attendance>()
 
     fun onAttachView(view: AttendanceView, date: Long?) {
         super.onAttachView(view)
@@ -54,11 +54,13 @@ class AttendancePresenter @Inject constructor(
     }
 
     fun onPreviousDay() {
+        attendanceToExcuseList.clear()
         loadData(currentDate.previousSchoolDay)
         reloadView()
     }
 
     fun onNextDay() {
+        attendanceToExcuseList.clear()
         loadData(currentDate.nextSchoolDay)
         reloadView()
     }
@@ -111,10 +113,8 @@ class AttendancePresenter @Inject constructor(
     }
 
     fun onExcuseCheckboxSelect(attendanceItem: Attendance, checked: Boolean) {
-        attendanceToExcuseList = when (checked) {
-            true -> attendanceToExcuseList + attendanceItem
-            false -> attendanceToExcuseList - attendanceItem
-        }
+        if (checked) attendanceToExcuseList.add(attendanceItem)
+        else attendanceToExcuseList.remove(attendanceItem)
 
         view?.showExcuseButton(attendanceToExcuseList.isNotEmpty())
     }
@@ -209,7 +209,7 @@ class AttendancePresenter @Inject constructor(
                 .subscribe({
                     Timber.i("Excusing for absence result: Success")
                     analytics.logEvent("excuse_absence", "items" to attendanceToExcuseList.size)
-                    attendanceToExcuseList = ArrayList()
+                    attendanceToExcuseList.clear()
                     view?.apply {
                         showExcuseButton(false)
                         showMessage(excuseSuccessString)
