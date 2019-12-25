@@ -37,9 +37,15 @@ interface LoginFormView : BaseView {
 
     fun showVersion()
 
-    fun showPrivacyPolicy()
-
     fun notifyParentAccountLogged(students: List<Student>, loginData: Triple<String, String, String>)
 
     fun openPrivacyPolicyPage()
+
+    fun showContact(show: Boolean)
+
+    fun openFaqPage()
+
+    fun openEmail()
+
+    fun openAdvancedLogin()
 }

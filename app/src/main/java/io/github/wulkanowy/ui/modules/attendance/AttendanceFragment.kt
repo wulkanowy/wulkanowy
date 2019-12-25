@@ -6,7 +6,12 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import eu.davidea.flexibleadapter.FlexibleAdapter
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
@@ -19,9 +24,11 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.SchooldaysRangeLimiter
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_attendance.*
+import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildView,
@@ -76,7 +83,11 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
         }
 
         attendanceSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
+        attendanceErrorRetry.setOnClickListener { presenter.onRetry() }
+        attendanceErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+
         attendancePreviousButton.setOnClickListener { presenter.onPreviousDay() }
+        attendanceNavDate.setOnClickListener { presenter.onPickDate() }
         attendanceNextButton.setOnClickListener { presenter.onNextDay() }
 
         attendanceExcuseButton.setOnClickListener { presenter.onExcuseButtonClick() }
@@ -118,11 +129,19 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     }
 
     override fun showEmpty(show: Boolean) {
-        attendanceEmpty.visibility = if (show) View.VISIBLE else View.GONE
+        attendanceEmpty.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun showErrorView(show: Boolean) {
+        attendanceError.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun setErrorDetails(message: String) {
+        attendanceErrorMessage.text = message
     }
 
     override fun showProgress(show: Boolean) {
-        attendanceProgress.visibility = if (show) View.VISIBLE else View.GONE
+        attendanceProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun enableSwipe(enable: Boolean) {
@@ -130,7 +149,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     }
 
     override fun showContent(show: Boolean) {
-        attendanceRecycler.visibility = if (show) View.VISIBLE else View.GONE
+        attendanceRecycler.visibility = if (show) VISIBLE else GONE
     }
 
     override fun hideRefresh() {
@@ -138,11 +157,11 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     }
 
     override fun showPreButton(show: Boolean) {
-        attendancePreviousButton.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        attendancePreviousButton.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showNextButton(show: Boolean) {
-        attendanceNextButton.visibility = if (show) View.VISIBLE else View.INVISIBLE
+        attendanceNextButton.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showExcuseButton(show: Boolean) {
@@ -151,6 +170,21 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
 
     override fun showAttendanceDialog(lesson: Attendance) {
         (activity as? MainActivity)?.showDialogFragment(AttendanceDialog.newInstance(lesson))
+    }
+
+    override fun showDatePickerDialog(currentDate: LocalDate) {
+        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            presenter.onDateSet(year, month + 1, dayOfMonth)
+        }
+        val datePickerDialog = DatePickerDialog.newInstance(dateSetListener,
+            currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
+
+        with(datePickerDialog) {
+            setDateRangeLimiter(SchooldaysRangeLimiter())
+            version = DatePickerDialog.Version.VERSION_2
+            scrollOrientation = DatePickerDialog.ScrollOrientation.VERTICAL
+            show(this@AttendanceFragment.parentFragmentManager, null)
+        }
     }
 
     override fun showExcuseDialog() {

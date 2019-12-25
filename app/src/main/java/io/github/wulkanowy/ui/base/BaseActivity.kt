@@ -1,10 +1,10 @@
 package io.github.wulkanowy.ui.base
 
 import android.app.ActivityManager
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -22,7 +22,8 @@ import io.github.wulkanowy.utils.FragmentLifecycleLogger
 import io.github.wulkanowy.utils.getThemeAttrColor
 import javax.inject.Inject
 
-abstract class BaseActivity<T : BasePresenter<out BaseView>> : AppCompatActivity(), BaseView, HasAndroidInjector {
+abstract class BaseActivity<T : BasePresenter<out BaseView>> : AppCompatActivity(), BaseView,
+    HasAndroidInjector {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
@@ -53,11 +54,13 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>> : AppCompatActivity
     override fun showError(text: String, error: Throwable) {
         if (messageContainer != null) {
             Snackbar.make(messageContainer!!, text, LENGTH_LONG)
-                .setAction(R.string.all_details) {
-                    ErrorDialog.newInstance(error).show(supportFragmentManager, error.toString())
-                }
+                .setAction(R.string.all_details) { showErrorDetailsDialog(error) }
                 .show()
         } else showMessage(text)
+    }
+
+    override fun showErrorDetailsDialog(error: Throwable) {
+        ErrorDialog.newInstance(error).show(supportFragmentManager, error.toString())
     }
 
     override fun showMessage(text: String) {

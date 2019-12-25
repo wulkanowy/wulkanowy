@@ -6,18 +6,18 @@ import dagger.android.ContributesAndroidInjector
 import io.github.wulkanowy.di.scopes.PerActivity
 import io.github.wulkanowy.di.scopes.PerFragment
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
+import io.github.wulkanowy.ui.modules.login.advanced.LoginAdvancedFragment
 import io.github.wulkanowy.ui.modules.login.form.LoginFormFragment
 import io.github.wulkanowy.ui.modules.login.studentselect.LoginStudentSelectFragment
 import io.github.wulkanowy.ui.modules.login.symbol.LoginSymbolFragment
 
 @Suppress("unused")
-@Module
+@Module(includes = [LoginModule.Static::class])
 internal abstract class LoginModule {
 
     @Module
-    companion object {
+    object Static {
 
-        @JvmStatic
         @PerActivity
         @Provides
         fun provideLoginAdapter(activity: LoginActivity) = BaseFragmentPagerAdapter(activity.supportFragmentManager)
@@ -26,6 +26,10 @@ internal abstract class LoginModule {
     @PerFragment
     @ContributesAndroidInjector
     abstract fun bindLoginFormFragment(): LoginFormFragment
+
+    @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindLoginAdvancedFragment(): LoginAdvancedFragment
 
     @PerFragment
     @ContributesAndroidInjector

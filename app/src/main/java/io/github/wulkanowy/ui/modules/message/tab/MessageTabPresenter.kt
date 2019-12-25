@@ -4,6 +4,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.data.repositories.message.MessageRepository
+import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -18,20 +19,36 @@ class MessageTabPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val messageRepository: MessageRepository,
+    private val semesterRepository: SemesterRepository,
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<MessageTabView>(errorHandler, studentRepository, schedulers) {
 
     lateinit var folder: MessageFolder
 
+    private lateinit var lastError: Throwable
+
     fun onAttachView(view: MessageTabView, folder: MessageFolder) {
         super.onAttachView(view)
         view.initView()
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         this.folder = folder
     }
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the $folder message")
         onParentViewLoadData(true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     fun onDeleteMessage() {
@@ -61,8 +78,11 @@ class MessageTabPresenter @Inject constructor(
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()
-                .flatMap { messageRepository.getMessages(it, folder, forceRefresh) }
-                .map { items -> items.map { MessageItem(it, view?.noSubjectString.orEmpty()) } }
+                .flatMap { student ->
+                    semesterRepository.getCurrentSemester(student)
+                        .flatMap { messageRepository.getMessages(student, it, folder, forceRefresh) }
+                        .map { items -> items.map { MessageItem(it, view?.noSubjectString.orEmpty()) } }
+                }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {
@@ -78,14 +98,25 @@ class MessageTabPresenter @Inject constructor(
                     view?.run {
                         showEmpty(it.isEmpty())
                         showContent(it.isNotEmpty())
+                        showErrorView(false)
                         updateData(it)
                     }
                     analytics.logEvent("load_messages", "items" to it.size, "folder" to folder.name)
                 }) {
                     Timber.i("Loading $folder message result: An exception occurred")
-                    view?.run { showEmpty(isViewEmpty) }
                     errorHandler.dispatch(it)
                 })
+        }
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            if (isViewEmpty) {
+                lastError = error
+                setErrorDetails(message)
+                showErrorView(true)
+                showEmpty(false)
+            } else showError(message, error)
         }
     }
 

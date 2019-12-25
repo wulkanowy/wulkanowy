@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 18,
-    "identityHash": "2275b459319e3e57996d229e86aef42e",
+    "identityHash": "73b1dcfe0cf84170ba102b2818dd0191",
     "entities": [
       {
         "tableName": "Students",
@@ -410,7 +410,7 @@
       },
       {
         "tableName": "Attendance",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `time_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `number` INTEGER NOT NULL, `subject` TEXT NOT NULL, `name` TEXT NOT NULL, `presence` INTEGER NOT NULL, `absence` INTEGER NOT NULL, `exemption` INTEGER NOT NULL, `lateness` INTEGER NOT NULL, `excused` INTEGER NOT NULL, `deleted` INTEGER NOT NULL, `excusable` INTEGER NOT NULL, `excuse_status` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `number` INTEGER NOT NULL, `subject` TEXT NOT NULL, `name` TEXT NOT NULL, `presence` INTEGER NOT NULL, `absence` INTEGER NOT NULL, `exemption` INTEGER NOT NULL, `lateness` INTEGER NOT NULL, `excused` INTEGER NOT NULL, `deleted` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -427,12 +427,6 @@
           {
             "fieldPath": "diaryId",
             "columnName": "diary_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "timeId",
-            "columnName": "time_id",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -495,18 +489,6 @@
             "columnName": "deleted",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "excusable",
-            "columnName": "excusable",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "excuseStatus",
-            "columnName": "excuse_status",
-            "affinity": "TEXT",
-            "notNull": false
           }
         ],
         "primaryKey": {
@@ -1537,12 +1519,74 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "School",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `address` TEXT NOT NULL, `contact` TEXT NOT NULL, `headmaster` TEXT NOT NULL, `pedagogue` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "studentId",
+            "columnName": "student_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "classId",
+            "columnName": "class_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contact",
+            "columnName": "contact",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "headmaster",
+            "columnName": "headmaster",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pedagogue",
+            "columnName": "pedagogue",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2275b459319e3e57996d229e86aef42e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '73b1dcfe0cf84170ba102b2818dd0191')"
     ]
   }
 }

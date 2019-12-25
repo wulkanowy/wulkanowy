@@ -83,7 +83,8 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
             setElevationCompat(context.dpToPx(4f))
         }
 
-        gradeSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
+        gradeErrorRetry.setOnClickListener { presenter.onRetry() }
+        gradeErrorDetails.setOnClickListener { presenter.onDetailsClick() }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -104,20 +105,16 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
         gradeProgress.visibility = if (show) VISIBLE else INVISIBLE
     }
 
-    override fun showEmpty(show: Boolean) {
-        gradeEmpty.visibility = if (show) VISIBLE else INVISIBLE
+    override fun showErrorView(show: Boolean) {
+        gradeError.visibility = if (show) VISIBLE else INVISIBLE
     }
 
-    override fun showRefresh(show: Boolean) {
-        gradeSwipe.isRefreshing = show
+    override fun setErrorDetails(message: String) {
+        gradeErrorMessage.text = message
     }
 
     override fun showSemesterSwitch(show: Boolean) {
         semesterSwitchMenu?.isVisible = show
-    }
-
-    override fun enableSwipe(enable: Boolean) {
-        gradeSwipe.isEnabled = enable
     }
 
     override fun showSemesterDialog(selectedIndex: Int) {

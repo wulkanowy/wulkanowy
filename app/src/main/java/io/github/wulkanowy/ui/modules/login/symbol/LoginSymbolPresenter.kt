@@ -23,7 +23,10 @@ class LoginSymbolPresenter @Inject constructor(
     @Suppress("UNCHECKED_CAST")
     fun onAttachView(view: LoginSymbolView, savedLoginData: Serializable?) {
         super.onAttachView(view)
-        view.initView()
+        view.run {
+            initView()
+            showContact(false)
+        }
         if (savedLoginData is Triple<*, *, *>) {
             loginData = savedLoginData as Triple<String, String, String>
         }
@@ -41,7 +44,7 @@ class LoginSymbolPresenter @Inject constructor(
 
         disposable.add(
             Single.fromCallable { if (loginData == null) throw IllegalArgumentException("Login data is null") else loginData }
-                .flatMap { studentRepository.getStudents(it.first, it.second, it.third, symbol) }
+                .flatMap { studentRepository.getStudentsScrapper(it.first, it.second, it.third, symbol) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doOnSubscribe {
@@ -59,11 +62,12 @@ class LoginSymbolPresenter @Inject constructor(
                     }
                 }
                 .subscribe({
-                    analytics.logEvent("registration_symbol", "success" to true, "students" to it.size, "endpoint" to loginData?.third, "symbol" to symbol, "error" to "No error")
+                    analytics.logEvent("registration_symbol", "success" to true, "students" to it.size, "scrapperBaseUrl" to loginData?.third, "symbol" to symbol, "error" to "No error")
                     view?.apply {
                         if (it.isEmpty()) {
                             Timber.i("Login with symbol result: Empty student list")
                             setErrorSymbolIncorrect()
+                            view?.showContact(true)
                         } else {
                             Timber.i("Login with symbol result: Success")
                             notifyParentAccountLogged(it)
@@ -71,8 +75,9 @@ class LoginSymbolPresenter @Inject constructor(
                     }
                 }, {
                     Timber.i("Login with symbol result: An exception occurred")
-                    analytics.logEvent("registration_symbol", "success" to false, "students" to -1, "endpoint" to loginData?.third, "symbol" to symbol, "error" to it.message.ifNullOrBlank { "No message" })
+                    analytics.logEvent("registration_symbol", "success" to false, "students" to -1, "scrapperBaseUrl" to loginData?.third, "symbol" to symbol, "error" to it.message.ifNullOrBlank { "No message" })
                     loginErrorHandler.dispatch(it)
+                    view?.showContact(true)
                 }))
     }
 
@@ -82,5 +87,13 @@ class LoginSymbolPresenter @Inject constructor(
             clearAndFocusSymbol()
             showSoftKeyboard()
         }
+    }
+
+    fun onFaqClick() {
+        view?.openFaqPage()
+    }
+
+    fun onEmailClick() {
+        view?.openEmail()
     }
 }
