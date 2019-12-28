@@ -137,8 +137,8 @@ class AttendancePresenter @Inject constructor(
     }
 
     fun onExcuseDialogSubmit(reason: String) {
-        excuseAbsence(if (reason != "") reason else null)
         view?.finishActionMode()
+        excuseAbsence(if (reason != "") reason else null)
     }
 
     fun onPrepareActionMode(): Boolean {

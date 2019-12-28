@@ -180,7 +180,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     }
 
     override fun showContent(show: Boolean) {
-        attendanceRecyclerLayout.visibility = if (show) VISIBLE else GONE
+        attendanceRecycler.visibility = if (show) VISIBLE else GONE
     }
 
     override fun hideRefresh() {

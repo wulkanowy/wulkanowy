@@ -23,29 +23,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/attendanceRecyclerLayout"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/attendanceRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/attendanceRecycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:listitem="@layout/item_attendance" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/attendanceExcuseButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:layout_margin="16dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:tint="?colorOnSecondary"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/ic_all_done_all" />
-            </FrameLayout>
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_attendance" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
@@ -73,6 +55,18 @@
                 android:text="@string/attendance_no_items"
                 android:textSize="20sp" />
         </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/attendanceExcuseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:tint="?colorOnSecondary"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_all_done_all" />
 
         <LinearLayout
             android:id="@+id/attendanceError"
