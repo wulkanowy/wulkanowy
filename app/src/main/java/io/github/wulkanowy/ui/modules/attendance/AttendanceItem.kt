@@ -4,6 +4,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import androidx.core.view.isVisible
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -48,8 +49,13 @@ class AttendanceItem(val attendance: Attendance) :
                     attendanceItemExcuseInfo.visibility = VISIBLE
                 }
                 else -> {
-                    attendanceItemNumber.visibility = if (attendance.excusable) GONE else VISIBLE
-                    attendanceItemExcuseCheckbox.visibility = if (attendance.excusable) VISIBLE else GONE
+                    if (attendance.excusable && (adapter as AttendanceAdapter).excuseActionMode) {
+                        attendanceItemNumber.visibility = GONE
+                        attendanceItemExcuseCheckbox.visibility = VISIBLE
+                    } else {
+                        attendanceItemNumber.visibility = VISIBLE
+                        attendanceItemExcuseCheckbox.visibility = GONE
+                    }
                 }
             }
         }
@@ -72,9 +78,20 @@ class AttendanceItem(val attendance: Attendance) :
         return result
     }
 
-    class ViewHolder(view: View, adapter: FlexibleAdapter<*>) : FlexibleViewHolder(view, adapter),
+    class ViewHolder(view: View, val adapter: FlexibleAdapter<*>) :
+        FlexibleViewHolder(view, adapter),
         LayoutContainer {
+
         override val containerView: View
             get() = contentView
+
+        override fun onClick(view: View?) {
+            super.onClick(view)
+            attendanceItemExcuseCheckbox.apply {
+                if ((adapter as AttendanceAdapter).excuseActionMode && isVisible) {
+                    isChecked = !isChecked
+                }
+            }
+        }
     }
 }

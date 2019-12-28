@@ -12,6 +12,10 @@ interface AttendanceView : BaseView {
 
     val excuseSuccessString: String
 
+    val excuseNoSelectionString: String
+
+    val excuseActionMode: Boolean
+
     fun initView()
 
     fun updateData(data: List<AttendanceItem>)
@@ -49,6 +53,12 @@ interface AttendanceView : BaseView {
     fun showExcuseDialog()
 
     fun openSummaryView()
+
+    fun startActionMode()
+
+    fun showExcuseCheckboxes(show: Boolean)
+
+    fun finishActionMode()
 
     fun popView()
 }

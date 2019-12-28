@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.ActionMode
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -42,6 +43,9 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     override val excuseSuccessString: String
         get() = getString(R.string.attendance_excuse_success)
 
+    override val excuseNoSelectionString: String
+        get() = getString(R.string.attendance_excuse_no_selection)
+
     companion object {
         private const val SAVED_DATE_KEY = "CURRENT_DATE"
 
@@ -53,6 +57,34 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     override val isViewEmpty get() = attendanceAdapter.isEmpty
 
     override val currentStackSize get() = (activity as? MainActivity)?.currentStackSize
+
+    override val excuseActionMode: Boolean get() = attendanceAdapter.excuseActionMode
+
+    private var actionMode: ActionMode? = null
+    private val actionModeCallback = object : ActionMode.Callback {
+        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+            val inflater = mode.menuInflater
+            inflater.inflate(R.menu.context_menu_excuse, menu)
+            return true
+        }
+
+        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+            mode.title = getString(R.string.attendance_excuse_title)
+            return presenter.onPrepareActionMode()
+        }
+
+        override fun onDestroyActionMode(mode: ActionMode) {
+            presenter.onDestroyActionMode()
+            actionMode = null
+        }
+
+        override fun onActionItemClicked(mode: ActionMode, menu: MenuItem): Boolean {
+            return when (menu.itemId) {
+                R.id.excuseMenuSubmit -> presenter.onExcuseSubmitButtonClick()
+                else -> false
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,7 +180,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     }
 
     override fun showContent(show: Boolean) {
-        attendanceRecycler.visibility = if (show) VISIBLE else GONE
+        attendanceRecyclerLayout.visibility = if (show) VISIBLE else GONE
     }
 
     override fun hideRefresh() {
@@ -164,7 +196,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     }
 
     override fun showExcuseButton(show: Boolean) {
-        attendanceExcuseButton.visibility = if (show) View.VISIBLE else View.GONE
+        attendanceExcuseButton.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showAttendanceDialog(lesson: Attendance) {
@@ -212,6 +244,21 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
 
     override fun openSummaryView() {
         (activity as? MainActivity)?.pushView(AttendanceSummaryFragment.newInstance())
+    }
+
+    override fun startActionMode() {
+        actionMode = (activity as MainActivity?)?.startSupportActionMode(actionModeCallback)
+    }
+
+    override fun showExcuseCheckboxes(show: Boolean) {
+        attendanceAdapter.apply {
+            excuseActionMode = show
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun finishActionMode() {
+        actionMode?.finish()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

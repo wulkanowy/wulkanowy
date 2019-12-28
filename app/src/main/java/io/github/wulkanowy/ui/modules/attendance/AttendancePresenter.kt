@@ -106,28 +106,53 @@ class AttendancePresenter @Inject constructor(
     }
 
     fun onAttendanceItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is AttendanceItem) {
-            Timber.i("Select attendance item ${item.attendance.id}")
-            view?.showAttendanceDialog(item.attendance)
+        view?.apply {
+            if (item is AttendanceItem && !excuseActionMode) {
+                Timber.i("Select attendance item ${item.attendance.id}")
+                showAttendanceDialog(item.attendance)
+            }
         }
+    }
+
+    fun onExcuseButtonClick() {
+        view?.startActionMode()
     }
 
     fun onExcuseCheckboxSelect(attendanceItem: Attendance, checked: Boolean) {
         if (checked) attendanceToExcuseList.add(attendanceItem)
         else attendanceToExcuseList.remove(attendanceItem)
-
-        view?.showExcuseButton(attendanceToExcuseList.isNotEmpty())
     }
 
-    fun onExcuseButtonClick() {
-        if (attendanceToExcuseList.isNotEmpty()) {
-            view?.showExcuseDialog()
+    fun onExcuseSubmitButtonClick(): Boolean {
+        view?.apply {
+            return if (attendanceToExcuseList.isNotEmpty()) {
+                showExcuseDialog()
+                true
+            } else {
+                showMessage(excuseNoSelectionString)
+                false
+            }
         }
+        return false
     }
 
     fun onExcuseDialogSubmit(reason: String) {
-        if (attendanceToExcuseList.isNotEmpty()) {
-            excuseAbsence(if (reason != "") reason else null)
+        excuseAbsence(if (reason != "") reason else null)
+        view?.finishActionMode()
+    }
+
+    fun onPrepareActionMode(): Boolean {
+        view?.apply {
+            showExcuseCheckboxes(true)
+            showExcuseButton(false)
+        }
+        return true
+    }
+
+    fun onDestroyActionMode() {
+        view?.apply {
+            showExcuseCheckboxes(false)
+            showExcuseButton(true)
         }
     }
 
@@ -181,6 +206,7 @@ class AttendancePresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showErrorView(false)
                         showContent(it.isNotEmpty())
+                        showExcuseButton(it.any { item -> item.attendance.excusable })
                     }
                     analytics.logEvent("load_attendance", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
@@ -204,6 +230,7 @@ class AttendancePresenter @Inject constructor(
                     view?.apply {
                         showProgress(true)
                         showContent(false)
+                        showExcuseButton(false)
                     }
                 }
                 .subscribe({

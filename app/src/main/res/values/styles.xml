@@ -11,11 +11,13 @@
         <item name="colorDivider">@color/colorDivider</item>
         <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:preferenceStyle">@style/PreferenceThemeOverlay</item>
+        <item name="android:actionModeBackground">@color/colorPrimary</item>
     </style>
 
     <style name="WulkanowyTheme.NoActionBar" parent="WulkanowyTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="WulkanowyTheme.SplashScreen" parent="WulkanowyTheme.NoActionBar">
