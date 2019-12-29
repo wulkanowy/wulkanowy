@@ -11,7 +11,6 @@
         <item name="colorDivider">@color/colorDivider</item>
         <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:preferenceStyle">@style/PreferenceThemeOverlay</item>
-        <item name="android:actionModeBackground">@color/colorPrimary</item>
     </style>
 
     <style name="WulkanowyTheme.NoActionBar" parent="WulkanowyTheme">

@@ -155,6 +155,10 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
         if (::presenter.isInitialized) presenter.onViewReselected()
     }
 
+    override fun onFragmentLeft() {
+        if (::presenter.isInitialized) presenter.onViewLeft()
+    }
+
     override fun popView() {
         (activity as? MainActivity)?.popView()
     }

@@ -167,6 +167,10 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         (navController.currentStack?.getOrNull(0) as? MainView.MainChildView)?.onFragmentReselected()
     }
 
+    override fun notifyMenuViewLeft() {
+        (navController.currentStack?.getOrNull(0) as? MainView.MainChildView)?.onFragmentLeft()
+    }
+
     fun showDialogFragment(dialog: DialogFragment) {
         navController.showDialogFragment(dialog)
     }

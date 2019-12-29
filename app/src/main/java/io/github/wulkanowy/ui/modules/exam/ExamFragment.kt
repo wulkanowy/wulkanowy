@@ -94,6 +94,8 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
         if (::presenter.isInitialized) presenter.onViewReselected()
     }
 
+    override fun onFragmentLeft() {}
+
     override fun showEmpty(show: Boolean) {
         examEmpty.visibility = if (show) VISIBLE else GONE
     }

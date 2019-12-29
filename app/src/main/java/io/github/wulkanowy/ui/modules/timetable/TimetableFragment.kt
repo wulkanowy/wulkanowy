@@ -119,6 +119,8 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
         if (::presenter.isInitialized) presenter.onViewReselected()
     }
 
+    override fun onFragmentLeft() {}
+
     override fun popView() {
         (activity as? MainActivity)?.popView()
     }

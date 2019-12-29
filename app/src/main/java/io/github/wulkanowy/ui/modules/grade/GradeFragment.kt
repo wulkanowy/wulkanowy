@@ -96,6 +96,8 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
         if (::presenter.isInitialized) presenter.onViewReselected()
     }
 
+    override fun onFragmentLeft() {}
+
     override fun showContent(show: Boolean) {
         gradeViewPager.visibility = if (show) VISIBLE else INVISIBLE
         gradeTabLayout.visibility = if (show) VISIBLE else INVISIBLE

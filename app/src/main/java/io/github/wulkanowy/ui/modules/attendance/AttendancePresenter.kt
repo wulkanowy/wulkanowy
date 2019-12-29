@@ -105,6 +105,10 @@ class AttendancePresenter @Inject constructor(
         }
     }
 
+    fun onViewLeft() {
+        view?.finishActionMode()
+    }
+
     fun onAttendanceItemSelected(item: AbstractFlexibleItem<*>?) {
         view?.apply {
             if (item is AttendanceItem && !excuseActionMode) {

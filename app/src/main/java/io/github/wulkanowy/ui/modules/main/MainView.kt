@@ -26,6 +26,8 @@ interface MainView : BaseView {
 
     fun notifyMenuViewReselected()
 
+    fun notifyMenuViewLeft()
+
     fun setViewTitle(title: String)
 
     fun popView(depth: Int = 1)
@@ -33,6 +35,8 @@ interface MainView : BaseView {
     interface MainChildView {
 
         fun onFragmentReselected()
+
+        fun onFragmentLeft()
     }
 
     interface TitledView {
