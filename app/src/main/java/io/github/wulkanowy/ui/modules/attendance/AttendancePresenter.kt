@@ -54,12 +54,14 @@ class AttendancePresenter @Inject constructor(
     }
 
     fun onPreviousDay() {
+        view?.finishActionMode()
         attendanceToExcuseList.clear()
         loadData(currentDate.previousSchoolDay)
         reloadView()
     }
 
     fun onNextDay() {
+        view?.finishActionMode()
         attendanceToExcuseList.clear()
         loadData(currentDate.nextSchoolDay)
         reloadView()
@@ -150,6 +152,7 @@ class AttendancePresenter @Inject constructor(
             showExcuseCheckboxes(true)
             showExcuseButton(false)
         }
+        attendanceToExcuseList.clear()
         return true
     }
 
