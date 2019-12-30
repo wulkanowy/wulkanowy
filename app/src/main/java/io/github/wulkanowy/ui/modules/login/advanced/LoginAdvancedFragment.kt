@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -85,17 +86,20 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
             })
         }
 
-        listOf(loginFormPin, loginFormPass).onEach {
-            it.setOnEditorActionListener { _, id, _ ->
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) loginFormSignIn.callOnClick() else false
-            }
-        }
+        loginFormPin.setOnEditorDoneSignIn()
+        loginFormPass.setOnEditorDoneSignIn()
 
         loginFormSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
 
         with(loginFormHost) {
             setText(hostKeys.getOrElse(0) { "" })
             setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
+        }
+    }
+
+    private fun AppCompatEditText.setOnEditorDoneSignIn() {
+        setOnEditorActionListener { _, id, _ ->
+            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) loginFormSignIn.callOnClick() else false
         }
     }
 
