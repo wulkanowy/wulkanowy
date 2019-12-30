@@ -112,63 +112,63 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     }
 
     override fun setErrorNameRequired() {
-        loginFormNameLayout.run {
+        with(loginFormNameLayout) {
             requestFocus()
             error = getString(R.string.login_field_required)
         }
     }
 
     override fun setErrorPassRequired(focus: Boolean) {
-        loginFormPassLayout.run {
+        with(loginFormPassLayout) {
             if (focus) requestFocus()
             error = getString(R.string.login_field_required)
         }
     }
 
     override fun setErrorPassInvalid(focus: Boolean) {
-        loginFormPassLayout.run {
+        with(loginFormPassLayout) {
             if (focus) requestFocus()
             error = getString(R.string.login_invalid_password)
         }
     }
 
     override fun setErrorPassIncorrect() {
-        loginFormPassLayout.run {
+        with(loginFormPassLayout) {
             requestFocus()
             error = getString(R.string.login_incorrect_password)
         }
     }
 
     override fun setErrorPinRequired() {
-        loginFormPinLayout.run {
+        with(loginFormPinLayout) {
             requestFocus()
             error = getString(R.string.login_field_required)
         }
     }
 
     override fun setErrorPinInvalid(message: String) {
-        loginFormPinLayout.run {
+        with(loginFormPinLayout) {
             requestFocus()
             error = message
         }
     }
 
     override fun setErrorSymbolRequired() {
-        loginFormSymbolLayout.run {
+        with(loginFormSymbolLayout) {
             requestFocus()
             error = getString(R.string.login_field_required)
         }
     }
 
     override fun setErrorSymbolInvalid(message: String) {
-        loginFormSymbolLayout.run {
+        with(loginFormSymbolLayout) {
             requestFocus()
             error = message
         }
     }
 
     override fun setErrorTokenRequired() {
-        loginFormTokenLayout.run {
+        with(loginFormTokenLayout) {
             requestFocus()
             error = getString(R.string.login_field_required)
         }
