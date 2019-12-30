@@ -135,6 +135,13 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         }
     }
 
+    override fun setErrorPinInvalid(message: String) {
+        loginFormPinLayout.run {
+            requestFocus()
+            error = message
+        }
+    }
+
     override fun setErrorSymbolRequired() {
         loginFormSymbolLayout.run {
             requestFocus()
@@ -142,10 +149,24 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         }
     }
 
+    override fun setErrorSymbolInvalid(message: String) {
+        loginFormSymbolLayout.run {
+            requestFocus()
+            error = message
+        }
+    }
+
     override fun setErrorTokenRequired() {
         loginFormTokenLayout.run {
             requestFocus()
             error = getString(R.string.login_field_required)
+        }
+    }
+
+    override fun setErrorTokenInvalid(message: String) {
+        with(loginFormTokenLayout) {
+            requestFocus()
+            error = message
         }
     }
 

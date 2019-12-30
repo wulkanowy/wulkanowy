@@ -24,10 +24,27 @@ class LoginAdvancedPresenter @Inject constructor(
         view.run {
             initView()
             showOnlyScrapperModeInputs()
-            loginErrorHandler.onBadCredentials = {
-                setErrorPassIncorrect()
-                showSoftKeyboard()
-                Timber.i("Entered wrong username or password")
+            with(loginErrorHandler) {
+                onBadCredentials = {
+                    setErrorPassIncorrect()
+                    showSoftKeyboard()
+                    Timber.i("Entered wrong username or password")
+                }
+                onInvalidToken = {
+                    setErrorTokenInvalid(it)
+                    showSoftKeyboard()
+                    Timber.i("Entered invalid token")
+                }
+                onInvalidSymbol = {
+                    setErrorSymbolInvalid(it)
+                    showSoftKeyboard()
+                    Timber.i("Entered invalid symbol")
+                }
+                onInvalidPin = {
+                    setErrorPinInvalid(it)
+                    showSoftKeyboard()
+                    Timber.i("Entered invalid PIN")
+                }
             }
         }
     }
