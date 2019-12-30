@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
@@ -82,6 +83,12 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
                 R.id.loginTypeScrapper -> Sdk.Mode.SCRAPPER
                 else -> Sdk.Mode.HYBRID
             })
+        }
+
+        listOf(loginFormPin, loginFormPass).onEach {
+            it.setOnEditorActionListener { _, id, _ ->
+                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) loginFormSignIn.callOnClick() else false
+            }
         }
 
         loginFormSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
