@@ -3,7 +3,7 @@ package io.github.wulkanowy.data.repositories.attendance
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.sdk.scrapper.attendance.Absent
+import io.github.wulkanowy.sdk.pojo.Absent
 import io.reactivex.Single
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
