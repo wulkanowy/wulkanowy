@@ -11,7 +11,7 @@ Nieoficjalny klient dziennika VULCAN UONET+ dla ucznia i rodzica
 
 ## Funkcje
 
-* logowanie za pomocą e-maila i hasła LUB tokenu i pinu
+* logowanie za pomocą e-maila i hasła LUB tokena i pinu
 * funkcje ze strony internetowej dziennika:
     * oceny
     * statystyki ocen
