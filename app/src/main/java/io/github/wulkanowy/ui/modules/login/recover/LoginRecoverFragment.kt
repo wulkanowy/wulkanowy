@@ -36,8 +36,6 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
 
     private lateinit var hostValues: Array<String>
 
-
-
     override val recoverHostValue: String?
         get() = hostValues.getOrNull(hostKeys.indexOf(loginRecoverHost.text.toString()))
 
@@ -46,6 +44,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
 
     override val recoverSymbolValue: String
         get() = loginRecoverSymbol.text.toString().trim()
+
 
     override fun setErrorNameRequired() {
         with(loginRecoverNameLayout) {
@@ -114,9 +113,10 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
 
     override fun loadRecaptcha(siteKey: String, URL: String){
         val HTML = "<div id=\"recaptcha\"></div>\n<script src=\"https://www.google.com/recaptcha/api.js?onload=cl&render=explicit&hl=pl\" async defer></script>\n<script>var cl=()=>grecaptcha.render(\"recaptcha\",{sitekey:'$siteKey',callback:e =>Android.recaptchaCallback(e)})</script>"
+
         with(loginRecoverWebView) {
             settings.javaScriptEnabled = true
-            addJavascriptInterface(WebAppInterface(context), "Android")
+            addJavascriptInterface(webAppInterface, "Android")
             loadDataWithBaseURL(URL, HTML, "text/html", "UTF-8", null)
             webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {

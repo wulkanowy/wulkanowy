@@ -20,11 +20,11 @@ interface LoginRecoverView : BaseView {
 
     fun setErrorNameRequired()
 
-    fun showProgress(show: Boolean)
-
     fun showSoftKeyboard()
 
     fun hideSoftKeyboard()
+
+    fun showProgress(show: Boolean)
 
     fun showContentForm(show: Boolean)
 

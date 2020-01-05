@@ -52,6 +52,7 @@ class LoginRecoverPresenter @Inject constructor(
                     hideSoftKeyboard()
                     showProgress(true)
                     showContentForm(false)
+                    showContentCaptcha(false)
                 }
             }
             .subscribe({
@@ -60,7 +61,6 @@ class LoginRecoverPresenter @Inject constructor(
             }) {
                 errorHandler.dispatch(it)
             })
-
     }
 
     fun onHostSelected() {
@@ -73,9 +73,22 @@ class LoginRecoverPresenter @Inject constructor(
         }
     }
 
-    fun sendRecoverRequest(recaptchaResponse: String){
-        Timber.i("To dziala")
+    fun sendRecoverRequest(recaptchaResponse: String) {
+        disposable.add(recoverRepository.sendRecoverRequest(view?.recoverHostValue.orEmpty(), view?.recoverSymbolValue.ifNullOrBlank { "Default" }, view?.recoverNameValue.orEmpty(), recaptchaResponse)
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .doOnSubscribe {
+                view?.apply {
+                    hideSoftKeyboard()
+                    showContentForm(false)
+                    showContentCaptcha(false)
+                    showProgress(true)
+                }
+            }
+            .subscribe({
+                view?.showMessage("Wysłano wiadomość na podany email.")
+            }) {
+                errorHandler.dispatch(it)
+            })
     }
-
-
 }
