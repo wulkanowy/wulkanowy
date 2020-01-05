@@ -346,4 +346,6 @@
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available in this mode</string>
+    <string name="login_recover_title">Recover your account</string>
+    <string name="login_recover">Recover</string>
 </resources>

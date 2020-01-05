@@ -65,7 +65,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginFormPrivacyLink.setOnClickListener { presenter.onPrivacyLinkClick() }
         loginFormFaq.setOnClickListener { presenter.onFaqClick() }
         loginFormContactEmail.setOnClickListener { presenter.onEmailClick() }
-
+        loginFormRecoverLink.setOnClickListener { presenter.onRecoverClick() }
         loginFormPass.setOnEditorActionListener { _, id, _ ->
             if (id == IME_ACTION_DONE || id == IME_NULL) loginFormSignIn.callOnClick() else false
         }
@@ -152,6 +152,10 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
     override fun openAdvancedLogin() {
         (activity as? LoginActivity)?.onAdvancedLoginClick()
+    }
+
+    override fun onRecoverClick() {
+        (activity as? LoginActivity)?.onRecoverClick()
     }
 
     override fun onDestroyView() {

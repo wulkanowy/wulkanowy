@@ -101,6 +101,10 @@ class LoginFormPresenter @Inject constructor(
         view?.openEmail()
     }
 
+    fun onRecoverClick() {
+        view?.onRecoverClick()
+    }
+
     private fun validateCredentials(login: String, password: String): Boolean {
         var isCorrect = true
 

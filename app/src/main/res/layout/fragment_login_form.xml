@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -67,7 +67,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_weight="1"
                         android:text="@string/login_contact_email"
                         app:icon="@drawable/ic_more_messages" />
@@ -78,7 +77,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_weight="1"
                         android:text="@string/about_faq"
                         app:icon="@drawable/ic_about_faq" />
@@ -169,7 +167,7 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     app:fontFamily="sans-serif"
-                    tools:targetApi="o" />
+                    tools:targetApi="o"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -198,13 +196,25 @@
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:id="@+id/loginFormRecoverLink"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:gravity="start|center_vertical"
+                android:text="@string/login_recover_title"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp" app:fontFamily="sans-serif-medium"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/loginFormHostLayout"
+                tools:visibility="visible"/>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginFormAdvancedButton"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
                 android:text="@string/login_advanced"
                 android:textAppearance="?android:textAppearance"
                 android:textColor="@color/colorPrimary"
@@ -223,7 +233,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="48dp"
                 android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
                 android:layout_marginBottom="16dp"
                 android:text="@string/login_sign_in"
                 app:layout_constraintBottom_toBottomOf="parent"

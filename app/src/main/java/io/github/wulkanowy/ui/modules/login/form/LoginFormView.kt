@@ -48,4 +48,6 @@ interface LoginFormView : BaseView {
     fun openEmail()
 
     fun openAdvancedLogin()
+
+    fun onRecoverClick()
 }
