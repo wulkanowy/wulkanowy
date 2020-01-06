@@ -270,6 +270,10 @@
     <string name="license_dialog_title">License</string>
 
 
+    <!--Creators-->
+    <string name="creators_avatar_description">Avatar</string>
+
+
     <!--Generic-->
     <string name="all_content">Content</string>
     <string name="all_retry">Retry</string>

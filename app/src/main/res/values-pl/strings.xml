@@ -289,6 +289,10 @@
     <string name="license_dialog_title">Licencja</string>
 
 
+    <!--Creators-->
+    <string name="creators_avatar_description">Awatar</string>
+
+
     <!--Generic-->
     <string name="all_content">Treść</string>
     <string name="all_retry">Ponów</string>

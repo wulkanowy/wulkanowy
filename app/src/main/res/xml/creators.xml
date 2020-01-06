@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <creators>
     <creator>
-        <name>mklkj</name>
+        <name>Mikołaj Pich</name>
         <summary>MMKKLLKKJJ</summary>
+        <github-username>mklkj</github-username>
     </creator>
     <creator>
-        <name>Fajerbel</name>
+        <name>Rafał Borcz</name>
         <summary>ffAAJJEERRBBEELL</summary>
+        <github-username>Faierbel</github-username>
+    </creator>
+    <creator>
+        <name>Kacper Ziubryniewicz</name>
+        <summary>kkAACCPPEERR zzIIUUBBRRYYNNIIEEWWIICCZZ</summary>
+        <github-username>kapi2289</github-username>
     </creator>
     <creator>
         <name>Dominik Korsa</name>
         <summary>ddOOMMIINIIKK kkOORRSSAA</summary>
+        <github-username>dominik-korsa</github-username>
     </creator>
 </creators>

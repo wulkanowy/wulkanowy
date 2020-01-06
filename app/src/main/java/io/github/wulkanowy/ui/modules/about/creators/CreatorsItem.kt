@@ -1,7 +1,10 @@
 package io.github.wulkanowy.ui.modules.about.creators
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.View
-import com.mikepenz.aboutlibraries.entity.Library
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -20,6 +23,8 @@ class CreatorsItem(val creator: Creator) : AbstractFlexibleItem<CreatorsItem.Vie
         with(holder) {
             creatorsItemName.text = creator.name
             creatorsItemSummary.text = creator.summary
+
+            Glide.with(contentView).load("https://github.com/${creator.githubUsername}.png").transform(RoundedCorners(8)).into(creatorsItemAvatar)
         }
     }
 
