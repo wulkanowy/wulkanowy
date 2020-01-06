@@ -22,7 +22,8 @@ class CreatorsPresenter @Inject constructor(
 
     fun onItemSelected(item: AbstractFlexibleItem<*>) {
         if (item !is CreatorsItem) return
-//        view?.run { item.creator.license?.licenseDescription?.let { openLicense(it) } }
+        if (item.creator.githubUsername == null) return
+        view?.openUserGithubPage(item.creator.githubUsername)
     }
 
     private fun loadData() {

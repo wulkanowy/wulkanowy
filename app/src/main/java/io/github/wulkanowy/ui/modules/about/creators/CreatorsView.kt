@@ -10,7 +10,7 @@ interface CreatorsView : BaseView {
 
     fun updateData(data: List<CreatorsItem>)
 
-    fun openLicense(licenseHtml: String)
+    fun openUserGithubPage(username: String)
 
     fun showProgress(show: Boolean)
 }

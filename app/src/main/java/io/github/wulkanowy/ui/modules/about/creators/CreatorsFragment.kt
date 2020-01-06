@@ -16,6 +16,7 @@ import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_creators.*
 import org.xmlpull.v1.XmlPullParser
@@ -62,15 +63,8 @@ class CreatorsFragment : BaseFragment(), CreatorsView, MainView.TitledView {
         creatorsAdapter.updateDataSet(data)
     }
 
-    override fun openLicense(licenseHtml: String) {
-        context?.let {
-            AlertDialog.Builder(it).apply {
-                setTitle(R.string.license_dialog_title)
-                setMessage(licenseHtml.parseAsHtml())
-                setPositiveButton(android.R.string.ok) { _, _ -> }
-                show()
-            }
-        }
+    override fun openUserGithubPage(username: String) {
+        context?.openInternetBrowser("https://github.com/${username}", ::showMessage)
     }
 
     override fun showProgress(show: Boolean) {
