@@ -22,16 +22,12 @@ class CreatorsPresenter @Inject constructor(
 
     fun onItemSelected(item: AbstractFlexibleItem<*>) {
         if (item !is CreatorsItem) return
-        view?.run { item.library.license?.licenseDescription?.let { openLicense(it) } }
+//        view?.run { item.creator.license?.licenseDescription?.let { openLicense(it) } }
     }
 
     private fun loadData() {
-        disposable.add(Single.fromCallable { view?.appLibraries }
-            .map {
-                val exclude = listOf("Android-Iconics", "CircleImageView", "FastAdapter", "Jsoup", "okio", "Retrofit")
-                it.filter { library -> !exclude.contains(library.libraryName) }
-            }
-            .map { it.map { library -> CreatorsItem(library) } }
+        disposable.add(Single.fromCallable { view?.appCreators }
+            .map { it.map { creator -> CreatorsItem(creator) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnEvent { _, _ -> view?.showProgress(false) }

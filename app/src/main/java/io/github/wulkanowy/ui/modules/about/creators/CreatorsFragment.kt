@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.parseAsHtml
 import com.mikepenz.aboutlibraries.Libs
-import com.mikepenz.aboutlibraries.entity.Library
 import dagger.Lazy
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -18,7 +17,8 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.setOnItemClickListener
-import kotlinx.android.synthetic.main.fragment_license.*
+import kotlinx.android.synthetic.main.fragment_creators.*
+import org.xmlpull.v1.XmlPullParser
 import javax.inject.Inject
 
 class CreatorsFragment : BaseFragment(), CreatorsView, MainView.TitledView {
@@ -34,17 +34,15 @@ class CreatorsFragment : BaseFragment(), CreatorsView, MainView.TitledView {
 
     override val titleStringId get() = R.string.creators_title
 
-    override val appLibraries: ArrayList<Library>?
-        get() = context?.let {
-            libs.get().prepareLibraries(it, emptyArray(), emptyArray(), autoDetect = true, checkCachedDetection = true, sort = true)
-        }
-
     companion object {
         fun newInstance() = CreatorsFragment()
     }
 
+    override val appCreators
+        get() = CreatorsXMLParser().parse(requireContext().resources.getXml(R.xml.creators))
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_license, container, false)
+        return inflater.inflate(R.layout.fragment_creators, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -53,7 +51,7 @@ class CreatorsFragment : BaseFragment(), CreatorsView, MainView.TitledView {
     }
 
     override fun initView() {
-        with(licenseRecycler) {
+        with(creatorsRecycler) {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = creatorsAdapter
         }
@@ -76,7 +74,7 @@ class CreatorsFragment : BaseFragment(), CreatorsView, MainView.TitledView {
     }
 
     override fun showProgress(show: Boolean) {
-        licenseProgress.visibility = if (show) VISIBLE else GONE
+        creatorsProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun onDestroyView() {

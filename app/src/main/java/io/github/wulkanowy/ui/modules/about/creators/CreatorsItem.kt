@@ -8,18 +8,18 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_license.*
+import kotlinx.android.synthetic.main.item_creators.*
 
-class CreatorsItem(val library: Library) : AbstractFlexibleItem<CreatorsItem.ViewHolder>() {
+class CreatorsItem(val creator: Creator) : AbstractFlexibleItem<CreatorsItem.ViewHolder>() {
 
-    override fun getLayoutRes() = R.layout.item_license
+    override fun getLayoutRes() = R.layout.item_creators
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>) = ViewHolder(view, adapter)
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         with(holder) {
-            licenseItemName.text = library.libraryName
-            licenseItemSummary.text = library.license?.licenseName
+            creatorsItemName.text = creator.name
+            creatorsItemSummary.text = creator.summary
         }
     }
 
@@ -29,12 +29,12 @@ class CreatorsItem(val library: Library) : AbstractFlexibleItem<CreatorsItem.Vie
 
         other as CreatorsItem
 
-        if (library != other.library) return false
+        if (creator != other.creator) return false
 
         return true
     }
 
-    override fun hashCode() = library.hashCode()
+    override fun hashCode() = creator.hashCode()
 
     class ViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>) : FlexibleViewHolder(view, adapter),
         LayoutContainer {
