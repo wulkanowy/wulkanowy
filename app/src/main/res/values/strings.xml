@@ -250,8 +250,8 @@
 
     <!--About-->
     <string name="about_version">App version</string>
-    <string name="about_creators">Creators</string>
-    <string name="about_creators_summary">List of Wulkanowy developers</string>
+    <string name="about_creator">Creators</string>
+    <string name="about_creator_summary">List of Wulkanowy developers</string>
     <string name="about_feedback">Report a bug</string>
     <string name="about_feedback_summary">Send a bug report via e-mail</string>
     <string name="about_faq">FAQ</string>
@@ -271,7 +271,7 @@
 
 
     <!--Creators-->
-    <string name="creators_avatar_description">Avatar</string>
+    <string name="creator_avatar_description">Avatar</string>
 
 
     <!--Generic-->

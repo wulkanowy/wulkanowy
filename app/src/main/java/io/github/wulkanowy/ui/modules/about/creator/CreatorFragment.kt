@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.modules.about.creators
+package io.github.wulkanowy.ui.modules.about.creator
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,8 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
-import androidx.core.text.parseAsHtml
 import com.mikepenz.aboutlibraries.Libs
 import dagger.Lazy
 import eu.davidea.flexibleadapter.FlexibleAdapter
@@ -18,14 +16,13 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.setOnItemClickListener
-import kotlinx.android.synthetic.main.fragment_creators.*
-import org.xmlpull.v1.XmlPullParser
+import kotlinx.android.synthetic.main.fragment_creator.*
 import javax.inject.Inject
 
-class CreatorsFragment : BaseFragment(), CreatorsView, MainView.TitledView {
+class CreatorFragment : BaseFragment(), CreatorView, MainView.TitledView {
 
     @Inject
-    lateinit var presenter: CreatorsPresenter
+    lateinit var presenter: CreatorPresenter
 
     @Inject
     lateinit var creatorsAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
@@ -36,14 +33,14 @@ class CreatorsFragment : BaseFragment(), CreatorsView, MainView.TitledView {
     override val titleStringId get() = R.string.creators_title
 
     companion object {
-        fun newInstance() = CreatorsFragment()
+        fun newInstance() = CreatorFragment()
     }
 
     override val appCreators
-        get() = CreatorsXMLParser().parse(requireContext().resources.getXml(R.xml.creators))
+        get() = CreatorXMLParser().parse(requireContext().resources.getXml(R.xml.creators))
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_creators, container, false)
+        return inflater.inflate(R.layout.fragment_creator, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -52,14 +49,14 @@ class CreatorsFragment : BaseFragment(), CreatorsView, MainView.TitledView {
     }
 
     override fun initView() {
-        with(creatorsRecycler) {
+        with(creatorRecycler) {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = creatorsAdapter
         }
         creatorsAdapter.setOnItemClickListener(presenter::onItemSelected)
     }
 
-    override fun updateData(data: List<CreatorsItem>) {
+    override fun updateData(data: List<CreatorItem>) {
         creatorsAdapter.updateDataSet(data)
     }
 
@@ -68,7 +65,7 @@ class CreatorsFragment : BaseFragment(), CreatorsView, MainView.TitledView {
     }
 
     override fun showProgress(show: Boolean) {
-        creatorsProgress.visibility = if (show) VISIBLE else GONE
+        creatorProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun onDestroyView() {

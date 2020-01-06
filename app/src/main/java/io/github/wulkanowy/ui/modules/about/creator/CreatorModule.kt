@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.modules.about.creators
+package io.github.wulkanowy.ui.modules.about.creator
 
 import android.content.Context
 import com.mikepenz.aboutlibraries.Libs
@@ -7,7 +7,7 @@ import dagger.Provides
 import io.github.wulkanowy.di.scopes.PerFragment
 
 @Module
-class CreatorsModule {
+class CreatorModule {
 
     @PerFragment
     @Provides

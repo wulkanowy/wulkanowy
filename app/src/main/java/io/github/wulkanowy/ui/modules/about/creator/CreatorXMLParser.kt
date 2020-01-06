@@ -1,10 +1,10 @@
-package io.github.wulkanowy.ui.modules.about.creators
+package io.github.wulkanowy.ui.modules.about.creator
 
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 
-class CreatorsXMLParser {
+class CreatorXMLParser {
     fun parse(parser: XmlPullParser): List<Creator> {
         parser.next()
         parser.next()

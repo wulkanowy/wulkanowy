@@ -1,7 +1,5 @@
-package io.github.wulkanowy.ui.modules.about.creators
+package io.github.wulkanowy.ui.modules.about.creator
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -11,19 +9,19 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_creators.*
+import kotlinx.android.synthetic.main.item_creator.*
 
-class CreatorsItem(val creator: Creator) : AbstractFlexibleItem<CreatorsItem.ViewHolder>() {
+class CreatorItem(val creator: Creator) : AbstractFlexibleItem<CreatorItem.ViewHolder>() {
 
-    override fun getLayoutRes() = R.layout.item_creators
+    override fun getLayoutRes() = R.layout.item_creator
 
     override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>) = ViewHolder(view, adapter)
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         with(holder) {
-            creatorsItemName.text = creator.name
+            creatorItemName.text = creator.name
 
-            Glide.with(contentView).load("https://github.com/${creator.githubUsername}.png").transform(RoundedCorners(8)).into(creatorsItemAvatar)
+            Glide.with(contentView).load("https://github.com/${creator.githubUsername}.png").transform(RoundedCorners(8)).into(creatorItemAvatar)
         }
     }
 
@@ -31,7 +29,7 @@ class CreatorsItem(val creator: Creator) : AbstractFlexibleItem<CreatorsItem.Vie
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as CreatorsItem
+        other as CreatorItem
 
         if (creator != other.creator) return false
 

@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-        android:id="@+id/creatorsProgress"
+        android:id="@+id/creatorProgress"
         style="@style/Widget.MaterialProgressBar.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,7 +12,7 @@
         android:indeterminate="true" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/creatorsRecycler"
+        android:id="@+id/creatorRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

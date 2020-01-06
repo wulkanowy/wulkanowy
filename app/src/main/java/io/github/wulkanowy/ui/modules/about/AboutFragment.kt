@@ -16,7 +16,7 @@ import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.about.creators.CreatorsFragment
+import io.github.wulkanowy.ui.modules.about.creator.CreatorFragment
 import io.github.wulkanowy.ui.modules.about.license.LicenseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -45,7 +45,7 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
 
     override val creatorsRes: Triple<String, String, Drawable?>?
         get() = context?.run {
-            Triple(getString(R.string.about_creators), getString(R.string.about_creators_summary), getCompatDrawable(R.drawable.ic_about_creators))
+            Triple(getString(R.string.about_creator), getString(R.string.about_creator_summary), getCompatDrawable(R.drawable.ic_about_creator))
         }
 
     override val feedbackRes: Triple<String, String, Drawable?>?
@@ -150,7 +150,7 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
     }
 
     override fun openCreators() {
-        (activity as? MainActivity)?.pushView(CreatorsFragment.newInstance())
+        (activity as? MainActivity)?.pushView(CreatorFragment.newInstance())
     }
 
     override fun openPrivacyPolicy() {

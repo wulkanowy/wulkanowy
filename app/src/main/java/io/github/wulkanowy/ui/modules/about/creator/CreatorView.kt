@@ -1,14 +1,14 @@
-package io.github.wulkanowy.ui.modules.about.creators
+package io.github.wulkanowy.ui.modules.about.creator
 
 import io.github.wulkanowy.ui.base.BaseView
 
-interface CreatorsView : BaseView {
+interface CreatorView : BaseView {
 
     val appCreators: List<Creator>
 
     fun initView()
 
-    fun updateData(data: List<CreatorsItem>)
+    fun updateData(data: List<CreatorItem>)
 
     fun openUserGithubPage(username: String)
 

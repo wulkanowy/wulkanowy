@@ -269,8 +269,8 @@
 
     <!--About-->
     <string name="about_version">Wersja aplikacji</string>
-    <string name="about_creators">Twórcy</string>
-    <string name="about_creators_summary">Lista programistów Wulkanowego</string>
+    <string name="about_creator">Twórcy</string>
+    <string name="about_creator_summary">Lista programistów Wulkanowego</string>
     <string name="about_feedback">Zgłoś błąd</string>
     <string name="about_feedback_summary">Wyślij zgłoszenie o błędzie poprzez e-maila</string>
     <string name="about_faq">FAQ</string>
@@ -290,7 +290,7 @@
 
 
     <!--Creators-->
-    <string name="creators_avatar_description">Awatar</string>
+    <string name="creator_avatar_description">Awatar</string>
 
 
     <!--Generic-->
