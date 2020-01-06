@@ -1,20 +1,13 @@
 package io.github.wulkanowy.ui.modules.login.recover
 
-import android.content.Context
-import android.webkit.JavascriptInterface
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
-import io.github.wulkanowy.ui.modules.login.advanced.LoginAdvancedView
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.android.synthetic.main.fragment_login_advanced.*
 import io.github.wulkanowy.data.repositories.recover.RecoverRepository
 import io.github.wulkanowy.utils.ifNullOrBlank
-import io.reactivex.disposables.Disposable
 import timber.log.Timber
-import java.io.InputStream
 import javax.inject.Inject
 
 class LoginRecoverPresenter @Inject constructor(
@@ -74,15 +67,21 @@ class LoginRecoverPresenter @Inject constructor(
     }
 
     fun sendRecoverRequest(recaptchaResponse: String) {
+        disposable.clear()
         disposable.add(recoverRepository.sendRecoverRequest(view?.recoverHostValue.orEmpty(), view?.recoverSymbolValue.ifNullOrBlank { "Default" }, view?.recoverNameValue.orEmpty(), recaptchaResponse)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {
                 view?.apply {
-                    hideSoftKeyboard()
+                    showProgress(true)
                     showContentForm(false)
                     showContentCaptcha(false)
-                    showProgress(true)
+                }
+            }
+            .doFinally{
+                view?.apply {
+                    showProgress(false)
+                    showContentForm(true)
                 }
             }
             .subscribe({

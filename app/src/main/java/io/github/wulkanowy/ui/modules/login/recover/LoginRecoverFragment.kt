@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.login.recover
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,19 +14,13 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.form.LoginSymbolAdapter
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
-import kotlinx.android.synthetic.main.fragment_login_form.*
 import kotlinx.android.synthetic.main.fragment_login_recover.*
-import timber.log.Timber
-import java.util.Locale
 import javax.inject.Inject
 
 class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
 
     @Inject
     lateinit var presenter: LoginRecoverPresenter
-
-    @Inject
-    lateinit var webAppInterface: WebAppInterface
 
     companion object {
         fun newInstance() = LoginRecoverFragment()
@@ -45,7 +39,6 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
     override val recoverSymbolValue: String
         get() = loginRecoverSymbol.text.toString().trim()
 
-
     override fun setErrorNameRequired() {
         with(loginRecoverNameLayout) {
             requestFocus()
@@ -63,7 +56,6 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
     }
 
     override fun initView() {
-        webAppInterface.onRecaptchaResponse = { presenter.sendRecoverRequest(it) }
         hostKeys = resources.getStringArray(R.array.hosts_keys)
         hostValues = resources.getStringArray(R.array.hosts_values)
 
@@ -111,33 +103,35 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         activity?.hideSoftInput()
     }
 
-    override fun loadRecaptcha(siteKey: String, URL: String){
-        val HTML = "<div id=\"recaptcha\"></div>\n<script src=\"https://www.google.com/recaptcha/api.js?onload=cl&render=explicit&hl=pl\" async defer></script>\n<script>var cl=()=>grecaptcha.render(\"recaptcha\",{sitekey:'$siteKey',callback:e =>Android.recaptchaCallback(e)})</script>"
+    @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
+    override fun loadRecaptcha(siteKey: String, url: String) {
+        val html = """
+            <div align="center" id="recaptcha"></div>
+            <script src="https://www.google.com/recaptcha/api.js?onload=cl&render=explicit&hl=pl" async defer></script>
+            <script>var cl=()=>grecaptcha.render("recaptcha",{
+            sitekey:'$siteKey',
+            callback:e =>Android.captchaCallback(e)})</script>
+        """.trimIndent()
 
         with(loginRecoverWebView) {
             settings.javaScriptEnabled = true
-            addJavascriptInterface(webAppInterface, "Android")
-            loadDataWithBaseURL(URL, HTML, "text/html", "UTF-8", null)
             webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
-                    Timber.i("Zaladowano")
                     showContentCaptcha(true)
                     showProgress(false)
                 }
                 //TODO Error przy niezaładowaniu strony
             }
+
+            loadDataWithBaseURL(url, html, "text/html", "UTF-8", null)
+            addJavascriptInterface(object {
+                @JavascriptInterface
+                fun captchaCallback(reCaptchaResponse: String) {
+                    activity?.runOnUiThread {
+                        presenter.sendRecoverRequest(reCaptchaResponse)
+                    }
+                }
+            }, "Android")
         }
-
     }
-
-    class WebAppInterface @Inject constructor(private val mContext: Context) {
-        var onRecaptchaResponse: (String) -> Unit = {}
-
-        @JavascriptInterface
-        fun recaptchaCallback(recaptchaResponse: String) {
-            Timber.d(recaptchaResponse)
-            onRecaptchaResponse(recaptchaResponse)
-        }
-    }
-
 }
