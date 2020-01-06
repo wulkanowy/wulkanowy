@@ -45,7 +45,7 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
 
     override val creatorsRes: Triple<String, String, Drawable?>?
         get() = context?.run {
-            Triple(getString(R.string.about_creators), getString(R.string.about_creators_summary), getCompatDrawable(R.drawable.ic_about_privacy))
+            Triple(getString(R.string.about_creators), getString(R.string.about_creators_summary), getCompatDrawable(R.drawable.ic_about_creators))
         }
 
     override val feedbackRes: Triple<String, String, Drawable?>?
