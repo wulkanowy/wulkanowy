@@ -54,6 +54,7 @@ class CreatorFragment : BaseFragment(), CreatorView, MainView.TitledView {
             adapter = creatorsAdapter
         }
         creatorsAdapter.setOnItemClickListener(presenter::onItemSelected)
+        creatorSeeMore.setOnClickListener { presenter.onSeeMoreClick() }
     }
 
     override fun updateData(data: List<CreatorItem>) {
@@ -62,6 +63,10 @@ class CreatorFragment : BaseFragment(), CreatorView, MainView.TitledView {
 
     override fun openUserGithubPage(username: String) {
         context?.openInternetBrowser("https://github.com/${username}", ::showMessage)
+    }
+
+    override fun openGithubContributorsPage() {
+        context?.openInternetBrowser("https://github.com/wulkanowy/wulkanowy/graphs/contributors", ::showMessage)
     }
 
     override fun showProgress(show: Boolean) {

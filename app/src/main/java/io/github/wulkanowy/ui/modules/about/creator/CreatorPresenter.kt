@@ -26,6 +26,10 @@ class CreatorPresenter @Inject constructor(
         view?.openUserGithubPage(item.creator.githubUsername)
     }
 
+    fun onSeeMoreClick() {
+        view?.openGithubContributorsPage()
+    }
+
     private fun loadData() {
         disposable.add(Single.fromCallable { view?.appCreators }
             .map { it.map { creator -> CreatorItem(creator) } }

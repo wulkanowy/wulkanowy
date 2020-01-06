@@ -12,5 +12,7 @@ interface CreatorView : BaseView {
 
     fun openUserGithubPage(username: String)
 
+    fun openGithubContributorsPage()
+
     fun showProgress(show: Boolean)
 }
