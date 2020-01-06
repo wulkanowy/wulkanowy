@@ -34,7 +34,6 @@ class CreatorsXMLParser {
     private fun readCreator(parser: XmlPullParser): Creator {
         parser.require(XmlPullParser.START_TAG, null, "creator")
         var name: String? = null
-        var summary: String? = null
         var username: String? = null
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
@@ -42,12 +41,11 @@ class CreatorsXMLParser {
             }
             when (parser.name) {
                 "name" -> name = readName(parser)
-                "summary" -> summary = readSummary(parser)
                 "github-username" -> username = readGithubUsername(parser)
                 else -> skip(parser)
             }
         }
-        return Creator(name, summary, username)
+        return Creator(name, username)
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
@@ -56,14 +54,6 @@ class CreatorsXMLParser {
         val name = readText(parser)
         parser.require(XmlPullParser.END_TAG, null, "name")
         return name
-    }
-
-    @Throws(XmlPullParserException::class, IOException::class)
-    private fun readSummary(parser: XmlPullParser): String {
-        parser.require(XmlPullParser.START_TAG, null, "summary")
-        val summary = readText(parser)
-        parser.require(XmlPullParser.END_TAG, null, "summary")
-        return summary
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
