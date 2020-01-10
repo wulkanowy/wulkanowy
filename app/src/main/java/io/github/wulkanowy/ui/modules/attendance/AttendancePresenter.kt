@@ -144,7 +144,7 @@ class AttendancePresenter @Inject constructor(
 
     fun onExcuseDialogSubmit(reason: String) {
         view?.finishActionMode()
-        excuseAbsence(if (reason != "") reason else null)
+        excuseAbsence(if (reason != "") reason else null, attendanceToExcuseList.toList())
     }
 
     fun onPrepareActionMode(): Boolean {
@@ -224,13 +224,13 @@ class AttendancePresenter @Inject constructor(
         }
     }
 
-    private fun excuseAbsence(reason: String?) {
+    private fun excuseAbsence(reason: String?, toExcuseList: List<Attendance>) {
         Timber.i("Excusing absence started")
         disposable.apply {
             add(studentRepository.getCurrentStudent()
                 .delay(200, MILLISECONDS)
                 .flatMap { semesterRepository.getCurrentSemester(it) }
-                .flatMap { attendanceRepository.excuseForAbsence(it, attendanceToExcuseList, reason) }
+                .flatMap { attendanceRepository.excuseForAbsence(it, toExcuseList, reason) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doOnSubscribe {
