@@ -53,7 +53,7 @@ class GradeDetailsDialog : DialogFragment() {
         gradeDialogSubject.text = grade.subject
 
         gradeDialogColorAndWeightValue.run {
-            text = String.format(context.getString(R.string.grade_weight_value), grade.weight)
+            text = context.getString(R.string.grade_weight_value, grade.weight)
             setBackgroundResource(grade.getGradeColor())
         }
 
