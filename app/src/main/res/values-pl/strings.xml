@@ -28,7 +28,7 @@
     <string name="login_host_hint">Dziennik</string>
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_type_api">Mobilne API</string>
-    <string name="login_type_scrapper">Scrapper</string>
+    <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybrydowe</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
@@ -43,7 +43,7 @@
     <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprawdź symbol</string>
     <string name="login_field_required">To pole jest wymagane</string>
     <string name="login_duplicate_student">Wybrany uczeń jest już zalogowany</string>
-    <string name="login_symbol_helper">Symbol znajdziesz na stronie dziennika w Uczeń -> Dostęp Mobilny -> Zarejestruj urządzenie mobilne</string>
+    <string name="login_symbol_helper">Symbol znajdziesz na stronie dziennika w Uczeń -> Dostęp Mobilny -> Zarejestruj urządzenie mobilne</string>
     <string name="login_select_student">Wybierz uczniów do zalogowania w aplikacji</string>
     <string name="login_advanced">Inne opcje</string>
     <string name="login_privacy_policy">Polityka prywatności</string>
@@ -51,6 +51,8 @@
     <string name="login_contact_email">Email</string>
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Wyślij email</string>
+    <string name="login_recover_title">Przywróć swoje konto</string>
+    <string name="login_recover">Przywróć</string>
 
 
     <!--Main-->
@@ -359,12 +361,10 @@
 
     <!--Errors-->
     <string name="error_no_internet">Brak połączenia z internetem</string>
-    <string name="error_timeout">Zbyt długie oczekiwanie na połączenie z dziennikiem</string>
+    <string name="error_timeout">Upłynął limit czasu na połączenie z dziennikiem</string>
     <string name="error_login_failed">Logowanie nie powiodło się. Spróbuj ponownie lub zrestartuj aplikację</string>
-    <string name="error_service_unavailable">Dziennik jest niedostępny. Spróbuj ponownie później</string>
+    <string name="error_service_unavailable">Trwa przerwa techniczna dziennika UONET+. Spróbuj ponownie później</string>
     <string name="error_unknown">Wystąpił nieoczekiwany błąd</string>
     <string name="error_feature_disabled">Funkcja wyłączona przez szkołę</string>
     <string name="error_feature_not_available">Funkcja niedostępna w tym trybie</string>
-    <string name="login_recover_title">Przywróć swoje konto</string>
-    <string name="login_recover">Przywróć</string>
 </resources>
