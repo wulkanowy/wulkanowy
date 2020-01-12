@@ -17,8 +17,8 @@ android {
         testApplicationId "io.github.tests.wulkanowy"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 49
-        versionName "0.14.0"
+        versionCode 51
+        versionName "0.14.2"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -111,7 +111,7 @@ play {
 }
 
 ext {
-    work_manager = "2.3.0-beta02"
+    work_manager = "2.3.0-rc01"
     room = "2.2.3"
     dagger = "2.25.4"
     chucker = "2.0.4"
@@ -130,7 +130,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.1.0-rc03"
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "androidx.appcompat:appcompat-resources:1.1.0"
-    implementation "androidx.fragment:fragment-ktx:1.2.0-rc04"
+    implementation "androidx.fragment:fragment-ktx:1.2.0-rc05"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation "androidx.multidex:multidex:2.0.1"
 
@@ -174,7 +174,6 @@ dependencies {
     implementation "com.jakewharton.threetenabp:threetenabp:1.2.1"
     implementation "com.jakewharton.timber:timber:4.7.1"
     implementation "at.favre.lib:slf4j-timber:1.0.1"
-    implementation "com.squareup.okhttp3:logging-interceptor:3.12.6"
     implementation "com.mikepenz:aboutlibraries-core:7.1.0"
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
 
@@ -186,7 +185,7 @@ dependencies {
     debugImplementation "fr.o80.chucker:library:$chucker"
     debugImplementation "com.amitshekhar.android:debug-db:1.0.6"
 
-    testImplementation "junit:junit:4.12"
+    testImplementation "junit:junit:4.13"
     testImplementation "io.mockk:mockk:$mockk"
     testImplementation "org.threeten:threetenbp:1.4.0"
     testImplementation "org.mockito:mockito-inline:3.2.4"
