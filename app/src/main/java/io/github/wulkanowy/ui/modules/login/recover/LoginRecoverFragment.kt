@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.login.recover
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,6 +57,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
     }
 
     override fun initView() {
+        loginRecoverWebView.setBackgroundColor(Color.TRANSPARENT)
         hostKeys = resources.getStringArray(R.array.hosts_keys)
         hostValues = resources.getStringArray(R.array.hosts_values)
 
@@ -106,7 +108,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
     @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
     override fun loadRecaptcha(siteKey: String, url: String) {
         val html = """
-            <div align="center" id="recaptcha"></div>
+            <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);" id="recaptcha"></div>
             <script src="https://www.google.com/recaptcha/api.js?onload=cl&render=explicit&hl=pl" async defer></script>
             <script>var cl=()=>grecaptcha.render("recaptcha",{
             sitekey:'$siteKey',

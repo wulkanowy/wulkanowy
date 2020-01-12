@@ -96,7 +96,8 @@
             android:hint="@string/login_symbol_hint"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/loginRecoverHostLayout">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginRecoverHostLayout">
 
             <AutoCompleteTextView
                 android:id="@+id/loginRecoverSymbol"
@@ -116,7 +117,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:text="@string/login_recover"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/loginRecoverSymbolLayout"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginRecoverSymbolLayout"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -125,20 +127,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
-
-        <TextView
-            android:id="@+id/loginRecoverCaptchaHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="178dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:text="Verify you are not a robot"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
 
         <WebView
             android:id="@+id/loginRecoverWebView"
