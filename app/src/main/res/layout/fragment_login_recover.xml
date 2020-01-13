@@ -93,7 +93,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
-            android:hint="@string/login_symbol_hint"
+            android:hint="@string/login_symbol_hint_optional"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

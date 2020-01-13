@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -65,6 +66,8 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverSymbol.doOnTextChanged { _, _, _, _ -> presenter.onSymbolTextChanged() }
         loginRecoverHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginRecoverConfirm.setOnClickListener { presenter.onConfirmClick() }
+
+        loginRecoverSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
 
         with(loginRecoverHost) {
             setText(hostKeys.getOrElse(0) { "" })

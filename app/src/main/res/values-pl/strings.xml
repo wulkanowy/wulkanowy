@@ -27,6 +27,7 @@
     <string name="login_password_hint">Hasło</string>
     <string name="login_host_hint">Dziennik</string>
     <string name="login_symbol_hint">Symbol</string>
+    <string name="login_symbol_hint_optional">Symbol (opcjonalnie)</string>
     <string name="login_type_api">Mobilne API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybrydowe</string>
