@@ -24,7 +24,7 @@ class Migration20 : Migration(19, 20) {
                 `teacher` TEXT NOT NULL,
                 `teacherOld` TEXT NOT NULL,
                 `info` TEXT NOT NULL,
-                `student_plan` TEXT NOT NULL,
+                `student_plan` INTEGER NOT NULL,
                 `changes` INTEGER NOT NULL,
                 `canceled` INTEGER NOT NULL
             )
