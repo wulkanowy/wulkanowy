@@ -28,7 +28,7 @@
     <string name="login_host_hint">Dziennik</string>
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_type_api">Mobilne API</string>
-    <string name="login_type_scrapper">Scrapper</string>
+    <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybrydowe</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
@@ -66,6 +66,7 @@
     <string name="grade_switch_semester">Zmień semestr</string>
     <string name="grade_no_items">Brak ocen</string>
     <string name="grade_weight">Waga</string>
+    <string name="grade_weight_value">Waga: %s</string>
     <string name="grade_comment">Komentarz</string>
     <string name="grade_no_new_items">Brak nowych ocen</string>
     <string name="grade_number_new_items">Ilość nowych ocen: %1$d</string>
@@ -364,10 +365,11 @@
 
     <!--Errors-->
     <string name="error_no_internet">Brak połączenia z internetem</string>
-    <string name="error_timeout">Zbyt długie oczekiwanie na połączenie z dziennikiem</string>
+    <string name="error_timeout">Upłynął limit czasu na połączenie z dziennikiem</string>
     <string name="error_login_failed">Logowanie nie powiodło się. Spróbuj ponownie lub zrestartuj aplikację</string>
-    <string name="error_service_unavailable">Dziennik jest niedostępny. Spróbuj ponownie później</string>
+    <string name="error_service_unavailable">Trwa przerwa techniczna dziennika UONET+. Spróbuj ponownie później</string>
     <string name="error_unknown">Wystąpił nieoczekiwany błąd</string>
     <string name="error_feature_disabled">Funkcja wyłączona przez szkołę</string>
     <string name="error_feature_not_available">Funkcja niedostępna w tym trybie</string>
+    <string name="pref_view_timetable_show_whole_class">Pokazuj lekcje całej klasy</string>
 </resources>
