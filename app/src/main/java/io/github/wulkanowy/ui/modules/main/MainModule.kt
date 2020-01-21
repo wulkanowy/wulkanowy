@@ -9,7 +9,6 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.di.scopes.PerFragment
 import io.github.wulkanowy.ui.modules.about.AboutFragment
 import io.github.wulkanowy.ui.modules.about.creator.CreatorFragment
-import io.github.wulkanowy.ui.modules.about.creator.CreatorModule
 import io.github.wulkanowy.ui.modules.about.license.LicenseFragment
 import io.github.wulkanowy.ui.modules.about.license.LicenseModule
 import io.github.wulkanowy.ui.modules.account.AccountDialog
@@ -124,7 +123,7 @@ abstract class MainModule {
     abstract fun bindLicenseFragment(): LicenseFragment
 
     @PerFragment
-    @ContributesAndroidInjector(modules = [CreatorModule::class])
+    @ContributesAndroidInjector()
     abstract fun bindCreatorsFragment(): CreatorFragment
 
     @PerFragment
