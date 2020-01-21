@@ -25,7 +25,7 @@ class CreatorPresenter @Inject constructor(
 
     fun onItemSelected(item: AbstractFlexibleItem<*>) {
         if (item !is CreatorItem) return
-        item.creator.githubUsername?.run { view?.openUserGithubPage(this) }
+        view?.openUserGithubPage(item.creator.githubUsername)
     }
 
     fun onSeeMoreClick() {
@@ -37,7 +37,7 @@ class CreatorPresenter @Inject constructor(
             .map { it.map { creator -> CreatorItem(creator) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .doOnEvent { _, _ -> view?.showProgress(false) }
+            .doFinally { view?.showProgress(false) }
             .subscribe({ view?.run { updateData(it) } }, { errorHandler.dispatch(it) }))
     }
 }
