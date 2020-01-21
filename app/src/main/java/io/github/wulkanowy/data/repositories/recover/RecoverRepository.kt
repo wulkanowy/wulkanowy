@@ -5,13 +5,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RecoverRepository @Inject constructor(private val remote: RecoverRemote){
+class RecoverRepository @Inject constructor(private val remote: RecoverRemote) {
     fun getRecaptchaSitekey(host: String, symbol: String) : Single<Pair<String, String>>{
-
         return remote.getRecaptchaSitekey(host, symbol)
     }
 
-    fun sendRecoverRequest(URL: String, symbol: String, email:String, recaptchaResponse: String) : Single<Pair<Boolean,String>>{
-        return remote.sendRecoverRequest(URL, symbol, email, recaptchaResponse)
+    fun sendRecoverRequest(url: String, symbol: String, email:String, recaptchaResponse: String) : Single<Pair<Boolean,String>>{
+        return remote.sendRecoverRequest(url, symbol, email, recaptchaResponse)
     }
 }

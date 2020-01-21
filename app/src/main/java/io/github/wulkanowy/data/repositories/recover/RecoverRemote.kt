@@ -13,8 +13,8 @@ class RecoverRemote @Inject constructor(private val sdk: Sdk) {
         return sdk.getPasswordResetCaptchaCode(host, symbol)
     }
 
-    fun sendRecoverRequest(URL: String, symbol: String, email:String, recaptchaResponse: String) : Single<Pair<Boolean,String>>{
-        return sdk.sendPasswordResetRequest(URL, symbol, email, recaptchaResponse)
+    fun sendRecoverRequest(url: String, symbol: String, email:String, recaptchaResponse: String) : Single<Pair<Boolean,String>>{
+        return sdk.sendPasswordResetRequest(url, symbol, email, recaptchaResponse)
     }
 }
 

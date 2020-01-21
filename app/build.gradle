@@ -38,7 +38,6 @@ android {
 
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
-        main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] }
     }
 
     signingConfigs {
