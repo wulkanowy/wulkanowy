@@ -10,6 +10,8 @@ interface LoginRecoverView : BaseView {
 
     val recoverSymbolValue: String
 
+    val recoverWebViewSuccess: Boolean
+
     fun initView()
 
     fun setDefaultCredentials(name: String, symbol: String)
@@ -30,6 +32,8 @@ interface LoginRecoverView : BaseView {
 
     fun showContentCaptcha(show: Boolean)
 
-    fun loadRecaptcha(siteKey: String, URL: String)
+    fun showError(show: Boolean)
+
+    fun loadRecaptcha(siteKey: String, url: String)
 
 }

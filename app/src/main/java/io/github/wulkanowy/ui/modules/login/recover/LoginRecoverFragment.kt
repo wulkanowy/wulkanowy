@@ -32,6 +32,8 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
 
     private lateinit var hostValues: Array<String>
 
+    override var recoverWebViewSuccess: Boolean = true
+
     override val recoverHostValue: String?
         get() = hostValues.getOrNull(hostKeys.indexOf(loginRecoverHost.text.toString()))
 
@@ -66,6 +68,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverSymbol.doOnTextChanged { _, _, _, _ -> presenter.onSymbolTextChanged() }
         loginRecoverHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginRecoverConfirm.setOnClickListener { presenter.onConfirmClick() }
+        loginRecoverErrorRetry.setOnClickListener { presenter.onConfirmClick() }
 
         loginRecoverSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
 
@@ -100,6 +103,10 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverCaptchaContainer.visibility = if (show) View.VISIBLE else View.GONE
     }
 
+    override fun showError(show: Boolean) {
+        loginRecoverError.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
     override fun showSoftKeyboard() {
         activity?.showSoftInput()
     }
@@ -122,10 +129,17 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
             settings.javaScriptEnabled = true
             webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
-                    showContentCaptcha(true)
-                    showProgress(false)
+                    if(recoverWebViewSuccess) {
+                        showContentCaptcha(true)
+                        showProgress(false)
+                    } else {
+                        showProgress(false)
+                        showError(true)
+                    }
                 }
-                //TODO Error przy niezaładowaniu strony
+                override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
+                    recoverWebViewSuccess = false
+                }
             }
 
             loadDataWithBaseURL(url, html, "text/html", "UTF-8", null)
