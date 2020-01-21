@@ -19,7 +19,7 @@ class CreatorItem(val creator: Creator) : AbstractFlexibleItem<CreatorItem.ViewH
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         with(holder) {
-            creatorItemName.text = creator.name
+            creatorItemName.text = creator.displayName
 
             Glide.with(contentView).load("https://github.com/${creator.githubUsername}.png").transform(RoundedCorners(8)).into(creatorItemAvatar)
         }

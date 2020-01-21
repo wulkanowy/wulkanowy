@@ -6,8 +6,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import com.mikepenz.aboutlibraries.Libs
-import dagger.Lazy
+import com.google.gson.Gson
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
@@ -27,17 +26,17 @@ class CreatorFragment : BaseFragment(), CreatorView, MainView.TitledView {
     @Inject
     lateinit var creatorsAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
-    @Inject
-    lateinit var libs: Lazy<Libs>
-
     override val titleStringId get() = R.string.creators_title
 
     companion object {
         fun newInstance() = CreatorFragment()
     }
 
-    override val appCreators
-        get() = CreatorXMLParser().parse(requireContext().resources.getXml(R.xml.creators))
+    override val appCreators: List<Creator>
+        get() = Gson().fromJson(
+            requireContext().assets.open("creators.json").bufferedReader().use { it.readText() },
+            Array<Creator>::class.java
+        ).toList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_creator, container, false)
