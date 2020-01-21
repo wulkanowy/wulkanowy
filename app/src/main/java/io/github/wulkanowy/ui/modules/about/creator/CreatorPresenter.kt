@@ -22,8 +22,7 @@ class CreatorPresenter @Inject constructor(
 
     fun onItemSelected(item: AbstractFlexibleItem<*>) {
         if (item !is CreatorItem) return
-        if (item.creator.githubUsername == null) return
-        view?.openUserGithubPage(item.creator.githubUsername)
+        item.creator.githubUsername?.run { view?.openUserGithubPage(this) }
     }
 
     fun onSeeMoreClick() {
