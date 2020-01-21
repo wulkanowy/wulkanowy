@@ -4,8 +4,6 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface CreatorView : BaseView {
 
-    val appCreators: List<Creator>
-
     fun initView()
 
     fun updateData(data: List<CreatorItem>)

@@ -32,12 +32,6 @@ class CreatorFragment : BaseFragment(), CreatorView, MainView.TitledView {
         fun newInstance() = CreatorFragment()
     }
 
-    override val appCreators: List<Creator>
-        get() = Gson().fromJson(
-            requireContext().assets.open("creators.json").bufferedReader().use { it.readText() },
-            Array<Creator>::class.java
-        ).toList()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_creator, container, false)
     }

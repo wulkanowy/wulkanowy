@@ -1,6 +1,8 @@
 package io.github.wulkanowy.ui.modules.about.creator
 
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import io.github.wulkanowy.data.pojos.AppCreator
+import io.github.wulkanowy.data.repositories.appcreator.AppCreatorRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -11,7 +13,8 @@ import javax.inject.Inject
 class CreatorPresenter @Inject constructor(
     schedulers: SchedulersProvider,
     errorHandler: ErrorHandler,
-    studentRepository: StudentRepository
+    studentRepository: StudentRepository,
+    private val appCreatorRepository: AppCreatorRepository
 ) : BasePresenter<CreatorView>(errorHandler, studentRepository, schedulers) {
 
     override fun onAttachView(view: CreatorView) {
@@ -30,7 +33,7 @@ class CreatorPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        disposable.add(Single.fromCallable { view?.appCreators }
+        disposable.add(Single.fromCallable { appCreatorRepository.appCreators }
             .map { it.map { creator -> CreatorItem(creator) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)

@@ -1,3 +1,3 @@
-package io.github.wulkanowy.ui.modules.about.creator
+package io.github.wulkanowy.data.pojos
 
-class Creator(val displayName: String?, val githubUsername: String?)
+class AppCreator(val displayName: String?, val githubUsername: String?)
