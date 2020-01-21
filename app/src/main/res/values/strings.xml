@@ -69,6 +69,7 @@
     <string name="grade_switch_semester">Change semester</string>
     <string name="grade_no_items">No grades</string>
     <string name="grade_weight">Weight</string>
+    <string name="grade_weight_value">Weight: %s</string>
     <string name="grade_comment">Comment</string>
     <string name="grade_no_new_items">No new grades</string>
     <string name="grade_number_new_items">Number of new ratings: %1$d</string>
@@ -244,7 +245,7 @@
     <!--Account-->
     <string name="account_add_new">Add account</string>
     <string name="account_logout">Logout</string>
-    <string name="account_confirm">Do you want to log out of this student account?</string>
+    <string name="account_confirm">Do you want to log out of an active student?</string>
     <string name="account_logout_student">Student logout</string>
 
 
@@ -308,6 +309,7 @@
     <string name="pref_view_present">Show presence in attendance</string>
     <string name="pref_view_app_theme">Application theme</string>
     <string name="pref_view_expand_grade">Expand grades</string>
+    <string name="pref_view_timetable_show_whole_class">Show whole class lessons</string>
     <string name="pref_view_grade_color_scheme">Grades color scheme</string>
     <string name="pref_view_app_language">App language</string>
 
@@ -349,9 +351,10 @@
     <!--Errors-->
     <string name="error_no_internet">No internet connection</string>
     <string name="error_timeout">Connection to the register timed out</string>
-    <string name="error_login_failed">Login failed. Restart the app and try again</string>
-    <string name="error_service_unavailable">The service is not available. Try again later</string>
+    <string name="error_login_failed">Login failed. Try again or restart the app</string>
+    <string name="error_service_unavailable">Maintenance underway UONET + register. Try again later</string>
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available in this mode</string>
+
 </resources>

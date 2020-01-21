@@ -1,7 +1,6 @@
-Wersja 0.14.0
+Wersja 0.14.2
 
-- dodane zostały nowe opcje logowania, m.in. logowanie przez token
-- naprawione zostało wyświetlanie nauczyciela, kiedy zastępstwo zostanie usunięte z danej lekcji
-- naprawiony został biały ekran w szczęśliwym numerku
+- naprawiliśmy błąd powodujący zatrzymanie aplikacji na urządzeniach z Androidem poniżej 5.0
+- zmieniliśmy mało mówiący komunikat o niedostępnym dzienniku na taki mówiący o przerwie technicznej dziennika
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases
