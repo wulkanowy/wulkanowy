@@ -47,7 +47,7 @@ class CreatorFragment : BaseFragment(), CreatorView, MainView.TitledView {
             adapter = creatorsAdapter
             addItemDecoration(FlexibleItemDecoration(context)
                 .withDefaultDivider()
-                .withDrawDividerOnLastItem(true))
+                .withDrawDividerOnLastItem(false))
         }
         creatorsAdapter.setOnItemClickListener(presenter::onItemSelected)
         creatorSeeMore.setOnClickListener { presenter.onSeeMoreClick() }
