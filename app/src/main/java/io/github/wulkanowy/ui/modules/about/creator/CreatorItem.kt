@@ -1,8 +1,8 @@
 package io.github.wulkanowy.ui.modules.about.creator
 
 import android.view.View
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import coil.api.load
+import coil.transform.RoundedCornersTransformation
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
@@ -22,7 +22,10 @@ class CreatorItem(val creator: AppCreator) : AbstractFlexibleItem<CreatorItem.Vi
         with(holder) {
             creatorItemName.text = creator.displayName
 
-            Glide.with(contentView).load("https://github.com/${creator.githubUsername}.png").transform(RoundedCorners(8)).into(creatorItemAvatar)
+            creatorItemAvatar.load("https://github.com/${creator.githubUsername}.png") {
+                transformations(RoundedCornersTransformation(8f))
+                crossfade(true)
+            }
         }
     }
 
