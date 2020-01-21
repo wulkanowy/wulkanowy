@@ -33,7 +33,7 @@ class CreatorPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        disposable.add(Single.fromCallable { appCreatorRepository.appCreators }
+        disposable.add(appCreatorRepository.getAppCreators()
             .map { it.map { creator -> CreatorItem(creator) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
