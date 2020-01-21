@@ -6,8 +6,8 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import com.google.gson.Gson
 import eu.davidea.flexibleadapter.FlexibleAdapter
+import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.R
@@ -45,6 +45,9 @@ class CreatorFragment : BaseFragment(), CreatorView, MainView.TitledView {
         with(creatorRecycler) {
             layoutManager = SmoothScrollLinearLayoutManager(context)
             adapter = creatorsAdapter
+            addItemDecoration(FlexibleItemDecoration(context)
+                .withDefaultDivider()
+                .withDrawDividerOnLastItem(false))
         }
         creatorsAdapter.setOnItemClickListener(presenter::onItemSelected)
         creatorSeeMore.setOnClickListener { presenter.onSeeMoreClick() }
