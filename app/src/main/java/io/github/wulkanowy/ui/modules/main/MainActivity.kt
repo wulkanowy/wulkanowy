@@ -36,6 +36,7 @@ import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.safelyPopFragments
 import io.github.wulkanowy.utils.setOnViewChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : BaseActivity<MainPresenter>(), MainView {
@@ -167,8 +168,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         (navController.currentStack?.getOrNull(0) as? MainView.MainChildView)?.onFragmentReselected()
     }
 
-    override fun notifyMenuViewLeft() {
-        (navController.currentStack?.getOrNull(0) as? MainView.MainChildView)?.onFragmentLeft()
+    override fun notifyMenuViewChanged() {
+        Timber.d("Menu view changed")
+        (navController.currentStack?.getOrNull(0) as? MainView.MainChildView)?.onFragmentChanged()
     }
 
     fun showDialogFragment(dialog: DialogFragment) {

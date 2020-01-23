@@ -107,7 +107,7 @@ class AttendancePresenter @Inject constructor(
         }
     }
 
-    fun onViewLeft() {
+    fun onMainViewChanged() {
         view?.finishActionMode()
     }
 

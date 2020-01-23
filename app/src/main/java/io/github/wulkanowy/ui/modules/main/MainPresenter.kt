@@ -75,7 +75,7 @@ class MainPresenter @Inject constructor(
                 notifyMenuViewReselected()
                 false
             } else {
-                notifyMenuViewLeft()
+                notifyMenuViewChanged()
                 switchMenuView(index)
                 true
             }

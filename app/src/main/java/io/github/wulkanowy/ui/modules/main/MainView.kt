@@ -26,7 +26,7 @@ interface MainView : BaseView {
 
     fun notifyMenuViewReselected()
 
-    fun notifyMenuViewLeft()
+    fun notifyMenuViewChanged()
 
     fun setViewTitle(title: String)
 
@@ -36,7 +36,7 @@ interface MainView : BaseView {
 
         fun onFragmentReselected()
 
-        fun onFragmentLeft()
+        fun onFragmentChanged() {}
     }
 
     interface TitledView {
