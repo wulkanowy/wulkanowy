@@ -43,7 +43,7 @@ class GradeAverageProvider @Inject constructor(
                 }.map { grades ->
                     grades.map { if (student.loginMode == Sdk.Mode.SCRAPPER.name) it.changeModifier(plusModifier, minusModifier) else it }
                         .groupBy { it.subject }
-                        .map { Triple(it.key, it.value.calcAverage(), "TODO") }
+                        .map { Triple(it.key, it.value.calcAverage(), "") }
                 })
     }
 
@@ -57,7 +57,7 @@ class GradeAverageProvider @Inject constructor(
                 .map { grades ->
                     grades.map { if (student.loginMode == Sdk.Mode.SCRAPPER.name) it.changeModifier(plusModifier, minusModifier) else it }
                         .groupBy { it.subject }
-                        .map { Triple(it.key, it.value.calcAverage(), "TODO") }
+                        .map { Triple(it.key, it.value.calcAverage(), "") }
                 })
     }
 
