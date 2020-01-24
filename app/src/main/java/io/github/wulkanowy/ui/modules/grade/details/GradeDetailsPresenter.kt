@@ -180,7 +180,7 @@ class GradeDetailsPresenter @Inject constructor(
         }
     }
 
-    private fun createGradeItems(items: Map<String, List<Grade>>, averages: List<Pair<String, Double>>): List<GradeDetailsHeader> {
+    private fun createGradeItems(items: Map<String, List<Grade>>, averages: List<Triple<String, Double, String>>): List<GradeDetailsHeader> {
         val isGradeExpandable = preferencesRepository.isGradeExpandable
         val gradeColorTheme = preferencesRepository.gradeColorTheme
 

@@ -115,7 +115,7 @@ class GradeSummaryPresenter @Inject constructor(
         disposable.clear()
     }
 
-    private fun createGradeSummaryItemsAndHeader(gradesSummary: List<GradeSummary>, averages: List<Pair<String, Double>>): Pair<List<GradeSummaryItem>, GradeSummaryScrollableHeader> {
+    private fun createGradeSummaryItemsAndHeader(gradesSummary: List<GradeSummary>, averages: List<Triple<String, Double, String>>): Pair<List<GradeSummaryItem>, GradeSummaryScrollableHeader> {
         return averages.filter { value -> value.second != 0.0 }
             .let { filteredAverages ->
                 gradesSummary.filter { !checkEmpty(it, filteredAverages) }
@@ -132,7 +132,7 @@ class GradeSummaryPresenter @Inject constructor(
             }
     }
 
-    private fun checkEmpty(gradeSummary: GradeSummary, averages: List<Pair<String, Double>>): Boolean {
+    private fun checkEmpty(gradeSummary: GradeSummary, averages: List<Triple<String, Double, String>>): Boolean {
         return gradeSummary.run {
             finalGrade.isBlank() && predictedGrade.isBlank() && averages.singleOrNull { it.first == subject } == null
         }
