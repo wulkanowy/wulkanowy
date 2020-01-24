@@ -18,7 +18,7 @@ class GradeAverageProvider @Inject constructor(
     private val gradeSummaryRepository: GradeSummaryRepository
 ) {
 
-    fun getGradeAverage(student: Student, semesters: List<Semester>, selectedSemesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
+    fun getGradeAverage(student: Student, semesters: List<Semester>, selectedSemesterId: Int, forceRefresh: Boolean): Single<List<Pair<String, Double>>> {
         return when (preferencesRepository.gradeAverageMode) {
             "all_year" -> getAllYearAverage(student, semesters, selectedSemesterId, forceRefresh)
             "only_one_semester" -> getOnlyOneSemesterAverage(student, semesters, selectedSemesterId, forceRefresh)
@@ -26,7 +26,7 @@ class GradeAverageProvider @Inject constructor(
         }
     }
 
-    private fun getAllYearAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
+    private fun getAllYearAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<List<Pair<String, Double>>> {
         val selectedSemester = semesters.single { it.semesterId == semesterId }
         val firstSemester = semesters.single { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
         val plusModifier = preferencesRepository.gradePlusModifier
@@ -44,10 +44,11 @@ class GradeAverageProvider @Inject constructor(
                     grades.map { if (student.loginMode == Sdk.Mode.SCRAPPER.name) it.changeModifier(plusModifier, minusModifier) else it }
                         .groupBy { it.subject }
                         .mapValues { it.value.calcAverage() }
+                        .toList()
                 })
     }
 
-    private fun getOnlyOneSemesterAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<Map<String, Double>> {
+    private fun getOnlyOneSemesterAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<List<Pair<String, Double>>> {
         val selectedSemester = semesters.single { it.semesterId == semesterId }
         val plusModifier = preferencesRepository.gradePlusModifier
         val minusModifier = preferencesRepository.gradeMinusModifier
@@ -58,15 +59,16 @@ class GradeAverageProvider @Inject constructor(
                     grades.map { if (student.loginMode == Sdk.Mode.SCRAPPER.name) it.changeModifier(plusModifier, minusModifier) else it }
                         .groupBy { it.subject }
                         .mapValues { it.value.calcAverage() }
+                        .toList()
                 })
     }
 
-    private fun getAverageFromGradeSummary(selectedSemester: Semester, forceRefresh: Boolean): Maybe<Map<String, Double>> {
+    private fun getAverageFromGradeSummary(selectedSemester: Semester, forceRefresh: Boolean): Maybe<List<Pair<String, Double>>> {
         return gradeSummaryRepository.getGradesSummary(selectedSemester, forceRefresh)
             .toMaybe()
             .flatMap {
                 if (it.any { summary -> summary.average != .0 }) {
-                    Maybe.just(it.map { summary -> summary.subject to summary.average }.toMap())
+                    Maybe.just(it.map { summary -> summary.subject to summary.average })
                 } else Maybe.empty()
             }.filter { !preferencesRepository.gradeAverageForceCalc }
     }
