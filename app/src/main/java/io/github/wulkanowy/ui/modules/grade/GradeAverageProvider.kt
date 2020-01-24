@@ -18,6 +18,10 @@ class GradeAverageProvider @Inject constructor(
     private val gradeSummaryRepository: GradeSummaryRepository
 ) {
 
+    private val plusModifier = preferencesRepository.gradePlusModifier
+
+    private val minusModifier = preferencesRepository.gradeMinusModifier
+
     fun getGradeAverage(student: Student, semesters: List<Semester>, selectedSemesterId: Int, forceRefresh: Boolean): Single<List<Triple<String, Double, String>>> {
         return when (preferencesRepository.gradeAverageMode) {
             "all_year" -> getAllYearAverage(student, semesters, selectedSemesterId, forceRefresh)
@@ -29,8 +33,6 @@ class GradeAverageProvider @Inject constructor(
     private fun getAllYearAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<List<Triple<String, Double, String>>> {
         val selectedSemester = semesters.single { it.semesterId == semesterId }
         val firstSemester = semesters.single { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
-        val plusModifier = preferencesRepository.gradePlusModifier
-        val minusModifier = preferencesRepository.gradeMinusModifier
 
         return getAverageFromGradeSummary(selectedSemester, forceRefresh)
             .switchIfEmpty(gradeRepository.getGrades(student, selectedSemester, forceRefresh)
@@ -49,8 +51,6 @@ class GradeAverageProvider @Inject constructor(
 
     private fun getOnlyOneSemesterAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<List<Triple<String, Double, String>>> {
         val selectedSemester = semesters.single { it.semesterId == semesterId }
-        val plusModifier = preferencesRepository.gradePlusModifier
-        val minusModifier = preferencesRepository.gradeMinusModifier
 
         return getAverageFromGradeSummary(selectedSemester, forceRefresh)
             .switchIfEmpty(gradeRepository.getGrades(student, selectedSemester, forceRefresh)
