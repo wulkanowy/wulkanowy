@@ -186,11 +186,13 @@ class GradeDetailsPresenter @Inject constructor(
 
         val noDescriptionString = view?.noDescriptionString.orEmpty()
         val weightString = view?.weightString.orEmpty()
+        val pointsSumString = view?.pointsSumString.orEmpty()
 
         return items.map { subject ->
             GradeDetailsHeader(
                 subject = subject.key,
-                average = formatAverage(averages.singleOrNull { subject.key == it.first}?.second),
+                average = formatAverage(averages.singleOrNull { subject.key == it.first }?.second),
+                pointsSum = averages.singleOrNull { subject.key == it.first }?.let { pointsSumString.format(it.third) }.orEmpty(),
                 number = view?.getGradeNumberString(subject.value.size).orEmpty(),
                 newGrades = subject.value.filter { grade -> !grade.isRead }.size,
                 isExpandable = isGradeExpandable
