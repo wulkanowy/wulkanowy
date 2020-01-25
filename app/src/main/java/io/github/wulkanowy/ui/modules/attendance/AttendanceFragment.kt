@@ -13,7 +13,6 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
-import com.google.android.material.textfield.TextInputEditText
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -27,6 +26,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.SchooldaysRangeLimiter
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemClickListener
+import kotlinx.android.synthetic.main.dialog_excuse.*
 import kotlinx.android.synthetic.main.fragment_attendance.*
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
@@ -230,12 +230,9 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
             .create()
             .apply {
                 setButton(BUTTON_POSITIVE, getString(R.string.attendance_excuse_dialog_submit)) { _, _ ->
-                    val input: TextInputEditText? = findViewById(R.id.excuseReason)
-                    val reason = input?.text?.toString() ?: ""
-                    presenter.onExcuseDialogSubmit(reason)
+                    presenter.onExcuseDialogSubmit(excuseReason.text?.toString().orEmpty())
                 }
-                show()
-            }
+            }.show()
     }
 
     override fun openSummaryView() {
