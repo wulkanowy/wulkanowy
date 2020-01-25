@@ -2,5 +2,4 @@
     <!--BottomNav-->
     <dimen name="bottom_navigation_margin_top_active" tools:override="true">8dp</dimen>
     <dimen name="bottom_navigation_margin_top_inactive" tools:override="true">8dp</dimen>
-    <dimen name="dialog_margin">20dp</dimen>
 </resources>

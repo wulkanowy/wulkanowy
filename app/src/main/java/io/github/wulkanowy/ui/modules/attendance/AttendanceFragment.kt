@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.attendance
 
+import android.content.DialogInterface.BUTTON_POSITIVE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -10,10 +11,9 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
+import com.google.android.material.textfield.TextInputEditText
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
@@ -223,27 +223,19 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     }
 
     override fun showExcuseDialog() {
-        val input = EditText(context)
-        val container = FrameLayout(requireContext())
-        val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        val margin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
-
-        params.leftMargin = margin
-        params.rightMargin = margin
-        input.layoutParams = params
-        container.addView(input)
-
         AlertDialog.Builder(requireContext())
-            .setTitle(R.string.attendance_excuse_dialog_title)
-            .setView(container)
-            .setPositiveButton(R.string.attendance_excuse_dialog_submit) { _, _ ->
-                val reason = input.text.toString()
-                presenter.onExcuseDialogSubmit(reason)
-            }
+            .setTitle(R.string.attendance_excuse_title)
+            .setView(R.layout.dialog_excuse)
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
-            .show()
-
-        input.requestFocus()
+            .create()
+            .apply {
+                setButton(BUTTON_POSITIVE, getString(R.string.attendance_excuse_dialog_submit)) { _, _ ->
+                    val input: TextInputEditText? = findViewById(R.id.excuseReason)
+                    val reason = input?.text?.toString() ?: ""
+                    presenter.onExcuseDialogSubmit(reason)
+                }
+                show()
+            }
     }
 
     override fun openSummaryView() {
