@@ -192,7 +192,7 @@ class GradeDetailsPresenter @Inject constructor(
             GradeDetailsHeader(
                 subject = subject.key,
                 average = formatAverage(averages.singleOrNull { subject.key == it.first }?.second),
-                pointsSum = averages.singleOrNull { subject.key == it.first }?.let { pointsSumString.format(it.third) }.orEmpty(),
+                pointsSum = averages.singleOrNull { subject.key == it.first }?.takeIf { it.third.isNotEmpty() }?.let { pointsSumString.format(it.third) }.orEmpty(),
                 number = view?.getGradeNumberString(subject.value.size).orEmpty(),
                 newGrades = subject.value.filter { grade -> !grade.isRead }.size,
                 isExpandable = isGradeExpandable
