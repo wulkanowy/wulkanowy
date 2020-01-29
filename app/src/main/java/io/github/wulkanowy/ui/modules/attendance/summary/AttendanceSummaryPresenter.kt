@@ -147,7 +147,7 @@ class AttendanceSummaryPresenter @Inject constructor(
     private fun createAttendanceSummaryItems(attendanceSummary: List<AttendanceSummary>): List<AttendanceSummaryItem> {
         return attendanceSummary.sortedByDescending { it.id }.map {
             AttendanceSummaryItem(
-                month = it.month.getFormattedName(),
+                month = it.month?.getFormattedName(),
                 percentage = formatPercentage(it.calculatePercentage()),
                 present = it.presence.toString(),
                 absence = it.absence.toString(),

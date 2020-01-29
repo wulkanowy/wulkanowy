@@ -18,7 +18,7 @@ data class AttendanceSummary(
     @ColumnInfo(name = "subject_id")
     val subjectId: Int,
 
-    val month: Month,
+    val month: Month?,
 
     val presence: Int,
 
