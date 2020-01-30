@@ -147,34 +147,16 @@ class AttendanceSummaryPresenter @Inject constructor(
     private fun createAttendanceSummaryTotalItem(attendanceSummary: List<AttendanceSummary>): AttendanceSummaryItem {
         val totalString = view?.totalString.orEmpty()
 
-        var presence = 0
-        var absence = 0
-        var absenceExcused = 0
-        var absenceForSchoolReasons = 0
-        var exemption = 0
-        var lateness = 0
-        var latenessExcused = 0
-
-        attendanceSummary.forEach {
-            presence += it.presence
-            absence += it.absence
-            absenceExcused += it.absenceExcused
-            absenceForSchoolReasons += it.absenceForSchoolReasons
-            exemption += it.exemption
-            lateness += it.lateness
-            latenessExcused += it.latenessExcused
-        }
-
         return AttendanceSummaryItem(
             totalString,
             formatPercentage(attendanceSummary.calculatePercentage()),
-            presence.toString(),
-            absence.toString(),
-            absenceExcused.toString(),
-            absenceForSchoolReasons.toString(),
-            exemption.toString(),
-            lateness.toString(),
-            latenessExcused.toString()
+            attendanceSummary.sumBy { it.presence }.toString(),
+            attendanceSummary.sumBy { it.absence }.toString(),
+            attendanceSummary.sumBy { it.absenceExcused }.toString(),
+            attendanceSummary.sumBy { it.absenceForSchoolReasons }.toString(),
+            attendanceSummary.sumBy { it.exemption }.toString(),
+            attendanceSummary.sumBy { it.lateness }.toString(),
+            attendanceSummary.sumBy { it.latenessExcused }.toString()
         )
     }
 
