@@ -148,15 +148,15 @@ class AttendanceSummaryPresenter @Inject constructor(
         val totalString = view?.totalString.orEmpty()
 
         return AttendanceSummaryItem(
-            totalString,
-            formatPercentage(attendanceSummary.calculatePercentage()),
-            attendanceSummary.sumBy { it.presence }.toString(),
-            attendanceSummary.sumBy { it.absence }.toString(),
-            attendanceSummary.sumBy { it.absenceExcused }.toString(),
-            attendanceSummary.sumBy { it.absenceForSchoolReasons }.toString(),
-            attendanceSummary.sumBy { it.exemption }.toString(),
-            attendanceSummary.sumBy { it.lateness }.toString(),
-            attendanceSummary.sumBy { it.latenessExcused }.toString()
+            month = totalString,
+            percentage = formatPercentage(attendanceSummary.calculatePercentage()),
+            present = attendanceSummary.sumBy { it.presence }.toString(),
+            absence = attendanceSummary.sumBy { it.absence }.toString(),
+            excusedAbsence = attendanceSummary.sumBy { it.absenceExcused }.toString(),
+            schoolAbsence = attendanceSummary.sumBy { it.absenceForSchoolReasons }.toString(),
+            exemption = attendanceSummary.sumBy { it.exemption }.toString(),
+            lateness = attendanceSummary.sumBy { it.lateness }.toString(),
+            excusedLateness = attendanceSummary.sumBy { it.latenessExcused }.toString()
         )
     }
 
