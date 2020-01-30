@@ -144,20 +144,58 @@ class AttendanceSummaryPresenter @Inject constructor(
         )
     }
 
-    private fun createAttendanceSummaryItems(attendanceSummary: List<AttendanceSummary>): List<AttendanceSummaryItem> {
-        return attendanceSummary.sortedByDescending { it.id }.map {
-            AttendanceSummaryItem(
-                month = it.month.getFormattedName(),
-                percentage = formatPercentage(it.calculatePercentage()),
-                present = it.presence.toString(),
-                absence = it.absence.toString(),
-                excusedAbsence = it.absenceExcused.toString(),
-                schoolAbsence = it.absenceForSchoolReasons.toString(),
-                exemption = it.exemption.toString(),
-                lateness = it.lateness.toString(),
-                excusedLateness = it.latenessExcused.toString()
-            )
+    private fun createAttendanceSummaryTotalItem(attendanceSummary: List<AttendanceSummary>): AttendanceSummaryItem {
+        var presence = 0
+        var absence = 0
+        var absenceExcused = 0
+        var absenceForSchoolReasons = 0
+        var exemption = 0
+        var lateness = 0
+        var latenessExcused = 0
+
+        attendanceSummary.forEach {
+            presence += it.presence
+            absence += it.absence
+            absenceExcused += it.absenceExcused
+            absenceForSchoolReasons += it.absenceForSchoolReasons
+            exemption += it.exemption
+            lateness += it.lateness
+            latenessExcused += it.latenessExcused
         }
+
+        return AttendanceSummaryItem(
+            null,
+            formatPercentage(attendanceSummary.calculatePercentage()),
+            presence.toString(),
+            absence.toString(),
+            absenceExcused.toString(),
+            absenceForSchoolReasons.toString(),
+            exemption.toString(),
+            lateness.toString(),
+            latenessExcused.toString()
+        )
+    }
+
+    private fun createAttendanceSummaryItems(attendanceSummary: List<AttendanceSummary>): List<AttendanceSummaryItem> {
+        val totalItem = createAttendanceSummaryTotalItem(attendanceSummary)
+        val monthItems = attendanceSummary.sortedByDescending { it.id }
+            .map {
+                AttendanceSummaryItem(
+                    month = it.month.getFormattedName(),
+                    percentage = formatPercentage(it.calculatePercentage()),
+                    present = it.presence.toString(),
+                    absence = it.absence.toString(),
+                    excusedAbsence = it.absenceExcused.toString(),
+                    schoolAbsence = it.absenceForSchoolReasons.toString(),
+                    exemption = it.exemption.toString(),
+                    lateness = it.lateness.toString(),
+                    excusedLateness = it.latenessExcused.toString()
+                )
+            }
+        return listOf(
+            totalItem,
+            *monthItems.toTypedArray()
+        )
     }
 
     private fun formatPercentage(percentage: Double): String {
