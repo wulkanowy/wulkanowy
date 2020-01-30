@@ -10,7 +10,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_attendance_summary.*
 
 class AttendanceSummaryItem(
-    private val month: String?,
+    private val month: String,
     private val percentage: String,
     private val present: String,
     private val absence: String,
@@ -29,7 +29,7 @@ class AttendanceSummaryItem(
 
     override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>?) {
         holder.apply {
-            attendanceSummaryMonth.text = month ?: holder.contentView.context.getString(R.string.attendance_summary_total)
+            attendanceSummaryMonth.text = month
             attendanceSummaryPercentage.text = percentage
             attendanceSummaryPresent.text = present
             attendanceSummaryAbsenceUnexcused.text = absence

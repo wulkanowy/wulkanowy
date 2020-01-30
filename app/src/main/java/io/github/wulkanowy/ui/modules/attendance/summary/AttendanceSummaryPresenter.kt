@@ -145,6 +145,8 @@ class AttendanceSummaryPresenter @Inject constructor(
     }
 
     private fun createAttendanceSummaryTotalItem(attendanceSummary: List<AttendanceSummary>): AttendanceSummaryItem {
+        val totalString = view?.totalString.orEmpty()
+
         var presence = 0
         var absence = 0
         var absenceExcused = 0
@@ -164,7 +166,7 @@ class AttendanceSummaryPresenter @Inject constructor(
         }
 
         return AttendanceSummaryItem(
-            null,
+            totalString,
             formatPercentage(attendanceSummary.calculatePercentage()),
             presence.toString(),
             absence.toString(),
