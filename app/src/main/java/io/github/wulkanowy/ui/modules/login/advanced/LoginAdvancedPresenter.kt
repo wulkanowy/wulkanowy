@@ -31,7 +31,7 @@ class LoginAdvancedPresenter @Inject constructor(
                 onInvalidPin = ::onInvalidPin
             }
 
-            setIsEmailLogin(formIsEmailLogin)
+            updateIsEmailLogin()
         }
     }
 
@@ -67,6 +67,12 @@ class LoginAdvancedPresenter @Inject constructor(
         }
     }
 
+    fun updateIsEmailLogin() {
+        view?.apply {
+            setIsEmailLogin("vulcan" in formHostValue.orEmpty() || "fakelog" in formHostValue.orEmpty())
+        }
+    }
+
     fun onHostSelected() {
         view?.apply {
             clearPassError()
@@ -74,7 +80,7 @@ class LoginAdvancedPresenter @Inject constructor(
             if (formHostValue?.contains("fakelog") == true) {
                 setDefaultCredentials("jan@fakelog.cf", "jan123", "powiatwulkanowy", "FK100000", "999999")
             }
-            setIsEmailLogin(formIsEmailLogin)
+            updateIsEmailLogin()
         }
     }
 

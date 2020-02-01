@@ -11,8 +11,6 @@ interface LoginAdvancedView : BaseView {
 
     val formHostValue: String?
 
-    val formIsEmailLogin: Boolean
-
     val formLoginType: String
 
     val formPinValue: String

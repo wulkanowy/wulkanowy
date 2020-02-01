@@ -13,8 +13,6 @@ interface LoginFormView : BaseView {
 
     val formHostValue: String?
 
-    val formIsEmailLogin: Boolean
-
     fun setCredentials(name: String, pass: String)
 
     fun setIsEmailLogin(emailLogin: Boolean)

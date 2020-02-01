@@ -29,7 +29,7 @@ class LoginFormPresenter @Inject constructor(
                 Timber.i("Entered wrong username or password")
             }
 
-            setIsEmailLogin(formIsEmailLogin)
+            updateIsEmailLogin()
         }
     }
 
@@ -48,7 +48,13 @@ class LoginFormPresenter @Inject constructor(
             if (formHostValue?.contains("fakelog") == true) {
                 setCredentials("jan@fakelog.cf", "jan123")
             }
-            setIsEmailLogin(formIsEmailLogin)
+            updateIsEmailLogin()
+        }
+    }
+
+    fun updateIsEmailLogin() {
+        view?.apply {
+            setIsEmailLogin("vulcan" in formHostValue.orEmpty() || "fakelog" in formHostValue.orEmpty())
         }
     }
 

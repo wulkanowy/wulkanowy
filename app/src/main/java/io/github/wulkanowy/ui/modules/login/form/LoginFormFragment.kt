@@ -40,11 +40,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
     override val formHostValue get() = hostValues.getOrNull(hostKeys.indexOf(loginFormHost.text.toString()))
 
-    override val formIsEmailLogin: Boolean
-        get() = hostsIsEmailLogin.getOrElse(hostKeys.indexOf(loginFormHost.text.toString())) { 0 } != 0
-
-    private lateinit var hostsIsEmailLogin: IntArray
-
     private lateinit var hostKeys: Array<String>
 
     private lateinit var hostValues: Array<String>
@@ -61,7 +56,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override fun initView() {
         hostKeys = resources.getStringArray(R.array.hosts_keys)
         hostValues = resources.getStringArray(R.array.hosts_values)
-        hostsIsEmailLogin = resources.getIntArray(R.array.hosts_is_email_login)
 
         loginFormName.doOnTextChanged { _, _, _, _ -> presenter.onNameTextChanged() }
         loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }

@@ -18,13 +18,4 @@
         <item>https://resman.pl</item>
         <item>http://fakelog.cf</item>
     </string-array>
-    <integer-array name="hosts_is_email_login">
-        <item>1</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>1</item>
-    </integer-array>
 </resources>
