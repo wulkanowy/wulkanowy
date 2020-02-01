@@ -35,8 +35,8 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
             else -> "HYBRID"
         }
 
-    override val formNameValue: String
-        get() = loginFormName.text.toString().trim()
+    override val formUsernameValue: String
+        get() = loginFormUsername.text.toString().trim()
 
     override val formPassValue: String
         get() = loginFormPass.text.toString().trim()
@@ -70,7 +70,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         hostKeys = resources.getStringArray(R.array.hosts_keys)
         hostValues = resources.getStringArray(R.array.hosts_values)
 
-        loginFormName.doOnTextChanged { _, _, _, _ -> presenter.onNameTextChanged() }
+        loginFormUsername.doOnTextChanged { _, _, _, _ -> presenter.onUsernameTextChanged() }
         loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
         loginFormPin.doOnTextChanged { _, _, _, _ -> presenter.onPinTextChanged() }
         loginFormSymbol.doOnTextChanged { _, _, _, _ -> presenter.onSymbolTextChanged() }
@@ -103,20 +103,20 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         }
     }
 
-    override fun setDefaultCredentials(name: String, pass: String, symbol: String, token: String, pin: String) {
-        loginFormName.setText(name)
+    override fun setDefaultCredentials(username: String, pass: String, symbol: String, token: String, pin: String) {
+        loginFormUsername.setText(username)
         loginFormPass.setText(pass)
         loginFormToken.setText(token)
         loginFormSymbol.setText(symbol)
         loginFormPin.setText(pin)
     }
 
-    override fun setIsEmailLogin(emailLogin: Boolean) {
-        loginFormNameLayout.hint = getString(if (emailLogin) R.string.login_email_hint else R.string.login_nickname_hint)
+    override fun setUsernameLabel(isEmail: Boolean) {
+        loginFormUsernameLayout.hint = getString(if (isEmail) R.string.login_email_hint else R.string.login_nickname_hint)
     }
 
-    override fun setErrorNameRequired() {
-        with(loginFormNameLayout) {
+    override fun setErrorUsernameRequired() {
+        with(loginFormUsernameLayout) {
             requestFocus()
             error = getString(R.string.login_field_required)
         }
@@ -185,8 +185,8 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         }
     }
 
-    override fun clearNameError() {
-        loginFormNameLayout.error = null
+    override fun clearUsernameError() {
+        loginFormUsernameLayout.error = null
     }
 
     override fun clearPassError() {
@@ -206,7 +206,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     }
 
     override fun showOnlyHybridModeInputs() {
-        loginFormNameLayout.visibility = View.VISIBLE
+        loginFormUsernameLayout.visibility = View.VISIBLE
         loginFormPassLayout.visibility = View.VISIBLE
         loginFormHostLayout.visibility = View.VISIBLE
         loginFormPinLayout.visibility = View.GONE
@@ -215,7 +215,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     }
 
     override fun showOnlyScrapperModeInputs() {
-        loginFormNameLayout.visibility = View.VISIBLE
+        loginFormUsernameLayout.visibility = View.VISIBLE
         loginFormPassLayout.visibility = View.VISIBLE
         loginFormHostLayout.visibility = View.VISIBLE
         loginFormPinLayout.visibility = View.GONE
@@ -224,7 +224,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     }
 
     override fun showOnlyMobileApiModeInputs() {
-        loginFormNameLayout.visibility = View.GONE
+        loginFormUsernameLayout.visibility = View.GONE
         loginFormPassLayout.visibility = View.GONE
         loginFormHostLayout.visibility = View.GONE
         loginFormPinLayout.visibility = View.VISIBLE
@@ -250,7 +250,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
 
     override fun notifyParentAccountLogged(students: List<Student>) {
         (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, Triple(
-            loginFormName.text.toString(),
+            loginFormUsername.text.toString(),
             loginFormPass.text.toString(),
             resources.getStringArray(R.array.hosts_values)[1]
         ))

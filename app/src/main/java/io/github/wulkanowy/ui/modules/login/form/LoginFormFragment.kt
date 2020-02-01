@@ -34,7 +34,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         fun newInstance() = LoginFormFragment()
     }
 
-    override val formNameValue get() = loginFormName.text.toString()
+    override val formUsernameValue get() = loginFormUsername.text.toString()
 
     override val formPassValue get() = loginFormPass.text.toString()
 
@@ -57,7 +57,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         hostKeys = resources.getStringArray(R.array.hosts_keys)
         hostValues = resources.getStringArray(R.array.hosts_values)
 
-        loginFormName.doOnTextChanged { _, _, _, _ -> presenter.onNameTextChanged() }
+        loginFormUsername.doOnTextChanged { _, _, _, _ -> presenter.onUsernameTextChanged() }
         loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
         loginFormHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
@@ -76,17 +76,17 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
     }
 
-    override fun setCredentials(name: String, pass: String) {
-        loginFormName.setText(name)
+    override fun setCredentials(username: String, pass: String) {
+        loginFormUsername.setText(username)
         loginFormPass.setText(pass)
     }
 
-    override fun setIsEmailLogin(emailLogin: Boolean) {
-        loginFormNameLayout.hint = getString(if (emailLogin) R.string.login_email_hint else R.string.login_nickname_hint)
+    override fun setUsernameLabel(isEmail: Boolean) {
+        loginFormUsernameLayout.hint = getString(if (isEmail) R.string.login_email_hint else R.string.login_nickname_hint)
     }
 
-    override fun setErrorNameRequired() {
-        with(loginFormNameLayout) {
+    override fun setErrorUsernameRequired() {
+        with(loginFormUsernameLayout) {
             requestFocus()
             error = getString(R.string.login_field_required)
         }
@@ -113,8 +113,8 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
     }
 
-    override fun clearNameError() {
-        loginFormNameLayout.error = null
+    override fun clearUsernameError() {
+        loginFormUsernameLayout.error = null
     }
 
     override fun clearPassError() {
