@@ -45,8 +45,8 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
 
     private lateinit var hostValues: Array<String>
 
-    override val formHostValue: String?
-        get() = hostValues.getOrNull(hostKeys.indexOf(loginFormHost.text.toString()))
+    override val formHostValue: String
+        get() = hostValues.getOrNull(hostKeys.indexOf(loginFormHost.text.toString())).orEmpty()
 
     override val formPinValue: String
         get() = loginFormPin.text.toString().trim()

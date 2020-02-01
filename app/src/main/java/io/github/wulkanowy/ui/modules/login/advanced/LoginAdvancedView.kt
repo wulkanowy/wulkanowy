@@ -9,7 +9,7 @@ interface LoginAdvancedView : BaseView {
 
     val formPassValue: String
 
-    val formHostValue: String?
+    val formHostValue: String
 
     val formLoginType: String
 

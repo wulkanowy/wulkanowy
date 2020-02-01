@@ -34,11 +34,14 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         fun newInstance() = LoginFormFragment()
     }
 
-    override val formUsernameValue get() = loginFormUsername.text.toString()
+    override val formUsernameValue: String
+        get() = loginFormUsername.text.toString()
 
-    override val formPassValue get() = loginFormPass.text.toString()
+    override val formPassValue: String
+        get() = loginFormPass.text.toString()
 
-    override val formHostValue get() = hostValues.getOrNull(hostKeys.indexOf(loginFormHost.text.toString()))
+    override val formHostValue: String
+        get() = hostValues.getOrNull(hostKeys.indexOf(loginFormHost.text.toString())).orEmpty()
 
     private lateinit var hostKeys: Array<String>
 
