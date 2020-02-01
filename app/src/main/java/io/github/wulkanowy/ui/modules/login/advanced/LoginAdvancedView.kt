@@ -11,6 +11,8 @@ interface LoginAdvancedView : BaseView {
 
     val formHostValue: String?
 
+    val formIsEmailLogin: Boolean
+
     val formLoginType: String
 
     val formPinValue: String
@@ -22,6 +24,8 @@ interface LoginAdvancedView : BaseView {
     fun initView()
 
     fun setDefaultCredentials(name: String, pass: String, symbol: String, token: String, pin: String)
+
+    fun setIsEmailLogin(emailLogin: Boolean)
 
     fun setErrorNameRequired()
 

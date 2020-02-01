@@ -28,6 +28,8 @@ class LoginFormPresenter @Inject constructor(
                 showSoftKeyboard()
                 Timber.i("Entered wrong username or password")
             }
+
+            setIsEmailLogin(formIsEmailLogin)
         }
     }
 
@@ -46,6 +48,7 @@ class LoginFormPresenter @Inject constructor(
             if (formHostValue?.contains("fakelog") == true) {
                 setCredentials("jan@fakelog.cf", "jan123")
             }
+            setIsEmailLogin(formIsEmailLogin)
         }
     }
 
