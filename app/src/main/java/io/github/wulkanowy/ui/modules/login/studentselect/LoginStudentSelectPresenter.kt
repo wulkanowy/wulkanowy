@@ -60,22 +60,18 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     private fun mapAlreadySavedStudents(students: List<Student>): Single<List<Pair<Student, Boolean>>> {
-        return Single.create<List<Pair<Student, Boolean>>> { emitter ->
-            studentRepository.getSavedStudents()
-                .subscribe({
-                    emitter.onSuccess(students.map { student ->
-                        Pair(student, it.any { comparedStudent ->
-                            student.email == comparedStudent.email
-                                && student.symbol == comparedStudent.symbol
-                                && student.studentId == comparedStudent.studentId
-                                && student.schoolSymbol == comparedStudent.schoolSymbol
-                                && student.classId == comparedStudent.classId
-                        })
+        return studentRepository.getSavedStudents()
+            .map {
+                students.map { student ->
+                    Pair(student, it.any { comparedStudent ->
+                        student.email == comparedStudent.email
+                            && student.symbol == comparedStudent.symbol
+                            && student.studentId == comparedStudent.studentId
+                            && student.schoolSymbol == comparedStudent.schoolSymbol
+                            && student.classId == comparedStudent.classId
                     })
-                }, {
-                    emitter.onError(it)
-                })
-        }
+                }
+            }
     }
 
     private fun loadData(students: List<Student>) {
