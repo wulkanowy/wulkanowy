@@ -13,84 +13,82 @@ import javax.inject.Inject
 class LoginRecoverPresenter @Inject constructor(
     schedulers: SchedulersProvider,
     studentRepository: StudentRepository,
-    loginErrorHandler: LoginErrorHandler,
+    private val loginErrorHandler: RecoverErrorHandler,
     private val analytics: FirebaseAnalyticsHelper,
     private val recoverRepository: RecoverRepository
 ) : BasePresenter<LoginRecoverView>(loginErrorHandler, studentRepository, schedulers) {
+
     override fun onAttachView(view: LoginRecoverView) {
         super.onAttachView(view)
-        view.run {
-            initView()
-        }
+        view.initView()
+        loginErrorHandler.onInvalidUsername = { view.setUsernameError(it) }
     }
 
     fun onNameTextChanged() {
-        view?.clearNameError()
+        view?.clearUsernameError()
     }
 
     fun onSymbolTextChanged() {
         view?.clearSymbolError()
     }
 
+    fun onHostSelected() {
+        view?.run {
+            if ("fakelog" in recoverHostValue) setDefaultCredentials("jan@fakelog.cf", "Default")
+            clearUsernameError()
+        }
+    }
+
     fun onConfirmClick() {
-        if (view?.recoverNameValue.orEmpty().isEmpty()) {
+        val username = view?.recoverNameValue.orEmpty()
+        val host = view?.recoverHostValue.orEmpty()
+        val symbol = view?.recoverSymbolValue.ifNullOrBlank { "Default" }
+
+        if (username.isEmpty()) {
             view?.setErrorNameRequired()
             return
         }
-        disposable.add(
-            recoverRepository.getRecaptchaSitekey(
-                view?.recoverHostValue.orEmpty(),
-                view?.recoverSymbolValue.ifNullOrBlank { "Default" }
-            )
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doOnSubscribe {
-                    view?.apply {
-                        hideSoftKeyboard()
-                        showProgress(true)
-                        showContentForm(false)
-                        showContentCaptcha(false)
-                    }
+
+        disposable.add(recoverRepository.getReCaptchaSiteKey(host, symbol)
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .doOnSubscribe {
+                view?.run {
+                    hideSoftKeyboard()
+                    showProgress(true)
+                    showRecoverForm(false)
+                    showCaptcha(false)
                 }
-                .subscribe({
-                    Timber.d(it.second)
-                    view?.loadRecaptcha(it.second, it.first)
-                }) {
-                    errorHandler.dispatch(it)
-                })
-    }
-
-    fun onHostSelected() {
-        view?.apply {
-            clearNameError()
-            if (recoverHostValue?.contains("fakelog") == true) {
-                setDefaultCredentials("jan@fakelog.cf", "Default")
             }
-        }
+            .subscribe({ (resetUrl, siteKey) ->
+                Timber.d(siteKey)
+                view?.loadReCaptcha(siteKey, resetUrl)
+            }) {
+                errorHandler.dispatch(it)
+            })
     }
 
-    fun sendRecoverRequest(recaptchaResponse: String) {
-        disposable.clear()
-        disposable.add(
-            recoverRepository.sendRecoverRequest(
-                view?.recoverHostValue.orEmpty(),
-                view?.recoverSymbolValue.ifNullOrBlank { "Default" },
-                view?.recoverNameValue.orEmpty(),
-                recaptchaResponse
-            )
+    fun sendRecoverRequest(reCaptchaResponse: String) {
+        val username = view?.recoverNameValue.orEmpty()
+        val host = view?.recoverHostValue.orEmpty()
+        val symbol = view?.recoverSymbolValue.ifNullOrBlank { "Default" }
+
+        with(disposable) {
+            clear()
+            add(recoverRepository.sendRecoverRequest(host, symbol, username, reCaptchaResponse)
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doOnSubscribe {
                     view?.apply {
                         showProgress(true)
-                        showContentForm(false)
-                        showContentCaptcha(false)
+                        showRecoverForm(false)
+                        showCaptcha(false)
                     }
                 }
                 .doFinally {
                     view?.apply {
                         showProgress(false)
-                        showContentForm(true)
+                        showRecoverForm(true)
                     }
                 }
                 .subscribe({
@@ -98,5 +96,6 @@ class LoginRecoverPresenter @Inject constructor(
                 }) {
                     errorHandler.dispatch(it)
                 })
+        }
     }
 }

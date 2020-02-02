@@ -8,12 +8,12 @@ import javax.inject.Singleton
 @Singleton
 class RecoverRemote @Inject constructor(private val sdk: Sdk) {
 
-    fun getRecaptchaSitekey(host: String, symbol: String): Single<Pair<String, String>> {
+    fun getReCaptchaSiteKey(host: String, symbol: String): Single<Pair<String, String>> {
         return sdk.getPasswordResetCaptchaCode(host, symbol)
     }
 
-    fun sendRecoverRequest(url: String, symbol: String, email:String, recaptchaResponse: String) : Single<String> {
-        return sdk.sendPasswordResetRequest(url, symbol, email, recaptchaResponse)
+    fun sendRecoverRequest(url: String, symbol: String, email: String, reCaptchaResponse: String): Single<String> {
+        return sdk.sendPasswordResetRequest(url, symbol, email, reCaptchaResponse)
     }
 }
 

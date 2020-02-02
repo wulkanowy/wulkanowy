@@ -32,23 +32,14 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
 
     private lateinit var hostValues: Array<String>
 
-    override var recoverWebViewSuccess: Boolean = true
-
-    override val recoverHostValue: String?
-        get() = hostValues.getOrNull(hostKeys.indexOf(loginRecoverHost.text.toString()))
+    override val recoverHostValue: String
+        get() = hostValues.getOrNull(hostKeys.indexOf(loginRecoverHost.text.toString())).orEmpty()
 
     override val recoverNameValue: String
         get() = loginRecoverName.text.toString().trim()
 
     override val recoverSymbolValue: String
         get() = loginRecoverSymbol.text.toString().trim()
-
-    override fun setErrorNameRequired() {
-        with(loginRecoverNameLayout) {
-            requestFocus()
-            error = getString(R.string.login_field_required)
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_recover, container, false)
@@ -78,12 +69,26 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         }
     }
 
-    override fun setDefaultCredentials(name: String, symbol: String) {
-        loginRecoverName.setText(name)
+    override fun setDefaultCredentials(username: String, symbol: String) {
+        loginRecoverName.setText(username)
         loginRecoverSymbol.setText(symbol)
     }
 
-    override fun clearNameError() {
+    override fun setErrorNameRequired() {
+        with(loginRecoverNameLayout) {
+            requestFocus()
+            error = getString(R.string.login_field_required)
+        }
+    }
+
+    override fun setUsernameError(message: String) {
+        with(loginRecoverNameLayout) {
+            requestFocus()
+            error = message
+        }
+    }
+
+    override fun clearUsernameError() {
         loginRecoverNameLayout.error = null
     }
 
@@ -95,16 +100,20 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverProgress.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun showContentForm(show: Boolean) {
+    override fun showRecoverForm(show: Boolean) {
         loginRecoverFormContainer.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun showContentCaptcha(show: Boolean) {
+    override fun showCaptcha(show: Boolean) {
         loginRecoverCaptchaContainer.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun showError(show: Boolean) {
+    override fun showErrorView(show: Boolean) {
         loginRecoverError.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun setErrorDetails(message: String) {
+        loginRecoverErrorMessage.text = message
     }
 
     override fun showSoftKeyboard() {
@@ -116,7 +125,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
     }
 
     @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
-    override fun loadRecaptcha(siteKey: String, url: String) {
+    override fun loadReCaptcha(siteKey: String, url: String) {
         val html = """
             <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);" id="recaptcha"></div>
             <script src="https://www.google.com/recaptcha/api.js?onload=cl&render=explicit&hl=pl" async defer></script>
@@ -128,15 +137,18 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         with(loginRecoverWebView) {
             settings.javaScriptEnabled = true
             webViewClient = object : WebViewClient() {
+                private var recoverWebViewSuccess: Boolean = true
+
                 override fun onPageFinished(view: WebView?, url: String?) {
-                    if(recoverWebViewSuccess) {
-                        showContentCaptcha(true)
+                    if (recoverWebViewSuccess) {
+                        showCaptcha(true)
                         showProgress(false)
                     } else {
                         showProgress(false)
-                        showError(true)
+                        showErrorView(true)
                     }
                 }
+
                 override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                     recoverWebViewSuccess = false
                 }

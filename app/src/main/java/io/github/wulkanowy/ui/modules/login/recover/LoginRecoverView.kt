@@ -4,23 +4,23 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface LoginRecoverView : BaseView {
 
-    val recoverHostValue: String?
+    val recoverHostValue: String
 
     val recoverNameValue: String
 
     val recoverSymbolValue: String
 
-    val recoverWebViewSuccess: Boolean
-
     fun initView()
 
-    fun setDefaultCredentials(name: String, symbol: String)
+    fun setDefaultCredentials(username: String, symbol: String)
 
-    fun clearNameError()
+    fun clearUsernameError()
 
     fun clearSymbolError()
 
     fun setErrorNameRequired()
+
+    fun setUsernameError(message: String)
 
     fun showSoftKeyboard()
 
@@ -28,12 +28,13 @@ interface LoginRecoverView : BaseView {
 
     fun showProgress(show: Boolean)
 
-    fun showContentForm(show: Boolean)
+    fun showRecoverForm(show: Boolean)
 
-    fun showContentCaptcha(show: Boolean)
+    fun showCaptcha(show: Boolean)
 
-    fun showError(show: Boolean)
+    fun showErrorView(show: Boolean)
 
-    fun loadRecaptcha(siteKey: String, url: String)
+    fun setErrorDetails(message: String)
 
+    fun loadReCaptcha(siteKey: String, url: String)
 }
