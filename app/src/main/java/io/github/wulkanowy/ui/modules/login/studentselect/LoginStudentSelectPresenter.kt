@@ -8,6 +8,7 @@ import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
+import io.reactivex.Single
 import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
@@ -50,7 +51,7 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     fun onItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is LoginStudentSelectItem) {
+        if (item is LoginStudentSelectItem && !item.alreadySaved) {
             selectedStudents.removeAll { it == item.student }
                 .let { if (!it) selectedStudents.add(item.student) }
 
@@ -58,11 +59,39 @@ class LoginStudentSelectPresenter @Inject constructor(
         }
     }
 
+    private fun mapAlreadySavedStudents(students: List<Student>): Single<List<Pair<Student, Boolean>>> {
+        return Single.create<List<Pair<Student, Boolean>>> { emitter ->
+            studentRepository.getSavedStudents()
+                .subscribe({
+                    emitter.onSuccess(students.map { student ->
+                        Pair(student, it.any { comparedStudent ->
+                            student.email == comparedStudent.email
+                                && student.symbol == comparedStudent.symbol
+                                && student.studentId == comparedStudent.studentId
+                                && student.schoolSymbol == comparedStudent.schoolSymbol
+                                && student.classId == comparedStudent.classId
+                        })
+                    })
+                }, {
+                    emitter.onError(it)
+                })
+        }
+    }
+
     private fun loadData(students: List<Student>) {
         this.students = students
-        view?.apply {
-            updateData(students.map { LoginStudentSelectItem(it) })
-        }
+        disposable.add(mapAlreadySavedStudents(students)
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
+                view?.updateData(it.map { studentPair ->
+                    LoginStudentSelectItem(studentPair.first, studentPair.second)
+                })
+            }, {
+                errorHandler.dispatch(it)
+                view?.updateData(students.map { student -> LoginStudentSelectItem(student, false) })
+            })
+        )
     }
 
     private fun registerStudents(students: List<Student>) {
