@@ -59,24 +59,22 @@ class LoginStudentSelectPresenter @Inject constructor(
         }
     }
 
-    private fun mapAlreadySavedStudents(students: List<Student>): Single<List<Pair<Student, Boolean>>> {
-        return studentRepository.getSavedStudents()
-            .map {
-                students.map { student ->
-                    Pair(student, it.any { comparedStudent ->
-                        student.email == comparedStudent.email
-                            && student.symbol == comparedStudent.symbol
-                            && student.studentId == comparedStudent.studentId
-                            && student.schoolSymbol == comparedStudent.schoolSymbol
-                            && student.classId == comparedStudent.classId
-                    })
-                }
-            }
+    private fun compareStudents(a: Student, b: Student): Boolean {
+        return a.email == b.email
+            && a.symbol == b.symbol
+            && a.studentId == b.studentId
+            && a.schoolSymbol == b.schoolSymbol
+            && a.classId == b.classId
     }
 
     private fun loadData(students: List<Student>) {
         this.students = students
-        disposable.add(mapAlreadySavedStudents(students)
+        disposable.add(studentRepository.getSavedStudents()
+            .map { savedStudents ->
+                students.map { student ->
+                    Pair(student, savedStudents.any { compareStudents(student, it) })
+                }
+            }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .subscribe({
