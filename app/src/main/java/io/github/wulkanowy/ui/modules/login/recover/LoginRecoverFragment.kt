@@ -59,8 +59,8 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverName.doOnTextChanged { _, _, _, _ -> presenter.onNameTextChanged() }
         loginRecoverSymbol.doOnTextChanged { _, _, _, _ -> presenter.onSymbolTextChanged() }
         loginRecoverHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
-        loginRecoverConfirm.setOnClickListener { presenter.onConfirmClick() }
-        loginRecoverErrorRetry.setOnClickListener { presenter.onConfirmClick() }
+        loginRecoverButton.setOnClickListener { presenter.onRecoverClick() }
+        loginRecoverErrorRetry.setOnClickListener { presenter.onRecoverClick() }
         loginRecoverLogin.setOnClickListener { (activity as LoginActivity).switchView(0) }
 
         loginRecoverSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
@@ -169,7 +169,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
                 @JavascriptInterface
                 fun captchaCallback(reCaptchaResponse: String) {
                     activity?.runOnUiThread {
-                        presenter.sendRecoverRequest(reCaptchaResponse)
+                        presenter.onReCaptchaVerified(reCaptchaResponse)
                     }
                 }
             }, "Android")

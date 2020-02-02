@@ -51,7 +51,7 @@ class LoginRecoverPresenter @Inject constructor(
         }
     }
 
-    fun onConfirmClick() {
+    fun onRecoverClick() {
         val username = view?.recoverNameValue.orEmpty()
         val host = view?.recoverHostValue.orEmpty()
         val symbol = view?.recoverSymbolValue.ifNullOrBlank { "Default" }
@@ -81,7 +81,7 @@ class LoginRecoverPresenter @Inject constructor(
             })
     }
 
-    fun sendRecoverRequest(reCaptchaResponse: String) {
+    fun onReCaptchaVerified(reCaptchaResponse: String) {
         val username = view?.recoverNameValue.orEmpty()
         val host = view?.recoverHostValue.orEmpty()
         val symbol = view?.recoverSymbolValue.ifNullOrBlank { "Default" }
