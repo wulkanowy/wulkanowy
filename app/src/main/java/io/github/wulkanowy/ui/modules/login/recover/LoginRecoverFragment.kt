@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.login.form.LoginSymbolAdapter
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
@@ -60,6 +61,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginRecoverConfirm.setOnClickListener { presenter.onConfirmClick() }
         loginRecoverErrorRetry.setOnClickListener { presenter.onConfirmClick() }
+        loginRecoverLogin.setOnClickListener { (activity as LoginActivity).switchView(0) }
 
         loginRecoverSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
 
@@ -112,8 +114,16 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverError.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun setErrorDetails(message: String) {
+    override fun setErrorMessage(message: String) {
         loginRecoverErrorMessage.text = message
+    }
+
+    override fun showSuccessView(show: Boolean) {
+        loginRecoverSuccess.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun setSuccessMessage(message: String) {
+        loginRecoverSuccessMessage.text = message
     }
 
     override fun showSoftKeyboard() {
@@ -164,5 +174,10 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
                 }
             }, "Android")
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        presenter.onDetachView()
     }
 }

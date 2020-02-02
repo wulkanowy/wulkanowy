@@ -34,7 +34,11 @@ interface LoginRecoverView : BaseView {
 
     fun showErrorView(show: Boolean)
 
-    fun setErrorDetails(message: String)
+    fun setErrorMessage(message: String)
+
+    fun showSuccessView(show: Boolean)
+
+    fun setSuccessMessage(message: String)
 
     fun loadReCaptcha(siteKey: String, url: String)
 }

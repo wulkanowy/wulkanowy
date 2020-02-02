@@ -201,4 +201,40 @@
                 android:text="@string/all_retry" />
         </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/loginRecoverSuccess"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        tools:ignore="UseCompoundDrawables"
+        tools:visibility="invisible">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/ic_done_black_24dp"
+            app:tint="?colorOnBackground"
+            tools:ignore="contentDescription" />
+
+        <TextView
+            android:id="@+id/loginRecoverSuccessMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@string/login_recover"
+            android:textSize="14sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginRecoverLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/main_log_in" />
+    </LinearLayout>
+
 </FrameLayout>

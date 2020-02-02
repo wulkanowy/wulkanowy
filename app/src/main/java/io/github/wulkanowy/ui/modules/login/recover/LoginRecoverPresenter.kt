@@ -3,7 +3,6 @@ package io.github.wulkanowy.ui.modules.login.recover
 import io.github.wulkanowy.data.repositories.recover.RecoverRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
-import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
@@ -14,14 +13,27 @@ class LoginRecoverPresenter @Inject constructor(
     schedulers: SchedulersProvider,
     studentRepository: StudentRepository,
     private val loginErrorHandler: RecoverErrorHandler,
-    private val analytics: FirebaseAnalyticsHelper,
+    private val analytics: FirebaseAnalyticsHelper, // TODO
     private val recoverRepository: RecoverRepository
 ) : BasePresenter<LoginRecoverView>(loginErrorHandler, studentRepository, schedulers) {
 
     override fun onAttachView(view: LoginRecoverView) {
         super.onAttachView(view)
         view.initView()
-        loginErrorHandler.onInvalidUsername = { view.setUsernameError(it) }
+        loginErrorHandler.onInvalidUsername = {
+            with(view) {
+                showRecoverForm(true)
+                setUsernameError(it)
+            }
+        }
+        loginErrorHandler.onInvalidCaptcha = {
+            with(view) {
+                setErrorMessage(it)
+                showCaptcha(false)
+                showRecoverForm(false)
+                showErrorView(true)
+            }
+        }
     }
 
     fun onNameTextChanged() {
@@ -55,15 +67,16 @@ class LoginRecoverPresenter @Inject constructor(
             .doOnSubscribe {
                 view?.run {
                     hideSoftKeyboard()
-                    showProgress(true)
                     showRecoverForm(false)
+                    showProgress(true)
+                    showErrorView(false)
                     showCaptcha(false)
                 }
             }
             .subscribe({ (resetUrl, siteKey) ->
-                Timber.d(siteKey)
                 view?.loadReCaptcha(siteKey, resetUrl)
             }) {
+                Timber.e("Obtain captcha site key result: An exception occurred")
                 errorHandler.dispatch(it)
             })
     }
@@ -79,21 +92,22 @@ class LoginRecoverPresenter @Inject constructor(
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doOnSubscribe {
-                    view?.apply {
+                    view?.run {
                         showProgress(true)
                         showRecoverForm(false)
                         showCaptcha(false)
                     }
                 }
                 .doFinally {
-                    view?.apply {
-                        showProgress(false)
-                        showRecoverForm(true)
-                    }
+                    view?.showProgress(false)
                 }
                 .subscribe({
-                    view?.showMessage("Wysłano wiadomość na podany email.")
+                    view?.run {
+                        showSuccessView(true)
+                        setSuccessMessage(it)
+                    }
                 }) {
+                    Timber.e("Send recover request result: An exception occurred")
                     errorHandler.dispatch(it)
                 })
         }
