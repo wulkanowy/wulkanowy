@@ -19,11 +19,15 @@ interface LoginAdvancedView : BaseView {
 
     val formTokenValue: String
 
+    val nicknameLabel: String
+
+    val emailLabel: String
+
     fun initView()
 
     fun setDefaultCredentials(username: String, pass: String, symbol: String, token: String, pin: String)
 
-    fun setUsernameLabel(isEmail: Boolean)
+    fun setUsernameLabel(label: String)
 
     fun setErrorUsernameRequired()
 

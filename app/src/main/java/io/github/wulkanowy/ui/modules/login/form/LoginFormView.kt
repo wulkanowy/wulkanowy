@@ -13,9 +13,13 @@ interface LoginFormView : BaseView {
 
     val formHostValue: String
 
+    val nicknameLabel: String
+
+    val emailLabel: String
+
     fun setCredentials(username: String, pass: String)
 
-    fun setUsernameLabel(isEmail: Boolean)
+    fun setUsernameLabel(label: String)
 
     fun setErrorUsernameRequired()
 

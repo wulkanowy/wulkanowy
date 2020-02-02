@@ -43,6 +43,12 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override val formHostValue: String
         get() = hostValues.getOrNull(hostKeys.indexOf(loginFormHost.text.toString())).orEmpty()
 
+    override val nicknameLabel: String
+        get() = getString(R.string.login_nickname_hint)
+
+    override val emailLabel: String
+        get() = getString(R.string.login_email_hint)
+
     private lateinit var hostKeys: Array<String>
 
     private lateinit var hostValues: Array<String>
@@ -84,8 +90,8 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginFormPass.setText(pass)
     }
 
-    override fun setUsernameLabel(isEmail: Boolean) {
-        loginFormUsernameLayout.hint = getString(if (isEmail) R.string.login_email_hint else R.string.login_nickname_hint)
+    override fun setUsernameLabel(label: String) {
+        loginFormUsernameLayout.hint = label
     }
 
     override fun setErrorUsernameRequired() {

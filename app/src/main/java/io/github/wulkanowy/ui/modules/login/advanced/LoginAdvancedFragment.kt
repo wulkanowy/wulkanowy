@@ -57,6 +57,12 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     override val formTokenValue: String
         get() = loginFormToken.text.toString().trim()
 
+    override val nicknameLabel: String
+        get() = getString(R.string.login_nickname_hint)
+
+    override val emailLabel: String
+        get() = getString(R.string.login_email_hint)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_advanced, container, false)
     }
@@ -111,8 +117,8 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         loginFormPin.setText(pin)
     }
 
-    override fun setUsernameLabel(isEmail: Boolean) {
-        loginFormUsernameLayout.hint = getString(if (isEmail) R.string.login_email_hint else R.string.login_nickname_hint)
+    override fun setUsernameLabel(label: String) {
+        loginFormUsernameLayout.hint = label
     }
 
     override fun setErrorUsernameRequired() {
