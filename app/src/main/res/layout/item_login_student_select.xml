@@ -65,7 +65,6 @@
         android:textColor="?android:textColorSecondary"
         android:textSize="14sp"
         android:text="@string/login_signed_in"
-        android:layout_marginTop="2dp"
         android:enabled="false"
         android:visibility="gone"
         tools:visibility="visible" />
