@@ -72,6 +72,7 @@
     <string name="grade_no_new_items">Новые оценки отсутствуют</string>
     <string name="grade_number_new_items">Количество новых оценок: %1$d</string>
     <string name="grade_average">Средняя оценка: %1$.2f</string>
+    <string name="grade_points_sum">точек: %s</string>
     <string name="grade_no_average">Средняя оценка отсутствует</string>
     <string name="grade_predicted">Ожидаемая оценка: %1$s</string>
     <string name="grade_final">Итоговая оценка: %1$s</string>
@@ -145,6 +146,7 @@
 
     <!--Attendance summary-->
     <string name="attendance_summary_final">Посещаемость</string>
+    <string name="attendance_summary_total">вместе</string>
 
 
     <!--Exam-->
