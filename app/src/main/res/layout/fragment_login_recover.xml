@@ -224,7 +224,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/ic_done_black_24dp"
+            app:srcCompat="@drawable/ic_all_done"
             app:tint="?colorOnBackground"
             tools:ignore="contentDescription" />
 
