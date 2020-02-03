@@ -94,6 +94,10 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverNameLayout.error = null
     }
 
+    override fun showSymbol(show: Boolean) {
+        loginRecoverSymbolLayout.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
     override fun showProgress(show: Boolean) {
         loginRecoverProgress.visibility = if (show) View.VISIBLE else View.GONE
     }
@@ -170,6 +174,11 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
                 }
             }, "Android")
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.updateSymbolVisibility()
     }
 
     override fun onDestroyView() {

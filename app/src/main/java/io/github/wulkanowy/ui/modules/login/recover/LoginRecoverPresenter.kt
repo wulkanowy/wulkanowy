@@ -38,6 +38,13 @@ class LoginRecoverPresenter @Inject constructor(
         view?.run {
             if ("fakelog" in recoverHostValue) setDefaultCredentials("jan@fakelog.cf", "Default")
             clearUsernameError()
+            updateSymbolVisibility()
+        }
+    }
+
+    fun updateSymbolVisibility() {
+        view?.run {
+            showSymbol("fakelog" in recoverHostValue || "vulcan" in recoverHostValue)
         }
     }
 
