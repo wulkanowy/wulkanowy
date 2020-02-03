@@ -60,6 +60,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginRecoverButton.setOnClickListener { presenter.onRecoverClick() }
         loginRecoverErrorRetry.setOnClickListener { presenter.onRecoverClick() }
+        loginRecoverErrorDetails.setOnClickListener { presenter.onDetailsClick() }
         loginRecoverLogin.setOnClickListener { (activity as LoginActivity).switchView(0) }
 
         loginRecoverSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
@@ -109,7 +110,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverError.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    override fun setErrorMessage(message: String) {
+    override fun setErrorDetails(message: String) {
         loginRecoverErrorMessage.text = message
     }
 

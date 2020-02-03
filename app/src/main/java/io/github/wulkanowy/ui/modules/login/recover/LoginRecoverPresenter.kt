@@ -17,22 +17,16 @@ class LoginRecoverPresenter @Inject constructor(
     private val recoverRepository: RecoverRepository
 ) : BasePresenter<LoginRecoverView>(loginErrorHandler, studentRepository, schedulers) {
 
+    private lateinit var lastError: Throwable
+
     override fun onAttachView(view: LoginRecoverView) {
         super.onAttachView(view)
         view.initView()
-        loginErrorHandler.onInvalidUsername = {
-            with(view) {
-                showRecoverForm(true)
-                setUsernameError(it)
-            }
-        }
-        loginErrorHandler.onInvalidCaptcha = {
-            with(view) {
-                setErrorMessage(it)
-                showCaptcha(false)
-                showRecoverForm(false)
-                showErrorView(true)
-            }
+
+        with(loginErrorHandler) {
+            showErrorMessage = ::showErrorMessage
+            onInvalidUsername = ::onInvalidUsername
+            onInvalidCaptcha = ::onInvalidCaptcha
         }
     }
 
@@ -106,6 +100,35 @@ class LoginRecoverPresenter @Inject constructor(
                     Timber.e("Send recover request result: An exception occurred")
                     errorHandler.dispatch(it)
                 })
+        }
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
+    }
+
+    private fun showErrorMessage(message: String, error: Throwable) {
+        view?.run {
+            lastError = error
+            showProgress(false)
+            setErrorDetails(message)
+            showErrorView(true)
+        }
+    }
+
+    private fun onInvalidUsername(message: String) {
+        view?.run {
+            setUsernameError(message)
+            showRecoverForm(true)
+        }
+    }
+
+    private fun onInvalidCaptcha(message: String) {
+        view?.run {
+            setErrorDetails(message)
+            showCaptcha(false)
+            showRecoverForm(false)
+            showErrorView(true)
         }
     }
 }

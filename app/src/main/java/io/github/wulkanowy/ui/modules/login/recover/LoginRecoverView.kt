@@ -32,7 +32,7 @@ interface LoginRecoverView : BaseView {
 
     fun showErrorView(show: Boolean)
 
-    fun setErrorMessage(message: String)
+    fun setErrorDetails(message: String)
 
     fun showSuccessView(show: Boolean)
 
