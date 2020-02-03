@@ -16,8 +16,6 @@ interface LoginRecoverView : BaseView {
 
     fun clearUsernameError()
 
-    fun clearSymbolError()
-
     fun setErrorNameRequired()
 
     fun setUsernameError(message: String)

@@ -57,7 +57,6 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         hostValues = resources.getStringArray(R.array.hosts_values)
 
         loginRecoverName.doOnTextChanged { _, _, _, _ -> presenter.onNameTextChanged() }
-        loginRecoverSymbol.doOnTextChanged { _, _, _, _ -> presenter.onSymbolTextChanged() }
         loginRecoverHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginRecoverButton.setOnClickListener { presenter.onRecoverClick() }
         loginRecoverErrorRetry.setOnClickListener { presenter.onRecoverClick() }
@@ -92,10 +91,6 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
 
     override fun clearUsernameError() {
         loginRecoverNameLayout.error = null
-    }
-
-    override fun clearSymbolError() {
-        loginRecoverSymbolLayout.error = null
     }
 
     override fun showProgress(show: Boolean) {
