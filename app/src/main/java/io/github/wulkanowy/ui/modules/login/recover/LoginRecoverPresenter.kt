@@ -58,6 +58,11 @@ class LoginRecoverPresenter @Inject constructor(
             return
         }
 
+        if (("fakelog" in host || "vulcan" in host) && "@" !in username) {
+            view?.setUsernameError(view?.invalidEmailString.orEmpty())
+            return
+        }
+
         disposable.add(recoverRepository.getReCaptchaSiteKey(host, symbol)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)

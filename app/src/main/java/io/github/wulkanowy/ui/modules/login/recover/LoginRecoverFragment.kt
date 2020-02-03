@@ -42,6 +42,9 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
     override val recoverSymbolValue: String
         get() = loginRecoverSymbol.text.toString().trim()
 
+    override val invalidEmailString: String
+        get() = getString(R.string.login_invalid_email)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_recover, container, false)
     }

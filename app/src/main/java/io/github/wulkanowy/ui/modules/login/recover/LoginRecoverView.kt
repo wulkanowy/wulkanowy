@@ -10,6 +10,8 @@ interface LoginRecoverView : BaseView {
 
     val recoverSymbolValue: String
 
+    val invalidEmailString: String
+
     fun initView()
 
     fun setDefaultCredentials(username: String, symbol: String)
