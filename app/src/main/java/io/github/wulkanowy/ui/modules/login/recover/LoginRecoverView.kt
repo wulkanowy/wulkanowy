@@ -10,6 +10,10 @@ interface LoginRecoverView : BaseView {
 
     val recoverSymbolValue: String
 
+    val emailHintString: String
+
+    val loginPeselEmailHintString: String
+
     val invalidEmailString: String
 
     fun initView()
@@ -21,6 +25,8 @@ interface LoginRecoverView : BaseView {
     fun showSymbol(show: Boolean)
 
     fun setErrorNameRequired()
+
+    fun setUsernameHint(hint: String)
 
     fun setUsernameError(message: String)
 

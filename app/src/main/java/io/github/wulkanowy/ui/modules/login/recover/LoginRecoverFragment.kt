@@ -42,6 +42,12 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
     override val recoverSymbolValue: String
         get() = loginRecoverSymbol.text.toString().trim()
 
+    override val emailHintString: String
+        get() = getString(R.string.login_email_hint)
+
+    override val loginPeselEmailHintString: String
+        get() = getString(R.string.login_login_pesel_email_hint)
+
     override val invalidEmailString: String
         get() = getString(R.string.login_invalid_email)
 
@@ -84,6 +90,10 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
             requestFocus()
             error = getString(R.string.login_field_required)
         }
+    }
+
+    override fun setUsernameHint(hint: String) {
+        loginRecoverNameLayout.hint = hint
     }
 
     override fun setUsernameError(message: String) {
@@ -181,7 +191,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
 
     override fun onResume() {
         super.onResume()
-        presenter.updateSymbolVisibility()
+        presenter.updateFields()
     }
 
     override fun onDestroyView() {
