@@ -178,6 +178,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        loginRecoverWebView.destroy()
         presenter.onDetachView()
     }
 }
