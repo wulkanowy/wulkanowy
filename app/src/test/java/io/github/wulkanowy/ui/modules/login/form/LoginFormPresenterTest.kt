@@ -4,7 +4,6 @@ import io.github.wulkanowy.TestSchedulersProvider
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.reactivex.Single
 import org.junit.Before
@@ -33,9 +32,6 @@ class LoginFormPresenterTest {
 
     @Mock
     lateinit var analytics: FirebaseAnalyticsHelper
-
-    @Mock
-    lateinit var appInfo: AppInfo
 
     private lateinit var presenter: LoginFormPresenter
 

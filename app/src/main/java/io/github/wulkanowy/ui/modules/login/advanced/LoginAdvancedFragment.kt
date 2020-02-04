@@ -101,8 +101,6 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
             setText(hostKeys.getOrElse(0) { "" })
             setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
         }
-
-        presenter.updateUsernameLabel()
     }
 
     private fun AppCompatEditText.setOnEditorDoneSignIn() {

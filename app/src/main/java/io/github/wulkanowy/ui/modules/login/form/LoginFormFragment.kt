@@ -83,8 +83,6 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
             setText(hostKeys.getOrElse(0) { "" })
             setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
         }
-
-        presenter.updateUsernameLabel()
     }
 
     override fun setCredentials(username: String, pass: String) {
