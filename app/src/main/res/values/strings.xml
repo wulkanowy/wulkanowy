@@ -61,6 +61,7 @@
     <string name="login_recover_button">I forgot my password</string>
     <string name="login_recover_title">Recover your account</string>
     <string name="login_recover">Recover</string>
+    <string name="login_signed_in">Student is already signed in</string>
 
 
     <!--Main-->

@@ -59,6 +59,7 @@
     <string name="login_recover_button">Nie pamiętam hasła</string>
     <string name="login_recover_title">Przywróć swoje konto</string>
     <string name="login_recover">Przywróć</string>
+    <string name="login_signed_in">Uczeń jest już zalogowany</string>
 
 
     <!--Main-->

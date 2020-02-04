@@ -60,6 +60,7 @@
     <string name="login_recover">восстановление</string>
     <string name="login_recover_button">Я не помню пароль</string>
     <string name="login_recover_title">Восстановите свой аккаунт</string>
+    <string name="login_signed_in">Студент уже вошел в систему</string>
 
 
     <!--Main-->
