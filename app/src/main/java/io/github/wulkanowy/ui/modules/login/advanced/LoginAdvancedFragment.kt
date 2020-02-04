@@ -101,6 +101,8 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
             setText(hostKeys.getOrElse(0) { "" })
             setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
         }
+
+        presenter.updateUsernameLabel()
     }
 
     private fun AppCompatEditText.setOnEditorDoneSignIn() {
@@ -260,6 +262,11 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
             loginFormPass.text.toString(),
             resources.getStringArray(R.array.hosts_values)[1]
         ))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.updateUsernameLabel()
     }
 
     override fun onDestroyView() {

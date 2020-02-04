@@ -30,8 +30,6 @@ class LoginAdvancedPresenter @Inject constructor(
                 onInvalidSymbol = ::onInvalidSymbol
                 onInvalidPin = ::onInvalidPin
             }
-
-            updateUsernameLabel()
         }
     }
 
@@ -67,7 +65,7 @@ class LoginAdvancedPresenter @Inject constructor(
         }
     }
 
-    private fun updateUsernameLabel() {
+    fun updateUsernameLabel() {
         view?.apply {
             setUsernameLabel(if ("vulcan" in formHostValue || "fakelog" in formHostValue) emailLabel else nicknameLabel)
         }

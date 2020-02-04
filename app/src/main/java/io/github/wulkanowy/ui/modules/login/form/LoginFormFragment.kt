@@ -83,6 +83,8 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
             setText(hostKeys.getOrElse(0) { "" })
             setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
         }
+
+        presenter.updateUsernameLabel()
     }
 
     override fun setCredentials(username: String, pass: String) {
@@ -174,6 +176,11 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
     override fun openFaqPage() {
         context?.openInternetBrowser("https://wulkanowy.github.io/czesto-zadawane-pytania/dlaczego-nie-moge-sie-zalogowac", ::showMessage)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.updateUsernameLabel()
     }
 
     override fun openEmail() {
