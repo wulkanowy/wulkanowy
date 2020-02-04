@@ -7,6 +7,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.isCurrent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -97,10 +98,12 @@ class GradePresenter @Inject constructor(
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
             .doOnSuccess {
-                it.first { item -> item.isCurrent }.also { current ->
-                    selectedIndex = if (selectedIndex == 0) current.semesterName else selectedIndex
-                    semesters = it.filter { semester -> semester.diaryId == current.diaryId }
-                }
+                it
+                    .first { item -> item.isCurrent }
+                    .also { current ->
+                        selectedIndex = if (selectedIndex == 0) current.semesterName else selectedIndex
+                        semesters = it.filter { semester -> semester.diaryId == current.diaryId }
+                    }
             }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)

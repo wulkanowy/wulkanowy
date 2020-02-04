@@ -27,9 +27,6 @@ data class Semester(
     @ColumnInfo(name = "semester_name")
     val semesterName: Int,
 
-    @ColumnInfo(name = "is_current")
-    val isCurrent: Boolean,
-
     val start: LocalDate,
 
     val end: LocalDate,

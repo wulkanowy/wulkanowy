@@ -14,6 +14,7 @@ import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.doReturn
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
+import org.threeten.bp.LocalDate.now
 
 class SemesterRepositoryTest {
 
@@ -44,8 +45,8 @@ class SemesterRepositoryTest {
     @Test
     fun singleCurrentSemesterTest() {
         val semesters = listOf(
-            createSemesterEntity(false),
-            createSemesterEntity(true)
+            createSemesterEntity(0, 0, now().minusMonths(6), now().minusMonths(3)),
+            createSemesterEntity(0, 0, now(), now())
         )
 
         doNothing().`when`(sdkHelper).init(student)
@@ -61,8 +62,8 @@ class SemesterRepositoryTest {
     @Test(expected = IllegalArgumentException::class)
     fun twoCurrentSemesterTest() {
         val semesters = listOf(
-            createSemesterEntity(true),
-            createSemesterEntity(true)
+            createSemesterEntity(0, 0, now(), now()),
+            createSemesterEntity(0, 0, now(), now())
         )
 
         doNothing().`when`(sdkHelper).init(student)

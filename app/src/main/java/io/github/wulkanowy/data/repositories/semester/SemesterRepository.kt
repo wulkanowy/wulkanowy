@@ -5,6 +5,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.Inter
 import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.utils.isCurrent
 import io.github.wulkanowy.utils.uniqueSubtract
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -26,7 +27,8 @@ class SemesterRepository @Inject constructor(
             .flatMap { local.getSemesters(student).filter { !forceRefresh } }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
-                    if (it) remote.getSemesters(student) else Single.error(UnknownHostException())
+                    if (it) remote.getSemesters(student)
+                    else Single.error(UnknownHostException())
                 }.flatMap { new ->
                     val currentSemesters = new.filter { it.isCurrent }
                     if (currentSemesters.size == 1) {
