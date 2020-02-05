@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.utils.getCurrentOrLast
+import io.github.wulkanowy.utils.isCurrent
 import io.github.wulkanowy.utils.uniqueSubtract
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -21,9 +22,13 @@ class SemesterRepository @Inject constructor(
     private val sdkHelper: SdkHelper
 ) {
 
-    fun getSemesters(student: Student, forceRefresh: Boolean = false): Single<List<Semester>> {
+    fun getSemesters(student: Student, forceRefresh: Boolean = false, refreshOnNoCurrent: Boolean = false): Single<List<Semester>> {
         return Maybe.just(sdkHelper.init(student))
-            .flatMap { local.getSemesters(student).filter { !forceRefresh } }
+            .flatMap {
+                local.getSemesters(student).filter { !forceRefresh }.filter {
+                    refreshOnNoCurrent && it.any { semester -> semester.isCurrent }
+                }
+            }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
                     if (it) remote.getSemesters(student)

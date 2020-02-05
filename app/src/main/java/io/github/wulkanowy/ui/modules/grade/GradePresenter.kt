@@ -96,7 +96,7 @@ class GradePresenter @Inject constructor(
     private fun loadData() {
         Timber.i("Loading grade data started")
         disposable.add(studentRepository.getCurrentStudent()
-            .flatMap { semesterRepository.getSemesters(it) }
+            .flatMap { semesterRepository.getSemesters(it, refreshOnNoCurrent = true) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally { view?.showProgress(false) }
