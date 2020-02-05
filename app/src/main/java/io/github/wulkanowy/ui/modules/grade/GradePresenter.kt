@@ -97,18 +97,14 @@ class GradePresenter @Inject constructor(
         Timber.i("Loading grade data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
-            .doOnSuccess {
-                it
-                    .getCurrentOrLast()
-                    .also { current ->
-                        selectedIndex = if (selectedIndex == 0) current.semesterName else selectedIndex
-                        semesters = it.filter { semester -> semester.diaryId == current.diaryId }
-                    }
-            }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally { view?.showProgress(false) }
             .subscribe({
+                val current = it.getCurrentOrLast()
+                selectedIndex = if (selectedIndex == 0) current.semesterName else selectedIndex
+                semesters = it.filter { semester -> semester.diaryId == current.diaryId }
+
                 view?.run {
                     Timber.i("Loading grade result: Attempt load index $currentPageIndex")
                     loadChild(currentPageIndex)
