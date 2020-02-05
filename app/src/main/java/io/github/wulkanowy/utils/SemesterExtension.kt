@@ -9,7 +9,11 @@ inline val Semester.isCurrent: Boolean
 fun List<Semester>.getCurrentOrLast(): Semester {
     if (isEmpty()) throw RuntimeException("Empty semester list")
 
-    return singleOrNull { it.isCurrent }
-        ?: singleOrNull { semester -> semester.semesterId == maxBy { it.semesterId }?.semesterId }
-        ?: throw IllegalArgumentException("Current semester can be only one: ${joinToString(separator = "\n")}")
+    // when there is only one current semester
+    singleOrNull { it.isCurrent }?.let { return it }
+
+    // when there is more than one current semester - find one with higher id
+    singleOrNull { semester -> semester.semesterId == maxBy { it.semesterId }?.semesterId }?.let { return it }
+
+    throw IllegalArgumentException("Duplicated last semester! Semesters: ${joinToString(separator = "\n")}")
 }
