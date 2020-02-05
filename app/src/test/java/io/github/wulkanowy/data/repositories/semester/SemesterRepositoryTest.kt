@@ -60,16 +60,23 @@ class SemesterRepositoryTest {
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun twoCurrentSemesterTest() {
+    fun getCurrentSemester_doubleCurrent() {
         val semesters = listOf(
             createSemesterEntity(0, 0, now(), now()),
             createSemesterEntity(0, 0, now(), now())
         )
 
         doNothing().`when`(sdkHelper).init(student)
-        doReturn(Maybe.empty<Semester>()).`when`(semesterLocal).getSemesters(student)
-        doReturn(Single.just(semesters)).`when`(semesterRemote).getSemesters(student)
+        doReturn(Maybe.just(semesters)).`when`(semesterLocal).getSemesters(student)
 
-        semesterRepository.getSemesters(student).blockingGet()
+        semesterRepository.getCurrentSemester(student).blockingGet()
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun getCurrentSemester_emptyList() {
+        doNothing().`when`(sdkHelper).init(student)
+        doReturn(Maybe.just(emptyList<Semester>())).`when`(semesterLocal).getSemesters(student)
+
+        semesterRepository.getCurrentSemester(student).blockingGet()
     }
 }
