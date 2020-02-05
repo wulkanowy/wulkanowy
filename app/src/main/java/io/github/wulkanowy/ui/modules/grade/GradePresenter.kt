@@ -99,7 +99,6 @@ class GradePresenter @Inject constructor(
             .flatMap { semesterRepository.getSemesters(it, refreshOnNoCurrent = true) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .doFinally { view?.showProgress(false) }
             .subscribe({
                 val current = it.getCurrentOrLast()
                 selectedIndex = if (selectedIndex == 0) current.semesterName else selectedIndex
@@ -120,6 +119,7 @@ class GradePresenter @Inject constructor(
     private fun showErrorViewOnError(message: String, error: Throwable) {
         lastError = error
         view?.run {
+            showProgress(false)
             showErrorView(true)
             setErrorDetails(message)
         }
