@@ -26,7 +26,9 @@ class SemesterRepository @Inject constructor(
         return Maybe.just(sdkHelper.init(student))
             .flatMap {
                 local.getSemesters(student).filter { !forceRefresh }.filter {
-                    !refreshOnNoCurrent && !it.any { semester -> semester.isCurrent }
+                    if (refreshOnNoCurrent) {
+                        it.any { semester -> semester.isCurrent }
+                    } else true
                 }
             }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
