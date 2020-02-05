@@ -141,8 +141,9 @@ class LoginRecoverPresenter @Inject constructor(
         }
     }
 
-    private fun onInvalidCaptcha(message: String) {
+    private fun onInvalidCaptcha(message: String, error: Throwable) {
         view?.run {
+            lastError = error
             setErrorDetails(message)
             showCaptcha(false)
             showRecoverForm(false)

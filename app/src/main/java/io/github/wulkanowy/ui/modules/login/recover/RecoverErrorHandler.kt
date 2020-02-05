@@ -15,12 +15,12 @@ class RecoverErrorHandler @Inject constructor(
 
     var onInvalidUsername: (String) -> Unit = {}
 
-    var onInvalidCaptcha: (String) -> Unit = {}
+    var onInvalidCaptcha: (String, Throwable) -> Unit = { _, _ -> }
 
     override fun proceed(error: Throwable) {
         when (error) {
             is InvalidEmailException, is NoAccountFoundException -> onInvalidUsername(error.localizedMessage.orEmpty())
-            is InvalidCaptchaException -> onInvalidCaptcha(error.localizedMessage.orEmpty())
+            is InvalidCaptchaException -> onInvalidCaptcha(error.localizedMessage.orEmpty(), error)
             else -> super.proceed(error)
         }
     }
