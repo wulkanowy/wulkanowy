@@ -9,6 +9,7 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.getCurrentOrLast
 import timber.log.Timber
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class GradePresenter @Inject constructor(
@@ -97,6 +98,7 @@ class GradePresenter @Inject constructor(
         Timber.i("Loading grade data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it, refreshOnNoCurrent = true) }
+            .delay(200, MILLISECONDS)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .subscribe({
