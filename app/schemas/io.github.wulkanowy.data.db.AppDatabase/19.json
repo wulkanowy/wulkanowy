@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 19,
-    "identityHash": "294f40cebf8314f9776208827240e65f",
+    "identityHash": "2e07c9e253519398bbda9948f50a1392",
     "entities": [
       {
         "tableName": "Students",
@@ -250,11 +250,17 @@
       },
       {
         "tableName": "Exams",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `group` TEXT NOT NULL, `type` TEXT NOT NULL, `description` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `cSync` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `group` TEXT NOT NULL, `type` TEXT NOT NULL, `description` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cSync",
+            "columnName": "cSync",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1622,7 +1628,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '294f40cebf8314f9776208827240e65f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2e07c9e253519398bbda9948f50a1392')"
     ]
   }
 }

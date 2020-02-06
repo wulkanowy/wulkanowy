@@ -36,4 +36,6 @@ data class Exam(
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    var cSync: Boolean = false
 }

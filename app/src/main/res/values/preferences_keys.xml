@@ -16,4 +16,6 @@
     <string name="pref_key_grade_modifier_plus">grade_modifier_plus</string>
     <string name="pref_key_grade_modifier_minus">grade_modifier_minus</string>
     <string name="pref_key_fill_message_content">fill_message_content</string>
+    <string name="pref_key_calendar_sync_enable">calendar_sync_enable</string>
+    <string name="pref_key_calendar_sync_select">calendar_sync_select</string>
 </resources>

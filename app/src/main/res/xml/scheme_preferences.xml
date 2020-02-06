@@ -87,6 +87,21 @@
     </PreferenceCategory>
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:title="@string/pref_calendar_header">
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/pref_default_calendar_sync_enable"
+            app:dependency="services_enable"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_key_calendar_sync_enable"
+            app:title="@string/pref_calendar_switch"/>
+        <ListPreference
+            app:iconSpaceReserved="false"
+            app:dependency="calendar_sync_enable"
+            app:key="@string/pref_key_calendar_sync_select"
+            app:title="@string/pref_calendar_select"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/pref_other_header">
         <ListPreference
             app:defaultValue="@string/pref_default_grade_modifier_plus"
