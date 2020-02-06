@@ -80,8 +80,9 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
 
         with(loginFormHost) {
-            setText(hostKeys.getOrElse(0) { "" })
+            setText(hostKeys.getOrNull(0).orEmpty())
             setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
+            setOnClickListener { if (loginFormContainer.visibility == GONE) dismissDropDown() }
         }
     }
 

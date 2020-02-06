@@ -79,6 +79,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         with(loginRecoverHost) {
             setText(hostKeys.getOrNull(0).orEmpty())
             setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
+            setOnClickListener { if (loginRecoverFormContainer.visibility == GONE) dismissDropDown() }
         }
     }
 
