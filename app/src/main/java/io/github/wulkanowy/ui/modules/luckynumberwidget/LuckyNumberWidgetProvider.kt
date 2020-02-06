@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.luckynumberwidget
 
-import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.appwidget.AppWidgetManager
@@ -9,7 +8,6 @@ import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -56,7 +54,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         fun getThemeWidgetKey(appWidgetId: Int) = "lucky_number_widget_theme_$appWidgetId"
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
         super.onReceive(context, intent)
@@ -101,7 +98,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         appWidgetManager.updateAppWidget(appWidgetId, remoteView)
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun setStyles(views: RemoteViews, options: Bundle? = null) {
         val maxWidth = options?.getInt(OPTION_APPWIDGET_MIN_WIDTH) ?: 74
         val maxHeight = options?.getInt(OPTION_APPWIDGET_MAX_HEIGHT) ?: 74
