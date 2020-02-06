@@ -174,12 +174,14 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/loginFormRecoverLink"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
                 android:gravity="start|center_vertical"
                 android:text="@string/login_recover_button"
                 android:textColor="?android:textColorSecondary"
@@ -197,7 +199,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginLeft="24dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginRight="24dp"
                 android:hint="@string/login_host_hint"
