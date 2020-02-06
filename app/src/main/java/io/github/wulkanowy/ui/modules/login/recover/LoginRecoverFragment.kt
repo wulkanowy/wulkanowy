@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
@@ -75,7 +77,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
 
         with(loginRecoverHost) {
-            setText(hostKeys.getOrElse(0) { "" })
+            setText(hostKeys.getOrNull(0).orEmpty())
             setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
         }
     }
@@ -108,23 +110,23 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
     }
 
     override fun showSymbol(show: Boolean) {
-        loginRecoverSymbolLayout.visibility = if (show) View.VISIBLE else View.GONE
+        loginRecoverSymbolLayout.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showProgress(show: Boolean) {
-        loginRecoverProgress.visibility = if (show) View.VISIBLE else View.GONE
+        loginRecoverProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showRecoverForm(show: Boolean) {
-        loginRecoverFormContainer.visibility = if (show) View.VISIBLE else View.GONE
+        loginRecoverFormContainer.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showCaptcha(show: Boolean) {
-        loginRecoverCaptchaContainer.visibility = if (show) View.VISIBLE else View.GONE
+        loginRecoverCaptchaContainer.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showErrorView(show: Boolean) {
-        loginRecoverError.visibility = if (show) View.VISIBLE else View.GONE
+        loginRecoverError.visibility = if (show) VISIBLE else GONE
     }
 
     override fun setErrorDetails(message: String) {
@@ -132,7 +134,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
     }
 
     override fun showSuccessView(show: Boolean) {
-        loginRecoverSuccess.visibility = if (show) View.VISIBLE else View.GONE
+        loginRecoverSuccess.visibility = if (show) VISIBLE else GONE
     }
 
     override fun setSuccessMessage(message: String) {
