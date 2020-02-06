@@ -5,7 +5,7 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
-import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
+import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
@@ -103,53 +103,36 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun setStyles(views: RemoteViews, options: Bundle? = null) {
-        val maxWidth = options?.getInt(OPTION_APPWIDGET_MAX_WIDTH) ?: 150
-        val maxHeight = options?.getInt(OPTION_APPWIDGET_MAX_HEIGHT) ?: 40
+        val maxWidth = options?.getInt(OPTION_APPWIDGET_MIN_WIDTH) ?: 74
+        val maxHeight = options?.getInt(OPTION_APPWIDGET_MAX_HEIGHT) ?: 74
+
+        val rows = getCellsForSize(maxHeight)
+        val cols = getCellsForSize(maxWidth)
 
         Timber.d("New lucky number widget measurement: %dx%d", maxWidth, maxHeight)
+        Timber.d("Widget size: $cols x $rows")
 
         when {
-            // 1x1
-            maxWidth < 150 && maxHeight < 110 -> {
-                Timber.d("Lucky number widget size: 1x1")
-                with(views) {
-                    setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
-                    setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
-                    setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
-                    setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
-                }
-            }
-            // 1x2
-            maxWidth < 150 && maxHeight > 110 -> {
-                Timber.d("Lucky number widget size: 1x2")
-                with(views) {
-                    setViewVisibility(R.id.luckyNumberWidgetImageTop, VISIBLE)
-                    setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
-                    setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
-                    setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
-                }
-            }
-            // 2x1
-            maxWidth >= 150 && maxHeight <= 110 -> {
-                Timber.d("Lucky number widget size: 2x1")
-                with(views) {
-                    setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
-                    setViewVisibility(R.id.luckyNumberWidgetImageLeft, VISIBLE)
-                    setViewVisibility(R.id.luckyNumberWidgetTitle, GONE)
-                    setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
-                }
-            }
-            // 2x2 and bigger
-            else -> {
-                Timber.d("Lucky number widget size: 2x2 and bigger")
-                with(views) {
-                    setViewVisibility(R.id.luckyNumberWidgetImageTop, GONE)
-                    setViewVisibility(R.id.luckyNumberWidgetImageLeft, GONE)
-                    setViewVisibility(R.id.luckyNumberWidgetTitle, VISIBLE)
-                    setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
-                }
-            }
+            1 == cols && 1 == rows -> views.setVisibility(imageTop = false, imageLeft = false)
+            1 == cols && 1 < rows -> views.setVisibility(imageTop = true, imageLeft = false)
+            1 < cols && 1 == rows -> views.setVisibility(imageTop = false, imageLeft = true)
+            1 == cols && 1 == rows -> views.setVisibility(imageTop = true, imageLeft = false)
+            2 == cols && 1 == rows -> views.setVisibility(imageTop = false, imageLeft = true)
+            else -> views.setVisibility(imageTop = false, imageLeft = false, title = true)
         }
+    }
+
+    private fun RemoteViews.setVisibility(imageTop: Boolean, imageLeft: Boolean, title: Boolean = false) {
+        setViewVisibility(R.id.luckyNumberWidgetImageTop, if (imageTop) VISIBLE else GONE)
+        setViewVisibility(R.id.luckyNumberWidgetImageLeft, if (imageLeft) VISIBLE else GONE)
+        setViewVisibility(R.id.luckyNumberWidgetTitle, if (title) VISIBLE else GONE)
+        setViewVisibility(R.id.luckyNumberWidgetNumber, VISIBLE)
+    }
+
+    private fun getCellsForSize(size: Int): Int {
+        var n = 2
+        while (74 * n - 30 < size) ++n
+        return n - 1
     }
 
     private fun getLuckyNumber(studentId: Long, appWidgetId: Int): LuckyNumber? {
