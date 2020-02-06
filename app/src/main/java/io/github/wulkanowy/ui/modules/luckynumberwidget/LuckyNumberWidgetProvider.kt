@@ -52,6 +52,10 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         fun getStudentWidgetKey(appWidgetId: Int) = "lucky_number_widget_student_$appWidgetId"
 
         fun getThemeWidgetKey(appWidgetId: Int) = "lucky_number_widget_theme_$appWidgetId"
+
+        fun getHeightWidgetKey(appWidgetId: Int) = "lucky_number_widget_height_$appWidgetId"
+
+        fun getWidthWidgetKey(appWidgetId: Int) = "lucky_number_widget_width_$appWidgetId"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -74,7 +78,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                 setOnClickPendingIntent(R.id.luckyNumberWidgetContainer, appIntent)
             }
 
-            setStyles(remoteView)
+            setStyles(remoteView, appWidgetId)
             appWidgetManager.updateAppWidget(appWidgetId, remoteView)
         }
     }
@@ -94,18 +98,21 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
 
         val remoteView = RemoteViews(context.packageName, layoutId)
 
-        setStyles(remoteView, newOptions)
+        setStyles(remoteView, appWidgetId, newOptions)
         appWidgetManager.updateAppWidget(appWidgetId, remoteView)
     }
 
-    private fun setStyles(views: RemoteViews, options: Bundle? = null) {
-        val maxWidth = options?.getInt(OPTION_APPWIDGET_MIN_WIDTH) ?: 74
-        val maxHeight = options?.getInt(OPTION_APPWIDGET_MAX_HEIGHT) ?: 74
+    private fun setStyles(views: RemoteViews, appWidgetId: Int, options: Bundle? = null) {
+        val width = options?.getInt(OPTION_APPWIDGET_MIN_WIDTH) ?: sharedPref.getLong(getWidthWidgetKey(appWidgetId), 74).toInt()
+        val height = options?.getInt(OPTION_APPWIDGET_MAX_HEIGHT) ?: sharedPref.getLong(getHeightWidgetKey(appWidgetId), 74).toInt()
 
-        val rows = getCellsForSize(maxHeight)
-        val cols = getCellsForSize(maxWidth)
+        sharedPref.putLong(getWidthWidgetKey(appWidgetId), width.toLong())
+        sharedPref.putLong(getHeightWidgetKey(appWidgetId), height.toLong())
 
-        Timber.d("New lucky number widget measurement: %dx%d", maxWidth, maxHeight)
+        val rows = getCellsForSize(height)
+        val cols = getCellsForSize(width)
+
+        Timber.d("New lucky number widget measurement: %dx%d", width, height)
         Timber.d("Widget size: $cols x $rows")
 
         when {
