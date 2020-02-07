@@ -43,5 +43,5 @@ data class Semester(
 
 
     @ColumnInfo(name = "is_current")
-    var isCurrent: Boolean = false
+    var current: Boolean = false
 }
