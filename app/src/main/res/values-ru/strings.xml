@@ -25,7 +25,8 @@
     <!--Login-->
     <string name="login_header_default">Авторизируйтесь при помощи аккаунта ученика или родителя</string>
     <string name="login_header_symbol">Впишите \"symbol\"</string>
-    <string name="login_nickname_hint">Электронная почта или имя пользователя</string>
+    <string name="login_nickname_hint">Имя пользователя</string>
+    <string name="login_email_hint">Электронная почта</string>
     <string name="login_password_hint">Пароль</string>
     <string name="login_host_hint">Дневник</string>
     <string name="login_type_api">Мобильный API</string>
@@ -53,6 +54,7 @@
     <string name="login_contact_email">Электронная почта</string>
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Отправить письмо</string>
+    <string name="login_signed_in">Студент уже вошел в систему</string>
 
 
     <!--Main-->
@@ -72,6 +74,7 @@
     <string name="grade_no_new_items">Новые оценки отсутствуют</string>
     <string name="grade_number_new_items">Количество новых оценок: %1$d</string>
     <string name="grade_average">Средняя оценка: %1$.2f</string>
+    <string name="grade_points_sum">точек: %s</string>
     <string name="grade_no_average">Средняя оценка отсутствует</string>
     <string name="grade_predicted">Ожидаемая оценка: %1$s</string>
     <string name="grade_final">Итоговая оценка: %1$s</string>
@@ -145,6 +148,7 @@
 
     <!--Attendance summary-->
     <string name="attendance_summary_final">Посещаемость</string>
+    <string name="attendance_summary_total">вместе</string>
 
 
     <!--Exam-->
@@ -364,5 +368,6 @@
     <string name="error_unknown">Произошла неожиданная ошибка</string>
     <string name="error_feature_disabled">Функция была выключена школой</string>
     <string name="error_feature_not_available">Функция не доступна в этом режиме</string>
+    <string name="pref_view_timetable_show_whole_class">Показать уроки всего класса</string>
 
 </resources>

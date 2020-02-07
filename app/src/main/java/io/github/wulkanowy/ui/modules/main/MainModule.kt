@@ -8,10 +8,12 @@ import dagger.android.ContributesAndroidInjector
 import io.github.wulkanowy.R
 import io.github.wulkanowy.di.scopes.PerFragment
 import io.github.wulkanowy.ui.modules.about.AboutFragment
+import io.github.wulkanowy.ui.modules.about.creator.CreatorFragment
 import io.github.wulkanowy.ui.modules.about.license.LicenseFragment
 import io.github.wulkanowy.ui.modules.about.license.LicenseModule
 import io.github.wulkanowy.ui.modules.account.AccountDialog
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
+import io.github.wulkanowy.ui.modules.attendance.AttendanceModule
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
@@ -33,16 +35,14 @@ import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import io.github.wulkanowy.ui.modules.timetable.completed.CompletedLessonsFragment
 
 @Suppress("unused")
-@Module(includes = [MainModule.Static::class])
+@Module
 abstract class MainModule {
 
-    @Module
-    object Static {
+    companion object {
 
         @Provides
-        fun provideFragNavController(activity: MainActivity): FragNavController {
-            return FragNavController(activity.supportFragmentManager, R.id.mainFragmentContainer)
-        }
+        fun provideFragNavController(activity: MainActivity) =
+            FragNavController(activity.supportFragmentManager, R.id.mainFragmentContainer)
 
         //In activities must be injected as Lazy
         @Provides
@@ -50,7 +50,7 @@ abstract class MainModule {
     }
 
     @PerFragment
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [AttendanceModule::class])
     abstract fun bindAttendanceFragment(): AttendanceFragment
 
     @PerFragment
@@ -120,6 +120,10 @@ abstract class MainModule {
     @PerFragment
     @ContributesAndroidInjector(modules = [LicenseModule::class])
     abstract fun bindLicenseFragment(): LicenseFragment
+
+    @PerFragment
+    @ContributesAndroidInjector()
+    abstract fun bindCreatorsFragment(): CreatorFragment
 
     @PerFragment
     @ContributesAndroidInjector(modules = [SchoolAndTeachersModule::class])
