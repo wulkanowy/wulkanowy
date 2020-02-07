@@ -27,10 +27,10 @@ class ExamWork @Inject constructor(
 
     override fun create(student: Student, semester: Semester): Completable {
         return examRepository.getExams(semester, now().monday, now().friday, true)
-            .flatMap { examRepository.getNotCSyncedExams(semester) }
+            .flatMap { examRepository.getNotCalendarSyncedExams(semester) }
             .flatMapCompletable {
                 if(it.isNotEmpty()) calendarSync(it)
-                examRepository.updateExams(it.onEach { exam -> exam.cSync = true })
+                examRepository.updateExams(it.onEach { exam -> exam.calendarSync = true })
             }
     }
 

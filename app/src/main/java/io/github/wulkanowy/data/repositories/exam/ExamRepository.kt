@@ -46,9 +46,9 @@ class ExamRepository @Inject constructor(
             }
     }
 
-    fun getNotCSyncedExams(semester: Semester): Single<List<Exam>> {
+    fun getNotCalendarSyncedExams(semester: Semester): Single<List<Exam>> {
 
-        return local.getExams(semester, now().monday, now().plusWeeks(4).friday).map { it.filter { exam -> !exam.cSync && preferencesRepository.isCalendarSyncEnable } }.toSingle(emptyList())
+        return local.getExams(semester, now().monday, now().plusWeeks(4).friday).map { it.filter { exam -> !exam.calendarSync && preferencesRepository.isCalendarSyncEnable } }.toSingle(emptyList())
     }
 
 

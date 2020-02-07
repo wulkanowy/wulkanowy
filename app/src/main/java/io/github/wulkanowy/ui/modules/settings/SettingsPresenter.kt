@@ -23,8 +23,6 @@ import org.threeten.bp.LocalDate.now
 import timber.log.Timber
 import javax.inject.Inject
 
-const val cSyncPermissionRequest = 0
-
 class SettingsPresenter @Inject constructor(
     schedulers: SchedulersProvider,
     errorHandler: ErrorHandler,
