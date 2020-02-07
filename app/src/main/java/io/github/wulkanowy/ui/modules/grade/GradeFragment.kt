@@ -136,7 +136,7 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
     }
 
     override fun setCurrentSemesterName(semester: Int, schoolYear: Int) {
-        subtitleString = "Semester $semester, $schoolYear/${schoolYear + 1}"
+        subtitleString = getString(R.string.grade_subtitle, semester, schoolYear, schoolYear + 1)
         (activity as MainView).setViewSubTitle(subtitleString)
     }
 
