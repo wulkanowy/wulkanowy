@@ -54,6 +54,8 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
 
     override val titleStringId get() = R.string.attendance_title
 
+    override var subtitleString = ""
+
     override val isViewEmpty get() = attendanceAdapter.isEmpty
 
     override val currentStackSize get() = (activity as? MainActivity)?.currentStackSize

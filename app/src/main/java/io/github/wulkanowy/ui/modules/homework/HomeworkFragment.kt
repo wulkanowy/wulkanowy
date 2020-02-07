@@ -36,6 +36,8 @@ class HomeworkFragment : BaseFragment(), HomeworkView, MainView.TitledView {
 
     override val titleStringId get() = R.string.homework_title
 
+    override var subtitleString = ""
+
     override val isViewEmpty get() = homeworkAdapter.isEmpty
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

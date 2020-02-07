@@ -34,6 +34,8 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
     override val titleStringId: Int
         get() = R.string.mobile_devices_title
 
+    override var subtitleString = ""
+
     override val isViewEmpty: Boolean
         get() = devicesAdapter.isEmpty
 

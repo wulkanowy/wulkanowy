@@ -40,6 +40,8 @@ class CompletedLessonsFragment : BaseFragment(), CompletedLessonsView, MainView.
 
     override val titleStringId get() = R.string.completed_lessons_title
 
+    override var subtitleString = ""
+
     override val isViewEmpty get() = completedLessonsAdapter.isEmpty
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

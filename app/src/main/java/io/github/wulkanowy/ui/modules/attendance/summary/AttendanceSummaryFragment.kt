@@ -40,6 +40,8 @@ class AttendanceSummaryFragment : BaseFragment(), AttendanceSummaryView, MainVie
 
     override val titleStringId get() = R.string.attendance_title
 
+    override var subtitleString = ""
+
     override val isViewEmpty get() = attendanceSummaryAdapter.isEmpty
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

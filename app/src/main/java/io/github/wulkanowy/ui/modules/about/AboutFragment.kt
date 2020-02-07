@@ -80,6 +80,8 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
 
     override val titleStringId get() = R.string.about_title
 
+    override var subtitleString = ""
+
     companion object {
         fun newInstance() = AboutFragment()
     }

@@ -34,6 +34,8 @@ class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
     override val titleStringId: Int
         get() = R.string.note_title
 
+    override var subtitleString = ""
+
     override val isViewEmpty: Boolean
         get() = noteAdapter.isEmpty
 

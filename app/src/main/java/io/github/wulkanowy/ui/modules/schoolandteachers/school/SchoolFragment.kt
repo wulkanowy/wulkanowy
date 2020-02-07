@@ -24,6 +24,8 @@ class SchoolFragment : BaseFragment(), SchoolView, MainView.TitledView, SchoolAn
 
     override val titleStringId get() = R.string.school_title
 
+    override var subtitleString = ""
+
     override val isViewEmpty get() = schoolName.text.isBlank()
 
     companion object {

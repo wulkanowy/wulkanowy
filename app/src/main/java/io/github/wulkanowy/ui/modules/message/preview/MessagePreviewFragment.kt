@@ -34,6 +34,8 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     override val titleStringId: Int
         get() = R.string.message_title
 
+    override var subtitleString = ""
+
     override val noSubjectString: String
         get() = getString(R.string.message_no_subject)
 
