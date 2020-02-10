@@ -31,8 +31,6 @@ class SchoolAndTeachersFragment : BaseFragment(), SchoolAndTeachersView, MainVie
 
     override val titleStringId: Int get() = R.string.schoolandteachers_title
 
-    override var subtitleString = ""
-
     override val currentPageIndex get() = schoolandteachersViewPager.currentItem
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

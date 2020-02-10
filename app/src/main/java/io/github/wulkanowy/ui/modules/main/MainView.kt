@@ -48,6 +48,8 @@ interface MainView : BaseView {
         val titleStringId: Int
 
         var subtitleString: String
+            get() = ""
+            set(_) {}
     }
 
     enum class Section(val id: Int) {

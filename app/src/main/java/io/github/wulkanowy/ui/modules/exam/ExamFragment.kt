@@ -37,8 +37,6 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
 
     override val titleStringId get() = R.string.exam_title
 
-    override var subtitleString = ""
-
     override val isViewEmpty get() = examAdapter.isEmpty
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

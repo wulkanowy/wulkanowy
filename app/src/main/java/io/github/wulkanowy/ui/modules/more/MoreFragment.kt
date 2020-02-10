@@ -40,8 +40,6 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
     override val titleStringId: Int
         get() = R.string.more_title
 
-    override var subtitleString = ""
-
     override val messagesRes: Pair<String, Drawable?>?
         get() = context?.run { getString(R.string.message_title) to getCompatDrawable(R.drawable.ic_more_messages) }
 

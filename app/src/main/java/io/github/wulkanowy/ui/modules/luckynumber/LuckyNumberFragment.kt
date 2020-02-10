@@ -25,8 +25,6 @@ class LuckyNumberFragment : BaseFragment(), LuckyNumberView, MainView.TitledView
     override val titleStringId: Int
         get() = R.string.lucky_number_title
 
-    override var subtitleString = ""
-
     override val isViewEmpty get() = luckyNumberText.text.isBlank()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

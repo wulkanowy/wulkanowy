@@ -35,8 +35,6 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
 
     override val titleStringId get() = R.string.message_title
 
-    override var subtitleString = ""
-
     override val currentPageIndex get() = messageViewPager.currentItem
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

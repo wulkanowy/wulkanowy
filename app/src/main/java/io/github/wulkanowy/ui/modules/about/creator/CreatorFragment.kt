@@ -28,8 +28,6 @@ class CreatorFragment : BaseFragment(), CreatorView, MainView.TitledView {
 
     override val titleStringId get() = R.string.creators_title
 
-    override var subtitleString = ""
-
     companion object {
         fun newInstance() = CreatorFragment()
     }

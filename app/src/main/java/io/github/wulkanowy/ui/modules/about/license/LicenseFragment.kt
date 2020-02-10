@@ -34,8 +34,6 @@ class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
 
     override val titleStringId get() = R.string.license_title
 
-    override var subtitleString = ""
-
     override val appLibraries: ArrayList<Library>?
         get() = context?.let {
             libs.get().prepareLibraries(it, emptyArray(), emptyArray(), autoDetect = true, checkCachedDetection = true, sort = true)
