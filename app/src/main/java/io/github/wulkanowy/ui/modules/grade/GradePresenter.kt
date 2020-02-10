@@ -21,8 +21,7 @@ class GradePresenter @Inject constructor(
     var selectedIndex = 0
         private set
 
-    var schoolYear = 0
-        private set
+    private var schoolYear = 0
 
     private var semesters = emptyList<Semester>()
 
