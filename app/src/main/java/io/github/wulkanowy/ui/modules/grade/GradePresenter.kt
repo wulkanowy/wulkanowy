@@ -58,7 +58,7 @@ class GradePresenter @Inject constructor(
             selectedIndex = index + 1
             loadedSemesterId.clear()
             view?.let {
-               it.setCurrentSemesterName(index + 1, schoolYear)
+                it.setCurrentSemesterName(index + 1, schoolYear)
                 notifyChildrenSemesterChange()
                 loadChild(it.currentPageIndex)
             }
@@ -101,16 +101,15 @@ class GradePresenter @Inject constructor(
             .flatMap { semesterRepository.getSemesters(it) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .doOnSuccess {
+            .doFinally { view?.showProgress(false) }
+            .subscribe({
                 it.first { item -> item.isCurrent }.also { current ->
                     selectedIndex = if (selectedIndex == 0) current.semesterName else selectedIndex
                     schoolYear = current.schoolYear
                     semesters = it.filter { semester -> semester.diaryId == current.diaryId }
                     view?.setCurrentSemesterName(current.semesterName, schoolYear)
                 }
-            }
-            .doFinally { view?.showProgress(false) }
-            .subscribe({
+
                 view?.run {
                     Timber.i("Loading grade result: Attempt load index $currentPageIndex")
                     loadChild(currentPageIndex)
