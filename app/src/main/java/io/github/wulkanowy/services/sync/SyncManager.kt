@@ -14,7 +14,11 @@ import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.SharedPrefProvider.Companion.APP_VERSION_CODE_KEY
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.services.sync.channels.DebugChannel
+import io.github.wulkanowy.services.sync.channels.LuckyNumberChannel
 import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
+import io.github.wulkanowy.services.sync.channels.NewGradesChannel
+import io.github.wulkanowy.services.sync.channels.NewMessagesChannel
+import io.github.wulkanowy.services.sync.channels.NewNotesChannel
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.isHolidays
 import org.threeten.bp.LocalDate.now
@@ -30,6 +34,10 @@ class SyncManager @Inject constructor(
     sharedPrefProvider: SharedPrefProvider,
     newEntriesChannel: NewEntriesChannel,
     debugChannel: DebugChannel,
+    luckyNumberChannel: LuckyNumberChannel,
+    newGradesChannel: NewGradesChannel,
+    newMessagesChannel: NewMessagesChannel,
+    newNotesChannel: NewNotesChannel,
     appInfo: AppInfo
 ) {
 
@@ -38,6 +46,10 @@ class SyncManager @Inject constructor(
 
         if (SDK_INT > O) {
             newEntriesChannel.create()
+            luckyNumberChannel.create()
+            newGradesChannel.create()
+            newMessagesChannel.create()
+            newNotesChannel.create()
             if (appInfo.isDebug) debugChannel.create()
         }
 
