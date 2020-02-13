@@ -22,7 +22,7 @@
     <string name="account_title">Выберите аккаунт</string>
 
     <!--Subtitles-->
-    <string name="grade_subtitle">семестр %d, %d/%d</string>
+    <string name="grade_subtitle">Семестр %d, %d/%d</string>
 
 
     <!--Login-->
