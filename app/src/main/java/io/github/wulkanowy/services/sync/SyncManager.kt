@@ -15,7 +15,6 @@ import io.github.wulkanowy.data.db.SharedPrefProvider.Companion.APP_VERSION_CODE
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.services.sync.channels.DebugChannel
 import io.github.wulkanowy.services.sync.channels.LuckyNumberChannel
-import io.github.wulkanowy.services.sync.channels.NewEntriesChannel
 import io.github.wulkanowy.services.sync.channels.NewGradesChannel
 import io.github.wulkanowy.services.sync.channels.NewMessagesChannel
 import io.github.wulkanowy.services.sync.channels.NewNotesChannel
@@ -32,7 +31,6 @@ class SyncManager @Inject constructor(
     private val workManager: WorkManager,
     private val preferencesRepository: PreferencesRepository,
     sharedPrefProvider: SharedPrefProvider,
-    newEntriesChannel: NewEntriesChannel,
     debugChannel: DebugChannel,
     luckyNumberChannel: LuckyNumberChannel,
     newGradesChannel: NewGradesChannel,
@@ -45,7 +43,6 @@ class SyncManager @Inject constructor(
         if (now().isHolidays) stopSyncWorker()
 
         if (SDK_INT > O) {
-            newEntriesChannel.create()
             luckyNumberChannel.create()
             newGradesChannel.create()
             newMessagesChannel.create()

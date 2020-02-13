@@ -1,9 +1,11 @@
 package io.github.wulkanowy.ui.modules.main
 
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
@@ -84,6 +86,10 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
         setContentView(R.layout.activity_main)
         setSupportActionBar(mainToolbar)
         messageContainer = mainFragmentContainer
+        if (SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.deleteNotificationChannel("new_entries_channel")
+        }
 
         presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.Section)
 
