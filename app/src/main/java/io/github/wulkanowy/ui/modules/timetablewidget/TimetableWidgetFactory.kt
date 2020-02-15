@@ -14,6 +14,7 @@ import android.widget.RemoteViewsService
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.data.repositories.timetable.TimetableRepository
@@ -31,6 +32,7 @@ class TimetableWidgetFactory(
     private val timetableRepository: TimetableRepository,
     private val studentRepository: StudentRepository,
     private val semesterRepository: SemesterRepository,
+    private val prefRepository: PreferencesRepository,
     private val sharedPref: SharedPrefProvider,
     private val schedulers: SchedulersProvider,
     private val context: Context,
@@ -95,6 +97,7 @@ class TimetableWidgetFactory(
                 .flatMap { semesterRepository.getCurrentSemester(it).toMaybe() }
                 .flatMap { timetableRepository.getTimetable(it, date, date).toMaybe() }
                 .map { item -> item.sortedBy { it.number } }
+                .map { lessons -> lessons.filter { if (prefRepository.showWholeClassPlan == "no") it.studentPlan else true } }
                 .subscribeOn(schedulers.backgroundThread)
                 .blockingGet(emptyList())
         } catch (e: Exception) {
