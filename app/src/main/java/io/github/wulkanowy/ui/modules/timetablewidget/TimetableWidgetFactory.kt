@@ -87,9 +87,9 @@ class TimetableWidgetFactory(
 
     private fun getItemLayout(lesson: Timetable): Int {
         return when {
-            prefRepository.showWholeClassPlan == "small" && !lesson.studentPlan -> when (savedTheme) {
-                0L -> R.layout.item_widget_timetable_small
-                else -> R.layout.item_widget_timetable_small_dark
+            prefRepository.showWholeClassPlan == "small" && !lesson.studentPlan -> {
+                if (savedTheme == 0L) R.layout.item_widget_timetable_small
+                else R.layout.item_widget_timetable_small_dark
             }
             savedTheme == 0L -> R.layout.item_widget_timetable
             else -> R.layout.item_widget_timetable_dark
