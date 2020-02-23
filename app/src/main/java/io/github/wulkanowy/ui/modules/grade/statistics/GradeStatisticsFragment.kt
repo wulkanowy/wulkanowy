@@ -96,11 +96,7 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         statisticsAdapter.items = emptyList()
     }
 
-    override fun showPieContent(show: Boolean) {
-        gradeStatisticsRecycler.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
-    override fun showBarContent(show: Boolean) {
+    override fun showContent(show: Boolean) {
         gradeStatisticsRecycler.visibility = if (show) View.VISIBLE else View.GONE
     }
 

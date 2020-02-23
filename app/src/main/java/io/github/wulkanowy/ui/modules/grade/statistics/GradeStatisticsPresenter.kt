@@ -53,7 +53,7 @@ class GradeStatisticsPresenter @Inject constructor(
             showProgress(true)
             enableSwipe(false)
             showRefresh(false)
-            showBarContent(false)
+            showContent(false)
             showErrorView(false)
             showEmpty(false)
             clearView()
@@ -81,8 +81,7 @@ class GradeStatisticsPresenter @Inject constructor(
     fun onSubjectSelected(name: String?) {
         Timber.i("Select grade stats subject $name")
         view?.run {
-            showBarContent(false)
-            showPieContent(false)
+            showContent(false)
             showProgress(true)
             enableSwipe(false)
             showEmpty(false)
@@ -99,8 +98,7 @@ class GradeStatisticsPresenter @Inject constructor(
         Timber.i("Select grade stats semester: $type")
         disposable.clear()
         view?.run {
-            showBarContent(false)
-            showPieContent(false)
+            showContent(false)
             showProgress(true)
             enableSwipe(false)
             showEmpty(false)
@@ -165,8 +163,7 @@ class GradeStatisticsPresenter @Inject constructor(
                 Timber.i("Loading grade stats result: Success")
                 view?.run {
                     showEmpty(it.isEmpty())
-                    showBarContent(false)
-                    showPieContent(it.isNotEmpty())
+                    showContent(it.isNotEmpty())
                     showErrorView(false)
                     updateData(it, preferencesRepository.gradeColorTheme)
                 }
