@@ -33,7 +33,7 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         fun newInstance() = GradeStatisticsFragment()
     }
 
-    override val isEmpty get() = statisticsAdapter.items.isEmpty()
+    override val isViewEmpty get() = statisticsAdapter.items.isEmpty()
 
     override val currentType
         get() = when (gradeStatisticsTypeSwitch.checkedRadioButtonId) {
@@ -96,6 +96,10 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         statisticsAdapter.items = emptyList()
     }
 
+    override fun resetView() {
+        gradeStatisticsScroll.scrollTo(0, 0)
+    }
+
     override fun showContent(show: Boolean) {
         gradeStatisticsRecycler.visibility = if (show) View.VISIBLE else View.GONE
     }
@@ -129,7 +133,7 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
     }
 
     override fun onParentReselected() {
-        gradeStatisticsRecycler.scrollToPosition(0)
+        presenter.onParentViewReselected()
     }
 
     override fun onParentChangeSemester() {

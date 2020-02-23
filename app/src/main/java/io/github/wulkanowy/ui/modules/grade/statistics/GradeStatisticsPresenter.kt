@@ -48,6 +48,13 @@ class GradeStatisticsPresenter @Inject constructor(
         loadDataByType(semesterId, currentSubjectName, currentType, forceRefresh)
     }
 
+
+    fun onParentViewReselected() {
+        view?.run {
+            if (!isViewEmpty) resetView()
+        }
+    }
+
     fun onParentViewChangeSemester() {
         view?.run {
             showProgress(true)
@@ -176,7 +183,7 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
         view?.run {
-            if (isEmpty) {
+            if (isViewEmpty) {
                 lastError = error
                 setErrorDetails(message)
                 showErrorView(true)

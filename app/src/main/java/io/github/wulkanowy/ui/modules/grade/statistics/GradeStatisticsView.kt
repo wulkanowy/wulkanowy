@@ -5,7 +5,7 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface GradeStatisticsView : BaseView {
 
-    val isEmpty: Boolean
+    val isViewEmpty: Boolean
 
     val currentType: ViewType
 
@@ -22,6 +22,8 @@ interface GradeStatisticsView : BaseView {
     fun notifyParentRefresh()
 
     fun clearView()
+
+    fun resetView()
 
     fun showContent(show: Boolean)
 
