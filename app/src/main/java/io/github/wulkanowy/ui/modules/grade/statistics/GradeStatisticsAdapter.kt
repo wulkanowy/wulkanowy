@@ -16,18 +16,16 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.GradePointsStatistics
-import io.github.wulkanowy.data.db.entities.GradeStatistics
+import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.utils.getThemeAttrColor
 import kotlinx.android.synthetic.main.item_grade_statistics_bar.view.*
 import kotlinx.android.synthetic.main.item_grade_statistics_pie.view.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class GradeStatisticsAdapter @Inject constructor() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var items = emptyList<Any>()
+    var items = emptyList<GradeStatisticsItem>()
 
     var theme: String = ""
 
@@ -61,9 +59,9 @@ class GradeStatisticsAdapter @Inject constructor() :
     override fun getItemCount() = items.size
 
     override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
-            is GradePointsStatistics -> R.layout.item_grade_statistics_bar
-            else -> R.layout.item_grade_statistics_pie
+        return when (items[position].type) {
+            ViewType.SEMESTER, ViewType.PARTIAL -> R.layout.item_grade_statistics_pie
+            ViewType.POINTS -> R.layout.item_grade_statistics_bar
         }
     }
 
@@ -76,18 +74,18 @@ class GradeStatisticsAdapter @Inject constructor() :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Timber.d("onBindViewHolder: $holder")
-
         when (holder) {
-            is GradeStatisticsPie -> bindPieChart(holder, items[position] as List<GradeStatistics>)
-            is GradeStatisticsBar -> bindBarChart(holder, items[position] as GradePointsStatistics)
+            is GradeStatisticsPie -> bindPieChart(holder, items[position])
+            is GradeStatisticsBar -> bindBarChart(holder, items[position])
         }
     }
 
-    private fun bindPieChart(holder: GradeStatisticsPie, items: List<GradeStatistics>) {
-        val gradeStatisticsChart = holder.view.gradeStatisticsChart
+    private fun bindPieChart(holder: GradeStatisticsPie, item: GradeStatisticsItem) {
+        val gradeStatisticsPie = holder.view.gradeStatisticsPie
 
-        with(gradeStatisticsChart) {
+        holder.view.gradeStatisticsPieTitle.text = item.partial.firstOrNull()?.subject
+
+        with(gradeStatisticsPie) {
             description.isEnabled = false
             setHoleColor(context.getThemeAttrColor(android.R.attr.windowBackground))
             setCenterTextColor(context.getThemeAttrColor(android.R.attr.textColorPrimary))
@@ -101,6 +99,10 @@ class GradeStatisticsAdapter @Inject constructor() :
             else -> materialGradeColors
         }
 
+        val items = item.partial
+            .sortedByDescending { it.grade }
+            .filter { it.amount != 0 }
+
         val dataset = PieDataSet(items.map {
             PieEntry(it.amount.toFloat(), it.grade.toString())
         }, "Legenda").apply {
@@ -112,7 +114,7 @@ class GradeStatisticsAdapter @Inject constructor() :
             }.toIntArray(), holder.view.context)
         }
 
-        with(gradeStatisticsChart) {
+        with(gradeStatisticsPie) {
             data = PieData(dataset).apply {
                 setTouchEnabled(false)
                 setValueFormatter(object : ValueFormatter() {
@@ -136,8 +138,10 @@ class GradeStatisticsAdapter @Inject constructor() :
         }
     }
 
-    private fun bindBarChart(holder: GradeStatisticsBar, item: GradePointsStatistics) {
+    private fun bindBarChart(holder: GradeStatisticsBar, item: GradeStatisticsItem) {
         val gradeStatisticsChartPoints = holder.view.gradeStatisticsBar
+
+        holder.view.gradeStatisticsBarTitle.text = item.points!!.subject
 
         with(gradeStatisticsChartPoints) {
             description.isEnabled = false
@@ -158,8 +162,8 @@ class GradeStatisticsAdapter @Inject constructor() :
         }
 
         val dataset = BarDataSet(listOf(
-            BarEntry(1f, item.others.toFloat()),
-            BarEntry(2f, item.student.toFloat())
+            BarEntry(1f, item.points.others.toFloat()),
+            BarEntry(2f, item.points.student.toFloat())
         ), "Legenda").apply {
             valueTextSize = 12f
             valueTextColor = holder.view.context.getThemeAttrColor(android.R.attr.textColorPrimary)

@@ -8,8 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.GradePointsStatistics
-import io.github.wulkanowy.data.db.entities.GradeStatistics
+import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
@@ -34,9 +33,7 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         fun newInstance() = GradeStatisticsFragment()
     }
 
-    override val isPieViewEmpty get() = statisticsAdapter.items.isEmpty()
-
-    override val isBarViewEmpty get() = statisticsAdapter.items.isEmpty()
+    override val isEmpty get() = statisticsAdapter.items.isEmpty()
 
     override val currentType
         get() = when (gradeStatisticsTypeSwitch.checkedRadioButtonId) {
@@ -84,14 +81,9 @@ class GradeStatisticsFragment : BaseFragment(), GradeStatisticsView, GradeView.G
         }
     }
 
-    override fun updatePieData(items: List<GradeStatistics>, theme: String) {
+    override fun updateData(items: List<GradeStatisticsItem>, theme: String) {
         statisticsAdapter.theme = theme
-        statisticsAdapter.items = listOf(items)
-        statisticsAdapter.notifyDataSetChanged()
-    }
-
-    override fun updateBarData(item: GradePointsStatistics) {
-        statisticsAdapter.items = listOf(item)
+        statisticsAdapter.items = items
         statisticsAdapter.notifyDataSetChanged()
     }
 

@@ -147,8 +147,6 @@ class GradeStatisticsPresenter @Inject constructor(
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
             .flatMap { gradeStatisticsRepository.getGradesStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, isSemester, forceRefresh) }
-            .map { list -> list.sortedByDescending { it.grade } }
-            .map { list -> list.filter { it.amount != 0 } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {
@@ -166,7 +164,7 @@ class GradeStatisticsPresenter @Inject constructor(
                     showBarContent(false)
                     showPieContent(it.isNotEmpty())
                     showErrorView(false)
-                    updatePieData(it, preferencesRepository.gradeColorTheme)
+                    updateData(it, preferencesRepository.gradeColorTheme)
                 }
                 analytics.logEvent("load_grade_statistics", "items" to it.size, "force_refresh" to forceRefresh)
             }) {
@@ -179,7 +177,7 @@ class GradeStatisticsPresenter @Inject constructor(
         Timber.i("Loading grade points stats data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
-            .flatMapMaybe { gradeStatisticsRepository.getGradesPointsStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, forceRefresh) }
+            .flatMap { gradeStatisticsRepository.getGradesPointsStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, forceRefresh) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {
@@ -193,29 +191,23 @@ class GradeStatisticsPresenter @Inject constructor(
             .subscribe({
                 Timber.i("Loading grade points stats result: Success")
                 view?.run {
-                    showEmpty(false)
+                    showEmpty(it.isEmpty())
                     showPieContent(false)
-                    showBarContent(true)
+                    showBarContent(it.isNotEmpty())
                     showErrorView(false)
-                    updateBarData(it)
+                    updateData(it, preferencesRepository.gradeColorTheme)
                 }
                 analytics.logEvent("load_grade_points_statistics", "force_refresh" to forceRefresh)
             }, {
                 Timber.e("Loading grade points stats result: An exception occurred")
                 errorHandler.dispatch(it)
-            }, {
-                Timber.d("Loading grade points stats result: No point stats found")
-                view?.run {
-                    showBarContent(false)
-                    showEmpty(true)
-                }
             })
         )
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
         view?.run {
-            if ((isBarViewEmpty && currentType == ViewType.POINTS) || (isPieViewEmpty) && currentType != ViewType.POINTS) {
+            if (isEmpty) {
                 lastError = error
                 setErrorDetails(message)
                 showErrorView(true)

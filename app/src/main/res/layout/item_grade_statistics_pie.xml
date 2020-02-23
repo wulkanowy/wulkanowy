@@ -1,8 +1,21 @@
-<com.github.mikephil.charting.charts.PieChart xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/gradeStatisticsChart"
     android:layout_width="match_parent"
-    android:layout_height="400dp"
-    android:layout_margin="10dp"
-    android:background="?android:windowBackground"
-    tools:context=".ui.modules.grade.statistics.GradeStatisticsAdapter" />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/gradeStatisticsPieTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Matematyka" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/gradeStatisticsPie"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_margin="10dp"
+        android:background="?android:windowBackground"
+        tools:context=".ui.modules.grade.statistics.GradeStatisticsAdapter" />
+
+</LinearLayout>
