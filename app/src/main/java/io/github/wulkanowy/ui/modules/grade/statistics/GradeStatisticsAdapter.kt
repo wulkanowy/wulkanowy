@@ -29,7 +29,7 @@ class GradeStatisticsAdapter @Inject constructor() :
 
     var items = emptyList<GradeStatisticsItem>()
 
-    var theme: String = ""
+    var theme: String = "vulcan"
 
     private val vulcanGradeColors = listOf(
         6 to R.color.grade_vulcan_six,
@@ -83,19 +83,8 @@ class GradeStatisticsAdapter @Inject constructor() :
     }
 
     private fun bindPieChart(holder: GradeStatisticsPie, item: GradeStatisticsItem) {
-        val gradeStatisticsPie = holder.view.gradeStatisticsPie
-
         holder.view.gradeStatisticsPieTitle.text = item.partial.firstOrNull()?.subject
         holder.view.gradeStatisticsPieTitle.visibility = if (items.size == 1) GONE else VISIBLE
-
-        with(gradeStatisticsPie) {
-            description.isEnabled = false
-            setHoleColor(context.getThemeAttrColor(android.R.attr.windowBackground))
-            setCenterTextColor(context.getThemeAttrColor(android.R.attr.textColorPrimary))
-            animateXY(1000, 1000)
-            minAngleForSlices = 25f
-            legend.textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
-        }
 
         val gradeColors = when (theme) {
             "vulcan" -> vulcanGradeColors
@@ -108,7 +97,9 @@ class GradeStatisticsAdapter @Inject constructor() :
 
         val dataset = PieDataSet(items.map {
             PieEntry(it.amount.toFloat(), it.grade.toString())
-        }, "Legenda").apply {
+        }, "Legenda")
+
+        with(dataset) {
             valueTextSize = 12f
             sliceSpace = 1f
             valueTextColor = Color.WHITE
@@ -117,18 +108,18 @@ class GradeStatisticsAdapter @Inject constructor() :
             }.toIntArray(), holder.view.context)
         }
 
-        with(gradeStatisticsPie) {
+        with(holder.view.gradeStatisticsPie) {
+            setTouchEnabled(false)
+            animateXY(1000, 1000)
             data = PieData(dataset).apply {
-                setTouchEnabled(false)
                 setValueFormatter(object : ValueFormatter() {
                     override fun getPieLabel(value: Float, pieEntry: PieEntry): String {
                         return resources.getQuantityString(R.plurals.grade_number_item, value.toInt(), value.toInt())
                     }
                 })
-                centerText = items.fold(0) { acc, it -> acc + it.amount }
-                    .let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
             }
-            legend.apply {
+            with(legend) {
+                textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
                 setCustom(gradeLabels.mapIndexed { i, it ->
                     LegendEntry().apply {
                         label = it
@@ -137,38 +128,28 @@ class GradeStatisticsAdapter @Inject constructor() :
                     }
                 })
             }
+
+            minAngleForSlices = 25f
+            description.isEnabled = false
+            centerText = items.fold(0) { acc, it -> acc + it.amount }
+                .let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
+
+            setHoleColor(context.getThemeAttrColor(android.R.attr.windowBackground))
+            setCenterTextColor(context.getThemeAttrColor(android.R.attr.textColorPrimary))
             invalidate()
         }
     }
 
     private fun bindBarChart(holder: GradeStatisticsBar, item: GradeStatisticsItem) {
-        val gradeStatisticsChartPoints = holder.view.gradeStatisticsBar
-
         holder.view.gradeStatisticsBarTitle.text = item.points!!.subject
         holder.view.gradeStatisticsBarTitle.visibility = if (items.size == 1) GONE else VISIBLE
-
-        with(gradeStatisticsChartPoints) {
-            description.isEnabled = false
-
-            animateXY(1000, 1000)
-            legend.textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
-
-            with(axisLeft) {
-                axisMinimum = 0f
-                axisMaximum = 100f
-                labelCount = 11
-            }
-            with(axisRight) {
-                axisMinimum = 0f
-                axisMaximum = 100f
-                labelCount = 11
-            }
-        }
 
         val dataset = BarDataSet(listOf(
             BarEntry(1f, item.points.others.toFloat()),
             BarEntry(2f, item.points.student.toFloat())
-        ), "Legenda").apply {
+        ), "Legenda")
+
+        with(dataset) {
             valueTextSize = 12f
             valueTextColor = holder.view.context.getThemeAttrColor(android.R.attr.textColorPrimary)
             valueFormatter = object : ValueFormatter() {
@@ -177,18 +158,12 @@ class GradeStatisticsAdapter @Inject constructor() :
             colors = gradePointsColors
         }
 
-        with(gradeStatisticsChartPoints) {
+        with(holder.view.gradeStatisticsBar) {
+            setTouchEnabled(false)
+            animateXY(1000, 1000)
             data = BarData(dataset).apply {
                 barWidth = 0.5f
                 setFitBars(true)
-            }
-            setTouchEnabled(false)
-            xAxis.setDrawLabels(false)
-            xAxis.setDrawGridLines(false)
-
-            holder.view.context.getThemeAttrColor(android.R.attr.textColorPrimary).let {
-                axisLeft.textColor = it
-                axisRight.textColor = it
             }
             legend.setCustom(listOf(
                 LegendEntry().apply {
@@ -202,6 +177,26 @@ class GradeStatisticsAdapter @Inject constructor() :
                     form = Legend.LegendForm.SQUARE
                 }
             ))
+            legend.textColor = context.getThemeAttrColor(android.R.attr.textColorPrimary)
+
+            description.isEnabled = false
+
+            holder.view.context.getThemeAttrColor(android.R.attr.textColorPrimary).let {
+                axisLeft.textColor = it
+                axisRight.textColor = it
+            }
+            xAxis.setDrawLabels(false)
+            xAxis.setDrawGridLines(false)
+            with(axisLeft) {
+                axisMinimum = 0f
+                axisMaximum = 100f
+                labelCount = 11
+            }
+            with(axisRight) {
+                axisMinimum = 0f
+                axisMaximum = 100f
+                labelCount = 11
+            }
             invalidate()
         }
     }
