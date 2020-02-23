@@ -3,6 +3,8 @@ package io.github.wulkanowy.ui.modules.grade.statistics
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -84,6 +86,7 @@ class GradeStatisticsAdapter @Inject constructor() :
         val gradeStatisticsPie = holder.view.gradeStatisticsPie
 
         holder.view.gradeStatisticsPieTitle.text = item.partial.firstOrNull()?.subject
+        holder.view.gradeStatisticsPieTitle.visibility = if (items.size == 1) GONE else VISIBLE
 
         with(gradeStatisticsPie) {
             description.isEnabled = false
@@ -142,6 +145,7 @@ class GradeStatisticsAdapter @Inject constructor() :
         val gradeStatisticsChartPoints = holder.view.gradeStatisticsBar
 
         holder.view.gradeStatisticsBarTitle.text = item.points!!.subject
+        holder.view.gradeStatisticsBarTitle.visibility = if (items.size == 1) GONE else VISIBLE
 
         with(gradeStatisticsChartPoints) {
             description.isEnabled = false
