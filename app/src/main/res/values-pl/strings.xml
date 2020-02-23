@@ -20,6 +20,9 @@
     <string name="homework_title">Zadania domowe</string>
     <string name="account_title">Wybierz konto</string>
 
+    <!--Subtitles-->
+    <string name="grade_subtitle">Semestr %d, %d/%d</string>
+
 
     <!--Login-->
     <string name="login_header_default">Zaloguj się za pomocą konta ucznia lub rodzica</string>
@@ -302,6 +305,11 @@
     <!--Creators-->
     <string name="creator_avatar_description">Awatar</string>
     <string name="creator_see_more">Zobacz więcej na GitHub</string>
+
+    <!--Log viewer-->
+    <string name="logviewer_title">Przeglądarka logów</string>
+    <string name="logviewer_share">Share logs</string>
+    <string name="logviewer_refresh">Odśwież</string>
 
 
     <!--Generic-->
