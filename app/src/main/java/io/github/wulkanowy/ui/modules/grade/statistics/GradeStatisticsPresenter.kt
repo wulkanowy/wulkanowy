@@ -135,18 +135,22 @@ class GradeStatisticsPresenter @Inject constructor(
     private fun loadDataByType(semesterId: Int, subjectName: String, type: ViewType, forceRefresh: Boolean = false) {
         currentSubjectName = subjectName
         currentType = type
-        when (type) {
-            ViewType.SEMESTER -> loadData(semesterId, subjectName, true, forceRefresh)
-            ViewType.PARTIAL -> loadData(semesterId, subjectName, false, forceRefresh)
-            ViewType.POINTS -> loadPointsData(semesterId, subjectName, forceRefresh)
-        }
+        loadData(semesterId, subjectName, type, forceRefresh)
     }
 
-    private fun loadData(semesterId: Int, subjectName: String, isSemester: Boolean, forceRefresh: Boolean = false) {
+    private fun loadData(semesterId: Int, subjectName: String, type: ViewType, forceRefresh: Boolean) {
         Timber.i("Loading grade stats data started")
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it) }
-            .flatMap { gradeStatisticsRepository.getGradesStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, isSemester, forceRefresh) }
+            .flatMap {
+                val semester = it.first { item -> item.semesterId == semesterId }
+
+                when (type) {
+                    ViewType.SEMESTER -> gradeStatisticsRepository.getGradesStatistics(semester, subjectName, true, forceRefresh)
+                    ViewType.PARTIAL -> gradeStatisticsRepository.getGradesStatistics(semester, subjectName, false, forceRefresh)
+                    ViewType.POINTS -> gradeStatisticsRepository.getGradesPointsStatistics(semester, subjectName, forceRefresh)
+                }
+            }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {
@@ -171,38 +175,6 @@ class GradeStatisticsPresenter @Inject constructor(
                 Timber.e("Loading grade stats result: An exception occurred")
                 errorHandler.dispatch(it)
             })
-    }
-
-    private fun loadPointsData(semesterId: Int, subjectName: String, forceRefresh: Boolean = false) {
-        Timber.i("Loading grade points stats data started")
-        disposable.add(studentRepository.getCurrentStudent()
-            .flatMap { semesterRepository.getSemesters(it) }
-            .flatMap { gradeStatisticsRepository.getGradesPointsStatistics(it.first { item -> item.semesterId == semesterId }, subjectName, forceRefresh) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doFinally {
-                view?.run {
-                    showRefresh(false)
-                    showProgress(false)
-                    enableSwipe(true)
-                    notifyParentDataLoaded(semesterId)
-                }
-            }
-            .subscribe({
-                Timber.i("Loading grade points stats result: Success")
-                view?.run {
-                    showEmpty(it.isEmpty())
-                    showPieContent(false)
-                    showBarContent(it.isNotEmpty())
-                    showErrorView(false)
-                    updateData(it, preferencesRepository.gradeColorTheme)
-                }
-                analytics.logEvent("load_grade_points_statistics", "force_refresh" to forceRefresh)
-            }, {
-                Timber.e("Loading grade points stats result: An exception occurred")
-                errorHandler.dispatch(it)
-            })
-        )
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
