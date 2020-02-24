@@ -33,4 +33,6 @@ data class Homework(
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    var calendarSync: Boolean = false
 }

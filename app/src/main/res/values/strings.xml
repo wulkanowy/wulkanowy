@@ -209,6 +209,7 @@
 
     <!--Homework-->
     <string name="homework_no_items">No info about homework</string>
+    <string name="homework_label">Homework</string>
 
 
     <!--Lucky number-->

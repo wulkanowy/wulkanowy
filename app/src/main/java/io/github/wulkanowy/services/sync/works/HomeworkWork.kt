@@ -12,6 +12,11 @@ import javax.inject.Inject
 class HomeworkWork @Inject constructor(private val homeworkRepository: HomeworkRepository) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return homeworkRepository.getHomework(semester, now().monday, now().friday, true).ignoreElement()
+        return homeworkRepository.getHomework(semester, now().monday, now().friday, true)
+            .flatMap { homeworkRepository.getNotCalendarSyncedHomework(semester) }
+            .flatMapCompletable {
+                if (it.isNotEmpty()) homeworkRepository.createCalendarEvents(it)
+                homeworkRepository.updateHomework(it.onEach { homework -> homework.calendarSync = true })
+            }
     }
 }

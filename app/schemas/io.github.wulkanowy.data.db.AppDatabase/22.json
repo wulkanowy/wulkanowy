@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 22,
-    "identityHash": "7104066ef4df9adaaad2e9bfaf98fede",
+    "identityHash": "c484b2febb2bfdce453f81f1a6260d6c",
     "entities": [
       {
         "tableName": "Students",
@@ -1128,11 +1128,17 @@
       },
       {
         "tableName": "Homework",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `content` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `calendarSync` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `content` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "calendarSync",
+            "columnName": "calendarSync",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1652,7 +1658,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7104066ef4df9adaaad2e9bfaf98fede')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c484b2febb2bfdce453f81f1a6260d6c')"
     ]
   }
 }

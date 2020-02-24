@@ -227,6 +227,7 @@
 
     <!--Homework-->
     <string name="homework_no_items">Brak zadań domowych</string>
+    <string name="homework_label">Zadanie domowe</string>
 
 
     <!--Lucky number-->
