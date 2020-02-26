@@ -19,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        tools:visibility="invisible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/loginRecoverFormContainer"
@@ -212,39 +213,60 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/loginRecoverSuccess"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
+        android:fillViewport="true"
+        android:scrollbars="none"
         android:visibility="invisible"
-        tools:ignore="UseCompoundDrawables"
-        tools:visibility="invisible">
+        tools:visibility="visible">
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:srcCompat="@drawable/ic_all_done"
-            app:tint="?colorOnBackground"
-            tools:ignore="contentDescription" />
-
-        <TextView
-            android:id="@+id/loginRecoverSuccessMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:padding="8dp"
-            android:text="@string/login_recover"
-            android:textSize="14sp" />
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/loginRecoverLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/main_log_in" />
-    </LinearLayout>
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/ic_all_done"
+                app:tint="?colorOnBackground"
+                tools:ignore="contentDescription" />
 
+            <TextView
+                android:id="@+id/loginRecoverSuccessTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="35dp"
+                android:gravity="center"
+                android:textSize="20sp"
+                tools:text="Pomyślnie wysłano email!" />
+
+            <TextView
+                android:id="@+id/loginRecoverSuccessMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="35dp"
+                android:lineSpacingMultiplier="1.5"
+                android:scrollbars="vertical"
+                android:text="@string/login_recover"
+                android:textSize="14sp"
+                tools:text="@tools:sample/lorem/random" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginRecoverLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="30dp"
+                android:text="@android:string/ok" />
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 </FrameLayout>

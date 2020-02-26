@@ -138,6 +138,10 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         loginRecoverSuccess.visibility = if (show) VISIBLE else GONE
     }
 
+    override fun setSuccessTitle(title: String) {
+        loginRecoverSuccessTitle.text = title
+    }
+
     override fun setSuccessMessage(message: String) {
         loginRecoverSuccessMessage.text = message
     }

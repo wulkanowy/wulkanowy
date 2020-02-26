@@ -112,7 +112,8 @@ class LoginRecoverPresenter @Inject constructor(
                 .subscribe({
                     view?.run {
                         showSuccessView(true)
-                        setSuccessMessage(it)
+                        setSuccessTitle(it.substringBefore(". "))
+                        setSuccessMessage(it.substringAfter(". "))
                     }
                 }) {
                     Timber.e("Send recover request result: An exception occurred")

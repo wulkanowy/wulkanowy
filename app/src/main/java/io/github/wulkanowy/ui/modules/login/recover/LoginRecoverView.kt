@@ -48,5 +48,7 @@ interface LoginRecoverView : BaseView {
 
     fun setSuccessMessage(message: String)
 
+    fun setSuccessTitle(title: String)
+
     fun loadReCaptcha(siteKey: String, url: String)
 }
