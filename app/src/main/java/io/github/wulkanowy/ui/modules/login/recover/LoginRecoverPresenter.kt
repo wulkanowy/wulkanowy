@@ -13,7 +13,7 @@ class LoginRecoverPresenter @Inject constructor(
     schedulers: SchedulersProvider,
     studentRepository: StudentRepository,
     private val loginErrorHandler: RecoverErrorHandler,
-    private val analytics: FirebaseAnalyticsHelper, // TODO
+    private val analytics: FirebaseAnalyticsHelper,
     private val recoverRepository: RecoverRepository
 ) : BasePresenter<LoginRecoverView>(loginErrorHandler, studentRepository, schedulers) {
 
@@ -115,9 +115,12 @@ class LoginRecoverPresenter @Inject constructor(
                         setSuccessTitle(it.substringBefore(". "))
                         setSuccessMessage(it.substringAfter(". "))
                     }
+
+                    analytics.logEvent("account_recover", "register" to host, "symbol" to symbol, "success" to true)
                 }) {
                     Timber.e("Send recover request result: An exception occurred")
                     errorHandler.dispatch(it)
+                    analytics.logEvent("account_recover", "register" to host, "symbol" to symbol, "success" to false)
                 })
         }
     }
