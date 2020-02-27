@@ -32,7 +32,7 @@
     <string name="login_email_hint">Электронная почта</string>
     <string name="login_login_pesel_email_hint">Логин, PESEL или электронная почта</string>
     <string name="login_password_hint">Пароль</string>
-    <string name="login_host_hint">Дневник</string>
+    <string name="login_host_hint">Дневник UONET+</string>
     <string name="login_type_api">Мобильный API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Гибрид</string>
