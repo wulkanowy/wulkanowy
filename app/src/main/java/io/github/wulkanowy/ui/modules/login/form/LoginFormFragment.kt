@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -86,6 +87,8 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginFormRecoverLink.setOnClickListener { presenter.onRecoverClick() }
         loginFormPass.setOnEditorDoneSignIn { loginFormSignIn.callOnClick() }
         loginFormSymbol.setOnEditorDoneSignIn { loginFormSignIn.callOnClick() }
+
+        loginFormSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
 
         with(loginFormHost) {
             setText(hostKeys.getOrNull(0).orEmpty())
