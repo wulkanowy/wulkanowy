@@ -13,13 +13,13 @@ import javax.inject.Inject
 class NewNotesChannel @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
     private val context: Context
-) {
+) : Channel {
 
     companion object {
         const val CHANNEL_ID = "new_notes_channel"
     }
 
-    fun create() {
+    override fun create() {
         notificationManager.createNotificationChannel(
             NotificationChannel(CHANNEL_ID, context.getString(R.string.channel_new_notes), NotificationManager.IMPORTANCE_HIGH)
                 .apply {
