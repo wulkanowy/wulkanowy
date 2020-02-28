@@ -7,8 +7,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
-import android.view.inputmethod.EditorInfo.IME_NULL
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -18,6 +16,7 @@ import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
+import io.github.wulkanowy.utils.setOnEditorDoneSignIn
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.fragment_login_form.*
 import javax.inject.Inject
@@ -85,12 +84,8 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginFormFaq.setOnClickListener { presenter.onFaqClick() }
         loginFormContactEmail.setOnClickListener { presenter.onEmailClick() }
         loginFormRecoverLink.setOnClickListener { presenter.onRecoverClick() }
-        loginFormPass.setOnEditorActionListener { _, id, _ ->
-            if (id == IME_ACTION_DONE || id == IME_NULL) loginFormSignIn.callOnClick() else false
-        }
-        loginFormSymbol.setOnEditorActionListener { _, id, _ ->
-            if (id == IME_ACTION_DONE || id == IME_NULL) loginFormSignIn.callOnClick() else false
-        }
+        loginFormPass.setOnEditorDoneSignIn { loginFormSignIn.callOnClick() }
+        loginFormSymbol.setOnEditorDoneSignIn { loginFormSignIn.callOnClick() }
 
         with(loginFormHost) {
             setText(hostKeys.getOrNull(0).orEmpty())

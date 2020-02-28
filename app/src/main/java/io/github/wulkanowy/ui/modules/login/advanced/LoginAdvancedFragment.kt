@@ -6,9 +6,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -17,6 +15,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.login.form.LoginSymbolAdapter
 import io.github.wulkanowy.utils.hideSoftInput
+import io.github.wulkanowy.utils.setOnEditorDoneSignIn
 import io.github.wulkanowy.utils.showSoftInput
 import kotlinx.android.synthetic.main.fragment_login_advanced.*
 import javax.inject.Inject
@@ -94,8 +93,8 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
             })
         }
 
-        loginFormPin.setOnEditorDoneSignIn()
-        loginFormPass.setOnEditorDoneSignIn()
+        loginFormPin.setOnEditorDoneSignIn { loginFormSignIn.callOnClick() }
+        loginFormPass.setOnEditorDoneSignIn { loginFormSignIn.callOnClick() }
 
         loginFormSymbol.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
 
@@ -103,12 +102,6 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
             setText(hostKeys.getOrNull(0).orEmpty())
             setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
             setOnClickListener { if (loginFormContainer.visibility == GONE) dismissDropDown() }
-        }
-    }
-
-    private fun AppCompatEditText.setOnEditorDoneSignIn() {
-        setOnEditorActionListener { _, id, _ ->
-            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) loginFormSignIn.callOnClick() else false
         }
     }
 
