@@ -12,7 +12,7 @@
     </string-array>
     <string-array name="hosts_values">
         <item>https://vulcan.net.pl/?standard</item>
-        <item>https://vulcan.net.pl/</item>
+        <item>https://vulcan.net.pl/?adfs</item>
         <item>https://eszkola.opolskie.pl</item>
         <item>https://edu.gdansk.pl</item>
         <item>https://edu.lublin.eu</item>

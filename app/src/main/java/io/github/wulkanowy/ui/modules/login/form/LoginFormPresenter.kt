@@ -60,7 +60,7 @@ class LoginFormPresenter @Inject constructor(
 
     fun updateSymbolInputVisibility() {
         view?.run {
-            showSymbol("standard" !in formHostValue)
+            showSymbol("adfs" in formHostValue)
         }
     }
 
