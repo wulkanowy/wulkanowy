@@ -43,6 +43,9 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override val formHostValue: String
         get() = hostValues.getOrNull(hostKeys.indexOf(loginFormHost.text.toString())).orEmpty()
 
+    override val formSymbolValue: String
+        get() = loginFormSymbol.text.toString()
+
     override val nicknameLabel: String
         get() = getString(R.string.login_nickname_hint)
 
@@ -68,6 +71,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
         loginFormUsername.doOnTextChanged { _, _, _, _ -> presenter.onUsernameTextChanged() }
         loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
+        loginFormSymbol.doOnTextChanged { _, _, _, _ -> presenter.onSymbolTextChanged() }
         loginFormHost.setOnItemClickListener { _, _, _, _ -> presenter.onHostSelected() }
         loginFormSignIn.setOnClickListener { presenter.onSignInClick() }
         loginFormAdvancedButton.setOnClickListener { presenter.onAdvancedLoginClick() }
@@ -95,9 +99,20 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginFormUsernameLayout.hint = label
     }
 
+    override fun showSymbol(show: Boolean) {
+        loginFormSymbolLayout.visibility = if (show) VISIBLE else GONE
+    }
+
     override fun setErrorUsernameRequired() {
         with(loginFormUsernameLayout) {
             requestFocus()
+            error = getString(R.string.login_field_required)
+        }
+    }
+
+    override fun setErrorSymbolRequired(focus: Boolean) {
+        with(loginFormSymbolLayout) {
+            if (focus) requestFocus()
             error = getString(R.string.login_field_required)
         }
     }
@@ -129,6 +144,10 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
     override fun clearPassError() {
         loginFormPassLayout.error = null
+    }
+
+    override fun clearSymbolError() {
+        loginFormSymbolLayout.error = null
     }
 
     override fun showSoftKeyboard() {
@@ -183,7 +202,10 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
     override fun onResume() {
         super.onResume()
-        presenter.updateUsernameLabel()
+        with(presenter) {
+            updateUsernameLabel()
+            updateSymbolInputVisibility()
+        }
     }
 
     override fun openEmail() {
