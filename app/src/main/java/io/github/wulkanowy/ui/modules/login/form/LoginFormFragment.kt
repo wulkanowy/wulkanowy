@@ -43,6 +43,9 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override val formHostValue: String
         get() = hostValues.getOrNull(hostKeys.indexOf(loginFormHost.text.toString())).orEmpty()
 
+    override val formHostSymbol: String
+        get() = hostSymbols.getOrNull(hostKeys.indexOf(loginFormHost.text.toString())).orEmpty()
+
     override val formSymbolValue: String
         get() = loginFormSymbol.text.toString()
 
@@ -56,6 +59,8 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
 
     private lateinit var hostValues: Array<String>
 
+    private lateinit var hostSymbols: Array<String>
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login_form, container, false)
     }
@@ -68,6 +73,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override fun initView() {
         hostKeys = resources.getStringArray(R.array.hosts_keys)
         hostValues = resources.getStringArray(R.array.hosts_values)
+        hostSymbols = resources.getStringArray(R.array.hosts_symbols)
 
         loginFormUsername.doOnTextChanged { _, _, _, _ -> presenter.onUsernameTextChanged() }
         loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
@@ -82,6 +88,9 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         loginFormPass.setOnEditorActionListener { _, id, _ ->
             if (id == IME_ACTION_DONE || id == IME_NULL) loginFormSignIn.callOnClick() else false
         }
+        loginFormSymbol.setOnEditorActionListener { _, id, _ ->
+            if (id == IME_ACTION_DONE || id == IME_NULL) loginFormSignIn.callOnClick() else false
+        }
 
         with(loginFormHost) {
             setText(hostKeys.getOrNull(0).orEmpty())
@@ -93,6 +102,10 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     override fun setCredentials(username: String, pass: String) {
         loginFormUsername.setText(username)
         loginFormPass.setText(pass)
+    }
+
+    override fun setSymbol(symbol: String) {
+        loginFormSymbol.setText(symbol)
     }
 
     override fun setUsernameLabel(label: String) {

@@ -20,4 +20,14 @@
         <item>https://resman.pl</item>
         <item>http://fakelog.cf/?standard</item>
     </string-array>
+    <string-array name="hosts_symbols">
+        <item>Default</item>
+        <item />
+        <item>opole</item>
+        <item>gdansk</item>
+        <item>lublin</item>
+        <item>tarnow</item>
+        <item>rzeszow</item>
+        <item>Default</item>
+    </string-array>
 </resources>

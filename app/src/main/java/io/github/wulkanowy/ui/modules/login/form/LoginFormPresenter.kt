@@ -46,6 +46,7 @@ class LoginFormPresenter @Inject constructor(
             if (formHostValue.contains("fakelog")) {
                 setCredentials("jan@fakelog.cf", "jan123")
             }
+            setSymbol(formHostSymbol)
             updateUsernameLabel()
             updateSymbolInputVisibility()
         }

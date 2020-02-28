@@ -13,6 +13,8 @@ interface LoginFormView : BaseView {
 
     val formHostValue: String
 
+    val formHostSymbol: String
+
     val formSymbolValue: String
 
     val nicknameLabel: String
@@ -20,6 +22,8 @@ interface LoginFormView : BaseView {
     val emailLabel: String
 
     fun setCredentials(username: String, pass: String)
+
+    fun setSymbol(symbol: String)
 
     fun setUsernameLabel(label: String)
 
