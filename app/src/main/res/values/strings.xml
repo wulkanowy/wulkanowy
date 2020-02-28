@@ -40,7 +40,6 @@
     <string name="login_pin_hint">PIN</string>
     <string name="login_api_key_hint">API key</string>
     <string name="login_symbol_hint">Symbol</string>
-    <string name="login_symbol_hint_optional">Symbol (optional)</string>
     <string name="login_sign_in">Sign in</string>
     <string name="login_invalid_password">Password too short</string>
     <string name="login_incorrect_password">Login details are incorrect</string>
