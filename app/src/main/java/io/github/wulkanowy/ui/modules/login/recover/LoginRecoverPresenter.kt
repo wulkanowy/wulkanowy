@@ -19,8 +19,6 @@ class LoginRecoverPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
-    private fun isLoginByEmail(host: String) = "fakelog" in host || ("vulcan" in host && "adfs" !in host)
-
     override fun onAttachView(view: LoginRecoverView) {
         super.onAttachView(view)
         view.initView()
@@ -51,7 +49,7 @@ class LoginRecoverPresenter @Inject constructor(
     fun updateFields() {
         view?.run {
             showSymbol("adfs" in recoverHostValue)
-            setUsernameHint(if (isLoginByEmail(recoverHostValue)) emailHintString else loginPeselEmailHintString)
+            setUsernameHint(if ("standard" in recoverHostValue) emailHintString else loginPeselEmailHintString)
         }
     }
 
@@ -90,7 +88,7 @@ class LoginRecoverPresenter @Inject constructor(
             isCorrect = false
         }
 
-        if (isLoginByEmail(host) && "@" !in username) {
+        if ("standard" in host && "@" !in username) {
             view?.setUsernameError(view?.invalidEmailString.orEmpty())
             isCorrect = false
         }

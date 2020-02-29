@@ -46,8 +46,13 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
 
     private lateinit var hostValues: Array<String>
 
+    private lateinit var hostSymbols: Array<String>
+
     override val formHostValue: String
         get() = hostValues.getOrNull(hostKeys.indexOf(loginFormHost.text.toString())).orEmpty()
+
+    override val formHostSymbol: String
+        get() = hostSymbols.getOrNull(hostKeys.indexOf(loginFormHost.text.toString())).orEmpty()
 
     override val formPinValue: String
         get() = loginFormPin.text.toString().trim()
@@ -76,6 +81,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
     override fun initView() {
         hostKeys = resources.getStringArray(R.array.hosts_keys)
         hostValues = resources.getStringArray(R.array.hosts_values)
+        hostSymbols = resources.getStringArray(R.array.hosts_symbols)
 
         loginFormUsername.doOnTextChanged { _, _, _, _ -> presenter.onUsernameTextChanged() }
         loginFormPass.doOnTextChanged { _, _, _, _ -> presenter.onPassTextChanged() }
@@ -115,6 +121,10 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
 
     override fun setUsernameLabel(label: String) {
         loginFormUsernameLayout.hint = label
+    }
+
+    override fun setSymbol(symbol: String) {
+        loginFormSymbol.setText(symbol)
     }
 
     override fun setErrorUsernameRequired() {
