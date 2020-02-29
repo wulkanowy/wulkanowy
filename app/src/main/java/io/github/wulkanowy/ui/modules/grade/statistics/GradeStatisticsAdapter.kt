@@ -110,7 +110,7 @@ class GradeStatisticsAdapter @Inject constructor() :
 
         with(holder.view.gradeStatisticsPie) {
             setTouchEnabled(false)
-            animateXY(1000, 1000)
+            if (items.size == 1) animateXY(1000, 1000)
             data = PieData(dataset).apply {
                 setValueFormatter(object : ValueFormatter() {
                     override fun getPieLabel(value: Float, pieEntry: PieEntry): String {
@@ -160,7 +160,7 @@ class GradeStatisticsAdapter @Inject constructor() :
 
         with(holder.view.gradeStatisticsBar) {
             setTouchEnabled(false)
-            animateXY(1000, 1000)
+            if (items.size == 1) animateXY(1000, 1000)
             data = BarData(dataset).apply {
                 barWidth = 0.5f
                 setFitBars(true)
