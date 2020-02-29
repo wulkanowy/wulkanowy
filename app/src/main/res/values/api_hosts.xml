@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string-array name="hosts_keys">
-        <item>Standardowy</item>
-        <item>Vulcan (niestandardowy)</item>
+        <item>Vulcan - standardowy</item>
+        <item>Vulcan - niestandardowy</item>
         <item>Opolska eSzkoła</item>
         <item>Gdańska Platforma Edukacyjna</item>
         <item>Lubelski Portal Oświatowy</item>
