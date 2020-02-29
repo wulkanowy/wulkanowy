@@ -18,6 +18,8 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.GradePointsStatistics
+import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.utils.getThemeAttrColor
 import kotlinx.android.synthetic.main.item_grade_statistics_bar.view.*
@@ -77,21 +79,23 @@ class GradeStatisticsAdapter @Inject constructor() :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is GradeStatisticsPie -> bindPieChart(holder, items[position])
-            is GradeStatisticsBar -> bindBarChart(holder, items[position])
+            is GradeStatisticsPie -> bindPieChart(holder, items[position].partial)
+            is GradeStatisticsBar -> bindBarChart(holder, items[position].points!!)
         }
     }
 
-    private fun bindPieChart(holder: GradeStatisticsPie, item: GradeStatisticsItem) {
-        holder.view.gradeStatisticsPieTitle.text = item.partial.firstOrNull()?.subject
-        holder.view.gradeStatisticsPieTitle.visibility = if (items.size == 1) GONE else VISIBLE
+    private fun bindPieChart(holder: GradeStatisticsPie, partials: List<GradeStatistics>) {
+        with(holder.view.gradeStatisticsPieTitle) {
+            text = partials.firstOrNull()?.subject
+            visibility = if (items.size == 1) GONE else VISIBLE
+        }
 
         val gradeColors = when (theme) {
             "vulcan" -> vulcanGradeColors
             else -> materialGradeColors
         }
 
-        val items = item.partial
+        val items = partials
             .sortedByDescending { it.grade }
             .filter { it.amount != 0 }
 
@@ -140,13 +144,15 @@ class GradeStatisticsAdapter @Inject constructor() :
         }
     }
 
-    private fun bindBarChart(holder: GradeStatisticsBar, item: GradeStatisticsItem) {
-        holder.view.gradeStatisticsBarTitle.text = item.points!!.subject
-        holder.view.gradeStatisticsBarTitle.visibility = if (items.size == 1) GONE else VISIBLE
+    private fun bindBarChart(holder: GradeStatisticsBar, points: GradePointsStatistics) {
+        with(holder.view.gradeStatisticsBarTitle) {
+            text = points.subject
+            visibility = if (items.size == 1) GONE else VISIBLE
+        }
 
         val dataset = BarDataSet(listOf(
-            BarEntry(1f, item.points.others.toFloat()),
-            BarEntry(2f, item.points.student.toFloat())
+            BarEntry(1f, points.others.toFloat()),
+            BarEntry(2f, points.student.toFloat())
         ), "Legenda")
 
         with(dataset) {
