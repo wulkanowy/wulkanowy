@@ -95,11 +95,7 @@ class GradeStatisticsAdapter @Inject constructor() :
             else -> materialGradeColors
         }
 
-        val items = partials
-            .sortedByDescending { it.grade }
-            .filter { it.amount != 0 }
-
-        val dataset = PieDataSet(items.map {
+        val dataset = PieDataSet(partials.map {
             PieEntry(it.amount.toFloat(), it.grade.toString())
         }, "Legenda")
 
@@ -107,14 +103,14 @@ class GradeStatisticsAdapter @Inject constructor() :
             valueTextSize = 12f
             sliceSpace = 1f
             valueTextColor = Color.WHITE
-            setColors(items.map {
+            setColors(partials.map {
                 gradeColors.single { color -> color.first == it.grade }.second
             }.toIntArray(), holder.view.context)
         }
 
         with(holder.view.gradeStatisticsPie) {
             setTouchEnabled(false)
-            if (items.size == 1) animateXY(1000, 1000)
+            if (partials.size == 1) animateXY(1000, 1000)
             data = PieData(dataset).apply {
                 setValueFormatter(object : ValueFormatter() {
                     override fun getPieLabel(value: Float, pieEntry: PieEntry): String {
@@ -135,7 +131,7 @@ class GradeStatisticsAdapter @Inject constructor() :
 
             minAngleForSlices = 25f
             description.isEnabled = false
-            centerText = items.fold(0) { acc, it -> acc + it.amount }
+            centerText = partials.fold(0) { acc, it -> acc + it.amount }
                 .let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
 
             setHoleColor(context.getThemeAttrColor(android.R.attr.windowBackground))

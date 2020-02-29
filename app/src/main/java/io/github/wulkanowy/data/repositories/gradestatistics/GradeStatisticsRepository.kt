@@ -54,7 +54,9 @@ class GradeStatisticsRepository @Inject constructor(
         return groupBy { it.subject }.map {
             GradeStatisticsItem(
                 type = ViewType.PARTIAL,
-                partial = it.value,
+                partial = it.value
+                    .sortedByDescending { item -> item.grade }
+                    .filter { item -> item.amount != 0 },
                 points = null
             )
         }
