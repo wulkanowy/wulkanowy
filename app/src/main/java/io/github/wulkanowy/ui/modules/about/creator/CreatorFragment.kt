@@ -26,7 +26,7 @@ class CreatorFragment : BaseFragment(), CreatorView, MainView.TitledView {
     @Inject
     lateinit var creatorsAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
 
-    override val titleStringId get() = R.string.creators_title
+    override val titleStringId get() = R.string.contributors_title
 
     companion object {
         fun newInstance() = CreatorFragment()
