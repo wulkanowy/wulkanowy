@@ -4,10 +4,10 @@
 
 
     <!--Activity/Fragment title-->
-    <string name="login_title">Anmeldung</string>
+    <string name="login_title">Anmelden</string>
     <string name="main_title">Wulkanowy</string>
     <string name="grade_title">Noten</string>
-    <string name="attendance_title">Anwesenheit</string>
+    <string name="attendance_title">Schulbesuch</string>
     <string name="exam_title">Prüfungen</string>
     <string name="timetable_title">Zeitplan</string>
     <string name="settings_title">Einstellungen</string>
@@ -17,9 +17,9 @@
     <string name="license_title">Lizenzen</string>
     <string name="message_title">Nachrichten</string>
     <string name="send_message_title">neue Nachricht</string>
-    <string name="note_title">Notizen und Erfolge</string>
+    <string name="note_title">Eintragen und Erfolgen</string>
     <string name="homework_title">Hausaufgaben</string>
-    <string name="account_title">Konto auswählen</string>
+    <string name="account_title">Wählen Sie ein Konto</string>
 
     <!--Subtitles-->
     <string name="grade_subtitle">Semester %d, %d/%d</string>
@@ -32,9 +32,9 @@
     <string name="login_email_hint">Email</string>
     <string name="login_login_pesel_email_hint">Anmeldung, PESEL oder e-mail</string>
     <string name="login_password_hint">Passwort</string>
-    <string name="login_host_hint">UONET+ Journal</string>
+    <string name="login_host_hint">UONET+ Klassenbuch</string>
     <string name="login_type_api">Mobile API</string>
-    <string name="login_type_scrapper">Schaber</string>
+    <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybride</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
@@ -68,8 +68,8 @@
     <!--Main-->
     <string name="main_account_picker">Kundenbetreuer</string>
     <string name="main_log_in">Anmelden</string>
-    <string name="main_session_expired">Sitzung abgelaufen</string>
-    <string name="main_session_relogin">Sitzung abgelaufen, erneut anmelden.</string>
+    <string name="main_session_expired">Die Sitzung ist abgelaufen</string>
+    <string name="main_session_relogin">Die Sitzung ist abgelaufen, bitte loggen Sie sich erneut ein</string>
 
 
     <!--Grade-->
@@ -77,8 +77,8 @@
     <string name="grade_semester">Semester %d</string>
     <string name="grade_switch_semester">Semester wechseln</string>
     <string name="grade_no_items">Keine Noten</string>
-    <string name="grade_weight">Gewicht</string>
-    <string name="grade_weight_value">Gewicht: %s</string>
+    <string name="grade_weight">Gewichtung</string>
+    <string name="grade_weight_value">Gewichtung: %s</string>
     <string name="grade_comment">Kommentar</string>
     <string name="grade_no_new_items">Keine neuen Noten</string>
     <string name="grade_number_new_items">Anzahl der neuen Bewertungen: %1$d</string>
@@ -88,7 +88,7 @@
     <string name="grade_predicted">Vorausgesagt: %1$s</string>
     <string name="grade_final">Finale: %1$s</string>
     <string name="grade_summary_points">Gesamtpunkte</string>
-    <string name="grade_summary_final_grade">Endnote</string>
+    <string name="grade_summary_final_grade">Finaler Note</string>
     <string name="grade_summary_predicted_grade">Vorhergesagte Note</string>
     <string name="grade_summary_calculated_average">Berechnender Durchschnitt</string>
     <string name="grade_summary_final_average">Finaler Durchschnitt</string>
@@ -114,7 +114,7 @@
 
     <!--Timetable-->
     <string name="timetable_lesson">Lektion</string>
-    <string name="timetable_room">Raum</string>
+    <string name="timetable_room">Klassenzimmer</string>
     <string name="timetable_group">Gruppe</string>
     <string name="timetable_time">Stunden</string>
     <string name="timetable_changes">Änderungen</string>
@@ -131,7 +131,7 @@
 
 
     <!--Attendance-->
-    <string name="attendance_summary_button">Übersicht über die Anwesenheitsliste</string>
+    <string name="attendance_summary_button">Übersicht über die Schulbesuch</string>
     <string name="attendance_absence_school">Aus schulischen Gründen abwesend</string>
     <string name="attendance_absence_excused">Entschuldigte Abwesenheit</string>
     <string name="attendance_absence_unexcused">Unentschuldigtes Abwesenheit</string>
@@ -139,8 +139,8 @@
     <string name="attendance_excused_lateness">Entschuldigte Verspätung</string>
     <string name="attendance_unexcused_lateness">Unentschuldigte Verspätung</string>
     <string name="attendance_present">Anwesend</string>
-    <string name="attendance_number">Anzahl der Lektionen</string>
-    <string name="attendance_no_items">Keine Einträge</string>
+    <string name="attendance_number">Lektion Nummer</string>
+    <string name="attendance_no_items">Keine Einträgen</string>
     <plurals name="attendance_number_absences">
         <item quantity="one">%1$d abwesenheit</item>
         <item quantity="other">%1$d Abwesenheiten</item>
@@ -153,7 +153,7 @@
 
 
     <!--Attendance summary-->
-    <string name="attendance_summary_final">Anwesenheit</string>
+    <string name="attendance_summary_final">Schulbesuch</string>
     <string name="attendance_summary_total">Gesamt</string>
 
 
@@ -166,7 +166,7 @@
     <!--Message-->
     <string name="message_inbox">Posteingang</string>
     <string name="message_sent">Gesendet</string>
-    <string name="message_trash">Müll</string>
+    <string name="message_trash">Korb</string>
     <string name="message_no_subject">(kein Thema)</string>
     <string name="message_no_items">Keine Nachrichten</string>
     <string name="message_preview_error">Beim Herunterladen des Nachrichteninhalts ist ein Fehler aufgetreten</string>
@@ -176,7 +176,7 @@
     <string name="message_reply">Antwort</string>
     <string name="message_forward">Weiterleiten</string>
     <string name="message_delete">Löschen</string>
-    <string name="message_move_to_bin">In den Müll wandern</string>
+    <string name="message_move_to_bin">In den Korb wandern</string>
     <string name="message_delete_forever">Dauerhaft löschen</string>
     <string name="message_delete_success">Nachricht erfolgreich gelöscht</string>
     <string name="message_subject">Thema</string>
@@ -199,18 +199,18 @@
 
 
     <!--Note-->
-    <string name="note_no_items">Keine Informationen über Notizen</string>
+    <string name="note_no_items">Keine Informationen über Eintragen</string>
     <plurals name="note_number_item">
-        <item quantity="one">%d notiz</item>
-        <item quantity="other">%d notizen</item>
+        <item quantity="one">%d Eintrag</item>
+        <item quantity="other">%d Eintragen</item>
     </plurals>
     <plurals name="note_new_items">
-        <item quantity="one">Neu Notiz</item>
-        <item quantity="other">Neue Notizen</item>
+        <item quantity="one">Neu Eintrag</item>
+        <item quantity="other">Neue Eintragen</item>
     </plurals>
     <plurals name="note_notify_new_items">
-        <item quantity="one">Du hast %1$d notiz bekommen</item>
-        <item quantity="other">Du hast %1$d notizen bekommen</item>
+        <item quantity="one">Du hast %1$d Eintrag bekommen</item>
+        <item quantity="other">Du hast %1$d Eintragen bekommen</item>
     </plurals>
 
 
@@ -250,7 +250,7 @@
     <string name="school_headmaster">Name des Schulleiters</string>
     <string name="school_pedagogue">Name des Pädagogen</string>
     <string name="school_address_button">Auf Karte anzeigen</string>
-    <string name="school_telephone_button">Ruf an</string>
+    <string name="school_telephone_button">Rufen Sie an</string>
 
 
     <!--Teacher-->
@@ -268,10 +268,10 @@
 
     <!--About-->
     <string name="about_version">Version der App</string>
-    <string name="about_feedback">Einen Fehler melden</string>
+    <string name="about_feedback">Melden Sie einen Fehler</string>
     <string name="about_feedback_summary">Senden Sie einen Fehlerbericht per E-Mail</string>
     <string name="about_faq">FAQ</string>
-    <string name="about_faq_summary">Häufig gestellte Fragen lesen</string>
+    <string name="about_faq_summary">Lesen Sie Häufig gestellte Fragen</string>
     <string name="about_discord">Discord server</string>
     <string name="about_discord_summary">Treten Sie der Wulkanowy-Gemeinschaft bei</string>
     <string name="about_privacy">Datenschutzerklärung</string>
@@ -288,7 +288,7 @@
 
     <!--Creators-->
     <string name="creator_avatar_description">Avatar</string>
-    <string name="creator_see_more">Mehr auf GitHub sehen</string>
+    <string name="creator_see_more">Sehen Sie mehr auf GitHub</string>
 
     <!--Log viewer-->
     <string name="logviewer_share">Logs teilen</string>
@@ -317,12 +317,12 @@
     <string name="widget_timetable_no_items">Keine Lektionen</string>
     <string name="widget_timetable_theme_title">Thema wählen</string>
     <string name="widget_timetable_theme_light">Licht</string>
-    <string name="widget_timetable_theme_dark">Dunkelheit</string>
+    <string name="widget_timetable_theme_dark">Dunkel</string>
 
 
     <!--Preferences-->
     <string name="pref_view_header">Erscheinungsbild</string>
-    <string name="pref_view_list">Standard-Ansicht</string>
+    <string name="pref_view_list">Standard Ansicht</string>
     <string name="pref_view_grade_average_mode">Berechnung des Jahresenddurchschnitts</string>
     <string name="pref_view_grade_average_force_calc">Mittelwertberechnung durch App erzwingen</string>
     <string name="pref_view_present">Gegenwart in Anwesenheit zeigen</string>
@@ -330,7 +330,7 @@
     <string name="pref_view_expand_grade">Noten erweitern</string>
     <string name="pref_view_timetable_show_whole_class">Unterricht der ganzen Klasse anzeigen</string>
     <string name="pref_view_grade_color_scheme">Farbschema der Noten</string>
-    <string name="pref_view_app_language">App-Sprache</string>
+    <string name="pref_view_app_language">App Sprache</string>
     <string name="pref_notify_header">Benachrichtigungen</string>
     <string name="pref_notify_switch">Benachrichtigungen anzeigen</string>
     <string name="pref_notify_debug_switch">Debug-Benachrichtigungen anzeigen</string>
@@ -346,11 +346,11 @@
 
 
     <!--Notification Channels-->
-    <string name="channel_new_entries">Neue Einträge im Register</string>
+    <string name="channel_new_entries">Neue Einträge im Klassenbuch</string>
     <string name="channel_new_grades">Neue Noten</string>
     <string name="channel_lucky_number">Glückliche Nummer</string>
     <string name="channel_new_message">Neue Nachrichten</string>
-    <string name="channel_new_notes">Neue Anmerkungen</string>
+    <string name="channel_new_notes">Neue Eintragen</string>
     <string name="channel_debug">Debuggen</string>
 
 
@@ -370,9 +370,9 @@
 
     <!--Errors-->
     <string name="error_no_internet">Keine Internetverbindung</string>
-    <string name="error_timeout">Verbindung zum Register mit Zeitüberschreitung</string>
+    <string name="error_timeout">Das Zeitlimit für die Verbindung zum Klassenbuch ist abgelaufen</string>
     <string name="error_login_failed">Anmeldung fehlgeschlagen. Versuchen Sie es noch einmal oder starten Sie die Anwendung neu.</string>
-    <string name="error_service_unavailable">Wartung im Gange UONET + Register. Versuchen Sie es später noch einmal</string>
+    <string name="error_service_unavailable">Wartung im Gange UONET + Klassenbuch. Versuchen Sie es später noch einmal</string>
     <string name="error_unknown">Ein unerwarteter Fehler ist aufgetreten</string>
     <string name="error_feature_disabled">Funktion, die von Ihrer Schule deaktiviert wurde</string>
     <string name="error_feature_not_available">Feature in diesem Modus nicht verfügbar</string>
