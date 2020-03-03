@@ -17,7 +17,7 @@
     </string-array>
 
     <string-array name="app_language_entries">
-        <item>Sprache</item>
+        <item>System Sprache</item>
         <item>Polski</item>
         <item>English</item>
         <item>Pусский</item>
