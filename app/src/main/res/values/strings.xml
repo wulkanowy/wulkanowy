@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Wulkanowy</string>
 
 
@@ -13,13 +15,14 @@
     <string name="more_title">More</string>
     <string name="about_title">About</string>
     <string name="logviewer_title">Log viewer</string>
-    <string name="creators_title">Creators</string>
+    <string name="contributors_title">Contributors</string>
     <string name="license_title">Licenses</string>
     <string name="message_title">Messages</string>
     <string name="send_message_title">New message</string>
     <string name="note_title">Notes and achievements</string>
     <string name="homework_title">Homework</string>
     <string name="account_title">Choose account</string>
+
 
     <!--Subtitles-->
     <string name="grade_subtitle">Semester %d, %d/%d</string>
@@ -272,8 +275,8 @@
 
     <!--About-->
     <string name="about_version">App version</string>
-    <string name="about_creator">Creators</string>
-    <string name="about_creator_summary">List of Wulkanowy developers</string>
+    <string name="about_contributor">Contributors</string>
+    <string name="about_contributor_summary">List of Wulkanowy developers</string>
     <string name="about_feedback">Report a bug</string>
     <string name="about_feedback_summary">Send a bug report via e-mail</string>
     <string name="about_faq">FAQ</string>
@@ -292,9 +295,10 @@
     <string name="license_dialog_title">License</string>
 
 
-    <!--Creators-->
-    <string name="creator_avatar_description">Avatar</string>
-    <string name="creator_see_more">See more on GitHub</string>
+    <!--Contributor-->
+    <string name="contributor_avatar_description">Avatar</string>
+    <string name="contributor_see_more">See more on GitHub</string>
+
 
     <!--Log viewer-->
     <string name="logviewer_share">Share logs</string>
@@ -387,5 +391,4 @@
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available in this mode</string>
-
 </resources>
