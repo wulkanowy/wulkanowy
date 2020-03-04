@@ -44,7 +44,7 @@
     <string name="login_api_key_hint">Klucz API</string>
     <string name="login_sign_in">Zaloguj</string>
     <string name="login_invalid_password">To hasło jest za krótkie</string>
-    <string name="login_incorrect_password">Dane logowania są niepoprawne</string>
+    <string name="login_incorrect_password">Dane logowania są niepoprawne. Upewnij się, że został wybrany odpowiedni dziennik UONET+</string>
     <string name="login_invalid_pin">Nieprawidłowy PIN</string>
     <string name="login_invalid_token">Nieprawidłowy token</string>
     <string name="login_expired_token">Token stracił ważność</string>
