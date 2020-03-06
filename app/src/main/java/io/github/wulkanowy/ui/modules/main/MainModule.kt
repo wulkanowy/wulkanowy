@@ -8,9 +8,10 @@ import dagger.android.ContributesAndroidInjector
 import io.github.wulkanowy.R
 import io.github.wulkanowy.di.scopes.PerFragment
 import io.github.wulkanowy.ui.modules.about.AboutFragment
-import io.github.wulkanowy.ui.modules.about.creator.CreatorFragment
+import io.github.wulkanowy.ui.modules.about.contributor.ContributorFragment
 import io.github.wulkanowy.ui.modules.about.license.LicenseFragment
 import io.github.wulkanowy.ui.modules.about.license.LicenseModule
+import io.github.wulkanowy.ui.modules.about.logviewer.LogViewerFragment
 import io.github.wulkanowy.ui.modules.account.AccountDialog
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.attendance.AttendanceModule
@@ -122,8 +123,12 @@ abstract class MainModule {
     abstract fun bindLicenseFragment(): LicenseFragment
 
     @PerFragment
+    @ContributesAndroidInjector
+    abstract fun bindLogViewerFragment(): LogViewerFragment
+
+    @PerFragment
     @ContributesAndroidInjector()
-    abstract fun bindCreatorsFragment(): CreatorFragment
+    abstract fun bindContributorFragment(): ContributorFragment
 
     @PerFragment
     @ContributesAndroidInjector(modules = [SchoolAndTeachersModule::class])

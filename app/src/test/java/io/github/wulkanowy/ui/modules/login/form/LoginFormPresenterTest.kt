@@ -86,12 +86,14 @@ class LoginFormPresenterTest {
 
     @Test
     fun loginTest() {
-        val studentTest = Student(email = "test@", password = "123", scrapperBaseUrl = "https://fakelog.cf", loginType = "AUTO", studentName = "", schoolSymbol = "", schoolName = "", studentId = 0, classId = 1, isCurrent = false, symbol = "", registrationDate = now(), className = "", mobileBaseUrl = "", privateKey = "", certificateKey = "", loginMode = "", userLoginId = 0, isParent = false)
+        val studentTest = Student(email = "test@", password = "123", scrapperBaseUrl = "https://fakelog.cf", loginType = "AUTO", studentName = "", schoolSymbol = "", schoolName = "", studentId = 0, classId = 1, isCurrent = false, symbol = "", registrationDate = now(), className = "", mobileBaseUrl = "", privateKey = "", certificateKey = "", loginMode = "", userLoginId = 0, schoolShortName = "", isParent = false)
         doReturn(Single.just(listOf(studentTest))).`when`(repository).getStudentsScrapper(anyString(), anyString(), anyString(), anyString())
 
         `when`(loginFormView.formUsernameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
+        `when`(loginFormView.formSymbolValue).thenReturn("Default")
+        `when`(loginFormView.formHostSymbol).thenReturn("Default")
         presenter.onSignInClick()
 
         verify(loginFormView).hideSoftKeyboard()
@@ -108,6 +110,8 @@ class LoginFormPresenterTest {
         `when`(loginFormView.formUsernameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
+        `when`(loginFormView.formSymbolValue).thenReturn("Default")
+        `when`(loginFormView.formHostSymbol).thenReturn("Default")
         presenter.onSignInClick()
 
         verify(loginFormView).hideSoftKeyboard()
@@ -124,6 +128,8 @@ class LoginFormPresenterTest {
         `when`(loginFormView.formUsernameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
+        `when`(loginFormView.formSymbolValue).thenReturn("Default")
+        `when`(loginFormView.formHostSymbol).thenReturn("Default")
         presenter.onSignInClick()
         presenter.onSignInClick()
 
@@ -141,6 +147,8 @@ class LoginFormPresenterTest {
         `when`(loginFormView.formUsernameValue).thenReturn("@")
         `when`(loginFormView.formPassValue).thenReturn("123456")
         `when`(loginFormView.formHostValue).thenReturn("https://fakelog.cf")
+        `when`(loginFormView.formSymbolValue).thenReturn("Default")
+        `when`(loginFormView.formHostSymbol).thenReturn("Default")
         presenter.onSignInClick()
 
         verify(loginFormView).hideSoftKeyboard()

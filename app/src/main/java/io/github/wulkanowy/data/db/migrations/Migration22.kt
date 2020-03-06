@@ -6,7 +6,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 class Migration22 : Migration(21, 22) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE Exams ADD COLUMN calendarSync INTEGER NOT NULL DEFAULT 0")
-        database.execSQL("ALTER TABLE Homework ADD COLUMN calendarSync INTEGER NOT NULL DEFAULT 0")
+        database.execSQL("ALTER TABLE Students ADD COLUMN school_short TEXT NOT NULL DEFAULT ''")
     }
 }

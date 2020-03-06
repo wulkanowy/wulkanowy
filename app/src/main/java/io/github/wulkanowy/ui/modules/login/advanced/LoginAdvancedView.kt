@@ -11,6 +11,8 @@ interface LoginAdvancedView : BaseView {
 
     val formHostValue: String
 
+    val formHostSymbol: String
+
     val formLoginType: String
 
     val formPinValue: String
@@ -25,9 +27,17 @@ interface LoginAdvancedView : BaseView {
 
     fun initView()
 
+    fun showMobileApiWarningMessage()
+
+    fun showScraperWarningMessage()
+
+    fun showHybridWarningMessage()
+
     fun setDefaultCredentials(username: String, pass: String, symbol: String, token: String, pin: String)
 
     fun setUsernameLabel(label: String)
+
+    fun setSymbol(symbol: String)
 
     fun setErrorUsernameRequired()
 
