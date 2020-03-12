@@ -55,7 +55,7 @@ class MessageRepository @Inject constructor(
                     .filter {
                         it.content.isNotEmpty().also { status ->
                             Timber.d("Message content in db empty: ${!status}")
-                        }
+                        } && !it.unread
                     }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                         .flatMap {
@@ -81,10 +81,6 @@ class MessageRepository @Inject constructor(
         return local.getMessages(student, RECEIVED)
             .map { it.filter { message -> !message.isNotified && message.unread } }
             .toSingle(emptyList())
-    }
-
-    fun updateMessage(message: Message): Completable {
-        return Completable.fromCallable { local.updateMessages(listOf(message)) }
     }
 
     fun updateMessages(messages: List<Message>): Completable {
