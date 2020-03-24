@@ -9,9 +9,16 @@ import io.reactivex.Completable
 import org.threeten.bp.LocalDate.now
 import javax.inject.Inject
 
-class ExamWork @Inject constructor(private val examRepository: ExamRepository) : Work {
+class ExamWork @Inject constructor(
+    private val examRepository: ExamRepository
+) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return examRepository.getExams(semester, now().monday, now().friday, true).ignoreElement()
+        return examRepository.getExams(semester, now().monday, now().plusWeeks(4).friday, true)
+            .flatMap { examRepository.getNotCalendarSyncedExams(semester) }
+            .flatMapCompletable {
+                if (it.isNotEmpty()) examRepository.createCalendarEvents(it)
+                examRepository.updateExams(it.onEach { exam -> exam.calendarSync = true })
+            }
     }
 }

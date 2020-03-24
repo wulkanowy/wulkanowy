@@ -1,10 +1,25 @@
 package io.github.wulkanowy.ui.modules.settings
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.provider.CalendarContract
+import androidx.core.app.ActivityCompat
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.TwoStatePreference
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.karumi.dexter.listener.single.PermissionListener
 import com.yariksoffice.lingver.Lingver
 import dagger.android.support.AndroidSupportInjection
 import io.github.wulkanowy.R
@@ -12,6 +27,7 @@ import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.ErrorDialog
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AppInfo
+import timber.log.Timber
 import javax.inject.Inject
 
 class SettingsFragment : PreferenceFragmentCompat(),
@@ -36,6 +52,14 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+    }
+
+    override fun initView(){
+        (findPreference(getString(R.string.pref_key_calendar_sync_select)) as Preference?)?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                presenter.onCalendarSyncSelectClick(it as ListPreference)
+                true
+            }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -95,5 +119,24 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onPause() {
         super.onPause()
         preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun checkPermission() {
+        if (findPreference<TwoStatePreference>(getString(R.string.pref_key_calendar_sync_enable))?.isChecked!!) {
+            Dexter.withActivity(activity)
+                .withPermissions(Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR)
+                .withListener(object: MultiplePermissionsListener {
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        if (report?.areAllPermissionsGranted()!!){
+                            findPreference<TwoStatePreference>(getString(R.string.pref_key_calendar_sync_enable))?.isChecked = true
+                        }
+                    }
+
+                    override fun onPermissionRationaleShouldBeShown(permissions: MutableList<PermissionRequest>?, token: PermissionToken?) {
+                        findPreference<TwoStatePreference>(getString(R.string.pref_key_calendar_sync_enable))?.isChecked = false
+                        token?.continuePermissionRequest();
+                    }
+                }).check()
+        }
     }
 }

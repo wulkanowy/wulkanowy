@@ -23,4 +23,8 @@ class ExamLocal @Inject constructor(private val examDb: ExamDao) {
     fun deleteExams(exams: List<Exam>) {
         examDb.deleteAll(exams)
     }
+
+    fun updateExams(exams: List<Exam>) {
+        examDb.updateAll(exams)
+    }
 }

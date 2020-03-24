@@ -176,6 +176,7 @@ dependencies {
     implementation "fr.bipi.treessence:treessence:0.3.2"
     implementation "com.mikepenz:aboutlibraries-core:7.1.0"
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+    implementation 'com.karumi:dexter:6.0.2'
 
     implementation("io.coil-kt:coil:0.9.5")
 

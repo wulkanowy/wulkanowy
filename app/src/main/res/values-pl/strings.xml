@@ -242,6 +242,7 @@
 
     <!--Homework-->
     <string name="homework_no_items">Brak zadań domowych</string>
+    <string name="homework_label">Zadanie domowe</string>
 
 
     <!--Lucky number-->
@@ -363,6 +364,10 @@
     <string name="pref_notify_header">Powiadomienia</string>
     <string name="pref_notify_switch">Pokazuj powiadomienia</string>
     <string name="pref_notify_debug_switch">Pokazuj powiadomienia debugowania</string>
+
+    <string name="pref_calendar_header">Kalendarz</string>
+    <string name="pref_calendar_switch">Synchronizacja z kalendarzem</string>
+    <string name="pref_calendar_select">Kalendarz używany do synchronizacji</string>
 
     <string name="pref_services_header">Synchronizacja</string>
     <string name="pref_services_switch">Automatyczna aktualizacja</string>

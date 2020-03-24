@@ -225,6 +225,7 @@
 
     <!--Homework-->
     <string name="homework_no_items">No info about homework</string>
+    <string name="homework_label">Homework</string>
 
 
     <!--Lucky number-->
@@ -346,6 +347,10 @@
     <string name="pref_notify_header">Notifications</string>
     <string name="pref_notify_switch">Show notifications</string>
     <string name="pref_notify_debug_switch">Show debug notifications</string>
+
+    <string name="pref_calendar_header">Calendar</string>
+    <string name="pref_calendar_switch">Calendar sync</string>
+    <string name="pref_calendar_select">Calendar used for sync</string>
 
     <string name="pref_services_header">Synchronization</string>
     <string name="pref_services_switch">Automatic update</string>

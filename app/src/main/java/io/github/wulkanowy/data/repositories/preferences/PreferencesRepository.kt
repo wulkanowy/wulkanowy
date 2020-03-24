@@ -52,6 +52,13 @@ class PreferencesRepository @Inject constructor(
     val isNotificationsEnable: Boolean
         get() = getBoolean(R.string.pref_key_notifications_enable, R.bool.pref_default_notifications_enable)
 
+    val calendarSyncEnableKey = context.getString(R.string.pref_key_calendar_sync_enable)
+    val isCalendarSyncEnable: Boolean
+        get() = getBoolean(calendarSyncEnableKey, R.bool.pref_default_calendar_sync_enable)
+
+    val calendarSyncId: Int
+        get() = getString(R.string.pref_key_calendar_sync_select, R.string.pref_default_calendar_sync_select).toInt()
+
     val isDebugNotificationEnableKey = context.getString(R.string.pref_key_notification_debug)
     val isDebugNotificationEnable: Boolean
         get() = getBoolean(isDebugNotificationEnableKey, R.bool.pref_default_notification_debug)
