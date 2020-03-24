@@ -174,7 +174,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:4.7.1"
     implementation "at.favre.lib:slf4j-timber:1.0.1"
     implementation "fr.bipi.treessence:treessence:0.3.2"
-    implementation "com.mikepenz:aboutlibraries-core:7.1.0"
+    implementation "com.mikepenz:aboutlibraries-core:8.0.0"
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
 
     implementation("io.coil-kt:coil:0.9.5")
