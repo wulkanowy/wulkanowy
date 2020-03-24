@@ -111,8 +111,8 @@ play {
 }
 
 ext {
-    work_manager = "2.3.3"
-    room = "2.2.4"
+    work_manager = "2.3.4"
+    room = "2.2.5"
     dagger = "2.27"
     chucker = "2.0.4"
     mockk = "1.9.2"
@@ -130,7 +130,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.1.0"
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "androidx.appcompat:appcompat-resources:1.1.0"
-    implementation "androidx.fragment:fragment-ktx:1.2.2"
+    implementation "androidx.fragment:fragment-ktx:1.2.3"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation "androidx.multidex:multidex:2.0.1"
 
@@ -190,7 +190,7 @@ dependencies {
 
     testImplementation "junit:junit:4.13"
     testImplementation "io.mockk:mockk:$mockk"
-    testImplementation "org.threeten:threetenbp:1.4.1"
+    testImplementation "org.threeten:threetenbp:1.4.2"
     testImplementation "org.mockito:mockito-inline:3.3.3"
 
     androidTestImplementation "androidx.test:core:1.2.0"
