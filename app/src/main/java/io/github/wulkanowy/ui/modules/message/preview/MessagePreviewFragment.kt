@@ -43,9 +43,9 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     companion object {
         const val MESSAGE_ID_KEY = "message_id"
 
-        fun newInstance(messageId: Long): MessagePreviewFragment {
+        fun newInstance(message: Message): MessagePreviewFragment {
             return MessagePreviewFragment().apply {
-                arguments = Bundle().apply { putLong(MESSAGE_ID_KEY, messageId) }
+                arguments = Bundle().apply { putSerializable(MESSAGE_ID_KEY, message) }
             }
         }
     }
@@ -62,7 +62,7 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         messageContainer = messagePreviewContainer
-        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getLong(MESSAGE_ID_KEY) ?: 0L)
+        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getSerializable(MESSAGE_ID_KEY) as Message)
     }
 
     override fun initView() {
@@ -160,7 +160,7 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putLong(MESSAGE_ID_KEY, presenter.messageId)
+        outState.putSerializable(MESSAGE_ID_KEY, presenter.message)
     }
 
     override fun onDestroyView() {

@@ -5,6 +5,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 class Migration23 : Migration(22, 23) {
     override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("ALTER TABLE Messages ADD COLUMN has_attachments INTEGER NOT NULL DEFAULT 0")
         database.execSQL("""
             CREATE TABLE IF NOT EXISTS MessageAttachments (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

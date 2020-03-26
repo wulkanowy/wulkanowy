@@ -48,10 +48,10 @@ class MessageRepository @Inject constructor(
             }
     }
 
-    fun getMessage(student: Student, messageDbId: Long, markAsRead: Boolean = false): Single<Message> {
+    fun getMessage(student: Student, message: Message, markAsRead: Boolean = false): Single<Message> {
         return Single.just(sdkHelper.init(student))
             .flatMap { _ ->
-                local.getMessage(messageDbId)
+                local.getMessage(student, message)
                     .filter {
                         it.content.isNotEmpty().also { status ->
                             Timber.d("Message content in db empty: ${!status}")
@@ -59,7 +59,7 @@ class MessageRepository @Inject constructor(
                     }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                         .flatMap {
-                            if (it) local.getMessage(messageDbId)
+                            if (it) local.getMessage(student, message)
                             else Single.error(UnknownHostException())
                         }
                         .flatMap { dbMessage ->
@@ -68,10 +68,10 @@ class MessageRepository @Inject constructor(
                                     id = dbMessage.id
                                     content = content.ifBlank { it }
                                 }))
-                                Timber.d("Message $messageDbId with blank content: ${dbMessage.content.isBlank()}, marked as read")
+                                Timber.d("Message ${message.messageId} with blank content: ${dbMessage.content.isBlank()}, marked as read")
                             }
                         }.flatMap {
-                            local.getMessage(messageDbId)
+                            local.getMessage(student, message)
                         }
                     )
             }

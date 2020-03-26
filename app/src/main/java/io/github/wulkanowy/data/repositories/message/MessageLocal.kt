@@ -29,8 +29,8 @@ class MessageLocal @Inject constructor(
         messagesDb.deleteAll(messages)
     }
 
-    fun getMessage(id: Long): Single<Message> {
-        return messagesDb.load(id)
+    fun getMessage(student: Student, message: Message): Single<Message> {
+        return messagesDb.load(student.studentId, message.messageId)
     }
 
     fun saveMessageAttachments(attachments: List<MessageAttachment>) {

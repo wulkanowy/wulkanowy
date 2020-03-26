@@ -34,7 +34,8 @@ class MessageRemote @Inject constructor(private val sdk: Sdk) {
                     unread = it.unread ?: false,
                     unreadBy = it.unreadBy ?: 0,
                     readBy = it.readBy ?: 0,
-                    removed = it.removed
+                    removed = it.removed,
+                    hasAttachments = it.hasAttachments
                 )
             }
         }
