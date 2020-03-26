@@ -4,6 +4,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -11,7 +12,6 @@ import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
 import io.github.wulkanowy.sdk.pojo.SentMessage
 import io.github.wulkanowy.utils.uniqueSubtract
 import io.reactivex.Completable
-import io.reactivex.Maybe
 import io.reactivex.Single
 import timber.log.Timber
 import java.net.UnknownHostException
@@ -75,6 +75,20 @@ class MessageRepository @Inject constructor(
                         }
                     )
             }
+    }
+
+    fun getMessageAttachments(message: Message): Single<List<MessageAttachment>> {
+        return local.getMessageAttachments(message.messageId)
+            .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
+                .flatMap {
+                    if (it) remote.getMessageAttachments(message)
+                    else Single.error(UnknownHostException())
+                }.flatMap { new ->
+                    local.getMessageAttachments(message.messageId).toSingle(emptyList())
+                        .doOnSuccess { old ->
+                            local.saveMessageAttachments(old.uniqueSubtract(new))
+                        }
+                }.flatMap { local.getMessageAttachments(message.messageId).toSingle(emptyList()) })
     }
 
     fun getNotNotifiedMessages(student: Student): Single<List<Message>> {
