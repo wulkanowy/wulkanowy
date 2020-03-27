@@ -31,6 +31,7 @@ class MessagePreviewPresenter @Inject constructor(
         view.initView()
         errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData(message)
+        if (message.hasAttachments) loadAttachments(message)
     }
 
     private fun onMessageLoadRetry(message: Message) {
@@ -39,6 +40,7 @@ class MessagePreviewPresenter @Inject constructor(
             showProgress(true)
         }
         loadData(message)
+        if (message.hasAttachments) loadAttachments(message)
     }
 
     fun onDetailsClick() {
@@ -75,6 +77,23 @@ class MessagePreviewPresenter @Inject constructor(
                     errorHandler.dispatch(it)
                 })
         }
+    }
+
+    private fun loadAttachments(message: Message) {
+        Timber.i("Loading message ${message.messageId} attachments started")
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { messageRepository.getMessageAttachments(message) }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
+                view?.run {
+                    setAttachments(it)
+                }
+            }) {
+                Timber.i("Loading message ${message.messageId} preview result: An exception occurred ")
+                errorHandler.dispatch(it)
+            }
+        )
     }
 
     fun onReply(): Boolean {

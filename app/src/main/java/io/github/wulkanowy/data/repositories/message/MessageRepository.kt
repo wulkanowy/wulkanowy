@@ -86,7 +86,7 @@ class MessageRepository @Inject constructor(
                 }.flatMap { new ->
                     local.getMessageAttachments(message.messageId).toSingle(emptyList())
                         .doOnSuccess { old ->
-                            local.saveMessageAttachments(old.uniqueSubtract(new))
+                            local.saveMessageAttachments(new.uniqueSubtract(old))
                         }
                 }.flatMap { local.getMessageAttachments(message.messageId).toSingle(emptyList()) })
     }

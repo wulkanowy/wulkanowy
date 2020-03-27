@@ -12,11 +12,13 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
+import io.github.wulkanowy.utils.openInternetBrowser
 import kotlinx.android.synthetic.main.fragment_message_preview.*
 import javax.inject.Inject
 
@@ -114,6 +116,14 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
 
     override fun showContent(show: Boolean) {
         messagePreviewContentContainer.visibility = if (show) VISIBLE else GONE
+    }
+
+    override fun setAttachments(items: List<MessageAttachment>) {
+        messagePreviewAttachment.visibility = VISIBLE
+        messagePreviewAttachment.text = items.getOrNull(0)?.filename
+        messagePreviewAttachment.setOnClickListener {
+            items.getOrNull(0)?.url?.let { requireContext().openInternetBrowser(it) { } }
+        }
     }
 
     override fun showOptions(show: Boolean) {

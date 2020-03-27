@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.ui.base.BaseView
 
 interface MessagePreviewView : BaseView {
@@ -24,6 +25,8 @@ interface MessagePreviewView : BaseView {
     fun showProgress(show: Boolean)
 
     fun showContent(show: Boolean)
+
+    fun setAttachments(items: List<MessageAttachment>)
 
     fun notifyParentMessageDeleted(message: Message)
 

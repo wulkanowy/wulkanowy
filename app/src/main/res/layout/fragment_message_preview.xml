@@ -51,6 +51,19 @@
                 android:lineSpacingMultiplier="1.2"
                 android:textIsSelectable="true"
                 tools:text="@tools:sample/lorem" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/messagePreviewAttachment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:drawablePadding="10dp"
+                android:visibility="gone"
+                app:drawableStartCompat="@drawable/ic_attachment"
+                app:drawableTint="?colorOnBackground"
+                tools:drawableStart="@drawable/ic_attachment"
+                tools:text="@tools:sample/lorem"
+                tools:visibility="visible" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
