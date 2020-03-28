@@ -6,12 +6,15 @@ import android.graphics.Typeface.NORMAL
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.core.content.ContextCompat
 import eu.davidea.flexibleadapter.FlexibleAdapter
 import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Note
+import io.github.wulkanowy.sdk.scrapper.notes.Note.CategoryType
+import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_note.*
@@ -38,6 +41,11 @@ class NoteItem(val note: Note) : AbstractFlexibleItem<NoteItem.ViewHolder>() {
             with(noteItemPoints) {
                 text = "${if (note.points > 0) "+" else ""}${note.points}"
                 visibility = if (note.isPointsShow) VISIBLE else GONE
+                setTextColor(when(CategoryType.getByValue(note.categoryType)) {
+                    CategoryType.POSITIVE -> ContextCompat.getColor(context, R.color.note_positive)
+                    CategoryType.NEGATIVE -> ContextCompat.getColor(context, R.color.note_negative)
+                    else -> context.getThemeAttrColor(android.R.attr.textColorPrimary)
+                })
             }
             noteItemTeacher.text = note.teacher
             noteItemContent.text = note.content

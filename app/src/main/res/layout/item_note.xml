@@ -63,7 +63,7 @@
         app:layout_constraintRight_toRightOf="@id/noteItemTeacher"
         app:layout_constraintTop_toBottomOf="@id/noteItemTeacher"
         tools:text="-5"
-        tools:textColor="?colorError"
+        tools:textColor="@color/note_positive"
         tools:visibility="visible" />
 
     <TextView
