@@ -97,6 +97,10 @@ android {
         exclude 'META-INF/library_release.kotlin_module'
         exclude 'META-INF/library-core_release.kotlin_module'
     }
+
+    aboutLibraries {
+        configPath = "app/src/main/res/raw"
+    }
 }
 
 androidExtensions {
