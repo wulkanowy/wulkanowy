@@ -17,11 +17,11 @@ class NoteItem(val note: Note) : AbstractFlexibleItem<NoteItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_note
 
-    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): NoteItem.ViewHolder {
-        return NoteItem.ViewHolder(view, adapter)
+    override fun createViewHolder(view: View, adapter: FlexibleAdapter<IFlexible<*>>): ViewHolder {
+        return ViewHolder(view, adapter)
     }
 
-    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: NoteItem.ViewHolder, position: Int, payloads: MutableList<Any>?) {
+    override fun bindViewHolder(adapter: FlexibleAdapter<IFlexible<*>>, holder: ViewHolder, position: Int, payloads: MutableList<Any>?) {
         holder.apply {
             noteItemDate.apply {
                 text = note.date.toFormattedString()
