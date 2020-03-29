@@ -30,7 +30,7 @@ class MessageLocal @Inject constructor(
     }
 
     fun getMessage(student: Student, message: Message): Single<Message> {
-        return messagesDb.load(student.studentId, message.messageId)
+        return messagesDb.load(student.id.toInt(), message.messageId)
     }
 
     fun saveMessageAttachments(attachments: List<MessageAttachment>) {
