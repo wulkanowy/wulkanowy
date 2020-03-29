@@ -4,6 +4,8 @@ import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
@@ -51,16 +53,16 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
 
     override fun showThemeDialog() {
         val items = arrayOf(
-            getString(R.string.widget_timetable_theme_system),
             getString(R.string.widget_timetable_theme_light),
-            getString(R.string.widget_timetable_theme_dark)
+            getString(R.string.widget_timetable_theme_dark),
+            getString(R.string.widget_timetable_theme_system)
         )
 
         dialog = AlertDialog.Builder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
             .setTitle(R.string.widget_timetable_theme_title)
             .setOnDismissListener { presenter.onDismissThemeView() }
             .setSingleChoiceItems(items, -1) { _, which ->
-                presenter.onThemeSelect(which-1)
+                presenter.onThemeSelect(if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES && which == 2 || which == 1) 1 else 0)
             }
             .show()
     }
