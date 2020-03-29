@@ -9,12 +9,12 @@ class Migration24 : Migration(23, 24) {
         database.execSQL("ALTER TABLE Messages ADD COLUMN has_attachments INTEGER NOT NULL DEFAULT 0")
         database.execSQL("""
             CREATE TABLE IF NOT EXISTS MessageAttachments (
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 real_id INTEGER NOT NULL,
                 message_id INTEGER NOT NULL,
                 one_drive_id TEXT NOT NULL,
                 url TEXT NOT NULL,
-                filename TEXT NOT NULL
+                filename TEXT NOT NULL,
+                PRIMARY KEY(real_id)
             )
         """)
     }
