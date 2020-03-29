@@ -47,9 +47,10 @@ class MessageRepositoryTest {
 
     @Test
     fun `throw error when message is not in the db`() {
-        `when`(local.getMessage(123)).thenReturn(Single.error(EmptyResultSetException("No message in database")))
+        val testMessage = Message(1, 1, 1, "", 1, "", "", "", now(), 1, false, 1, 1, false, false)
+        `when`(local.getMessageWithAttachment(student, testMessage)).thenReturn(Single.error(EmptyResultSetException("No message in database")))
 
-        val message = repo.getMessage(student, 123)
+        val message = repo.getMessage(student, testMessage)
         val messageObserver = TestObserver<Message>()
         message.subscribe(messageObserver)
         messageObserver.assertError(EmptyResultSetException::class.java)
@@ -57,26 +58,26 @@ class MessageRepositoryTest {
 
     @Test
     fun `get message when content already in db`() {
-        `when`(local.getMessage(123)).thenReturn(Single.just(
-            Message(1, 1, 123, "", 1, "", "", "Test", now(), 1, false, 1, 1, false)
-        ))
+        val testMessage = Message(1, 1, 123, "", 1, "", "", "Test", now(), 1, false, 1, 1, false, false)
 
-        val message = repo.getMessage(student, 123).blockingGet()
+        `when`(local.getMessageWithAttachment(student, testMessage)).thenReturn(Single.just(testMessage))
+
+        val message = repo.getMessage(student, testMessage).blockingGet()
 
         assertEquals("Test", message.content)
     }
 
     @Test
     fun `get message when content in db is empty`() {
-        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, true, 1, 1, false)
+        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, true, 1, 1, false, false)
         val testMessageWithContent = testMessage.copy(content = "Test")
 
-        `when`(local.getMessage(123))
+        `when`(local.getMessageWithAttachment(student, testMessage))
             .thenReturn(Single.just(testMessage))
             .thenReturn(Single.just(testMessageWithContent))
-        `when`(remote.getMessagesContent(testMessageWithContent)).thenReturn(Single.just("Test"))
+        `when`(remote.getMessagesContentDetails(testMessageWithContent)).thenReturn(Single.just("Test" to emptyList()))
 
-        val message = repo.getMessage(student, 123).blockingGet()
+        val message = repo.getMessage(student, testMessage).blockingGet()
 
         assertEquals("Test", message.content)
         verify(local).updateMessages(listOf(testMessageWithContent))
@@ -84,12 +85,12 @@ class MessageRepositoryTest {
 
     @Test
     fun `get message when content in db is empty and there is no internet connection`() {
-        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, false, 1, 1, false)
+        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, false, 1, 1, false, false)
 
         testObservingStrategy.isInternetConnection = false
-        `when`(local.getMessage(123)).thenReturn(Single.just(testMessage))
+        `when`(local.getMessageWithAttachment(student, testMessage)).thenReturn(Single.just(testMessage))
 
-        val message = repo.getMessage(student, 123)
+        val message = repo.getMessage(student, testMessage)
         val messageObserver = TestObserver<Message>()
         message.subscribe(messageObserver)
         messageObserver.assertError(UnknownHostException::class.java)
@@ -97,12 +98,12 @@ class MessageRepositoryTest {
 
     @Test
     fun `get message when content in db is empty, unread and there is no internet connection`() {
-        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, true, 1, 1, false)
+        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, true, 1, 1, false, false)
 
         testObservingStrategy.isInternetConnection = false
-        `when`(local.getMessage(123)).thenReturn(Single.just(testMessage))
+        `when`(local.getMessageWithAttachment(student, testMessage)).thenReturn(Single.just(testMessage))
 
-        val message = repo.getMessage(student, 123)
+        val message = repo.getMessage(student, testMessage)
         val messageObserver = TestObserver<Message>()
         message.subscribe(messageObserver)
         messageObserver.assertError(UnknownHostException::class.java)

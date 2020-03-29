@@ -41,13 +41,9 @@ class MessageRemote @Inject constructor(private val sdk: Sdk) {
         }
     }
 
-    fun getMessagesContent(message: Message, markAsRead: Boolean = false): Single<String> {
-        return sdk.getMessageContent(message.messageId, message.folderId, markAsRead, message.realId)
-    }
-
-    fun getMessageAttachments(message: Message): Single<List<MessageAttachment>> {
-        return sdk.getMessageAttachment(message.messageId, message.folderId).map { attachments ->
-            attachments.map {
+    fun getMessagesContentDetails(message: Message, markAsRead: Boolean = false): Single<Pair<String, List<MessageAttachment>>> {
+        return sdk.getMessageDetails(message.messageId, message.folderId, markAsRead, message.realId).map { details ->
+            details.content to details.attachments.map {
                 MessageAttachment(
                     realId = it.id,
                     messageId = it.messageId,

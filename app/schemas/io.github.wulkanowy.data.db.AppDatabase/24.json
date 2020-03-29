@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "734cc9ceddd7940c7e013dba80d6d3d4",
+    "identityHash": "9bbf60310b56a855839164e2aae031f9",
     "entities": [
       {
         "tableName": "Students",
@@ -1072,14 +1072,8 @@
       },
       {
         "tableName": "MessageAttachments",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `one_drive_id` TEXT NOT NULL, `url` TEXT NOT NULL, `filename` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `one_drive_id` TEXT NOT NULL, `url` TEXT NOT NULL, `filename` TEXT NOT NULL, PRIMARY KEY(`real_id`))",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "realId",
             "columnName": "real_id",
@@ -1113,9 +1107,9 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "real_id"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -1732,7 +1726,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '734cc9ceddd7940c7e013dba80d6d3d4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9bbf60310b56a855839164e2aae031f9')"
     ]
   }
 }

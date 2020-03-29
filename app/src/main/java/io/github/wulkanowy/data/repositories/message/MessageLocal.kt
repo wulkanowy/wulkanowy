@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
+import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.message.MessageFolder.TRASHED
 import io.reactivex.Maybe
@@ -29,16 +30,12 @@ class MessageLocal @Inject constructor(
         messagesDb.deleteAll(messages)
     }
 
-    fun getMessage(student: Student, message: Message): Single<Message> {
-        return messagesDb.load(student.id.toInt(), message.messageId)
+    fun getMessageWithAttachment(student: Student, message: Message): Single<MessageWithAttachment> {
+        return messagesDb.loadMessageWithAttachment(student.id.toInt(), message.messageId)
     }
 
     fun saveMessageAttachments(attachments: List<MessageAttachment>) {
-        messageAttachmentDao.insertAll(attachments)
-    }
-
-    fun getMessageAttachments(messageId: Int): Maybe<List<MessageAttachment>> {
-        return messageAttachmentDao.loadAll(messageId).filter { it.isNotEmpty() }
+        messageAttachmentDao.insertAttachments(attachments)
     }
 
     fun getMessages(student: Student, folder: MessageFolder): Maybe<List<Message>> {

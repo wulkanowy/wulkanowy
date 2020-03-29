@@ -4,7 +4,7 @@ import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.db.entities.MessageAttachment
+import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -48,47 +48,34 @@ class MessageRepository @Inject constructor(
             }
     }
 
-    fun getMessage(student: Student, message: Message, markAsRead: Boolean = false): Single<Message> {
+    fun getMessage(student: Student, message: Message, markAsRead: Boolean = false): Single<MessageWithAttachment> {
         return Single.just(sdkHelper.init(student))
             .flatMap { _ ->
-                local.getMessage(student, message)
+                local.getMessageWithAttachment(student, message)
                     .filter {
-                        it.content.isNotEmpty().also { status ->
+                        it.message.content.isNotEmpty().also { status ->
                             Timber.d("Message content in db empty: ${!status}")
-                        } && !it.unread
+                        } && !it.message.unread
                     }
                     .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                         .flatMap {
-                            if (it) local.getMessage(student, message)
+                            if (it) local.getMessageWithAttachment(student, message)
                             else Single.error(UnknownHostException())
                         }
                         .flatMap { dbMessage ->
-                            remote.getMessagesContent(dbMessage, markAsRead).doOnSuccess {
-                                local.updateMessages(listOf(dbMessage.copy(unread = !markAsRead).apply {
-                                    id = dbMessage.id
-                                    content = content.ifBlank { it }
+                            remote.getMessagesContentDetails(dbMessage.message, markAsRead).doOnSuccess { (downloadedMessage, attachments) ->
+                                local.updateMessages(listOf(dbMessage.message.copy(unread = !markAsRead).apply {
+                                    id = dbMessage.message.id
+                                    content = content.ifBlank { downloadedMessage }
                                 }))
-                                Timber.d("Message ${message.messageId} with blank content: ${dbMessage.content.isBlank()}, marked as read")
+                                local.saveMessageAttachments(attachments)
+                                Timber.d("Message ${message.messageId} with blank content: ${dbMessage.message.content.isBlank()}, marked as read")
                             }
                         }.flatMap {
-                            local.getMessage(student, message)
+                            local.getMessageWithAttachment(student, message)
                         }
                     )
             }
-    }
-
-    fun getMessageAttachments(message: Message): Single<List<MessageAttachment>> {
-        return local.getMessageAttachments(message.messageId)
-            .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
-                .flatMap {
-                    if (it) remote.getMessageAttachments(message)
-                    else Single.error(UnknownHostException())
-                }.flatMap { new ->
-                    local.getMessageAttachments(message.messageId).toSingle(emptyList())
-                        .doOnSuccess { old ->
-                            local.saveMessageAttachments(new.uniqueSubtract(old))
-                        }
-                }.flatMap { local.getMessageAttachments(message.messageId).toSingle(emptyList()) })
     }
 
     fun getNotNotifiedMessages(student: Student): Single<List<Message>> {

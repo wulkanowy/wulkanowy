@@ -8,6 +8,7 @@ import java.io.Serializable
 @Entity(tableName = "MessageAttachments")
 data class MessageAttachment(
 
+    @PrimaryKey
     @ColumnInfo(name = "real_id")
     val realId: Int,
 
@@ -22,8 +23,4 @@ data class MessageAttachment(
 
     @ColumnInfo(name = "filename")
     val filename: String
-) : Serializable {
-
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
-}
+) : Serializable

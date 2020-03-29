@@ -31,7 +31,6 @@ class MessagePreviewPresenter @Inject constructor(
         view.initView()
         errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData(message)
-        if (message.hasAttachments) loadAttachments(message)
     }
 
     private fun onMessageLoadRetry(message: Message) {
@@ -40,7 +39,6 @@ class MessagePreviewPresenter @Inject constructor(
             showProgress(true)
         }
         loadData(message)
-        if (message.hasAttachments) loadAttachments(message)
     }
 
     fun onDetailsClick() {
@@ -57,43 +55,27 @@ class MessagePreviewPresenter @Inject constructor(
                 .observeOn(schedulers.mainThread)
                 .doFinally { view?.showProgress(false) }
                 .subscribe({ message ->
-                    Timber.i("Loading message ${message.messageId} preview result: Success ")
-                    this@MessagePreviewPresenter.message = message
+                    Timber.i("Loading message ${message.message.messageId} preview result: Success ")
+                    this@MessagePreviewPresenter.message = message.message
                     view?.run {
                         message.let {
-                            setSubject(if (it.subject.isNotBlank()) it.subject else noSubjectString)
-                            setDate(it.date.toFormattedString("yyyy-MM-dd HH:mm:ss"))
-                            setContent(it.content)
+                            setSubject(if (it.message.subject.isNotBlank()) it.message.subject else noSubjectString)
+                            setDate(it.message.date.toFormattedString("yyyy-MM-dd HH:mm:ss"))
+                            setContent(it.message.content)
+                            setAttachments(it.attachments)
                             initOptions()
 
-                            if (it.folderId == MessageFolder.SENT.id) setRecipient(it.recipient)
-                            else setSender(it.sender)
+                            if (it.message.folderId == MessageFolder.SENT.id) setRecipient(it.message.recipient)
+                            else setSender(it.message.sender)
                         }
                     }
-                    analytics.logEvent("load_message_preview", "length" to message.content.length)
+                    analytics.logEvent("load_message_preview", "length" to message.message.content.length)
                 }) {
                     Timber.i("Loading message ${message.messageId} preview result: An exception occurred ")
                     retryCallback = { onMessageLoadRetry(message) }
                     errorHandler.dispatch(it)
                 })
         }
-    }
-
-    private fun loadAttachments(message: Message) {
-        Timber.i("Loading message ${message.messageId} attachments started")
-        disposable.add(studentRepository.getCurrentStudent()
-            .flatMap { messageRepository.getMessageAttachments(message) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                view?.run {
-                    setAttachments(it)
-                }
-            }) {
-                Timber.i("Loading message ${message.messageId} preview result: An exception occurred ")
-                errorHandler.dispatch(it)
-            }
-        )
     }
 
     fun onReply(): Boolean {
