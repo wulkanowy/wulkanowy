@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
-    android:padding="15dp">
+    android:paddingStart="16dp"
+    android:paddingTop="5dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="5dp">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/messagePreviewAttachment"
