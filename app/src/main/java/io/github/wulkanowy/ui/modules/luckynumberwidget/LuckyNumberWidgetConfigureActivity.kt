@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.content.Intent
 import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -59,7 +60,7 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
             .setTitle(R.string.widget_timetable_theme_title)
             .setOnDismissListener { presenter.onDismissThemeView() }
             .setSingleChoiceItems(items, -1) { _, which ->
-                presenter.onThemeSelect(if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES && which == 2 || which == 1) 1 else 0)
+                presenter.onThemeSelect(if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES && which == 2 || which == 1) 1 else 0)
             }
             .show()
     }
