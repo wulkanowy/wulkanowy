@@ -21,7 +21,8 @@ class MessagePreviewAdapter @Inject constructor() :
 
     enum class ViewType(val id: Int) {
         MESSAGE(1),
-        ATTACHMENT(2)
+        DIVIDER(2),
+        ATTACHMENT(3)
     }
 
     var messageWithAttachment: MessageWithAttachment? = null
@@ -32,15 +33,20 @@ class MessagePreviewAdapter @Inject constructor() :
 
     private var attachments: List<MessageAttachment> = emptyList()
 
-    override fun getItemCount() = if (messageWithAttachment == null) 0 else attachments.size + 1
+    override fun getItemCount() = if (messageWithAttachment == null) 0 else attachments.size + 1 + if (attachments.isNotEmpty()) 1 else 0
 
-    override fun getItemViewType(position: Int) = if (position == 0) ViewType.MESSAGE.id else ViewType.ATTACHMENT.id
+    override fun getItemViewType(position: Int) = when (position) {
+        0 -> ViewType.MESSAGE.id
+        1 -> ViewType.DIVIDER.id
+        else -> ViewType.ATTACHMENT.id
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
         return when (viewType) {
             ViewType.MESSAGE.id -> MessageViewHolder(inflater.inflate(R.layout.item_message_preview, parent, false))
+            ViewType.DIVIDER.id -> DividerViewHolder(inflater.inflate(R.layout.item_message_divider, parent, false))
             ViewType.ATTACHMENT.id -> AttachmentViewHolder(inflater.inflate(R.layout.item_message_attachment, parent, false))
             else -> throw IllegalStateException()
         }
@@ -49,7 +55,7 @@ class MessagePreviewAdapter @Inject constructor() :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is MessageViewHolder -> bindMessage(holder.view, requireNotNull(messageWithAttachment).message)
-            is AttachmentViewHolder -> bindAttachment(holder.view, requireNotNull(messageWithAttachment).attachments[position - 1])
+            is AttachmentViewHolder -> bindAttachment(holder.view, requireNotNull(messageWithAttachment).attachments[position - 2])
         }
     }
 
@@ -75,6 +81,8 @@ class MessagePreviewAdapter @Inject constructor() :
     }
 
     class MessageViewHolder(val view: View) : RecyclerView.ViewHolder(view)
+
+    class DividerViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
     class AttachmentViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 }
