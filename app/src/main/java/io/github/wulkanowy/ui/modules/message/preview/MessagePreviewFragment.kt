@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -10,15 +9,15 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.db.entities.MessageAttachment
+import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
-import io.github.wulkanowy.utils.openInternetBrowser
 import kotlinx.android.synthetic.main.fragment_message_preview.*
 import javax.inject.Inject
 
@@ -26,6 +25,9 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
 
     @Inject
     lateinit var presenter: MessagePreviewPresenter
+
+    @Inject
+    lateinit var previewAdapter: MessagePreviewAdapter
 
     private var menuReplyButton: MenuItem? = null
 
@@ -35,9 +37,6 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
 
     override val titleStringId: Int
         get() = R.string.message_title
-
-    override val noSubjectString: String
-        get() = getString(R.string.message_no_subject)
 
     override val deleteMessageSuccessString: String
         get() = getString(R.string.message_delete_success)
@@ -69,6 +68,11 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
 
     override fun initView() {
         messagePreviewErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+
+        with(messagePreviewRecycler) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = previewAdapter
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -88,26 +92,9 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
         }
     }
 
-    override fun setSubject(subject: String) {
-        messagePreviewSubject.text = subject
-    }
-
-    @SuppressLint("SetTextI18n")
-    override fun setRecipient(recipient: String) {
-        messagePreviewAuthor.text = "${getString(R.string.message_to)} $recipient"
-    }
-
-    @SuppressLint("SetTextI18n")
-    override fun setSender(sender: String) {
-        messagePreviewAuthor.text = "${getString(R.string.message_from)} $sender"
-    }
-
-    override fun setDate(date: String) {
-        messagePreviewDate.text = getString(R.string.message_date, date)
-    }
-
-    override fun setContent(content: String) {
-        messagePreviewContent.text = content
+    override fun setMessageWithAttachment(item: MessageWithAttachment) {
+        previewAdapter.messageWithAttachment = item
+        previewAdapter.notifyDataSetChanged()
     }
 
     override fun showProgress(show: Boolean) {
@@ -115,15 +102,7 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     }
 
     override fun showContent(show: Boolean) {
-        messagePreviewContentContainer.visibility = if (show) VISIBLE else GONE
-    }
-
-    override fun setAttachments(items: List<MessageAttachment>) {
-        messagePreviewAttachment.visibility = VISIBLE
-        messagePreviewAttachment.text = items.getOrNull(0)?.filename
-        messagePreviewAttachment.setOnClickListener {
-            items.getOrNull(0)?.url?.let { requireContext().openInternetBrowser(it) { } }
-        }
+        messagePreviewRecycler.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showOptions(show: Boolean) {

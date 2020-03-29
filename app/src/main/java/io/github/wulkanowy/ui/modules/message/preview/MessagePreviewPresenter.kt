@@ -1,14 +1,12 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.data.repositories.message.MessageRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -57,17 +55,9 @@ class MessagePreviewPresenter @Inject constructor(
                 .subscribe({ message ->
                     Timber.i("Loading message ${message.message.messageId} preview result: Success ")
                     this@MessagePreviewPresenter.message = message.message
-                    view?.run {
-                        message.let {
-                            setSubject(if (it.message.subject.isNotBlank()) it.message.subject else noSubjectString)
-                            setDate(it.message.date.toFormattedString("yyyy-MM-dd HH:mm:ss"))
-                            setContent(it.message.content)
-                            setAttachments(it.attachments)
-                            initOptions()
-
-                            if (it.message.folderId == MessageFolder.SENT.id) setRecipient(it.message.recipient)
-                            else setSender(it.message.sender)
-                        }
+                    view?.apply {
+                        setMessageWithAttachment(message)
+                        initOptions()
                     }
                     analytics.logEvent("load_message_preview", "length" to message.message.content.length)
                 }) {
