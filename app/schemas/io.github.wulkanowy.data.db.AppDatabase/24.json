@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 23,
-    "identityHash": "f2505bf0c76c3ae4567856536d790909",
+    "version": 24,
+    "identityHash": "734cc9ceddd7940c7e013dba80d6d3d4",
     "entities": [
       {
         "tableName": "Students",
@@ -956,7 +956,7 @@
       },
       {
         "tableName": "Messages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `sender_name` TEXT NOT NULL, `sender_id` INTEGER NOT NULL, `recipient_name` TEXT NOT NULL, `subject` TEXT NOT NULL, `content` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `unread_by` INTEGER NOT NULL, `read_by` INTEGER NOT NULL, `removed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `sender_name` TEXT NOT NULL, `sender_id` INTEGER NOT NULL, `recipient_name` TEXT NOT NULL, `subject` TEXT NOT NULL, `content` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `unread_by` INTEGER NOT NULL, `read_by` INTEGER NOT NULL, `removed` INTEGER NOT NULL, `has_attachments` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -1052,6 +1052,62 @@
             "fieldPath": "removed",
             "columnName": "removed",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hasAttachments",
+            "columnName": "has_attachments",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "MessageAttachments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `one_drive_id` TEXT NOT NULL, `url` TEXT NOT NULL, `filename` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "realId",
+            "columnName": "real_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "messageId",
+            "columnName": "message_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oneDriveId",
+            "columnName": "one_drive_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "filename",
+            "columnName": "filename",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -1676,7 +1732,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f2505bf0c76c3ae4567856536d790909')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '734cc9ceddd7940c7e013dba80d6d3d4')"
     ]
   }
 }
