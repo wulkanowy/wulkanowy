@@ -49,6 +49,7 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
 
     override fun showThemeDialog() {
         val items = arrayOf(
+            getString(R.string.widget_timetable_theme_system),
             getString(R.string.widget_timetable_theme_light),
             getString(R.string.widget_timetable_theme_dark)
         )
@@ -57,7 +58,7 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
             .setTitle(R.string.widget_timetable_theme_title)
            .setOnDismissListener { presenter.onDismissThemeView() }
             .setSingleChoiceItems(items, -1) { _, which ->
-                presenter.onThemeSelect(which)
+                presenter.onThemeSelect(which-1)
             }
             .show()
     }
