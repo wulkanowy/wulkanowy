@@ -33,4 +33,7 @@ data class Homework(
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    @ColumnInfo(name = "is_done")
+    var isDone: Boolean = true
 }
