@@ -218,6 +218,8 @@
 
     <!--Homework-->
     <string name="homework_no_items">Keine Informationen über Hausaufgaben</string>
+    <string name="homework_mark_as_done">Mark as done</string>
+    <string name="homework_mark_as_undone">Mark as undone</string>
 
 
     <!--Lucky number-->
