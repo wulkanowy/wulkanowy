@@ -35,5 +35,5 @@ data class Homework(
     var id: Long = 0
 
     @ColumnInfo(name = "is_done")
-    var isDone: Boolean = true
+    var isDone: Boolean = false
 }
