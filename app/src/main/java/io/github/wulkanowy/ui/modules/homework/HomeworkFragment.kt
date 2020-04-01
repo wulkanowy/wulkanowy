@@ -74,6 +74,10 @@ class HomeworkFragment : BaseFragment(), HomeworkView, MainView.TitledView {
         homeworkAdapter.updateDataSet(data, true)
     }
 
+    fun onReloadList() {
+        presenter.reloadData()
+    }
+
     override fun clearData() {
         homeworkAdapter.clear()
     }

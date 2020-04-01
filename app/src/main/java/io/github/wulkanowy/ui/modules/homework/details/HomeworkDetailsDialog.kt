@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.ui.base.BaseDialogFragment
+import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.android.synthetic.main.dialog_homework.*
 import javax.inject.Inject
@@ -57,6 +58,7 @@ class HomeworkDetailsDialog : BaseDialogFragment(), HomeworkDetailsView {
     }
 
     override fun updateMarkAsDoneLabel(isDone: Boolean) {
+        (parentFragment as? HomeworkFragment)?.onReloadList()
         homeworkDialogRead.text = view?.context?.getString(if (isDone) R.string.homework_mark_as_undone else R.string.homework_mark_as_done)
     }
 }
