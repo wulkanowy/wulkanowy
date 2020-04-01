@@ -45,21 +45,20 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="50dp"
         android:layout_marginBottom="15dp"
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.2"
         android:maxLines="2"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/homeworkItemImage"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/homeworkItemSubject"
         app:layout_constraintTop_toBottomOf="@id/homeworkItemSubject"
-        app:layout_goneMarginEnd="0dp"
         tools:text="@tools:sample/lorem/random" />
 
     <ImageView
-        android:id="@+id/homeworkItemImage"
+        android:id="@+id/homeworkItemCheckImage"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginTop="8dp"
@@ -67,5 +66,18 @@
         app:layout_constraintTop_toBottomOf="@id/homeworkItemTeacher"
         app:srcCompat="@drawable/ic_check"
         app:tint="?android:textColorSecondary"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/homeworkItemAttachmentImage"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@id/homeworkItemTeacher"
+        app:layout_constraintTop_toBottomOf="@id/homeworkItemTeacher"
+        app:srcCompat="@drawable/ic_attachment"
+        app:tint="?android:textColorSecondary"
+        tools:ignore="ContentDescription"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

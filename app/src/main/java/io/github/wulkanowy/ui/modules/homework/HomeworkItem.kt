@@ -24,7 +24,8 @@ class HomeworkItem(header: HomeworkHeader, val homework: Homework) :
             homeworkItemSubject.text = homework.subject
             homeworkItemTeacher.text = homework.teacher
             homeworkItemContent.text = homework.content
-            homeworkItemImage.visibility = if (homework.isDone) View.VISIBLE else View.GONE
+            homeworkItemCheckImage.visibility = if (homework.isDone) View.VISIBLE else View.GONE
+            homeworkItemAttachmentImage.visibility = if (!homework.isDone && homework.attachments.isNotEmpty()) View.VISIBLE else View.GONE
         }
     }
 
