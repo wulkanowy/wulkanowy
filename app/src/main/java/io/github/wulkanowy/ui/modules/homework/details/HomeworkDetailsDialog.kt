@@ -1,9 +1,12 @@
 package io.github.wulkanowy.ui.modules.homework.details
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.ui.base.BaseDialogFragment
@@ -46,12 +49,16 @@ class HomeworkDetailsDialog : BaseDialogFragment(), HomeworkDetailsView {
         presenter.onAttachView(this)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun initView() {
         homeworkDialogDate.text = homework.date.toFormattedString()
         homeworkDialogEntryDate.text = homework.entryDate.toFormattedString()
         homeworkDialogSubject.text = homework.subject
         homeworkDialogTeacher.text = homework.teacher
-        homeworkDialogContent.text = homework.content
+        homeworkDialogContent.movementMethod = LinkMovementMethod.getInstance()
+        homeworkDialogContent.text = HtmlCompat.fromHtml(homework.content + "<br><br>" +
+            homework.attachments.joinToString("<br>") { "<a href='${it.first}'>${it.second}</a>" },
+            HtmlCompat.FROM_HTML_MODE_COMPACT)
         homeworkDialogRead.text = view?.context?.getString(if (homework.isDone) R.string.homework_mark_as_undone else R.string.homework_mark_as_done)
         homeworkDialogRead.setOnClickListener { presenter.toggleDone(homework) }
         homeworkDialogClose.setOnClickListener { dismiss() }
