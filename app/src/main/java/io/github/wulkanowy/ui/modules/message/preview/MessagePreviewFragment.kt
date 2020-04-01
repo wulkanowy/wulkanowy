@@ -93,8 +93,10 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     }
 
     override fun setMessageWithAttachment(item: MessageWithAttachment) {
-        previewAdapter.messageWithAttachment = item
-        previewAdapter.notifyDataSetChanged()
+        with(previewAdapter) {
+            messageWithAttachment = item
+            notifyDataSetChanged()
+        }
     }
 
     override fun showProgress(show: Boolean) {
