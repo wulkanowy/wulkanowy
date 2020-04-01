@@ -40,7 +40,7 @@ class MessageRemote @Inject constructor(private val sdk: Sdk) {
     }
 
     fun getMessagesContent(message: Message, markAsRead: Boolean = false): Single<String> {
-        return sdk.getMessageContent(message.messageId, message.folderId, markAsRead, message.realId)
+        return sdk.getMessageDetails(message.messageId, message.folderId, markAsRead, message.realId).map { it.content }
     }
 
     fun sendMessage(subject: String, content: String, recipients: List<Recipient>): Single<SentMessage> {

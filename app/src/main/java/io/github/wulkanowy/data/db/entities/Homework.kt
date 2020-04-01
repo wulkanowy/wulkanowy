@@ -27,8 +27,9 @@ data class Homework(
     val teacher: String,
 
     @ColumnInfo(name = "teacher_symbol")
-    val teacherSymbol: String
+    val teacherSymbol: String,
 
+    val attachments: List<Pair<String, String>>
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
