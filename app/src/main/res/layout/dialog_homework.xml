@@ -93,6 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
+            android:autoLink="web|email"
             android:lineSpacingMultiplier="1.2"
             android:text="@string/all_no_data"
             android:textIsSelectable="true"
