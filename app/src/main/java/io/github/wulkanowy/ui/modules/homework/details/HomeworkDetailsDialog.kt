@@ -68,4 +68,9 @@ class HomeworkDetailsDialog : BaseDialogFragment(), HomeworkDetailsView {
         (parentFragment as? HomeworkFragment)?.onReloadList()
         homeworkDialogRead.text = view?.context?.getString(if (isDone) R.string.homework_mark_as_undone else R.string.homework_mark_as_done)
     }
+
+    override fun onDestroyView() {
+        presenter.onDetachView()
+        super.onDestroyView()
+    }
 }
