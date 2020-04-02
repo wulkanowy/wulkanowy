@@ -49,6 +49,7 @@
     <string name="login_invalid_token">Недействительный token</string>
     <string name="login_expired_token">Токен просрочен</string>
     <string name="login_invalid_email">Неверный адрес электронной почты</string>
+    <string name="login_invalid_login">Неправильный логин</string>
     <string name="login_invalid_symbol">Недействительный symbol</string>
     <string name="login_incorrect_symbol">Не удалось найти ученика. Пожалуйста, проверьте \"symbol\"</string>
     <string name="login_field_required">Это поле обязательно</string>
@@ -344,6 +345,7 @@
     <string name="widget_timetable_theme_title">Выбрать тему</string>
     <string name="widget_timetable_theme_light">Светлая</string>
     <string name="widget_timetable_theme_dark">Тёмная</string>
+    <string name="widget_timetable_theme_system">Системная тема</string>
 
 
     <!--Preferences-->

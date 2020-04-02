@@ -49,6 +49,7 @@
     <string name="login_invalid_pin">Недійсний PIN</string>
     <string name="login_invalid_token">Недійсний token</string>
     <string name="login_invalid_email">Недійсна адреса електронної пошти</string>
+    <string name="login_invalid_login">Невірний логін</string>
     <string name="login_expired_token">Токен протермінований</string>
     <string name="login_invalid_symbol">Недійсний symbol</string>
     <string name="login_incorrect_symbol">Не вдалося знайти учня. Будь ласка, перевірте \"symbol\"</string>
@@ -345,6 +346,7 @@
     <string name="widget_timetable_theme_title">Вибрати тему</string>
     <string name="widget_timetable_theme_light">Світла</string>
     <string name="widget_timetable_theme_dark">Темна</string>
+    <string name="widget_timetable_theme_system">Тема системи</string>
 
 
     <!--Preferences-->
