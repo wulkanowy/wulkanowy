@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 24,
-    "identityHash": "d101f5a26a024f62e6fee161e421b882",
+    "identityHash": "9bbf60310b56a855839164e2aae031f9",
     "entities": [
       {
         "tableName": "Students",
@@ -1202,17 +1202,11 @@
       },
       {
         "tableName": "Homework",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_done` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `content` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL, `attachments` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `content` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isDone",
-            "columnName": "is_done",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1261,12 +1255,6 @@
           {
             "fieldPath": "teacherSymbol",
             "columnName": "teacher_symbol",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "attachments",
-            "columnName": "attachments",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -1738,7 +1726,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd101f5a26a024f62e6fee161e421b882')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9bbf60310b56a855839164e2aae031f9')"
     ]
   }
 }
