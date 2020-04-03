@@ -238,7 +238,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
             requireContext().getString(R.string.login_email_intent_title),
             "wulkanowyinc@gmail.com",
             requireContext().getString(R.string.login_email_subject),
-            requireContext().getString(R.string.login_email_text, appInfo.systemModel, appInfo.systemVersion.toString(), appInfo.versionName)
+            requireContext().getString(R.string.login_email_text, "${appInfo.systemManufacturer} ${appInfo.systemModel}", appInfo.systemVersion.toString(), appInfo.versionName)
         )
     }
 }

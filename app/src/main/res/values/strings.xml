@@ -292,6 +292,7 @@
     <string name="about_homepage_summary">Visit the website and help develop the application</string>
     <string name="about_licenses">Licenses</string>
     <string name="about_licenses_summary">Licenses of libraries used in the application</string>
+    <string name="about_feedback_template" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\n\nTreść zgłoszenia:</string>
 
 
     <!--Licenses-->
