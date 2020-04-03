@@ -32,7 +32,7 @@ fun Context.openInternetBrowser(uri: String, onActivityNotFound: (uri: String) -
     }
 }
 
-fun Context.openEmailClient(chooserTitle: String, email: String, subject: String, body: String, onActivityNotFound: () -> Unit) {
+fun Context.openEmailClient(chooserTitle: String, email: String, subject: String, body: String, onActivityNotFound: () -> Unit = {}) {
     val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:")).apply {
         putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
         putExtra(Intent.EXTRA_SUBJECT, subject)
