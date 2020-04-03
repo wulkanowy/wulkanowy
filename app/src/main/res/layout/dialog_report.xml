@@ -14,7 +14,8 @@
             android:id="@+id/reportContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/login_email_details" />
+            android:hint="@string/login_email_details"
+            android:lines="3" />
 
         <requestFocus />
     </com.google.android.material.textfield.TextInputLayout>
