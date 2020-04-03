@@ -67,7 +67,9 @@ interface LoginFormView : BaseView {
 
     fun openFaqPage()
 
-    fun openEmail()
+    fun openProblemDetailsInput()
+
+    fun openEmail(details: String)
 
     fun openAdvancedLogin()
 

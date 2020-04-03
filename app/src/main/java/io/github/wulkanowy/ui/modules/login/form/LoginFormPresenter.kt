@@ -118,7 +118,11 @@ class LoginFormPresenter @Inject constructor(
     }
 
     fun onEmailClick() {
-        view?.openEmail()
+        view?.openProblemDetailsInput()
+    }
+
+    fun onProblemDetailsEntered(details: String) {
+        view?.openEmail(details)
     }
 
     fun onRecoverClick() {

@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.login.form
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface.BUTTON_POSITIVE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -19,6 +21,7 @@ import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.setOnEditorDoneSignIn
 import io.github.wulkanowy.utils.showSoftInput
+import kotlinx.android.synthetic.main.dialog_report.*
 import kotlinx.android.synthetic.main.fragment_login_form.*
 import javax.inject.Inject
 
@@ -233,12 +236,30 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
         }
     }
 
-    override fun openEmail() {
+    override fun openProblemDetailsInput() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.login_email_subject)
+            .setView(R.layout.dialog_report)
+            .setNegativeButton(android.R.string.cancel) { _, _ -> }
+            .create()
+            .apply {
+                setButton(BUTTON_POSITIVE, getString(R.string.login_email_intent_title)) { _, _ ->
+                    presenter.onProblemDetailsEntered(reportContent.text.toString())
+                }
+            }.show()
+    }
+
+    override fun openEmail(details: String) {
         context?.openEmailClient(
             requireContext().getString(R.string.login_email_intent_title),
             "wulkanowyinc@gmail.com",
             requireContext().getString(R.string.login_email_subject),
-            requireContext().getString(R.string.login_email_text, "${appInfo.systemManufacturer} ${appInfo.systemModel}", appInfo.systemVersion.toString(), appInfo.versionName)
+            requireContext().getString(R.string.login_email_text,
+                "${appInfo.systemManufacturer} ${appInfo.systemModel}",
+                appInfo.systemVersion.toString(),
+                appInfo.versionName,
+                details
+            )
         )
     }
 }

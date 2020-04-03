@@ -130,7 +130,7 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
                 putExtra(EXTRA_EMAIL, arrayOf("wulkanowyinc@gmail.com"))
                 putExtra(EXTRA_SUBJECT, "Zgłoszenie błędu")
                 putExtra(EXTRA_TEXT, requireContext().getString(R.string.about_feedback_template, "${appInfo.systemManufacturer} ${appInfo.systemModel}", appInfo.systemVersion.toString(), appInfo.versionName))
-            }
+            } // TODO: use extension method used in login fragment
 
         context?.let {
             if (intent.resolveActivity(it.packageManager) != null) {
