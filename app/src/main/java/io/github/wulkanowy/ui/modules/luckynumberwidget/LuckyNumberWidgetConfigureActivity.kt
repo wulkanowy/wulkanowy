@@ -19,6 +19,7 @@ import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.activity_widget_configure.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigurePresenter>(),
@@ -65,8 +66,7 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
             .setTitle(R.string.widget_timetable_theme_title)
             .setOnDismissListener { presenter.onDismissThemeView() }
             .setSingleChoiceItems(items, -1) { _, which ->
-                val isDarkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
-                presenter.onThemeSelect(if (isDarkMode && which == 2 || which == 1) 1 else 0)
+                presenter.onThemeSelect(which)
             }
             .show()
     }

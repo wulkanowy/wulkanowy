@@ -13,6 +13,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.res.Configuration
 import android.widget.RemoteViews
 import dagger.android.AndroidInjection
 import io.github.wulkanowy.R
@@ -117,7 +118,15 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     @SuppressLint("DefaultLocale")
     private fun updateWidget(context: Context, appWidgetId: Int, date: LocalDate, student: Student?) {
         val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
-        val layoutId = if (savedTheme == 0L) R.layout.widget_timetable else R.layout.widget_timetable_dark
+        val layoutId = when (savedTheme) {
+            0L -> R.layout.widget_timetable
+            1L -> R.layout.widget_timetable_dark
+            else -> {
+                val isDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+                if (isDarkMode) R.layout.widget_timetable_dark
+                else R.layout.widget_timetable
+            }
+        }
 
         val nextNavIntent = createNavIntent(context, appWidgetId, appWidgetId, BUTTON_NEXT)
         val prevNavIntent = createNavIntent(context, -appWidgetId, appWidgetId, BUTTON_PREV)

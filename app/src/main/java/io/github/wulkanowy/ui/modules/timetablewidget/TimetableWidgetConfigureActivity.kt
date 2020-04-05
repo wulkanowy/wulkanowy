@@ -67,8 +67,7 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
             .setTitle(R.string.widget_timetable_theme_title)
             .setOnDismissListener { presenter.onDismissThemeView() }
             .setSingleChoiceItems(items, -1) { _, which ->
-                val isDarkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
-                presenter.onThemeSelect(if (isDarkMode && which == 2 || which == 1) 1 else 0)
+                presenter.onThemeSelect(which)
             }
             .show()
     }
