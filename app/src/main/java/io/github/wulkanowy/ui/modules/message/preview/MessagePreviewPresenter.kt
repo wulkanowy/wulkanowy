@@ -47,7 +47,7 @@ class MessagePreviewPresenter @Inject constructor(
         Timber.i("Loading message ${message.messageId} preview started")
         disposable.apply {
             clear()
-            add(studentRepository.getCurrentStudent()
+            add(studentRepository.getStudentById(message.studentId)
                 .flatMap { messageRepository.getMessage(it, message, true) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
