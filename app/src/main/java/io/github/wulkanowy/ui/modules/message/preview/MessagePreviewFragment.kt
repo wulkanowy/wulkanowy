@@ -63,7 +63,7 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         messageContainer = messagePreviewContainer
-        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getSerializable(MESSAGE_ID_KEY) as Message)
+        presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getSerializable(MESSAGE_ID_KEY) as? Message)
     }
 
     override fun initView() {

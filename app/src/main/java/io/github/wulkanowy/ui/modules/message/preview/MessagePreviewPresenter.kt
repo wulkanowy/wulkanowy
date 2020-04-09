@@ -24,11 +24,11 @@ class MessagePreviewPresenter @Inject constructor(
 
     private var retryCallback: () -> Unit = {}
 
-    fun onAttachView(view: MessagePreviewView, message: Message) {
+    fun onAttachView(view: MessagePreviewView, message: Message?) {
         super.onAttachView(view)
         view.initView()
         errorHandler.showErrorMessage = ::showErrorViewOnError
-        loadData(message)
+        loadData(requireNotNull(message))
     }
 
     private fun onMessageLoadRetry(message: Message) {
