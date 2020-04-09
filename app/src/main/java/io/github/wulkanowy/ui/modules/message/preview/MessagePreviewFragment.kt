@@ -150,8 +150,8 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         outState.putSerializable(MESSAGE_ID_KEY, presenter.message)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onDestroyView() {

@@ -28,6 +28,7 @@ class MessagePreviewPresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         errorHandler.showErrorMessage = ::showErrorViewOnError
+        this.message = message
         loadData(requireNotNull(message))
     }
 
