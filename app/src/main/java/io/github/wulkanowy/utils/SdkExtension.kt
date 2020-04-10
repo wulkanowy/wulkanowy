@@ -2,6 +2,7 @@ package io.github.wulkanowy.utils
 
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
+import timber.log.Timber
 
 fun Sdk.init(student: Student): Sdk {
     email = student.email
@@ -21,6 +22,8 @@ fun Sdk.init(student: Student): Sdk {
     mobileBaseUrl = student.mobileBaseUrl
     certKey = student.certificateKey
     privateKey = student.privateKey
+
+    Timber.d("Sdk in ${student.loginMode} mode reinitialized")
 
     return this
 }
