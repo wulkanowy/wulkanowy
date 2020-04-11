@@ -8,6 +8,16 @@
         <item>Lubelski Portal Oświatowy</item>
         <item>EduNet Miasta Tarnowa</item>
         <item>ResMan Rzeszów</item>
+        <item>Rawa Mazowiecka - Platforma vEdukacja</item>
+        <item>Zduńska Wola - e-Urząd</item>
+        <item>Sieradz - Portal oświatowy</item>
+        <item>Łask - Platforma vEdukacja</item>
+        <item>Powiat łaski - Platforma edukacyjna</item>
+        <item>Powiat Krasnostawski - Platforma oświatowa</item>
+        <item>Powiat kętrzyński - Platforma e-Usług</item>
+        <item>Gmina Ulan-Majorat - Platforma edukacyjna</item>
+        <item>Gmina Ozorków - Platforma edukacyjna</item>
+        <item>Gmina Łopiennik Górny - Platforma oświatowa</item>
         <item>Fakelog</item>
     </string-array>
     <string-array name="hosts_values">
@@ -18,6 +28,16 @@
         <item>https://edu.lublin.eu</item>
         <item>https://umt.tarnow.pl</item>
         <item>https://resman.pl</item>
+        <item>https://vulcan.net.pl/?light</item>
+        <item>https://vulcan.net.pl/?light</item>
+        <item>https://vulcan.net.pl/?light</item>
+        <item>https://vulcan.net.pl/?light</item>
+        <item>https://vulcan.net.pl/?light</item>
+        <item>https://vulcan.net.pl/?light</item>
+        <item>https://vulcan.net.pl/?light</item>
+        <item>https://vulcan.net.pl/?light</item>
+        <item>https://vulcan.net.pl/?light</item>
+        <item>https://vulcan.net.pl/?light</item>
         <item>http://fakelog.cf/?standard</item>
     </string-array>
     <string-array name="hosts_symbols">
@@ -28,6 +48,16 @@
         <item>lublin</item>
         <item>tarnow</item>
         <item>rzeszow</item>
+        <item>rawamazowiecka</item>
+        <item>zdunskawola</item>
+        <item>sieradz</item>
+        <item>lask</item>
+        <item>powiatlaski</item>
+        <item>powiatkrasnostawski</item>
+        <item>powiatketrzynski</item>
+        <item>gminaulanmajorat</item>
+        <item>gminaozorkow</item>
+        <item>gminalopiennikgorny</item>
         <item>powiatwulkanowy</item>
     </string-array>
 </resources>
