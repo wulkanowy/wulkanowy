@@ -12,11 +12,13 @@
         android:orientation="vertical">
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/errorDialogNestedScroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:overScrollMode="ifContentScrolls">
 
             <HorizontalScrollView
+                android:id="@+id/errorDialogHorizontalScroll"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:paddingLeft="24dp"

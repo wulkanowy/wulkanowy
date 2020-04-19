@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.HorizontalScrollView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.core.content.getSystemService
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
 import kotlinx.android.synthetic.main.dialog_error.*
@@ -55,7 +57,12 @@ class ErrorDialog : DialogFragment() {
 
             Toast.makeText(context, R.string.all_copied, LENGTH_LONG).show()
         }
+        with(errorDialogNestedScroll) {
+            post { fullScroll(NestedScrollView.FOCUS_UP) }
+        }
+        with(errorDialogHorizontalScroll) {
+            post { fullScroll(HorizontalScrollView.FOCUS_LEFT) }
+        }
         errorDialogCancel.setOnClickListener { dismiss() }
     }
 }
-
