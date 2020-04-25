@@ -9,7 +9,6 @@ import eu.davidea.flexibleadapter.items.IFlexible
 import eu.davidea.viewholders.FlexibleViewHolder
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetConfigureItem
 import io.github.wulkanowy.utils.getThemeAttrColor
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_account.*
@@ -39,7 +38,7 @@ class LuckyNumberWidgetConfigureItem(var student: Student, val isCurrent: Boolea
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as TimetableWidgetConfigureItem
+        other as LuckyNumberWidgetConfigureItem
 
         if (student != other.student) return false
 
