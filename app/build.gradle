@@ -80,6 +80,10 @@ android {
         }
     }
 
+    viewBinding {
+        enabled = true
+    }
+
     lintOptions {
         disable 'HardwareIds'
     }
