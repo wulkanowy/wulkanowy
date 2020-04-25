@@ -12,7 +12,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.login.LoginActivity
-import io.github.wulkanowy.ui.modules.timetablewidget.WidgetConfigureAdapter
+import io.github.wulkanowy.ui.base.WidgetConfigureAdapter
 import kotlinx.android.synthetic.main.activity_widget_configure.*
 import javax.inject.Inject
 

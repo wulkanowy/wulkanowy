@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.modules.timetablewidget
+package io.github.wulkanowy.ui.base
 
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
