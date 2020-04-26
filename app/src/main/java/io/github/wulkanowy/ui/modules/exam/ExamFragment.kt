@@ -7,11 +7,11 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.base.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.dpToPx
@@ -52,7 +52,7 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
         with(examRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = examAdapter
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            addItemDecoration(DividerItemDecoration(context))
         }
 
         examSwipe.setOnRefreshListener(presenter::onSwipeRefresh)

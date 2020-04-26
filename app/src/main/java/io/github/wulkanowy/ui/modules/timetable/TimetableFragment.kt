@@ -9,12 +9,12 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.base.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.timetable.completed.CompletedLessonsFragment
@@ -66,7 +66,7 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
         with(timetableRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = timetableAdapter
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            addItemDecoration(DividerItemDecoration(context))
         }
 
         timetableSwipe.setOnRefreshListener(presenter::onSwipeRefresh)

@@ -6,11 +6,11 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.base.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.homework.details.HomeworkDetailsDialog
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -52,7 +52,7 @@ class HomeworkFragment : BaseFragment(), HomeworkView, MainView.TitledView {
         with(homeworkRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = homeworkAdapter
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            addItemDecoration(DividerItemDecoration(context))
         }
 
         homeworkSwipe.setOnRefreshListener(presenter::onSwipeRefresh)

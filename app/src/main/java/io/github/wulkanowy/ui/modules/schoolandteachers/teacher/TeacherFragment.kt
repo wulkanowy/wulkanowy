@@ -6,11 +6,11 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Teacher
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.base.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersChildView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment
@@ -51,7 +51,7 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView,
         teacherRecycler.run {
             layoutManager = LinearLayoutManager(context)
             adapter = teacherAdapter
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            addItemDecoration(DividerItemDecoration(context))
         }
         teacherSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         teacherErrorRetry.setOnClickListener { presenter.onRetry() }

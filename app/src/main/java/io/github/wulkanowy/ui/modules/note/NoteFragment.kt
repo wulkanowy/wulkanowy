@@ -6,11 +6,11 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.base.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import kotlinx.android.synthetic.main.fragment_note.*
@@ -49,7 +49,7 @@ class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
         noteRecycler.run {
             layoutManager = LinearLayoutManager(context)
             adapter = noteAdapter
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            addItemDecoration(DividerItemDecoration(context))
         }
         noteSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         noteErrorRetry.setOnClickListener { presenter.onRetry() }

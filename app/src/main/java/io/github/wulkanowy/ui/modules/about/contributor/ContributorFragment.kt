@@ -6,11 +6,11 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.pojos.Contributor
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.base.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.openInternetBrowser
 import kotlinx.android.synthetic.main.fragment_creator.*
@@ -43,7 +43,7 @@ class ContributorFragment : BaseFragment(), ContributorView, MainView.TitledView
         with(creatorRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = creatorsAdapter
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            addItemDecoration(DividerItemDecoration(context))
         }
         creatorsAdapter.onClickListener = presenter::onItemSelected
         creatorSeeMore.setOnClickListener { presenter.onSeeMoreClick() }
