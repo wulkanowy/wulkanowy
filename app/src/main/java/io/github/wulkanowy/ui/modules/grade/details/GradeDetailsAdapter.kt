@@ -44,6 +44,12 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
         items[items.indexOf(item)] = item
     }
 
+    fun collapseAll() {
+        if (expandedPosition != -1) {
+            refreshList(headers)
+        }
+    }
+
     private fun refreshList(newItems: List<GradeDetailsItem<*>>) {
         val diffCallback = GradeDetailsDiffUtil(items, newItems)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
@@ -105,12 +111,6 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
                     refreshList(items - header.grades)
                 }
             }
-        }
-    }
-
-    fun collapseAll() {
-        if (expandedPosition != -1) {
-            refreshList(headers)
         }
     }
 

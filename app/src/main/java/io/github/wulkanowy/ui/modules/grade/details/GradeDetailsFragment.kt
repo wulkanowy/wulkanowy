@@ -35,7 +35,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
     }
 
     override val isViewEmpty
-        get() = gradeDetailsAdapter.itemCount > 0
+        get() = gradeDetailsAdapter.itemCount == 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
