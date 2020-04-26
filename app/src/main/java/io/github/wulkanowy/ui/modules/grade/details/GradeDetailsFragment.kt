@@ -35,7 +35,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
     }
 
     override val isViewEmpty
-        get() = gradeDetailsAdapter.items.isEmpty()
+        get() = gradeDetailsAdapter.itemCount > 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,23 +77,19 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
 
     override fun updateData(data: List<GradeDetailsItem<*>>, isGradeExpandable: Boolean, gradeColorTheme: String) {
         with(gradeDetailsAdapter) {
-            items = data.toMutableList()
-            isExpanded = isGradeExpandable
             colorTheme = gradeColorTheme
+            setDataItems(data, isGradeExpandable)
             notifyDataSetChanged()
         }
     }
 
     override fun updateItem(item: Grade, position: Int) {
-        with(gradeDetailsAdapter) {
-            items[position] = GradeDetailsItem(item, GradeDetailsItem.ViewType.ITEM)
-            notifyDataSetChanged()
-        }
+        gradeDetailsAdapter.updateDetailsItem(position, item)
     }
 
     override fun clearView() {
         with(gradeDetailsAdapter) {
-            items = mutableListOf()
+            setDataItems(mutableListOf())
             notifyDataSetChanged()
         }
     }
@@ -106,9 +102,12 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         gradeDetailsRecycler.smoothScrollToPosition(0)
     }
 
-    override fun getHeaderOfItem(item: GradeDetailsItem<*>): GradeDetailsHeader {
-//        return gradeDetailsAdapter.getExpandableOf(item)
-        TODO()
+    override fun getHeaderOfItem(subject: String): GradeDetailsItem<GradeDetailsHeader> {
+        return gradeDetailsAdapter.getHeaderItem(subject)
+    }
+
+    override fun updateHeaderItem(item: GradeDetailsItem<GradeDetailsHeader>) {
+        gradeDetailsAdapter.updateHeaderItem(item)
     }
 
     override fun showProgress(show: Boolean) {

@@ -48,13 +48,10 @@ class GradeDetailsPresenter @Inject constructor(
             if (!grade.isRead) {
                 grade.isRead = true
                 updateItem(grade, position)
-                // TODO
-//                getHeaderOfItem(item)?.let { header ->
-//                    if (header is GradeDetailsHeader) {
-//                        header.newGrades--
-//                        updateItem(header)
-//                    }
-//                }
+                getHeaderOfItem(grade.subject).let { header ->
+                    header.value.newGrades--
+                    updateHeaderItem(header)
+                }
                 newGradesAmount--
                 updateMarkAsDoneButton()
                 updateGrade(grade)
@@ -183,17 +180,19 @@ class GradeDetailsPresenter @Inject constructor(
 
     private fun createGradeItems(items: List<Grade>, averages: List<Triple<String, Double, String>>): List<GradeDetailsItem<Any>> {
         return items.groupBy { grade -> grade.subject }.toSortedMap().map { (subject, grades) ->
-            GradeDetailsItem(GradeDetailsHeader(
+            val subItems = grades.map {
+                GradeDetailsItem(it, GradeDetailsItem.ViewType.ITEM)
+            }
+
+            listOf(GradeDetailsItem(GradeDetailsHeader(
                 subject = subject,
                 average = averages.singleOrNull { subject == it.first }?.second,
                 pointsSum = averages.singleOrNull { subject == it.first }?.third,
                 number = grades.size,
                 newGrades = grades.filter { grade -> !grade.isRead }.size,
-                grades = grades.map {
-                    GradeDetailsItem(it, GradeDetailsItem.ViewType.ITEM)
-                }
-            ), GradeDetailsItem.ViewType.HEADER)
-        }
+                grades = subItems
+            ), GradeDetailsItem.ViewType.HEADER)) + if (preferencesRepository.isGradeExpandable) emptyList() else subItems
+        }.flatten()
     }
 
     private fun updateGrade(grade: Grade) {

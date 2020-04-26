@@ -5,7 +5,7 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
@@ -17,13 +17,39 @@ import javax.inject.Inject
 
 class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var items = mutableListOf<GradeDetailsItem<*>>()
+    private var headers = mutableListOf<GradeDetailsItem<*>>()
+
+    private var items = mutableListOf<GradeDetailsItem<*>>()
+
+    private var isExpandable = false
 
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
-    var isExpanded = false
-
     var colorTheme = ""
+
+    fun setDataItems(data: List<GradeDetailsItem<*>>, isExpanded: Boolean = isExpandable) {
+        headers = data.filter { it.viewType == GradeDetailsItem.ViewType.HEADER }.toMutableList()
+        items = if (isExpanded) headers else data.toMutableList()
+        isExpandable = isExpanded
+    }
+
+    fun updateDetailsItem(position: Int, grade: Grade) {
+        items[position] = GradeDetailsItem(grade, GradeDetailsItem.ViewType.ITEM)
+    }
+
+    fun getHeaderItem(subject: String) = headers.single { (it.value as GradeDetailsHeader).subject == subject } as GradeDetailsItem<GradeDetailsHeader>
+
+    fun updateHeaderItem(item: GradeDetailsItem<GradeDetailsHeader>) {
+        headers[headers.indexOf(item)] = item
+        items[items.indexOf(item)] = item
+    }
+
+    private fun refreshList(newItems: List<GradeDetailsItem<*>>) {
+        val diffCallback = GradeDetailsDiffUtil(items, newItems)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        items = newItems.toMutableList()
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     override fun getItemCount() = items.size
 
@@ -41,15 +67,18 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is HeaderViewHolder -> bindHeaderViewHolder(holder.binding, items[position].value as GradeDetailsHeader, position)
+            is HeaderViewHolder -> bindHeaderViewHolder(holder.binding, items[position] as GradeDetailsItem<GradeDetailsHeader>, position)
             is ItemViewHolder -> bindItemViewHolder(holder.binding, items[position].value as Grade, position)
         }
     }
 
     private var expandedPosition = -1
 
-    private fun bindHeaderViewHolder(binding: HeaderGradeDetailsBinding, header: GradeDetailsHeader, position: Int) {
-        val isSubjectExpanded = position == expandedPosition || !isExpanded
+    private fun bindHeaderViewHolder(binding: HeaderGradeDetailsBinding, item: GradeDetailsItem<GradeDetailsHeader>, position: Int) {
+        val header = item.value
+        val realPosition = headers.indexOf(item)
+
+        val isSubjectExpanded = realPosition == expandedPosition
 
         with(binding) {
             gradeHeaderSubject.apply {
@@ -63,22 +92,17 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
             gradeHeaderNote.visibility = if (header.newGrades > 0) View.VISIBLE else View.GONE
             if (header.newGrades > 0) gradeHeaderNote.text = header.newGrades.toString(10)
 
-            gradeHeaderContainer.isEnabled = isExpanded
+            gradeHeaderContainer.isEnabled = isExpandable
             gradeHeaderContainer.setOnClickListener {
-                val oldExpandedPosition = expandedPosition
-                expandedPosition = if (oldExpandedPosition == position) -1 else position
-                notifyItemChanged(oldExpandedPosition)
-                if (expandedPosition != -1) {
-                    notifyItemChanged(expandedPosition)
-                }
-            }
+                expandedPosition = if (expandedPosition == position) -1 else position
 
-            with(gradeHeaderRecycler) {
-                visibility = if (isSubjectExpanded) View.VISIBLE else View.GONE
-                layoutManager = LinearLayoutManager(context)
-                adapter = GradeDetailsAdapter().apply {
-                    items = header.grades.toMutableList()
-                    onClickListener = this@GradeDetailsAdapter.onClickListener
+                if (expandedPosition != -1) {
+                    val headersWithGrades = mutableListOf<GradeDetailsItem<*>>()
+                    headersWithGrades.addAll(headers)
+                    headersWithGrades.addAll(realPosition + 1, header.grades)
+                    refreshList(headersWithGrades)
+                } else {
+                    refreshList(items - header.grades)
                 }
             }
         }
@@ -86,9 +110,7 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
 
     fun collapseAll() {
         if (expandedPosition != -1) {
-            val oldExpandedPosition = expandedPosition
-            expandedPosition = -1
-            notifyItemChanged(oldExpandedPosition)
+            refreshList(headers)
         }
     }
 
@@ -122,4 +144,20 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
 
     private class ItemViewHolder(val binding: ItemGradeDetailsBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    class GradeDetailsDiffUtil(private val old: List<GradeDetailsItem<*>>, private val new: List<GradeDetailsItem<*>>) :
+        DiffUtil.Callback() {
+
+        override fun getOldListSize() = old.size
+
+        override fun getNewListSize() = new.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return old[oldItemPosition] == new[newItemPosition]
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return old[oldItemPosition] == new[newItemPosition]
+        }
+    }
 }

@@ -13,6 +13,8 @@ interface GradeDetailsView : BaseView {
 
     fun updateItem(item: Grade, position: Int)
 
+    fun updateHeaderItem(item: GradeDetailsItem<GradeDetailsHeader>)
+
     fun clearView()
 
     fun scrollToStart()
@@ -41,5 +43,5 @@ interface GradeDetailsView : BaseView {
 
     fun enableMarkAsDoneButton(enable: Boolean)
 
-    fun getHeaderOfItem(item: GradeDetailsItem<*>): GradeDetailsHeader
+    fun getHeaderOfItem(subject: String): GradeDetailsItem<GradeDetailsHeader>
 }
