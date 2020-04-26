@@ -10,21 +10,11 @@ interface GradeDetailsView : BaseView {
 
     val isViewEmpty: Boolean
 
-    val emptyAverageString: String
-
-    val averageString: String
-
-    val pointsSumString: String
-
-    val weightString: String
-
-    val noDescriptionString: String
-
     fun initView()
 
-    fun updateData(data: List<GradeDetailsHeader>)
+    fun updateData(data: List<GradeDetailsItem<*>>, isGradeExpandable: Boolean, gradeColorTheme: String)
 
-    fun updateItem(item: AbstractFlexibleItem<*>)
+    fun updateItem(item: Grade, position: Int)
 
     fun clearView()
 
@@ -53,8 +43,6 @@ interface GradeDetailsView : BaseView {
     fun notifyParentRefresh()
 
     fun enableMarkAsDoneButton(enable: Boolean)
-
-    fun getGradeNumberString(number: Int): String
 
     fun getHeaderOfItem(item: AbstractFlexibleItem<*>): IExpandable<*, out IFlexible<*>>?
 }
