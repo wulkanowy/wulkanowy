@@ -9,9 +9,9 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
-import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -66,10 +66,7 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
         with(timetableRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = timetableAdapter
-            addItemDecoration(FlexibleItemDecoration(context)
-                .withDefaultDivider()
-                .withDrawDividerOnLastItem(false)
-            )
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
 
         timetableSwipe.setOnRefreshListener(presenter::onSwipeRefresh)

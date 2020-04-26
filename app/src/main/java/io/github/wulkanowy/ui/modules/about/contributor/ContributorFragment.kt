@@ -6,8 +6,8 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.pojos.Contributor
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -43,9 +43,7 @@ class ContributorFragment : BaseFragment(), ContributorView, MainView.TitledView
         with(creatorRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = creatorsAdapter
-            addItemDecoration(FlexibleItemDecoration(context)
-                .withDefaultDivider()
-                .withDrawDividerOnLastItem(false))
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
         creatorsAdapter.onClickListener = presenter::onItemSelected
         creatorSeeMore.setOnClickListener { presenter.onSeeMoreClick() }

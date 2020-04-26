@@ -7,8 +7,8 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.message.MessageFolder
@@ -60,10 +60,7 @@ class MessageTabFragment : BaseFragment(), MessageTabView {
         messageTabRecycler.run {
             layoutManager = LinearLayoutManager(context)
             adapter = tabAdapter
-            addItemDecoration(FlexibleItemDecoration(context)
-                .withDefaultDivider()
-                .withDrawDividerOnLastItem(false)
-            )
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
         messageTabSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         messageTabErrorRetry.setOnClickListener { presenter.onRetry() }

@@ -7,8 +7,8 @@ import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -52,9 +52,7 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
         with(examRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = examAdapter
-            addItemDecoration(FlexibleItemDecoration(context)
-                .withDefaultDivider(R.layout.item_exam)
-                .withDrawDividerOnLastItem(false))
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
 
         examSwipe.setOnRefreshListener(presenter::onSwipeRefresh)

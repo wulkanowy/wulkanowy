@@ -11,9 +11,6 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import eu.davidea.flexibleadapter.items.IExpandable
-import eu.davidea.flexibleadapter.items.IFlexible
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -109,8 +106,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         gradeDetailsRecycler.smoothScrollToPosition(0)
     }
 
-    override fun getHeaderOfItem(item: AbstractFlexibleItem<*>): IExpandable<*, out IFlexible<*>>? {
-
+    override fun getHeaderOfItem(item: GradeDetailsItem<*>): GradeDetailsHeader {
 //        return gradeDetailsAdapter.getExpandableOf(item)
         TODO()
     }

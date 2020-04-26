@@ -1,8 +1,5 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
-import eu.davidea.flexibleadapter.items.IExpandable
-import eu.davidea.flexibleadapter.items.IFlexible
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.base.BaseView
 
@@ -44,5 +41,5 @@ interface GradeDetailsView : BaseView {
 
     fun enableMarkAsDoneButton(enable: Boolean)
 
-    fun getHeaderOfItem(item: AbstractFlexibleItem<*>): IExpandable<*, out IFlexible<*>>?
+    fun getHeaderOfItem(item: GradeDetailsItem<*>): GradeDetailsHeader
 }

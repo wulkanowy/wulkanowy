@@ -13,9 +13,9 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
-import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -108,9 +108,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
         with(attendanceRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = attendanceAdapter
-            addItemDecoration(FlexibleItemDecoration(context)
-                .withDefaultDivider()
-                .withDrawDividerOnLastItem(false))
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
 
         attendanceSwipe.setOnRefreshListener(presenter::onSwipeRefresh)

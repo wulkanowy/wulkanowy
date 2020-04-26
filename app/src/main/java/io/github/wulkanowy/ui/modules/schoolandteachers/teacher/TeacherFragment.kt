@@ -6,8 +6,8 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
-import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Teacher
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -49,12 +49,9 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView,
 
     override fun initView() {
         teacherRecycler.run {
-            layoutManager = SmoothScrollLinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context)
             adapter = teacherAdapter
-            addItemDecoration(FlexibleItemDecoration(context)
-                .withDefaultDivider()
-                .withDrawDividerOnLastItem(false)
-            )
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
         teacherSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         teacherErrorRetry.setOnClickListener { presenter.onRetry() }

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import eu.davidea.flexibleadapter.common.FlexibleItemDecoration
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -49,10 +49,7 @@ class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
         noteRecycler.run {
             layoutManager = LinearLayoutManager(context)
             adapter = noteAdapter
-            addItemDecoration(FlexibleItemDecoration(context)
-                .withDefaultDivider()
-                .withDrawDividerOnLastItem(false)
-            )
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
         noteSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         noteErrorRetry.setOnClickListener { presenter.onRetry() }
