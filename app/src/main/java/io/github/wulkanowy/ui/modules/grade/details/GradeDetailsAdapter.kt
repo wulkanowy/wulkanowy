@@ -13,6 +13,7 @@ import io.github.wulkanowy.databinding.HeaderGradeDetailsBinding
 import io.github.wulkanowy.databinding.ItemGradeDetailsBinding
 import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.toFormattedString
+import timber.log.Timber
 import javax.inject.Inject
 
 class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -22,6 +23,8 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
     private var items = mutableListOf<GradeDetailsItem<*>>()
 
     private var isExpandable = false
+
+    private var expandedPosition = -1
 
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
@@ -50,6 +53,7 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
         }
     }
 
+    @Synchronized
     private fun refreshList(newItems: List<GradeDetailsItem<*>>) {
         val diffCallback = GradeDetailsDiffUtil(items, newItems)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
@@ -78,8 +82,6 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
         }
     }
 
-    private var expandedPosition = -1
-
     private fun bindHeaderViewHolder(binding: HeaderGradeDetailsBinding, item: GradeDetailsItem<GradeDetailsHeader>, position: Int) {
         val header = item.value
         val realPosition = headers.indexOf(item)
@@ -102,13 +104,16 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
             gradeHeaderContainer.setOnClickListener {
                 expandedPosition = if (expandedPosition == position) -1 else position
 
+                Timber.d("-".repeat(80))
+                Timber.d("Click on $realPosition: ${header.subject}")
                 if (expandedPosition != -1) {
-                    val headersWithGrades = mutableListOf<GradeDetailsItem<*>>()
-                    headersWithGrades.addAll(headers)
-                    headersWithGrades.addAll(realPosition + 1, header.grades)
-                    refreshList(headersWithGrades)
+                    Timber.d("Show header $realPosition: ${header.subject} with ${header.grades.size} subitems")
+                    refreshList(headers.toMutableList().apply {
+                        addAll(realPosition + 1, header.grades)
+                    })
                 } else {
-                    refreshList(items - header.grades)
+                    Timber.d("Collapse all items (show only headers)")
+                    refreshList(headers)
                 }
             }
         }
