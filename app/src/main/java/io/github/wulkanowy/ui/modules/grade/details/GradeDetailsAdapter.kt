@@ -77,21 +77,16 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is HeaderViewHolder -> bindHeaderViewHolder(holder.binding, items[position] as GradeDetailsItem<GradeDetailsHeader>, position)
+            is HeaderViewHolder -> bindHeaderViewHolder(holder.binding, items[position].value as GradeDetailsHeader, headers.indexOf(items[position]), position)
             is ItemViewHolder -> bindItemViewHolder(holder.binding, items[position].value as Grade, position)
         }
     }
 
-    private fun bindHeaderViewHolder(binding: HeaderGradeDetailsBinding, item: GradeDetailsItem<GradeDetailsHeader>, position: Int) {
-        val header = item.value
-        val realPosition = headers.indexOf(item)
-
-        val isSubjectExpanded = realPosition == expandedPosition
-
+    private fun bindHeaderViewHolder(binding: HeaderGradeDetailsBinding, header: GradeDetailsHeader, realPosition: Int, position: Int) {
         with(binding) {
             gradeHeaderSubject.apply {
                 text = header.subject
-                maxLines = if (isSubjectExpanded) 2 else 1
+                maxLines = if (realPosition == expandedPosition) 2 else 1
             }
             gradeHeaderAverage.text = formatAverage(header.average, root.context.resources)
             gradeHeaderPointsSum.text = root.context.getString(R.string.grade_points_sum, header.pointsSum)
