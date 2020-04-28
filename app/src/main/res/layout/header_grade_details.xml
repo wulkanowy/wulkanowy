@@ -9,8 +9,7 @@
     android:paddingTop="10dp"
     android:paddingEnd="12dp"
     android:paddingBottom="10dp"
-    tools:context=".ui.modules.grade.details.GradeDetailsAdapter"
-    tools:targetApi="m">
+    tools:context=".ui.modules.grade.details.GradeDetailsAdapter">
 
     <TextView
         android:id="@+id/gradeHeaderSubject"
