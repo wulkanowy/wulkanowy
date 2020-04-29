@@ -24,7 +24,7 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
 
     private var isExpandable = false
 
-    private var expandedPosition = -1
+    private var expandedPosition = RecyclerView.NO_POSITION
 
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
@@ -34,10 +34,12 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
         headers = data.filter { it.viewType == GradeDetailsItem.ViewType.HEADER }.toMutableList()
         items = if (isExpanded) headers else data.toMutableList()
         isExpandable = isExpanded
+        expandedPosition = RecyclerView.NO_POSITION
     }
 
     fun updateDetailsItem(position: Int, grade: Grade) {
         items[position] = GradeDetailsItem(grade, GradeDetailsItem.ViewType.ITEM)
+        notifyItemChanged(position)
     }
 
     fun getHeaderItem(subject: String) = headers.single { (it.value as GradeDetailsHeader).subject == subject } as GradeDetailsItem<GradeDetailsHeader>
@@ -45,6 +47,7 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
     fun updateHeaderItem(item: GradeDetailsItem<GradeDetailsHeader>) {
         headers[headers.indexOf(item)] = item
         items[items.indexOf(item)] = item
+        notifyItemChanged(items.indexOf(item))
     }
 
     fun collapseAll() {
@@ -102,7 +105,7 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
 
                 Timber.d("-".repeat(80))
                 Timber.d("Click on $headerPosition: ${header.subject}")
-                if (expandedPosition != -1) {
+                if (expandedPosition != RecyclerView.NO_POSITION) {
                     Timber.d("Show header $headerPosition: ${header.subject} with ${header.grades.size} subitems")
                     refreshList(headers.toMutableList().apply {
                         addAll(headerPosition + 1, header.grades)
