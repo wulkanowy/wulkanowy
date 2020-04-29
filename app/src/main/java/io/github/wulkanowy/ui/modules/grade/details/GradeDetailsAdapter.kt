@@ -82,11 +82,12 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
         }
     }
 
-    private fun bindHeaderViewHolder(binding: HeaderGradeDetailsBinding, header: GradeDetailsHeader, realPosition: Int, position: Int) {
+    private fun bindHeaderViewHolder(binding: HeaderGradeDetailsBinding, header: GradeDetailsHeader, headerPosition: Int, adapterPosition: Int) {
         with(binding) {
+            gradeHeaderDivider.visibility = if (adapterPosition == 0) View.GONE else View.VISIBLE
             gradeHeaderSubject.apply {
                 text = header.subject
-                maxLines = if (realPosition == expandedPosition) 2 else 1
+                maxLines = if (headerPosition == expandedPosition) 2 else 1
             }
             gradeHeaderAverage.text = formatAverage(header.average, root.context.resources)
             gradeHeaderPointsSum.text = root.context.getString(R.string.grade_points_sum, header.pointsSum)
@@ -97,14 +98,14 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
 
             gradeHeaderContainer.isEnabled = isExpandable
             gradeHeaderContainer.setOnClickListener {
-                expandedPosition = if (expandedPosition == position) -1 else position
+                expandedPosition = if (expandedPosition == adapterPosition) -1 else adapterPosition
 
                 Timber.d("-".repeat(80))
-                Timber.d("Click on $realPosition: ${header.subject}")
+                Timber.d("Click on $headerPosition: ${header.subject}")
                 if (expandedPosition != -1) {
-                    Timber.d("Show header $realPosition: ${header.subject} with ${header.grades.size} subitems")
+                    Timber.d("Show header $headerPosition: ${header.subject} with ${header.grades.size} subitems")
                     refreshList(headers.toMutableList().apply {
-                        addAll(realPosition + 1, header.grades)
+                        addAll(headerPosition + 1, header.grades)
                     })
                 } else {
                     Timber.d("Collapse all items (show only headers)")

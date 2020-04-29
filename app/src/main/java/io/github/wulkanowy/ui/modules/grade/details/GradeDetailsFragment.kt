@@ -64,7 +64,6 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         gradeDetailsRecycler.run {
             layoutManager = LinearLayoutManager(context)
             adapter = gradeDetailsAdapter
-            addItemDecoration(GradeDetailsHeaderItemDecoration(requireContext()))
         }
         gradeDetailsSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
         gradeDetailsErrorRetry.setOnClickListener { presenter.onRetry() }
