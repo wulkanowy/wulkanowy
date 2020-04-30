@@ -2,10 +2,13 @@ package io.github.wulkanowy.ui.modules.grade.details
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
@@ -15,8 +18,12 @@ import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.max
+import kotlin.math.min
 
 class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var recyclerView: RecyclerView? = null
 
     private var headers = mutableListOf<GradeDetailsItem<*>>()
 
@@ -29,6 +36,11 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
     var colorTheme = ""
+
+    companion object {
+        private const val MILLISECONDS_PER_INCH = 100f
+        private const val AUTO_SCROLL_DELAY = 150L
+    }
 
     fun setDataItems(data: List<GradeDetailsItem<*>>, isExpanded: Boolean = isExpandable) {
         headers = data.filter { it.viewType == GradeDetailsItem.ViewType.HEADER }.toMutableList()
@@ -67,6 +79,16 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
     override fun getItemCount() = items.size
 
     override fun getItemViewType(position: Int) = items[position].viewType.id
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        this.recyclerView = null
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -110,11 +132,44 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
                     refreshList(headers.toMutableList().apply {
                         addAll(headerPosition + 1, header.grades)
                     })
+                    scrollToHeaderWithSubItems(headerPosition, header.grades.size)
                 } else {
                     Timber.d("Collapse all items (show only headers)")
                     refreshList(headers)
                 }
             }
+        }
+    }
+
+    // original: https://github.com/davideas/FlexibleAdapter/blob/5.1.0/flexible-adapter/src/main/java/eu/davidea/flexibleadapter/FlexibleAdapter.java#L4984-L5011
+    private fun scrollToHeaderWithSubItems(position: Int, subItemsCount: Int) {
+        val layoutManager = recyclerView!!.layoutManager as LinearLayoutManager
+        val firstVisibleItem: Int = layoutManager.findFirstCompletelyVisibleItemPosition()
+        val lastVisibleItem: Int = layoutManager.findLastCompletelyVisibleItemPosition()
+        val itemsToShow: Int = position + subItemsCount - lastVisibleItem
+        Timber.v("autoScroll itemsToShow=%s firstVisibleItem=%s lastVisibleItem=%s RvChildCount=%s", itemsToShow, firstVisibleItem, lastVisibleItem, recyclerView?.childCount)
+        if (itemsToShow > 0) {
+            val scrollMax: Int = position - firstVisibleItem
+            val scrollMin = max(0, position + subItemsCount - lastVisibleItem)
+            val scrollBy = min(scrollMax, scrollMin)
+            val scrollTo = firstVisibleItem + scrollBy
+            Timber.v("autoScroll scrollMin=%s scrollMax=%s scrollBy=%s scrollTo=%s", scrollMin, scrollMax, scrollBy, scrollTo)
+            scrollToPosition(scrollTo)
+        } else if (position < firstVisibleItem) {
+            scrollToPosition(position)
+        }
+    }
+
+    private fun scrollToPosition(position: Int) {
+        recyclerView?.run {
+            postDelayed({
+                layoutManager?.startSmoothScroll(object : LinearSmoothScroller(context) {
+                    override fun getVerticalSnapPreference() = SNAP_TO_START
+                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics) = MILLISECONDS_PER_INCH / displayMetrics.densityDpi
+                }.apply {
+                    targetPosition = position
+                })
+            }, AUTO_SCROLL_DELAY)
         }
     }
 
