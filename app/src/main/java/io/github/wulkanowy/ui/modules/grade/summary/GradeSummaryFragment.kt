@@ -10,13 +10,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.GradeSummary
+import io.github.wulkanowy.databinding.FragmentGradeSummaryBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
-import kotlinx.android.synthetic.main.fragment_grade_summary.*
 import javax.inject.Inject
 
 class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeChildView {
+
+    private lateinit var binding: FragmentGradeSummaryBinding
 
     @Inject
     lateinit var presenter: GradeSummaryPresenter
@@ -38,23 +40,25 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
         get() = getString(R.string.grade_summary_final_grade)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_grade_summary, container, false)
+        return FragmentGradeSummaryBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        messageContainer = gradeSummaryRecycler
+        messageContainer = binding.gradeSummaryRecycler
         presenter.onAttachView(this)
     }
 
     override fun initView() {
-        gradeSummaryRecycler.run {
+        with(binding.gradeSummaryRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = gradeSummaryAdapter
         }
-        gradeSummarySwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
-        gradeSummaryErrorRetry.setOnClickListener { presenter.onRetry() }
-        gradeSummaryErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+        with(binding) {
+            gradeSummarySwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+            gradeSummaryErrorRetry.setOnClickListener { presenter.onRetry() }
+            gradeSummaryErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+        }
     }
 
     override fun updateData(data: List<GradeSummary>) {
@@ -72,35 +76,35 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
     }
 
     override fun resetView() {
-        gradeSummaryRecycler.scrollToPosition(0)
+        binding.gradeSummaryRecycler.scrollToPosition(0)
     }
 
     override fun showContent(show: Boolean) {
-        gradeSummaryRecycler.visibility = if (show) VISIBLE else INVISIBLE
+        binding.gradeSummaryRecycler.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showEmpty(show: Boolean) {
-        gradeSummaryEmpty.visibility = if (show) VISIBLE else INVISIBLE
+        binding.gradeSummaryEmpty.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showErrorView(show: Boolean) {
-        gradeSummaryError.visibility = if (show) VISIBLE else INVISIBLE
+        binding.gradeSummaryError.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun setErrorDetails(message: String) {
-        gradeSummaryErrorMessage.text = message
+        binding.gradeSummaryErrorMessage.text = message
     }
 
     override fun showProgress(show: Boolean) {
-        gradeSummaryProgress.visibility = if (show) VISIBLE else GONE
+        binding.gradeSummaryProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun enableSwipe(enable: Boolean) {
-        gradeSummarySwipe.isEnabled = enable
+        binding.gradeSummarySwipe.isEnabled = enable
     }
 
     override fun showRefresh(show: Boolean) {
-        gradeSummarySwipe.isRefreshing = show
+        binding.gradeSummarySwipe.isRefreshing = show
     }
 
     override fun onParentLoadData(semesterId: Int, forceRefresh: Boolean) {

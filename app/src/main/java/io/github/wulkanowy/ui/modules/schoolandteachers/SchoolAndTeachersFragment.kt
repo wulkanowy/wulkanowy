@@ -7,6 +7,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import io.github.wulkanowy.R
+import io.github.wulkanowy.databinding.FragmentSchoolandteachersBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -14,10 +15,11 @@ import io.github.wulkanowy.ui.modules.schoolandteachers.school.SchoolFragment
 import io.github.wulkanowy.ui.modules.schoolandteachers.teacher.TeacherFragment
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnSelectPageListener
-import kotlinx.android.synthetic.main.fragment_schoolandteachers.*
 import javax.inject.Inject
 
 class SchoolAndTeachersFragment : BaseFragment(), SchoolAndTeachersView, MainView.TitledView {
+
+    private lateinit var binding: FragmentSchoolandteachersBinding
 
     @Inject
     lateinit var presenter: SchoolAndTeachersPresenter
@@ -31,10 +33,10 @@ class SchoolAndTeachersFragment : BaseFragment(), SchoolAndTeachersView, MainVie
 
     override val titleStringId: Int get() = R.string.schoolandteachers_title
 
-    override val currentPageIndex get() = schoolandteachersViewPager.currentItem
+    override val currentPageIndex get() = binding.schoolandteachersViewPager.currentItem
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_schoolandteachers, container, false)
+        return FragmentSchoolandteachersBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -44,32 +46,34 @@ class SchoolAndTeachersFragment : BaseFragment(), SchoolAndTeachersView, MainVie
 
     override fun initView() {
         with(pagerAdapter) {
-            containerId = schoolandteachersViewPager.id
+            containerId = binding.schoolandteachersViewPager.id
             addFragmentsWithTitle(mapOf(
                 SchoolFragment.newInstance() to getString(R.string.school_title),
                 TeacherFragment.newInstance() to getString(R.string.teachers_title)
             ))
         }
 
-        with(schoolandteachersViewPager) {
+        with(binding.schoolandteachersViewPager) {
             adapter = pagerAdapter
             offscreenPageLimit = 2
             setOnSelectPageListener(presenter::onPageSelected)
         }
 
-        with(schoolandteachersTabLayout) {
-            setupWithViewPager(schoolandteachersViewPager)
+        with(binding.schoolandteachersTabLayout) {
+            setupWithViewPager(binding.schoolandteachersViewPager)
             setElevationCompat(context.dpToPx(4f))
         }
     }
 
     override fun showContent(show: Boolean) {
-        schoolandteachersViewPager.visibility = if (show) VISIBLE else INVISIBLE
-        schoolandteachersTabLayout.visibility = if (show) VISIBLE else INVISIBLE
+        with(binding) {
+            schoolandteachersViewPager.visibility = if (show) VISIBLE else INVISIBLE
+            schoolandteachersTabLayout.visibility = if (show) VISIBLE else INVISIBLE
+        }
     }
 
     override fun showProgress(show: Boolean) {
-        schoolandteachersProgress.visibility = if (show) VISIBLE else INVISIBLE
+        binding.schoolandteachersProgress.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     fun onChildFragmentLoaded() {

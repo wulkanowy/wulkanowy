@@ -9,14 +9,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.pojos.Contributor
+import io.github.wulkanowy.databinding.FragmentCreatorBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.openInternetBrowser
-import kotlinx.android.synthetic.main.fragment_creator.*
 import javax.inject.Inject
 
 class ContributorFragment : BaseFragment(), ContributorView, MainView.TitledView {
+
+    private lateinit var binding: FragmentCreatorBinding
 
     @Inject
     lateinit var presenter: ContributorPresenter
@@ -31,7 +33,7 @@ class ContributorFragment : BaseFragment(), ContributorView, MainView.TitledView
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_creator, container, false)
+        return FragmentCreatorBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -40,13 +42,13 @@ class ContributorFragment : BaseFragment(), ContributorView, MainView.TitledView
     }
 
     override fun initView() {
-        with(creatorRecycler) {
+        with(binding.creatorRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = creatorsAdapter
             addItemDecoration(DividerItemDecoration(context))
         }
         creatorsAdapter.onClickListener = presenter::onItemSelected
-        creatorSeeMore.setOnClickListener { presenter.onSeeMoreClick() }
+        binding.creatorSeeMore.setOnClickListener { presenter.onSeeMoreClick() }
     }
 
     override fun updateData(data: List<Contributor>) {
@@ -65,7 +67,7 @@ class ContributorFragment : BaseFragment(), ContributorView, MainView.TitledView
     }
 
     override fun showProgress(show: Boolean) {
-        creatorProgress.visibility = if (show) VISIBLE else GONE
+        binding.creatorProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun onDestroyView() {

@@ -9,12 +9,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Note
+import io.github.wulkanowy.databinding.DialogNoteBinding
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
-import kotlinx.android.synthetic.main.dialog_note.*
 import io.github.wulkanowy.sdk.scrapper.notes.Note.CategoryType
 
 class NoteDialog : DialogFragment() {
+
+    private lateinit var binding: DialogNoteBinding
 
     private lateinit var note: Note
 
@@ -44,12 +46,15 @@ class NoteDialog : DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        noteDialogDate.text = note.date.toFormattedString()
-        noteDialogCategory.text = note.category
-        noteDialogTeacher.text = note.teacher
-        noteDialogContent.text = note.content
+        with(binding) {
+            noteDialogDate.text = note.date.toFormattedString()
+            noteDialogCategory.text = note.category
+            noteDialogTeacher.text = note.teacher
+            noteDialogContent.text = note.content
+        }
+
         if (note.isPointsShow) {
-            with(noteDialogPoints) {
+            with(binding.noteDialogPoints) {
                 text = "${if (note.points > 0) "+" else ""}${note.points}"
                 setTextColor(when (CategoryType.getByValue(note.categoryType)) {
                     CategoryType.POSITIVE -> ContextCompat.getColor(requireContext(), R.color.note_positive)
@@ -58,6 +63,7 @@ class NoteDialog : DialogFragment() {
                 })
             }
         }
-        noteDialogClose.setOnClickListener { dismiss() }
+
+        binding.noteDialogClose.setOnClickListener { dismiss() }
     }
 }

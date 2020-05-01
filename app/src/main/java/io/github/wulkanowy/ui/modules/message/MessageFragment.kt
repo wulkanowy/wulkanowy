@@ -11,6 +11,7 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
 import io.github.wulkanowy.data.repositories.message.MessageFolder.SENT
 import io.github.wulkanowy.data.repositories.message.MessageFolder.TRASHED
+import io.github.wulkanowy.databinding.FragmentMessageBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -18,10 +19,11 @@ import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import io.github.wulkanowy.ui.modules.message.tab.MessageTabFragment
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnSelectPageListener
-import kotlinx.android.synthetic.main.fragment_message.*
 import javax.inject.Inject
 
 class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
+
+    private lateinit var binding: FragmentMessageBinding
 
     @Inject
     lateinit var presenter: MessagePresenter
@@ -35,10 +37,10 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
 
     override val titleStringId get() = R.string.message_title
 
-    override val currentPageIndex get() = messageViewPager.currentItem
+    override val currentPageIndex get() = binding.messageViewPager.currentItem
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_message, container, false)
+        return FragmentMessageBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,7 +50,7 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
 
     override fun initView() {
         with(pagerAdapter) {
-            containerId = messageViewPager.id
+            containerId = binding.messageViewPager.id
             addFragmentsWithTitle(mapOf(
                 MessageTabFragment.newInstance(RECEIVED) to getString(R.string.message_inbox),
                 MessageTabFragment.newInstance(SENT) to getString(R.string.message_sent),
@@ -56,27 +58,29 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
             ))
         }
 
-        with(messageViewPager) {
+        with(binding.messageViewPager) {
             adapter = pagerAdapter
             offscreenPageLimit = 2
             setOnSelectPageListener(presenter::onPageSelected)
         }
 
-        with(messageTabLayout) {
-            setupWithViewPager(messageViewPager)
+        with(binding.messageTabLayout) {
+            setupWithViewPager(binding.messageViewPager)
             setElevationCompat(context.dpToPx(4f))
         }
 
-        openSendMessageButton.setOnClickListener { presenter.onSendMessageButtonClicked() }
+        binding.openSendMessageButton.setOnClickListener { presenter.onSendMessageButtonClicked() }
     }
 
     override fun showContent(show: Boolean) {
-        messageViewPager.visibility = if (show) VISIBLE else INVISIBLE
-        messageTabLayout.visibility = if (show) VISIBLE else INVISIBLE
+        with(binding) {
+            messageViewPager.visibility = if (show) VISIBLE else INVISIBLE
+            messageTabLayout.visibility = if (show) VISIBLE else INVISIBLE
+        }
     }
 
     override fun showProgress(show: Boolean) {
-        messageProgress.visibility = if (show) VISIBLE else INVISIBLE
+        binding.messageProgress.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     fun onDeleteMessage(message: Message) {

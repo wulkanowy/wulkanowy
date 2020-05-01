@@ -18,13 +18,15 @@ import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.BuildConfig.APPLICATION_ID
 import io.github.wulkanowy.R
+import io.github.wulkanowy.databinding.FragmentLogviewerBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
-import kotlinx.android.synthetic.main.fragment_logviewer.*
 import java.io.File
 import javax.inject.Inject
 
 class LogViewerFragment : BaseFragment(), LogViewerView, MainView.TitledView {
+
+    private lateinit var binding: FragmentLogviewerBinding
 
     @Inject
     lateinit var presenter: LogViewerPresenter
@@ -44,12 +46,12 @@ class LogViewerFragment : BaseFragment(), LogViewerView, MainView.TitledView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_logviewer, container, false)
+        return FragmentLogviewerBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        messageContainer = logViewerRecycler
+        messageContainer = binding.logViewerRecycler
         presenter.onAttachView(this)
     }
 
@@ -63,18 +65,18 @@ class LogViewerFragment : BaseFragment(), LogViewerView, MainView.TitledView {
     }
 
     override fun initView() {
-        with(logViewerRecycler) {
+        with(binding.logViewerRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = logAdapter
         }
 
-        logViewRefreshButton.setOnClickListener { presenter.onRefreshClick() }
+        binding.logViewRefreshButton.setOnClickListener { presenter.onRefreshClick() }
     }
 
     override fun setLines(lines: List<String>) {
         logAdapter.lines = lines
         logAdapter.notifyDataSetChanged()
-        logViewerRecycler.scrollToPosition(lines.size - 1)
+        binding.logViewerRecycler.scrollToPosition(lines.size - 1)
     }
 
     override fun shareLogs(files: List<File>) {

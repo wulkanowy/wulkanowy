@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
+import io.github.wulkanowy.databinding.FragmentMoreBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.about.AboutFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
@@ -19,10 +20,11 @@ import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment
 import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.utils.getCompatDrawable
-import kotlinx.android.synthetic.main.fragment_more.*
 import javax.inject.Inject
 
 class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.MainChildView {
+
+    private lateinit var binding: FragmentMoreBinding
 
     @Inject
     lateinit var presenter: MorePresenter
@@ -62,7 +64,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
         get() = context?.run { getString(R.string.about_title) to getCompatDrawable(R.drawable.ic_all_about) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_more, container, false)
+        return FragmentMoreBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -73,7 +75,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
     override fun initView() {
         moreAdapter.onClickListener = presenter::onItemSelected
 
-        moreRecycler.apply {
+        with(binding.moreRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = moreAdapter
         }

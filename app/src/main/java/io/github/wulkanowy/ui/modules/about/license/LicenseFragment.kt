@@ -13,12 +13,14 @@ import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
 import dagger.Lazy
 import io.github.wulkanowy.R
+import io.github.wulkanowy.databinding.FragmentLicenseBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
-import kotlinx.android.synthetic.main.fragment_license.*
 import javax.inject.Inject
 
 class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
+
+    private lateinit var binding: FragmentLicenseBinding
 
     @Inject
     lateinit var presenter: LicensePresenter
@@ -41,7 +43,7 @@ class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_license, container, false)
+        return FragmentLicenseBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -52,7 +54,7 @@ class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
     override fun initView() {
         licenseAdapter.onClickListener = presenter::onItemSelected
 
-        with(licenseRecycler) {
+        with(binding.licenseRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = licenseAdapter
         }
@@ -77,7 +79,7 @@ class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
     }
 
     override fun showProgress(show: Boolean) {
-        licenseProgress.visibility = if (show) VISIBLE else GONE
+        binding.licenseProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun onDestroyView() {

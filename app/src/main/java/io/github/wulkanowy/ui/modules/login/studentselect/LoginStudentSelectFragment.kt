@@ -9,16 +9,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.databinding.FragmentLoginStudentSelectBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
-import kotlinx.android.synthetic.main.fragment_login_student_select.*
 import java.io.Serializable
 import javax.inject.Inject
 
 class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
+
+    private lateinit var binding: FragmentLoginStudentSelectBinding
 
     @Inject
     lateinit var presenter: LoginStudentSelectPresenter
@@ -36,7 +38,7 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_login_student_select, container, false)
+        return FragmentLoginStudentSelectBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -46,13 +48,16 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
 
     override fun initView() {
         loginAdapter.onClickListener = presenter::onItemSelected
-        loginStudentSelectSignIn.setOnClickListener { presenter.onSignIn() }
-        loginStudentSelectContactDiscord.setOnClickListener { presenter.onDiscordClick() }
-        loginStudentSelectContactEmail.setOnClickListener { presenter.onEmailClick() }
 
-        loginStudentSelectRecycler.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = loginAdapter
+        with(binding) {
+            loginStudentSelectSignIn.setOnClickListener { presenter.onSignIn() }
+            loginStudentSelectContactDiscord.setOnClickListener { presenter.onDiscordClick() }
+            loginStudentSelectContactEmail.setOnClickListener { presenter.onEmailClick() }
+
+            with(loginStudentSelectRecycler) {
+                layoutManager = LinearLayoutManager(context)
+                adapter = loginAdapter
+            }
         }
     }
 
@@ -68,15 +73,15 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
     }
 
     override fun showProgress(show: Boolean) {
-        loginStudentSelectProgress.visibility = if (show) VISIBLE else GONE
+        binding.loginStudentSelectProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showContent(show: Boolean) {
-        loginStudentSelectContent.visibility = if (show) VISIBLE else GONE
+        binding.loginStudentSelectContent.visibility = if (show) VISIBLE else GONE
     }
 
     override fun enableSignIn(enable: Boolean) {
-        loginStudentSelectSignIn.isEnabled = enable
+        binding.loginStudentSelectSignIn.isEnabled = enable
     }
 
     fun onParentInitStudentSelectFragment(students: List<Student>) {
@@ -89,7 +94,7 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
     }
 
     override fun showContact(show: Boolean) {
-        loginStudentSelectContact.visibility = if (show) VISIBLE else GONE
+        binding.loginStudentSelectContact.visibility = if (show) VISIBLE else GONE
     }
 
     override fun onDestroyView() {

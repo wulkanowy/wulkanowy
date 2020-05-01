@@ -13,15 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
+import io.github.wulkanowy.databinding.FragmentMessagePreviewBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
-import kotlinx.android.synthetic.main.fragment_message_preview.*
 import javax.inject.Inject
 
 class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.TitledView {
+
+    private lateinit var binding: FragmentMessagePreviewBinding
 
     @Inject
     lateinit var presenter: MessagePreviewPresenter
@@ -57,19 +59,19 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_message_preview, container, false)
+        return FragmentMessagePreviewBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        messageContainer = messagePreviewContainer
+        messageContainer = binding.messagePreviewContainer
         presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getSerializable(MESSAGE_ID_KEY) as? Message)
     }
 
     override fun initView() {
-        messagePreviewErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+        binding.messagePreviewErrorDetails.setOnClickListener { presenter.onDetailsClick() }
 
-        with(messagePreviewRecycler) {
+        with(binding.messagePreviewRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = previewAdapter
         }
@@ -100,11 +102,11 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     }
 
     override fun showProgress(show: Boolean) {
-        messagePreviewProgress.visibility = if (show) VISIBLE else GONE
+        binding.messagePreviewProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showContent(show: Boolean) {
-        messagePreviewRecycler.visibility = if (show) VISIBLE else GONE
+        binding.messagePreviewRecycler.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showOptions(show: Boolean) {
@@ -122,15 +124,15 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     }
 
     override fun showErrorView(show: Boolean) {
-        messagePreviewError.visibility = if (show) VISIBLE else GONE
+        binding.messagePreviewError.visibility = if (show) VISIBLE else GONE
     }
 
     override fun setErrorDetails(message: String) {
-        messagePreviewErrorMessage.text = message
+        binding.messagePreviewErrorMessage.text = message
     }
 
     override fun setErrorRetryCallback(callback: () -> Unit) {
-        messagePreviewErrorRetry.setOnClickListener { callback() }
+        binding.messagePreviewErrorRetry.setOnClickListener { callback() }
     }
 
     override fun openMessageReply(message: Message?) {

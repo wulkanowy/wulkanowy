@@ -9,16 +9,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Teacher
+import io.github.wulkanowy.databinding.FragmentTeacherBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersChildView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment
-import kotlinx.android.synthetic.main.fragment_teacher.*
 import javax.inject.Inject
 
 class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView,
     SchoolAndTeachersChildView {
+
+    private lateinit var binding: FragmentTeacherBinding
 
     @Inject
     lateinit var presenter: TeacherPresenter
@@ -39,7 +41,7 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView,
         get() = teacherAdapter.items.isEmpty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_teacher, container, false)
+        return FragmentTeacherBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,14 +50,16 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView,
     }
 
     override fun initView() {
-        teacherRecycler.run {
+        with(binding.teacherRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = teacherAdapter
             addItemDecoration(DividerItemDecoration(context))
         }
-        teacherSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
-        teacherErrorRetry.setOnClickListener { presenter.onRetry() }
-        teacherErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+        with(binding) {
+            teacherSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+            teacherErrorRetry.setOnClickListener { presenter.onRetry() }
+            teacherErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+        }
     }
 
     override fun updateData(data: List<Teacher>) {
@@ -66,31 +70,31 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView,
     }
 
     override fun showEmpty(show: Boolean) {
-        teacherEmpty.visibility = if (show) VISIBLE else GONE
+        binding.teacherEmpty.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showErrorView(show: Boolean) {
-        teacherError.visibility = if (show) VISIBLE else GONE
+        binding.teacherError.visibility = if (show) VISIBLE else GONE
     }
 
     override fun setErrorDetails(message: String) {
-        teacherErrorMessage.text = message
+        binding.teacherErrorMessage.text = message
     }
 
     override fun showProgress(show: Boolean) {
-        teacherProgress.visibility = if (show) VISIBLE else GONE
+        binding.teacherProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun enableSwipe(enable: Boolean) {
-        teacherSwipe.isEnabled = enable
+        binding.teacherSwipe.isEnabled = enable
     }
 
     override fun showContent(show: Boolean) {
-        teacherRecycler.visibility = if (show) VISIBLE else GONE
+        binding.teacherRecycler.visibility = if (show) VISIBLE else GONE
     }
 
     override fun hideRefresh() {
-        teacherSwipe.isRefreshing = false
+        binding.teacherSwipe.isRefreshing = false
     }
 
     override fun notifyParentDataLoaded() {
