@@ -55,6 +55,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
     fun collapseAll() {
         if (expandedPosition != -1) {
             refreshList(headers)
+            expandedPosition = RecyclerView.NO_POSITION
         }
     }
 
