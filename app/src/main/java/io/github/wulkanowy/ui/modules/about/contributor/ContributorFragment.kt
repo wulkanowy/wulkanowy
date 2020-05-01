@@ -1,22 +1,20 @@
 package io.github.wulkanowy.ui.modules.about.contributor
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.pojos.Contributor
-import io.github.wulkanowy.databinding.FragmentCreatorBinding
+import io.github.wulkanowy.databinding.FragmentContributorBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
-class ContributorFragment : BaseFragment<FragmentCreatorBinding>(R.layout.fragment_creator),
+class ContributorFragment : BaseFragment<FragmentContributorBinding>(R.layout.fragment_contributor),
     ContributorView, MainView.TitledView {
 
     @Inject
@@ -31,13 +29,9 @@ class ContributorFragment : BaseFragment<FragmentCreatorBinding>(R.layout.fragme
         fun newInstance() = ContributorFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentCreatorBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentCreatorBinding.bind(view)
+        _binding = FragmentContributorBinding.bind(view)
         presenter.onAttachView(this)
     }
 
