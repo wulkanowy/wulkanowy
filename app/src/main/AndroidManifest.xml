@@ -22,7 +22,8 @@
         <activity
             android:name=".ui.modules.splash.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/WulkanowyTheme.SplashScreen">
+            android:theme="@style/WulkanowyTheme.SplashScreen"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -106,11 +107,40 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <!-- workaround for https://github.com/firebase/firebase-android-sdk/issues/473 enabled:false -->
+        <!-- https://firebase.googleblog.com/2017/03/take-control-of-your-firebase-init-on.html -->
+        <provider
+            android:name="com.google.firebase.provider.FirebaseInitProvider"
+            android:authorities="${applicationId}.firebaseinitprovider"
+            android:enabled="${firebase_enabled}"
+            android:exported="false" />
+
         <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="${fabric_api_key}" />
+            android:name="firebase_analytics_collection_enabled"
+            android:value="${firebase_enabled}" />
+
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="${firebase_enabled}" />
+
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="${crashlytics_enabled}" />
+            android:value="${firebase_enabled}" />
+
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="${firebase_enabled}" />
+
+        <meta-data
+            android:name="firebase_inapp_messaging_auto_data_collection_enabled"
+            android:value="${firebase_enabled}" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_push" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="push_channel" />
     </application>
 </manifest>

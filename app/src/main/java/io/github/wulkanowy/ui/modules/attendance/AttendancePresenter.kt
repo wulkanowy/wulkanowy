@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.attendance
 
 import android.annotation.SuppressLint
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.repositories.attendance.AttendanceRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
@@ -111,11 +110,11 @@ class AttendancePresenter @Inject constructor(
         view?.finishActionMode()
     }
 
-    fun onAttendanceItemSelected(item: AbstractFlexibleItem<*>?) {
+    fun onAttendanceItemSelected(attendance: Attendance) {
         view?.apply {
-            if (item is AttendanceItem && !excuseActionMode) {
-                Timber.i("Select attendance item ${item.attendance.id}")
-                showAttendanceDialog(item.attendance)
+            if (!excuseActionMode) {
+                Timber.i("Select attendance item ${attendance.id}")
+                showAttendanceDialog(attendance)
             }
         }
     }
@@ -188,15 +187,16 @@ class AttendancePresenter @Inject constructor(
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()
-                .delay(200, MILLISECONDS)
-                .flatMap { semesterRepository.getCurrentSemester(it) }
-                .flatMap { attendanceRepository.getAttendance(it, date, date, forceRefresh) }
+                .flatMap { student ->
+                    semesterRepository.getCurrentSemester(student).flatMap { semester ->
+                        attendanceRepository.getAttendance(student, semester, date, date, forceRefresh)
+                    }
+                }
                 .map { list ->
                     if (prefRepository.isShowPresent) list
                     else list.filter { !it.presence }
                 }
-                .map { items -> items.map { AttendanceItem(it) } }
-                .map { items -> items.sortedBy { it.attendance.number } }
+                .map { items -> items.sortedBy { it.number } }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {
@@ -213,7 +213,7 @@ class AttendancePresenter @Inject constructor(
                         showEmpty(it.isEmpty())
                         showErrorView(false)
                         showContent(it.isNotEmpty())
-                        showExcuseButton(it.any { item -> item.attendance.excusable })
+                        showExcuseButton(it.any { item -> item.excusable })
                     }
                     analytics.logEvent("load_attendance", "items" to it.size, "force_refresh" to forceRefresh)
                 }) {
@@ -228,9 +228,11 @@ class AttendancePresenter @Inject constructor(
         Timber.i("Excusing absence started")
         disposable.apply {
             add(studentRepository.getCurrentStudent()
-                .delay(200, MILLISECONDS)
-                .flatMap { semesterRepository.getCurrentSemester(it) }
-                .flatMap { attendanceRepository.excuseForAbsence(it, toExcuseList, reason) }
+                .flatMap { student ->
+                    semesterRepository.getCurrentSemester(student).flatMap { semester ->
+                        attendanceRepository.excuseForAbsence(student, semester, toExcuseList, reason)
+                    }
+                }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doOnSubscribe {

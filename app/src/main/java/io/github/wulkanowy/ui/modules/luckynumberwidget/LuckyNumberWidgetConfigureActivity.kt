@@ -10,14 +10,13 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.AppInfo
-import io.github.wulkanowy.utils.setOnItemClickListener
+import io.github.wulkanowy.ui.base.WidgetConfigureAdapter
 import kotlinx.android.synthetic.main.activity_widget_configure.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -26,7 +25,7 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
     LuckyNumberWidgetConfigureView {
 
     @Inject
-    lateinit var configureAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
+    lateinit var configureAdapter: WidgetConfigureAdapter
 
     @Inject
     override lateinit var presenter: LuckyNumberWidgetConfigurePresenter
@@ -49,10 +48,10 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
     override fun initView() {
         with(widgetConfigureRecycler) {
             adapter = configureAdapter
-            layoutManager = SmoothScrollLinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context)
         }
 
-        configureAdapter.setOnItemClickListener(presenter::onItemSelect)
+        configureAdapter.onClickListener = presenter::onItemSelect
     }
 
     override fun showThemeDialog() {
@@ -71,8 +70,11 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
             .show()
     }
 
-    override fun updateData(data: List<LuckyNumberWidgetConfigureItem>) {
-        configureAdapter.updateDataSet(data)
+    override fun updateData(data: List<Pair<Student, Boolean>>) {
+        with(configureAdapter) {
+            items = data
+            notifyDataSetChanged()
+        }
     }
 
     override fun updateLuckyNumberWidget(widgetId: Int) {

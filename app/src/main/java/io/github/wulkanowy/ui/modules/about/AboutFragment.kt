@@ -1,19 +1,11 @@
 package io.github.wulkanowy.ui.modules.about
 
-import android.content.Intent
-import android.content.Intent.ACTION_SENDTO
-import android.content.Intent.EXTRA_EMAIL
-import android.content.Intent.EXTRA_SUBJECT
-import android.content.Intent.EXTRA_TEXT
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import eu.davidea.flexibleadapter.FlexibleAdapter
-import eu.davidea.flexibleadapter.common.SmoothScrollLinearLayoutManager
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.about.contributor.ContributorFragment
@@ -23,8 +15,8 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.getCompatDrawable
+import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
-import io.github.wulkanowy.utils.setOnItemClickListener
 import kotlinx.android.synthetic.main.fragment_about.*
 import javax.inject.Inject
 
@@ -34,7 +26,7 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
     lateinit var presenter: AboutPresenter
 
     @Inject
-    lateinit var aboutAdapter: FlexibleAdapter<AbstractFlexibleItem<*>>
+    lateinit var aboutAdapter: AboutAdapter
 
     @Inject
     lateinit var appInfo: AppInfo
@@ -95,19 +87,18 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
     }
 
     override fun initView() {
-        aboutAdapter.setOnItemClickListener(presenter::onItemSelected)
+        aboutAdapter.onClickListener = presenter::onItemSelected
 
         with(aboutRecycler) {
-            layoutManager = SmoothScrollLinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context)
             adapter = aboutAdapter
         }
     }
 
-    override fun updateData(header: AboutScrollableHeader, items: List<AboutItem>) {
+    override fun updateData(data: List<Triple<String, String, Drawable?>>) {
         with(aboutAdapter) {
-            removeAllScrollableHeaders()
-            addScrollableHeader(header)
-            updateDataSet(items)
+            items = data
+            notifyDataSetChanged()
         }
     }
 
@@ -124,26 +115,17 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
     }
 
     override fun openEmailClient() {
-        val intent = Intent(ACTION_SENDTO)
-            .apply {
-                data = Uri.parse("mailto:")
-                putExtra(EXTRA_EMAIL, arrayOf("wulkanowyinc@gmail.com"))
-                putExtra(EXTRA_SUBJECT, "Zgłoszenie błędu")
-                putExtra(EXTRA_TEXT, "Tu umieść treść zgłoszenia\n\n${"-".repeat(40)}\n " +
-                    """
-                        Build: ${appInfo.versionCode}
-                        SDK: ${appInfo.systemVersion}
-                        Device: ${appInfo.systemManufacturer} ${appInfo.systemModel}
-                    """.trimIndent())
+        requireContext().openEmailClient(
+            chooserTitle = getString(R.string.about_feedback),
+            email = "wulkanowyinc@gmail.com",
+            subject = "Zgłoszenie błędu",
+            body = requireContext().getString(R.string.about_feedback_template,
+                "${appInfo.systemManufacturer} ${appInfo.systemModel}", appInfo.systemVersion.toString(), appInfo.versionName
+            ),
+            onActivityNotFound = {
+                requireContext().openInternetBrowser("https://github.com/wulkanowy/wulkanowy/issues", ::showMessage)
             }
-
-        context?.let {
-            if (intent.resolveActivity(it.packageManager) != null) {
-                startActivity(Intent.createChooser(intent, getString(R.string.about_feedback)))
-            } else {
-                it.openInternetBrowser("https://github.com/wulkanowy/wulkanowy/issues", ::showMessage)
-            }
-        }
+        )
     }
 
     override fun openFaqPage() {

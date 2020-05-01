@@ -135,12 +135,12 @@ class SendMessagePresenter @Inject constructor(
                         if (selectedRecipientChips.isNotEmpty()) setSelectedRecipients(selectedRecipientChips)
                         showContent(true)
                     } else {
-                        Timber.e("Loading recipients result: Can't find the reporting unit")
+                        Timber.i("Loading recipients result: Can't find the reporting unit")
                         view?.showEmpty(true)
                     }
                 }
             }, {
-                Timber.e("Loading recipients result: An exception occurred")
+                Timber.i("Loading recipients result: An exception occurred")
                 view?.showContent(true)
                 errorHandler.dispatch(it)
             }))
@@ -148,7 +148,8 @@ class SendMessagePresenter @Inject constructor(
 
     private fun sendMessage(subject: String, content: String, recipients: List<Recipient>) {
         Timber.i("Sending message started")
-        disposable.add(messageRepository.sendMessage(subject, content, recipients)
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { messageRepository.sendMessage(it, subject, content, recipients) }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doOnSubscribe {

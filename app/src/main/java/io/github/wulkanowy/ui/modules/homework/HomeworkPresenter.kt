@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.homework
 
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.homework.HomeworkRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
@@ -18,7 +17,6 @@ import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.ofEpochDay
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class HomeworkPresenter @Inject constructor(
@@ -74,11 +72,9 @@ class HomeworkPresenter @Inject constructor(
         view?.showErrorDetailsDialog(lastError)
     }
 
-    fun onHomeworkItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is HomeworkItem) {
-            Timber.i("Select homework item ${item.homework.id}")
-            view?.showTimetableDialog(item.homework)
-        }
+    fun onHomeworkItemSelected(homework: Homework) {
+        Timber.i("Select homework item ${homework.id}")
+        view?.showTimetableDialog(homework)
     }
 
     private fun setBaseDateOnHolidays() {
@@ -95,16 +91,21 @@ class HomeworkPresenter @Inject constructor(
             })
     }
 
+    fun reloadData() {
+        loadData(currentDate, false)
+    }
+
     private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
         Timber.i("Loading homework data started")
         currentDate = date
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()
-                .delay(200, TimeUnit.MILLISECONDS)
-                .flatMap { semesterRepository.getCurrentSemester(it) }
-                .flatMap { homeworkRepository.getHomework(it, currentDate, currentDate, forceRefresh) }
-                .map { it.groupBy { homework -> homework.date }.toSortedMap() }
+                .flatMap { student ->
+                    semesterRepository.getCurrentSemester(student).flatMap { semester ->
+                        homeworkRepository.getHomework(student, semester, currentDate, currentDate, forceRefresh)
+                    }
+                }
                 .map { createHomeworkItem(it) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
@@ -143,12 +144,12 @@ class HomeworkPresenter @Inject constructor(
         }
     }
 
-    private fun createHomeworkItem(items: Map<LocalDate, List<Homework>>): List<HomeworkItem> {
-        return items.flatMap {
-            HomeworkHeader(it.key).let { header ->
-                it.value.reversed().map { item -> HomeworkItem(header, item) }
+    private fun createHomeworkItem(items: List<Homework>): List<HomeworkItem<*>> {
+        return items.groupBy { it.date }.toSortedMap().map { (date, exams) ->
+            listOf(HomeworkItem(date, HomeworkItem.ViewType.HEADER)) + exams.reversed().map { exam ->
+                HomeworkItem(exam, HomeworkItem.ViewType.ITEM)
             }
-        }
+        }.flatten()
     }
 
     private fun reloadView() {
