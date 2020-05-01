@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.base.DividerItemDecoration
+import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.mobiledevice.token.MobileDeviceTokenDialog

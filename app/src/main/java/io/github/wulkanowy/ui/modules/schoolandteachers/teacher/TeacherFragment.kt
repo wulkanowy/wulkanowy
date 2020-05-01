@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Teacher
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.base.DividerItemDecoration
+import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersChildView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment

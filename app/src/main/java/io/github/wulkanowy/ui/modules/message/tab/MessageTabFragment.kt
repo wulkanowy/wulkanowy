@@ -12,7 +12,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.base.DividerItemDecoration
+import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment

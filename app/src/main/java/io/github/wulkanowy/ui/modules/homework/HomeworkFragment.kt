@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.base.DividerItemDecoration
+import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.homework.details.HomeworkDetailsDialog
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView

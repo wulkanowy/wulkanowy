@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.base
+package io.github.wulkanowy.ui.widgets
 
 import android.content.Context
 import android.graphics.Canvas
