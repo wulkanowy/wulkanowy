@@ -1,9 +1,7 @@
 package io.github.wulkanowy.ui.modules.grade.statistics
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +15,9 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import javax.inject.Inject
 
-class GradeStatisticsFragment : BaseFragment<FragmentGradeStatisticsBinding>(), GradeStatisticsView, GradeView.GradeChildView {
+class GradeStatisticsFragment :
+    BaseFragment<FragmentGradeStatisticsBinding>(R.layout.fragment_grade_statistics),
+    GradeStatisticsView, GradeView.GradeChildView {
 
     @Inject
     lateinit var presenter: GradeStatisticsPresenter
@@ -42,12 +42,9 @@ class GradeStatisticsFragment : BaseFragment<FragmentGradeStatisticsBinding>(), 
             else -> ViewType.POINTS
         }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentGradeStatisticsBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentGradeStatisticsBinding.bind(view)
         messageContainer = binding.gradeStatisticsSwipe
         presenter.onAttachView(this, savedInstanceState?.getSerializable(SAVED_CHART_TYPE) as? ViewType)
     }

@@ -1,11 +1,9 @@
 package io.github.wulkanowy.ui.modules.login.symbol
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.EditorInfo.IME_NULL
 import android.widget.ArrayAdapter
@@ -22,7 +20,8 @@ import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
-class LoginSymbolFragment : BaseFragment<FragmentLoginSymbolBinding>(), LoginSymbolView {
+class LoginSymbolFragment :
+    BaseFragment<FragmentLoginSymbolBinding>(R.layout.fragment_login_symbol), LoginSymbolView {
 
     @Inject
     lateinit var presenter: LoginSymbolPresenter
@@ -39,12 +38,9 @@ class LoginSymbolFragment : BaseFragment<FragmentLoginSymbolBinding>(), LoginSym
     override val symbolNameError: CharSequence?
         get() = binding.loginSymbolNameLayout.error
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLoginSymbolBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentLoginSymbolBinding.bind(view)
         presenter.onAttachView(this, savedInstanceState?.getSerializable(SAVED_LOGIN_DATA))
     }
 

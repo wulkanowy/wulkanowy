@@ -1,13 +1,15 @@
 package io.github.wulkanowy.ui.base
 
 import android.view.View
+import androidx.annotation.LayoutRes
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import dagger.android.support.DaggerFragment
 import io.github.wulkanowy.R
 
-abstract class BaseFragment<DB : ViewBinding> : DaggerFragment(), BaseView {
+abstract class BaseFragment<DB : ViewBinding>(@LayoutRes layoutId: Int) : DaggerFragment(layoutId),
+    BaseView {
 
     protected open var _binding: DB? = null
 

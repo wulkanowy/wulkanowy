@@ -1,24 +1,24 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.databinding.FragmentMessageTabBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
+import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import javax.inject.Inject
 
-class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(), MessageTabView {
+class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.fragment_message_tab),
+    MessageTabView {
 
     @Inject
     lateinit var presenter: MessageTabPresenter
@@ -41,12 +41,9 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(), MessageTab
     override val isViewEmpty
         get() = tabAdapter.items.isEmpty()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentMessageTabBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentMessageTabBinding.bind(view)
         messageContainer = binding.messageTabRecycler
         presenter.onAttachView(this, MessageFolder.valueOf(
             (savedInstanceState ?: arguments)?.getString(MESSAGE_TAB_FOLDER_ID).orEmpty()

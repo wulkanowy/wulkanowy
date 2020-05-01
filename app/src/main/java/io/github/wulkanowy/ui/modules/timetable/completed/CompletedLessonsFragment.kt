@@ -1,12 +1,10 @@
 package io.github.wulkanowy.ui.modules.timetable.completed
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import io.github.wulkanowy.R
@@ -22,7 +20,9 @@ import io.github.wulkanowy.utils.getCompatDrawable
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
-class CompletedLessonsFragment : BaseFragment<FragmentTimetableCompletedBinding>(), CompletedLessonsView, MainView.TitledView {
+class CompletedLessonsFragment :
+    BaseFragment<FragmentTimetableCompletedBinding>(R.layout.fragment_timetable_completed),
+    CompletedLessonsView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: CompletedLessonsPresenter
@@ -40,12 +40,9 @@ class CompletedLessonsFragment : BaseFragment<FragmentTimetableCompletedBinding>
 
     override val isViewEmpty get() = completedLessonsAdapter.items.isEmpty()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentTimetableCompletedBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentTimetableCompletedBinding.bind(view)
         messageContainer = binding.completedLessonsRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }

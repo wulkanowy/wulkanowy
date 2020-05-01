@@ -1,24 +1,23 @@
 package io.github.wulkanowy.ui.modules.exam
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.databinding.FragmentExamBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.dpToPx
 import javax.inject.Inject
 
-class ExamFragment : BaseFragment<FragmentExamBinding>(), ExamView, MainView.MainChildView, MainView.TitledView {
+class ExamFragment : BaseFragment<FragmentExamBinding>(R.layout.fragment_exam), ExamView,
+    MainView.MainChildView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: ExamPresenter
@@ -36,12 +35,9 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(), ExamView, MainView.Mai
 
     override val isViewEmpty get() = examAdapter.items.isEmpty()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentExamBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentExamBinding.bind(view)
         messageContainer = binding.examRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }

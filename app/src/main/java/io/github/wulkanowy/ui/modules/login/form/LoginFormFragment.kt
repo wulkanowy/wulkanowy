@@ -2,11 +2,9 @@ package io.github.wulkanowy.ui.modules.login.form
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -21,7 +19,8 @@ import io.github.wulkanowy.utils.setOnEditorDoneSignIn
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
-class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(), LoginFormView {
+class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragment_login_form),
+    LoginFormView {
 
     @Inject
     lateinit var presenter: LoginFormPresenter
@@ -57,12 +56,9 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(), LoginFormVie
 
     private lateinit var hostSymbols: Array<String>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLoginFormBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentLoginFormBinding.bind(view)
         presenter.onAttachView(this)
     }
 

@@ -2,9 +2,7 @@ package io.github.wulkanowy.ui.modules.more
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentMoreBinding
@@ -22,7 +20,8 @@ import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.utils.getCompatDrawable
 import javax.inject.Inject
 
-class MoreFragment : BaseFragment<FragmentMoreBinding>(), MoreView, MainView.TitledView, MainView.MainChildView {
+class MoreFragment : BaseFragment<FragmentMoreBinding>(R.layout.fragment_more), MoreView,
+    MainView.TitledView, MainView.MainChildView {
 
     @Inject
     lateinit var presenter: MorePresenter
@@ -61,12 +60,9 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>(), MoreView, MainView.Tit
     override val aboutRes: Pair<String, Drawable?>?
         get() = context?.run { getString(R.string.about_title) to getCompatDrawable(R.drawable.ic_all_about) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentMoreBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentMoreBinding.bind(view)
         presenter.onAttachView(this)
     }
 

@@ -11,12 +11,13 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.pojos.Contributor
 import io.github.wulkanowy.databinding.FragmentCreatorBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
-class ContributorFragment : BaseFragment<FragmentCreatorBinding>(), ContributorView, MainView.TitledView {
+class ContributorFragment : BaseFragment<FragmentCreatorBinding>(R.layout.fragment_creator),
+    ContributorView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: ContributorPresenter
@@ -34,8 +35,9 @@ class ContributorFragment : BaseFragment<FragmentCreatorBinding>(), ContributorV
         return FragmentCreatorBinding.inflate(inflater).apply { _binding = this }.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentCreatorBinding.bind(view)
         presenter.onAttachView(this)
     }
 

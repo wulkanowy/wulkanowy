@@ -1,11 +1,9 @@
 package io.github.wulkanowy.ui.modules.schoolandteachers
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentSchoolandteachersBinding
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -17,7 +15,8 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import javax.inject.Inject
 
-class SchoolAndTeachersFragment : BaseFragment<FragmentSchoolandteachersBinding>(),
+class SchoolAndTeachersFragment :
+    BaseFragment<FragmentSchoolandteachersBinding>(R.layout.fragment_schoolandteachers),
     SchoolAndTeachersView, MainView.TitledView {
 
     @Inject
@@ -34,12 +33,9 @@ class SchoolAndTeachersFragment : BaseFragment<FragmentSchoolandteachersBinding>
 
     override val currentPageIndex get() = binding.schoolandteachersViewPager.currentItem
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentSchoolandteachersBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentSchoolandteachersBinding.bind(view)
         presenter.onAttachView(this)
     }
 

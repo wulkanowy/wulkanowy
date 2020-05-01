@@ -1,12 +1,10 @@
 package io.github.wulkanowy.ui.modules.grade.summary
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.GradeSummary
@@ -16,7 +14,9 @@ import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import javax.inject.Inject
 
-class GradeSummaryFragment : BaseFragment<FragmentGradeSummaryBinding>(), GradeSummaryView, GradeView.GradeChildView {
+class GradeSummaryFragment :
+    BaseFragment<FragmentGradeSummaryBinding>(R.layout.fragment_grade_summary), GradeSummaryView,
+    GradeView.GradeChildView {
 
     @Inject
     lateinit var presenter: GradeSummaryPresenter
@@ -37,12 +37,9 @@ class GradeSummaryFragment : BaseFragment<FragmentGradeSummaryBinding>(), GradeS
     override val finalString
         get() = getString(R.string.grade_summary_final_grade)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentGradeSummaryBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentGradeSummaryBinding.bind(view)
         messageContainer = binding.gradeSummaryRecycler
         presenter.onAttachView(this)
     }

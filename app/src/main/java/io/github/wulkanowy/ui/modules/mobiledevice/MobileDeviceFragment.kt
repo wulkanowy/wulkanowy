@@ -1,11 +1,9 @@
 package io.github.wulkanowy.ui.modules.mobiledevice
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.core.view.postDelayed
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -13,13 +11,15 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.databinding.FragmentMobileDeviceBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.mobiledevice.token.MobileDeviceTokenDialog
+import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import javax.inject.Inject
 
-class MobileDeviceFragment : BaseFragment<FragmentMobileDeviceBinding>(), MobileDeviceView, MainView.TitledView {
+class MobileDeviceFragment :
+    BaseFragment<FragmentMobileDeviceBinding>(R.layout.fragment_mobile_device), MobileDeviceView,
+    MainView.TitledView {
 
     @Inject
     lateinit var presenter: MobileDevicePresenter
@@ -37,12 +37,9 @@ class MobileDeviceFragment : BaseFragment<FragmentMobileDeviceBinding>(), Mobile
     override val isViewEmpty: Boolean
         get() = devicesAdapter.items.isEmpty()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentMobileDeviceBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentMobileDeviceBinding.bind(view)
         messageContainer = binding.mobileDevicesRecycler
         presenter.onAttachView(this)
     }

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +28,7 @@ import io.github.wulkanowy.utils.dpToPx
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
-class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(), AttendanceView, MainView.MainChildView,
+class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.fragment_attendance), AttendanceView, MainView.MainChildView,
     MainView.TitledView {
 
     @Inject
@@ -89,12 +88,9 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(), Attendance
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentAttendanceBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentAttendanceBinding.bind(view)
         messageContainer = binding.attendanceRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }

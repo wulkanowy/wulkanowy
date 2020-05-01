@@ -1,11 +1,9 @@
 package io.github.wulkanowy.ui.modules.login.advanced
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import io.github.wulkanowy.R
@@ -20,7 +18,9 @@ import io.github.wulkanowy.utils.setOnEditorDoneSignIn
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
-class LoginAdvancedFragment : BaseFragment<FragmentLoginAdvancedBinding>(), LoginAdvancedView {
+class LoginAdvancedFragment :
+    BaseFragment<FragmentLoginAdvancedBinding>(R.layout.fragment_login_advanced),
+    LoginAdvancedView {
 
     @Inject
     lateinit var presenter: LoginAdvancedPresenter
@@ -69,12 +69,9 @@ class LoginAdvancedFragment : BaseFragment<FragmentLoginAdvancedBinding>(), Logi
     override val emailLabel: String
         get() = getString(R.string.login_email_hint)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLoginAdvancedBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentLoginAdvancedBinding.bind(view)
         presenter.onAttachView(this)
     }
 

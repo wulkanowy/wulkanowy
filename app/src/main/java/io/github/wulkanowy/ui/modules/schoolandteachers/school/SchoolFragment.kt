@@ -1,11 +1,9 @@
 package io.github.wulkanowy.ui.modules.schoolandteachers.school
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.School
 import io.github.wulkanowy.databinding.FragmentSchoolBinding
@@ -17,7 +15,8 @@ import io.github.wulkanowy.utils.openDialer
 import io.github.wulkanowy.utils.openNavigation
 import javax.inject.Inject
 
-class SchoolFragment : BaseFragment<FragmentSchoolBinding>(), SchoolView, MainView.TitledView, SchoolAndTeachersChildView {
+class SchoolFragment : BaseFragment<FragmentSchoolBinding>(R.layout.fragment_school), SchoolView,
+    MainView.TitledView, SchoolAndTeachersChildView {
 
     @Inject
     lateinit var presenter: SchoolPresenter
@@ -30,12 +29,9 @@ class SchoolFragment : BaseFragment<FragmentSchoolBinding>(), SchoolView, MainVi
         fun newInstance() = SchoolFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentSchoolBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentSchoolBinding.bind(view)
         presenter.onAttachView(this)
     }
 

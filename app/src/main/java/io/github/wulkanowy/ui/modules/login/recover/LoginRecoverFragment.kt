@@ -3,11 +3,9 @@ package io.github.wulkanowy.ui.modules.login.recover
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -21,7 +19,8 @@ import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
-class LoginRecoverFragment : BaseFragment<FragmentLoginRecoverBinding>(), LoginRecoverView {
+class LoginRecoverFragment :
+    BaseFragment<FragmentLoginRecoverBinding>(R.layout.fragment_login_recover), LoginRecoverView {
 
     @Inject
     lateinit var presenter: LoginRecoverPresenter
@@ -54,12 +53,9 @@ class LoginRecoverFragment : BaseFragment<FragmentLoginRecoverBinding>(), LoginR
     override val invalidEmailString: String
         get() = getString(R.string.login_invalid_email)
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLoginRecoverBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentLoginRecoverBinding.bind(view)
         presenter.onAttachView(this)
     }
 

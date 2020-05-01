@@ -1,11 +1,9 @@
 package io.github.wulkanowy.ui.modules.about.license
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.text.parseAsHtml
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,7 +16,8 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
-class LicenseFragment : BaseFragment<FragmentLicenseBinding>(), LicenseView, MainView.TitledView {
+class LicenseFragment : BaseFragment<FragmentLicenseBinding>(R.layout.fragment_license),
+    LicenseView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: LicensePresenter
@@ -40,12 +39,9 @@ class LicenseFragment : BaseFragment<FragmentLicenseBinding>(), LicenseView, Mai
         fun newInstance() = LicenseFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLicenseBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentLicenseBinding.bind(view)
         presenter.onAttachView(this)
     }
 

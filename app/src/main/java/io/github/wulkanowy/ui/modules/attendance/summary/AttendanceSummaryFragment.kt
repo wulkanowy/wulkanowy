@@ -1,12 +1,10 @@
 package io.github.wulkanowy.ui.modules.attendance.summary
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +17,9 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import javax.inject.Inject
 
-class AttendanceSummaryFragment : BaseFragment<FragmentAttendanceSummaryBinding>(), AttendanceSummaryView, MainView.TitledView {
+class AttendanceSummaryFragment :
+    BaseFragment<FragmentAttendanceSummaryBinding>(R.layout.fragment_attendance_summary),
+    AttendanceSummaryView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: AttendanceSummaryPresenter
@@ -39,12 +39,9 @@ class AttendanceSummaryFragment : BaseFragment<FragmentAttendanceSummaryBinding>
 
     override val isViewEmpty get() = attendanceSummaryAdapter.items.isEmpty()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentAttendanceSummaryBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentAttendanceSummaryBinding.bind(view)
         messageContainer = binding.attendanceSummaryRecycler
         presenter.onAttachView(this, savedInstanceState?.getInt(SAVED_SUBJECT_KEY))
     }

@@ -1,14 +1,12 @@
 package io.github.wulkanowy.ui.modules.grade
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentGradeBinding
@@ -22,7 +20,7 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import javax.inject.Inject
 
-class GradeFragment : BaseFragment<FragmentGradeBinding>(), GradeView, MainView.MainChildView, MainView.TitledView {
+class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade), GradeView, MainView.MainChildView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: GradePresenter
@@ -49,12 +47,9 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(), GradeView, MainView.
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentGradeBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentGradeBinding.bind(view)
         presenter.onAttachView(this, savedInstanceState?.getInt(SAVED_SEMESTER_KEY))
     }
 

@@ -1,11 +1,9 @@
 package io.github.wulkanowy.ui.modules.message
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
@@ -21,7 +19,8 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import javax.inject.Inject
 
-class MessageFragment : BaseFragment<FragmentMessageBinding>(), MessageView, MainView.TitledView {
+class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_message),
+    MessageView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: MessagePresenter
@@ -37,12 +36,9 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(), MessageView, Mai
 
     override val currentPageIndex get() = binding.messageViewPager.currentItem
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentMessageBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentMessageBinding.bind(view)
         presenter.onAttachView(this)
     }
 

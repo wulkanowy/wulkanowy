@@ -1,24 +1,23 @@
 package io.github.wulkanowy.ui.modules.homework
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.databinding.FragmentHomeworkBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.homework.details.HomeworkDetailsDialog
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.dpToPx
 import javax.inject.Inject
 
-class HomeworkFragment : BaseFragment<FragmentHomeworkBinding>(), HomeworkView, MainView.TitledView {
+class HomeworkFragment : BaseFragment<FragmentHomeworkBinding>(R.layout.fragment_homework),
+    HomeworkView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: HomeworkPresenter
@@ -36,12 +35,9 @@ class HomeworkFragment : BaseFragment<FragmentHomeworkBinding>(), HomeworkView, 
 
     override val isViewEmpty get() = homeworkAdapter.items.isEmpty()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentHomeworkBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentHomeworkBinding.bind(view)
         messageContainer = binding.homeworkRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }

@@ -2,9 +2,7 @@ package io.github.wulkanowy.ui.modules.about
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentAboutBinding
@@ -20,7 +18,8 @@ import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
-class AboutFragment : BaseFragment<FragmentAboutBinding>(), AboutView, MainView.TitledView {
+class AboutFragment : BaseFragment<FragmentAboutBinding>(R.layout.fragment_about), AboutView,
+    MainView.TitledView {
 
     @Inject
     lateinit var presenter: AboutPresenter
@@ -77,12 +76,9 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(), AboutView, MainView.
         fun newInstance() = AboutFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentAboutBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentAboutBinding.bind(view)
         presenter.onAttachView(this)
     }
 

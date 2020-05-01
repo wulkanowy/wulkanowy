@@ -1,14 +1,12 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
@@ -21,7 +19,9 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import javax.inject.Inject
 
-class MessagePreviewFragment : BaseFragment<FragmentMessagePreviewBinding>(), MessagePreviewView, MainView.TitledView {
+class MessagePreviewFragment :
+    BaseFragment<FragmentMessagePreviewBinding>(R.layout.fragment_message_preview),
+    MessagePreviewView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: MessagePreviewPresenter
@@ -56,12 +56,9 @@ class MessagePreviewFragment : BaseFragment<FragmentMessagePreviewBinding>(), Me
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentMessagePreviewBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentMessagePreviewBinding.bind(view)
         messageContainer = binding.messagePreviewContainer
         presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getSerializable(MESSAGE_ID_KEY) as? Message)
     }

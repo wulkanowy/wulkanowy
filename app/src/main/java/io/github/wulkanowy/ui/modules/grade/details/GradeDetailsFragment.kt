@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
@@ -20,7 +18,8 @@ import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import javax.inject.Inject
 
-class GradeDetailsFragment : BaseFragment<FragmentGradeDetailsBinding>(), GradeDetailsView,
+class GradeDetailsFragment :
+    BaseFragment<FragmentGradeDetailsBinding>(R.layout.fragment_grade_details), GradeDetailsView,
     GradeView.GradeChildView {
 
     @Inject
@@ -43,12 +42,9 @@ class GradeDetailsFragment : BaseFragment<FragmentGradeDetailsBinding>(), GradeD
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentGradeDetailsBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentGradeDetailsBinding.bind(view)
         messageContainer = binding.gradeDetailsRecycler
         presenter.onAttachView(this)
     }

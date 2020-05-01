@@ -1,11 +1,9 @@
 package io.github.wulkanowy.ui.modules.luckynumber
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.databinding.FragmentLuckyNumberBinding
@@ -13,7 +11,9 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
-class LuckyNumberFragment : BaseFragment<FragmentLuckyNumberBinding>(), LuckyNumberView, MainView.TitledView {
+class LuckyNumberFragment :
+    BaseFragment<FragmentLuckyNumberBinding>(R.layout.fragment_lucky_number), LuckyNumberView,
+    MainView.TitledView {
 
     @Inject
     lateinit var presenter: LuckyNumberPresenter
@@ -27,12 +27,9 @@ class LuckyNumberFragment : BaseFragment<FragmentLuckyNumberBinding>(), LuckyNum
 
     override val isViewEmpty get() = binding.luckyNumberText.text.isBlank()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLuckyNumberBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentLuckyNumberBinding.bind(view)
         messageContainer = binding.luckyNumberSwipe
         presenter.onAttachView(this)
     }

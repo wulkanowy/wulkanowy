@@ -1,14 +1,12 @@
 package io.github.wulkanowy.ui.modules.timetable
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import io.github.wulkanowy.R
@@ -24,9 +22,8 @@ import io.github.wulkanowy.utils.dpToPx
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
-class TimetableFragment : BaseFragment<FragmentTimetableBinding>(), TimetableView,
-    MainView.MainChildView,
-    MainView.TitledView {
+class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragment_timetable),
+    TimetableView, MainView.MainChildView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: TimetablePresenter
@@ -51,12 +48,9 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(), TimetableVie
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentTimetableBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentTimetableBinding.bind(view)
         messageContainer = binding.timetableRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }

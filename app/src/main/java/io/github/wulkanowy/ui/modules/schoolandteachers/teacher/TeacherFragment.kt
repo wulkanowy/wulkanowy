@@ -1,24 +1,22 @@
 package io.github.wulkanowy.ui.modules.schoolandteachers.teacher
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Teacher
 import io.github.wulkanowy.databinding.FragmentTeacherBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersChildView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment
+import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import javax.inject.Inject
 
-class TeacherFragment : BaseFragment<FragmentTeacherBinding>(), TeacherView, MainView.TitledView,
-    SchoolAndTeachersChildView {
+class TeacherFragment : BaseFragment<FragmentTeacherBinding>(R.layout.fragment_teacher),
+    TeacherView, MainView.TitledView, SchoolAndTeachersChildView {
 
     @Inject
     lateinit var presenter: TeacherPresenter
@@ -38,12 +36,9 @@ class TeacherFragment : BaseFragment<FragmentTeacherBinding>(), TeacherView, Mai
     override val isViewEmpty: Boolean
         get() = teacherAdapter.items.isEmpty()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentTeacherBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentTeacherBinding.bind(view)
         presenter.onAttachView(this)
     }
 

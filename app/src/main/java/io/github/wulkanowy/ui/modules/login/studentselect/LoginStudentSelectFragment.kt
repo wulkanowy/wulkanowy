@@ -1,11 +1,9 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -18,7 +16,9 @@ import io.github.wulkanowy.utils.openInternetBrowser
 import java.io.Serializable
 import javax.inject.Inject
 
-class LoginStudentSelectFragment : BaseFragment<FragmentLoginStudentSelectBinding>(), LoginStudentSelectView {
+class LoginStudentSelectFragment :
+    BaseFragment<FragmentLoginStudentSelectBinding>(R.layout.fragment_login_student_select),
+    LoginStudentSelectView {
 
     @Inject
     lateinit var presenter: LoginStudentSelectPresenter
@@ -35,12 +35,9 @@ class LoginStudentSelectFragment : BaseFragment<FragmentLoginStudentSelectBindin
         fun newInstance() = LoginStudentSelectFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLoginStudentSelectBinding.inflate(inflater).apply { _binding = this }.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentLoginStudentSelectBinding.bind(view)
         presenter.onAttachView(this, savedInstanceState?.getSerializable(SAVED_STUDENTS))
     }
 
