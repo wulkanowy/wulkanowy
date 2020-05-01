@@ -16,7 +16,9 @@ import io.github.wulkanowy.sdk.scrapper.notes.Note.CategoryType
 
 class NoteDialog : DialogFragment() {
 
-    private lateinit var binding: DialogNoteBinding
+    private var _binding: DialogNoteBinding? = null
+
+    private val binding get() = _binding!!
 
     private lateinit var note: Note
 
@@ -39,7 +41,7 @@ class NoteDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_note, container, false)
+        return DialogNoteBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     @SuppressLint("SetTextI18n")
@@ -65,5 +67,10 @@ class NoteDialog : DialogFragment() {
         }
 
         binding.noteDialogClose.setOnClickListener { dismiss() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

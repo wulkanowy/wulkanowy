@@ -11,7 +11,9 @@ import io.github.wulkanowy.utils.toFormattedString
 
 class ExamDialog : DialogFragment() {
 
-    private lateinit var binding: DialogExamBinding
+    private var _binding: DialogExamBinding? = null
+
+    private val binding get() = _binding!!
 
     private lateinit var exam: Exam
 
@@ -34,7 +36,7 @@ class ExamDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogExamBinding.inflate(inflater).apply { binding = this }.root
+        return DialogExamBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -49,5 +51,10 @@ class ExamDialog : DialogFragment() {
 
             examDialogClose.setOnClickListener { dismiss() }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

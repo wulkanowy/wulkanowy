@@ -18,7 +18,9 @@ import org.threeten.bp.LocalDateTime
 
 class TimetableDialog : DialogFragment() {
 
-    private lateinit var binding: DialogTimetableBinding
+    private var _binding: DialogTimetableBinding? = null
+
+    private val binding get() = _binding!!
 
     private lateinit var lesson: Timetable
 
@@ -41,7 +43,7 @@ class TimetableDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogTimetableBinding.inflate(inflater).apply { binding = this }.root
+        return DialogTimetableBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -167,5 +169,10 @@ class TimetableDialog : DialogFragment() {
     @SuppressLint("SetTextI18n")
     private fun setTime(start: LocalDateTime, end: LocalDateTime) {
         binding.timetableDialogTime.text = "${start.toFormattedString("HH:mm")} - ${end.toFormattedString("HH:mm")}"
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

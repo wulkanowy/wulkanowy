@@ -11,7 +11,9 @@ import io.github.wulkanowy.databinding.DialogLessonCompletedBinding
 
 class CompletedLessonDialog : DialogFragment() {
 
-    private lateinit var binding: DialogLessonCompletedBinding
+    private var _binding: DialogLessonCompletedBinding? = null
+
+    private val binding get() = _binding!!
 
     private lateinit var completedLesson: CompletedLesson
 
@@ -34,7 +36,7 @@ class CompletedLessonDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogLessonCompletedBinding.inflate(inflater).apply { binding = this }.root
+        return DialogLessonCompletedBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     @SuppressLint("SetTextI18n")
@@ -78,5 +80,10 @@ class CompletedLessonDialog : DialogFragment() {
         }
 
         binding.completedLessonDialogClose.setOnClickListener { dismiss() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

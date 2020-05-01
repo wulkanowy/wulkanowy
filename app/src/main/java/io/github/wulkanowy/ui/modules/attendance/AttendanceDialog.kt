@@ -11,7 +11,9 @@ import io.github.wulkanowy.utils.toFormattedString
 
 class AttendanceDialog : DialogFragment() {
 
-    private lateinit var binding: DialogAttendanceBinding
+    private var _binding: DialogAttendanceBinding? = null
+
+    private val binding get() = _binding!!
 
     private lateinit var attendance: Attendance
 
@@ -34,7 +36,7 @@ class AttendanceDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogAttendanceBinding.inflate(inflater).apply { binding = this }.root
+        return DialogAttendanceBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -47,5 +49,10 @@ class AttendanceDialog : DialogFragment() {
             attendanceDialogNumber.text = attendance.number.toString()
             attendanceDialogClose.setOnClickListener { dismiss() }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
