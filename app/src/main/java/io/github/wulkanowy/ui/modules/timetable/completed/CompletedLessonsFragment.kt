@@ -12,6 +12,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.base.DividerItemDecoration
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.SchooldaysRangeLimiter
@@ -55,6 +56,7 @@ class CompletedLessonsFragment : BaseFragment(), CompletedLessonsView, MainView.
         with(completedLessonsRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = completedLessonsAdapter
+            addItemDecoration(DividerItemDecoration(context))
         }
 
         completedLessonsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)

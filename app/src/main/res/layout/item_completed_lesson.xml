@@ -3,14 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ic_all_divider"
-    android:foreground="?selectableItemBackground"
+    android:background="?selectableItemBackground"
     android:paddingStart="8dp"
     android:paddingTop="6dp"
     android:paddingEnd="12dp"
     android:paddingBottom="6dp"
-    tools:context=".ui.modules.timetable.completed.CompletedLessonsAdapter"
-    tools:ignore="UnusedAttribute">
+    tools:context=".ui.modules.timetable.completed.CompletedLessonsAdapter">
 
     <TextView
         android:id="@+id/completedLessonItemNumber"
