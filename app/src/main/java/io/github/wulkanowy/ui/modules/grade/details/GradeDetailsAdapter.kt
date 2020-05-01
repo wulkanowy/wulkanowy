@@ -2,27 +2,21 @@ package io.github.wulkanowy.ui.modules.grade.details
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.databinding.HeaderGradeDetailsBinding
 import io.github.wulkanowy.databinding.ItemGradeDetailsBinding
+import io.github.wulkanowy.ui.base.BaseExpandableAdapter
 import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
-import kotlin.math.max
-import kotlin.math.min
 
-class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private var recyclerView: RecyclerView? = null
+class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<RecyclerView.ViewHolder>() {
 
     private var headers = mutableListOf<GradeDetailsItem>()
 
@@ -35,11 +29,6 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
     var colorTheme = ""
-
-    companion object {
-        private const val MILLISECONDS_PER_INCH = 100f
-        private const val AUTO_SCROLL_DELAY = 150L
-    }
 
     fun setDataItems(data: List<GradeDetailsItem>, isExpanded: Boolean = isExpandable) {
         headers = data.filter { it.viewType == ViewType.HEADER }.toMutableList()
@@ -81,16 +70,6 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
 
     override fun getItemViewType(position: Int) = items[position].viewType.id
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        this.recyclerView = recyclerView
-    }
-
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
-        this.recyclerView = null
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
@@ -103,8 +82,17 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is HeaderViewHolder -> bindHeaderViewHolder(holder.binding, items[position].value as GradeDetailsHeader, headers.indexOf(items[position]), position)
-            is ItemViewHolder -> bindItemViewHolder(holder.binding, items[position].value as Grade, position)
+            is HeaderViewHolder -> bindHeaderViewHolder(
+                binding = holder.binding,
+                header = items[position].value as GradeDetailsHeader,
+                headerPosition = headers.indexOf(items[position]),
+                adapterPosition = position
+            )
+            is ItemViewHolder -> bindItemViewHolder(
+                binding = holder.binding,
+                grade = items[position].value as Grade,
+                position = position
+            )
         }
     }
 
@@ -135,36 +123,6 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
                     refreshList(headers)
                 }
             }
-        }
-    }
-
-    // original: https://github.com/davideas/FlexibleAdapter/blob/5.1.0/flexible-adapter/src/main/java/eu/davidea/flexibleadapter/FlexibleAdapter.java#L4984-L5011
-    private fun scrollToHeaderWithSubItems(position: Int, subItemsCount: Int) {
-        val layoutManager = recyclerView!!.layoutManager as LinearLayoutManager
-        val firstVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
-        val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
-        val itemsToShow = position + subItemsCount - lastVisibleItem
-        if (itemsToShow > 0) {
-            val scrollMax: Int = position - firstVisibleItem
-            val scrollMin = max(0, position + subItemsCount - lastVisibleItem)
-            val scrollBy = min(scrollMax, scrollMin)
-            val scrollTo = firstVisibleItem + scrollBy
-            scrollToPosition(scrollTo)
-        } else if (position < firstVisibleItem) {
-            scrollToPosition(position)
-        }
-    }
-
-    private fun scrollToPosition(position: Int) {
-        recyclerView?.run {
-            postDelayed({
-                layoutManager?.startSmoothScroll(object : LinearSmoothScroller(context) {
-                    override fun getVerticalSnapPreference() = SNAP_TO_START
-                    override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics) = MILLISECONDS_PER_INCH / displayMetrics.densityDpi
-                }.apply {
-                    targetPosition = position
-                })
-            }, AUTO_SCROLL_DELAY)
         }
     }
 

@@ -200,8 +200,9 @@ class GradeDetailsPresenter @Inject constructor(
         disposable.add(gradeRepository.updateGrade(grade)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
-            .subscribe({ Timber.i("Update grade result: Success") })
-            { error ->
+            .subscribe({
+                Timber.i("Update grade result: Success")
+            }) { error ->
                 Timber.i("Update grade result: An exception occurred")
                 errorHandler.dispatch(error)
             })
