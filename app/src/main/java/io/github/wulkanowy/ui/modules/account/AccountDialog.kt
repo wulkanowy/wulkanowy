@@ -15,9 +15,7 @@ import io.github.wulkanowy.ui.base.BaseDialogFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import javax.inject.Inject
 
-class AccountDialog : BaseDialogFragment(), AccountView {
-
-    private lateinit var binding: DialogAccountBinding
+class AccountDialog : BaseDialogFragment<DialogAccountBinding>(), AccountView {
 
     @Inject
     lateinit var presenter: AccountPresenter
@@ -35,7 +33,7 @@ class AccountDialog : BaseDialogFragment(), AccountView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogAccountBinding.inflate(inflater).apply { binding = this }.root
+        return DialogAccountBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

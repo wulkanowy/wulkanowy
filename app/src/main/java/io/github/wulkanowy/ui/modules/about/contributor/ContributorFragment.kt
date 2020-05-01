@@ -16,9 +16,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
-class ContributorFragment : BaseFragment(), ContributorView, MainView.TitledView {
-
-    private lateinit var binding: FragmentCreatorBinding
+class ContributorFragment : BaseFragment<FragmentCreatorBinding>(), ContributorView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: ContributorPresenter
@@ -33,7 +31,7 @@ class ContributorFragment : BaseFragment(), ContributorView, MainView.TitledView
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentCreatorBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentCreatorBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

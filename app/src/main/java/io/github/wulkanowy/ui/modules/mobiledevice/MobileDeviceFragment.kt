@@ -19,9 +19,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.mobiledevice.token.MobileDeviceTokenDialog
 import javax.inject.Inject
 
-class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledView {
-
-    private lateinit var binding: FragmentMobileDeviceBinding
+class MobileDeviceFragment : BaseFragment<FragmentMobileDeviceBinding>(), MobileDeviceView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: MobileDevicePresenter
@@ -40,7 +38,7 @@ class MobileDeviceFragment : BaseFragment(), MobileDeviceView, MainView.TitledVi
         get() = devicesAdapter.items.isEmpty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentMobileDeviceBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentMobileDeviceBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

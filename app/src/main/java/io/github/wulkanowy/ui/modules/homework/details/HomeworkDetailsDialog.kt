@@ -14,9 +14,7 @@ import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
-class HomeworkDetailsDialog : BaseDialogFragment(), HomeworkDetailsView {
-
-    private lateinit var binding: DialogHomeworkBinding
+class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), HomeworkDetailsView {
 
     @Inject
     lateinit var presenter: HomeworkDetailsPresenter
@@ -45,7 +43,7 @@ class HomeworkDetailsDialog : BaseDialogFragment(), HomeworkDetailsView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogHomeworkBinding.inflate(inflater).apply { binding = this }.root
+        return DialogHomeworkBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

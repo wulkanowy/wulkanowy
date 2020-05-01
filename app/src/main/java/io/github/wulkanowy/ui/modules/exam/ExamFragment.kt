@@ -18,9 +18,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.dpToPx
 import javax.inject.Inject
 
-class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.TitledView {
-
-    private lateinit var binding: FragmentExamBinding
+class ExamFragment : BaseFragment<FragmentExamBinding>(), ExamView, MainView.MainChildView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: ExamPresenter
@@ -39,7 +37,7 @@ class ExamFragment : BaseFragment(), ExamView, MainView.MainChildView, MainView.
     override val isViewEmpty get() = examAdapter.items.isEmpty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentExamBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentExamBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -20,9 +20,7 @@ import io.github.wulkanowy.utils.setOnEditorDoneSignIn
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
-class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
-
-    private lateinit var binding: FragmentLoginAdvancedBinding
+class LoginAdvancedFragment : BaseFragment<FragmentLoginAdvancedBinding>(), LoginAdvancedView {
 
     @Inject
     lateinit var presenter: LoginAdvancedPresenter
@@ -72,7 +70,7 @@ class LoginAdvancedFragment : BaseFragment(), LoginAdvancedView {
         get() = getString(R.string.login_email_hint)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLoginAdvancedBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentLoginAdvancedBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

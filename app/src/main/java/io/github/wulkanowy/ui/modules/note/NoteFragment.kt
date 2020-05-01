@@ -16,9 +16,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import javax.inject.Inject
 
-class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
-
-    private lateinit var binding: FragmentNoteBinding
+class NoteFragment : BaseFragment<FragmentNoteBinding>(), NoteView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: NotePresenter
@@ -37,7 +35,7 @@ class NoteFragment : BaseFragment(), NoteView, MainView.TitledView {
         get() = noteAdapter.items.isEmpty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentNoteBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentNoteBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

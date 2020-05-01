@@ -1,12 +1,17 @@
 package io.github.wulkanowy.ui.base
 
 import android.view.View
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import dagger.android.support.DaggerFragment
 import io.github.wulkanowy.R
 
-abstract class BaseFragment : DaggerFragment(), BaseView {
+abstract class BaseFragment<DB : ViewBinding> : DaggerFragment(), BaseView {
+
+    protected open var _binding: DB? = null
+
+    protected val binding get() = _binding!!
 
     protected var messageContainer: View? = null
 
@@ -38,5 +43,10 @@ abstract class BaseFragment : DaggerFragment(), BaseView {
 
     override fun openClearLoginView() {
         (activity as? BaseActivity<*>)?.openClearLoginView()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

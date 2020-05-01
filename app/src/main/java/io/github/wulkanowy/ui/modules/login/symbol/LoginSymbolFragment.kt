@@ -22,9 +22,7 @@ import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
-class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
-
-    private lateinit var binding: FragmentLoginSymbolBinding
+class LoginSymbolFragment : BaseFragment<FragmentLoginSymbolBinding>(), LoginSymbolView {
 
     @Inject
     lateinit var presenter: LoginSymbolPresenter
@@ -42,7 +40,7 @@ class LoginSymbolFragment : BaseFragment(), LoginSymbolView {
         get() = binding.loginSymbolNameLayout.error
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLoginSymbolBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentLoginSymbolBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

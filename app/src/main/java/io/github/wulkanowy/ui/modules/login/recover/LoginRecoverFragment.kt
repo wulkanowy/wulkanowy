@@ -21,9 +21,7 @@ import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
-class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
-
-    private lateinit var binding: FragmentLoginRecoverBinding
+class LoginRecoverFragment : BaseFragment<FragmentLoginRecoverBinding>(), LoginRecoverView {
 
     @Inject
     lateinit var presenter: LoginRecoverPresenter
@@ -57,7 +55,7 @@ class LoginRecoverFragment : BaseFragment(), LoginRecoverView {
         get() = getString(R.string.login_invalid_email)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLoginRecoverBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentLoginRecoverBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

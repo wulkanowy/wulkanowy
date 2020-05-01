@@ -21,9 +21,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import javax.inject.Inject
 
-class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.TitledView {
-
-    private lateinit var binding: FragmentMessagePreviewBinding
+class MessagePreviewFragment : BaseFragment<FragmentMessagePreviewBinding>(), MessagePreviewView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: MessagePreviewPresenter
@@ -59,7 +57,7 @@ class MessagePreviewFragment : BaseFragment(), MessagePreviewView, MainView.Titl
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentMessagePreviewBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentMessagePreviewBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

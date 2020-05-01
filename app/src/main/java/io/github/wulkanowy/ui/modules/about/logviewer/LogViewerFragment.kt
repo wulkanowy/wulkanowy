@@ -24,9 +24,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import java.io.File
 import javax.inject.Inject
 
-class LogViewerFragment : BaseFragment(), LogViewerView, MainView.TitledView {
-
-    private lateinit var binding: FragmentLogviewerBinding
+class LogViewerFragment : BaseFragment<FragmentLogviewerBinding>(), LogViewerView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: LogViewerPresenter
@@ -46,7 +44,7 @@ class LogViewerFragment : BaseFragment(), LogViewerView, MainView.TitledView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLogviewerBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentLogviewerBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

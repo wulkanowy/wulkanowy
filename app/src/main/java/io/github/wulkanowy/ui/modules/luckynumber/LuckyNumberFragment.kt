@@ -13,9 +13,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
-class LuckyNumberFragment : BaseFragment(), LuckyNumberView, MainView.TitledView {
-
-    private lateinit var binding: FragmentLuckyNumberBinding
+class LuckyNumberFragment : BaseFragment<FragmentLuckyNumberBinding>(), LuckyNumberView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: LuckyNumberPresenter
@@ -30,7 +28,7 @@ class LuckyNumberFragment : BaseFragment(), LuckyNumberView, MainView.TitledView
     override val isViewEmpty get() = binding.luckyNumberText.text.isBlank()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLuckyNumberBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentLuckyNumberBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

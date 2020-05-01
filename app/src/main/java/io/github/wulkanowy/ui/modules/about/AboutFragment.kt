@@ -20,9 +20,7 @@ import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
-class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
-
-    private lateinit var binding: FragmentAboutBinding
+class AboutFragment : BaseFragment<FragmentAboutBinding>(), AboutView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: AboutPresenter
@@ -80,7 +78,7 @@ class AboutFragment : BaseFragment(), AboutView, MainView.TitledView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentAboutBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentAboutBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

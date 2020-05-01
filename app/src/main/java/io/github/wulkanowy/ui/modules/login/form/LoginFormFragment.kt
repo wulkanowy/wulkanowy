@@ -21,9 +21,7 @@ import io.github.wulkanowy.utils.setOnEditorDoneSignIn
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
-class LoginFormFragment : BaseFragment(), LoginFormView {
-
-    private lateinit var binding: FragmentLoginFormBinding
+class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(), LoginFormView {
 
     @Inject
     lateinit var presenter: LoginFormPresenter
@@ -60,7 +58,7 @@ class LoginFormFragment : BaseFragment(), LoginFormView {
     private lateinit var hostSymbols: Array<String>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLoginFormBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentLoginFormBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

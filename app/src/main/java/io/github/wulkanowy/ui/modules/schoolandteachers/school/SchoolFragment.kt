@@ -17,9 +17,7 @@ import io.github.wulkanowy.utils.openDialer
 import io.github.wulkanowy.utils.openNavigation
 import javax.inject.Inject
 
-class SchoolFragment : BaseFragment(), SchoolView, MainView.TitledView, SchoolAndTeachersChildView {
-
-    private lateinit var binding: FragmentSchoolBinding
+class SchoolFragment : BaseFragment<FragmentSchoolBinding>(), SchoolView, MainView.TitledView, SchoolAndTeachersChildView {
 
     @Inject
     lateinit var presenter: SchoolPresenter
@@ -33,7 +31,7 @@ class SchoolFragment : BaseFragment(), SchoolView, MainView.TitledView, SchoolAn
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentSchoolBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentSchoolBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

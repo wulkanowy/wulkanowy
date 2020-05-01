@@ -22,9 +22,7 @@ import io.github.wulkanowy.ui.modules.settings.SettingsFragment
 import io.github.wulkanowy.utils.getCompatDrawable
 import javax.inject.Inject
 
-class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.MainChildView {
-
-    private lateinit var binding: FragmentMoreBinding
+class MoreFragment : BaseFragment<FragmentMoreBinding>(), MoreView, MainView.TitledView, MainView.MainChildView {
 
     @Inject
     lateinit var presenter: MorePresenter
@@ -64,7 +62,7 @@ class MoreFragment : BaseFragment(), MoreView, MainView.TitledView, MainView.Mai
         get() = context?.run { getString(R.string.about_title) to getCompatDrawable(R.drawable.ic_all_about) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentMoreBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentMoreBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

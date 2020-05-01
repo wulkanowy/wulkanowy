@@ -20,9 +20,8 @@ import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import javax.inject.Inject
 
-class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeChildView {
-
-    private lateinit var binding: FragmentGradeDetailsBinding
+class GradeDetailsFragment : BaseFragment<FragmentGradeDetailsBinding>(), GradeDetailsView,
+    GradeView.GradeChildView {
 
     @Inject
     lateinit var presenter: GradeDetailsPresenter
@@ -45,7 +44,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentGradeDetailsBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentGradeDetailsBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

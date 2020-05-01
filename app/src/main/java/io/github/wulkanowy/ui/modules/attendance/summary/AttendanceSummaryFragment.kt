@@ -19,9 +19,7 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnItemSelectedListener
 import javax.inject.Inject
 
-class AttendanceSummaryFragment : BaseFragment(), AttendanceSummaryView, MainView.TitledView {
-
-    private lateinit var binding: FragmentAttendanceSummaryBinding
+class AttendanceSummaryFragment : BaseFragment<FragmentAttendanceSummaryBinding>(), AttendanceSummaryView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: AttendanceSummaryPresenter
@@ -42,7 +40,7 @@ class AttendanceSummaryFragment : BaseFragment(), AttendanceSummaryView, MainVie
     override val isViewEmpty get() = attendanceSummaryAdapter.items.isEmpty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentAttendanceSummaryBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentAttendanceSummaryBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

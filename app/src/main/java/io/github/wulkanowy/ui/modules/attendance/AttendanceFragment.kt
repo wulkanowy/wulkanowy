@@ -29,10 +29,8 @@ import io.github.wulkanowy.utils.dpToPx
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
-class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildView,
+class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(), AttendanceView, MainView.MainChildView,
     MainView.TitledView {
-
-    private lateinit var binding: FragmentAttendanceBinding
 
     @Inject
     lateinit var presenter: AttendancePresenter
@@ -92,7 +90,7 @@ class AttendanceFragment : BaseFragment(), AttendanceView, MainView.MainChildVie
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentAttendanceBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentAttendanceBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

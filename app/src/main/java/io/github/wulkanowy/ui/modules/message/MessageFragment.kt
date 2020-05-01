@@ -21,9 +21,7 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import javax.inject.Inject
 
-class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
-
-    private lateinit var binding: FragmentMessageBinding
+class MessageFragment : BaseFragment<FragmentMessageBinding>(), MessageView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: MessagePresenter
@@ -40,7 +38,7 @@ class MessageFragment : BaseFragment(), MessageView, MainView.TitledView {
     override val currentPageIndex get() = binding.messageViewPager.currentItem
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentMessageBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentMessageBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

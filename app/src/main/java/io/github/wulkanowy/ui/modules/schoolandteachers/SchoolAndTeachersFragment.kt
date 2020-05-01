@@ -17,9 +17,8 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import javax.inject.Inject
 
-class SchoolAndTeachersFragment : BaseFragment(), SchoolAndTeachersView, MainView.TitledView {
-
-    private lateinit var binding: FragmentSchoolandteachersBinding
+class SchoolAndTeachersFragment : BaseFragment<FragmentSchoolandteachersBinding>(),
+    SchoolAndTeachersView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: SchoolAndTeachersPresenter
@@ -36,7 +35,7 @@ class SchoolAndTeachersFragment : BaseFragment(), SchoolAndTeachersView, MainVie
     override val currentPageIndex get() = binding.schoolandteachersViewPager.currentItem
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentSchoolandteachersBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentSchoolandteachersBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

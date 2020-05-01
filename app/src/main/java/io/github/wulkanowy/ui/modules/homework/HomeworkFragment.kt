@@ -18,9 +18,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.dpToPx
 import javax.inject.Inject
 
-class HomeworkFragment : BaseFragment(), HomeworkView, MainView.TitledView {
-
-    private lateinit var binding: FragmentHomeworkBinding
+class HomeworkFragment : BaseFragment<FragmentHomeworkBinding>(), HomeworkView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: HomeworkPresenter
@@ -39,7 +37,7 @@ class HomeworkFragment : BaseFragment(), HomeworkView, MainView.TitledView {
     override val isViewEmpty get() = homeworkAdapter.items.isEmpty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentHomeworkBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentHomeworkBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

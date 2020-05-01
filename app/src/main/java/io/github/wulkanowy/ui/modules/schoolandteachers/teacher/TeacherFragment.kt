@@ -17,10 +17,8 @@ import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersChildVi
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersFragment
 import javax.inject.Inject
 
-class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView,
+class TeacherFragment : BaseFragment<FragmentTeacherBinding>(), TeacherView, MainView.TitledView,
     SchoolAndTeachersChildView {
-
-    private lateinit var binding: FragmentTeacherBinding
 
     @Inject
     lateinit var presenter: TeacherPresenter
@@ -41,7 +39,7 @@ class TeacherFragment : BaseFragment(), TeacherView, MainView.TitledView,
         get() = teacherAdapter.items.isEmpty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentTeacherBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentTeacherBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

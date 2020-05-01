@@ -18,9 +18,7 @@ import io.github.wulkanowy.utils.openInternetBrowser
 import java.io.Serializable
 import javax.inject.Inject
 
-class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
-
-    private lateinit var binding: FragmentLoginStudentSelectBinding
+class LoginStudentSelectFragment : BaseFragment<FragmentLoginStudentSelectBinding>(), LoginStudentSelectView {
 
     @Inject
     lateinit var presenter: LoginStudentSelectPresenter
@@ -38,7 +36,7 @@ class LoginStudentSelectFragment : BaseFragment(), LoginStudentSelectView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLoginStudentSelectBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentLoginStudentSelectBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

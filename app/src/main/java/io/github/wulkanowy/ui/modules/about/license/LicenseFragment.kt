@@ -18,9 +18,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
-class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
-
-    private lateinit var binding: FragmentLicenseBinding
+class LicenseFragment : BaseFragment<FragmentLicenseBinding>(), LicenseView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: LicensePresenter
@@ -43,7 +41,7 @@ class LicenseFragment : BaseFragment(), LicenseView, MainView.TitledView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentLicenseBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentLicenseBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

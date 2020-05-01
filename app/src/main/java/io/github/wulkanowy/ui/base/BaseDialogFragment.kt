@@ -1,9 +1,14 @@
 package io.github.wulkanowy.ui.base
 
 import android.widget.Toast
+import androidx.viewbinding.ViewBinding
 import dagger.android.support.DaggerAppCompatDialogFragment
 
-abstract class BaseDialogFragment : DaggerAppCompatDialogFragment(), BaseView {
+abstract class BaseDialogFragment<DB : ViewBinding> : DaggerAppCompatDialogFragment(), BaseView {
+
+    protected open var _binding: DB? = null
+
+    protected val binding get() = _binding!!
 
     override fun showError(text: String, error: Throwable) {
         showMessage(text)
@@ -23,5 +28,10 @@ abstract class BaseDialogFragment : DaggerAppCompatDialogFragment(), BaseView {
 
     override fun showErrorDetailsDialog(error: Throwable) {
         ErrorDialog.newInstance(error).show(childFragmentManager, error.toString())
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

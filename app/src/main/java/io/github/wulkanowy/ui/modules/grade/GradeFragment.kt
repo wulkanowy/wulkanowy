@@ -22,9 +22,7 @@ import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import javax.inject.Inject
 
-class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainView.TitledView {
-
-    private lateinit var binding: FragmentGradeBinding
+class GradeFragment : BaseFragment<FragmentGradeBinding>(), GradeView, MainView.MainChildView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: GradePresenter
@@ -52,7 +50,7 @@ class GradeFragment : BaseFragment(), GradeView, MainView.MainChildView, MainVie
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentGradeBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentGradeBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

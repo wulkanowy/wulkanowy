@@ -22,9 +22,7 @@ import io.github.wulkanowy.utils.getCompatDrawable
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
-class CompletedLessonsFragment : BaseFragment(), CompletedLessonsView, MainView.TitledView {
-
-    private lateinit var binding: FragmentTimetableCompletedBinding
+class CompletedLessonsFragment : BaseFragment<FragmentTimetableCompletedBinding>(), CompletedLessonsView, MainView.TitledView {
 
     @Inject
     lateinit var presenter: CompletedLessonsPresenter
@@ -43,7 +41,7 @@ class CompletedLessonsFragment : BaseFragment(), CompletedLessonsView, MainView.
     override val isViewEmpty get() = completedLessonsAdapter.items.isEmpty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentTimetableCompletedBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentTimetableCompletedBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

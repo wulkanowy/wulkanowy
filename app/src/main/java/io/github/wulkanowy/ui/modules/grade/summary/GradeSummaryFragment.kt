@@ -16,9 +16,7 @@ import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import javax.inject.Inject
 
-class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeChildView {
-
-    private lateinit var binding: FragmentGradeSummaryBinding
+class GradeSummaryFragment : BaseFragment<FragmentGradeSummaryBinding>(), GradeSummaryView, GradeView.GradeChildView {
 
     @Inject
     lateinit var presenter: GradeSummaryPresenter
@@ -40,7 +38,7 @@ class GradeSummaryFragment : BaseFragment(), GradeSummaryView, GradeView.GradeCh
         get() = getString(R.string.grade_summary_final_grade)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentGradeSummaryBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentGradeSummaryBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

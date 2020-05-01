@@ -24,10 +24,9 @@ import io.github.wulkanowy.utils.dpToPx
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
-class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
+class TimetableFragment : BaseFragment<FragmentTimetableBinding>(), TimetableView,
+    MainView.MainChildView,
     MainView.TitledView {
-
-    private lateinit var binding: FragmentTimetableBinding
 
     @Inject
     lateinit var presenter: TimetablePresenter
@@ -53,7 +52,7 @@ class TimetableFragment : BaseFragment(), TimetableView, MainView.MainChildView,
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentTimetableBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentTimetableBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -18,9 +18,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
 import javax.inject.Inject
 
-class MessageTabFragment : BaseFragment(), MessageTabView {
-
-    private lateinit var binding: FragmentMessageTabBinding
+class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(), MessageTabView {
 
     @Inject
     lateinit var presenter: MessageTabPresenter
@@ -44,7 +42,7 @@ class MessageTabFragment : BaseFragment(), MessageTabView {
         get() = tabAdapter.items.isEmpty()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return FragmentMessageTabBinding.inflate(inflater).apply { binding = this }.root
+        return FragmentMessageTabBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

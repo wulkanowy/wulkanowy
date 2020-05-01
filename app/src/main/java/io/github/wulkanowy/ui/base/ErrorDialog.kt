@@ -26,9 +26,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class ErrorDialog : BaseDialogFragment() {
-
-    private lateinit var binding: DialogErrorBinding
+class ErrorDialog : BaseDialogFragment<DialogErrorBinding>() {
 
     private lateinit var error: Throwable
 
@@ -54,7 +52,7 @@ class ErrorDialog : BaseDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogErrorBinding.inflate(inflater).apply { binding = this }.root
+        return DialogErrorBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

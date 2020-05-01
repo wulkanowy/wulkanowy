@@ -18,9 +18,7 @@ import io.github.wulkanowy.databinding.DialogMobileDeviceBinding
 import io.github.wulkanowy.ui.base.BaseDialogFragment
 import javax.inject.Inject
 
-class MobileDeviceTokenDialog : BaseDialogFragment(), MobileDeviceTokenVIew {
-
-    private lateinit var binding: DialogMobileDeviceBinding
+class MobileDeviceTokenDialog : BaseDialogFragment<DialogMobileDeviceBinding>(), MobileDeviceTokenVIew {
 
     @Inject
     lateinit var presenter: MobileDeviceTokenPresenter
@@ -35,7 +33,7 @@ class MobileDeviceTokenDialog : BaseDialogFragment(), MobileDeviceTokenVIew {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogMobileDeviceBinding.inflate(inflater).apply { binding = this }.root
+        return DialogMobileDeviceBinding.inflate(inflater).apply { _binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
