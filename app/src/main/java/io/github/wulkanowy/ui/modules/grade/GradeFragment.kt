@@ -165,7 +165,7 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         presenter.onDetachView()
+        super.onDestroyView()
     }
 }

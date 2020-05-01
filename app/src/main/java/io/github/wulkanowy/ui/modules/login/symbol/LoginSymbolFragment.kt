@@ -120,8 +120,8 @@ class LoginSymbolFragment :
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         presenter.onDetachView()
+        super.onDestroyView()
     }
 
     override fun openFaqPage() {
