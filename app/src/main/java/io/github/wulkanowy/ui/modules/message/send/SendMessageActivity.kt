@@ -21,9 +21,7 @@ import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
-class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageView {
-
-    private lateinit var binding: ActivitySendMessageBinding
+class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessageBinding>(), SendMessageView {
 
     @Inject
     override lateinit var presenter: SendMessagePresenter
@@ -66,7 +64,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter>(), SendMessageVie
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(ActivitySendMessageBinding.inflate(layoutInflater).apply { binding = this }.root)
+        setContentView(ActivitySendMessageBinding.inflate(layoutInflater).apply { _binding = this }.root)
         setSupportActionBar(binding.sendMessageToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         messageContainer = binding.sendMessageContainer

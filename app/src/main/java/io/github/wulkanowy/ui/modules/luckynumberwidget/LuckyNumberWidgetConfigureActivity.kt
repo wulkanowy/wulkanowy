@@ -16,10 +16,9 @@ import io.github.wulkanowy.ui.base.WidgetConfigureAdapter
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import javax.inject.Inject
 
-class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigurePresenter>(),
+class LuckyNumberWidgetConfigureActivity :
+    BaseActivity<LuckyNumberWidgetConfigurePresenter, ActivityWidgetConfigureBinding>(),
     LuckyNumberWidgetConfigureView {
-
-    private lateinit var binding: ActivityWidgetConfigureBinding
 
     @Inject
     lateinit var configureAdapter: WidgetConfigureAdapter
@@ -32,7 +31,7 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(RESULT_CANCELED)
-        setContentView(ActivityWidgetConfigureBinding.inflate(layoutInflater).apply { binding = this }.root)
+        setContentView(ActivityWidgetConfigureBinding.inflate(layoutInflater).apply { _binding = this }.root)
 
         intent.extras.let {
             presenter.onAttachView(this, it?.getInt(EXTRA_APPWIDGET_ID))

@@ -16,9 +16,7 @@ import io.github.wulkanowy.ui.modules.login.symbol.LoginSymbolFragment
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import javax.inject.Inject
 
-class LoginActivity : BaseActivity<LoginPresenter>(), LoginView {
-
-    private lateinit var binding: ActivityLoginBinding
+class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), LoginView {
 
     @Inject
     override lateinit var presenter: LoginPresenter
@@ -35,7 +33,7 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(ActivityLoginBinding.inflate(layoutInflater).apply { binding = this }.root)
+        setContentView(ActivityLoginBinding.inflate(layoutInflater).apply { _binding = this }.root)
         setSupportActionBar(binding.loginToolbar)
         messageContainer = binding.loginContainer
 

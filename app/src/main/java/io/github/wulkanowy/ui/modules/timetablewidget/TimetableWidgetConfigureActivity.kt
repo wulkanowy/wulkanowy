@@ -18,10 +18,9 @@ import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.EXTRA_FROM_PROVIDER
 import javax.inject.Inject
 
-class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePresenter>(),
+class TimetableWidgetConfigureActivity :
+    BaseActivity<TimetableWidgetConfigurePresenter, ActivityWidgetConfigureBinding>(),
     TimetableWidgetConfigureView {
-
-    private lateinit var binding: ActivityWidgetConfigureBinding
 
     @Inject
     lateinit var configureAdapter: WidgetConfigureAdapter
@@ -34,7 +33,7 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(RESULT_CANCELED)
-        setContentView(ActivityWidgetConfigureBinding.inflate(layoutInflater).apply { binding = this }.root)
+        setContentView(ActivityWidgetConfigureBinding.inflate(layoutInflater).apply { _binding = this }.root)
 
         intent.extras.let {
             presenter.onAttachView(this, it?.getInt(EXTRA_APPWIDGET_ID), it?.getBoolean(EXTRA_FROM_PROVIDER))

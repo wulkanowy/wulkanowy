@@ -38,9 +38,7 @@ import io.github.wulkanowy.utils.setOnViewChangeListener
 import timber.log.Timber
 import javax.inject.Inject
 
-class MainActivity : BaseActivity<MainPresenter>(), MainView {
-
-    private lateinit var binding: ActivityMainBinding
+class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainView {
 
     @Inject
     override lateinit var presenter: MainPresenter
@@ -84,7 +82,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(ActivityMainBinding.inflate(layoutInflater).apply { binding = this }.root)
+        setContentView(ActivityMainBinding.inflate(layoutInflater).apply { _binding = this }.root)
         setSupportActionBar(binding.mainToolbar)
         messageContainer = binding.mainFragmentContainer
 

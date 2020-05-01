@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import dagger.android.AndroidInjection
@@ -22,8 +23,12 @@ import io.github.wulkanowy.utils.FragmentLifecycleLogger
 import io.github.wulkanowy.utils.getThemeAttrColor
 import javax.inject.Inject
 
-abstract class BaseActivity<T : BasePresenter<out BaseView>> : AppCompatActivity(), BaseView,
-    HasAndroidInjector {
+abstract class BaseActivity<T : BasePresenter<out BaseView>, DB : ViewBinding> :
+    AppCompatActivity(), BaseView, HasAndroidInjector {
+
+    protected open var _binding: DB? = null
+
+    protected val binding get() = _binding!!
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
@@ -86,6 +91,7 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>> : AppCompatActivity
         super.onDestroy()
         invalidateOptionsMenu()
         presenter.onDetachView()
+        _binding = null
     }
 
     override fun androidInjector() = androidInjector

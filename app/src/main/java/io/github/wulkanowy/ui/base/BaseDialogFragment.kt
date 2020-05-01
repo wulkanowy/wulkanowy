@@ -19,11 +19,11 @@ abstract class BaseDialogFragment<DB : ViewBinding> : DaggerAppCompatDialogFragm
     }
 
     override fun showExpiredDialog() {
-        (activity as? BaseActivity<*>)?.showExpiredDialog()
+        (activity as? BaseActivity<*, *>)?.showExpiredDialog()
     }
 
     override fun openClearLoginView() {
-        (activity as? BaseActivity<*>)?.openClearLoginView()
+        (activity as? BaseActivity<*, *>)?.openClearLoginView()
     }
 
     override fun showErrorDetailsDialog(error: Throwable) {

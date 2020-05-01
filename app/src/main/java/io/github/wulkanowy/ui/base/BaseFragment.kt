@@ -21,7 +21,7 @@ abstract class BaseFragment<DB : ViewBinding> : DaggerFragment(), BaseView {
                 .setAction(R.string.all_details) { if (isAdded) showErrorDetailsDialog(error) }
                 .show()
         } else {
-            (activity as? BaseActivity<*>)?.showError(text, error)
+            (activity as? BaseActivity<*, *>)?.showError(text, error)
         }
     }
 
@@ -33,16 +33,16 @@ abstract class BaseFragment<DB : ViewBinding> : DaggerFragment(), BaseView {
         if (messageContainer != null) {
             Snackbar.make(messageContainer!!, text, LENGTH_LONG).show()
         } else {
-            (activity as? BaseActivity<*>)?.showMessage(text)
+            (activity as? BaseActivity<*, *>)?.showMessage(text)
         }
     }
 
     override fun showExpiredDialog() {
-        (activity as? BaseActivity<*>)?.showExpiredDialog()
+        (activity as? BaseActivity<*, *>)?.showExpiredDialog()
     }
 
     override fun openClearLoginView() {
-        (activity as? BaseActivity<*>)?.openClearLoginView()
+        (activity as? BaseActivity<*, *>)?.openClearLoginView()
     }
 
     override fun onDestroyView() {
