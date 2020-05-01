@@ -49,7 +49,7 @@ class GradeDetailsPresenter @Inject constructor(
                 grade.isRead = true
                 updateItem(grade, position)
                 getHeaderOfItem(grade.subject).let { header ->
-                    header.value.newGrades--
+                    (header.value as GradeDetailsHeader).newGrades--
                     updateHeaderItem(header)
                 }
                 newGradesAmount--
@@ -147,7 +147,7 @@ class GradeDetailsPresenter @Inject constructor(
             .subscribe({ grades ->
                 Timber.i("Loading grade details result: Success")
                 newGradesAmount = grades
-                    .filter { it.viewType == GradeDetailsItem.ViewType.HEADER }
+                    .filter { it.viewType == ViewType.HEADER }
                     .sumBy { item -> (item.value as GradeDetailsHeader).newGrades }
                 updateMarkAsDoneButton()
                 view?.run {
@@ -178,10 +178,10 @@ class GradeDetailsPresenter @Inject constructor(
         }
     }
 
-    private fun createGradeItems(items: List<Grade>, averages: List<Triple<String, Double, String>>): List<GradeDetailsItem<Any>> {
+    private fun createGradeItems(items: List<Grade>, averages: List<Triple<String, Double, String>>): List<GradeDetailsItem> {
         return items.groupBy { grade -> grade.subject }.toSortedMap().map { (subject, grades) ->
             val subItems = grades.map {
-                GradeDetailsItem(it, GradeDetailsItem.ViewType.ITEM)
+                GradeDetailsItem(it, ViewType.ITEM)
             }
 
             listOf(GradeDetailsItem(GradeDetailsHeader(
@@ -191,7 +191,7 @@ class GradeDetailsPresenter @Inject constructor(
                 number = grades.size,
                 newGrades = grades.filter { grade -> !grade.isRead }.size,
                 grades = subItems
-            ), GradeDetailsItem.ViewType.HEADER)) + if (preferencesRepository.isGradeExpandable) emptyList() else subItems
+            ), ViewType.HEADER)) + if (preferencesRepository.isGradeExpandable) emptyList() else subItems
         }.flatten()
     }
 

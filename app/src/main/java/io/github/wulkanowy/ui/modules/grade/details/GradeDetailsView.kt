@@ -9,11 +9,11 @@ interface GradeDetailsView : BaseView {
 
     fun initView()
 
-    fun updateData(data: List<GradeDetailsItem<*>>, isGradeExpandable: Boolean, gradeColorTheme: String)
+    fun updateData(data: List<GradeDetailsItem>, isGradeExpandable: Boolean, gradeColorTheme: String)
 
     fun updateItem(item: Grade, position: Int)
 
-    fun updateHeaderItem(item: GradeDetailsItem<GradeDetailsHeader>)
+    fun updateHeaderItem(item: GradeDetailsItem)
 
     fun clearView()
 
@@ -43,5 +43,5 @@ interface GradeDetailsView : BaseView {
 
     fun enableMarkAsDoneButton(enable: Boolean)
 
-    fun getHeaderOfItem(subject: String): GradeDetailsItem<GradeDetailsHeader>
+    fun getHeaderOfItem(subject: String): GradeDetailsItem
 }

@@ -16,7 +16,6 @@ import io.github.wulkanowy.databinding.HeaderGradeDetailsBinding
 import io.github.wulkanowy.databinding.ItemGradeDetailsBinding
 import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.toFormattedString
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
@@ -25,13 +24,13 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
 
     private var recyclerView: RecyclerView? = null
 
-    private var headers = mutableListOf<GradeDetailsItem<*>>()
+    private var headers = mutableListOf<GradeDetailsItem>()
 
-    private var items = mutableListOf<GradeDetailsItem<*>>()
-
-    private var isExpandable = false
+    private var items = mutableListOf<GradeDetailsItem>()
 
     private var expandedPosition = RecyclerView.NO_POSITION
+
+    private var isExpandable = false
 
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
@@ -42,21 +41,23 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
         private const val AUTO_SCROLL_DELAY = 150L
     }
 
-    fun setDataItems(data: List<GradeDetailsItem<*>>, isExpanded: Boolean = isExpandable) {
-        headers = data.filter { it.viewType == GradeDetailsItem.ViewType.HEADER }.toMutableList()
+    fun setDataItems(data: List<GradeDetailsItem>, isExpanded: Boolean = isExpandable) {
+        headers = data.filter { it.viewType == ViewType.HEADER }.toMutableList()
         items = if (isExpanded) headers else data.toMutableList()
         isExpandable = isExpanded
         expandedPosition = RecyclerView.NO_POSITION
     }
 
     fun updateDetailsItem(position: Int, grade: Grade) {
-        items[position] = GradeDetailsItem(grade, GradeDetailsItem.ViewType.ITEM)
+        items[position] = GradeDetailsItem(grade, ViewType.ITEM)
         notifyItemChanged(position)
     }
 
-    fun getHeaderItem(subject: String) = headers.single { (it.value as GradeDetailsHeader).subject == subject } as GradeDetailsItem<GradeDetailsHeader>
+    fun getHeaderItem(subject: String): GradeDetailsItem {
+        return headers.single { (it.value as GradeDetailsHeader).subject == subject }
+    }
 
-    fun updateHeaderItem(item: GradeDetailsItem<GradeDetailsHeader>) {
+    fun updateHeaderItem(item: GradeDetailsItem) {
         headers[headers.indexOf(item)] = item
         items[items.indexOf(item)] = item
         notifyItemChanged(items.indexOf(item))
@@ -69,7 +70,7 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
     }
 
     @Synchronized
-    private fun refreshList(newItems: List<GradeDetailsItem<*>>) {
+    private fun refreshList(newItems: List<GradeDetailsItem>) {
         val diffCallback = GradeDetailsDiffUtil(items, newItems)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         items = newItems.toMutableList()
@@ -94,8 +95,8 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
         val inflater = LayoutInflater.from(parent.context)
 
         return when (viewType) {
-            GradeDetailsItem.ViewType.HEADER.id -> HeaderViewHolder(HeaderGradeDetailsBinding.inflate(inflater, parent, false))
-            GradeDetailsItem.ViewType.ITEM.id -> ItemViewHolder(ItemGradeDetailsBinding.inflate(inflater, parent, false))
+            ViewType.HEADER.id -> HeaderViewHolder(HeaderGradeDetailsBinding.inflate(inflater, parent, false))
+            ViewType.ITEM.id -> ItemViewHolder(ItemGradeDetailsBinding.inflate(inflater, parent, false))
             else -> throw IllegalStateException()
         }
     }
@@ -125,16 +126,12 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
             gradeHeaderContainer.setOnClickListener {
                 expandedPosition = if (expandedPosition == adapterPosition) -1 else adapterPosition
 
-                Timber.d("-".repeat(80))
-                Timber.d("Click on $headerPosition: ${header.subject}")
                 if (expandedPosition != RecyclerView.NO_POSITION) {
-                    Timber.d("Show header $headerPosition: ${header.subject} with ${header.grades.size} subitems")
                     refreshList(headers.toMutableList().apply {
                         addAll(headerPosition + 1, header.grades)
                     })
                     scrollToHeaderWithSubItems(headerPosition, header.grades.size)
                 } else {
-                    Timber.d("Collapse all items (show only headers)")
                     refreshList(headers)
                 }
             }
@@ -144,16 +141,14 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
     // original: https://github.com/davideas/FlexibleAdapter/blob/5.1.0/flexible-adapter/src/main/java/eu/davidea/flexibleadapter/FlexibleAdapter.java#L4984-L5011
     private fun scrollToHeaderWithSubItems(position: Int, subItemsCount: Int) {
         val layoutManager = recyclerView!!.layoutManager as LinearLayoutManager
-        val firstVisibleItem: Int = layoutManager.findFirstCompletelyVisibleItemPosition()
-        val lastVisibleItem: Int = layoutManager.findLastCompletelyVisibleItemPosition()
-        val itemsToShow: Int = position + subItemsCount - lastVisibleItem
-        Timber.v("autoScroll itemsToShow=%s firstVisibleItem=%s lastVisibleItem=%s RvChildCount=%s", itemsToShow, firstVisibleItem, lastVisibleItem, recyclerView?.childCount)
+        val firstVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
+        val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+        val itemsToShow = position + subItemsCount - lastVisibleItem
         if (itemsToShow > 0) {
             val scrollMax: Int = position - firstVisibleItem
             val scrollMin = max(0, position + subItemsCount - lastVisibleItem)
             val scrollBy = min(scrollMax, scrollMin)
             val scrollTo = firstVisibleItem + scrollBy
-            Timber.v("autoScroll scrollMin=%s scrollMax=%s scrollBy=%s scrollTo=%s", scrollMin, scrollMax, scrollBy, scrollTo)
             scrollToPosition(scrollTo)
         } else if (position < firstVisibleItem) {
             scrollToPosition(position)
@@ -204,7 +199,7 @@ class GradeDetailsAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerV
     private class ItemViewHolder(val binding: ItemGradeDetailsBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    class GradeDetailsDiffUtil(private val old: List<GradeDetailsItem<*>>, private val new: List<GradeDetailsItem<*>>) :
+    class GradeDetailsDiffUtil(private val old: List<GradeDetailsItem>, private val new: List<GradeDetailsItem>) :
         DiffUtil.Callback() {
 
         override fun getOldListSize() = old.size

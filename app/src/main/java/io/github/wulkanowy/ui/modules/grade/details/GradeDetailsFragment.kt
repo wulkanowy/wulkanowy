@@ -75,7 +75,7 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         else false
     }
 
-    override fun updateData(data: List<GradeDetailsItem<*>>, isGradeExpandable: Boolean, gradeColorTheme: String) {
+    override fun updateData(data: List<GradeDetailsItem>, isGradeExpandable: Boolean, gradeColorTheme: String) {
         with(gradeDetailsAdapter) {
             colorTheme = gradeColorTheme
             setDataItems(data, isGradeExpandable)
@@ -102,11 +102,11 @@ class GradeDetailsFragment : BaseFragment(), GradeDetailsView, GradeView.GradeCh
         gradeDetailsRecycler.smoothScrollToPosition(0)
     }
 
-    override fun getHeaderOfItem(subject: String): GradeDetailsItem<GradeDetailsHeader> {
+    override fun getHeaderOfItem(subject: String): GradeDetailsItem {
         return gradeDetailsAdapter.getHeaderItem(subject)
     }
 
-    override fun updateHeaderItem(item: GradeDetailsItem<GradeDetailsHeader>) {
+    override fun updateHeaderItem(item: GradeDetailsItem) {
         gradeDetailsAdapter.updateHeaderItem(item)
     }
 
