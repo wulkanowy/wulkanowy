@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -34,7 +33,7 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<AccountAdapter
 
             with(accountItemImage) {
                 val colorImage = if (student.isCurrent) context.getThemeAttrColor(R.attr.colorPrimary)
-                else ColorUtils.setAlphaComponent(context.getThemeAttrColor(R.attr.colorOnSurface), 153)
+                else context.getThemeAttrColor(R.attr.colorOnSurface, 153)
 
                 setColorFilter(colorImage, PorterDuff.Mode.SRC_IN)
             }
