@@ -31,7 +31,7 @@ class LuckyNumberWidgetConfigureActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(RESULT_CANCELED)
-        setContentView(ActivityWidgetConfigureBinding.inflate(layoutInflater).apply { _binding = this }.root)
+        setContentView(ActivityWidgetConfigureBinding.inflate(layoutInflater).apply { binding = this }.root)
 
         intent.extras.let {
             presenter.onAttachView(this, it?.getInt(EXTRA_APPWIDGET_ID))

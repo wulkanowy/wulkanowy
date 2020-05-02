@@ -21,14 +21,13 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.FragmentLifecycleLogger
 import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.lifecycleAwareVariable
 import javax.inject.Inject
 
-abstract class BaseActivity<T : BasePresenter<out BaseView>, DB : ViewBinding> :
+abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
     AppCompatActivity(), BaseView, HasAndroidInjector {
 
-    protected open var _binding: DB? = null
-
-    protected val binding get() = _binding!!
+    protected var binding: VB by lifecycleAwareVariable()
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
@@ -91,7 +90,6 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, DB : ViewBinding> :
         super.onDestroy()
         invalidateOptionsMenu()
         presenter.onDetachView()
-        _binding = null
     }
 
     override fun androidInjector() = androidInjector

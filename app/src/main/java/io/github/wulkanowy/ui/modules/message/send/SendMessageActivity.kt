@@ -64,7 +64,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(ActivitySendMessageBinding.inflate(layoutInflater).apply { _binding = this }.root)
+        setContentView(ActivitySendMessageBinding.inflate(layoutInflater).apply { binding = this }.root)
         setSupportActionBar(binding.sendMessageToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         messageContainer = binding.sendMessageContainer

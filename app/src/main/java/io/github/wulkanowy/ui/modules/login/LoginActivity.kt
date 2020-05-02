@@ -33,7 +33,7 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(ActivityLoginBinding.inflate(layoutInflater).apply { _binding = this }.root)
+        setContentView(ActivityLoginBinding.inflate(layoutInflater).apply { binding = this }.root)
         setSupportActionBar(binding.loginToolbar)
         messageContainer = binding.loginContainer
 
