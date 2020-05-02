@@ -27,7 +27,7 @@ class GradeLocal @Inject constructor(
         gradeDb.updateAll(grades)
     }
 
-    fun getGrades(semester: Semester): Maybe<List<Grade>> {
+    fun getGradesDetails(semester: Semester): Maybe<List<Grade>> {
         return gradeDb.loadAll(semester.semesterId, semester.studentId).filter { it.isNotEmpty() }
     }
 

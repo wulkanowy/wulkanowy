@@ -21,21 +21,48 @@ class GradeRepository @Inject constructor(
 ) {
 
     fun getGrades(student: Student, semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<Pair<List<Grade>, List<GradeSummary>>> {
-        return getGradesDetails(student, semester, forceRefresh, notify).flatMap { details ->
-            getGradesSummary(student, semester, forceRefresh).map { summary ->
-                details to summary
-            }
-        }
+        return local.getGradesDetails(semester).flatMap { details ->
+            local.getGradesSummary(semester).map { summary -> details to summary }
+        }.filter { !forceRefresh }
+            .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings).flatMap {
+                if (it) remote.getGrades(student, semester)
+                else Single.error(UnknownHostException())
+            }.flatMap { (newDetails, newSummary) ->
+                local.getGradesDetails(semester).toSingle(emptyList())
+                    .doOnSuccess { old ->
+                        val notifyBreakDate = old.maxBy { it.date }?.date ?: student.registrationDate.toLocalDate()
+                        local.deleteGrades(old.uniqueSubtract(newDetails))
+                        local.saveGrades(newDetails.uniqueSubtract(old)
+                            .onEach {
+                                if (it.date >= notifyBreakDate) it.apply {
+                                    isRead = false
+                                    if (notify) isNotified = false
+                                }
+                            })
+                    }.flatMap {
+                        local.getGradesSummary(semester).toSingle(emptyList())
+                            .doOnSuccess { old ->
+                                local.deleteGradesSummary(old.uniqueSubtract(newSummary))
+                                local.saveGradesSummary(newSummary.uniqueSubtract(old))
+                            }
+                    }
+            }.flatMap {
+                local.getGradesDetails(semester).toSingle(emptyList()).flatMap { details ->
+                    local.getGradesSummary(semester).toSingle(emptyList()).map { summary ->
+                        details to summary
+                    }
+                }
+            })
     }
 
     fun getGradesDetails(student: Student, semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Grade>> {
-        return local.getGrades(semester).filter { !forceRefresh }
+        return local.getGradesDetails(semester).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {
                     if (it) remote.getGradesDetails(student, semester)
                     else Single.error(UnknownHostException())
                 }.flatMap { new ->
-                    local.getGrades(semester).toSingle(emptyList())
+                    local.getGradesDetails(semester).toSingle(emptyList())
                         .doOnSuccess { old ->
                             val notifyBreakDate = old.maxBy { it.date }?.date ?: student.registrationDate.toLocalDate()
                             local.deleteGrades(old.uniqueSubtract(new))
@@ -47,7 +74,7 @@ class GradeRepository @Inject constructor(
                                     }
                                 })
                         }
-                }.flatMap { local.getGrades(semester).toSingle(emptyList()) })
+                }.flatMap { local.getGradesDetails(semester).toSingle(emptyList()) })
     }
 
     fun getGradesSummary(student: Student, semester: Semester, forceRefresh: Boolean = false): Single<List<GradeSummary>> {
@@ -66,11 +93,11 @@ class GradeRepository @Inject constructor(
     }
 
     fun getUnreadGrades(semester: Semester): Single<List<Grade>> {
-        return local.getGrades(semester).map { it.filter { grade -> !grade.isRead } }.toSingle(emptyList())
+        return local.getGradesDetails(semester).map { it.filter { grade -> !grade.isRead } }.toSingle(emptyList())
     }
 
     fun getNotNotifiedGrades(semester: Semester): Single<List<Grade>> {
-        return local.getGrades(semester).map { it.filter { grade -> !grade.isNotified } }.toSingle(emptyList())
+        return local.getGradesDetails(semester).map { it.filter { grade -> !grade.isNotified } }.toSingle(emptyList())
     }
 
     fun updateGrade(grade: Grade): Completable {
