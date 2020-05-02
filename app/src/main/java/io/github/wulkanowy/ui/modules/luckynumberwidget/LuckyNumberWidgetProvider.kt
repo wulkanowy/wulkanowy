@@ -67,8 +67,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray?) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         appWidgetIds?.forEach { appWidgetId ->
-            val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
-            val layoutId = when (savedTheme) {
+            val layoutId = when (sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)) {
                 0L -> R.layout.widget_luckynumber
                 1L -> R.layout.widget_luckynumber_dark
                 else -> {
@@ -102,8 +101,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle?) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
 
-        val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
-        val layoutId = when (savedTheme) {
+        val layoutId = when (sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)) {
             0L -> R.layout.widget_luckynumber
             1L -> R.layout.widget_luckynumber_dark
             else -> {

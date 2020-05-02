@@ -117,8 +117,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
     @SuppressLint("DefaultLocale")
     private fun updateWidget(context: Context, appWidgetId: Int, date: LocalDate, student: Student?) {
-        val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
-        val layoutId = when (savedTheme) {
+        val layoutId = when (sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)) {
             0L -> R.layout.widget_timetable
             1L -> R.layout.widget_timetable_dark
             else -> {
