@@ -55,43 +55,6 @@ class GradeRepository @Inject constructor(
             })
     }
 
-    fun getGradesDetails(student: Student, semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Grade>> {
-        return local.getGradesDetails(semester).filter { !forceRefresh }
-            .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
-                .flatMap {
-                    if (it) remote.getGradesDetails(student, semester)
-                    else Single.error(UnknownHostException())
-                }.flatMap { new ->
-                    local.getGradesDetails(semester).toSingle(emptyList())
-                        .doOnSuccess { old ->
-                            val notifyBreakDate = old.maxBy { it.date }?.date ?: student.registrationDate.toLocalDate()
-                            local.deleteGrades(old.uniqueSubtract(new))
-                            local.saveGrades(new.uniqueSubtract(old)
-                                .onEach {
-                                    if (it.date >= notifyBreakDate) it.apply {
-                                        isRead = false
-                                        if (notify) isNotified = false
-                                    }
-                                })
-                        }
-                }.flatMap { local.getGradesDetails(semester).toSingle(emptyList()) })
-    }
-
-    fun getGradesSummary(student: Student, semester: Semester, forceRefresh: Boolean = false): Single<List<GradeSummary>> {
-        return local.getGradesSummary(semester).filter { !forceRefresh }
-            .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
-                .flatMap {
-                    if (it) remote.getGradeSummary(student, semester)
-                    else Single.error(UnknownHostException())
-                }.flatMap { new ->
-                    local.getGradesSummary(semester).toSingle(emptyList())
-                        .doOnSuccess { old ->
-                            local.deleteGradesSummary(old.uniqueSubtract(new))
-                            local.saveGradesSummary(new.uniqueSubtract(old))
-                        }
-                }.flatMap { local.getGradesSummary(semester).toSingle(emptyList()) })
-    }
-
     fun getUnreadGrades(semester: Semester): Single<List<Grade>> {
         return local.getGradesDetails(semester).map { it.filter { grade -> !grade.isRead } }.toSingle(emptyList())
     }

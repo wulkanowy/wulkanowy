@@ -79,7 +79,7 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGradesDetails(studentMock, semesterMock, true).blockingGet().sortedByDescending { it.date }
+            .getGrades(studentMock, semesterMock, true).blockingGet().first.sortedByDescending { it.date }
 
         assertFalse { grades[0].isRead }
         assertFalse { grades[1].isRead }
@@ -103,7 +103,7 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGradesDetails(studentMock, semesterMock, true).blockingGet().sortedByDescending { it.date }
+            .getGrades(studentMock, semesterMock, true).blockingGet().first.sortedByDescending { it.date }
 
         assertFalse { grades[0].isRead }
         assertFalse { grades[1].isRead }
@@ -125,9 +125,9 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGradesDetails(studentMock, semesterMock, true).blockingGet()
+            .getGrades(studentMock, semesterMock, true).blockingGet()
 
-        assertEquals(2, grades.size)
+        assertEquals(2, grades.first.size)
     }
 
     @Test
@@ -144,9 +144,9 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGradesDetails(studentMock, semesterMock, true).blockingGet()
+            .getGrades(studentMock, semesterMock, true).blockingGet()
 
-        assertEquals(3, grades.size)
+        assertEquals(3, grades.first.size)
     }
 
     @Test
@@ -160,9 +160,9 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGradesDetails(studentMock, semesterMock, true).blockingGet()
+            .getGrades(studentMock, semesterMock, true).blockingGet()
 
-        assertEquals(3, grades.size)
+        assertEquals(3, grades.first.size)
     }
 
     @Test
@@ -175,8 +175,8 @@ class GradeRepositoryTest {
         every { mockSdk.getGrades(1) } returns Single.just(emptyList<Grade>() to emptyList())
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGradesDetails(studentMock, semesterMock, true).blockingGet()
+            .getGrades(studentMock, semesterMock, true).blockingGet()
 
-        assertEquals(0, grades.size)
+        assertEquals(0, grades.first.size)
     }
 }
