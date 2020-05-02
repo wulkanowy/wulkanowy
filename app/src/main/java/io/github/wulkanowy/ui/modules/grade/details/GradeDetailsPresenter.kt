@@ -171,7 +171,7 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     private fun createGradeItems(items: List<GradeDetailsWithAverage>): List<GradeDetailsItem> {
-        return items.filter { it.grades.isNotEmpty() }.map { (subject, average, points, grades) ->
+        return items.filter { it.grades.isNotEmpty() }.map { (subject, average, points, _, grades) ->
             val subItems = grades.map {
                 GradeDetailsItem(it, ViewType.ITEM)
             }
