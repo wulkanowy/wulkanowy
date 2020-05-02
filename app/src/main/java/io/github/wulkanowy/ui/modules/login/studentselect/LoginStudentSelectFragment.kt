@@ -37,7 +37,7 @@ class LoginStudentSelectFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentLoginStudentSelectBinding.bind(view)
+        binding = FragmentLoginStudentSelectBinding.bind(view)
         presenter.onAttachView(this, savedInstanceState?.getSerializable(SAVED_STUDENTS))
     }
 

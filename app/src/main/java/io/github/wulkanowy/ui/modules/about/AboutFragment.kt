@@ -78,7 +78,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(R.layout.fragment_about
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentAboutBinding.bind(view)
+        binding = FragmentAboutBinding.bind(view)
         presenter.onAttachView(this)
     }
 

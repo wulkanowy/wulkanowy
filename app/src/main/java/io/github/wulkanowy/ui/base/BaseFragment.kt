@@ -7,13 +7,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import dagger.android.support.DaggerFragment
 import io.github.wulkanowy.R
+import io.github.wulkanowy.utils.lifecycleAwareVariable
 
-abstract class BaseFragment<DB : ViewBinding>(@LayoutRes layoutId: Int) : DaggerFragment(layoutId),
+abstract class BaseFragment<VB : ViewBinding>(@LayoutRes layoutId: Int) : DaggerFragment(layoutId),
     BaseView {
 
-    protected open var _binding: DB? = null
-
-    protected val binding get() = _binding!!
+    protected var binding: VB by lifecycleAwareVariable()
 
     protected var messageContainer: View? = null
 
@@ -45,10 +44,5 @@ abstract class BaseFragment<DB : ViewBinding>(@LayoutRes layoutId: Int) : Dagger
 
     override fun openClearLoginView() {
         (activity as? BaseActivity<*, *>)?.openClearLoginView()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

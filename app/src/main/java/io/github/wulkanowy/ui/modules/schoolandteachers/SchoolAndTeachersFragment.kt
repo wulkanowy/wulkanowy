@@ -35,7 +35,7 @@ class SchoolAndTeachersFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentSchoolandteachersBinding.bind(view)
+        binding = FragmentSchoolandteachersBinding.bind(view)
         presenter.onAttachView(this)
     }
 

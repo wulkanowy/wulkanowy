@@ -55,7 +55,7 @@ class LoginRecoverFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentLoginRecoverBinding.bind(view)
+        binding = FragmentLoginRecoverBinding.bind(view)
         presenter.onAttachView(this)
     }
 

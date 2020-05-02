@@ -50,7 +50,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentTimetableBinding.bind(view)
+        binding = FragmentTimetableBinding.bind(view)
         messageContainer = binding.timetableRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }

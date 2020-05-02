@@ -40,7 +40,7 @@ class LoginSymbolFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentLoginSymbolBinding.bind(view)
+        binding = FragmentLoginSymbolBinding.bind(view)
         presenter.onAttachView(this, savedInstanceState?.getSerializable(SAVED_LOGIN_DATA))
     }
 

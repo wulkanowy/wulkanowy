@@ -58,7 +58,7 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentLoginFormBinding.bind(view)
+        binding = FragmentLoginFormBinding.bind(view)
         presenter.onAttachView(this)
     }
 

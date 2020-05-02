@@ -39,7 +39,7 @@ class GradeSummaryFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentGradeSummaryBinding.bind(view)
+        binding = FragmentGradeSummaryBinding.bind(view)
         messageContainer = binding.gradeSummaryRecycler
         presenter.onAttachView(this)
     }

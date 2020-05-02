@@ -62,7 +62,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>(R.layout.fragment_more), 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMoreBinding.bind(view)
+        binding = FragmentMoreBinding.bind(view)
         presenter.onAttachView(this)
     }
 

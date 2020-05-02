@@ -38,7 +38,7 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMessageBinding.bind(view)
+        binding = FragmentMessageBinding.bind(view)
         presenter.onAttachView(this)
     }
 

@@ -44,7 +44,7 @@ class LogViewerFragment : BaseFragment<FragmentLogviewerBinding>(R.layout.fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentLogviewerBinding.bind(view)
+        binding = FragmentLogviewerBinding.bind(view)
         messageContainer = binding.logViewerRecycler
         presenter.onAttachView(this)
     }

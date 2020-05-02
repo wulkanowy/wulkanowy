@@ -31,7 +31,7 @@ class ContributorFragment : BaseFragment<FragmentContributorBinding>(R.layout.fr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentContributorBinding.bind(view)
+        binding = FragmentContributorBinding.bind(view)
         presenter.onAttachView(this)
     }
 

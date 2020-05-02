@@ -39,7 +39,7 @@ class MobileDeviceFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMobileDeviceBinding.bind(view)
+        binding = FragmentMobileDeviceBinding.bind(view)
         messageContainer = binding.mobileDevicesRecycler
         presenter.onAttachView(this)
     }

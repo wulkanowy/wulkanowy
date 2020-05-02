@@ -29,7 +29,7 @@ class LuckyNumberFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentLuckyNumberBinding.bind(view)
+        binding = FragmentLuckyNumberBinding.bind(view)
         messageContainer = binding.luckyNumberSwipe
         presenter.onAttachView(this)
     }

@@ -71,7 +71,7 @@ class LoginAdvancedFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentLoginAdvancedBinding.bind(view)
+        binding = FragmentLoginAdvancedBinding.bind(view)
         presenter.onAttachView(this)
     }
 

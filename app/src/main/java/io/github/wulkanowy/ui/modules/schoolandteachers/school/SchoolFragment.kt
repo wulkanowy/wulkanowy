@@ -31,7 +31,7 @@ class SchoolFragment : BaseFragment<FragmentSchoolBinding>(R.layout.fragment_sch
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentSchoolBinding.bind(view)
+        binding = FragmentSchoolBinding.bind(view)
         presenter.onAttachView(this)
     }
 

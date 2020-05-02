@@ -41,7 +41,7 @@ class LicenseFragment : BaseFragment<FragmentLicenseBinding>(R.layout.fragment_l
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentLicenseBinding.bind(view)
+        binding = FragmentLicenseBinding.bind(view)
         presenter.onAttachView(this)
     }
 

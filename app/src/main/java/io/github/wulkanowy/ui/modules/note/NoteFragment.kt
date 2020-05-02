@@ -35,7 +35,7 @@ class NoteFragment : BaseFragment<FragmentNoteBinding>(R.layout.fragment_note), 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentNoteBinding.bind(view)
+        binding = FragmentNoteBinding.bind(view)
         presenter.onAttachView(this)
     }
 

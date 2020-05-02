@@ -43,7 +43,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMessageTabBinding.bind(view)
+        binding = FragmentMessageTabBinding.bind(view)
         messageContainer = binding.messageTabRecycler
         presenter.onAttachView(this, MessageFolder.valueOf(
             (savedInstanceState ?: arguments)?.getString(MESSAGE_TAB_FOLDER_ID).orEmpty()

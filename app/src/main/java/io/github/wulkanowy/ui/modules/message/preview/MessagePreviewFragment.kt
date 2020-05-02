@@ -58,7 +58,7 @@ class MessagePreviewFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMessagePreviewBinding.bind(view)
+        binding = FragmentMessagePreviewBinding.bind(view)
         messageContainer = binding.messagePreviewContainer
         presenter.onAttachView(this, (savedInstanceState ?: arguments)?.getSerializable(MESSAGE_ID_KEY) as? Message)
     }

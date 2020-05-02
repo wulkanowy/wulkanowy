@@ -41,7 +41,7 @@ class AttendanceSummaryFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentAttendanceSummaryBinding.bind(view)
+        binding = FragmentAttendanceSummaryBinding.bind(view)
         messageContainer = binding.attendanceSummaryRecycler
         presenter.onAttachView(this, savedInstanceState?.getInt(SAVED_SUBJECT_KEY))
     }

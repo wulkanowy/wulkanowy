@@ -38,7 +38,7 @@ class TeacherFragment : BaseFragment<FragmentTeacherBinding>(R.layout.fragment_t
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentTeacherBinding.bind(view)
+        binding = FragmentTeacherBinding.bind(view)
         presenter.onAttachView(this)
     }
 

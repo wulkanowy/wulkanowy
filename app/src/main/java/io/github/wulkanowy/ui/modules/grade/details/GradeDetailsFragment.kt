@@ -44,7 +44,7 @@ class GradeDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentGradeDetailsBinding.bind(view)
+        binding = FragmentGradeDetailsBinding.bind(view)
         messageContainer = binding.gradeDetailsRecycler
         presenter.onAttachView(this)
     }

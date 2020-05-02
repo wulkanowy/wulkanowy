@@ -42,7 +42,7 @@ class CompletedLessonsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentTimetableCompletedBinding.bind(view)
+        binding = FragmentTimetableCompletedBinding.bind(view)
         messageContainer = binding.completedLessonsRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }

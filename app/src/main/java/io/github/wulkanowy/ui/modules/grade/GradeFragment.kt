@@ -49,7 +49,7 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentGradeBinding.bind(view)
+        binding = FragmentGradeBinding.bind(view)
         presenter.onAttachView(this, savedInstanceState?.getInt(SAVED_SEMESTER_KEY))
     }
 

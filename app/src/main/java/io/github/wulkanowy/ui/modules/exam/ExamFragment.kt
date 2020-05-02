@@ -37,7 +37,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(R.layout.fragment_exam), 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentExamBinding.bind(view)
+        binding = FragmentExamBinding.bind(view)
         messageContainer = binding.examRecycler
         presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
     }
