@@ -20,7 +20,15 @@ class GradeRepository @Inject constructor(
     private val remote: GradeRemote
 ) {
 
-    fun getGrades(student: Student, semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Grade>> {
+    fun getGrades(student: Student, semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<Pair<List<Grade>, List<GradeSummary>>> {
+        return getGradesDetails(student, semester, forceRefresh, notify).flatMap { details ->
+            getGradesSummary(student, semester, forceRefresh).map { summary ->
+                details to summary
+            }
+        }
+    }
+
+    fun getGradesDetails(student: Student, semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Single<List<Grade>> {
         return local.getGrades(semester).filter { !forceRefresh }
             .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings)
                 .flatMap {

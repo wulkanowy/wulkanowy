@@ -64,8 +64,8 @@ class GradeAverageProviderTest {
         doReturn(.33).`when`(preferencesRepository).gradePlusModifier
         doReturn(false).`when`(preferencesRepository).gradeAverageForceCalc
 
-        doReturn(Single.just(firstGrades)).`when`(gradeRepository).getGrades(student, semesters[1], true)
-        doReturn(Single.just(secondGrade)).`when`(gradeRepository).getGrades(student, semesters[2], true)
+        doReturn(Single.just(firstGrades)).`when`(gradeRepository).getGradesDetails(student, semesters[1], true)
+        doReturn(Single.just(secondGrade)).`when`(gradeRepository).getGradesDetails(student, semesters[2], true)
     }
 
     @Test
@@ -85,7 +85,7 @@ class GradeAverageProviderTest {
     fun onlyOneSemester_gradesWithModifiers_default() {
         doReturn("only_one_semester").`when`(preferencesRepository).gradeAverageMode
         doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeRepository).getGradesSummary(student, semesters[2], true)
-        doReturn(Single.just(secondGradeWithModifier)).`when`(gradeRepository).getGrades(student, semesters[2], true)
+        doReturn(Single.just(secondGradeWithModifier)).`when`(gradeRepository).getGradesDetails(student, semesters[2], true)
 
         val averages = gradeAverageProvider.getGradeAverage(student, semesters, semesters[2].semesterId, true)
             .blockingGet()
@@ -97,7 +97,7 @@ class GradeAverageProviderTest {
     fun onlyOneSemester_gradesWithModifiers_api() {
         doReturn("only_one_semester").`when`(preferencesRepository).gradeAverageMode
         doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeRepository).getGradesSummary(student.copy(loginMode = Sdk.Mode.API.name), semesters[2], true)
-        doReturn(Single.just(secondGradeWithModifier)).`when`(gradeRepository).getGrades(student.copy(loginMode = Sdk.Mode.API.name), semesters[2], true)
+        doReturn(Single.just(secondGradeWithModifier)).`when`(gradeRepository).getGradesDetails(student.copy(loginMode = Sdk.Mode.API.name), semesters[2], true)
 
         val averages = gradeAverageProvider.getGradeAverage(student.copy(loginMode = Sdk.Mode.API.name), semesters, semesters[2].semesterId, true)
             .blockingGet()
@@ -109,7 +109,7 @@ class GradeAverageProviderTest {
     fun onlyOneSemester_gradesWithModifiers_scrapper() {
         doReturn("only_one_semester").`when`(preferencesRepository).gradeAverageMode
         doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeRepository).getGradesSummary(student, semesters[2], true)
-        doReturn(Single.just(secondGradeWithModifier)).`when`(gradeRepository).getGrades(student.copy(loginMode = Sdk.Mode.SCRAPPER.name), semesters[2], true)
+        doReturn(Single.just(secondGradeWithModifier)).`when`(gradeRepository).getGradesDetails(student.copy(loginMode = Sdk.Mode.SCRAPPER.name), semesters[2], true)
 
         val averages = gradeAverageProvider.getGradeAverage(student.copy(loginMode = Sdk.Mode.SCRAPPER.name), semesters, semesters[2].semesterId, true)
             .blockingGet()
@@ -121,7 +121,7 @@ class GradeAverageProviderTest {
     fun onlyOneSemester_gradesWithModifiers_hybrid() {
         doReturn("only_one_semester").`when`(preferencesRepository).gradeAverageMode
         doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeRepository).getGradesSummary(student.copy(loginMode = Sdk.Mode.HYBRID.name), semesters[2], true)
-        doReturn(Single.just(secondGradeWithModifier)).`when`(gradeRepository).getGrades(student.copy(loginMode = Sdk.Mode.HYBRID.name), semesters[2], true)
+        doReturn(Single.just(secondGradeWithModifier)).`when`(gradeRepository).getGradesDetails(student.copy(loginMode = Sdk.Mode.HYBRID.name), semesters[2], true)
 
         val averages = gradeAverageProvider.getGradeAverage(student.copy(loginMode = Sdk.Mode.HYBRID.name), semesters, semesters[2].semesterId, true)
             .blockingGet()
@@ -145,7 +145,7 @@ class GradeAverageProviderTest {
     @Test
     fun allYearSecondSemesterTest() {
         doReturn("all_year").`when`(preferencesRepository).gradeAverageMode
-        doReturn(Single.just(firstGrades)).`when`(gradeRepository).getGrades(student, semesters[1], false)
+        doReturn(Single.just(firstGrades)).`when`(gradeRepository).getGradesDetails(student, semesters[1], false)
         doReturn(Single.just(emptyList<GradeSummary>())).`when`(gradeRepository).getGradesSummary(student, semesters[2], true)
 
         val averages = gradeAverageProvider.getGradeAverage(student, semesters, semesters[2].semesterId, true)
@@ -166,7 +166,7 @@ class GradeAverageProviderTest {
     @Test
     fun onlyOneSemester_averageFromSummary() {
         doReturn("all_year").`when`(preferencesRepository).gradeAverageMode
-        doReturn(Single.just(firstGrades)).`when`(gradeRepository).getGrades(student, semesters[1], false)
+        doReturn(Single.just(firstGrades)).`when`(gradeRepository).getGradesDetails(student, semesters[1], false)
         doReturn(Single.just(listOf(
             getSummary(22, "Matematyka", 3.1),
             getSummary(22, "Fizyka", 3.26)
@@ -184,7 +184,7 @@ class GradeAverageProviderTest {
     fun onlyOneSemester_averageFromSummary_forceCalc() {
         doReturn(true).`when`(preferencesRepository).gradeAverageForceCalc
         doReturn("all_year").`when`(preferencesRepository).gradeAverageMode
-        doReturn(Single.just(firstGrades)).`when`(gradeRepository).getGrades(student, semesters[1], false)
+        doReturn(Single.just(firstGrades)).`when`(gradeRepository).getGradesDetails(student, semesters[1], false)
         doReturn(Single.just(listOf(
             getSummary(22, "Matematyka", 3.1),
             getSummary(22, "Fizyka", 3.26)

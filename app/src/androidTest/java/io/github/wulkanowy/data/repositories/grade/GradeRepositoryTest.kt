@@ -78,7 +78,7 @@ class GradeRepositoryTest {
         ))
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGrades(studentMock, semesterMock, true).blockingGet().sortedByDescending { it.date }
+            .getGradesDetails(studentMock, semesterMock, true).blockingGet().sortedByDescending { it.date }
 
         assertFalse { grades[0].isRead }
         assertFalse { grades[1].isRead }
@@ -102,7 +102,7 @@ class GradeRepositoryTest {
         ))
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGrades(studentMock, semesterMock, true).blockingGet().sortedByDescending { it.date }
+            .getGradesDetails(studentMock, semesterMock, true).blockingGet().sortedByDescending { it.date }
 
         assertFalse { grades[0].isRead }
         assertFalse { grades[1].isRead }
@@ -124,7 +124,7 @@ class GradeRepositoryTest {
         ))
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGrades(studentMock, semesterMock, true).blockingGet()
+            .getGradesDetails(studentMock, semesterMock, true).blockingGet()
 
         assertEquals(2, grades.size)
     }
@@ -143,7 +143,7 @@ class GradeRepositoryTest {
         ))
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGrades(studentMock, semesterMock, true).blockingGet()
+            .getGradesDetails(studentMock, semesterMock, true).blockingGet()
 
         assertEquals(3, grades.size)
     }
@@ -159,7 +159,7 @@ class GradeRepositoryTest {
         ))
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGrades(studentMock, semesterMock, true).blockingGet()
+            .getGradesDetails(studentMock, semesterMock, true).blockingGet()
 
         assertEquals(3, grades.size)
     }
@@ -174,7 +174,7 @@ class GradeRepositoryTest {
         every { mockSdk.getGrades(1) } returns Single.just(listOf())
 
         val grades = GradeRepository(settings, gradeLocal, gradeRemote)
-            .getGrades(studentMock, semesterMock, true).blockingGet()
+            .getGradesDetails(studentMock, semesterMock, true).blockingGet()
 
         assertEquals(0, grades.size)
     }
