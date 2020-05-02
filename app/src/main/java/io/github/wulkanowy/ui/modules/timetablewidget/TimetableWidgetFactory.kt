@@ -19,9 +19,9 @@ import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.data.repositories.timetable.TimetableRepository
+import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getCurrentThemeWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getDateWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getStudentWidgetKey
-import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getThemeWidgetKey
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toFormattedString
@@ -76,7 +76,7 @@ class TimetableWidgetFactory(
     }
 
     private fun updateTheme(appWidgetId: Int) {
-        savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
+        savedTheme = sharedPref.getLong(getCurrentThemeWidgetKey(appWidgetId), 0)
 
         primaryColor = when (savedTheme) {
             0L -> R.color.colorPrimary

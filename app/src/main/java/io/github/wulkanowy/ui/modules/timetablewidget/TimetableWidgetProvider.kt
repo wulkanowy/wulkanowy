@@ -72,6 +72,8 @@ class TimetableWidgetProvider : BroadcastReceiver() {
         fun getStudentWidgetKey(appWidgetId: Int) = "timetable_widget_student_$appWidgetId"
 
         fun getThemeWidgetKey(appWidgetId: Int) = "timetable_widget_theme_$appWidgetId"
+
+        fun getCurrentThemeWidgetKey(appWidgetId: Int) = "timetable_widget_current_theme_$appWidgetId"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -111,6 +113,8 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             with(sharedPref) {
                 delete(getStudentWidgetKey(appWidgetId))
                 delete(getDateWidgetKey(appWidgetId))
+                delete(getThemeWidgetKey(appWidgetId))
+                delete(getCurrentThemeWidgetKey(appWidgetId))
             }
         }
     }
@@ -158,6 +162,13 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             setPendingIntentTemplate(R.id.timetableWidgetList, appIntent)
         }
 
+        var theme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
+
+        if (theme == 2L) {
+            theme = if (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) 1L else 0L
+        }
+
+        sharedPref.putLong(getCurrentThemeWidgetKey(appWidgetId), theme)
         sharedPref.putLong(getDateWidgetKey(appWidgetId), date.toEpochDay(), true)
         with(appWidgetManager) {
             notifyAppWidgetViewDataChanged(appWidgetId, R.id.timetableWidgetList)
