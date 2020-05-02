@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.grade.summary
 
 import io.github.wulkanowy.data.db.entities.GradeSummary
-import io.github.wulkanowy.data.repositories.gradessummary.GradeSummaryRepository
+import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -16,7 +16,7 @@ class GradeSummaryPresenter @Inject constructor(
     schedulers: SchedulersProvider,
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
-    private val gradeSummaryRepository: GradeSummaryRepository,
+    private val gradeRepository: GradeRepository,
     private val semesterRepository: SemesterRepository,
     private val averageProvider: GradeAverageProvider,
     private val analytics: FirebaseAnalyticsHelper
@@ -35,7 +35,7 @@ class GradeSummaryPresenter @Inject constructor(
         disposable.add(studentRepository.getCurrentStudent()
             .flatMap { semesterRepository.getSemesters(it).map { semesters -> it to semesters } }
             .flatMap { (student, semesters) ->
-                gradeSummaryRepository.getGradesSummary(student, semesters.first { it.semesterId == semesterId }, forceRefresh)
+                gradeRepository.getGradesSummary(student, semesters.first { it.semesterId == semesterId }, forceRefresh)
                     .map { it.sortedBy { subject -> subject.subject } }
                     .flatMap { gradesSummary ->
                         averageProvider.getGradeAverage(student, semesters, semesterId, forceRefresh)

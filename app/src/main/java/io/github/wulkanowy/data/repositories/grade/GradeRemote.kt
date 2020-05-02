@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.repositories.grade
 
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
@@ -12,9 +13,9 @@ import javax.inject.Singleton
 @Singleton
 class GradeRemote @Inject constructor(private val sdk: Sdk) {
 
-    fun getGrades(student: Student, semester: Semester): Single<List<Grade>> {
+    fun getGradesDetails(student: Student, semester: Semester): Single<List<Grade>> {
         return sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
-            .getGrades(semester.semesterId)
+            .getGradesDetails(semester.semesterId)
             .map { grades ->
                 grades.map {
                     Grade(
@@ -32,6 +33,27 @@ class GradeRemote @Inject constructor(private val sdk: Sdk) {
                         weightValue = it.weightValue,
                         date = it.date,
                         teacher = it.teacher
+                    )
+                }
+            }
+    }
+
+    fun getGradeSummary(student: Student, semester: Semester): Single<List<GradeSummary>> {
+        return sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+            .getGradesSummary(semester.semesterId)
+            .map { gradesSummary ->
+                gradesSummary.map {
+                    GradeSummary(
+                        semesterId = semester.semesterId,
+                        studentId = semester.studentId,
+                        position = 0,
+                        subject = it.name,
+                        predictedGrade = it.predicted,
+                        finalGrade = it.final,
+                        pointsSum = it.pointsSum,
+                        proposedPoints = it.proposedPoints,
+                        finalPoints = it.finalPoints,
+                        average = it.average
                     )
                 }
             }
