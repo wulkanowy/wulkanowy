@@ -13,12 +13,11 @@ import io.github.wulkanowy.databinding.DialogNoteBinding
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.sdk.scrapper.notes.Note.CategoryType
+import io.github.wulkanowy.utils.lifecycleAwareVariable
 
 class NoteDialog : DialogFragment() {
 
-    private var _binding: DialogNoteBinding? = null
-
-    private val binding get() = _binding!!
+    private var binding: DialogNoteBinding by lifecycleAwareVariable()
 
     private lateinit var note: Note
 
@@ -41,7 +40,7 @@ class NoteDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogNoteBinding.inflate(inflater).apply { _binding = this }.root
+        return DialogNoteBinding.inflate(inflater).apply { binding = this }.root
     }
 
     @SuppressLint("SetTextI18n")
@@ -67,10 +66,5 @@ class NoteDialog : DialogFragment() {
         }
 
         binding.noteDialogClose.setOnClickListener { dismiss() }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

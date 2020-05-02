@@ -7,13 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.databinding.DialogExamBinding
+import io.github.wulkanowy.utils.lifecycleAwareVariable
 import io.github.wulkanowy.utils.toFormattedString
 
 class ExamDialog : DialogFragment() {
 
-    private var _binding: DialogExamBinding? = null
-
-    private val binding get() = _binding!!
+    private var binding: DialogExamBinding by lifecycleAwareVariable()
 
     private lateinit var exam: Exam
 
@@ -36,7 +35,7 @@ class ExamDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogExamBinding.inflate(inflater).apply { _binding = this }.root
+        return DialogExamBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -51,10 +50,5 @@ class ExamDialog : DialogFragment() {
 
             examDialogClose.setOnClickListener { dismiss() }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

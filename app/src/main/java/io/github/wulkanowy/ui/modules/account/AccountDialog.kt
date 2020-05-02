@@ -33,7 +33,7 @@ class AccountDialog : BaseDialogFragment<DialogAccountBinding>(), AccountView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogAccountBinding.inflate(inflater).apply { _binding = this }.root
+        return DialogAccountBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

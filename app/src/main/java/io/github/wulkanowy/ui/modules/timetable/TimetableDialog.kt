@@ -13,14 +13,13 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.databinding.DialogTimetableBinding
 import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.lifecycleAwareVariable
 import io.github.wulkanowy.utils.toFormattedString
 import org.threeten.bp.LocalDateTime
 
 class TimetableDialog : DialogFragment() {
 
-    private var _binding: DialogTimetableBinding? = null
-
-    private val binding get() = _binding!!
+    private var binding: DialogTimetableBinding by lifecycleAwareVariable()
 
     private lateinit var lesson: Timetable
 
@@ -43,7 +42,7 @@ class TimetableDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogTimetableBinding.inflate(inflater).apply { _binding = this }.root
+        return DialogTimetableBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -169,10 +168,5 @@ class TimetableDialog : DialogFragment() {
     @SuppressLint("SetTextI18n")
     private fun setTime(start: LocalDateTime, end: LocalDateTime) {
         binding.timetableDialogTime.text = "${start.toFormattedString("HH:mm")} - ${end.toFormattedString("HH:mm")}"
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -12,13 +12,12 @@ import io.github.wulkanowy.databinding.DialogGradeBinding
 import io.github.wulkanowy.utils.colorStringId
 import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.getGradeColor
+import io.github.wulkanowy.utils.lifecycleAwareVariable
 import io.github.wulkanowy.utils.toFormattedString
 
 class GradeDetailsDialog : DialogFragment() {
 
-    private var _binding: DialogGradeBinding? = null
-
-    private val binding get() = _binding!!
+    private var binding: DialogGradeBinding by lifecycleAwareVariable()
 
     private lateinit var grade: Grade
 
@@ -48,7 +47,7 @@ class GradeDetailsDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogGradeBinding.inflate(inflater).apply { _binding = this }.root
+        return DialogGradeBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -92,10 +91,5 @@ class GradeDetailsDialog : DialogFragment() {
 
             gradeDialogClose.setOnClickListener { dismiss() }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -52,7 +52,7 @@ class ErrorDialog : BaseDialogFragment<DialogErrorBinding>() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogErrorBinding.inflate(inflater).apply { _binding = this }.root
+        return DialogErrorBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

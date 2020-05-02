@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.databinding.DialogLessonCompletedBinding
+import io.github.wulkanowy.utils.lifecycleAwareVariable
 
 class CompletedLessonDialog : DialogFragment() {
 
-    private var _binding: DialogLessonCompletedBinding? = null
-
-    private val binding get() = _binding!!
+    private var binding: DialogLessonCompletedBinding by lifecycleAwareVariable()
 
     private lateinit var completedLesson: CompletedLesson
 
@@ -36,7 +35,7 @@ class CompletedLessonDialog : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogLessonCompletedBinding.inflate(inflater).apply { _binding = this }.root
+        return DialogLessonCompletedBinding.inflate(inflater).apply { binding = this }.root
     }
 
     @SuppressLint("SetTextI18n")
@@ -80,10 +79,5 @@ class CompletedLessonDialog : DialogFragment() {
         }
 
         binding.completedLessonDialogClose.setOnClickListener { dismiss() }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

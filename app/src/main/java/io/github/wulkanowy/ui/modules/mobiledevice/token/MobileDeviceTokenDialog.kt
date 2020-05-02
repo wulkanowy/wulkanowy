@@ -33,7 +33,7 @@ class MobileDeviceTokenDialog : BaseDialogFragment<DialogMobileDeviceBinding>(),
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return DialogMobileDeviceBinding.inflate(inflater).apply { _binding = this }.root
+        return DialogMobileDeviceBinding.inflate(inflater).apply { binding = this }.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
