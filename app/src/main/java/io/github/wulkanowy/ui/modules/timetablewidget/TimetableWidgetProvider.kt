@@ -121,14 +121,14 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
     @SuppressLint("DefaultLocale")
     private fun updateWidget(context: Context, appWidgetId: Int, date: LocalDate, student: Student?) {
-        val layoutId = when (sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)) {
-            0L -> R.layout.widget_timetable
-            1L -> R.layout.widget_timetable_dark
-            else -> {
-                val isDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-                if (isDarkMode) R.layout.widget_timetable_dark
-                else R.layout.widget_timetable
-            }
+        val savedConfigureTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
+        val isSystemDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        var currentTheme = 0L
+        var layoutId = R.layout.widget_timetable
+
+        if (savedConfigureTheme == 1L || (savedConfigureTheme == 2L && isSystemDarkMode)) {
+            currentTheme = 1L
+            layoutId = R.layout.widget_timetable_dark
         }
 
         val nextNavIntent = createNavIntent(context, appWidgetId, appWidgetId, BUTTON_NEXT)
@@ -162,14 +162,11 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             setPendingIntentTemplate(R.id.timetableWidgetList, appIntent)
         }
 
-        var theme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
-
-        if (theme == 2L) {
-            theme = if (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) 1L else 0L
+        with(sharedPref) {
+            putLong(getCurrentThemeWidgetKey(appWidgetId), currentTheme)
+            putLong(getDateWidgetKey(appWidgetId), date.toEpochDay(), true)
         }
 
-        sharedPref.putLong(getCurrentThemeWidgetKey(appWidgetId), theme)
-        sharedPref.putLong(getDateWidgetKey(appWidgetId), date.toEpochDay(), true)
         with(appWidgetManager) {
             notifyAppWidgetViewDataChanged(appWidgetId, R.id.timetableWidgetList)
             updateAppWidget(appWidgetId, remoteView)

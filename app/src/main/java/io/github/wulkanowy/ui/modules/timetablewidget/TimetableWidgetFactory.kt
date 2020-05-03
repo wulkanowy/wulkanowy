@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Paint.ANTI_ALIAS_FLAG
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.view.View.GONE
@@ -42,8 +41,7 @@ class TimetableWidgetFactory(
 
     private var lessons = emptyList<Timetable>()
 
-    private var savedTheme: Long? = null
-
+    private var savedCurrentTheme: Long? = null
 
     private var primaryColor: Int? = null
 
@@ -76,57 +74,27 @@ class TimetableWidgetFactory(
     }
 
     private fun updateTheme(appWidgetId: Int) {
-        savedTheme = sharedPref.getLong(getCurrentThemeWidgetKey(appWidgetId), 0)
+        savedCurrentTheme = sharedPref.getLong(getCurrentThemeWidgetKey(appWidgetId), 0)
 
-        primaryColor = when (savedTheme) {
-            0L -> R.color.colorPrimary
-            1L -> R.color.colorPrimaryLight
-            else -> {
-                val isDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-                if (isDarkMode) R.color.colorPrimaryLight
-                else R.color.colorPrimary
-            }
-        }
-        textColor = when (savedTheme) {
-            0L -> android.R.color.black
-            1L -> android.R.color.white
-            else -> {
-                val isDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-                if (isDarkMode) android.R.color.white
-                else android.R.color.black
-            }
-        }
-        timetableChangeColor = when (savedTheme) {
-            0L -> R.color.timetable_change_dark
-            1L -> R.color.timetable_change_light
-            else -> {
-                val isDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-                if (isDarkMode) R.color.timetable_change_light
-                else R.color.timetable_change_dark
-            }
+        if (savedCurrentTheme == 0L) {
+            primaryColor = R.color.colorPrimary
+            textColor = android.R.color.black
+            timetableChangeColor = R.color.timetable_change_dark
+        } else {
+            primaryColor = R.color.colorPrimaryLight
+            textColor = android.R.color.white
+            timetableChangeColor = R.color.timetable_change_light
         }
     }
 
     private fun getItemLayout(lesson: Timetable): Int {
         return when {
             prefRepository.showWholeClassPlan == "small" && !lesson.isStudentPlan -> {
-                when (savedTheme) {
-                    0L -> R.layout.item_widget_timetable_small
-                    1L -> R.layout.item_widget_timetable_small_dark
-                    else -> {
-                        val isDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-                        if (isDarkMode) R.layout.item_widget_timetable_small_dark
-                        else R.layout.item_widget_timetable_small
-                    }
-                }
+                if (savedCurrentTheme == 0L) R.layout.item_widget_timetable_small
+                else R.layout.item_widget_timetable_small_dark
             }
-            savedTheme == 0L -> R.layout.item_widget_timetable
-            savedTheme == 1L -> R.layout.item_widget_timetable_dark
-            else -> {
-                val isDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-                if (isDarkMode) R.layout.item_widget_timetable_dark
-                else R.layout.item_widget_timetable
-            }
+            savedCurrentTheme == 1L -> R.layout.item_widget_timetable_dark
+            else -> R.layout.item_widget_timetable
         }
     }
 
