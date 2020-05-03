@@ -22,7 +22,6 @@ import io.github.wulkanowy.data.repositories.luckynumber.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Maybe
 import timber.log.Timber
@@ -45,9 +44,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     @Inject
     lateinit var sharedPref: SharedPrefProvider
 
-    @Inject
-    lateinit var appInfo: AppInfo
-
     companion object {
 
         fun getStudentWidgetKey(appWidgetId: Int) = "lucky_number_widget_student_$appWidgetId"
@@ -67,21 +63,12 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray?) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         appWidgetIds?.forEach { appWidgetId ->
-            val layoutId = when (sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)) {
-                0L -> R.layout.widget_luckynumber
-                1L -> R.layout.widget_luckynumber_dark
-                else -> {
-                    val isDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-                    if (isDarkMode) R.layout.widget_luckynumber_dark
-                    else R.layout.widget_luckynumber
-                }
-            }
 
             val luckyNumber = getLuckyNumber(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)
             val appIntent = PendingIntent.getActivity(context, MainView.Section.LUCKY_NUMBER.id,
                 MainActivity.getStartIntent(context, MainView.Section.LUCKY_NUMBER, true), FLAG_UPDATE_CURRENT)
 
-            val remoteView = RemoteViews(context.packageName, layoutId).apply {
+            val remoteView = RemoteViews(context.packageName, getCorrectLayoutId(appWidgetId, context)).apply {
                 setTextViewText(R.id.luckyNumberWidgetNumber, luckyNumber?.luckyNumber?.toString() ?: "#")
                 setOnClickPendingIntent(R.id.luckyNumberWidgetContainer, appIntent)
             }
@@ -94,24 +81,19 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
         super.onDeleted(context, appWidgetIds)
         appWidgetIds?.forEach { appWidgetId ->
-            if (appWidgetId != 0) sharedPref.delete(getStudentWidgetKey(appWidgetId))
+            with(sharedPref) {
+                delete(getHeightWidgetKey(appWidgetId))
+                delete(getStudentWidgetKey(appWidgetId))
+                delete(getThemeWidgetKey(appWidgetId))
+                delete(getWidthWidgetKey(appWidgetId))
+            }
         }
     }
 
     override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle?) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
 
-        val layoutId = when (sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)) {
-            0L -> R.layout.widget_luckynumber
-            1L -> R.layout.widget_luckynumber_dark
-            else -> {
-                val isDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-                if (isDarkMode) R.layout.widget_luckynumber_dark
-                else R.layout.widget_luckynumber
-            }
-        }
-
-        val remoteView = RemoteViews(context.packageName, layoutId)
+        val remoteView = RemoteViews(context.packageName, getCorrectLayoutId(appWidgetId, context))
 
         setStyles(remoteView, appWidgetId, newOptions)
         appWidgetManager.updateAppWidget(appWidgetId, remoteView)
@@ -121,8 +103,10 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         val width = options?.getInt(OPTION_APPWIDGET_MIN_WIDTH) ?: sharedPref.getLong(getWidthWidgetKey(appWidgetId), 74).toInt()
         val height = options?.getInt(OPTION_APPWIDGET_MAX_HEIGHT) ?: sharedPref.getLong(getHeightWidgetKey(appWidgetId), 74).toInt()
 
-        sharedPref.putLong(getWidthWidgetKey(appWidgetId), width.toLong())
-        sharedPref.putLong(getHeightWidgetKey(appWidgetId), height.toLong())
+        with(sharedPref) {
+            putLong(getWidthWidgetKey(appWidgetId), width.toLong())
+            putLong(getHeightWidgetKey(appWidgetId), height.toLong())
+        }
 
         val rows = getCellsForSize(height)
         val cols = getCellsForSize(width)
@@ -179,6 +163,17 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                 Timber.e(e, "An error has occurred in lucky number provider")
             }
             null
+        }
+    }
+
+    private fun getCorrectLayoutId(appWidgetId: Int, context: Context): Int {
+        val savedTheme = sharedPref.getLong(getThemeWidgetKey(appWidgetId), 0)
+        val isSystemDarkMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        return if (savedTheme == 1L || (savedTheme == 2L && isSystemDarkMode)) {
+            R.layout.widget_luckynumber_dark
+        } else {
+            R.layout.widget_luckynumber
         }
     }
 }
