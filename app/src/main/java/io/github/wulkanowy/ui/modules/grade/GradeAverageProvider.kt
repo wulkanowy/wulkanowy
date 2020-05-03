@@ -21,7 +21,7 @@ class GradeAverageProvider @Inject constructor(
 
     private val minusModifier = preferencesRepository.gradeMinusModifier
 
-    fun getGradesDetailsWithAverage(student: Student, semesterId: Int, forceRefresh: Boolean): Single<List<GradeDetailsWithAverage>> {
+    fun getGradesDetailsWithAverage(student: Student, semesterId: Int, forceRefresh: Boolean = false): Single<List<GradeDetailsWithAverage>> {
         return semesterRepository.getSemesters(student).flatMap { semesters ->
             when (preferencesRepository.gradeAverageMode) {
                 "only_one_semester" -> getSemesterDetailsWithAverage(student, semesters.single { it.semesterId == semesterId }, forceRefresh)
@@ -38,14 +38,16 @@ class GradeAverageProvider @Inject constructor(
         return getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh).flatMap { selectedDetails ->
             val isAnyAverage = selectedDetails.any { it.average != .0 }
 
-            if (selectedSemester != firstSemester) getSemesterDetailsWithAverage(student, firstSemester, forceRefresh).map { secondDetails ->
-                selectedDetails.map { selected ->
-                    val second = secondDetails.singleOrNull { it.subject == selected.subject }
-                    selected.copy(
-                        average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
-                            (selected.grades + second?.grades.orEmpty()).calcAverage()
-                        } else (selected.average + (second?.average ?: selected.average)) / 2
-                    )
+            if (selectedSemester != firstSemester) {
+                getSemesterDetailsWithAverage(student, firstSemester, forceRefresh).map { secondDetails ->
+                    selectedDetails.map { selected ->
+                        val second = secondDetails.singleOrNull { it.subject == selected.subject }
+                        selected.copy(
+                            average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
+                                (selected.grades + second?.grades.orEmpty()).calcAverage()
+                            } else (selected.average + (second?.average ?: selected.average)) / 2
+                        )
+                    }
                 }
             } else Single.just(selectedDetails)
         }
