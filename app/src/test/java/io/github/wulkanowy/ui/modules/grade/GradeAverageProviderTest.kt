@@ -195,17 +195,21 @@ class GradeAverageProviderTest {
     @Test
     fun allYearSemester_averageFromSummary() {
         `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
-        `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(firstGrades to emptyList()))
+        `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(false)
+        `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(firstGrades to listOf(
+            getSummary(22, "Matematyka", 3.0),
+            getSummary(22, "Fizyka", 3.5)
+        )))
         `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(secondGrades to listOf(
-            getSummary(22, "Matematyka", 3.1),
-            getSummary(22, "Fizyka", 3.26)
+            getSummary(22, "Matematyka", 3.5),
+            getSummary(22, "Fizyka", 4.0)
         )))
 
         val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
 
         assertEquals(2, items.size)
-        assertEquals(3.1, items.single { it.subject == "Matematyka" }.average, .0)
-        assertEquals(3.26, items.single { it.subject == "Fizyka" }.average, .0)
+        assertEquals(3.25, items.single { it.subject == "Matematyka" }.average, .0)
+        assertEquals(3.75, items.single { it.subject == "Fizyka" }.average, .0)
     }
 
     @Test
