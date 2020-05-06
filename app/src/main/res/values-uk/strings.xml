@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-
+<resources>
     <string name="app_name">Wulkanowy</string>
-
-
     <!--Activity/Fragment title-->
     <string name="login_title">Авторизація</string>
     <string name="main_title">Wulkanowy</string>
@@ -22,12 +19,8 @@
     <string name="note_title">Нотатки та досягнення</string>
     <string name="homework_title">Домашні завдання</string>
     <string name="account_title">Виберіть акаунт</string>
-
-
     <!--Subtitles-->
     <string name="grade_subtitle">Семестр %d, %d/%d</string>
-
-
     <!--Login-->
     <string name="login_header_default">Авторизуйтеся за допомогою акаунта учня або батьків</string>
     <string name="login_header_symbol">Впишіть \"symbol\"</string>
@@ -48,9 +41,9 @@
     <string name="login_incorrect_password">Вказані неправильні дані</string>
     <string name="login_invalid_pin">Недійсний PIN</string>
     <string name="login_invalid_token">Недійсний token</string>
+    <string name="login_expired_token">Токен протермінований</string>
     <string name="login_invalid_email">Недійсна адреса електронної пошти</string>
     <string name="login_invalid_login">Невірний логін</string>
-    <string name="login_expired_token">Токен протермінований</string>
     <string name="login_invalid_symbol">Недійсний symbol</string>
     <string name="login_incorrect_symbol">Не вдалося знайти учня. Будь ласка, перевірте \"symbol\"</string>
     <string name="login_field_required">Це поле обов\'язкове</string>
@@ -58,24 +51,25 @@
     <string name="login_symbol_helper">Ви можете знайти \"symbol\" в <b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b></string>
     <string name="login_select_student">Виберіть учнів для авторизації в додатку</string>
     <string name="login_advanced">Інші варіанти</string>
+    <string name="login_advanced_warning_mobile_api">In this mode, a lucky number does not work, a class grade stats, summary of attendance, excuse for absence, completed lessons, school information and preview of the list of registered devices</string>
+    <string name="login_advanced_warning_scraper">This mode displays the same data as it appears on the register website</string>
+    <string name="login_advanced_warning_hybrid">The combination of the best features of the other two modes. It works faster than scraper and provides features not available in the Mobile API mode. It is in the experimental phase</string>
     <string name="login_privacy_policy">Політика приватності</string>
     <string name="login_contact_header">Проблеми з авторизацією? Зв\'яжіться з нами!</string>
     <string name="login_contact_email">Електронна пошта</string>
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Відправити листа</string>
+    <string name="login_email_details">Describe details of problem:</string>
+    <string name="login_recover_warning">Make sure the correct UONET+ register is selected!</string>
     <string name="login_recover_button">Я забув свій пароль</string>
     <string name="login_recover_title">Відновіть свій акаунт</string>
     <string name="login_recover">Відновити</string>
     <string name="login_signed_in">Учень вже ввійшов в систему</string>
-
-
     <!--Main-->
     <string name="main_account_picker">Менеджер акаунтів</string>
     <string name="main_log_in">Ввійти</string>
     <string name="main_session_expired">Сесія закінчилася</string>
     <string name="main_session_relogin">Сесія закінчилася, будь ласка, авторизуйтеся знову</string>
-
-
     <!--Grade-->
     <string name="grade_header">Оцінка</string>
     <string name="grade_semester">Семестр %d</string>
@@ -109,7 +103,7 @@
         <item quantity="other">%d оцінок</item>
     </plurals>
     <plurals name="grade_new_items">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Нова оцінка</item>
+        <item quantity="one">Нова оцінка</item>
         <item quantity="few">Нові оцінки</item>
         <item quantity="many">Нові оцінки</item>
         <item quantity="other">Нові оцінки</item>
@@ -120,8 +114,6 @@
         <item quantity="many">Ви отримали %1$d оцінок</item>
         <item quantity="other">ви отримали %1$d оцінок</item>
     </plurals>
-
-
     <!--Timetable-->
     <string name="timetable_lesson">Урок</string>
     <string name="timetable_room">Аудиторія</string>
@@ -129,17 +121,13 @@
     <string name="timetable_time">Години</string>
     <string name="timetable_changes">Зміни</string>
     <string name="timetable_no_items">Цього дня уроків немає</string>
-
-
-    <!--CompletedLesson-->
+    <!--Completed lessons-->
     <string name="completed_lessons_title">Проведені уроки</string>
     <string name="completed_lessons_button">Подивитися проведені уроки</string>
     <string name="completed_lessons_no_items">Інформації про проведені уроки немає</string>
     <string name="completed_lessons_topic">Тема</string>
     <string name="completed_lessons_absence">Відсутність</string>
     <string name="completed_lessons_resources">Ресурси</string>
-
-
     <!--Attendance-->
     <string name="attendance_summary_button">Підсумкова відвідуваність</string>
     <string name="attendance_absence_school">Відсутність зі шкільних причин</string>
@@ -162,19 +150,13 @@
     <string name="attendance_excuse_success">Відсутність виправдана успішно!</string>
     <string name="attendance_excuse_no_selection">Ви повинні вибрати хоча б одну відсутність!</string>
     <string name="attendance_excuse_title">Oбґрунтовувати</string>
-
-
     <!--Attendance summary-->
     <string name="attendance_summary_final">Відвідуваність</string>
     <string name="attendance_summary_total">Загальна</string>
-
-
     <!--Exam-->
     <string name="exam_no_items">Тести на цьому тижні не заплановані</string>
     <string name="exam_type">Тип</string>
     <string name="exam_entry_date">Дата запису</string>
-
-
     <!--Message-->
     <string name="message_inbox">Отримані</string>
     <string name="message_sent">Відправлені</string>
@@ -203,7 +185,7 @@
         <item quantity="other">%d повідомлень</item>
     </plurals>
     <plurals name="message_new_items">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Нове повідомлення</item>
+        <item quantity="one">Нове повідомлення</item>
         <item quantity="few">Нові повідомлення</item>
         <item quantity="many">Нові повідомлення</item>
         <item quantity="other">Нові повідомлення</item>
@@ -214,8 +196,6 @@
         <item quantity="many">Ви отримали %1$d нових повідомлень</item>
         <item quantity="other">Ви отримали %1$d нових повідомлень</item>
     </plurals>
-
-
     <!--Note-->
     <string name="note_no_items">Немає даних про нотатки</string>
     <string name="note_points">точок</string>
@@ -226,7 +206,7 @@
         <item quantity="other">%d нотатки</item>
     </plurals>
     <plurals name="note_new_items">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Нова нотатка</item>
+        <item quantity="one">Нова нотатка</item>
         <item quantity="few">Нові нотатки</item>
         <item quantity="many">Нових нотаток</item>
         <item quantity="other">Нових нотаток</item>
@@ -237,23 +217,17 @@
         <item quantity="many">Ви отримали %1$d нотаток</item>
         <item quantity="other">Ви отримали %1$d нотаток</item>
     </plurals>
-
-
     <!--Homework-->
     <string name="homework_no_items">Немає домашніх завдань</string>
     <string name="homework_mark_as_done">зроблений</string>
     <string name="homework_mark_as_undone">Не зроблено</string>
     <string name="homework_attachments">Вкладення</string>
-
-
     <!--Lucky number-->
     <string name="lucky_number_title">Щасливий номер</string>
     <string name="lucky_number_header">Сьогодні щасливий номер</string>
     <string name="lucky_number_empty">Немає даних про щасливий номер</string>
     <string name="lucky_number_notify_new_item_title">Сьогодні щасливий номер</string>
     <string name="lucky_number_notify_new_item">Сьогодні щасливий номер: %d</string>
-
-
     <!--Mobile devices-->
     <string name="mobile_devices_title">Мобільні пристрої</string>
     <string name="mobile_devices_no_items">Пристрої відсутні</string>
@@ -263,12 +237,8 @@
     <string name="mobile_device_token">Token</string>
     <string name="mobile_device_symbol">Symbol</string>
     <string name="mobile_device_pin">PIN</string>
-
-
     <!--School and teachers-->
     <string name="schoolandteachers_title">Школа та вчителі</string>
-
-
     <!--School-->
     <string name="school_title">Школа</string>
     <string name="school_no_info">Немає інформації про школу</string>
@@ -279,21 +249,15 @@
     <string name="school_pedagogue">Викладач</string>
     <string name="school_address_button">Показати на карті</string>
     <string name="school_telephone_button">Зателефонувати</string>
-
-
     <!--Teacher-->
     <string name="teachers_title">Вчителі</string>
     <string name="teacher_no_items">Немає інформації про вчителів</string>
     <string name="teacher_no_subject">Нема предмету</string>
-
-
     <!--Account-->
     <string name="account_add_new">Додати акаунт</string>
     <string name="account_logout">Вийти</string>
     <string name="account_confirm">Ви дійсно бажаєте вийти з даного акаунту?</string>
     <string name="account_logout_student">Вийти</string>
-
-
     <!--About-->
     <string name="about_version">Версія додатку</string>
     <string name="about_contributor">Tворці</string>
@@ -310,22 +274,14 @@
     <string name="about_homepage_summary">Відвідати сторінку та допомогти в розвитку додатку</string>
     <string name="about_licenses">Ліцензії</string>
     <string name="about_licenses_summary">Ліцензії використаних в додатку бібліотек</string>
-
-
     <!--Licenses-->
     <string name="license_dialog_title">Ліцензія</string>
-
-
-    <!--Creators-->
+    <!--Contributor-->
     <string name="contributor_avatar_description">Аватар</string>
     <string name="contributor_see_more">Дивіться більше на GitHub</string>
-
-
     <!--Log viewer-->
     <string name="logviewer_share">Поділитися журналами</string>
     <string name="logviewer_refresh">Оновити</string>
-
-
     <!--Generic-->
     <string name="all_content">Зміст</string>
     <string name="all_retry">Знову</string>
@@ -342,15 +298,11 @@
     <string name="all_subject">Предмет</string>
     <string name="all_prev">Попередній</string>
     <string name="all_next">Наступний</string>
-
-
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Немає уроків</string>
     <string name="widget_timetable_theme_title">Вибрати тему</string>
     <string name="widget_timetable_theme_light">Світла</string>
     <string name="widget_timetable_theme_dark">Темна</string>
-
-
     <!--Preferences-->
     <string name="pref_view_header">Зовнішній вигляд</string>
     <string name="pref_view_list">При вході відкривати</string>
@@ -362,33 +314,34 @@
     <string name="pref_view_timetable_show_whole_class">Показати уроки всього класу</string>
     <string name="pref_view_grade_color_scheme">Колірна гама оцінок</string>
     <string name="pref_view_app_language">Мова додатку</string>
-
     <string name="pref_notify_header">Повідомлення</string>
     <string name="pref_notify_switch">Показувати повідомлення</string>
     <string name="pref_notify_debug_switch">Показувати дебаг-повідомлення</string>
-
     <string name="pref_services_header">Синхронізація</string>
     <string name="pref_services_switch">Автоматична синхронізація</string>
     <string name="pref_services_suspended">Призупинити синхронізації на час канікул</string>
     <string name="pref_services_interval">Інтервал синхронізації</string>
     <string name="pref_services_wifi">Тільки через Wi-Fi</string>
-
+    <string name="pref_services_force_sync">Sync now</string>
+    <string name="pref_services_message_sync_success">Synced!</string>
+    <string name="pref_services_message_sync_failed">Sync failed</string>
+    <string name="pref_services_sync_in_progress">Sync in progress</string>
+    <string name="pref_services_dialog_force_sync_title">Synchronization</string>
+    <string name="pref_services_dialog_force_sync_summary">        Manual sync doesn\'t refresh app views.
+        \nTo see the synced data relaunch the app after syncing.
+    </string>
     <string name="pref_other_header">Інші</string>
     <string name="pref_other_grade_modifier_plus">Вага плюса</string>
     <string name="pref_other_grade_modifier_minus">Вага мінуса</string>
     <string name="pref_other_fill_message_content">Відповісти з історією повідомлень</string>
-
-
     <!--Notification Channels-->
     <string name="channel_new_entries">Нові дані в щоденнику</string>
-    <string name="channel_lucky_number">Щасливий номер</string>
     <string name="channel_new_grades">Нові оцінки</string>
+    <string name="channel_lucky_number">Щасливий номер</string>
     <string name="channel_new_message">Нові повідомлення</string>
     <string name="channel_new_notes">Нові нотатки</string>
     <string name="channel_push">Повідомлення pushs</string>
     <string name="channel_debug">Дебаг</string>
-
-
     <!--Colors-->
     <string name="all_black">Чорний</string>
     <string name="all_red">Червоний</string>
@@ -396,13 +349,9 @@
     <string name="all_green">Зелений</string>
     <string name="all_purple">Фіолетовий</string>
     <string name="all_empty_color">Нема кольору</string>
-
-
     <!--Others-->
     <string name="all_copied">Скопійовано</string>
     <string name="all_undo">Відмінити</string>
-
-
     <!--Errors-->
     <string name="error_no_internet">Відсутнє інтернет-підключення</string>
     <string name="error_timeout">Занадто довге очікування з\'єднання з щоденником</string>
