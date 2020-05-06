@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-
+<resources>
     <string name="app_name">Wulkanowy</string>
-
-
     <!--Activity/Fragment title-->
     <string name="login_title">Авторизация</string>
     <string name="main_title">Wulkanowy</string>
@@ -22,11 +19,8 @@
     <string name="note_title">Предупреждения и свершения</string>
     <string name="homework_title">Домашние задания</string>
     <string name="account_title">Выберите аккаунт</string>
-
     <!--Subtitles-->
     <string name="grade_subtitle">Семестр %d, %d/%d</string>
-
-
     <!--Login-->
     <string name="login_header_default">Авторизируйтесь при помощи аккаунта ученика или родителя</string>
     <string name="login_header_symbol">Впишите \"symbol\"</string>
@@ -57,24 +51,25 @@
     <string name="login_symbol_helper">Вы можете найти \"symbol\" в <b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b></string>
     <string name="login_select_student">Выберите учеников для авторизации в приложении</string>
     <string name="login_advanced">Другие варианты</string>
+    <string name="login_advanced_warning_mobile_api">In this mode, a lucky number does not work, a class grade stats, summary of attendance, excuse for absence, completed lessons, school information and preview of the list of registered devices</string>
+    <string name="login_advanced_warning_scraper">This mode displays the same data as it appears on the register website</string>
+    <string name="login_advanced_warning_hybrid">The combination of the best features of the other two modes. It works faster than scraper and provides features not available in the Mobile API mode. It is in the experimental phase</string>
     <string name="login_privacy_policy">Политика приватности</string>
     <string name="login_contact_header">Проблемы с авторизацией? Свяжитесь с нами!</string>
     <string name="login_contact_email">Электронная почта</string>
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Отправить письмо</string>
-    <string name="login_recover">восстановление</string>
+    <string name="login_email_details">Describe details of problem:</string>
+    <string name="login_recover_warning">Make sure the correct UONET+ register is selected!</string>
     <string name="login_recover_button">Я не помню пароль</string>
     <string name="login_recover_title">Восстановите свой аккаунт</string>
+    <string name="login_recover">восстановление</string>
     <string name="login_signed_in">Студент уже вошел в систему</string>
-
-
     <!--Main-->
     <string name="main_account_picker">Менеджер аккаунтов</string>
     <string name="main_log_in">Войти</string>
     <string name="main_session_expired">Сеанс истёк</string>
     <string name="main_session_relogin">Сеанс истёк, пожалуйста, авторизируйтесь ещё раз</string>
-
-
     <!--Grade-->
     <string name="grade_header">Оценка</string>
     <string name="grade_semester">Семестр %d</string>
@@ -108,7 +103,7 @@
         <item quantity="other">%d оценок</item>
     </plurals>
     <plurals name="grade_new_items">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Новая оценка</item>
+        <item quantity="one">Новая оценка</item>
         <item quantity="few">Новые оценки</item>
         <item quantity="many">Новые оценки</item>
         <item quantity="other">Новые оценки</item>
@@ -119,8 +114,6 @@
         <item quantity="many">Вы получили %1$d оценок</item>
         <item quantity="other">Вы получили %1$d оценок</item>
     </plurals>
-
-
     <!--Timetable-->
     <string name="timetable_lesson">Урок</string>
     <string name="timetable_room">Аудитория</string>
@@ -128,17 +121,13 @@
     <string name="timetable_time">Часы</string>
     <string name="timetable_changes">Изменения</string>
     <string name="timetable_no_items">Нету уроков в данный день</string>
-
-
-    <!--CompletedLesson-->
+    <!--Completed lessons-->
     <string name="completed_lessons_title">Проведённые уроки</string>
     <string name="completed_lessons_button">Просмотреть проведённые уроки</string>
     <string name="completed_lessons_no_items">Нет информации о проведённых уроках</string>
     <string name="completed_lessons_topic">Тема</string>
     <string name="completed_lessons_absence">Отсутствие</string>
     <string name="completed_lessons_resources">Ресурсы</string>
-
-
     <!--Attendance-->
     <string name="attendance_summary_button">Итоговая посещаемость</string>
     <string name="attendance_absence_school">Отсутствие по школьным причинам</string>
@@ -161,19 +150,13 @@
     <string name="attendance_excuse_success">Отсутствие оправдано успешно!</string>
     <string name="attendance_excuse_no_selection">Вы должны выбрать хотя бы одно отсутствие!</string>
     <string name="attendance_excuse_title">Oбосновывать</string>
-
-
     <!--Attendance summary-->
     <string name="attendance_summary_final">Посещаемость</string>
     <string name="attendance_summary_total">вместе</string>
-
-
     <!--Exam-->
     <string name="exam_no_items">Тесты на этой неделе не запланированы</string>
     <string name="exam_type">Тип</string>
     <string name="exam_entry_date">Дата записи</string>
-
-
     <!--Message-->
     <string name="message_inbox">Полученные</string>
     <string name="message_sent">Отправленные</string>
@@ -202,7 +185,7 @@
         <item quantity="other">%d сообщений</item>
     </plurals>
     <plurals name="message_new_items">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Новое сообщение</item>
+        <item quantity="one">Новое сообщение</item>
         <item quantity="few">Новые сообщения</item>
         <item quantity="many">Новые сообщения</item>
         <item quantity="other">Новые сообщения</item>
@@ -213,8 +196,6 @@
         <item quantity="many">Вы получили %1$d новых сообщений</item>
         <item quantity="other">Вы получили %1$d новых сообщений</item>
     </plurals>
-
-
     <!--Note-->
     <string name="note_no_items">Нет данных о предупреждениях</string>
     <string name="note_points">точек</string>
@@ -225,7 +206,7 @@
         <item quantity="other">%d предупреждений</item>
     </plurals>
     <plurals name="note_new_items">
-        <item quantity="one" tools:ignore="ImpliedQuantity">Новое предупреждение</item>
+        <item quantity="one">Новое предупреждение</item>
         <item quantity="few">Новые предупреждения</item>
         <item quantity="many">Новых предупреждений</item>
         <item quantity="other">Новых предупреждений</item>
@@ -236,23 +217,17 @@
         <item quantity="many">Вы получили %1$d предупреждений</item>
         <item quantity="other">Вы получили %1$d предупреждений</item>
     </plurals>
-
-
     <!--Homework-->
     <string name="homework_no_items">Нет домашних заданий</string>
     <string name="homework_mark_as_done">сделанный</string>
     <string name="homework_mark_as_undone">Не сделано</string>
     <string name="homework_attachments">Вложения</string>
-
-
     <!--Lucky number-->
     <string name="lucky_number_title">Счастливый номер</string>
     <string name="lucky_number_header">Сегодняшний счастливый номер</string>
     <string name="lucky_number_empty">Нет данных о счастливом номере</string>
     <string name="lucky_number_notify_new_item_title">Сегодняшний счастливый номер</string>
     <string name="lucky_number_notify_new_item">Сегодняшний счастливый номер: %d</string>
-
-
     <!--Mobile devices-->
     <string name="mobile_devices_title">Мобильные устройства</string>
     <string name="mobile_devices_no_items">Нет устройств</string>
@@ -262,12 +237,8 @@
     <string name="mobile_device_token">Token</string>
     <string name="mobile_device_symbol">Symbol</string>
     <string name="mobile_device_pin">PIN</string>
-
-
     <!--School and teachers-->
     <string name="schoolandteachers_title">Школа и учителя</string>
-
-
     <!--School-->
     <string name="school_title">Школа</string>
     <string name="school_no_info">Нет информации о школе</string>
@@ -278,21 +249,15 @@
     <string name="school_pedagogue">Педагог</string>
     <string name="school_address_button">Показать на карте</string>
     <string name="school_telephone_button">Позвонить</string>
-
-
     <!--Teacher-->
     <string name="teachers_title">Учителя</string>
     <string name="teacher_no_items">Нет информации о учителях</string>
     <string name="teacher_no_subject">Нет предмета</string>
-
-
     <!--Account-->
     <string name="account_add_new">Добавить аккаунт</string>
     <string name="account_logout">Выйти</string>
     <string name="account_confirm">Вы точно хотите выйти из данного аккаунта?</string>
     <string name="account_logout_student">Выйти</string>
-
-
     <!--About-->
     <string name="about_version">Версия приложения</string>
     <string name="about_contributor">Творцы</string>
@@ -309,22 +274,14 @@
     <string name="about_homepage_summary">Посетить страницу и помочь в развитии приложения</string>
     <string name="about_licenses">Лицензии</string>
     <string name="about_licenses_summary">Лицензии использованных в приложении библиотек</string>
-
-
     <!--Licenses-->
     <string name="license_dialog_title">Лицензия</string>
-
-
-    <!--Creators-->
+    <!--Contributor-->
     <string name="contributor_avatar_description">Aватар</string>
     <string name="contributor_see_more">Смотрите больше на GitHub</string>
-
-
     <!--Log viewer-->
     <string name="logviewer_share">Share logs</string>
     <string name="logviewer_refresh">Обновление</string>
-
-
     <!--Generic-->
     <string name="all_content">Содержание</string>
     <string name="all_retry">Снова</string>
@@ -341,15 +298,11 @@
     <string name="all_subject">Предмет</string>
     <string name="all_prev">Предыдущий</string>
     <string name="all_next">Следующий</string>
-
-
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Нет уроков</string>
     <string name="widget_timetable_theme_title">Выбрать тему</string>
     <string name="widget_timetable_theme_light">Светлая</string>
     <string name="widget_timetable_theme_dark">Тёмная</string>
-
-
     <!--Preferences-->
     <string name="pref_view_header">Внешний вид</string>
     <string name="pref_view_list">При входе открывать</string>
@@ -361,23 +314,26 @@
     <string name="pref_view_timetable_show_whole_class">Показать уроки всего класса</string>
     <string name="pref_view_grade_color_scheme">Схема цветов оценок</string>
     <string name="pref_view_app_language">Язык приложения</string>
-
     <string name="pref_notify_header">Уведомления</string>
     <string name="pref_notify_switch">Показывать уведомления</string>
     <string name="pref_notify_debug_switch">Показывать дебаг-уведомления</string>
-
     <string name="pref_services_header">Синхронизация</string>
     <string name="pref_services_switch">Автоматическая синхронизация</string>
     <string name="pref_services_suspended">Приостановить синхронизации во время каникул</string>
     <string name="pref_services_interval">Интервал синхронизации</string>
     <string name="pref_services_wifi">Только через Wi-Fi</string>
-
+    <string name="pref_services_force_sync">Sync now</string>
+    <string name="pref_services_message_sync_success">Synced!</string>
+    <string name="pref_services_message_sync_failed">Sync failed</string>
+    <string name="pref_services_sync_in_progress">Sync in progress</string>
+    <string name="pref_services_dialog_force_sync_title">Synchronization</string>
+    <string name="pref_services_dialog_force_sync_summary">        Manual sync doesn\'t refresh app views.
+        \nTo see the synced data relaunch the app after syncing.
+    </string>
     <string name="pref_other_header">Другие</string>
     <string name="pref_other_grade_modifier_plus">Вес плюса</string>
     <string name="pref_other_grade_modifier_minus">Вес минуса</string>
     <string name="pref_other_fill_message_content">Ответить с историей сообщений</string>
-
-
     <!--Notification Channels-->
     <string name="channel_new_entries">Новые данные в дневнике</string>
     <string name="channel_new_grades">Новые оценки</string>
@@ -386,8 +342,6 @@
     <string name="channel_new_notes">Новые заметки</string>
     <string name="channel_push">Push-уведомления</string>
     <string name="channel_debug">Дебаг</string>
-
-
     <!--Colors-->
     <string name="all_black">Чёрный</string>
     <string name="all_red">Красный</string>
@@ -395,13 +349,9 @@
     <string name="all_green">Зелёный</string>
     <string name="all_purple">Фиолетовый</string>
     <string name="all_empty_color">Нет цвета</string>
-
-
     <!--Others-->
     <string name="all_copied">Скопировано</string>
     <string name="all_undo">Отменить</string>
-
-
     <!--Errors-->
     <string name="error_no_internet">Нет интернет-подключения</string>
     <string name="error_timeout">Слишком долгое ожидание соединения с дневником</string>
