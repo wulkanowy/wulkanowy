@@ -45,7 +45,7 @@
     <string name="login_invalid_email">Неверный адрес электронной почты</string>
     <string name="login_invalid_login">Неправильный логин</string>
     <string name="login_invalid_symbol">Неправильный symbol</string>
-    <string name="login_incorrect_symbol">Не удалось найти ученика. Пожалуйста, проверьте \"symbol\"</string>
+    <string name="login_incorrect_symbol">Не удалось найти ученика. Проверьте \"symbol\"</string>
     <string name="login_field_required">Обязательное поле</string>
     <string name="login_duplicate_student">Данный ученик уже авторизован</string>
     <string name="login_symbol_helper">Вы можете найти \"symbol\" в <b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b></string>
@@ -75,27 +75,27 @@
     <string name="grade_semester">Семестр %d</string>
     <string name="grade_switch_semester">Сменить семестр</string>
     <string name="grade_no_items">Оценки отсутствуют</string>
-    <string name="grade_weight">Вес</string>
+    <string name="grade_weight">Стоимость</string>
     <string name="grade_weight_value">Bес: %s</string>
     <string name="grade_comment">Комментарий</string>
     <string name="grade_no_new_items">Новые оценки отсутствуют</string>
     <string name="grade_number_new_items">Количество новых оценок: %1$d</string>
     <string name="grade_average">Средняя оценка: %1$.2f</string>
-    <string name="grade_points_sum">точек: %s</string>
+    <string name="grade_points_sum">Баллы: %s</string>
     <string name="grade_no_average">Средняя оценка отсутствует</string>
     <string name="grade_predicted">Ожидаемая оценка: %1$s</string>
     <string name="grade_final">Итоговая оценка: %1$s</string>
-    <string name="grade_summary_points">Сумма очков</string>
+    <string name="grade_summary_points">Сумма баллов</string>
     <string name="grade_summary_final_grade">Итоговая оценка</string>
     <string name="grade_summary_predicted_grade">Ожидаемая оценка</string>
     <string name="grade_summary_calculated_average">Рассчитанная средняя оценка</string>
     <string name="grade_summary_final_average">Итоговая средняя оценка</string>
     <string name="grade_menu_summary">Итоги</string>
     <string name="grade_menu_statistics">Класс</string>
-    <string name="grade_menu_read">Пометить как \"прочитанное*</string>
+    <string name="grade_menu_read">Пометить как \"прочитанное\"</string>
     <string name="grade_statistics_partial">Частичные</string>
     <string name="grade_statistics_semester">Семестровые</string>
-    <string name="grade_statistics_points">Очки</string>
+    <string name="grade_statistics_points">Баллы</string>
     <plurals name="grade_number_item">
         <item quantity="one">%d оценка</item>
         <item quantity="few">%d оценки</item>
@@ -120,7 +120,7 @@
     <string name="timetable_group">Группа</string>
     <string name="timetable_time">Часы</string>
     <string name="timetable_changes">Изменения</string>
-    <string name="timetable_no_items">Нету уроков в данный день</string>
+    <string name="timetable_no_items">Нет уроков в данный день</string>
     <!--Completed lessons-->
     <string name="completed_lessons_title">Проведённые уроки</string>
     <string name="completed_lessons_button">Просмотреть проведённые уроки</string>
@@ -131,11 +131,11 @@
     <!--Attendance-->
     <string name="attendance_summary_button">Итоговая посещаемость</string>
     <string name="attendance_absence_school">Отсутствие по школьным причинам</string>
-    <string name="attendance_absence_excused">Оправданное отсутствие</string>
-    <string name="attendance_absence_unexcused">Неоправданное отсутствие</string>
+    <string name="attendance_absence_excused">Отсутствие по уважительной причине</string>
+    <string name="attendance_absence_unexcused">Отсутствие по неуважительной причине</string>
     <string name="attendance_exemption">Освобождение</string>
-    <string name="attendance_excused_lateness">Оправданное опоздание</string>
-    <string name="attendance_unexcused_lateness">Неоправданное опоздание</string>
+    <string name="attendance_excused_lateness">Опоздание по уважительным причинам</string>
+    <string name="attendance_unexcused_lateness">Опоздание по неуважительным причинам</string>
     <string name="attendance_present">Присутствие</string>
     <string name="attendance_number">Урок №</string>
     <string name="attendance_no_items">Данные не найдены</string>
@@ -147,23 +147,23 @@
     </plurals>
     <string name="attendance_excuse_dialog_reason">Причина отсутствия (необязательно)</string>
     <string name="attendance_excuse_dialog_submit">Послать</string>
-    <string name="attendance_excuse_success">Отсутствие оправдано успешно!</string>
-    <string name="attendance_excuse_no_selection">Вы должны выбрать хотя бы одно отсутствие!</string>
-    <string name="attendance_excuse_title">Oбосновывать</string>
+    <string name="attendance_excuse_success">Статус отсутствия изменён</string>
+    <string name="attendance_excuse_no_selection">Выберите хотя-бы одно отсутствие</string>
+    <string name="attendance_excuse_title">Изменить статус</string>
     <!--Attendance summary-->
     <string name="attendance_summary_final">Посещаемость</string>
-    <string name="attendance_summary_total">вместе</string>
+    <string name="attendance_summary_total">Общая</string>
     <!--Exam-->
-    <string name="exam_no_items">Тесты на этой неделе не запланированы</string>
+    <string name="exam_no_items">Нет тестов на этой неделе</string>
     <string name="exam_type">Тип</string>
     <string name="exam_entry_date">Дата записи</string>
     <!--Message-->
     <string name="message_inbox">Полученные</string>
     <string name="message_sent">Отправленные</string>
     <string name="message_trash">Корзина</string>
-    <string name="message_no_subject">(нету темы)</string>
+    <string name="message_no_subject">(нет темы)</string>
     <string name="message_no_items">Нет сообщений</string>
-    <string name="message_preview_error">Произошла ошибка во время получения текста сообщения</string>
+    <string name="message_preview_error">Произошла ошибка во время получения содержания сообщения</string>
     <string name="message_from">От:</string>
     <string name="message_to">Кому:</string>
     <string name="message_date">Дата: %s</string>
@@ -198,7 +198,7 @@
     </plurals>
     <!--Note-->
     <string name="note_no_items">Нет данных о предупреждениях</string>
-    <string name="note_points">точек</string>
+    <string name="note_points">Баллы</string>
     <plurals name="note_number_item">
         <item quantity="one">%d предупреждение</item>
         <item quantity="few">%d предупреждения</item>
@@ -261,30 +261,30 @@
     <!--About-->
     <string name="about_version">Версия приложения</string>
     <string name="about_contributor">Творцы</string>
-    <string name="about_contributor_summary">Список Wulkanowy программистов</string>
+    <string name="about_contributor_summary">Список разработчиков \"Wulkanowy\"</string>
     <string name="about_feedback">Сообщить о ошибке</string>
     <string name="about_feedback_summary">Отправить сообщение о ошибке через электронную почту</string>
     <string name="about_faq">FAQ</string>
-    <string name="about_faq_summary">Читайте часто задаваемые вопросы</string>
+    <string name="about_faq_summary">Часто задаваемые вопросы</string>
     <string name="about_discord">Сервер Discord</string>
     <string name="about_discord_summary">Присоединиться к сообществу приложения</string>
     <string name="about_privacy">Политика приватности</string>
-    <string name="about_privacy_summary">Правила сбора личных данных</string>
+    <string name="about_privacy_summary">Правила хранения личных данных</string>
     <string name="about_homepage">Домашняя страница</string>
-    <string name="about_homepage_summary">Посетить страницу и помочь в развитии приложения</string>
+    <string name="about_homepage_summary">Помочь в развитии приложения</string>
     <string name="about_licenses">Лицензии</string>
     <string name="about_licenses_summary">Лицензии использованных в приложении библиотек</string>
     <!--Licenses-->
     <string name="license_dialog_title">Лицензия</string>
     <!--Contributor-->
     <string name="contributor_avatar_description">Aватар</string>
-    <string name="contributor_see_more">Смотрите больше на GitHub</string>
+    <string name="contributor_see_more">Страница проекта на GitHub</string>
     <!--Log viewer-->
     <string name="logviewer_share">Поделиться логами</string>
-    <string name="logviewer_refresh">Обновление</string>
+    <string name="logviewer_refresh">Обновить</string>
     <!--Generic-->
     <string name="all_content">Содержание</string>
-    <string name="all_retry">Снова</string>
+    <string name="all_retry">Повторить</string>
     <string name="all_description">Описание</string>
     <string name="all_no_description">Нет описания</string>
     <string name="all_teacher">Учитель</string>
@@ -304,9 +304,9 @@
     <string name="widget_timetable_theme_light">Светлая</string>
     <string name="widget_timetable_theme_dark">Тёмная</string>
     <!--Preferences-->
-    <string name="pref_view_header">Внешний вид</string>
-    <string name="pref_view_list">При входе открывать</string>
-    <string name="pref_view_grade_average_mode">Рассчитывание средней годовой оценки</string>
+    <string name="pref_view_header">Вид</string>
+    <string name="pref_view_list">Окно по умолчанию</string>
+    <string name="pref_view_grade_average_mode">Способ определения средней годовой оценки</string>
     <string name="pref_view_grade_average_force_calc">Принудительно высчитать среднюю оценку через приложение</string>
     <string name="pref_view_present">Показывать присутствия в посещаемости</string>
     <string name="pref_view_app_theme">Тема приложения</string>
@@ -331,8 +331,8 @@
         \nЧтобы увидеть обновлённые данные, перезапустите приложение.
     </string>
     <string name="pref_other_header">Другие</string>
-    <string name="pref_other_grade_modifier_plus">Вес плюса</string>
-    <string name="pref_other_grade_modifier_minus">Вес минуса</string>
+    <string name="pref_other_grade_modifier_plus">Стоимость плюса</string>
+    <string name="pref_other_grade_modifier_minus">Стоимость минуса</string>
     <string name="pref_other_fill_message_content">Ответить с историей сообщений</string>
     <!--Notification Channels-->
     <string name="channel_new_entries">Новые данные в дневнике</string>
@@ -340,7 +340,7 @@
     <string name="channel_lucky_number">Счастливый номер</string>
     <string name="channel_new_message">Новые сообщения</string>
     <string name="channel_new_notes">Новые заметки</string>
-    <string name="channel_push">Push-уведомления</string>
+    <string name="channel_push">Показывать push-уведомления</string>
     <string name="channel_debug">Дебаг</string>
     <!--Colors-->
     <string name="all_black">Чёрный</string>
@@ -355,7 +355,7 @@
     <!--Errors-->
     <string name="error_no_internet">Нет интернет-подключения</string>
     <string name="error_timeout">Слишком долгое ожидание соединения с дневником</string>
-    <string name="error_login_failed">Авторизация не удалась. Пожалуйста, попробуйте ещё раз или перезапустите дневник</string>
+    <string name="error_login_failed">Авторизация не удалась. Попробуйте ещё раз или перезапустите дневник</string>
     <string name="error_password_change_required">Требуется смена пароля</string>
     <string name="error_service_unavailable">Технический перерыв в журнале UONET + продолжается. Попробуйте позже</string>
     <string name="error_unknown">Произошла неожиданная ошибка</string>
