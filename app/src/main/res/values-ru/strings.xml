@@ -29,41 +29,41 @@
     <string name="login_login_pesel_email_hint">Логин, PESEL или электронная почта</string>
     <string name="login_password_hint">Пароль</string>
     <string name="login_host_hint">Дневник UONET+</string>
-    <string name="login_type_api">Мобильный API</string>
+    <string name="login_type_api">Mobile API</string>
     <string name="login_type_scrapper">Scraper</string>
-    <string name="login_type_hybrid">Гибрид</string>
+    <string name="login_type_hybrid">Hybrid</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
-    <string name="login_api_key_hint">клавиша API</string>
+    <string name="login_api_key_hint">Ключ API</string>
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Войти</string>
     <string name="login_invalid_password">Слишком короткий пароль</string>
-    <string name="login_incorrect_password">Указаны неверные данные</string>
-    <string name="login_invalid_pin">Недействительный PIN</string>
-    <string name="login_invalid_token">Недействительный token</string>
+    <string name="login_incorrect_password">Указаны неверные данные. Убедитесь, что вы выбрали нужный дневник</string>
+    <string name="login_invalid_pin">Неправильный PIN</string>
+    <string name="login_invalid_token">Неправильный token</string>
     <string name="login_expired_token">Токен просрочен</string>
     <string name="login_invalid_email">Неверный адрес электронной почты</string>
     <string name="login_invalid_login">Неправильный логин</string>
-    <string name="login_invalid_symbol">Недействительный symbol</string>
+    <string name="login_invalid_symbol">Неправильный symbol</string>
     <string name="login_incorrect_symbol">Не удалось найти ученика. Пожалуйста, проверьте \"symbol\"</string>
-    <string name="login_field_required">Это поле обязательно</string>
+    <string name="login_field_required">Обязательное поле</string>
     <string name="login_duplicate_student">Данный ученик уже авторизован</string>
     <string name="login_symbol_helper">Вы можете найти \"symbol\" в <b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b></string>
     <string name="login_select_student">Выберите учеников для авторизации в приложении</string>
     <string name="login_advanced">Другие варианты</string>
-    <string name="login_advanced_warning_mobile_api">In this mode, a lucky number does not work, a class grade stats, summary of attendance, excuse for absence, completed lessons, school information and preview of the list of registered devices</string>
-    <string name="login_advanced_warning_scraper">This mode displays the same data as it appears on the register website</string>
-    <string name="login_advanced_warning_hybrid">The combination of the best features of the other two modes. It works faster than scraper and provides features not available in the Mobile API mode. It is in the experimental phase</string>
+    <string name="login_advanced_warning_mobile_api">В этом режиме не работают: счастливый номер, статистика класса по оценкам, статистика посещаемости и уроков, информация о школе и список зарегистрированных устройств</string>
+    <string name="login_advanced_warning_scraper">Scraper - режим, который показывает данные так же, как и сайт дневника</string>
+    <string name="login_advanced_warning_hybrid">Hybrid - это комбинация лучших функций остальных двух режимов. Он работает быстрее, чем Scraper, и вводит функции, которых нет в режиме Mobile API. Находится в экспериментальной стадии</string>
     <string name="login_privacy_policy">Политика приватности</string>
     <string name="login_contact_header">Проблемы с авторизацией? Свяжитесь с нами!</string>
     <string name="login_contact_email">Электронная почта</string>
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Отправить письмо</string>
-    <string name="login_email_details">Describe details of problem:</string>
-    <string name="login_recover_warning">Make sure the correct UONET+ register is selected!</string>
-    <string name="login_recover_button">Я не помню пароль</string>
+    <string name="login_email_details">Опишите детали проблемы:</string>
+    <string name="login_recover_warning">Убедитесь, что выбран нужный дневник!</string>
+    <string name="login_recover_button">Забыли пароль?</string>
     <string name="login_recover_title">Восстановите свой аккаунт</string>
-    <string name="login_recover">восстановление</string>
+    <string name="login_recover">Восстановить</string>
     <string name="login_signed_in">Студент уже вошел в систему</string>
     <!--Main-->
     <string name="main_account_picker">Менеджер аккаунтов</string>
@@ -280,7 +280,7 @@
     <string name="contributor_avatar_description">Aватар</string>
     <string name="contributor_see_more">Смотрите больше на GitHub</string>
     <!--Log viewer-->
-    <string name="logviewer_share">Share logs</string>
+    <string name="logviewer_share">Поделиться логами</string>
     <string name="logviewer_refresh">Обновление</string>
     <!--Generic-->
     <string name="all_content">Содержание</string>
@@ -322,13 +322,13 @@
     <string name="pref_services_suspended">Приостановить синхронизации во время каникул</string>
     <string name="pref_services_interval">Интервал синхронизации</string>
     <string name="pref_services_wifi">Только через Wi-Fi</string>
-    <string name="pref_services_force_sync">Sync now</string>
-    <string name="pref_services_message_sync_success">Synced!</string>
-    <string name="pref_services_message_sync_failed">Sync failed</string>
-    <string name="pref_services_sync_in_progress">Sync in progress</string>
-    <string name="pref_services_dialog_force_sync_title">Synchronization</string>
-    <string name="pref_services_dialog_force_sync_summary">        Manual sync doesn\'t refresh app views.
-        \nTo see the synced data relaunch the app after syncing.
+    <string name="pref_services_force_sync">Синхронизировать</string>
+    <string name="pref_services_message_sync_success">Синхронизировано!</string>
+    <string name="pref_services_message_sync_failed">Синхронизация не удалась</string>
+    <string name="pref_services_sync_in_progress">Идёт синхронизация</string>
+    <string name="pref_services_dialog_force_sync_title">Синхронизация</string>
+    <string name="pref_services_dialog_force_sync_summary">Ручная синхронизация не обновляет данные в приложении.
+        \nЧтобы увидеть обновлённые данные, перезапустите приложение.
     </string>
     <string name="pref_other_header">Другие</string>
     <string name="pref_other_grade_modifier_plus">Вес плюса</string>
