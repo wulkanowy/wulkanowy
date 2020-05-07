@@ -9,10 +9,10 @@
     <string name="exam_title">Тесты</string>
     <string name="timetable_title">Расписание</string>
     <string name="settings_title">Настройки</string>
-    <string name="more_title">Ещё</string>
+    <string name="more_title">Другое</string>
     <string name="about_title">О приложении</string>
     <string name="logviewer_title">Просмотр журнала</string>
-    <string name="contributors_title">Творцы</string>
+    <string name="contributors_title">Разработчики</string>
     <string name="license_title">Лицензии</string>
     <string name="message_title">Сообщения</string>
     <string name="send_message_title">Новое сообщение</string>
@@ -20,7 +20,7 @@
     <string name="homework_title">Домашние задания</string>
     <string name="account_title">Выберите аккаунт</string>
     <!--Subtitles-->
-    <string name="grade_subtitle">Семестр %d, %d/%d</string>
+    <string name="grade_subtitle">%d семестр, %d/%d</string>
     <!--Login-->
     <string name="login_header_default">Авторизируйтесь при помощи аккаунта ученика или родителя</string>
     <string name="login_header_symbol">Впишите \"symbol\"</string>
@@ -76,7 +76,7 @@
     <string name="grade_switch_semester">Сменить семестр</string>
     <string name="grade_no_items">Оценки отсутствуют</string>
     <string name="grade_weight">Стоимость</string>
-    <string name="grade_weight_value">Bес: %s</string>
+    <string name="grade_weight_value">Стоимость: %s</string>
     <string name="grade_comment">Комментарий</string>
     <string name="grade_no_new_items">Новые оценки отсутствуют</string>
     <string name="grade_number_new_items">Количество новых оценок: %1$d</string>
@@ -94,7 +94,7 @@
     <string name="grade_menu_statistics">Класс</string>
     <string name="grade_menu_read">Пометить как \"прочитанное\"</string>
     <string name="grade_statistics_partial">Частичные</string>
-    <string name="grade_statistics_semester">Семестровые</string>
+    <string name="grade_statistics_semester">За семестр</string>
     <string name="grade_statistics_points">Баллы</string>
     <plurals name="grade_number_item">
         <item quantity="one">%d оценка</item>
@@ -260,10 +260,10 @@
     <string name="account_logout_student">Выйти</string>
     <!--About-->
     <string name="about_version">Версия приложения</string>
-    <string name="about_contributor">Творцы</string>
+    <string name="about_contributor">Разработчики</string>
     <string name="about_contributor_summary">Список разработчиков \"Wulkanowy\"</string>
-    <string name="about_feedback">Сообщить о ошибке</string>
-    <string name="about_feedback_summary">Отправить сообщение о ошибке через электронную почту</string>
+    <string name="about_feedback">Возникла ошибка?</string>
+    <string name="about_feedback_summary">Сообщить о ошибке</string>
     <string name="about_faq">FAQ</string>
     <string name="about_faq_summary">Часто задаваемые вопросы</string>
     <string name="about_discord">Сервер Discord</string>
@@ -273,7 +273,7 @@
     <string name="about_homepage">Домашняя страница</string>
     <string name="about_homepage_summary">Помочь в развитии приложения</string>
     <string name="about_licenses">Лицензии</string>
-    <string name="about_licenses_summary">Лицензии использованных в приложении библиотек</string>
+    <string name="about_licenses_summary">Лицензии использованных библиотек</string>
     <!--Licenses-->
     <string name="license_dialog_title">Лицензия</string>
     <!--Contributor-->
@@ -333,7 +333,7 @@
     <string name="pref_other_header">Другие</string>
     <string name="pref_other_grade_modifier_plus">Стоимость плюса</string>
     <string name="pref_other_grade_modifier_minus">Стоимость минуса</string>
-    <string name="pref_other_fill_message_content">Ответить с историей сообщений</string>
+    <string name="pref_other_fill_message_content">Отвечать с историей сообщений</string>
     <!--Notification Channels-->
     <string name="channel_new_entries">Новые данные в дневнике</string>
     <string name="channel_new_grades">Новые оценки</string>
