@@ -5,6 +5,8 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.os.Build.VERSION_CODES.N
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dagger.android.AndroidInjection
@@ -96,7 +98,9 @@ class TimetableNotificationReceiver : BroadcastReceiver() {
             .setAutoCancel(false)
             .setOngoing(true)
             .setWhen(countDown)
-            .setUsesChronometer(true)
+            .apply {
+                if (Build.VERSION.SDK_INT >= N) setUsesChronometer(true)
+            }
             .setTimeoutAfter(timeout)
             .setSmallIcon(R.drawable.ic_stat_timetable)
             .setColor(context.getCompatColor(R.color.colorPrimary))
