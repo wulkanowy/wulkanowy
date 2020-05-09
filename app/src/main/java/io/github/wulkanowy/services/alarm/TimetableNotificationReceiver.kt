@@ -98,7 +98,7 @@ class TimetableNotificationReceiver : BroadcastReceiver() {
             .setWhen(countDown)
             .setUsesChronometer(true)
             .setTimeoutAfter(timeout)
-            .setSmallIcon(R.drawable.ic_main_timetable)
+            .setSmallIcon(R.drawable.ic_stat_timetable)
             .setColor(context.getCompatColor(R.color.colorPrimary))
             .setStyle(NotificationCompat.InboxStyle().also {
                 it.setSummaryText(studentName)
