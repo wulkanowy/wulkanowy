@@ -34,10 +34,6 @@ class LoginRecoverPresenter @Inject constructor(
         view?.clearUsernameError()
     }
 
-    fun onSymbolTextChanged() {
-        view?.clearSymbolError()
-    }
-
     fun onHostSelected() {
         view?.run {
             if ("fakelog" in recoverHostValue) setDefaultCredentials("jan@fakelog.cf")
@@ -48,7 +44,6 @@ class LoginRecoverPresenter @Inject constructor(
 
     fun updateFields() {
         view?.run {
-            showSymbol("adfs" in recoverHostValue)
             setUsernameHint(if ("standard" in recoverHostValue) emailHintString else loginPeselEmailHintString)
         }
     }
@@ -56,9 +51,9 @@ class LoginRecoverPresenter @Inject constructor(
     fun onRecoverClick() {
         val username = view?.recoverNameValue.orEmpty()
         val host = view?.recoverHostValue.orEmpty()
-        val symbol = view?.recoverSymbolValue.orEmpty()
+        val symbol = view?.formHostSymbol.orEmpty()
 
-        if (!validateInput(username, host, symbol)) return
+        if (!validateInput(username, host)) return
 
         disposable.add(recoverRepository.getReCaptchaSiteKey(host, symbol.ifBlank { "Default" })
             .subscribeOn(schedulers.backgroundThread)
@@ -75,12 +70,12 @@ class LoginRecoverPresenter @Inject constructor(
             .subscribe({ (resetUrl, siteKey) ->
                 view?.loadReCaptcha(siteKey, resetUrl)
             }) {
-                Timber.e("Obtain captcha site key result: An exception occurred")
+                Timber.i("Obtain captcha site key result: An exception occurred")
                 errorHandler.dispatch(it)
             })
     }
 
-    private fun validateInput(username: String, host: String, symbol: String): Boolean {
+    private fun validateInput(username: String, host: String): Boolean {
         var isCorrect = true
 
         if (username.isEmpty()) {
@@ -93,18 +88,13 @@ class LoginRecoverPresenter @Inject constructor(
             isCorrect = false
         }
 
-        if ("adfs" in host && symbol.isBlank()) {
-            view?.setSymbolError(focus = isCorrect)
-            isCorrect = false
-        }
-
         return isCorrect
     }
 
     fun onReCaptchaVerified(reCaptchaResponse: String) {
         val username = view?.recoverNameValue.orEmpty()
         val host = view?.recoverHostValue.orEmpty()
-        val symbol = view?.recoverSymbolValue.ifNullOrBlank { "Default" }
+        val symbol = view?.formHostSymbol.ifNullOrBlank { "Default" }
 
         with(disposable) {
             clear()
@@ -130,7 +120,7 @@ class LoginRecoverPresenter @Inject constructor(
 
                     analytics.logEvent("account_recover", "register" to host, "symbol" to symbol, "success" to true)
                 }) {
-                    Timber.e("Send recover request result: An exception occurred")
+                    Timber.i("Send recover request result: An exception occurred")
                     errorHandler.dispatch(it)
                     analytics.logEvent("account_recover", "register" to host, "symbol" to symbol, "success" to false)
                 })

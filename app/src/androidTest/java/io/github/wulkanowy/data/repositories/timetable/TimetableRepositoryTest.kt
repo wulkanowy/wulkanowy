@@ -10,6 +10,7 @@ import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.TestInternetObservingStrategy
+import io.github.wulkanowy.data.repositories.getStudent
 import io.github.wulkanowy.services.alarm.TimetableNotificationSchedulerHelper
 import io.github.wulkanowy.sdk.Sdk
 import io.mockk.MockKAnnotations
@@ -38,6 +39,8 @@ class TimetableRepositoryTest {
 
     @MockK
     private lateinit var studentMock: Student
+
+    private val student = getStudent()
 
     @MockK
     private lateinit var semesterMock: Semester
@@ -94,7 +97,7 @@ class TimetableRepositoryTest {
         ))
 
         val lessons = TimetableRepository(settings, timetableLocal, timetableRemote, timetableNotificationSchedulerHelper)
-            .getTimetable(studentMock, semesterMock, LocalDate.of(2019, 3, 5), LocalDate.of(2019, 3, 5), true)
+            .getTimetable(student, semesterMock, LocalDate.of(2019, 3, 5), LocalDate.of(2019, 3, 5), true)
             .blockingGet()
 
         assertEquals(4, lessons.size)
@@ -140,7 +143,7 @@ class TimetableRepositoryTest {
         ))
 
         val lessons = TimetableRepository(settings, timetableLocal, timetableRemote, timetableNotificationSchedulerHelper)
-            .getTimetable(studentMock, semesterMock, LocalDate.of(2019, 12, 23), LocalDate.of(2019, 12, 25), true)
+            .getTimetable(student, semesterMock, LocalDate.of(2019, 12, 23), LocalDate.of(2019, 12, 25), true)
             .blockingGet()
 
         assertEquals(12, lessons.size)

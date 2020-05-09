@@ -29,8 +29,16 @@ class StudentLocal @Inject constructor(
 
     fun getStudents(decryptPass: Boolean): Maybe<List<Student>> {
         return studentDb.loadAll()
-            .map { list -> list.map { it.apply { if (decryptPass) password = decrypt(password) } } }
+            .map { list -> list.map { it.apply { if (decryptPass && Sdk.Mode.valueOf(loginMode) != Sdk.Mode.API) password = decrypt(password) } } }
             .filter { it.isNotEmpty() }
+    }
+
+    fun getStudentById(id: Int): Maybe<Student> {
+        return studentDb.loadById(id).map {
+            it.apply {
+                if (Sdk.Mode.valueOf(loginMode) != Sdk.Mode.API) password = decrypt(password)
+            }
+        }
     }
 
     fun getCurrentStudent(decryptPass: Boolean): Maybe<Student> {

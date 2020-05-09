@@ -8,15 +8,18 @@
     android:paddingStart="16dp"
     android:paddingLeft="16dp"
     android:paddingEnd="16dp"
-    android:paddingRight="16dp">
+    android:paddingRight="16dp"
+    tools:context=".ui.modules.about.license.LicenseAdapter">
 
     <TextView
         android:id="@+id/licenseItemName"
         android:layout_width="match_parent"
         android:layout_height="28dp"
+        android:ellipsize="end"
         android:gravity="bottom"
+        android:singleLine="true"
         android:textSize="16sp"
-        tools:text="@tools:sample/lorem" />
+        tools:text="@tools:sample/lorem/random" />
 
     <TextView
         android:id="@+id/licenseItemSummary"

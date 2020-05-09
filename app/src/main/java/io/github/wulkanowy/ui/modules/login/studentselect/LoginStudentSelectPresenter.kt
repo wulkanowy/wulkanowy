@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -8,7 +7,6 @@ import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
-import io.reactivex.Single
 import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
@@ -19,6 +17,8 @@ class LoginStudentSelectPresenter @Inject constructor(
     private val loginErrorHandler: LoginErrorHandler,
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<LoginStudentSelectView>(loginErrorHandler, studentRepository, schedulers) {
+
+    private var lastError: Throwable? = null
 
     var students = emptyList<Student>()
 
@@ -50,13 +50,14 @@ class LoginStudentSelectPresenter @Inject constructor(
         if (students.size == 1) registerStudents(students)
     }
 
-    fun onItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is LoginStudentSelectItem && !item.alreadySaved) {
-            selectedStudents.removeAll { it == item.student }
-                .let { if (!it) selectedStudents.add(item.student) }
+    fun onItemSelected(student: Student, alreadySaved: Boolean) {
+        if (alreadySaved) return
 
-            view?.enableSignIn(selectedStudents.isNotEmpty())
-        }
+        selectedStudents
+            .removeAll { it == student }
+            .let { if (!it) selectedStudents.add(student) }
+
+        view?.enableSignIn(selectedStudents.isNotEmpty())
     }
 
     private fun compareStudents(a: Student, b: Student): Boolean {
@@ -72,18 +73,17 @@ class LoginStudentSelectPresenter @Inject constructor(
         disposable.add(studentRepository.getSavedStudents()
             .map { savedStudents ->
                 students.map { student ->
-                    Pair(student, savedStudents.any { compareStudents(student, it) })
+                    student to savedStudents.any { compareStudents(student, it) }
                 }
             }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .subscribe({
-                view?.updateData(it.map { studentPair ->
-                    LoginStudentSelectItem(studentPair.first, studentPair.second)
-                })
+                view?.updateData(it)
             }, {
                 errorHandler.dispatch(it)
-                view?.updateData(students.map { student -> LoginStudentSelectItem(student, false) })
+                lastError = it
+                view?.updateData(students.map { student -> student to false })
             })
         )
     }
@@ -109,6 +109,7 @@ class LoginStudentSelectPresenter @Inject constructor(
                 students.forEach { analytics.logEvent("registration_student_select", "success" to false, "scrapperBaseUrl" to it.scrapperBaseUrl, "symbol" to it.symbol, "error" to error.message.ifNullOrBlank { "No message" }) }
                 Timber.i("Registration result: An exception occurred ")
                 loginErrorHandler.dispatch(error)
+                lastError = error
                 view?.apply {
                     showProgress(false)
                     showContent(true)
@@ -122,6 +123,6 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     fun onEmailClick() {
-        view?.openEmail()
+        view?.openEmail(lastError?.message.ifNullOrBlank { "empty" })
     }
 }

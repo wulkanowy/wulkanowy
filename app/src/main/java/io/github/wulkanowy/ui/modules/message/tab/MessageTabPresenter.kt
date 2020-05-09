@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.data.repositories.message.MessageRepository
@@ -8,7 +7,6 @@ import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.ui.modules.message.MessageItem
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import timber.log.Timber
@@ -59,16 +57,13 @@ class MessageTabPresenter @Inject constructor(
         loadData(forceRefresh)
     }
 
-    fun onMessageItemSelected(item: AbstractFlexibleItem<*>) {
-        if (item is MessageItem) {
-            Timber.i("Select message ${item.message.id} item")
-            view?.run {
-                openMessage(item.message.id)
-                if (item.message.unread) {
-                    item.message.unread = false
-                    updateItem(item)
-                    updateMessage(item.message)
-                }
+    fun onMessageItemSelected(message: Message, position: Int) {
+        Timber.i("Select message ${message.id} item")
+        view?.run {
+            openMessage(message)
+            if (message.unread) {
+                message.unread = false
+                updateItem(message, position)
             }
         }
     }
@@ -81,7 +76,6 @@ class MessageTabPresenter @Inject constructor(
                 .flatMap { student ->
                     semesterRepository.getCurrentSemester(student)
                         .flatMap { messageRepository.getMessages(student, it, folder, forceRefresh) }
-                        .map { items -> items.map { MessageItem(it, view?.noSubjectString.orEmpty()) } }
                 }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
@@ -118,17 +112,5 @@ class MessageTabPresenter @Inject constructor(
                 showEmpty(false)
             } else showError(message, error)
         }
-    }
-
-    private fun updateMessage(message: Message) {
-        Timber.i("Attempt to update message ${message.id}")
-        disposable.add(messageRepository.updateMessage(message)
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({ Timber.d("Update message ${message.id} result: Success") })
-            { error ->
-                Timber.i("Update message ${message.id} result: An exception occurred")
-                errorHandler.dispatch(error)
-            })
     }
 }

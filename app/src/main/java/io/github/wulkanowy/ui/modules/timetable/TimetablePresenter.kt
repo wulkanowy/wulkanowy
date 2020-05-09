@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetable
 
 import android.annotation.SuppressLint
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
@@ -22,7 +21,6 @@ import org.threeten.bp.LocalDate.now
 import org.threeten.bp.LocalDate.of
 import org.threeten.bp.LocalDate.ofEpochDay
 import timber.log.Timber
-import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class TimetablePresenter @Inject constructor(
@@ -102,11 +100,9 @@ class TimetablePresenter @Inject constructor(
         }
     }
 
-    fun onTimetableItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is TimetableItem) {
-            Timber.i("Select timetable item ${item.lesson.id}")
-            view?.showTimetableDialog(item.lesson)
-        }
+    fun onTimetableItemSelected(lesson: Timetable) {
+        Timber.i("Select timetable item ${lesson.id}")
+        view?.showTimetableDialog(lesson)
     }
 
     fun onCompletedLessonsSwitchSelected(): Boolean {
@@ -135,12 +131,12 @@ class TimetablePresenter @Inject constructor(
             clear()
             add(studentRepository.getCurrentStudent()
                 .flatMap { student ->
-                    semesterRepository.getCurrentSemester(student)
-                        .flatMap { timetableRepository.getTimetable(student, it, currentDate, currentDate, forceRefresh) }
+                    semesterRepository.getCurrentSemester(student).flatMap { semester ->
+                        timetableRepository.getTimetable(student, semester, currentDate, currentDate, forceRefresh)
+                    }
                 }
-                .delay(200, MILLISECONDS)
-                .map { createTimetableItems(it) }
-                .map { items -> items.sortedWith(compareBy({ it.lesson.number }, { !it.lesson.isStudentPlan })) }
+                .map { items -> items.filter { if (prefRepository.showWholeClassPlan == "no") it.isStudentPlan else true } }
+                .map { items -> items.sortedWith(compareBy({ it.number }, { !it.isStudentPlan })) }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {
@@ -153,7 +149,7 @@ class TimetablePresenter @Inject constructor(
                 .subscribe({
                     Timber.i("Loading timetable result: Success")
                     view?.apply {
-                        updateData(it)
+                        updateData(it, prefRepository.showWholeClassPlan)
                         showEmpty(it.isEmpty())
                         showErrorView(false)
                         showContent(it.isNotEmpty())
@@ -175,12 +171,6 @@ class TimetablePresenter @Inject constructor(
                 showEmpty(false)
             } else showError(message, error)
         }
-    }
-
-    private fun createTimetableItems(items: List<Timetable>): List<TimetableItem> {
-        return items
-            .filter { if (prefRepository.showWholeClassPlan == "no") it.isStudentPlan else true }
-            .map { TimetableItem(it, prefRepository.showWholeClassPlan) }
     }
 
     private fun reloadView() {

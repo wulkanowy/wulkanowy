@@ -27,7 +27,7 @@ class TimetableRepository @Inject constructor(
         return Single.fromCallable { start.monday to end.friday }.flatMap { (monday, friday) ->
             local.getTimetable(semester, monday, friday).filter { !forceRefresh }
                 .switchIfEmpty(ReactiveNetwork.checkInternetConnectivity(settings).flatMap {
-                    if (it) remote.getTimetable(semester, monday, friday)
+                    if (it) remote.getTimetable(student, semester, monday, friday)
                     else Single.error(UnknownHostException())
                 }.flatMap { new ->
                     local.getTimetable(semester, monday, friday)

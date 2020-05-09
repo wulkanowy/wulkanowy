@@ -49,9 +49,11 @@ class MobileDevicePresenter @Inject constructor(
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading mobile devices data started")
         disposable.add(studentRepository.getCurrentStudent()
-            .flatMap { semesterRepository.getCurrentSemester(it) }
-            .flatMap { mobileDeviceRepository.getDevices(it, forceRefresh) }
-            .map { items -> items.map { MobileDeviceItem(it) } }
+            .flatMap { student ->
+                semesterRepository.getCurrentSemester(student).flatMap { semester ->
+                    mobileDeviceRepository.getDevices(student, semester, forceRefresh)
+                }
+            }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {
@@ -92,14 +94,15 @@ class MobileDevicePresenter @Inject constructor(
 
     fun onUnregisterDevice(device: MobileDevice, position: Int) {
         view?.run {
-            showUndo(position, device)
+            deleteItem(device, position)
+            showUndo(device, position)
             showEmpty(isViewEmpty)
         }
     }
 
-    fun onUnregisterCancelled() {
+    fun onUnregisterCancelled(device: MobileDevice, position: Int) {
         view?.run {
-            restoreDeleteItem()
+            restoreDeleteItem(device, position)
             showEmpty(isViewEmpty)
         }
     }
@@ -107,12 +110,12 @@ class MobileDevicePresenter @Inject constructor(
     fun onUnregisterConfirmed(device: MobileDevice) {
         Timber.i("Unregister device started")
         disposable.add(studentRepository.getCurrentStudent()
-            .flatMap { semesterRepository.getCurrentSemester(it) }
-            .flatMap { semester ->
-                mobileDeviceRepository.unregisterDevice(semester, device)
-                    .flatMap { mobileDeviceRepository.getDevices(semester, it) }
+            .flatMap { student ->
+                semesterRepository.getCurrentSemester(student).flatMap { semester ->
+                    mobileDeviceRepository.unregisterDevice(student, semester, device)
+                        .flatMap { mobileDeviceRepository.getDevices(student, semester, it) }
+                }
             }
-            .map { items -> items.map { MobileDeviceItem(it) } }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .doFinally {

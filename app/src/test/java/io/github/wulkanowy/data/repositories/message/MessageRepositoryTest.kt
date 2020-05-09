@@ -2,8 +2,8 @@ package io.github.wulkanowy.data.repositories.message
 
 import androidx.room.EmptyResultSetException
 import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
-import io.github.wulkanowy.data.SdkHelper
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.UnitTestInternetObservingStrategy
 import io.reactivex.Single
@@ -19,9 +19,6 @@ import org.threeten.bp.LocalDateTime.now
 import java.net.UnknownHostException
 
 class MessageRepositoryTest {
-
-    @Mock
-    lateinit var sdk: SdkHelper
 
     @Mock
     lateinit var local: MessageLocal
@@ -42,55 +39,75 @@ class MessageRepositoryTest {
 
         repo = MessageRepository(InternetObservingSettings.builder()
             .strategy(testObservingStrategy)
-            .build(), local, remote, sdk)
+            .build(), local, remote)
     }
 
     @Test
     fun `throw error when message is not in the db`() {
-        `when`(local.getMessage(123)).thenReturn(Single.error(EmptyResultSetException("No message in database")))
+        val testMessage = Message(1, 1, 1, "", 1, "", "", "", now(), 1, false, 1, 1, false, false)
+        `when`(local.getMessageWithAttachment(student, testMessage)).thenReturn(Single.error(EmptyResultSetException("No message in database")))
 
-        val message = repo.getMessage(student, 123)
-        val messageObserver = TestObserver<Message>()
+        val message = repo.getMessage(student, testMessage)
+        val messageObserver = TestObserver<MessageWithAttachment>()
         message.subscribe(messageObserver)
         messageObserver.assertError(EmptyResultSetException::class.java)
     }
 
     @Test
     fun `get message when content already in db`() {
-        `when`(local.getMessage(123)).thenReturn(Single.just(
-            Message(1, 1, 123, "", 1, "", "", "Test", now(), 1, false, 1, 1, false)
-        ))
+        val testMessage = Message(1, 1, 123, "", 1, "", "", "Test", now(), 1, false, 1, 1, false, false)
+        val messageWithAttachment = MessageWithAttachment(testMessage, emptyList())
 
-        val message = repo.getMessage(student, 123).blockingGet()
+        `when`(local.getMessageWithAttachment(student, testMessage)).thenReturn(Single.just(messageWithAttachment))
 
-        assertEquals("Test", message.content)
+        val message = repo.getMessage(student, testMessage).blockingGet()
+
+        assertEquals("Test", message.message.content)
     }
 
     @Test
     fun `get message when content in db is empty`() {
-        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, true, 1, 1, false)
+        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, true, 1, 1, false, false)
         val testMessageWithContent = testMessage.copy(content = "Test")
 
-        `when`(local.getMessage(123))
-            .thenReturn(Single.just(testMessage))
-            .thenReturn(Single.just(testMessageWithContent))
-        `when`(remote.getMessagesContent(testMessageWithContent)).thenReturn(Single.just("Test"))
+        val mWa = MessageWithAttachment(testMessage, emptyList())
+        val mWaWithContent = MessageWithAttachment(testMessageWithContent, emptyList())
 
-        val message = repo.getMessage(student, 123).blockingGet()
+        `when`(local.getMessageWithAttachment(student, testMessage))
+            .thenReturn(Single.just(mWa))
+            .thenReturn(Single.just(mWaWithContent))
+        `when`(remote.getMessagesContentDetails(student, testMessageWithContent)).thenReturn(Single.just("Test" to emptyList()))
 
-        assertEquals("Test", message.content)
+        val message = repo.getMessage(student, testMessage).blockingGet()
+
+        assertEquals("Test", message.message.content)
         verify(local).updateMessages(listOf(testMessageWithContent))
     }
 
     @Test
     fun `get message when content in db is empty and there is no internet connection`() {
-        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, false, 1, 1, false)
+        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, false, 1, 1, false, false)
+        val messageWithAttachment = MessageWithAttachment(testMessage, emptyList())
 
         testObservingStrategy.isInternetConnection = false
-        `when`(local.getMessage(123)).thenReturn(Single.just(testMessage))
+        `when`(local.getMessageWithAttachment(student, testMessage)).thenReturn(Single.just(messageWithAttachment))
 
-        val message = repo.getMessage(student, 123)
-        val messageObserver = TestObserver<Message>()
+        val message = repo.getMessage(student, testMessage)
+        val messageObserver = TestObserver<MessageWithAttachment>()
+        message.subscribe(messageObserver)
+        messageObserver.assertError(UnknownHostException::class.java)
+    }
+
+    @Test
+    fun `get message when content in db is empty, unread and there is no internet connection`() {
+        val testMessage = Message(1, 1, 123, "", 1, "", "", "", now(), 1, true, 1, 1, false, false)
+        val messageWithAttachment = MessageWithAttachment(testMessage, emptyList())
+
+        testObservingStrategy.isInternetConnection = false
+        `when`(local.getMessageWithAttachment(student, testMessage)).thenReturn(Single.just(messageWithAttachment))
+
+        val message = repo.getMessage(student, testMessage)
+        val messageObserver = TestObserver<MessageWithAttachment>()
         message.subscribe(messageObserver)
         messageObserver.assertError(UnknownHostException::class.java)
     }

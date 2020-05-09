@@ -5,6 +5,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.BigTextStyle
 import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
 import androidx.core.app.NotificationManagerCompat
+import androidx.work.Data
 import androidx.work.ListenableWorker
 import androidx.work.RxWorker
 import androidx.work.WorkerParameters
@@ -15,6 +16,7 @@ import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.sdk.exception.FeatureDisabledException
+import io.github.wulkanowy.sdk.exception.FeatureNotAvailableException
 import io.github.wulkanowy.services.sync.channels.DebugChannel
 import io.github.wulkanowy.services.sync.works.Work
 import io.github.wulkanowy.utils.getCompatColor
@@ -43,6 +45,10 @@ class SyncWorker @AssistedInject constructor(
                     .flatMapCompletable { semester ->
                         Completable.mergeDelayError(works.map { work ->
                             work.create(student, semester)
+                                .onErrorResumeNext {
+                                    if (it is FeatureDisabledException || it is FeatureNotAvailableException) Completable.complete()
+                                    else Completable.error(it)
+                                }
                                 .doOnSubscribe { Timber.i("${work::class.java.simpleName} is starting") }
                                 .doOnError { Timber.i("${work::class.java.simpleName} result: An exception occurred") }
                                 .doOnComplete { Timber.i("${work::class.java.simpleName} result: Success") }
@@ -52,8 +58,15 @@ class SyncWorker @AssistedInject constructor(
             .toSingleDefault(Result.success())
             .onErrorReturn {
                 Timber.e(it, "There was an error during synchronization")
-                if (it is FeatureDisabledException) Result.success()
-                else Result.retry()
+                when {
+                    inputData.getBoolean("one_time", false) -> {
+                        Result.failure(Data.Builder()
+                            .putString("error", it.toString())
+                            .build()
+                        )
+                    }
+                    else -> Result.retry()
+                }
             }
             .doOnSuccess {
                 if (preferencesRepository.isDebugNotificationEnable) notify(it)
@@ -64,7 +77,7 @@ class SyncWorker @AssistedInject constructor(
     private fun notify(result: Result) {
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(applicationContext, DebugChannel.CHANNEL_ID)
             .setContentTitle("Debug notification")
-            .setSmallIcon(R.drawable.ic_more_settings)
+            .setSmallIcon(R.drawable.ic_stat_push)
             .setAutoCancel(true)
             .setColor(applicationContext.getCompatColor(R.color.colorPrimary))
             .setStyle(BigTextStyle().bigText("${SyncWorker::class.java.simpleName} result: $result"))

@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.timetable.completed
 
 import android.annotation.SuppressLint
-import eu.davidea.flexibleadapter.items.AbstractFlexibleItem
+import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.repositories.completedlessons.CompletedLessonsRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -18,7 +18,6 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
 import org.threeten.bp.LocalDate.ofEpochDay
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CompletedLessonsPresenter @Inject constructor(
@@ -87,11 +86,9 @@ class CompletedLessonsPresenter @Inject constructor(
         view?.showErrorDetailsDialog(lastError)
     }
 
-    fun onCompletedLessonsItemSelected(item: AbstractFlexibleItem<*>?) {
-        if (item is CompletedLessonItem) {
-            Timber.i("Select completed lessons item ${item.completedLesson.id}")
-            view?.showCompletedLessonDialog(item.completedLesson)
-        }
+    fun onCompletedLessonsItemSelected(completedLesson: CompletedLesson) {
+        Timber.i("Select completed lessons item ${completedLesson.id}")
+        view?.showCompletedLessonDialog(completedLesson)
     }
 
     private fun setBaseDateOnHolidays() {
@@ -114,11 +111,12 @@ class CompletedLessonsPresenter @Inject constructor(
         disposable.apply {
             clear()
             add(studentRepository.getCurrentStudent()
-                .flatMap { semesterRepository.getCurrentSemester(it) }
-                .delay(200, TimeUnit.MILLISECONDS)
-                .flatMap { completedLessonsRepository.getCompletedLessons(it, currentDate, currentDate, forceRefresh) }
-                .map { items -> items.map { CompletedLessonItem(it) } }
-                .map { items -> items.sortedBy { it.completedLesson.number } }
+                .flatMap { student ->
+                    semesterRepository.getCurrentSemester(student).flatMap { semester ->
+                        completedLessonsRepository.getCompletedLessons(student, semester, currentDate, currentDate, forceRefresh)
+                    }
+                }
+                .map { items -> items.sortedBy { it.number } }
                 .subscribeOn(schedulers.backgroundThread)
                 .observeOn(schedulers.mainThread)
                 .doFinally {

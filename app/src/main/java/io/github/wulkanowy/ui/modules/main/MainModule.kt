@@ -14,18 +14,17 @@ import io.github.wulkanowy.ui.modules.about.license.LicenseModule
 import io.github.wulkanowy.ui.modules.about.logviewer.LogViewerFragment
 import io.github.wulkanowy.ui.modules.account.AccountDialog
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
-import io.github.wulkanowy.ui.modules.attendance.AttendanceModule
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeModule
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
+import io.github.wulkanowy.ui.modules.homework.details.HomeworkDetailsDialog
 import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.MessageModule
 import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
 import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceFragment
-import io.github.wulkanowy.ui.modules.mobiledevice.MobileDeviceModule
 import io.github.wulkanowy.ui.modules.mobiledevice.token.MobileDeviceTokenDialog
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
@@ -51,7 +50,7 @@ abstract class MainModule {
     }
 
     @PerFragment
-    @ContributesAndroidInjector(modules = [AttendanceModule::class])
+    @ContributesAndroidInjector
     abstract fun bindAttendanceFragment(): AttendanceFragment
 
     @PerFragment
@@ -100,6 +99,10 @@ abstract class MainModule {
 
     @PerFragment
     @ContributesAndroidInjector
+    abstract fun bindHomeworkDetailsDialog(): HomeworkDetailsDialog
+
+    @PerFragment
+    @ContributesAndroidInjector
     abstract fun bindLuckyNumberFragment(): LuckyNumberFragment
 
     @PerFragment
@@ -111,7 +114,7 @@ abstract class MainModule {
     abstract fun bindAccountDialog(): AccountDialog
 
     @PerFragment
-    @ContributesAndroidInjector(modules = [MobileDeviceModule::class])
+    @ContributesAndroidInjector
     abstract fun bindMobileDevices(): MobileDeviceFragment
 
     @PerFragment
@@ -127,7 +130,7 @@ abstract class MainModule {
     abstract fun bindLogViewerFragment(): LogViewerFragment
 
     @PerFragment
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindContributorFragment(): ContributorFragment
 
     @PerFragment
