@@ -54,7 +54,7 @@ class PreferencesRepository @Inject constructor(
 
     val isUpcomingLessonsNotificationsEnableKey = context.getString(R.string.pref_key_notifications_upcoming_lessons_enable)
     val isUpcomingLessonsNotificationsEnable: Boolean
-        get() = getBoolean(isUpcomingLessonsNotificationsEnableKey, R.bool.pref_default_upcoming_lessons_enable)
+        get() = getBoolean(isUpcomingLessonsNotificationsEnableKey, R.bool.pref_default_notification_upcoming_lessons_enable)
 
     val isDebugNotificationEnableKey = context.getString(R.string.pref_key_notification_debug)
     val isDebugNotificationEnable: Boolean
