@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
@@ -11,14 +12,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.databinding.ActivityWidgetConfigureBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.WidgetConfigureAdapter
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.EXTRA_FROM_PROVIDER
-import kotlinx.android.synthetic.main.activity_widget_configure.*
+import io.github.wulkanowy.utils.AppInfo
 import javax.inject.Inject
 
-class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePresenter>(),
+class TimetableWidgetConfigureActivity :
+    BaseActivity<TimetableWidgetConfigurePresenter, ActivityWidgetConfigureBinding>(),
     TimetableWidgetConfigureView {
 
     @Inject
@@ -27,12 +30,15 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
     @Inject
     override lateinit var presenter: TimetableWidgetConfigurePresenter
 
+    @Inject
+    lateinit var appInfo: AppInfo
+
     private var dialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(RESULT_CANCELED)
-        setContentView(R.layout.activity_widget_configure)
+        setContentView(ActivityWidgetConfigureBinding.inflate(layoutInflater).apply { binding = this }.root)
 
         intent.extras.let {
             presenter.onAttachView(this, it?.getInt(EXTRA_APPWIDGET_ID), it?.getBoolean(EXTRA_FROM_PROVIDER))
@@ -40,7 +46,7 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
     }
 
     override fun initView() {
-        with(widgetConfigureRecycler) {
+        with(binding.widgetConfigureRecycler) {
             adapter = configureAdapter
             layoutManager = LinearLayoutManager(context)
         }
@@ -49,10 +55,11 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
     }
 
     override fun showThemeDialog() {
-        val items = arrayOf(
+        var items = arrayOf(
             getString(R.string.widget_timetable_theme_light),
             getString(R.string.widget_timetable_theme_dark)
         )
+        if (appInfo.systemVersion >= Build.VERSION_CODES.Q) items += getString(R.string.widget_timetable_theme_system)
 
         dialog = AlertDialog.Builder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
             .setTitle(R.string.widget_timetable_theme_title)
