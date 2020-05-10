@@ -11,14 +11,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.databinding.ActivityWidgetConfigureBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.WidgetConfigureAdapter
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.AppInfo
-import kotlinx.android.synthetic.main.activity_widget_configure.*
 import javax.inject.Inject
 
-class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigurePresenter>(),
+class LuckyNumberWidgetConfigureActivity :
+    BaseActivity<LuckyNumberWidgetConfigurePresenter, ActivityWidgetConfigureBinding>(),
     LuckyNumberWidgetConfigureView {
 
     @Inject
@@ -35,7 +36,7 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(RESULT_CANCELED)
-        setContentView(R.layout.activity_widget_configure)
+        setContentView(ActivityWidgetConfigureBinding.inflate(layoutInflater).apply { binding = this }.root)
 
         intent.extras.let {
             presenter.onAttachView(this, it?.getInt(EXTRA_APPWIDGET_ID))
@@ -43,7 +44,7 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
     }
 
     override fun initView() {
-        with(widgetConfigureRecycler) {
+        with(binding.widgetConfigureRecycler) {
             adapter = configureAdapter
             layoutManager = LinearLayoutManager(context)
         }
