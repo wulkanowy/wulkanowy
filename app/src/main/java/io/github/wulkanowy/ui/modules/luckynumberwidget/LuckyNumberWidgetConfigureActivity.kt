@@ -4,8 +4,6 @@ import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.content.Intent
-import android.content.res.Configuration
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -14,11 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseActivity
+import io.github.wulkanowy.ui.base.WidgetConfigureAdapter
 import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.utils.AppInfo
-import io.github.wulkanowy.ui.base.WidgetConfigureAdapter
 import kotlinx.android.synthetic.main.activity_widget_configure.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigurePresenter>(),
@@ -59,7 +56,7 @@ class LuckyNumberWidgetConfigureActivity : BaseActivity<LuckyNumberWidgetConfigu
             getString(R.string.widget_timetable_theme_light),
             getString(R.string.widget_timetable_theme_dark)
         )
-        if (appInfo.versionCode >= Build.VERSION_CODES.Q) items+=(getString(R.string.widget_timetable_theme_system))
+        if (appInfo.systemVersion >= Build.VERSION_CODES.Q) items += (getString(R.string.widget_timetable_theme_system))
 
         dialog = AlertDialog.Builder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
             .setTitle(R.string.widget_timetable_theme_title)

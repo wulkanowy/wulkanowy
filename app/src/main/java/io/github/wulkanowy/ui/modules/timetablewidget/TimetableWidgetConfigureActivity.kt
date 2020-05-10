@@ -58,7 +58,7 @@ class TimetableWidgetConfigureActivity : BaseActivity<TimetableWidgetConfigurePr
             getString(R.string.widget_timetable_theme_light),
             getString(R.string.widget_timetable_theme_dark)
         )
-        if (appInfo.versionCode >= Build.VERSION_CODES.Q) items += getString(R.string.widget_timetable_theme_system)
+        if (appInfo.systemVersion >= Build.VERSION_CODES.Q) items += getString(R.string.widget_timetable_theme_system)
 
         dialog = AlertDialog.Builder(this, R.style.WulkanowyTheme_WidgetAccountSwitcher)
             .setTitle(R.string.widget_timetable_theme_title)
