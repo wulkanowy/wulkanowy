@@ -26,6 +26,8 @@ class MessageTabPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
+    private var lastSearchQuery = ""
+
     private var messages = emptyList<Message>()
 
     fun onAttachView(view: MessageTabView, folder: MessageFolder) {
@@ -93,7 +95,7 @@ class MessageTabPresenter @Inject constructor(
                 .subscribe({
                     Timber.i("Loading $folder message result: Success")
                     messages = it
-                    updateData(it)
+                    onSearchQueryTextChange(lastSearchQuery)
                     analytics.logEvent("load_messages", "items" to it.size, "folder" to folder.name)
                 }) {
                     Timber.i("Loading $folder message result: An exception occurred")
@@ -115,20 +117,21 @@ class MessageTabPresenter @Inject constructor(
 
     @SuppressLint("DefaultLocale")
     fun onSearchQueryTextChange(query: String) {
+        lastSearchQuery = query
         val lowerCaseQuery = query.toLowerCase()
 
-        val filteredModelList: MutableList<Message> = ArrayList()
+        val filteredList = mutableListOf<Message>()
 
         messages.forEach {
             if (it.subject.toLowerCase().contains(lowerCaseQuery) ||
                 it.sender.toLowerCase().contains(lowerCaseQuery) ||
                 it.recipient.toLowerCase().contains(lowerCaseQuery)
             ) {
-                filteredModelList.add(it)
+                filteredList.add(it)
             }
         }
 
-        updateData(filteredModelList)
+        updateData(filteredList)
     }
 
     private fun updateData(data: List<Message>) {
