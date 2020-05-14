@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
+import android.annotation.SuppressLint
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.data.repositories.message.MessageRepository
@@ -24,6 +25,8 @@ class MessageTabPresenter @Inject constructor(
     lateinit var folder: MessageFolder
 
     private lateinit var lastError: Throwable
+
+    private var messages = emptyList<Message>()
 
     fun onAttachView(view: MessageTabView, folder: MessageFolder) {
         super.onAttachView(view)
@@ -89,12 +92,8 @@ class MessageTabPresenter @Inject constructor(
                 }
                 .subscribe({
                     Timber.i("Loading $folder message result: Success")
-                    view?.run {
-                        showEmpty(it.isEmpty())
-                        showContent(it.isNotEmpty())
-                        showErrorView(false)
-                        updateData(it)
-                    }
+                    messages = it
+                    updateData(it)
                     analytics.logEvent("load_messages", "items" to it.size, "folder" to folder.name)
                 }) {
                     Timber.i("Loading $folder message result: An exception occurred")
@@ -111,6 +110,34 @@ class MessageTabPresenter @Inject constructor(
                 showErrorView(true)
                 showEmpty(false)
             } else showError(message, error)
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    fun onSearchQueryTextChange(query: String) {
+        val lowerCaseQuery = query.toLowerCase()
+
+        val filteredModelList: MutableList<Message> = ArrayList()
+
+        messages.forEach {
+            if (it.subject.toLowerCase().contains(lowerCaseQuery) ||
+                it.sender.toLowerCase().contains(lowerCaseQuery) ||
+                it.recipient.toLowerCase().contains(lowerCaseQuery)
+            ) {
+                filteredModelList.add(it)
+            }
+        }
+
+        updateData(filteredModelList)
+    }
+
+    private fun updateData(data: List<Message>) {
+        view?.run {
+            showEmpty(data.isEmpty())
+            showContent(data.isNotEmpty())
+            showErrorView(false)
+            updateData(data)
+            resetListPosition()
         }
     }
 }
