@@ -118,14 +118,13 @@ class MessageTabPresenter @Inject constructor(
     @SuppressLint("DefaultLocale")
     fun onSearchQueryTextChange(query: String) {
         lastSearchQuery = query
+
         val lowerCaseQuery = query.toLowerCase()
-
         val filteredList = mutableListOf<Message>()
-
         messages.forEach {
-            if (it.subject.toLowerCase().contains(lowerCaseQuery) ||
-                it.sender.toLowerCase().contains(lowerCaseQuery) ||
-                it.recipient.toLowerCase().contains(lowerCaseQuery)
+            if (lowerCaseQuery in it.subject.toLowerCase() ||
+                lowerCaseQuery in it.sender.toLowerCase() ||
+                lowerCaseQuery in it.recipient.toLowerCase()
             ) {
                 filteredList.add(it)
             }
