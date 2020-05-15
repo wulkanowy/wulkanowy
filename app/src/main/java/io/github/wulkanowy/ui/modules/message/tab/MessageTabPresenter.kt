@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -124,7 +125,8 @@ class MessageTabPresenter @Inject constructor(
         messages.forEach {
             if (lowerCaseQuery in it.subject.toLowerCase() ||
                 lowerCaseQuery in it.sender.toLowerCase() ||
-                lowerCaseQuery in it.recipient.toLowerCase()
+                lowerCaseQuery in it.recipient.toLowerCase() ||
+                lowerCaseQuery in it.date.toFormattedString()
             ) {
                 filteredList.add(it)
             }
