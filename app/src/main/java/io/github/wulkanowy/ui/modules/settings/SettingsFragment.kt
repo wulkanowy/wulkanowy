@@ -52,7 +52,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
             }
         }
         findPreference<Preference>(getString(R.string.pref_key_notifications_fix_issues))?.run {
-            isVisible = KillerManager.isAnyActionAvailable(requireContext())
+            isVisible = KillerManager.isDeviceSupported() && KillerManager.isAnyActionAvailable(requireContext())
             setOnPreferenceClickListener {
                 presenter.onFixSyncIssuesClicked()
                 true
