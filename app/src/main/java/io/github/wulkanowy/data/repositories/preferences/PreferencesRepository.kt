@@ -11,6 +11,11 @@ class PreferencesRepository @Inject constructor(
     private val sharedPref: SharedPreferences,
     val context: Context
 ) {
+
+    var isFirstAppStart: Boolean
+        get() = sharedPref.getBoolean("first_app_start", true)
+        set(value) = sharedPref.edit().putBoolean("first_app_start", value).apply()
+
     val startMenuIndex: Int
         get() = getString(R.string.pref_key_start_menu, R.string.pref_default_startup).toInt()
 
