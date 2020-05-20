@@ -9,7 +9,6 @@ import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -18,10 +17,8 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.elevation.ElevationOverlayProvider
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
-import com.thelittlefireman.appkillermanager.AppKillerManager
 import dagger.Lazy
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.databinding.ActivityMainBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.account.AccountDialog
@@ -48,9 +45,6 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     @Inject
     lateinit var navController: FragNavController
-
-    @Inject
-    lateinit var preferencesRepository: PreferencesRepository
 
     @Inject
     lateinit var overlayProvider: Lazy<ElevationOverlayProvider>
@@ -139,22 +133,6 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
                 TimetableFragment.newInstance(),
                 MoreFragment.newInstance()
             )
-        }
-
-        if (preferencesRepository.isFirstAppStart) {
-            if (AppKillerManager.isDeviceSupported() && AppKillerManager.isAnyActionAvailable(baseContext)) {
-                AlertDialog.Builder(this)
-                    .setTitle(R.string.pref_notify_fix_sync_issues)
-                    .setMessage(R.string.pref_notify_fix_sync_issues_message)
-                    .setNegativeButton(R.string.all_close) { _, _ -> }
-                    .setPositiveButton(R.string.pref_notify_fix_sync_issues_settings_button) { _, _ ->
-                        AppKillerManager.doActionPowerSaving(baseContext)
-                        AppKillerManager.doActionAutoStart(baseContext)
-                        AppKillerManager.doActionNotification(baseContext)
-                    }
-                    .show()
-            }
-            preferencesRepository.isFirstAppStart = false
         }
     }
 
