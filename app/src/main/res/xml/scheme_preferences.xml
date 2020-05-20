@@ -31,6 +31,11 @@
             app:key="@string/pref_key_expand_grade"
             app:title="@string/pref_view_expand_grade" />
         <SwitchPreferenceCompat
+            app:defaultValue="@bool/pref_default_timetable_show_timers"
+            app:iconSpaceReserved="false"
+            app:title="@string/pref_view_timetable_show_timers"
+            app:key="@string/pref_key_timetable_show_timers" />
+        <SwitchPreferenceCompat
             app:defaultValue="@bool/pref_default_grade_statistics_list"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_grade_statistics_list"
@@ -101,6 +106,11 @@
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_notifications_enable"
             app:title="@string/pref_notify_switch" />
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/pref_default_notification_upcoming_lessons_enable"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_key_notifications_upcoming_lessons_enable"
+            app:title="@string/pref_notify_upcoming_lessons_switch" />
         <SwitchPreferenceCompat
             app:defaultValue="@bool/pref_default_notification_debug"
             app:iconSpaceReserved="false"

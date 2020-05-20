@@ -60,6 +60,10 @@ class PreferencesRepository @Inject constructor(
     val isNotificationsEnable: Boolean
         get() = getBoolean(R.string.pref_key_notifications_enable, R.bool.pref_default_notifications_enable)
 
+    val isUpcomingLessonsNotificationsEnableKey = context.getString(R.string.pref_key_notifications_upcoming_lessons_enable)
+    val isUpcomingLessonsNotificationsEnable: Boolean
+        get() = getBoolean(isUpcomingLessonsNotificationsEnableKey, R.bool.pref_default_notification_upcoming_lessons_enable)
+
     val isDebugNotificationEnableKey = context.getString(R.string.pref_key_notification_debug)
     val isDebugNotificationEnable: Boolean
         get() = getBoolean(isDebugNotificationEnableKey, R.bool.pref_default_notification_debug)
@@ -75,6 +79,9 @@ class PreferencesRepository @Inject constructor(
 
     val showWholeClassPlan: String
         get() = getString(R.string.pref_key_timetable_show_whole_class, R.string.pref_default_timetable_show_whole_class)
+
+    val showTimetableTimers: Boolean
+        get() = getBoolean(R.string.pref_key_timetable_show_timers, R.bool.pref_default_timetable_show_timers)
 
     private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
 
