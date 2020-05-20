@@ -179,6 +179,8 @@ class LoginRecoverFragment :
 
             loadDataWithBaseURL(url, html, "text/html", "UTF-8", null)
             addJavascriptInterface(object {
+
+                @Suppress("UNUSED")
                 @JavascriptInterface
                 fun captchaCallback(reCaptchaResponse: String) {
                     activity?.runOnUiThread {
@@ -195,7 +197,6 @@ class LoginRecoverFragment :
     }
 
     override fun onDestroyView() {
-        binding.loginRecoverWebView.destroy()
         presenter.onDetachView()
 
         super.onDestroyView()
