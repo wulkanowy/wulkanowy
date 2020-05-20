@@ -18,7 +18,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.elevation.ElevationOverlayProvider
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
-import com.thelittlefireman.appkillermanager.managers.KillerManager
+import com.thelittlefireman.appkillermanager.AppKillerManager
 import dagger.Lazy
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
@@ -142,15 +142,15 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         }
 
         if (preferencesRepository.isFirstAppStart) {
-            if (KillerManager.isDeviceSupported() && KillerManager.isAnyActionAvailable(baseContext)) {
+            if (AppKillerManager.isDeviceSupported() && AppKillerManager.isAnyActionAvailable(baseContext)) {
                 AlertDialog.Builder(this)
                     .setTitle(R.string.pref_notify_fix_sync_issues)
                     .setMessage(R.string.pref_notify_fix_sync_issues_message)
                     .setNegativeButton(R.string.all_close) { _, _ -> }
                     .setPositiveButton(R.string.pref_notify_fix_sync_issues_settings_button) { _, _ ->
-                        KillerManager.doActionPowerSaving(baseContext)
-                        KillerManager.doActionAutoStart(baseContext)
-                        KillerManager.doActionNotification(baseContext)
+                        AppKillerManager.doActionPowerSaving(baseContext)
+                        AppKillerManager.doActionAutoStart(baseContext)
+                        AppKillerManager.doActionNotification(baseContext)
                     }
                     .show()
             }

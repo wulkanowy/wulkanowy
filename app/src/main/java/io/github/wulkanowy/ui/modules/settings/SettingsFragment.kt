@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.thelittlefireman.appkillermanager.managers.KillerManager
+import com.thelittlefireman.appkillermanager.AppKillerManager
 import com.yariksoffice.lingver.Lingver
 import dagger.android.support.AndroidSupportInjection
 import io.github.wulkanowy.R
@@ -52,7 +52,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
             }
         }
         findPreference<Preference>(getString(R.string.pref_key_notifications_fix_issues))?.run {
-            isVisible = KillerManager.isDeviceSupported() && KillerManager.isAnyActionAvailable(requireContext())
+            isVisible = AppKillerManager.isDeviceSupported() && AppKillerManager.isAnyActionAvailable(requireContext())
             setOnPreferenceClickListener {
                 presenter.onFixSyncIssuesClicked()
                 true
@@ -133,9 +133,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
             .setMessage(R.string.pref_notify_fix_sync_issues_message)
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .setPositiveButton(R.string.pref_notify_fix_sync_issues_settings_button) { _, _ ->
-                KillerManager.doActionPowerSaving(requireContext())
-                KillerManager.doActionAutoStart(requireContext())
-                KillerManager.doActionNotification(requireContext())
+                AppKillerManager.doActionPowerSaving(requireContext())
+                AppKillerManager.doActionAutoStart(requireContext())
+                AppKillerManager.doActionNotification(requireContext())
             }
             .show()
     }
