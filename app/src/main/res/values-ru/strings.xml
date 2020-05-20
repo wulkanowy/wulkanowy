@@ -121,6 +121,9 @@
     <string name="timetable_time">Часы</string>
     <string name="timetable_changes">Изменения</string>
     <string name="timetable_no_items">Нет уроков в данный день</string>
+    <string name="timetable_now">Now: %s</string>
+    <string name="timetable_next">Next: %s</string>
+    <string name="timetable_later">Later: %s</string>
     <!--Completed lessons-->
     <string name="completed_lessons_title">Проведённые уроки</string>
     <string name="completed_lessons_button">Просмотреть проведённые уроки</string>
@@ -320,6 +323,7 @@
     <string name="pref_view_app_language">Язык приложения</string>
     <string name="pref_notify_header">Уведомления</string>
     <string name="pref_notify_switch">Показывать уведомления</string>
+    <string name="pref_notify_upcoming_lessons_switch">Show upcoming lesson notifications</string>
     <string name="pref_notify_debug_switch">Показывать дебаг-уведомления</string>
     <string name="pref_services_header">Синхронизация</string>
     <string name="pref_services_switch">Автоматическая синхронизация</string>
@@ -345,6 +349,7 @@
     <string name="channel_new_message">Новые сообщения</string>
     <string name="channel_new_notes">Новые заметки</string>
     <string name="channel_push">Показывать push-уведомления</string>
+    <string name="channel_upcoming_lessons">Upcoming lessons</string>
     <string name="channel_debug">Дебаг</string>
     <!--Colors-->
     <string name="all_black">Чёрный</string>
