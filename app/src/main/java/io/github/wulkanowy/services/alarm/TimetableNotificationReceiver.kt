@@ -1,5 +1,6 @@
 package io.github.wulkanowy.services.alarm
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.BroadcastReceiver
@@ -18,7 +19,6 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toLocalDateTime
-import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -48,18 +48,19 @@ class TimetableNotificationReceiver : BroadcastReceiver() {
         const val LESSON_END = "end_timestamp"
     }
 
+    @SuppressLint("CheckResult")
     override fun onReceive(context: Context, intent: Intent) {
         Timber.d("Receiving intent... ${intent.toUri(0)}")
         AndroidInjection.inject(this, context)
 
-        CompositeDisposable().add(studentRepository.getCurrentStudent(false)
+        studentRepository.getCurrentStudent(false)
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
             .subscribe({
                 val studentId = intent.getIntExtra(STUDENT_ID, 0)
                 if (it.studentId == studentId) prepareNotification(context, intent)
                 else Timber.d("Notification studentId($studentId) differs from current(${it.studentId})")
-            }, { Timber.e(it) }))
+            }, { Timber.e(it) })
     }
 
     private fun prepareNotification(context: Context, intent: Intent) {
