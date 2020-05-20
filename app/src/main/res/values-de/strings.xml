@@ -115,6 +115,9 @@
     <string name="timetable_time">Stunden</string>
     <string name="timetable_changes">Änderungen</string>
     <string name="timetable_no_items">Kein Unterricht an diesem Tag</string>
+    <string name="timetable_now">Now: %s</string>
+    <string name="timetable_next">Next: %s</string>
+    <string name="timetable_later">Later: %s</string>
     <!--Completed lessons-->
     <string name="completed_lessons_title">Beendete Lektionen</string>
     <string name="completed_lessons_button">Beendete Lektionen anzeigen</string>
@@ -300,6 +303,7 @@
     <string name="pref_view_app_language">App Sprache</string>
     <string name="pref_notify_header">Benachrichtigungen</string>
     <string name="pref_notify_switch">Benachrichtigungen anzeigen</string>
+    <string name="pref_notify_upcoming_lessons_switch">Show upcoming lesson notifications</string>
     <string name="pref_notify_debug_switch">Debug-Benachrichtigungen anzeigen</string>
     <string name="pref_services_header">Synchronisierung</string>
     <string name="pref_services_switch">Automatische Aktualisierung</string>
@@ -325,6 +329,7 @@
     <string name="channel_new_message">Neue Nachrichten</string>
     <string name="channel_new_notes">Neue Eintragen</string>
     <string name="channel_push">Push-Benachrichtigungen</string>
+    <string name="channel_upcoming_lessons">Upcoming lessons</string>
     <string name="channel_debug">Debuggen</string>
     <!--Colors-->
     <string name="all_black">Schwarz</string>
