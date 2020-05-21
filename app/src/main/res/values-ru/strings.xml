@@ -121,12 +121,12 @@
     <string name="timetable_time">Часы</string>
     <string name="timetable_changes">Изменения</string>
     <string name="timetable_no_items">Нет уроков в данный день</string>
-    <string name="timetable_minutes">%s min</string>
-    <string name="timetable_seconds">%s sec</string>
-    <string name="timetable_time_left">%1$s left</string>
-    <string name="timetable_time_until">in %1$s</string>
-    <string name="timetable_finished">Finished</string>
-    <string name="timetable_now">Now: %s</string>
+    <string name="timetable_minutes">%s мин</string>
+    <string name="timetable_seconds">%s сек</string>
+    <string name="timetable_time_left">%1$s осталось</string>
+    <string name="timetable_time_until">через %1$s</string>
+    <string name="timetable_finished">Окончен</string>
+    <string name="timetable_now">Сейчас: %s</string>
     <string name="timetable_next">Следующий: %s</string>
     <string name="timetable_later">Позже: %s</string>
     <!--Completed lessons-->
