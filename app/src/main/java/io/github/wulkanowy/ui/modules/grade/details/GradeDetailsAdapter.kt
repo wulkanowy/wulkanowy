@@ -107,7 +107,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
             is ItemViewHolder -> bindItemViewHolder(
                 binding = holder.binding,
                 grade = items[position].value as Grade,
-                position = position
+                position = holder.adapterPosition
             )
         }
     }
