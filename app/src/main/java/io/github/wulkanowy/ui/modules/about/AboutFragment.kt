@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.github.wulkanowy.BuildConfig
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentAboutBinding
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -98,8 +99,14 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(R.layout.fragment_about
         }
     }
 
+    override fun openAppInMarket() {
+        context?.openInternetBrowser("market://details?id=${BuildConfig.APPLICATION_ID}") {
+            context?.openInternetBrowser("https://github.com/wulkanowy/wulkanowy/releases", ::showMessage)
+        }
+    }
+
     override fun openLogViewer() {
-        if (appInfo.isDebug) (activity as? MainActivity)?.pushView(LogViewerFragment.newInstance())
+        (activity as? MainActivity)?.pushView(LogViewerFragment.newInstance())
     }
 
     override fun openDiscordInvite() {
@@ -115,7 +122,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(R.layout.fragment_about
             chooserTitle = getString(R.string.about_feedback),
             email = "wulkanowyinc@gmail.com",
             subject = "Zgłoszenie błędu",
-            body = requireContext().getString(R.string.about_feedback_template,
+            body = getString(R.string.about_feedback_template,
                 "${appInfo.systemManufacturer} ${appInfo.systemModel}", appInfo.systemVersion.toString(), appInfo.versionName
             ),
             onActivityNotFound = {
