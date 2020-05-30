@@ -76,10 +76,10 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
     }
 
     @Synchronized
-    private fun refreshList(newItems: List<GradeDetailsItem>) {
+    private fun refreshList(newItems: MutableList<GradeDetailsItem>) {
         val diffCallback = GradeDetailsDiffUtil(items, newItems)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        items = newItems.toMutableList()
+        items = newItems
         diffResult.dispatchUpdatesTo(this)
     }
 
