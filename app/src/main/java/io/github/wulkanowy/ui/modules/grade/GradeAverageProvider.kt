@@ -83,18 +83,18 @@ class GradeAverageProvider @Inject constructor(
         var i = 0
         return grades.map { subject ->
             i++
-            val summary = singleOrNull { it.subject == subject }
+            singleOrNull { it.subject == subject }?.let { return@map it }
             GradeSummary(
                 studentId = studentId,
                 semesterId = semesterId,
-                position = summary?.position ?: i,
+                position = i,
                 subject = subject,
-                predictedGrade = summary?.predictedGrade.orEmpty(),
-                finalGrade = summary?.finalGrade.orEmpty(),
-                proposedPoints = summary?.proposedPoints.orEmpty(),
-                finalPoints = summary?.finalPoints.orEmpty(),
-                pointsSum = summary?.pointsSum.orEmpty(),
-                average = summary?.average ?: .0
+                predictedGrade = "",
+                finalGrade = "",
+                proposedPoints = "",
+                finalPoints = "",
+                pointsSum = "",
+                average = .0
             )
         }
     }
