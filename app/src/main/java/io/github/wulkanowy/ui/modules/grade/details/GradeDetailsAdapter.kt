@@ -49,14 +49,10 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
     }
 
     fun getHeaderItem(subject: String): GradeDetailsItem {
-        if (headers.any { it.value !is GradeDetailsHeader }) {
-            Timber.e("Headers contains no-header items! $headers")
-        }
-
         val candidates = headers.filter { (it.value as GradeDetailsHeader).subject == subject }
 
         if (candidates.size > 1) {
-            Timber.e("Header with subject $subject found ${candidates.size} times! Items: $candidates, expanded: $expandedPosition")
+            Timber.e("Header with subject $subject found ${candidates.size} times! Expanded: $expandedPosition. Items: $candidates")
         }
 
         return candidates.first()
