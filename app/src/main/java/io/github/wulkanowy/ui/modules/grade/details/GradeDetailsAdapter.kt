@@ -59,9 +59,16 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
     }
 
     fun updateHeaderItem(item: GradeDetailsItem) {
-        headers[headers.indexOf(item)] = item
-        items[items.indexOf(item)] = item
-        notifyItemChanged(items.indexOf(item))
+        val headerPosition = headers.indexOf(item)
+        val itemPosition = items.indexOf(item)
+
+        if (headerPosition == NO_POSITION || itemPosition == NO_POSITION) {
+            Timber.e("Invalid update header positions! Header: $headerPosition, item: $itemPosition")
+        }
+
+        headers[headerPosition] = item
+        items[itemPosition] = item
+        notifyItemChanged(itemPosition)
     }
 
     fun collapseAll() {
