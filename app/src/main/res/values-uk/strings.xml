@@ -120,14 +120,14 @@
     <string name="timetable_time">Години</string>
     <string name="timetable_changes">Зміни</string>
     <string name="timetable_no_items">Брак уроків у цей день</string>
-    <string name="timetable_minutes">%s min</string>
-    <string name="timetable_seconds">%s sec</string>
-    <string name="timetable_time_left">%1$s left</string>
-    <string name="timetable_time_until">in %1$s</string>
-    <string name="timetable_finished">Finished</string>
-    <string name="timetable_now">Now: %s</string>
-    <string name="timetable_next">Next: %s</string>
-    <string name="timetable_later">Later: %s</string>
+    <string name="timetable_minutes">%s хвилин</string>
+    <string name="timetable_seconds">%s сек</string>
+    <string name="timetable_time_left">%1$s лишилося</string>
+    <string name="timetable_time_until">через %1$s</string>
+    <string name="timetable_finished">Завершено</string>
+    <string name="timetable_now">Зараз: %s</string>
+    <string name="timetable_next">Наступний: %s</string>
+    <string name="timetable_later">Пізніше: %s</string>
     <!--Completed lessons-->
     <string name="completed_lessons_title">Уроки, що відбулися</string>
     <string name="completed_lessons_button">Показати уроки, що відбулися</string>
@@ -290,8 +290,8 @@
     <string name="logviewer_share">Поділитися логами</string>
     <string name="logviewer_refresh">Оновити</string>
     <!--Error dialog-->
-    <string name="dialog_error_check_update">Check for updates</string>
-    <string name="dialog_error_check_update_message">Before reporting a bug, check first if an update with the bug fix is available</string>
+    <string name="dialog_error_check_update">Провірити наявність оновлень</string>
+    <string name="dialog_error_check_update_message">Перед тим, як повідомлювати о помілці, перевірте наявність оновлень</string>
     <!--Generic-->
     <string name="all_content">Зміст</string>
     <string name="all_retry">Повторити</string>
@@ -308,8 +308,8 @@
     <string name="all_subject">Предмет</string>
     <string name="all_prev">Попередній</string>
     <string name="all_next">Наступний</string>
-    <string name="all_search">Search</string>
-    <string name="all_search_hint">Search...</string>
+    <string name="all_search">Пошук</string>
+    <string name="all_search_hint">Пошук...</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Брак уроків</string>
     <string name="widget_timetable_theme_title">Увібрати тему</string>
