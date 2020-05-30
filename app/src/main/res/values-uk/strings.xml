@@ -324,17 +324,17 @@
     <string name="pref_view_present">Показувати присутність у відвідуваності</string>
     <string name="pref_view_app_theme">Тема додатку</string>
     <string name="pref_view_expand_grade">Більше оцінок</string>
-    <string name="pref_view_timetable_show_timers">Mark current lesson in timetable</string>
-    <string name="pref_view_grade_statistics_list">Show chart list in class grades</string>
+    <string name="pref_view_timetable_show_timers">Позначити поточний урок у розкладі</string>
+    <string name="pref_view_grade_statistics_list">Показувати діаграми в оцінках класу</string>
     <string name="pref_view_timetable_show_whole_class">Показати уроки всього класу</string>
     <string name="pref_view_grade_color_scheme">Схема кольорів оцінок</string>
     <string name="pref_view_app_language">Мова додатку</string>
     <string name="pref_notify_header">Повідомлення</string>
     <string name="pref_notify_switch">Показувати повідомлення</string>
-    <string name="pref_notify_upcoming_lessons_switch">Show upcoming lesson notifications</string>
-    <string name="pref_notify_fix_sync_issues">Fix synchronization &amp; notifications issues</string>
-    <string name="pref_notify_fix_sync_issues_message">Your device may have data synchronization issues and with notifications.\n\nTo fix them, you need to add Wulkanowy to the autostart and turn off battery optimization/saving in the phone settings.</string>
-    <string name="pref_notify_fix_sync_issues_settings_button">Go to settings</string>
+    <string name="pref_notify_upcoming_lessons_switch">Показувати повідомлення о наступних уроках</string>
+    <string name="pref_notify_fix_sync_issues">Виправити помилки з синхронізацією і повідомленнями</string>
+    <string name="pref_notify_fix_sync_issues_message">На вашому пристрої можуть бути помилки з синхронізацією і повідомленнями\n\nЩоб виправити іх, вам необхідно додати Wulkanowy в авто-старт и вимкнути оптимізацію/экономію батареї в налаштуваннях пристрою.</string>
+    <string name="pref_notify_fix_sync_issues_settings_button">Перейти до налаштувань</string>
     <string name="pref_notify_debug_switch">Показувати дебаг-повідомлення</string>
     <string name="pref_services_header">Синхронізація</string>
     <string name="pref_services_switch">Автоматична синхронізація</string>
@@ -360,7 +360,7 @@
     <string name="channel_new_message">Нові повідомлення</string>
     <string name="channel_new_notes">Нові нотатки</string>
     <string name="channel_push">Показувати push-повідомлення</string>
-    <string name="channel_upcoming_lessons">Upcoming lessons</string>
+    <string name="channel_upcoming_lessons">Наступні уроки</string>
     <string name="channel_debug">Дебаг</string>
     <!--Colors-->
     <string name="all_black">Чорний</string>
