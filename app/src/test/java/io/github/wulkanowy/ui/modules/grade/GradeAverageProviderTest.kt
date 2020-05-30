@@ -1,11 +1,11 @@
 package io.github.wulkanowy.ui.modules.grade
 
+import io.github.wulkanowy.createSemesterEntity
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
-import io.github.wulkanowy.createSemesterEntity
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.sdk.Sdk
 import io.reactivex.Single
@@ -221,6 +221,21 @@ class GradeAverageProviderTest {
             getSummary(22, "Matematyka", 1.1),
             getSummary(22, "Fizyka", 7.26)
         )))
+
+        val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
+
+        assertEquals(2, items.size)
+        assertEquals(3.0, items.single { it.subject == "Matematyka" }.average, .0)
+        assertEquals(3.25, items.single { it.subject == "Fizyka" }.average, .0)
+    }
+
+    @Test
+    fun allYearEmptySummaries() {
+        `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
+        `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
+
+        `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(firstGrades to emptyList()))
+        `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(secondGrades to emptyList()))
 
         val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
 

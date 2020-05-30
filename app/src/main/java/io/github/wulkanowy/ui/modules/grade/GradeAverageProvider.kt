@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade
 
+import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
@@ -58,7 +59,7 @@ class GradeAverageProvider @Inject constructor(
             val isAnyAverage = summaries.any { it.average != .0 }
             val allGrades = details.groupBy { it.subject }
 
-            summaries.map { summary ->
+            summaries.emulateSummariesWhenEmpty(student.studentId, semester.semesterId, allGrades.keys).map { summary ->
                 val grades = allGrades[summary.subject].orEmpty()
                 GradeDetailsWithAverage(
                     subject = summary.subject,
@@ -73,6 +74,28 @@ class GradeAverageProvider @Inject constructor(
                     grades = grades
                 )
             }
+        }
+    }
+
+    private fun List<GradeSummary>.emulateSummariesWhenEmpty(studentId: Int, semesterId: Int, grades: Set<String>): List<GradeSummary> {
+        if (isNotEmpty() && size == grades.size) return this
+
+        var i = 0
+        return grades.map { subject ->
+            i++
+            val summary = singleOrNull { it.subject == subject }
+            GradeSummary(
+                studentId = studentId,
+                semesterId = semesterId,
+                position = summary?.position ?: i,
+                subject = subject,
+                predictedGrade = summary?.predictedGrade.orEmpty(),
+                finalGrade = summary?.finalGrade.orEmpty(),
+                proposedPoints = summary?.proposedPoints.orEmpty(),
+                finalPoints = summary?.finalPoints.orEmpty(),
+                pointsSum = summary?.pointsSum.orEmpty(),
+                average = summary?.average ?: .0
+            )
         }
     }
 }
