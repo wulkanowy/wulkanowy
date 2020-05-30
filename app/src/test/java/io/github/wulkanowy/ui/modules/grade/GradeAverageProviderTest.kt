@@ -244,6 +244,25 @@ class GradeAverageProviderTest {
         assertEquals(3.25, items.single { it.subject == "Fizyka" }.average, .0)
     }
 
+    @Test
+    fun allYearMissingSummaries() {
+        `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(false)
+        `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
+
+        `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(firstGrades to listOf(
+            getSummary(22, "Matematyka", 4.0)
+        )))
+        `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(secondGrades to listOf(
+            getSummary(23, "Matematyka", 3.0)
+        )))
+
+        val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
+
+        assertEquals(2, items.size)
+        assertEquals(3.5, items.single { it.subject == "Matematyka" }.average, .0) // from summaries
+        assertEquals(3.25, items.single { it.subject == "Fizyka" }.average, .0)
+    }
+
     private fun getGrade(semesterId: Int, subject: String, value: Double, modifier: Double = 0.0): Grade {
         return Grade(
             studentId = 101,

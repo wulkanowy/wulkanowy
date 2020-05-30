@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade
 
+import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -59,15 +60,14 @@ class GradeAverageProvider @Inject constructor(
             val isAnyAverage = summaries.any { it.average != .0 }
             val allGrades = details.groupBy { it.subject }
 
-            summaries.emulateSummariesWhenEmpty(student.studentId, semester.semesterId, allGrades.keys).map { summary ->
+            summaries.emulateEmptySummaries(student, semester, allGrades, isAnyAverage).map { summary ->
                 val grades = allGrades[summary.subject].orEmpty()
                 GradeDetailsWithAverage(
                     subject = summary.subject,
                     average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
-                        grades.map {
-                            if (student.loginMode == Sdk.Mode.SCRAPPER.name) it.changeModifier(plusModifier, minusModifier)
-                            else it
-                        }.calcAverage()
+                        (if (student.loginMode == Sdk.Mode.SCRAPPER.name)
+                            grades.map { it.changeModifier(plusModifier, minusModifier) }
+                        else grades).calcAverage()
                     } else summary.average,
                     points = summary.pointsSum,
                     summary = summary,
@@ -77,16 +77,16 @@ class GradeAverageProvider @Inject constructor(
         }
     }
 
-    private fun List<GradeSummary>.emulateSummariesWhenEmpty(studentId: Int, semesterId: Int, grades: Set<String>): List<GradeSummary> {
+    private fun List<GradeSummary>.emulateEmptySummaries(student: Student, semester: Semester, grades: Map<String, List<Grade>>, calcAverage: Boolean): List<GradeSummary> {
         if (isNotEmpty() && size == grades.size) return this
 
         var i = 0
-        return grades.map { subject ->
+        return grades.map { (subject, details) ->
             i++
             singleOrNull { it.subject == subject }?.let { return@map it }
             GradeSummary(
-                studentId = studentId,
-                semesterId = semesterId,
+                studentId = student.studentId,
+                semesterId = semester.semesterId,
                 position = i,
                 subject = subject,
                 predictedGrade = "",
@@ -94,7 +94,9 @@ class GradeAverageProvider @Inject constructor(
                 proposedPoints = "",
                 finalPoints = "",
                 pointsSum = "",
-                average = .0
+                average = if (calcAverage) (if (student.loginMode == Sdk.Mode.SCRAPPER.name) {
+                    details.map { it.changeModifier(plusModifier, minusModifier) }
+                } else details).calcAverage() else .0
             )
         }
     }
