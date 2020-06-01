@@ -91,20 +91,7 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun onlyOneSemesterTest() {
-        `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
-        `when`(preferencesRepository.gradeAverageMode).thenReturn("only_one_semester")
-        `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(secondGrades to secondSummaries))
-
-        val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
-
-        assertEquals(2, items.size)
-        assertEquals(2.5, items.single { it.subject == "Matematyka" }.average, .0) // from details: 2,5
-        assertEquals(3.0, items.single { it.subject == "Fizyka" }.average, .0) // from details: 3,0
-    }
-
-    @Test
-    fun onlyOneSemester_gradesWithModifiers_default() {
+    fun `force calc current semester average with default modifiers in scraper mode`() {
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
         `when`(preferencesRepository.gradeAverageMode).thenReturn("only_one_semester")
         `when`(semesterRepository.getSemesters(student)).thenReturn(Single.just(semesters))
@@ -116,7 +103,7 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun onlyOneSemester_gradesWithModifiers_scrapper() {
+    fun `force calc current semester average with custom modifiers in scraper mode`() {
         val student = student.copy(loginMode = Sdk.Mode.SCRAPPER.name)
 
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
@@ -133,10 +120,13 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun onlyOneSemester_gradesWithModifiers_api() {
+    fun `force calc current semester average with custom modifiers in api mode`() {
         val student = student.copy(loginMode = Sdk.Mode.API.name)
 
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
+        `when`(preferencesRepository.gradeMinusModifier).thenReturn(.33) // useless in this mode
+        `when`(preferencesRepository.gradePlusModifier).thenReturn(.33)
+
         `when`(preferencesRepository.gradeAverageMode).thenReturn("only_one_semester")
         `when`(semesterRepository.getSemesters(student)).thenReturn(Single.just(semesters))
         `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(secondGradeWithModifier to secondSummariesWithModifier))
@@ -147,10 +137,13 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun onlyOneSemester_gradesWithModifiers_hybrid() {
+    fun `force calc current semester average with custom modifiers in hybrid mode`() {
         val student = student.copy(loginMode = Sdk.Mode.HYBRID.name)
 
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
+        `when`(preferencesRepository.gradeMinusModifier).thenReturn(.33) // useless in this mode
+        `when`(preferencesRepository.gradePlusModifier).thenReturn(.33)
+
         `when`(preferencesRepository.gradeAverageMode).thenReturn("only_one_semester")
         `when`(semesterRepository.getSemesters(student)).thenReturn(Single.just(semesters))
         `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(secondGradeWithModifier to secondSummariesWithModifier))
@@ -161,7 +154,33 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun allYearFirstSemesterTest() {
+    fun `calc current semester average`() {
+        `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(false)
+        `when`(preferencesRepository.gradeAverageMode).thenReturn("only_one_semester")
+        `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(secondGrades to secondSummaries))
+
+        val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
+
+        assertEquals(2, items.size)
+        assertEquals(2.9, items.single { it.subject == "Matematyka" }.average, .0) // from summary: 2,9
+        assertEquals(3.4, items.single { it.subject == "Fizyka" }.average, .0) // from details: 3,4
+    }
+
+    @Test
+    fun `force calc current semester average`() {
+        `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
+        `when`(preferencesRepository.gradeAverageMode).thenReturn("only_one_semester")
+        `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(secondGrades to secondSummaries))
+
+        val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
+
+        assertEquals(2, items.size)
+        assertEquals(2.5, items.single { it.subject == "Matematyka" }.average, .0) // from details: 2,5
+        assertEquals(3.0, items.single { it.subject == "Fizyka" }.average, .0) // from details: 3,0
+    }
+
+    @Test
+    fun `force calc full year average when current is first`() {
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
         `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
         `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(firstGrades to firstSummaries))
@@ -173,29 +192,15 @@ class GradeAverageProviderTest {
         assertEquals(3.5, items.single { it.subject == "Fizyka" }.average, .0) // (from summary): 3,5
     }
 
-    @Test
-    fun allYearSecondSemesterTest_forceCalc() {
-        `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
-        `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
-        `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(firstGrades to firstSummaries))
-        `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(secondGrades to secondSummaries))
-
-        val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
-
-        assertEquals(2, items.size)
-        assertEquals(3.0, items.single { it.subject == "Matematyka" }.average, .0) // (from details): 2,5 + 3,5 → 3,0
-        assertEquals(3.25, items.single { it.subject == "Fizyka" }.average, .0) // (from details): 3,5  + 3,0 → 3,25
-    }
-
     @Test(expected = IllegalArgumentException::class)
-    fun incorrectAverageModeTest() {
+    fun `calc average on invalid mode`() {
         `when`(preferencesRepository.gradeAverageMode).thenReturn("test_mode")
 
         gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId, true).blockingGet()
     }
 
     @Test
-    fun allYearSemester_averageFromSummary() {
+    fun `calc full year average`() {
         `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(false)
         `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(firstGrades to listOf(
@@ -215,7 +220,7 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun allYear_averageFromSummary_forceCalc() {
+    fun `force calc full year average`() {
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
         `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
         `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(firstGrades to firstSummaries))
@@ -232,7 +237,22 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun allYearEmptySummaries() {
+    fun `calc full year average when no summaries`() {
+        `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(false)
+        `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
+
+        `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(firstGrades to emptyList()))
+        `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(secondGrades to emptyList()))
+
+        val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
+
+        assertEquals(2, items.size)
+        assertEquals(3.0, items.single { it.subject == "Matematyka" }.average, .0) // (from details): 2,5 + 3,5 → 3,0
+        assertEquals(3.25, items.single { it.subject == "Fizyka" }.average, .0) // (from details): 3,5  + 3,0 → 3,25
+    }
+
+    @Test
+    fun `force calc full year average when no summaries`() {
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
         `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
 
@@ -247,7 +267,7 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun allYearMissingSummaries() {
+    fun `calc full year average when missing summaries in both semesters`() {
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(false)
         `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
 
@@ -266,7 +286,7 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun allYearMissingSummaryInFirstSemester() {
+    fun `calc full year average when missing summary in second semester`() {
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(false)
         `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
 
@@ -281,7 +301,7 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun allYearMissingSummaryInSecondSemester() {
+    fun `calc full year average when missing summary in first semester`() {
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(false)
         `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
 
@@ -296,7 +316,7 @@ class GradeAverageProviderTest {
     }
 
     @Test
-    fun allYearMissingSummaryInSecondSemester_froceCalc() {
+    fun `force calc full year average when missing summary in first semester`() {
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
         `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
 
