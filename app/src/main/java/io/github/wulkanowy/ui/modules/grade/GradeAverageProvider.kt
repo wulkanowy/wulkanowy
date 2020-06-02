@@ -60,7 +60,7 @@ class GradeAverageProvider @Inject constructor(
             val isAnyAverage = summaries.any { it.average != .0 }
             val allGrades = details.groupBy { it.subject }
 
-            summaries.emulateEmptySummaries(student, semester, allGrades, isAnyAverage).map { summary ->
+            summaries.emulateEmptySummaries(student, semester, allGrades.toList(), isAnyAverage).map { summary ->
                 val grades = allGrades[summary.subject].orEmpty()
                 GradeDetailsWithAverage(
                     subject = summary.subject,
@@ -77,13 +77,11 @@ class GradeAverageProvider @Inject constructor(
         }
     }
 
-    private fun List<GradeSummary>.emulateEmptySummaries(student: Student, semester: Semester, grades: Map<String, List<Grade>>, calcAverage: Boolean): List<GradeSummary> {
+    private fun List<GradeSummary>.emulateEmptySummaries(student: Student, semester: Semester, grades: List<Pair<String, List<Grade>>>, calcAverage: Boolean): List<GradeSummary> {
         if (isNotEmpty() && size == grades.size) return this
 
-        var i = 0
-        return grades.map { (subject, details) ->
-            i++
-            singleOrNull { it.subject == subject }?.let { return@map it }
+        return grades.mapIndexed { i, (subject, details) ->
+            singleOrNull { it.subject == subject }?.let { return@mapIndexed it }
             GradeSummary(
                 studentId = student.studentId,
                 semesterId = semester.semesterId,
