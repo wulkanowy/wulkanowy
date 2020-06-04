@@ -10,6 +10,7 @@ import android.view.View.VISIBLE
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.databinding.FragmentMessagePreviewBinding
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -140,8 +141,8 @@ class MessagePreviewFragment :
         context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, message)) }
     }
 
-    override fun openMessageShare(message: Message) {
-        context?.shareMessage(message)
+    override fun openMessageShare(message: Message, attachments: List<MessageAttachment>?) {
+        context?.shareMessage(message, attachments)
     }
 
     override fun popView() {

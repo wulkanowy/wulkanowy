@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import io.github.wulkanowy.BuildConfig.APPLICATION_ID
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.MessageAttachment
 
 @ColorInt
 fun Context.getThemeAttrColor(@AttrRes colorAttr: Int): Int {
@@ -72,11 +73,19 @@ fun Context.openDialer(phone: String) {
     startActivity(intent)
 }
 
-fun Context.shareMessage(message: Message) {
-    val text = "Temat: ${message.subject}\n" + when (message.sender.isNotEmpty()) {
+fun Context.shareMessage(message: Message, attachments: List<MessageAttachment>?) {
+    var text = "Temat: ${message.subject}\n" + when (message.sender.isNotEmpty()) {
         true -> "Od: ${message.sender}\n"
         false -> "Do: ${message.recipient}\n"
     } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}"
+
+    if (attachments != null && attachments.size > 0) {
+        text += "\n\nZałączniki:"
+
+        attachments.forEach { attachment ->
+            text += "\n${attachment.filename}: ${attachment.url}"
+        }
+    }
 
     val sendIntent: Intent = Intent().apply {
         action = Intent.ACTION_SEND

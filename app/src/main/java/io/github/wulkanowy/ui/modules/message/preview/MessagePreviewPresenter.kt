@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.repositories.message.MessageRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -19,6 +20,8 @@ class MessagePreviewPresenter @Inject constructor(
 ) : BasePresenter<MessagePreviewView>(errorHandler, studentRepository, schedulers) {
 
     var message: Message? = null
+
+    var attachments: List<MessageAttachment>? = null
 
     private lateinit var lastError: Throwable
 
@@ -56,6 +59,7 @@ class MessagePreviewPresenter @Inject constructor(
                 .subscribe({ message ->
                     Timber.i("Loading message ${message.message.messageId} preview result: Success ")
                     this@MessagePreviewPresenter.message = message.message
+                    this@MessagePreviewPresenter.attachments = message.attachments
                     view?.apply {
                         setMessageWithAttachment(message)
                         initOptions()
@@ -89,7 +93,7 @@ class MessagePreviewPresenter @Inject constructor(
 
     fun onShare(): Boolean {
         message?.let {
-            view?.openMessageShare(it)
+            view?.openMessageShare(it, attachments)
             return true
         }
         return false

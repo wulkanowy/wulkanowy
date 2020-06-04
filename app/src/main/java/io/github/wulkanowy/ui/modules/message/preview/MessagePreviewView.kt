@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
 import io.github.wulkanowy.data.db.entities.Message
+import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.ui.base.BaseView
 
@@ -34,7 +35,7 @@ interface MessagePreviewView : BaseView {
 
     fun openMessageForward(message: Message?)
 
-    fun openMessageShare(message: Message)
+    fun openMessageShare(message: Message, attachments: List<MessageAttachment>?)
 
     fun popView()
 }
