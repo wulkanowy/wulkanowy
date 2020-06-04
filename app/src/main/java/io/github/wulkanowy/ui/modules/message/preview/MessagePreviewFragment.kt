@@ -17,6 +17,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
+import io.github.wulkanowy.utils.shareMessage
 import javax.inject.Inject
 
 class MessagePreviewFragment :
@@ -85,6 +86,7 @@ class MessagePreviewFragment :
             R.id.messagePreviewMenuReply -> presenter.onReply()
             R.id.messagePreviewMenuForward -> presenter.onForward()
             R.id.messagePreviewMenuDelete -> presenter.onMessageDelete()
+            R.id.messagePreviewMenuShare -> presenter.onShare()
             else -> false
         }
     }
@@ -136,6 +138,10 @@ class MessagePreviewFragment :
 
     override fun openMessageForward(message: Message?) {
         context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, message)) }
+    }
+
+    override fun openMessageShare(message: Message) {
+        context?.shareMessage(message)
     }
 
     override fun popView() {

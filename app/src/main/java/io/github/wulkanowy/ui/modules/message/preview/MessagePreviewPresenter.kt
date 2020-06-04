@@ -87,6 +87,14 @@ class MessagePreviewPresenter @Inject constructor(
         } else false
     }
 
+    fun onShare(): Boolean {
+        message?.let {
+            view?.openMessageShare(it)
+            return true
+        }
+        return false
+    }
+
     private fun deleteMessage() {
         message?.let { message ->
             disposable.add(studentRepository.getCurrentStudent()

@@ -34,5 +34,7 @@ interface MessagePreviewView : BaseView {
 
     fun openMessageForward(message: Message?)
 
+    fun openMessageShare(message: Message)
+
     fun popView()
 }

@@ -11,6 +11,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import io.github.wulkanowy.BuildConfig.APPLICATION_ID
+import io.github.wulkanowy.data.db.entities.Message
 
 @ColorInt
 fun Context.getThemeAttrColor(@AttrRes colorAttr: Int): Int {
@@ -69,6 +70,22 @@ fun Context.openDialer(phone: String) {
     val intentUri = Uri.parse("tel:$phone")
     val intent = Intent(Intent.ACTION_DIAL, intentUri)
     startActivity(intent)
+}
+
+fun Context.shareMessage(message: Message) {
+    val text = "Temat: ${message.subject}\n" + when (message.sender.isNotEmpty()) {
+        true -> "Od: ${message.sender}\n"
+        false -> "Do: ${message.recipient}\n"
+    } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}"
+
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, text)
+        putExtra(Intent.EXTRA_SUBJECT, "FW: ${message.subject}")
+        type = "text/plain"
+    }
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    startActivity(shareIntent)
 }
 
 fun Context.dpToPx(dp: Float) = dp * resources.displayMetrics.densityDpi / DENSITY_DEFAULT
