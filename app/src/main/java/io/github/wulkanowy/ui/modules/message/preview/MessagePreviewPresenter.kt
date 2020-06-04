@@ -8,6 +8,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -93,7 +94,22 @@ class MessagePreviewPresenter @Inject constructor(
 
     fun onShare(): Boolean {
         message?.let {
-            view?.openMessageShare(it, attachments)
+            var text = "Temat: ${it.subject}\n" + when (it.sender.isNotEmpty()) {
+                true -> "Od: ${it.sender}\n"
+                false -> "Do: ${it.recipient}\n"
+            } + "Data: ${it.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${it.content}"
+
+            attachments?.let {
+                if (it.size > 0) {
+                    text += "\n\nZałączniki:"
+
+                    it.forEach { attachment ->
+                        text += "\n${attachment.filename}: ${attachment.url}"
+                    }
+                }
+            }
+
+            view?.shareText(text, "FW: ${it.subject}")
             return true
         }
         return false

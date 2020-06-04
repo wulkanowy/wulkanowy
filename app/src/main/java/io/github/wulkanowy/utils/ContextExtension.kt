@@ -11,8 +11,6 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import io.github.wulkanowy.BuildConfig.APPLICATION_ID
-import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.db.entities.MessageAttachment
 
 @ColorInt
 fun Context.getThemeAttrColor(@AttrRes colorAttr: Int): Int {
@@ -73,24 +71,13 @@ fun Context.openDialer(phone: String) {
     startActivity(intent)
 }
 
-fun Context.shareMessage(message: Message, attachments: List<MessageAttachment>?) {
-    var text = "Temat: ${message.subject}\n" + when (message.sender.isNotEmpty()) {
-        true -> "Od: ${message.sender}\n"
-        false -> "Do: ${message.recipient}\n"
-    } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}"
-
-    if (attachments != null && attachments.size > 0) {
-        text += "\n\nZałączniki:"
-
-        attachments.forEach { attachment ->
-            text += "\n${attachment.filename}: ${attachment.url}"
-        }
-    }
-
+fun Context.shareText(text: String, subject: String?) {
     val sendIntent: Intent = Intent().apply {
         action = Intent.ACTION_SEND
         putExtra(Intent.EXTRA_TEXT, text)
-        putExtra(Intent.EXTRA_SUBJECT, "FW: ${message.subject}")
+        if (subject != null) {
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+        }
         type = "text/plain"
     }
     val shareIntent = Intent.createChooser(sendIntent, null)
