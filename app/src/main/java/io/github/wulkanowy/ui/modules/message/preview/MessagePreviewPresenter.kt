@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
+import android.os.Build
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.repositories.message.MessageRepository
@@ -111,6 +112,16 @@ class MessagePreviewPresenter @Inject constructor(
 
             view?.shareText(text, "FW: ${it.subject}")
             return true
+        }
+        return false
+    }
+
+    fun onPrint(): Boolean {
+        message?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                view?.print(it)
+                return true
+            }
         }
         return false
     }

@@ -1,12 +1,19 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.print.PrintAttributes
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
@@ -18,7 +25,10 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import io.github.wulkanowy.utils.shareText
+import io.github.wulkanowy.utils.toFormattedString
+import timber.log.Timber
 import javax.inject.Inject
+import android.print.PrintManager as PrintManager1
 
 class MessagePreviewFragment :
     BaseFragment<FragmentMessagePreviewBinding>(R.layout.fragment_message_preview),
@@ -35,6 +45,10 @@ class MessagePreviewFragment :
     private var menuForwardButton: MenuItem? = null
 
     private var menuDeleteButton: MenuItem? = null
+
+    private var menuShareButton: MenuItem? = null
+
+    private var menuPrintButton: MenuItem? = null
 
     override val titleStringId: Int
         get() = R.string.message_title
@@ -78,6 +92,8 @@ class MessagePreviewFragment :
         menuReplyButton = menu.findItem(R.id.messagePreviewMenuReply)
         menuForwardButton = menu.findItem(R.id.messagePreviewMenuForward)
         menuDeleteButton = menu.findItem(R.id.messagePreviewMenuDelete)
+        menuShareButton = menu.findItem(R.id.messagePreviewMenuShare)
+        menuPrintButton = menu.findItem(R.id.messagePreviewMenuPrint)
         presenter.onCreateOptionsMenu()
     }
 
@@ -87,6 +103,7 @@ class MessagePreviewFragment :
             R.id.messagePreviewMenuForward -> presenter.onForward()
             R.id.messagePreviewMenuDelete -> presenter.onMessageDelete()
             R.id.messagePreviewMenuShare -> presenter.onShare()
+            R.id.messagePreviewMenuPrint -> presenter.onPrint()
             else -> false
         }
     }
@@ -110,6 +127,8 @@ class MessagePreviewFragment :
         menuReplyButton?.isVisible = show
         menuForwardButton?.isVisible = show
         menuDeleteButton?.isVisible = show
+        menuShareButton?.isVisible = show
+        menuPrintButton?.isVisible = show && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
     }
 
     override fun setDeletedOptionsLabels() {
@@ -142,6 +161,66 @@ class MessagePreviewFragment :
 
     override fun shareText(text: String, subject: String) {
         context?.shareText(text, subject)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun print(message: Message) {
+        context?.let {
+            var infoContent = ""
+            infoContent += "<div>" +
+                "<h4>Data wysłania</h4>" +
+                message.date.toFormattedString("yyyy-MM-dd HH:mm:ss") +
+                "</div>"
+            if (message.sender.isNotEmpty()) {
+                infoContent += "<div>" +
+                    "<h4>Od</h4>" +
+                    message.sender +
+                    "</div>"
+            } else {
+                infoContent += "<div>" +
+                    "<h4>Do</h4>" +
+                    message.recipient +
+                    "</div>"
+            }
+
+            val messageContent = "<p>${message.content}</p>"
+                .replace(Regex("[\\n\\r]{2,}"), "</p><p>")
+                .replace(Regex("[\\n\\r]"), "<br>")
+
+            val html = it.assets.open("message-print-page.html").bufferedReader().use { it.readText() }
+                .replace("%SUBJECT%", message.subject)
+                .replace("%CONTENT%", messageContent)
+                .replace("%INFO%", infoContent)
+
+            Timber.i(message.content)
+            Timber.i(html)
+
+            val webView = WebView(activity)
+            webView.webViewClient = object : WebViewClient() {
+
+                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
+
+                override fun onPageFinished(view: WebView, url: String) {
+                    createWebPrintJob(view)
+                }
+            }
+
+            webView.loadDataWithBaseURL("file:///android_asset/", html, "text/HTML", "UTF-8", null)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun createWebPrintJob(webView: WebView) {
+        (activity?.getSystemService(Context.PRINT_SERVICE) as? PrintManager1)?.let { printManager ->
+            val jobName = "${getString(R.string.app_name)} Document"
+            val printAdapter = webView.createPrintDocumentAdapter(jobName)
+
+            printManager.print(
+                jobName,
+                printAdapter,
+                PrintAttributes.Builder().build()
+            )
+        }
     }
 
     override fun popView() {
