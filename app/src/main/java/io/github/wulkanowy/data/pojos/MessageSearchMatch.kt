@@ -18,36 +18,36 @@ data class MessageSearchMatch(val message: Message, val query: String?) {
     init {
         subjectRatio = query?.let {
             FuzzySearch.tokenSortPartialRatio(
-                it.toLowerCase(Locale.ROOT),
+                it.toLowerCase(Locale.getDefault()),
                 message.subject
             )
         }
 
         senderOrRecipientRatio = query?.let {
             FuzzySearch.tokenSortPartialRatio(
-                it.toLowerCase(Locale.ROOT),
-                if (message.sender.isNotEmpty()) message.sender.toLowerCase(Locale.ROOT)
-                else message.recipient.toLowerCase(Locale.ROOT)
+                it.toLowerCase(Locale.getDefault()),
+                if (message.sender.isNotEmpty()) message.sender.toLowerCase(Locale.getDefault())
+                else message.recipient.toLowerCase(Locale.getDefault())
             )
         }
 
         dateRatio = query?.let {
             listOf(
                 FuzzySearch.ratio(
-                    it.toLowerCase(Locale.ROOT),
-                    message.date.toFormattedString("dd.MM").toLowerCase(Locale.ROOT)
+                    it.toLowerCase(Locale.getDefault()),
+                    message.date.toFormattedString("dd.MM").toLowerCase(Locale.getDefault())
                 ),
                 FuzzySearch.ratio(
-                    it.toLowerCase(Locale.ROOT),
-                    message.date.toFormattedString("dd.MM.yyyy").toLowerCase(Locale.ROOT)
+                    it.toLowerCase(Locale.getDefault()),
+                    message.date.toFormattedString("dd.MM.yyyy").toLowerCase(Locale.getDefault())
                 ),
                 FuzzySearch.ratio(
-                    it.toLowerCase(Locale.ROOT),
-                    message.date.toFormattedString("d MMMMM").toLowerCase(Locale.ROOT)
+                    it.toLowerCase(Locale.getDefault()),
+                    message.date.toFormattedString("d MMMMM").toLowerCase(Locale.getDefault())
                 ),
                 FuzzySearch.ratio(
-                    it.toLowerCase(Locale.ROOT),
-                    message.date.toFormattedString("d MMMMM yyyy").toLowerCase(Locale.ROOT)
+                    it.toLowerCase(Locale.getDefault()),
+                    message.date.toFormattedString("d MMMMM yyyy").toLowerCase(Locale.getDefault())
                 )
             ).max()
         }
