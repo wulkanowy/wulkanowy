@@ -106,6 +106,10 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         binding.messageTabSwipe.isEnabled = enable
     }
 
+    override fun resetListPosition() {
+        binding.messageTabRecycler.scrollToPosition(0)
+    }
+
     override fun showContent(show: Boolean) {
         binding.messageTabRecycler.visibility = if (show) VISIBLE else INVISIBLE
     }

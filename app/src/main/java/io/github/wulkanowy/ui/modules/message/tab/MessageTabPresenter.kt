@@ -150,6 +150,7 @@ class MessageTabPresenter @Inject constructor(
             showContent(data.isNotEmpty())
             showErrorView(false)
             updateData(data)
+            resetListPosition()
         }
     }
 }
