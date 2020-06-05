@@ -25,8 +25,6 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import io.github.wulkanowy.utils.shareText
-import io.github.wulkanowy.utils.toFormattedString
-import timber.log.Timber
 import javax.inject.Inject
 import android.print.PrintManager as PrintManager1
 
@@ -55,6 +53,9 @@ class MessagePreviewFragment :
 
     override val deleteMessageSuccessString: String
         get() = getString(R.string.message_delete_success)
+
+    override val printHTML: String
+        get() = requireContext().assets.open("message-print-page.html").bufferedReader().use { it.readText() }
 
     companion object {
         const val MESSAGE_ID_KEY = "message_id"
@@ -164,49 +165,18 @@ class MessagePreviewFragment :
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun print(message: Message) {
-        context?.let {
-            var infoContent = ""
-            infoContent += "<div>" +
-                "<h4>Data wysłania</h4>" +
-                message.date.toFormattedString("yyyy-MM-dd HH:mm:ss") +
-                "</div>"
-            if (message.sender.isNotEmpty()) {
-                infoContent += "<div>" +
-                    "<h4>Od</h4>" +
-                    message.sender +
-                    "</div>"
-            } else {
-                infoContent += "<div>" +
-                    "<h4>Do</h4>" +
-                    message.recipient +
-                    "</div>"
+    override fun print(html: String) {
+        val webView = WebView(activity)
+        webView.webViewClient = object : WebViewClient() {
+
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
+
+            override fun onPageFinished(view: WebView, url: String) {
+                createWebPrintJob(view)
             }
-
-            val messageContent = "<p>${message.content}</p>"
-                .replace(Regex("[\\n\\r]{2,}"), "</p><p>")
-                .replace(Regex("[\\n\\r]"), "<br>")
-
-            val html = it.assets.open("message-print-page.html").bufferedReader().use { it.readText() }
-                .replace("%SUBJECT%", message.subject)
-                .replace("%CONTENT%", messageContent)
-                .replace("%INFO%", infoContent)
-
-            Timber.i(message.content)
-            Timber.i(html)
-
-            val webView = WebView(activity)
-            webView.webViewClient = object : WebViewClient() {
-
-                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
-
-                override fun onPageFinished(view: WebView, url: String) {
-                    createWebPrintJob(view)
-                }
-            }
-
-            webView.loadDataWithBaseURL("file:///android_asset/", html, "text/HTML", "UTF-8", null)
         }
+
+        webView.loadDataWithBaseURL("file:///android_asset/", html, "text/HTML", "UTF-8", null)
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

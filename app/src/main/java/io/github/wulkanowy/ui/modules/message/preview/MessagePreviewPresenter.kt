@@ -117,9 +117,36 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     fun onPrint(): Boolean {
-        message?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                view?.print(it)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            message?.let {
+                var infoContent = ""
+                infoContent += "<div>" +
+                    "<h4>Data wysłania</h4>" +
+                    it.date.toFormattedString("yyyy-MM-dd HH:mm:ss") +
+                    "</div>"
+                if (it.sender.isNotEmpty()) {
+                    infoContent += "<div>" +
+                        "<h4>Od</h4>" +
+                        it.sender +
+                        "</div>"
+                } else {
+                    infoContent += "<div>" +
+                        "<h4>Do</h4>" +
+                        it.recipient +
+                        "</div>"
+                }
+
+                val messageContent = "<p>${it.content}</p>"
+                    .replace(Regex("[\\n\\r]{2,}"), "</p><p>")
+                    .replace(Regex("[\\n\\r]"), "<br>")
+
+                view?.apply {
+                    val html = printHTML
+                        .replace("%SUBJECT%", it.subject)
+                        .replace("%CONTENT%", messageContent)
+                        .replace("%INFO%", infoContent)
+                    print(html)
+                }
                 return true
             }
         }

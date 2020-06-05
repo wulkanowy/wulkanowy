@@ -10,6 +10,8 @@ interface MessagePreviewView : BaseView {
 
     val deleteMessageSuccessString: String
 
+    val printHTML: String
+
     fun initView()
 
     fun setMessageWithAttachment(item: MessageWithAttachment)
@@ -39,7 +41,7 @@ interface MessagePreviewView : BaseView {
     fun shareText(text: String, subject: String)
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun print(message: Message)
+    fun print(html: String)
 
     fun popView()
 }
