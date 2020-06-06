@@ -86,6 +86,8 @@ class GradeAverageProviderTest {
 
         `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(false)
         `when`(semesterRepository.getSemesters(student)).thenReturn(Single.just(semesters))
+        `when`(preferencesRepository.gradeMinusModifier).thenReturn(.33)
+        `when`(preferencesRepository.gradePlusModifier).thenReturn(.33)
 
         gradeAverageProvider = GradeAverageProvider(semesterRepository, gradeRepository, preferencesRepository)
     }
@@ -348,7 +350,39 @@ class GradeAverageProviderTest {
         `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(listOf(
             getGrade(23, "Fizyka", 5.0, weight = 1.0),
             getGrade(23, "Fizyka", 5.0, weight = 2.0),
-            getGrade(23, "Fizyka", 4.5, weight = 2.0)
+            getGrade(23, "Fizyka", 4.0, modifier = 0.3, weight = 2.0)
+        ) to listOf(getSummary(semesterId = 23, subject = "Fizyka", average = .0))))
+
+        val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
+
+        assertEquals(5.2296, items.single { it.subject == "Fizyka" }.average, .0001) // (from details): 5.72727272  + 4,732 → 5,2636
+    }
+
+    @Test
+    fun `force calc full year average with different average from all grades and from two semesters with custom modifiers`() {
+        val student = student.copy(loginMode = Sdk.Mode.SCRAPPER.name)
+
+        `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
+        `when`(preferencesRepository.gradeMinusModifier).thenReturn(.33)
+        `when`(preferencesRepository.gradePlusModifier).thenReturn(.5)
+
+        `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
+        `when`(semesterRepository.getSemesters(student)).thenReturn(Single.just(semesters))
+
+        `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(listOf(
+            getGrade(22, "Fizyka", 5.0, weight = 2.0),
+            getGrade(22, "Fizyka", 6.0, weight = 2.0),
+            getGrade(22, "Fizyka", 5.0, weight = 4.0),
+            getGrade(22, "Fizyka", 6.0, weight = 2.0),
+            getGrade(22, "Fizyka", 6.0, weight = 2.0),
+            getGrade(22, "Fizyka", 6.0, weight = 4.0),
+            getGrade(22, "Fizyka", 6.0, weight = 4.0),
+            getGrade(22, "Fizyka", 6.0, weight = 2.0)
+        ) to listOf(getSummary(semesterId = 22, subject = "Fizyka", average = .0))))
+        `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(listOf(
+            getGrade(23, "Fizyka", 5.0, weight = 1.0),
+            getGrade(23, "Fizyka", 5.0, weight = 2.0),
+            getGrade(23, "Fizyka", 4.0, modifier = 0.33, weight = 2.0)
         ) to listOf(getSummary(semesterId = 23, subject = "Fizyka", average = .0))))
 
         val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()

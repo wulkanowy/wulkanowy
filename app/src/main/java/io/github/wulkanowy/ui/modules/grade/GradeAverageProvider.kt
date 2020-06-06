@@ -19,9 +19,9 @@ class GradeAverageProvider @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) {
 
-    private val plusModifier = preferencesRepository.gradePlusModifier
+    private val plusModifier get() = preferencesRepository.gradePlusModifier
 
-    private val minusModifier = preferencesRepository.gradeMinusModifier
+    private val minusModifier get() = preferencesRepository.gradeMinusModifier
 
     fun getGradesDetailsWithAverage(student: Student, semesterId: Int, forceRefresh: Boolean = false): Single<List<GradeDetailsWithAverage>> {
         return semesterRepository.getSemesters(student).flatMap { semesters ->
@@ -46,7 +46,8 @@ class GradeAverageProvider @Inject constructor(
                         val second = secondDetails.singleOrNull { it.subject == selected.subject }
                         selected.copy(
                             average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
-                                (selected.grades.calcAverage() + (second?.grades ?: selected.grades).calcAverage()) / 2
+                                val selectedAverage = selected.grades.updateModifiers(student).calcAverage()
+                                (selectedAverage + (second?.grades?.updateModifiers(student)?.calcAverage() ?: selectedAverage)) / 2
                             } else (selected.average + (second?.average ?: selected.average)) / 2
                         )
                     }
@@ -65,9 +66,7 @@ class GradeAverageProvider @Inject constructor(
                 GradeDetailsWithAverage(
                     subject = summary.subject,
                     average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
-                        (if (student.loginMode == Sdk.Mode.SCRAPPER.name)
-                            grades.map { it.changeModifier(plusModifier, minusModifier) }
-                        else grades).calcAverage()
+                        grades.updateModifiers(student).calcAverage()
                     } else summary.average,
                     points = summary.pointsSum,
                     summary = summary,
@@ -92,10 +91,14 @@ class GradeAverageProvider @Inject constructor(
                 proposedPoints = "",
                 finalPoints = "",
                 pointsSum = "",
-                average = if (calcAverage) (if (student.loginMode == Sdk.Mode.SCRAPPER.name) {
-                    details.map { it.changeModifier(plusModifier, minusModifier) }
-                } else details).calcAverage() else .0
+                average = if (calcAverage) details.updateModifiers(student).calcAverage() else .0
             )
         }
+    }
+
+    private fun List<Grade>.updateModifiers(student: Student): List<Grade> {
+        return if (student.loginMode == Sdk.Mode.SCRAPPER.name) {
+            map { it.changeModifier(plusModifier, minusModifier) }
+        } else this
     }
 }
