@@ -19,7 +19,7 @@ class PreferencesRepository @Inject constructor(
         get() = getBoolean(R.string.pref_key_attendance_present, R.bool.pref_default_attendance_present)
 
     val gradeAverageMode: GradeAverageMode
-        get() = GradeAverageMode.valueOf(getString(R.string.pref_key_grade_average_mode, R.string.pref_default_grade_average_mode))
+        get() = GradeAverageMode.getByValue(getString(R.string.pref_key_grade_average_mode, R.string.pref_default_grade_average_mode))
 
     val gradeAverageForceCalc: Boolean
         get() = getBoolean(R.string.pref_key_grade_average_force_calc, R.bool.pref_default_grade_average_force_calc)

@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.ALL_YEAR
+import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.BOTH_SEMESTERS
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.ONE_SEMESTER
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
@@ -29,12 +30,34 @@ class GradeAverageProvider @Inject constructor(
         return semesterRepository.getSemesters(student).flatMap { semesters ->
             when (preferencesRepository.gradeAverageMode) {
                 ONE_SEMESTER -> getSemesterDetailsWithAverage(student, semesters.single { it.semesterId == semesterId }, forceRefresh)
-                ALL_YEAR -> calculateWholeYearAverage(student, semesters, semesterId, forceRefresh)
+                BOTH_SEMESTERS -> calculateBothSemestersAverage(student, semesters, semesterId, forceRefresh)
+                ALL_YEAR -> calculateAllYearAverage(student, semesters, semesterId, forceRefresh)
             }
         }
     }
 
-    private fun calculateWholeYearAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<List<GradeDetailsWithAverage>> {
+    private fun calculateBothSemestersAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<List<GradeDetailsWithAverage>> {
+        val selectedSemester = semesters.single { it.semesterId == semesterId }
+        val firstSemester = semesters.single { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
+
+        return getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh).flatMap { selectedDetails ->
+            val isAnyAverage = selectedDetails.any { it.average != .0 }
+
+            if (selectedSemester != firstSemester) {
+                getSemesterDetailsWithAverage(student, firstSemester, forceRefresh).map { secondDetails ->
+                    selectedDetails.map { selected ->
+                        val second = secondDetails.singleOrNull { it.subject == selected.subject }
+                        selected.copy(average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
+                            val selectedGrades = selected.grades.updateModifiers(student).calcAverage()
+                            (selectedGrades + (second?.grades?.updateModifiers(student)?.calcAverage() ?: selectedGrades)) / 2
+                        } else (selected.average + (second?.average ?: selected.average)) / 2)
+                    }
+                }
+            } else Single.just(selectedDetails)
+        }
+    }
+
+    private fun calculateAllYearAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): Single<List<GradeDetailsWithAverage>> {
         val selectedSemester = semesters.single { it.semesterId == semesterId }
         val firstSemester = semesters.single { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
 
