@@ -44,12 +44,9 @@ class GradeAverageProvider @Inject constructor(
                 getSemesterDetailsWithAverage(student, firstSemester, forceRefresh).map { secondDetails ->
                     selectedDetails.map { selected ->
                         val second = secondDetails.singleOrNull { it.subject == selected.subject }
-                        selected.copy(
-                            average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
-                                val selectedAverage = selected.grades.updateModifiers(student).calcAverage()
-                                (selectedAverage + (second?.grades?.updateModifiers(student)?.calcAverage() ?: selectedAverage)) / 2
-                            } else (selected.average + (second?.average ?: selected.average)) / 2
-                        )
+                        selected.copy(average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
+                            (selected.grades.updateModifiers(student) + second?.grades?.updateModifiers(student).orEmpty()).calcAverage()
+                        } else selected.average)
                     }
                 }
             } else Single.just(selectedDetails)

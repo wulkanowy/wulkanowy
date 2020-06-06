@@ -217,8 +217,8 @@ class GradeAverageProviderTest {
         val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
 
         assertEquals(2, items.size)
-        assertEquals(3.25, items.single { it.subject == "Matematyka" }.average, .0) // (from summaries ↑): 3,0 + 3,5 → 3,25
-        assertEquals(3.75, items.single { it.subject == "Fizyka" }.average, .0) // (from summaries ↑): 3,5 + 4,0 → 3,75
+        assertEquals(3.5, items.single { it.subject == "Matematyka" }.average, .0) // (from summaries ↑): 3,0 + 3,5 → 3,5
+        assertEquals(4.0, items.single { it.subject == "Fizyka" }.average, .0) // (from summaries ↑): 3,5 + 4,0 → 4,0
     }
 
     @Test
@@ -249,8 +249,8 @@ class GradeAverageProviderTest {
         val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
 
         assertEquals(2, items.size)
-        assertEquals(3.0, items.single { it.subject == "Matematyka" }.average, .0) // (from details): 2,5 + 3,5 → 3,0
-        assertEquals(3.25, items.single { it.subject == "Fizyka" }.average, .0) // (from details): 3,5  + 3,0 → 3,25
+        assertEquals(2.5, items.single { it.subject == "Matematyka" }.average, .0) // (from details): 3,5 + 2,5 → 2,5
+        assertEquals(3.0, items.single { it.subject == "Fizyka" }.average, .0) // (from details): 3,5 + 3,0 → 3,0
     }
 
     @Test
@@ -283,8 +283,8 @@ class GradeAverageProviderTest {
         val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
 
         assertEquals(2, items.size)
-        assertEquals(3.5, items.single { it.subject == "Matematyka" }.average, .0) // (from summaries ↑): 4,0 + 3,0 → 3,5
-        assertEquals(3.25, items.single { it.subject == "Fizyka" }.average, .0) // (from details): 3,5  + 3,0 → 3,25
+        assertEquals(3.0, items.single { it.subject == "Matematyka" }.average, .0) // (from summaries ↑): 4,0 + 3,0 → 3,0
+        assertEquals(3.0, items.single { it.subject == "Fizyka" }.average, .0) // (from details): 3,5  + 3,0 → 3,0
     }
 
     @Test
@@ -298,8 +298,8 @@ class GradeAverageProviderTest {
         val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
 
         assertEquals(2, items.size)
-        assertEquals(3.4, items.single { it.subject == "Matematyka" }.average, .0) // (from summaries): 3,9 + 2,9 → 3,4
-        assertEquals(3.05, items.single { it.subject == "Fizyka" }.average, .0) // 3,1 (from summary) + 3,0 (from details) → 3,05
+        assertEquals(2.9, items.single { it.subject == "Matematyka" }.average, .0) // (from summaries): 3,9 + 2,9 → 2,9
+        assertEquals(3.0, items.single { it.subject == "Fizyka" }.average, .0) // 3,1 (from summary) + 3,0 (from details) → 3,0
     }
 
     @Test
@@ -313,8 +313,8 @@ class GradeAverageProviderTest {
         val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
 
         assertEquals(2, items.size)
-        assertEquals(3.4, items.single { it.subject == "Matematyka" }.average, .0) // (from summaries): 3,9 + 2,9 → 3,4
-        assertEquals(3.45, items.single { it.subject == "Fizyka" }.average, .0) // 3,5 (from details) + 3,4 (from summary) → 3,45
+        assertEquals(2.9, items.single { it.subject == "Matematyka" }.average, .0) // (from summaries): 3,9 + 2,9 → 2.9
+        assertEquals(3.4, items.single { it.subject == "Fizyka" }.average, .0) // 3,5 (from details) + 3,4 (from summary) → 3,4
     }
 
     @Test
@@ -355,7 +355,7 @@ class GradeAverageProviderTest {
 
         val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
 
-        assertEquals(5.2296, items.single { it.subject == "Fizyka" }.average, .0001) // (from details): 5.72727272  + 4,732 → 5,2636
+        assertEquals(5.5429, items.single { it.subject == "Fizyka" }.average, .0001) // (from details): 5.72727272  + 4,732 → .average()
     }
 
     @Test
@@ -387,7 +387,7 @@ class GradeAverageProviderTest {
 
         val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
 
-        assertEquals(5.2636, items.single { it.subject == "Fizyka" }.average, .0001) // (from details): 5.72727272  + 4,8 → 5,2636
+        assertEquals(5.5555, items.single { it.subject == "Fizyka" }.average, .0001) // (from details): 5.72727272  + 4,8 → .average()
     }
 
     private fun getGrade(semesterId: Int, subject: String, value: Double, modifier: Double = 0.0, weight: Double = 1.0): Grade {
