@@ -46,7 +46,7 @@ class GradeAverageProvider @Inject constructor(
                         val second = secondDetails.singleOrNull { it.subject == selected.subject }
                         selected.copy(
                             average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
-                                (selected.grades + second?.grades.orEmpty()).calcAverage()
+                                (selected.grades.calcAverage() + (second?.grades ?: selected.grades).calcAverage()) / 2
                             } else (selected.average + (second?.average ?: selected.average)) / 2
                         )
                     }

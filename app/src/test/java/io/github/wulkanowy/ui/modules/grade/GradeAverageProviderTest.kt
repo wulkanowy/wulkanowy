@@ -330,14 +330,40 @@ class GradeAverageProviderTest {
         assertEquals(3.25, items.single { it.subject == "Fizyka" }.average, .0) // (from details): 3,5  + 3,0 → 3,25
     }
 
-    private fun getGrade(semesterId: Int, subject: String, value: Double, modifier: Double = 0.0): Grade {
+    @Test
+    fun `force calc full year average with different average from all grades and from two semesters`() {
+        `when`(preferencesRepository.gradeAverageForceCalc).thenReturn(true)
+        `when`(preferencesRepository.gradeAverageMode).thenReturn("all_year")
+
+        `when`(gradeRepository.getGrades(student, semesters[1])).thenReturn(Single.just(listOf(
+            getGrade(22, "Fizyka", 5.0, weight = 2.0),
+            getGrade(22, "Fizyka", 6.0, weight = 2.0),
+            getGrade(22, "Fizyka", 5.0, weight = 4.0),
+            getGrade(22, "Fizyka", 6.0, weight = 2.0),
+            getGrade(22, "Fizyka", 6.0, weight = 2.0),
+            getGrade(22, "Fizyka", 6.0, weight = 4.0),
+            getGrade(22, "Fizyka", 6.0, weight = 4.0),
+            getGrade(22, "Fizyka", 6.0, weight = 2.0)
+        ) to listOf(getSummary(semesterId = 22, subject = "Fizyka", average = .0))))
+        `when`(gradeRepository.getGrades(student, semesters[2])).thenReturn(Single.just(listOf(
+            getGrade(23, "Fizyka", 5.0, weight = 1.0),
+            getGrade(23, "Fizyka", 5.0, weight = 2.0),
+            getGrade(23, "Fizyka", 4.5, weight = 2.0)
+        ) to listOf(getSummary(semesterId = 23, subject = "Fizyka", average = .0))))
+
+        val items = gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId).blockingGet()
+
+        assertEquals(5.2636, items.single { it.subject == "Fizyka" }.average, .0001) // (from details): 5.72727272  + 4,8 → 5,2636
+    }
+
+    private fun getGrade(semesterId: Int, subject: String, value: Double, modifier: Double = 0.0, weight: Double = 1.0): Grade {
         return Grade(
             studentId = 101,
             semesterId = semesterId,
             subject = subject,
             value = value,
             modifier = modifier,
-            weightValue = 1.0,
+            weightValue = weight,
             teacher = "",
             date = now(),
             weight = "",
