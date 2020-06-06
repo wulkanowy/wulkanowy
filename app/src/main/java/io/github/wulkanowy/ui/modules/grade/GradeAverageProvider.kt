@@ -8,6 +8,8 @@ import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.ALL_YEAR
+import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.ONE_SEMESTER
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
 import io.reactivex.Single
@@ -26,9 +28,8 @@ class GradeAverageProvider @Inject constructor(
     fun getGradesDetailsWithAverage(student: Student, semesterId: Int, forceRefresh: Boolean = false): Single<List<GradeDetailsWithAverage>> {
         return semesterRepository.getSemesters(student).flatMap { semesters ->
             when (preferencesRepository.gradeAverageMode) {
-                "only_one_semester" -> getSemesterDetailsWithAverage(student, semesters.single { it.semesterId == semesterId }, forceRefresh)
-                "all_year" -> calculateWholeYearAverage(student, semesters, semesterId, forceRefresh)
-                else -> throw IllegalArgumentException("Incorrect grade average mode: ${preferencesRepository.gradeAverageMode} ")
+                ONE_SEMESTER -> getSemesterDetailsWithAverage(student, semesters.single { it.semesterId == semesterId }, forceRefresh)
+                ALL_YEAR -> calculateWholeYearAverage(student, semesters, semesterId, forceRefresh)
             }
         }
     }
