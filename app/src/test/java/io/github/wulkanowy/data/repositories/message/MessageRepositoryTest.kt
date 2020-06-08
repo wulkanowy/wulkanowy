@@ -44,7 +44,7 @@ class MessageRepositoryTest {
 
     @Test
     fun `throw error when message is not in the db`() {
-        val testMessage = Message(1, 1, 1, "", 1, "", "", "", now(), 1, false, 1, 1, false, false)
+        val testMessage = Message(1, 1, 1, "", 1, "", "", "", now(), 1, false, 1, 1, removed = false, hasAttachments = false)
         `when`(local.getMessageWithAttachment(student, testMessage)).thenReturn(Single.error(EmptyResultSetException("No message in database")))
 
         val message = repo.getMessage(student, testMessage)
