@@ -36,4 +36,10 @@ data class GradeSummary(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    @ColumnInfo(name = "is_predicted_grade_notified")
+    var isPredictedGradeNotified: Boolean = true
+
+    @ColumnInfo(name = "is_final_grade_notified")
+    var isFinalGradeNotified: Boolean = true
 }

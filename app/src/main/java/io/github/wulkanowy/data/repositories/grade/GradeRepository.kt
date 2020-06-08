@@ -43,7 +43,24 @@ class GradeRepository @Inject constructor(
                         local.getGradesSummary(semester).toSingle(emptyList())
                             .doOnSuccess { old ->
                                 local.deleteGradesSummary(old.uniqueSubtract(newSummary))
-                                local.saveGradesSummary(newSummary.uniqueSubtract(old))
+                                local.saveGradesSummary(newSummary.uniqueSubtract(old)
+                                    .onEach { summary ->
+                                        val oldSummary = old.find { oldSummary ->
+                                            oldSummary.subject == summary.subject &&
+                                                oldSummary.studentId == summary.studentId &&
+                                                oldSummary.semesterId == summary.semesterId
+                                        }
+                                        if (summary.predictedGrade.isEmpty()) {
+                                            summary.isPredictedGradeNotified = true
+                                        } else if (notify && oldSummary != null && oldSummary.predictedGrade != summary.predictedGrade) {
+                                            summary.isPredictedGradeNotified = false
+                                        }
+                                        if (summary.finalGrade.isEmpty()) {
+                                            summary.isFinalGradeNotified = true
+                                        } else if (notify && oldSummary != null && oldSummary.finalGrade != summary.finalGrade) {
+                                            summary.isFinalGradeNotified = false
+                                        }
+                                    })
                             }
                     }
             }.flatMap {
@@ -63,11 +80,23 @@ class GradeRepository @Inject constructor(
         return local.getGradesDetails(semester).map { it.filter { grade -> !grade.isNotified } }.toSingle(emptyList())
     }
 
+    fun getNotNotifiedPredictedGrades(semester: Semester): Single<List<GradeSummary>> {
+        return local.getGradesSummary(semester).map { it.filter { gradeSummary -> !gradeSummary.isPredictedGradeNotified } }.toSingle(emptyList())
+    }
+
+    fun getNotNotifiedFinalGrades(semester: Semester): Single<List<GradeSummary>> {
+        return local.getGradesSummary(semester).map { it.filter { gradeSummary -> !gradeSummary.isFinalGradeNotified } }.toSingle(emptyList())
+    }
+
     fun updateGrade(grade: Grade): Completable {
         return Completable.fromCallable { local.updateGrades(listOf(grade)) }
     }
 
     fun updateGrades(grades: List<Grade>): Completable {
         return Completable.fromCallable { local.updateGrades(grades) }
+    }
+
+    fun updateGradesSummary(gradesSummary: List<GradeSummary>): Completable {
+        return Completable.fromCallable { local.updateGradesSummary(gradesSummary) }
     }
 }
