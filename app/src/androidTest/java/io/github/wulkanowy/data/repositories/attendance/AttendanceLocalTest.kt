@@ -35,9 +35,57 @@ class AttendanceLocalTest {
     @Test
     fun saveAndReadTest() {
         attendanceLocal.saveAttendance(listOf(
-            Attendance(1, 2, 3, of(2018, 9, 10), 0, "", "", presence = false, absence = false, exemption = false, lateness = false, excused = false, deleted = false, excusable = false, excuseStatus = SentExcuseStatus.ACCEPTED.name),
-            Attendance(1, 2, 3, of(2018, 9, 14), 0, "", "", false, false, false, false, false, false, false, SentExcuseStatus.WAITING.name),
-            Attendance(1, 2, 3, of(2018, 9, 17), 0, "", "", false, false, false, false, false, false, false, SentExcuseStatus.ACCEPTED.name)
+            Attendance(
+                1,
+                2,
+                3,
+                of(2018, 9, 10),
+                0,
+                "",
+                "",
+                presence = false,
+                absence = false,
+                exemption = false,
+                lateness = false,
+                excused = false,
+                deleted = false,
+                excusable = false,
+                excuseStatus = SentExcuseStatus.ACCEPTED.name
+            ),
+            Attendance(
+                1,
+                2,
+                3,
+                of(2018, 9, 14),
+                0,
+                "",
+                "",
+                presence = false,
+                absence = false,
+                exemption = false,
+                lateness = false,
+                excused = false,
+                deleted = false,
+                excusable = false,
+                excuseStatus = SentExcuseStatus.WAITING.name
+            ),
+            Attendance(
+                1,
+                2,
+                3,
+                of(2018, 9, 17),
+                0,
+                "",
+                "",
+                presence = false,
+                absence = false,
+                exemption = false,
+                lateness = false,
+                excused = false,
+                deleted = false,
+                excusable = false,
+                excuseStatus = SentExcuseStatus.ACCEPTED.name
+            )
         ))
 
         val attendance = attendanceLocal
