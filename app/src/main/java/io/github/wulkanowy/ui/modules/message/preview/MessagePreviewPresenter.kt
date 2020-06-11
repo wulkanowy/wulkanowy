@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
+import android.annotation.SuppressLint
 import android.os.Build
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
@@ -7,6 +8,7 @@ import io.github.wulkanowy.data.repositories.message.MessageRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
@@ -18,7 +20,8 @@ class MessagePreviewPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val messageRepository: MessageRepository,
-    private val analytics: FirebaseAnalyticsHelper
+    private val analytics: FirebaseAnalyticsHelper,
+    private var appInfo: AppInfo
 ) : BasePresenter<MessagePreviewView>(errorHandler, studentRepository, schedulers) {
 
     var message: Message? = null
@@ -100,11 +103,11 @@ class MessagePreviewPresenter @Inject constructor(
                 false -> "Do: ${it.recipient}\n"
             } + "Data: ${it.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${it.content}"
 
-            attachments?.let {
-                if (it.size > 0) {
+            attachments?.let { attachments ->
+                if (attachments.isNotEmpty()) {
                     text += "\n\nZałączniki:"
 
-                    it.forEach { attachment ->
+                    attachments.forEach { attachment ->
                         text += "\n${attachment.filename}: ${attachment.url}"
                     }
                 }
@@ -116,39 +119,33 @@ class MessagePreviewPresenter @Inject constructor(
         return false
     }
 
+    @SuppressLint("NewApi")
     fun onPrint(): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            message?.let {
-                var infoContent = ""
-                infoContent += "<div>" +
-                    "<h4>Data wysłania</h4>" +
-                    it.date.toFormattedString("yyyy-MM-dd HH:mm:ss") +
-                    "</div>"
-                if (it.sender.isNotEmpty()) {
-                    infoContent += "<div>" +
-                        "<h4>Od</h4>" +
-                        it.sender +
-                        "</div>"
-                } else {
-                    infoContent += "<div>" +
-                        "<h4>Do</h4>" +
-                        it.recipient +
-                        "</div>"
-                }
-
-                val messageContent = "<p>${it.content}</p>"
-                    .replace(Regex("[\\n\\r]{2,}"), "</p><p>")
-                    .replace(Regex("[\\n\\r]"), "<br>")
-
-                view?.apply {
-                    val html = printHTML
-                        .replace("%SUBJECT%", it.subject)
-                        .replace("%CONTENT%", messageContent)
-                        .replace("%INFO%", infoContent)
-                    print(html)
-                }
-                return true
+        if (appInfo.systemVersion < Build.VERSION_CODES.LOLLIPOP) return false
+        message?.let {
+            val dateString = it.date.toFormattedString("yyyy-MM-dd HH:mm:ss")
+            val infoContent = "<div><h4>Data wysłania</h4>$dateString</div>" + when {
+                it.sender.isNotEmpty() -> "<div><h4>Od</h4>${it.sender}</div>"
+                else -> "<div><h4>Do</h4>${it.recipient}</div>"
             }
+
+            val messageContent = "<p>${it.content}</p>"
+                .replace(Regex("[\\n\\r]{2,}"), "</p><p>")
+                .replace(Regex("[\\n\\r]"), "<br>")
+
+            val jobName = "Wiadomość " + when {
+                it.sender.isNotEmpty() -> "od ${it.sender}"
+                else -> "do ${it.recipient}"
+            } + " $dateString: ${it.subject} | Wulkanowy"
+
+            view?.apply {
+                val html = printHTML
+                    .replace("%SUBJECT%", it.subject)
+                    .replace("%CONTENT%", messageContent)
+                    .replace("%INFO%", infoContent)
+                printDocument(html, jobName)
+            }
+            return true
         }
         return false
     }

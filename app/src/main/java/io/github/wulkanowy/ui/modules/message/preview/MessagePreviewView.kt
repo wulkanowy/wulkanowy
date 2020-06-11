@@ -41,7 +41,7 @@ interface MessagePreviewView : BaseView {
     fun shareText(text: String, subject: String)
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun print(html: String)
+    fun printDocument(html: String, jobName: String)
 
     fun popView()
 }

@@ -1,9 +1,9 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.print.PrintAttributes
+import android.print.PrintManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -14,6 +14,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
+import androidx.core.content.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
@@ -24,9 +25,9 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.shareText
 import javax.inject.Inject
-import android.print.PrintManager as PrintManager1
 
 class MessagePreviewFragment :
     BaseFragment<FragmentMessagePreviewBinding>(R.layout.fragment_message_preview),
@@ -37,6 +38,9 @@ class MessagePreviewFragment :
 
     @Inject
     lateinit var previewAdapter: MessagePreviewAdapter
+
+    @Inject
+    lateinit var appInfo: AppInfo
 
     private var menuReplyButton: MenuItem? = null
 
@@ -129,7 +133,7 @@ class MessagePreviewFragment :
         menuForwardButton?.isVisible = show
         menuDeleteButton?.isVisible = show
         menuShareButton?.isVisible = show
-        menuPrintButton?.isVisible = show && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+        menuPrintButton?.isVisible = show && appInfo.systemVersion >= Build.VERSION_CODES.LOLLIPOP
     }
 
     override fun setDeletedOptionsLabels() {
@@ -165,14 +169,14 @@ class MessagePreviewFragment :
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    override fun print(html: String) {
+    override fun printDocument(html: String, jobName: String) {
         val webView = WebView(activity)
         webView.webViewClient = object : WebViewClient() {
 
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
 
             override fun onPageFinished(view: WebView, url: String) {
-                createWebPrintJob(view)
+                createWebPrintJob(view, jobName)
             }
         }
 
@@ -180,9 +184,8 @@ class MessagePreviewFragment :
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun createWebPrintJob(webView: WebView) {
-        (activity?.getSystemService(Context.PRINT_SERVICE) as? PrintManager1)?.let { printManager ->
-            val jobName = "${getString(R.string.app_name)} Document"
+    private fun createWebPrintJob(webView: WebView, jobName: String) {
+        activity?.getSystemService<PrintManager>()?.let { printManager ->
             val printAdapter = webView.createPrintDocumentAdapter(jobName)
 
             printManager.print(
