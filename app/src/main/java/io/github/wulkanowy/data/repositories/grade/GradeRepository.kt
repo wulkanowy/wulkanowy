@@ -45,20 +45,16 @@ class GradeRepository @Inject constructor(
                                 local.deleteGradesSummary(old.uniqueSubtract(newSummary))
                                 local.saveGradesSummary(newSummary.uniqueSubtract(old)
                                     .onEach { summary ->
-                                        val oldSummary = old.find { oldSummary ->
-                                            oldSummary.subject == summary.subject &&
-                                                oldSummary.studentId == summary.studentId &&
-                                                oldSummary.semesterId == summary.semesterId
+                                        val oldSummary = old.find { oldSummary -> oldSummary.subject == summary.subject }
+                                        summary.isPredictedGradeNotified = when {
+                                            summary.predictedGrade.isEmpty() -> true
+                                            notify && oldSummary?.predictedGrade != summary.predictedGrade -> false
+                                            else -> true
                                         }
-                                        if (summary.predictedGrade.isEmpty()) {
-                                            summary.isPredictedGradeNotified = true
-                                        } else if (notify && oldSummary != null && oldSummary.predictedGrade != summary.predictedGrade) {
-                                            summary.isPredictedGradeNotified = false
-                                        }
-                                        if (summary.finalGrade.isEmpty()) {
-                                            summary.isFinalGradeNotified = true
-                                        } else if (notify && oldSummary != null && oldSummary.finalGrade != summary.finalGrade) {
-                                            summary.isFinalGradeNotified = false
+                                        summary.isFinalGradeNotified = when {
+                                            summary.finalGrade.isEmpty() -> true
+                                            notify && oldSummary?.finalGrade != summary.finalGrade -> false
+                                            else -> true
                                         }
                                     })
                             }
