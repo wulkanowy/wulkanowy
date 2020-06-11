@@ -19,13 +19,12 @@ class MessageTabAdapter @Inject constructor() :
 
     var onClickListener: (Message, position: Int) -> Unit = { _, _ -> }
 
-    private val items = mutableListOf<MessageSearchMatch>()
+    private var items = mutableListOf<MessageSearchMatch>()
 
-    fun replaceAll(models: List<MessageSearchMatch>) {
-        val diffResult = DiffUtil.calculateDiff(DiffCallback(models, items))
+    fun setDataItems(data: List<MessageSearchMatch>) {
+        val diffResult = DiffUtil.calculateDiff(MessageTabDiffUtil(items, data))
+        items = data.toMutableList()
         diffResult.dispatchUpdatesTo(this)
-        items.clear()
-        items.addAll(models)
     }
 
     fun updateItem(position: Int, item: Message) {
@@ -70,22 +69,18 @@ class MessageTabAdapter @Inject constructor() :
 
     class ItemViewHolder(val binding: ItemMessageBinding) : RecyclerView.ViewHolder(binding.root)
 
-    private class DiffCallback(private val newMessages: List<MessageSearchMatch>, private val oldMessages: List<MessageSearchMatch>) :
+    private class MessageTabDiffUtil(private val old: List<MessageSearchMatch>, private val new: List<MessageSearchMatch>) :
         DiffUtil.Callback() {
-        override fun getOldListSize(): Int {
-            return oldMessages.size
-        }
+        override fun getOldListSize(): Int = new.size
 
-        override fun getNewListSize(): Int {
-            return newMessages.size
-        }
+        override fun getNewListSize(): Int = old.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldMessages[oldItemPosition].message.id == newMessages[newItemPosition].message.id
+            return new[oldItemPosition].message.id == old[newItemPosition].message.id
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldMessages[oldItemPosition].hashCode() == newMessages[newItemPosition].hashCode()
+            return new[oldItemPosition].message.hashCode() == old[newItemPosition].message.hashCode()
         }
     }
 }
