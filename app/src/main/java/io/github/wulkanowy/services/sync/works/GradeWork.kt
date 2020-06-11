@@ -48,10 +48,8 @@ class GradeWork @Inject constructor(
             }
     }
 
-    private fun notifyDetails(grades: List<Grade>) {
-        notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewGradesChannel.CHANNEL_ID)
-            .setContentTitle(context.resources.getQuantityString(R.plurals.grade_new_items, grades.size, grades.size))
-            .setContentText(context.resources.getQuantityString(R.plurals.grade_notify_new_items, grades.size, grades.size))
+    private fun getNotificationBuilder(): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, NewGradesChannel.CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_grade)
             .setAutoCancel(true)
             .setPriority(PRIORITY_HIGH)
@@ -60,6 +58,12 @@ class GradeWork @Inject constructor(
             .setContentIntent(
                 PendingIntent.getActivity(context, MainView.Section.GRADE.id,
                     MainActivity.getStartIntent(context, MainView.Section.GRADE, true), FLAG_UPDATE_CURRENT))
+    }
+
+    private fun notifyDetails(grades: List<Grade>) {
+        notificationManager.notify(Random.nextInt(Int.MAX_VALUE), getNotificationBuilder()
+            .setContentTitle(context.resources.getQuantityString(R.plurals.grade_new_items, grades.size, grades.size))
+            .setContentText(context.resources.getQuantityString(R.plurals.grade_notify_new_items, grades.size, grades.size))
             .setStyle(NotificationCompat.InboxStyle().run {
                 setSummaryText(context.resources.getQuantityString(R.plurals.grade_number_item, grades.size, grades.size))
                 grades.forEach { addLine("${it.subject}: ${it.entry}") }
@@ -70,17 +74,9 @@ class GradeWork @Inject constructor(
     }
 
     private fun notifyPredicted(gradesSummary: List<GradeSummary>) {
-        notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewGradesChannel.CHANNEL_ID)
+        notificationManager.notify(Random.nextInt(Int.MAX_VALUE), getNotificationBuilder()
             .setContentTitle(context.resources.getQuantityString(R.plurals.grade_new_items_predicted, gradesSummary.size, gradesSummary.size))
             .setContentText(context.resources.getQuantityString(R.plurals.grade_notify_new_items_predicted, gradesSummary.size, gradesSummary.size))
-            .setSmallIcon(R.drawable.ic_stat_grade)
-            .setAutoCancel(true)
-            .setPriority(PRIORITY_HIGH)
-            .setDefaults(DEFAULT_ALL)
-            .setColor(context.getCompatColor(R.color.colorPrimary))
-            .setContentIntent(
-                PendingIntent.getActivity(context, MainView.Section.GRADE.id,
-                    MainActivity.getStartIntent(context, MainView.Section.GRADE, true), FLAG_UPDATE_CURRENT))
             .setStyle(NotificationCompat.InboxStyle().run {
                 setSummaryText(context.resources.getQuantityString(R.plurals.grade_number_item, gradesSummary.size, gradesSummary.size))
                 gradesSummary.forEach { addLine("${it.subject}: ${it.predictedGrade}") }
@@ -91,17 +87,9 @@ class GradeWork @Inject constructor(
     }
 
     private fun notifyFinal(gradesSummary: List<GradeSummary>) {
-        notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewGradesChannel.CHANNEL_ID)
+        notificationManager.notify(Random.nextInt(Int.MAX_VALUE), getNotificationBuilder()
             .setContentTitle(context.resources.getQuantityString(R.plurals.grade_new_items_final, gradesSummary.size, gradesSummary.size))
             .setContentText(context.resources.getQuantityString(R.plurals.grade_notify_new_items_final, gradesSummary.size, gradesSummary.size))
-            .setSmallIcon(R.drawable.ic_stat_grade)
-            .setAutoCancel(true)
-            .setPriority(PRIORITY_HIGH)
-            .setDefaults(DEFAULT_ALL)
-            .setColor(context.getCompatColor(R.color.colorPrimary))
-            .setContentIntent(
-                PendingIntent.getActivity(context, MainView.Section.GRADE.id,
-                    MainActivity.getStartIntent(context, MainView.Section.GRADE, true), FLAG_UPDATE_CURRENT))
             .setStyle(NotificationCompat.InboxStyle().run {
                 setSummaryText(context.resources.getQuantityString(R.plurals.grade_number_item, gradesSummary.size, gradesSummary.size))
                 gradesSummary.forEach { addLine("${it.subject}: ${it.finalGrade}") }
