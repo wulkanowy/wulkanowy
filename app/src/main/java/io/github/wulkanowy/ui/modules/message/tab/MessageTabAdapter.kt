@@ -4,6 +4,7 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import io.github.wulkanowy.R
@@ -21,38 +22,10 @@ class MessageTabAdapter @Inject constructor() :
     private val items = mutableListOf<MessageSearchMatch>()
 
     fun replaceAll(models: List<MessageSearchMatch>) {
-        for (i in items.size - 1 downTo 0) {
-            val item = items.get(i)
-            if (models.find { it.message.id == item.message.id } == null) {
-                items.removeAt(i)
-                notifyItemRemoved(i)
-            }
-        }
-
-        models.forEachIndexed { index, model ->
-            if (items.find { it.message.id == model.message.id } == null) {
-                items.add(index, model)
-                notifyItemInserted(index)
-            }
-        }
-
-        models.forEachIndexed { index, model ->
-            val indexOfItem = items.indexOfFirst { it.message.id == model.message.id }
-            val item = items.get(indexOfItem)
-            if (indexOfItem != index) {
-                for (i in indexOfItem - 1 downTo index) {
-                    items.set(i + 1, items.get(i))
-                }
-
-                items.set(index, model)
-
-                notifyItemMoved(indexOfItem, index)
-            }
-
-            if (item.message.hashCode() != model.message.hashCode()) {
-                notifyItemChanged(index)
-            }
-        }
+        val diffResult = DiffUtil.calculateDiff(DiffCallback(models, items))
+        diffResult.dispatchUpdatesTo(this)
+        items.clear()
+        items.addAll(models)
     }
 
     fun updateItem(position: Int, item: Message) {
@@ -96,4 +69,23 @@ class MessageTabAdapter @Inject constructor() :
     }
 
     class ItemViewHolder(val binding: ItemMessageBinding) : RecyclerView.ViewHolder(binding.root)
+
+    private class DiffCallback(private val newMessages: List<MessageSearchMatch>, private val oldMessages: List<MessageSearchMatch>) :
+        DiffUtil.Callback() {
+        override fun getOldListSize(): Int {
+            return oldMessages.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newMessages.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldMessages[oldItemPosition].message.id == newMessages[newItemPosition].message.id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldMessages[oldItemPosition].hashCode() == newMessages[newItemPosition].hashCode()
+        }
+    }
 }
