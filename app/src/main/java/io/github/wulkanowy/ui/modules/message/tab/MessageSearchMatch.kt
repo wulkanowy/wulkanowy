@@ -1,4 +1,4 @@
-package io.github.wulkanowy.data.pojos
+package io.github.wulkanowy.ui.modules.message.tab
 
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.utils.toFormattedString

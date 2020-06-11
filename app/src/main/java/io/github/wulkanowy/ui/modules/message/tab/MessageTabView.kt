@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.pojos.MessageSearchMatch
 import io.github.wulkanowy.ui.base.BaseView
 
 interface MessageTabView : BaseView {
