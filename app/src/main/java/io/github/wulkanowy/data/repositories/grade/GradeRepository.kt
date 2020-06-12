@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.utils.uniqueSubtract
 import io.reactivex.Completable
 import io.reactivex.Single
+import org.threeten.bp.LocalDateTime
 import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,6 +56,17 @@ class GradeRepository @Inject constructor(
                                             summary.finalGrade.isEmpty() -> true
                                             notify && oldSummary?.finalGrade != summary.finalGrade -> false
                                             else -> true
+                                        }
+
+                                        summary.predictedGradeLastChange = when {
+                                            oldSummary == null -> LocalDateTime.now()
+                                            summary.predictedGrade != oldSummary.predictedGrade -> LocalDateTime.now()
+                                            else -> oldSummary.predictedGradeLastChange
+                                        }
+                                        summary.finalGradeLastChange = when {
+                                            oldSummary == null -> LocalDateTime.now()
+                                            summary.finalGrade != oldSummary.finalGrade -> LocalDateTime.now()
+                                            else -> oldSummary.finalGradeLastChange
                                         }
                                     })
                             }
