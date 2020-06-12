@@ -265,6 +265,10 @@
     <string name="account_logout">Вийти</string>
     <string name="account_confirm">Ви впевнені, що хочете вийти з цього аккаунту?</string>
     <string name="account_logout_student">Вийти з аккаунту учня</string>
+    <string name="account_type_student">Student account</string>
+    <string name="account_type_parent">Parent account</string>
+    <string name="account_login_mobile_api">Mobile API mode</string>
+    <string name="account_login_hybrid">Hybrid mode</string>
     <!--About-->
     <string name="about_version">Версія додатка</string>
     <string name="about_contributor">Розробники</string>
