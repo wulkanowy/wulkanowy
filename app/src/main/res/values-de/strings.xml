@@ -245,6 +245,10 @@
     <string name="account_logout">Abmelden</string>
     <string name="account_confirm">Wollen Sie sich von einem aktiven Studenten abmelden?</string>
     <string name="account_logout_student">Abmeldung von Student</string>
+    <string name="account_type_student">Student account</string>
+    <string name="account_type_parent">Parent account</string>
+    <string name="account_login_mobile_api">Mobile API mode</string>
+    <string name="account_login_hybrid">Hybrid mode</string>
     <!--About-->
     <string name="about_version">Version der App</string>
     <string name="about_contributor">Mitarbeiter</string>
