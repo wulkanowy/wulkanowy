@@ -127,21 +127,13 @@ class MessageTabPresenter @Inject constructor(
         lastSearchQuery = query
         val trimmedQuery = query.trim()
 
-        val filteredList: List<Message>
-
-        filteredList = if (trimmedQuery.isEmpty()) {
-            messages
-                .sortedByDescending { it.date }
+        val filteredList = if (trimmedQuery.isEmpty()) {
+            messages.sortedByDescending { it.date }
         } else {
             messages
-                .map {
-                    val matchRatio = calculateMatchRatio(it, query)
-                    it to matchRatio
-                }
+                .map { it to calculateMatchRatio(it, query) }
                 .sortedByDescending { it.second }
-                .filter {
-                    it.second > 5000
-                }
+                .filter { it.second > 5000 }
                 .map { it.first }
         }
 
