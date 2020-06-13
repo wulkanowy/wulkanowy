@@ -129,11 +129,11 @@ class MessageTabPresenter @Inject constructor(
 
         val filteredList: List<Message>
 
-        if (trimmedQuery.isEmpty()) {
-            filteredList = messages
+        filteredList = if (trimmedQuery.isEmpty()) {
+            messages
                 .sortedByDescending { it.date }
         } else {
-            filteredList = messages
+            messages
                 .map {
                     val matchRatio = calculateMatchRatio(it, query)
                     it to matchRatio
@@ -183,11 +183,11 @@ class MessageTabPresenter @Inject constructor(
             ),
             FuzzySearch.ratio(
                 query.toLowerCase(Locale.getDefault()),
-                message.date.toFormattedString("d MMMMM").toLowerCase(Locale.getDefault())
+                message.date.toFormattedString("d MMMM").toLowerCase(Locale.getDefault())
             ),
             FuzzySearch.ratio(
                 query.toLowerCase(Locale.getDefault()),
-                message.date.toFormattedString("d MMMMM yyyy").toLowerCase(Locale.getDefault())
+                message.date.toFormattedString("d MMMM yyyy").toLowerCase(Locale.getDefault())
             )
         ).max() ?: 0
 

@@ -28,8 +28,8 @@ class MessageTabAdapter @Inject constructor() :
     }
 
     fun updateItem(position: Int, item: Message) {
-        val currentItem = items.get(position)
-        items.set(position, item)
+        val currentItem = items[position]
+        items[position] = item
         if (item.hashCode() != currentItem.hashCode()) {
             notifyItemChanged(position)
         }
