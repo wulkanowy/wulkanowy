@@ -89,7 +89,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         })
     }
 
-    override fun updateData(data: List<MessageSearchMatch>) {
+    override fun updateData(data: List<Message>) {
         tabAdapter.setDataItems(data)
     }
 

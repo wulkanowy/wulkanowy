@@ -11,7 +11,7 @@ interface MessageTabView : BaseView {
 
     fun resetListPosition()
 
-    fun updateData(data: List<MessageSearchMatch>)
+    fun updateData(data: List<Message>)
 
     fun updateItem(item: Message, position: Int)
 

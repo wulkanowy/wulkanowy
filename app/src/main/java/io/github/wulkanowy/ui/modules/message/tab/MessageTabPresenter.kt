@@ -9,8 +9,12 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.toFormattedString
+import me.xdrop.fuzzywuzzy.FuzzySearch
 import timber.log.Timber
+import java.util.Locale
 import javax.inject.Inject
+import kotlin.math.pow
 
 class MessageTabPresenter @Inject constructor(
     schedulers: SchedulersProvider,
@@ -123,19 +127,22 @@ class MessageTabPresenter @Inject constructor(
         lastSearchQuery = query
         val trimmedQuery = query.trim()
 
-        val filteredList: List<MessageSearchMatch>
+        val filteredList: List<Message>
 
         if (trimmedQuery.isEmpty()) {
             filteredList = messages
                 .sortedByDescending { it.date }
-                .map { MessageSearchMatch(it, null) }
         } else {
             filteredList = messages
-                .map { MessageSearchMatch(it, trimmedQuery) }
-                .sortedByDescending { it.totalRatioWeighted }
-                .filter { message ->
-                    message.totalRatioWeighted ?: 0 > 5000
+                .map {
+                    val matchRatio = calculateMatchRatio(it, query)
+                    it to matchRatio
                 }
+                .sortedByDescending { it.second }
+                .filter {
+                    it.second > 5000
+                }
+                .map { it.first }
         }
 
         Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${filteredList.size}")
@@ -143,7 +150,7 @@ class MessageTabPresenter @Inject constructor(
         updateData(filteredList)
     }
 
-    private fun updateData(data: List<MessageSearchMatch>) {
+    private fun updateData(data: List<Message>) {
         view?.run {
             showEmpty(data.isEmpty())
             showContent(data.isNotEmpty())
@@ -151,5 +158,43 @@ class MessageTabPresenter @Inject constructor(
             updateData(data)
             resetListPosition()
         }
+    }
+
+    private fun calculateMatchRatio(message: Message, query: String): Int {
+        val subjectRatio = FuzzySearch.tokenSortPartialRatio(
+            query.toLowerCase(Locale.getDefault()),
+            message.subject
+        )
+
+        val senderOrRecipientRatio = FuzzySearch.tokenSortPartialRatio(
+            query.toLowerCase(Locale.getDefault()),
+            if (message.sender.isNotEmpty()) message.sender.toLowerCase(Locale.getDefault())
+            else message.recipient.toLowerCase(Locale.getDefault())
+        )
+
+        val dateRatio = listOf(
+            FuzzySearch.ratio(
+                query.toLowerCase(Locale.getDefault()),
+                message.date.toFormattedString("dd.MM").toLowerCase(Locale.getDefault())
+            ),
+            FuzzySearch.ratio(
+                query.toLowerCase(Locale.getDefault()),
+                message.date.toFormattedString("dd.MM.yyyy").toLowerCase(Locale.getDefault())
+            ),
+            FuzzySearch.ratio(
+                query.toLowerCase(Locale.getDefault()),
+                message.date.toFormattedString("d MMMMM").toLowerCase(Locale.getDefault())
+            ),
+            FuzzySearch.ratio(
+                query.toLowerCase(Locale.getDefault()),
+                message.date.toFormattedString("d MMMMM yyyy").toLowerCase(Locale.getDefault())
+            )
+        ).max() ?: 0
+
+
+        return (subjectRatio.toDouble().pow(2)
+            + senderOrRecipientRatio.toDouble().pow(2)
+            + dateRatio.toDouble().pow(2) * 2
+            ).toInt()
     }
 }
