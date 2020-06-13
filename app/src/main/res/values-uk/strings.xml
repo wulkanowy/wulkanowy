@@ -107,11 +107,35 @@
         <item quantity="many">Нові оцінки</item>
         <item quantity="other">Нові оцінки</item>
     </plurals>
+    <plurals name="grade_new_items_predicted">
+        <item quantity="one">New predicted grade</item>
+        <item quantity="few">New predicted grades</item>
+        <item quantity="many">New predicted grades</item>
+        <item quantity="other">New predicted grades</item>
+    </plurals>
+    <plurals name="grade_new_items_final">
+        <item quantity="one">New final grade</item>
+        <item quantity="few">New final grades</item>
+        <item quantity="many">New final grades</item>
+        <item quantity="other">New final grades</item>
+    </plurals>
     <plurals name="grade_notify_new_items">
         <item quantity="one">Ви отримали %1$d оцінку</item>
         <item quantity="few">Ви отримали %1$d оцінки</item>
         <item quantity="many">Ви отримали %1$d оцінок</item>
         <item quantity="other">Ви отримали %1$d оцінок</item>
+    </plurals>
+    <plurals name="grade_notify_new_items_predicted">
+        <item quantity="one">You received %1$d predicted grade</item>
+        <item quantity="few">You received %1$d predicted grades</item>
+        <item quantity="many">You received %1$d predicted grades</item>
+        <item quantity="other">You received %1$d predicted grades</item>
+    </plurals>
+    <plurals name="grade_notify_new_items_final">
+        <item quantity="one">You received %1$d final grade</item>
+        <item quantity="few">You received %1$d final grades</item>
+        <item quantity="many">You received %1$d final grades</item>
+        <item quantity="other">You received %1$d final grades</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Урок</string>
