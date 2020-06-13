@@ -101,7 +101,7 @@ class MessageTabPresenter @Inject constructor(
             .subscribe({
                 Timber.i("Loading $folder message result: Success")
                 messages = it
-                view?.updateData(it)
+                view?.updateData(getFilteredData(lastSearchQuery))
                 analytics.logEvent(
                     "load_data",
                     "type" to "messages",
@@ -135,15 +135,7 @@ class MessageTabPresenter @Inject constructor(
             .debounce(250, TimeUnit.MILLISECONDS)
             .map { query ->
                 lastSearchQuery = query
-                if (query.trim().isEmpty()) {
-                    messages.sortedByDescending { it.date }
-                } else {
-                    messages
-                        .map { it to calculateMatchRatio(it, query) }
-                        .sortedByDescending { it.second }
-                        .filter { it.second > 5000 }
-                        .map { it.first }
-                }
+                getFilteredData(query)
             }
             .subscribeOn(schedulers.backgroundThread)
             .observeOn(schedulers.mainThread)
@@ -151,6 +143,18 @@ class MessageTabPresenter @Inject constructor(
                 Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${it.size}")
                 updateData(it)
             }) { Timber.e(it) })
+    }
+
+    private fun getFilteredData(query: String): List<Message> {
+        return if (query.trim().isEmpty()) {
+            messages.sortedByDescending { it.date }
+        } else {
+            messages
+                .map { it to calculateMatchRatio(it, query) }
+                .sortedByDescending { it.second }
+                .filter { it.second > 5000 }
+                .map { it.first }
+        }
     }
 
     private fun updateData(data: List<Message>) {
