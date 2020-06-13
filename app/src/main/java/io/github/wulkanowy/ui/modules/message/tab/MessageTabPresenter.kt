@@ -10,9 +10,11 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
+import io.reactivex.subjects.PublishSubject
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import timber.log.Timber
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.math.pow
 
@@ -33,9 +35,12 @@ class MessageTabPresenter @Inject constructor(
 
     private var messages = emptyList<Message>()
 
+    private val searchQuery = PublishSubject.create<String>()
+
     fun onAttachView(view: MessageTabView, folder: MessageFolder) {
         super.onAttachView(view)
         view.initView()
+        initializeSearchStream()
         errorHandler.showErrorMessage = ::showErrorViewOnError
         this.folder = folder
     }
@@ -78,38 +83,35 @@ class MessageTabPresenter @Inject constructor(
 
     private fun loadData(forceRefresh: Boolean) {
         Timber.i("Loading $folder message data started")
-        disposable.apply {
-            clear()
-            add(studentRepository.getCurrentStudent()
-                .flatMap { student ->
-                    semesterRepository.getCurrentSemester(student)
-                        .flatMap { messageRepository.getMessages(student, it, folder, forceRefresh) }
+        disposable.add(studentRepository.getCurrentStudent()
+            .flatMap { student ->
+                semesterRepository.getCurrentSemester(student)
+                    .flatMap { messageRepository.getMessages(student, it, folder, forceRefresh) }
+            }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .doFinally {
+                view?.run {
+                    showRefresh(false)
+                    showProgress(false)
+                    enableSwipe(true)
+                    notifyParentDataLoaded()
                 }
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doFinally {
-                    view?.run {
-                        showRefresh(false)
-                        showProgress(false)
-                        enableSwipe(true)
-                        notifyParentDataLoaded()
-                    }
-                }
-                .subscribe({
-                    Timber.i("Loading $folder message result: Success")
-                    messages = it
-                    onSearchQueryTextChange(lastSearchQuery)
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "messages",
-                        "items" to it.size,
-                        "folder" to folder.name
-                    )
-                }) {
-                    Timber.i("Loading $folder message result: An exception occurred")
-                    errorHandler.dispatch(it)
-                })
-        }
+            }
+            .subscribe({
+                Timber.i("Loading $folder message result: Success")
+                messages = it
+                view?.updateData(it)
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "messages",
+                    "items" to it.size,
+                    "folder" to folder.name
+                )
+            }) {
+                Timber.i("Loading $folder message result: An exception occurred")
+                errorHandler.dispatch(it)
+            })
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
@@ -124,22 +126,31 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onSearchQueryTextChange(query: String) {
-        lastSearchQuery = query
-        val trimmedQuery = query.trim()
+        if (query != searchQuery.toString())
+            searchQuery.onNext(query)
+    }
 
-        val filteredList = if (trimmedQuery.isEmpty()) {
-            messages.sortedByDescending { it.date }
-        } else {
-            messages
-                .map { it to calculateMatchRatio(it, query) }
-                .sortedByDescending { it.second }
-                .filter { it.second > 5000 }
-                .map { it.first }
-        }
-
-        Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${filteredList.size}")
-
-        updateData(filteredList)
+    private fun initializeSearchStream() {
+        disposable.add(searchQuery
+            .debounce(250, TimeUnit.MILLISECONDS)
+            .map { query ->
+                lastSearchQuery = query
+                if (query.trim().isEmpty()) {
+                    messages.sortedByDescending { it.date }
+                } else {
+                    messages
+                        .map { it to calculateMatchRatio(it, query) }
+                        .sortedByDescending { it.second }
+                        .filter { it.second > 5000 }
+                        .map { it.first }
+                }
+            }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
+                Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${it.size}")
+                updateData(it)
+            }) { Timber.e(it) })
     }
 
     private fun updateData(data: List<Message>) {
