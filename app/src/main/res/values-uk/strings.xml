@@ -313,7 +313,7 @@
     <string name="all_prev">Попередній</string>
     <string name="all_next">Наступний</string>
     <string name="all_search">Пошук</string>
-    <string name="all_search_hint">Пошук...</string>
+    <string name="all_search_hint">Search…</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Брак уроків</string>
     <string name="widget_timetable_theme_title">Увібрати тему</string>
