@@ -10,6 +10,8 @@ interface MessagePreviewView : BaseView {
 
     val deleteMessageSuccessString: String
 
+    val messageNoSubjectString: String
+
     val printHTML: String
 
     fun initView()

@@ -98,7 +98,7 @@ class MessagePreviewPresenter @Inject constructor(
 
     fun onShare(): Boolean {
         message?.let {
-            var text = "Temat: ${it.subject}\n" + when (it.sender.isNotEmpty()) {
+            var text = "Temat: ${it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() }}\n" + when (it.sender.isNotEmpty()) {
                 true -> "Od: ${it.sender}\n"
                 false -> "Do: ${it.recipient}\n"
             } + "Data: ${it.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${it.content}"
@@ -113,7 +113,7 @@ class MessagePreviewPresenter @Inject constructor(
                 }
             }
 
-            view?.shareText(text, "FW: ${it.subject}")
+            view?.shareText(text, "FW: ${it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() }}")
             return true
         }
         return false
@@ -136,11 +136,11 @@ class MessagePreviewPresenter @Inject constructor(
             val jobName = "Wiadomość " + when {
                 it.sender.isNotEmpty() -> "od ${it.sender}"
                 else -> "do ${it.recipient}"
-            } + " $dateString: ${it.subject} | Wulkanowy"
+            } + " $dateString: ${it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() }} | Wulkanowy"
 
             view?.apply {
                 val html = printHTML
-                    .replace("%SUBJECT%", it.subject)
+                    .replace("%SUBJECT%", it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() })
                     .replace("%CONTENT%", messageContent)
                     .replace("%INFO%", infoContent)
                 printDocument(html, jobName)

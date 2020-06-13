@@ -58,6 +58,9 @@ class MessagePreviewFragment :
     override val deleteMessageSuccessString: String
         get() = getString(R.string.message_delete_success)
 
+    override val messageNoSubjectString: String
+        get() = getString(R.string.message_no_subject)
+
     override val printHTML: String
         get() = requireContext().assets.open("message-print-page.html").bufferedReader().use { it.readText() }
 
