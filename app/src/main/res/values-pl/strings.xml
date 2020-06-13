@@ -108,7 +108,7 @@
         <item quantity="other">Nowe oceny</item>
     </plurals>
     <plurals name="grade_new_items_predicted">
-        <item quantity="one">Nowa ocena przewidywane</item>
+        <item quantity="one">Nowa ocena przewidywana</item>
         <item quantity="few">Nowe oceny przewidywane</item>
         <item quantity="many">Nowe oceny przewidywane</item>
         <item quantity="other">Nowe oceny przewidywane</item>
