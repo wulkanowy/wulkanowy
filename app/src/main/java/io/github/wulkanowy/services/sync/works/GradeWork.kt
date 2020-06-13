@@ -31,21 +31,17 @@ class GradeWork @Inject constructor(
 
     override fun create(student: Student, semester: Semester): Completable {
         return gradeRepository.getGrades(student, semester, true, preferencesRepository.isNotificationsEnable)
-            .flatMap { gradeRepository.getNotNotifiedGrades(semester) }
-            .doOnSuccess {
+            .ignoreElement()
+            .concatWith(Completable.concatArray(gradeRepository.getNotNotifiedGrades(semester).flatMapCompletable {
                 if (it.isNotEmpty()) notifyDetails(it)
                 gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true })
-            }
-            .flatMap { gradeRepository.getNotNotifiedPredictedGrades(semester) }
-            .doOnSuccess {
+            }, gradeRepository.getNotNotifiedPredictedGrades(semester).flatMapCompletable {
                 if (it.isNotEmpty()) notifyPredicted(it)
                 gradeRepository.updateGradesSummary(it.onEach { grade -> grade.isPredictedGradeNotified = true })
-            }
-            .flatMap { gradeRepository.getNotNotifiedFinalGrades(semester) }
-            .flatMapCompletable {
+            }, gradeRepository.getNotNotifiedFinalGrades(semester).flatMapCompletable {
                 if (it.isNotEmpty()) notifyFinal(it)
                 gradeRepository.updateGradesSummary(it.onEach { grade -> grade.isFinalGradeNotified = true })
-            }
+            }))
     }
 
     private fun getNotificationBuilder(): NotificationCompat.Builder {
