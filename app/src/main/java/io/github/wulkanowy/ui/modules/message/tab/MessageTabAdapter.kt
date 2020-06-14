@@ -30,7 +30,7 @@ class MessageTabAdapter @Inject constructor() :
     fun updateItem(position: Int, item: Message) {
         val currentItem = items[position]
         items[position] = item
-        if (item.hashCode() != currentItem.hashCode()) {
+        if (item != currentItem) {
             notifyItemChanged(position)
         }
     }
@@ -80,7 +80,7 @@ class MessageTabAdapter @Inject constructor() :
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return old[oldItemPosition].hashCode() == new[newItemPosition].hashCode()
+            return old[oldItemPosition] == new[newItemPosition]
         }
     }
 }
