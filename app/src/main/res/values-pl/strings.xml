@@ -126,16 +126,16 @@
         <item quantity="other">Masz %1$d nowych ocen</item>
     </plurals>
     <plurals name="grade_notify_new_items_predicted">
-        <item quantity="one">You received %1$d predicted grade</item>
-        <item quantity="few">You received %1$d predicted grades</item>
-        <item quantity="many">You received %1$d predicted grades</item>
-        <item quantity="other">You received %1$d predicted grades</item>
+        <item quantity="one">Masz %1$d nową przewidywaną ocenę</item>
+        <item quantity="few">Masz %1$d nowe przewidywane oceny</item>
+        <item quantity="many">Masz %1$d nowych przewidywanych ocen</item>
+        <item quantity="other">Masz %1$d nowych przewidywanych ocen</item>
     </plurals>
     <plurals name="grade_notify_new_items_final">
-        <item quantity="one">You received %1$d final grade</item>
-        <item quantity="few">You received %1$d final grades</item>
-        <item quantity="many">You received %1$d final grades</item>
-        <item quantity="other">You received %1$d final grades</item>
+        <item quantity="one">Masz %1$d nową końcową ocenę</item>
+        <item quantity="few">Masz %1$d nowe końcowe oceny</item>
+        <item quantity="many">Masz %1$d nowych końcowych ocen</item>
+        <item quantity="other">Masz %1$d nowych końcowych ocen</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Lekcja</string>
@@ -204,8 +204,8 @@
     <string name="message_move_to_bin">Przenieś do kosza</string>
     <string name="message_delete_forever">Usuń trwale</string>
     <string name="message_delete_success">Wiadomość usunięta pomyślnie</string>
-    <string name="message_share">Share</string>
-    <string name="message_print">Print</string>
+    <string name="message_share">Udostępnij</string>
+    <string name="message_print">Drukuj</string>
     <string name="message_subject">Temat</string>
     <string name="message_content">Treść</string>
     <string name="message_send_successful">Wiadomość wysłana pomyślnie</string>
@@ -291,10 +291,10 @@
     <string name="account_logout">Wyloguj</string>
     <string name="account_confirm">Czy chcesz wylogować aktualnego ucznia?</string>
     <string name="account_logout_student">Wylogowanie ucznia</string>
-    <string name="account_type_student">Student account</string>
-    <string name="account_type_parent">Parent account</string>
-    <string name="account_login_mobile_api">Mobile API mode</string>
-    <string name="account_login_hybrid">Hybrid mode</string>
+    <string name="account_type_student">Konto ucznia</string>
+    <string name="account_type_parent">Konto rodzica</string>
+    <string name="account_login_mobile_api">Tryb API mobilne</string>
+    <string name="account_login_hybrid">Tryb hybrydowy</string>
     <!--About-->
     <string name="about_version">Wersja aplikacji</string>
     <string name="about_contributor">Twórcy</string>
@@ -339,7 +339,7 @@
     <string name="all_prev">Poprzedni</string>
     <string name="all_next">Następny</string>
     <string name="all_search">Szukaj</string>
-    <string name="all_search_hint">Search…</string>
+    <string name="all_search_hint">Szukaj…</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Brak lekcji</string>
     <string name="widget_timetable_theme_title">Wybierz motyw</string>
