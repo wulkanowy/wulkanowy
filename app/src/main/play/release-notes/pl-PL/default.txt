@@ -1,8 +1,6 @@
-Wersja 0.18.1
-- naprawiliśmy sortowanie w ocenach
-- naprawilismy wiele problemów ze stabilnością
-- nazwy opcji w ustawieniach nie są już ucięte
-- w zadaniach domowych wyświetlają się teraz pozycje na weekend
-- wyłączyliśmy logowanie przez token (bo nie działa i nie wiadomo kiedy będzie działać)
+Wersja 0.18.3
+- poprawiliśmy liczenie średniej i dodaliśmy nowy sposób jej liczenia w ustawieniach
+- naprawiliśmy usuwanie wiadomości
+- naprawiliśmy wysyłanie wiadomości na Lubelskim Portalu Oświatowym
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases
