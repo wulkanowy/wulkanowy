@@ -311,7 +311,7 @@
     <string name="all_prev">Zurück</string>
     <string name="all_next">Nächste</string>
     <string name="all_search">Suchen</string>
-    <string name="all_search_hint">Search…</string>
+    <string name="all_search_hint">Suchen…</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Keine Lektionen</string>
     <string name="widget_timetable_theme_title">Thema wählen</string>
