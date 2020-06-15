@@ -20,14 +20,14 @@ class AttendanceRepository @Inject constructor(
 
     suspend fun getAttendance(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean): List<Attendance> {
         return local.getAttendance(semester, start.monday, end.sunday).filter { !forceRefresh }.ifEmpty {
-            val newAttendance = remote.getAttendance(student, semester, start.monday, end.sunday)
+            val new = remote.getAttendance(student, semester, start.monday, end.sunday)
+            val old = local.getAttendance(semester, start.monday, end.sunday)
 
-            val oldAttendance = local.getAttendance(semester, start.monday, end.sunday)
-            local.deleteAttendance(oldAttendance.uniqueSubtract(newAttendance))
-            local.saveAttendance(newAttendance.uniqueSubtract(oldAttendance))
+            local.deleteAttendance(old.uniqueSubtract(new))
+            local.saveAttendance(new.uniqueSubtract(old))
 
-            local.getAttendance(semester, start.monday, end.sunday).filter { it.date in start..end }
-        }
+            local.getAttendance(semester, start.monday, end.sunday)
+        }.filter { it.date in start..end }
     }
 
     suspend fun excuseForAbsence(student: Student, semester: Semester, attendanceList: List<Attendance>, reason: String? = null): Boolean {

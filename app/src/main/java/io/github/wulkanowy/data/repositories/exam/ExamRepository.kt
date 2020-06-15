@@ -26,7 +26,7 @@ class ExamRepository @Inject constructor(
             local.deleteExams(old.uniqueSubtract(new))
             local.saveExams(new.uniqueSubtract(old))
 
-            return local.getExams(semester, start.monday, end.sunday).filter { it.date in start..end }
-        }
+            return local.getExams(semester, start.monday, end.sunday)
+        }.filter { it.date in start..end }
     }
 }

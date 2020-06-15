@@ -21,12 +21,9 @@ class TimetableRepository @Inject constructor(
 ) {
 
     suspend fun getTimetable(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean = false): List<Timetable> {
-        val monday = start.monday
-        val sunday = start.sunday
-
-        return local.getTimetable(semester, monday, sunday).filter { !forceRefresh }.ifEmpty {
-            val new = remote.getTimetable(student, semester, monday, sunday)
-            val old = local.getTimetable(semester, monday, sunday)
+        return local.getTimetable(semester, start.monday, start.sunday).filter { !forceRefresh }.ifEmpty {
+            val new = remote.getTimetable(student, semester, start.monday, start.sunday)
+            val old = local.getTimetable(semester, start.monday, start.sunday)
 
             local.deleteTimetable(old.uniqueSubtract(new).also { schedulerHelper.cancelScheduled(it) })
             local.saveTimetable(new.uniqueSubtract(old).also { schedulerHelper.scheduleNotifications(it, student) }.map { item ->
@@ -40,9 +37,7 @@ class TimetableRepository @Inject constructor(
                 }
             })
 
-            return local.getTimetable(semester, monday, sunday)
-                .filter { it.date in start..end }
-                .also { schedulerHelper.scheduleNotifications(it, student) }
-        }
+            local.getTimetable(semester, start.monday, start.sunday)
+        }.filter { it.date in start..end }.also { schedulerHelper.scheduleNotifications(it, student) }
     }
 }
