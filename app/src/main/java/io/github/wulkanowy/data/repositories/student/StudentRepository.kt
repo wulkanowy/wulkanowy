@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.student
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import javax.inject.Inject
@@ -9,8 +8,7 @@ import javax.inject.Singleton
 @Singleton
 class StudentRepository @Inject constructor(
     private val local: StudentLocal,
-    private val remote: StudentRemote,
-    private val settings: InternetObservingSettings
+    private val remote: StudentRemote
 ) {
 
     suspend fun isStudentSaved(): Boolean = local.getStudents(false).isNotEmpty()

@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.note
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -10,7 +9,6 @@ import javax.inject.Singleton
 
 @Singleton
 class NoteRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: NoteLocal,
     private val remote: NoteRemote
 ) {
@@ -28,7 +26,7 @@ class NoteRepository @Inject constructor(
                 }
             })
 
-            return local.getNotes(student)
+            local.getNotes(student)
         }
     }
 

@@ -1,29 +1,28 @@
 package io.github.wulkanowy.data.repositories.logger
 
 import android.content.Context
-import io.reactivex.Single
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
 import javax.inject.Inject
 
 class LoggerRepository @Inject constructor(private val context: Context) {
 
-    fun getLastLogLines(): Single<List<String>> {
-        return getLastModified()
-            .map { it.readText() }
-            .map { it.split("\n") }
+    suspend fun getLastLogLines(): List<String> {
+        return getLastModified().readText().split("\n")
     }
 
-    fun getLogFiles(): Single<List<File>> {
-        return Single.fromCallable {
+    suspend fun getLogFiles(): List<File> {
+        return withContext(Dispatchers.IO) {
             File(context.filesDir.absolutePath).listFiles(File::isFile)?.filter {
                 it.name.endsWith(".log")
-            }
+            }!!
         }
     }
 
-    private fun getLastModified(): Single<File> {
-        return Single.fromCallable {
+    private suspend fun getLastModified(): File {
+        return withContext(Dispatchers.IO) {
             var lastModifiedTime = Long.MIN_VALUE
             var chosenFile: File? = null
             File(context.filesDir.absolutePath).listFiles(File::isFile)?.forEach { file ->
@@ -33,7 +32,7 @@ class LoggerRepository @Inject constructor(private val context: Context) {
                 }
             }
             if (chosenFile == null) throw FileNotFoundException("Log file not found")
-            chosenFile
+            chosenFile!!
         }
     }
 }

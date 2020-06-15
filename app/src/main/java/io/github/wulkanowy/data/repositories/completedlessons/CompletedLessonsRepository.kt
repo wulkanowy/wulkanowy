@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.completedlessons
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -13,7 +12,6 @@ import javax.inject.Singleton
 
 @Singleton
 class CompletedLessonsRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: CompletedLessonsLocal,
     private val remote: CompletedLessonsRemote
 ) {
@@ -26,7 +24,7 @@ class CompletedLessonsRepository @Inject constructor(
             local.deleteCompleteLessons(old.uniqueSubtract(new))
             local.saveCompletedLessons(new.uniqueSubtract(old))
 
-            return local.getCompletedLessons(semester, start.monday, end.sunday).filter { it.date in start..end }
-        }
+            local.getCompletedLessons(semester, start.monday, end.sunday)
+        }.filter { it.date in start..end }
     }
 }

@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.gradestatistics
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.GradePointsStatistics
 import io.github.wulkanowy.data.db.entities.GradeStatistics
 import io.github.wulkanowy.data.db.entities.Semester
@@ -13,7 +12,6 @@ import javax.inject.Singleton
 
 @Singleton
 class GradeStatisticsRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: GradeStatisticsLocal,
     private val remote: GradeStatisticsRemote
 ) {
@@ -26,7 +24,7 @@ class GradeStatisticsRepository @Inject constructor(
             local.deleteGradesStatistics(old.uniqueSubtract(new))
             local.saveGradesStatistics(new.uniqueSubtract(old))
 
-            return local.getGradesStatistics(semester, isSemester, subjectName).mapToStatisticItems()
+            local.getGradesStatistics(semester, isSemester, subjectName).mapToStatisticItems()
         }
     }
 
@@ -38,29 +36,25 @@ class GradeStatisticsRepository @Inject constructor(
             local.deleteGradesPointsStatistics(old.uniqueSubtract(new))
             local.saveGradesPointsStatistics(new.uniqueSubtract(old))
 
-            return local.getGradesPointsStatistics(semester, subjectName).mapToStatisticsItem()
+            local.getGradesPointsStatistics(semester, subjectName).mapToStatisticsItem()
         }
     }
 
-    private fun List<GradeStatistics>.mapToStatisticItems(): List<GradeStatisticsItem> {
-        return groupBy { it.subject }.map {
-            GradeStatisticsItem(
-                type = ViewType.PARTIAL,
-                partial = it.value
-                    .sortedByDescending { item -> item.grade }
-                    .filter { item -> item.amount != 0 },
-                points = null
-            )
-        }
+    private fun List<GradeStatistics>.mapToStatisticItems() = groupBy { it.subject }.map {
+        GradeStatisticsItem(
+            type = ViewType.PARTIAL,
+            partial = it.value
+                .sortedByDescending { item -> item.grade }
+                .filter { item -> item.amount != 0 },
+            points = null
+        )
     }
 
-    private fun List<GradePointsStatistics>.mapToStatisticsItem(): List<GradeStatisticsItem> {
-        return map {
-            GradeStatisticsItem(
-                type = ViewType.POINTS,
-                partial = emptyList(),
-                points = it
-            )
-        }
+    private fun List<GradePointsStatistics>.mapToStatisticsItem() = map {
+        GradeStatisticsItem(
+            type = ViewType.POINTS,
+            partial = emptyList(),
+            points = it
+        )
     }
 }

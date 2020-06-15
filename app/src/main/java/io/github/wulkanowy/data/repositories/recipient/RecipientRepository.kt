@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.recipient
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
@@ -11,7 +10,6 @@ import javax.inject.Singleton
 
 @Singleton
 class RecipientRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: RecipientLocal,
     private val remote: RecipientRemote
 ) {
@@ -24,7 +22,7 @@ class RecipientRepository @Inject constructor(
             local.deleteRecipients(old.uniqueSubtract(new))
             local.saveRecipients(new.uniqueSubtract(old))
 
-            return local.getRecipients(student, role, unit)
+            local.getRecipients(student, role, unit)
         }
     }
 

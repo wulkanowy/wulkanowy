@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.message
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.db.entities.Recipient
@@ -15,7 +14,6 @@ import javax.inject.Singleton
 
 @Singleton
 class MessageRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: MessageLocal,
     private val remote: MessageRemote
 ) {
@@ -23,14 +21,14 @@ class MessageRepository @Inject constructor(
     suspend fun getMessages(student: Student, semester: Semester, folder: MessageFolder, forceRefresh: Boolean = false, notify: Boolean = false): List<Message> {
         return local.getMessages(student, folder).filter { !forceRefresh }.ifEmpty {
             val new = remote.getMessages(student, semester, folder)
-
             val old = local.getMessages(student, folder)
+
             local.deleteMessages(old.uniqueSubtract(new))
             local.saveMessages(new.uniqueSubtract(old).onEach {
                 it.isNotified = !notify
             })
 
-            return local.getMessages(student, folder)
+            local.getMessages(student, folder)
         }
     }
 
@@ -53,7 +51,7 @@ class MessageRepository @Inject constructor(
             local.saveMessageAttachments(attachments)
             Timber.d("Message ${message.messageId} with blank content: ${dbMessage.message.content.isBlank()}, marked as read")
 
-            return local.getMessageWithAttachment(student, message)
+            local.getMessageWithAttachment(student, message)
         }
     }
 

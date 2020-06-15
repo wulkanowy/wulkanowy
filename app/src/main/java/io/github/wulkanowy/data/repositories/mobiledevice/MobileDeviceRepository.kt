@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.mobiledevice
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -11,7 +10,6 @@ import javax.inject.Singleton
 
 @Singleton
 class MobileDeviceRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: MobileDeviceLocal,
     private val remote: MobileDeviceRemote
 ) {
@@ -24,7 +22,7 @@ class MobileDeviceRepository @Inject constructor(
             local.deleteDevices(old uniqueSubtract new)
             local.saveDevices(new uniqueSubtract old)
 
-            return local.getDevices(semester)
+            local.getDevices(semester)
         }
     }
 

@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.timetable
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Timetable
@@ -14,7 +13,6 @@ import javax.inject.Singleton
 
 @Singleton
 class TimetableRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: TimetableLocal,
     private val remote: TimetableRemote,
     private val schedulerHelper: TimetableNotificationSchedulerHelper

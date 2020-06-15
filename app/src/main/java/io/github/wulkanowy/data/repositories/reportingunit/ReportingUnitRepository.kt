@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.reportingunit
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.utils.uniqueSubtract
@@ -9,7 +8,6 @@ import javax.inject.Singleton
 
 @Singleton
 class ReportingUnitRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: ReportingUnitLocal,
     private val remote: ReportingUnitRemote
 ) {
@@ -22,7 +20,7 @@ class ReportingUnitRepository @Inject constructor(
             local.deleteReportingUnits(old.uniqueSubtract(new))
             local.saveReportingUnits(new.uniqueSubtract(old))
 
-            return local.getReportingUnits(student)
+            local.getReportingUnits(student)
         }
     }
 

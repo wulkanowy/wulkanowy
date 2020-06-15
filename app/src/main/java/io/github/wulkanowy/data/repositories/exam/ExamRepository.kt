@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.exam
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -13,7 +12,6 @@ import javax.inject.Singleton
 
 @Singleton
 class ExamRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: ExamLocal,
     private val remote: ExamRemote
 ) {
@@ -26,7 +24,7 @@ class ExamRepository @Inject constructor(
             local.deleteExams(old.uniqueSubtract(new))
             local.saveExams(new.uniqueSubtract(old))
 
-            return local.getExams(semester, start.monday, end.sunday)
+            local.getExams(semester, start.monday, end.sunday)
         }.filter { it.date in start..end }
     }
 }

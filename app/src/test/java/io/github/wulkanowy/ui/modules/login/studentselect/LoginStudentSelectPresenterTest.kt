@@ -5,29 +5,26 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito.clearInvocations
-import org.mockito.Mockito.doReturn
-import org.mockito.Mockito.verify
-import org.mockito.MockitoAnnotations
 import org.threeten.bp.LocalDateTime.now
 
 class LoginStudentSelectPresenterTest {
 
-    @Mock
+    @MockK
     lateinit var errorHandler: LoginErrorHandler
 
-    @Mock
+    @MockK
     lateinit var loginStudentSelectView: LoginStudentSelectView
 
-    @Mock
+    @MockK
     lateinit var studentRepository: StudentRepository
 
-    @Mock
+    @MockK
     lateinit var analytics: FirebaseAnalyticsHelper
 
     private lateinit var presenter: LoginStudentSelectPresenter
@@ -38,36 +35,36 @@ class LoginStudentSelectPresenterTest {
 
     @Before
     fun initPresenter() {
-        MockitoAnnotations.initMocks(this)
-        clearInvocations(studentRepository, loginStudentSelectView)
+        MockKAnnotations.init(this)
         presenter = LoginStudentSelectPresenter(TestSchedulersProvider(), studentRepository, errorHandler, analytics)
         presenter.onAttachView(loginStudentSelectView, null)
     }
 
     @Test
     fun initViewTest() {
-        verify(loginStudentSelectView).initView()
+        verify { loginStudentSelectView.initView() }
     }
 
     @Test
     fun onSelectedStudentTest() {
-        doReturn(Single.just(listOf(1L))).`when`(studentRepository).saveStudents(listOf(testStudent))
-        doReturn(Completable.complete()).`when`(studentRepository).switchStudent(testStudent)
+        coEvery { studentRepository.saveStudents(listOf(testStudent)) } returns listOf(1L)
+        coEvery { studentRepository.switchStudent(testStudent) }
         presenter.onItemSelected(testStudent, false)
         presenter.onSignIn()
-        verify(loginStudentSelectView).showContent(false)
-        verify(loginStudentSelectView).showProgress(true)
-        verify(loginStudentSelectView).openMainView()
+
+        verify { loginStudentSelectView.showContent(false) }
+        verify { loginStudentSelectView.showProgress(true) }
+        verify { loginStudentSelectView.openMainView() }
     }
 
     @Test
     fun onSelectedStudentErrorTest() {
-        doReturn(Single.error<Student>(testException)).`when`(studentRepository).saveStudents(listOf(testStudent))
-        doReturn(Completable.complete()).`when`(studentRepository).logoutStudent(testStudent)
+        coEvery { studentRepository.saveStudents(listOf(testStudent)) } throws testException
+        coEvery { studentRepository.logoutStudent(testStudent) }
         presenter.onItemSelected(testStudent, false)
         presenter.onSignIn()
-        verify(loginStudentSelectView).showContent(false)
-        verify(loginStudentSelectView).showProgress(true)
-        verify(errorHandler).dispatch(testException)
+        verify { loginStudentSelectView.showContent(false) }
+        verify { loginStudentSelectView.showProgress(true) }
+        verify { errorHandler.dispatch(testException) }
     }
 }

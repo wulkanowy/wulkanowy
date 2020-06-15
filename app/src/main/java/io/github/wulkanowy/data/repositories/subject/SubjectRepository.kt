@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.subject
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
@@ -10,7 +9,6 @@ import javax.inject.Singleton
 
 @Singleton
 class SubjectRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: SubjectLocal,
     private val remote: SubjectRemote
 ) {
@@ -23,7 +21,7 @@ class SubjectRepository @Inject constructor(
             local.deleteSubjects(old.uniqueSubtract(new))
             local.saveSubjects(new.uniqueSubtract(old))
 
-            return local.getSubjects(semester)
+            local.getSubjects(semester)
         }
     }
 }

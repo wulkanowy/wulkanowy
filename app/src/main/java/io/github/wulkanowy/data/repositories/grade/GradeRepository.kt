@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.grade
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Semester
@@ -12,7 +11,6 @@ import javax.inject.Singleton
 
 @Singleton
 class GradeRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: GradeLocal,
     private val remote: GradeRemote
 ) {

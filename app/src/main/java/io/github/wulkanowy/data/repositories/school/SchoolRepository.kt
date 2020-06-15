@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.school
 
-import com.github.pwittchen.reactivenetwork.library.rx2.internet.observing.InternetObservingSettings
 import io.github.wulkanowy.data.db.entities.School
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -9,7 +8,6 @@ import javax.inject.Singleton
 
 @Singleton
 class SchoolRepository @Inject constructor(
-    private val settings: InternetObservingSettings,
     private val local: SchoolLocal,
     private val remote: SchoolRemote
 ) {
@@ -25,7 +23,7 @@ class SchoolRepository @Inject constructor(
             }
             local.saveSchool(new)
 
-            return local.getSchool(semester)!!
+            local.getSchool(semester)!!
         }
     }
 }
