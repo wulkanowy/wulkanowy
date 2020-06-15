@@ -35,7 +35,7 @@ class SemesterRepository @Inject constructor(
         }
     }
 
-    suspend fun getCurrentSemester(student: Student, forceRefresh: Boolean = false): List<Semester> {
-        return getSemesters(student, forceRefresh)
+    suspend fun getCurrentSemester(student: Student, forceRefresh: Boolean = false): Semester {
+        return getSemesters(student, forceRefresh).single { it.isCurrent }
     }
 }
