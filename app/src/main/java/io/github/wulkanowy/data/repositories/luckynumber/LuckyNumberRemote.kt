@@ -11,8 +11,8 @@ import javax.inject.Singleton
 @Singleton
 class LuckyNumberRemote @Inject constructor(private val sdk: Sdk) {
 
-    suspend fun getLuckyNumber(student: Student): LuckyNumber {
-        return sdk.init(student).getLuckyNumber(student.schoolShortName).let {
+    suspend fun getLuckyNumber(student: Student): LuckyNumber? {
+        return sdk.init(student).getLuckyNumber(student.schoolShortName)?.let {
             LuckyNumber(
                 studentId = student.studentId,
                 date = LocalDate.now(),

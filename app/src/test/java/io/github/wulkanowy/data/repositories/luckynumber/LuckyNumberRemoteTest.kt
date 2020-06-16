@@ -37,8 +37,8 @@ class LuckyNumberRemoteTest {
                 .getLuckyNumber(student)
         }
 
-        assertEquals(14, luckyNumber.luckyNumber)
-        assertEquals(LocalDate.now(), luckyNumber.date)
-        assertEquals(student.studentId, luckyNumber.studentId)
+        assertEquals(14, luckyNumber?.luckyNumber)
+        assertEquals(LocalDate.now(), luckyNumber?.date)
+        assertEquals(student.studentId, luckyNumber?.studentId)
     }
 }
