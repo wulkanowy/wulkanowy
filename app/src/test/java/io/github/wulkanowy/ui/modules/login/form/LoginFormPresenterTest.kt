@@ -6,11 +6,14 @@ import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.mockk.MockKAnnotations
-import io.mockk.clearMocks
+import io.mockk.Runs
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.verify
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDateTime.now
@@ -34,10 +37,24 @@ class LoginFormPresenterTest {
     @Before
     fun initPresenter() {
         MockKAnnotations.init(this)
-        clearMocks(repository, loginFormView)
+
+        every { loginFormView.initView() } just Runs
+        every { loginFormView.showContact(any()) } just Runs
+        every { loginFormView.showVersion() } just Runs
+        every { loginFormView.showProgress(any()) } just Runs
+        every { loginFormView.showContent(any()) } just Runs
+        every { loginFormView.formHostSymbol } returns "Default"
+        every { loginFormView.setErrorPassInvalid(any()) } just Runs
+        every { loginFormView.setErrorPassRequired(any()) } just Runs
+        every { loginFormView.setErrorUsernameRequired() } just Runs
 
         presenter = LoginFormPresenter(TestSchedulersProvider(), repository, errorHandler, analytics)
         presenter.onAttachView(loginFormView)
+    }
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
     }
 
     @Test
@@ -140,6 +157,8 @@ class LoginFormPresenterTest {
         every { loginFormView.formPassValue } returns "123456"
         every { loginFormView.formHostValue } returns "https://fakelog.cf/?standard"
         every { loginFormView.formHostSymbol } returns "Default"
+        every { loginFormView.showProgress(any()) } just Runs
+        every { loginFormView.showProgress(any()) } just Runs
         presenter.onSignInClick()
 
         verify { loginFormView.hideSoftKeyboard() }

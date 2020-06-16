@@ -12,7 +12,7 @@ import org.junit.Test
 
 class SplashPresenterTest {
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var splashView: SplashView
 
     @MockK
