@@ -22,7 +22,7 @@ class LuckyNumberLocal @Inject constructor(private val luckyNumberDb: LuckyNumbe
         luckyNumberDb.deleteAll(listOf(luckyNumber))
     }
 
-    suspend fun getLuckyNumber(student: Student, date: LocalDate): LuckyNumber {
+    suspend fun getLuckyNumber(student: Student, date: LocalDate): LuckyNumber? {
         return luckyNumberDb.load(student.studentId, date)
     }
 }

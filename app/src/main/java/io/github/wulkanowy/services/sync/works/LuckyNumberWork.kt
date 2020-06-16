@@ -19,7 +19,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.getCompatColor
 import io.reactivex.Completable
 import kotlinx.coroutines.rx2.rxCompletable
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.rx2.rxMaybe
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -31,8 +31,8 @@ class LuckyNumberWork @Inject constructor(
 ) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return rxSingle { luckyNumberRepository.getLuckyNumber(student, true, preferencesRepository.isNotificationsEnable) }
-            .flatMap { rxSingle { luckyNumberRepository.getNotNotifiedLuckyNumber(student) } }
+        return rxMaybe { luckyNumberRepository.getLuckyNumber(student, true, preferencesRepository.isNotificationsEnable) }
+            .flatMap { rxMaybe { luckyNumberRepository.getNotNotifiedLuckyNumber(student) } }
             .flatMapCompletable {
                 notify(it)
                 rxCompletable { luckyNumberRepository.updateLuckyNumber(it.apply { isNotified = true }) }

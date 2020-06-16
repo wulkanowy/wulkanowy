@@ -38,7 +38,7 @@ class AccountPresenter @Inject constructor(
 
     fun onLogoutConfirm() {
         Timber.i("Attempt to logout current user ")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
+        disposable.add(rxSingle { studentRepository.getCurrentStudent(false) }
             .flatMapCompletable { rxCompletable { studentRepository.logoutStudent(it) } }
             .andThen(rxSingle { studentRepository.getSavedStudents(false) })
             .flatMap {

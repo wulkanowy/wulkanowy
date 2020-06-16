@@ -3,6 +3,7 @@ package io.github.wulkanowy.data.repositories.semester
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.getCurrentOrLast
 import io.github.wulkanowy.utils.isCurrent
 import io.github.wulkanowy.utils.uniqueSubtract
 import javax.inject.Inject
@@ -36,6 +37,6 @@ class SemesterRepository @Inject constructor(
     }
 
     suspend fun getCurrentSemester(student: Student, forceRefresh: Boolean = false): Semester {
-        return getSemesters(student, forceRefresh).single { it.isCurrent }
+        return getSemesters(student, forceRefresh).getCurrentOrLast()
     }
 }

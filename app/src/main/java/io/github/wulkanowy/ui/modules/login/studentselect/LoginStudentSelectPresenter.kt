@@ -73,7 +73,7 @@ class LoginStudentSelectPresenter @Inject constructor(
     private fun loadData(students: List<Student>) {
         resetSelectedState()
         this.students = students
-        disposable.add(rxSingle { studentRepository.getSavedStudents() }
+        disposable.add(rxSingle { studentRepository.getSavedStudents(false) }
             .map { savedStudents ->
                 students.map { student ->
                     student to savedStudents.any { compareStudents(student, it) }

@@ -12,13 +12,13 @@ class LuckyNumberRepository @Inject constructor(
     private val remote: LuckyNumberRemote
 ) {
 
-    suspend fun getLuckyNumber(student: Student, forceRefresh: Boolean = false, notify: Boolean = false): LuckyNumber {
-        return local.getLuckyNumber(student, now()).takeIf { it.luckyNumber != -1 && !forceRefresh } ?: run {
+    suspend fun getLuckyNumber(student: Student, forceRefresh: Boolean = false, notify: Boolean = false): LuckyNumber? {
+        return local.getLuckyNumber(student, now())?.takeIf { it.luckyNumber != -1 && !forceRefresh } ?: run {
             val new = remote.getLuckyNumber(student)
             val old = local.getLuckyNumber(student, now())
 
             if (new != old) {
-                local.deleteLuckyNumber(old)
+                old?.let { local.deleteLuckyNumber(it) }
                 local.saveLuckyNumber(new.apply {
                     if (notify) isNotified = false
                 })
@@ -32,7 +32,7 @@ class LuckyNumberRepository @Inject constructor(
         }
     }
 
-    suspend fun getNotNotifiedLuckyNumber(student: Student): LuckyNumber {
+    suspend fun getNotNotifiedLuckyNumber(student: Student): LuckyNumber? {
         return local.getLuckyNumber(student, now())
     }
 
