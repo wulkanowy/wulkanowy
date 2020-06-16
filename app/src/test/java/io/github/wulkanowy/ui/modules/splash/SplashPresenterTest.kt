@@ -18,7 +18,7 @@ class SplashPresenterTest {
     @MockK
     lateinit var studentRepository: StudentRepository
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var errorHandler: ErrorHandler
 
     private lateinit var presenter: SplashPresenter

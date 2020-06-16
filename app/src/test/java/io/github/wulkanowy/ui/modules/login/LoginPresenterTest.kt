@@ -13,10 +13,10 @@ import org.junit.Test
 
 class LoginPresenterTest {
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var loginView: LoginView
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var errorHandler: LoginErrorHandler
 
     @MockK

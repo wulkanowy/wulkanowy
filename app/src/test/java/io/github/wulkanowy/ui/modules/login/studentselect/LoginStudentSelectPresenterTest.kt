@@ -6,8 +6,12 @@ import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.mockk.MockKAnnotations
+import io.mockk.Runs
+import io.mockk.clearMocks
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
@@ -15,7 +19,7 @@ import org.threeten.bp.LocalDateTime.now
 
 class LoginStudentSelectPresenterTest {
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var errorHandler: LoginErrorHandler
 
     @MockK
@@ -24,7 +28,7 @@ class LoginStudentSelectPresenterTest {
     @MockK
     lateinit var studentRepository: StudentRepository
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var analytics: FirebaseAnalyticsHelper
 
     private lateinit var presenter: LoginStudentSelectPresenter
@@ -36,6 +40,13 @@ class LoginStudentSelectPresenterTest {
     @Before
     fun initPresenter() {
         MockKAnnotations.init(this)
+        clearMocks(studentRepository, loginStudentSelectView)
+        every { loginStudentSelectView.initView() } just Runs
+        every { loginStudentSelectView.showContact(any()) } just Runs
+        every { loginStudentSelectView.enableSignIn(any()) } just Runs
+        every { loginStudentSelectView.showProgress(any()) } just Runs
+        every { loginStudentSelectView.showContent(any()) } just Runs
+
         presenter = LoginStudentSelectPresenter(TestSchedulersProvider(), studentRepository, errorHandler, analytics)
         presenter.onAttachView(loginStudentSelectView, null)
     }

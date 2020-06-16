@@ -18,22 +18,22 @@ import org.junit.Test
 
 class MainPresenterTest {
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var errorHandler: ErrorHandler
 
     @MockK
     lateinit var studentRepository: StudentRepository
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var prefRepository: PreferencesRepository
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var syncManager: SyncManager
 
     @MockK
     lateinit var mainView: MainView
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var analytics: FirebaseAnalyticsHelper
 
     private lateinit var presenter: MainPresenter
@@ -43,6 +43,11 @@ class MainPresenterTest {
         MockKAnnotations.init(this)
         clearMocks(mainView)
 
+        every { mainView.startMenuIndex = any() } just Runs
+        every { mainView.startMenuMoreIndex = any() } just Runs
+        every { mainView.startMenuIndex } returns 1
+        every { mainView.startMenuMoreIndex } returns 1
+        every { mainView.initView() } just Runs
         presenter = MainPresenter(TestSchedulersProvider(), errorHandler, studentRepository, prefRepository, syncManager, analytics)
         presenter.onAttachView(mainView, null)
     }
@@ -54,9 +59,10 @@ class MainPresenterTest {
 
     @Test
     fun onTabSelectedTest() {
+        every { mainView.notifyMenuViewChanged() } just Runs
+
         every { mainView.switchMenuView(1) } just Runs
         presenter.onTabSelected(1, false)
         verify { mainView.switchMenuView(1) }
     }
 }
-

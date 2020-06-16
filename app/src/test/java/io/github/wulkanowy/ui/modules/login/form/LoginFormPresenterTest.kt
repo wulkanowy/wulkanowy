@@ -5,7 +5,6 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
-import io.mockk.Called
 import io.mockk.MockKAnnotations
 import io.mockk.clearMocks
 import io.mockk.coEvery
@@ -27,7 +26,7 @@ class LoginFormPresenterTest {
     @MockK(relaxed = true)
     lateinit var errorHandler: LoginErrorHandler
 
-    @MockK
+    @MockK(relaxed = true)
     lateinit var analytics: FirebaseAnalyticsHelper
 
     private lateinit var presenter: LoginFormPresenter
@@ -36,7 +35,7 @@ class LoginFormPresenterTest {
     fun initPresenter() {
         MockKAnnotations.init(this)
         clearMocks(repository, loginFormView)
-//        clearInvocations(repository, loginFormView)
+
         presenter = LoginFormPresenter(TestSchedulersProvider(), repository, errorHandler, analytics)
         presenter.onAttachView(loginFormView)
     }
@@ -51,12 +50,11 @@ class LoginFormPresenterTest {
         every { loginFormView.formUsernameValue } returns ""
         every { loginFormView.formPassValue } returns "test123"
         every { loginFormView.formHostValue } returns "https://fakelog.cf/?standard"
-        every { loginFormView.formHostValue } returns "https://fakelog.cf/?standard"
         presenter.onSignInClick()
 
         verify { loginFormView.setErrorUsernameRequired() }
-        verify { loginFormView.setErrorPassRequired(false) wasNot Called }
-        verify { loginFormView.setErrorPassInvalid(false) wasNot Called }
+        verify(exactly = 0) { loginFormView.setErrorPassRequired(true) }
+        verify(exactly = 0) { loginFormView.setErrorPassInvalid(false) }
     }
 
     @Test
@@ -66,9 +64,9 @@ class LoginFormPresenterTest {
         every { loginFormView.formHostValue } returns "https://fakelog.cf/?standard"
         presenter.onSignInClick()
 
-        verify { loginFormView.setErrorUsernameRequired() wasNot Called }
+        verify(exactly = 0) { loginFormView.setErrorUsernameRequired() }
         verify { loginFormView.setErrorPassRequired(true) }
-        verify { loginFormView.setErrorPassInvalid(false) wasNot Called }
+        verify(exactly = 0) { loginFormView.setErrorPassInvalid(false) }
     }
 
     @Test
@@ -78,8 +76,8 @@ class LoginFormPresenterTest {
         every { loginFormView.formHostValue } returns "https://fakelog.cf/?standard"
         presenter.onSignInClick()
 
-        verify { loginFormView.setErrorUsernameRequired() wasNot Called }
-        verify { loginFormView.setErrorPassRequired(true) wasNot Called }
+        verify(exactly = 0) { loginFormView.setErrorUsernameRequired() }
+        verify(exactly = 0) { loginFormView.setErrorPassRequired(true) }
         verify { loginFormView.setErrorPassInvalid(true) }
     }
 
