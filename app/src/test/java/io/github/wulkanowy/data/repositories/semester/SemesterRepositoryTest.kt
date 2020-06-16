@@ -50,8 +50,8 @@ class SemesterRepositoryTest {
 
         runBlocking { semesterRepository.getSemesters(student) }
 
-        coVerify { semesterLocal.deleteSemesters(any()) }
         coVerify { semesterLocal.saveSemesters(semesters) }
+        coVerify { semesterLocal.deleteSemesters(emptyList()) }
     }
 
     @Test
@@ -141,10 +141,11 @@ class SemesterRepositoryTest {
         coEvery { semesterLocal.getSemesters(student) } returns emptyList()
         coEvery { semesterRemote.getSemesters(student) } returns semesters
         coEvery { semesterLocal.deleteSemesters(any()) } just Runs
+        coEvery { semesterLocal.saveSemesters(any()) } just Runs
 
         runBlocking { semesterRepository.getSemesters(student, refreshOnNoCurrent = true) }
 
-        coVerify { semesterLocal.deleteSemesters(any()) }
+        coVerify { semesterLocal.deleteSemesters(emptyList()) }
         coVerify { semesterLocal.saveSemesters(semesters) }
     }
 

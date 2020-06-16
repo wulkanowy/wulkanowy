@@ -15,13 +15,15 @@ class SemesterRepository @Inject constructor(
 ) {
 
     suspend fun getSemesters(student: Student, forceRefresh: Boolean = false, refreshOnNoCurrent: Boolean = false): List<Semester> {
-        return local.getSemesters(student).filter { !forceRefresh }.takeIf { semesters ->
-            when {
-                Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API -> semesters.firstOrNull { it.isCurrent }?.diaryId != 0
-                refreshOnNoCurrent -> semesters.any { semester -> semester.isCurrent }
-                else -> true
+        return local.getSemesters(student).let { semesters ->
+            semesters.filter {
+                !forceRefresh && when {
+                    Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API -> semesters.firstOrNull { it.isCurrent }?.diaryId != 0
+                    refreshOnNoCurrent -> semesters.any { semester -> semester.isCurrent }
+                    else -> true
+                }
             }
-        } ?: run {
+        }.ifEmpty {
             val new = remote.getSemesters(student)
             if (new.isEmpty()) throw IllegalArgumentException("Empty semester list!")
 
