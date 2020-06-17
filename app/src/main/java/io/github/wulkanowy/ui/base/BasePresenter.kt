@@ -2,23 +2,17 @@ package io.github.wulkanowy.ui.base
 
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.rx2.rxCompletable
+import kotlinx.coroutines.rx2.rxSingle
 import timber.log.Timber
 
 open class BasePresenter<T : BaseView>(
     protected val errorHandler: ErrorHandler,
     protected val studentRepository: StudentRepository,
     protected val schedulers: SchedulersProvider
-) : CoroutineScope {
-
-    private val job = Job()
-
-    override val coroutineContext = job + Dispatchers.IO
+) {
 
     val disposable = CompositeDisposable()
 
@@ -35,29 +29,29 @@ open class BasePresenter<T : BaseView>(
 
     fun onExpiredLoginSelected() {
         Timber.i("Attempt to switch the student after the session expires")
-        launch {
-            val student = studentRepository.getCurrentStudent(false)
-            studentRepository.logoutStudent(student)
-            val students = studentRepository.getSavedStudents(false)
-            if (students.isNotEmpty()) {
-                Timber.i("Switching current student")
-                studentRepository.switchStudent(students[0])
+        disposable.add(rxSingle { studentRepository.getCurrentStudent(false) }
+            .flatMapCompletable { rxCompletable { studentRepository.logoutStudent(it) } }
+            .andThen(rxSingle { studentRepository.getSavedStudents(false) })
+            .flatMapCompletable {
+                if (it.isNotEmpty()) {
+                    Timber.i("Switching current student")
+                    rxCompletable { studentRepository.switchStudent(it[0]) }
+                } else Completable.complete()
             }
-
-            withContext(Dispatchers.Main) {
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .subscribe({
                 Timber.i("Switch student result: Open login view")
                 view?.openClearLoginView()
-            }
-
-//            Timber.i("Switch student result: An exception occurred")
-//            errorHandler.dispatch(it)
-        }
+            }, {
+                Timber.i("Switch student result: An exception occurred")
+                errorHandler.dispatch(it)
+            }))
     }
 
     open fun onDetachView() {
         view = null
         disposable.clear()
-        job.cancel()
         errorHandler.clear()
     }
 }

@@ -15,9 +15,8 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
 import io.reactivex.Completable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.rx2.rxMaybe
+import kotlinx.coroutines.rx2.rxSingle
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -101,33 +100,36 @@ class SendMessagePresenter @Inject constructor(
         var selectedRecipientChips: List<RecipientChipItem> = emptyList()
 
         Timber.i("Loading recipients started")
-
-        view?.run {
-            showProgress(true)
-            showContent(false)
-        }
-
-        launch {
-            val student = studentRepository.getCurrentStudent()
-            val semester = semesterRepository.getCurrentSemester(student)
-
-            val unit = reportingUnitRepository.getReportingUnit(student, semester.unitId)
-            reportingUnit = unit
-
-            val recipients = recipientRepository.getRecipients(student, 2, unit)
-
-            Timber.i("Loading recipients result: Success, fetched %d recipients", recipients.size)
-            recipientChips = createChips(recipients)
-
-            if (message == null || reply != true) Completable.complete()
-            else {
-                val messageRecipients = recipientRepository.getMessageRecipients(student, message)
-                Timber.i("Loaded message recipients to reply result: Success, fetched %d recipients", messageRecipients.size)
-                selectedRecipientChips = createChips(messageRecipients)
+        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
+            .flatMap { rxSingle { semesterRepository.getCurrentSemester(it) }.map { semester -> it to semester } }
+            .flatMapCompletable { (student, semester) ->
+                rxMaybe { reportingUnitRepository.getReportingUnit(student, semester.unitId) }
+                    .doOnSuccess { reportingUnit = it }
+                    .flatMap { rxMaybe { recipientRepository.getRecipients(student, 2, it) } }
+                    .doOnSuccess {
+                        Timber.i("Loading recipients result: Success, fetched %d recipients", it.size)
+                        recipientChips = createChips(it)
+                    }
+                    .flatMapCompletable {
+                        if (message == null || reply != true) Completable.complete()
+                        else rxSingle { recipientRepository.getMessageRecipients(student, message) }
+                            .doOnSuccess {
+                                Timber.i("Loaded message recipients to reply result: Success, fetched %d recipients", it.size)
+                                selectedRecipientChips = createChips(it)
+                            }
+                            .ignoreElement()
+                    }
             }
-
-            // subscribe
-            withContext(Dispatchers.Main) {
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .doOnSubscribe {
+                view?.run {
+                    showProgress(true)
+                    showContent(false)
+                }
+            }
+            .doFinally { view?.run { showProgress(false) } }
+            .subscribe({
                 view?.run {
                     if (reportingUnit !== null) {
                         reportingUnit?.let { setReportingUnit(it) }
@@ -136,57 +138,47 @@ class SendMessagePresenter @Inject constructor(
                         showContent(true)
                     } else {
                         Timber.i("Loading recipients result: Can't find the reporting unit")
-                        showEmpty(true)
+                        view?.showEmpty(true)
                     }
                 }
-            }
-
-
-            // finally
-            withContext(Dispatchers.Main) {
-                view?.showProgress(false)
-            }
-
-
-            // on error
-//            Timber.i("Loading recipients result: An exception occurred")
-//            view?.showContent(true)
-//            errorHandler.dispatch(e)
-        }
+            }, {
+                Timber.i("Loading recipients result: An exception occurred")
+                view?.showContent(true)
+                errorHandler.dispatch(it)
+            }))
     }
 
     private fun sendMessage(subject: String, content: String, recipients: List<Recipient>) {
         Timber.i("Sending message started")
-
-        view?.run {
-            showSoftInput(false)
-            showContent(false)
-            showProgress(true)
-            showActionBar(false)
-        }
-
-        launch {
-            val student = studentRepository.getCurrentStudent()
-            messageRepository.sendMessage(student, subject, content, recipients)
-
-            withContext(Dispatchers.Main) {
+        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
+            .flatMap { rxSingle { messageRepository.sendMessage(it, subject, content, recipients) } }
+            .subscribeOn(schedulers.backgroundThread)
+            .observeOn(schedulers.mainThread)
+            .doOnSubscribe {
+                view?.run {
+                    showSoftInput(false)
+                    showContent(false)
+                    showProgress(true)
+                    showActionBar(false)
+                }
+            }
+            .subscribe({
                 Timber.i("Sending message result: Success")
                 analytics.logEvent("send_message", "recipients" to recipients.size)
                 view?.run {
                     showMessage(messageSuccess)
                     popView()
                 }
-            }
-
-            // on error
-//            Timber.i("Sending message result: An exception occurred")
-//            view?.run {
-//                showContent(true)
-//                showProgress(false)
-//                showActionBar(true)
-//            }
-//            errorHandler.dispatch(e)
-        }
+            }, {
+                Timber.i("Sending message result: An exception occurred")
+                view?.run {
+                    showContent(true)
+                    showProgress(false)
+                    showActionBar(true)
+                }
+                errorHandler.dispatch(it)
+            })
+        )
     }
 
     private fun createChips(recipients: List<Recipient>): List<RecipientChipItem> {
