@@ -6,7 +6,11 @@ import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ContributorPresenter @Inject constructor(
@@ -31,10 +35,11 @@ class ContributorPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        disposable.add(rxSingle { appCreatorRepository.getAppCreators() }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doFinally { view?.showProgress(false) }
-            .subscribe({ view?.run { updateData(it) } }, { errorHandler.dispatch(it) }))
+        launch {
+            flowOf(appCreatorRepository.getAppCreators())
+                .onCompletion { view?.showProgress(false) }
+                .catch { errorHandler.dispatch(it) }
+                .collect { view?.updateData(it) }
+        }
     }
 }
