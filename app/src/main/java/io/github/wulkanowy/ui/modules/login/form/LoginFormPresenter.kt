@@ -3,12 +3,14 @@ package io.github.wulkanowy.ui.modules.login.form
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
+import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -17,6 +19,7 @@ import javax.inject.Inject
 
 class LoginFormPresenter @Inject constructor(
     schedulers: SchedulersProvider,
+    private val dispatchers: DispatchersProvider,
     studentRepository: StudentRepository,
     private val loginErrorHandler: LoginErrorHandler,
     private val analytics: FirebaseAnalyticsHelper
@@ -81,7 +84,9 @@ class LoginFormPresenter @Inject constructor(
         if (!validateCredentials(email, password, host)) return
 
         launch {
-            flowOf(studentRepository.getStudentsScrapper(email, password, host, symbol)).onStart {
+            flow {
+                emit(studentRepository.getStudentsScrapper(email, password, host, symbol))
+            }.onStart {
                 view?.apply {
                     hideSoftKeyboard()
                     showProgress(true)
@@ -93,7 +98,7 @@ class LoginFormPresenter @Inject constructor(
                     showProgress(false)
                     showContent(true)
                 }
-            }.catch {
+            }.flowOn(dispatchers.backgroundThread).catch {
                 Timber.i("Login result: An exception occurred")
                 analytics.logEvent("registration_form", "success" to false, "students" to -1, "scrapperBaseUrl" to host, "error" to it.message.ifNullOrBlank { "No message" })
                 loginErrorHandler.dispatch(it)

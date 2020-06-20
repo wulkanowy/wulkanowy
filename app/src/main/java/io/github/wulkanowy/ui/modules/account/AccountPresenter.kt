@@ -5,12 +5,15 @@ import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.SchedulersProvider
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -18,6 +21,7 @@ import javax.inject.Inject
 
 class AccountPresenter @Inject constructor(
     schedulers: SchedulersProvider,
+    private val dispatchers: DispatchersProvider,
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val syncManager: SyncManager
@@ -113,6 +117,7 @@ class AccountPresenter @Inject constructor(
                     Timber.i("Loading account result: An exception occurred")
                     errorHandler.dispatch(it)
                 }
+                .flowOn(dispatchers.backgroundThread)
                 .collect {
                     Timber.i("Loading account result: Success")
                     view?.updateData(it)

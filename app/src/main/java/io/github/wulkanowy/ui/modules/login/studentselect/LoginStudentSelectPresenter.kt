@@ -10,6 +10,7 @@ import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -101,7 +102,7 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     private fun registerStudents(students: List<Student>) {
         launch {
-            flowOf(studentRepository.saveStudents(students))
+            flow { emit(studentRepository.saveStudents(students)) }
                 .map { students.first().apply { id = it.first() } }
                 .flatMapConcat { flowOf(studentRepository.switchStudent(it)) }
                 .onStart {

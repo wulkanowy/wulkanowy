@@ -14,12 +14,17 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.unmockkAll
 import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDateTime.now
 
 class LoginStudentSelectPresenterTest {
+
+    private val mainThreadSurrogate = Dispatchers.Unconfined
 
     @MockK(relaxed = true)
     lateinit var errorHandler: LoginErrorHandler
@@ -40,8 +45,10 @@ class LoginStudentSelectPresenterTest {
     private val testException by lazy { RuntimeException("Problem") }
 
     @Before
-    fun initPresenter() {
+    fun setUp() {
         MockKAnnotations.init(this)
+        Dispatchers.setMain(mainThreadSurrogate)
+
         clearMocks(studentRepository, loginStudentSelectView)
         every { loginStudentSelectView.initView() } just Runs
         every { loginStudentSelectView.showContact(any()) } just Runs
@@ -56,6 +63,7 @@ class LoginStudentSelectPresenterTest {
     @After
     fun tearDown() {
         unmockkAll()
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -73,7 +81,7 @@ class LoginStudentSelectPresenterTest {
 
         verify { loginStudentSelectView.showContent(false) }
         verify { loginStudentSelectView.showProgress(true) }
-//        verify { loginStudentSelectView.openMainView() }
+        verify { loginStudentSelectView.openMainView() }
     }
 
     @Test

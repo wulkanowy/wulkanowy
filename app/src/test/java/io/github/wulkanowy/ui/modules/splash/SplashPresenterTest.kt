@@ -7,10 +7,17 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 class SplashPresenterTest {
+
+    private val mainThreadSurrogate = Dispatchers.Unconfined
 
     @MockK(relaxed = true)
     lateinit var splashView: SplashView
@@ -24,9 +31,15 @@ class SplashPresenterTest {
     private lateinit var presenter: SplashPresenter
 
     @Before
-    fun initPresenter() {
+    fun setUp() {
         MockKAnnotations.init(this)
+        Dispatchers.setMain(mainThreadSurrogate)
         presenter = SplashPresenter(TestSchedulersProvider(), errorHandler, studentRepository)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
     }
 
     @Test
