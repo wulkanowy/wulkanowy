@@ -8,9 +8,12 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.getCurrentOrLast
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class GradePresenter @Inject constructor(
@@ -100,12 +103,16 @@ class GradePresenter @Inject constructor(
 
     private fun loadData() {
         Timber.i("Loading grade data started")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-            .flatMap { rxSingle { semesterRepository.getSemesters(it, refreshOnNoCurrent = true) } }
-            .delay(200, MILLISECONDS)
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
+        launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semesters = semesterRepository.getSemesters(student, refreshOnNoCurrent = true)
+                delay(200)
+                emit(semesters)
+            }.catch {
+                Timber.i("Loading grade result: An exception occurred")
+                errorHandler.dispatch(it)
+            }.collect {
                 val current = it.getCurrentOrLast()
                 selectedIndex = if (selectedIndex == 0) current.semesterName else selectedIndex
                 schoolYear = current.schoolYear
@@ -118,10 +125,8 @@ class GradePresenter @Inject constructor(
                     showErrorView(false)
                     showSemesterSwitch(true)
                 }
-            }) {
-                Timber.i("Loading grade result: An exception occurred")
-                errorHandler.dispatch(it)
-            })
+            }
+        }
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
