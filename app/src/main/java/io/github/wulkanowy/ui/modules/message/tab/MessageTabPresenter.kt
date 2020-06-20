@@ -11,7 +11,13 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import timber.log.Timber
 import java.util.Locale
@@ -31,6 +37,10 @@ class MessageTabPresenter @Inject constructor(
     lateinit var folder: MessageFolder
 
     private lateinit var lastError: Throwable
+
+    private var refreshJob: Job? = null
+
+    private var loadingJob: Job? = null
 
     private var lastSearchQuery = ""
 
@@ -56,7 +66,7 @@ class MessageTabPresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        loadData(true)
+        refreshData()
     }
 
     fun onDetailsClick() {
@@ -64,11 +74,12 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onDeleteMessage() {
-        loadData(false)
+        refreshData()
     }
 
     fun onParentViewLoadData(forceRefresh: Boolean) {
-        loadData(forceRefresh)
+        if (forceRefresh) refreshData()
+        else loadData()
     }
 
     fun onMessageItemSelected(message: Message, position: Int) {
@@ -82,24 +93,31 @@ class MessageTabPresenter @Inject constructor(
         }
     }
 
-    private fun loadData(forceRefresh: Boolean) {
+    private fun refreshData() {
+        refreshJob?.cancel()
+        refreshJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emit(messageRepository.refreshMessages(student, semester, folder))
+            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+        }
+    }
+
+    private fun loadData() {
         Timber.i("Loading $folder message data started")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-            .flatMap { student ->
-                rxSingle { semesterRepository.getCurrentSemester(student) }
-                    .flatMap { rxSingle { messageRepository.getMessages(student, it, folder, forceRefresh) } }
-            }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doFinally {
-                view?.run {
-                    showRefresh(false)
-                    showProgress(false)
-                    enableSwipe(true)
-                    notifyParentDataLoaded()
-                }
-            }
-            .subscribe({
+
+        loadingJob?.cancel()
+        loadingJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emitAll(messageRepository.getMessages(student, semester, folder))
+            }.onEach {
+                afterLoading()
+            }.catch {
+                handleError(it)
+            }.collect {
                 Timber.i("Loading $folder message result: Success")
                 messages = it
                 view?.updateData(getFilteredData(lastSearchQuery))
@@ -109,10 +127,22 @@ class MessageTabPresenter @Inject constructor(
                     "items" to it.size,
                     "folder" to folder.name
                 )
-            }) {
-                Timber.i("Loading $folder message result: An exception occurred")
-                errorHandler.dispatch(it)
-            })
+            }
+        }
+    }
+
+    private fun afterLoading() {
+        view?.run {
+            showRefresh(false)
+            showProgress(false)
+            enableSwipe(true)
+            notifyParentDataLoaded()
+        }
+    }
+
+    private fun handleError(error: Throwable) {
+        Timber.i("Loading $folder message result: An exception occurred")
+        errorHandler.dispatch(error)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

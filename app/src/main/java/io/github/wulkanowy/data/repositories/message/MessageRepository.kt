@@ -8,6 +8,9 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
 import io.github.wulkanowy.sdk.pojo.SentMessage
 import io.github.wulkanowy.utils.uniqueSubtract
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,17 +21,21 @@ class MessageRepository @Inject constructor(
     private val remote: MessageRemote
 ) {
 
-    suspend fun getMessages(student: Student, semester: Semester, folder: MessageFolder, forceRefresh: Boolean = false, notify: Boolean = false): List<Message> {
-        return local.getMessages(student, folder).filter { !forceRefresh }.ifEmpty {
-            val new = remote.getMessages(student, semester, folder)
-            val old = local.getMessages(student, folder)
+    suspend fun refreshMessages(student: Student, semester: Semester, folder: MessageFolder, notify: Boolean = false) {
+        val new = remote.getMessages(student, semester, folder)
+        val old = local.getMessages(student, folder).first()
 
-            local.deleteMessages(old.uniqueSubtract(new))
-            local.saveMessages(new.uniqueSubtract(old).onEach {
-                it.isNotified = !notify
-            })
+        local.deleteMessages(old uniqueSubtract new)
+        local.saveMessages((new uniqueSubtract old).onEach {
+            it.isNotified = !notify
+        })
+    }
 
-            local.getMessages(student, folder)
+    fun getMessages(student: Student, semester: Semester, folder: MessageFolder, notify: Boolean = false): Flow<List<Message>> {
+        return local.getMessages(student, folder).map {
+            if (it.isNotEmpty()) return@map it
+            refreshMessages(student, semester, folder, notify)
+            it
         }
     }
 
@@ -55,9 +62,8 @@ class MessageRepository @Inject constructor(
         }
     }
 
-    suspend fun getNotNotifiedMessages(student: Student): List<Message> {
-        return local.getMessages(student, RECEIVED)
-            .filter { message -> !message.isNotified && message.unread }
+    fun getNotNotifiedMessages(student: Student): Flow<List<Message>> {
+        return local.getMessages(student, RECEIVED).map { it.filter { message -> !message.isNotified && message.unread } }
     }
 
     suspend fun updateMessages(messages: List<Message>) {
