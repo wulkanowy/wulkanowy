@@ -6,9 +6,13 @@ import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.reactivex.Single
-import kotlinx.coroutines.rx2.rxCompletable
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,17 +42,23 @@ class AccountPresenter @Inject constructor(
 
     fun onLogoutConfirm() {
         Timber.i("Attempt to logout current user ")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent(false) }
-            .flatMapCompletable { rxCompletable { studentRepository.logoutStudent(it) } }
-            .andThen(rxSingle { studentRepository.getSavedStudents(false) })
-            .flatMap {
-                if (it.isNotEmpty()) rxCompletable { studentRepository.switchStudent(it[0]) }.toSingle { it }
-                else Single.just(it)
-            }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doFinally { view?.dismissView() }
-            .subscribe({
+        launch {
+            flow {
+                val student = studentRepository.getCurrentStudent(false)
+                studentRepository.logoutStudent(student)
+
+                val students = studentRepository.getSavedStudents(false)
+                if (students.isNotEmpty()) {
+                    studentRepository.switchStudent(students[0])
+                }
+
+                emit(students)
+            }.onCompletion {
+                view?.dismissView()
+            }.catch {
+                Timber.i("Logout result: An exception occurred")
+                errorHandler.dispatch(it)
+            }.collect {
                 view?.apply {
                     if (it.isEmpty()) {
                         Timber.i("Logout result: Open login view")
@@ -59,10 +69,8 @@ class AccountPresenter @Inject constructor(
                         recreateMainView()
                     }
                 }
-            }, {
-                Timber.i("Logout result: An exception occurred")
-                errorHandler.dispatch(it)
-            }))
+            }
+        }
     }
 
     fun onItemSelected(student: Student) {
@@ -71,17 +79,20 @@ class AccountPresenter @Inject constructor(
             view?.dismissView()
         } else {
             Timber.i("Attempt to change a student")
-            disposable.add(rxSingle { studentRepository.switchStudent(student) }
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doFinally { view?.dismissView() }
-                .subscribe({
-                    Timber.i("Change a student result: Success")
-                    view?.recreateMainView()
-                }, {
-                    Timber.i("Change a student result: An exception occurred")
-                    errorHandler.dispatch(it)
-                }))
+            launch {
+                flowOf(studentRepository.switchStudent(student))
+                    .onCompletion {
+                        view?.dismissView()
+                    }
+                    .catch {
+                        Timber.i("Change a student result: An exception occurred")
+                        errorHandler.dispatch(it)
+                    }
+                    .collect {
+                        Timber.i("Change a student result: Success")
+                        view?.recreateMainView()
+                    }
+            }
         }
     }
 
@@ -95,16 +106,17 @@ class AccountPresenter @Inject constructor(
 
     private fun loadData() {
         Timber.i("Loading account data started")
-        disposable.add(rxSingle { studentRepository.getSavedStudents(false) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .map { createAccountItems(it) }
-            .subscribe({
-                Timber.i("Loading account result: Success")
-                view?.updateData(it)
-            }, {
-                Timber.i("Loading account result: An exception occurred")
-                errorHandler.dispatch(it)
-            }))
+        launch {
+            flowOf(studentRepository.getSavedStudents(false))
+                .map { createAccountItems(it) }
+                .catch {
+                    Timber.i("Loading account result: An exception occurred")
+                    errorHandler.dispatch(it)
+                }
+                .collect {
+                    Timber.i("Loading account result: Success")
+                    view?.updateData(it)
+                }
+        }
     }
 }
