@@ -8,12 +8,20 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.rxSingle
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
@@ -37,6 +45,10 @@ class ExamPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
+    private var refreshJob: Job? = null
+
+    private var loadingJob: Job? = null
+
     fun onAttachView(view: ExamView, date: Long?) {
         super.onAttachView(view)
         view.initView()
@@ -59,7 +71,7 @@ class ExamPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the exam")
-        loadData(currentDate, true)
+        refreshData(currentDate)
     }
 
     fun onRetry() {
@@ -67,7 +79,7 @@ class ExamPresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        loadData(currentDate, true)
+        refreshData(currentDate)
     }
 
     fun onDetailsClick() {
@@ -103,46 +115,61 @@ class ExamPresenter @Inject constructor(
             })
     }
 
-    private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
+    private fun refreshData(date: LocalDate) {
+        refreshJob?.cancel()
+        refreshJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emit(examRepository.refreshExams(student, semester, date, date))
+            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+        }
+    }
+
+    private fun loadData(date: LocalDate) {
         Timber.i("Loading exam data started")
         currentDate = date
-        disposable.apply {
-            clear()
-            add(rxSingle { studentRepository.getCurrentStudent() }
-                .flatMap { student ->
-                    rxSingle { semesterRepository.getCurrentSemester(student) }.flatMap { semester ->
-                        rxSingle { examRepository.getExams(student, semester, currentDate.monday, currentDate.sunday, forceRefresh) }
-                    }
+
+        loadingJob?.cancel()
+        loadingJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emitAll(examRepository.getExams(student, semester, currentDate.monday, currentDate.sunday))
+            }.map {
+                createExamItems(it)
+            }.onEach {
+                afterLoading()
+            }.catch {
+                handleError(it)
+            }.collect {
+                Timber.i("Loading exam result: Success")
+                view?.apply {
+                    updateData(it)
+                    showEmpty(it.isEmpty())
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
                 }
-                .map { createExamItems(it) }
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doFinally {
-                    view?.run {
-                        hideRefresh()
-                        showProgress(false)
-                        enableSwipe(true)
-                    }
-                }
-                .subscribe({
-                    Timber.i("Loading exam result: Success")
-                    view?.apply {
-                        updateData(it)
-                        showEmpty(it.isEmpty())
-                        showErrorView(false)
-                        showContent(it.isNotEmpty())
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "exam",
-                        "items" to it.size,
-                        "force_refresh" to forceRefresh
-                    )
-                }) {
-                    Timber.i("Loading exam result: An exception occurred")
-                    errorHandler.dispatch(it)
-                })
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "exam",
+                    "items" to it.size
+                )
+            }
         }
+    }
+
+    private fun afterLoading() {
+        view?.run {
+            hideRefresh()
+            showProgress(false)
+            enableSwipe(true)
+        }
+    }
+
+    private fun handleError(error: Throwable) {
+        Timber.i("Loading exam result: An exception occurred")
+        errorHandler.dispatch(error)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
