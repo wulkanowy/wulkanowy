@@ -7,8 +7,13 @@ import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
-import kotlinx.coroutines.rx2.rxCompletable
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
@@ -73,22 +78,20 @@ class LoginStudentSelectPresenter @Inject constructor(
     private fun loadData(students: List<Student>) {
         resetSelectedState()
         this.students = students
-        disposable.add(rxSingle { studentRepository.getSavedStudents(false) }
-            .map { savedStudents ->
-                students.map { student ->
-                    student to savedStudents.any { compareStudents(student, it) }
+        launch {
+            flowOf(studentRepository.getSavedStudents(false))
+                .map { savedStudents ->
+                    students.map { student ->
+                        student to savedStudents.any { compareStudents(student, it) }
+                    }
                 }
-            }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                view?.updateData(it)
-            }, {
-                errorHandler.dispatch(it)
-                lastError = it
-                view?.updateData(students.map { student -> student to false })
-            })
-        )
+                .catch {
+                    errorHandler.dispatch(it)
+                    lastError = it
+                    view?.updateData(students.map { student -> student to false })
+                }
+                .collect { view?.updateData(it) }
+        }
     }
 
     private fun resetSelectedState() {
@@ -97,33 +100,34 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     private fun registerStudents(students: List<Student>) {
-        disposable.add(rxSingle { studentRepository.saveStudents(students) }
-            .map { students.first().apply { id = it.first() } }
-            .flatMapCompletable { rxCompletable { studentRepository.switchStudent(it) } }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doOnSubscribe {
-                view?.apply {
-                    showProgress(true)
-                    showContent(false)
+        launch {
+            flowOf(studentRepository.saveStudents(students))
+                .map { students.first().apply { id = it.first() } }
+                .flatMapConcat { flowOf(studentRepository.switchStudent(it)) }
+                .onStart {
+                    view?.apply {
+                        showProgress(true)
+                        showContent(false)
+                    }
+                    Timber.i("Registration started")
                 }
-                Timber.i("Registration started")
-            }
-            .subscribe({
-                students.forEach { analytics.logEvent("registration_student_select", "success" to true, "scrapperBaseUrl" to it.scrapperBaseUrl, "symbol" to it.symbol, "error" to "No error") }
-                Timber.i("Registration result: Success")
-                view?.openMainView()
-            }, { error ->
-                students.forEach { analytics.logEvent("registration_student_select", "success" to false, "scrapperBaseUrl" to it.scrapperBaseUrl, "symbol" to it.symbol, "error" to error.message.ifNullOrBlank { "No message" }) }
-                Timber.i("Registration result: An exception occurred ")
-                loginErrorHandler.dispatch(error)
-                lastError = error
-                view?.apply {
-                    showProgress(false)
-                    showContent(true)
-                    showContact(true)
+                .catch { error ->
+                    students.forEach { analytics.logEvent("registration_student_select", "success" to false, "scrapperBaseUrl" to it.scrapperBaseUrl, "symbol" to it.symbol, "error" to error.message.ifNullOrBlank { "No message" }) }
+                    Timber.i("Registration result: An exception occurred ")
+                    loginErrorHandler.dispatch(error)
+                    lastError = error
+                    view?.apply {
+                        showProgress(false)
+                        showContent(true)
+                        showContact(true)
+                    }
                 }
-            }))
+                .collect {
+                    students.forEach { analytics.logEvent("registration_student_select", "success" to true, "scrapperBaseUrl" to it.scrapperBaseUrl, "symbol" to it.symbol, "error" to "No error") }
+                    Timber.i("Registration result: Success")
+                    view?.openMainView()
+                }
+        }
     }
 
     fun onDiscordClick() {
