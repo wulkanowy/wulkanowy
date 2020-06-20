@@ -7,7 +7,10 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -27,19 +30,17 @@ class HomeworkDetailsPresenter @Inject constructor(
 
     fun toggleDone(homework: Homework) {
         Timber.i("Homework details update start")
-        disposable.add(rxSingle { homeworkRepository.toggleDone(homework) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                Timber.i("Homework details update: Success")
-                view?.run {
-                    updateMarkAsDoneLabel(homework.isDone)
+        launch {
+            flowOf(homeworkRepository.toggleDone(homework))
+                .catch {
+                    Timber.i("Homework details update result: An exception occurred")
+                    errorHandler.dispatch(it)
                 }
-                analytics.logEvent("homework_mark_as_done")
-            }) {
-                Timber.i("Homework details update result: An exception occurred")
-                errorHandler.dispatch(it)
-            }
-        )
+                .collect {
+                    Timber.i("Homework details update: Success")
+                    view?.updateMarkAsDoneLabel(homework.isDone)
+                    analytics.logEvent("homework_mark_as_done")
+                }
+        }
     }
 }

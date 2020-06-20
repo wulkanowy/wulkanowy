@@ -104,10 +104,6 @@ class HomeworkPresenter @Inject constructor(
             })
     }
 
-    fun reloadData() {
-        refreshData(currentDate)
-    }
-
     private fun refreshData(date: LocalDate) {
         refreshJob?.cancel()
         refreshJob = launch {
