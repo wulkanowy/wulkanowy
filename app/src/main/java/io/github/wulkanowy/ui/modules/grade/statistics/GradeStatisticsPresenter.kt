@@ -13,10 +13,11 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.rxSingle
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,6 +40,8 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
+    private var refreshJob: Job? = null
+
     private var loadingJob: Job? = null
 
     var currentType: ViewType = ViewType.PARTIAL
@@ -54,7 +57,8 @@ class GradeStatisticsPresenter @Inject constructor(
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         currentSemesterId = semesterId
         loadSubjects()
-        loadDataByType(semesterId, currentSubjectName, currentType, forceRefresh)
+        if (forceRefresh) refreshDataByType(semesterId, currentType)
+        else loadDataByType(semesterId, currentSubjectName, currentType)
     }
 
     fun onParentViewReselected() {
@@ -73,7 +77,7 @@ class GradeStatisticsPresenter @Inject constructor(
             showEmpty(false)
             clearView()
         }
-        disposable.clear()
+//        job.cancel()
     }
 
     fun onSwipeRefresh() {
@@ -111,7 +115,7 @@ class GradeStatisticsPresenter @Inject constructor(
     fun onTypeChange() {
         val type = view?.currentType ?: ViewType.POINTS
         Timber.i("Select grade stats semester: $type")
-        disposable.clear()
+//        job.cancel()
         view?.run {
             showContent(false)
             showProgress(true)
@@ -125,27 +129,43 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private fun loadSubjects() {
         Timber.i("Loading grade stats subjects started")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-            .flatMap { student ->
-                rxSingle { semesterRepository.getCurrentSemester(student) }.flatMap { semester ->
-                    rxSingle { subjectRepository.getSubjects(student, semester).first() }
-                }
-            }
-            .doOnSuccess { subjects = it }
-            .map { ArrayList(it.map { subject -> subject.name }) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                Timber.i("Loading grade stats subjects result: Success")
-                view?.updateSubjects(it)
-            }, {
+        launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emitAll(subjectRepository.getSubjects(student, semester))
+            }.map {
+                ArrayList(it.map { subject -> subject.name })
+            }.catch {
                 Timber.i("Loading grade stats subjects result: An exception occurred")
                 errorHandler.dispatch(it)
-            })
-        )
+            }.collect {
+                Timber.i("Loading grade stats subjects result: Success")
+                view?.updateSubjects(it)
+            }
+        }
     }
 
-    private fun loadDataByType(semesterId: Int, subjectName: String, type: ViewType, forceRefresh: Boolean = false) {
+    private fun refreshDataByType(semesterId: Int, type: ViewType) {
+        refreshJob?.cancel()
+        refreshJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semesters = semesterRepository.getSemesters(student)
+                val semester = semesters.first { item -> item.semesterId == semesterId }
+
+                emit(with(gradeStatisticsRepository) {
+                    when (type) {
+                        ViewType.SEMESTER -> refreshGradeStatistics(student, semester, true)
+                        ViewType.PARTIAL -> refreshGradeStatistics(student, semester, false)
+                        ViewType.POINTS -> refreshGradePointStatistics(student, semester)
+                    }
+                })
+            }.onEach { afterLoading(semesterId) }.catch { handleErrors(it) }.collect()
+        }
+    }
+
+    private fun loadDataByType(semesterId: Int, subjectName: String, type: ViewType) {
         currentSubjectName = if (preferencesRepository.showAllSubjectsOnStatisticsList) "Wszystkie" else subjectName
         currentType = type
 
@@ -153,26 +173,22 @@ class GradeStatisticsPresenter @Inject constructor(
 
         loadingJob?.cancel()
         loadingJob = launch {
-            val student = studentRepository.getCurrentStudent()
-            val semesters = semesterRepository.getSemesters(student)
-            val semester = semesters.first { item -> item.semesterId == semesterId }
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semesters = semesterRepository.getSemesters(student)
+                val semester = semesters.first { item -> item.semesterId == semesterId }
 
-            with(gradeStatisticsRepository) {
-                when (type) {
-                    ViewType.SEMESTER -> getGradesStatistics(student, semester, currentSubjectName, true, forceRefresh)
-                    ViewType.PARTIAL -> getGradesStatistics(student, semester, currentSubjectName, false, forceRefresh)
-                    ViewType.POINTS -> getGradesPointsStatistics(student, semester, currentSubjectName, forceRefresh)
-                }
+                emitAll(with(gradeStatisticsRepository) {
+                    when (type) {
+                        ViewType.SEMESTER -> getGradesStatistics(student, semester, currentSubjectName, true)
+                        ViewType.PARTIAL -> getGradesStatistics(student, semester, currentSubjectName, false)
+                        ViewType.POINTS -> getGradesPointsStatistics(student, semester, currentSubjectName)
+                    }
+                })
             }.onEach {
-                view?.run {
-                    showRefresh(false)
-                    showProgress(false)
-                    enableSwipe(true)
-                    notifyParentDataLoaded(semesterId)
-                }
+                afterLoading(semesterId)
             }.catch {
-                Timber.i("Loading grade stats result: An exception occurred")
-                errorHandler.dispatch(it)
+                handleErrors(it)
             }.collect {
                 Timber.i("Loading grade stats result: Success")
                 view?.run {
@@ -185,11 +201,24 @@ class GradeStatisticsPresenter @Inject constructor(
                 analytics.logEvent(
                     "load_data",
                     "type" to "grade_statistics",
-                    "items" to it.size,
-                    "force_refresh" to forceRefresh
+                    "items" to it.size
                 )
             }
         }
+    }
+
+    private fun afterLoading(semesterId: Int) {
+        view?.run {
+            showRefresh(false)
+            showProgress(false)
+            enableSwipe(true)
+            notifyParentDataLoaded(semesterId)
+        }
+    }
+
+    private fun handleErrors(error: Throwable) {
+        Timber.i("Loading grade stats result: An exception occurred")
+        errorHandler.dispatch(error)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

@@ -18,7 +18,7 @@ open class BasePresenter<T : BaseView>(
     protected val schedulers: SchedulersProvider
 ) : CoroutineScope {
 
-    private val job = Job()
+    val job = Job()
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
