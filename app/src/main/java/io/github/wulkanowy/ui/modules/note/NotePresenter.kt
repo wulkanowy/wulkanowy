@@ -8,7 +8,15 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,6 +31,10 @@ class NotePresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
+    private var refreshJob: Job? = null
+
+    private var loadingJob: Job? = null
+
     override fun onAttachView(view: NoteView) {
         super.onAttachView(view)
         view.initView()
@@ -33,7 +45,7 @@ class NotePresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the note")
-        loadData(true)
+        refreshData()
     }
 
     fun onRetry() {
@@ -41,28 +53,40 @@ class NotePresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        loadData(true)
+        refreshData()
     }
 
     fun onDetailsClick() {
         view?.showErrorDetailsDialog(lastError)
     }
 
-    private fun loadData(forceRefresh: Boolean = false) {
+    private fun refreshData() {
+        refreshJob?.cancel()
+        refreshJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emit(noteRepository.refreshNotes(student, semester))
+            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+        }
+    }
+
+    private fun loadData() {
         Timber.i("Loading note data started")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-            .flatMap { rxSingle { semesterRepository.getCurrentSemester(it) }.map { semester -> semester to it } }
-            .flatMap { rxSingle { noteRepository.getNotes(it.second, it.first, forceRefresh) } }
-            .map { items -> items.sortedByDescending { it.date } }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doFinally {
-                view?.run {
-                    hideRefresh()
-                    showProgress(false)
-                    enableSwipe(true)
-                }
-            }.subscribe({
+
+        loadingJob?.cancel()
+        loadingJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emitAll(noteRepository.getNotes(student, semester))
+            }.map { items ->
+                items.sortedByDescending { it.date }
+            }.onEach {
+                afterLoading()
+            }.catch {
+                handleError(it)
+            }.collect {
                 Timber.i("Loading note result: Success")
                 view?.apply {
                     updateData(it)
@@ -73,14 +97,23 @@ class NotePresenter @Inject constructor(
                 analytics.logEvent(
                     "load_data",
                     "type" to "note",
-                    "items" to it.size,
-                    "force_refresh" to forceRefresh
+                    "items" to it.size
                 )
-            }, {
-                Timber.i("Loading note result: An exception occurred")
-                errorHandler.dispatch(it)
-            })
-        )
+            }
+        }
+    }
+
+    private fun afterLoading() {
+        view?.run {
+            hideRefresh()
+            showProgress(false)
+            enableSwipe(true)
+        }
+    }
+
+    private fun handleError(error: Throwable) {
+        Timber.i("Loading note result: An exception occurred")
+        errorHandler.dispatch(error)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
@@ -108,13 +141,11 @@ class NotePresenter @Inject constructor(
 
     private fun updateNote(note: Note) {
         Timber.i("Attempt to update note ${note.id}")
-        disposable.add(rxSingle { noteRepository.updateNote(note) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({ Timber.i("Update note result: Success") })
-            { error ->
+        launch {
+            flowOf(noteRepository.updateNote(note)).catch {
                 Timber.i("Update note result: An exception occurred")
-                errorHandler.dispatch(error)
-            })
+                errorHandler.dispatch(it)
+            }.collect { Timber.i("Update note result: Success") }
+        }
     }
 }
