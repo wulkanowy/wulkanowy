@@ -81,33 +81,29 @@ class LoginFormPresenter @Inject constructor(
         if (!validateCredentials(email, password, host)) return
 
         launch {
-            flowOf(studentRepository.getStudentsScrapper(email, password, host, symbol))
-                .onStart {
-                    view?.apply {
-                        hideSoftKeyboard()
-                        showProgress(true)
-                        showContent(false)
-                    }
-                    Timber.i("Login started")
+            flowOf(studentRepository.getStudentsScrapper(email, password, host, symbol)).onStart {
+                view?.apply {
+                    hideSoftKeyboard()
+                    showProgress(true)
+                    showContent(false)
                 }
-                .onCompletion {
-                    view?.apply {
-                        showProgress(false)
-                        showContent(true)
-                    }
+                Timber.i("Login started")
+            }.onCompletion {
+                view?.apply {
+                    showProgress(false)
+                    showContent(true)
                 }
-                .catch {
-                    Timber.i("Login result: An exception occurred")
-                    analytics.logEvent("registration_form", "success" to false, "students" to -1, "scrapperBaseUrl" to host, "error" to it.message.ifNullOrBlank { "No message" })
-                    loginErrorHandler.dispatch(it)
-                    lastError = it
-                    view?.showContact(true)
-                }
-                .collect {
-                    Timber.i("Login result: Success")
-                    analytics.logEvent("registration_form", "success" to true, "students" to it.size, "scrapperBaseUrl" to host, "error" to "No error")
-                    view?.notifyParentAccountLogged(it, Triple(email, password, host))
-                }
+            }.catch {
+                Timber.i("Login result: An exception occurred")
+                analytics.logEvent("registration_form", "success" to false, "students" to -1, "scrapperBaseUrl" to host, "error" to it.message.ifNullOrBlank { "No message" })
+                loginErrorHandler.dispatch(it)
+                lastError = it
+                view?.showContact(true)
+            }.collect {
+                Timber.i("Login result: Success")
+                analytics.logEvent("registration_form", "success" to true, "students" to it.size, "scrapperBaseUrl" to host, "error" to "No error")
+                view?.notifyParentAccountLogged(it, Triple(email, password, host))
+            }
         }
     }
 

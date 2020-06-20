@@ -52,41 +52,37 @@ class LoginSymbolPresenter @Inject constructor(
         }
 
         launch {
-            flowOf(studentRepository.getStudentsScrapper(loginData!!.first, loginData!!.second, loginData!!.third, symbol))
-                .onStart {
-                    view?.apply {
-                        hideSoftKeyboard()
-                        showProgress(true)
-                        showContent(false)
-                    }
-                    Timber.i("Login with symbol started")
+            flowOf(studentRepository.getStudentsScrapper(loginData!!.first, loginData!!.second, loginData!!.third, symbol)).onStart {
+                view?.apply {
+                    hideSoftKeyboard()
+                    showProgress(true)
+                    showContent(false)
                 }
-                .onCompletion {
-                    view?.apply {
-                        showProgress(false)
-                        showContent(true)
-                    }
+                Timber.i("Login with symbol started")
+            }.onCompletion {
+                view?.apply {
+                    showProgress(false)
+                    showContent(true)
                 }
-                .catch {
-                    Timber.i("Login with symbol result: An exception occurred")
-                    analytics.logEvent("registration_symbol", "success" to false, "students" to -1, "scrapperBaseUrl" to loginData?.third, "symbol" to symbol, "error" to it.message.ifNullOrBlank { "No message" })
-                    loginErrorHandler.dispatch(it)
-                    lastError = it
-                    view?.showContact(true)
-                }
-                .collect {
-                    analytics.logEvent("registration_symbol", "success" to true, "students" to it.size, "scrapperBaseUrl" to loginData?.third, "symbol" to symbol, "error" to "No error")
-                    view?.apply {
-                        if (it.isEmpty()) {
-                            Timber.i("Login with symbol result: Empty student list")
-                            setErrorSymbolIncorrect()
-                            view?.showContact(true)
-                        } else {
-                            Timber.i("Login with symbol result: Success")
-                            notifyParentAccountLogged(it)
-                        }
+            }.catch {
+                Timber.i("Login with symbol result: An exception occurred")
+                analytics.logEvent("registration_symbol", "success" to false, "students" to -1, "scrapperBaseUrl" to loginData?.third, "symbol" to symbol, "error" to it.message.ifNullOrBlank { "No message" })
+                loginErrorHandler.dispatch(it)
+                lastError = it
+                view?.showContact(true)
+            }.collect {
+                analytics.logEvent("registration_symbol", "success" to true, "students" to it.size, "scrapperBaseUrl" to loginData?.third, "symbol" to symbol, "error" to "No error")
+                view?.apply {
+                    if (it.isEmpty()) {
+                        Timber.i("Login with symbol result: Empty student list")
+                        setErrorSymbolIncorrect()
+                        view?.showContact(true)
+                    } else {
+                        Timber.i("Login with symbol result: Success")
+                        notifyParentAccountLogged(it)
                     }
                 }
+            }
         }
     }
 
