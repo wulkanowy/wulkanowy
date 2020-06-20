@@ -14,6 +14,14 @@ import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.rxSingle
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
@@ -36,6 +44,10 @@ class CompletedLessonsPresenter @Inject constructor(
         private set
 
     private lateinit var lastError: Throwable
+
+    private var refreshJob: Job? = null
+
+    private var loadingJob: Job? = null
 
     fun onAttachView(view: CompletedLessonsView, date: Long?) {
         super.onAttachView(view)
@@ -73,7 +85,7 @@ class CompletedLessonsPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the completed lessons")
-        loadData(currentDate, true)
+        refreshData(currentDate)
     }
 
     fun onRetry() {
@@ -81,7 +93,7 @@ class CompletedLessonsPresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        loadData(currentDate, true)
+        refreshData(currentDate)
     }
 
     fun onDetailsClick() {
@@ -107,46 +119,63 @@ class CompletedLessonsPresenter @Inject constructor(
             })
     }
 
-    private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
+    private fun refreshData(date: LocalDate) {
+        refreshJob?.cancel()
+        refreshJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+
+                emit(completedLessonsRepository.refreshCompletedLessons(student, semester, date, date))
+            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+        }
+    }
+
+    private fun loadData(date: LocalDate) {
         Timber.i("Loading completed lessons data started")
         currentDate = date
-        disposable.apply {
-            clear()
-            add(rxSingle { studentRepository.getCurrentStudent() }
-                .flatMap { student ->
-                    rxSingle { semesterRepository.getCurrentSemester(student) }.flatMap { semester ->
-                        rxSingle { completedLessonsRepository.getCompletedLessons(student, semester, currentDate, currentDate, forceRefresh) }
-                    }
+
+        loadingJob?.cancel()
+        loadingJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emitAll(completedLessonsRepository.getCompletedLessons(student, semester, date, date))
+            }.map { items ->
+                items.sortedBy { it.number }
+            }.onEach {
+                afterLoading()
+            }.catch {
+                handleError(it)
+            }.collect {
+                Timber.i("Loading completed lessons lessons result: Success")
+                view?.apply {
+                    updateData(it)
+                    showEmpty(it.isEmpty())
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
                 }
-                .map { items -> items.sortedBy { it.number } }
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doFinally {
-                    view?.run {
-                        hideRefresh()
-                        showProgress(false)
-                        enableSwipe(true)
-                    }
-                }
-                .subscribe({
-                    Timber.i("Loading completed lessons lessons result: Success")
-                    view?.apply {
-                        updateData(it)
-                        showEmpty(it.isEmpty())
-                        showErrorView(false)
-                        showContent(it.isNotEmpty())
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "completed_lessons",
-                        "items" to it.size,
-                        "force_refresh" to forceRefresh
-                    )
-                }) {
-                    Timber.i("Loading completed lessons result: An exception occurred")
-                    completedLessonsErrorHandler.dispatch(it)
-                })
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "completed_lessons",
+                    "items" to it.size
+                )
+            }
+
         }
+    }
+
+    private fun afterLoading() {
+        view?.run {
+            hideRefresh()
+            showProgress(false)
+            enableSwipe(true)
+        }
+    }
+
+    private fun handleError(error: Throwable) {
+        Timber.i("Loading completed lessons result: An exception occurred")
+        completedLessonsErrorHandler.dispatch(error)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
