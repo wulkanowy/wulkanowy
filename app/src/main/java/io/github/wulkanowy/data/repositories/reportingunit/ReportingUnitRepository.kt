@@ -24,11 +24,11 @@ class ReportingUnitRepository @Inject constructor(
         }
     }
 
-    suspend fun getReportingUnit(student: Student, unitId: Int): ReportingUnit {
+    suspend fun getReportingUnit(student: Student, unitId: Int): ReportingUnit? {
         return local.getReportingUnit(student, unitId) ?: run {
-            getReportingUnits(student, true)
+            getReportingUnits(student, true).first()
 
-            return local.getReportingUnit(student, unitId)!!
+            return local.getReportingUnit(student, unitId)
         }
     }
 }

@@ -18,7 +18,7 @@ class RecipientWork @Inject constructor(
         return rxSingle { reportingUnitRepository.getReportingUnits(student, true) }
             .flatMapCompletable { units ->
                 Completable.mergeDelayError(units.map {
-                    rxCompletable { recipientRepository.getRecipients(student, 2, it, true) }
+                    rxCompletable { recipientRepository.refreshRecipients(student, 2, it) }
                 })
             }
     }
