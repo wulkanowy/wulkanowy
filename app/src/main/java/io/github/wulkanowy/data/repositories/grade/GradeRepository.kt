@@ -21,21 +21,29 @@ class GradeRepository @Inject constructor(
 
     suspend fun refreshGrades(student: Student, semester: Semester, notify: Boolean = false) {
         val (newDetails, newSummary) = remote.getGrades(student, semester)
+
+        refreshGradeDetails(student, semester, newDetails, notify)
+        refreshGradeSummaries(semester, newSummary, notify)
+    }
+
+    private suspend fun refreshGradeDetails(student: Student, semester: Semester, newDetails: List<Grade>, notify: Boolean) {
         val oldGrades = local.getGradesDetails(semester).first()
 
         val notifyBreakDate = oldGrades.maxBy { it.date }?.date ?: student.registrationDate.toLocalDate()
-        local.deleteGrades(oldGrades.uniqueSubtract(newDetails))
-        local.saveGrades(newDetails.uniqueSubtract(oldGrades).onEach {
+        local.deleteGrades(oldGrades uniqueSubtract newDetails)
+        local.saveGrades((newDetails uniqueSubtract oldGrades).onEach {
             if (it.date >= notifyBreakDate) it.apply {
                 isRead = false
                 if (notify) isNotified = false
             }
         })
+    }
 
+    private suspend fun refreshGradeSummaries(semester: Semester, newSummary: List<GradeSummary>, notify: Boolean) {
         val oldSummaries = local.getGradesSummary(semester).first()
 
-        local.deleteGradesSummary(oldSummaries.uniqueSubtract(newSummary))
-        local.saveGradesSummary(newSummary.uniqueSubtract(oldSummaries).onEach { summary ->
+        local.deleteGradesSummary(oldSummaries uniqueSubtract newSummary)
+        local.saveGradesSummary((newSummary uniqueSubtract oldSummaries).onEach { summary ->
             val oldSummary = oldSummaries.find { oldSummary -> oldSummary.subject == summary.subject }
             summary.isPredictedGradeNotified = when {
                 summary.predictedGrade.isEmpty() -> true
