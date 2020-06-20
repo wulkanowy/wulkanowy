@@ -12,10 +12,17 @@ import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class MessagePreviewPresenter @Inject constructor(
     schedulers: SchedulersProvider,
     errorHandler: ErrorHandler,
@@ -55,31 +62,30 @@ class MessagePreviewPresenter @Inject constructor(
 
     private fun loadData(message: Message) {
         Timber.i("Loading message ${message.messageId} preview started")
-        disposable.apply {
-            clear()
-            add(rxSingle { studentRepository.getStudentById(message.studentId) }
-                .flatMap { rxSingle { messageRepository.getMessage(it, message, true) } }
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doFinally { view?.showProgress(false) }
-                .subscribe({ message ->
-                    Timber.i("Loading message ${message.message.messageId} preview result: Success ")
-                    this@MessagePreviewPresenter.message = message.message
-                    this@MessagePreviewPresenter.attachments = message.attachments
-                    view?.apply {
-                        setMessageWithAttachment(message)
-                        initOptions()
-                    }
-                    analytics.logEvent(
-                        "load_item",
-                        "type" to "message_preview",
-                        "length" to message.message.content.length
-                    )
-                }) {
-                    Timber.i("Loading message ${message.messageId} preview result: An exception occurred ")
-                    retryCallback = { onMessageLoadRetry(message) }
-                    errorHandler.dispatch(it)
-                })
+        launch {
+            flow {
+                val student = studentRepository.getStudentById(message.studentId)
+                emit(messageRepository.getMessage(student, message, true))
+            }.onEach {
+                view?.showProgress(false)
+            }.catch {
+                Timber.i("Loading message ${message.messageId} preview result: An exception occurred ")
+                retryCallback = { onMessageLoadRetry(message) }
+                errorHandler.dispatch(it)
+            }.collect {
+                Timber.i("Loading message ${it.message.messageId} preview result: Success ")
+                this@MessagePreviewPresenter.message = it.message
+                this@MessagePreviewPresenter.attachments = it.attachments
+                view?.apply {
+                    setMessageWithAttachment(it)
+                    initOptions()
+                }
+                analytics.logEvent(
+                    "load_item",
+                    "type" to "message_preview",
+                    "length" to it.message.content.length
+                )
+            }
         }
     }
 
@@ -152,33 +158,31 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     private fun deleteMessage() {
-        message?.let { message ->
-            disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-                .flatMap { rxSingle { messageRepository.deleteMessage(it, message) } }
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doOnSubscribe {
-                    view?.run {
-                        showContent(false)
-                        showProgress(true)
-                        showOptions(false)
-                        showErrorView(false)
-                    }
+        message ?: return
+
+        view?.run {
+            showContent(false)
+            showProgress(true)
+            showOptions(false)
+            showErrorView(false)
+        }
+
+        launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                emit(messageRepository.deleteMessage(student, message!!))
+            }.onCompletion {
+                view?.showProgress(false)
+            }.catch {
+                retryCallback = { onMessageDelete() }
+                errorHandler.dispatch(it)
+            }.collect {
+                view?.run {
+                    notifyParentMessageDeleted(message!!) // TODO: delete this callback
+                    showMessage(deleteMessageSuccessString)
+                    popView()
                 }
-                .doFinally {
-                    view?.showProgress(false)
-                }
-                .subscribe({
-                    view?.run {
-                        notifyParentMessageDeleted(message)
-                        showMessage(deleteMessageSuccessString)
-                        popView()
-                    }
-                }, { error ->
-                    retryCallback = { onMessageDelete() }
-                    errorHandler.dispatch(error)
-                })
-            )
+            }
         }
     }
 
