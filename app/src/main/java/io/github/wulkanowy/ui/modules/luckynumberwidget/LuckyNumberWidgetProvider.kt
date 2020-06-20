@@ -24,6 +24,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Maybe
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.rx2.rxMaybe
 import kotlinx.coroutines.rx2.rxSingle
 import timber.log.Timber
@@ -157,7 +158,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                         else -> Maybe.empty()
                     }
                 }
-                .flatMap { rxMaybe { luckyNumberRepository.getLuckyNumber(it) } }
+                .flatMap { rxMaybe { luckyNumberRepository.getLuckyNumber(it).first() } }
                 .subscribeOn(schedulers.backgroundThread)
                 .blockingGet()
         } catch (e: Exception) {
