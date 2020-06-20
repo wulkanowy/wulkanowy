@@ -6,7 +6,13 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -19,6 +25,8 @@ class LoginRecoverPresenter @Inject constructor(
 ) : BasePresenter<LoginRecoverView>(loginErrorHandler, studentRepository, schedulers) {
 
     private lateinit var lastError: Throwable
+
+    private var captchaConfirmJob: Job? = null
 
     override fun onAttachView(view: LoginRecoverView) {
         super.onAttachView(view)
@@ -56,24 +64,23 @@ class LoginRecoverPresenter @Inject constructor(
 
         if (!validateInput(username, host)) return
 
-        disposable.add(rxSingle { recoverRepository.getReCaptchaSiteKey(host, symbol.ifBlank { "Default" }) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doOnSubscribe {
-                view?.run {
-                    hideSoftKeyboard()
-                    showRecoverForm(false)
-                    showProgress(true)
-                    showErrorView(false)
-                    showCaptcha(false)
+        launch {
+            flowOf(recoverRepository.getReCaptchaSiteKey(host, symbol.ifBlank { "Default" }))
+                .onStart {
+                    view?.run {
+                        hideSoftKeyboard()
+                        showRecoverForm(false)
+                        showProgress(true)
+                        showErrorView(false)
+                        showCaptcha(false)
+                    }
+                }.catch {
+                    Timber.i("Obtain captcha site key result: An exception occurred")
+                    errorHandler.dispatch(it)
+                }.collect { (resetUrl, siteKey) ->
+                    view?.loadReCaptcha(siteKey, resetUrl)
                 }
-            }
-            .subscribe({ (resetUrl, siteKey) ->
-                view?.loadReCaptcha(siteKey, resetUrl)
-            }) {
-                Timber.i("Obtain captcha site key result: An exception occurred")
-                errorHandler.dispatch(it)
-            })
+        }
     }
 
     private fun validateInput(username: String, host: String): Boolean {
@@ -97,22 +104,23 @@ class LoginRecoverPresenter @Inject constructor(
         val host = view?.recoverHostValue.orEmpty()
         val symbol = view?.formHostSymbol.ifNullOrBlank { "Default" }
 
-        with(disposable) {
-            clear()
-            add(rxSingle { recoverRepository.sendRecoverRequest(host, symbol, username, reCaptchaResponse) }
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doOnSubscribe {
+        captchaConfirmJob?.cancel()
+        captchaConfirmJob = launch {
+            flowOf(recoverRepository.sendRecoverRequest(host, symbol, username, reCaptchaResponse))
+                .onStart {
                     view?.run {
                         showProgress(true)
                         showRecoverForm(false)
                         showCaptcha(false)
                     }
                 }
-                .doFinally {
+                .onCompletion {
                     view?.showProgress(false)
-                }
-                .subscribe({
+                }.catch {
+                    Timber.i("Send recover request result: An exception occurred")
+                    errorHandler.dispatch(it)
+                    analytics.logEvent("account_recover", "register" to host, "symbol" to symbol, "success" to false)
+                }.collect {
                     view?.run {
                         showSuccessView(true)
                         setSuccessTitle(it.substringBefore(". "))
@@ -120,11 +128,7 @@ class LoginRecoverPresenter @Inject constructor(
                     }
 
                     analytics.logEvent("account_recover", "register" to host, "symbol" to symbol, "success" to true)
-                }) {
-                    Timber.i("Send recover request result: An exception occurred")
-                    errorHandler.dispatch(it)
-                    analytics.logEvent("account_recover", "register" to host, "symbol" to symbol, "success" to false)
-                })
+                }
         }
     }
 
