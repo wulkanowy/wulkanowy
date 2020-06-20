@@ -7,7 +7,11 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -29,27 +33,25 @@ class MobileDeviceTokenPresenter @Inject constructor(
 
     private fun loadData() {
         Timber.i("Mobile device registration data started")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-            .flatMap { student ->
-                rxSingle { semesterRepository.getCurrentSemester(student) }.flatMap { semester ->
-                    rxSingle { mobileDeviceRepository.getToken(student, semester) }
-                }
-            }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doFinally { view?.hideLoading() }
-            .subscribe({
+        launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emit(mobileDeviceRepository.getToken(student, semester))
+            }.onCompletion {
+                view?.hideLoading()
+            }.catch {
+                Timber.i("Mobile device registration result: An exception occurred")
+                view?.closeDialog()
+                errorHandler.dispatch(it)
+            }.collect {
                 Timber.i("Mobile device registration result: Success")
                 view?.run {
                     updateData(it)
                     showContent()
                 }
                 analytics.logEvent("device_register", "symbol" to it.token.substring(0, 3))
-            }) {
-                Timber.i("Mobile device registration result: An exception occurred")
-                view?.closeDialog()
-                errorHandler.dispatch(it)
             }
-        )
+        }
     }
 }
