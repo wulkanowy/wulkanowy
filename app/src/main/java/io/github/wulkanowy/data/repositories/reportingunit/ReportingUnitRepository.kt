@@ -12,13 +12,17 @@ class ReportingUnitRepository @Inject constructor(
     private val remote: ReportingUnitRemote
 ) {
 
-    suspend fun getReportingUnits(student: Student, forceRefresh: Boolean = false): List<ReportingUnit> {
-        return local.getReportingUnits(student).filter { !forceRefresh }.ifEmpty {
-            val new = remote.getReportingUnits(student)
-            val old = local.getReportingUnits(student)
+    suspend fun refreshReportingUnits(student: Student) {
+        val new = remote.getReportingUnits(student)
+        val old = local.getReportingUnits(student)
 
-            local.deleteReportingUnits(old.uniqueSubtract(new))
-            local.saveReportingUnits(new.uniqueSubtract(old))
+        local.deleteReportingUnits(old.uniqueSubtract(new))
+        local.saveReportingUnits(new.uniqueSubtract(old))
+    }
+
+    suspend fun getReportingUnits(student: Student): List<ReportingUnit> {
+        return local.getReportingUnits(student).ifEmpty {
+            refreshReportingUnits(student)
 
             local.getReportingUnits(student)
         }
@@ -26,7 +30,7 @@ class ReportingUnitRepository @Inject constructor(
 
     suspend fun getReportingUnit(student: Student, unitId: Int): ReportingUnit? {
         return local.getReportingUnit(student, unitId) ?: run {
-            getReportingUnits(student, true).first()
+            refreshReportingUnits(student)
 
             return local.getReportingUnit(student, unitId)
         }
