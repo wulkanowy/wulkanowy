@@ -5,7 +5,10 @@ import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,16 +26,17 @@ class LogViewerPresenter @Inject constructor(
     }
 
     fun onShareLogsSelected(): Boolean {
-        disposable.add(rxSingle { loggerRepository.getLogFiles() }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({ files ->
-                Timber.i("Loading logs files result: ${files.joinToString { it.name }}")
-                view?.shareLogs(files)
-            }, {
-                Timber.i("Loading logs files result: An exception occurred")
-                errorHandler.dispatch(it)
-            }))
+        launch {
+            flowOf(loggerRepository.getLogFiles())
+                .catch {
+                    Timber.i("Loading logs files result: An exception occurred")
+                    errorHandler.dispatch(it)
+                }
+                .collect { files ->
+                    Timber.i("Loading logs files result: ${files.joinToString { it.name }}")
+                    view?.shareLogs(files)
+                }
+        }
         return true
     }
 
@@ -41,15 +45,16 @@ class LogViewerPresenter @Inject constructor(
     }
 
     private fun loadLogFile() {
-        disposable.add(rxSingle { loggerRepository.getLastLogLines() }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                Timber.i("Loading last log file result: load ${it.size} lines")
-                view?.setLines(it)
-            }, {
-                Timber.i("Loading last log file result: An exception occurred")
-                errorHandler.dispatch(it)
-            }))
+        launch {
+            flowOf(loggerRepository.getLastLogLines())
+                .catch {
+                    Timber.i("Loading last log file result: An exception occurred")
+                    errorHandler.dispatch(it)
+                }
+                .collect {
+                    Timber.i("Loading last log file result: load ${it.size} lines")
+                    view?.setLines(it)
+                }
+        }
     }
 }
