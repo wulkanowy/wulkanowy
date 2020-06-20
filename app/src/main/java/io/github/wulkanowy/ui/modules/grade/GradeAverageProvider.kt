@@ -13,6 +13,10 @@ import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.BOTH_SEMESTERS
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.ONE_SEMESTER
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GradeAverageProvider @Inject constructor(
@@ -25,25 +29,25 @@ class GradeAverageProvider @Inject constructor(
 
     private val minusModifier get() = preferencesRepository.gradeMinusModifier
 
-    suspend fun getGradesDetailsWithAverage(student: Student, semesterId: Int, forceRefresh: Boolean = false): List<GradeDetailsWithAverage> {
+    suspend fun getGradesDetailsWithAverage(student: Student, semesterId: Int): Flow<List<GradeDetailsWithAverage>> {
         return semesterRepository.getSemesters(student).let { semesters ->
             when (preferencesRepository.gradeAverageMode) {
-                ONE_SEMESTER -> getSemesterDetailsWithAverage(student, semesters.single { it.semesterId == semesterId }, forceRefresh)
-                BOTH_SEMESTERS -> calculateBothSemestersAverage(student, semesters, semesterId, forceRefresh)
-                ALL_YEAR -> calculateAllYearAverage(student, semesters, semesterId, forceRefresh)
+                ONE_SEMESTER -> getSemesterDetailsWithAverage(student, semesters.single { it.semesterId == semesterId })
+                BOTH_SEMESTERS -> calculateBothSemestersAverage(student, semesters, semesterId)
+                ALL_YEAR -> calculateAllYearAverage(student, semesters, semesterId)
             }
         }
     }
 
-    private suspend fun calculateBothSemestersAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): List<GradeDetailsWithAverage> {
+    private fun calculateBothSemestersAverage(student: Student, semesters: List<Semester>, semesterId: Int): Flow<List<GradeDetailsWithAverage>> {
         val selectedSemester = semesters.single { it.semesterId == semesterId }
         val firstSemester = semesters.single { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
 
-        return getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh).let { selectedDetails ->
+        return getSemesterDetailsWithAverage(student, selectedSemester).flatMapConcat { selectedDetails ->
             val isAnyAverage = selectedDetails.any { it.average != .0 }
 
             if (selectedSemester != firstSemester) {
-                getSemesterDetailsWithAverage(student, firstSemester, forceRefresh).let { secondDetails ->
+                getSemesterDetailsWithAverage(student, firstSemester).map { secondDetails ->
                     selectedDetails.map { selected ->
                         val second = secondDetails.singleOrNull { it.subject == selected.subject }
                         selected.copy(average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
@@ -52,19 +56,19 @@ class GradeAverageProvider @Inject constructor(
                         } else (selected.average + (second?.average ?: selected.average)) / 2)
                     }
                 }
-            } else selectedDetails
+            } else flow { emit(selectedDetails) }
         }
     }
 
-    private suspend fun calculateAllYearAverage(student: Student, semesters: List<Semester>, semesterId: Int, forceRefresh: Boolean): List<GradeDetailsWithAverage> {
+    private suspend fun calculateAllYearAverage(student: Student, semesters: List<Semester>, semesterId: Int): Flow<List<GradeDetailsWithAverage>> {
         val selectedSemester = semesters.single { it.semesterId == semesterId }
         val firstSemester = semesters.single { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
 
-        return getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh).let { selectedDetails ->
+        return getSemesterDetailsWithAverage(student, selectedSemester).flatMapConcat { selectedDetails ->
             val isAnyAverage = selectedDetails.any { it.average != .0 }
 
             if (selectedSemester != firstSemester) {
-                getSemesterDetailsWithAverage(student, firstSemester, forceRefresh).let { secondDetails ->
+                getSemesterDetailsWithAverage(student, firstSemester).map { secondDetails ->
                     selectedDetails.map { selected ->
                         val second = secondDetails.singleOrNull { it.subject == selected.subject }
                         selected.copy(average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
@@ -72,12 +76,12 @@ class GradeAverageProvider @Inject constructor(
                         } else selected.average)
                     }
                 }
-            } else selectedDetails
+            } else flow { emit(selectedDetails) }
         }
     }
 
-    private suspend fun getSemesterDetailsWithAverage(student: Student, semester: Semester, forceRefresh: Boolean): List<GradeDetailsWithAverage> {
-        return gradeRepository.getGrades(student, semester, forceRefresh).let { (details, summaries) ->
+    private fun getSemesterDetailsWithAverage(student: Student, semester: Semester): Flow<List<GradeDetailsWithAverage>> {
+        return gradeRepository.getGrades(student, semester).map { (details, summaries) ->
             val isAnyAverage = summaries.any { it.average != .0 }
             val allGrades = details.groupBy { it.subject }
 

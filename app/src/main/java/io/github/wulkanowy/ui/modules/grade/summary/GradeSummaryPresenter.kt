@@ -8,7 +8,12 @@ import io.github.wulkanowy.ui.modules.grade.GradeAverageProvider
 import io.github.wulkanowy.ui.modules.grade.GradeDetailsWithAverage
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,6 +27,8 @@ class GradeSummaryPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
+    private var loadingJob: Job? = null
+
     override fun onAttachView(view: GradeSummaryView) {
         super.onAttachView(view)
         view.initView()
@@ -30,36 +37,40 @@ class GradeSummaryPresenter @Inject constructor(
 
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         Timber.i("Loading grade summary data started")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-            .flatMap { rxSingle { averageProvider.getGradesDetailsWithAverage(it, semesterId, forceRefresh) } }
-            .map { createGradeSummaryItems(it) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doFinally {
-                view?.run {
-                    showRefresh(false)
-                    showProgress(false)
-                    enableSwipe(true)
-                    notifyParentDataLoaded(semesterId)
+
+        loadingJob?.cancel()
+        loadingJob = launch {
+            val student = studentRepository.getCurrentStudent()
+            averageProvider.getGradesDetailsWithAverage(student, semesterId) // TODO
+                .map { createGradeSummaryItems(it) }
+                .onEach {
+                    view?.run {
+                        showRefresh(false)
+                        showProgress(false)
+                        enableSwipe(true)
+                        notifyParentDataLoaded(semesterId)
+                    }
                 }
-            }.subscribe({
-                Timber.i("Loading grade summary result: Success")
-                view?.run {
-                    showEmpty(it.isEmpty())
-                    showContent(it.isNotEmpty())
-                    showErrorView(false)
-                    updateData(it)
+                .catch {
+                    Timber.i("Loading grade summary result: An exception occurred")
+                    errorHandler.dispatch(it)
                 }
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "grade_summary",
-                    "items" to it.size,
-                    "force_refresh" to forceRefresh
-                )
-            }) {
-                Timber.i("Loading grade summary result: An exception occurred")
-                errorHandler.dispatch(it)
-            })
+                .collect {
+                    Timber.i("Loading grade summary result: Success")
+                    view?.run {
+                        showEmpty(it.isEmpty())
+                        showContent(it.isNotEmpty())
+                        showErrorView(false)
+                        updateData(it)
+                    }
+                    analytics.logEvent(
+                        "load_data",
+                        "type" to "grade_summary",
+                        "items" to it.size,
+                        "force_refresh" to forceRefresh
+                    )
+                }
+        }
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
@@ -105,7 +116,7 @@ class GradeSummaryPresenter @Inject constructor(
             showEmpty(false)
             clearView()
         }
-        disposable.clear()
+        loadingJob?.cancel()
     }
 
     private fun createGradeSummaryItems(items: List<GradeDetailsWithAverage>): List<GradeSummary> {

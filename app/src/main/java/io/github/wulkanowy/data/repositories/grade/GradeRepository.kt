@@ -5,6 +5,11 @@ import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.utils.uniqueSubtract
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.transform
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,27 +20,20 @@ class GradeRepository @Inject constructor(
     private val remote: GradeRemote
 ) {
 
-    suspend fun getGrades(student: Student, semester: Semester, forceRefresh: Boolean = false, notify: Boolean = false): Pair<List<Grade>, List<GradeSummary>> {
-        val details = local.getGradesDetails(semester)
-        val summaries = local.getGradesSummary(semester)
-
-        if ((details.isNotEmpty() || summaries.isNotEmpty()) && !forceRefresh) {
-            return details to summaries
-        }
-
+    suspend fun refreshGrades(student: Student, semester: Semester, notify: Boolean = false) {
         val (newDetails, newSummary) = remote.getGrades(student, semester)
-        val oldGrades = local.getGradesDetails(semester)
+        val oldGrades = local.getGradesDetails(semester).first()
 
         val notifyBreakDate = oldGrades.maxBy { it.date }?.date ?: student.registrationDate.toLocalDate()
         local.deleteGrades(oldGrades.uniqueSubtract(newDetails))
         local.saveGrades(newDetails.uniqueSubtract(oldGrades).onEach {
-                if (it.date >= notifyBreakDate) it.apply {
-                    isRead = false
-                    if (notify) isNotified = false
-                }
-            })
+            if (it.date >= notifyBreakDate) it.apply {
+                isRead = false
+                if (notify) isNotified = false
+            }
+        })
 
-        val oldSummaries = local.getGradesSummary(semester)
+        val oldSummaries = local.getGradesSummary(semester).first()
 
         local.deleteGradesSummary(oldSummaries.uniqueSubtract(newSummary))
         local.saveGradesSummary(newSummary.uniqueSubtract(oldSummaries).onEach { summary ->
@@ -62,24 +60,35 @@ class GradeRepository @Inject constructor(
                 else -> oldSummary.finalGradeLastChange
             }
         })
-
-        return local.getGradesDetails(semester) to local.getGradesSummary(semester)
     }
 
-    suspend fun getUnreadGrades(semester: Semester): List<Grade> {
-        return local.getGradesDetails(semester).filter { grade -> !grade.isRead }
+    fun getGrades(student: Student, semester: Semester): Flow<Pair<List<Grade>, List<GradeSummary>>> {
+        return local.getGradesDetails(semester).combine(local.getGradesSummary(semester)) { details, summaries ->
+            details to summaries
+        }.map { (details, summaries) ->
+            if (details.isNotEmpty() || summaries.isNotEmpty()) {
+                return@map details to summaries
+            }
+            refreshGrades(student, semester)
+
+            details to summaries
+        }
     }
 
-    suspend fun getNotNotifiedGrades(semester: Semester): List<Grade> {
-        return local.getGradesDetails(semester).filter { grade -> !grade.isNotified }
+    fun getUnreadGrades(semester: Semester): Flow<List<Grade>> {
+        return local.getGradesDetails(semester).transform { emit(it.filter { grade -> !grade.isRead }) }
     }
 
-    suspend fun getNotNotifiedPredictedGrades(semester: Semester): List<GradeSummary> {
-        return local.getGradesSummary(semester).filter { gradeSummary -> !gradeSummary.isPredictedGradeNotified }
+    fun getNotNotifiedGrades(semester: Semester): Flow<List<Grade>> {
+        return local.getGradesDetails(semester).transform { emit(it.filter { grade -> !grade.isNotified }) }
     }
 
-    suspend fun getNotNotifiedFinalGrades(semester: Semester): List<GradeSummary> {
-        return local.getGradesSummary(semester).filter { gradeSummary -> !gradeSummary.isFinalGradeNotified }
+    fun getNotNotifiedPredictedGrades(semester: Semester): Flow<List<GradeSummary>> {
+        return local.getGradesSummary(semester).transform { emit(it.filter { gradeSummary -> !gradeSummary.isPredictedGradeNotified }) }
+    }
+
+    fun getNotNotifiedFinalGrades(semester: Semester): Flow<List<GradeSummary>> {
+        return local.getGradesSummary(semester).transform { emit(it.filter { gradeSummary -> !gradeSummary.isFinalGradeNotified }) }
     }
 
     suspend fun updateGrade(grade: Grade) {

@@ -11,6 +11,14 @@ import io.github.wulkanowy.ui.modules.grade.GradeAverageProvider
 import io.github.wulkanowy.ui.modules.grade.GradeDetailsWithAverage
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.rxCompletable
 import kotlinx.coroutines.rx2.rxSingle
 import timber.log.Timber
@@ -33,6 +41,10 @@ class GradeDetailsPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
+    private var refreshJob: Job? = null
+
+    private var loadingJob: Job? = null
+
     override fun onAttachView(view: GradeDetailsView) {
         super.onAttachView(view)
         view.initView()
@@ -41,7 +53,8 @@ class GradeDetailsPresenter @Inject constructor(
 
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         currentSemesterId = semesterId
-        loadData(semesterId, forceRefresh)
+        if (forceRefresh) refreshData(semesterId)
+        else loadData(semesterId)
     }
 
     fun onGradeItemSelected(grade: Grade, position: Int) {
@@ -66,7 +79,7 @@ class GradeDetailsPresenter @Inject constructor(
         Timber.i("Select mark grades as read")
         disposable.add(rxSingle { studentRepository.getCurrentStudent() }
             .flatMap { rxSingle { semesterRepository.getSemesters(it) } }
-            .flatMap { rxSingle { gradeRepository.getUnreadGrades(it.first { item -> item.semesterId == currentSemesterId }) } }
+            .flatMap { rxSingle { gradeRepository.getUnreadGrades(it.first { item -> item.semesterId == currentSemesterId }).first() } }
             .map { it.map { grade -> grade.apply { isRead = true } } }
             .flatMapCompletable {
                 Timber.i("Mark as read ${it.size} grades")
@@ -76,7 +89,6 @@ class GradeDetailsPresenter @Inject constructor(
             .observeOn(schedulers.mainThread)
             .subscribe({
                 Timber.i("Mark as read result: Success")
-                loadData(currentSemesterId, false)
             }, {
                 Timber.i("Mark as read result: An exception occurred")
                 errorHandler.dispatch(it)
@@ -119,6 +131,8 @@ class GradeDetailsPresenter @Inject constructor(
             showEmpty(false)
             clearView()
         }
+        refreshJob?.cancel()
+        loadingJob?.cancel()
         disposable.clear()
     }
 
@@ -126,21 +140,31 @@ class GradeDetailsPresenter @Inject constructor(
         view?.enableMarkAsDoneButton(newGradesAmount > 0)
     }
 
-    private fun loadData(semesterId: Int, forceRefresh: Boolean) {
+    private fun refreshData(semesterId: Int) {
+        refreshJob?.cancel()
+        refreshJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semesters = semesterRepository.getSemesters(student)
+                val semester = semesters.first { item -> item.semesterId == currentSemesterId }
+                emit(gradeRepository.refreshGrades(student, semester))
+            }.onEach { afterLoading(semesterId) }.catch { handleError(it) }.collect()
+        }
+    }
+
+    private fun loadData(semesterId: Int) {
         Timber.i("Loading grade details data started")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-            .flatMap { rxSingle { averageProvider.getGradesDetailsWithAverage(it, semesterId, forceRefresh) } }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doFinally {
-                view?.run {
-                    showRefresh(false)
-                    showProgress(false)
-                    enableSwipe(true)
-                    notifyParentDataLoaded(semesterId)
-                }
-            }
-            .subscribe({ grades ->
+
+        loadingJob?.cancel()
+        loadingJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                emitAll(averageProvider.getGradesDetailsWithAverage(student, semesterId))
+            }.onEach {
+                afterLoading(semesterId)
+            }.catch {
+                handleError(it)
+            }.collect { grades ->
                 Timber.i("Loading grade details result: Success")
                 newGradesAmount = grades.sumBy { it.grades.sumBy { grade -> if (!grade.isRead) 1 else 0 } }
                 updateMarkAsDoneButton()
@@ -157,13 +181,24 @@ class GradeDetailsPresenter @Inject constructor(
                 analytics.logEvent(
                     "load_data",
                     "type" to "grade_details",
-                    "items" to grades.size,
-                    "force_refresh" to forceRefresh
+                    "items" to grades.size
                 )
-            }) {
-                Timber.i("Loading grade details result: An exception occurred")
-                errorHandler.dispatch(it)
-            })
+            }
+        }
+    }
+
+    private fun afterLoading(semesterId: Int) {
+        view?.run {
+            showRefresh(false)
+            showProgress(false)
+            enableSwipe(true)
+            notifyParentDataLoaded(semesterId)
+        }
+    }
+
+    private fun handleError(error: Throwable) {
+        Timber.i("Loading grade details result: An exception occurred")
+        errorHandler.dispatch(error)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

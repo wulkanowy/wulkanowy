@@ -14,6 +14,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -74,7 +75,7 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock, true)
+            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
                 .first.sortedByDescending { it.date }
         }
 
@@ -101,7 +102,7 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock, true)
+            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
                 .first.sortedByDescending { it.date }
         }
 
@@ -126,7 +127,7 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock, true)
+            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
         }
 
         assertEquals(2, grades.first.size)
@@ -147,7 +148,7 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock, true)
+            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
         }
 
         assertEquals(3, grades.first.size)
@@ -164,7 +165,7 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock, true)
+            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
         }
 
         assertEquals(3, grades.first.size)
@@ -181,7 +182,7 @@ class GradeRepositoryTest {
         coEvery { mockSdk.getGrades(1) } returns (emptyList<Grade>() to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock, true)
+            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
         }
 
         assertEquals(0, grades.first.size)

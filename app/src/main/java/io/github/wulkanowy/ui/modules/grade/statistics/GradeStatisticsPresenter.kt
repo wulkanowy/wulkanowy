@@ -10,6 +10,11 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.rxSingle
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,6 +37,8 @@ class GradeStatisticsPresenter @Inject constructor(
     private var currentSubjectName: String = "Wszystkie"
 
     private lateinit var lastError: Throwable
+
+    private var loadingJob: Job? = null
 
     var currentType: ViewType = ViewType.PARTIAL
         private set
@@ -142,33 +149,30 @@ class GradeStatisticsPresenter @Inject constructor(
         currentType = type
 
         Timber.i("Loading grade stats data started")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-            .flatMap { student ->
-                rxSingle { semesterRepository.getSemesters(student) }.flatMap { semesters ->
-                    val semester = semesters.first { item -> item.semesterId == semesterId }
 
-                    rxSingle {
-                        with(gradeStatisticsRepository) {
-                            when (type) {
-                                ViewType.SEMESTER -> getGradesStatistics(student, semester, currentSubjectName, true, forceRefresh)
-                                ViewType.PARTIAL -> getGradesStatistics(student, semester, currentSubjectName, false, forceRefresh)
-                                ViewType.POINTS -> getGradesPointsStatistics(student, semester, currentSubjectName, forceRefresh)
-                            }
-                        }
-                    }
+        loadingJob?.cancel()
+        loadingJob = launch {
+            val student = studentRepository.getCurrentStudent()
+            val semesters = semesterRepository.getSemesters(student)
+            val semester = semesters.first { item -> item.semesterId == semesterId }
+
+            with(gradeStatisticsRepository) {
+                when (type) {
+                    ViewType.SEMESTER -> getGradesStatistics(student, semester, currentSubjectName, true, forceRefresh)
+                    ViewType.PARTIAL -> getGradesStatistics(student, semester, currentSubjectName, false, forceRefresh)
+                    ViewType.POINTS -> getGradesPointsStatistics(student, semester, currentSubjectName, forceRefresh)
                 }
-            }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doFinally {
+            }.onEach {
                 view?.run {
                     showRefresh(false)
                     showProgress(false)
                     enableSwipe(true)
                     notifyParentDataLoaded(semesterId)
                 }
-            }
-            .subscribe({
+            }.catch {
+                Timber.i("Loading grade stats result: An exception occurred")
+                errorHandler.dispatch(it)
+            }.collect {
                 Timber.i("Loading grade stats result: Success")
                 view?.run {
                     showEmpty(it.isEmpty())
@@ -183,10 +187,8 @@ class GradeStatisticsPresenter @Inject constructor(
                     "items" to it.size,
                     "force_refresh" to forceRefresh
                 )
-            }) {
-                Timber.i("Loading grade stats result: An exception occurred")
-                errorHandler.dispatch(it)
-            })
+            }
+        }
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
