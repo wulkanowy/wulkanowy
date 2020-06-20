@@ -2,13 +2,14 @@ package io.github.wulkanowy.ui.base
 
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.rx2.rxCompletable
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
@@ -39,24 +40,25 @@ open class BasePresenter<T : BaseView>(
 
     fun onExpiredLoginSelected() {
         Timber.i("Attempt to switch the student after the session expires")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent(false) }
-            .flatMapCompletable { rxCompletable { studentRepository.logoutStudent(it) } }
-            .andThen(rxSingle { studentRepository.getSavedStudents(false) })
-            .flatMapCompletable {
-                if (it.isNotEmpty()) {
+        launch {
+            flow {
+                val student = studentRepository.getCurrentStudent(false)
+                studentRepository.logoutStudent(student)
+
+                val students = studentRepository.getSavedStudents(false)
+                if (students.isNotEmpty()) {
                     Timber.i("Switching current student")
-                    rxCompletable { studentRepository.switchStudent(it[0]) }
-                } else Completable.complete()
-            }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                Timber.i("Switch student result: Open login view")
-                view?.openClearLoginView()
-            }, {
+                    studentRepository.switchStudent(students[0])
+                    emit(students[0])
+                } else emit(null)
+            }.catch {
                 Timber.i("Switch student result: An exception occurred")
                 errorHandler.dispatch(it)
-            }))
+            }.collect {
+                Timber.i("Switch student result: Open login view")
+                view?.openClearLoginView()
+            }
+        }
     }
 
     open fun onDetachView() {
