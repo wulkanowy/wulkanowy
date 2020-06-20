@@ -8,8 +8,12 @@ import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
-import io.reactivex.Single
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -126,35 +130,32 @@ class LoginAdvancedPresenter @Inject constructor(
     fun onSignInClick() {
         if (!validateCredentials()) return
 
-        disposable.add(getStudentsAppropriatesToLoginType()
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doOnSubscribe {
+        launch {
+            flowOf(getStudentsAppropriatesToLoginType()).onStart {
                 view?.apply {
                     hideSoftKeyboard()
                     showProgress(true)
                     showContent(false)
                 }
                 Timber.i("Login started")
-            }
-            .doFinally {
+            }.onCompletion {
                 view?.apply {
                     showProgress(false)
                     showContent(true)
                 }
-            }
-            .subscribe({
-                Timber.i("Login result: Success")
-                analytics.logEvent("registration_form", "success" to true, "students" to it.size, "error" to "No error")
-                view?.notifyParentAccountLogged(it)
-            }, {
+            }.catch {
                 Timber.i("Login result: An exception occurred")
                 analytics.logEvent("registration_form", "success" to false, "students" to -1, "error" to it.message.ifNullOrBlank { "No message" })
                 loginErrorHandler.dispatch(it)
-            }))
+            }.collect {
+                Timber.i("Login result: Success")
+                analytics.logEvent("registration_form", "success" to true, "students" to it.size, "error" to "No error")
+                view?.notifyParentAccountLogged(it)
+            }
+        }
     }
 
-    private fun getStudentsAppropriatesToLoginType(): Single<List<Student>> {
+    private suspend fun getStudentsAppropriatesToLoginType(): List<Student> {
         val email = view?.formUsernameValue.orEmpty()
         val password = view?.formPassValue.orEmpty()
         val endpoint = view?.formHostValue.orEmpty()
@@ -163,12 +164,10 @@ class LoginAdvancedPresenter @Inject constructor(
         val symbol = view?.formSymbolValue.orEmpty()
         val token = view?.formTokenValue.orEmpty()
 
-        return rxSingle {
-            when (Sdk.Mode.valueOf(view?.formLoginType ?: "")) {
-                Sdk.Mode.API -> studentRepository.getStudentsApi(pin, symbol, token)
-                Sdk.Mode.SCRAPPER -> studentRepository.getStudentsScrapper(email, password, endpoint, symbol)
-                Sdk.Mode.HYBRID -> studentRepository.getStudentsHybrid(email, password, endpoint, symbol)
-            }
+        return when (Sdk.Mode.valueOf(view?.formLoginType ?: "")) {
+            Sdk.Mode.API -> studentRepository.getStudentsApi(pin, symbol, token)
+            Sdk.Mode.SCRAPPER -> studentRepository.getStudentsScrapper(email, password, endpoint, symbol)
+            Sdk.Mode.HYBRID -> studentRepository.getStudentsHybrid(email, password, endpoint, symbol)
         }
     }
 
