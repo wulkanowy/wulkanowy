@@ -6,7 +6,12 @@ import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -75,34 +80,35 @@ class LoginFormPresenter @Inject constructor(
 
         if (!validateCredentials(email, password, host)) return
 
-        disposable.add(rxSingle { studentRepository.getStudentsScrapper(email, password, host, symbol) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doOnSubscribe {
-                view?.apply {
-                    hideSoftKeyboard()
-                    showProgress(true)
-                    showContent(false)
+        launch {
+            flowOf(studentRepository.getStudentsScrapper(email, password, host, symbol))
+                .onStart {
+                    view?.apply {
+                        hideSoftKeyboard()
+                        showProgress(true)
+                        showContent(false)
+                    }
+                    Timber.i("Login started")
                 }
-                Timber.i("Login started")
-            }
-            .doFinally {
-                view?.apply {
-                    showProgress(false)
-                    showContent(true)
+                .onCompletion {
+                    view?.apply {
+                        showProgress(false)
+                        showContent(true)
+                    }
                 }
-            }
-            .subscribe({
-                Timber.i("Login result: Success")
-                analytics.logEvent("registration_form", "success" to true, "students" to it.size, "scrapperBaseUrl" to host, "error" to "No error")
-                view?.notifyParentAccountLogged(it, Triple(email, password, host))
-            }, {
-                Timber.i("Login result: An exception occurred")
-                analytics.logEvent("registration_form", "success" to false, "students" to -1, "scrapperBaseUrl" to host, "error" to it.message.ifNullOrBlank { "No message" })
-                loginErrorHandler.dispatch(it)
-                lastError = it
-                view?.showContact(true)
-            }))
+                .catch {
+                    Timber.i("Login result: An exception occurred")
+                    analytics.logEvent("registration_form", "success" to false, "students" to -1, "scrapperBaseUrl" to host, "error" to it.message.ifNullOrBlank { "No message" })
+                    loginErrorHandler.dispatch(it)
+                    lastError = it
+                    view?.showContact(true)
+                }
+                .collect {
+                    Timber.i("Login result: Success")
+                    analytics.logEvent("registration_form", "success" to true, "students" to it.size, "scrapperBaseUrl" to host, "error" to "No error")
+                    view?.notifyParentAccountLogged(it, Triple(email, password, host))
+                }
+        }
     }
 
     fun onFaqClick() {
