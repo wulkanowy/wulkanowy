@@ -4,12 +4,19 @@ import com.mikepenz.aboutlibraries.entity.Library
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.SchedulersProvider
-import io.reactivex.Single
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class LicensePresenter @Inject constructor(
     schedulers: SchedulersProvider,
+    private val dispatchers: DispatchersProvider,
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository
 ) : BasePresenter<LicenseView>(errorHandler, studentRepository, schedulers) {
@@ -25,10 +32,16 @@ class LicensePresenter @Inject constructor(
     }
 
     private fun loadData() {
-        disposable.add(Single.fromCallable { view?.appLibraries.orEmpty() }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .doOnEvent { _, _ -> view?.showProgress(false) }
-            .subscribe({ view?.run { updateData(it) } }, { errorHandler.dispatch(it) }))
+        launch {
+            flowOf(withContext(dispatchers.backgroundThread) {
+                view?.appLibraries.orEmpty()
+            }).onCompletion {
+                view?.showProgress(false)
+            }.catch {
+                errorHandler.dispatch(it)
+            }.collect {
+                view?.updateData(it)
+            }
+        }
     }
 }
