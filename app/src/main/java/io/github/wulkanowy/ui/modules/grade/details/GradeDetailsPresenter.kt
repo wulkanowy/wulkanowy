@@ -146,7 +146,7 @@ class GradeDetailsPresenter @Inject constructor(
             flow {
                 val student = studentRepository.getCurrentStudent()
                 val semesters = semesterRepository.getSemesters(student)
-                val semester = semesters.first { item -> item.semesterId == currentSemesterId }
+                val semester = semesters.first { item -> item.semesterId == semesterId }
                 emit(gradeRepository.refreshGrades(student, semester))
             }.onEach { afterLoading(semesterId) }.catch { handleError(it) }.collect()
         }

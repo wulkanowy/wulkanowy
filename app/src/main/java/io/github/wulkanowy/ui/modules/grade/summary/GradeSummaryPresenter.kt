@@ -1,6 +1,8 @@
 package io.github.wulkanowy.ui.modules.grade.summary
 
 import io.github.wulkanowy.data.db.entities.GradeSummary
+import io.github.wulkanowy.data.repositories.grade.GradeRepository
+import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -11,6 +13,7 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -21,11 +24,15 @@ class GradeSummaryPresenter @Inject constructor(
     schedulers: SchedulersProvider,
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
+    private val semesterRepository: SemesterRepository,
+    private val gradeRepository: GradeRepository,
     private val averageProvider: GradeAverageProvider,
     private val analytics: FirebaseAnalyticsHelper
 ) : BasePresenter<GradeSummaryView>(errorHandler, studentRepository, schedulers) {
 
     private lateinit var lastError: Throwable
+
+    private var refreshJob: Job? = null
 
     private var loadingJob: Job? = null
 
@@ -38,22 +45,33 @@ class GradeSummaryPresenter @Inject constructor(
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         Timber.i("Loading grade summary data started")
 
+        if (forceRefresh) refreshData(semesterId)
+        else loadData(semesterId)
+    }
+
+    private fun refreshData(semesterId: Int) {
+        refreshJob?.cancel()
+        refreshJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semesters = semesterRepository.getSemesters(student)
+                val semester = semesters.first { item -> item.semesterId == semesterId }
+                emit(gradeRepository.refreshGrades(student, semester))
+            }.onEach { afterLoading(semesterId) }.catch { handleError(it) }.collect()
+        }
+    }
+
+    private fun loadData(semesterId: Int) {
         loadingJob?.cancel()
         loadingJob = launch {
             val student = studentRepository.getCurrentStudent()
-            averageProvider.getGradesDetailsWithAverage(student, semesterId) // TODO
+            averageProvider.getGradesDetailsWithAverage(student, semesterId)
                 .map { createGradeSummaryItems(it) }
                 .onEach {
-                    view?.run {
-                        showRefresh(false)
-                        showProgress(false)
-                        enableSwipe(true)
-                        notifyParentDataLoaded(semesterId)
-                    }
+                    afterLoading(semesterId)
                 }
                 .catch {
-                    Timber.i("Loading grade summary result: An exception occurred")
-                    errorHandler.dispatch(it)
+                    handleError(it)
                 }
                 .collect {
                     Timber.i("Loading grade summary result: Success")
@@ -66,11 +84,24 @@ class GradeSummaryPresenter @Inject constructor(
                     analytics.logEvent(
                         "load_data",
                         "type" to "grade_summary",
-                        "items" to it.size,
-                        "force_refresh" to forceRefresh
+                        "items" to it.size
                     )
                 }
         }
+    }
+
+    private fun afterLoading(semesterId: Int) {
+        view?.run {
+            showRefresh(false)
+            showProgress(false)
+            enableSwipe(true)
+            notifyParentDataLoaded(semesterId)
+        }
+    }
+
+    private fun handleError(error: Throwable) {
+        Timber.i("Loading grade summary result: An exception occurred")
+        errorHandler.dispatch(error)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
