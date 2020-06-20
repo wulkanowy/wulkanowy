@@ -16,6 +16,14 @@ import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.rxSingle
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
@@ -41,6 +49,8 @@ class AttendancePresenter @Inject constructor(
     private lateinit var lastError: Throwable
 
     private val attendanceToExcuseList = mutableListOf<Attendance>()
+
+    private var loadingJob: Job? = null
 
     fun onAttachView(view: AttendanceView, date: Long?) {
         super.onAttachView(view)
@@ -77,7 +87,7 @@ class AttendancePresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the attendance")
-        loadData(currentDate, true)
+        refreshData()
     }
 
     fun onRetry() {
@@ -85,7 +95,7 @@ class AttendancePresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        loadData(currentDate, true)
+        refreshData()
     }
 
     fun onDetailsClick() {
@@ -181,32 +191,33 @@ class AttendancePresenter @Inject constructor(
             })
     }
 
-    private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
+    private fun refreshData() {
+        launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emit(attendanceRepository.refreshAttendance(student, semester, currentDate, currentDate))
+            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+        }
+    }
+
+    private fun loadData(date: LocalDate) {
         Timber.i("Loading attendance data started")
         currentDate = date
-        disposable.apply {
-            clear()
-            add(rxSingle { studentRepository.getCurrentStudent() }
-                .flatMap { student ->
-                    rxSingle { semesterRepository.getCurrentSemester(student) }.flatMap { semester ->
-                        rxSingle { attendanceRepository.getAttendance(student, semester, date, date, forceRefresh) }
-                    }
-                }
-                .map { list ->
-                    if (prefRepository.isShowPresent) list
-                    else list.filter { !it.presence }
-                }
-                .map { items -> items.sortedBy { it.number } }
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doFinally {
-                    view?.run {
-                        hideRefresh()
-                        showProgress(false)
-                        enableSwipe(true)
-                    }
-                }
-                .subscribe({
+
+        loadingJob?.cancel()
+        loadingJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emitAll(attendanceRepository.getAttendance(student, semester, date, date))
+            }.map {
+                if (prefRepository.isShowPresent) it
+                else it.filter { item -> !item.presence }
+            }.map { it.sortedBy { item -> item.number } }
+                .onEach { afterLoading() }
+                .catch { handleError(it) }
+                .collect {
                     Timber.i("Loading attendance result: Success")
                     view?.apply {
                         updateData(it)
@@ -218,15 +229,23 @@ class AttendancePresenter @Inject constructor(
                     analytics.logEvent(
                         "load_data",
                         "type" to "attendance",
-                        "items" to it.size,
-                        "force_refresh" to forceRefresh
+                        "items" to it.size
                     )
-                }) {
-                    Timber.i("Loading attendance result: An exception occurred")
-                    errorHandler.dispatch(it)
                 }
-            )
         }
+    }
+
+    private fun afterLoading() {
+        view?.run {
+            hideRefresh()
+            showProgress(false)
+            enableSwipe(true)
+        }
+    }
+
+    private fun handleError(error: Throwable) {
+        Timber.i("Loading attendance result: An exception occurred")
+        errorHandler.dispatch(error)
     }
 
     private fun excuseAbsence(reason: String?, toExcuseList: List<Attendance>) {
@@ -255,7 +274,7 @@ class AttendancePresenter @Inject constructor(
                         showExcuseButton(false)
                         showMessage(excuseSuccessString)
                     }
-                    loadData(currentDate, true)
+                    refreshData()
                 }) {
                     Timber.i("Excusing for absence result: An exception occurred")
                     view?.showProgress(false)

@@ -4,16 +4,26 @@ import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.rx2.rxCompletable
 import kotlinx.coroutines.rx2.rxSingle
 import timber.log.Timber
+import kotlin.coroutines.CoroutineContext
 
 open class BasePresenter<T : BaseView>(
     protected val errorHandler: ErrorHandler,
     protected val studentRepository: StudentRepository,
     protected val schedulers: SchedulersProvider
-) {
+) : CoroutineScope {
 
+    private val job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    @Deprecated("Use flow instead :)")
     val disposable = CompositeDisposable()
 
     var view: T? = null
@@ -52,6 +62,7 @@ open class BasePresenter<T : BaseView>(
     open fun onDetachView() {
         view = null
         disposable.clear()
+        job.cancel()
         errorHandler.clear()
     }
 }
