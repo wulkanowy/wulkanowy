@@ -25,6 +25,7 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toFormattedString
 import io.reactivex.Maybe
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.rx2.rxMaybe
 import kotlinx.coroutines.rx2.rxSingle
 import org.threeten.bp.LocalDate
@@ -113,7 +114,7 @@ class TimetableWidgetFactory(
                 }
                 .flatMap { student ->
                     rxMaybe { semesterRepository.getCurrentSemester(student) }.flatMap { semester ->
-                        rxMaybe { timetableRepository.getTimetable(student, semester, date, date) }
+                        rxMaybe { timetableRepository.getTimetable(student, semester, date, date).first() }
                     }
                 }
                 .map { items -> items.sortedWith(compareBy({ it.number }, { !it.isStudentPlan })) }
