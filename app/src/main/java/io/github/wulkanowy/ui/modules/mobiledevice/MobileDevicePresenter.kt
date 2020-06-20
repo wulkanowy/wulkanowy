@@ -150,7 +150,8 @@ class MobileDevicePresenter @Inject constructor(
             flow {
                 val student = studentRepository.getCurrentStudent()
                 val semester = semesterRepository.getCurrentSemester(student)
-                emit(mobileDeviceRepository.unregisterDevice(student, semester, device))
+                mobileDeviceRepository.unregisterDevice(student, semester, device)
+                emit(mobileDeviceRepository.refreshDevices(student, semester))
             }.catch {
                 Timber.i("Unregister device result: An exception occurred")
                 errorHandler.dispatch(it)
