@@ -16,7 +16,7 @@ class SubjectRepository @Inject constructor(
     private val remote: SubjectRemote
 ) {
 
-    suspend fun refreshSubjects(student: Student, semester: Semester) {
+    private suspend fun refreshSubjects(student: Student, semester: Semester) {
         val new = remote.getSubjects(student, semester)
         val old = local.getSubjects(semester).first()
 
