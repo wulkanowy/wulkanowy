@@ -4,6 +4,9 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.utils.uniqueSubtract
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,15 +16,19 @@ class SubjectRepository @Inject constructor(
     private val remote: SubjectRemote
 ) {
 
-    suspend fun getSubjects(student: Student, semester: Semester, forceRefresh: Boolean = false): List<Subject> {
-        return local.getSubjects(semester).filter { !forceRefresh }.ifEmpty {
-            val new = remote.getSubjects(student, semester)
-            val old = local.getSubjects(semester)
+    suspend fun refreshSubjects(student: Student, semester: Semester) {
+        val new = remote.getSubjects(student, semester)
+        val old = local.getSubjects(semester).first()
 
-            local.deleteSubjects(old.uniqueSubtract(new))
-            local.saveSubjects(new.uniqueSubtract(old))
+        local.deleteSubjects(old uniqueSubtract new)
+        local.saveSubjects(new uniqueSubtract old)
+    }
 
-            local.getSubjects(semester)
+    fun getSubjects(student: Student, semester: Semester): Flow<List<Subject>> {
+        return local.getSubjects(semester).map {
+            if (it.isNotEmpty()) return@map it
+            refreshSubjects(student, semester)
+            it
         }
     }
 }

@@ -13,6 +13,7 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.rxSingle
@@ -127,7 +128,7 @@ class GradeStatisticsPresenter @Inject constructor(
         disposable.add(rxSingle { studentRepository.getCurrentStudent() }
             .flatMap { student ->
                 rxSingle { semesterRepository.getCurrentSemester(student) }.flatMap { semester ->
-                    rxSingle { subjectRepository.getSubjects(student, semester) }
+                    rxSingle { subjectRepository.getSubjects(student, semester).first() }
                 }
             }
             .doOnSuccess { subjects = it }
