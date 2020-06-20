@@ -17,10 +17,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.rxCompletable
-import kotlinx.coroutines.rx2.rxSingle
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -77,22 +76,22 @@ class GradeDetailsPresenter @Inject constructor(
 
     fun onMarkAsReadSelected(): Boolean {
         Timber.i("Select mark grades as read")
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-            .flatMap { rxSingle { semesterRepository.getSemesters(it) } }
-            .flatMap { rxSingle { gradeRepository.getUnreadGrades(it.first { item -> item.semesterId == currentSemesterId }).first() } }
-            .map { it.map { grade -> grade.apply { isRead = true } } }
-            .flatMapCompletable {
-                Timber.i("Mark as read ${it.size} grades")
-                rxCompletable { gradeRepository.updateGrades(it) }
-            }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                Timber.i("Mark as read result: Success")
-            }, {
+        launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semesters = semesterRepository.getSemesters(student)
+                val semester = semesters.first { item -> item.semesterId == currentSemesterId }
+                val unreadGrades = gradeRepository.getUnreadGrades(semester).first()
+
+                Timber.i("Mark as read ${unreadGrades.size} grades")
+                emit(gradeRepository.updateGrades(unreadGrades.map { it.apply { isRead = true } }))
+            }.catch {
                 Timber.i("Mark as read result: An exception occurred")
                 errorHandler.dispatch(it)
-            }))
+            }.collect {
+                Timber.i("Mark as read result: Success")
+            }
+        }
         return true
     }
 
@@ -133,7 +132,6 @@ class GradeDetailsPresenter @Inject constructor(
         }
         refreshJob?.cancel()
         loadingJob?.cancel()
-        disposable.clear()
     }
 
     fun updateMarkAsDoneButton() {
@@ -233,14 +231,11 @@ class GradeDetailsPresenter @Inject constructor(
 
     private fun updateGrade(grade: Grade) {
         Timber.i("Attempt to update grade ${grade.id}")
-        disposable.add(rxCompletable { gradeRepository.updateGrade(grade) }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                Timber.i("Update grade result: Success")
-            }) { error ->
+        launch {
+            flowOf(gradeRepository.updateGrade(grade)).catch {
                 Timber.i("Update grade result: An exception occurred")
-                errorHandler.dispatch(error)
-            })
+                errorHandler.dispatch(it)
+            }.collect { Timber.i("Update grade result: Success") }
+        }
     }
 }

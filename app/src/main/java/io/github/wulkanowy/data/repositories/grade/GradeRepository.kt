@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.transform
 import org.threeten.bp.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -76,19 +75,19 @@ class GradeRepository @Inject constructor(
     }
 
     fun getUnreadGrades(semester: Semester): Flow<List<Grade>> {
-        return local.getGradesDetails(semester).transform { emit(it.filter { grade -> !grade.isRead }) }
+        return local.getGradesDetails(semester).map { it.filter { grade -> !grade.isRead } }
     }
 
     fun getNotNotifiedGrades(semester: Semester): Flow<List<Grade>> {
-        return local.getGradesDetails(semester).transform { emit(it.filter { grade -> !grade.isNotified }) }
+        return local.getGradesDetails(semester).map { it.filter { grade -> !grade.isNotified } }
     }
 
     fun getNotNotifiedPredictedGrades(semester: Semester): Flow<List<GradeSummary>> {
-        return local.getGradesSummary(semester).transform { emit(it.filter { gradeSummary -> !gradeSummary.isPredictedGradeNotified }) }
+        return local.getGradesSummary(semester).map { it.filter { gradeSummary -> !gradeSummary.isPredictedGradeNotified } }
     }
 
     fun getNotNotifiedFinalGrades(semester: Semester): Flow<List<GradeSummary>> {
-        return local.getGradesSummary(semester).transform { emit(it.filter { gradeSummary -> !gradeSummary.isFinalGradeNotified }) }
+        return local.getGradesSummary(semester).map { it.filter { gradeSummary -> !gradeSummary.isFinalGradeNotified } }
     }
 
     suspend fun updateGrade(grade: Grade) {
