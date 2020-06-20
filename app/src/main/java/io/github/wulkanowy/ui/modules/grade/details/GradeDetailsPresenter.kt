@@ -14,6 +14,7 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -158,7 +159,7 @@ class GradeDetailsPresenter @Inject constructor(
             flow {
                 val student = studentRepository.getCurrentStudent()
                 emitAll(averageProvider.getGradesDetailsWithAverage(student, semesterId))
-            }.onEach {
+            }.distinctUntilChanged().onEach {
                 afterLoading(semesterId)
             }.catch {
                 handleError(it)
