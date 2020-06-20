@@ -167,12 +167,13 @@ class GradeDetailsPresenter @Inject constructor(
                 Timber.i("Loading grade details result: Success")
                 newGradesAmount = grades.sumBy { it.grades.sumBy { grade -> if (!grade.isRead) 1 else 0 } }
                 updateMarkAsDoneButton()
+                val items = createGradeItems(grades)
                 view?.run {
-                    showEmpty(grades.isEmpty())
+                    showEmpty(items.isEmpty())
                     showErrorView(false)
-                    showContent(grades.isNotEmpty())
+                    showContent(items.isNotEmpty())
                     updateData(
-                        data = createGradeItems(grades),
+                        data = items,
                         isGradeExpandable = preferencesRepository.isGradeExpandable,
                         gradeColorTheme = preferencesRepository.gradeColorTheme
                     )
