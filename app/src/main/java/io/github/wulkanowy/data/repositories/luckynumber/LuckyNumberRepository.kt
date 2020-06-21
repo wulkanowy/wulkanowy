@@ -25,10 +25,6 @@ class LuckyNumberRepository @Inject constructor(
                 if (notify) isNotified = false
             })
         }
-
-        local.saveLuckyNumber(new?.apply {
-            if (notify) isNotified = false
-        })
     }
 
     fun getLuckyNumber(student: Student, notify: Boolean = false): Flow<LuckyNumber?> {
