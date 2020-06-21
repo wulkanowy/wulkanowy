@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -146,7 +147,7 @@ class GradeDetailsPresenter @Inject constructor(
                 val semesters = semesterRepository.getSemesters(student)
                 val semester = semesters.first { item -> item.semesterId == semesterId }
                 emit(gradeRepository.refreshGrades(student, semester))
-            }.onEach { afterLoading(semesterId) }.catch { handleError(it) }.collect()
+            }.onCompletion { afterLoading(semesterId) }.catch { handleError(it, semesterId) }.collect()
         }
     }
 
@@ -161,7 +162,7 @@ class GradeDetailsPresenter @Inject constructor(
             }.distinctUntilChanged().onEach {
                 afterLoading(semesterId)
             }.catch {
-                handleError(it)
+                handleError(it, semesterId)
             }.collect { grades ->
                 Timber.i("Loading grade details result: Success")
                 newGradesAmount = grades.sumBy { it.grades.sumBy { grade -> if (!grade.isRead) 1 else 0 } }
@@ -195,9 +196,10 @@ class GradeDetailsPresenter @Inject constructor(
         }
     }
 
-    private fun handleError(error: Throwable) {
+    private fun handleError(error: Throwable, semesterId: Int) {
         Timber.i("Loading grade details result: An exception occurred")
         errorHandler.dispatch(error)
+        afterLoading(semesterId)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

@@ -13,8 +13,10 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -57,36 +59,36 @@ class GradeSummaryPresenter @Inject constructor(
                 val semesters = semesterRepository.getSemesters(student)
                 val semester = semesters.first { item -> item.semesterId == semesterId }
                 emit(gradeRepository.refreshGrades(student, semester))
-            }.onEach { afterLoading(semesterId) }.catch { handleError(it) }.collect()
+            }.onCompletion { afterLoading(semesterId) }.catch { handleError(it, semesterId) }.collect()
         }
     }
 
     private fun loadData(semesterId: Int) {
         loadingJob?.cancel()
         loadingJob = launch {
-            val student = studentRepository.getCurrentStudent()
-            averageProvider.getGradesDetailsWithAverage(student, semesterId)
-                .map { createGradeSummaryItems(it) }
-                .onEach {
-                    afterLoading(semesterId)
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                emitAll(averageProvider.getGradesDetailsWithAverage(student, semesterId))
+            }.map {
+                createGradeSummaryItems(it)
+            }.onEach {
+                afterLoading(semesterId)
+            }.catch {
+                handleError(it, semesterId)
+            }.collect {
+                Timber.i("Loading grade summary result: Success")
+                view?.run {
+                    showEmpty(it.isEmpty())
+                    showContent(it.isNotEmpty())
+                    showErrorView(false)
+                    updateData(it)
                 }
-                .catch {
-                    handleError(it)
-                }
-                .collect {
-                    Timber.i("Loading grade summary result: Success")
-                    view?.run {
-                        showEmpty(it.isEmpty())
-                        showContent(it.isNotEmpty())
-                        showErrorView(false)
-                        updateData(it)
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "grade_summary",
-                        "items" to it.size
-                    )
-                }
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "grade_summary",
+                    "items" to it.size
+                )
+            }
         }
     }
 
@@ -99,9 +101,10 @@ class GradeSummaryPresenter @Inject constructor(
         }
     }
 
-    private fun handleError(error: Throwable) {
+    private fun handleError(error: Throwable, semesterId: Int) {
         Timber.i("Loading grade summary result: An exception occurred")
         errorHandler.dispatch(error)
+        afterLoading(semesterId)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

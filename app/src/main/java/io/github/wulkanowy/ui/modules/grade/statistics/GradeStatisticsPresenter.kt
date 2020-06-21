@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -161,7 +162,7 @@ class GradeStatisticsPresenter @Inject constructor(
                         ViewType.POINTS -> refreshGradePointStatistics(student, semester)
                     }
                 })
-            }.onEach { afterLoading(semesterId) }.catch { handleErrors(it) }.collect()
+            }.onCompletion { afterLoading(semesterId) }.catch { handleErrors(it, semesterId) }.collect()
         }
     }
 
@@ -188,7 +189,7 @@ class GradeStatisticsPresenter @Inject constructor(
             }.onEach {
                 afterLoading(semesterId)
             }.catch {
-                handleErrors(it)
+                handleErrors(it, semesterId)
             }.collect {
                 Timber.i("Loading grade stats result: Success")
                 view?.run {
@@ -216,9 +217,10 @@ class GradeStatisticsPresenter @Inject constructor(
         }
     }
 
-    private fun handleErrors(error: Throwable) {
+    private fun handleErrors(error: Throwable, semesterId: Int) {
         Timber.i("Loading grade stats result: An exception occurred")
         errorHandler.dispatch(error)
+        afterLoading(semesterId)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
