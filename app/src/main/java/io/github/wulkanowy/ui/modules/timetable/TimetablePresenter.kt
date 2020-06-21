@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.rxSingle
@@ -144,7 +145,7 @@ class TimetablePresenter @Inject constructor(
                 val student = studentRepository.getCurrentStudent()
                 val semester = semesterRepository.getCurrentSemester(student)
                 emit(timetableRepository.refreshTimetable(student, semester, date, date))
-            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+            }.onCompletion { afterLoading() }.catch { handleError(it) }.collect()
         }
     }
 
@@ -194,6 +195,7 @@ class TimetablePresenter @Inject constructor(
     private fun handleError(error: Throwable) {
         Timber.i("Loading timetable result: An exception occurred")
         errorHandler.dispatch(error)
+        afterLoading()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
