@@ -107,6 +107,7 @@ class LoginStudentSelectPresenter @Inject constructor(
             flow { emit(studentRepository.saveStudents(students)) }
                 .map { students.first().apply { id = it.first() } }
                 .flatMapConcat { flow { emit(studentRepository.switchStudent(it)) } }
+                .flowOn(dispatchers.backgroundThread)
                 .onStart {
                     view?.apply {
                         showProgress(true)
@@ -114,7 +115,6 @@ class LoginStudentSelectPresenter @Inject constructor(
                     }
                     Timber.i("Registration started")
                 }
-                .flowOn(dispatchers.backgroundThread)
                 .catch { error ->
                     students.forEach { analytics.logEvent("registration_student_select", "success" to false, "scrapperBaseUrl" to it.scrapperBaseUrl, "symbol" to it.symbol, "error" to error.message.ifNullOrBlank { "No message" }) }
                     Timber.i("Registration result: An exception occurred ")
