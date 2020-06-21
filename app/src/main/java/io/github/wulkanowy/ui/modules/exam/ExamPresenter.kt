@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.rxSingle
@@ -122,7 +123,7 @@ class ExamPresenter @Inject constructor(
                 val student = studentRepository.getCurrentStudent()
                 val semester = semesterRepository.getCurrentSemester(student)
                 emit(examRepository.refreshExams(student, semester, date, date))
-            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+            }.onCompletion { afterLoading() }.catch { handleError(it) }.collect()
         }
     }
 
@@ -170,6 +171,7 @@ class ExamPresenter @Inject constructor(
     private fun handleError(error: Throwable) {
         Timber.i("Loading exam result: An exception occurred")
         errorHandler.dispatch(error)
+        afterLoading()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
