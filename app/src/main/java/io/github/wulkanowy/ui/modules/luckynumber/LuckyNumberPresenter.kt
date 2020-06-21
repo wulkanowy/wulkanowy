@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -48,7 +49,7 @@ class LuckyNumberPresenter @Inject constructor(
             flow {
                 val student = studentRepository.getCurrentStudent()
                 emit(luckyNumberRepository.refreshLuckyNumber(student))
-            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+            }.onCompletion { afterLoading() }.catch { handleError(it) }.collect()
         }
     }
 
@@ -101,6 +102,7 @@ class LuckyNumberPresenter @Inject constructor(
     private fun handleError(error: Throwable) {
         Timber.i("Loading lucky number result: An exception occurred")
         errorHandler.dispatch(error)
+        afterLoading()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
