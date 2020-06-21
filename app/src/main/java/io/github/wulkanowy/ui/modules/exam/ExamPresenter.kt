@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.rxSingle
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
 import org.threeten.bp.LocalDate.ofEpochDay
@@ -103,17 +102,18 @@ class ExamPresenter @Inject constructor(
     }
 
     private fun setBaseDateOnHolidays() {
-        disposable.add(rxSingle { studentRepository.getCurrentStudent() }
-            .flatMap { rxSingle { semesterRepository.getCurrentSemester(it) } }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
+        launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                emit(semesterRepository.getCurrentSemester(student))
+            }.catch {
+                Timber.i("Loading semester result: An exception occurred")
+            }.collect {
                 baseDate = baseDate.getLastSchoolDayIfHoliday(it.schoolYear)
                 currentDate = baseDate
                 reloadNavigation()
-            }) {
-                Timber.i("Loading semester result: An exception occurred")
-            })
+            }
+        }
     }
 
     private fun refreshData(date: LocalDate) {
