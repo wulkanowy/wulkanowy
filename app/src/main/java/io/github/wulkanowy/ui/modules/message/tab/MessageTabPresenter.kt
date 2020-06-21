@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.xdrop.fuzzywuzzy.FuzzySearch
@@ -100,7 +101,7 @@ class MessageTabPresenter @Inject constructor(
                 val student = studentRepository.getCurrentStudent()
                 val semester = semesterRepository.getCurrentSemester(student)
                 emit(messageRepository.refreshMessages(student, semester, folder))
-            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+            }.onCompletion { afterLoading() }.catch { handleError(it) }.collect()
         }
     }
 
@@ -143,6 +144,7 @@ class MessageTabPresenter @Inject constructor(
     private fun handleError(error: Throwable) {
         Timber.i("Loading $folder message result: An exception occurred")
         errorHandler.dispatch(error)
+        afterLoading()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
