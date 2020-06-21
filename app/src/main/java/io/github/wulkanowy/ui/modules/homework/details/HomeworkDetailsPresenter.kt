@@ -9,7 +9,7 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,7 +31,7 @@ class HomeworkDetailsPresenter @Inject constructor(
     fun toggleDone(homework: Homework) {
         Timber.i("Homework details update start")
         launch {
-            flowOf(homeworkRepository.toggleDone(homework))
+            flow { emit(homeworkRepository.toggleDone(homework)) }
                 .catch {
                     Timber.i("Homework details update result: An exception occurred")
                     errorHandler.dispatch(it)

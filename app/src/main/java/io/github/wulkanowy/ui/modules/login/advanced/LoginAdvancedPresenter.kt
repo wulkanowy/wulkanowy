@@ -10,7 +10,7 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -131,7 +131,7 @@ class LoginAdvancedPresenter @Inject constructor(
         if (!validateCredentials()) return
 
         launch {
-            flowOf(getStudentsAppropriatesToLoginType()).onStart {
+            flow { emit(getStudentsAppropriatesToLoginType()) }.onStart {
                 view?.apply {
                     hideSoftKeyboard()
                     showProgress(true)

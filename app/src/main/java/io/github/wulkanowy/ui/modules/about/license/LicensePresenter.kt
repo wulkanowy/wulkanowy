@@ -8,7 +8,7 @@ import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.SchedulersProvider
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,9 +33,11 @@ class LicensePresenter @Inject constructor(
 
     private fun loadData() {
         launch {
-            flowOf(withContext(dispatchers.backgroundThread) {
-                view?.appLibraries.orEmpty()
-            }).onCompletion {
+            flow {
+                emit(withContext(dispatchers.backgroundThread) {
+                    view?.appLibraries.orEmpty()
+                })
+            }.onCompletion {
                 view?.showProgress(false)
             }.catch {
                 errorHandler.dispatch(it)

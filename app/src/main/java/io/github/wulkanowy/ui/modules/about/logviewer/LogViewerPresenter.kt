@@ -7,7 +7,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class LogViewerPresenter @Inject constructor(
 
     fun onShareLogsSelected(): Boolean {
         launch {
-            flowOf(loggerRepository.getLogFiles())
+            flow { emit(loggerRepository.getLogFiles()) }
                 .catch {
                     Timber.i("Loading logs files result: An exception occurred")
                     errorHandler.dispatch(it)
@@ -46,7 +46,7 @@ class LogViewerPresenter @Inject constructor(
 
     private fun loadLogFile() {
         launch {
-            flowOf(loggerRepository.getLastLogLines())
+            flow { emit(loggerRepository.getLastLogLines()) }
                 .catch {
                     Timber.i("Loading last log file result: An exception occurred")
                     errorHandler.dispatch(it)

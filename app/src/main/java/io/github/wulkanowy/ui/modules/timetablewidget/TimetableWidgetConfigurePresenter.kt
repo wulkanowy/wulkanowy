@@ -10,7 +10,7 @@ import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Co
 import io.github.wulkanowy.utils.SchedulersProvider
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -56,7 +56,7 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
 
     private fun loadData() {
         launch {
-            flowOf(studentRepository.getSavedStudents(false))
+            flow { emit(studentRepository.getSavedStudents(false)) }
                 .map { it to appWidgetId?.let { id -> sharedPref.getLong(getStudentWidgetKey(id), 0) } }
                 .map { (students, currentStudentId) ->
                     students.map { student -> student to (student.id == currentStudentId) }

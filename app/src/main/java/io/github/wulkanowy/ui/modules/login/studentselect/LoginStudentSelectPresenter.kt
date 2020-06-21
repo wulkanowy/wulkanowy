@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -83,7 +82,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         resetSelectedState()
         this.students = students
         launch {
-            flowOf(studentRepository.getSavedStudents(false))
+            flow { emit(studentRepository.getSavedStudents(false)) }
                 .map { savedStudents ->
                     students.map { student ->
                         student to savedStudents.any { compareStudents(student, it) }
@@ -107,7 +106,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         launch {
             flow { emit(studentRepository.saveStudents(students)) }
                 .map { students.first().apply { id = it.first() } }
-                .flatMapConcat { flowOf(studentRepository.switchStudent(it)) }
+                .flatMapConcat { flow { emit(studentRepository.switchStudent(it)) } }
                 .onStart {
                     view?.apply {
                         showProgress(true)

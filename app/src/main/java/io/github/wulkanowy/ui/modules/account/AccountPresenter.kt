@@ -7,13 +7,12 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.SchedulersProvider
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -84,7 +83,7 @@ class AccountPresenter @Inject constructor(
         } else {
             Timber.i("Attempt to change a student")
             launch {
-                flowOf(studentRepository.switchStudent(student))
+                flow { emit(studentRepository.switchStudent(student)) }
                     .onCompletion {
                         view?.dismissView()
                     }
@@ -111,7 +110,7 @@ class AccountPresenter @Inject constructor(
     private fun loadData() {
         Timber.i("Loading account data started")
         launch {
-            flowOf(studentRepository.getSavedStudents(false))
+            flow { emit(studentRepository.getSavedStudents(false)) }
                 .map { createAccountItems(it) }
                 .catch {
                     Timber.i("Loading account result: An exception occurred")
@@ -119,6 +118,7 @@ class AccountPresenter @Inject constructor(
                 }
                 .flowOn(dispatchers.backgroundThread)
                 .collect {
+                    println("A context with name: ${coroutineContext + CoroutineName("test")}")
                     Timber.i("Loading account result: Success")
                     view?.updateData(it)
                 }

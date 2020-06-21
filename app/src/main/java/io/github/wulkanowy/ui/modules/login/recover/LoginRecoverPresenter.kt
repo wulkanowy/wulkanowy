@@ -10,7 +10,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -107,7 +106,7 @@ class LoginRecoverPresenter @Inject constructor(
 
         captchaConfirmJob?.cancel()
         captchaConfirmJob = launch {
-            flowOf(recoverRepository.sendRecoverRequest(host, symbol, username, reCaptchaResponse))
+            flow { emit(recoverRepository.sendRecoverRequest(host, symbol, username, reCaptchaResponse)) }
                 .onStart {
                     view?.run {
                         showProgress(true)

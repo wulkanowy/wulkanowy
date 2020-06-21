@@ -8,7 +8,7 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -52,7 +52,7 @@ class LoginSymbolPresenter @Inject constructor(
         }
 
         launch {
-            flowOf(studentRepository.getStudentsScrapper(loginData!!.first, loginData!!.second, loginData!!.third, symbol)).onStart {
+            flow { emit(studentRepository.getStudentsScrapper(loginData!!.first, loginData!!.second, loginData!!.third, symbol)) }.onStart {
                 view?.apply {
                     hideSoftKeyboard()
                     showProgress(true)

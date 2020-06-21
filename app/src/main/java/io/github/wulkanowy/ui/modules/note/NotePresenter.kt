@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -142,7 +141,7 @@ class NotePresenter @Inject constructor(
     private fun updateNote(note: Note) {
         Timber.i("Attempt to update note ${note.id}")
         launch {
-            flowOf(noteRepository.updateNote(note)).catch {
+            flow { emit(noteRepository.updateNote(note)) }.catch {
                 Timber.i("Update note result: An exception occurred")
                 errorHandler.dispatch(it)
             }.collect { Timber.i("Update note result: Success") }

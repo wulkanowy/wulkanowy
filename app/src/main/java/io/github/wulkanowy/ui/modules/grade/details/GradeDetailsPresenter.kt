@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -234,7 +233,7 @@ class GradeDetailsPresenter @Inject constructor(
     private fun updateGrade(grade: Grade) {
         Timber.i("Attempt to update grade ${grade.id}")
         launch {
-            flowOf(gradeRepository.updateGrade(grade)).catch {
+            flow { emit(gradeRepository.updateGrade(grade)) }.catch {
                 Timber.i("Update grade result: An exception occurred")
                 errorHandler.dispatch(it)
             }.collect { Timber.i("Update grade result: Success") }
