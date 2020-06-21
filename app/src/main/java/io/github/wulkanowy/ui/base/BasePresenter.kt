@@ -19,10 +19,10 @@ open class BasePresenter<T : BaseView>(
     protected val schedulers: SchedulersProvider
 ) : CoroutineScope {
 
-    val job = Job()
+    var job: Job? = Job()
 
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+        get() = Dispatchers.Main + (job ?: Job())
 
     @Deprecated("Use flow instead :)")
     val disposable = CompositeDisposable()
@@ -31,6 +31,7 @@ open class BasePresenter<T : BaseView>(
 
     open fun onAttachView(view: T) {
         this.view = view
+        this.job = Job()
         errorHandler.apply {
             showErrorMessage = view::showError
             onSessionExpired = view::showExpiredDialog
@@ -64,7 +65,7 @@ open class BasePresenter<T : BaseView>(
     open fun onDetachView() {
         view = null
         disposable.clear()
-        job.cancel()
+        job?.cancel()
         errorHandler.clear()
     }
 }

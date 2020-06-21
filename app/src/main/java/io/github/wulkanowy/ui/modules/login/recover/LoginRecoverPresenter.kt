@@ -9,6 +9,7 @@ import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
@@ -65,7 +66,7 @@ class LoginRecoverPresenter @Inject constructor(
         if (!validateInput(username, host)) return
 
         launch {
-            flowOf(recoverRepository.getReCaptchaSiteKey(host, symbol.ifBlank { "Default" }))
+            flow { emit(recoverRepository.getReCaptchaSiteKey(host, symbol.ifBlank { "Default" })) }
                 .onStart {
                     view?.run {
                         hideSoftKeyboard()
