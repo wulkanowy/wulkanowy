@@ -10,19 +10,21 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFormattedString
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import timber.log.Timber
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.math.pow
 
@@ -47,7 +49,7 @@ class MessageTabPresenter @Inject constructor(
 
     private var messages = emptyList<Message>()
 
-    private val searchQuery = PublishSubject.create<String>()
+    private val searchChannel = Channel<String>()
 
     fun onAttachView(view: MessageTabView, folder: MessageFolder) {
         super.onAttachView(view)
@@ -159,23 +161,25 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onSearchQueryTextChange(query: String) {
-        if (query != searchQuery.toString())
-            searchQuery.onNext(query)
+        launch {
+            searchChannel.send(query)
+        }
     }
 
     private fun initializeSearchStream() {
-        disposable.add(searchQuery
-            .debounce(250, TimeUnit.MILLISECONDS)
-            .map { query ->
-                lastSearchQuery = query
-                getFilteredData(query)
-            }
-            .subscribeOn(schedulers.backgroundThread)
-            .observeOn(schedulers.mainThread)
-            .subscribe({
-                Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${it.size}")
-                updateData(it)
-            }) { Timber.e(it) })
+        launch {
+            searchChannel.consumeAsFlow()
+                .debounce(250)
+                .map { query ->
+                    lastSearchQuery = query
+                    getFilteredData(query)
+                }
+                .catch { Timber.e(it) }
+                .collect {
+                    Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${it.size}")
+                    updateData(it)
+                }
+        }
     }
 
     private fun getFilteredData(query: String): List<Message> {
