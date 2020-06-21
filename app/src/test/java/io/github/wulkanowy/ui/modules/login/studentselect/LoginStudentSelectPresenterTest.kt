@@ -93,6 +93,6 @@ class LoginStudentSelectPresenterTest {
         presenter.onSignIn()
         verify { loginStudentSelectView.showContent(false) }
         verify { loginStudentSelectView.showProgress(true) }
-        verify { errorHandler.dispatch(testException) }
+        verify { errorHandler.dispatch(match { testException.message == it.message }) }
     }
 }
