@@ -56,6 +56,8 @@ class AttendancePresenter @Inject constructor(
 
     private var loadingJob: Job? = null
 
+    private var excuseJob: Job? = null
+
     fun onAttachView(view: AttendanceView, date: Long?) {
         super.onAttachView(view)
         view.initView()
@@ -257,36 +259,36 @@ class AttendancePresenter @Inject constructor(
 
     private fun excuseAbsence(reason: String?, toExcuseList: List<Attendance>) {
         Timber.i("Excusing absence started")
-        disposable.apply {
-            add(rxSingle { studentRepository.getCurrentStudent() }
-                .flatMap { student ->
-                    rxSingle { semesterRepository.getCurrentSemester(student) }.flatMap { semester ->
-                        rxSingle { attendanceRepository.excuseForAbsence(student, semester, toExcuseList, reason) }
-                    }
+
+        excuseJob?.cancel()
+        excuseJob = launch {
+            flow {
+                val student = studentRepository.getCurrentStudent()
+                val semester = semesterRepository.getCurrentSemester(student)
+                emit(attendanceRepository.excuseForAbsence(student, semester, toExcuseList, reason))
+            }.onStart {
+                view?.apply {
+                    showProgress(true)
+                    showContent(false)
+                    showExcuseButton(false)
                 }
-                .subscribeOn(schedulers.backgroundThread)
-                .observeOn(schedulers.mainThread)
-                .doOnSubscribe {
-                    view?.apply {
-                        showProgress(true)
-                        showContent(false)
-                        showExcuseButton(false)
-                    }
+            }.catch {
+                Timber.i("Excusing for absence result: An exception occurred")
+                view?.showProgress(false)
+                errorHandler.dispatch(it)
+            }.collect {
+                Timber.i("Excusing for absence result: Success")
+                analytics.logEvent("excuse_absence", "items" to attendanceToExcuseList.size)
+                attendanceToExcuseList.clear()
+                view?.apply {
+                    showExcuseButton(false)
+                    showMessage(excuseSuccessString)
+                    showContent(true)
+                    showProgress(false)
                 }
-                .subscribe({
-                    Timber.i("Excusing for absence result: Success")
-                    analytics.logEvent("excuse_absence", "items" to attendanceToExcuseList.size)
-                    attendanceToExcuseList.clear()
-                    view?.apply {
-                        showExcuseButton(false)
-                        showMessage(excuseSuccessString)
-                    }
-                    refreshData()
-                }) {
-                    Timber.i("Excusing for absence result: An exception occurred")
-                    view?.showProgress(false)
-                    errorHandler.dispatch(it)
-                })
+                loadData(currentDate)
+                refreshData()
+            }
         }
     }
 
