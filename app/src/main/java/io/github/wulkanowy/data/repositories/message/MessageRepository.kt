@@ -48,7 +48,6 @@ class MessageRepository @Inject constructor(
             }
 
             val dbMessage = local.getMessageWithAttachment(student, message)
-
             val (downloadedMessage, attachments) = remote.getMessagesContentDetails(student, dbMessage.message, markAsRead)
 
             local.updateMessages(listOf(dbMessage.message.copy(unread = !markAsRead).apply {
@@ -74,15 +73,12 @@ class MessageRepository @Inject constructor(
         return remote.sendMessage(student, subject, content, recipients)
     }
 
-    suspend fun deleteMessage(student: Student, message: Message): Boolean {
-        val delete = remote.deleteMessage(student, message)
+    suspend fun deleteMessage(student: Student, message: Message) {
+        val isDeleted = remote.deleteMessage(student, message)
 
-        if (!message.removed) local.updateMessages(listOf(message.copy(removed = true).apply {
+        if (!message.removed) local.updateMessages(listOf(message.copy(removed = isDeleted).apply {
             id = message.id
             content = message.content
-        }))
-        else local.deleteMessages(listOf(message))
-
-        return delete // TODO: wtf
+        })) else local.deleteMessages(listOf(message))
     }
 }

@@ -178,7 +178,6 @@ class MessagePreviewPresenter @Inject constructor(
                 errorHandler.dispatch(it)
             }.collect {
                 view?.run {
-                    notifyParentMessageDeleted(message!!) // TODO: delete this callback
                     showMessage(deleteMessageSuccessString)
                     popView()
                 }

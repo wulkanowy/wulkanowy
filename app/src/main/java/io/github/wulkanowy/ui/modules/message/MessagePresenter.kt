@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.message
 
-import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -44,15 +43,6 @@ class MessagePresenter @Inject constructor(
             showContent(true)
             showProgress(false)
         }
-    }
-
-    fun onDeleteMessage(message: Message) {
-        view?.notifyChildMessageDeleted(
-            when (message.removed) {
-                true -> 2
-                else -> message.folderId - 1
-            }
-        )
     }
 
     fun onSendMessageButtonClicked() {
