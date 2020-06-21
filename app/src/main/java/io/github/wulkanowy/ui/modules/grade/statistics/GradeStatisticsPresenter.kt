@@ -59,7 +59,10 @@ class GradeStatisticsPresenter @Inject constructor(
         currentSemesterId = semesterId
         loadSubjects()
         if (forceRefresh) refreshDataByType(semesterId, currentType)
-        else loadDataByType(semesterId, currentSubjectName, currentType)
+        else {
+            view?.showErrorView(false)
+            loadDataByType(semesterId, currentSubjectName, currentType)
+        }
     }
 
     fun onParentViewReselected() {

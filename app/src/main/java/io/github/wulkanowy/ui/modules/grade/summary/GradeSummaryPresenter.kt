@@ -48,7 +48,10 @@ class GradeSummaryPresenter @Inject constructor(
         Timber.i("Loading grade summary data started")
 
         if (forceRefresh) refreshData(semesterId)
-        else loadData(semesterId)
+        else {
+            view?.showErrorView(false)
+            loadData(semesterId)
+        }
     }
 
     private fun refreshData(semesterId: Int) {
