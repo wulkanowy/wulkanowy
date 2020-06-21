@@ -22,7 +22,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.rxSingle
 import org.threeten.bp.LocalDate
@@ -49,6 +51,8 @@ class AttendancePresenter @Inject constructor(
     private lateinit var lastError: Throwable
 
     private val attendanceToExcuseList = mutableListOf<Attendance>()
+
+    private var refreshJob: Job? = null
 
     private var loadingJob: Job? = null
 
@@ -192,12 +196,13 @@ class AttendancePresenter @Inject constructor(
     }
 
     private fun refreshData() {
-        launch {
+        refreshJob?.cancel()
+        refreshJob = launch {
             flow {
                 val student = studentRepository.getCurrentStudent()
                 val semester = semesterRepository.getCurrentSemester(student)
                 emit(attendanceRepository.refreshAttendance(student, semester, currentDate, currentDate))
-            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+            }.onCompletion { afterLoading() }.catch { handleError(it) }.collect()
         }
     }
 
@@ -215,6 +220,7 @@ class AttendancePresenter @Inject constructor(
                 if (prefRepository.isShowPresent) it
                 else it.filter { item -> !item.presence }
             }.map { it.sortedBy { item -> item.number } }
+                .onStart { view?.showExcuseButton(false) }
                 .onEach { afterLoading() }
                 .catch { handleError(it) }
                 .collect {
@@ -246,6 +252,7 @@ class AttendancePresenter @Inject constructor(
     private fun handleError(error: Throwable) {
         Timber.i("Loading attendance result: An exception occurred")
         errorHandler.dispatch(error)
+        afterLoading()
     }
 
     private fun excuseAbsence(reason: String?, toExcuseList: List<Attendance>) {
