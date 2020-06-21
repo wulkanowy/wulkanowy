@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories.message
 
-import androidx.room.EmptyResultSetException
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.getMessageEntity
@@ -39,10 +38,10 @@ class MessageRepositoryTest {
     @Test
     fun `throw error when message is not in the db`() {
         val testMessage = getMessageEntity(1, "", false)
-        coEvery { local.getMessageWithAttachment(student, testMessage) } throws EmptyResultSetException("No message in database")
+        coEvery { local.getMessageWithAttachment(student, testMessage) } throws NullPointerException("No message in database")
 
         val message = runCatching { runBlocking { repo.getMessage(student, testMessage) } }
-        assertEquals(EmptyResultSetException::class.java, message.exceptionOrNull()?.javaClass)
+        assertEquals(NullPointerException::class.java, message.exceptionOrNull()?.javaClass)
     }
 
     @Test
