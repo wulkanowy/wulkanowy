@@ -67,7 +67,7 @@ class MobileDevicePresenter @Inject constructor(
                 val student = studentRepository.getCurrentStudent()
                 val semester = semesterRepository.getCurrentSemester(student)
                 emit(mobileDeviceRepository.refreshDevices(student, semester))
-            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
+            }.onCompletion { afterLoading() }.catch { handleError(it) }.collect()
         }
     }
 
@@ -112,6 +112,7 @@ class MobileDevicePresenter @Inject constructor(
     private fun handleError(error: Throwable) {
         Timber.i("Loading mobile devices result: An exception occurred")
         errorHandler.dispatch(error)
+        afterLoading()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
