@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.schoolandteachers.school
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.repositories.school.SchoolRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -7,13 +8,10 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import io.github.wulkanowy.utils.afterLoading
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -32,10 +30,6 @@ class SchoolPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
-    private var refreshJob: Job? = null
-
-    private var loadingJob: Job? = null
-
     override fun onAttachView(view: SchoolView) {
         super.onAttachView(view)
         view.initView()
@@ -45,7 +39,7 @@ class SchoolPresenter @Inject constructor(
     }
 
     fun onSwipeRefresh() {
-        refreshData()
+        loadData(true)
     }
 
     fun onRetry() {
@@ -53,7 +47,7 @@ class SchoolPresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        refreshData()
+        loadData(true)
     }
 
     fun onDetailsClick() {
@@ -61,8 +55,7 @@ class SchoolPresenter @Inject constructor(
     }
 
     fun onParentViewLoadData(forceRefresh: Boolean) {
-        if (forceRefresh) refreshData()
-        else loadData()
+        loadData(forceRefresh)
     }
 
     fun onAddressSelected() {
@@ -73,37 +66,20 @@ class SchoolPresenter @Inject constructor(
         contact?.let { view?.dialPhone(it) }
     }
 
-    private fun refreshData() {
-        refreshJob?.cancel()
-        refreshJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emit(schoolRepository.refreshSchool(student, semester))
-            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
-        }
-    }
-
-    private fun loadData() {
-        Timber.i("Loading school info started")
-
-        loadingJob?.cancel()
-        loadingJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emitAll(schoolRepository.getSchoolInfo(student, semester))
-            }.onEach {
-                afterLoading()
-            }.catch {
-                handleError(it)
-            }.collect {
-                if (it != null) {
+    private fun loadData(forceRefresh: Boolean = false) {
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            emitAll(schoolRepository.getSchoolInfo(student, semester, forceRefresh))
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading school info started")
+                Status.SUCCESS -> if (it.data != null) {
                     Timber.i("Loading teachers result: Success")
                     view?.run {
-                        address = it.address.ifBlank { null }
-                        contact = it.contact.ifBlank { null }
-                        updateData(it)
+                        address = it.data.address.ifBlank { null }
+                        contact = it.data.contact.ifBlank { null }
+                        updateData(it.data)
                         showContent(true)
                         showEmpty(false)
                         showErrorView(false)
@@ -112,30 +88,25 @@ class SchoolPresenter @Inject constructor(
                         "load_item",
                         "type" to "school"
                     )
-                } else {
+                } else view?.run {
                     Timber.i("Loading school result: No school info found")
-                    view?.run {
-                        showContent(!isViewEmpty)
-                        showEmpty(isViewEmpty)
-                        showErrorView(false)
-                    }
+                    showContent(!isViewEmpty)
+                    showEmpty(isViewEmpty)
+                    showErrorView(false)
+                }
+                Status.ERROR -> {
+                    Timber.i("Loading school result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
                 }
             }
-        }
-    }
-
-    private fun afterLoading() {
-        view?.run {
-            hideRefresh()
-            showProgress(false)
-            enableSwipe(true)
-            notifyParentDataLoaded()
-        }
-    }
-
-    private fun handleError(error: Throwable) {
-        Timber.i("Loading school result: An exception occurred")
-        errorHandler.dispatch(error)
+        }.afterLoading {
+            view?.run {
+                hideRefresh()
+                showProgress(false)
+                enableSwipe(true)
+                notifyParentDataLoaded()
+            }
+        }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
