@@ -49,7 +49,7 @@ class MobileDeviceRepositoryTest {
         coEvery { mobileDeviceLocal.saveDevices(devices) } just Runs
         coEvery { mobileDeviceRemote.getDevices(student, semester) } returns devices
 
-        runBlocking { mobileDeviceRepository.getDevices(student, semester).first() }
+        runBlocking { mobileDeviceRepository.getDevices(student, semester, true).first() }
 
         coVerify { mobileDeviceLocal.deleteDevices(emptyList()) }
         coVerify { mobileDeviceLocal.saveDevices(devices) }
