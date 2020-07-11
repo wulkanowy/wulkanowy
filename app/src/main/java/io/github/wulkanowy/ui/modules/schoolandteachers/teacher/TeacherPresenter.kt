@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.schoolandteachers.teacher
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.data.repositories.teacher.TeacherRepository
@@ -7,14 +8,10 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import io.github.wulkanowy.utils.afterLoading
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -29,10 +26,6 @@ class TeacherPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
-    private var refreshJob: Job? = null
-
-    private var loadingJob: Job? = null
-
     override fun onAttachView(view: TeacherView) {
         super.onAttachView(view)
         view.initView()
@@ -42,7 +35,7 @@ class TeacherPresenter @Inject constructor(
     }
 
     fun onSwipeRefresh() {
-        refreshData()
+        loadData(true)
     }
 
     fun onRetry() {
@@ -58,65 +51,44 @@ class TeacherPresenter @Inject constructor(
     }
 
     fun onParentViewLoadData(forceRefresh: Boolean) {
-        if (forceRefresh) refreshData()
-        else loadData()
+        loadData(forceRefresh)
     }
 
-    private fun refreshData() {
-        refreshJob?.cancel()
-        refreshJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emit(teacherRepository.refreshTeachers(student, semester))
-            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
-        }
-    }
-
-    private fun loadData() {
-        Timber.i("Loading teachers data started")
-
-        loadingJob?.cancel()
-        loadingJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emitAll(teacherRepository.getTeachers(student, semester))
-            }.map {
-                it.filter { item -> item.name.isNotBlank() }
-            }.onEach {
-                afterLoading()
-            }.catch {
-                handleError(it)
-            }.collect {
-                Timber.i("Loading teachers result: Success")
-                view?.run {
-                    updateData(it)
-                    showContent(it.isNotEmpty())
-                    showEmpty(it.isEmpty())
-                    showErrorView(false)
+    private fun loadData(forceRefresh: Boolean = false) {
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            emitAll(teacherRepository.getTeachers(student, semester, forceRefresh))
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading teachers data started")
+                Status.SUCCESS -> {
+                    Timber.i("Loading teachers result: Success")
+                    view?.run {
+                        updateData(it.data!!.filter { item -> item.name.isNotBlank() })
+                        showContent(it.data.isNotEmpty())
+                        showEmpty(it.data.isEmpty())
+                        showErrorView(false)
+                    }
+                    analytics.logEvent(
+                        "load_data",
+                        "type" to "teachers",
+                        "items" to it.data!!.size
+                    )
                 }
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "teachers",
-                    "items" to it.size
-                )
+                Status.ERROR -> {
+                    Timber.i("Loading teachers result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
-        }
-    }
-
-    private fun afterLoading() {
-        view?.run {
-            hideRefresh()
-            showProgress(false)
-            enableSwipe(true)
-            notifyParentDataLoaded()
-        }
-    }
-
-    private fun handleError(error: Throwable) {
-        Timber.i("Loading teachers result: An exception occurred")
-        errorHandler.dispatch(error)
+        }.afterLoading {
+            view?.run {
+                hideRefresh()
+                showProgress(false)
+                enableSwipe(true)
+                notifyParentDataLoaded()
+            }
+        }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
