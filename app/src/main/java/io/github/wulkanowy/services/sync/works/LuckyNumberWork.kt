@@ -32,7 +32,7 @@ class LuckyNumberWork @Inject constructor(
 ) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return rxMaybe { luckyNumberRepository.refreshLuckyNumber(student, preferencesRepository.isNotificationsEnable) }
+        return rxMaybe { luckyNumberRepository.getLuckyNumber(student, true, preferencesRepository.isNotificationsEnable).waitForResult() }
             .flatMap { rxMaybe { luckyNumberRepository.getNotNotifiedLuckyNumber(student).first() } }
             .flatMapCompletable {
                 notify(it)

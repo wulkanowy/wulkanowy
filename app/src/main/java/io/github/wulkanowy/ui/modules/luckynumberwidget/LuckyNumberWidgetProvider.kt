@@ -15,6 +15,7 @@ import android.view.View.VISIBLE
 import android.widget.RemoteViews
 import dagger.android.AndroidInjection
 import io.github.wulkanowy.R
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
@@ -25,6 +26,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.reactivex.Maybe
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.rx2.rxMaybe
 import kotlinx.coroutines.rx2.rxSingle
 import timber.log.Timber
@@ -158,7 +160,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                         else -> Maybe.empty()
                     }
                 }
-                .flatMap { rxMaybe { luckyNumberRepository.getLuckyNumber(it).first() } }
+                .flatMap { rxMaybe { luckyNumberRepository.getLuckyNumber(it, false).takeWhile { it.status == Status.LOADING }.first().data } }
                 .subscribeOn(schedulers.backgroundThread)
                 .blockingGet()
         } catch (e: Exception) {
