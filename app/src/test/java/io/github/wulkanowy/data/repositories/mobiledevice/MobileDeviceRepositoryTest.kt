@@ -9,8 +9,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -49,7 +49,7 @@ class MobileDeviceRepositoryTest {
         coEvery { mobileDeviceLocal.saveDevices(devices) } just Runs
         coEvery { mobileDeviceRemote.getDevices(student, semester) } returns devices
 
-        runBlocking { mobileDeviceRepository.getDevices(student, semester, true).first() }
+        runBlocking { mobileDeviceRepository.getDevices(student, semester, true).toList() }
 
         coVerify { mobileDeviceLocal.deleteDevices(emptyList()) }
         coVerify { mobileDeviceLocal.saveDevices(devices) }

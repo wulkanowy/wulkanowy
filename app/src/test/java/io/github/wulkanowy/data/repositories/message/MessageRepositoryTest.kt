@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories.message
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.getMessageEntity
@@ -9,6 +10,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -40,7 +43,7 @@ class MessageRepositoryTest {
         val testMessage = getMessageEntity(1, "", false)
         coEvery { local.getMessageWithAttachment(student, testMessage) } throws NullPointerException("No message in database")
 
-        val message = runCatching { runBlocking { repo.getMessage(student, testMessage) } }
+        val message = runCatching { runBlocking { repo.getMessage(student, testMessage).toList()[1] } }
         assertEquals(NullPointerException::class.java, message.exceptionOrNull()?.javaClass)
     }
 
@@ -49,11 +52,12 @@ class MessageRepositoryTest {
         val testMessage = getMessageEntity(123, "Test", false)
         val messageWithAttachment = MessageWithAttachment(testMessage, emptyList())
 
-        coEvery { local.getMessageWithAttachment(student, testMessage) } returns messageWithAttachment
+        coEvery { local.getMessageWithAttachment(student, testMessage) } returns flowOf(messageWithAttachment)
 
-        val message = runBlocking { repo.getMessage(student, testMessage) }
+        val message = runBlocking { repo.getMessage(student, testMessage).toList() }
 
-        assertEquals("Test", message.message.content)
+        assertEquals(Status.SUCCESS, message[1].status)
+        assertEquals("Test", message[1].data!!.message.content)
     }
 
     @Test
@@ -64,14 +68,15 @@ class MessageRepositoryTest {
         val mWa = MessageWithAttachment(testMessage, emptyList())
         val mWaWithContent = MessageWithAttachment(testMessageWithContent, emptyList())
 
-        coEvery { local.getMessageWithAttachment(student, testMessage) } returnsMany listOf(mWa, mWaWithContent)
-        coEvery { remote.getMessagesContentDetails(student, testMessageWithContent) } returns ("Test" to emptyList())
+        coEvery { local.getMessageWithAttachment(student, testMessage) } returnsMany listOf(flowOf(mWa), flowOf(mWaWithContent))
+        coEvery { remote.getMessagesContentDetails(student, any(), any()) } returns ("Test" to emptyList())
         coEvery { local.updateMessages(any()) } just Runs
         coEvery { local.saveMessageAttachments(any()) } just Runs
 
-        val message = runBlocking { repo.getMessage(student, testMessage) }
+        val message = runBlocking { repo.getMessage(student, testMessage).toList() }
 
-        assertEquals("Test", message.message.content)
+        assertEquals(Status.SUCCESS, message[2].status)
+        assertEquals("Test", message[2].data!!.message.content)
         coVerify { local.updateMessages(listOf(testMessageWithContent)) }
     }
 
@@ -82,7 +87,7 @@ class MessageRepositoryTest {
 
         coEvery { local.getMessageWithAttachment(student, testMessage) } throws UnknownHostException()
 
-        val message = runCatching { runBlocking { repo.getMessage(student, testMessage) } }
+        val message = runCatching { runBlocking { repo.getMessage(student, testMessage).toList()[1] } }
         assertEquals(UnknownHostException::class.java, message.exceptionOrNull()?.javaClass)
     }
 
@@ -93,7 +98,7 @@ class MessageRepositoryTest {
 
         coEvery { local.getMessageWithAttachment(student, testMessage) } throws UnknownHostException()
 
-        val message = runCatching { runBlocking { repo.getMessage(student, testMessage) } }
+        val message = runCatching { runBlocking { repo.getMessage(student, testMessage).toList()[1] } }
         assertEquals(UnknownHostException::class.java, message.exceptionOrNull()?.javaClass)
     }
 }
