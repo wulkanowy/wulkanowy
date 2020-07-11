@@ -27,6 +27,6 @@ class SplashPresenter @Inject constructor(
                 }
                 Status.ERROR -> errorHandler.dispatch(it.error!!)
             }
-        }
+        }.launch()
     }
 }
