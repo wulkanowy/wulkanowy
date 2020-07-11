@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories.logger
 
 import android.content.Context
 import io.github.wulkanowy.utils.DispatchersProvider
+import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileNotFoundException
@@ -12,12 +13,12 @@ class LoggerRepository @Inject constructor(
     private val dispatchers: DispatchersProvider
 ) {
 
-    suspend fun getLastLogLines(): List<String> {
-        return getLastModified().readText().split("\n")
+    fun getLastLogLines() = flowWithResource {
+        getLastModified().readText().split("\n")
     }
 
-    suspend fun getLogFiles(): List<File> {
-        return withContext(dispatchers.backgroundThread) {
+    fun getLogFiles() = flowWithResource {
+        withContext(dispatchers.backgroundThread) {
             File(context.filesDir.absolutePath).listFiles(File::isFile)?.filter {
                 it.name.endsWith(".log")
             }!!

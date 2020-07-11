@@ -1,14 +1,12 @@
 package io.github.wulkanowy.ui.modules.about.logviewer
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.repositories.logger.LoggerRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,17 +24,19 @@ class LogViewerPresenter @Inject constructor(
     }
 
     fun onShareLogsSelected(): Boolean {
-        launch {
-            flow { emit(loggerRepository.getLogFiles()) }
-                .catch {
+        loggerRepository.getLogFiles().onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.d("Loading logs files started")
+                Status.SUCCESS -> {
+                    Timber.i("Loading logs files result: ${it.data!!.joinToString { file -> file.name }}")
+                    view?.shareLogs(it.data)
+                }
+                Status.ERROR -> {
                     Timber.i("Loading logs files result: An exception occurred")
-                    errorHandler.dispatch(it)
+                    errorHandler.dispatch(it.error!!)
                 }
-                .collect { files ->
-                    Timber.i("Loading logs files result: ${files.joinToString { it.name }}")
-                    view?.shareLogs(files)
-                }
-        }
+            }
+        }.launch("share")
         return true
     }
 
@@ -45,16 +45,18 @@ class LogViewerPresenter @Inject constructor(
     }
 
     private fun loadLogFile() {
-        launch {
-            flow { emit(loggerRepository.getLastLogLines()) }
-                .catch {
+        loggerRepository.getLastLogLines().onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.d("Loading last log file started")
+                Status.SUCCESS -> {
+                    Timber.i("Loading last log file result: load ${it.data!!.size} lines")
+                    view?.setLines(it.data)
+                }
+                Status.ERROR -> {
                     Timber.i("Loading last log file result: An exception occurred")
-                    errorHandler.dispatch(it)
+                    errorHandler.dispatch(it.error!!)
                 }
-                .collect {
-                    Timber.i("Loading last log file result: load ${it.size} lines")
-                    view?.setLines(it)
-                }
-        }
+            }
+        }.launch("file")
     }
 }
