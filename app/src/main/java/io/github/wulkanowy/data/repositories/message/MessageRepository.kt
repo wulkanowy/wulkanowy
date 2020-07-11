@@ -1,12 +1,12 @@
 package io.github.wulkanowy.data.repositories.message
 
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
 import io.github.wulkanowy.sdk.pojo.SentMessage
+import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
@@ -33,27 +33,22 @@ class MessageRepository @Inject constructor(
         }
     )
 
-    suspend fun getMessage(student: Student, message: Message, markAsRead: Boolean = false): MessageWithAttachment {
-        return local.getMessageWithAttachment(student, message).let {
-            if (it.message.content.isNotEmpty().also { status ->
-                    Timber.d("Message content in db empty: ${!status}")
-                } && !it.message.unread) {
-                return@let it
-            }
-
-            val dbMessage = local.getMessageWithAttachment(student, message)
-            val (downloadedMessage, attachments) = remote.getMessagesContentDetails(student, dbMessage.message, markAsRead)
-
-            local.updateMessages(listOf(dbMessage.message.copy(unread = !markAsRead).apply {
-                id = dbMessage.message.id
+    fun getMessage(student: Student, message: Message, markAsRead: Boolean = false) = networkBoundResource(
+        shouldFetch = {
+            Timber.d("Message content in db empty: ${it.message.content.isEmpty()}")
+            it.message.unread || it.message.content.isEmpty()
+        },
+        query = { local.getMessageWithAttachment(student, message) },
+        fetch = { remote.getMessagesContentDetails(student, it.message, markAsRead) },
+        saveFetchResult = { old, (downloadedMessage, attachments) ->
+            local.updateMessages(listOf(old.message.copy(unread = !markAsRead).apply {
+                id = old.message.id
                 content = content.ifBlank { downloadedMessage }
             }))
             local.saveMessageAttachments(attachments)
-            Timber.d("Message ${message.messageId} with blank content: ${dbMessage.message.content.isBlank()}, marked as read")
-
-            local.getMessageWithAttachment(student, message)
+            Timber.d("Message ${message.messageId} with blank content: ${old.message.content.isBlank()}, marked as read")
         }
-    }
+    )
 
     fun getNotNotifiedMessages(student: Student): Flow<List<Message>> {
         return local.getMessages(student, RECEIVED).map { it.filter { message -> !message.isNotified && message.unread } }
@@ -67,7 +62,7 @@ class MessageRepository @Inject constructor(
         return remote.sendMessage(student, subject, content, recipients)
     }
 
-    suspend fun deleteMessage(student: Student, message: Message) {
+    fun deleteMessage(student: Student, message: Message) = flowWithResource {
         val isDeleted = remote.deleteMessage(student, message)
 
         if (!message.removed) local.updateMessages(listOf(message.copy(removed = isDeleted).apply {

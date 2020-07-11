@@ -102,7 +102,7 @@ class MessageTabPresenter @Inject constructor(
                 Status.SUCCESS -> {
                     Timber.i("Loading $folder message result: Success")
                     messages = it.data!!
-                    view?.updateData(getFilteredData(lastSearchQuery))
+                    updateData(getFilteredData(lastSearchQuery))
                     analytics.logEvent(
                         "load_data",
                         "type" to "messages",

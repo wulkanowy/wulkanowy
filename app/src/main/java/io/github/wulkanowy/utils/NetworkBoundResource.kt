@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
-inline fun <ResultType> networkBoundResource(
+inline fun <ResultType, RequestType> networkBoundResource(
     showSavedOnLoading: Boolean = true,
     crossinline query: () -> Flow<ResultType>,
-    crossinline fetch: suspend () -> ResultType,
-    crossinline saveFetchResult: suspend (old: ResultType, new: ResultType) -> Unit,
+    crossinline fetch: suspend (ResultType) -> RequestType,
+    crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
     crossinline onFetchFailed: (Throwable) -> Unit = { Unit },
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline filterResult: (ResultType) -> ResultType = { it }
@@ -25,7 +25,7 @@ inline fun <ResultType> networkBoundResource(
         if (showSavedOnLoading) emit(Resource.loading(filterResult(data)))
 
         try {
-            saveFetchResult(data, fetch())
+            saveFetchResult(data, fetch(data))
             query().map { Resource.success(filterResult(it)) }
         } catch (throwable: Throwable) {
             onFetchFailed(throwable)

@@ -12,7 +12,7 @@ interface MessagesDao : BaseDao<Message> {
 
     @Transaction
     @Query("SELECT * FROM Messages WHERE student_id = :studentId AND message_id = :messageId")
-    suspend fun loadMessageWithAttachment(studentId: Int, messageId: Int): MessageWithAttachment
+    fun loadMessageWithAttachment(studentId: Int, messageId: Int): Flow<MessageWithAttachment>
 
     @Query("SELECT * FROM Messages WHERE student_id = :studentId AND folder_id = :folder AND removed = 0 ORDER BY date DESC")
     fun loadAll(studentId: Int, folder: Int): Flow<List<Message>>

@@ -29,7 +29,7 @@ class MessageLocal @Inject constructor(
         messagesDb.deleteAll(messages)
     }
 
-    suspend fun getMessageWithAttachment(student: Student, message: Message): MessageWithAttachment {
+    fun getMessageWithAttachment(student: Student, message: Message): Flow<MessageWithAttachment> {
         return messagesDb.loadMessageWithAttachment(student.id.toInt(), message.messageId)
     }
 
