@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.luckynumberwidget
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -8,11 +9,9 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.luckynumberwidget.LuckyNumberWidgetProvider.Companion.getStudentWidgetKey
 import io.github.wulkanowy.ui.modules.luckynumberwidget.LuckyNumberWidgetProvider.Companion.getThemeWidgetKey
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
+import io.github.wulkanowy.utils.flowWithResource
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import javax.inject.Inject
 
 class LuckyNumberWidgetConfigurePresenter @Inject constructor(
@@ -50,24 +49,25 @@ class LuckyNumberWidgetConfigurePresenter @Inject constructor(
     }
 
     private fun loadData() {
-        launch {
-            flow { emit(studentRepository.getSavedStudents(false)) }
-                .map { it to appWidgetId?.let { id -> sharedPref.getLong(getStudentWidgetKey(id), 0) } }
-                .map { (students, currentStudentId) ->
-                    students.map { student -> student to (student.id == currentStudentId) }
-                }
-                .catch { errorHandler.dispatch(it) }
-                .collect {
+        flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.d("Lucky number widget configure students data load")
+                Status.SUCCESS -> {
+                    val widgetId = appWidgetId?.let { id -> sharedPref.getLong(getStudentWidgetKey(id), 0) }
                     when {
-                        it.isEmpty() -> view?.openLoginView()
-                        it.size == 1 -> {
-                            selectedStudent = it.single().first
+                        it.data!!.isEmpty() -> view?.openLoginView()
+                        it.data.size == 1 -> {
+                            selectedStudent = it.data.single()
                             view?.showThemeDialog()
                         }
-                        else -> view?.updateData(it)
+                        else -> view?.updateData(it.data.map { student ->
+                            student to (student.id == widgetId)
+                        })
                     }
                 }
-        }
+                Status.ERROR -> errorHandler.dispatch(it.error!!)
+            }
+        }.launch()
     }
 
     private fun registerStudent(student: Student?) {
