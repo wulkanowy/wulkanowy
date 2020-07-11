@@ -1,17 +1,14 @@
 package io.github.wulkanowy.ui.modules.login.symbol
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.ifNullOrBlank
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
@@ -51,39 +48,55 @@ class LoginSymbolPresenter @Inject constructor(
             return
         }
 
-        launch {
-            flow { emit(studentRepository.getStudentsScrapper(loginData!!.first, loginData!!.second, loginData!!.third, symbol)) }.onStart {
-                view?.apply {
+        studentRepository.getStudentsScrapper(loginData!!.first, loginData!!.second, loginData!!.third, symbol).onEach {
+            when (it.status) {
+                Status.LOADING -> view?.run {
+                    Timber.i("Login with symbol started")
                     hideSoftKeyboard()
                     showProgress(true)
                     showContent(false)
                 }
-                Timber.i("Login with symbol started")
-            }.onCompletion {
-                view?.apply {
-                    showProgress(false)
-                    showContent(true)
-                }
-            }.catch {
-                Timber.i("Login with symbol result: An exception occurred")
-                analytics.logEvent("registration_symbol", "success" to false, "students" to -1, "scrapperBaseUrl" to loginData?.third, "symbol" to symbol, "error" to it.message.ifNullOrBlank { "No message" })
-                loginErrorHandler.dispatch(it)
-                lastError = it
-                view?.showContact(true)
-            }.collect {
-                analytics.logEvent("registration_symbol", "success" to true, "students" to it.size, "scrapperBaseUrl" to loginData?.third, "symbol" to symbol, "error" to "No error")
-                view?.apply {
-                    if (it.isEmpty()) {
-                        Timber.i("Login with symbol result: Empty student list")
-                        setErrorSymbolIncorrect()
-                        view?.showContact(true)
-                    } else {
-                        Timber.i("Login with symbol result: Success")
-                        notifyParentAccountLogged(it)
+                Status.SUCCESS -> {
+                    view?.run {
+                        if (it.data!!.isEmpty()) {
+                            Timber.i("Login with symbol result: Empty student list")
+                            setErrorSymbolIncorrect()
+                            view?.showContact(true)
+                        } else {
+                            Timber.i("Login with symbol result: Success")
+                            notifyParentAccountLogged(it.data)
+                        }
                     }
+                    analytics.logEvent(
+                        "registration_symbol",
+                        "success" to true,
+                        "students" to it.data!!.size,
+                        "scrapperBaseUrl" to loginData?.third,
+                        "symbol" to symbol,
+                        "error" to "No error"
+                    )
+                }
+                Status.ERROR -> {
+                    Timber.i("Login with symbol result: An exception occurred")
+                    analytics.logEvent(
+                        "registration_symbol",
+                        "success" to false,
+                        "students" to -1,
+                        "scrapperBaseUrl" to loginData?.third,
+                        "symbol" to symbol,
+                        "error" to it.error!!.message.ifNullOrBlank { "No message" }
+                    )
+                    loginErrorHandler.dispatch(it.error)
+                    lastError = it.error
+                    view?.showContact(true)
                 }
             }
-        }
+        }.afterLoading {
+            view?.apply {
+                showProgress(false)
+                showContent(true)
+            }
+        }.launch("login")
     }
 
     fun onParentInitSymbolView(loginData: Triple<String, String, String>) {

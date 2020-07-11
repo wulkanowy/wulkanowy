@@ -1,17 +1,14 @@
 package io.github.wulkanowy.ui.modules.login.form
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.ifNullOrBlank
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -80,33 +77,44 @@ class LoginFormPresenter @Inject constructor(
 
         if (!validateCredentials(email, password, host)) return
 
-        launch {
-            flow {
-                emit(studentRepository.getStudentsScrapper(email, password, host, symbol))
-            }.onStart {
-                view?.apply {
+        studentRepository.getStudentsScrapper(email, password, host, symbol).onEach {
+            when (it.status) {
+                Status.LOADING -> view?.run {
+                    Timber.i("Login started")
                     hideSoftKeyboard()
                     showProgress(true)
                     showContent(false)
                 }
-                Timber.i("Login started")
-            }.onCompletion {
-                view?.apply {
-                    showProgress(false)
-                    showContent(true)
+                Status.SUCCESS -> {
+                    Timber.i("Login result: Success")
+                    analytics.logEvent(
+                        "registration_form",
+                        "success" to true,
+                        "students" to it.data!!.size,
+                        "scrapperBaseUrl" to host,
+                        "error" to "No error"
+                    )
+                    view?.notifyParentAccountLogged(it.data, Triple(email, password, host))
                 }
-            }.catch {
-                Timber.i("Login result: An exception occurred")
-                analytics.logEvent("registration_form", "success" to false, "students" to -1, "scrapperBaseUrl" to host, "error" to it.message.ifNullOrBlank { "No message" })
-                loginErrorHandler.dispatch(it)
-                lastError = it
-                view?.showContact(true)
-            }.collect {
-                Timber.i("Login result: Success")
-                analytics.logEvent("registration_form", "success" to true, "students" to it.size, "scrapperBaseUrl" to host, "error" to "No error")
-                view?.notifyParentAccountLogged(it, Triple(email, password, host))
+                Status.ERROR -> {
+                    Timber.i("Login result: An exception occurred")
+                    analytics.logEvent(
+                        "registration_form",
+                        "success" to false,
+                        "students" to -1,
+                        "scrapperBaseUrl" to host,
+                        "error" to it.error!!.message.ifNullOrBlank { "No message" })
+                    loginErrorHandler.dispatch(it.error)
+                    lastError = it.error
+                    view?.showContact(true)
+                }
             }
-        }
+        }.afterLoading {
+            view?.apply {
+                showProgress(false)
+                showContent(true)
+            }
+        }.launch("login")
     }
 
     fun onFaqClick() {
