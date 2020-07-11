@@ -16,7 +16,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -99,8 +99,9 @@ class TimetableRepositoryTest {
                 student = student,
                 semester = semesterMock,
                 start = LocalDate.of(2019, 3, 5),
-                end = LocalDate.of(2019, 3, 5)
-            ).first()
+                end = LocalDate.of(2019, 3, 5),
+                forceRefresh = true
+            ).toList()[1].data.orEmpty()
         }
 
         assertEquals(4, lessons.size)
@@ -151,8 +152,9 @@ class TimetableRepositoryTest {
                 student = student,
                 semester = semesterMock,
                 start = LocalDate.of(2019, 12, 23),
-                end = LocalDate.of(2019, 12, 25)
-            ).first()
+                end = LocalDate.of(2019, 12, 25),
+                forceRefresh = true
+            ).toList()[1].data.orEmpty()
         }
 
         assertEquals(12, lessons.size)

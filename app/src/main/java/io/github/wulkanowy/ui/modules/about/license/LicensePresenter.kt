@@ -1,17 +1,17 @@
 package io.github.wulkanowy.ui.modules.about.license
 
 import com.mikepenz.aboutlibraries.entity.Library
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.launch
+import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 class LicensePresenter @Inject constructor(
@@ -28,22 +28,22 @@ class LicensePresenter @Inject constructor(
     }
 
     fun onItemSelected(library: Library) {
-        view?.run { library.license?.licenseDescription?.let { openLicense(it) } }
+        view?.run { library.licenses?.firstOrNull()?.licenseDescription?.let { openLicense(it) } }
     }
 
     private fun loadData() {
-        launch {
-            flow {
-                emit(withContext(dispatchers.backgroundThread) {
-                    view?.appLibraries.orEmpty()
-                })
-            }.onCompletion {
-                view?.showProgress(false)
-            }.catch {
-                errorHandler.dispatch(it)
-            }.collect {
-                view?.updateData(it)
+        flowWithResource {
+            withContext(dispatchers.backgroundThread) {
+                view?.appLibraries.orEmpty()
             }
-        }
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.d("License data load started")
+                Status.SUCCESS -> view?.updateData(it.data!!)
+                Status.ERROR -> errorHandler.dispatch(it.error!!)
+            }
+        }.afterLoading {
+            view?.showProgress(false)
+        }.launch()
     }
 }
