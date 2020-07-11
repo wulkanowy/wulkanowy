@@ -17,7 +17,7 @@ data class Resource<out T>(val status: Status, val data: T?, val error: Throwabl
 }
 
 enum class Status {
+    LOADING,
     SUCCESS,
-    ERROR,
-    LOADING
+    ERROR
 }

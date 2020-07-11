@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.statistics
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.repositories.gradestatistics.GradeStatisticsRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
@@ -132,22 +133,28 @@ class GradeStatisticsPresenter @Inject constructor(
     }
 
     private fun loadSubjects() {
-        Timber.i("Loading grade stats subjects started")
-        launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emitAll(subjectRepository.getSubjects(student, semester))
-            }.map {
-                ArrayList(it.map { subject -> subject.name })
-            }.catch {
-                Timber.i("Loading grade stats subjects result: An exception occurred")
-                errorHandler.dispatch(it)
-            }.collect {
-                Timber.i("Loading grade stats subjects result: Success")
-                view?.updateSubjects(it)
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            emitAll(subjectRepository.getSubjects(student, semester))
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading grade stats subjects started")
+                Status.SUCCESS -> {
+                    subjects = it.data!!
+
+                    Timber.i("Loading grade stats subjects result: Success")
+                    view?.run {
+                        view?.updateSubjects(ArrayList(it.data.map { subject -> subject.name }))
+                        showSubjects(true)
+                    }
+                }
+                Status.ERROR -> {
+                    Timber.i("Loading grade stats subjects result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
-        }
+        }.launch("subjects")
     }
 
     private fun refreshDataByType(semesterId: Int, type: ViewType) {

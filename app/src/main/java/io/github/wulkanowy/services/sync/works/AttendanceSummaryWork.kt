@@ -12,7 +12,7 @@ class AttendanceSummaryWork @Inject constructor(
 ) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return rxCompletable { attendanceSummaryRepository.refreshAttendanceSummary(student, semester, -1) }
+        return rxCompletable { attendanceSummaryRepository.getAttendanceSummary(student, semester, -1, true).waitForResult() }
     }
 }
 

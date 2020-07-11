@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.attendance.summary
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.repositories.attendancesummary.AttendanceSummaryRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
@@ -9,14 +10,10 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import io.github.wulkanowy.utils.afterLoading
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.threeten.bp.Month
 import timber.log.Timber
 import javax.inject.Inject
@@ -38,10 +35,6 @@ class AttendanceSummaryPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
-    private var refreshJob: Job? = null
-
-    private var loadJob: Job? = null
-
     fun onAttachView(view: AttendanceSummaryView, subjectId: Int?) {
         super.onAttachView(view)
         view.initView()
@@ -53,7 +46,7 @@ class AttendanceSummaryPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the attendance summary")
-        refreshData(currentSubjectId)
+        loadData(currentSubjectId, true)
     }
 
     fun onRetry() {
@@ -61,7 +54,7 @@ class AttendanceSummaryPresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        refreshData(currentSubjectId)
+        loadData(currentSubjectId, true)
     }
 
     fun onDetailsClick() {
@@ -83,61 +76,44 @@ class AttendanceSummaryPresenter @Inject constructor(
         }
     }
 
-    private fun refreshData(subjectId: Int) {
-        refreshJob?.cancel()
-        refreshJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emit(attendanceSummaryRepository.refreshAttendanceSummary(student, semester, subjectId))
-            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
-        }
-    }
-
-    private fun loadData(subjectId: Int) {
-        Timber.i("Loading attendance summary data started")
+    private fun loadData(subjectId: Int, forceRefresh: Boolean = false) {
         currentSubjectId = subjectId
 
-        loadJob?.cancel()
-        loadJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emitAll(attendanceSummaryRepository.getAttendanceSummary(student, semester, subjectId))
-            }.map { items ->
-                items.sortedByDescending { if (it.month.value <= Month.JUNE.value) it.month.value + 12 else it.month.value }
-            }.onEach {
-                afterLoading()
-            }.catch {
-                handleError(it)
-            }.collect {
-                Timber.i("Loading attendance summary result: Success")
-                view?.apply {
-                    showEmpty(it.isEmpty())
-                    showContent(it.isNotEmpty())
-                    updateDataSet(it)
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            emitAll(attendanceSummaryRepository.getAttendanceSummary(student, semester, subjectId, forceRefresh))
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading attendance summary data started")
+                Status.SUCCESS -> {
+                    Timber.i("Loading attendance summary result: Success")
+                    view?.apply {
+                        showEmpty(it.data!!.isEmpty())
+                        showContent(it.data.isNotEmpty())
+                        updateDataSet(it.data.sortedByDescending { item ->
+                            if (item.month.value <= Month.JUNE.value) item.month.value + 12 else item.month.value
+                        })
+                    }
+                    analytics.logEvent(
+                        "load_data",
+                        "type" to "attendance_summary",
+                        "items" to it.data!!.size,
+                        "item_id" to subjectId
+                    )
                 }
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "attendance_summary",
-                    "items" to it.size,
-                    "item_id" to subjectId
-                )
+                Status.ERROR -> {
+                    Timber.i("Loading attendance summary result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
-        }
-    }
-
-    private fun handleError(error: Throwable) {
-        Timber.i("Loading attendance summary result: An exception occurred")
-        errorHandler.dispatch(error)
-    }
-
-    private fun afterLoading() {
-        view?.run {
-            hideRefresh()
-            showProgress(false)
-            enableSwipe(true)
-        }
+        }.afterLoading {
+            view?.run {
+                hideRefresh()
+                showProgress(false)
+                enableSwipe(true)
+            }
+        }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
@@ -152,26 +128,27 @@ class AttendanceSummaryPresenter @Inject constructor(
     }
 
     private fun loadSubjects() {
-        Timber.i("Loading attendance summary subjects started")
-        launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emitAll(subjectRepository.getSubjects(student, semester))
-            }.onEach {
-                subjects = it
-            }.map {
-                ArrayList(it.map { subject -> subject.name })
-            }.catch {
-                Timber.i("Loading attendance summary subjects result: An exception occurred")
-                errorHandler.dispatch(it)
-            }.collect {
-                Timber.i("Loading attendance summary subjects result: Success")
-                view?.run {
-                    view?.updateSubjects(it)
-                    showSubjects(true)
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            emitAll(subjectRepository.getSubjects(student, semester))
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading attendance summary subjects started")
+                Status.SUCCESS -> {
+                    subjects = it.data!!
+
+                    Timber.i("Loading attendance summary subjects result: Success")
+                    view?.run {
+                        view?.updateSubjects(ArrayList(it.data.map { subject -> subject.name }))
+                        showSubjects(true)
+                    }
+                }
+                Status.ERROR -> {
+                    Timber.i("Loading attendance summary subjects result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
                 }
             }
-        }
+        }.launch("subjects")
     }
 }
