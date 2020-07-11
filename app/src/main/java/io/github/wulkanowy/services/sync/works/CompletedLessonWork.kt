@@ -15,6 +15,6 @@ class CompletedLessonWork @Inject constructor(
 ) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return rxCompletable { completedLessonsRepository.refreshCompletedLessons(student, semester, now().monday, now().sunday) }
+        return rxCompletable { completedLessonsRepository.getCompletedLessons(student, semester, now().monday, now().sunday, true).waitForResult() }
     }
 }
