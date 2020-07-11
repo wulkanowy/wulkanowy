@@ -32,7 +32,7 @@ class NoteWork @Inject constructor(
 ) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return rxSingle { noteRepository.refreshNotes(student, semester, preferencesRepository.isNotificationsEnable) }
+        return rxSingle { noteRepository.getNotes(student, semester, true, preferencesRepository.isNotificationsEnable).waitForResult() }
             .flatMap { rxSingle { noteRepository.getNotNotifiedNotes(student).first() } }
             .flatMapCompletable {
                 if (it.isNotEmpty()) notify(it)
