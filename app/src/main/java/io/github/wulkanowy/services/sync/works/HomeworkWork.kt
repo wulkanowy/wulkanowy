@@ -13,6 +13,6 @@ import javax.inject.Inject
 class HomeworkWork @Inject constructor(private val homeworkRepository: HomeworkRepository) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return rxCompletable { homeworkRepository.refreshHomework(student, semester, now().monday, now().sunday) }
+        return rxCompletable { homeworkRepository.getHomework(student, semester, now().monday, now().sunday, true).waitForResult() }
     }
 }

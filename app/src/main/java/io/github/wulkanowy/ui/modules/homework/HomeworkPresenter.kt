@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.homework
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.homework.HomeworkRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
@@ -8,20 +9,17 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.ofEpochDay
 import timber.log.Timber
@@ -42,10 +40,6 @@ class HomeworkPresenter @Inject constructor(
         private set
 
     private lateinit var lastError: Throwable
-
-    private var refreshJob: Job? = null
-
-    private var loadingJob: Job? = null
 
     fun onAttachView(view: HomeworkView, date: Long?) {
         super.onAttachView(view)
@@ -69,7 +63,7 @@ class HomeworkPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the homework")
-        refreshData(currentDate)
+        loadData(currentDate, true)
     }
 
     fun onRetry() {
@@ -77,7 +71,7 @@ class HomeworkPresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        refreshData(currentDate)
+        loadData(currentDate, true)
     }
 
     fun onDetailsClick() {
@@ -90,75 +84,54 @@ class HomeworkPresenter @Inject constructor(
     }
 
     private fun setBaseDateOnHolidays() {
-        launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                emit(semesterRepository.getCurrentSemester(student))
-            }.catch {
-                Timber.i("Loading semester result: An exception occurred")
-            }.collect {
-                baseDate = baseDate.getLastSchoolDayIfHoliday(it.schoolYear)
-                currentDate = baseDate
-                reloadNavigation()
-            }
-        }
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            emit(semesterRepository.getCurrentSemester(student))
+        }.catch {
+            Timber.i("Loading semester result: An exception occurred")
+        }.onEach {
+            baseDate = baseDate.getLastSchoolDayIfHoliday(it.schoolYear)
+            currentDate = baseDate
+            reloadNavigation()
+        }.launch("holidays")
     }
 
-    private fun refreshData(date: LocalDate) {
-        refreshJob?.cancel()
-        refreshJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emit(homeworkRepository.refreshHomework(student, semester, date, date))
-            }.onEach { afterLoading() }.catch { handleError(it) }.collect()
-        }
-    }
-
-    private fun loadData(date: LocalDate) {
-        Timber.i("Loading homework data started")
+    private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
         currentDate = date
 
-        loadingJob?.cancel()
-        loadingJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emitAll(homeworkRepository.getHomework(student, semester, date, date))
-            }.map {
-                createHomeworkItem(it)
-            }.onEach {
-                afterLoading()
-            }.catch {
-                handleError(it)
-            }.collect {
-                Timber.i("Loading homework result: Success")
-                view?.apply {
-                    updateData(it)
-                    showEmpty(it.isEmpty())
-                    showErrorView(false)
-                    showContent(it.isNotEmpty())
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            emitAll(homeworkRepository.getHomework(student, semester, date, date, forceRefresh))
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading homework data started")
+                Status.SUCCESS -> {
+                    Timber.i("Loading homework result: Success")
+                    view?.apply {
+                        updateData(createHomeworkItem(it.data!!))
+                        showEmpty(it.data.isEmpty())
+                        showErrorView(false)
+                        showContent(it.data.isNotEmpty())
+                    }
+                    analytics.logEvent(
+                        "load_data",
+                        "type" to "homework",
+                        "items" to it.data!!.size
+                    )
                 }
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "homework",
-                    "items" to it.size
-                )
+                Status.ERROR -> {
+                    Timber.i("Loading homework result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
-        }
-    }
-
-    private fun afterLoading() {
-        view?.run {
-            hideRefresh()
-            showProgress(false)
-            enableSwipe(true)
-        }
-    }
-
-    private fun handleError(error: Throwable) {
-        Timber.i("Loading homework result: An exception occurred")
-        errorHandler.dispatch(error)
+        }.afterLoading {
+            view?.run {
+                hideRefresh()
+                showProgress(false)
+                enableSwipe(true)
+            }
+        }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
