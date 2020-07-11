@@ -1,17 +1,17 @@
 package io.github.wulkanowy.ui.modules.account
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,26 +40,20 @@ class AccountPresenter @Inject constructor(
     }
 
     fun onLogoutConfirm() {
-        Timber.i("Attempt to logout current user ")
-        launch {
-            flow {
-                val student = studentRepository.getCurrentStudent(false)
-                studentRepository.logoutStudent(student)
+        flow {
+            val student = studentRepository.getCurrentStudent(false)
+            studentRepository.logoutStudent(student)
 
-                val students = studentRepository.getSavedStudents(false)
-                if (students.isNotEmpty()) {
-                    studentRepository.switchStudent(students[0])
-                }
-
-                emit(students)
-            }.onCompletion {
-                view?.dismissView()
-            }.catch {
-                Timber.i("Logout result: An exception occurred")
-                errorHandler.dispatch(it)
-            }.collect {
-                view?.apply {
-                    if (it.isEmpty()) {
+            val students = studentRepository.getSavedStudents(false)
+            if (students.isNotEmpty()) {
+                studentRepository.switchStudent(students[0])
+            }
+            emitAll(flowWithResource { students })
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Attempt to logout current user ")
+                Status.SUCCESS -> view?.run {
+                    if (it.data!!.isEmpty()) {
                         Timber.i("Logout result: Open login view")
                         syncManager.stopSyncWorker()
                         openClearLoginView()
@@ -68,31 +62,35 @@ class AccountPresenter @Inject constructor(
                         recreateMainView()
                     }
                 }
+                Status.ERROR -> {
+                    Timber.i("Logout result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
-        }
+        }.afterLoading {
+            view?.dismissView()
+        }.launch("logout")
     }
 
     fun onItemSelected(student: Student) {
         Timber.i("Select student item ${student.id}")
         if (student.isCurrent) {
             view?.dismissView()
-        } else {
-            Timber.i("Attempt to change a student")
-            launch {
-                flow { emit(studentRepository.switchStudent(student)) }
-                    .onCompletion {
-                        view?.dismissView()
-                    }
-                    .catch {
-                        Timber.i("Change a student result: An exception occurred")
-                        errorHandler.dispatch(it)
-                    }
-                    .collect {
-                        Timber.i("Change a student result: Success")
-                        view?.recreateMainView()
-                    }
+        } else flowWithResource { studentRepository.switchStudent(student) }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Attempt to change a student")
+                Status.SUCCESS -> {
+                    Timber.i("Change a student result: Success")
+                    view?.recreateMainView()
+                }
+                Status.ERROR -> {
+                    Timber.i("Change a student result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
-        }
+        }.afterLoading {
+            view?.dismissView()
+        }.launch("switch")
     }
 
     private fun createAccountItems(items: List<Student>): List<AccountItem<*>> {
@@ -104,18 +102,18 @@ class AccountPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        Timber.i("Loading account data started")
-        launch {
-            flow { emit(studentRepository.getSavedStudents(false)) }
-                .map { createAccountItems(it) }
-                .catch {
-                    Timber.i("Loading account result: An exception occurred")
-                    errorHandler.dispatch(it)
-                }
-                .collect {
+        flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading account data started")
+                Status.SUCCESS -> {
                     Timber.i("Loading account result: Success")
-                    view?.updateData(it)
+                    view?.updateData(createAccountItems(it.data!!))
                 }
-        }
+                Status.ERROR -> {
+                    Timber.i("Loading account result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
+            }
+        }.launch()
     }
 }

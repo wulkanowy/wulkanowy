@@ -1,28 +1,21 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
-import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
 
 class LoginStudentSelectPresenter @Inject constructor(
     schedulers: SchedulersProvider,
-    private val dispatchers: DispatchersProvider,
     studentRepository: StudentRepository,
     private val loginErrorHandler: LoginErrorHandler,
     private val analytics: FirebaseAnalyticsHelper
@@ -36,7 +29,7 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     fun onAttachView(view: LoginStudentSelectView, students: Serializable?) {
         super.onAttachView(view)
-        view.run {
+        with(view) {
             initView()
             showContact(false)
             enableSignIn(false)
@@ -81,20 +74,20 @@ class LoginStudentSelectPresenter @Inject constructor(
     private fun loadData(students: List<Student>) {
         resetSelectedState()
         this.students = students
-        launch {
-            flow { emit(studentRepository.getSavedStudents(false)) }
-                .map { savedStudents ->
-                    students.map { student ->
-                        student to savedStudents.any { compareStudents(student, it) }
-                    }
-                }
-                .catch {
-                    errorHandler.dispatch(it)
-                    lastError = it
+
+        flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.d("Login student select students load started")
+                Status.SUCCESS -> view?.updateData(students.map { student ->
+                    student to it.data!!.any { item -> compareStudents(student, item) }
+                })
+                Status.ERROR -> {
+                    errorHandler.dispatch(it.error!!)
+                    lastError = it.error
                     view?.updateData(students.map { student -> student to false })
                 }
-                .collect { view?.updateData(it) }
-        }
+            }
+        }.launch()
     }
 
     private fun resetSelectedState() {
@@ -103,35 +96,35 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     private fun registerStudents(students: List<Student>) {
-        launch {
-            flow { emit(studentRepository.saveStudents(students)) }
-                .map { students.first().apply { id = it.first() } }
-                .flatMapConcat { flow { emit(studentRepository.switchStudent(it)) } }
-                .flowOn(dispatchers.backgroundThread)
-                .onStart {
-                    view?.apply {
-                        showProgress(true)
-                        showContent(false)
-                    }
+        flowWithResource {
+            val savedStudents = studentRepository.saveStudents(students)
+            val firstRegistered = students.first().apply { id = savedStudents.first() }
+            studentRepository.switchStudent(firstRegistered)
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> view?.run {
                     Timber.i("Registration started")
+                    showProgress(true)
+                    showContent(false)
                 }
-                .catch { error ->
-                    students.forEach { analytics.logEvent("registration_student_select", "success" to false, "scrapperBaseUrl" to it.scrapperBaseUrl, "symbol" to it.symbol, "error" to error.message.ifNullOrBlank { "No message" }) }
+                Status.SUCCESS -> {
+                    Timber.i("Registration result: Success")
+                    view?.openMainView()
+                    logRegisterEvent(students)
+                }
+                Status.ERROR -> {
                     Timber.i("Registration result: An exception occurred ")
-                    loginErrorHandler.dispatch(error)
-                    lastError = error
                     view?.apply {
                         showProgress(false)
                         showContent(true)
                         showContact(true)
                     }
+                    lastError = it.error
+                    loginErrorHandler.dispatch(it.error!!)
+                    logRegisterEvent(students, it.error)
                 }
-                .collect {
-                    students.forEach { analytics.logEvent("registration_student_select", "success" to true, "scrapperBaseUrl" to it.scrapperBaseUrl, "symbol" to it.symbol, "error" to "No error") }
-                    Timber.i("Registration result: Success")
-                    view?.openMainView()
-                }
-        }
+            }
+        }.launch("register")
     }
 
     fun onDiscordClick() {
@@ -140,5 +133,16 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     fun onEmailClick() {
         view?.openEmail(lastError?.message.ifNullOrBlank { "empty" })
+    }
+
+    private fun logRegisterEvent(students: List<Student>, error: Throwable? = null) {
+        students.forEach { student ->
+            analytics.logEvent(
+                "registration_student_select",
+                "success" to (error != null),
+                "scrapperBaseUrl" to student.scrapperBaseUrl,
+                "symbol" to student.symbol,
+                "error" to (error?.message?.ifBlank { "No message" } ?: "No error"))
+        }
     }
 }
