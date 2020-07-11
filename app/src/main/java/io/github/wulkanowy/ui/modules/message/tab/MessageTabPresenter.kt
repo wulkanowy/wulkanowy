@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.data.repositories.message.MessageRepository
@@ -9,8 +10,8 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.toFormattedString
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -19,7 +20,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.xdrop.fuzzywuzzy.FuzzySearch
@@ -40,10 +40,6 @@ class MessageTabPresenter @Inject constructor(
     lateinit var folder: MessageFolder
 
     private lateinit var lastError: Throwable
-
-    private var refreshJob: Job? = null
-
-    private var loadingJob: Job? = null
 
     private var lastSearchQuery = ""
 
@@ -69,7 +65,7 @@ class MessageTabPresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        refreshData()
+        loadData(true)
     }
 
     fun onDetailsClick() {
@@ -77,12 +73,11 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onDeleteMessage() {
-        refreshData()
+        loadData(true)
     }
 
     fun onParentViewLoadData(forceRefresh: Boolean) {
-        if (forceRefresh) refreshData()
-        else loadData()
+        loadData(forceRefresh)
     }
 
     fun onMessageItemSelected(message: Message, position: Int) {
@@ -96,57 +91,38 @@ class MessageTabPresenter @Inject constructor(
         }
     }
 
-    private fun refreshData() {
-        refreshJob?.cancel()
-        refreshJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emit(messageRepository.refreshMessages(student, semester, folder))
-            }.onCompletion { afterLoading() }.catch { handleError(it) }.collect()
-        }
-    }
-
-    private fun loadData() {
-        Timber.i("Loading $folder message data started")
-
-        loadingJob?.cancel()
-        loadingJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semester = semesterRepository.getCurrentSemester(student)
-                emitAll(messageRepository.getMessages(student, semester, folder))
-            }.onEach {
-                afterLoading()
-            }.catch {
-                handleError(it)
-            }.collect {
-                Timber.i("Loading $folder message result: Success")
-                messages = it
-                view?.updateData(getFilteredData(lastSearchQuery))
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "messages",
-                    "items" to it.size,
-                    "folder" to folder.name
-                )
+    private fun loadData(forceRefresh: Boolean) {
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            emitAll(messageRepository.getMessages(student, semester, folder, forceRefresh))
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading $folder message data started")
+                Status.SUCCESS -> {
+                    Timber.i("Loading $folder message result: Success")
+                    messages = it.data!!
+                    view?.updateData(getFilteredData(lastSearchQuery))
+                    analytics.logEvent(
+                        "load_data",
+                        "type" to "messages",
+                        "items" to it.data.size,
+                        "folder" to folder.name
+                    )
+                }
+                Status.ERROR -> {
+                    Timber.i("Loading $folder message result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
-        }
-    }
-
-    private fun afterLoading() {
-        view?.run {
-            showRefresh(false)
-            showProgress(false)
-            enableSwipe(true)
-            notifyParentDataLoaded()
-        }
-    }
-
-    private fun handleError(error: Throwable) {
-        Timber.i("Loading $folder message result: An exception occurred")
-        errorHandler.dispatch(error)
-        afterLoading()
+        }.afterLoading {
+            view?.run {
+                showRefresh(false)
+                showProgress(false)
+                enableSwipe(true)
+                notifyParentDataLoaded()
+            }
+        }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
