@@ -20,7 +20,7 @@ class TimetableRepository @Inject constructor(
 ) {
 
     fun getTimetable(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isNotEmpty() || forceRefresh },
+        shouldFetch = { it.isEmpty() || forceRefresh },
         query = { local.getTimetable(semester, start.monday, end.sunday).map { schedulerHelper.scheduleNotifications(it, student); it } },
         fetch = { remote.getTimetable(student, semester, start.monday, end.sunday) },
         saveFetchResult = { old, new ->
