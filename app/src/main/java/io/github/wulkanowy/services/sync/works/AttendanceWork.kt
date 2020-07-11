@@ -13,6 +13,6 @@ import javax.inject.Inject
 class AttendanceWork @Inject constructor(private val attendanceRepository: AttendanceRepository) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return rxCompletable { attendanceRepository.refreshAttendance(student, semester, now().monday, now().sunday) }
+        return rxCompletable { attendanceRepository.getAttendance(student, semester, now().monday, now().sunday, true).waitForResult() }
     }
 }
