@@ -19,24 +19,37 @@ class GradeStatisticsRepository @Inject constructor(
 
     fun getGradesStatistics(student: Student, semester: Semester, subjectName: String, isSemester: Boolean, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getGradesStatistics(semester, isSemester, subjectName) },
+        query = { local.getGradesStatistics(semester, isSemester) },
         fetch = { remote.getGradeStatistics(student, semester, isSemester) },
         saveFetchResult = { old, new ->
-            local.deleteGradesStatistics(old.uniqueSubtract(new))
-            local.saveGradesStatistics(new.uniqueSubtract(old))
+            local.deleteGradesStatistics(old uniqueSubtract new)
+            local.saveGradesStatistics(new uniqueSubtract old)
         },
-        mapResult = { it.mapToStatisticItems() }
+        mapResult = { items ->
+            when (subjectName) {
+                "Wszystkie" -> items.groupBy { it.grade }.map {
+                    GradeStatistics(semester.studentId, semester.semesterId, subjectName, it.key,
+                        it.value.fold(0) { acc, e -> acc + e.amount }, false)
+                } + items
+                else -> items.filter { it.subject == subjectName }
+            }.mapToStatisticItems()
+        }
     )
 
     fun getGradesPointsStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getGradesPointsStatistics(semester, subjectName) },
+        query = { local.getGradesPointsStatistics(semester) },
         fetch = { remote.getGradePointsStatistics(student, semester) },
         saveFetchResult = { old, new ->
-            local.deleteGradesPointsStatistics(old.uniqueSubtract(new))
-            local.saveGradesPointsStatistics(new.uniqueSubtract(old))
+            local.deleteGradesPointsStatistics(old uniqueSubtract new)
+            local.saveGradesPointsStatistics(new uniqueSubtract old)
         },
-        mapResult = { it.mapToStatisticsItem() }
+        mapResult = { items ->
+            when (subjectName) {
+                "Wszystkie" -> items
+                else -> items.filter { it.subject == subjectName }
+            }.mapToStatisticsItem()
+        }
     )
 
     private fun List<GradeStatistics>.mapToStatisticItems() = groupBy { it.subject }.map {

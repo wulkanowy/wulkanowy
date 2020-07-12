@@ -178,26 +178,19 @@ class GradeStatisticsPresenter @Inject constructor(
                         "items" to it.data!!.size
                     )
                 }
-                Status.ERROR -> handleErrors(it.error!!, semesterId)
+                Status.ERROR -> {
+                    Timber.i("Loading grade stats result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
         }.afterLoading {
-            afterLoading(semesterId)
+            view?.run {
+                showRefresh(false)
+                showProgress(false)
+                enableSwipe(true)
+                notifyParentDataLoaded(semesterId)
+            }
         }.launch("load")
-    }
-
-    private fun afterLoading(semesterId: Int) {
-        view?.run {
-            showRefresh(false)
-            showProgress(false)
-            enableSwipe(true)
-            notifyParentDataLoaded(semesterId)
-        }
-    }
-
-    private fun handleErrors(error: Throwable, semesterId: Int) {
-        Timber.i("Loading grade stats result: An exception occurred")
-        errorHandler.dispatch(error)
-        afterLoading(semesterId)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
