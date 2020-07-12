@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.summary
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
@@ -10,15 +11,12 @@ import io.github.wulkanowy.ui.modules.grade.GradeAverageProvider
 import io.github.wulkanowy.ui.modules.grade.GradeDetailsWithAverage
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.Job
+import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,10 +31,6 @@ class GradeSummaryPresenter @Inject constructor(
 ) : BasePresenter<GradeSummaryView>(errorHandler, studentRepository, schedulers) {
 
     private lateinit var lastError: Throwable
-
-    private var refreshJob: Job? = null
-
-    private var loadingJob: Job? = null
 
     override fun onAttachView(view: GradeSummaryView) {
         super.onAttachView(view)
@@ -55,44 +49,40 @@ class GradeSummaryPresenter @Inject constructor(
     }
 
     private fun refreshData(semesterId: Int) {
-        refreshJob?.cancel()
-        refreshJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semesters = semesterRepository.getSemesters(student)
-                val semester = semesters.first { item -> item.semesterId == semesterId }
-                emit(gradeRepository.refreshGrades(student, semester))
-            }.onCompletion { afterLoading(semesterId) }.catch { handleError(it, semesterId) }.collect()
-        }
+        flowWithResource {
+            val student = studentRepository.getCurrentStudent()
+            val semesters = semesterRepository.getSemesters(student)
+            val semester = semesters.first { item -> item.semesterId == semesterId }
+            gradeRepository.refreshGrades(student, semester)
+        }.onEach {
+            if (it.status == Status.ERROR) handleError(it.error!!, semesterId)
+        }.afterLoading {
+            afterLoading(semesterId)
+        }.launch("refresh")
     }
 
     private fun loadData(semesterId: Int) {
-        loadingJob?.cancel()
-        loadingJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                emitAll(averageProvider.getGradesDetailsWithAverage(student, semesterId))
-            }.map {
-                createGradeSummaryItems(it)
-            }.onEach {
-                afterLoading(semesterId)
-            }.catch {
-                handleError(it, semesterId)
-            }.collect {
-                Timber.i("Loading grade summary result: Success")
-                view?.run {
-                    showEmpty(it.isEmpty())
-                    showContent(it.isNotEmpty())
-                    showErrorView(false)
-                    updateData(it)
-                }
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "grade_summary",
-                    "items" to it.size
-                )
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            emitAll(averageProvider.getGradesDetailsWithAverage(student, semesterId))
+        }.onEach {
+            afterLoading(semesterId)
+        }.catch {
+            handleError(it, semesterId)
+        }.onEach {
+            Timber.i("Loading grade summary result: Success")
+            view?.run {
+                showEmpty(it.isEmpty())
+                showContent(it.isNotEmpty())
+                showErrorView(false)
+                updateData(createGradeSummaryItems(it))
             }
-        }
+            analytics.logEvent(
+                "load_data",
+                "type" to "grade_summary",
+                "items" to it.size
+            )
+        }.launch()
     }
 
     private fun afterLoading(semesterId: Int) {
@@ -153,7 +143,7 @@ class GradeSummaryPresenter @Inject constructor(
             showEmpty(false)
             clearView()
         }
-        loadingJob?.cancel()
+        cancelJobs("load")
     }
 
     private fun createGradeSummaryItems(items: List<GradeDetailsWithAverage>): List<GradeSummary> {
