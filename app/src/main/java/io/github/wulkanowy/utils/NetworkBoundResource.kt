@@ -29,10 +29,38 @@ inline fun <ResultType, RequestType> networkBoundResource(
             query().map { Resource.success(filterResult(it)) }
         } catch (throwable: Throwable) {
             onFetchFailed(throwable)
-            query().map { Resource.error(throwable, it) }
+            query().map { Resource.error(throwable, filterResult(it)) }
         }
     } else {
         query().map { Resource.success(filterResult(it)) }
+    })
+}
+
+@JvmName("networkBoundResourceWithMap")
+inline fun <ResultType, RequestType, T> networkBoundResource(
+    showSavedOnLoading: Boolean = true,
+    crossinline query: () -> Flow<ResultType>,
+    crossinline fetch: suspend (ResultType) -> RequestType,
+    crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
+    crossinline onFetchFailed: (Throwable) -> Unit = { Unit },
+    crossinline shouldFetch: (ResultType) -> Boolean = { true },
+    crossinline mapResult: (ResultType) -> T
+) = flow {
+    emit(Resource.loading())
+
+    val data = query().first()
+    emitAll(if (shouldFetch(data)) {
+        if (showSavedOnLoading) emit(Resource.loading(mapResult(data)))
+
+        try {
+            saveFetchResult(data, fetch(data))
+            query().map { Resource.success(mapResult(it)) }
+        } catch (throwable: Throwable) {
+            onFetchFailed(throwable)
+            query().map { Resource.error(throwable, mapResult(it)) }
+        }
+    } else {
+        query().map { Resource.success(mapResult(it)) }
     })
 }
 

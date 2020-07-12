@@ -11,15 +11,10 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import io.github.wulkanowy.utils.afterLoading
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -42,10 +37,6 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
-    private var refreshJob: Job? = null
-
-    private var loadingJob: Job? = null
-
     var currentType: ViewType = ViewType.PARTIAL
         private set
 
@@ -59,11 +50,8 @@ class GradeStatisticsPresenter @Inject constructor(
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         currentSemesterId = semesterId
         loadSubjects()
-        if (forceRefresh) refreshDataByType(semesterId, currentType)
-        else {
-            view?.showErrorView(false)
-            loadDataByType(semesterId, currentSubjectName, currentType)
-        }
+        if (!forceRefresh) view?.showErrorView(false)
+        loadDataByType(semesterId, currentSubjectName, currentType, forceRefresh)
     }
 
     fun onParentViewReselected() {
@@ -82,7 +70,7 @@ class GradeStatisticsPresenter @Inject constructor(
             showEmpty(false)
             clearView()
         }
-//        job.cancel()
+        cancelJobs("load")
     }
 
     fun onSwipeRefresh() {
@@ -120,7 +108,7 @@ class GradeStatisticsPresenter @Inject constructor(
     fun onTypeChange() {
         val type = view?.currentType ?: ViewType.POINTS
         Timber.i("Select grade stats semester: $type")
-//        job.cancel()
+        cancelJobs("load")
         view?.run {
             showContent(false)
             showProgress(true)
@@ -157,65 +145,45 @@ class GradeStatisticsPresenter @Inject constructor(
         }.launch("subjects")
     }
 
-    private fun refreshDataByType(semesterId: Int, type: ViewType) {
-        refreshJob?.cancel()
-        refreshJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semesters = semesterRepository.getSemesters(student)
-                val semester = semesters.first { item -> item.semesterId == semesterId }
-
-                emit(with(gradeStatisticsRepository) {
-                    when (type) {
-                        ViewType.SEMESTER -> refreshGradeStatistics(student, semester, true)
-                        ViewType.PARTIAL -> refreshGradeStatistics(student, semester, false)
-                        ViewType.POINTS -> refreshGradePointStatistics(student, semester)
-                    }
-                })
-            }.onCompletion { afterLoading(semesterId) }.catch { handleErrors(it, semesterId) }.collect()
-        }
-    }
-
-    private fun loadDataByType(semesterId: Int, subjectName: String, type: ViewType) {
+    private fun loadDataByType(semesterId: Int, subjectName: String, type: ViewType, forceRefresh: Boolean = false) {
         currentSubjectName = if (preferencesRepository.showAllSubjectsOnStatisticsList) "Wszystkie" else subjectName
         currentType = type
 
-        Timber.i("Loading grade stats data started")
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semesters = semesterRepository.getSemesters(student)
+            val semester = semesters.first { item -> item.semesterId == semesterId }
 
-        loadingJob?.cancel()
-        loadingJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semesters = semesterRepository.getSemesters(student)
-                val semester = semesters.first { item -> item.semesterId == semesterId }
-
-                emitAll(with(gradeStatisticsRepository) {
-                    when (type) {
-                        ViewType.SEMESTER -> getGradesStatistics(student, semester, currentSubjectName, true)
-                        ViewType.PARTIAL -> getGradesStatistics(student, semester, currentSubjectName, false)
-                        ViewType.POINTS -> getGradesPointsStatistics(student, semester, currentSubjectName)
-                    }
-                })
-            }.onEach {
-                afterLoading(semesterId)
-            }.catch {
-                handleErrors(it, semesterId)
-            }.collect {
-                Timber.i("Loading grade stats result: Success")
-                view?.run {
-                    showEmpty(it.isEmpty())
-                    showContent(it.isNotEmpty())
-                    showErrorView(false)
-                    updateData(it, preferencesRepository.gradeColorTheme, preferencesRepository.showAllSubjectsOnStatisticsList)
-                    showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
+            emitAll(with(gradeStatisticsRepository) {
+                when (type) {
+                    ViewType.SEMESTER -> getGradesStatistics(student, semester, currentSubjectName, true, forceRefresh)
+                    ViewType.PARTIAL -> getGradesStatistics(student, semester, currentSubjectName, false, forceRefresh)
+                    ViewType.POINTS -> getGradesPointsStatistics(student, semester, currentSubjectName, forceRefresh)
                 }
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "grade_statistics",
-                    "items" to it.size
-                )
+            })
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading grade stats data started")
+                Status.SUCCESS -> {
+                    Timber.i("Loading grade stats result: Success")
+                    view?.run {
+                        showEmpty(it.data!!.isEmpty())
+                        showContent(it.data.isNotEmpty())
+                        showErrorView(false)
+                        updateData(it.data, preferencesRepository.gradeColorTheme, preferencesRepository.showAllSubjectsOnStatisticsList)
+                        showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
+                    }
+                    analytics.logEvent(
+                        "load_data",
+                        "type" to "grade_statistics",
+                        "items" to it.data!!.size
+                    )
+                }
+                Status.ERROR -> handleErrors(it.error!!, semesterId)
             }
-        }
+        }.afterLoading {
+            afterLoading(semesterId)
+        }.launch("load")
     }
 
     private fun afterLoading(semesterId: Int) {

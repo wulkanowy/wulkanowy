@@ -6,10 +6,8 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.ui.modules.grade.statistics.ViewType
+import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,37 +17,27 @@ class GradeStatisticsRepository @Inject constructor(
     private val remote: GradeStatisticsRemote
 ) {
 
-    suspend fun refreshGradeStatistics(student: Student, semester: Semester, isSemester: Boolean) {
-        val new = remote.getGradeStatistics(student, semester, isSemester)
-        val old = local.getGradesStatistics(semester, isSemester).first()
+    fun getGradesStatistics(student: Student, semester: Semester, subjectName: String, isSemester: Boolean, forceRefresh: Boolean) = networkBoundResource(
+        shouldFetch = { it.isEmpty() || forceRefresh },
+        query = { local.getGradesStatistics(semester, isSemester, subjectName) },
+        fetch = { remote.getGradeStatistics(student, semester, isSemester) },
+        saveFetchResult = { old, new ->
+            local.deleteGradesStatistics(old.uniqueSubtract(new))
+            local.saveGradesStatistics(new.uniqueSubtract(old))
+        },
+        mapResult = { it.mapToStatisticItems() }
+    )
 
-        local.deleteGradesStatistics(old.uniqueSubtract(new))
-        local.saveGradesStatistics(new.uniqueSubtract(old))
-    }
-
-    fun getGradesStatistics(student: Student, semester: Semester, subjectName: String, isSemester: Boolean): Flow<List<GradeStatisticsItem>> {
-        return local.getGradesStatistics(semester, isSemester, subjectName).map {
-            if (it.isNotEmpty()) return@map it
-            refreshGradeStatistics(student, semester, isSemester)
-            it
-        }.map { it.mapToStatisticItems() }
-    }
-
-    suspend fun refreshGradePointStatistics(student: Student, semester: Semester) {
-        val new = remote.getGradePointsStatistics(student, semester)
-        val old = local.getGradesPointsStatistics(semester).first()
-
-        local.deleteGradesPointsStatistics(old.uniqueSubtract(new))
-        local.saveGradesPointsStatistics(new.uniqueSubtract(old))
-    }
-
-    fun getGradesPointsStatistics(student: Student, semester: Semester, subjectName: String): Flow<List<GradeStatisticsItem>> {
-        return local.getGradesPointsStatistics(semester, subjectName).map {
-            if (it.isNotEmpty()) return@map it
-            refreshGradePointStatistics(student, semester)
-            it
-        }.map { it.mapToStatisticsItem() }
-    }
+    fun getGradesPointsStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
+        shouldFetch = { it.isEmpty() || forceRefresh },
+        query = { local.getGradesPointsStatistics(semester, subjectName) },
+        fetch = { remote.getGradePointsStatistics(student, semester) },
+        saveFetchResult = { old, new ->
+            local.deleteGradesPointsStatistics(old.uniqueSubtract(new))
+            local.saveGradesPointsStatistics(new.uniqueSubtract(old))
+        },
+        mapResult = { it.mapToStatisticsItem() }
+    )
 
     private fun List<GradeStatistics>.mapToStatisticItems() = groupBy { it.subject }.map {
         GradeStatisticsItem(

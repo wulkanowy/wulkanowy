@@ -4,8 +4,6 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.gradestatistics.GradeStatisticsRepository
 import io.reactivex.Completable
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.rx2.rxCompletable
 import javax.inject.Inject
 
@@ -16,12 +14,9 @@ class GradeStatisticsWork @Inject constructor(
     override fun create(student: Student, semester: Semester): Completable {
         return rxCompletable {
             with(gradeStatisticsRepository) {
-                flow {
-                    refreshGradeStatistics(student, semester, false)
-                    refreshGradeStatistics(student, semester, true)
-                    refreshGradePointStatistics(student, semester)
-                    emit(null)
-                }.first()
+                getGradesStatistics(student, semester, "Wszystkie", isSemester = true, forceRefresh = true).waitForResult()
+                getGradesStatistics(student, semester, "Wszystkie", isSemester = false, forceRefresh = true).waitForResult()
+                getGradesPointsStatistics(student, semester, "Wszystkie", forceRefresh = true).waitForResult()
             }
         }
     }
