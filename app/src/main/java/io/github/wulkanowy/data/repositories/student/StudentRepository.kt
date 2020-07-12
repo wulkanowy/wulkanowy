@@ -2,7 +2,6 @@ package io.github.wulkanowy.data.repositories.student
 
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
-import io.github.wulkanowy.utils.flowWithResource
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,16 +15,16 @@ class StudentRepository @Inject constructor(
 
     suspend fun isCurrentStudentSet(): Boolean = local.getCurrentStudent(false)?.isCurrent ?: false
 
-    fun getStudentsApi(pin: String, symbol: String, token: String) = flowWithResource {
-        remote.getStudentsMobileApi(token, pin, symbol)
+    suspend fun getStudentsApi(pin: String, symbol: String, token: String): List<Student> {
+        return remote.getStudentsMobileApi(token, pin, symbol)
     }
 
-    fun getStudentsScrapper(email: String, password: String, endpoint: String, symbol: String) = flowWithResource {
-        remote.getStudentsScrapper(email, password, endpoint, symbol)
+    suspend fun getStudentsScrapper(email: String, password: String, endpoint: String, symbol: String): List<Student> {
+        return remote.getStudentsScrapper(email, password, endpoint, symbol)
     }
 
-    fun getStudentsHybrid(email: String, password: String, endpoint: String, symbol: String) = flowWithResource {
-        remote.getStudentsHybrid(email, password, endpoint, symbol)
+    suspend fun getStudentsHybrid(email: String, password: String, endpoint: String, symbol: String): List<Student> {
+        return remote.getStudentsHybrid(email, password, endpoint, symbol)
     }
 
     suspend fun getSavedStudents(decryptPass: Boolean = true): List<Student> {

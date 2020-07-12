@@ -7,6 +7,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -58,7 +59,7 @@ class LoginRecoverPresenter @Inject constructor(
 
         if (!validateInput(username, host)) return
 
-        recoverRepository.getReCaptchaSiteKey(host, symbol.ifBlank { "Default" }).onEach {
+        flowWithResource { recoverRepository.getReCaptchaSiteKey(host, symbol.ifBlank { "Default" }) }.onEach {
             when (it.status) {
                 Status.LOADING -> view?.run {
                     hideSoftKeyboard()
@@ -97,7 +98,7 @@ class LoginRecoverPresenter @Inject constructor(
         val host = view?.recoverHostValue.orEmpty()
         val symbol = view?.formHostSymbol.ifNullOrBlank { "Default" }
 
-        recoverRepository.sendRecoverRequest(host, symbol, username, reCaptchaResponse).onEach {
+        flowWithResource { recoverRepository.sendRecoverRequest(host, symbol, username, reCaptchaResponse) }.onEach {
             when (it.status) {
                 Status.LOADING -> view?.run {
                     showProgress(true)

@@ -3,7 +3,6 @@ package io.github.wulkanowy.data.repositories.homework
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.sunday
@@ -28,7 +27,7 @@ class HomeworkRepository @Inject constructor(
         }
     )
 
-    fun toggleDone(homework: Homework) = flowWithResource {
+    suspend fun toggleDone(homework: Homework) {
         local.updateHomework(listOf(homework.apply {
             isDone = !isDone
         }))

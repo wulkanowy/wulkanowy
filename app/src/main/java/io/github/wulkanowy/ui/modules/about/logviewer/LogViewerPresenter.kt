@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -24,7 +25,7 @@ class LogViewerPresenter @Inject constructor(
     }
 
     fun onShareLogsSelected(): Boolean {
-        loggerRepository.getLogFiles().onEach {
+        flowWithResource { loggerRepository.getLogFiles() }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.d("Loading logs files started")
                 Status.SUCCESS -> {
@@ -45,7 +46,7 @@ class LogViewerPresenter @Inject constructor(
     }
 
     private fun loadLogFile() {
-        loggerRepository.getLastLogLines().onEach {
+        flowWithResource { loggerRepository.getLastLogLines() }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.d("Loading last log file started")
                 Status.SUCCESS -> {

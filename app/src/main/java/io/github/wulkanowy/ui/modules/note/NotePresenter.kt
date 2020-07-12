@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -112,7 +113,7 @@ class NotePresenter @Inject constructor(
     }
 
     private fun updateNote(note: Note) {
-        noteRepository.updateNote(note).onEach {
+        flowWithResource { noteRepository.updateNote(note) }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Attempt to update note ${note.id}")
                 Status.SUCCESS -> Timber.i("Update note result: Success")

@@ -7,6 +7,7 @@ import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -48,7 +49,7 @@ class LoginSymbolPresenter @Inject constructor(
             return
         }
 
-        studentRepository.getStudentsScrapper(loginData!!.first, loginData!!.second, loginData!!.third, symbol).onEach {
+        flowWithResource { studentRepository.getStudentsScrapper(loginData!!.first, loginData!!.second, loginData!!.third, symbol) }.onEach {
             when (it.status) {
                 Status.LOADING -> view?.run {
                     Timber.i("Login with symbol started")

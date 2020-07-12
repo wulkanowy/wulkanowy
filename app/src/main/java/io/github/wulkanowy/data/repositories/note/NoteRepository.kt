@@ -3,7 +3,6 @@ package io.github.wulkanowy.data.repositories.note
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +35,7 @@ class NoteRepository @Inject constructor(
         return local.getNotes(student).map { it.filter { note -> !note.isNotified } }
     }
 
-    fun updateNote(note: Note) = flowWithResource {
+    suspend fun updateNote(note: Note) {
         local.updateNotes(listOf(note))
     }
 

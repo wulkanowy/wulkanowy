@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.login.advanced
 
-import io.github.wulkanowy.Resource
 import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -10,8 +9,8 @@ import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -129,7 +128,7 @@ class LoginAdvancedPresenter @Inject constructor(
     fun onSignInClick() {
         if (!validateCredentials()) return
 
-        getStudentsAppropriatesToLoginType().onEach {
+        flowWithResource { getStudentsAppropriatesToLoginType() }.onEach {
             when (it.status) {
                 Status.LOADING -> view?.run {
                     Timber.i("Login started")
@@ -164,7 +163,7 @@ class LoginAdvancedPresenter @Inject constructor(
         }.launch("login")
     }
 
-    private fun getStudentsAppropriatesToLoginType(): Flow<Resource<List<Student>>> {
+    private suspend fun getStudentsAppropriatesToLoginType(): List<Student> {
         val email = view?.formUsernameValue.orEmpty()
         val password = view?.formPassValue.orEmpty()
         val endpoint = view?.formHostValue.orEmpty()
