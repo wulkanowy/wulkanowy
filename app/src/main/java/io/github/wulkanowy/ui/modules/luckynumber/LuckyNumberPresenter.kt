@@ -8,8 +8,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
+import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -37,9 +36,9 @@ class LuckyNumberPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
-            emitAll(luckyNumberRepository.getLuckyNumber(student, forceRefresh))
+            luckyNumberRepository.getLuckyNumber(student, forceRefresh)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading lucky number started")

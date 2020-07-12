@@ -11,8 +11,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
+import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.onEach
 import org.threeten.bp.Month
 import timber.log.Timber
@@ -79,10 +78,10 @@ class AttendanceSummaryPresenter @Inject constructor(
     private fun loadData(subjectId: Int, forceRefresh: Boolean = false) {
         currentSubjectId = subjectId
 
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(attendanceSummaryRepository.getAttendanceSummary(student, semester, subjectId, forceRefresh))
+            attendanceSummaryRepository.getAttendanceSummary(student, semester, subjectId, forceRefresh)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading attendance summary data started")
@@ -128,10 +127,10 @@ class AttendanceSummaryPresenter @Inject constructor(
     }
 
     private fun loadSubjects() {
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(subjectRepository.getSubjects(student, semester))
+            subjectRepository.getSubjects(student, semester)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading attendance summary subjects started")

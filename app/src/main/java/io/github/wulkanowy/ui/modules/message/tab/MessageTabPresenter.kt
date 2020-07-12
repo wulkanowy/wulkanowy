@@ -11,14 +11,13 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -92,10 +91,10 @@ class MessageTabPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean) {
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(messageRepository.getMessages(student, semester, folder, forceRefresh))
+            messageRepository.getMessages(student, semester, folder, forceRefresh)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading $folder message data started")

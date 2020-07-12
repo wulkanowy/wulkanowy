@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
@@ -17,7 +18,6 @@ import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import org.threeten.bp.LocalDate
@@ -114,10 +114,10 @@ class CompletedLessonsPresenter @Inject constructor(
     private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
         currentDate = date
 
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(completedLessonsRepository.getCompletedLessons(student, semester, date, date, forceRefresh))
+            completedLessonsRepository.getCompletedLessons(student, semester, date, date, forceRefresh)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading completed lessons data started")

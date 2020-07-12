@@ -12,8 +12,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
+import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -121,10 +120,10 @@ class GradeStatisticsPresenter @Inject constructor(
     }
 
     private fun loadSubjects() {
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(subjectRepository.getSubjects(student, semester))
+            subjectRepository.getSubjects(student, semester)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading grade stats subjects started")
@@ -149,18 +148,18 @@ class GradeStatisticsPresenter @Inject constructor(
         currentSubjectName = if (preferencesRepository.showAllSubjectsOnStatisticsList) "Wszystkie" else subjectName
         currentType = type
 
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semesters = semesterRepository.getSemesters(student)
             val semester = semesters.first { item -> item.semesterId == semesterId }
 
-            emitAll(with(gradeStatisticsRepository) {
+            with(gradeStatisticsRepository) {
                 when (type) {
                     ViewType.SEMESTER -> getGradesStatistics(student, semester, currentSubjectName, true, forceRefresh)
                     ViewType.PARTIAL -> getGradesStatistics(student, semester, currentSubjectName, false, forceRefresh)
                     ViewType.POINTS -> getGradesPointsStatistics(student, semester, currentSubjectName, forceRefresh)
                 }
-            })
+            }
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading grade stats data started")

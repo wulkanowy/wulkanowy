@@ -13,10 +13,10 @@ import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
+import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -60,9 +60,9 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     private fun loadData(message: Message) {
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getStudentById(message.studentId)
-            emitAll(messageRepository.getMessage(student, message, true))
+            messageRepository.getMessage(student, message, true)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading message ${message.messageId} preview started")
@@ -169,9 +169,9 @@ class MessagePreviewPresenter @Inject constructor(
             showErrorView(false)
         }
 
-        flow {
+        flowWithResource {
             val student = studentRepository.getCurrentStudent()
-            emitAll(messageRepository.deleteMessage(student, message!!))
+            messageRepository.deleteMessage(student, message!!)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.d("Message ${message?.id} delete started")

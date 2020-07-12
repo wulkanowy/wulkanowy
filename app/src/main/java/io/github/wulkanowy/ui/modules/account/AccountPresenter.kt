@@ -9,8 +9,6 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -40,7 +38,7 @@ class AccountPresenter @Inject constructor(
     }
 
     fun onLogoutConfirm() {
-        flow {
+        flowWithResource {
             val student = studentRepository.getCurrentStudent(false)
             studentRepository.logoutStudent(student)
 
@@ -48,7 +46,7 @@ class AccountPresenter @Inject constructor(
             if (students.isNotEmpty()) {
                 studentRepository.switchStudent(students[0])
             }
-            emitAll(flowWithResource { students })
+            students
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Attempt to logout current user ")

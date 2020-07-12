@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.monday
@@ -17,7 +18,6 @@ import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import org.threeten.bp.LocalDate
@@ -110,10 +110,10 @@ class ExamPresenter @Inject constructor(
     private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
         currentDate = date
 
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(examRepository.getExams(student, semester, currentDate.monday, currentDate.sunday, forceRefresh))
+            examRepository.getExams(student, semester, currentDate.monday, currentDate.sunday, forceRefresh)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading exam data started")

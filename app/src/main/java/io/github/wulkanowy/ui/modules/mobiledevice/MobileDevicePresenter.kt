@@ -10,9 +10,9 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
+import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -55,10 +55,10 @@ class MobileDevicePresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(mobileDeviceRepository.getDevices(student, semester, forceRefresh))
+            mobileDeviceRepository.getDevices(student, semester, forceRefresh)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading mobile devices data started")
@@ -121,10 +121,10 @@ class MobileDevicePresenter @Inject constructor(
     }
 
     fun onUnregisterConfirmed(device: MobileDevice) {
-        flow {
+        flowWithResource {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(mobileDeviceRepository.unregisterDevice(student, semester, device))
+            mobileDeviceRepository.unregisterDevice(student, semester, device)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Unregister device started")

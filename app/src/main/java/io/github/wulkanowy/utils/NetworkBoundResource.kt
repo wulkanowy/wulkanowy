@@ -3,6 +3,7 @@ package io.github.wulkanowy.utils
 import io.github.wulkanowy.Resource
 import io.github.wulkanowy.Status
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -68,6 +69,18 @@ fun <T> flowWithResource(block: suspend () -> T) = flow {
     emit(Resource.loading())
     try {
         emit(Resource.success(block()))
+    } catch (e: Throwable) {
+        emit(Resource.error(e))
+    }
+}
+
+fun <T> flowWithResourceIn(block: suspend () -> Flow<Resource<T>>) = flow {
+    emit(Resource.loading())
+
+    try {
+        block().collect {
+            emit(it)
+        }
     } catch (e: Throwable) {
         emit(Resource.error(e))
     }

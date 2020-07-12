@@ -12,6 +12,8 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
+import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.nextSchoolDay
@@ -19,7 +21,6 @@ import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import org.threeten.bp.LocalDate
@@ -189,10 +190,10 @@ class AttendancePresenter @Inject constructor(
         Timber.i("Loading attendance data started")
         currentDate = date
 
-        flow {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(attendanceRepository.getAttendance(student, semester, date, date, forceRefresh))
+            attendanceRepository.getAttendance(student, semester, date, date, forceRefresh)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> view?.showExcuseButton(false)
@@ -229,15 +230,14 @@ class AttendancePresenter @Inject constructor(
     }
 
     private fun excuseAbsence(reason: String?, toExcuseList: List<Attendance>) {
-        Timber.i("Excusing absence started")
-
-        flow {
+        flowWithResource {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(attendanceRepository.excuseForAbsence(student, semester, toExcuseList, reason))
+            attendanceRepository.excuseForAbsence(student, semester, toExcuseList, reason)
         }.onEach {
             when (it.status) {
-                Status.LOADING -> view?.apply {
+                Status.LOADING -> view?.run {
+                    Timber.i("Excusing absence started")
                     showProgress(true)
                     showContent(false)
                     showExcuseButton(false)
@@ -246,7 +246,7 @@ class AttendancePresenter @Inject constructor(
                     Timber.i("Excusing for absence result: Success")
                     analytics.logEvent("excuse_absence", "items" to attendanceToExcuseList.size)
                     attendanceToExcuseList.clear()
-                    view?.apply {
+                    view?.run {
                         showExcuseButton(false)
                         showMessage(excuseSuccessString)
                         showContent(true)

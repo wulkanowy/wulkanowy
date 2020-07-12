@@ -6,7 +6,6 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.message.MessageFolder.RECEIVED
 import io.github.wulkanowy.sdk.pojo.SentMessage
-import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
@@ -62,7 +61,7 @@ class MessageRepository @Inject constructor(
         return remote.sendMessage(student, subject, content, recipients)
     }
 
-    fun deleteMessage(student: Student, message: Message) = flowWithResource {
+    suspend fun deleteMessage(student: Student, message: Message) {
         val isDeleted = remote.deleteMessage(student, message)
 
         if (!message.removed) local.updateMessages(listOf(message.copy(removed = isDeleted).apply {

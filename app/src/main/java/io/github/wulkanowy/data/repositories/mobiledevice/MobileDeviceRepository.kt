@@ -3,7 +3,7 @@ package io.github.wulkanowy.data.repositories.mobiledevice
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.utils.flowWithResource
+import io.github.wulkanowy.data.pojos.MobileDeviceToken
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import javax.inject.Inject
@@ -25,12 +25,12 @@ class MobileDeviceRepository @Inject constructor(
         }
     )
 
-    fun unregisterDevice(student: Student, semester: Semester, device: MobileDevice) = flowWithResource {
+    suspend fun unregisterDevice(student: Student, semester: Semester, device: MobileDevice) {
         remote.unregisterDevice(student, semester, device)
         local.deleteDevices(listOf(device))
     }
 
-    fun getToken(student: Student, semester: Semester) = flowWithResource {
-        remote.getToken(student, semester)
+    suspend fun getToken(student: Student, semester: Semester): MobileDeviceToken {
+        return remote.getToken(student, semester)
     }
 }

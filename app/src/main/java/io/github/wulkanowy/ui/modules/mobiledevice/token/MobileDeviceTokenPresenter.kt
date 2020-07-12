@@ -9,8 +9,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
+import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,12 +31,12 @@ class MobileDeviceTokenPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        flow {
+        flowWithResource {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            emitAll(mobileDeviceRepository.getToken(student, semester))
+            mobileDeviceRepository.getToken(student, semester)
         }.onEach {
-            when(it.status) {
+            when (it.status) {
                 Status.LOADING -> Timber.i("Mobile device registration data started")
                 Status.SUCCESS -> {
                     Timber.i("Mobile device registration result: Success")
