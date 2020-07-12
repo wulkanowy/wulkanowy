@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
+import io.github.wulkanowy.MainCoroutineRule
 import io.github.wulkanowy.TestSchedulersProvider
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -12,19 +13,16 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
-import io.mockk.unmockkAll
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.threeten.bp.LocalDateTime.now
 
 class LoginStudentSelectPresenterTest {
 
-    private val mainThreadSurrogate = Dispatchers.Unconfined
+    @get:Rule
+    val coroutineRule = MainCoroutineRule()
 
     @MockK(relaxed = true)
     lateinit var errorHandler: LoginErrorHandler
@@ -47,7 +45,6 @@ class LoginStudentSelectPresenterTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        Dispatchers.setMain(mainThreadSurrogate)
 
         clearMocks(studentRepository, loginStudentSelectView)
         every { loginStudentSelectView.initView() } just Runs
@@ -58,12 +55,6 @@ class LoginStudentSelectPresenterTest {
 
         presenter = LoginStudentSelectPresenter(TestSchedulersProvider(), studentRepository, errorHandler, analytics)
         presenter.onAttachView(loginStudentSelectView, null)
-    }
-
-    @After
-    fun tearDown() {
-        unmockkAll()
-        Dispatchers.resetMain()
     }
 
     @Test
