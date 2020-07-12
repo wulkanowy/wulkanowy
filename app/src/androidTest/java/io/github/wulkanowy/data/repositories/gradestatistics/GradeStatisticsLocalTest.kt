@@ -58,10 +58,11 @@ class GradeStatisticsLocalTest {
         runBlocking { gradeStatisticsLocal.saveGradesStatistics(list) }
 
         val stats = runBlocking { gradeStatisticsLocal.getGradesStatistics(getSemester(), false).first() }
-        assertEquals(3, stats.size)
-        assertEquals(stats[0].subject, "Wszystkie")
-        assertEquals(stats[1].subject, "Matematyka")
-        assertEquals(stats[2].subject, "Chemia")
+        assertEquals(2, stats.size)
+//        assertEquals(3, stats.size)
+//        assertEquals(stats[0].subject, "Wszystkie") // now in main repo
+        assertEquals(stats[0].subject, "Matematyka")
+        assertEquals(stats[1].subject, "Chemia")
     }
 
     @Test

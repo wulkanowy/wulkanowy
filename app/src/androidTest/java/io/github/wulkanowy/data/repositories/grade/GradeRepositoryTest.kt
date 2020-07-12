@@ -30,13 +30,12 @@ import kotlin.test.assertTrue
 @RunWith(AndroidJUnit4::class)
 class GradeRepositoryTest {
 
-    @MockK
+    @MockK(relaxed = true)
     private lateinit var mockSdk: Sdk
 
     @MockK
     private lateinit var semesterMock: Semester
 
-    @MockK
     private lateinit var studentMock: Student
 
     private lateinit var gradeRemote: GradeRemote
@@ -51,12 +50,13 @@ class GradeRepositoryTest {
         testDb = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase::class.java).build()
         gradeLocal = GradeLocal(testDb.gradeDao, testDb.gradeSummaryDao)
         gradeRemote = GradeRemote(mockSdk)
+        studentMock = getStudentMock()
 
-        every { studentMock.registrationDate } returns LocalDateTime.of(2019, 2, 27, 12, 0)
         every { semesterMock.studentId } returns 1
         every { semesterMock.diaryId } returns 1
         every { semesterMock.schoolYear } returns 2019
         every { semesterMock.semesterId } returns 1
+
         every { mockSdk.switchDiary(any(), any()) } returns mockSdk
     }
 
@@ -75,8 +75,10 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
-                .first.sortedByDescending { it.date }
+            GradeRepository(gradeLocal, gradeRemote).run {
+                refreshGrades(studentMock, semesterMock)
+                getGrades(studentMock, semesterMock).first().first.sortedByDescending { it.date }
+            }
         }
 
         assertFalse { grades[0].isRead }
@@ -102,8 +104,10 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
-                .first.sortedByDescending { it.date }
+            GradeRepository(gradeLocal, gradeRemote).run {
+                refreshGrades(studentMock, semesterMock)
+                getGrades(studentMock, semesterMock).first().first.sortedByDescending { it.date }
+            }
         }
 
         assertFalse { grades[0].isRead }
@@ -127,7 +131,10 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
+            GradeRepository(gradeLocal, gradeRemote).run {
+                refreshGrades(studentMock, semesterMock)
+                getGrades(studentMock, semesterMock).first()
+            }
         }
 
         assertEquals(2, grades.first.size)
@@ -148,7 +155,10 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
+            GradeRepository(gradeLocal, gradeRemote).run {
+                refreshGrades(studentMock, semesterMock)
+                getGrades(studentMock, semesterMock).first()
+            }
         }
 
         assertEquals(3, grades.first.size)
@@ -165,7 +175,10 @@ class GradeRepositoryTest {
         ) to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
+            GradeRepository(gradeLocal, gradeRemote).run {
+                refreshGrades(studentMock, semesterMock)
+                getGrades(studentMock, semesterMock).first()
+            }
         }
 
         assertEquals(3, grades.first.size)
@@ -182,9 +195,35 @@ class GradeRepositoryTest {
         coEvery { mockSdk.getGrades(1) } returns (emptyList<Grade>() to emptyList())
 
         val grades = runBlocking {
-            GradeRepository(gradeLocal, gradeRemote).getGrades(studentMock, semesterMock).first()
+            GradeRepository(gradeLocal, gradeRemote).run {
+                refreshGrades(studentMock, semesterMock)
+                getGrades(studentMock, semesterMock).first()
+            }
         }
 
         assertEquals(0, grades.first.size)
     }
+
+    private fun getStudentMock() = Student(
+        scrapperBaseUrl = "http://fakelog.cf",
+        email = "jan@fakelog.cf",
+        certificateKey = "",
+        classId = 0,
+        className = "",
+        isCurrent = false,
+        isParent = false,
+        loginMode = Sdk.Mode.SCRAPPER.name,
+        loginType = "STANDARD",
+        mobileBaseUrl = "",
+        password = "",
+        privateKey = "",
+        registrationDate = LocalDateTime.of(2019, 2, 27, 12, 0),
+        schoolName = "",
+        schoolShortName = "test",
+        schoolSymbol = "",
+        studentId = 0,
+        studentName = "",
+        symbol = "",
+        userLoginId = 0
+    )
 }
