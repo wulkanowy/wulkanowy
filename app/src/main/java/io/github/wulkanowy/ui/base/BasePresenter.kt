@@ -72,6 +72,12 @@ open class BasePresenter<T : BaseView>(
         return job
     }
 
+    fun cancelJobs(vararg names: String) {
+        names.forEach {
+            jobs[it]?.cancel()
+        }
+    }
+
     open fun onDetachView() {
         view = null
         disposable.clear()

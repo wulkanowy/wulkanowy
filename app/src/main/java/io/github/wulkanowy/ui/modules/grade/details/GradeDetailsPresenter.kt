@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.repositories.grade.GradeRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
@@ -11,16 +12,14 @@ import io.github.wulkanowy.ui.modules.grade.GradeAverageProvider
 import io.github.wulkanowy.ui.modules.grade.GradeDetailsWithAverage
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
-import kotlinx.coroutines.Job
+import io.github.wulkanowy.utils.afterLoading
+import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,10 +39,6 @@ class GradeDetailsPresenter @Inject constructor(
     private var currentSemesterId = 0
 
     private lateinit var lastError: Throwable
-
-    private var refreshJob: Job? = null
-
-    private var loadingJob: Job? = null
 
     override fun onAttachView(view: GradeDetailsView) {
         super.onAttachView(view)
@@ -80,23 +75,24 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     fun onMarkAsReadSelected(): Boolean {
-        Timber.i("Select mark grades as read")
-        launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semesters = semesterRepository.getSemesters(student)
-                val semester = semesters.first { item -> item.semesterId == currentSemesterId }
-                val unreadGrades = gradeRepository.getUnreadGrades(semester).first()
+        flowWithResource {
+            val student = studentRepository.getCurrentStudent()
+            val semesters = semesterRepository.getSemesters(student)
+            val semester = semesters.first { item -> item.semesterId == currentSemesterId }
+            val unreadGrades = gradeRepository.getUnreadGrades(semester).first()
 
-                Timber.i("Mark as read ${unreadGrades.size} grades")
-                emit(gradeRepository.updateGrades(unreadGrades.map { it.apply { isRead = true } }))
-            }.catch {
-                Timber.i("Mark as read result: An exception occurred")
-                errorHandler.dispatch(it)
-            }.collect {
-                Timber.i("Mark as read result: Success")
+            Timber.i("Mark as read ${unreadGrades.size} grades")
+            gradeRepository.updateGrades(unreadGrades.map { it.apply { isRead = true } })
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Select mark grades as read")
+                Status.SUCCESS -> Timber.i("Mark as read result: Success")
+                Status.ERROR -> {
+                    Timber.i("Mark as read result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
-        }
+        }.launch("mark")
         return true
     }
 
@@ -135,8 +131,7 @@ class GradeDetailsPresenter @Inject constructor(
             showEmpty(false)
             clearView()
         }
-        refreshJob?.cancel()
-        loadingJob?.cancel()
+        cancelJobs("refresh", "load")
     }
 
     fun updateMarkAsDoneButton() {
@@ -144,51 +139,49 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     private fun refreshData(semesterId: Int) {
-        refreshJob?.cancel()
-        refreshJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                val semesters = semesterRepository.getSemesters(student)
-                val semester = semesters.first { item -> item.semesterId == semesterId }
-                emit(gradeRepository.refreshGrades(student, semester))
-            }.onCompletion { afterLoading(semesterId) }.catch { handleError(it, semesterId) }.collect()
-        }
+        flowWithResource {
+            val student = studentRepository.getCurrentStudent()
+            val semesters = semesterRepository.getSemesters(student)
+            val semester = semesters.first { item -> item.semesterId == semesterId }
+            gradeRepository.refreshGrades(student, semester)
+        }.onEach {
+            if (it.status == Status.ERROR) handleError(it.error!!, semesterId)
+        }.afterLoading {
+            afterLoading(semesterId)
+        }.launch("refresh")
     }
 
     private fun loadData(semesterId: Int) {
         Timber.i("Loading grade details data started")
 
-        loadingJob?.cancel()
-        loadingJob = launch {
-            flow {
-                val student = studentRepository.getCurrentStudent()
-                emitAll(averageProvider.getGradesDetailsWithAverage(student, semesterId))
-            }.distinctUntilChanged().onEach {
-                afterLoading(semesterId)
-            }.catch {
-                handleError(it, semesterId)
-            }.collect { grades ->
-                Timber.i("Loading grade details result: Success")
-                newGradesAmount = grades.sumBy { it.grades.sumBy { grade -> if (!grade.isRead) 1 else 0 } }
-                updateMarkAsDoneButton()
-                val items = createGradeItems(grades)
-                view?.run {
-                    showEmpty(items.isEmpty())
-                    showErrorView(false)
-                    showContent(items.isNotEmpty())
-                    updateData(
-                        data = items,
-                        isGradeExpandable = preferencesRepository.isGradeExpandable,
-                        gradeColorTheme = preferencesRepository.gradeColorTheme
-                    )
-                }
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "grade_details",
-                    "items" to grades.size
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            emitAll(averageProvider.getGradesDetailsWithAverage(student, semesterId))
+        }.distinctUntilChanged().onEach {
+            afterLoading(semesterId)
+        }.catch {
+            handleError(it, semesterId)
+        }.onEach { grades ->
+            Timber.i("Loading grade details result: Success")
+            newGradesAmount = grades.sumBy { it.grades.sumBy { grade -> if (!grade.isRead) 1 else 0 } }
+            updateMarkAsDoneButton()
+            val items = createGradeItems(grades)
+            view?.run {
+                showEmpty(items.isEmpty())
+                showErrorView(false)
+                showContent(items.isNotEmpty())
+                updateData(
+                    data = items,
+                    isGradeExpandable = preferencesRepository.isGradeExpandable,
+                    gradeColorTheme = preferencesRepository.gradeColorTheme
                 )
             }
-        }
+            analytics.logEvent(
+                "load_data",
+                "type" to "grade_details",
+                "items" to grades.size
+            )
+        }.launch("load")
     }
 
     private fun afterLoading(semesterId: Int) {
@@ -237,12 +230,15 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     private fun updateGrade(grade: Grade) {
-        Timber.i("Attempt to update grade ${grade.id}")
-        launch {
-            flow { emit(gradeRepository.updateGrade(grade)) }.catch {
-                Timber.i("Update grade result: An exception occurred")
-                errorHandler.dispatch(it)
-            }.collect { Timber.i("Update grade result: Success") }
-        }
+        flowWithResource { gradeRepository.updateGrade(grade) }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Attempt to update grade ${grade.id}")
+                Status.SUCCESS -> Timber.i("Update grade result: Success")
+                Status.ERROR -> {
+                    Timber.i("Update grade result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
+            }
+        }.launch("update")
     }
 }
