@@ -1,17 +1,16 @@
 package io.github.wulkanowy.ui.base
 
+import io.github.wulkanowy.Status
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.utils.SchedulersProvider
+import io.github.wulkanowy.utils.flowWithResource
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
@@ -43,24 +42,26 @@ open class BasePresenter<T : BaseView>(
     }
 
     fun onExpiredLoginSelected() {
-        Timber.i("Attempt to switch the student after the session expires")
-        launch {
-            flow {
-                val student = studentRepository.getCurrentStudent(false)
-                studentRepository.logoutStudent(student)
+        flowWithResource {
+            val student = studentRepository.getCurrentStudent(false)
+            studentRepository.logoutStudent(student)
 
-                val students = studentRepository.getSavedStudents(false)
-                if (students.isNotEmpty()) {
-                    Timber.i("Switching current student")
-                    studentRepository.switchStudent(students[0])
-                    emit(students[0])
-                } else emit(null)
-            }.catch {
-                Timber.i("Switch student result: An exception occurred")
-                errorHandler.dispatch(it)
-            }.collect {
-                Timber.i("Switch student result: Open login view")
-                view?.openClearLoginView()
+            val students = studentRepository.getSavedStudents(false)
+            if (students.isNotEmpty()) {
+                Timber.i("Switching current student")
+                studentRepository.switchStudent(students[0])
+            }
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Attempt to switch the student after the session expires")
+                Status.SUCCESS -> {
+                    Timber.i("Switch student result: Open login view")
+                    view?.openClearLoginView()
+                }
+                Status.ERROR -> {
+                    Timber.i("Switch student result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
         }
     }
