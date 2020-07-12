@@ -63,7 +63,7 @@ open class BasePresenter<T : BaseView>(
                     errorHandler.dispatch(it.error!!)
                 }
             }
-        }
+        }.launch("expired")
     }
 
     fun <T> Flow<T>.launch(individualJobTag: String = "load"): Job {
