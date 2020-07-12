@@ -19,9 +19,9 @@ class SchoolRepository @Inject constructor(
         saveFetchResult = { old, new ->
             if (new != old && old != null) {
                 local.deleteSchool(old)
-                local.saveSchool(new!!)
+                local.saveSchool(new)
             }
-            local.saveSchool(new!!)
+            local.saveSchool(new)
         }
     )
 }
