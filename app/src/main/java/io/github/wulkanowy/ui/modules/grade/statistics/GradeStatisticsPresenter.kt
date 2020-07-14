@@ -133,7 +133,7 @@ class GradeStatisticsPresenter @Inject constructor(
                     Timber.i("Loading grade stats subjects result: Success")
                     view?.run {
                         view?.updateSubjects(ArrayList(it.data.map { subject -> subject.name }))
-                        showSubjects(true)
+                        showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
                     }
                 }
                 Status.ERROR -> {
