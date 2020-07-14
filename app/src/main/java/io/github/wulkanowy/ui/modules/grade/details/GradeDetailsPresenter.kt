@@ -15,7 +15,6 @@ import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -137,7 +136,7 @@ class GradeDetailsPresenter @Inject constructor(
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
-        }.distinctUntilChanged().onEach {
+        }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading grade details data started")
                 Status.SUCCESS -> {
