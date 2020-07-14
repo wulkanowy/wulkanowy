@@ -20,7 +20,7 @@ open class BasePresenter<T : BaseView>(
     protected val schedulers: SchedulersProvider
 ) : CoroutineScope {
 
-    var job: Job = Job()
+    private var job: Job = Job()
 
     private val jobs = mutableMapOf<String, Job>()
 
@@ -33,6 +33,7 @@ open class BasePresenter<T : BaseView>(
     var view: T? = null
 
     open fun onAttachView(view: T) {
+        job = Job()
         this.view = view
         errorHandler.apply {
             showErrorMessage = view::showError
@@ -70,6 +71,7 @@ open class BasePresenter<T : BaseView>(
         jobs[individualJobTag]?.cancel()
         val job = launchIn(this@BasePresenter)
         jobs[individualJobTag] = job
+        Timber.d("Job $individualJobTag launched in ${this@BasePresenter.javaClass.simpleName}: $job")
         return job
     }
 
