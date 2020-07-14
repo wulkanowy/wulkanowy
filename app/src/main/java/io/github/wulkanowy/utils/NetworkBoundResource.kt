@@ -79,7 +79,9 @@ fun <T> flowWithResourceIn(block: suspend () -> Flow<Resource<T>>) = flow {
 
     try {
         block().collect {
-            emit(it)
+            if (it.status != Status.LOADING) { // LOADING is already emitted
+                emit(it)
+            }
         }
     } catch (e: Throwable) {
         emit(Resource.error(e))
