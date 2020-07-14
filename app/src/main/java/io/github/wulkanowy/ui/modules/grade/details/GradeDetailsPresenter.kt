@@ -14,11 +14,9 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
-import kotlinx.coroutines.flow.catch
+import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -49,11 +47,8 @@ class GradeDetailsPresenter @Inject constructor(
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         currentSemesterId = semesterId
 
-        if (forceRefresh) refreshData(semesterId)
-        else {
-            view?.showErrorView(false)
-            loadData(semesterId)
-        }
+        loadData(semesterId, forceRefresh)
+        if (!forceRefresh) view?.showErrorView(false)
     }
 
     fun onGradeItemSelected(grade: Grade, position: Int) {
@@ -131,72 +126,54 @@ class GradeDetailsPresenter @Inject constructor(
             showEmpty(false)
             clearView()
         }
-        cancelJobs("refresh", "load")
+        cancelJobs("load")
     }
 
     fun updateMarkAsDoneButton() {
         view?.enableMarkAsDoneButton(newGradesAmount > 0)
     }
 
-    private fun refreshData(semesterId: Int) {
-        flowWithResource {
+    private fun loadData(semesterId: Int, forceRefresh: Boolean) {
+        flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
-            val semesters = semesterRepository.getSemesters(student)
-            val semester = semesters.first { item -> item.semesterId == semesterId }
-            gradeRepository.refreshGrades(student, semester)
-        }.onEach {
-            if (it.status == Status.ERROR) handleError(it.error!!, semesterId)
-        }.afterLoading {
-            afterLoading(semesterId)
-        }.launch("refresh")
-    }
-
-    private fun loadData(semesterId: Int) {
-        Timber.i("Loading grade details data started")
-
-        flow {
-            val student = studentRepository.getCurrentStudent()
-            emitAll(averageProvider.getGradesDetailsWithAverage(student, semesterId))
+            averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }.distinctUntilChanged().onEach {
-            afterLoading(semesterId)
-        }.catch {
-            handleError(it, semesterId)
-        }.onEach { grades ->
-            Timber.i("Loading grade details result: Success")
-            newGradesAmount = grades.sumBy { it.grades.sumBy { grade -> if (!grade.isRead) 1 else 0 } }
-            updateMarkAsDoneButton()
-            val items = createGradeItems(grades)
-            view?.run {
-                showEmpty(items.isEmpty())
-                showErrorView(false)
-                showContent(items.isNotEmpty())
-                updateData(
-                    data = items,
-                    isGradeExpandable = preferencesRepository.isGradeExpandable,
-                    gradeColorTheme = preferencesRepository.gradeColorTheme
-                )
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading grade details data started")
+                Status.SUCCESS -> {
+                    Timber.i("Loading grade details result: Success")
+                    newGradesAmount = it.data!!.sumBy { item -> item.grades.sumBy { grade -> if (!grade.isRead) 1 else 0 } }
+                    updateMarkAsDoneButton()
+                    val items = createGradeItems(it.data)
+                    view?.run {
+                        showEmpty(items.isEmpty())
+                        showErrorView(false)
+                        showContent(items.isNotEmpty())
+                        updateData(
+                            data = items,
+                            isGradeExpandable = preferencesRepository.isGradeExpandable,
+                            gradeColorTheme = preferencesRepository.gradeColorTheme
+                        )
+                    }
+                    analytics.logEvent(
+                        "load_data",
+                        "type" to "grade_details",
+                        "items" to it.data.size
+                    )
+                }
+                Status.ERROR -> {
+                    Timber.i("Loading grade details result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
             }
-            analytics.logEvent(
-                "load_data",
-                "type" to "grade_details",
-                "items" to grades.size
-            )
-        }.launch("load")
-    }
-
-    private fun afterLoading(semesterId: Int) {
-        view?.run {
-            showRefresh(false)
-            showProgress(false)
-            enableSwipe(true)
-            notifyParentDataLoaded(semesterId)
-        }
-    }
-
-    private fun handleError(error: Throwable, semesterId: Int) {
-        Timber.i("Loading grade details result: An exception occurred")
-        errorHandler.dispatch(error)
-        afterLoading(semesterId)
+        }.afterLoading {
+            view?.run {
+                showRefresh(false)
+                showProgress(false)
+                enableSwipe(true)
+                notifyParentDataLoaded(semesterId)
+            }
+        }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

@@ -33,7 +33,7 @@ class GradeWork @Inject constructor(
 ) : Work {
 
     override fun create(student: Student, semester: Semester): Completable {
-        return rxCompletable { gradeRepository.refreshGrades(student, semester, preferencesRepository.isNotificationsEnable) }
+        return rxCompletable { gradeRepository.getGrades(student, semester, true, preferencesRepository.isNotificationsEnable).waitForResult() }
             .concatWith(Completable.concatArray(rxSingle { gradeRepository.getNotNotifiedGrades(semester).first() }.flatMapCompletable {
                 if (it.isNotEmpty()) notifyDetails(it)
                 rxCompletable { gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true }) }
