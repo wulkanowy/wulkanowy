@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.about.contributor
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.pojos.Contributor
 import io.github.wulkanowy.data.repositories.appcreator.AppCreatorRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository

@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.statistics
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.repositories.gradestatistics.GradeStatisticsRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository

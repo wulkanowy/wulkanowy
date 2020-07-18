@@ -12,7 +12,7 @@ import android.widget.AdapterView.INVALID_POSITION
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import io.github.wulkanowy.R
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository

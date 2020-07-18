@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.timetable.completed
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.repositories.completedlessons.CompletedLessonsRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository

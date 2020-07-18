@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.note
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.repositories.note.NoteRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository

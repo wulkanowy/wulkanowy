@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.login.recover
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.recover.RecoverRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter

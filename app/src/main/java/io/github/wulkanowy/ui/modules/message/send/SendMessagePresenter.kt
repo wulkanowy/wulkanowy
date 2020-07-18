@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.send
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.repositories.message.MessageRepository

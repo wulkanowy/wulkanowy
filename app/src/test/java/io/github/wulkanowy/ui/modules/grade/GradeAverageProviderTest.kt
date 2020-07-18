@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.grade
 
-import io.github.wulkanowy.Resource
 import io.github.wulkanowy.createSemesterEntity
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Student

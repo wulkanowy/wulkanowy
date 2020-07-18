@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.attendance
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.repositories.attendance.AttendanceRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository

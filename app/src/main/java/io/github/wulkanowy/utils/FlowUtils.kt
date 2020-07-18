@@ -1,7 +1,7 @@
 package io.github.wulkanowy.utils
 
-import io.github.wulkanowy.Resource
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Resource
+import io.github.wulkanowy.data.Status
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll

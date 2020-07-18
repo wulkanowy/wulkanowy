@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.schoolandteachers.teacher
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.data.repositories.teacher.TeacherRepository

@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.attendance.summary
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.repositories.attendancesummary.AttendanceSummaryRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository

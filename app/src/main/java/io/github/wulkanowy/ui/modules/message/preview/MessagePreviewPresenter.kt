@@ -2,7 +2,7 @@ package io.github.wulkanowy.ui.modules.message.preview
 
 import android.annotation.SuppressLint
 import android.os.Build
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.repositories.message.MessageRepository

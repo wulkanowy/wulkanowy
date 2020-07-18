@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.homework
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.homework.HomeworkRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository

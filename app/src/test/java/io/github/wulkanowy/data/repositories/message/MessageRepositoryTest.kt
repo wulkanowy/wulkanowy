@@ -1,6 +1,6 @@
 package io.github.wulkanowy.data.repositories.message
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.getMessageEntity

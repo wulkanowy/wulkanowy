@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.exam
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.repositories.exam.ExamRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository

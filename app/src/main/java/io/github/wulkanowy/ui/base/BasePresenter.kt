@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.base
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.flowWithResource

@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.mobiledevice
 
-import io.github.wulkanowy.Status
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.repositories.mobiledevice.MobileDeviceRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository

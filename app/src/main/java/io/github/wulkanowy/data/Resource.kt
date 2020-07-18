@@ -1,4 +1,4 @@
-package io.github.wulkanowy
+package io.github.wulkanowy.data
 
 data class Resource<out T>(val status: Status, val data: T?, val error: Throwable?) {
     companion object {
