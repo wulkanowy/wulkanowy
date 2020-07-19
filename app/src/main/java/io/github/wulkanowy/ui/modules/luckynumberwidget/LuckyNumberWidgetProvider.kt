@@ -21,7 +21,6 @@ import io.github.wulkanowy.data.repositories.luckynumber.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.toFirstResult
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
@@ -34,12 +33,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
 
     @Inject
     lateinit var luckyNumberRepository: LuckyNumberRepository
-
-    @Inject
-    lateinit var schedulers: SchedulersProvider
-
-    @Inject
-    lateinit var appWidgetManager: AppWidgetManager
 
     @Inject
     lateinit var sharedPref: SharedPrefProvider

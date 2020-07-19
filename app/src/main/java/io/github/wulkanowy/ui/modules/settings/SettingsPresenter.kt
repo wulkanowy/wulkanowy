@@ -10,7 +10,6 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
-import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.isHolidays
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
@@ -19,7 +18,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class SettingsPresenter @Inject constructor(
-    schedulers: SchedulersProvider,
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val preferencesRepository: PreferencesRepository,
@@ -28,7 +26,7 @@ class SettingsPresenter @Inject constructor(
     private val syncManager: SyncManager,
     private val chuckerCollector: ChuckerCollector,
     private val appInfo: AppInfo
-) : BasePresenter<SettingsView>(errorHandler, studentRepository, schedulers) {
+) : BasePresenter<SettingsView>(errorHandler, studentRepository) {
 
     override fun onAttachView(view: SettingsView) {
         super.onAttachView(view)

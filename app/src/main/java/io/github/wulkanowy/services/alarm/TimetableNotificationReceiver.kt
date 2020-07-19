@@ -17,7 +17,6 @@ import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.channels.UpcomingLessonsChannel.Companion.CHANNEL_ID
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.SchedulersProvider
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toLocalDateTime
@@ -31,9 +30,6 @@ class TimetableNotificationReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var studentRepository: StudentRepository
-
-    @Inject
-    lateinit var schedulers: SchedulersProvider
 
     companion object {
         const val NOTIFICATION_TYPE_CURRENT = 1
