@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
 
 inline fun <ResultType, RequestType> networkBoundResource(
     showSavedOnLoading: Boolean = true,
@@ -94,3 +95,5 @@ fun <T> Flow<Resource<T>>.afterLoading(callback: () -> Unit) = onEach {
 }
 
 suspend fun <T> Flow<Resource<T>>.toFirstResult() = filter { it.status != Status.LOADING }.first()
+
+suspend fun <T> Flow<Resource<T>>.waitForResult() = takeWhile { it.status == Status.LOADING }.collect()
