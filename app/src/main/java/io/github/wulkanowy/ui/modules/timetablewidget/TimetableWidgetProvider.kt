@@ -30,9 +30,8 @@ import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
-import io.reactivex.Maybe
-import kotlinx.coroutines.rx2.rxMaybe
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDate.now
 import timber.log.Timber
@@ -80,13 +79,15 @@ class TimetableWidgetProvider : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
-        when (intent.action) {
-            ACTION_APPWIDGET_UPDATE -> onUpdate(context, intent)
-            ACTION_APPWIDGET_DELETED -> onDelete(intent)
+        GlobalScope.launch {
+            when (intent.action) {
+                ACTION_APPWIDGET_UPDATE -> onUpdate(context, intent)
+                ACTION_APPWIDGET_DELETED -> onDelete(intent)
+            }
         }
     }
 
-    private fun onUpdate(context: Context, intent: Intent) {
+    private suspend fun onUpdate(context: Context, intent: Intent) {
         if (intent.getStringExtra(EXTRA_BUTTON_TYPE) === null) {
             intent.getIntArrayExtra(EXTRA_APPWIDGET_IDS)?.forEach { appWidgetId ->
                 val student = getStudent(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)
@@ -170,8 +171,9 @@ class TimetableWidgetProvider : BroadcastReceiver() {
         }
 
         with(appWidgetManager) {
-            notifyAppWidgetViewDataChanged(appWidgetId, R.id.timetableWidgetList)
             updateAppWidget(appWidgetId, remoteView)
+            notifyAppWidgetViewDataChanged(appWidgetId, R.id.timetableWidgetList)
+            Timber.d("TimetableWidgetProvider updated")
         }
     }
 
@@ -184,31 +186,22 @@ class TimetableWidgetProvider : BroadcastReceiver() {
             }, FLAG_UPDATE_CURRENT)
     }
 
-    private fun getStudent(studentId: Long, appWidgetId: Int): Student? {
-        return try {
-            rxSingle { studentRepository.isStudentSaved() }
-                .filter { true }
-                .flatMap { rxMaybe { studentRepository.getSavedStudents(false) } }
-                .flatMap { students ->
-                    val student = students.singleOrNull { student -> student.id == studentId }
-                    when {
-                        student != null -> Maybe.just(student)
-                        studentId != 0L -> {
-                            rxSingle { studentRepository.isCurrentStudentSet() }
-                                .filter { true }
-                                .flatMap { rxMaybe { studentRepository.getCurrentStudent(false) } }
-                                .doOnSuccess { sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id) }
-                        }
-                        else -> Maybe.empty()
-                    }
+    private suspend fun getStudent(studentId: Long, appWidgetId: Int) = try {
+        val students = studentRepository.getSavedStudents(false)
+        val student = students.singleOrNull { student -> student.id == studentId }
+        when {
+            student != null -> student
+            studentId != 0L && studentRepository.isCurrentStudentSet() -> {
+                studentRepository.getCurrentStudent(false).also {
+                    sharedPref.putLong(getStudentWidgetKey(appWidgetId), it.id)
                 }
-                .subscribeOn(schedulers.backgroundThread)
-                .blockingGet()
-        } catch (e: Exception) {
-            if (e.cause !is NoCurrentStudentException) {
-                Timber.e(e, "An error has occurred in timetable widget provider")
             }
-            null
+            else -> null
         }
+    } catch (e: Exception) {
+        if (e.cause !is NoCurrentStudentException) {
+            Timber.e(e, "An error has occurred in timetable widget provider")
+        }
+        null
     }
 }
