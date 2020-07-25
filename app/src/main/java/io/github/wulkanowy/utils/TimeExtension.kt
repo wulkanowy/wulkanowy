@@ -1,21 +1,21 @@
 package io.github.wulkanowy.utils
 
-import org.threeten.bp.DayOfWeek.FRIDAY
-import org.threeten.bp.DayOfWeek.MONDAY
-import org.threeten.bp.DayOfWeek.SATURDAY
-import org.threeten.bp.DayOfWeek.SUNDAY
-import org.threeten.bp.Instant.ofEpochMilli
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.LocalDateTime.ofInstant
-import org.threeten.bp.Month
-import org.threeten.bp.ZoneId
-import org.threeten.bp.ZoneOffset
-import org.threeten.bp.format.DateTimeFormatter.ofPattern
-import org.threeten.bp.format.TextStyle.FULL_STANDALONE
-import org.threeten.bp.temporal.TemporalAdjusters.firstInMonth
-import org.threeten.bp.temporal.TemporalAdjusters.next
-import org.threeten.bp.temporal.TemporalAdjusters.previous
+import java.time.DayOfWeek.FRIDAY
+import java.time.DayOfWeek.MONDAY
+import java.time.DayOfWeek.SATURDAY
+import java.time.DayOfWeek.SUNDAY
+import java.time.Instant.ofEpochMilli
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalDateTime.ofInstant
+import java.time.Month
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter.ofPattern
+import java.time.format.TextStyle.FULL_STANDALONE
+import java.time.temporal.TemporalAdjusters.firstInMonth
+import java.time.temporal.TemporalAdjusters.next
+import java.time.temporal.TemporalAdjusters.previous
 import java.util.Locale
 
 private const val DATE_PATTERN = "dd.MM.yyyy"
