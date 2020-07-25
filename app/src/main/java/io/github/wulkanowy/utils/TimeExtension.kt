@@ -1,5 +1,6 @@
 package io.github.wulkanowy.utils
 
+import android.annotation.SuppressLint
 import java.time.DayOfWeek.FRIDAY
 import java.time.DayOfWeek.MONDAY
 import java.time.DayOfWeek.SATURDAY
@@ -13,6 +14,7 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter.ofPattern
 import java.time.format.TextStyle.FULL_STANDALONE
+import java.time.format.TextStyle.*
 import java.time.temporal.TemporalAdjusters.firstInMonth
 import java.time.temporal.TemporalAdjusters.next
 import java.time.temporal.TemporalAdjusters.previous
@@ -24,17 +26,15 @@ fun String.toLocalDate(format: String = DATE_PATTERN): LocalDate = LocalDate.par
 
 fun LocalDateTime.toTimestamp() = atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toInstant().toEpochMilli()
 
-fun Long.toLocalDateTime() = ofInstant(ofEpochMilli(this), ZoneId.systemDefault())
+fun Long.toLocalDateTime(): LocalDateTime = ofInstant(ofEpochMilli(this), ZoneId.systemDefault())
 
 fun LocalDate.toFormattedString(format: String = DATE_PATTERN): String = format(ofPattern(format))
 
 fun LocalDateTime.toFormattedString(format: String = DATE_PATTERN): String = format(ofPattern(format))
 
-/**
- * https://github.com/ThreeTen/threetenbp/issues/55
- */
+@SuppressLint("DefaultLocale")
 fun Month.getFormattedName(): String {
-    return getDisplayName(FULL_STANDALONE, Locale.getDefault())
+    return getDisplayName(FULL, Locale.getDefault())
         .let {
             when (it) {
                 "stycznia" -> "Styczeń"
@@ -51,7 +51,7 @@ fun Month.getFormattedName(): String {
                 "grudnia" -> "Grudzień"
                 else -> it
             }
-        }
+        }.capitalize()
 }
 
 inline val LocalDate.nextSchoolDay: LocalDate
