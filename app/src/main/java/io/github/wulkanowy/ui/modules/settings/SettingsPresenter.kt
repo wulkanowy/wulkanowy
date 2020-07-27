@@ -13,8 +13,8 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.isHolidays
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
-import org.threeten.bp.LocalDate.now
 import timber.log.Timber
+import java.time.LocalDate.now
 import javax.inject.Inject
 
 class SettingsPresenter @Inject constructor(

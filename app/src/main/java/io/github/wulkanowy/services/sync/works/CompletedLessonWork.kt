@@ -6,7 +6,7 @@ import io.github.wulkanowy.data.repositories.completedlessons.CompletedLessonsRe
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.waitForResult
-import org.threeten.bp.LocalDate.now
+import java.time.LocalDate.now
 import javax.inject.Inject
 
 class CompletedLessonWork @Inject constructor(

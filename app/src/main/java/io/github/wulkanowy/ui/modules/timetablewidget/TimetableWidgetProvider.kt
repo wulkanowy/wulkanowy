@@ -31,9 +31,9 @@ import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDate.now
 import timber.log.Timber
+import java.time.LocalDate
+import java.time.LocalDate.now
 import javax.inject.Inject
 
 class TimetableWidgetProvider : BroadcastReceiver() {

@@ -12,8 +12,8 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.onEach
-import org.threeten.bp.Month
 import timber.log.Timber
+import java.time.Month
 import javax.inject.Inject
 
 class AttendanceSummaryPresenter @Inject constructor(

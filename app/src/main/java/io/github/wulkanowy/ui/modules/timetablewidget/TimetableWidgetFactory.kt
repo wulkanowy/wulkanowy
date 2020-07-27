@@ -25,8 +25,8 @@ import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toFirstResult
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.runBlocking
-import org.threeten.bp.LocalDate
 import timber.log.Timber
+import java.time.LocalDate
 
 class TimetableWidgetFactory(
     private val timetableRepository: TimetableRepository,
