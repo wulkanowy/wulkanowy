@@ -15,7 +15,7 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.res.Configuration
 import android.widget.RemoteViews
-import dagger.android.AndroidInjection
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.Student
@@ -36,7 +36,12 @@ import java.time.LocalDate
 import java.time.LocalDate.now
 import javax.inject.Inject
 
-class TimetableWidgetProvider : BroadcastReceiver() {
+abstract class DaggerBroadcastReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {}
+}
+
+@AndroidEntryPoint
+class TimetableWidgetProvider : DaggerBroadcastReceiver() {
 
     @Inject
     lateinit var appWidgetManager: AppWidgetManager
@@ -74,7 +79,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        AndroidInjection.inject(this, context)
+        super.onReceive(context, intent)
         GlobalScope.launch {
             when (intent.action) {
                 ACTION_APPWIDGET_UPDATE -> onUpdate(context, intent)

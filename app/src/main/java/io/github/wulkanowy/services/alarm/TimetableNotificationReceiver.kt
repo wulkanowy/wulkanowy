@@ -10,7 +10,7 @@ import android.os.Build
 import android.os.Build.VERSION_CODES.N
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import dagger.android.AndroidInjection
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.student.StudentRepository
@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class TimetableNotificationReceiver : BroadcastReceiver() {
 
     @Inject
@@ -52,7 +53,6 @@ class TimetableNotificationReceiver : BroadcastReceiver() {
     @SuppressLint("CheckResult")
     override fun onReceive(context: Context, intent: Intent) {
         Timber.d("Receiving intent... ${intent.toUri(0)}")
-        AndroidInjection.inject(this, context)
 
         flowWithResource {
             val student = studentRepository.getCurrentStudent(false)
