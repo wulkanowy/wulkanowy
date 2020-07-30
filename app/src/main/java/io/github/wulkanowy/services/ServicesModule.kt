@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
 import androidx.work.WorkManager
-import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -38,9 +37,8 @@ import io.github.wulkanowy.services.sync.works.Work
 import javax.inject.Singleton
 
 @Suppress("unused")
-@InstallIn(ApplicationComponent::class)
-@AssistedModule
 @Module
+@InstallIn(ApplicationComponent::class)
 abstract class ServicesModule {
 
     companion object {

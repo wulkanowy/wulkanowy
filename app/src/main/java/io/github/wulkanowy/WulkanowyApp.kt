@@ -5,12 +5,12 @@ import android.content.Context
 import android.util.Log.DEBUG
 import android.util.Log.INFO
 import android.util.Log.VERBOSE
+import androidx.hilt.work.HiltWorkerFactory
 import androidx.multidex.MultiDex
 import androidx.work.Configuration
 import com.yariksoffice.lingver.Lingver
 import dagger.hilt.android.HiltAndroidApp
 import fr.bipi.tressence.file.FileLoggerTree
-import io.github.wulkanowy.services.sync.SyncWorkerFactory
 import io.github.wulkanowy.ui.base.ThemeManager
 import io.github.wulkanowy.utils.ActivityLifecycleLogger
 import io.github.wulkanowy.utils.AppInfo
@@ -24,7 +24,7 @@ import javax.inject.Inject
 class WulkanowyApp : Application(), Configuration.Provider {
 
     @Inject
-    lateinit var workerFactory: SyncWorkerFactory
+    lateinit var workerFactory: HiltWorkerFactory
 
     @Inject
     lateinit var themeManager: ThemeManager
