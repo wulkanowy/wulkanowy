@@ -52,6 +52,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
 
     @SuppressLint("CheckResult")
     override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
         Timber.d("Receiving intent... ${intent.toUri(0)}")
 
         flowWithResource {
