@@ -24,7 +24,7 @@ class SchoolAndTeachersFragment :
     @Inject
     lateinit var presenter: SchoolAndTeachersPresenter
 
-    private val pagerAdapter = BaseFragmentPagerAdapter(childFragmentManager)
+    private val pagerAdapter by lazy { BaseFragmentPagerAdapter(childFragmentManager) }
 
     companion object {
         fun newInstance() = SchoolAndTeachersFragment()
