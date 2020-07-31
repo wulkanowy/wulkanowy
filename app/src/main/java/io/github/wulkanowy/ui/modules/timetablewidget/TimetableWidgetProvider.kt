@@ -8,7 +8,6 @@ import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_DELETED
 import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -21,6 +20,7 @@ import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import io.github.wulkanowy.data.repositories.student.StudentRepository
+import io.github.wulkanowy.services.HiltBroadcastReceiver
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -36,12 +36,8 @@ import java.time.LocalDate
 import java.time.LocalDate.now
 import javax.inject.Inject
 
-abstract class DaggerBroadcastReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {}
-}
-
 @AndroidEntryPoint
-class TimetableWidgetProvider : DaggerBroadcastReceiver() {
+class TimetableWidgetProvider : HiltBroadcastReceiver() {
 
     @Inject
     lateinit var appWidgetManager: AppWidgetManager
