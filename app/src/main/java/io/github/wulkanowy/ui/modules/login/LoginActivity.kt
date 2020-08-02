@@ -40,6 +40,7 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
         setContentView(ActivityLoginBinding.inflate(layoutInflater).apply { binding = this }.root)
         setSupportActionBar(binding.loginToolbar)
         messageContainer = binding.loginContainer
+        updateHelper.messageContainer = binding.loginContainer
 
         presenter.onAttachView(this)
         updateHelper.checkAndInstallUpdates(this)
