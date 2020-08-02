@@ -17,6 +17,7 @@ import com.google.android.play.core.install.model.UpdateAvailability.DEVELOPER_T
 import com.google.android.play.core.install.model.UpdateAvailability.UPDATE_AVAILABLE
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
+import io.github.wulkanowy.R
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,9 +38,9 @@ class UpdateHelper @Inject constructor(private val context: Context) {
 
     private val flexibleUpdateListener = InstallStateUpdatedListener { state ->
         when (state.installStatus()) {
-            PENDING -> Toast.makeText(context, "Start downloading update...", Toast.LENGTH_SHORT).show()
+            PENDING -> Toast.makeText(context, R.string.update_download_started, Toast.LENGTH_SHORT).show()
             DOWNLOADED -> popupSnackBarForCompleteUpdate()
-            else -> Timber.d("InAppUpdate state: ${state.installStatus()}")
+            else -> Timber.d("Update state: ${state.installStatus()}")
         }
     }
 
@@ -74,13 +75,13 @@ class UpdateHelper @Inject constructor(private val context: Context) {
     fun onActivityResult(requestCode: Int, resultCode: Int) {
         if (requestCode == IN_APP_UPDATE_REQUEST_CODE && resultCode != RESULT_OK) {
             Timber.e("Update failed! Result code: $resultCode")
-            Toast.makeText(context, "Update failed! Wulkanowy may not function properly. Consider updating", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, R.string.update_failed, Toast.LENGTH_LONG).show()
         }
     }
 
     fun onResume(activity: Activity) {
         appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
-            Timber.d("onResume in app update listener: $info")
+            Timber.d("InAppUpdate.onResume() listener: $info")
 
             when {
                 DOWNLOADED == info.installStatus() -> popupSnackBarForCompleteUpdate()
@@ -92,8 +93,8 @@ class UpdateHelper @Inject constructor(private val context: Context) {
     }
 
     private fun popupSnackBarForCompleteUpdate() {
-        Snackbar.make(messageContainer, "An update has just been downloaded.", Snackbar.LENGTH_INDEFINITE).apply {
-            setAction("RESTART") {
+        Snackbar.make(messageContainer, R.string.update_download_success, Snackbar.LENGTH_INDEFINITE).apply {
+            setAction(R.string.update_download_success_button) {
                 appUpdateManager.completeUpdate()
                 appUpdateManager.unregisterListener(flexibleUpdateListener)
             }
