@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.login.advanced
 
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.pojos.StudentAndSemesters
 import io.github.wulkanowy.ui.base.BaseView
 
 interface LoginAdvancedView : BaseView {
@@ -69,7 +70,7 @@ interface LoginAdvancedView : BaseView {
 
     fun showContent(show: Boolean)
 
-    fun notifyParentAccountLogged(students: List<Student>)
+    fun notifyParentAccountLogged(students: List<StudentAndSemesters>)
 
     fun setErrorPinRequired()
 

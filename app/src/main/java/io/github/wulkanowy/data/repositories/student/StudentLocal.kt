@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.pojos.StudentAndSemesters
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.security.decrypt

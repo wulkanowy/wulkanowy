@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.pojos.StudentAndSemesters
 import io.github.wulkanowy.databinding.FragmentLoginSymbolBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
@@ -108,7 +108,7 @@ class LoginSymbolFragment :
         binding.loginSymbolContainer.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun notifyParentAccountLogged(students: List<Student>) {
+    override fun notifyParentAccountLogged(students: List<StudentAndSemesters>) {
         (activity as? LoginActivity)?.onSymbolFragmentAccountLogged(students)
     }
 

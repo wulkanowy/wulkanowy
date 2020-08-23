@@ -9,6 +9,7 @@ import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.pojos.StudentAndSemesters
 import io.github.wulkanowy.databinding.FragmentLoginFormBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
@@ -171,7 +172,7 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         binding.loginFormVersion.text = "v${appInfo.versionName}"
     }
 
-    override fun notifyParentAccountLogged(students: List<Student>, loginData: Triple<String, String, String>) {
+    override fun notifyParentAccountLogged(students: List<StudentAndSemesters>, loginData: Triple<String, String, String>) {
         (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, loginData)
     }
 

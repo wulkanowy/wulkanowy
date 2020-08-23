@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.account
 
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.pojos.StudentAndSemesters
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -42,7 +43,7 @@ class AccountPresenter @Inject constructor(
 
             val students = studentRepository.getSavedStudents(false)
             if (students.isNotEmpty()) {
-                studentRepository.switchStudent(students[0])
+                studentRepository.switchStudent(StudentAndSemesters(students[0], emptyList()))
             }
             students
         }.onEach {
@@ -72,7 +73,7 @@ class AccountPresenter @Inject constructor(
         Timber.i("Select student item ${student.id}")
         if (student.isCurrent) {
             view?.dismissView()
-        } else flowWithResource { studentRepository.switchStudent(student) }.onEach {
+        } else flowWithResource { studentRepository.switchStudent(StudentAndSemesters(student, emptyList())) }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Attempt to change a student")
                 Status.SUCCESS -> {

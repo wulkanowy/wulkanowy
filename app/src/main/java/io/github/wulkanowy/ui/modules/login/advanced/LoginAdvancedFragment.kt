@@ -9,6 +9,7 @@ import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.pojos.StudentAndSemesters
 import io.github.wulkanowy.databinding.FragmentLoginAdvancedBinding
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -295,7 +296,7 @@ class LoginAdvancedFragment :
         binding.loginFormContainer.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun notifyParentAccountLogged(students: List<Student>) {
+    override fun notifyParentAccountLogged(students: List<StudentAndSemesters>) {
         (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, Triple(
             binding.loginFormUsername.text.toString(),
             binding.loginFormPass.text.toString(),

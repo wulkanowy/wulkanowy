@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.login.studentselect
 
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.pojos.StudentAndSemesters
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
@@ -21,9 +22,9 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     private var lastError: Throwable? = null
 
-    var students = emptyList<Student>()
+    var students = emptyList<StudentAndSemesters>()
 
-    private val selectedStudents = mutableListOf<Student>()
+    private val selectedStudents = mutableListOf<StudentAndSemesters>()
 
     fun onAttachView(view: LoginStudentSelectView, students: Serializable?) {
         super.onAttachView(view)
@@ -38,7 +39,7 @@ class LoginStudentSelectPresenter @Inject constructor(
         }
 
         if (students is List<*> && students.isNotEmpty()) {
-            loadData(students.filterIsInstance<Student>())
+            loadData(students.filterIsInstance<StudentAndSemesters>())
         }
     }
 
@@ -46,12 +47,12 @@ class LoginStudentSelectPresenter @Inject constructor(
         registerStudents(selectedStudents)
     }
 
-    fun onParentInitStudentSelectView(students: List<Student>) {
+    fun onParentInitStudentSelectView(students: List<StudentAndSemesters>) {
         loadData(students)
         if (students.size == 1) registerStudents(students)
     }
 
-    fun onItemSelected(student: Student, alreadySaved: Boolean) {
+    fun onItemSelected(student: StudentAndSemesters, alreadySaved: Boolean) {
         if (alreadySaved) return
 
         selectedStudents
@@ -69,7 +70,7 @@ class LoginStudentSelectPresenter @Inject constructor(
             && a.classId == b.classId
     }
 
-    private fun loadData(students: List<Student>) {
+    private fun loadData(students: List<StudentAndSemesters>) {
         resetSelectedState()
         this.students = students
 
@@ -77,7 +78,7 @@ class LoginStudentSelectPresenter @Inject constructor(
             when (it.status) {
                 Status.LOADING -> Timber.d("Login student select students load started")
                 Status.SUCCESS -> view?.updateData(students.map { student ->
-                    student to it.data!!.any { item -> compareStudents(student, item) }
+                    student to it.data!!.any { item -> compareStudents(student.student, item) }
                 })
                 Status.ERROR -> {
                     errorHandler.dispatch(it.error!!)
@@ -93,10 +94,10 @@ class LoginStudentSelectPresenter @Inject constructor(
         view?.enableSignIn(false)
     }
 
-    private fun registerStudents(students: List<Student>) {
+    private fun registerStudents(students: List<StudentAndSemesters>) {
         flowWithResource {
             val savedStudents = studentRepository.saveStudents(students)
-            val firstRegistered = students.first().apply { id = savedStudents.first() }
+            val firstRegistered = students.first().apply { student.id = savedStudents.first() }
             studentRepository.switchStudent(firstRegistered)
         }.onEach {
             when (it.status) {
@@ -133,13 +134,13 @@ class LoginStudentSelectPresenter @Inject constructor(
         view?.openEmail(lastError?.message.ifNullOrBlank { "empty" })
     }
 
-    private fun logRegisterEvent(students: List<Student>, error: Throwable? = null) {
+    private fun logRegisterEvent(students: List<StudentAndSemesters>, error: Throwable? = null) {
         students.forEach { student ->
             analytics.logEvent(
                 "registration_student_select",
                 "success" to (error != null),
-                "scrapperBaseUrl" to student.scrapperBaseUrl,
-                "symbol" to student.symbol,
+                "scrapperBaseUrl" to student.student.scrapperBaseUrl,
+                "symbol" to student.student.symbol,
                 "error" to (error?.message?.ifBlank { "No message" } ?: "No error"))
         }
     }

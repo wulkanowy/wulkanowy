@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.pojos.StudentAndSemesters
 import io.github.wulkanowy.databinding.ItemLoginStudentSelectBinding
 import javax.inject.Inject
 
@@ -14,13 +14,13 @@ class LoginStudentSelectAdapter @Inject constructor() :
 
     private val checkedList = mutableMapOf<Int, Boolean>()
 
-    var items = emptyList<Pair<Student, Boolean>>()
+    var items = emptyList<Pair<StudentAndSemesters, Boolean>>()
         set(value) {
             field = value
             checkedList.clear()
         }
 
-    var onClickListener: (Student, alreadySaved: Boolean) -> Unit = { _, _ -> }
+    var onClickListener: (StudentAndSemesters, alreadySaved: Boolean) -> Unit = { _, _ -> }
 
     override fun getItemCount() = items.size
 
@@ -33,8 +33,8 @@ class LoginStudentSelectAdapter @Inject constructor() :
         val (student, alreadySaved) = items[position]
 
         with(holder.binding) {
-            loginItemName.text = "${student.studentName} ${student.className}"
-            loginItemSchool.text = student.schoolName
+            loginItemName.text = "${student.student.studentName} ${student.student.className}" // TODO
+            loginItemSchool.text = student.student.schoolName
             loginItemName.isEnabled = !alreadySaved
             loginItemSchool.isEnabled = !alreadySaved
             loginItemSignedIn.visibility = if (alreadySaved) View.VISIBLE else View.GONE
