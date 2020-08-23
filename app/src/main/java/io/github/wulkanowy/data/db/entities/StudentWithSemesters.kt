@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.db.entities
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import java.io.Serializable
 
 data class StudentWithSemesters(
     @Embedded
@@ -9,4 +10,4 @@ data class StudentWithSemesters(
 
     @Relation(parentColumn = "student_id", entityColumn = "student_id")
     val semesters: List<Semester>
-)
+) : Serializable
