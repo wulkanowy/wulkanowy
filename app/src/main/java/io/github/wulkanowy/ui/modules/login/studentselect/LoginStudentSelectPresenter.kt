@@ -70,20 +70,20 @@ class LoginStudentSelectPresenter @Inject constructor(
             && a.classId == b.classId
     }
 
-    private fun loadData(students: List<StudentWithSemesters>) {
+    private fun loadData(studentsWithSemeters: List<StudentWithSemesters>) {
         resetSelectedState()
-        this.students = students
+        this.students = studentsWithSemeters
 
         flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.d("Login student select students load started")
-                Status.SUCCESS -> view?.updateData(students.map { student ->
-                    student to it.data!!.any { item -> compareStudents(student.student, item.student) }
+                Status.SUCCESS -> view?.updateData(studentsWithSemeters.map { studentWithSemesters ->
+                    studentWithSemesters to it.data!!.any { item -> compareStudents(studentWithSemesters.student, item.student) }
                 })
                 Status.ERROR -> {
                     errorHandler.dispatch(it.error!!)
                     lastError = it.error
-                    view?.updateData(students.map { student -> student to false })
+                    view?.updateData(studentsWithSemeters.map { student -> student to false })
                 }
             }
         }.launch()
@@ -94,10 +94,10 @@ class LoginStudentSelectPresenter @Inject constructor(
         view?.enableSignIn(false)
     }
 
-    private fun registerStudents(students: List<StudentWithSemesters>) {
+    private fun registerStudents(studentsWithSemesters: List<StudentWithSemesters>) {
         flowWithResource {
-            val savedStudents = studentRepository.saveStudents(students)
-            val firstRegistered = students.first().apply { student.id = savedStudents.first() }
+            val savedStudents = studentRepository.saveStudents(studentsWithSemesters)
+            val firstRegistered = studentsWithSemesters.first().apply { student.id = savedStudents.first() }
             studentRepository.switchStudent(firstRegistered)
         }.onEach {
             when (it.status) {
@@ -109,7 +109,7 @@ class LoginStudentSelectPresenter @Inject constructor(
                 Status.SUCCESS -> {
                     Timber.i("Registration result: Success")
                     view?.openMainView()
-                    logRegisterEvent(students)
+                    logRegisterEvent(studentsWithSemesters)
                 }
                 Status.ERROR -> {
                     Timber.i("Registration result: An exception occurred ")
@@ -120,7 +120,7 @@ class LoginStudentSelectPresenter @Inject constructor(
                     }
                     lastError = it.error
                     loginErrorHandler.dispatch(it.error!!)
-                    logRegisterEvent(students, it.error)
+                    logRegisterEvent(studentsWithSemesters, it.error)
                 }
             }
         }.launch("register")
@@ -134,8 +134,8 @@ class LoginStudentSelectPresenter @Inject constructor(
         view?.openEmail(lastError?.message.ifNullOrBlank { "empty" })
     }
 
-    private fun logRegisterEvent(students: List<StudentWithSemesters>, error: Throwable? = null) {
-        students.forEach { student ->
+    private fun logRegisterEvent(studentsWithSemesters: List<StudentWithSemesters>, error: Throwable? = null) {
+        studentsWithSemesters.forEach { student ->
             analytics.logEvent(
                 "registration_student_select",
                 "success" to (error != null),

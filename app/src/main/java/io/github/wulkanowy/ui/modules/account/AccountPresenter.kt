@@ -68,11 +68,11 @@ class AccountPresenter @Inject constructor(
         }.launch("logout")
     }
 
-    fun onItemSelected(student: StudentWithSemesters) {
-        Timber.i("Select student item ${student.student.id}")
-        if (student.student.isCurrent) {
+    fun onItemSelected(studentWithSemesters: StudentWithSemesters) {
+        Timber.i("Select student item ${studentWithSemesters.student.id}")
+        if (studentWithSemesters.student.isCurrent) {
             view?.dismissView()
-        } else flowWithResource { studentRepository.switchStudent(student) }.onEach {
+        } else flowWithResource { studentRepository.switchStudent(studentWithSemesters) }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Attempt to change a student")
                 Status.SUCCESS -> {

@@ -42,13 +42,13 @@ class StudentRepository @Inject constructor(
         return local.getCurrentStudent(decryptPass) ?: throw NoCurrentStudentException()
     }
 
-    suspend fun saveStudents(students: List<StudentWithSemesters>): List<Long> {
-        semestersLocal.saveSemesters(students.flatMap { it.semesters })
-        return local.saveStudents(students.map { it.student })
+    suspend fun saveStudents(studentsWithSemesters: List<StudentWithSemesters>): List<Long> {
+        semestersLocal.saveSemesters(studentsWithSemesters.flatMap { it.semesters })
+        return local.saveStudents(studentsWithSemesters.map { it.student })
     }
 
-    suspend fun switchStudent(student: StudentWithSemesters) {
-        return local.setCurrentStudent(student.student)
+    suspend fun switchStudent(studentWithSemesters: StudentWithSemesters) {
+        return local.setCurrentStudent(studentWithSemesters.student)
     }
 
     suspend fun logoutStudent(student: Student) {
