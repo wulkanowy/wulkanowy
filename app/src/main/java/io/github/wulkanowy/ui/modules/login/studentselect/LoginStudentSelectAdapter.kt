@@ -30,11 +30,14 @@ class LoginStudentSelectAdapter @Inject constructor() :
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val (student, alreadySaved) = items[position]
+        val (studentAndSemesters, alreadySaved) = items[position]
+        val student = studentAndSemesters.student
+        val semesters = studentAndSemesters.semesters
+        val diary = semesters.maxByOrNull { it.semesterId }
 
         with(holder.binding) {
-            loginItemName.text = "${student.student.studentName} ${student.student.className}" // TODO
-            loginItemSchool.text = student.student.schoolName
+            loginItemName.text = "${student.studentName} ${diary?.diaryName.orEmpty()}"
+            loginItemSchool.text = student.schoolName
             loginItemName.isEnabled = !alreadySaved
             loginItemSchool.isEnabled = !alreadySaved
             loginItemSignedIn.visibility = if (alreadySaved) View.VISIBLE else View.GONE
@@ -46,7 +49,7 @@ class LoginStudentSelectAdapter @Inject constructor() :
             }
 
             root.setOnClickListener {
-                onClickListener(student, alreadySaved)
+                onClickListener(studentAndSemesters, alreadySaved)
 
                 with(loginItemCheck) {
                     if (isEnabled) {
