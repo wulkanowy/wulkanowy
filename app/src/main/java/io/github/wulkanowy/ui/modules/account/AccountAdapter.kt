@@ -20,7 +20,7 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
 
     var items = emptyList<AccountItem<*>>()
 
-    var onClickListener: (Student) -> Unit = {}
+    var onClickListener: (StudentWithSemesters) -> Unit = {}
 
     override fun getItemCount() = items.size
 
@@ -82,7 +82,7 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
                 setColorFilter(colorImage, PorterDuff.Mode.SRC_IN)
             }
 
-            root.setOnClickListener { onClickListener(student) }
+            root.setOnClickListener { onClickListener(studentWithSemesters) }
         }
     }
 

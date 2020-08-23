@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.account
 
 import io.github.wulkanowy.data.Status
-import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
@@ -69,11 +68,11 @@ class AccountPresenter @Inject constructor(
         }.launch("logout")
     }
 
-    fun onItemSelected(student: Student) {
-        Timber.i("Select student item ${student.id}")
-        if (student.isCurrent) {
+    fun onItemSelected(student: StudentWithSemesters) {
+        Timber.i("Select student item ${student.student.id}")
+        if (student.student.isCurrent) {
             view?.dismissView()
-        } else flowWithResource { studentRepository.switchStudent(StudentWithSemesters(student, emptyList())) }.onEach {
+        } else flowWithResource { studentRepository.switchStudent(student) }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Attempt to change a student")
                 Status.SUCCESS -> {
