@@ -47,17 +47,17 @@ class LoginStudentSelectPresenter @Inject constructor(
         registerStudents(selectedStudents)
     }
 
-    fun onParentInitStudentSelectView(students: List<StudentWithSemesters>) {
-        loadData(students)
-        if (students.size == 1) registerStudents(students)
+    fun onParentInitStudentSelectView(studentsWithSemesters: List<StudentWithSemesters>) {
+        loadData(studentsWithSemesters)
+        if (studentsWithSemesters.size == 1) registerStudents(studentsWithSemesters)
     }
 
-    fun onItemSelected(student: StudentWithSemesters, alreadySaved: Boolean) {
+    fun onItemSelected(studentWithSemester: StudentWithSemesters, alreadySaved: Boolean) {
         if (alreadySaved) return
 
         selectedStudents
-            .removeAll { it == student }
-            .let { if (!it) selectedStudents.add(student) }
+            .removeAll { it == studentWithSemester }
+            .let { if (!it) selectedStudents.add(studentWithSemester) }
 
         view?.enableSignIn(selectedStudents.isNotEmpty())
     }
@@ -70,20 +70,20 @@ class LoginStudentSelectPresenter @Inject constructor(
             && a.classId == b.classId
     }
 
-    private fun loadData(studentsWithSemeters: List<StudentWithSemesters>) {
+    private fun loadData(studentsWithSemesters: List<StudentWithSemesters>) {
         resetSelectedState()
-        this.students = studentsWithSemeters
+        this.students = studentsWithSemesters
 
         flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.d("Login student select students load started")
-                Status.SUCCESS -> view?.updateData(studentsWithSemeters.map { studentWithSemesters ->
+                Status.SUCCESS -> view?.updateData(studentsWithSemesters.map { studentWithSemesters ->
                     studentWithSemesters to it.data!!.any { item -> compareStudents(studentWithSemesters.student, item.student) }
                 })
                 Status.ERROR -> {
                     errorHandler.dispatch(it.error!!)
                     lastError = it.error
-                    view?.updateData(studentsWithSemeters.map { student -> student to false })
+                    view?.updateData(studentsWithSemesters.map { student -> student to false })
                 }
             }
         }.launch()

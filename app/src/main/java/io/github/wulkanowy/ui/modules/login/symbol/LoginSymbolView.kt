@@ -25,7 +25,7 @@ interface LoginSymbolView : BaseView {
 
     fun showContent(show: Boolean)
 
-    fun notifyParentAccountLogged(students: List<StudentWithSemesters>)
+    fun notifyParentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>)
 
     fun showContact(show: Boolean)
 

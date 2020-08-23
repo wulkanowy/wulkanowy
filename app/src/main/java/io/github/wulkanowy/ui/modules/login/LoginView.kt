@@ -15,5 +15,5 @@ interface LoginView : BaseView {
 
     fun notifyInitSymbolFragment(loginData: Triple<String, String, String>)
 
-    fun notifyInitStudentSelectFragment(students: List<StudentWithSemesters>)
+    fun notifyInitStudentSelectFragment(studentsWithSemesters: List<StudentWithSemesters>)
 }

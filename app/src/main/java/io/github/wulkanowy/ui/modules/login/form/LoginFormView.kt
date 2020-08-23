@@ -49,7 +49,7 @@ interface LoginFormView : BaseView {
 
     fun showVersion()
 
-    fun notifyParentAccountLogged(students: List<StudentWithSemesters>, loginData: Triple<String, String, String>)
+    fun notifyParentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>, loginData: Triple<String, String, String>)
 
     fun openPrivacyPolicyPage()
 

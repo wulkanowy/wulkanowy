@@ -21,24 +21,24 @@ class LoginPresenter @Inject constructor(
         Timber.i("Login view was initialized")
     }
 
-    fun onFormViewAccountLogged(students: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
+    fun onFormViewAccountLogged(studentsWithSemesters: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
         view?.apply {
-            if (students.isEmpty()) {
+            if (studentsWithSemesters.isEmpty()) {
                 Timber.i("Switch to symbol form")
                 notifyInitSymbolFragment(loginData)
                 switchView(1)
             } else {
                 Timber.i("Switch to student select")
-                notifyInitStudentSelectFragment(students)
+                notifyInitStudentSelectFragment(studentsWithSemesters)
                 switchView(2)
             }
         }
     }
 
-    fun onSymbolViewAccountLogged(students: List<StudentWithSemesters>) {
+    fun onSymbolViewAccountLogged(studentsWithSemesters: List<StudentWithSemesters>) {
         view?.apply {
             Timber.i("Switch to student select")
-            notifyInitStudentSelectFragment(students)
+            notifyInitStudentSelectFragment(studentsWithSemesters)
             switchView(2)
         }
     }

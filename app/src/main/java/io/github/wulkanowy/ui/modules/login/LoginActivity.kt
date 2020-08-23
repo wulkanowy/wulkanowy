@@ -86,16 +86,16 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
         (loginAdapter.getFragmentInstance(1) as? LoginSymbolFragment)?.onParentInitSymbolFragment(loginData)
     }
 
-    override fun notifyInitStudentSelectFragment(students: List<StudentWithSemesters>) {
-        (loginAdapter.getFragmentInstance(2) as? LoginStudentSelectFragment)?.onParentInitStudentSelectFragment(students)
+    override fun notifyInitStudentSelectFragment(studentsWithSemesters: List<StudentWithSemesters>) {
+        (loginAdapter.getFragmentInstance(2) as? LoginStudentSelectFragment)?.onParentInitStudentSelectFragment(studentsWithSemesters)
     }
 
-    fun onFormFragmentAccountLogged(students: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
-        presenter.onFormViewAccountLogged(students, loginData)
+    fun onFormFragmentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
+        presenter.onFormViewAccountLogged(studentsWithSemesters, loginData)
     }
 
-    fun onSymbolFragmentAccountLogged(students: List<StudentWithSemesters>) {
-        presenter.onSymbolViewAccountLogged(students)
+    fun onSymbolFragmentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>) {
+        presenter.onSymbolViewAccountLogged(studentsWithSemesters)
     }
 
     fun onAdvancedLoginClick() {

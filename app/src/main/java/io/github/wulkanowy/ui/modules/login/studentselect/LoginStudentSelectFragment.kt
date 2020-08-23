@@ -81,8 +81,8 @@ class LoginStudentSelectFragment :
         binding.loginStudentSelectSignIn.isEnabled = enable
     }
 
-    fun onParentInitStudentSelectFragment(students: List<StudentWithSemesters>) {
-        presenter.onParentInitStudentSelectView(students)
+    fun onParentInitStudentSelectFragment(studentsWithSemesters: List<StudentWithSemesters>) {
+        presenter.onParentInitStudentSelectView(studentsWithSemesters)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

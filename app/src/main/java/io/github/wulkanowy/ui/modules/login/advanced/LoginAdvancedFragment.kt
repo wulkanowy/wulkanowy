@@ -295,8 +295,8 @@ class LoginAdvancedFragment :
         binding.loginFormContainer.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun notifyParentAccountLogged(students: List<StudentWithSemesters>) {
-        (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, Triple(
+    override fun notifyParentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>) {
+        (activity as? LoginActivity)?.onFormFragmentAccountLogged(studentsWithSemesters, Triple(
             binding.loginFormUsername.text.toString(),
             binding.loginFormPass.text.toString(),
             resources.getStringArray(R.array.hosts_values)[1]

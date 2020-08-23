@@ -108,8 +108,8 @@ class LoginSymbolFragment :
         binding.loginSymbolContainer.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun notifyParentAccountLogged(students: List<StudentWithSemesters>) {
-        (activity as? LoginActivity)?.onSymbolFragmentAccountLogged(students)
+    override fun notifyParentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>) {
+        (activity as? LoginActivity)?.onSymbolFragmentAccountLogged(studentsWithSemesters)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

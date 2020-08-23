@@ -171,8 +171,8 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         binding.loginFormVersion.text = "v${appInfo.versionName}"
     }
 
-    override fun notifyParentAccountLogged(students: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
-        (activity as? LoginActivity)?.onFormFragmentAccountLogged(students, loginData)
+    override fun notifyParentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
+        (activity as? LoginActivity)?.onFormFragmentAccountLogged(studentsWithSemesters, loginData)
     }
 
     override fun openPrivacyPolicyPage() {
