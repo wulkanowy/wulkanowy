@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.login
 
-import io.github.wulkanowy.data.pojos.StudentAndSemesters
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -21,7 +21,7 @@ class LoginPresenter @Inject constructor(
         Timber.i("Login view was initialized")
     }
 
-    fun onFormViewAccountLogged(students: List<StudentAndSemesters>, loginData: Triple<String, String, String>) {
+    fun onFormViewAccountLogged(students: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
         view?.apply {
             if (students.isEmpty()) {
                 Timber.i("Switch to symbol form")
@@ -35,7 +35,7 @@ class LoginPresenter @Inject constructor(
         }
     }
 
-    fun onSymbolViewAccountLogged(students: List<StudentAndSemesters>) {
+    fun onSymbolViewAccountLogged(students: List<StudentWithSemesters>) {
         view?.apply {
             Timber.i("Switch to student select")
             notifyInitStudentSelectFragment(students)

@@ -1,12 +1,12 @@
 package io.github.wulkanowy.data.mappers
 
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.pojos.StudentAndSemesters
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import java.time.LocalDateTime
 import io.github.wulkanowy.sdk.pojo.Student as SdkStudent
 
 fun List<SdkStudent>.mapToEntities(password: String = "") = map {
-    StudentAndSemesters(
+    StudentWithSemesters(
         student = Student(
             email = it.email,
             password = password,

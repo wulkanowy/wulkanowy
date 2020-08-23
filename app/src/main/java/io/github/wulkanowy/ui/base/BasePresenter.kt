@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.base
 
 import io.github.wulkanowy.data.Status
-import io.github.wulkanowy.data.pojos.StudentAndSemesters
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.CoroutineScope
@@ -45,7 +44,7 @@ open class BasePresenter<T : BaseView>(
             val students = studentRepository.getSavedStudents(false)
             if (students.isNotEmpty()) {
                 Timber.i("Switching current student")
-                studentRepository.switchStudent(StudentAndSemesters((students[0]), emptyList())) // TODO
+                studentRepository.switchStudent(students[0])
             }
         }.onEach {
             when (it.status) {

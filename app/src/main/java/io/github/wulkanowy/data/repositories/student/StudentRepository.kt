@@ -2,7 +2,7 @@ package io.github.wulkanowy.data.repositories.student
 
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
-import io.github.wulkanowy.data.pojos.StudentAndSemesters
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.semester.SemesterLocal
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,19 +18,19 @@ class StudentRepository @Inject constructor(
 
     suspend fun isCurrentStudentSet(): Boolean = local.getCurrentStudent(false)?.isCurrent ?: false
 
-    suspend fun getStudentsApi(pin: String, symbol: String, token: String): List<StudentAndSemesters> {
+    suspend fun getStudentsApi(pin: String, symbol: String, token: String): List<StudentWithSemesters> {
         return remote.getStudentsMobileApi(token, pin, symbol)
     }
 
-    suspend fun getStudentsScrapper(email: String, password: String, endpoint: String, symbol: String): List<StudentAndSemesters> {
+    suspend fun getStudentsScrapper(email: String, password: String, endpoint: String, symbol: String): List<StudentWithSemesters> {
         return remote.getStudentsScrapper(email, password, endpoint, symbol)
     }
 
-    suspend fun getStudentsHybrid(email: String, password: String, endpoint: String, symbol: String): List<StudentAndSemesters> {
+    suspend fun getStudentsHybrid(email: String, password: String, endpoint: String, symbol: String): List<StudentWithSemesters> {
         return remote.getStudentsHybrid(email, password, endpoint, symbol)
     }
 
-    suspend fun getSavedStudents(decryptPass: Boolean = true): List<Student> {
+    suspend fun getSavedStudents(decryptPass: Boolean = true): List<StudentWithSemesters> {
         return local.getStudents(decryptPass)
     }
 
@@ -42,12 +42,12 @@ class StudentRepository @Inject constructor(
         return local.getCurrentStudent(decryptPass) ?: throw NoCurrentStudentException()
     }
 
-    suspend fun saveStudents(students: List<StudentAndSemesters>): List<Long> {
+    suspend fun saveStudents(students: List<StudentWithSemesters>): List<Long> {
         semestersLocal.saveSemesters(students.flatMap { it.semesters })
         return local.saveStudents(students.map { it.student })
     }
 
-    suspend fun switchStudent(student: StudentAndSemesters) {
+    suspend fun switchStudent(student: StudentWithSemesters) {
         return local.setCurrentStudent(student.student)
     }
 

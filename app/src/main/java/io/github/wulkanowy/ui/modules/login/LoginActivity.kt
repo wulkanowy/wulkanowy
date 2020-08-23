@@ -5,8 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.pojos.StudentAndSemesters
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.ActivityLoginBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
@@ -87,15 +86,15 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
         (loginAdapter.getFragmentInstance(1) as? LoginSymbolFragment)?.onParentInitSymbolFragment(loginData)
     }
 
-    override fun notifyInitStudentSelectFragment(students: List<StudentAndSemesters>) {
+    override fun notifyInitStudentSelectFragment(students: List<StudentWithSemesters>) {
         (loginAdapter.getFragmentInstance(2) as? LoginStudentSelectFragment)?.onParentInitStudentSelectFragment(students)
     }
 
-    fun onFormFragmentAccountLogged(students: List<StudentAndSemesters>, loginData: Triple<String, String, String>) {
+    fun onFormFragmentAccountLogged(students: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
         presenter.onFormViewAccountLogged(students, loginData)
     }
 
-    fun onSymbolFragmentAccountLogged(students: List<StudentAndSemesters>) {
+    fun onSymbolFragmentAccountLogged(students: List<StudentWithSemesters>) {
         presenter.onSymbolViewAccountLogged(students)
     }
 
