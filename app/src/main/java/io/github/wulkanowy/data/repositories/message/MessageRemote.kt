@@ -18,7 +18,7 @@ import io.github.wulkanowy.sdk.pojo.Recipient as SdkRecipient
 class MessageRemote @Inject constructor(private val sdk: Sdk) {
 
     suspend fun getMessages(student: Student, semester: Semester, folder: MessageFolder): List<Message> {
-        return sdk.init(student).getMessages(Folder.valueOf(folder.name), semester.start.atStartOfDay().minusMonths(1), semester.end.atStartOfDay()).map {
+        return sdk.init(student).getMessages(Folder.valueOf(folder.name), now().minusMonths(3), now()).map {
             Message(
                 studentId = student.id.toInt(),
                 realId = it.id ?: 0,
