@@ -72,6 +72,6 @@ class MessageRemote @Inject constructor(private val sdk: Sdk) {
     }
 
     suspend fun deleteMessage(student: Student, message: Message): Boolean {
-        return sdk.init(student).deleteMessages(listOf(message.messageId to message.folderId))
+        return sdk.init(student).deleteMessages(listOf(message.messageId), message.folderId)
     }
 }
