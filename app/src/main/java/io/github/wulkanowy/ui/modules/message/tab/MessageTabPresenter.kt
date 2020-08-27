@@ -151,6 +151,7 @@ class MessageTabPresenter @Inject constructor(
                 .collect {
                     Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${it.size}")
                     updateData(it)
+                    view?.resetListPosition()
                 }
         }
     }
@@ -173,7 +174,6 @@ class MessageTabPresenter @Inject constructor(
             showContent(data.isNotEmpty())
             showErrorView(false)
             updateData(data)
-            resetListPosition()
         }
     }
 

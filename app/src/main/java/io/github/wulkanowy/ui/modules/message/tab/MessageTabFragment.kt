@@ -61,7 +61,10 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
     }
 
     override fun initView() {
-        tabAdapter.onClickListener = presenter::onMessageItemSelected
+        with(tabAdapter) {
+            onClickListener = presenter::onMessageItemSelected
+            onChangesDetectedListener = ::resetListPosition
+        }
 
         with(binding.messageTabRecycler) {
             layoutManager = LinearLayoutManager(context)
