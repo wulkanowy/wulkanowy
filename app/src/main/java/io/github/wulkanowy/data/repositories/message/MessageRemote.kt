@@ -28,14 +28,15 @@ class MessageRemote @Inject constructor(private val sdk: Sdk) {
                 recipient = it.recipient.orEmpty(),
                 subject = it.subject.trim(),
                 date = it.date ?: now(),
-                content = it.content.orEmpty(),
                 folderId = it.folderId,
                 unread = it.unread ?: false,
                 unreadBy = it.unreadBy ?: 0,
                 readBy = it.readBy ?: 0,
                 removed = it.removed,
                 hasAttachments = it.hasAttachments
-            )
+            ).apply {
+                content = it.content.orEmpty()
+            }
         }
     }
 
