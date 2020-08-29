@@ -79,13 +79,7 @@ class MessageTabPresenter @Inject constructor(
 
     fun onMessageItemSelected(message: Message, position: Int) {
         Timber.i("Select message ${message.id} item (position: $position)")
-        view?.run {
-            openMessage(message)
-            if (message.unread) {
-                message.unread = false
-                updateItem(message, position)
-            }
-        }
+        view?.openMessage(message)
     }
 
     private fun loadData(forceRefresh: Boolean) {

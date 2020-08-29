@@ -98,10 +98,6 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         tabAdapter.setDataItems(data)
     }
 
-    override fun updateItem(item: Message, position: Int) {
-        tabAdapter.updateItem(position, item)
-    }
-
     override fun showProgress(show: Boolean) {
         binding.messageTabProgress.visibility = if (show) VISIBLE else GONE
     }

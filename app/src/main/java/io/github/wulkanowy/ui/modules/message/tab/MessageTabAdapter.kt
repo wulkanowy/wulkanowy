@@ -29,14 +29,6 @@ class MessageTabAdapter @Inject constructor() :
         diffResult.dispatchUpdatesTo(this)
     }
 
-    fun updateItem(position: Int, item: Message) {
-        val currentItem = items[position]
-        items[position] = item
-        if (item != currentItem) {
-            notifyItemChanged(position)
-        }
-    }
-
     override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
