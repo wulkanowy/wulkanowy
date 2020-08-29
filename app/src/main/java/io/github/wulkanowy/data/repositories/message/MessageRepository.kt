@@ -22,13 +22,7 @@ class MessageRepository @Inject constructor(
 
     fun getMessages(student: Student, semester: Semester, folder: MessageFolder, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = {
-            local.getMessages(student, folder).map {
-                it.map { message ->
-                    message.apply { isSentByUser = message.sender == student.userName }
-                }
-            }
-        },
+        query = { local.getMessages(student, folder) },
         fetch = { remote.getMessages(student, semester, folder) },
         saveFetchResult = { old, new ->
             local.deleteMessages(old uniqueSubtract new)
@@ -43,13 +37,7 @@ class MessageRepository @Inject constructor(
             Timber.d("Message content in db empty: ${it.message.content.isEmpty()}")
             it.message.unread || it.message.content.isEmpty()
         },
-        query = {
-            local.getMessageWithAttachment(student, message).map {
-                it.apply {
-                    it.message.isSentByUser = it.message.sender == student.userName
-                }
-            }
-        },
+        query = { local.getMessageWithAttachment(student, message) },
         fetch = { remote.getMessagesContentDetails(student, it.message, markAsRead) },
         saveFetchResult = { old, (downloadedMessage, attachments) ->
             local.updateMessages(listOf(old.message.copy(unread = !markAsRead).apply {
