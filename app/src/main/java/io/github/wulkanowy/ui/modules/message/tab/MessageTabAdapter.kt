@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.databinding.ItemMessageBinding
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
@@ -51,7 +50,7 @@ class MessageTabAdapter @Inject constructor() :
             val style = if (item.unread) Typeface.BOLD else Typeface.NORMAL
 
             messageItemAuthor.run {
-                text = if (item.folderId == MessageFolder.SENT.id) item.recipient else item.sender
+                text = if (item.isSentByUser) item.recipient else item.sender
                 setTypeface(null, style)
             }
             messageItemSubject.run {
