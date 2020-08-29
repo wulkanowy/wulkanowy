@@ -13,8 +13,9 @@ class Migration27 : Migration(26, 27) {
 
         students.forEach { (id, userLoginId, studentName) ->
             val userNameFromUnits = units.singleOrNull { (senderId, _) -> senderId == userLoginId }?.second
+            val normalizedStudentName = studentName.split(" ").asReversed().joinToString(" ")
 
-            val userName = userNameFromUnits ?: studentName
+            val userName = userNameFromUnits ?: normalizedStudentName
             database.execSQL("UPDATE Students SET user_name = '$userName' WHERE id = '$id'")
         }
     }

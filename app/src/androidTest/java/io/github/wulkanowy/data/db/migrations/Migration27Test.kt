@@ -13,8 +13,8 @@ class Migration27Test : AbstractMigrationTest() {
     @Test
     fun userWithoutCorrespondingUnit() {
         with(helper.createDatabase(dbName, 26)) {
-            createStudent(this, 321, 123, "Jan Always Student")
-            createUnit(this, 9999, "Jan Kowalski Unit")
+            createStudent(this, 321, 123, "Jan Student")
+            createUnit(this, 9999, "Unit Jan")
             close()
         }
 
@@ -28,7 +28,7 @@ class Migration27Test : AbstractMigrationTest() {
         with(students[0]) {
             assertEquals(321, id)
             assertEquals(123, userLoginId)
-            assertEquals("Jan Always Student", userName)
+            assertEquals("Student Jan", userName)
         }
     }
 
@@ -36,7 +36,7 @@ class Migration27Test : AbstractMigrationTest() {
     fun userWithCorrespondingUnit() {
         with(helper.createDatabase(dbName, 26)) {
             createStudent(this, 1, 2, "Jan Kowalski Student")
-            createUnit(this, 2, "Jan Kowalski Unit")
+            createUnit(this, 2, "Unit Jan")
             close()
         }
 
@@ -50,17 +50,17 @@ class Migration27Test : AbstractMigrationTest() {
         with(students[0]) {
             assertEquals(1, id)
             assertEquals(2, userLoginId)
-            assertEquals("Jan Kowalski Unit", userName)
+            assertEquals("Unit Jan", userName)
         }
     }
 
     @Test
     fun studentAccountAndParentAccountWithCorrespondingUnits() {
         with(helper.createDatabase(dbName, 26)) {
-            createStudent(this, 1, 222, "Jan Kowalski Student")
-            createStudent(this, 2, 333, "Jan Kowalski Parent")
-            createUnit(this, 222, "Jan Kowalski Unit")
-            createUnit(this, 333, "Tomasz Kowalski Unit")
+            createStudent(this, 1, 222, "Jan Student")
+            createStudent(this, 2, 333, "Jan Parent")
+            createUnit(this, 222, "Unit Jan")
+            createUnit(this, 333, "Unit Tomasz")
             close()
         }
 
@@ -74,12 +74,12 @@ class Migration27Test : AbstractMigrationTest() {
         with(students[0]) {
             assertEquals(1, id)
             assertEquals(222, userLoginId)
-            assertEquals("Jan Kowalski Unit", userName)
+            assertEquals("Unit Jan", userName)
         }
         with(students[1]) {
             assertEquals(2, id)
             assertEquals(333, userLoginId)
-            assertEquals("Tomasz Kowalski Unit", userName)
+            assertEquals("Unit Tomasz", userName)
         }
     }
 
