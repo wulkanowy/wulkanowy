@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.main
 
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -43,7 +42,6 @@ import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.safelyPopFragments
 import io.github.wulkanowy.utils.setOnViewChangeListener
 import timber.log.Timber
-import java.util.Arrays
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -98,13 +96,13 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
         presenter.onAttachView(this,
             when (intent.action) {
-            "GRADE" -> MainView.Section.GRADE
-            "ATTENDANCE" -> MainView.Section.ATTENDANCE
-            "TIMETABLE" -> MainView.Section.TIMETABLE
-            "EXAM" -> MainView.Section.EXAM
-            "MESSAGE" -> MainView.Section.MESSAGE
-            else -> intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.Section
-        })
+                "GRADE" -> MainView.Section.GRADE
+                "ATTENDANCE" -> MainView.Section.ATTENDANCE
+                "TIMETABLE" -> MainView.Section.TIMETABLE
+                "EXAM" -> MainView.Section.EXAM
+                "MESSAGE" -> MainView.Section.MESSAGE
+                else -> intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.Section
+            })
 
         with(navController) {
             initialize(startMenuIndex, savedInstanceState)
