@@ -64,7 +64,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             return Intent(context, MainActivity::class.java)
                 .apply {
                     if (clear) flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
-                    startMenu?.let { putExtra(EXTRA_START_MENU, it) }
+                    startMenu?.let { putExtra(EXTRA_START_MENU, it.id) }
                 }
         }
     }
@@ -94,15 +94,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         setSupportActionBar(binding.mainToolbar)
         messageContainer = binding.mainFragmentContainer
 
-        presenter.onAttachView(this,
-            when (intent.action) {
-                "GRADE" -> MainView.Section.GRADE
-                "ATTENDANCE" -> MainView.Section.ATTENDANCE
-                "TIMETABLE" -> MainView.Section.TIMETABLE
-                "EXAM" -> MainView.Section.EXAM
-                "MESSAGE" -> MainView.Section.MESSAGE
-                else -> intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.Section
-            })
+        presenter.onAttachView(this, MainView.Section.values()[intent.getIntExtra(EXTRA_START_MENU, 0)])
 
         with(navController) {
             initialize(startMenuIndex, savedInstanceState)
@@ -115,38 +107,38 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     fun initShortcuts() {
         val shortcutManager = getSystemService(ShortcutManager::class.java)
 
-        val gradeShortcut = ShortcutInfo.Builder(applicationContext, "grade")
-            .setShortLabel(getString(R.string.grade_title))
-            .setLongLabel(getString(R.string.grade_title))
-            .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_grade))
-            .setIntent(Intent(applicationContext, MainActivity::class.java).setAction("GRADE"))
-            .build()
-        val attendanceShortcut = ShortcutInfo.Builder(applicationContext, "attendance")
-            .setShortLabel(getString(R.string.attendance_title))
-            .setLongLabel(getString(R.string.attendance_title))
-            .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_attendance))
-            .setIntent(Intent(applicationContext, MainActivity::class.java).setAction("ATTENDANCE"))
-            .build()
-        val examShortcut = ShortcutInfo.Builder(applicationContext, "exam")
-            .setShortLabel(getString(R.string.exam_title))
-            .setLongLabel(getString(R.string.exam_title))
-            .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_exam))
-            .setIntent(Intent(applicationContext, MainActivity::class.java).setAction("EXAM"))
-            .build()
-        val timetableShortcut = ShortcutInfo.Builder(applicationContext, "timetable")
-            .setShortLabel(getString(R.string.timetable_title))
-            .setLongLabel(getString(R.string.timetable_title))
-            .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_timetable))
-            .setIntent(Intent(applicationContext, MainActivity::class.java).setAction("TIMETABLE"))
-            .build()
-        val messageShortcut = ShortcutInfo.Builder(applicationContext, "message")
-            .setShortLabel(getString(R.string.message_title))
-            .setLongLabel(getString(R.string.message_title))
-            .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_more_messages))
-            .setIntent(Intent(applicationContext, MainActivity::class.java).setAction("MESSAGE"))
-            .build()
-
-        shortcutManager!!.dynamicShortcuts = listOf(gradeShortcut, attendanceShortcut, examShortcut, timetableShortcut, messageShortcut)
+        shortcutManager!!.dynamicShortcuts = listOf(
+            ShortcutInfo.Builder(applicationContext, "grade")
+                .setShortLabel(getString(R.string.grade_title))
+                .setLongLabel(getString(R.string.grade_title))
+                .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_grade))
+                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, 0).setAction("shortcut"))
+                .build(),
+            ShortcutInfo.Builder(applicationContext, "attendance")
+                .setShortLabel(getString(R.string.attendance_title))
+                .setLongLabel(getString(R.string.attendance_title))
+                .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_attendance))
+                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, 1).setAction("shortcut"))
+                .build(),
+            ShortcutInfo.Builder(applicationContext, "exam")
+                .setShortLabel(getString(R.string.exam_title))
+                .setLongLabel(getString(R.string.exam_title))
+                .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_exam))
+                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, 2).setAction("shortcut"))
+                .build(),
+            ShortcutInfo.Builder(applicationContext, "timetable")
+                .setShortLabel(getString(R.string.timetable_title))
+                .setLongLabel(getString(R.string.timetable_title))
+                .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_timetable))
+                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, 3).setAction("shortcut"))
+                .build(),
+            ShortcutInfo.Builder(applicationContext, "message")
+                .setShortLabel(getString(R.string.message_title))
+                .setLongLabel(getString(R.string.message_title))
+                .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_more_messages))
+                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, 5).setAction("shortcut"))
+                .build()
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
