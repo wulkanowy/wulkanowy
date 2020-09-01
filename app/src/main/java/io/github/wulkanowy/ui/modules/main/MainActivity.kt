@@ -1,14 +1,20 @@
 package io.github.wulkanowy.ui.modules.main
 
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.RequiresApi
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -37,6 +43,7 @@ import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.safelyPopFragments
 import io.github.wulkanowy.utils.setOnViewChangeListener
 import timber.log.Timber
+import java.util.Arrays
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -89,12 +96,59 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         setSupportActionBar(binding.mainToolbar)
         messageContainer = binding.mainFragmentContainer
 
-        presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.Section)
+        presenter.onAttachView(this,
+            when (intent.action) {
+            "GRADE" -> MainView.Section.GRADE
+            "ATTENDANCE" -> MainView.Section.ATTENDANCE
+            "TIMETABLE" -> MainView.Section.TIMETABLE
+            "EXAM" -> MainView.Section.EXAM
+            "MESSAGE" -> MainView.Section.MESSAGE
+            else -> intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.Section
+        })
 
         with(navController) {
             initialize(startMenuIndex, savedInstanceState)
             pushFragment(moreMenuFragments[startMenuMoreIndex])
         }
+        if (SDK_INT >= 25) initShortcuts()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N_MR1)
+    fun initShortcuts() {
+        val shortcutManager = getSystemService(ShortcutManager::class.java)
+
+        val gradeShortcut = ShortcutInfo.Builder(applicationContext, "grade")
+            .setShortLabel(getString(R.string.grade_title))
+            .setLongLabel(getString(R.string.grade_title))
+            .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_grade))
+            .setIntent(Intent(applicationContext, MainActivity::class.java).setAction("GRADE"))
+            .build()
+        val attendanceShortcut = ShortcutInfo.Builder(applicationContext, "attendance")
+            .setShortLabel(getString(R.string.attendance_title))
+            .setLongLabel(getString(R.string.attendance_title))
+            .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_attendance))
+            .setIntent(Intent(applicationContext, MainActivity::class.java).setAction("ATTENDANCE"))
+            .build()
+        val examShortcut = ShortcutInfo.Builder(applicationContext, "exam")
+            .setShortLabel(getString(R.string.exam_title))
+            .setLongLabel(getString(R.string.exam_title))
+            .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_exam))
+            .setIntent(Intent(applicationContext, MainActivity::class.java).setAction("EXAM"))
+            .build()
+        val timetableShortcut = ShortcutInfo.Builder(applicationContext, "timetable")
+            .setShortLabel(getString(R.string.timetable_title))
+            .setLongLabel(getString(R.string.timetable_title))
+            .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_timetable))
+            .setIntent(Intent(applicationContext, MainActivity::class.java).setAction("TIMETABLE"))
+            .build()
+        val messageShortcut = ShortcutInfo.Builder(applicationContext, "message")
+            .setShortLabel(getString(R.string.message_title))
+            .setLongLabel(getString(R.string.message_title))
+            .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_more_messages))
+            .setIntent(Intent(applicationContext, MainActivity::class.java).setAction("MESSAGE"))
+            .build()
+
+        shortcutManager!!.dynamicShortcuts = listOf(gradeShortcut, attendanceShortcut, examShortcut, timetableShortcut, messageShortcut)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
