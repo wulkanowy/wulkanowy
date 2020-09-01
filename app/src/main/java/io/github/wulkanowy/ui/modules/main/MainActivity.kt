@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.main
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -36,6 +37,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
@@ -52,6 +54,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     @Inject
     lateinit var analytics: FirebaseAnalyticsHelper
+
+    @Inject
+    lateinit var appInfo: AppInfo
 
     private val overlayProvider by lazy { ElevationOverlayProvider(this) }
 
@@ -88,6 +93,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         MainView.Section.LUCKY_NUMBER.id to LuckyNumberFragment.newInstance()
     )
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).apply { binding = this }.root)
@@ -100,45 +106,37 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             initialize(startMenuIndex, savedInstanceState)
             pushFragment(moreMenuFragments[startMenuMoreIndex])
         }
-        if (SDK_INT >= 25) initShortcuts()
+        if (appInfo.systemVersion >= Build.VERSION_CODES.N_MR1) initShortcuts()
     }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
     fun initShortcuts() {
         val shortcutManager = getSystemService(ShortcutManager::class.java)
 
-        shortcutManager!!.dynamicShortcuts = listOf(
-            ShortcutInfo.Builder(applicationContext, "grade")
-                .setShortLabel(getString(R.string.grade_title))
-                .setLongLabel(getString(R.string.grade_title))
-                .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_grade))
-                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, 0).setAction("shortcut"))
-                .build(),
-            ShortcutInfo.Builder(applicationContext, "attendance")
-                .setShortLabel(getString(R.string.attendance_title))
-                .setLongLabel(getString(R.string.attendance_title))
-                .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_attendance))
-                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, 1).setAction("shortcut"))
-                .build(),
-            ShortcutInfo.Builder(applicationContext, "exam")
-                .setShortLabel(getString(R.string.exam_title))
-                .setLongLabel(getString(R.string.exam_title))
-                .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_exam))
-                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, 2).setAction("shortcut"))
-                .build(),
-            ShortcutInfo.Builder(applicationContext, "timetable")
-                .setShortLabel(getString(R.string.timetable_title))
-                .setLongLabel(getString(R.string.timetable_title))
-                .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_main_timetable))
-                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, 3).setAction("shortcut"))
-                .build(),
-            ShortcutInfo.Builder(applicationContext, "message")
-                .setShortLabel(getString(R.string.message_title))
-                .setLongLabel(getString(R.string.message_title))
-                .setIcon(Icon.createWithResource(applicationContext, R.drawable.ic_more_messages))
-                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, 5).setAction("shortcut"))
-                .build()
+        val list = listOf(
+            getString(R.string.grade_title),
+            getString(R.string.attendance_title),
+            getString(R.string.exam_title),
+            getString(R.string.timetable_title),
+            getString(R.string.message_title),
+            R.drawable.ic_main_grade.toString(),
+            R.drawable.ic_main_attendance.toString(),
+            R.drawable.ic_main_exam.toString(),
+            R.drawable.ic_main_timetable.toString(),
+            R.drawable.ic_more_messages.toString()
         )
+
+        val shortcutsList = ArrayList<ShortcutInfo>(5)
+        for (i in 0..4) {
+            shortcutsList.add(ShortcutInfo.Builder(applicationContext, list[i])
+                .setShortLabel(list[i])
+                .setLongLabel(list[i])
+                .setIcon(Icon.createWithResource(applicationContext, list[i + 5].toInt()))
+                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, if (i == 4) i + 1 else i).setAction("shortcut"))
+                .build())
+        }
+
+        shortcutManager!!.dynamicShortcuts = shortcutsList
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
