@@ -113,24 +113,20 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     fun initShortcuts() {
         val shortcutManager = getSystemService(ShortcutManager::class.java)
 
-        val shortcutsList = ArrayList<ShortcutInfo>(5)
-
-        listOf(
+        shortcutManager!!.dynamicShortcuts = listOf(
             getString(R.string.grade_title) to R.drawable.ic_main_grade,
             getString(R.string.attendance_title) to R.drawable.ic_main_attendance,
             getString(R.string.exam_title) to R.drawable.ic_main_exam,
             getString(R.string.timetable_title) to R.drawable.ic_main_timetable,
             getString(R.string.message_title) to R.drawable.ic_more_messages
-        ).forEachIndexed { i, (title, icon) ->
-            shortcutsList.add(ShortcutInfo.Builder(applicationContext, title)
+        ).mapIndexed { i, (title, icon) ->
+            ShortcutInfo.Builder(applicationContext, title)
                 .setShortLabel(title)
                 .setLongLabel(title)
                 .setIcon(Icon.createWithResource(applicationContext, icon))
                 .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, if (i == 4) i + 1 else i).setAction("shortcut"))
-                .build())
+                .build()
         }
-
-        shortcutManager!!.dynamicShortcuts = shortcutsList
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
