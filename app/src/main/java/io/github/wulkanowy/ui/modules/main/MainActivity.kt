@@ -116,17 +116,17 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         val shortcutsList = ArrayList<ShortcutInfo>(5)
 
         listOf(
-            getString(R.string.grade_title) to R.drawable.ic_main_grade,
-            getString(R.string.attendance_title) to R.drawable.ic_main_attendance,
-            getString(R.string.exam_title) to R.drawable.ic_main_exam,
-            getString(R.string.timetable_title) to R.drawable.ic_main_timetable,
-            getString(R.string.message_title) to R.drawable.ic_more_messages
-        ).forEachIndexed { i, (title, icon) ->
+            Triple(getString(R.string.grade_title), R.drawable.ic_main_grade, MainView.Section.GRADE),
+            Triple(getString(R.string.attendance_title), R.drawable.ic_main_attendance, MainView.Section.ATTENDANCE),
+            Triple(getString(R.string.exam_title), R.drawable.ic_main_exam, MainView.Section.EXAM),
+            Triple(getString(R.string.timetable_title), R.drawable.ic_main_timetable, MainView.Section.TIMETABLE),
+            Triple(getString(R.string.message_title), R.drawable.ic_more_messages, MainView.Section.MESSAGE)
+        ).forEach { (title, icon, enum) ->
             shortcutsList.add(ShortcutInfo.Builder(applicationContext, title)
                 .setShortLabel(title)
                 .setLongLabel(title)
                 .setIcon(Icon.createWithResource(applicationContext, icon))
-                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, if (i == 4) i + 1 else i).setAction("shortcut"))
+                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, enum.id).setAction("shortcut"))
                 .build())
         }
 
