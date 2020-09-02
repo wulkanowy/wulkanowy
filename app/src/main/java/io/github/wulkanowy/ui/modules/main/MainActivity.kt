@@ -126,7 +126,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
                 .setShortLabel(title)
                 .setLongLabel(title)
                 .setIcon(Icon.createWithResource(applicationContext, icon))
-                .setIntent(Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, enum.id).setAction("shortcut"))
+                .setIntents(arrayOf(
+                    Intent(applicationContext, MainActivity::class.java).setAction(Intent.ACTION_VIEW),
+                    Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, enum.id).setAction(Intent.ACTION_VIEW).addFlags(FLAG_ACTIVITY_NEW_TASK).addFlags(FLAG_ACTIVITY_CLEAR_TASK)))
                 .build())
         }
 
