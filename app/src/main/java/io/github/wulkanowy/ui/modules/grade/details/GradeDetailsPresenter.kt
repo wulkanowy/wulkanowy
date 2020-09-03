@@ -190,7 +190,7 @@ class GradeDetailsPresenter @Inject constructor(
             .let {
                 if (preferencesRepository.gradeSortingMode == "date")
                     it.sortedByDescending { it.grades.first().date }
-                else it.sortedBy { it.subject }
+                else it.sortedBy { it.subject.toLowerCase() }
             }
             .map { (subject, average, points, _, grades) ->
                 val subItems = grades
