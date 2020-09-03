@@ -77,6 +77,9 @@ class PreferencesRepository @Inject constructor(
     val showWholeClassPlan: String
         get() = getString(R.string.pref_key_timetable_show_whole_class, R.string.pref_default_timetable_show_whole_class)
 
+    val gradeSortingMode: String
+        get() = getString(R.string.pref_key_grade_sorting_mode, R.string.pref_default_grade_sorting_mode)
+
     val showTimetableTimers: Boolean
         get() = getBoolean(R.string.pref_key_timetable_show_timers, R.bool.pref_default_timetable_show_timers)
 

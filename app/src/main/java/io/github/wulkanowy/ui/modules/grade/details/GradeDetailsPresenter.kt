@@ -187,7 +187,11 @@ class GradeDetailsPresenter @Inject constructor(
     private fun createGradeItems(items: List<GradeDetailsWithAverage>): List<GradeDetailsItem> {
         return items
             .filter { it.grades.isNotEmpty() }
-            .sortedBy { it.subject }
+            .let {
+                if (preferencesRepository.gradeSortingMode == "date")
+                    it.sortedByDescending { it.grades.first().date }
+                else it.sortedBy { it.subject }
+            }
             .map { (subject, average, points, _, grades) ->
                 val subItems = grades
                     .sortedByDescending { it.date }
