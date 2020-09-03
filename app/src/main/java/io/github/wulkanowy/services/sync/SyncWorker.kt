@@ -56,7 +56,7 @@ class SyncWorker @WorkerInject constructor(
         val result = when {
             exceptions.isNotEmpty() && inputData.getBoolean("one_time", false) -> {
                 Result.failure(Data.Builder()
-                    .putString("error", exceptions.toString())
+                    .putString("error", exceptions.map { it.stackTraceToString() }.toString())
                     .build()
                 )
             }
