@@ -33,10 +33,6 @@
         <item>Alfabetycznie</item>
         <item>Według daty</item>
     </string-array>
-    <string-array name="grade_sorting_mode_values" translatable="false">
-        <item>alphabetic</item>
-        <item>date</item>
-    </string-array>
     <string-array name="grade_color_scheme_entries">
         <item>Dzienniczek+</item>
         <item>Wulkanowy</item>
