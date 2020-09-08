@@ -15,6 +15,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.note.NoteRepository
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.sdk.scrapper.notes.NoteCategory
+import io.github.wulkanowy.sdk.scrapper.notes.NoteCategory.NEUTRAL
 import io.github.wulkanowy.sdk.scrapper.notes.NoteCategory.POSITIVE
 import io.github.wulkanowy.services.sync.channels.NewNotesChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
@@ -44,12 +45,18 @@ class NoteWork @Inject constructor(
     private fun notify(notes: List<Note>) {
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewNotesChannel.CHANNEL_ID)
             .setContentTitle(
-                if (NoteCategory.getByValue(notes.first().categoryType) == POSITIVE) context.resources.getQuantityString(R.plurals.praise_new_items, notes.size, notes.size)
-                else context.resources.getQuantityString(R.plurals.note_new_items, notes.size, notes.size)
+                when (NoteCategory.getByValue(notes.first().categoryType)) {
+                    POSITIVE -> context.resources.getQuantityString(R.plurals.praise_new_items, notes.size, notes.size)
+                    NEUTRAL -> context.resources.getQuantityString(R.plurals.neutral_note_new_items, notes.size, notes.size)
+                    else -> context.resources.getQuantityString(R.plurals.note_new_items, notes.size, notes.size)
+                }
             )
             .setContentText(
-                if (NoteCategory.getByValue(notes.first().categoryType) == POSITIVE) context.resources.getQuantityString(R.plurals.praise_notify_new_items, notes.size, notes.size)
-                else context.resources.getQuantityString(R.plurals.note_notify_new_items, notes.size, notes.size)
+                when (NoteCategory.getByValue(notes.first().categoryType)) {
+                    POSITIVE -> context.resources.getQuantityString(R.plurals.praise_notify_new_items, notes.size, notes.size)
+                    NEUTRAL -> context.resources.getQuantityString(R.plurals.neutral_note_notify_new_items, notes.size, notes.size)
+                    else -> context.resources.getQuantityString(R.plurals.note_notify_new_items, notes.size, notes.size)
+                }
             )
             .setSmallIcon(R.drawable.ic_stat_note)
             .setAutoCancel(true)
@@ -61,8 +68,11 @@ class NoteWork @Inject constructor(
                     MainActivity.getStartIntent(context, MainView.Section.NOTE, true), FLAG_UPDATE_CURRENT))
             .setStyle(NotificationCompat.InboxStyle().run {
                 setSummaryText(
-                    if (NoteCategory.getByValue(notes.first().categoryType) == POSITIVE) context.resources.getQuantityString(R.plurals.praise_number_item, notes.size, notes.size)
-                    else context.resources.getQuantityString(R.plurals.note_number_item, notes.size, notes.size)
+                    when (NoteCategory.getByValue(notes.first().categoryType)) {
+                        POSITIVE -> context.resources.getQuantityString(R.plurals.praise_number_item, notes.size, notes.size)
+                        NEUTRAL -> context.resources.getQuantityString(R.plurals.neutral_note_number_item, notes.size, notes.size)
+                        else -> context.resources.getQuantityString(R.plurals.note_number_item, notes.size, notes.size)
+                    }
                 )
                 notes.forEach { addLine("${it.teacher}: ${it.category}") }
                 this
