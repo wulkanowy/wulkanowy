@@ -88,8 +88,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
     private fun bindSmallView(binding: ItemTimetableSmallBinding, lesson: Timetable) {
         with(binding) {
             timetableSmallItemNumber.text = lesson.number.toString()
-            val subjectWithGroup = "${lesson.subject} (${lesson.group})"
-            timetableSmallItemSubject.text = if (showGroupsInPlan && lesson.group.isNotBlank()) subjectWithGroup else lesson.subject
+            timetableSmallItemSubject.text = lesson.subject
             timetableSmallItemTimeStart.text = lesson.start.toFormattedString("HH:mm")
             timetableSmallItemRoom.text = lesson.room
             timetableSmallItemTeacher.text = lesson.teacher
@@ -105,8 +104,8 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
     private fun bindNormalView(binding: ItemTimetableBinding, lesson: Timetable, position: Int) {
         with(binding) {
             timetableItemNumber.text = lesson.number.toString()
-            val subjectWithGroup = "${lesson.subject} (${lesson.group})"
-            timetableItemSubject.text = if (showGroupsInPlan && lesson.group.isNotBlank()) subjectWithGroup else lesson.subject
+            timetableItemSubject.text = lesson.subject
+            if (showGroupsInPlan) timetableItemGroup.text = lesson.group
             timetableItemRoom.text = lesson.room
             timetableItemTeacher.text = lesson.teacher
             timetableItemTimeStart.text = lesson.start.toFormattedString("HH:mm")
