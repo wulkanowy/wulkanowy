@@ -105,7 +105,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         with(binding) {
             timetableItemNumber.text = lesson.number.toString()
             timetableItemSubject.text = lesson.subject
-            if (showGroupsInPlan) timetableItemGroup.text = lesson.group
+            timetableItemGroup.text = if (showGroupsInPlan) lesson.group else ""
             timetableItemRoom.text = lesson.room
             timetableItemTeacher.text = lesson.teacher
             timetableItemTimeStart.text = lesson.start.toFormattedString("HH:mm")
