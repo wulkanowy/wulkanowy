@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.databinding.DialogHomeworkBinding
 import io.github.wulkanowy.ui.base.BaseDialogFragment
 import io.github.wulkanowy.utils.openInternetBrowser
@@ -24,6 +25,9 @@ class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), Homew
 
     @Inject
     lateinit var detailsAdapter: HomeworkDetailsAdapter
+
+    @Inject
+    lateinit var preferencesRepository: PreferencesRepository
 
     private lateinit var homework: Homework
 
@@ -61,6 +65,10 @@ class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), Homew
             homeworkDialogRead.setOnClickListener { presenter.toggleDone(homework) }
             homeworkDialogClose.setOnClickListener { dismiss() }
         }
+
+        if (preferencesRepository.isHomeworkFullscreen)
+            dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
+        else dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
 
         with(binding.homeworkDialogRecycler) {
             layoutManager = LinearLayoutManager(context)

@@ -80,6 +80,9 @@ class PreferencesRepository @Inject constructor(
     val showTimetableTimers: Boolean
         get() = getBoolean(R.string.pref_key_timetable_show_timers, R.bool.pref_default_timetable_show_timers)
 
+    val isHomeworkFullscreen: Boolean
+        get() = getBoolean(R.string.pref_key_homework_fullscreen, R.bool.pref_default_homework_fullscreen)
+
     private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
 
     private fun getString(id: String, default: Int) = sharedPref.getString(id, context.getString(default)) ?: context.getString(default)

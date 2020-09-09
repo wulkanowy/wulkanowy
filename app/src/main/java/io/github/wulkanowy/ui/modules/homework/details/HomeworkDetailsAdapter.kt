@@ -1,18 +1,23 @@
 package io.github.wulkanowy.ui.modules.homework.details
 
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.Homework
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.databinding.ItemHomeworkDialogAttachmentBinding
 import io.github.wulkanowy.databinding.ItemHomeworkDialogAttachmentsHeaderBinding
 import io.github.wulkanowy.databinding.ItemHomeworkDialogDetailsBinding
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
-class HomeworkDetailsAdapter @Inject constructor() :
+class HomeworkDetailsAdapter @Inject constructor(
+    private val preferencesRepository: PreferencesRepository,
+    private val sharedPref: SharedPreferences
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private enum class ViewType(val id: Int) {
@@ -67,14 +72,18 @@ class HomeworkDetailsAdapter @Inject constructor() :
             homeworkDialogSubject.text = homework?.subject
             homeworkDialogTeacher.text = homework?.teacher
             homeworkDialogContent.text = homework?.content
+            homeworkDialogFullScreen.visibility = if (preferencesRepository.isHomeworkFullscreen) GONE else VISIBLE
+            homeworkDialogFullScreenExit.visibility = if (preferencesRepository.isHomeworkFullscreen) VISIBLE else GONE
             homeworkDialogFullScreen.setOnClickListener {
                 homeworkDialogFullScreen.visibility = GONE
                 homeworkDialogFullScreenExit.visibility = VISIBLE
+                sharedPref.edit().putBoolean("homework_fullscreen", true).apply()
                 onFullScreenClickListener()
             }
             homeworkDialogFullScreenExit.setOnClickListener {
                 homeworkDialogFullScreen.visibility = VISIBLE
                 homeworkDialogFullScreenExit.visibility = GONE
+                sharedPref.edit().putBoolean("homework_fullscreen", false).apply()
                 onFullScreenExitClickListener()
             }
         }
