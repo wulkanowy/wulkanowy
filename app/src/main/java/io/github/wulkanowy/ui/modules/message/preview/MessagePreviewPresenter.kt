@@ -7,6 +7,7 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.data.repositories.message.MessageRepository
+import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -24,6 +25,7 @@ class MessagePreviewPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val messageRepository: MessageRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val analytics: FirebaseAnalyticsHelper,
     private var appInfo: AppInfo
 ) : BasePresenter<MessagePreviewView>(errorHandler, studentRepository) {
@@ -59,7 +61,7 @@ class MessagePreviewPresenter @Inject constructor(
     private fun loadData(message: Message) {
         flowWithResourceIn {
             val student = studentRepository.getStudentById(message.studentId)
-            messageRepository.getMessage(student, message, true)
+            messageRepository.getMessage(student, message, !preferencesRepository.isIncognitoMode)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading message ${message.messageId} preview started")

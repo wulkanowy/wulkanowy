@@ -383,6 +383,8 @@
     <string name="pref_other_grade_modifier_plus">Wartość plusa</string>
     <string name="pref_other_grade_modifier_minus">Wartość minusa</string>
     <string name="pref_other_fill_message_content">Odpowiadaj z historią wiadomości</string>
+    <string name="pref_other_incognito_mode">Włącz tryb incognito w wiadomościach</string>
+    <string name="pref_other_incognito_mode_summary">nie informuj o przeczytaniu wiadomości</string>
     <!--Notification Channels-->
     <string name="channel_new_entries">Nowe wpisy w dzienniku</string>
     <string name="channel_new_grades">Nowe oceny</string>
