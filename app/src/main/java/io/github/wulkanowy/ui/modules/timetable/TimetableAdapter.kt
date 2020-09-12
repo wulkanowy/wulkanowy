@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.timetable
 
 import android.graphics.Paint
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -44,12 +45,15 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
     private val timers = mutableMapOf<Int, Timer>()
 
+    private val handler = Handler()
+
     private fun resetTimers() {
-        Timber.d("Timetable timers reset")
+        Timber.d("Timetable timers (${timers.size}) reset")
         with(timers) {
             forEach { (_, timer) -> timer.cancel() }
             clear()
         }
+        handler.removeCallbacksAndMessages(null)
     }
 
     override fun getItemCount() = items.size
@@ -113,7 +117,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             bindNormalColors(binding, lesson)
 
             if (lesson.isStudentPlan && showTimers) timers[position] = timer(period = 1000) {
-                root.post { updateTimeLeft(binding, lesson, position) }
+                handler.post { updateTimeLeft(binding, lesson, position) }
             } else {
                 // reset item on set changed
                 timetableItemTimeUntil.visibility = GONE
