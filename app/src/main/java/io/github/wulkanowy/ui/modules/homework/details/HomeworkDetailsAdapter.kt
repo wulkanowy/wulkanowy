@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.homework.details
 
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -15,8 +14,7 @@ import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
 class HomeworkDetailsAdapter @Inject constructor(
-    private val preferencesRepository: PreferencesRepository,
-    private val sharedPref: SharedPreferences
+    private val preferencesRepository: PreferencesRepository
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -77,13 +75,13 @@ class HomeworkDetailsAdapter @Inject constructor(
             homeworkDialogFullScreen.setOnClickListener {
                 homeworkDialogFullScreen.visibility = GONE
                 homeworkDialogFullScreenExit.visibility = VISIBLE
-                sharedPref.edit().putBoolean("homework_fullscreen", true).apply()
+                preferencesRepository.isHomeworkFullscreen = true
                 onFullScreenClickListener()
             }
             homeworkDialogFullScreenExit.setOnClickListener {
                 homeworkDialogFullScreen.visibility = VISIBLE
                 homeworkDialogFullScreenExit.visibility = GONE
-                sharedPref.edit().putBoolean("homework_fullscreen", false).apply()
+                preferencesRepository.isHomeworkFullscreen = false
                 onFullScreenExitClickListener()
             }
         }
