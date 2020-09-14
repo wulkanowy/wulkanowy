@@ -116,11 +116,11 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         val shortcutsList = ArrayList<ShortcutInfo>(5)
 
         listOf(
-            Triple(getString(R.string.grade_title), R.drawable.ic_main_grade, MainView.Section.GRADE),
-            Triple(getString(R.string.attendance_title), R.drawable.ic_main_attendance, MainView.Section.ATTENDANCE),
-            Triple(getString(R.string.exam_title), R.drawable.ic_main_exam, MainView.Section.EXAM),
-            Triple(getString(R.string.timetable_title), R.drawable.ic_main_timetable, MainView.Section.TIMETABLE),
-            Triple(getString(R.string.message_title), R.drawable.ic_more_messages, MainView.Section.MESSAGE)
+            Triple(getString(R.string.grade_title), R.drawable.ic_shortcut_grade, MainView.Section.GRADE),
+            Triple(getString(R.string.attendance_title), R.drawable.ic_shortcut_attendance, MainView.Section.ATTENDANCE),
+            Triple(getString(R.string.exam_title), R.drawable.ic_shortcut_exam, MainView.Section.EXAM),
+            Triple(getString(R.string.timetable_title), R.drawable.ic_shortcut_timetable, MainView.Section.TIMETABLE),
+            Triple(getString(R.string.message_title), R.drawable.ic_shortcut_message, MainView.Section.MESSAGE)
         ).forEach { (title, icon, enum) ->
             shortcutsList.add(ShortcutInfo.Builder(applicationContext, title)
                 .setShortLabel(title)
