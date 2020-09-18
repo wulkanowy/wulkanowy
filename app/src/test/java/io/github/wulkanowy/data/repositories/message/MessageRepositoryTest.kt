@@ -59,7 +59,7 @@ class MessageRepositoryTest {
         val message = runBlocking { repo.getMessage(student, testMessage).toList() }
 
         assertEquals(Status.SUCCESS, message[1].status)
-        assertEquals("Test", message[1].data!!.message?.content)
+        assertEquals("Test", message[1].data!!.message.content)
     }
 
     @Test
@@ -78,7 +78,7 @@ class MessageRepositoryTest {
         val message = runBlocking { repo.getMessage(student, testMessage).toList() }
 
         assertEquals(Status.SUCCESS, message[2].status)
-        assertEquals("Test", message[2].data!!.message?.content)
+        assertEquals("Test", message[2].data!!.message.content)
         coVerify { local.updateMessages(listOf(testMessageWithContent)) }
     }
 
