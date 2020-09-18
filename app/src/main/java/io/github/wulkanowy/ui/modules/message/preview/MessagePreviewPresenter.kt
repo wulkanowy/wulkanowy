@@ -194,6 +194,7 @@ class MessagePreviewPresenter @Inject constructor(
         view?.run {
             lastError = error
             setErrorDetails(message)
+            showContent(false)
             showErrorView(true)
             setErrorRetryCallback { retryCallback() }
         }
