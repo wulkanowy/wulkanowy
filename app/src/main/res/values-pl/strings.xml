@@ -19,7 +19,7 @@
     <string name="homework_title">Zadania domowe</string>
     <string name="account_title">Wybierz konto</string>
     <!--Subtitles-->
-    <string name="grade_subtitle">Semestr %d, %d/%d</string>
+    <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
     <string name="login_header_default">Zaloguj się za pomocą konta ucznia lub rodzica</string>
     <string name="login_header_symbol">Podaj symbol</string>
@@ -168,6 +168,8 @@
     <string name="attendance_excused_lateness">Spóźnienie usprawiedliwione</string>
     <string name="attendance_unexcused_lateness">Spóźnienie nieusprawiedliwione</string>
     <string name="attendance_present">Obecność</string>
+    <string name="attendance_deleted">Usunięty</string>
+    <string name="attendance_unknown">Nieznany</string>
     <string name="attendance_number">Numer lekcji</string>
     <string name="attendance_no_items">Brak wpisów</string>
     <plurals name="attendance_number_absences">
