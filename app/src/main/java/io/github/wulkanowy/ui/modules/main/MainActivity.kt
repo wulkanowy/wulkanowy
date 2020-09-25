@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.RequiresApi
+import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -111,9 +112,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
     fun initShortcuts() {
-        val shortcutManager = getSystemService(ShortcutManager::class.java)
-
-        val shortcutsList = ArrayList<ShortcutInfo>(5)
+        val shortcutsList = mutableListOf<ShortcutInfo>()
 
         listOf(
             Triple(getString(R.string.grade_title), R.drawable.ic_shortcut_grade, MainView.Section.GRADE),
@@ -128,11 +127,12 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
                 .setIcon(Icon.createWithResource(applicationContext, icon))
                 .setIntents(arrayOf(
                     Intent(applicationContext, MainActivity::class.java).setAction(Intent.ACTION_VIEW),
-                    Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, enum.id).setAction(Intent.ACTION_VIEW).addFlags(FLAG_ACTIVITY_NEW_TASK).addFlags(FLAG_ACTIVITY_CLEAR_TASK)))
+                    Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, enum.id)
+                        .setAction(Intent.ACTION_VIEW).addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)))
                 .build())
         }
 
-        shortcutManager!!.dynamicShortcuts = shortcutsList
+        getSystemService<ShortcutManager>()?.dynamicShortcuts = shortcutsList
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
