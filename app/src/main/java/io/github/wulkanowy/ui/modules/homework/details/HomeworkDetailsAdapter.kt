@@ -6,16 +6,13 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.Homework
-import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.databinding.ItemHomeworkDialogAttachmentBinding
 import io.github.wulkanowy.databinding.ItemHomeworkDialogAttachmentsHeaderBinding
 import io.github.wulkanowy.databinding.ItemHomeworkDialogDetailsBinding
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
-class HomeworkDetailsAdapter @Inject constructor(
-    private val preferencesRepository: PreferencesRepository
-) :
+class HomeworkDetailsAdapter @Inject constructor() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private enum class ViewType(val id: Int) {
@@ -31,6 +28,8 @@ class HomeworkDetailsAdapter @Inject constructor(
             field = value
             attachments = value?.attachments.orEmpty()
         }
+
+    var isHomeworkFullscreen = false
 
     var onAttachmentClickListener: (url: String) -> Unit = {}
 
@@ -70,18 +69,16 @@ class HomeworkDetailsAdapter @Inject constructor(
             homeworkDialogSubject.text = homework?.subject
             homeworkDialogTeacher.text = homework?.teacher
             homeworkDialogContent.text = homework?.content
-            homeworkDialogFullScreen.visibility = if (preferencesRepository.isHomeworkFullscreen) GONE else VISIBLE
-            homeworkDialogFullScreenExit.visibility = if (preferencesRepository.isHomeworkFullscreen) VISIBLE else GONE
+            homeworkDialogFullScreen.visibility = if (isHomeworkFullscreen) GONE else VISIBLE
+            homeworkDialogFullScreenExit.visibility = if (isHomeworkFullscreen) VISIBLE else GONE
             homeworkDialogFullScreen.setOnClickListener {
                 homeworkDialogFullScreen.visibility = GONE
                 homeworkDialogFullScreenExit.visibility = VISIBLE
-                preferencesRepository.isHomeworkFullscreen = true
                 onFullScreenClickListener()
             }
             homeworkDialogFullScreenExit.setOnClickListener {
                 homeworkDialogFullScreen.visibility = VISIBLE
                 homeworkDialogFullScreenExit.visibility = GONE
-                preferencesRepository.isHomeworkFullscreen = false
                 onFullScreenExitClickListener()
             }
         }
