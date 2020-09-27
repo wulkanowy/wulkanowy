@@ -101,7 +101,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         with(binding) {
             timetableItemNumber.text = lesson.number.toString()
             timetableItemSubject.text = lesson.subject
-            timetableItemGroup.text = if (showGroupsInPlan) lesson.group else ""
+            timetableItemGroup.text = lesson.group
             timetableItemRoom.text = lesson.room
             timetableItemTeacher.text = lesson.teacher
             timetableItemTimeStart.text = lesson.start.toFormattedString("HH:mm")
@@ -221,6 +221,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
                 timetableItemDescription.text = lesson.info
 
                 timetableItemRoom.visibility = GONE
+                timetableItemGroup.visibility = GONE
                 timetableItemTeacher.visibility = GONE
 
                 timetableItemDescription.setTextColor(root.context.getThemeAttrColor(
@@ -230,6 +231,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             } else {
                 timetableItemDescription.visibility = GONE
                 timetableItemRoom.visibility = VISIBLE
+                timetableItemGroup.visibility = if (showGroupsInPlan && lesson.group.isNotBlank()) VISIBLE else GONE
                 timetableItemTeacher.visibility = VISIBLE
             }
         }
