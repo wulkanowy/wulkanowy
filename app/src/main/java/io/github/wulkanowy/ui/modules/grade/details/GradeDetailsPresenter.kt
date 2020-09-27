@@ -190,11 +190,16 @@ class GradeDetailsPresenter @Inject constructor(
     @SuppressLint("DefaultLocale")
     private fun createGradeItems(items: List<GradeDetailsWithAverage>): List<GradeDetailsItem> {
         return items
-            .let { if (!preferencesRepository.showSubjectsWithoutGrades) it.filter { it.grades.isNotEmpty() } else it.filter { true }}
+            .let { gradesWithAverages ->
+                if (!preferencesRepository.showSubjectsWithoutGrades) {
+                    gradesWithAverages.filter { it.grades.isNotEmpty() }
+                } else gradesWithAverages
+            }
             .let {
                 when (preferencesRepository.gradeSortingMode) {
-                    DATE -> it.sortedByDescending { gradeDetailsWithAverage ->  gradeDetailsWithAverage.grades.firstOrNull()?.date }
-                    ALPHABETIC -> it.sortedBy { gradeDetailsWithAverage ->  gradeDetailsWithAverage.subject.toLowerCase() } }
+                    DATE -> it.sortedByDescending { gradeDetailsWithAverage -> gradeDetailsWithAverage.grades.firstOrNull()?.date }
+                    ALPHABETIC -> it.sortedBy { gradeDetailsWithAverage -> gradeDetailsWithAverage.subject.toLowerCase() }
+                }
             }
             .map { (subject, average, points, _, grades) ->
                 val subItems = grades
