@@ -395,10 +395,12 @@
     <string name="pref_view_app_theme">Тема додатку</string>
     <string name="pref_view_expand_grade">Більше оцінок</string>
     <string name="pref_view_timetable_show_timers">Позначити поточний урок у розкладі</string>
+    <string name="pref_view_timetable_show_groups">Show groups next to subjects in timetable</string>
     <string name="pref_view_grade_statistics_list">Показувати діаграми в оцінках класу</string>
     <string name="pref_view_timetable_show_whole_class">Показати уроки всього класу</string>
     <string name="pref_view_subjects_without_grades">Show subjects without grades in Grades</string>
     <string name="pref_view_grade_color_scheme">Схема кольорів оцінок</string>
+    <string name="pref_view_grade_sorting_mode">Subjects sorting in \"Grades\"</string>
     <string name="pref_view_app_language">Мова додатку</string>
     <string name="pref_notify_header">Повідомлення</string>
     <string name="pref_notify_switch">Показувати повідомлення</string>
