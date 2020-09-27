@@ -18,8 +18,8 @@ class Converters {
         moshi.adapter<List<Int>>(Types.newParameterizedType(List::class.java, Integer::class.java))
     }
 
-    private val stringPairListAdapter by lazy {
-        moshi.adapter<List<Pair<String, String>>>(Types.newParameterizedType(List::class.java, Pair::class.java, String::class.java))
+    private val stringMapAdapter by lazy {
+        moshi.adapter<Map<String, String>>(Types.newParameterizedType(MutableMap::class.java, String::class.java, String::class.java))
     }
 
     @TypeConverter
@@ -60,11 +60,11 @@ class Converters {
 
     @TypeConverter
     fun stringPairListToJson(list: List<Pair<String, String>>): String {
-        return stringPairListAdapter.toJson(list)
+        return stringMapAdapter.toJson(list.toMap())
     }
 
     @TypeConverter
     fun jsonToStringPairList(value: String): List<Pair<String, String>> {
-        return stringPairListAdapter.fromJson(value).orEmpty()
+        return stringMapAdapter.fromJson(value).orEmpty().toList()
     }
 }
