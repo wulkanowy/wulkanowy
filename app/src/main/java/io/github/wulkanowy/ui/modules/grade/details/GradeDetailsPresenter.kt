@@ -190,7 +190,7 @@ class GradeDetailsPresenter @Inject constructor(
     @SuppressLint("DefaultLocale")
     private fun createGradeItems(items: List<GradeDetailsWithAverage>): List<GradeDetailsItem> {
         return items
-            .filter { it.grades.isNotEmpty() }
+            .let { if (!preferencesRepository.showSubjectsWithoutGrades) it.filter { it.grades.isNotEmpty() } else it.filter { true }}
             .let {
                 when (preferencesRepository.gradeSortingMode) {
                     DATE -> it.sortedByDescending { gradeDetailsWithAverage ->  gradeDetailsWithAverage.grades.firstOrNull()?.date }

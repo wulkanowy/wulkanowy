@@ -1,7 +1,5 @@
-Wersja 0.20.2
-- naprawiliśmy powiadomienie o szczęśliwym numerku
-- naprawiliśmy przełączanie na nowy rok szkolny
-- naprawiliśmy funkcję resetowania hasła
-- dodaliśmy dziennik e-Skarżysko
+Wersja 0.20.5
+- naprawiliśmy logowanie do koszalińskiego dziennika
+- naprawiliśmy resetowanie hasła na gdańskim dzienniku
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases
