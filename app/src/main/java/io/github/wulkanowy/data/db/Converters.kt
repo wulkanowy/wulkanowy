@@ -3,6 +3,7 @@ package io.github.wulkanowy.data.db
 import androidx.room.TypeConverter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import timber.log.Timber
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -65,6 +66,11 @@ class Converters {
 
     @TypeConverter
     fun jsonToStringPairList(value: String): List<Pair<String, String>> {
+        if (value.startsWith("{")) {
+            Timber.w("Malformed json: Expected BEGIN_ARRAY but was BEGIN_OBJECT at path \$")
+            return emptyList()
+        }
+
         return stringListMapAdapter.fromJson(value)?.flatMap { map -> map.map { it.key to it.value } }.orEmpty()
     }
 }
