@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.repositories.logger
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.utils.DispatchersProvider
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -8,20 +9,16 @@ import java.io.FileNotFoundException
 import javax.inject.Inject
 
 class LoggerRepository @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val dispatchers: DispatchersProvider
 ) {
 
-    suspend fun getLastLogLines(): List<String> {
-        return getLastModified().readText().split("\n")
-    }
+    suspend fun getLastLogLines() = getLastModified().readText().split("\n")
 
-    suspend fun getLogFiles(): List<File> {
-        return withContext(dispatchers.backgroundThread) {
-            File(context.filesDir.absolutePath).listFiles(File::isFile)?.filter {
-                it.name.endsWith(".log")
-            }!!
-        }
+    suspend fun getLogFiles() = withContext(dispatchers.backgroundThread) {
+        File(context.filesDir.absolutePath).listFiles(File::isFile)?.filter {
+            it.name.endsWith(".log")
+        }!!
     }
 
     private suspend fun getLastModified(): File {

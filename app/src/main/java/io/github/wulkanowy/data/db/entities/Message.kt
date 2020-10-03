@@ -3,8 +3,8 @@ package io.github.wulkanowy.data.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import org.threeten.bp.LocalDateTime
 import java.io.Serializable
+import java.time.LocalDateTime
 
 @Entity(tableName = "Messages")
 data class Message(
@@ -29,20 +29,12 @@ data class Message(
 
     val subject: String,
 
-    var content: String,
-
     val date: LocalDateTime,
 
     @ColumnInfo(name = "folder_id")
     val folderId: Int,
 
     var unread: Boolean,
-
-    @ColumnInfo(name = "unread_by")
-    val unreadBy: Int,
-
-    @ColumnInfo(name = "read_by")
-    val readBy: Int,
 
     val removed: Boolean,
 
@@ -55,4 +47,12 @@ data class Message(
 
     @ColumnInfo(name = "is_notified")
     var isNotified: Boolean = true
+
+    @ColumnInfo(name = "unread_by")
+    var unreadBy: Int = 0
+
+    @ColumnInfo(name = "read_by")
+    var readBy: Int = 0
+
+    var content: String = ""
 }

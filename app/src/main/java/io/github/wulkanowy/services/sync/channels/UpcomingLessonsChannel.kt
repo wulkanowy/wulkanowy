@@ -6,17 +6,18 @@ import android.app.NotificationChannel
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import javax.inject.Inject
 
 @TargetApi(26)
 class UpcomingLessonsChannel @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) : Channel {
 
     companion object {
-        const val CHANNEL_ID = "lesson_channel"
+        const val CHANNEL_ID = "upcoming_lesson_channel"
     }
 
     override fun create() {
@@ -25,6 +26,7 @@ class UpcomingLessonsChannel @Inject constructor(
                 lockscreenVisibility = VISIBILITY_PUBLIC
                 setShowBadge(false)
                 enableVibration(false)
+                setSound(null, null)
             }
         )
     }

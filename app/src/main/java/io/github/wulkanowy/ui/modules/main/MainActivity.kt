@@ -1,14 +1,21 @@
 package io.github.wulkanowy.ui.modules.main
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.annotation.RequiresApi
+import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -17,7 +24,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.elevation.ElevationOverlayProvider
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
-import dagger.Lazy
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.ActivityMainBinding
 import io.github.wulkanowy.ui.base.BaseActivity
@@ -31,6 +38,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
+import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
@@ -39,19 +47,21 @@ import io.github.wulkanowy.utils.setOnViewChangeListener
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainView {
 
     @Inject
     override lateinit var presenter: MainPresenter
 
     @Inject
-    lateinit var navController: FragNavController
-
-    @Inject
     lateinit var analytics: FirebaseAnalyticsHelper
 
     @Inject
-    lateinit var overlayProvider: Lazy<ElevationOverlayProvider>
+    lateinit var appInfo: AppInfo
+
+    private val overlayProvider by lazy { ElevationOverlayProvider(this) }
+
+    private val navController = FragNavController(supportFragmentManager, R.id.mainFragmentContainer)
 
     companion object {
         const val EXTRA_START_MENU = "extraStartMenu"
@@ -60,7 +70,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             return Intent(context, MainActivity::class.java)
                 .apply {
                     if (clear) flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
-                    startMenu?.let { putExtra(EXTRA_START_MENU, it) }
+                    startMenu?.let { putExtra(EXTRA_START_MENU, it.id) }
                 }
         }
     }
@@ -84,18 +94,45 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         MainView.Section.LUCKY_NUMBER.id to LuckyNumberFragment.newInstance()
     )
 
+    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).apply { binding = this }.root)
         setSupportActionBar(binding.mainToolbar)
         messageContainer = binding.mainFragmentContainer
 
-        presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_START_MENU) as? MainView.Section)
+        presenter.onAttachView(this, MainView.Section.values().singleOrNull { it.id == intent.getIntExtra(EXTRA_START_MENU, -1) })
 
         with(navController) {
             initialize(startMenuIndex, savedInstanceState)
             pushFragment(moreMenuFragments[startMenuMoreIndex])
         }
+        if (appInfo.systemVersion >= Build.VERSION_CODES.N_MR1) initShortcuts()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N_MR1)
+    fun initShortcuts() {
+        val shortcutsList = mutableListOf<ShortcutInfo>()
+
+        listOf(
+            Triple(getString(R.string.grade_title), R.drawable.ic_shortcut_grade, MainView.Section.GRADE),
+            Triple(getString(R.string.attendance_title), R.drawable.ic_shortcut_attendance, MainView.Section.ATTENDANCE),
+            Triple(getString(R.string.exam_title), R.drawable.ic_shortcut_exam, MainView.Section.EXAM),
+            Triple(getString(R.string.timetable_title), R.drawable.ic_shortcut_timetable, MainView.Section.TIMETABLE),
+            Triple(getString(R.string.message_title), R.drawable.ic_shortcut_message, MainView.Section.MESSAGE)
+        ).forEach { (title, icon, enum) ->
+            shortcutsList.add(ShortcutInfo.Builder(applicationContext, title)
+                .setShortLabel(title)
+                .setLongLabel(title)
+                .setIcon(Icon.createWithResource(applicationContext, icon))
+                .setIntents(arrayOf(
+                    Intent(applicationContext, MainActivity::class.java).setAction(Intent.ACTION_VIEW),
+                    Intent(applicationContext, MainActivity::class.java).putExtra(EXTRA_START_MENU, enum.id)
+                        .setAction(Intent.ACTION_VIEW).addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)))
+                .build())
+        }
+
+        getSystemService<ShortcutManager>()?.dynamicShortcuts = shortcutsList
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -106,7 +143,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     override fun initView() {
         with(binding.mainToolbar) {
             if (SDK_INT >= LOLLIPOP) stateListAnimator = null
-            setBackgroundColor(overlayProvider.get().compositeOverlayWithThemeSurfaceColorIfNeeded(dpToPx(4f)))
+            setBackgroundColor(overlayProvider.compositeOverlayWithThemeSurfaceColorIfNeeded(dpToPx(4f)))
         }
 
         with(binding.mainBottomNav) {
@@ -119,7 +156,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             ))
             accentColor = getThemeAttrColor(R.attr.colorPrimary)
             inactiveColor = getThemeAttrColor(R.attr.colorOnSurface, 153)
-            defaultBackgroundColor = overlayProvider.get().compositeOverlayWithThemeSurfaceColorIfNeeded(dpToPx(8f))
+            defaultBackgroundColor = overlayProvider.compositeOverlayWithThemeSurfaceColorIfNeeded(dpToPx(8f))
             titleState = ALWAYS_SHOW
             currentItem = startMenuIndex
             isBehaviorTranslationEnabled = false
@@ -144,8 +181,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         analytics.setCurrentScreen(this, name)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == R.id.mainMenuAccount) presenter.onAccountManagerSelected()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.mainMenuAccount) presenter.onAccountManagerSelected()
         else false
     }
 

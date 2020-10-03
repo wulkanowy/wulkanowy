@@ -5,13 +5,14 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.entities.Semester
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime.of
+import java.time.LocalDate
+import java.time.LocalDateTime.of
 import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
@@ -48,7 +49,7 @@ class TimetableLocalTest {
                 semester = semester,
                 startDate = LocalDate.of(2018, 9, 10),
                 endDate = LocalDate.of(2018, 9, 14)
-            )
+            ).first()
         }
 
         assertEquals(2, exams.size)

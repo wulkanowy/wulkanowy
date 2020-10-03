@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.DEFAULT_ALL
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.app.NotificationManagerCompat
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
@@ -18,31 +19,35 @@ import io.github.wulkanowy.services.sync.channels.NewGradesChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.getCompatColor
-import io.reactivex.Completable
-import kotlinx.coroutines.rx2.rxCompletable
-import kotlinx.coroutines.rx2.rxSingle
+import io.github.wulkanowy.utils.waitForResult
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import kotlin.random.Random
 
 class GradeWork @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val notificationManager: NotificationManagerCompat,
     private val gradeRepository: GradeRepository,
     private val preferencesRepository: PreferencesRepository
 ) : Work {
 
-    override fun create(student: Student, semester: Semester): Completable {
-        return rxCompletable { gradeRepository.getGrades(student, semester, true, preferencesRepository.isNotificationsEnable) }
-            .concatWith(Completable.concatArray(rxSingle { gradeRepository.getNotNotifiedGrades(semester) }.flatMapCompletable {
-                if (it.isNotEmpty()) notifyDetails(it)
-                rxCompletable { gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true }) }
-            }, rxSingle { gradeRepository.getNotNotifiedPredictedGrades(semester) }.flatMapCompletable {
-                if (it.isNotEmpty()) notifyPredicted(it)
-                rxCompletable { gradeRepository.updateGradesSummary(it.onEach { grade -> grade.isPredictedGradeNotified = true }) }
-            }, rxSingle { gradeRepository.getNotNotifiedFinalGrades(semester) }.flatMapCompletable {
-                if (it.isNotEmpty()) notifyFinal(it)
-                rxCompletable { gradeRepository.updateGradesSummary(it.onEach { grade -> grade.isFinalGradeNotified = true }) }
-            }))
+    override suspend fun doWork(student: Student, semester: Semester) {
+        gradeRepository.getGrades(student, semester, true, preferencesRepository.isNotificationsEnable).waitForResult()
+
+        gradeRepository.getNotNotifiedGrades(semester).first().let {
+            if (it.isNotEmpty()) notifyDetails(it)
+            gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true })
+        }
+
+        gradeRepository.getNotNotifiedPredictedGrades(semester).first().let {
+            if (it.isNotEmpty()) notifyPredicted(it)
+            gradeRepository.updateGradesSummary(it.onEach { grade -> grade.isPredictedGradeNotified = true })
+        }
+
+        gradeRepository.getNotNotifiedFinalGrades(semester).first().let {
+            if (it.isNotEmpty()) notifyFinal(it)
+            gradeRepository.updateGradesSummary(it.onEach { grade -> grade.isFinalGradeNotified = true })
+        }
     }
 
     private fun getNotificationBuilder(): NotificationCompat.Builder {

@@ -8,14 +8,15 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.databinding.DialogHomeworkBinding
 import io.github.wulkanowy.ui.base.BaseDialogFragment
-import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), HomeworkDetailsView {
 
     @Inject
@@ -61,19 +62,31 @@ class HomeworkDetailsDialog : BaseDialogFragment<DialogHomeworkBinding>(), Homew
             homeworkDialogClose.setOnClickListener { dismiss() }
         }
 
+        if (presenter.isHomeworkFullscreen) {
+            dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
+        } else {
+            dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
+        }
+
         with(binding.homeworkDialogRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = detailsAdapter.apply {
                 onAttachmentClickListener = { context.openInternetBrowser(it, ::showMessage) }
-                onFullScreenClickListener = { dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT) }
-                onFullScreenExitClickListener = { dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT) }
+                onFullScreenClickListener = {
+                    dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
+                    presenter.isHomeworkFullscreen = true
+                }
+                onFullScreenExitClickListener = {
+                    dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
+                    presenter.isHomeworkFullscreen = false
+                }
+                isHomeworkFullscreen = presenter.isHomeworkFullscreen
                 homework = this@HomeworkDetailsDialog.homework
             }
         }
     }
 
     override fun updateMarkAsDoneLabel(isDone: Boolean) {
-        (parentFragment as? HomeworkFragment)?.onReloadList()
         binding.homeworkDialogRead.text = view?.context?.getString(if (isDone) R.string.homework_mark_as_undone else R.string.homework_mark_as_done)
     }
 

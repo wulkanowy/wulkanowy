@@ -7,9 +7,11 @@
         <item>Lubelski Portal Oświatowy</item>
         <item>EduNet Miasta Tarnowa</item>
         <item>ResMan Rzeszów</item>
+        <item>Platforma Edukacyjna Koszalina</item>
         <item>Rawa Mazowiecka - Platforma vEdukacja</item>
         <item>Zduńska Wola - e-Urząd</item>
         <item>Sieradz - Portal oświatowy</item>
+        <item>Skarżysko-Kamienna - e-Skarżysko</item>
         <item>Łask - Platforma vEdukacja</item>
         <item>Powiat łaski - Platforma edukacyjna</item>
         <item>Powiat Krasnostawski - Platforma oświatowa</item>
@@ -26,6 +28,8 @@
         <item>https://edu.lublin.eu</item>
         <item>https://umt.tarnow.pl</item>
         <item>https://resman.pl</item>
+        <item>https://eduportal.koszalin.pl</item>
+        <item>https://vulcan.net.pl/</item>
         <item>https://vulcan.net.pl/</item>
         <item>https://vulcan.net.pl/</item>
         <item>https://vulcan.net.pl/</item>
@@ -45,9 +49,11 @@
         <item>lublin</item>
         <item>tarnow</item>
         <item>rzeszow</item>
+        <item>koszalin</item>
         <item>rawamazowiecka</item>
         <item>zdunskawola</item>
         <item>sieradz</item>
+        <item>skarzyskokamienna</item>
         <item>lask</item>
         <item>powiatlaski</item>
         <item>powiatkrasnostawski</item>

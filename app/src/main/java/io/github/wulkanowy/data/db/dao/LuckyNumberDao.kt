@@ -3,7 +3,8 @@ package io.github.wulkanowy.data.db.dao
 import androidx.room.Dao
 import androidx.room.Query
 import io.github.wulkanowy.data.db.entities.LuckyNumber
-import org.threeten.bp.LocalDate
+import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 import javax.inject.Singleton
 
 @Singleton
@@ -11,5 +12,5 @@ import javax.inject.Singleton
 interface LuckyNumberDao : BaseDao<LuckyNumber> {
 
     @Query("SELECT * FROM LuckyNumbers WHERE student_id = :studentId AND date = :date")
-    suspend fun load(studentId: Int, date: LocalDate): LuckyNumber
+    fun load(studentId: Int, date: LocalDate): Flow<LuckyNumber?>
 }

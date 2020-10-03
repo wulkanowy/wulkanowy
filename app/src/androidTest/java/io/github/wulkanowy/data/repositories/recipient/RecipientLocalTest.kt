@@ -12,7 +12,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
@@ -43,7 +43,7 @@ class RecipientLocalTest {
         )
         runBlocking { recipientLocal.saveRecipients(list) }
 
-        val student = Student("fakelog.cf", "AUTO", "", "", "", "", false, "", "", "", 1, 0, "", "", "", "", "", 1, true, LocalDateTime.now())
+        val student = Student("fakelog.cf", "AUTO", "", "", "", "", false, "", "", "", 1, 0, "", "", "", "", "", "", 1, true, LocalDateTime.now())
         val recipients = runBlocking {
             recipientLocal.getRecipients(
                 student = student,

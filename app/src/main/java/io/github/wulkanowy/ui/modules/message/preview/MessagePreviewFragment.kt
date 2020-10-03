@@ -16,6 +16,7 @@ import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
@@ -23,12 +24,12 @@ import io.github.wulkanowy.databinding.FragmentMessagePreviewBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.shareText
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MessagePreviewFragment :
     BaseFragment<FragmentMessagePreviewBinding>(R.layout.fragment_message_preview),
     MessagePreviewView, MainView.TitledView {
@@ -173,7 +174,7 @@ class MessagePreviewFragment :
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun printDocument(html: String, jobName: String) {
-        val webView = WebView(activity)
+        val webView = WebView(requireContext())
         webView.webViewClient = object : WebViewClient() {
 
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
@@ -201,10 +202,6 @@ class MessagePreviewFragment :
 
     override fun popView() {
         (activity as MainActivity).popView()
-    }
-
-    override fun notifyParentMessageDeleted(message: Message) {
-        parentFragmentManager.fragments.forEach { if (it is MessageFragment) it.onDeleteMessage(message) }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

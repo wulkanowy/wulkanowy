@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.splash
 
-import io.github.wulkanowy.TestSchedulersProvider
+import io.github.wulkanowy.MainCoroutineRule
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.mockk.MockKAnnotations
@@ -8,9 +8,13 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 class SplashPresenterTest {
+
+    @get:Rule
+    val coroutineRule = MainCoroutineRule()
 
     @MockK(relaxed = true)
     lateinit var splashView: SplashView
@@ -24,9 +28,9 @@ class SplashPresenterTest {
     private lateinit var presenter: SplashPresenter
 
     @Before
-    fun initPresenter() {
+    fun setUp() {
         MockKAnnotations.init(this)
-        presenter = SplashPresenter(TestSchedulersProvider(), errorHandler, studentRepository)
+        presenter = SplashPresenter(errorHandler, studentRepository)
     }
 
     @Test
