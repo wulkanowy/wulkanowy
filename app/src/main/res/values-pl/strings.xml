@@ -254,9 +254,9 @@
     </plurals>
     <!--Praise-->
     <plurals name="praise_number_item">
-        <item quantity="one">%d praise</item>
-        <item quantity="few">%d praises</item>
-        <item quantity="many">%d praises</item>
+        <item quantity="one">%d pochwała</item>
+        <item quantity="few">%d pochwały</item>
+        <item quantity="many">%d pochwał</item>
         <item quantity="other">%d pochwał</item>
     </plurals>
     <plurals name="praise_new_items">
@@ -266,29 +266,29 @@
         <item quantity="other">Nowe pochwały</item>
     </plurals>
     <plurals name="praise_notify_new_items">
-        <item quantity="one">You received %1$d praise</item>
-        <item quantity="few">You received %1$d praises</item>
-        <item quantity="many">You received %1$d praises</item>
-        <item quantity="other">You received %1$d praises</item>
+        <item quantity="one">Masz %1$d nową pochwałę</item>
+        <item quantity="few">Masz %1$d nowe pochwały</item>
+        <item quantity="many">Masz %1$d nowych pochwał</item>
+        <item quantity="other">Masz %1$d nowych pochwał</item>
     </plurals>
     <!--Neutral notes-->
     <plurals name="neutral_note_number_item">
-        <item quantity="one">%d neutral note</item>
-        <item quantity="few">%d neutral notes</item>
-        <item quantity="many">%d neutral notes</item>
-        <item quantity="other">%d neutral notes</item>
+        <item quantity="one">%d neutralna uwaga</item>
+        <item quantity="few">%d neutralne uwagi</item>
+        <item quantity="many">%d neutralnych uwag</item>
+        <item quantity="other">%d neutralnych uwag</item>
     </plurals>
     <plurals name="neutral_note_new_items">
-        <item quantity="one">New neutral note</item>
-        <item quantity="few">New neutral notes</item>
-        <item quantity="many">New neutral notes</item>
-        <item quantity="other">New neutral notes</item>
+        <item quantity="one">Nowa neutralna uwaga</item>
+        <item quantity="few">Nowe neutralne uwagi</item>
+        <item quantity="many">Nowe neutralne uwagi</item>
+        <item quantity="other">Nowe neutralne uwagi</item>
     </plurals>
     <plurals name="neutral_note_notify_new_items">
-        <item quantity="one">You received %1$d neutral note</item>
-        <item quantity="few">You received %1$d neutral notes</item>
-        <item quantity="many">You received %1$d neutral notes</item>
-        <item quantity="other">You received %1$d neutral notes</item>
+        <item quantity="one">Masz %1$d nową neutralną uwagę</item>
+        <item quantity="few">Masz %1$d nowe neutralne uwagi</item>
+        <item quantity="many">Masz %1$d nowych neutralnych uwag</item>
+        <item quantity="other">Masz %1$d nowych neutralnych uwag</item>
     </plurals>
     <!--Homework-->
     <string name="homework_no_items">Brak zadań domowych</string>
@@ -395,12 +395,12 @@
     <string name="pref_view_app_theme">Motyw aplikacji</string>
     <string name="pref_view_expand_grade">Rozwiń oceny</string>
     <string name="pref_view_timetable_show_timers">Oznaczaj bieżącą lekcję na planie</string>
-    <string name="pref_view_timetable_show_groups">Show groups next to subjects in timetable</string>
+    <string name="pref_view_timetable_show_groups">Pokazuj grupę obok przedmiotu na planie</string>
     <string name="pref_view_grade_statistics_list">Pokazuj listę wykresów w ocenach klasy</string>
     <string name="pref_view_timetable_show_whole_class">Pokazuj lekcje całej klasy</string>
-    <string name="pref_view_subjects_without_grades">Show subjects without grades in Grades</string>
+    <string name="pref_view_subjects_without_grades">Pokazuj przedmioty bez ocen w Oceny</string>
     <string name="pref_view_grade_color_scheme">Schemat kolorów ocen</string>
-    <string name="pref_view_grade_sorting_mode">Subjects sorting in \"Grades\"</string>
+    <string name="pref_view_grade_sorting_mode">Sortowanie przedmiotów w \"Oceny\"</string>
     <string name="pref_view_app_language">Język aplikacji</string>
     <string name="pref_notify_header">Powiadomienia</string>
     <string name="pref_notify_switch">Pokazuj powiadomienia</string>
