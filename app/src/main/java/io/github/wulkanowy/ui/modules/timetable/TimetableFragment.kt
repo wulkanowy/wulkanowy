@@ -88,11 +88,12 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         else false
     }
 
-    override fun updateData(data: List<Timetable>, showWholeClassPlanType: String, showTimetableTimers: Boolean) {
+    override fun updateData(data: List<Timetable>, showWholeClassPlanType: String, showGroupsInPlanType: Boolean, showTimetableTimers: Boolean) {
         with(timetableAdapter) {
             items = data.toMutableList()
             showTimers = showTimetableTimers
             showWholeClassPlan = showWholeClassPlanType
+            showGroupsInPlan = showGroupsInPlanType
             notifyDataSetChanged()
         }
     }
@@ -185,6 +186,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
     }
 
     override fun onDestroyView() {
+        timetableAdapter.resetTimers()
         presenter.onDetachView()
         super.onDestroyView()
     }
