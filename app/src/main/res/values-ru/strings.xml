@@ -273,22 +273,22 @@
     </plurals>
     <!--Neutral notes-->
     <plurals name="neutral_note_number_item">
-        <item quantity="one">%d neutral note</item>
-        <item quantity="few">%d neutral notes</item>
-        <item quantity="many">%d neutral notes</item>
-        <item quantity="other">%d neutral notes</item>
+        <item quantity="one">%d нейтральное замечание</item>
+        <item quantity="few">%d нейтральных замечания</item>
+        <item quantity="many">%d нейтральных замечаний</item>
+        <item quantity="other">%d нейтральных замечаний</item>
     </plurals>
     <plurals name="neutral_note_new_items">
-        <item quantity="one">New neutral note</item>
-        <item quantity="few">New neutral notes</item>
-        <item quantity="many">New neutral notes</item>
-        <item quantity="other">New neutral notes</item>
+        <item quantity="one">Новое нейтральное замечание</item>
+        <item quantity="few">Новые нейтральные замечания</item>
+        <item quantity="many">Новые нейтральные замечания</item>
+        <item quantity="other">Новые нейтральные замечания</item>
     </plurals>
     <plurals name="neutral_note_notify_new_items">
-        <item quantity="one">You received %1$d neutral note</item>
-        <item quantity="few">You received %1$d neutral notes</item>
-        <item quantity="many">You received %1$d neutral notes</item>
-        <item quantity="other">You received %1$d neutral notes</item>
+        <item quantity="one">Вы получили %1$d нейтральное замечание</item>
+        <item quantity="few">Вы получили %1$d нейтральных замечания</item>
+        <item quantity="many">Вы получили %1$d нейтральных замечаний</item>
+        <item quantity="other">Вы получили %1$d нейтральных замечаний</item>
     </plurals>
     <!--Homework-->
     <string name="homework_no_items">Нет домашних заданий</string>
@@ -395,7 +395,7 @@
     <string name="pref_view_app_theme">Тема приложения</string>
     <string name="pref_view_expand_grade">Разворачивать оценки</string>
     <string name="pref_view_timetable_show_timers">Отмечать текущий урок в расписании</string>
-    <string name="pref_view_timetable_show_groups">Show groups next to subjects in timetable</string>
+    <string name="pref_view_timetable_show_groups">Показать группу возле предмета в расписании</string>
     <string name="pref_view_grade_statistics_list">Показывать диаграммы в оценках класса</string>
     <string name="pref_view_timetable_show_whole_class">Показать уроки всего класса</string>
     <string name="pref_view_subjects_without_grades">Показывать предметы без оценок в \"Оценках\"</string>
