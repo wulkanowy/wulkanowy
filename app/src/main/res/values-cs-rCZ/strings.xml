@@ -28,7 +28,7 @@
     <string name="login_login_pesel_email_hint">Přihlášení, číslo PESEL nebo e-mail</string>
     <string name="login_password_hint">Heslo</string>
     <string name="login_host_hint">Deník UONET+</string>
-    <string name="login_type_api">Mobilní API</string>
+    <string name="login_type_api">Mobile API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybridní</string>
     <string name="login_token_hint">Token</string>
@@ -47,7 +47,7 @@
     <string name="login_incorrect_symbol">Student nebyl nalezen. Zkontrolujte symbol</string>
     <string name="login_field_required">Toto pole je povinné</string>
     <string name="login_duplicate_student">Vybraný student je již přihlášen</string>
-    <string name="login_symbol_helper">Symbol najdete na stránce deník v&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b></string>
+    <string name="login_symbol_helper">Symbol najdete na stránce deníku v&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b></string>
     <string name="login_select_student">Vyberte studenty k přihlášení do aplikace</string>
     <string name="login_advanced">Jiné možnosti</string>
     <string name="login_advanced_warning_mobile_api">In this mode, a lucky number does not work, a class grade stats, summary of attendance, excuse for absence, completed lessons, school information and preview of the list of registered devices</string>
@@ -74,11 +74,11 @@
     <string name="grade_semester">Semester %d</string>
     <string name="grade_switch_semester">Change semester</string>
     <string name="grade_no_items">No grades</string>
-    <string name="grade_weight">Weight</string>
-    <string name="grade_weight_value">Weight: %s</string>
-    <string name="grade_comment">Comment</string>
-    <string name="grade_no_new_items">No new grades</string>
-    <string name="grade_number_new_items">Number of new ratings: %1$d</string>
+    <string name="grade_weight">Váha</string>
+    <string name="grade_weight_value">Váha: %s</string>
+    <string name="grade_comment">Komentář</string>
+    <string name="grade_no_new_items">Žádné nové známky</string>
+    <string name="grade_number_new_items">Počet nových známek: %1$d</string>
     <string name="grade_average">Average: %1$.2f</string>
     <string name="grade_points_sum">Points: %s</string>
     <string name="grade_no_average">No average</string>
@@ -138,7 +138,7 @@
         <item quantity="other">You received %1$d final grades</item>
     </plurals>
     <!--Timetable-->
-    <string name="timetable_lesson">Lesson</string>
+    <string name="timetable_lesson">Lekce</string>
     <string name="timetable_room">Room</string>
     <string name="timetable_group">Group</string>
     <string name="timetable_time">Hours</string>
@@ -401,55 +401,55 @@
     <string name="pref_view_subjects_without_grades">Show subjects without grades in Grades</string>
     <string name="pref_view_grade_color_scheme">Grades color scheme</string>
     <string name="pref_view_grade_sorting_mode">Subjects sorting in \"Grades\"</string>
-    <string name="pref_view_app_language">App language</string>
-    <string name="pref_notify_header">Notifications</string>
-    <string name="pref_notify_switch">Show notifications</string>
-    <string name="pref_notify_upcoming_lessons_switch">Show upcoming lesson notifications</string>
-    <string name="pref_notify_fix_sync_issues">Fix synchronization &amp; notifications issues</string>
+    <string name="pref_view_app_language">Jazyk aplikace</string>
+    <string name="pref_notify_header">Oznámení</string>
+    <string name="pref_notify_switch">Ukázat notifikace</string>
+    <string name="pref_notify_upcoming_lessons_switch">Ukázat nadcházející oznámení o lekci</string>
+    <string name="pref_notify_fix_sync_issues">Opravte problémy se synchronizací a upozorněním</string>
     <string name="pref_notify_fix_sync_issues_message">Your device may have data synchronization issues and with notifications.\n\nTo fix them, you need to add Wulkanowy to the autostart and turn off battery optimization/saving in the phone settings.</string>
-    <string name="pref_notify_fix_sync_issues_settings_button">Go to settings</string>
+    <string name="pref_notify_fix_sync_issues_settings_button">Jdi do nastavení</string>
     <string name="pref_notify_debug_switch">Show debug notifications</string>
-    <string name="pref_services_header">Synchronization</string>
-    <string name="pref_services_switch">Automatic update</string>
-    <string name="pref_services_suspended">Suspended on holidays</string>
-    <string name="pref_services_interval">Updates interval</string>
-    <string name="pref_services_wifi">Wi-Fi only</string>
-    <string name="pref_services_force_sync">Sync now</string>
-    <string name="pref_services_message_sync_success">Synced!</string>
-    <string name="pref_services_message_sync_failed">Sync failed</string>
-    <string name="pref_services_sync_in_progress">Sync in progress</string>
-    <string name="pref_services_dialog_force_sync_title">Synchronization</string>
+    <string name="pref_services_header">Synchronizace</string>
+    <string name="pref_services_switch">Automatická aktualizace</string>
+    <string name="pref_services_suspended">Pozastaveno na dovolené</string>
+    <string name="pref_services_interval">Interval aktualizací</string>
+    <string name="pref_services_wifi">Pouze Wi-Fi</string>
+    <string name="pref_services_force_sync">Nyní synchronizovat</string>
+    <string name="pref_services_message_sync_success">Synchronizováno!</string>
+    <string name="pref_services_message_sync_failed">Synchronizace se nezdařila</string>
+    <string name="pref_services_sync_in_progress">Probíhá synchronizace</string>
+    <string name="pref_services_dialog_force_sync_title">Synchronizace</string>
     <string name="pref_services_dialog_force_sync_summary">        Manual sync doesn\'t refresh app views.
         \nTo see the synced data relaunch the app after syncing.
     </string>
-    <string name="pref_other_header">Other</string>
-    <string name="pref_other_grade_modifier_plus">Value of the plus</string>
-    <string name="pref_other_grade_modifier_minus">Value of the minus</string>
-    <string name="pref_other_fill_message_content">Reply with message history</string>
+    <string name="pref_other_header">Jiný</string>
+    <string name="pref_other_grade_modifier_plus">Hodnota plusu</string>
+    <string name="pref_other_grade_modifier_minus">Hodnota mínusu</string>
+    <string name="pref_other_fill_message_content">Odpovědět s historií zpráv</string>
     <!--Notification Channels-->
-    <string name="channel_new_entries">New entries in register</string>
-    <string name="channel_new_grades">New grades</string>
-    <string name="channel_lucky_number">Lucky number</string>
-    <string name="channel_new_message">New messages</string>
+    <string name="channel_new_entries">Nové položky v deník</string>
+    <string name="channel_new_grades">Nové známky</string>
+    <string name="channel_lucky_number">Šťastné číslo</string>
+    <string name="channel_new_message">Nové zprávy</string>
     <string name="channel_new_notes">New notes</string>
-    <string name="channel_push">Push notifications</string>
-    <string name="channel_upcoming_lessons">Upcoming lessons</string>
-    <string name="channel_debug">Debug</string>
+    <string name="channel_push">Oznámení push</string>
+    <string name="channel_upcoming_lessons">Nadcházející lekce</string>
+    <string name="channel_debug">Ladění</string>
     <!--Colors-->
-    <string name="all_black">Black</string>
-    <string name="all_red">Red</string>
-    <string name="all_blue">Blue</string>
-    <string name="all_green">Green</string>
-    <string name="all_purple">Purple</string>
-    <string name="all_empty_color">No color</string>
+    <string name="all_black">Černý</string>
+    <string name="all_red">Červený</string>
+    <string name="all_blue">Modrý</string>
+    <string name="all_green">Zelený</string>
+    <string name="all_purple">Nachový</string>
+    <string name="all_empty_color">Žádná barva</string>
     <!--Others-->
-    <string name="all_copied">Copied</string>
-    <string name="all_undo">Undo</string>
+    <string name="all_copied">Zkopírováno</string>
+    <string name="all_undo">Vrátit</string>
     <!--Errors-->
-    <string name="error_no_internet">No internet connection</string>
+    <string name="error_no_internet">Žádné internetové připojení</string>
     <string name="error_timeout">Connection to the register timed out</string>
-    <string name="error_login_failed">Login failed. Try again or restart the app</string>
-    <string name="error_password_change_required">Password change required</string>
+    <string name="error_login_failed">Přihlášení selhalo. Zkuste to znovu nebo restartujte aplikaci</string>
+    <string name="error_password_change_required">Je vyžadována změna hesla</string>
     <string name="error_service_unavailable">Maintenance underway UONET + register. Try again later</string>
     <string name="error_unknown">Došlo k neočekávané chybě</string>
     <string name="error_feature_disabled">Funkce deaktivována vaší školou</string>
