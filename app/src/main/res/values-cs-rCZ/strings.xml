@@ -62,7 +62,7 @@
     <string name="login_recover_warning">Ujistěte se, že je vybrán správný UONET+ deník!</string>
     <string name="login_recover_button">Zapomněl jsem své heslo</string>
     <string name="login_recover_title">Obnovte svůj účet</string>
-    <string name="login_recover">Recover</string>
+    <string name="login_recover">Obnovit</string>
     <string name="login_signed_in">Student je již přihlášen</string>
     <!--Main-->
     <string name="main_account_picker">Správce účtu</string>
@@ -83,7 +83,7 @@
     <string name="grade_points_sum">Body: %s</string>
     <string name="grade_no_average">Žádný průměr</string>
     <string name="grade_predicted">Předpovězeno: %1$s</string>
-    <string name="grade_final">Final: %1$s</string>
+    <string name="grade_final">Konečná: %1$s</string>
     <string name="grade_summary_points">Celkem bodů</string>
     <string name="grade_summary_final_grade">Konečná známka</string>
     <string name="grade_summary_predicted_grade">Předpokládaná známka</string>
@@ -96,10 +96,10 @@
     <string name="grade_statistics_semester">Semestr</string>
     <string name="grade_statistics_points">Body</string>
     <plurals name="grade_number_item">
-        <item quantity="one">%d grade</item>
-        <item quantity="few">%d grades</item>
-        <item quantity="many">%d grades</item>
-        <item quantity="other">%d grades</item>
+        <item quantity="one">%d známka</item>
+        <item quantity="few">%d známky</item>
+        <item quantity="many">%d známky</item>
+        <item quantity="other">%d známky</item>
     </plurals>
     <plurals name="grade_new_items">
         <item quantity="one">Nová známka</item>
@@ -132,7 +132,7 @@
         <item quantity="other">You received %1$d predicted grades</item>
     </plurals>
     <plurals name="grade_notify_new_items_final">
-        <item quantity="one">You received %1$d final grade</item>
+        <item quantity="one">Máte %1$d novou konečnou známku</item>
         <item quantity="few">You received %1$d final grades</item>
         <item quantity="many">You received %1$d final grades</item>
         <item quantity="other">You received %1$d final grades</item>
@@ -180,7 +180,7 @@
     </plurals>
     <string name="attendance_excuse_dialog_reason">Důvod absence (volitelný)</string>
     <string name="attendance_excuse_dialog_submit">Poslat</string>
-    <string name="attendance_excuse_success">Absence excused successfully!</string>
+    <string name="attendance_excuse_success">Omluveno úspěšně!</string>
     <string name="attendance_excuse_no_selection">Musíte vybrat alespoň jednu nepřítomnost!</string>
     <string name="attendance_excuse_title">Ospravedlnit</string>
     <!--Attendance summary-->
@@ -235,16 +235,16 @@
     <string name="note_no_items">Žádné informace o komentářích</string>
     <string name="note_points">Body</string>
     <plurals name="note_number_item">
-        <item quantity="one">%d note</item>
-        <item quantity="few">%d notes</item>
-        <item quantity="many">%d notes</item>
-        <item quantity="other">%d notes</item>
+        <item quantity="one">%d poznámka</item>
+        <item quantity="few">%d poznámky</item>
+        <item quantity="many">%d poznámky</item>
+        <item quantity="other">%d poznámky</item>
     </plurals>
     <plurals name="note_new_items">
-        <item quantity="one">New note</item>
-        <item quantity="few">New notes</item>
-        <item quantity="many">New notes</item>
-        <item quantity="other">New notes</item>
+        <item quantity="one">Nová poznámka</item>
+        <item quantity="few">Nové poznámky</item>
+        <item quantity="many">Nové poznámky</item>
+        <item quantity="other">Nové poznámky</item>
     </plurals>
     <plurals name="note_notify_new_items">
         <item quantity="one">You received %1$d note</item>
@@ -254,10 +254,10 @@
     </plurals>
     <!--Praise-->
     <plurals name="praise_number_item">
-        <item quantity="one">%d praise</item>
-        <item quantity="few">%d praises</item>
-        <item quantity="many">%d praises</item>
-        <item quantity="other">%d praises</item>
+        <item quantity="one">%d chvála</item>
+        <item quantity="few">%d chvály</item>
+        <item quantity="many">%d chvály</item>
+        <item quantity="other">%d chvály</item>
     </plurals>
     <plurals name="praise_new_items">
         <item quantity="one">Nová chvála</item>
@@ -266,29 +266,29 @@
         <item quantity="other">Nové chvály</item>
     </plurals>
     <plurals name="praise_notify_new_items">
-        <item quantity="one">You received %1$d praise</item>
-        <item quantity="few">You received %1$d praises</item>
-        <item quantity="many">You received %1$d praises</item>
-        <item quantity="other">You received %1$d praises</item>
+        <item quantity="one">Máte %1$d novou chválu</item>
+        <item quantity="few">Máte %1$d nové chvály</item>
+        <item quantity="many">Máte %1$d nové chvály</item>
+        <item quantity="other">Máte %1$d nové chvály</item>
     </plurals>
     <!--Neutral notes-->
     <plurals name="neutral_note_number_item">
-        <item quantity="one">%d neutral note</item>
+        <item quantity="one">%d neutrální poznámka</item>
         <item quantity="few">%d neutral notes</item>
         <item quantity="many">%d neutral notes</item>
         <item quantity="other">%d neutral notes</item>
     </plurals>
     <plurals name="neutral_note_new_items">
-        <item quantity="one">Nová neutrální nota</item>
-        <item quantity="few">New neutral notes</item>
-        <item quantity="many">New neutral notes</item>
-        <item quantity="other">New neutral notes</item>
+        <item quantity="one">Nová neutrální poznámka</item>
+        <item quantity="few">Nové neutrální poznámky</item>
+        <item quantity="many">Nové neutrální poznámky</item>
+        <item quantity="other">Nové neutrální poznámky</item>
     </plurals>
     <plurals name="neutral_note_notify_new_items">
-        <item quantity="one">You received %1$d neutral note</item>
-        <item quantity="few">You received %1$d neutral notes</item>
-        <item quantity="many">You received %1$d neutral notes</item>
-        <item quantity="other">You received %1$d neutral notes</item>
+        <item quantity="one">Máte %1$d novou neutrální pozornost</item>
+        <item quantity="few">Máte %1$d nové neutrální komentáře</item>
+        <item quantity="many">Máte %1$d nové neutrální komentáře</item>
+        <item quantity="other">Máte %1$d nové neutrální komentáře</item>
     </plurals>
     <!--Homework-->
     <string name="homework_no_items">Žádný domácí úkol</string>
@@ -349,7 +349,7 @@
     <string name="about_privacy_summary">Pravidla pro shromažďování osobních údajů</string>
     <string name="about_homepage">Domovská stránka</string>
     <string name="about_homepage_summary">Navštivte web a pomozte s vývojem aplikace</string>
-    <string name="about_licenses">Licenses</string>
+    <string name="about_licenses">Licence</string>
     <string name="about_licenses_summary">Licence knihoven použitých v aplikaci</string>
     <!--Licenses-->
     <string name="license_dialog_title">Licence</string>
@@ -357,7 +357,7 @@
     <string name="contributor_avatar_description">Avatar</string>
     <string name="contributor_see_more">Zobrazit více na GitHub</string>
     <!--Log viewer-->
-    <string name="logviewer_share">Share logs</string>
+    <string name="logviewer_share">Sdílejte protokoly</string>
     <string name="logviewer_refresh">Obnovit</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Kontrola aktualizací</string>
