@@ -50,9 +50,9 @@
     <string name="login_symbol_helper">Symbol najdete na stránce deníku v&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b></string>
     <string name="login_select_student">Vyberte studenty k přihlášení do aplikace</string>
     <string name="login_advanced">Jiné možnosti</string>
-    <string name="login_advanced_warning_mobile_api">In this mode, a lucky number does not work, a class grade stats, summary of attendance, excuse for absence, completed lessons, school information and preview of the list of registered devices</string>
-    <string name="login_advanced_warning_scraper">This mode displays the same data as it appears on the register website</string>
-    <string name="login_advanced_warning_hybrid">The combination of the best features of the other two modes. It works faster than scraper and provides features not available in the Mobile API mode. It is in the experimental phase</string>
+    <string name="login_advanced_warning_mobile_api">V tomto režimu nefungují následující: šťastné číslo, statistiky třídy, shrnutí docházky, ospravedlnění nepřítomnosti, absolvované lekce, informace o škole a prohlížení seznamu registrovaných zařízení</string>
+    <string name="login_advanced_warning_scraper">Tento režim zobrazuje stejná data, která se zobrazují na webových stránkách deníka</string>
+    <string name="login_advanced_warning_hybrid">Kombinace nejlepších vlastností ostatních dvou režimů. Funguje rychleji než scraper a poskytuje funkce, které nejsou k dispozici v režimu Mobile API. Je to v experimentální fázi</string>
     <string name="login_privacy_policy">Zásady ochrany osobních údajů</string>
     <string name="login_contact_header">Problémy s přihlášením? Napište nám!</string>
     <string name="login_contact_email">Email</string>
@@ -120,16 +120,16 @@
         <item quantity="other">Nové konečné známky</item>
     </plurals>
     <plurals name="grade_notify_new_items">
-        <item quantity="one">You received %1$d grade</item>
-        <item quantity="few">You received %1$d grades</item>
-        <item quantity="many">You received %1$d grades</item>
-        <item quantity="other">You received %1$d grades</item>
+        <item quantity="one">Máte %1$d novou známku</item>
+        <item quantity="few">Máte %1$d nové známky</item>
+        <item quantity="many">Máte %1$d nové známky</item>
+        <item quantity="other">Máte %1$d nové známky</item>
     </plurals>
     <plurals name="grade_notify_new_items_predicted">
-        <item quantity="one">You received %1$d predicted grade</item>
-        <item quantity="few">You received %1$d predicted grades</item>
-        <item quantity="many">You received %1$d predicted grades</item>
-        <item quantity="other">You received %1$d predicted grades</item>
+        <item quantity="one">Máte %1$d novou konečnou známku</item>
+        <item quantity="few">Máte %1$d nové konečné známky</item>
+        <item quantity="many">Máte %1$d nové konečné známky</item>
+        <item quantity="other">Máte %1$d nové konečné známky</item>
     </plurals>
     <plurals name="grade_notify_new_items_final">
         <item quantity="one">Máte %1$d novou konečnou známku</item>
@@ -157,7 +157,7 @@
     <string name="completed_lessons_button">Zobrazit dokončené lekce</string>
     <string name="completed_lessons_no_items">Žádné informace o absolvovaných lekcích</string>
     <string name="completed_lessons_topic">Téma</string>
-    <string name="completed_lessons_absence">Nepřítomnost</string>
+    <string name="completed_lessons_absence">Absence</string>
     <string name="completed_lessons_resources">Zdroje</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Souhrn docházky</string>
@@ -174,13 +174,13 @@
     <string name="attendance_no_items">Žádné položky</string>
     <plurals name="attendance_number_absences">
         <item quantity="one">%1$d absence</item>
-        <item quantity="few">%1$d absences</item>
-        <item quantity="many">%1$d absences</item>
-        <item quantity="other">%1$d absences</item>
+        <item quantity="few">%1$d absence</item>
+        <item quantity="many">%1$d absence</item>
+        <item quantity="other">%1$d absence</item>
     </plurals>
     <string name="attendance_excuse_dialog_reason">Důvod absence (volitelný)</string>
     <string name="attendance_excuse_dialog_submit">Poslat</string>
-    <string name="attendance_excuse_success">Omluveno úspěšně!</string>
+    <string name="attendance_excuse_success">Absence úspěšně omluvena!</string>
     <string name="attendance_excuse_no_selection">Musíte vybrat alespoň jednu nepřítomnost!</string>
     <string name="attendance_excuse_title">Ospravedlnit</string>
     <!--Attendance summary-->
@@ -247,10 +247,10 @@
         <item quantity="other">Nové poznámky</item>
     </plurals>
     <plurals name="note_notify_new_items">
-        <item quantity="one">You received %1$d note</item>
-        <item quantity="few">You received %1$d notes</item>
-        <item quantity="many">You received %1$d notes</item>
-        <item quantity="other">You received %1$d notes</item>
+        <item quantity="one">Máte %1$d novou poznámku</item>
+        <item quantity="few">Máte %1$d nové poznámky</item>
+        <item quantity="many">Máte %1$d nové poznámky</item>
+        <item quantity="other">Máte %1$d nové poznámky</item>
     </plurals>
     <!--Praise-->
     <plurals name="praise_number_item">
