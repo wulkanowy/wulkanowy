@@ -27,7 +27,7 @@ class AccountPresenter @Inject constructor(
 
     fun onAddSelected() {
         Timber.i("Select add account")
-        //view?.openLoginView()
+        view?.openLoginView()
     }
 
     fun onRemoveSelected() {
@@ -90,14 +90,18 @@ class AccountPresenter @Inject constructor(
     }
 
     private fun createAccountItems(items: List<StudentWithSemesters>): List<AccountItem<*>> {
-        return items.groupBy { Account(it.student.email, it.student.isParent) }
+        return items.groupBy {
+            Account("${it.student.userName} (${it.student.email})", it.student.isParent)
+        }
             .map { (account, students) ->
                 listOf(
                     AccountItem(account, AccountItem.ViewType.HEADER)
                 ) + students.map { student ->
                     AccountItem(student, AccountItem.ViewType.ITEM)
                 }
-            }.flatten()
+            }
+            .map { it + it }
+            .flatten()
     }
 
     private fun loadData() {

@@ -9,6 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentAccountBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
@@ -29,6 +30,8 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
 
     override val titleStringId = R.string.account_title
 
+    override var subtitleString = ""
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,12 +49,22 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
             layoutManager = LinearLayoutManager(context)
             adapter = accountAdapter
         }
+
+        with(binding) {
+            accountAdd.setOnClickListener { presenter.onAddSelected() }
+        }
     }
 
     override fun updateData(data: List<AccountItem<*>>) {
         with(accountAdapter) {
             items = data
             notifyDataSetChanged()
+        }
+    }
+
+    override fun openLoginView() {
+        activity?.let {
+            startActivity(LoginActivity.getStartIntent(it))
         }
     }
 }

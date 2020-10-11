@@ -8,7 +8,6 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.HeaderAccountBinding
 import io.github.wulkanowy.databinding.ItemAccountBinding
@@ -30,28 +29,55 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
         val inflater = LayoutInflater.from(parent.context)
 
         return when (viewType) {
-            AccountItem.ViewType.HEADER.id -> HeaderViewHolder(HeaderAccountBinding.inflate(inflater, parent, false))
-            AccountItem.ViewType.ITEM.id -> ItemViewHolder(ItemAccountBinding.inflate(inflater, parent, false))
+            AccountItem.ViewType.HEADER.id -> HeaderViewHolder(
+                HeaderAccountBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
+            AccountItem.ViewType.ITEM.id -> ItemViewHolder(
+                ItemAccountBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
             else -> throw IllegalStateException()
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is HeaderViewHolder -> bindHeaderViewHolder(holder.binding, items[position].value as Account)
-            is ItemViewHolder -> bindItemViewHolder(holder.binding, items[position].value as StudentWithSemesters)
+            is HeaderViewHolder -> bindHeaderViewHolder(
+                holder.binding,
+                items[position].value as Account,
+                position
+            )
+            is ItemViewHolder -> bindItemViewHolder(
+                holder.binding,
+                items[position].value as StudentWithSemesters
+            )
         }
     }
 
-    private fun bindHeaderViewHolder(binding: HeaderAccountBinding, account: Account) {
+    private fun bindHeaderViewHolder(
+        binding: HeaderAccountBinding,
+        account: Account,
+        position: Int
+    ) {
         with(binding) {
+            accountHeaderDivider.visibility = if (position == 0) GONE else VISIBLE
             accountHeaderEmail.text = account.email
             accountHeaderType.setText(if (account.isParent) R.string.account_type_parent else R.string.account_type_student)
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun bindItemViewHolder(binding: ItemAccountBinding, studentWithSemesters: StudentWithSemesters) {
+    private fun bindItemViewHolder(
+        binding: ItemAccountBinding,
+        studentWithSemesters: StudentWithSemesters
+    ) {
         val student = studentWithSemesters.student
         val semesters = studentWithSemesters.semesters
         val diary = semesters.maxByOrNull { it.semesterId }
@@ -76,8 +102,9 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
             }
 
             with(accountItemImage) {
-                val colorImage = if (student.isCurrent) context.getThemeAttrColor(R.attr.colorPrimary)
-                else context.getThemeAttrColor(R.attr.colorOnSurface, 153)
+                val colorImage =
+                    if (student.isCurrent) context.getThemeAttrColor(R.attr.colorPrimary)
+                    else context.getThemeAttrColor(R.attr.colorOnSurface, 153)
 
                 setColorFilter(colorImage, PorterDuff.Mode.SRC_IN)
             }

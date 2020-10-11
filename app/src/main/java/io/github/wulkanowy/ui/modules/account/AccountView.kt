@@ -7,5 +7,7 @@ interface AccountView : BaseView {
     fun initView()
 
     fun updateData(data: List<AccountItem<*>>)
+
+    fun openLoginView()
 }
 
