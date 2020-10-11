@@ -133,9 +133,9 @@
     </plurals>
     <plurals name="grade_notify_new_items_final">
         <item quantity="one">Máte %1$d novou konečnou známku</item>
-        <item quantity="few">You received %1$d final grades</item>
-        <item quantity="many">You received %1$d final grades</item>
-        <item quantity="other">You received %1$d final grades</item>
+        <item quantity="few">Máte %1$d nové konečné známky</item>
+        <item quantity="many">Máte %1$d nové konečné známky</item>
+        <item quantity="other">Máte %1$d nové konečné známky</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Lekce</string>
@@ -232,7 +232,7 @@
         <item quantity="other">Obdrželi jste %1$d zpráv</item>
     </plurals>
     <!--Note-->
-    <string name="note_no_items">Žádné informace o komentářích</string>
+    <string name="note_no_items">Žádné informace o poznámkách</string>
     <string name="note_points">Body</string>
     <plurals name="note_number_item">
         <item quantity="one">%d poznámka</item>
@@ -274,9 +274,9 @@
     <!--Neutral notes-->
     <plurals name="neutral_note_number_item">
         <item quantity="one">%d neutrální poznámka</item>
-        <item quantity="few">%d neutral notes</item>
-        <item quantity="many">%d neutral notes</item>
-        <item quantity="other">%d neutral notes</item>
+        <item quantity="few">%d neutrální poznámky</item>
+        <item quantity="many">%d neutrální poznámky</item>
+        <item quantity="other">%d neutrální poznámky</item>
     </plurals>
     <plurals name="neutral_note_new_items">
         <item quantity="one">Nová neutrální poznámka</item>
