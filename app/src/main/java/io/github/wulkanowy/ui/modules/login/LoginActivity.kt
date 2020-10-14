@@ -4,7 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import io.github.wulkanowy.data.db.entities.Student
+import dagger.hilt.android.AndroidEntryPoint
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.ActivityLoginBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
@@ -17,13 +18,13 @@ import io.github.wulkanowy.utils.UpdateHelper
 import io.github.wulkanowy.utils.setOnSelectPageListener
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), LoginView {
 
     @Inject
     override lateinit var presenter: LoginPresenter
 
-    @Inject
-    lateinit var loginAdapter: BaseFragmentPagerAdapter
+    private val loginAdapter = BaseFragmentPagerAdapter(supportFragmentManager)
 
     @Inject
     lateinit var updateHelper: UpdateHelper
@@ -101,16 +102,16 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
         (loginAdapter.getFragmentInstance(1) as? LoginSymbolFragment)?.onParentInitSymbolFragment(loginData)
     }
 
-    override fun notifyInitStudentSelectFragment(students: List<Student>) {
-        (loginAdapter.getFragmentInstance(2) as? LoginStudentSelectFragment)?.onParentInitStudentSelectFragment(students)
+    override fun notifyInitStudentSelectFragment(studentsWithSemesters: List<StudentWithSemesters>) {
+        (loginAdapter.getFragmentInstance(2) as? LoginStudentSelectFragment)?.onParentInitStudentSelectFragment(studentsWithSemesters)
     }
 
-    fun onFormFragmentAccountLogged(students: List<Student>, loginData: Triple<String, String, String>) {
-        presenter.onFormViewAccountLogged(students, loginData)
+    fun onFormFragmentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
+        presenter.onFormViewAccountLogged(studentsWithSemesters, loginData)
     }
 
-    fun onSymbolFragmentAccountLogged(students: List<Student>) {
-        presenter.onSymbolViewAccountLogged(students)
+    fun onSymbolFragmentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>) {
+        presenter.onSymbolViewAccountLogged(studentsWithSemesters)
     }
 
     fun onAdvancedLoginClick() {

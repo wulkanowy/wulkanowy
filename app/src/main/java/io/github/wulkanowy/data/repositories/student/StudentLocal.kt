@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.repositories.student
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.sdk.Sdk
@@ -15,7 +16,7 @@ import javax.inject.Singleton
 class StudentLocal @Inject constructor(
     private val studentDb: StudentDao,
     private val dispatchers: DispatchersProvider,
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) {
 
     suspend fun saveStudents(students: List<Student>) = withContext(dispatchers.backgroundThread) {
@@ -26,9 +27,9 @@ class StudentLocal @Inject constructor(
     }
 
     suspend fun getStudents(decryptPass: Boolean) = withContext(dispatchers.backgroundThread) {
-        studentDb.loadAll().map {
+        studentDb.loadStudentsWithSemesters().map {
             it.apply {
-                if (decryptPass && Sdk.Mode.valueOf(loginMode) != Sdk.Mode.API) password = decrypt(password)
+                if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) student.password = decrypt(student.password)
             }
         }
     }

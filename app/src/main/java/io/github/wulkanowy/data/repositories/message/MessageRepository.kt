@@ -34,12 +34,14 @@ class MessageRepository @Inject constructor(
 
     fun getMessage(student: Student, message: Message, markAsRead: Boolean = false) = networkBoundResource(
         shouldFetch = {
+            checkNotNull(it, { "This message no longer exist!" })
             Timber.d("Message content in db empty: ${it.message.content.isEmpty()}")
             it.message.unread || it.message.content.isEmpty()
         },
         query = { local.getMessageWithAttachment(student, message) },
-        fetch = { remote.getMessagesContentDetails(student, it.message, markAsRead) },
+        fetch = { remote.getMessagesContentDetails(student, it!!.message, markAsRead) },
         saveFetchResult = { old, (downloadedMessage, attachments) ->
+            checkNotNull(old, { "Fetched message no longer exist!" })
             local.updateMessages(listOf(old.message.copy(unread = !markAsRead).apply {
                 id = old.message.id
                 content = content.ifBlank { downloadedMessage }
@@ -64,9 +66,11 @@ class MessageRepository @Inject constructor(
     suspend fun deleteMessage(student: Student, message: Message) {
         val isDeleted = remote.deleteMessage(student, message)
 
-        if (!message.removed) local.updateMessages(listOf(message.copy(removed = isDeleted).apply {
-            id = message.id
-            content = message.content
-        })) else local.deleteMessages(listOf(message))
+        if (message.folderId != MessageFolder.TRASHED.id) {
+            if (isDeleted) local.updateMessages(listOf(message.copy(folderId = MessageFolder.TRASHED.id).apply {
+                id = message.id
+                content = message.content
+            }))
+        } else local.deleteMessages(listOf(message))
     }
 }

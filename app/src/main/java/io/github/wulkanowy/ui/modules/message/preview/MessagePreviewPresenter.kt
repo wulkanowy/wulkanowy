@@ -5,6 +5,7 @@ import android.os.Build
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
+import io.github.wulkanowy.data.repositories.message.MessageFolder
 import io.github.wulkanowy.data.repositories.message.MessageRepository
 import io.github.wulkanowy.data.repositories.student.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -63,7 +64,8 @@ class MessagePreviewPresenter @Inject constructor(
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading message ${message.messageId} preview started")
                 Status.SUCCESS -> {
-                    Timber.i("Loading message ${it.data!!.message.messageId} preview result: Success ")
+                    Timber.i("Loading message ${message.messageId} preview result: Success ")
+                    checkNotNull(it.data, { "Can't find message in local db! Probably no longer exist in this folder" })
                     this@MessagePreviewPresenter.message = it.data.message
                     this@MessagePreviewPresenter.attachments = it.data.attachments
                     view?.apply {
@@ -193,6 +195,7 @@ class MessagePreviewPresenter @Inject constructor(
         view?.run {
             lastError = error
             setErrorDetails(message)
+            showContent(false)
             showErrorView(true)
             setErrorRetryCallback { retryCallback() }
         }
@@ -207,7 +210,7 @@ class MessagePreviewPresenter @Inject constructor(
         view?.apply {
             showOptions(message != null)
             message?.let {
-                when (it.removed) {
+                when (it.folderId == MessageFolder.TRASHED.id) {
                     true -> setDeletedOptionsLabels()
                     false -> setNotDeletedOptionsLabels()
                 }

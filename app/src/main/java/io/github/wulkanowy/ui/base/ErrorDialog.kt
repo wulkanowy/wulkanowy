@@ -11,6 +11,7 @@ import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
+import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.DialogErrorBinding
 import io.github.wulkanowy.sdk.exception.FeatureNotAvailableException
@@ -21,13 +22,16 @@ import io.github.wulkanowy.utils.getString
 import io.github.wulkanowy.utils.openAppInMarket
 import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
+import okhttp3.internal.http2.StreamResetException
 import java.io.InterruptedIOException
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ErrorDialog : BaseDialogFragment<DialogErrorBinding>() {
 
     private lateinit var error: Throwable
@@ -83,6 +87,8 @@ class ErrorDialog : BaseDialogFragment<DialogErrorBinding>() {
             errorDialogReport.isEnabled = when (error) {
                 is UnknownHostException,
                 is InterruptedIOException,
+                is ConnectException,
+                is StreamResetException,
                 is SocketTimeoutException,
                 is ServiceUnavailableException,
                 is FeatureDisabledException,

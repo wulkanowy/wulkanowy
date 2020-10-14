@@ -5,12 +5,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.BigTextStyle
 import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
 import androidx.core.app.NotificationManagerCompat
+import androidx.hilt.Assisted
+import androidx.hilt.work.WorkerInject
 import androidx.work.CoroutineWorker
 import androidx.work.Data
-import androidx.work.ListenableWorker
 import androidx.work.WorkerParameters
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
 import io.github.wulkanowy.data.repositories.semester.SemesterRepository
@@ -24,7 +23,7 @@ import kotlinx.coroutines.coroutineScope
 import timber.log.Timber
 import kotlin.random.Random
 
-class SyncWorker @AssistedInject constructor(
+class SyncWorker @WorkerInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParameters: WorkerParameters,
     private val studentRepository: StudentRepository,
@@ -51,13 +50,16 @@ class SyncWorker @AssistedInject constructor(
             } catch (e: Throwable) {
                 Timber.w("${work::class.java.simpleName} result: An exception ${e.message} occurred")
                 if (e is FeatureDisabledException || e is FeatureNotAvailableException) null
-                else e
+                else {
+                    Timber.e(e)
+                    e
+                }
             }
         }
         val result = when {
             exceptions.isNotEmpty() && inputData.getBoolean("one_time", false) -> {
                 Result.failure(Data.Builder()
-                    .putString("error", exceptions.toString())
+                    .putString("error", exceptions.map { it.stackTraceToString() }.toString())
                     .build()
                 )
             }
@@ -80,11 +82,5 @@ class SyncWorker @AssistedInject constructor(
             .setStyle(BigTextStyle().bigText("${SyncWorker::class.java.simpleName} result: $result"))
             .setPriority(PRIORITY_DEFAULT)
             .build())
-    }
-
-    @AssistedInject.Factory
-    interface Factory {
-
-        fun create(appContext: Context, workerParameters: WorkerParameters): ListenableWorker
     }
 }

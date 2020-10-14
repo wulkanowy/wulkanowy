@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.DEFAULT_ALL
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.app.NotificationManagerCompat
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Semester
@@ -18,12 +19,11 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.waitForResult
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import kotlin.random.Random
 
 class LuckyNumberWork @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val notificationManager: NotificationManagerCompat,
     private val luckyNumberRepository: LuckyNumberRepository,
     private val preferencesRepository: PreferencesRepository
@@ -32,7 +32,7 @@ class LuckyNumberWork @Inject constructor(
     override suspend fun doWork(student: Student, semester: Semester) {
         luckyNumberRepository.getLuckyNumber(student, true, preferencesRepository.isNotificationsEnable).waitForResult()
 
-        luckyNumberRepository.getNotNotifiedLuckyNumber(student).first()?.let {
+        luckyNumberRepository.getNotNotifiedLuckyNumber(student)?.let {
             notify(it)
             luckyNumberRepository.updateLuckyNumber(it.apply { isNotified = true })
         }

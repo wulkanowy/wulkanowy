@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
@@ -9,16 +10,16 @@ apply from: 'sonarqube.gradle'
 apply from: 'hooks.gradle'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.3'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
 
     defaultConfig {
         applicationId "io.github.wulkanowy"
         testApplicationId "io.github.tests.wulkanowy"
         minSdkVersion 17
-        targetSdkVersion 29
-        versionCode 63
-        versionName "0.19.0"
+        targetSdkVersion 30
+        versionCode 72
+        versionName "0.21.2"
         multiDexEnabled true
         resValue "string", "app_name", "Wulkanowy"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -28,7 +29,7 @@ android {
         ]
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [
+                arguments += [
                         "room.schemaLocation": "$projectDir/schemas".toString(),
                         "room.incremental"   : "true"
                 ]
@@ -93,7 +94,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all"]
     }
 
     packagingOptions {
@@ -115,11 +116,11 @@ play {
 }
 
 ext {
-    work_manager = "2.3.4"
+    work_manager = "2.4.0"
     room = "2.2.5"
-    dagger = "2.28.3"
-    chucker = "3.2.0"
-    mockk = "1.10.0"
+    chucker = "3.3.0"
+    mockk = "1.10.2"
+    moshi = "1.11.0"
 }
 
 configurations.all {
@@ -127,18 +128,17 @@ configurations.all {
 }
 
 dependencies {
-    implementation "io.github.wulkanowy:sdk:02486b9"
+    implementation "io.github.wulkanowy:sdk:4d7e031"
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.8'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
 
-    implementation "androidx.core:core-ktx:1.3.0"
+    implementation "androidx.core:core-ktx:1.3.2"
     implementation "androidx.activity:activity-ktx:1.1.0"
-    implementation "androidx.appcompat:appcompat:1.2.0-rc02"
-    implementation "androidx.appcompat:appcompat-resources:1.1.0"
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.appcompat:appcompat-resources:1.2.0"
     implementation "androidx.fragment:fragment-ktx:1.2.5"
     implementation "androidx.annotation:annotation:1.1.0"
     implementation "androidx.multidex:multidex:2.0.1"
@@ -147,9 +147,9 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.viewpager:viewpager:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.1"
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
-    implementation "com.google.android.material:material:1.1.0"
+    implementation "com.google.android.material:material:1.2.1"
     implementation "com.github.wulkanowy:material-chips-input:2.1.1"
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
     implementation "me.zhanghai.android.materialprogressbar:library:1.6.1"
@@ -163,32 +163,33 @@ dependencies {
     implementation "androidx.room:room-ktx:$room"
     kapt "androidx.room:room-compiler:$room"
 
-    implementation "com.google.dagger:dagger-android-support:$dagger"
-    kapt "com.google.dagger:dagger-compiler:$dagger"
-    kapt "com.google.dagger:dagger-android-processor:$dagger"
-    implementation "com.squareup.inject:assisted-inject-annotations-dagger2:0.5.2"
-    kapt "com.squareup.inject:assisted-inject-processor-dagger2:0.5.2"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation 'androidx.hilt:hilt-work:1.0.0-alpha02'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha02'
 
     implementation "com.aurelhubert:ahbottomnavigation:2.3.4"
     implementation "com.ncapdevi:frag-nav:3.3.0"
     implementation "com.github.YarikSOffice:lingver:1.2.2"
 
-    implementation "com.google.code.gson:gson:2.8.6"
+    implementation "com.squareup.moshi:moshi:$moshi"
+    implementation "com.squareup.moshi:moshi-adapters:$moshi"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi"
     implementation "com.jakewharton.timber:timber:4.7.1"
     implementation "at.favre.lib:slf4j-timber:1.0.1"
     implementation "fr.bipi.treessence:treessence:0.3.2"
     implementation "com.mikepenz:aboutlibraries-core:$about_libraries"
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
-    implementation "io.coil-kt:coil:0.11.0"
+    implementation "io.coil-kt:coil:1.0.0-rc3"
     implementation "io.github.wulkanowy:AppKillerManager:3.0.0"
     implementation 'me.xdrop:fuzzywuzzy:1.3.1'
 
-    playImplementation 'com.google.firebase:firebase-analytics:17.4.4'
-    playImplementation 'com.google.firebase:firebase-inappmessaging-display-ktx:19.1.0'
-    playImplementation "com.google.firebase:firebase-inappmessaging-ktx:19.1.0"
-    playImplementation 'com.google.firebase:firebase-messaging:20.2.3'
-    playImplementation 'com.google.firebase:firebase-crashlytics:17.1.1'
-    playImplementation 'com.google.android.play:core-ktx:1.8.0'
+    playImplementation 'com.google.firebase:firebase-analytics:17.6.0'
+    playImplementation 'com.google.firebase:firebase-inappmessaging-display-ktx:19.1.1'
+    playImplementation "com.google.firebase:firebase-inappmessaging-ktx:19.1.1"
+    playImplementation 'com.google.firebase:firebase-messaging:20.3.0'
+    playImplementation 'com.google.firebase:firebase-crashlytics:17.2.2'
+    playImplementation 'com.google.android.play:core-ktx:1.8.1'
     playImplementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 
     releaseImplementation "com.github.ChuckerTeam.Chucker:library-no-op:$chucker"
@@ -198,11 +199,11 @@ dependencies {
 
     testImplementation "junit:junit:4.13"
     testImplementation "io.mockk:mockk:$mockk"
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.8'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9'
 
-    androidTestImplementation "androidx.test:core:1.2.0"
-    androidTestImplementation "androidx.test:runner:1.2.0"
-    androidTestImplementation "androidx.test.ext:junit:1.1.1"
+    androidTestImplementation "androidx.test:core:1.3.0"
+    androidTestImplementation "androidx.test:runner:1.3.0"
+    androidTestImplementation "androidx.test.ext:junit:1.1.2"
     androidTestImplementation "io.mockk:mockk-android:$mockk"
     androidTestImplementation "androidx.room:room-testing:$room"
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"

@@ -12,6 +12,7 @@ import io.github.wulkanowy.utils.FirebaseAnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.toFormattedString
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -44,6 +45,7 @@ class MessageTabPresenter @Inject constructor(
 
     private val searchChannel = Channel<String>()
 
+    @FlowPreview
     fun onAttachView(view: MessageTabView, folder: MessageFolder) {
         super.onAttachView(view)
         view.initView()
@@ -79,13 +81,7 @@ class MessageTabPresenter @Inject constructor(
 
     fun onMessageItemSelected(message: Message, position: Int) {
         Timber.i("Select message ${message.id} item (position: $position)")
-        view?.run {
-            openMessage(message)
-            if (message.unread) {
-                message.unread = false
-                updateItem(message, position)
-            }
-        }
+        view?.openMessage(message)
     }
 
     private fun loadData(forceRefresh: Boolean) {
@@ -139,6 +135,7 @@ class MessageTabPresenter @Inject constructor(
         }
     }
 
+    @FlowPreview
     private fun initializeSearchStream() {
         launch {
             searchChannel.consumeAsFlow()
@@ -151,6 +148,7 @@ class MessageTabPresenter @Inject constructor(
                 .collect {
                     Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${it.size}")
                     updateData(it)
+                    view?.resetListPosition()
                 }
         }
     }
@@ -173,7 +171,6 @@ class MessageTabPresenter @Inject constructor(
             showContent(data.isNotEmpty())
             showErrorView(false)
             updateData(data)
-            resetListPosition()
         }
     }
 
@@ -206,7 +203,7 @@ class MessageTabPresenter @Inject constructor(
                 query.toLowerCase(Locale.getDefault()),
                 message.date.toFormattedString("d MMMM yyyy").toLowerCase(Locale.getDefault())
             )
-        ).max() ?: 0
+        ).maxOrNull() ?: 0
 
 
         return (subjectRatio.toDouble().pow(2)
