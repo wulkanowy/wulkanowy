@@ -1,15 +1,16 @@
 package io.github.wulkanowy.ui.modules.account
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.FragmentAccountBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.account.accountdetails.AccountDetailsFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
@@ -32,15 +33,9 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
 
     override var subtitleString = ""
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return FragmentAccountBinding.inflate(inflater).apply { binding = this }.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAccountBinding.bind(view)
         presenter.onAttachView(this)
     }
 
@@ -49,6 +44,8 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
             layoutManager = LinearLayoutManager(context)
             adapter = accountAdapter
         }
+
+        accountAdapter.onClickListener = presenter::onItemSelected
 
         with(binding) {
             accountAdd.setOnClickListener { presenter.onAddSelected() }
@@ -66,5 +63,9 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
         activity?.let {
             startActivity(LoginActivity.getStartIntent(it))
         }
+    }
+
+    override fun openAccountView(studentWithSemesters: StudentWithSemesters) {
+        (activity as? MainActivity)?.pushView(AccountDetailsFragment.newInstance())
     }
 }
