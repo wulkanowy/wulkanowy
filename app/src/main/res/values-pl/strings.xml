@@ -446,7 +446,7 @@
     <string name="all_copied">Skopiowano</string>
     <string name="all_undo">Cofnij</string>
     <!--Update helper-->
-    <string name="update_download_started">Pobieranie aktualizacji rozpoczęto…</string>
+    <string name="update_download_started">Rozpoczęto pobieranie aktualizacji…</string>
     <string name="update_download_success">Aktualizacja została pobrana.</string>
     <string name="update_download_success_button">Uruchom ponownie</string>
     <string name="update_failed">Aktualizacja nie powiodła się! Wulkanowy może nie działać prawidłowo. Rozważ aktualizację</string>
