@@ -3,7 +3,6 @@ package io.github.wulkanowy.ui.modules.account
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.student.StudentRepository
-import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.flowWithResource
@@ -14,7 +13,6 @@ import javax.inject.Inject
 class AccountPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
-    private val syncManager: SyncManager
 ) : BasePresenter<AccountView>(errorHandler, studentRepository) {
 
     override fun onAttachView(view: AccountView) {
