@@ -69,6 +69,11 @@ android {
     flavorDimensions "platform"
 
     productFlavors {
+        hms {
+            minSdkVersion 19
+            dimension "platform"
+        }
+
         play {
             dimension "platform"
         }
@@ -192,6 +197,9 @@ dependencies {
     playImplementation 'com.google.android.play:core-ktx:1.8.1'
     playImplementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 
+    hmsImplementation 'com.huawei.hms:hianalytics:5.0.4.300'
+    hmsImplementation 'com.huawei.agconnect:agconnect-crash:1.4.1.300'
+
     releaseImplementation "com.github.ChuckerTeam.Chucker:library-no-op:$chucker"
 
     debugImplementation "com.github.ChuckerTeam.Chucker:library:$chucker"
@@ -210,3 +218,4 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.huawei.agconnect'
