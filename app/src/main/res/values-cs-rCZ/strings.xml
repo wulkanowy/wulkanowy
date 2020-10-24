@@ -446,18 +446,18 @@
     <string name="all_copied">Zkopírováno</string>
     <string name="all_undo">Vrátit</string>
     <!--Update helper-->
-    <string name="update_download_started">Start downloading update…</string>
+    <string name="update_download_started">Download of updates has started…</string>
     <string name="update_download_success">An update has just been downloaded.</string>
     <string name="update_download_success_button">Restart</string>
     <string name="update_failed">Update failed! Wulkanowy may not function properly. Consider updating</string>
     <!--Errors-->
     <string name="error_no_internet">Žádné internetové připojení</string>
     <string name="error_timeout">Vypršel časový limit připojení k denik</string>
-    <string name="error_login_failed">Login failed. Try again</string>
+    <string name="error_login_failed">Přihlášení selhalo. Zkus to znovu</string>
     <string name="error_password_change_required">Je vyžadována změna hesla</string>
     <string name="error_service_unavailable">Probíhá údržba UONET+ deník. Zkuste to později znovu</string>
     <string name="error_unknown_uonet">Unknown UONET + register error. Try again later</string>
-    <string name="error_unknown_app">Unknown application error</string>
+    <string name="error_unknown_app">Neznámá chyba aplikace</string>
     <string name="error_unknown">Došlo k neočekávané chybě</string>
     <string name="error_feature_disabled">Funkce deaktivována vaší školou</string>
     <string name="error_feature_not_available">Funkce není k dispozici. Přihlaste se v jiném režimu než Mobile API</string>
