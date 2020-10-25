@@ -4,12 +4,12 @@
 		"url":"connect-dre.hispace.hicloud.com"
 	},
 	"client":{
-		"cp_id":"",
+		"cp_id":"890048000024105546",
 		"product_id":"",
 		"client_id":"",
 		"client_secret":"",
-		"app_id":"",
-		"package_name":"io.github.wulkanowy",
+		"app_id":"101440411",
+		"package_name":"io.github.wulkanowy.dev",
 		"api_key":""
 	},
 	"service":{
