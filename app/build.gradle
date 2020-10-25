@@ -70,16 +70,25 @@ android {
 
     productFlavors {
         hms {
-            minSdkVersion 19
             dimension "platform"
+            minSdkVersion 19
+            manifestPlaceholders = [
+                    install_channel: "AppGallery"
+            ]
         }
 
         play {
             dimension "platform"
+            manifestPlaceholders = [
+                    install_channel: "Google Play"
+            ]
         }
 
         fdroid {
             dimension "platform"
+            manifestPlaceholders = [
+                    install_channel: "F-Droid"
+            ]
         }
     }
 
