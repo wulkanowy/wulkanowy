@@ -3,17 +3,17 @@ package io.github.wulkanowy.utils
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import com.huawei.hms.analytics.HiAnalytics
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FirebaseAnalyticsHelper @Inject constructor(
+class AnalyticsHelper @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 
-    private val analytics by lazy { HiAnalytics.getInstance(context) }
+    private val analytics by lazy { FirebaseAnalytics.getInstance(context) }
 
     fun logEvent(name: String, vararg params: Pair<String, Any?>) {
         Bundle().apply {
@@ -25,14 +25,14 @@ class FirebaseAnalyticsHelper @Inject constructor(
                     is Boolean, is Boolean? -> putBoolean(it.first, it.second as Boolean)
                 }
             }
-            analytics.onEvent(name, this)
+            analytics.logEvent(name, this)
         }
     }
 
     fun setCurrentScreen(activity: Activity, name: String?) {
-        analytics.onEvent("screen_view", Bundle().apply {
-            putString("screen_name", name)
-            putString("screen_class", activity::class.simpleName)
+        analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, Bundle().apply {
+            putString(FirebaseAnalytics.Param.SCREEN_NAME, name)
+            putString(FirebaseAnalytics.Param.SCREEN_CLASS, activity::class.simpleName)
         })
     }
 }
