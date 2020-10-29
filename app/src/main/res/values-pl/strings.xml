@@ -22,12 +22,12 @@
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
     <string name="login_header_default">Zaloguj się za pomocą konta ucznia lub rodzica</string>
-    <string name="login_header_symbol">Podaj symbol</string>
+    <string name="login_header_symbol">Podaj symbol ze strony dziennika</string>
     <string name="login_nickname_hint">Nazwa użytkownika</string>
     <string name="login_email_hint">Email</string>
     <string name="login_login_pesel_email_hint">Login, PESEL lub e-mail</string>
     <string name="login_password_hint">Hasło</string>
-    <string name="login_host_hint">Dziennik UONET+</string>
+    <string name="login_host_hint">Odmiana dziennika UONET+</string>
     <string name="login_type_api">Mobilne API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybrydowe</string>
@@ -37,14 +37,14 @@
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Zaloguj</string>
     <string name="login_invalid_password">To hasło jest za krótkie</string>
-    <string name="login_incorrect_password">Dane logowania są niepoprawne. Upewnij się, że został wybrany odpowiedni dziennik UONET+ w polu poniżej</string>
+    <string name="login_incorrect_password">Dane logowania są niepoprawne. Upewnij się, że została wybrana odpowiednia odmiana dziennika UONET+ w polu poniżej</string>
     <string name="login_invalid_pin">Nieprawidłowy PIN</string>
     <string name="login_invalid_token">Nieprawidłowy token</string>
     <string name="login_expired_token">Token stracił ważność</string>
     <string name="login_invalid_email">Niepoprawny adres email</string>
     <string name="login_invalid_login">Niepoprawny login</string>
     <string name="login_invalid_symbol">Niepoprawny symbol</string>
-    <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprawdź symbol</string>
+    <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprawdź poprawność symbolu i wybranej odmiany dziennika UONET+</string>
     <string name="login_field_required">To pole jest wymagane</string>
     <string name="login_duplicate_student">Wybrany uczeń jest już zalogowany</string>
     <string name="login_symbol_helper">Symbol znajdziesz na stronie dziennika w&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUpewnij się, że w polu <b>Dziennik UONET+</b> na poprzednim ekranie został ustawiony odpowiedni dziennik</string>
