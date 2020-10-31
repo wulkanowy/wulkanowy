@@ -23,7 +23,7 @@ class ConferenceAdapter @Inject constructor() :
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = items[position]
         with(holder.binding) {
-            conferenceItemDate.text = item.date.toFormattedString("dd.MM.yyyy hh:mm")
+            conferenceItemDate.text = item.date.toFormattedString("dd.MM.yyyy HH:mm")
             conferenceItemName.text = item.presentOnConference
             conferenceItemTitle.text = item.title
             conferenceItemSubject.text = item.subject
