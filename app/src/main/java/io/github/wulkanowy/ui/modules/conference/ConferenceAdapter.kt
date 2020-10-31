@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.conference
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.Conference
@@ -8,7 +9,8 @@ import io.github.wulkanowy.databinding.ItemConferenceBinding
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
-class ConferenceAdapter @Inject constructor() : RecyclerView.Adapter<ConferenceAdapter.ItemViewHolder>() {
+class ConferenceAdapter @Inject constructor() :
+    RecyclerView.Adapter<ConferenceAdapter.ItemViewHolder>() {
 
     var items = emptyList<Conference>()
 
@@ -26,6 +28,7 @@ class ConferenceAdapter @Inject constructor() : RecyclerView.Adapter<ConferenceA
             conferenceItemTitle.text = item.title
             conferenceItemSubject.text = item.subject
             conferenceItemContent.text = item.agenda
+            conferenceItemContent.visibility = if (item.agenda.isBlank()) View.GONE else View.VISIBLE
         }
     }
 
