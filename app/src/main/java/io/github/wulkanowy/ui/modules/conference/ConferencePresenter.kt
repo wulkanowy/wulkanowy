@@ -69,7 +69,7 @@ class ConferencePresenter @Inject constructor(
                 Status.SUCCESS -> {
                     Timber.i("Loading conference result: Success")
                     view?.run {
-                        updateData(it.data!!)
+                        updateData(it.data!!.sortedByDescending { conference -> conference.date })
                         showContent(it.data.isNotEmpty())
                         showEmpty(it.data.isEmpty())
                         showErrorView(false)
