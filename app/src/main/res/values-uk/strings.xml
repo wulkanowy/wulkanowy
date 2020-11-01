@@ -326,6 +326,9 @@
     <string name="teachers_title">Вчителі</string>
     <string name="teacher_no_items">Брак інформації про вчителів</string>
     <string name="teacher_no_subject">Брак предмету</string>
+    <!--Conference-->
+    <string name="conferences_title">Conferences</string>
+    <string name="conference_no_items">No info about conferences</string>
     <!--Account-->
     <string name="account_add_new">Додати аккаунт</string>
     <string name="account_logout">Вийти</string>
