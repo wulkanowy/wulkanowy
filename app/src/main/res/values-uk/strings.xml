@@ -108,16 +108,16 @@
         <item quantity="other">Нові оцінки</item>
     </plurals>
     <plurals name="grade_new_items_predicted">
-        <item quantity="one">New predicted grade</item>
-        <item quantity="few">New predicted grades</item>
-        <item quantity="many">New predicted grades</item>
-        <item quantity="other">New predicted grades</item>
+        <item quantity="one">Нова прогнозована оцінка</item>
+        <item quantity="few">Нові прогнозовані оцінки</item>
+        <item quantity="many">Нові прогнозовані оцінки</item>
+        <item quantity="other">Нові прогнозовані оцінки</item>
     </plurals>
     <plurals name="grade_new_items_final">
-        <item quantity="one">New final grade</item>
-        <item quantity="few">New final grades</item>
-        <item quantity="many">New final grades</item>
-        <item quantity="other">New final grades</item>
+        <item quantity="one">Нова підсумкова оцінка</item>
+        <item quantity="few">Нові підсумкові оцінки</item>
+        <item quantity="many">Нові підсумкові оцінки</item>
+        <item quantity="other">Нові підсумкові оцінки</item>
     </plurals>
     <plurals name="grade_notify_new_items">
         <item quantity="one">Ви отримали %1$d оцінку</item>
@@ -126,16 +126,16 @@
         <item quantity="other">Ви отримали %1$d оцінок</item>
     </plurals>
     <plurals name="grade_notify_new_items_predicted">
-        <item quantity="one">You received %1$d predicted grade</item>
-        <item quantity="few">You received %1$d predicted grades</item>
-        <item quantity="many">You received %1$d predicted grades</item>
-        <item quantity="other">You received %1$d predicted grades</item>
+        <item quantity="one">Ви отримали %1$d нову прогнозовану оцінку</item>
+        <item quantity="few">Ви отримали %1$d нові прогнозовані оцінки</item>
+        <item quantity="many">Ви отримали %1$d нових прогнозованих оцінок</item>
+        <item quantity="other">Ви отримали %1$d нових прогнозованих оцінок</item>
     </plurals>
     <plurals name="grade_notify_new_items_final">
-        <item quantity="one">You received %1$d final grade</item>
-        <item quantity="few">You received %1$d final grades</item>
-        <item quantity="many">You received %1$d final grades</item>
-        <item quantity="other">You received %1$d final grades</item>
+        <item quantity="one">Ви отримали %1$d нову підсумкову оцінку</item>
+        <item quantity="few">Ви отримали %1$d нові підсумкові оцінки</item>
+        <item quantity="many">Ви отримали %1$d нових підсумкових оцінок</item>
+        <item quantity="other">Ви отримали %1$d нових підсумкових оцінок</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Урок</string>
@@ -168,8 +168,8 @@
     <string name="attendance_excused_lateness">Спізнення з поважних причин</string>
     <string name="attendance_unexcused_lateness">Спізнення з не поважних причин</string>
     <string name="attendance_present">Присутність</string>
-    <string name="attendance_deleted">Deleted</string>
-    <string name="attendance_unknown">Unknown</string>
+    <string name="attendance_deleted">Вилучено</string>
+    <string name="attendance_unknown">Невідомо</string>
     <string name="attendance_number">Номер уроку</string>
     <string name="attendance_no_items">Брак записів</string>
     <plurals name="attendance_number_absences">
@@ -206,8 +206,8 @@
     <string name="message_move_to_bin">Перемістити у кошик</string>
     <string name="message_delete_forever">Видалити назавжди</string>
     <string name="message_delete_success">Повідомлення було успішно видалено</string>
-    <string name="message_share">Share</string>
-    <string name="message_print">Print</string>
+    <string name="message_share">Поділіться</string>
+    <string name="message_print">Друк</string>
     <string name="message_subject">Тема</string>
     <string name="message_content">Зміст</string>
     <string name="message_send_successful">Повідомлення було успішно відправлено</string>
