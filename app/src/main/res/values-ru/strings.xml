@@ -22,7 +22,7 @@
     <string name="grade_subtitle">%1$d семестр, %2$d/%3$d</string>
     <!--Login-->
     <string name="login_header_default">Авторизируйтесь при помощи аккаунта ученика или родителя</string>
-    <string name="login_header_symbol">Enter the symbol from the register page</string>
+    <string name="login_header_symbol">Введите символ со страницы регистрации</string>
     <string name="login_nickname_hint">Имя пользователя</string>
     <string name="login_email_hint">Электронная почта</string>
     <string name="login_login_pesel_email_hint">Логин, PESEL или электронная почта</string>
@@ -42,7 +42,7 @@
     <string name="login_invalid_token">Неправильный token</string>
     <string name="login_expired_token">Токен просрочен</string>
     <string name="login_invalid_email">Неверный адрес электронной почты</string>
-    <string name="login_invalid_login">Use the assigned login instead of email</string>
+    <string name="login_invalid_login">Используйте назначенный логин вместо электронной почты</string>
     <string name="login_invalid_symbol">Неправильный symbol</string>
     <string name="login_incorrect_symbol">Student not found. Validate the symbol and the chosen variation of the UONET+ register</string>
     <string name="login_field_required">Обязательное поле</string>
@@ -327,8 +327,8 @@
     <string name="teacher_no_items">Нет информации о учителях</string>
     <string name="teacher_no_subject">Нет предмета</string>
     <!--Conference-->
-    <string name="conferences_title">Conferences</string>
-    <string name="conference_no_items">No info about conferences</string>
+    <string name="conferences_title">Встречи</string>
+    <string name="conference_no_items">Нет информации о встречах</string>
     <!--Account-->
     <string name="account_add_new">Добавить аккаунт</string>
     <string name="account_logout">Выйти</string>
@@ -449,18 +449,18 @@
     <string name="all_copied">Скопировано</string>
     <string name="all_undo">Отменить</string>
     <!--Update helper-->
-    <string name="update_download_started">Download of updates has started…</string>
-    <string name="update_download_success">An update has just been downloaded.</string>
-    <string name="update_download_success_button">Restart</string>
-    <string name="update_failed">Update failed! Wulkanowy may not function properly. Consider updating</string>
+    <string name="update_download_started">Загрузка обновлений началась…</string>
+    <string name="update_download_success">Только что было скачано обновление.</string>
+    <string name="update_download_success_button">Перезапустить</string>
+    <string name="update_failed">Не удалось обновить! Wulkanowy может работать некорректно. Рассмотрите возможность обновления</string>
     <!--Errors-->
     <string name="error_no_internet">Нет интернет-подключения</string>
-    <string name="error_timeout">Connection to register failed. Servers can be overloaded. Please try again later</string>
-    <string name="error_login_failed">Loading data failed. Please try again later</string>
+    <string name="error_timeout">Не удалось подключиться к регистрации. Серверы могут быть перегружены. Пожалуйста, повторите попытку позже</string>
+    <string name="error_login_failed">Не удалось загрузить данные. Пожалуйста, повторите попытку позже</string>
     <string name="error_password_change_required">Register password change required</string>
     <string name="error_service_unavailable">Технический перерыв в журнале UONET + продолжается. Попробуйте позже</string>
     <string name="error_unknown_uonet">Unknown UONET + register error. Try again later</string>
-    <string name="error_unknown_app">Unknown application error. Please try again later</string>
+    <string name="error_unknown_app">Неизвестная ошибка приложения. Пожалуйста, повторите попытку позже</string>
     <string name="error_unknown">Произошла неожиданная ошибка</string>
     <string name="error_feature_disabled">Функция была выключена школой</string>
     <string name="error_feature_not_available">Функция не доступна в этом режиме</string>
