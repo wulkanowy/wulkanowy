@@ -22,12 +22,12 @@
     <string name="grade_subtitle">%1$d семестр, %2$d/%3$d</string>
     <!--Login-->
     <string name="login_header_default">Авторизуйтеся за допомогою аккаунта учня або батька</string>
-    <string name="login_header_symbol">Впишіть \"symbol\"</string>
+    <string name="login_header_symbol">Enter the symbol from the register page</string>
     <string name="login_nickname_hint">Ім\'я користувача</string>
     <string name="login_email_hint">Електронна пошта</string>
     <string name="login_login_pesel_email_hint">Логін, PESEL або електронна пошта</string>
     <string name="login_password_hint">Пароль</string>
-    <string name="login_host_hint">Щоденник</string>
+    <string name="login_host_hint">UONET+ register variant</string>
     <string name="login_type_api">Мobile API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybrid</string>
@@ -37,17 +37,17 @@
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Увійти</string>
     <string name="login_invalid_password">Занадто короткий пароль</string>
-    <string name="login_incorrect_password">Вказані невірні дані. Впевніться, що ви увібрали потрібний щоденник</string>
+    <string name="login_incorrect_password">Login details are incorrect. Make sure the correct UONET+ register variation is selected in the field below</string>
     <string name="login_invalid_pin">Неправильний PIN</string>
     <string name="login_invalid_token">Неправильний token</string>
     <string name="login_expired_token">Минув термін дії токену</string>
     <string name="login_invalid_email">Недійсна адреса електронної пошти</string>
-    <string name="login_invalid_login">Неправильний логін</string>
+    <string name="login_invalid_login">Use the assigned login instead of email</string>
     <string name="login_invalid_symbol">Неправильний symbol</string>
-    <string name="login_incorrect_symbol">Не вдалося знайти учня. Будь ласка, перевірте \"symbol\"</string>
+    <string name="login_incorrect_symbol">Student not found. Validate the symbol and the chosen variation of the UONET+ register</string>
     <string name="login_field_required">Обов\'язкове поле</string>
     <string name="login_duplicate_student">Даного учня вже авторизовано</string>
-    <string name="login_symbol_helper">Ви можете знайти \"symbol\" на сторінцi VULCAN стежкою <b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b></string>
+    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the previous screen. Wulkanowy does not detect pre-school students at the moment</string>
     <string name="login_select_student">Виберіть учнів для авторизації в додатку</string>
     <string name="login_advanced">Інші варіанти</string>
     <string name="login_advanced_warning_mobile_api">У цьому режимі не працюють: щасливий номер, статистика класу по оцінкам, статистика відвідуваності і уроків, інформація про школу і список зареєстрованних пристроїв</string>
@@ -59,7 +59,7 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Відправити лист</string>
     <string name="login_email_details">Опишіть деталі помилки:</string>
-    <string name="login_recover_warning">Переконайтесь, що обрано потрібний щоденник!</string>
+    <string name="login_recover_warning">Make sure you select the correct UONET+ register variation!</string>
     <string name="login_recover_button">Забули пароль?</string>
     <string name="login_recover_title">Відновіть свій аккаунт</string>
     <string name="login_recover">Відновити</string>
@@ -455,12 +455,12 @@
     <string name="update_failed">Update failed! Wulkanowy may not function properly. Consider updating</string>
     <!--Errors-->
     <string name="error_no_internet">Брак з\'єднання з інтернетом</string>
-    <string name="error_timeout">Занадто довге очікування з\'єднання з щоденником</string>
-    <string name="error_login_failed">Login failed. Try again</string>
-    <string name="error_password_change_required">Потрібно змінити пароль</string>
+    <string name="error_timeout">Connection to register failed. Servers can be overloaded. Please try again later</string>
+    <string name="error_login_failed">Loading data failed. Please try again later</string>
+    <string name="error_password_change_required">Register password change required</string>
     <string name="error_service_unavailable">Технічна перерва в журналі UONET + продовжується. Спробуйте пізніше</string>
     <string name="error_unknown_uonet">Unknown UONET + register error. Try again later</string>
-    <string name="error_unknown_app">Unknown application error</string>
+    <string name="error_unknown_app">Unknown application error. Please try again later</string>
     <string name="error_unknown">Відбулася несподівана помилка</string>
     <string name="error_feature_disabled">Функція вимкнена школою</string>
     <string name="error_feature_not_available">Функція не доступна в цьому режимі</string>
