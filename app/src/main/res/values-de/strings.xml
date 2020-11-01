@@ -22,12 +22,12 @@
     <string name="grade_subtitle">Semester %1$d, %2$d/%3$d</string>
     <!--Login-->
     <string name="login_header_default">Melden Sie sich mit dem Studenten- oder Elternkonto an</string>
-    <string name="login_header_symbol">Geben Sie das Symbol</string>
+    <string name="login_header_symbol">Enter the symbol from the register page</string>
     <string name="login_nickname_hint">Benutzername</string>
     <string name="login_email_hint">Email</string>
     <string name="login_login_pesel_email_hint">Anmeldung, PESEL oder e-mail</string>
     <string name="login_password_hint">Passwort</string>
-    <string name="login_host_hint">UONET+ Klassenbuch</string>
+    <string name="login_host_hint">UONET+ register variant</string>
     <string name="login_type_api">Mobile API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybride</string>
@@ -37,17 +37,17 @@
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Anmelden</string>
     <string name="login_invalid_password">Passwort ist zu kurz</string>
-    <string name="login_incorrect_password">Anmeldedaten sind falsch. Stellen Sie sicher, dass das richtige UONET+-Register ausgewählt ist</string>
+    <string name="login_incorrect_password">Login details are incorrect. Make sure the correct UONET+ register variation is selected in the field below</string>
     <string name="login_invalid_pin">Ungültige PIN</string>
     <string name="login_invalid_token">Ungültige token</string>
     <string name="login_expired_token">Token ist nicht mehr gültig</string>
     <string name="login_invalid_email">Ungültige email</string>
-    <string name="login_invalid_login">Ungültige login</string>
+    <string name="login_invalid_login">Use the assigned login instead of email</string>
     <string name="login_invalid_symbol">Ungültige symbol</string>
-    <string name="login_incorrect_symbol">Student nicht gefunden. Überprüfen Sie das Symbol</string>
+    <string name="login_incorrect_symbol">Student not found. Validate the symbol and the chosen variation of the UONET+ register</string>
     <string name="login_field_required">Dieses Datenfeld ist erforderlich</string>
     <string name="login_duplicate_student">Ausgewählter Student ist bereits angemeldet.</string>
-    <string name="login_symbol_helper">Das Symbol finden Sie auf der Registerseite unter&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b></string>
+    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the previous screen. Wulkanowy does not detect pre-school students at the moment</string>
     <string name="login_select_student">Wählen Sie die Studenten aus, die sich bei der Anwendung anmelden sollen.</string>
     <string name="login_advanced">Andere Optionen</string>
     <string name="login_advanced_warning_mobile_api">In diesem Modus funktioniert eine Glücknummer, eine Klassenstatistik, eine Zusammenfassung der Anwesenheit, eine Entschuldigung für die Abwesenheit, abgeschlossene Lektionen, Schulinformationen und eine Vorschau der Liste der registrierten Geräte nicht</string>
@@ -59,7 +59,7 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">email senden</string>
     <string name="login_email_details">Beschreiben Sie die Details des Problems:</string>
-    <string name="login_recover_warning">Stellen Sie sicher, dass das richtige UONET + Klassenbuch ausgewählt ist!</string>
+    <string name="login_recover_warning">Make sure you select the correct UONET+ register variation!</string>
     <string name="login_recover_button">Ich habe mein Passwort vergessen.</string>
     <string name="login_recover_title">Ihr Konto wiederherstellen</string>
     <string name="login_recover">Wiederherstellen</string>
@@ -415,12 +415,12 @@
     <string name="update_failed">Update failed! Wulkanowy may not function properly. Consider updating</string>
     <!--Errors-->
     <string name="error_no_internet">Keine Internetverbindung</string>
-    <string name="error_timeout">Das Zeitlimit für die Verbindung zum Klassenbuch ist abgelaufen</string>
-    <string name="error_login_failed">Login failed. Try again</string>
-    <string name="error_password_change_required">Passwortänderung erforderlich</string>
+    <string name="error_timeout">Connection to register failed. Servers can be overloaded. Please try again later</string>
+    <string name="error_login_failed">Loading data failed. Please try again later</string>
+    <string name="error_password_change_required">Register password change required</string>
     <string name="error_service_unavailable">Wartung im Gange UONET + Klassenbuch. Versuchen Sie es später noch einmal</string>
     <string name="error_unknown_uonet">Unknown UONET + register error. Try again later</string>
-    <string name="error_unknown_app">Unknown application error</string>
+    <string name="error_unknown_app">Unknown application error. Please try again later</string>
     <string name="error_unknown">Ein unerwarteter Fehler ist aufgetreten</string>
     <string name="error_feature_disabled">Funktion, die von Ihrer Schule deaktiviert wurde</string>
     <string name="error_feature_not_available">Feature in diesem Modus nicht verfügbar</string>
