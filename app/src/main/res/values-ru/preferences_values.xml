@@ -31,7 +31,7 @@
         <item>0,75</item>
     </string-array>
     <string-array name="grade_sorting_mode_entries">
-        <item>Alphabetically</item>
+        <item>Алфавитный</item>
         <item>По дате</item>
     </string-array>
     <string-array name="grade_color_scheme_entries">
