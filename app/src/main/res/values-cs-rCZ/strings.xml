@@ -327,8 +327,8 @@
     <string name="teacher_no_items">Žádné informace o učitelích</string>
     <string name="teacher_no_subject">Žádný předmět</string>
     <!--Conference-->
-    <string name="conferences_title">Conferences</string>
-    <string name="conference_no_items">No info about conferences</string>
+    <string name="conferences_title">Setkání</string>
+    <string name="conference_no_items">Žádné informace o setkání</string>
     <!--Account-->
     <string name="account_add_new">Přidat účet</string>
     <string name="account_logout">Odhlásit se</string>
