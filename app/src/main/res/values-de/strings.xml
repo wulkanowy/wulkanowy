@@ -286,6 +286,9 @@
     <string name="teachers_title">Lehrerinnen und Lehrer</string>
     <string name="teacher_no_items">Keine Informationen über Lehrer</string>
     <string name="teacher_no_subject">Kein Thema</string>
+    <!--Conference-->
+    <string name="conferences_title">Conferences</string>
+    <string name="conference_no_items">No info about conferences</string>
     <!--Account-->
     <string name="account_add_new">Konto hinzufügen</string>
     <string name="account_logout">Abmelden</string>
