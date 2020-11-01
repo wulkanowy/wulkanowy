@@ -17,10 +17,29 @@ class GradeStatisticsRepository @Inject constructor(
     private val remote: GradeStatisticsRemote
 ) {
 
-    fun getGradesStatistics(student: Student, semester: Semester, subjectName: String, isSemester: Boolean, forceRefresh: Boolean) = networkBoundResource(
+    fun getGradesPartialStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getGradesStatistics(semester, isSemester) },
-        fetch = { remote.getGradeStatistics(student, semester, isSemester) },
+        query = { local.getGradesStatistics(semester, false) },
+        fetch = { remote.getGradePartialStatistics(student, semester) },
+        saveFetchResult = { old, new ->
+            local.deleteGradesStatistics(old uniqueSubtract new)
+            local.saveGradesStatistics(new uniqueSubtract old)
+        },
+        mapResult = { items ->
+            when (subjectName) {
+                "Wszystkie" -> items.groupBy { it.grade }.map {
+                    GradeStatistics(semester.studentId, semester.semesterId, subjectName, it.key,
+                        it.value.fold(0) { acc, e -> acc + e.amount }, false)
+                } + items
+                else -> items.filter { it.subject == subjectName }
+            }.mapToStatisticItems()
+        }
+    )
+
+    fun getGradesSemesterStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
+        shouldFetch = { it.isEmpty() || forceRefresh },
+        query = { local.getGradesStatistics(semester, true) },
+        fetch = { remote.getGradeSemesterStatistics(student, semester) },
         saveFetchResult = { old, new ->
             local.deleteGradesStatistics(old uniqueSubtract new)
             local.saveGradesStatistics(new uniqueSubtract old)

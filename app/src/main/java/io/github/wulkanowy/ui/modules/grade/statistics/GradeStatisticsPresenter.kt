@@ -153,8 +153,8 @@ class GradeStatisticsPresenter @Inject constructor(
 
             with(gradeStatisticsRepository) {
                 when (type) {
-                    ViewType.SEMESTER -> getGradesStatistics(student, semester, currentSubjectName, true, forceRefresh)
-                    ViewType.PARTIAL -> getGradesStatistics(student, semester, currentSubjectName, false, forceRefresh)
+                    ViewType.PARTIAL -> getGradesPartialStatistics(student, semester, currentSubjectName, forceRefresh)
+                    ViewType.SEMESTER -> getGradesSemesterStatistics(student, semester, currentSubjectName, forceRefresh)
                     ViewType.POINTS -> getGradesPointsStatistics(student, semester, currentSubjectName, forceRefresh)
                 }
             }

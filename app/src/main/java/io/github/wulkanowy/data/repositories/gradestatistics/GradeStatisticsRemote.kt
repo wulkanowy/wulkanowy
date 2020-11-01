@@ -12,20 +12,36 @@ import javax.inject.Singleton
 @Singleton
 class GradeStatisticsRemote @Inject constructor(private val sdk: Sdk) {
 
-    suspend fun getGradeStatistics(student: Student, semester: Semester, isSemester: Boolean): List<GradeStatistics> {
-        return sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear).let {
-            if (isSemester) it.getGradesAnnualStatistics(semester.semesterId)
-            else it.getGradesPartialStatistics(semester.semesterId)
-        }.map {
-            GradeStatistics(
-                semesterId = semester.semesterId,
-                studentId = semester.studentId,
-                subject = it.subject,
-                grade = it.gradeValue,
-                amount = it.amount,
-                semester = isSemester
-            )
-        }
+    suspend fun getGradePartialStatistics(student: Student, semester: Semester): List<GradeStatistics> {
+        return sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+            .getGradesPartialStatistics(semester.semesterId)
+            .flatMap { subject ->
+                subject.items.map {
+                    GradeStatistics(
+                        semesterId = semester.semesterId,
+                        studentId = student.studentId,
+                        subject = subject.subject,
+                        grade = it.grade,
+                        amount = it.amount,
+                        semester = false
+                    )
+                }
+            }
+    }
+
+    suspend fun getGradeSemesterStatistics(student: Student, semester: Semester): List<GradeStatistics> {
+        return sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+            .getGradesAnnualStatistics(semester.semesterId)
+            .map {
+                GradeStatistics(
+                    semesterId = semester.semesterId,
+                    studentId = semester.studentId,
+                    subject = it.subject,
+                    grade = it.grade,
+                    amount = it.amount,
+                    semester = true
+                )
+            }
     }
 
     suspend fun getGradePointsStatistics(student: Student, semester: Semester): List<GradePointsStatistics> {
