@@ -254,16 +254,16 @@
     </plurals>
     <!--Praise-->
     <plurals name="praise_number_item">
-        <item quantity="one">%d praise</item>
-        <item quantity="few">%d praises</item>
-        <item quantity="many">%d praises</item>
-        <item quantity="other">%d praises</item>
+        <item quantity="one">%d похвалили</item>
+        <item quantity="few">%d похвали</item>
+        <item quantity="many">%d похвал</item>
+        <item quantity="other">%d похвал</item>
     </plurals>
     <plurals name="praise_new_items">
-        <item quantity="one">New praise</item>
-        <item quantity="few">New praises</item>
-        <item quantity="many">New praises</item>
-        <item quantity="other">New praises</item>
+        <item quantity="one">Нова похвала</item>
+        <item quantity="few">Нові похвали</item>
+        <item quantity="many">Нові похвали</item>
+        <item quantity="other">Нові похвали</item>
     </plurals>
     <plurals name="praise_notify_new_items">
         <item quantity="one">You received %1$d praise</item>
@@ -334,10 +334,10 @@
     <string name="account_logout">Вийти</string>
     <string name="account_confirm">Ви впевнені, що хочете вийти з цього аккаунту?</string>
     <string name="account_logout_student">Вийти з аккаунту учня</string>
-    <string name="account_type_student">Student account</string>
-    <string name="account_type_parent">Parent account</string>
-    <string name="account_login_mobile_api">Mobile API mode</string>
-    <string name="account_login_hybrid">Hybrid mode</string>
+    <string name="account_type_student">Студентський рахунок</string>
+    <string name="account_type_parent">Головний рахунок</string>
+    <string name="account_login_mobile_api">Режим мобільного API</string>
+    <string name="account_login_hybrid">Гібридний режим</string>
     <!--About-->
     <string name="about_version">Версія додатка</string>
     <string name="about_contributor">Розробники</string>
@@ -451,7 +451,7 @@
     <!--Update helper-->
     <string name="update_download_started">Download of updates has started…</string>
     <string name="update_download_success">An update has just been downloaded.</string>
-    <string name="update_download_success_button">Restart</string>
+    <string name="update_download_success_button">Перезапустити</string>
     <string name="update_failed">Update failed! Wulkanowy may not function properly. Consider updating</string>
     <!--Errors-->
     <string name="error_no_internet">Брак з\'єднання з інтернетом</string>
