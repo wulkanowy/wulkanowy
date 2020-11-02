@@ -10,7 +10,7 @@ import java.io.InterruptedIOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-class CrashlyticsTree : FormatterPriorityTree(Log.VERBOSE) {
+class CrashLogTree : FormatterPriorityTree(Log.VERBOSE) {
 
     private val crashlytics by lazy { FirebaseCrashlytics.getInstance() }
 
@@ -21,7 +21,7 @@ class CrashlyticsTree : FormatterPriorityTree(Log.VERBOSE) {
     }
 }
 
-class CrashlyticsExceptionTree : FormatterPriorityTree(Log.ERROR) {
+class CrashLogExceptionTree : FormatterPriorityTree(Log.ERROR) {
 
     private val crashlytics by lazy { FirebaseCrashlytics.getInstance() }
 
