@@ -22,12 +22,12 @@
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
     <string name="login_header_default">Přihlaste se pomocí studentského nebo nadřazeného účtu</string>
-    <string name="login_header_symbol">Enter the symbol from the register page</string>
+    <string name="login_header_symbol">Zadejte symbol ze stránky deníku</string>
     <string name="login_nickname_hint">Uživatelské jméno</string>
     <string name="login_email_hint">Email</string>
     <string name="login_login_pesel_email_hint">Přihlášení, číslo PESEL nebo e-mail</string>
     <string name="login_password_hint">Heslo</string>
-    <string name="login_host_hint">UONET+ register variant</string>
+    <string name="login_host_hint">Variace deníku UONET+</string>
     <string name="login_type_api">Mobile API</string>
     <string name="login_type_scrapper">Scraper</string>
     <string name="login_type_hybrid">Hybridní</string>
@@ -37,17 +37,17 @@
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Přihlásit</string>
     <string name="login_invalid_password">Toto heslo je příliš krátké</string>
-    <string name="login_incorrect_password">Login details are incorrect. Make sure the correct UONET+ register variation is selected in the field below</string>
+    <string name="login_incorrect_password">Přihlašovací údaje jsou nesprávné. Ujistěte se, že je v poli níže vybrána správná variace deníku UONET+</string>
     <string name="login_invalid_pin">Neplatný PIN</string>
     <string name="login_invalid_token">Neplatný token</string>
     <string name="login_expired_token">Platnost tokenu vypršela</string>
     <string name="login_invalid_email">Nesprávná e-mailová adresa</string>
-    <string name="login_invalid_login">Use the assigned login instead of email</string>
+    <string name="login_invalid_login">Místo e-mailu použijte přiřazené přihlašovací údaje</string>
     <string name="login_invalid_symbol">Neplatný symbol</string>
-    <string name="login_incorrect_symbol">Student not found. Validate the symbol and the chosen variation of the UONET+ register</string>
+    <string name="login_incorrect_symbol">Student nebyl nalezen. Zkontrolujte správnost symbolu a vybrané varianty deníku UONET+</string>
     <string name="login_field_required">Toto pole je povinné</string>
     <string name="login_duplicate_student">Vybraný student je již přihlášen</string>
-    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the previous screen. Wulkanowy does not detect pre-school students at the moment</string>
+    <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b> → &#160;<b>Dostęp Mobilny</b> → &#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUjistěte se, že jste na předchozí obrazovce nastavili správnou variantu deníku do pole <b>Variace deníku UONET+</b>. Wulkanowy v tuto chvíli nezjistí předškolní studenty</string>
     <string name="login_select_student">Vyberte studenty k přihlášení do aplikace</string>
     <string name="login_advanced">Jiné možnosti</string>
     <string name="login_advanced_warning_mobile_api">V tomto režimu nefungují následující: šťastné číslo, statistiky třídy, shrnutí docházky, ospravedlnění nepřítomnosti, absolvované lekce, informace o škole a prohlížení seznamu registrovaných zařízení</string>
@@ -59,7 +59,7 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Poslat e-mail</string>
     <string name="login_email_details">Popište podrobnosti problému:</string>
-    <string name="login_recover_warning">Make sure you select the correct UONET+ register variation!</string>
+    <string name="login_recover_warning">Ujistěte se, že jste vybrali správnou variantu deníku UONET+!</string>
     <string name="login_recover_button">Zapomněl jsem své heslo</string>
     <string name="login_recover_title">Obnovte svůj účet</string>
     <string name="login_recover">Obnovit</string>
@@ -455,12 +455,12 @@
     <string name="update_failed">Aktualizace selhala! Wulkanowy nemusí fungovat správně. Zvažte aktualizaci</string>
     <!--Errors-->
     <string name="error_no_internet">Žádné internetové připojení</string>
-    <string name="error_timeout">Connection to register failed. Servers can be overloaded. Please try again later</string>
-    <string name="error_login_failed">Loading data failed. Please try again later</string>
-    <string name="error_password_change_required">Register password change required</string>
+    <string name="error_timeout">Nelze se připojit ke deníku. Servery mohou být přetíženy. Prosím zkuste to znovu později</string>
+    <string name="error_login_failed">Načítání dat se nezdařilo. Prosím zkuste to znovu později</string>
+    <string name="error_password_change_required">Je vyžadována změna hesla pro deník</string>
     <string name="error_service_unavailable">Probíhá údržba UONET+ deník. Zkuste to později znovu</string>
     <string name="error_unknown_uonet">Neznámá chyba denika UONET+. Prosím zkuste to znovu později</string>
-    <string name="error_unknown_app">Unknown application error. Please try again later</string>
+    <string name="error_unknown_app">Neznámá chyba aplikace. Prosím zkuste to znovu později</string>
     <string name="error_unknown">Došlo k neočekávané chybě</string>
     <string name="error_feature_disabled">Funkce deaktivována vaší školou</string>
     <string name="error_feature_not_available">Funkce není k dispozici. Přihlaste se v jiném režimu než Mobile API</string>
