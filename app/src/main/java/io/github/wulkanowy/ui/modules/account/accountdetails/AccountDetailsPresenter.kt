@@ -16,6 +16,6 @@ class AccountDetailsPresenter @Inject constructor(
     override fun onAttachView(view: AccountDetailsView) {
         super.onAttachView(view)
 
-        view.showDefaultAvatar(studentWithSemesters.student.studentName)
+        view.showAccountData(studentWithSemesters)
     }
 }

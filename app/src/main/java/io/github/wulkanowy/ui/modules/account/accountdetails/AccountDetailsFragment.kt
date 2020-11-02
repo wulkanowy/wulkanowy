@@ -1,7 +1,10 @@
 package io.github.wulkanowy.ui.modules.account.accountdetails
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import androidx.core.view.get
 import com.avatarfirst.avatargenlib.AvatarConstants
 import com.avatarfirst.avatargenlib.AvatarGenerator
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +39,7 @@ class AccountDetailsFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         arguments?.let {
             presenter.studentWithSemesters =
                 it.getSerializable(ARGUMENT_KEY) as StudentWithSemesters
@@ -48,13 +52,21 @@ class AccountDetailsFragment :
         presenter.onAttachView(this)
     }
 
-    override fun showDefaultAvatar(name: String) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu[0].isVisible = false
+    }
+
+    override fun showAccountData(studentWithSemesters: StudentWithSemesters) {
+        binding.accountDetailsName.text = studentWithSemesters.student.studentName
+        binding.accountDetailsSchool.text = studentWithSemesters.student.schoolName
+
+
         binding.accountDetailsAvatar.setImageDrawable(
             AvatarGenerator.avatarImage(
                 requireContext(),
                 200,
                 AvatarConstants.CIRCLE,
-                name
+                studentWithSemesters.student.studentName
             )
         )
     }

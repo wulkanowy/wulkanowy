@@ -3,6 +3,7 @@ package io.github.wulkanowy.utils
 import androidx.fragment.app.Fragment
 import io.github.wulkanowy.ui.modules.about.AboutFragment
 import io.github.wulkanowy.ui.modules.account.AccountFragment
+import io.github.wulkanowy.ui.modules.account.accountdetails.AccountDetailsFragment
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
@@ -31,6 +32,7 @@ fun Fragment.toSection(): MainView.Section? {
         is AboutFragment -> MainView.Section.ABOUT
         is SchoolAndTeachersFragment -> MainView.Section.SCHOOL
         is AccountFragment -> MainView.Section.ACCOUNT
+        is AccountDetailsFragment -> MainView.Section.ACCOUNT
         else -> null
     }
 }
