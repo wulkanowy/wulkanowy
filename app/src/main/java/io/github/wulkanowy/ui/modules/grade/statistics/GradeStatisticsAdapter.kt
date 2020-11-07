@@ -105,14 +105,14 @@ class GradeStatisticsAdapter @Inject constructor() :
 
         val dataset = PieDataSet(amounts.mapIndexed { grade, amount ->
             PieEntry(amount.toFloat(), (grade + 1).toString())
-        }.filterNot { it.value == 0f }, "Legenda")
+        }.reversed().filterNot { it.value == 0f }, "Legenda")
 
         with(dataset) {
             valueTextSize = 12f
             sliceSpace = 1f
             valueTextColor = Color.WHITE
             val grades = amounts.mapIndexed { grade, amount -> (grade + 1) to amount }.filterNot { it.second == 0 }
-            setColors(grades.map { (grade, _) ->
+            setColors(grades.reversed().map { (grade, _) ->
                 gradeColors.single { color -> color.first == grade }.second
             }.toIntArray(), binding.root.context)
         }
