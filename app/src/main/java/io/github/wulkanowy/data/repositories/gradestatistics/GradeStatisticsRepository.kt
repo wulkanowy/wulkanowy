@@ -1,7 +1,8 @@
 package io.github.wulkanowy.data.repositories.gradestatistics
 
+import io.github.wulkanowy.data.db.entities.GradePartialStatistics
 import io.github.wulkanowy.data.db.entities.GradePointsStatistics
-import io.github.wulkanowy.data.db.entities.GradeStatistics
+import io.github.wulkanowy.data.db.entities.GradeSemesterStatistics
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
@@ -19,72 +20,102 @@ class GradeStatisticsRepository @Inject constructor(
 
     fun getGradesPartialStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getGradesStatistics(semester, false) },
+        query = { local.getGradePartialStatistics(semester) },
         fetch = { remote.getGradePartialStatistics(student, semester) },
         saveFetchResult = { old, new ->
-            local.deleteGradesStatistics(old uniqueSubtract new)
-            local.saveGradesStatistics(new uniqueSubtract old)
+            local.deleteGradePartialStatistics(old uniqueSubtract new)
+            local.saveGradePartialStatistics(new uniqueSubtract old)
         },
         mapResult = { items ->
             when (subjectName) {
-                "Wszystkie" -> items.groupBy { it.grade }.map {
-                    GradeStatistics(semester.studentId, semester.semesterId, subjectName, it.key,
-                        it.value.fold(0) { acc, e -> acc + e.amount }, false)
-                } + items
+                "Wszystkie" -> (items.reversed() + GradePartialStatistics(
+                    studentId = semester.studentId,
+                    semesterId = semester.semesterId,
+                    subject = subjectName,
+                    classAverage = "",
+                    studentAverage = "",
+                    classAmounts = items.map { it.classAmounts }.sumGradeAmounts(),
+                    studentAmounts = items.map { it.studentAmounts }.sumGradeAmounts()
+                )).reversed()
                 else -> items.filter { it.subject == subjectName }
-            }.mapToStatisticItems()
+            }.mapPartialToStatisticItems()
         }
     )
 
     fun getGradesSemesterStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getGradesStatistics(semester, true) },
+        query = { local.getGradeSemesterStatistics(semester) },
         fetch = { remote.getGradeSemesterStatistics(student, semester) },
         saveFetchResult = { old, new ->
-            local.deleteGradesStatistics(old uniqueSubtract new)
-            local.saveGradesStatistics(new uniqueSubtract old)
+            local.deleteGradeSemesterStatistics(old uniqueSubtract new)
+            local.saveGradeSemesterStatistics(new uniqueSubtract old)
         },
         mapResult = { items ->
             when (subjectName) {
-                "Wszystkie" -> items.groupBy { it.grade }.map {
-                    GradeStatistics(semester.studentId, semester.semesterId, subjectName, it.key,
-                        it.value.fold(0) { acc, e -> acc + e.amount }, false)
-                } + items
+                "Wszystkie" -> (items.reversed() + GradeSemesterStatistics(
+                    studentId = semester.studentId,
+                    semesterId = semester.semesterId,
+                    subject = subjectName,
+                    amounts = items.map { it.amounts }.sumGradeAmounts(),
+                    studentGrade = 0
+                )).reversed()
                 else -> items.filter { it.subject == subjectName }
-            }.mapToStatisticItems()
+            }.mapSemesterToStatisticItems()
         }
     )
 
     fun getGradesPointsStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getGradesPointsStatistics(semester) },
+        query = { local.getGradePointsStatistics(semester) },
         fetch = { remote.getGradePointsStatistics(student, semester) },
         saveFetchResult = { old, new ->
-            local.deleteGradesPointsStatistics(old uniqueSubtract new)
-            local.saveGradesPointsStatistics(new uniqueSubtract old)
+            local.deleteGradePointsStatistics(old uniqueSubtract new)
+            local.saveGradePointsStatistics(new uniqueSubtract old)
         },
         mapResult = { items ->
             when (subjectName) {
                 "Wszystkie" -> items
                 else -> items.filter { it.subject == subjectName }
-            }.mapToStatisticsItem()
+            }.mapPointsToStatisticsItems()
         }
     )
 
-    private fun List<GradeStatistics>.mapToStatisticItems() = groupBy { it.subject }.map {
+    private fun List<List<Int>>.sumGradeAmounts(): List<Int> {
+        val result = mutableListOf(0, 0, 0, 0, 0, 0)
+        forEach {
+            it.forEachIndexed { grade, amount ->
+                result[grade] += amount
+            }
+        }
+        return result
+    }
+
+    private fun List<GradePartialStatistics>.mapPartialToStatisticItems() = map {
         GradeStatisticsItem(
             type = ViewType.PARTIAL,
-            partial = it.value
-                .sortedByDescending { item -> item.grade }
-                .filter { item -> item.amount != 0 },
-            points = null
+            average = it.classAverage,
+            partial = it,
+            points = null,
+            semester = null
         )
     }
 
-    private fun List<GradePointsStatistics>.mapToStatisticsItem() = map {
+    private fun List<GradeSemesterStatistics>.mapSemesterToStatisticItems() = map {
+        GradeStatisticsItem(
+            type = ViewType.SEMESTER,
+            partial = null,
+            points = null,
+            average = "",
+            semester = it
+        )
+    }
+
+    private fun List<GradePointsStatistics>.mapPointsToStatisticsItems() = map {
         GradeStatisticsItem(
             type = ViewType.POINTS,
-            partial = emptyList(),
+            partial = null,
+            semester = null,
+            average = "",
             points = it
         )
     }

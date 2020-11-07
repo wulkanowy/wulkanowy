@@ -12,8 +12,9 @@ import io.github.wulkanowy.data.db.dao.AttendanceSummaryDao
 import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
 import io.github.wulkanowy.data.db.dao.ExamDao
 import io.github.wulkanowy.data.db.dao.GradeDao
+import io.github.wulkanowy.data.db.dao.GradePartialStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
-import io.github.wulkanowy.data.db.dao.GradeStatisticsDao
+import io.github.wulkanowy.data.db.dao.GradeSemesterStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradeSummaryDao
 import io.github.wulkanowy.data.db.dao.HomeworkDao
 import io.github.wulkanowy.data.db.dao.LuckyNumberDao
@@ -34,8 +35,9 @@ import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.data.db.entities.GradePartialStatistics
 import io.github.wulkanowy.data.db.entities.GradePointsStatistics
-import io.github.wulkanowy.data.db.entities.GradeStatistics
+import io.github.wulkanowy.data.db.entities.GradeSemesterStatistics
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.LuckyNumber
@@ -90,8 +92,9 @@ import javax.inject.Singleton
         AttendanceSummary::class,
         Grade::class,
         GradeSummary::class,
-        GradeStatistics::class,
+        GradePartialStatistics::class,
         GradePointsStatistics::class,
+        GradeSemesterStatistics::class,
         Message::class,
         MessageAttachment::class,
         Note::class,
@@ -171,9 +174,11 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract val gradeSummaryDao: GradeSummaryDao
 
-    abstract val gradeStatistics: GradeStatisticsDao
+    abstract val gradePartialStatisticsDao: GradePartialStatisticsDao
 
-    abstract val gradePointsStatistics: GradePointsStatisticsDao
+    abstract val gradePointsStatisticsDao: GradePointsStatisticsDao
+
+    abstract val gradeSemesterStatisticsDao: GradeSemesterStatisticsDao
 
     abstract val messagesDao: MessagesDao
 

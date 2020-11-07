@@ -72,9 +72,9 @@ class GradeStatisticsLocalTest {
             getGradePointsStatistics("Chemia", 2, 1),
             getGradePointsStatistics("Fizyka", 1, 2)
         )
-        runBlocking { gradeStatisticsLocal.saveGradesPointsStatistics(list) }
+        runBlocking { gradeStatisticsLocal.saveGradePointsStatistics(list) }
 
-        val stats = runBlocking { gradeStatisticsLocal.getGradesPointsStatistics(getSemester()).first() }
+        val stats = runBlocking { gradeStatisticsLocal.getGradePointsStatistics(getSemester()).first() }
         with(stats[0]) {
             assertEquals(subject, "Matematyka")
             assertEquals(others, 5.0)
@@ -84,17 +84,17 @@ class GradeStatisticsLocalTest {
 
     @Test
     fun saveAndRead_subjectEmpty() {
-        runBlocking { gradeStatisticsLocal.saveGradesPointsStatistics(listOf()) }
+        runBlocking { gradeStatisticsLocal.saveGradePointsStatistics(listOf()) }
 
-        val stats = runBlocking { gradeStatisticsLocal.getGradesPointsStatistics(getSemester()).first() }
+        val stats = runBlocking { gradeStatisticsLocal.getGradePointsStatistics(getSemester()).first() }
         assertEquals(emptyList(), stats)
     }
 
     @Test
     fun saveAndRead_allEmpty() {
-        runBlocking { gradeStatisticsLocal.saveGradesPointsStatistics(listOf()) }
+        runBlocking { gradeStatisticsLocal.saveGradePointsStatistics(listOf()) }
 
-        val stats = runBlocking { gradeStatisticsLocal.getGradesPointsStatistics(getSemester()).first() }
+        val stats = runBlocking { gradeStatisticsLocal.getGradePointsStatistics(getSemester()).first() }
         assertEquals(emptyList(), stats)
     }
 
