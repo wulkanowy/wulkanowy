@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.ui.modules.grade.statistics.ViewType
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,7 +33,11 @@ class GradeStatisticsRepository @Inject constructor(
                     studentId = semester.studentId,
                     semesterId = semester.semesterId,
                     subject = subjectName,
-                    classAverage = "",
+                    classAverage = items.map {
+                        it.classAverage.replace(",", ".").toDoubleOrNull() ?: .0
+                    }.filterNot { it == .0 }.average().let {
+                        "%.2f".format(Locale.FRANCE, it)
+                    },
                     studentAverage = "",
                     classAmounts = items.map { it.classAmounts }.sumGradeAmounts(),
                     studentAmounts = items.map { it.studentAmounts }.sumGradeAmounts()
