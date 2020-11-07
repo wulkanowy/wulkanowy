@@ -85,14 +85,14 @@ class GradeStatisticsAdapter @Inject constructor() :
     }
 
     private fun bindPartialChart(holder: PartialViewHolder, partials: GradePartialStatistics) {
-        bindPieChart(holder.binding, partials.subject, partials.classAmounts)
+        bindPieChart(holder.binding, partials.subject, partials.classAverage, partials.classAmounts)
     }
 
     private fun bindSemesterChart(holder: SemesterViewHolder, semester: GradeSemesterStatistics) {
-        bindPieChart(holder.binding, semester.subject, semester.amounts)
+        bindPieChart(holder.binding, semester.subject, null, semester.amounts)
     }
 
-    private fun bindPieChart(binding: ItemGradeStatisticsPieBinding, subject: String, amounts: List<Int>) {
+    private fun bindPieChart(binding: ItemGradeStatisticsPieBinding, subject: String, average: String?, amounts: List<Int>) {
         with(binding.gradeStatisticsPieTitle) {
             text = subject
             visibility = if (items.size == 1 || !showAllSubjectsOnList) GONE else VISIBLE
@@ -140,7 +140,8 @@ class GradeStatisticsAdapter @Inject constructor() :
             minAngleForSlices = 25f
             description.isEnabled = false
             centerText = amounts.fold(0) { acc, it -> acc + it }
-                .let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
+                .let { resources.getQuantityString(R.plurals.grade_number_item, it, it) } +
+                ("\n\nŚrednia: $average").takeIf { !average.isNullOrBlank() }.orEmpty()
 
             setHoleColor(context.getThemeAttrColor(android.R.attr.windowBackground))
             setCenterTextColor(context.getThemeAttrColor(android.R.attr.textColorPrimary))
