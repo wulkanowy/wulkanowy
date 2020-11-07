@@ -164,8 +164,15 @@ class GradeStatisticsPresenter @Inject constructor(
                 Status.SUCCESS -> {
                     Timber.i("Loading grade stats result: Success")
                     view?.run {
-                        showEmpty(it.data!!.isEmpty())
-                        showContent(it.data.isNotEmpty())
+                        val isNoContent = it.data!!.isEmpty() || when (type) {
+                            ViewType.SEMESTER -> it.data.firstOrNull()?.semester?.amounts.orEmpty().sum() == 0
+                            ViewType.PARTIAL -> it.data.firstOrNull()?.partial?.classAmounts.orEmpty().sum() == 0
+                            ViewType.POINTS -> it.data.firstOrNull()?.points?.let { points ->
+                                points.student == .0 && points.others == .0
+                            } ?: false
+                        }
+                        showEmpty(isNoContent)
+                        showContent(!isNoContent)
                         showErrorView(false)
                         updateData(it.data, preferencesRepository.gradeColorTheme, preferencesRepository.showAllSubjectsOnStatisticsList)
                         showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)

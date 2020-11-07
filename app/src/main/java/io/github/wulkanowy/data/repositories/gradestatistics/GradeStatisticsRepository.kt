@@ -109,7 +109,7 @@ class GradeStatisticsRepository @Inject constructor(
         return result
     }
 
-    private fun List<GradePartialStatistics>.mapPartialToStatisticItems() = map {
+    private fun List<GradePartialStatistics>.mapPartialToStatisticItems() = filterNot { it.classAmounts.isEmpty() }.map {
         GradeStatisticsItem(
             type = ViewType.PARTIAL,
             average = it.classAverage,
@@ -119,7 +119,7 @@ class GradeStatisticsRepository @Inject constructor(
         )
     }
 
-    private fun List<GradeSemesterStatistics>.mapSemesterToStatisticItems() = map {
+    private fun List<GradeSemesterStatistics>.mapSemesterToStatisticItems() = filterNot { it.amounts.isEmpty() }.map {
         GradeStatisticsItem(
             type = ViewType.SEMESTER,
             partial = null,
