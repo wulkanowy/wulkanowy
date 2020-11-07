@@ -89,10 +89,10 @@ class GradeStatisticsAdapter @Inject constructor() :
     }
 
     private fun bindSemesterChart(holder: SemesterViewHolder, semester: GradeSemesterStatistics) {
-        bindPieChart(holder.binding, semester.subject, null, semester.amounts)
+        bindPieChart(holder.binding, semester.subject, semester.average, semester.amounts)
     }
 
-    private fun bindPieChart(binding: ItemGradeStatisticsPieBinding, subject: String, average: String?, amounts: List<Int>) {
+    private fun bindPieChart(binding: ItemGradeStatisticsPieBinding, subject: String, average: String, amounts: List<Int>) {
         with(binding.gradeStatisticsPieTitle) {
             text = subject
             visibility = if (items.size == 1 || !showAllSubjectsOnList) GONE else VISIBLE
@@ -103,7 +103,7 @@ class GradeStatisticsAdapter @Inject constructor() :
             else -> materialGradeColors
         }
 
-        val dataset = PieDataSet(amounts.reversed().mapIndexed { grade, amount ->
+        val dataset = PieDataSet(amounts.mapIndexed { grade, amount ->
             PieEntry(amount.toFloat(), (grade + 1).toString())
         }.filterNot { it.value == 0f }, "Legenda")
 
@@ -111,7 +111,7 @@ class GradeStatisticsAdapter @Inject constructor() :
             valueTextSize = 12f
             sliceSpace = 1f
             valueTextColor = Color.WHITE
-            setColors(amounts.reversed().mapIndexed { grade, _ ->
+            setColors(amounts.mapIndexed { grade, _ -> // TODO: skip grades with amount == 0
                 gradeColors.single { color -> color.first == (grade + 1) }.second
             }.toIntArray(), binding.root.context)
         }
@@ -141,7 +141,7 @@ class GradeStatisticsAdapter @Inject constructor() :
             description.isEnabled = false
             centerText = amounts.fold(0) { acc, it -> acc + it }
                 .let { resources.getQuantityString(R.plurals.grade_number_item, it, it) } +
-                ("\n\nŚrednia: $average").takeIf { !average.isNullOrBlank() }.orEmpty()
+                ("\n\nŚrednia: $average").takeIf { average.isNotBlank() }.orEmpty()
 
             setHoleColor(context.getThemeAttrColor(android.R.attr.windowBackground))
             setCenterTextColor(context.getThemeAttrColor(android.R.attr.textColorPrimary))

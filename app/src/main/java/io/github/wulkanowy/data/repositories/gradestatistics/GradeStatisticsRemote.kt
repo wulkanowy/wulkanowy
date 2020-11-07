@@ -23,7 +23,9 @@ class GradeStatisticsRemote @Inject constructor(private val sdk: Sdk) {
                     subject = it.subject,
                     classAverage = it.classAverage,
                     studentAverage = it.studentAverage,
-                    classAmounts = it.classItems.map { item -> item.amount },
+                    classAmounts = it.classItems
+                        .sortedBy { item -> item.grade }
+                        .map { item -> item.amount },
                     studentAmounts = it.studentItems.map { item -> item.amount }
                 )
             }
@@ -37,7 +39,9 @@ class GradeStatisticsRemote @Inject constructor(private val sdk: Sdk) {
                     semesterId = semester.semesterId,
                     studentId = semester.studentId,
                     subject = it.subject,
-                    amounts = it.items.map { item -> item.amount },
+                    amounts = it.items
+                        .sortedBy { item -> item.grade }
+                        .map { item -> item.amount },
                     studentGrade = it.items.singleOrNull { item -> item.isStudentHere }?.grade ?: 0
                 )
             }

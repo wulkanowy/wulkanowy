@@ -56,15 +56,29 @@ class GradeStatisticsRepository @Inject constructor(
             local.saveGradeSemesterStatistics(new uniqueSubtract old)
         },
         mapResult = { items ->
+            val itemsWithAverage = items.map { item ->
+                item.copy().apply {
+                    val denominator = item.amounts.sum()
+                    average = if (denominator == 0) "" else (item.amounts.mapIndexed { gradeValue, amount ->
+                        (gradeValue + 1) * amount
+                    }.sum().toDouble() / denominator).let {
+                        "%.2f".format(Locale.FRANCE, it)
+                    }
+                }
+            }
             when (subjectName) {
-                "Wszystkie" -> (items.reversed() + GradeSemesterStatistics(
+                "Wszystkie" -> (itemsWithAverage.reversed() + GradeSemesterStatistics(
                     studentId = semester.studentId,
                     semesterId = semester.semesterId,
                     subject = subjectName,
-                    amounts = items.map { it.amounts }.sumGradeAmounts(),
+                    amounts = itemsWithAverage.map { it.amounts }.sumGradeAmounts(),
                     studentGrade = 0
-                )).reversed()
-                else -> items.filter { it.subject == subjectName }
+                ).apply {
+                    average = itemsWithAverage.mapNotNull { it.average.replace(",", ".").toDoubleOrNull() }.average().let {
+                        "%.2f".format(Locale.FRANCE, it)
+                    }
+                }).reversed()
+                else -> itemsWithAverage.filter { it.subject == subjectName }
             }.mapSemesterToStatisticItems()
         }
     )

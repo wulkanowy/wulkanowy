@@ -22,4 +22,7 @@ data class GradeSemesterStatistics(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    @Transient
+    var average: String = ""
 }
