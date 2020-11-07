@@ -111,8 +111,9 @@ class GradeStatisticsAdapter @Inject constructor() :
             valueTextSize = 12f
             sliceSpace = 1f
             valueTextColor = Color.WHITE
-            setColors(amounts.mapIndexed { grade, _ -> // TODO: skip grades with amount == 0
-                gradeColors.single { color -> color.first == (grade + 1) }.second
+            val grades = amounts.mapIndexed { grade, amount -> (grade + 1) to amount }.filterNot { it.second == 0 }
+            setColors(grades.map { (grade, _) ->
+                gradeColors.single { color -> color.first == grade }.second
             }.toIntArray(), binding.root.context)
         }
 
