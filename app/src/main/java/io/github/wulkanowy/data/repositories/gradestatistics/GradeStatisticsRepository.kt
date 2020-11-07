@@ -29,19 +29,22 @@ class GradeStatisticsRepository @Inject constructor(
         },
         mapResult = { items ->
             when (subjectName) {
-                "Wszystkie" -> (items.reversed() + GradePartialStatistics(
-                    studentId = semester.studentId,
-                    semesterId = semester.semesterId,
-                    subject = subjectName,
-                    classAverage = items.map {
+                "Wszystkie" -> {
+                    val numerator = items.map {
                         it.classAverage.replace(",", ".").toDoubleOrNull() ?: .0
-                    }.filterNot { it == .0 }.average().let {
-                        "%.2f".format(Locale.FRANCE, it)
-                    },
-                    studentAverage = "",
-                    classAmounts = items.map { it.classAmounts }.sumGradeAmounts(),
-                    studentAmounts = items.map { it.studentAmounts }.sumGradeAmounts()
-                )).reversed()
+                    }.filterNot { it == .0 }
+                    (items.reversed() + GradePartialStatistics(
+                        studentId = semester.studentId,
+                        semesterId = semester.semesterId,
+                        subject = subjectName,
+                        classAverage = if (numerator.isEmpty()) "" else numerator.average().let {
+                            "%.2f".format(Locale.FRANCE, it)
+                        },
+                        studentAverage = "",
+                        classAmounts = items.map { it.classAmounts }.sumGradeAmounts(),
+                        studentAmounts = items.map { it.studentAmounts }.sumGradeAmounts()
+                    )).reversed()
+                }
                 else -> items.filter { it.subject == subjectName }
             }.mapPartialToStatisticItems()
         }
