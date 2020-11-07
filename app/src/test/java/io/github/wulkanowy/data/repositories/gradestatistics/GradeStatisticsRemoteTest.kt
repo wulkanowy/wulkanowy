@@ -70,14 +70,16 @@ class GradeStatisticsRemoteTest {
     private fun getGradeStatisticsPartialSubject(subjectName: String): GradeStatisticsSubject {
         return GradeStatisticsSubject(
             subject = subjectName,
-            average = "",
-            items = listOf(
+            studentAverage = "",
+            classAverage = "",
+            classItems = listOf(
                 GradeStatisticsItem(
                     subject = subjectName,
                     grade = 0,
                     amount = 0
                 )
-            )
+            ),
+            studentItems = listOf()
         )
     }
 
