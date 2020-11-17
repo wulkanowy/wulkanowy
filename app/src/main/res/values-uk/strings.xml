@@ -348,6 +348,8 @@
     <string name="about_faq_summary">Запитання, які часто задають</string>
     <string name="about_discord">Сервер Discord</string>
     <string name="about_discord_summary">Приєднатися до спільноти додатка</string>
+    <string name="about_facebook">Facebook fanpage</string>
+    <string name="about_facebook_summary">Like our facebook fanpage</string>
     <string name="about_privacy">Політика конфіденційності</string>
     <string name="about_privacy_summary">Правила зберігання особистих даних</string>
     <string name="about_homepage">Домашня сторінка</string>
