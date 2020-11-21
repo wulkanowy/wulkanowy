@@ -3,7 +3,9 @@ package io.github.wulkanowy.ui.modules.account.accountdetails
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.get
 import com.avatarfirst.avatargenlib.AvatarConstants
 import com.avatarfirst.avatargenlib.AvatarGenerator
@@ -12,6 +14,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.FragmentAccountDetailsBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
@@ -50,10 +53,23 @@ class AccountDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAccountDetailsBinding.bind(view)
         presenter.onAttachView(this)
+
+
+        binding.accountDetailsLogout.setOnClickListener { presenter.onRemoveSelected() }
+        binding.accountDetailsSelect.setOnClickListener { presenter.onStudentSelect() }
+        binding.accountDetailsSelect.isEnabled = !presenter.studentWithSemesters.student.isCurrent
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu[0].isVisible = false
+        inflater.inflate(R.menu.action_menu_account_details, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.accountDetailsMenuEdit) {
+            showAccountEditDetailsDialog()
+            return true
+        } else false
     }
 
     override fun showAccountData(studentWithSemesters: StudentWithSemesters) {
@@ -69,6 +85,29 @@ class AccountDetailsFragment :
                 studentWithSemesters.student.studentName
             )
         )
+    }
+
+    override fun showAccountEditDetailsDialog() {
+        (requireActivity() as MainActivity).showDialogFragment(AccountEditDetailsDialog.newInstance())
+    }
+
+    override fun showLogoutConfirmDialog() {
+        context?.let {
+            AlertDialog.Builder(it)
+                .setTitle(R.string.account_logout_student)
+                .setMessage(R.string.account_confirm)
+                .setPositiveButton(R.string.account_logout) { _, _ -> presenter.onLogoutConfirm() }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                .show()
+        }
+    }
+
+    override fun popView() {
+        (requireActivity() as MainActivity).popView()
+    }
+
+    override fun recreateMainView() {
+        requireActivity().recreate()
     }
 
     override fun onDestroyView() {

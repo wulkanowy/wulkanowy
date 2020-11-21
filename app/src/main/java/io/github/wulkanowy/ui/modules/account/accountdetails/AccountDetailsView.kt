@@ -6,4 +6,12 @@ import io.github.wulkanowy.ui.base.BaseView
 interface AccountDetailsView : BaseView {
 
     fun showAccountData(studentWithSemesters: StudentWithSemesters)
+
+    fun showAccountEditDetailsDialog()
+
+    fun showLogoutConfirmDialog()
+
+    fun popView()
+
+    fun recreateMainView()
 }

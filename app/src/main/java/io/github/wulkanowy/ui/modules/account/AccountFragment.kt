@@ -1,7 +1,10 @@
 package io.github.wulkanowy.ui.modules.account
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -33,6 +36,11 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
 
     override var subtitleString = ""
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAccountBinding.bind(view)
@@ -50,6 +58,10 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
         with(binding) {
             accountAdd.setOnClickListener { presenter.onAddSelected() }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menu[0].isVisible = false
     }
 
     override fun updateData(data: List<AccountItem<*>>) {

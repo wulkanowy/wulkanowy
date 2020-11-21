@@ -42,7 +42,6 @@ class AccountPresenter @Inject constructor(
                     AccountItem(student, AccountItem.ViewType.ITEM)
                 }
             }
-            .map { it + it }
             .flatten()
     }
 
