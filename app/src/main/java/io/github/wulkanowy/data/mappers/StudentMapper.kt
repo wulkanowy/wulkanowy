@@ -28,7 +28,9 @@ fun List<SdkStudent>.mapToEntities(password: String = "") = map {
             mobileBaseUrl = it.mobileBaseUrl,
             privateKey = it.privateKey,
             certificateKey = it.certificateKey,
-            loginMode = it.loginMode.name
+            loginMode = it.loginMode.name,
+            avatarColor = "",
+            nick = null
         ),
         semesters = it.semesters.mapToEntities(it.studentId)
     )

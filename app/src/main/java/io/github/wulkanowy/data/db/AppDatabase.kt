@@ -77,6 +77,7 @@ import io.github.wulkanowy.data.db.migrations.Migration27
 import io.github.wulkanowy.data.db.migrations.Migration28
 import io.github.wulkanowy.data.db.migrations.Migration29
 import io.github.wulkanowy.data.db.migrations.Migration3
+import io.github.wulkanowy.data.db.migrations.Migration30
 import io.github.wulkanowy.data.db.migrations.Migration4
 import io.github.wulkanowy.data.db.migrations.Migration5
 import io.github.wulkanowy.data.db.migrations.Migration6
@@ -120,38 +121,16 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 29
+        const val VERSION_SCHEMA = 30
 
         fun getMigrations(sharedPrefProvider: SharedPrefProvider): Array<Migration> {
             return arrayOf(
-                Migration2(),
-                Migration3(),
-                Migration4(),
-                Migration5(),
-                Migration6(),
-                Migration7(),
-                Migration8(),
-                Migration9(),
-                Migration10(),
-                Migration11(),
-                Migration12(),
-                Migration13(),
-                Migration14(),
-                Migration15(),
-                Migration16(),
-                Migration17(),
-                Migration18(),
-                Migration19(sharedPrefProvider),
-                Migration20(),
-                Migration21(),
-                Migration22(),
-                Migration23(),
-                Migration24(),
-                Migration25(),
-                Migration26(),
-                Migration27(),
-                Migration28(),
-                Migration29()
+                Migration2(), Migration3(), Migration4(), Migration5(), Migration6(),
+                Migration7(), Migration8(), Migration9(), Migration10(), Migration11(),
+                Migration12(), Migration13(), Migration14(), Migration15(), Migration16(),
+                Migration17(), Migration18(), Migration19(sharedPrefProvider), Migration20(),
+                Migration21(), Migration22(), Migration23(), Migration24(), Migration25(),
+                Migration26(), Migration27(), Migration28(), Migration29(), Migration30()
             )
         }
 

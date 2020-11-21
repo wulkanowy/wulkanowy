@@ -52,7 +52,7 @@ data class Student(
     @ColumnInfo(name = "school_id")
     val schoolSymbol: String,
 
-    @ColumnInfo(name ="school_short")
+    @ColumnInfo(name = "school_short")
     val schoolShortName: String,
 
     @ColumnInfo(name = "school_name")
@@ -68,7 +68,13 @@ data class Student(
     val isCurrent: Boolean,
 
     @ColumnInfo(name = "registration_date")
-    val registrationDate: LocalDateTime
+    val registrationDate: LocalDateTime,
+
+    @ColumnInfo(name = "avatar_color")
+    val avatarColor: String,
+
+    @ColumnInfo(name = "nick")
+    val nick: String?
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
