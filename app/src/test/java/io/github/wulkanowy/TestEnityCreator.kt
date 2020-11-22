@@ -47,6 +47,8 @@ fun getStudentEntity(mode: Sdk.Mode = Sdk.Mode.API): Student {
         symbol = "",
         userLoginId = 0,
         userName = "",
+        avatarColor = "",
+        nick = null
     )
 }
 

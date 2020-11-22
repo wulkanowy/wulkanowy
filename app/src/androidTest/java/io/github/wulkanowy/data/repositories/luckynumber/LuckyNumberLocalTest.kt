@@ -26,7 +26,10 @@ class LuckyNumberLocalTest {
     @Before
     fun createDb() {
         testDb = Room
-            .inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase::class.java)
+            .inMemoryDatabaseBuilder(
+                ApplicationProvider.getApplicationContext(),
+                AppDatabase::class.java
+            )
             .build()
         luckyNumberLocal = LuckyNumberLocal(testDb.luckyNumberDao)
     }
@@ -41,8 +44,34 @@ class LuckyNumberLocalTest {
         val number = LuckyNumber(1, LocalDate.of(2019, 1, 20), 14)
         runBlocking { luckyNumberLocal.saveLuckyNumber(number) }
 
-        val student = Student("", "", "", "", "", "", false, "", "", "", 1, 1, "", "", "", "", "", "", 1, false, now())
-        val luckyNumber = runBlocking { luckyNumberLocal.getLuckyNumber(student, LocalDate.of(2019, 1, 20)).first() }
+        val student = Student(
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            false,
+            "",
+            "",
+            "",
+            1,
+            1,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            1,
+            false,
+            now(),
+            "",
+            null
+        )
+        val luckyNumber = runBlocking {
+            luckyNumberLocal.getLuckyNumber(student, LocalDate.of(2019, 1, 20)).first()
+        }
 
         assertEquals(1, luckyNumber?.studentId)
         assertEquals(LocalDate.of(2019, 1, 20), luckyNumber?.date)

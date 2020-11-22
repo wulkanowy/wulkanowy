@@ -47,7 +47,8 @@ class GradeRepositoryTest {
     @Before
     fun initApi() {
         MockKAnnotations.init(this)
-        testDb = Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase::class.java).build()
+        testDb =
+            Room.inMemoryDatabaseBuilder(getApplicationContext(), AppDatabase::class.java).build()
         gradeLocal = GradeLocal(testDb.gradeDao, testDb.gradeSummaryDao)
         studentMock = getStudentMock()
 
@@ -74,7 +75,8 @@ class GradeRepositoryTest {
         val grades = runBlocking {
             GradeRepository(gradeLocal, gradeRemote)
                 .getGrades(studentMock, semesterMock, true)
-                .filter { it.status == Status.SUCCESS }.first().data!!.first.sortedByDescending { it.date }
+                .filter { it.status == Status.SUCCESS }
+                .first().data!!.first.sortedByDescending { it.date }
         }
 
         assertFalse { grades[0].isRead }
@@ -93,16 +95,27 @@ class GradeRepositoryTest {
         runBlocking { gradeLocal.saveGrades(list) }
 
         coEvery { gradeRemote.getGrades(studentMock, semesterMock) } returns (listOf(
-            createGradeLocal(5, 2.0, of(2019, 2, 25), "Ocena ma datę, jest inna, ale nie zostanie powiadomiona"),
+            createGradeLocal(
+                5,
+                2.0,
+                of(2019, 2, 25),
+                "Ocena ma datę, jest inna, ale nie zostanie powiadomiona"
+            ),
             createGradeLocal(4, 3.0, of(2019, 2, 26), "starszą niż ostatnia lokalnie"),
-            createGradeLocal(3, 4.0, of(2019, 2, 27), "Ta jest z tego samego dnia co ostatnia lokalnie"),
+            createGradeLocal(
+                3,
+                4.0,
+                of(2019, 2, 27),
+                "Ta jest z tego samego dnia co ostatnia lokalnie"
+            ),
             createGradeLocal(2, 5.0, of(2019, 2, 28), "Ta jest już w ogóle nowa")
         ) to emptyList())
 
         val grades = runBlocking {
             GradeRepository(gradeLocal, gradeRemote)
                 .getGrades(studentMock, semesterMock, true)
-                .filter { it.status == Status.SUCCESS }.first().data!!.first.sortedByDescending { it.date }
+                .filter { it.status == Status.SUCCESS }
+                .first().data!!.first.sortedByDescending { it.date }
         }
 
         assertFalse { grades[0].isRead }
@@ -184,7 +197,12 @@ class GradeRepositoryTest {
         )
         runBlocking { gradeLocal.saveGrades(list) }
 
-        coEvery { gradeRemote.getGrades(studentMock, semesterMock) } returns (emptyList<Grade>() to emptyList())
+        coEvery {
+            gradeRemote.getGrades(
+                studentMock,
+                semesterMock
+            )
+        } returns (emptyList<Grade>() to emptyList())
 
         val grades = runBlocking {
             GradeRepository(gradeLocal, gradeRemote)
@@ -216,6 +234,8 @@ class GradeRepositoryTest {
         studentName = "",
         symbol = "",
         userLoginId = 0,
-        userName = ""
+        userName = "",
+        avatarColor = "",
+        nick = null
     )
 }

@@ -24,7 +24,10 @@ class RecipientLocalTest {
 
     @Before
     fun createDb() {
-        testDb = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabase::class.java)
+        testDb = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            AppDatabase::class.java
+        )
             .build()
         recipientLocal = RecipientLocal(testDb.recipientDao)
     }
@@ -37,13 +40,64 @@ class RecipientLocalTest {
     @Test
     fun saveAndReadTest() {
         val list = listOf(
-            Recipient(1, "2rPracownik", "Kowalski Jan", "Kowalski Jan [KJ] - Pracownik (Fake123456)", 3, 4, 2, "hash"),
-            Recipient(1, "3rPracownik", "Kowalska Karolina", "Kowalska Karolina [KK] - Pracownik (Fake123456)", 4, 4, 2, "hash"),
-            Recipient(1, "4rPracownik", "Krupa Stanisław", "Krupa Stanisław [KS] - Uczeń (Fake123456)", 5, 4, 1, "hash")
+            Recipient(
+                1,
+                "2rPracownik",
+                "Kowalski Jan",
+                "Kowalski Jan [KJ] - Pracownik (Fake123456)",
+                3,
+                4,
+                2,
+                "hash"
+            ),
+            Recipient(
+                1,
+                "3rPracownik",
+                "Kowalska Karolina",
+                "Kowalska Karolina [KK] - Pracownik (Fake123456)",
+                4,
+                4,
+                2,
+                "hash"
+            ),
+            Recipient(
+                1,
+                "4rPracownik",
+                "Krupa Stanisław",
+                "Krupa Stanisław [KS] - Uczeń (Fake123456)",
+                5,
+                4,
+                1,
+                "hash"
+            )
         )
         runBlocking { recipientLocal.saveRecipients(list) }
 
-        val student = Student("fakelog.cf", "AUTO", "", "", "", "", false, "", "", "", 1, 0, "", "", "", "", "", "", 1, true, LocalDateTime.now())
+        val student = Student(
+            "fakelog.cf",
+            "AUTO",
+            "",
+            "",
+            "",
+            "",
+            false,
+            "",
+            "",
+            "",
+            1,
+            0,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            1,
+            true,
+            LocalDateTime.now(),
+            "",
+            null
+        )
         val recipients = runBlocking {
             recipientLocal.getRecipients(
                 student = student,

@@ -27,7 +27,9 @@ fun getStudent(): Student {
         privateKey = "",
         mobileBaseUrl = "",
         userLoginId = 0,
-        isParent = false
+        isParent = false,
+        avatarColor = "",
+        nick = null
     )
 }
 

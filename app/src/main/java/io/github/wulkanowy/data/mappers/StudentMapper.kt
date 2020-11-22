@@ -2,10 +2,11 @@ package io.github.wulkanowy.data.mappers
 
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.utils.AppInfo
 import java.time.LocalDateTime
 import io.github.wulkanowy.sdk.pojo.Student as SdkStudent
 
-fun List<SdkStudent>.mapToEntities(password: String = "") = map {
+fun List<SdkStudent>.mapToEntities(password: String = "", appInfo: AppInfo) = map {
     StudentWithSemesters(
         student = Student(
             email = it.email,
@@ -29,7 +30,7 @@ fun List<SdkStudent>.mapToEntities(password: String = "") = map {
             privateKey = it.privateKey,
             certificateKey = it.certificateKey,
             loginMode = it.loginMode.name,
-            avatarColor = "",
+            avatarColor = appInfo.defaultColorsForAvatar.random().toString(),
             nick = null
         ),
         semesters = it.semesters.mapToEntities(it.studentId)
