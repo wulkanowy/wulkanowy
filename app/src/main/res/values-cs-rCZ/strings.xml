@@ -16,7 +16,7 @@
     <string name="message_title">Zprávy</string>
     <string name="send_message_title">Nová zpráva</string>
     <string name="note_title">Poznámky a úspěchy</string>
-    <string name="homework_title">Domácí práce</string>
+    <string name="homework_title">Domácí úkoly</string>
     <string name="account_title">Vyberte účet</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
