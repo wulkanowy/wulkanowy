@@ -226,10 +226,10 @@
         <item quantity="other">Nové zprávy</item>
     </plurals>
     <plurals name="message_notify_new_items">
-        <item quantity="one">Obdrželi jste %1$d zprávu</item>
-        <item quantity="few">Obdrželi jste %1$d zpráv</item>
-        <item quantity="many">Obdrželi jste %1$d zpráv</item>
-        <item quantity="other">Obdrželi jste %1$d zpráv</item>
+        <item quantity="one">Máte %1$d novou zprávu</item>
+        <item quantity="few">Máte %1$d nové zprávy</item>
+        <item quantity="many">Máte %1$d nové zprávy</item>
+        <item quantity="other">Máte %1$d nové zprávy</item>
     </plurals>
     <!--Note-->
     <string name="note_no_items">Žádné informace o poznámkách</string>
@@ -286,12 +286,12 @@
     </plurals>
     <plurals name="neutral_note_notify_new_items">
         <item quantity="one">Máte %1$d novou neutrální pozornost</item>
-        <item quantity="few">Máte %1$d nové neutrální komentáře</item>
-        <item quantity="many">Máte %1$d nové neutrální komentáře</item>
-        <item quantity="other">Máte %1$d nové neutrální komentáře</item>
+        <item quantity="few">Máte %1$d nové neutrální 	pozornosti</item>
+        <item quantity="many">Máte %1$d nové neutrální 	pozornosti</item>
+        <item quantity="other">Máte %1$d nové neutrální 	pozornosti</item>
     </plurals>
     <!--Homework-->
-    <string name="homework_no_items">Žádný domácí úkol</string>
+    <string name="homework_no_items">Žádné informace o domácím úkolu</string>
     <string name="homework_mark_as_done">Označit jako hotové</string>
     <string name="homework_mark_as_undone">Neudělané</string>
     <string name="homework_attachments">Přílohy</string>
@@ -315,7 +315,7 @@
     <!--School-->
     <string name="school_title">Škola</string>
     <string name="school_no_info">Žádné informace o škole</string>
-    <string name="school_name">Školní jméno</string>
+    <string name="school_name">Název školy</string>
     <string name="school_address">Adresa školy</string>
     <string name="school_telephone">Telefon</string>
     <string name="school_headmaster">Jméno ředitele</string>
@@ -336,14 +336,14 @@
     <string name="account_logout_student">Odhlášení studentů</string>
     <string name="account_type_student">Studentský účet</string>
     <string name="account_type_parent">Rodičovský účet</string>
-    <string name="account_login_mobile_api">Režimu Mobíle API</string>
+    <string name="account_login_mobile_api">Režim Mobilního API</string>
     <string name="account_login_hybrid">Hybridní režim</string>
     <!--About-->
     <string name="about_version">Verze aplikace</string>
     <string name="about_contributor">Tvůrci</string>
     <string name="about_contributor_summary">Seznam vývojářů Wulkanowy</string>
     <string name="about_feedback">Nahlásit chybu</string>
-    <string name="about_feedback_summary">Pošlete hlášení o chybě e-mailem</string>
+    <string name="about_feedback_summary">Odeslat zprávu o chybě e-mailem</string>
     <string name="about_faq">FAQ</string>
     <string name="about_faq_summary">Přečtěte si často kladené otázky</string>
     <string name="about_discord">Server Discord</string>
@@ -365,8 +365,8 @@
     <string name="logviewer_share">Sdílejte protokoly</string>
     <string name="logviewer_refresh">Obnovit</string>
     <!--Error dialog-->
-    <string name="dialog_error_check_update">Kontrola aktualizací</string>
-    <string name="dialog_error_check_update_message">Před nahlášením chyby nejprve zkontrolujte, zda je k dispozici aktualizace s opravou chyby</string>
+    <string name="dialog_error_check_update">Zkontrolovat aktualizace</string>
+    <string name="dialog_error_check_update_message">Před hlášením chyby zkontrolujte, zda je k dispozici aktualizace s opravou chyb</string>
     <!--Generic-->
     <string name="all_content">Obsah</string>
     <string name="all_retry">Zkuste to znovu</string>
@@ -383,21 +383,21 @@
     <string name="all_subject">Předmět</string>
     <string name="all_prev">Předchozí</string>
     <string name="all_next">Další</string>
-    <string name="all_search">Vyhledávání</string>
-    <string name="all_search_hint">Vyhledávání…</string>
+    <string name="all_search">Hledat</string>
+    <string name="all_search_hint">Hledat…</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Žádné lekce</string>
-    <string name="widget_timetable_theme_title">Vyberte téma</string>
+    <string name="widget_timetable_theme_title">Vybrat motiv</string>
     <string name="widget_timetable_theme_light">Světlý</string>
     <string name="widget_timetable_theme_dark">Tmavý</string>
-    <string name="widget_timetable_theme_system">Téma systému</string>
+    <string name="widget_timetable_theme_system">Motiv systému</string>
     <!--Preferences-->
     <string name="pref_view_header">Vzhled</string>
     <string name="pref_view_list">Výchozí zobrazení</string>
     <string name="pref_view_grade_average_mode">Výpočet koncoročního průměru</string>
     <string name="pref_view_grade_average_force_calc">Vynutit průměrný výpočet podle aplikace</string>
     <string name="pref_view_present">Zobrazit přítomnost v účasti</string>
-    <string name="pref_view_app_theme">Téma aplikace</string>
+    <string name="pref_view_app_theme">Motiv aplikace</string>
     <string name="pref_view_expand_grade">Rozbalit známky</string>
     <string name="pref_view_timetable_show_timers">Označte aktuální lekci v plánu lekce</string>
     <string name="pref_view_timetable_show_groups">Ukázat skupiny vedle předmětů v plánu lekce</string>
@@ -412,22 +412,22 @@
     <string name="pref_notify_upcoming_lessons_switch">Ukázat nadcházející oznámení o lekci</string>
     <string name="pref_notify_fix_sync_issues">Opravte problémy se synchronizací a upozorněním</string>
     <string name="pref_notify_fix_sync_issues_message">Ve vašem zařízení mohou nastat problémy se synchronizací dat a oznámenímii.\n\nChcete-li je opravit, přidejte Wulkanowy do funkce Autostart a vypněte optimalizaci/úsporu baterie v nastavení systému telefonu.</string>
-    <string name="pref_notify_fix_sync_issues_settings_button">Jdi do nastavení</string>
+    <string name="pref_notify_fix_sync_issues_settings_button">Přejít do nastavení</string>
     <string name="pref_notify_debug_switch">Ukázat oznámení o ladění</string>
     <string name="pref_services_header">Synchronizace</string>
     <string name="pref_services_switch">Automatická aktualizace</string>
     <string name="pref_services_suspended">Pozastaveno na dovolené</string>
     <string name="pref_services_interval">Interval aktualizací</string>
     <string name="pref_services_wifi">Pouze Wi-Fi</string>
-    <string name="pref_services_force_sync">Nyní synchronizovat</string>
+    <string name="pref_services_force_sync">Synchronizovat nyní</string>
     <string name="pref_services_message_sync_success">Synchronizováno!</string>
-    <string name="pref_services_message_sync_failed">Synchronizace se nezdařila</string>
+    <string name="pref_services_message_sync_failed">Synchronizace selhala</string>
     <string name="pref_services_sync_in_progress">Probíhá synchronizace</string>
     <string name="pref_services_dialog_force_sync_title">Synchronizace</string>
     <string name="pref_services_dialog_force_sync_summary">        Ruční synchronizace neobnoví zobrazení aplikace.
         \nChcete-li zobrazit synchronizovaná data, restartujte aplikaci po synchronizaci.
     </string>
-    <string name="pref_other_header">Jiný</string>
+    <string name="pref_other_header">Jiné</string>
     <string name="pref_other_grade_modifier_plus">Hodnota plusu</string>
     <string name="pref_other_grade_modifier_minus">Hodnota mínusu</string>
     <string name="pref_other_fill_message_content">Odpovědět s historií zpráv</string>
@@ -437,9 +437,9 @@
     <string name="channel_lucky_number">Šťastné číslo</string>
     <string name="channel_new_message">Nové zprávy</string>
     <string name="channel_new_notes">Nové poznámky</string>
-    <string name="channel_push">Oznámení push</string>
+    <string name="channel_push">Push oznámení</string>
     <string name="channel_upcoming_lessons">Nadcházející lekce</string>
-    <string name="channel_debug">Ladění</string>
+    <string name="channel_debug">Debug</string>
     <!--Colors-->
     <string name="all_black">Černý</string>
     <string name="all_red">Červený</string>
