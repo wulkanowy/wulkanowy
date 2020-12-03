@@ -198,7 +198,7 @@
     <string name="message_no_items">Žádné zprávy</string>
     <string name="message_preview_error">Při stahování obsahu zprávy došlo k chybě</string>
     <string name="message_from">Od:</string>
-    <string name="message_to">Do:</string>
+    <string name="message_to">Komu:</string>
     <string name="message_date">Datum: %s</string>
     <string name="message_reply">Odpověď</string>
     <string name="message_forward">Poslat dále</string>
