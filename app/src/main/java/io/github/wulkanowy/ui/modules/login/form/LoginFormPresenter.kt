@@ -56,7 +56,7 @@ class LoginFormPresenter @Inject constructor(
 
     fun updateUsernameLabel() {
         view?.run {
-            setUsernameLabel(if ("standard" in formHostValue) emailLabel else nicknameLabel)
+            setUsernameLabel(if ("login" in formHostValue) nicknameLabel else emailLabel)
         }
     }
 
@@ -135,12 +135,12 @@ class LoginFormPresenter @Inject constructor(
             view?.setErrorUsernameRequired()
             isCorrect = false
         } else {
-            if ("@" in login && "standard" !in host) {
+            if ("@" in login && "login" in host) {
                 view?.setErrorLoginRequired()
                 isCorrect = false
             }
 
-            if ("@" !in login && "standard" in host) {
+            if ("@" !in login && "email" in host) {
                 view?.setErrorEmailRequired()
                 isCorrect = false
             }
