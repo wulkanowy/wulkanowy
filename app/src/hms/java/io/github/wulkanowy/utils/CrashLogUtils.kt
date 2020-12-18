@@ -3,7 +3,6 @@ package io.github.wulkanowy.utils
 import android.util.Log
 import com.huawei.agconnect.crash.AGConnectCrash
 import fr.bipi.tressence.base.FormatterPriorityTree
-import fr.bipi.tressence.common.StackTraceRecorder
 import io.github.wulkanowy.sdk.exception.FeatureNotAvailableException
 import io.github.wulkanowy.sdk.scrapper.exception.FeatureDisabledException
 import java.io.InterruptedIOException
@@ -39,14 +38,16 @@ class CrashLogExceptionTree : FormatterPriorityTree(Log.ERROR) {
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         if (skipLog(priority, tag, message, t)) return
 
-        connectCrash.setCustomKey("priority", priority)
+        // Disabled due to a bug in the Huawei library
+
+        /*connectCrash.setCustomKey("priority", priority)
         connectCrash.setCustomKey("tag", tag.orEmpty())
         connectCrash.setCustomKey("message", message)
 
         if (t != null) {
-            connectCrash.log(priority, t.stackTraceToString())
+            connectCrash.recordException(t)
         } else {
-            connectCrash.log(priority, StackTraceRecorder(format(priority, tag, message)).stackTraceToString())
-        }
+            connectCrash.recordException(StackTraceRecorder(format(priority, tag, message)))
+        }*/
     }
 }

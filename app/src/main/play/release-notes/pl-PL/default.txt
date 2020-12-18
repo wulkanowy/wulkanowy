@@ -1,6 +1,5 @@
-Wersja 0.22.2
-- naprawiliśmy problem z wyświetlaniem pozycji na liście ocen
-- zmieniliśmy komunikaty o błędach, które powinny być teraz czytelniejsze dla większej liczby użytkowników
-- zwiększyliśmy maksymalny czas, przez który aplikacja będzie próbowała łączyć się z dziennikiem do 1 minuty
+Wersja 0.23.1
+- naprawiliśmy opis pola na email/login przy wyborze niestandardowych dzienników
+- naprawiliśmy obsługę dziennika lubelskiego i koszalińskiego na starszych urządzeniach (z Androidem 5 i starszymi)
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases
