@@ -144,18 +144,18 @@ class TimetablePresenter @Inject constructor(
                             showWholeClassPlanType = prefRepository.showWholeClassPlan,
                             showGroupsInPlanType = prefRepository.showGroupsInPlan,
                             showTimetableTimers = prefRepository.showTimetableTimers,
-                            data = it.data!!
+                            data = it.data!!.first
                                 .filter { item -> if (prefRepository.showWholeClassPlan == "no") item.isStudentPlan else true }
                                 .sortedWith(compareBy({ item -> item.number }, { item -> !item.isStudentPlan }))
                         )
-                        showEmpty(it.data.isEmpty())
+                        showEmpty(it.data.first.isEmpty())
                         showErrorView(false)
-                        showContent(it.data.isNotEmpty())
+                        showContent(it.data.first.isNotEmpty())
                     }
                     analytics.logEvent(
                         "load_data",
                         "type" to "timetable",
-                        "items" to it.data!!.size
+                        "items" to it.data!!.first.size
                     )
                 }
                 Status.ERROR -> {
