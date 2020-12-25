@@ -14,15 +14,14 @@
         android:id="@+id/additionalLessonItemSubject"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?android:textColorPrimary"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/additionalLessonItemTimeStart"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem" />
 
@@ -31,11 +30,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:maxLines="1"
         android:textColor="?android:textColorSecondary"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/additionalLessonItemSubject"
         tools:text="11:11" />
 
     <TextView
@@ -43,13 +43,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:maxLines="1"
         android:textColor="?android:textColorSecondary"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/additionalLessonItemTimeStart"
+        app:layout_constraintStart_toEndOf="@id/additionalLessonItemTimeStart"
+        app:layout_constraintTop_toTopOf="@id/additionalLessonItemTimeStart"
         tools:text="12:00" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
