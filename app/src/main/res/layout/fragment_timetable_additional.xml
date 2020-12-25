@@ -26,7 +26,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/additionalLessonsRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_timetable_additional" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
@@ -44,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:minWidth="100dp"
                 android:minHeight="100dp"
-                app:srcCompat="@drawable/ic_menu_timetable_lessons_completed"
+                app:srcCompat="@drawable/ic_menu_timetable_lessons_additional"
                 app:tint="?android:attr/textColorPrimary"
                 tools:ignore="contentDescription" />
 
@@ -54,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="@string/completed_lessons_no_items"
+                android:text="@string/additional_lessons_no_items"
                 android:textSize="20sp" />
         </LinearLayout>
 
