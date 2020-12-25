@@ -99,7 +99,7 @@ class AdditionalLessonsPresenter @Inject constructor(
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            timetableRepository.getTimetable(student, semester, date, date, forceRefresh)
+            timetableRepository.getTimetable(student, semester, date, date, forceRefresh, true)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading additional lessons data started")

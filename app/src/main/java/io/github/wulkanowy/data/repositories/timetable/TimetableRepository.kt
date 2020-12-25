@@ -22,8 +22,8 @@ class TimetableRepository @Inject constructor(
     private val schedulerHelper: TimetableNotificationSchedulerHelper
 ) {
 
-    fun getTimetable(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { (timetable, additional) -> timetable.isEmpty() || additional.isEmpty() || forceRefresh },
+    fun getTimetable(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean, refreshAdditional: Boolean = false) = networkBoundResource(
+        shouldFetch = { (timetable, additional) -> timetable.isEmpty() || (additional.isEmpty() && refreshAdditional) || forceRefresh },
         query = {
             local.getTimetable(semester, start.monday, end.sunday)
                 .map { schedulerHelper.scheduleNotifications(it, student); it }
