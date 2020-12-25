@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetable.additional
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,12 +20,12 @@ class AdditionalLessonsAdapter @Inject constructor() :
         ItemTimetableAdditionalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = items[position]
 
         with(holder.binding) {
-            additionalLessonItemTimeStart.text = item.start.toFormattedString("HH:mm")
-            additionalLessonItemTimeFinish.text = item.end.toFormattedString("HH:mm")
+            additionalLessonItemTime.text = "${item.start.toFormattedString("HH:mm")} - ${item.end.toFormattedString("HH:mm")}"
             additionalLessonItemSubject.text = item.subject
         }
     }

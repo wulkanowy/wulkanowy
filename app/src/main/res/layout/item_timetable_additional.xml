@@ -26,7 +26,7 @@
         tools:text="@tools:sample/lorem" />
 
     <TextView
-        android:id="@+id/additionalLessonItemTimeStart"
+        android:id="@+id/additionalLessonItemTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -36,18 +36,6 @@
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/additionalLessonItemSubject"
-        tools:text="11:11" />
-
-    <TextView
-        android:id="@+id/additionalLessonItemTimeFinish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:maxLines="1"
-        android:textColor="?android:textColorSecondary"
-        android:textSize="13sp"
-        app:layout_constraintStart_toEndOf="@id/additionalLessonItemTimeStart"
-        app:layout_constraintTop_toTopOf="@id/additionalLessonItemTimeStart"
-        tools:text="12:00" />
+        tools:text="11:11 - 12:12" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
