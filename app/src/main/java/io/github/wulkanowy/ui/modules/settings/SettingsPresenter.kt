@@ -47,7 +47,7 @@ class SettingsPresenter @Inject constructor(
                 isUpcomingLessonsNotificationsEnableKey -> if (!isUpcomingLessonsNotificationsEnable) timetableNotificationHelper.cancelNotification()
                 appLanguageKey -> view?.run {
                     val newLang = if (appLanguage == "system") appInfo.systemLanguage else appLanguage
-                    analytics.logEvent("language_changed", "langCode" to newLang)
+                    analytics.logEvent("language", "setting_changed" to newLang)
 
                     updateLanguage(newLang)
                     recreateView()
