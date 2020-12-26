@@ -30,6 +30,8 @@ jobs:
               ./gradlew -Pcoverage testFdroidDebugUnitTest --stacktrace
               ./gradlew -Pcoverage jacocoTestReport --stacktrace
           - uses: codecov/codecov-action@v1
+            with:
+                flags: unit
 
   instrumentation-tests:
       name: Instrumentation tests
@@ -63,4 +65,4 @@ jobs:
                   ./gradlew -Pcoverage jacocoTestReport --stacktrace
           - uses: codecov/codecov-action@v1
             with:
-                verbose: true
+                flags: instrumented,api-${{ matrix.api-level }}
