@@ -26,10 +26,10 @@ jobs:
                 key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
           - name: Unit tests
-            run: ./gradlew -Pcoverage testFdroidDebugUnitTest --stacktrace
+            run: |
+              ./gradlew -Pcoverage testFdroidDebugUnitTest --stacktrace
+              ./gradlew -Pcoverage jacocoTestReport --stacktrace
           - uses: codecov/codecov-action@v1
-            with:
-                verbose: true
 
   instrumentation-tests:
       name: Instrumentation tests
@@ -58,7 +58,9 @@ jobs:
             with:
                 api-level: ${{ matrix.api-level }}
                 arch: x86
-                script: ./gradlew -Pcoverage connectedFdroidDebugAndroidTest --stacktrace
+                script: |
+                  ./gradlew -Pcoverage connectedFdroidDebugAndroidTest --stacktrace
+                  ./gradlew -Pcoverage jacocoTestReport --stacktrace
           - uses: codecov/codecov-action@v1
             with:
                 verbose: true
