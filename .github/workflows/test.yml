@@ -67,7 +67,7 @@ jobs:
 
   instrumentation-tests:
       name: Instrumentation tests
-      runs-on: ubuntu-latest
+      runs-on: macOS-latest
       timeout-minutes: 15
       needs: [ build ]
       strategy:
