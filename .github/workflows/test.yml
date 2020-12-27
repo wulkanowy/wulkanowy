@@ -28,7 +28,7 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
       - name: Build
-        run: ./gradlew --build-cache compileFdroidDebugUnitTestKotlin packageFdroidDebug packageFdroidDebugAndroidTest preFdroidDebugAndroidTestBuild
+        run: ./gradlew --build-cache compileFdroidDebugUnitTestKotlin preFdroidDebugAndroidTestBuild dexBuilderFdroidDebugAndroidTest packageFdroidDebug packageFdroidDebugAndroidTest
       - name: Prepare build cache
         run: tar -cf prebuild.tar .build-cache .gradle app/build
       - uses: actions/upload-artifact@v2
