@@ -50,8 +50,6 @@ jobs:
             with:
                 java-version: 11
 
-          # Restore the cache.
-          # Intentionally don't set 'restore-keys' so the cache never contains redundant dependencies.
           - uses: actions/cache@v2
             with:
                 path: ~/.gradle/caches
