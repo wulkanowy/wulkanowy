@@ -31,8 +31,8 @@ jobs:
         run: tar -cvf prebuild.tar app/build
       - uses: actions/upload-artifact@v2
         with:
-          name: prebuild.tar
-          path: app/build
+          name: prebuild
+          path: prebuild.tar
 
   unit-tests:
       name: Unit tests
