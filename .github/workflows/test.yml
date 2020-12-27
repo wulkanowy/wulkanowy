@@ -27,9 +27,11 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
       - name: Build
         run: ./gradlew buildFdroidDebug
+      - name: Prepare build cache
+        run: tar -cvf prebuild.tar app/build
       - uses: actions/upload-artifact@v2
         with:
-          name: prebuild
+          name: prebuild.tar
           path: app/build
 
   unit-tests:
@@ -48,7 +50,9 @@ jobs:
             key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
         - uses: actions/download-artifact@v2
           with:
-            name: prebuild
+            name: prebuild.tar
+        - name: Extract build cache
+          run: tar -xvf prebuild.tar app/build
         - name: Unit tests
           run: |
             ./gradlew -Pcoverage testFdroidDebugUnitTest --stacktrace
@@ -77,7 +81,9 @@ jobs:
                 key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
           - uses: actions/download-artifact@v2
             with:
-              name: prebuild
+              name: prebuild.tar
+          - name: Extract build cache
+            run: tar -xvf prebuild.tar app/build
           - name: Instrumentation tests
             uses: reactivecircus/android-emulator-runner@v2.13.0
             with:
@@ -108,7 +114,9 @@ jobs:
             key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
         - uses: actions/download-artifact@v2
           with:
-            name: prebuild
+            name: prebuild.tar
+        - name: Extract build cache
+          run: tar -xvf prebuild.tar app/build
         - name: Decrypt keys
           env:
             ENCRYPT_KEY: ${{ secrets.ENCRYPT_KEY }}
