@@ -56,7 +56,7 @@ jobs:
                 key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
           - name: Instrumentation tests
-            uses: reactivecircus/android-emulator-runner@v2
+            uses: reactivecircus/android-emulator-runner@v2.13.0
             with:
                 api-level: ${{ matrix.api-level }}
                 arch: x86
