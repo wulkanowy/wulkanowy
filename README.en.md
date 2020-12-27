@@ -51,7 +51,8 @@ You can also download a [development version](https://wulkanowy.github.io/#downl
 
 
 * [Wulkanowy SDK](https://github.com/wulkanowy/sdk)
-* [Dagger 2](https://github.com/google/dagger)
+* [Kotlin Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)
+* [Hilt](https://dagger.dev/hilt/)
 * [Room](https://developer.android.com/topic/libraries/architecture/room)
 * [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) 
 
