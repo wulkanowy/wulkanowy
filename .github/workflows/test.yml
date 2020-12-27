@@ -50,9 +50,9 @@ jobs:
           with:
             name: prebuild
         - name: Unit tests
-            run: |
-              ./gradlew -Pcoverage testFdroidDebugUnitTest --stacktrace
-              ./gradlew -Pcoverage jacocoTestReport --stacktrace
+          run: |
+            ./gradlew -Pcoverage testFdroidDebugUnitTest --stacktrace
+            ./gradlew -Pcoverage jacocoTestReport --stacktrace
         - uses: codecov/codecov-action@v1
           with:
               flags: unit
@@ -103,9 +103,9 @@ jobs:
           with:
             java-version: 11
         - uses: actions/cache@v2
-            with:
-              path: ~/.gradle/caches
-              key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          with:
+            path: ~/.gradle/caches
+            key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
         - uses: actions/download-artifact@v2
           with:
             name: prebuild
