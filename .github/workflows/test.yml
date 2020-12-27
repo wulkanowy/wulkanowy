@@ -23,12 +23,14 @@ jobs:
           java-version: 11
       - uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
       - name: Build
-        run: ./gradlew buildFdroidDebug
+        run: ./gradlew compileFdroidDebugUnitTestKotlin packageFdroidDebug preFdroidDebugAndroidTestBuild
       - name: Prepare build cache
-        run: tar -cvf prebuild.tar app/build
+        run: tar -cvf prebuild.tar .gradle app/build
       - uses: actions/upload-artifact@v2
         with:
           name: prebuild.tar
@@ -46,8 +48,10 @@ jobs:
             java-version: 11
         - uses: actions/cache@v2
           with:
-            path: ~/.gradle/caches
-            key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+            path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+            key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
         - uses: actions/download-artifact@v2
           with:
             name: prebuild.tar
@@ -77,8 +81,10 @@ jobs:
                 java-version: 11
           - uses: actions/cache@v2
             with:
-                path: ~/.gradle/caches
-                key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+              path: |
+                ~/.gradle/caches
+                ~/.gradle/wrapper
+              key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
           - uses: actions/download-artifact@v2
             with:
               name: prebuild.tar
@@ -110,8 +116,10 @@ jobs:
             java-version: 11
         - uses: actions/cache@v2
           with:
-            path: ~/.gradle/caches
-            key: gradle-${{ runner.os }}-${{ hashFiles('**/build.gradle') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+            path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+            key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
         - uses: actions/download-artifact@v2
           with:
             name: prebuild.tar
