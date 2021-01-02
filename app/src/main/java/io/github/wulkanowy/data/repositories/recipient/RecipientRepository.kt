@@ -1,36 +1,40 @@
 package io.github.wulkanowy.data.repositories.recipient
 
+import io.github.wulkanowy.data.db.dao.RecipientDao
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.uniqueSubtract
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class RecipientRepository @Inject constructor(
-    private val local: RecipientLocal,
-    private val remote: RecipientRemote
+    private val recipientDb: RecipientDao,
+    private val sdk: Sdk
 ) {
 
     suspend fun refreshRecipients(student: Student, role: Int, unit: ReportingUnit) {
-        val new = remote.getRecipients(student, role, unit)
-        val old = local.getRecipients(student, role, unit)
+        val new = sdk.init(student).getRecipients(unit.realId, role).mapToEntities(student)
+        val old = recipientDb.load(student.studentId, role, unit.realId)
 
-        local.deleteRecipients(old uniqueSubtract new)
-        local.saveRecipients(new uniqueSubtract old)
+        recipientDb.deleteAll(old uniqueSubtract new)
+        recipientDb.insertAll(new uniqueSubtract old)
     }
 
     suspend fun getRecipients(student: Student, role: Int, unit: ReportingUnit): List<Recipient> {
-        return local.getRecipients(student, role, unit).ifEmpty {
+        return recipientDb.load(student.studentId, role, unit.realId).ifEmpty {
             refreshRecipients(student, role, unit)
 
-            local.getRecipients(student, role, unit)
+            recipientDb.load(student.studentId, role, unit.realId)
         }
     }
 
     suspend fun getMessageRecipients(student: Student, message: Message): List<Recipient> {
-        return remote.getMessageRecipients(student, message)
+        return sdk.init(student).getMessageRecipients(message.messageId, message.senderId).mapToEntities(student)
     }
 }

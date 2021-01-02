@@ -1,38 +1,42 @@
 package io.github.wulkanowy.data.repositories.reportingunit
 
+import io.github.wulkanowy.data.db.dao.ReportingUnitDao
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.uniqueSubtract
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ReportingUnitRepository @Inject constructor(
-    private val local: ReportingUnitLocal,
-    private val remote: ReportingUnitRemote
+    private val reportingUnitDb: ReportingUnitDao,
+    private val sdk: Sdk
 ) {
 
     suspend fun refreshReportingUnits(student: Student) {
-        val new = remote.getReportingUnits(student)
-        val old = local.getReportingUnits(student)
+        val new = sdk.init(student).getReportingUnits().mapToEntities(student)
+        val old = reportingUnitDb.load(student.studentId)
 
-        local.deleteReportingUnits(old.uniqueSubtract(new))
-        local.saveReportingUnits(new.uniqueSubtract(old))
+        reportingUnitDb.deleteAll(old.uniqueSubtract(new))
+        reportingUnitDb.insertAll(new.uniqueSubtract(old))
     }
 
     suspend fun getReportingUnits(student: Student): List<ReportingUnit> {
-        return local.getReportingUnits(student).ifEmpty {
+        return reportingUnitDb.load(student.studentId).ifEmpty {
             refreshReportingUnits(student)
 
-            local.getReportingUnits(student)
+            reportingUnitDb.load(student.studentId)
         }
     }
 
     suspend fun getReportingUnit(student: Student, unitId: Int): ReportingUnit? {
-        return local.getReportingUnit(student, unitId) ?: run {
+        return reportingUnitDb.loadOne(student.studentId, unitId) ?: run {
             refreshReportingUnits(student)
 
-            return local.getReportingUnit(student, unitId)
+            return reportingUnitDb.loadOne(student.studentId, unitId)
         }
     }
 }

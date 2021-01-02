@@ -1,9 +1,14 @@
 package io.github.wulkanowy.data.repositories.grade
 
+import io.github.wulkanowy.data.db.dao.GradeDao
+import io.github.wulkanowy.data.db.dao.GradeSummaryDao
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
@@ -15,18 +20,24 @@ import javax.inject.Singleton
 
 @Singleton
 class GradeRepository @Inject constructor(
-    private val local: GradeLocal,
-    private val remote: GradeRemote
+    private val gradeDb: GradeDao,
+    private val gradeSummaryDb: GradeSummaryDao,
+    private val sdk: Sdk
 ) {
 
     fun getGrades(student: Student, semester: Semester, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
         shouldFetch = { (details, summaries) -> details.isEmpty() || summaries.isEmpty() || forceRefresh },
         query = {
-            local.getGradesDetails(semester).combine(local.getGradesSummary(semester)) { details, summaries ->
+            gradeDb.loadAll(semester.semesterId, semester.studentId).combine(gradeSummaryDb.loadAll(semester.semesterId, semester.studentId)) { details, summaries ->
                 details to summaries
             }
         },
-        fetch = { remote.getGrades(student, semester) },
+        fetch = {
+            sdk.init(student)
+                .switchDiary(semester.diaryId, semester.schoolYear)
+                .getGrades(semester.semesterId)
+                .let { (details, summary) -> details.mapToEntities(semester) to summary.mapToEntities(semester) }
+        },
         saveFetchResult = { (oldDetails, oldSummary), (newDetails, newSummary) ->
             refreshGradeDetails(student, oldDetails, newDetails, notify)
             refreshGradeSummaries(oldSummary, newSummary, notify)
@@ -35,8 +46,8 @@ class GradeRepository @Inject constructor(
 
     private suspend fun refreshGradeDetails(student: Student, oldGrades: List<Grade>, newDetails: List<Grade>, notify: Boolean) {
         val notifyBreakDate = oldGrades.maxByOrNull { it.date }?.date ?: student.registrationDate.toLocalDate()
-        local.deleteGrades(oldGrades uniqueSubtract newDetails)
-        local.saveGrades((newDetails uniqueSubtract oldGrades).onEach {
+        gradeDb.deleteAll(oldGrades uniqueSubtract newDetails)
+        gradeDb.insertAll((newDetails uniqueSubtract oldGrades).onEach {
             if (it.date >= notifyBreakDate) it.apply {
                 isRead = false
                 if (notify) isNotified = false
@@ -45,8 +56,8 @@ class GradeRepository @Inject constructor(
     }
 
     private suspend fun refreshGradeSummaries(oldSummaries: List<GradeSummary>, newSummary: List<GradeSummary>, notify: Boolean) {
-        local.deleteGradesSummary(oldSummaries uniqueSubtract newSummary)
-        local.saveGradesSummary((newSummary uniqueSubtract oldSummaries).onEach { summary ->
+        gradeSummaryDb.deleteAll(oldSummaries uniqueSubtract newSummary)
+        gradeSummaryDb.insertAll((newSummary uniqueSubtract oldSummaries).onEach { summary ->
             val oldSummary = oldSummaries.find { oldSummary -> oldSummary.subject == summary.subject }
             summary.isPredictedGradeNotified = when {
                 summary.predictedGrade.isEmpty() -> true
@@ -73,30 +84,30 @@ class GradeRepository @Inject constructor(
     }
 
     fun getUnreadGrades(semester: Semester): Flow<List<Grade>> {
-        return local.getGradesDetails(semester).map { it.filter { grade -> !grade.isRead } }
+        return gradeDb.loadAll(semester.semesterId, semester.studentId).map { it.filter { grade -> !grade.isRead } }
     }
 
     fun getNotNotifiedGrades(semester: Semester): Flow<List<Grade>> {
-        return local.getGradesDetails(semester).map { it.filter { grade -> !grade.isNotified } }
+        return gradeDb.loadAll(semester.semesterId, semester.studentId).map { it.filter { grade -> !grade.isNotified } }
     }
 
     fun getNotNotifiedPredictedGrades(semester: Semester): Flow<List<GradeSummary>> {
-        return local.getGradesSummary(semester).map { it.filter { gradeSummary -> !gradeSummary.isPredictedGradeNotified } }
+        return gradeSummaryDb.loadAll(semester.semesterId, semester.studentId).map { it.filter { gradeSummary -> !gradeSummary.isPredictedGradeNotified } }
     }
 
     fun getNotNotifiedFinalGrades(semester: Semester): Flow<List<GradeSummary>> {
-        return local.getGradesSummary(semester).map { it.filter { gradeSummary -> !gradeSummary.isFinalGradeNotified } }
+        return gradeSummaryDb.loadAll(semester.semesterId, semester.studentId).map { it.filter { gradeSummary -> !gradeSummary.isFinalGradeNotified } }
     }
 
     suspend fun updateGrade(grade: Grade) {
-        return local.updateGrades(listOf(grade))
+        return gradeDb.updateAll(listOf(grade))
     }
 
     suspend fun updateGrades(grades: List<Grade>) {
-        return local.updateGrades(grades)
+        return gradeDb.updateAll(grades)
     }
 
     suspend fun updateGradesSummary(gradesSummary: List<GradeSummary>) {
-        return local.updateGradesSummary(gradesSummary)
+        return gradeSummaryDb.updateAll(gradesSummary)
     }
 }

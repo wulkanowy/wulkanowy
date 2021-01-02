@@ -1,9 +1,14 @@
 package io.github.wulkanowy.data.repositories.mobiledevice
 
+import io.github.wulkanowy.data.db.dao.MobileDeviceDao
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.mappers.mapToMobileDeviceToken
 import io.github.wulkanowy.data.pojos.MobileDeviceToken
+import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import javax.inject.Inject
@@ -11,26 +16,34 @@ import javax.inject.Singleton
 
 @Singleton
 class MobileDeviceRepository @Inject constructor(
-    private val local: MobileDeviceLocal,
-    private val remote: MobileDeviceRemote
+    private val mobileDb: MobileDeviceDao,
+    private val sdk: Sdk
 ) {
 
     fun getDevices(student: Student, semester: Semester, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getDevices(semester) },
-        fetch = { remote.getDevices(student, semester) },
+        query = { mobileDb.loadAll(semester.studentId) },
+        fetch = {
+            sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+                .getRegisteredDevices()
+                .mapToEntities(semester)
+        },
         saveFetchResult = { old, new ->
-            local.deleteDevices(old uniqueSubtract new)
-            local.saveDevices(new uniqueSubtract old)
+            mobileDb.deleteAll(old uniqueSubtract new)
+            mobileDb.insertAll(new uniqueSubtract old)
         }
     )
 
     suspend fun unregisterDevice(student: Student, semester: Semester, device: MobileDevice) {
-        remote.unregisterDevice(student, semester, device)
-        local.deleteDevices(listOf(device))
+        sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+            .unregisterDevice(device.deviceId)
+
+        mobileDb.deleteAll(listOf(device))
     }
 
     suspend fun getToken(student: Student, semester: Semester): MobileDeviceToken {
-        return remote.getToken(student, semester)
+        return sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+            .getToken()
+            .mapToMobileDeviceToken()
     }
 }

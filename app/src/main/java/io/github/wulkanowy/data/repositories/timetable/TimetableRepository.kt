@@ -1,10 +1,15 @@
 package io.github.wulkanowy.data.repositories.timetable
 
+import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
+import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.entities.TimetableAdditional
+import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.services.alarm.TimetableNotificationSchedulerHelper
+import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.sunday
@@ -17,21 +22,27 @@ import javax.inject.Singleton
 
 @Singleton
 class TimetableRepository @Inject constructor(
-    private val local: TimetableLocal,
-    private val remote: TimetableRemote,
+    private val timetableDb: TimetableDao,
+    private val timetableAdditionalDb: TimetableAdditionalDao,
+    private val sdk: Sdk,
     private val schedulerHelper: TimetableNotificationSchedulerHelper
 ) {
 
     fun getTimetable(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean, refreshAdditional: Boolean = false) = networkBoundResource(
         shouldFetch = { (timetable, additional) -> timetable.isEmpty() || (additional.isEmpty() && refreshAdditional) || forceRefresh },
         query = {
-            local.getTimetable(semester, start.monday, end.sunday)
+            timetableDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday)
                 .map { schedulerHelper.scheduleNotifications(it, student); it }
-                .combine(local.getTimetableAdditional(semester, start.monday, end.sunday)) { timetable, additional ->
+                .combine(timetableAdditionalDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday)) { timetable, additional ->
                     timetable to additional
                 }
         },
-        fetch = { remote.getTimetable(student, semester, start.monday, end.sunday) },
+        fetch = {
+            sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+                .getTimetable(start.monday, end.sunday)
+                .let { (normal, additional) -> normal.mapToEntities(semester) to additional.mapToEntities(semester) }
+
+        },
         saveFetchResult = { (oldTimetable, oldAdditional), (newTimetable, newAdditional) ->
             refreshTimetable(student, oldTimetable, newTimetable)
             refreshAdditional(oldAdditional, newAdditional)
@@ -45,8 +56,8 @@ class TimetableRepository @Inject constructor(
     )
 
     private suspend fun refreshTimetable(student: Student, old: List<Timetable>, new: List<Timetable>) {
-        local.deleteTimetable(old.uniqueSubtract(new).also { schedulerHelper.cancelScheduled(it) })
-        local.saveTimetable(new.uniqueSubtract(old).also { schedulerHelper.scheduleNotifications(it, student) }.map { item ->
+        timetableDb.deleteAll(old.uniqueSubtract(new).also { schedulerHelper.cancelScheduled(it) })
+        timetableDb.insertAll(new.uniqueSubtract(old).also { schedulerHelper.scheduleNotifications(it, student) }.map { item ->
             item.also { new ->
                 old.singleOrNull { new.start == it.start }?.let { old ->
                     return@map new.copy(
@@ -59,7 +70,7 @@ class TimetableRepository @Inject constructor(
     }
 
     private suspend fun refreshAdditional(old: List<TimetableAdditional>, new: List<TimetableAdditional>) {
-        local.deleteTimetableAdditional(old.uniqueSubtract(new))
-        local.saveTimetableAdditional(new.uniqueSubtract(old))
+        timetableAdditionalDb.deleteAll(old.uniqueSubtract(new))
+        timetableAdditionalDb.insertAll(new.uniqueSubtract(old))
     }
 }

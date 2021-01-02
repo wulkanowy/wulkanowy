@@ -1,10 +1,13 @@
 package io.github.wulkanowy.data.repositories.semester
 
+import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.getCurrentOrLast
+import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.isCurrent
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.withContext
@@ -14,17 +17,17 @@ import javax.inject.Singleton
 
 @Singleton
 class SemesterRepository @Inject constructor(
-    private val remote: SemesterRemote,
-    private val local: SemesterLocal,
+    private val sdk: Sdk,
+    private val semesterDb: SemesterDao,
     private val dispatchers: DispatchersProvider
 ) {
 
     suspend fun getSemesters(student: Student, forceRefresh: Boolean = false, refreshOnNoCurrent: Boolean = false) = withContext(dispatchers.backgroundThread) {
-        val semesters = local.getSemesters(student)
+        val semesters = semesterDb.loadAll(student.studentId, student.classId)
 
         if (isShouldFetch(student, semesters, forceRefresh, refreshOnNoCurrent)) {
             refreshSemesters(student)
-            local.getSemesters(student)
+            semesterDb.loadAll(student.studentId, student.classId)
         } else semesters
     }
 
@@ -41,12 +44,12 @@ class SemesterRepository @Inject constructor(
     }
 
     private suspend fun refreshSemesters(student: Student) {
-        val new = remote.getSemesters(student)
+        val new = sdk.init(student).getSemesters().mapToEntities(student.studentId)
         if (new.isEmpty()) return Timber.i("Empty semester list!")
 
-        val old = local.getSemesters(student)
-        local.deleteSemesters(old.uniqueSubtract(new))
-        local.saveSemesters(new.uniqueSubtract(old))
+        val old = semesterDb.loadAll(student.studentId, student.classId)
+        semesterDb.deleteAll(old.uniqueSubtract(new))
+        semesterDb.insertSemesters(new.uniqueSubtract(old))
     }
 
     suspend fun getCurrentSemester(student: Student, forceRefresh: Boolean = false) = withContext(dispatchers.backgroundThread) {

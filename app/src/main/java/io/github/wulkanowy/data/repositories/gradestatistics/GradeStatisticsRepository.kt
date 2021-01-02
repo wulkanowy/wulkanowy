@@ -1,12 +1,18 @@
 package io.github.wulkanowy.data.repositories.gradestatistics
 
+import io.github.wulkanowy.data.db.dao.GradePartialStatisticsDao
+import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
+import io.github.wulkanowy.data.db.dao.GradeSemesterStatisticsDao
 import io.github.wulkanowy.data.db.entities.GradePartialStatistics
-import io.github.wulkanowy.data.db.entities.GradePointsStatistics
 import io.github.wulkanowy.data.db.entities.GradeSemesterStatistics
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.pojos.GradeStatisticsItem
-import io.github.wulkanowy.ui.modules.grade.statistics.ViewType
+import io.github.wulkanowy.data.mappers.mapPartialToStatisticItems
+import io.github.wulkanowy.data.mappers.mapPointsToStatisticsItems
+import io.github.wulkanowy.data.mappers.mapSemesterToStatisticItems
+import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import java.util.Locale
@@ -15,17 +21,23 @@ import javax.inject.Singleton
 
 @Singleton
 class GradeStatisticsRepository @Inject constructor(
-    private val local: GradeStatisticsLocal,
-    private val remote: GradeStatisticsRemote
+    private val gradePartialStatisticsDb: GradePartialStatisticsDao,
+    private val gradePointsStatisticsDb: GradePointsStatisticsDao,
+    private val gradeSemesterStatisticsDb: GradeSemesterStatisticsDao,
+    private val sdk: Sdk
 ) {
 
     fun getGradesPartialStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getGradePartialStatistics(semester) },
-        fetch = { remote.getGradePartialStatistics(student, semester) },
+        query = { gradePartialStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
+        fetch = {
+            sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+                .getGradesPartialStatistics(semester.semesterId)
+                .mapToEntities(semester)
+        },
         saveFetchResult = { old, new ->
-            local.deleteGradePartialStatistics(old uniqueSubtract new)
-            local.saveGradePartialStatistics(new uniqueSubtract old)
+            gradePartialStatisticsDb.deleteAll(old uniqueSubtract new)
+            gradePartialStatisticsDb.insertAll(new uniqueSubtract old)
         },
         mapResult = { items ->
             when (subjectName) {
@@ -52,11 +64,15 @@ class GradeStatisticsRepository @Inject constructor(
 
     fun getGradesSemesterStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getGradeSemesterStatistics(semester) },
-        fetch = { remote.getGradeSemesterStatistics(student, semester) },
+        query = { gradeSemesterStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
+        fetch = {
+            sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+                .getGradesSemesterStatistics(semester.semesterId)
+                .mapToEntities(semester)
+        },
         saveFetchResult = { old, new ->
-            local.deleteGradeSemesterStatistics(old uniqueSubtract new)
-            local.saveGradeSemesterStatistics(new uniqueSubtract old)
+            gradeSemesterStatisticsDb.deleteAll(old uniqueSubtract new)
+            gradeSemesterStatisticsDb.insertAll(new uniqueSubtract old)
         },
         mapResult = { items ->
             val itemsWithAverage = items.map { item ->
@@ -88,11 +104,15 @@ class GradeStatisticsRepository @Inject constructor(
 
     fun getGradesPointsStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getGradePointsStatistics(semester) },
-        fetch = { remote.getGradePointsStatistics(student, semester) },
+        query = { gradePointsStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
+        fetch = {
+            sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+                .getGradesPointsStatistics(semester.semesterId)
+                .mapToEntities(semester)
+        },
         saveFetchResult = { old, new ->
-            local.deleteGradePointsStatistics(old uniqueSubtract new)
-            local.saveGradePointsStatistics(new uniqueSubtract old)
+            gradePointsStatisticsDb.deleteAll(old uniqueSubtract new)
+            gradePointsStatisticsDb.insertAll(new uniqueSubtract old)
         },
         mapResult = { items ->
             when (subjectName) {
@@ -110,35 +130,5 @@ class GradeStatisticsRepository @Inject constructor(
             }
         }
         return result
-    }
-
-    private fun List<GradePartialStatistics>.mapPartialToStatisticItems() = filterNot { it.classAmounts.isEmpty() }.map {
-        GradeStatisticsItem(
-            type = ViewType.PARTIAL,
-            average = it.classAverage,
-            partial = it,
-            points = null,
-            semester = null
-        )
-    }
-
-    private fun List<GradeSemesterStatistics>.mapSemesterToStatisticItems() = filterNot { it.amounts.isEmpty() }.map {
-        GradeStatisticsItem(
-            type = ViewType.SEMESTER,
-            partial = null,
-            points = null,
-            average = "",
-            semester = it
-        )
-    }
-
-    private fun List<GradePointsStatistics>.mapPointsToStatisticsItems() = map {
-        GradeStatisticsItem(
-            type = ViewType.POINTS,
-            partial = null,
-            semester = null,
-            average = "",
-            points = it
-        )
     }
 }

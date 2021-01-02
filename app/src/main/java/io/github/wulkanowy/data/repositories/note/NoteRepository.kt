@@ -1,8 +1,12 @@
 package io.github.wulkanowy.data.repositories.note
 
+import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
@@ -12,17 +16,21 @@ import javax.inject.Singleton
 
 @Singleton
 class NoteRepository @Inject constructor(
-    private val local: NoteLocal,
-    private val remote: NoteRemote
+    private val noteDb: NoteDao,
+    private val sdk: Sdk
 ) {
 
     fun getNotes(student: Student, semester: Semester, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
-        query = { local.getNotes(student) },
-        fetch = { remote.getNotes(student, semester) },
+        query = { noteDb.loadAll(student.studentId) },
+        fetch = {
+            sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+                .getNotes(semester.semesterId)
+                .mapToEntities(semester)
+        },
         saveFetchResult = { old, new ->
-            local.deleteNotes(old uniqueSubtract new)
-            local.saveNotes((new uniqueSubtract old).onEach {
+            noteDb.deleteAll(old uniqueSubtract new)
+            noteDb.insertAll((new uniqueSubtract old).onEach {
                 if (it.date >= student.registrationDate.toLocalDate()) it.apply {
                     isRead = false
                     if (notify) isNotified = false
@@ -32,14 +40,14 @@ class NoteRepository @Inject constructor(
     )
 
     fun getNotNotifiedNotes(student: Student): Flow<List<Note>> {
-        return local.getNotes(student).map { it.filter { note -> !note.isNotified } }
+        return noteDb.loadAll(student.studentId).map { it.filter { note -> !note.isNotified } }
     }
 
     suspend fun updateNote(note: Note) {
-        local.updateNotes(listOf(note))
+        noteDb.updateAll(listOf(note))
     }
 
     suspend fun updateNotes(notes: List<Note>) {
-        return local.updateNotes(notes)
+        noteDb.updateAll(notes)
     }
 }
