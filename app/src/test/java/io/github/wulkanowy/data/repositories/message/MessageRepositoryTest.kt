@@ -3,6 +3,7 @@ package io.github.wulkanowy.data.repositories.message
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.repositories.MessageRepository
 import io.github.wulkanowy.getMessageEntity
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -10,7 +11,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.just
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking

@@ -3,13 +3,13 @@ package io.github.wulkanowy.data.repositories.semester
 import io.github.wulkanowy.TestDispatchersProvider
 import io.github.wulkanowy.createSemesterEntity
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.just
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals

@@ -3,7 +3,9 @@ package io.github.wulkanowy.data.repositories.attendance
 import io.github.wulkanowy.data.db.dao.AttendanceDao
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
+import io.github.wulkanowy.data.enums.SentExcuseStatus
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.repositories.AttendanceRepository
 import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.init

@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.AppDatabase
+import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.data.repositories.getSemester
 import io.github.wulkanowy.data.repositories.getStudent
 import io.github.wulkanowy.services.alarm.TimetableNotificationSchedulerHelper

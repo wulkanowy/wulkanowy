@@ -10,6 +10,7 @@ import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.sdk.Sdk
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
