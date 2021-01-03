@@ -3,6 +3,8 @@ package io.github.wulkanowy.data.repositories
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.getSemesterEntity
+import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.services.alarm.TimetableNotificationSchedulerHelper
 import io.github.wulkanowy.utils.toFirstResult
@@ -37,9 +39,9 @@ class TimetableRepositoryTest {
     @MockK
     private lateinit var timetableAdditionalDao: TimetableAdditionalDao
 
-    private val student = getStudent()
+    private val student = getStudentEntity()
 
-    private val semester = getSemester()
+    private val semester = getSemesterEntity()
 
     private lateinit var timetableRepository: TimetableRepository
 

@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories
 
 import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.toFirstResult
@@ -29,7 +30,7 @@ class CompletedLessonsRepositoryTest {
     @MockK
     private lateinit var completedLessonDb: CompletedLessonsDao
 
-    private val semester = getSemester()
+    private val semester = getSemesterEntity()
 
     private val student = getStudentEntity()
 

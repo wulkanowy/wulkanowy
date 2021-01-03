@@ -3,6 +3,7 @@ package io.github.wulkanowy.data.repositories
 import io.github.wulkanowy.data.db.dao.GradeDao
 import io.github.wulkanowy.data.db.dao.GradeSummaryDao
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.toFirstResult
@@ -35,7 +36,7 @@ class GradeRepositoryTest {
     @MockK
     private lateinit var gradeSummaryDb: GradeSummaryDao
 
-    private val semester = getSemester()
+    private val semester = getSemesterEntity()
 
     private val student = getStudentEntity()
 

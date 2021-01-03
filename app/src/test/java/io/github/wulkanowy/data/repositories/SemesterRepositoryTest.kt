@@ -1,18 +1,18 @@
 package io.github.wulkanowy.data.repositories
 
 import io.github.wulkanowy.TestDispatchersProvider
-import io.github.wulkanowy.createSemesterEntity
-import io.github.wulkanowy.createSemesterPojo
 import io.github.wulkanowy.data.db.dao.SemesterDao
-import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.getSemesterEntity
+import io.github.wulkanowy.getSemesterPojo
+import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.SpyK
 import io.mockk.just
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -23,29 +23,28 @@ import java.time.LocalDate.now
 
 class SemesterRepositoryTest {
 
-    @MockK
-    private lateinit var sdk: Sdk
+    @SpyK
+    private var sdk = Sdk()
 
     @MockK
     private lateinit var semesterDb: SemesterDao
 
-    @MockK
-    private lateinit var student: Student
+    private val student = getStudentEntity()
 
     private lateinit var semesterRepository: SemesterRepository
 
     @Before
     fun initTest() {
         MockKAnnotations.init(this)
+
         semesterRepository = SemesterRepository(semesterDb, sdk, TestDispatchersProvider())
-        every { student.loginMode } returns "SCRAPPER"
     }
 
     @Test
     fun getSemesters_noSemesters() {
         val semesters = listOf(
-            createSemesterPojo(1, 1, now().minusMonths(6), now().minusMonths(3)),
-            createSemesterPojo(1, 2, now().minusMonths(3), now())
+            getSemesterPojo(1, 1, now().minusMonths(6), now().minusMonths(3)),
+            getSemesterPojo(1, 2, now().minusMonths(3), now())
         )
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns emptyList()
@@ -61,15 +60,14 @@ class SemesterRepositoryTest {
 
     @Test
     fun getSemesters_invalidDiary_api() {
-        every { student.loginMode } returns "API"
         val badSemesters = listOf(
-            createSemesterPojo(0, 1, now().minusMonths(6), now().minusMonths(3)),
-            createSemesterPojo(0, 2, now().minusMonths(3), now())
+            getSemesterPojo(0, 1, now().minusMonths(6), now().minusMonths(3)),
+            getSemesterPojo(0, 2, now().minusMonths(3), now())
         )
 
         val goodSemesters = listOf(
-            createSemesterPojo(122, 1, now().minusMonths(6), now().minusMonths(3)),
-            createSemesterPojo(123, 2, now().minusMonths(3), now())
+            getSemesterPojo(122, 1, now().minusMonths(6), now().minusMonths(3)),
+            getSemesterPojo(123, 2, now().minusMonths(3), now())
         )
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns badSemesters.mapToEntities(student.studentId)
@@ -77,22 +75,21 @@ class SemesterRepositoryTest {
         coEvery { semesterDb.deleteAll(any()) } just Runs
         coEvery { semesterDb.insertSemesters(any()) } returns listOf()
 
-        val items = runBlocking { semesterRepository.getSemesters(student) }
+        val items = runBlocking { semesterRepository.getSemesters(student.copy(loginMode = Sdk.Mode.API.name)) }
         assertEquals(2, items.size)
         assertEquals(0, items[0].diaryId)
     }
 
     @Test
     fun getSemesters_invalidDiary_scrapper() {
-        every { student.loginMode } returns "SCRAPPER"
         val badSemesters = listOf(
-            createSemesterPojo(0, 1, now().minusMonths(6), now().minusMonths(3)),
-            createSemesterPojo(0, 2, now().minusMonths(3), now())
+            getSemesterPojo(0, 1, now().minusMonths(6), now().minusMonths(3)),
+            getSemesterPojo(0, 2, now().minusMonths(3), now())
         )
 
         val goodSemesters = listOf(
-            createSemesterPojo(1, 1, now().minusMonths(6), now().minusMonths(3)),
-            createSemesterPojo(1, 2, now().minusMonths(3), now())
+            getSemesterPojo(1, 1, now().minusMonths(6), now().minusMonths(3)),
+            getSemesterPojo(1, 2, now().minusMonths(3), now())
         )
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returnsMany listOf(
@@ -104,7 +101,7 @@ class SemesterRepositoryTest {
         coEvery { semesterDb.deleteAll(any()) } just Runs
         coEvery { semesterDb.insertSemesters(any()) } returns listOf()
 
-        val items = runBlocking { semesterRepository.getSemesters(student) }
+        val items = runBlocking { semesterRepository.getSemesters(student.copy(loginMode = Sdk.Mode.SCRAPPER.name)) }
         assertEquals(2, items.size)
         assertNotEquals(0, items[0].diaryId)
     }
@@ -112,8 +109,8 @@ class SemesterRepositoryTest {
     @Test
     fun getSemesters_noCurrent() {
         val semesters = listOf(
-            createSemesterEntity(1, 1, now().minusMonths(12), now().minusMonths(6)),
-            createSemesterEntity(1, 2, now().minusMonths(6), now().minusMonths(1))
+            getSemesterEntity(1, 1, now().minusMonths(12), now().minusMonths(6)),
+            getSemesterEntity(1, 2, now().minusMonths(6), now().minusMonths(1))
         )
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns semesters
@@ -125,8 +122,8 @@ class SemesterRepositoryTest {
     @Test
     fun getSemesters_oneCurrent() {
         val semesters = listOf(
-            createSemesterEntity(1, 1, now().minusMonths(6), now().minusMonths(3)),
-            createSemesterEntity(1, 2, now().minusMonths(3), now())
+            getSemesterEntity(1, 1, now().minusMonths(6), now().minusMonths(3)),
+            getSemesterEntity(1, 2, now().minusMonths(3), now())
         )
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns semesters
@@ -138,8 +135,8 @@ class SemesterRepositoryTest {
     @Test
     fun getSemesters_doubleCurrent() {
         val semesters = listOf(
-            createSemesterEntity(1, 1, now(), now()),
-            createSemesterEntity(1, 2, now(), now())
+            getSemesterEntity(1, 1, now(), now()),
+            getSemesterEntity(1, 2, now(), now())
         )
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns semesters
@@ -151,8 +148,8 @@ class SemesterRepositoryTest {
     @Test
     fun getSemesters_noSemesters_refreshOnNoCurrent() {
         val semesters = listOf(
-            createSemesterPojo(1, 1, now().minusMonths(6), now().minusMonths(3)),
-            createSemesterPojo(1, 2, now().minusMonths(3), now())
+            getSemesterPojo(1, 1, now().minusMonths(6), now().minusMonths(3)),
+            getSemesterPojo(1, 2, now().minusMonths(3), now())
         )
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns emptyList()
@@ -169,16 +166,16 @@ class SemesterRepositoryTest {
     @Test
     fun getSemesters_noCurrent_refreshOnNoCurrent() {
         val semestersWithNoCurrent = listOf(
-            createSemesterEntity(1, 1, now().minusMonths(12), now().minusMonths(6)),
-            createSemesterEntity(1, 2, now().minusMonths(6), now().minusMonths(1))
+            getSemesterEntity(1, 1, now().minusMonths(12), now().minusMonths(6)),
+            getSemesterEntity(1, 2, now().minusMonths(6), now().minusMonths(1))
         )
 
         val newSemesters = listOf(
-            createSemesterPojo(1, 1, now().minusMonths(12), now().minusMonths(6)),
-            createSemesterPojo(1, 2, now().minusMonths(6), now().minusMonths(1)),
+            getSemesterPojo(1, 1, now().minusMonths(12), now().minusMonths(6)),
+            getSemesterPojo(1, 2, now().minusMonths(6), now().minusMonths(1)),
 
-            createSemesterPojo(2, 1, now().minusMonths(1), now().plusMonths(5)),
-            createSemesterPojo(2, 2, now().plusMonths(5), now().plusMonths(11)),
+            getSemesterPojo(2, 1, now().minusMonths(1), now().plusMonths(5)),
+            getSemesterPojo(2, 2, now().plusMonths(5), now().plusMonths(11)),
         )
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns semestersWithNoCurrent
@@ -193,8 +190,8 @@ class SemesterRepositoryTest {
     @Test
     fun getSemesters_doubleCurrent_refreshOnNoCurrent() {
         val semesters = listOf(
-            createSemesterEntity(1, 1, now(), now()),
-            createSemesterEntity(1, 2, now(), now())
+            getSemesterEntity(1, 1, now(), now()),
+            getSemesterEntity(1, 2, now(), now())
         )
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns semesters
@@ -206,8 +203,8 @@ class SemesterRepositoryTest {
     @Test(expected = IllegalArgumentException::class)
     fun getCurrentSemester_doubleCurrent() {
         val semesters = listOf(
-            createSemesterEntity(1, 1, now(), now()),
-            createSemesterEntity(1, 1, now(), now())
+            getSemesterEntity(1, 1, now(), now()),
+            getSemesterEntity(1, 1, now(), now())
         )
 
         coEvery { semesterDb.loadAll(student.studentId, student.classId) } returns semesters

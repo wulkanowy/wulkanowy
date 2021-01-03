@@ -16,8 +16,8 @@ import io.mockk.verify
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalDateTime.now
 import java.io.IOException
+import java.time.LocalDateTime.now
 
 class LoginFormPresenterTest {
 
