@@ -90,6 +90,10 @@ fun <T> flowWithResourceIn(block: suspend () -> Flow<Resource<T>>) = flow {
         }
 }
 
+suspend fun <I, O> Flow<Resource<I>>.mapData(block: suspend (I) -> O) = map { res ->
+    Resource(res.status, res.data?.let { block(it) }, res.error)
+}
+
 fun <T> Flow<Resource<T>>.afterLoading(callback: () -> Unit) = onEach {
     if (it.status != Status.LOADING) callback()
 }

@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.settings
 
 import android.content.SharedPreferences
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
@@ -18,9 +19,7 @@ import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SettingsFragment : PreferenceFragmentCompat(),
-    SharedPreferences.OnSharedPreferenceChangeListener,
-    MainView.TitledView, SettingsView {
+class SettingsFragment : PreferenceFragmentCompat(), MainView.TitledView, SettingsView {
 
     @Inject
     lateinit var presenter: SettingsPresenter
@@ -30,6 +29,9 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     @Inject
     lateinit var lingver: Lingver
+
+    @Inject
+    lateinit var dataStore: SettingsDataStore
 
     companion object {
         fun newInstance() = SettingsFragment()
@@ -63,12 +65,10 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        dataStore.onChangeCallback = { presenter.onSharedPreferenceChanged(it) }
+        preferenceManager.preferenceDataStore = dataStore
         setPreferencesFromResource(R.xml.scheme_preferences, rootKey)
-        findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible = appInfo.isDebug
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        presenter.onSharedPreferenceChanged(key)
+        findPreference<Preference>(getString(R.string.pref_key_global_notification_debug))?.isVisible = appInfo.isDebug
     }
 
     override fun recreateView() {
@@ -132,13 +132,13 @@ class SettingsFragment : PreferenceFragmentCompat(),
             .show()
     }
 
-    override fun onResume() {
-        super.onResume()
-        preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+//    }
 }

@@ -32,14 +32,10 @@ class GradeAverageProvider @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) {
 
-    private val plusModifier get() = preferencesRepository.gradePlusModifier
-
-    private val minusModifier get() = preferencesRepository.gradeMinusModifier
-
     fun getGradesDetailsWithAverage(student: Student, semesterId: Int, forceRefresh: Boolean) = flowWithResourceIn {
         val semesters = semesterRepository.getSemesters(student)
 
-        when (preferencesRepository.gradeAverageMode) {
+        when (preferencesRepository.getGradeAverageMode(student.studentId)) {
             ONE_SEMESTER -> getSemesterDetailsWithAverage(student, semesters.single { it.semesterId == semesterId }, forceRefresh)
             BOTH_SEMESTERS -> calculateBothSemestersAverage(student, semesters, semesterId, forceRefresh)
             ALL_YEAR -> calculateAllYearAverage(student, semesters, semesterId, forceRefresh)
@@ -57,7 +53,7 @@ class GradeAverageProvider @Inject constructor(
                 getSemesterDetailsWithAverage(student, firstSemester, forceRefresh).map { secondDetails ->
                     secondDetails.copy(data = selectedDetails.data?.map { selected ->
                         val second = secondDetails.data.orEmpty().singleOrNull { it.subject == selected.subject }
-                        selected.copy(average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
+                        selected.copy(average = if (!isAnyAverage || preferencesRepository.getGradeAverageForceCalc(student.studentId)) {
                             val selectedGrades = selected.grades.updateModifiers(student).calcAverage()
                             (selectedGrades + (second?.grades?.updateModifiers(student)?.calcAverage() ?: selectedGrades)) / 2
                         } else (selected.average + (second?.average ?: selected.average)) / 2)
@@ -78,7 +74,7 @@ class GradeAverageProvider @Inject constructor(
                 getSemesterDetailsWithAverage(student, firstSemester, forceRefresh).map { secondDetails ->
                     secondDetails.copy(data = selectedDetails.data?.map { selected ->
                         val second = secondDetails.data.orEmpty().singleOrNull { it.subject == selected.subject }
-                        selected.copy(average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
+                        selected.copy(average = if (!isAnyAverage || preferencesRepository.getGradeAverageForceCalc(student.studentId)) {
                             (selected.grades.updateModifiers(student) + second?.grades?.updateModifiers(student).orEmpty()).calcAverage()
                         } else selected.average)
                     })
@@ -97,7 +93,7 @@ class GradeAverageProvider @Inject constructor(
                 val grades = allGrades[summary.subject].orEmpty()
                 GradeDetailsWithAverage(
                     subject = summary.subject,
-                    average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
+                    average = if (!isAnyAverage || preferencesRepository.getGradeAverageForceCalc(student.studentId)) {
                         grades.updateModifiers(student).calcAverage()
                     } else summary.average,
                     points = summary.pointsSum,
@@ -108,7 +104,7 @@ class GradeAverageProvider @Inject constructor(
         }
     }
 
-    private fun List<GradeSummary>.emulateEmptySummaries(student: Student, semester: Semester, grades: List<Pair<String, List<Grade>>>, calcAverage: Boolean): List<GradeSummary> {
+    private suspend fun List<GradeSummary>.emulateEmptySummaries(student: Student, semester: Semester, grades: List<Pair<String, List<Grade>>>, calcAverage: Boolean): List<GradeSummary> {
         if (isNotEmpty() && size > grades.size) return this
 
         return grades.mapIndexed { i, (subject, details) ->
@@ -128,9 +124,12 @@ class GradeAverageProvider @Inject constructor(
         }
     }
 
-    private fun List<Grade>.updateModifiers(student: Student): List<Grade> {
-        return if (student.loginMode == Sdk.Mode.SCRAPPER.name) {
-            map { it.changeModifier(plusModifier, minusModifier) }
+    private suspend fun List<Grade>.updateModifiers(student: Student): List<Grade> {
+        return if (student.loginMode == Sdk.Mode.SCRAPPER.name) map {
+            it.changeModifier(
+                plusModifier = preferencesRepository.getGradePlusModifier(student.studentId),
+                minusModifier = preferencesRepository.getGradeMinusModifier(student.studentId)
+            )
         } else this
     }
 }

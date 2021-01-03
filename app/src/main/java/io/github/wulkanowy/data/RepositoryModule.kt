@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.AssetManager
 import android.content.res.Resources
+import androidx.datastore.preferences.createDataStore
 import androidx.preference.PreferenceManager
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
@@ -66,6 +67,10 @@ internal class RepositoryModule {
     @Singleton
     @Provides
     fun provideSharedPref(@ApplicationContext context: Context): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+    @Singleton
+    @Provides
+    fun provideDataStore(@ApplicationContext context: Context) = context.createDataStore("settings")
 
     @Singleton
     @Provides
@@ -166,4 +171,8 @@ internal class RepositoryModule {
     @Singleton
     @Provides
     fun provideTimetableAdditionalDao(database: AppDatabase) = database.timetableAdditionalDao
+
+    @Singleton
+    @Provides
+    fun providePreferencesDao(database: AppDatabase) = database.preferenceDao
 }

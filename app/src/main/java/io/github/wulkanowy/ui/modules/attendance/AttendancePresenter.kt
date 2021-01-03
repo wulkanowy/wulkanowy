@@ -15,6 +15,7 @@ import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
@@ -191,17 +192,17 @@ class AttendancePresenter @Inject constructor(
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            attendanceRepository.getAttendance(student, semester, date, date, forceRefresh)
+            attendanceRepository.getAttendance(student, semester, date, date, forceRefresh).mapData { items ->
+                if (prefRepository.getShowPresent(student.studentId)) items
+                else items.filter { item -> !item.presence }
+            }
         }.onEach {
             when (it.status) {
                 Status.LOADING -> view?.showExcuseButton(false)
                 Status.SUCCESS -> {
                     Timber.i("Loading attendance result: Success")
                     view?.apply {
-                        updateData(it.data!!.let { items ->
-                            if (prefRepository.isShowPresent) items
-                            else items.filter { item -> !item.presence }
-                        }.sortedBy { item -> item.number })
+                        updateData(it.data!!.sortedBy { item -> item.number })
                         showEmpty(it.data.isEmpty())
                         showErrorView(false)
                         showContent(it.data.isNotEmpty())

@@ -14,6 +14,7 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
@@ -138,7 +139,9 @@ class TimetablePresenter @Inject constructor(
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            timetableRepository.getTimetable(student, semester, date, date, forceRefresh)
+            timetableRepository.getTimetable(student, semester, date, date, forceRefresh).mapData {
+                it to prefRepository.isShowWholeClassPlan(student.studentId)
+            }
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading timetable data started")
@@ -146,21 +149,21 @@ class TimetablePresenter @Inject constructor(
                     Timber.i("Loading timetable result: Success")
                     view?.apply {
                         updateData(
-                            showWholeClassPlanType = prefRepository.showWholeClassPlan,
+                            showWholeClassPlanType = it.data!!.second,
                             showGroupsInPlanType = prefRepository.showGroupsInPlan,
                             showTimetableTimers = prefRepository.showTimetableTimers,
-                            data = it.data!!.first
-                                .filter { item -> if (prefRepository.showWholeClassPlan == "no") item.isStudentPlan else true }
+                            data = it.data.first.first
+                                .filter { item -> if (it.data.second == "no") item.isStudentPlan else true }
                                 .sortedWith(compareBy({ item -> item.number }, { item -> !item.isStudentPlan }))
                         )
-                        showEmpty(it.data.first.isEmpty())
+                        showEmpty(it.data.first.first.isEmpty())
                         showErrorView(false)
-                        showContent(it.data.first.isNotEmpty())
+                        showContent(it.data.first.first.isNotEmpty())
                     }
                     analytics.logEvent(
                         "load_data",
                         "type" to "timetable",
-                        "items" to it.data!!.first.size
+                        "items" to it.data!!.first.first.size
                     )
                 }
                 Status.ERROR -> {

@@ -13,6 +13,7 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.SharedPrefProvider
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -37,6 +38,8 @@ class TimetableWidgetFactory(
     private val context: Context,
     private val intent: Intent?
 ) : RemoteViewsService.RemoteViewsFactory {
+
+    private lateinit var student: Student
 
     private var lessons = emptyList<Timetable>()
 
@@ -88,7 +91,7 @@ class TimetableWidgetFactory(
 
     private fun getItemLayout(lesson: Timetable): Int {
         return when {
-            prefRepository.showWholeClassPlan == "small" && !lesson.isStudentPlan -> {
+            runBlocking { prefRepository.isShowWholeClassPlan(student.studentId) } == "small" && !lesson.isStudentPlan -> {
                 if (savedCurrentTheme == 0L) R.layout.item_widget_timetable_small
                 else R.layout.item_widget_timetable_small_dark
             }
@@ -109,7 +112,7 @@ class TimetableWidgetFactory(
             timetableRepository.getTimetable(student, semester, date, date, false)
                 .toFirstResult().data?.first.orEmpty()
                 .sortedWith(compareBy({ it.number }, { !it.isStudentPlan }))
-                .filter { if (prefRepository.showWholeClassPlan == "no") it.isStudentPlan else true }
+                .filter { if (prefRepository.isShowWholeClassPlan(student.studentId) == "no") it.isStudentPlan else true }
         }
     } catch (e: Exception) {
         Timber.e(e, "An error has occurred in timetable widget factory")
