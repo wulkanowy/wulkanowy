@@ -17,8 +17,8 @@ import javax.inject.Singleton
 
 @Singleton
 class SemesterRepository @Inject constructor(
-    private val sdk: Sdk,
     private val semesterDb: SemesterDao,
+    private val sdk: Sdk,
     private val dispatchers: DispatchersProvider
 ) {
 

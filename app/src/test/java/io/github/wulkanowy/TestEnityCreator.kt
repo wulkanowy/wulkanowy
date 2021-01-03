@@ -24,6 +24,20 @@ fun createSemesterEntity(diaryId: Int, semesterId: Int, start: LocalDate, end: L
     )
 }
 
+fun createSemesterPojo(diaryId: Int, semesterId: Int, start: LocalDate, end: LocalDate, semesterName: Int = 1): io.github.wulkanowy.sdk.pojo.Semester {
+    return io.github.wulkanowy.sdk.pojo.Semester(
+        diaryId = diaryId,
+        semesterId = semesterId,
+        diaryName = "$semesterId",
+        schoolYear = 1970,
+        classId = 0,
+        semesterNumber = semesterName,
+        unitId = 1,
+        start = start,
+        end = end,
+    )
+}
+
 fun getStudentEntity(mode: Sdk.Mode = Sdk.Mode.API): Student {
     return Student(
         scrapperBaseUrl = "http://fakelog.cf",
@@ -42,7 +56,7 @@ fun getStudentEntity(mode: Sdk.Mode = Sdk.Mode.API): Student {
         schoolName = "",
         schoolShortName = "test",
         schoolSymbol = "",
-        studentId = 0,
+        studentId = 1,
         studentName = "",
         symbol = "",
         userLoginId = 0,

@@ -33,10 +33,11 @@ class GradeRepository @Inject constructor(
             }
         },
         fetch = {
-            sdk.init(student)
+            val (details, summary) = sdk.init(student)
                 .switchDiary(semester.diaryId, semester.schoolYear)
                 .getGrades(semester.semesterId)
-                .let { (details, summary) -> details.mapToEntities(semester) to summary.mapToEntities(semester) }
+
+            details.mapToEntities(semester) to summary.mapToEntities(semester)
         },
         saveFetchResult = { (oldDetails, oldSummary), (newDetails, newSummary) ->
             refreshGradeDetails(student, oldDetails, newDetails, notify)

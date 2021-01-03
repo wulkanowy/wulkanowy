@@ -1,16 +1,19 @@
-package io.github.wulkanowy.data.repositories.message
-
 import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
+import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.MessageRepository
 import io.github.wulkanowy.getMessageEntity
+import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.sdk.pojo.MessageDetails
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
@@ -22,30 +25,33 @@ import java.net.UnknownHostException
 class MessageRepositoryTest {
 
     @MockK
-    lateinit var local: MessageLocal
+    private lateinit var sdk: Sdk
 
     @MockK
-    lateinit var remote: MessageRemote
+    private lateinit var messageDb: MessagesDao
+
+    @MockK
+    private lateinit var messageAttachmentDao: MessageAttachmentDao
 
     @MockK
     lateinit var student: Student
 
-    private lateinit var repo: MessageRepository
+    private lateinit var messageRepository: MessageRepository
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
         every { student.userName } returns "Jan"
-        repo = MessageRepository(local, remote)
+        messageRepository = MessageRepository(messageDb, messageAttachmentDao, sdk)
     }
 
     @Test
     fun `throw error when message is not in the db`() {
         val testMessage = getMessageEntity(1, "", false)
-        coEvery { local.getMessageWithAttachment(student, testMessage) } throws NullPointerException("No message in database")
+        coEvery { messageDb.loadMessageWithAttachment(student.studentId, testMessage.messageId) } throws NullPointerException("No message in database")
 
-        val message = runCatching { runBlocking { repo.getMessage(student, testMessage).toList()[1] } }
+        val message = runCatching { runBlocking { messageRepository.getMessage(student, testMessage).toList()[1] } }
         assertEquals(NullPointerException::class.java, message.exceptionOrNull()?.javaClass)
     }
 
@@ -54,9 +60,9 @@ class MessageRepositoryTest {
         val testMessage = getMessageEntity(123, "Test", false)
         val messageWithAttachment = MessageWithAttachment(testMessage, emptyList())
 
-        coEvery { local.getMessageWithAttachment(student, testMessage) } returns flowOf(messageWithAttachment)
+        coEvery { messageDb.loadMessageWithAttachment(student.studentId, testMessage.messageId) } returns flowOf(messageWithAttachment)
 
-        val message = runBlocking { repo.getMessage(student, testMessage).toList() }
+        val message = runBlocking { messageRepository.getMessage(student, testMessage).toList() }
 
         assertEquals(Status.SUCCESS, message[1].status)
         assertEquals("Test", message[1].data!!.message.content)
@@ -70,16 +76,16 @@ class MessageRepositoryTest {
         val mWa = MessageWithAttachment(testMessage, emptyList())
         val mWaWithContent = MessageWithAttachment(testMessageWithContent, emptyList())
 
-        coEvery { local.getMessageWithAttachment(student, testMessage) } returnsMany listOf(flowOf(mWa), flowOf(mWaWithContent))
-        coEvery { remote.getMessagesContentDetails(student, any(), any()) } returns ("Test" to emptyList())
-        coEvery { local.updateMessages(any()) } just Runs
-        coEvery { local.saveMessageAttachments(any()) } just Runs
+        coEvery { messageDb.loadMessageWithAttachment(student.studentId, testMessage.messageId) } returnsMany listOf(flowOf(mWa), flowOf(mWaWithContent))
+        coEvery { sdk.getMessageDetails(testMessage.messageId, any(), any()) } returns MessageDetails("Test", emptyList())
+        coEvery { messageDb.updateAll(any()) } just Runs
+        coEvery { messageAttachmentDao.insertAttachments(any()) } returns listOf(1)
 
-        val message = runBlocking { repo.getMessage(student, testMessage).toList() }
+        val message = runBlocking { messageRepository.getMessage(student, testMessage).toList() }
 
         assertEquals(Status.SUCCESS, message[2].status)
         assertEquals("Test", message[2].data!!.message.content)
-        coVerify { local.updateMessages(listOf(testMessageWithContent)) }
+        coVerify { messageDb.updateAll(listOf(testMessageWithContent)) }
     }
 
     @Test
@@ -87,9 +93,9 @@ class MessageRepositoryTest {
         val testMessage = getMessageEntity(123, "", false)
         val messageWithAttachment = MessageWithAttachment(testMessage, emptyList())
 
-        coEvery { local.getMessageWithAttachment(student, testMessage) } throws UnknownHostException()
+        coEvery { messageDb.loadMessageWithAttachment(student.studentId, testMessage.messageId) } throws UnknownHostException()
 
-        val message = runCatching { runBlocking { repo.getMessage(student, testMessage).toList()[1] } }
+        val message = runCatching { runBlocking { messageRepository.getMessage(student, testMessage).toList()[1] } }
         assertEquals(UnknownHostException::class.java, message.exceptionOrNull()?.javaClass)
     }
 
@@ -98,9 +104,9 @@ class MessageRepositoryTest {
         val testMessage = getMessageEntity(123, "", true)
         val messageWithAttachment = MessageWithAttachment(testMessage, emptyList())
 
-        coEvery { local.getMessageWithAttachment(student, testMessage) } throws UnknownHostException()
+        coEvery { messageDb.loadMessageWithAttachment(student.studentId, testMessage.messageId) } throws UnknownHostException()
 
-        val message = runCatching { runBlocking { repo.getMessage(student, testMessage).toList()[1] } }
+        val message = runCatching { runBlocking { messageRepository.getMessage(student, testMessage).toList()[1] } }
         assertEquals(UnknownHostException::class.java, message.exceptionOrNull()?.javaClass)
     }
 }

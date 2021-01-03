@@ -1,4 +1,4 @@
-package io.github.wulkanowy.data.repositories.grade
+package io.github.wulkanowy.data.repositories
 
 import java.time.LocalDate
 import io.github.wulkanowy.sdk.pojo.Grade as GradeRemote

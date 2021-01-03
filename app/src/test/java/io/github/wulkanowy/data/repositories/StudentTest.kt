@@ -1,30 +1,43 @@
-package io.github.wulkanowy.data.repositories.student
+package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.TestDispatchersProvider
+import io.github.wulkanowy.data.db.dao.SemesterDao
+import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Student
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class StudentRemoteTest {
+class StudentTest {
 
     @MockK
     private lateinit var mockSdk: Sdk
 
+    @MockK
+    private lateinit var studentDb: StudentDao
+
+    @MockK
+    private lateinit var semesterDb: SemesterDao
+
+    private lateinit var studentRepository: StudentRepository
+
     @Before
     fun initApi() {
         MockKAnnotations.init(this)
+        studentRepository = StudentRepository(mockk(), TestDispatchersProvider(), studentDb, semesterDb, mockSdk)
     }
 
     @Test
     fun testRemoteAll() {
         coEvery { mockSdk.getStudentsFromScrapper(any(), any(), any(), any()) } returns listOf(getStudent("test"))
 
-        val students = runBlocking { StudentRemote(mockSdk).getStudentsScrapper("", "", "http://fakelog.cf", "") }
+        val students = runBlocking { studentRepository.getStudentsScrapper("", "", "http://fakelog.cf", "") }
         assertEquals(1, students.size)
         assertEquals("test Kowalski", students.first().student.studentName)
     }
