@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.AttendanceDao
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Semester
@@ -21,11 +22,14 @@ import javax.inject.Singleton
 @Singleton
 class AttendanceRepository @Inject constructor(
     private val attendanceDb: AttendanceDao,
-    private val sdk: Sdk
+    private val sdk: Sdk,
+    private val sharedPref: SharedPrefProvider,
 ) {
 
+    private fun getRefreshKey(semester: Semester, start: LocalDate, end: LocalDate) = "attendance_${semester.studentId}_${semester.semesterId}_${start.monday}_${end.sunday}"
+
     fun getAttendance(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh },
+        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(semester, start, end)) },
         query = { attendanceDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -35,6 +39,8 @@ class AttendanceRepository @Inject constructor(
         saveFetchResult = { old, new ->
             attendanceDb.deleteAll(old uniqueSubtract new)
             attendanceDb.insertAll(new uniqueSubtract old)
+
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey(semester, start, end))
         },
         filterResult = { it.filter { item -> item.date in start..end } }
     )
