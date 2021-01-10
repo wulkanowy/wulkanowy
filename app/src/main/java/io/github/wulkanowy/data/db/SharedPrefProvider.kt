@@ -1,7 +1,10 @@
 package io.github.wulkanowy.data.db
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
+import io.github.wulkanowy.R
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.github.wulkanowy.utils.toTimestamp
 import timber.log.Timber
@@ -10,7 +13,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SharedPrefProvider @Inject constructor(private val sharedPref: SharedPreferences) {
+class SharedPrefProvider @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val sharedPref: SharedPreferences
+) {
 
     companion object {
         const val APP_VERSION_CODE_KEY = "app_version_code"
@@ -34,10 +40,14 @@ class SharedPrefProvider @Inject constructor(private val sharedPref: SharedPrefe
 
     fun isShouldBeRefreshed(key: String): Boolean {
         val timestamp = getLong(key, 0).toLocalDateTime()
+        val servicesInterval = getString(
+            context.getString(R.string.pref_key_services_interval),
+            context.getString(R.string.pref_default_services_interval)
+        ).toLong()
 
-        val shouldBeRefreshed = timestamp < LocalDateTime.now().minusSeconds(60)
+        val shouldBeRefreshed = timestamp < LocalDateTime.now().minusMinutes(servicesInterval)
 
-        Timber.d("Check if $key need to be refreshed: $shouldBeRefreshed (last refresh: $timestamp)")
+        Timber.d("Check if $key need to be refreshed: $shouldBeRefreshed (last refresh: $timestamp, interval: $servicesInterval min)")
 
         return shouldBeRefreshed
     }
