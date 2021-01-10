@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.GradePartialStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradeSemesterStatisticsDao
@@ -12,6 +13,7 @@ import io.github.wulkanowy.data.mappers.mapPointsToStatisticsItems
 import io.github.wulkanowy.data.mappers.mapSemesterToStatisticItems
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
@@ -24,11 +26,12 @@ class GradeStatisticsRepository @Inject constructor(
     private val gradePartialStatisticsDb: GradePartialStatisticsDao,
     private val gradePointsStatisticsDb: GradePointsStatisticsDao,
     private val gradeSemesterStatisticsDb: GradeSemesterStatisticsDao,
-    private val sdk: Sdk
+    private val sdk: Sdk,
+    private val sharedPref: SharedPrefProvider,
 ) {
 
     fun getGradesPartialStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh },
+        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("grade_stats_partial", semester)) },
         query = { gradePartialStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -38,6 +41,7 @@ class GradeStatisticsRepository @Inject constructor(
         saveFetchResult = { old, new ->
             gradePartialStatisticsDb.deleteAll(old uniqueSubtract new)
             gradePartialStatisticsDb.insertAll(new uniqueSubtract old)
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey("grade_stats_partial", semester))
         },
         mapResult = { items ->
             when (subjectName) {
@@ -63,7 +67,7 @@ class GradeStatisticsRepository @Inject constructor(
     )
 
     fun getGradesSemesterStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh },
+        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("grade_stats_semester", semester)) },
         query = { gradeSemesterStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -73,6 +77,7 @@ class GradeStatisticsRepository @Inject constructor(
         saveFetchResult = { old, new ->
             gradeSemesterStatisticsDb.deleteAll(old uniqueSubtract new)
             gradeSemesterStatisticsDb.insertAll(new uniqueSubtract old)
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey("grade_stats_semester", semester))
         },
         mapResult = { items ->
             val itemsWithAverage = items.map { item ->
@@ -103,7 +108,7 @@ class GradeStatisticsRepository @Inject constructor(
     )
 
     fun getGradesPointsStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh },
+        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("grade_stats_points", semester)) },
         query = { gradePointsStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -113,6 +118,7 @@ class GradeStatisticsRepository @Inject constructor(
         saveFetchResult = { old, new ->
             gradePointsStatisticsDb.deleteAll(old uniqueSubtract new)
             gradePointsStatisticsDb.insertAll(new uniqueSubtract old)
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey("grade_stats_points", semester))
         },
         mapResult = { items ->
             when (subjectName) {
