@@ -13,6 +13,10 @@ fun getRefreshKey(name: String, semester: Semester): String {
     return "${name}_${semester.studentId}_${semester.semesterId}"
 }
 
+fun getRefreshKey(name: String, student: Student): String {
+    return "${name}_${student.userLoginId}"
+}
+
 fun getRefreshKey(name: String, student: Student, folder: MessageFolder): String {
     return "${name}_${student.id}_${folder.id}"
 }
