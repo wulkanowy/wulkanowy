@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.GradeDao
 import io.github.wulkanowy.data.db.dao.GradeSummaryDao
 import io.github.wulkanowy.data.db.entities.Grade
@@ -8,6 +9,7 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
@@ -22,11 +24,12 @@ import javax.inject.Singleton
 class GradeRepository @Inject constructor(
     private val gradeDb: GradeDao,
     private val gradeSummaryDb: GradeSummaryDao,
-    private val sdk: Sdk
+    private val sdk: Sdk,
+    private val sharedPref: SharedPrefProvider,
 ) {
 
     fun getGrades(student: Student, semester: Semester, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
-        shouldFetch = { (details, summaries) -> details.isEmpty() || summaries.isEmpty() || forceRefresh },
+        shouldFetch = { (details, summaries) -> details.isEmpty() || summaries.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("grade", semester)) },
         query = {
             gradeDb.loadAll(semester.semesterId, semester.studentId).combine(gradeSummaryDb.loadAll(semester.semesterId, semester.studentId)) { details, summaries ->
                 details to summaries
@@ -42,6 +45,8 @@ class GradeRepository @Inject constructor(
         saveFetchResult = { (oldDetails, oldSummary), (newDetails, newSummary) ->
             refreshGradeDetails(student, oldDetails, newDetails, notify)
             refreshGradeSummaries(oldSummary, newSummary, notify)
+
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey("grade", semester))
         }
     )
 
