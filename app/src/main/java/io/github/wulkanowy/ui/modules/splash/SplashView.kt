@@ -8,5 +8,5 @@ interface SplashView : BaseView {
 
     fun openMainView()
 
-    fun openExternalUrl(url: String)
+    fun openExternalUrlAndFinish(url: String)
 }

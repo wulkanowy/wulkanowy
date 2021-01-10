@@ -18,7 +18,7 @@ class SplashPresenter @Inject constructor(
         super.onAttachView(view)
 
         if (!externalUrl.isNullOrBlank()) {
-            view.openExternalUrl(externalUrl)
+            return view.openExternalUrlAndFinish(externalUrl)
         }
 
         flowWithResource { studentRepository.isCurrentStudentSet() }.onEach {

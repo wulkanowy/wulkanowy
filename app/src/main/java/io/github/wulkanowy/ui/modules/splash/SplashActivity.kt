@@ -32,8 +32,9 @@ class SplashActivity : BaseActivity<SplashPresenter, ViewBinding>(), SplashView 
         finish()
     }
 
-    override fun openExternalUrl(url: String) {
-        baseContext.openInternetBrowser(url, ::showMessage)
+    override fun openExternalUrlAndFinish(url: String) {
+        openInternetBrowser(url, ::showMessage)
+        finish()
     }
 
     override fun showError(text: String, error: Throwable) {
