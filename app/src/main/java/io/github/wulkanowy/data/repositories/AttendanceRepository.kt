@@ -27,8 +27,10 @@ class AttendanceRepository @Inject constructor(
     private val sharedPref: SharedPrefProvider,
 ) {
 
+    private val cacheKey = "attendance"
+
     fun getAttendance(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("attendance", semester, start, end)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(cacheKey, semester, start, end)) },
         query = { attendanceDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -39,7 +41,7 @@ class AttendanceRepository @Inject constructor(
             attendanceDb.deleteAll(old uniqueSubtract new)
             attendanceDb.insertAll(new uniqueSubtract old)
 
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey("attendance", semester, start, end))
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         },
         filterResult = { it.filter { item -> item.date in start..end } }
     )

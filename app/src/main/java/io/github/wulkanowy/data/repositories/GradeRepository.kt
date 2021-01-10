@@ -28,8 +28,10 @@ class GradeRepository @Inject constructor(
     private val sharedPref: SharedPrefProvider,
 ) {
 
+    private val cacheKey = "grade"
+
     fun getGrades(student: Student, semester: Semester, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
-        shouldFetch = { (details, summaries) -> details.isEmpty() || summaries.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("grade", semester)) },
+        shouldFetch = { (details, summaries) -> details.isEmpty() || summaries.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(cacheKey, semester)) },
         query = {
             gradeDb.loadAll(semester.semesterId, semester.studentId).combine(gradeSummaryDb.loadAll(semester.semesterId, semester.studentId)) { details, summaries ->
                 details to summaries
@@ -46,7 +48,7 @@ class GradeRepository @Inject constructor(
             refreshGradeDetails(student, oldDetails, newDetails, notify)
             refreshGradeSummaries(oldSummary, newSummary, notify)
 
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey("grade", semester))
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )
 

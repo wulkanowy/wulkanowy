@@ -30,8 +30,12 @@ class GradeStatisticsRepository @Inject constructor(
     private val sharedPref: SharedPrefProvider,
 ) {
 
+    private val partialCacheKey = "grade_stats_partial"
+    private val semesterCacheKey = "grade_stats_semester"
+    private val pointsCacheKey = "grade_stats_points"
+
     fun getGradesPartialStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("grade_stats_partial", semester)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(partialCacheKey, semester)) },
         query = { gradePartialStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -41,7 +45,7 @@ class GradeStatisticsRepository @Inject constructor(
         saveFetchResult = { old, new ->
             gradePartialStatisticsDb.deleteAll(old uniqueSubtract new)
             gradePartialStatisticsDb.insertAll(new uniqueSubtract old)
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey("grade_stats_partial", semester))
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey(partialCacheKey, semester))
         },
         mapResult = { items ->
             when (subjectName) {
@@ -67,7 +71,7 @@ class GradeStatisticsRepository @Inject constructor(
     )
 
     fun getGradesSemesterStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("grade_stats_semester", semester)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(semesterCacheKey, semester)) },
         query = { gradeSemesterStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -77,7 +81,7 @@ class GradeStatisticsRepository @Inject constructor(
         saveFetchResult = { old, new ->
             gradeSemesterStatisticsDb.deleteAll(old uniqueSubtract new)
             gradeSemesterStatisticsDb.insertAll(new uniqueSubtract old)
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey("grade_stats_semester", semester))
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey(semesterCacheKey, semester))
         },
         mapResult = { items ->
             val itemsWithAverage = items.map { item ->
@@ -108,7 +112,7 @@ class GradeStatisticsRepository @Inject constructor(
     )
 
     fun getGradesPointsStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("grade_stats_points", semester)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(pointsCacheKey, semester)) },
         query = { gradePointsStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -118,7 +122,7 @@ class GradeStatisticsRepository @Inject constructor(
         saveFetchResult = { old, new ->
             gradePointsStatisticsDb.deleteAll(old uniqueSubtract new)
             gradePointsStatisticsDb.insertAll(new uniqueSubtract old)
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey("grade_stats_points", semester))
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey(pointsCacheKey, semester))
         },
         mapResult = { items ->
             when (subjectName) {

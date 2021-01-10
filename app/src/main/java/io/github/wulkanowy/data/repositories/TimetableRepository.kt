@@ -31,8 +31,10 @@ class TimetableRepository @Inject constructor(
     private val sharedPref: SharedPrefProvider,
 ) {
 
+    private val cacheKey = "timetable"
+
     fun getTimetable(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean, refreshAdditional: Boolean = false) = networkBoundResource(
-        shouldFetch = { (timetable, additional) -> timetable.isEmpty() || (additional.isEmpty() && refreshAdditional) || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("timetable", semester, start, end)) },
+        shouldFetch = { (timetable, additional) -> timetable.isEmpty() || (additional.isEmpty() && refreshAdditional) || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(cacheKey, semester, start, end)) },
         query = {
             timetableDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday)
                 .map { schedulerHelper.scheduleNotifications(it, student); it }
@@ -50,7 +52,7 @@ class TimetableRepository @Inject constructor(
             refreshTimetable(student, oldTimetable, newTimetable)
             refreshAdditional(oldAdditional, newAdditional)
 
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey("timetable", semester, start, end))
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         },
         filterResult = { (timetable, additional) ->
             timetable.filter { item ->

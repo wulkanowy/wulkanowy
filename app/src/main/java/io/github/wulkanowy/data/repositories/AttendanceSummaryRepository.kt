@@ -20,10 +20,10 @@ class AttendanceSummaryRepository @Inject constructor(
     private val sharedPref: SharedPrefProvider,
 ) {
 
-    private val key = "attendance_summary"
+    private val cacheKey = "attendance_summary"
 
     fun getAttendanceSummary(student: Student, semester: Semester, subjectId: Int, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(key, semester)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(cacheKey, semester)) },
         query = { attendanceDb.loadAll(semester.diaryId, semester.studentId, subjectId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -33,7 +33,7 @@ class AttendanceSummaryRepository @Inject constructor(
         saveFetchResult = { old, new ->
             attendanceDb.deleteAll(old uniqueSubtract new)
             attendanceDb.insertAll(new uniqueSubtract old)
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey(key, semester))
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )
 }
