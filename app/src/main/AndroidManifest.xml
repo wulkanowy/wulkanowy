@@ -112,8 +112,7 @@
 
         <meta-data
             android:name="install_channel"
-            android:value="${install_channel}">
-        </meta-data>
+            android:value="${install_channel}" />
 
         <!-- workaround for https://github.com/firebase/firebase-android-sdk/issues/473 enabled:false -->
         <!-- https://firebase.googleblog.com/2017/03/take-control-of-your-firebase-init-on.html -->
