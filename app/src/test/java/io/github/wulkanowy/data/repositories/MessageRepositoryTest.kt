@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
 import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.entities.Message
@@ -13,6 +14,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK
 import io.mockk.just
@@ -36,6 +38,9 @@ class MessageRepositoryTest {
     @MockK
     private lateinit var messageAttachmentDao: MessageAttachmentDao
 
+    @MockK(relaxUnitFun = true)
+    private lateinit var sharedPreferences: SharedPrefProvider
+
     private val student = getStudentEntity()
 
     private lateinit var messageRepository: MessageRepository
@@ -43,8 +48,9 @@ class MessageRepositoryTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+        every { sharedPreferences.isShouldBeRefreshed(any()) } returns false
 
-        messageRepository = MessageRepository(messageDb, messageAttachmentDao, sdk)
+        messageRepository = MessageRepository(messageDb, messageAttachmentDao, sdk, sharedPreferences)
     }
 
     @Test(expected = NoSuchElementException::class)

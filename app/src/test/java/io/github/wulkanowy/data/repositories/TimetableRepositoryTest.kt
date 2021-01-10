@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.mappers.mapToEntities
@@ -12,6 +13,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK
 import io.mockk.just
@@ -39,6 +41,9 @@ class TimetableRepositoryTest {
     @MockK
     private lateinit var timetableAdditionalDao: TimetableAdditionalDao
 
+    @MockK(relaxUnitFun = true)
+    private lateinit var sharedPreferences: SharedPrefProvider
+
     private val student = getStudentEntity()
 
     private val semester = getSemesterEntity()
@@ -52,7 +57,9 @@ class TimetableRepositoryTest {
     @Before
     fun initApi() {
         MockKAnnotations.init(this)
-        timetableRepository = TimetableRepository(timetableDb, timetableAdditionalDao, sdk, timetableNotificationSchedulerHelper)
+        every { sharedPreferences.isShouldBeRefreshed(any()) } returns false
+
+        timetableRepository = TimetableRepository(timetableDb, timetableAdditionalDao, sdk, timetableNotificationSchedulerHelper, sharedPreferences)
     }
 
     @Test

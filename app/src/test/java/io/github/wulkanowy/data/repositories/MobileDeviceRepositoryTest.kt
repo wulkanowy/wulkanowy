@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MobileDeviceDao
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.getSemesterEntity
@@ -11,6 +12,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK
 import io.mockk.just
@@ -29,6 +31,9 @@ class MobileDeviceRepositoryTest {
     @MockK
     private lateinit var mobileDeviceDb: MobileDeviceDao
 
+    @MockK(relaxUnitFun = true)
+    private lateinit var sharedPreferences: SharedPrefProvider
+
     private val semester = getSemesterEntity()
 
     private val student = getStudentEntity()
@@ -43,8 +48,9 @@ class MobileDeviceRepositoryTest {
     @Before
     fun initTest() {
         MockKAnnotations.init(this)
+        every { sharedPreferences.isShouldBeRefreshed(any()) } returns false
 
-        mobileDeviceRepository = MobileDeviceRepository(mobileDeviceDb, sdk)
+        mobileDeviceRepository = MobileDeviceRepository(mobileDeviceDb, sdk, sharedPreferences)
     }
 
     @Test
