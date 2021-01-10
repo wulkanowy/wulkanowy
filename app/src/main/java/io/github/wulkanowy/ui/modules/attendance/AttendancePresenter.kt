@@ -187,11 +187,10 @@ class AttendancePresenter @Inject constructor(
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading attendance data started")
 
-        val date = currentDate
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            attendanceRepository.getAttendance(student, semester, date, date, forceRefresh)
+            attendanceRepository.getAttendance(student, semester, currentDate, currentDate, forceRefresh)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> {
