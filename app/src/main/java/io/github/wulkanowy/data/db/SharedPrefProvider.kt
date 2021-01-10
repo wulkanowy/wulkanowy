@@ -40,10 +40,7 @@ class SharedPrefProvider @Inject constructor(
 
     fun isShouldBeRefreshed(key: String): Boolean {
         val timestamp = getLong(key, 0).toLocalDateTime()
-        val servicesInterval = getString(
-            context.getString(R.string.pref_key_services_interval),
-            context.getString(R.string.pref_default_services_interval)
-        ).toLong()
+        val servicesInterval = getString(context.getString(R.string.pref_key_services_interval), context.getString(R.string.pref_default_services_interval)).toLong()
 
         val shouldBeRefreshed = timestamp < LocalDateTime.now().minusMinutes(servicesInterval)
 

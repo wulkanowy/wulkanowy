@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Absent
+import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.networkBoundResource
@@ -26,10 +27,8 @@ class AttendanceRepository @Inject constructor(
     private val sharedPref: SharedPrefProvider,
 ) {
 
-    private fun getRefreshKey(semester: Semester, start: LocalDate, end: LocalDate) = "attendance_${semester.studentId}_${semester.semesterId}_${start.monday}_${end.sunday}"
-
     fun getAttendance(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(semester, start, end)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey("attendance", semester, start, end)) },
         query = { attendanceDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -40,7 +39,7 @@ class AttendanceRepository @Inject constructor(
             attendanceDb.deleteAll(old uniqueSubtract new)
             attendanceDb.insertAll(new uniqueSubtract old)
 
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey(semester, start, end))
+            sharedPref.updateLastRefreshTimestamp(getRefreshKey("attendance", semester, start, end))
         },
         filterResult = { it.filter { item -> item.date in start..end } }
     )
