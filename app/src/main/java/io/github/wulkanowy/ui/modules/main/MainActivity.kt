@@ -250,7 +250,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
                     if (section == MainView.Section.ACCOUNT) View.GONE else View.VISIBLE
 
                 analytics.setCurrentScreen(this@MainActivity, name)
-                presenter.onViewChange(section, name)
+                presenter.onViewChange(section)
             }
             fragmentHideStrategy = HIDE
             rootFragments = listOf(

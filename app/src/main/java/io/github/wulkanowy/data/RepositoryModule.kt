@@ -17,7 +17,6 @@ import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.AppInfo
 import timber.log.Timber
 import javax.inject.Singleton
 
@@ -34,10 +33,11 @@ internal class RepositoryModule {
             setSimpleHttpLogger { Timber.d(it) }
 
             // for debug only
-            addInterceptor(ChuckerInterceptor.Builder(context)
-                .collector(chuckerCollector)
-                .alwaysReadResponseBody(true)
-                .build(), network = true
+            addInterceptor(
+                ChuckerInterceptor.Builder(context)
+                    .collector(chuckerCollector)
+                    .alwaysReadResponseBody(true)
+                    .build(), network = true
             )
         }
     }
@@ -60,8 +60,7 @@ internal class RepositoryModule {
     fun provideDatabase(
         @ApplicationContext context: Context,
         sharedPrefProvider: SharedPrefProvider,
-        appInfo: AppInfo
-    ) = AppDatabase.newInstance(context, sharedPrefProvider, appInfo)
+    ) = AppDatabase.newInstance(context, sharedPrefProvider)
 
     @Singleton
     @Provides
