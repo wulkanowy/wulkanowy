@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.db.entities
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
@@ -12,16 +13,16 @@ data class StudentInfo(
     @ColumnInfo(name = "student_id")
     val studentId: Int,
 
-    val name: String,
+    @ColumnInfo(name = "full_name")
+    val fullName: String,
 
-    @ColumnInfo(name = "middle_name")
-    val middleName: String,
+    @ColumnInfo(name = "first_name")
+    val firstName: String,
 
-    @ColumnInfo(name = "id_number")
-    val idNumber: Int?,
+    @ColumnInfo(name = "second_name")
+    val secondName: String,
 
-    @ColumnInfo(name = "last_name")
-    val lastName: String,
+    val surname: String,
 
     @ColumnInfo(name = "birth_date")
     val birthDate: LocalDate,
@@ -29,19 +30,16 @@ data class StudentInfo(
     @ColumnInfo(name = "birth_place")
     val birthPlace: String,
 
+    val gender: String,
+
+    @ColumnInfo(name = "has_polish_citizenship")
+    val hasPolishCitizenship: Boolean,
+
     @ColumnInfo(name = "family_name")
     val familyName: String,
 
-    @ColumnInfo(name = "polish_citizenship")
-    val polishCitizenship: Int,
-
-    @ColumnInfo(name = "mother_name")
-    val motherName: String,
-
-    @ColumnInfo(name = "father_name")
-    val fatherName: String,
-
-    val gender: Boolean,
+    @ColumnInfo(name = "parents_names")
+    val parentsNames: String,
 
     val address: String,
 
@@ -51,33 +49,36 @@ data class StudentInfo(
     @ColumnInfo(name = "correspondence_address")
     val correspondenceAddress: String,
 
-    @ColumnInfo(name = "home_phone")
-    val homePhone: String?,
+    @ColumnInfo(name = "phone_number")
+    val phoneNumber: String,
 
-    @ColumnInfo(name = "cell_phone")
-    val cellPhone: String?,
+    @ColumnInfo(name = "cell_phone_number")
+    val cellPhoneNumber: String,
 
     val email: String,
 
-    @ColumnInfo(name = "is_visible_pesel")
-    val isVisiblePesel: Boolean,
+    @Embedded(prefix = "first_guardian_")
+    val firstGuardian: StudentGuardian,
 
-    @ColumnInfo(name = "hide_address")
-    val hideAddress: Boolean,
+    @Embedded(prefix = "second_guardian_")
+    val secondGuardian: StudentGuardian
 
-    @ColumnInfo(name = "full_name")
-    val fullName: String,
-
-    @ColumnInfo(name = "has_pesel")
-    val hasPesel: Boolean,
-
-    @ColumnInfo(name = "is_pole")
-    val isPole: Boolean,
-
-    @ColumnInfo(name = "mother_and_father_names")
-    val motherAndFatherNames: String
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 }
+
+data class StudentGuardian(
+
+    @ColumnInfo(name = "full_name")
+    val fullName: String,
+
+    val kinship: String,
+
+    val address: String,
+
+    val phones: String,
+
+    val email: String
+) : Serializable

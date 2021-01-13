@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.account.accountdetails
 
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.repositories.StudentInfoRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -15,13 +16,20 @@ import javax.inject.Inject
 class AccountDetailsPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
-    private val syncManager: SyncManager
+    private val syncManager: SyncManager,
+    private val studentInfoRepository: StudentInfoRepository
 ) : BasePresenter<AccountDetailsView>(errorHandler, studentRepository) {
 
     lateinit var studentWithSemesters: StudentWithSemesters
 
     override fun onAttachView(view: AccountDetailsView) {
         super.onAttachView(view)
+
+        studentInfoRepository.getStudentInfo(
+            studentWithSemesters.student,
+            studentWithSemesters.semesters[0],
+            false
+        ).launch("fafaf")
 
         view.showAccountData(studentWithSemesters)
     }
