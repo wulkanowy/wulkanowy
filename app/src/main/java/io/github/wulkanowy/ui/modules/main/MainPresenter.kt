@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.main
 
-import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
-import io.github.wulkanowy.data.repositories.student.StudentRepository
+import io.github.wulkanowy.data.repositories.PreferencesRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -35,9 +35,8 @@ class MainPresenter @Inject constructor(
         analytics.logEvent("app_open", "destination" to initMenu?.name)
     }
 
-    fun onViewChange(section: MainView.Section?, name: String?) {
+    fun onViewChange(section: MainView.Section?) {
         view?.apply {
-            setCurrentScreen(name)
             showActionBarElevation(section != GRADE && section != MESSAGE && section != SCHOOL)
             currentViewTitle?.let { setViewTitle(it) }
             currentViewSubtitle?.let { setViewSubTitle(it.ifBlank { null }) }

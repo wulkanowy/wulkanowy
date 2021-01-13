@@ -3,10 +3,10 @@ package io.github.wulkanowy.ui.modules.timetable
 import android.annotation.SuppressLint
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Timetable
-import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
-import io.github.wulkanowy.data.repositories.semester.SemesterRepository
-import io.github.wulkanowy.data.repositories.student.StudentRepository
-import io.github.wulkanowy.data.repositories.timetable.TimetableRepository
+import io.github.wulkanowy.data.repositories.PreferencesRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
@@ -109,6 +109,11 @@ class TimetablePresenter @Inject constructor(
         view?.showTimetableDialog(lesson)
     }
 
+    fun onAdditionalLessonsSwitchSelected(): Boolean {
+        view?.openAdditionalLessonsView()
+        return true
+    }
+
     fun onCompletedLessonsSwitchSelected(): Boolean {
         view?.openCompletedLessonsView()
         return true
@@ -144,18 +149,18 @@ class TimetablePresenter @Inject constructor(
                             showWholeClassPlanType = prefRepository.showWholeClassPlan,
                             showGroupsInPlanType = prefRepository.showGroupsInPlan,
                             showTimetableTimers = prefRepository.showTimetableTimers,
-                            data = it.data!!
+                            data = it.data!!.first
                                 .filter { item -> if (prefRepository.showWholeClassPlan == "no") item.isStudentPlan else true }
                                 .sortedWith(compareBy({ item -> item.number }, { item -> !item.isStudentPlan }))
                         )
-                        showEmpty(it.data.isEmpty())
+                        showEmpty(it.data.first.isEmpty())
                         showErrorView(false)
-                        showContent(it.data.isNotEmpty())
+                        showContent(it.data.first.isNotEmpty())
                     }
                     analytics.logEvent(
                         "load_data",
                         "type" to "timetable",
-                        "items" to it.data!!.size
+                        "items" to it.data!!.first.size
                     )
                 }
                 Status.ERROR -> {

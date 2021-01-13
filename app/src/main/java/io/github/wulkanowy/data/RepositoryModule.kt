@@ -11,18 +11,18 @@ import com.chuckerteam.chucker.api.RetentionManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.SharedPrefProvider
-import io.github.wulkanowy.data.repositories.preferences.PreferencesRepository
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AppInfo
 import timber.log.Timber
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 internal class RepositoryModule {
 
     @Singleton
@@ -34,12 +34,10 @@ internal class RepositoryModule {
             setSimpleHttpLogger { Timber.d(it) }
 
             // for debug only
-            addInterceptor(
-                ChuckerInterceptor(
-                    context = context,
-                    collector = chuckerCollector,
-                    alwaysReadResponseBody = true
-                ), true
+            addInterceptor(ChuckerInterceptor.Builder(context)
+                .collector(chuckerCollector)
+                .alwaysReadResponseBody(true)
+                .build(), network = true
             )
         }
     }
@@ -174,4 +172,8 @@ internal class RepositoryModule {
     @Singleton
     @Provides
     fun provideConferenceDao(database: AppDatabase) = database.conferenceDao
+
+    @Singleton
+    @Provides
+    fun provideTimetableAdditionalDao(database: AppDatabase) = database.timetableAdditionalDao
 }
