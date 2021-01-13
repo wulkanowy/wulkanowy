@@ -28,6 +28,8 @@ import io.github.wulkanowy.data.db.dao.ReportingUnitDao
 import io.github.wulkanowy.data.db.dao.SchoolDao
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
+import io.github.wulkanowy.data.db.dao.StudentGuardianDao
+import io.github.wulkanowy.data.db.dao.StudentInfoDao
 import io.github.wulkanowy.data.db.dao.SubjectDao
 import io.github.wulkanowy.data.db.dao.TeacherDao
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
@@ -53,6 +55,8 @@ import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.db.entities.School
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.StudentGuardian
+import io.github.wulkanowy.data.db.entities.StudentInfo
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.db.entities.Teacher
 import io.github.wulkanowy.data.db.entities.Timetable
@@ -117,6 +121,8 @@ import javax.inject.Singleton
         School::class,
         Conference::class,
         TimetableAdditional::class,
+        StudentGuardian::class,
+        StudentInfo::class,
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -221,4 +227,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val conferenceDao: ConferenceDao
 
     abstract val timetableAdditionalDao: TimetableAdditionalDao
+
+    abstract val studentInfoDao: StudentInfoDao
+
+    abstract val studentGuardianDao: StudentGuardianDao
 }

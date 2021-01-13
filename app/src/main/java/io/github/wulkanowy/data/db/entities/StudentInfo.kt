@@ -3,9 +3,8 @@ package io.github.wulkanowy.data.db.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import io.github.wulkanowy.sdk.scrapper.student.StudentGuardian
 import java.io.Serializable
-import java.util.Date
+import java.time.LocalDate
 
 @Entity(tableName = "StudentInfo")
 data class StudentInfo(
@@ -25,7 +24,7 @@ data class StudentInfo(
     val lastName: String,
 
     @ColumnInfo(name = "birth_date")
-    val birthDate: Date,
+    val birthDate: LocalDate,
 
     @ColumnInfo(name = "birth_place")
     val birthPlace: String,
@@ -62,12 +61,6 @@ data class StudentInfo(
 
     @ColumnInfo(name = "is_visible_pesel")
     val isVisiblePesel: Boolean,
-
-    @ColumnInfo(name = "guardian_first")
-    val guardianFirst: StudentGuardian,
-
-    @ColumnInfo(name = "guardian_second")
-    val guardianSecond: StudentGuardian,
 
     @ColumnInfo(name = "hide_address")
     val hideAddress: Boolean,

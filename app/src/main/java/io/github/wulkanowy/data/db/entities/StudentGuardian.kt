@@ -8,6 +8,9 @@ import java.io.Serializable
 @Entity(tableName = "StudentGuardians")
 data class StudentGuardian(
 
+    @ColumnInfo(name = "student_id")
+    val studentId: Int,
+
     @ColumnInfo(name = "real_id")
     val realId: Int,
 
