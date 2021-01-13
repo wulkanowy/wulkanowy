@@ -27,7 +27,7 @@ class MobileDeviceRepository @Inject constructor(
 
     fun getDevices(student: Student, semester: Semester, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, student)) },
-        query = { mobileDb.loadAll(semester.studentId) },
+        query = { mobileDb.loadAll(student.userLoginId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
                 .getRegisteredDevices()
