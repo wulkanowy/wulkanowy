@@ -8,9 +8,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.SharedPrefProvider
-import io.github.wulkanowy.utils.AppInfo
-import io.mockk.every
-import io.mockk.mockk
 import org.junit.Rule
 
 abstract class AbstractMigrationTest {
@@ -25,9 +22,6 @@ abstract class AbstractMigrationTest {
     )
 
     fun getMigratedRoomDatabase(): AppDatabase {
-        val appInfo = mockk<AppInfo>()
-        every { appInfo.defaultColorsForAvatar } returns listOf(1)
-
         val database = Room.databaseBuilder(
             ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java, dbName
@@ -37,7 +31,7 @@ abstract class AbstractMigrationTest {
                     SharedPrefProvider(
                         PreferenceManager
                             .getDefaultSharedPreferences(ApplicationProvider.getApplicationContext())
-                    ), appInfo
+                    )
                 )
             )
             .build()
