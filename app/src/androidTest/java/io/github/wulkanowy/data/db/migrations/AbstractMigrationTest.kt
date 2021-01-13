@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.db.migrations
 
+import android.content.Context
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import androidx.room.testing.MigrationTestHelper
@@ -22,17 +23,11 @@ abstract class AbstractMigrationTest {
     )
 
     fun getMigratedRoomDatabase(): AppDatabase {
-        val database = Room.databaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            AppDatabase::class.java, dbName
-        )
-            .addMigrations(
-                *AppDatabase.getMigrations(
-                    SharedPrefProvider(
-                        PreferenceManager
-                            .getDefaultSharedPreferences(ApplicationProvider.getApplicationContext())
-                    )
-                )
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val database = Room.databaseBuilder(ApplicationProvider.getApplicationContext(),
+            AppDatabase::class.java, dbName)
+            .addMigrations(*AppDatabase.getMigrations(SharedPrefProvider(PreferenceManager
+                .getDefaultSharedPreferences(context)))
             )
             .build()
         // close the database and release any stream resources when the test finishes
