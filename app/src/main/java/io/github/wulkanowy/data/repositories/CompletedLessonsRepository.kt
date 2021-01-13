@@ -1,11 +1,11 @@
 package io.github.wulkanowy.data.repositories
 
-import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.monday
@@ -20,13 +20,13 @@ import javax.inject.Singleton
 class CompletedLessonsRepository @Inject constructor(
     private val completedLessonsDb: CompletedLessonsDao,
     private val sdk: Sdk,
-    private val sharedPref: SharedPrefProvider,
+    private val refreshHelper: AutoRefreshHelper,
 ) {
 
     private val cacheKey = "completed"
 
     fun getCompletedLessons(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(cacheKey, semester, start, end)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester, start, end)) },
         query = { completedLessonsDb.loadAll(semester.studentId, semester.diaryId, start.monday, end.sunday) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -36,7 +36,7 @@ class CompletedLessonsRepository @Inject constructor(
         saveFetchResult = { old, new ->
             completedLessonsDb.deleteAll(old uniqueSubtract new)
             completedLessonsDb.insertAll(new uniqueSubtract old)
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         },
         filterResult = { it.filter { item -> item.date in start..end } }
     )

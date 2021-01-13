@@ -1,11 +1,11 @@
 package io.github.wulkanowy.data.repositories
 
-import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.toFirstResult
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -33,7 +33,7 @@ class CompletedLessonsRepositoryTest {
     private lateinit var completedLessonDb: CompletedLessonsDao
 
     @MockK(relaxUnitFun = true)
-    private lateinit var sharedPreferences: SharedPrefProvider
+    private lateinit var refreshHelper: AutoRefreshHelper
 
     private val semester = getSemesterEntity()
 
@@ -53,9 +53,9 @@ class CompletedLessonsRepositoryTest {
     @Before
     fun initApi() {
         MockKAnnotations.init(this)
-        every { sharedPreferences.isShouldBeRefreshed(any()) } returns false
+        every { refreshHelper.isShouldBeRefreshed(any()) } returns false
 
-        completedLessonRepository = CompletedLessonsRepository(completedLessonDb, sdk, sharedPreferences)
+        completedLessonRepository = CompletedLessonsRepository(completedLessonDb, sdk, refreshHelper)
     }
 
     @Test

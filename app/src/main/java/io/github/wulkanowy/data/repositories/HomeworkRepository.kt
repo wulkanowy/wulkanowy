@@ -1,12 +1,12 @@
 package io.github.wulkanowy.data.repositories
 
-import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.HomeworkDao
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.monday
@@ -21,13 +21,13 @@ import javax.inject.Singleton
 class HomeworkRepository @Inject constructor(
     private val homeworkDb: HomeworkDao,
     private val sdk: Sdk,
-    private val sharedPref: SharedPrefProvider,
+    private val refreshHelper: AutoRefreshHelper,
 ) {
 
     private val cacheKey = "homework"
 
     fun getHomework(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(cacheKey, semester, start, end)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester, start, end)) },
         query = { homeworkDb.loadAll(semester.semesterId, semester.studentId, start.monday, end.sunday) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -38,7 +38,7 @@ class HomeworkRepository @Inject constructor(
             homeworkDb.deleteAll(old uniqueSubtract new)
             homeworkDb.insertAll(new uniqueSubtract old)
 
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         }
     )
 

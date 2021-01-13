@@ -26,10 +26,9 @@ abstract class AbstractMigrationTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val database = Room.databaseBuilder(ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java, dbName)
-            .addMigrations(*AppDatabase.getMigrations(SharedPrefProvider(
-                context = context,
-                sharedPref = PreferenceManager.getDefaultSharedPreferences(context),
-            )))
+            .addMigrations(*AppDatabase.getMigrations(SharedPrefProvider(PreferenceManager
+                .getDefaultSharedPreferences(context)))
+            )
             .build()
         // close the database and release any stream resources when the test finishes
         helper.closeWhenFinished(database)

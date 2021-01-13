@@ -1,20 +1,12 @@
 package io.github.wulkanowy.data.db
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import dagger.hilt.android.qualifiers.ApplicationContext
-import io.github.wulkanowy.R
-import io.github.wulkanowy.utils.toLocalDateTime
-import io.github.wulkanowy.utils.toTimestamp
-import timber.log.Timber
-import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SharedPrefProvider @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val sharedPref: SharedPreferences
 ) {
 
@@ -36,20 +28,5 @@ class SharedPrefProvider @Inject constructor(
 
     fun delete(key: String) {
         sharedPref.edit().remove(key).apply()
-    }
-
-    fun isShouldBeRefreshed(key: String): Boolean {
-        val timestamp = getLong(key, 0).toLocalDateTime()
-        val servicesInterval = getString(context.getString(R.string.pref_key_services_interval), context.getString(R.string.pref_default_services_interval)).toLong()
-
-        val shouldBeRefreshed = timestamp < LocalDateTime.now().minusMinutes(servicesInterval)
-
-        Timber.d("Check if $key need to be refreshed: $shouldBeRefreshed (last refresh: $timestamp, interval: $servicesInterval min)")
-
-        return shouldBeRefreshed
-    }
-
-    fun updateLastRefreshTimestamp(key: String) {
-        putLong(key, LocalDateTime.now().toTimestamp())
     }
 }

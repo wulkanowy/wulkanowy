@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories
 
-import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MobileDeviceDao
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.db.entities.Semester
@@ -9,6 +8,7 @@ import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.mappers.mapToMobileDeviceToken
 import io.github.wulkanowy.data.pojos.MobileDeviceToken
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
@@ -20,13 +20,13 @@ import javax.inject.Singleton
 class MobileDeviceRepository @Inject constructor(
     private val mobileDb: MobileDeviceDao,
     private val sdk: Sdk,
-    private val sharedPref: SharedPrefProvider,
+    private val refreshHelper: AutoRefreshHelper,
 ) {
 
     private val cacheKey = "devices"
 
     fun getDevices(student: Student, semester: Semester, forceRefresh: Boolean) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(cacheKey, student)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, student)) },
         query = { mobileDb.loadAll(semester.studentId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -37,7 +37,7 @@ class MobileDeviceRepository @Inject constructor(
             mobileDb.deleteAll(old uniqueSubtract new)
             mobileDb.insertAll(new uniqueSubtract old)
 
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student))
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student))
         }
     )
 

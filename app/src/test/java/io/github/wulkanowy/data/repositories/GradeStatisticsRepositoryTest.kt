@@ -1,6 +1,5 @@
 package io.github.wulkanowy.data.repositories
 
-import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.GradePartialStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradeSemesterStatisticsDao
@@ -10,6 +9,7 @@ import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.GradeStatisticsItem
 import io.github.wulkanowy.sdk.pojo.GradeStatisticsSubject
+import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.toFirstResult
 import io.mockk.MockKAnnotations
 import io.mockk.Runs
@@ -40,7 +40,7 @@ class GradeStatisticsRepositoryTest {
     private lateinit var gradeSemesterStatisticsDb: GradeSemesterStatisticsDao
 
     @MockK(relaxUnitFun = true)
-    private lateinit var sharedPreferences: SharedPrefProvider
+    private lateinit var refreshHelper: AutoRefreshHelper
 
     private val semester = getSemesterEntity()
 
@@ -56,9 +56,9 @@ class GradeStatisticsRepositoryTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { sharedPreferences.isShouldBeRefreshed(any()) } returns false
+        every { refreshHelper.isShouldBeRefreshed(any()) } returns false
 
-        gradeStatisticsRepository = GradeStatisticsRepository(gradePartialStatisticsDb, gradePointsStatisticsDb, gradeSemesterStatisticsDb, sdk, sharedPreferences)
+        gradeStatisticsRepository = GradeStatisticsRepository(gradePartialStatisticsDb, gradePointsStatisticsDb, gradeSemesterStatisticsDb, sdk, refreshHelper)
     }
 
     @Test

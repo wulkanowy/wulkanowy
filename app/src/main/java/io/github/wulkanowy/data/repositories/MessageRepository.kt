@@ -1,19 +1,19 @@
 package io.github.wulkanowy.data.repositories
 
-import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.mappers.mapFromEntities
-import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.enums.MessageFolder.RECEIVED
+import io.github.wulkanowy.data.mappers.mapFromEntities
+import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Folder
 import io.github.wulkanowy.sdk.pojo.SentMessage
+import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
@@ -30,14 +30,14 @@ class MessageRepository @Inject constructor(
     private val messagesDb: MessagesDao,
     private val messageAttachmentDao: MessageAttachmentDao,
     private val sdk: Sdk,
-    private val sharedPref: SharedPrefProvider,
+    private val refreshHelper: AutoRefreshHelper,
 ) {
 
     private val cacheKey = "message"
 
     @Suppress("UNUSED_PARAMETER")
     fun getMessages(student: Student, semester: Semester, folder: MessageFolder, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(cacheKey, student, folder)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, student, folder)) },
         query = { messagesDb.loadAll(student.id.toInt(), folder.id) },
         fetch = { sdk.init(student).getMessages(Folder.valueOf(folder.name), now().minusMonths(3), now()).mapToEntities(student) },
         saveFetchResult = { old, new ->
@@ -46,7 +46,7 @@ class MessageRepository @Inject constructor(
                 it.isNotified = !notify
             })
 
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student, folder))
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student, folder))
         }
     )
 

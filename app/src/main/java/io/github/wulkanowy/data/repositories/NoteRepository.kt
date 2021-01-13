@@ -1,12 +1,12 @@
 package io.github.wulkanowy.data.repositories
 
-import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
@@ -20,13 +20,13 @@ import javax.inject.Singleton
 class NoteRepository @Inject constructor(
     private val noteDb: NoteDao,
     private val sdk: Sdk,
-    private val sharedPref: SharedPrefProvider,
+    private val refreshHelper: AutoRefreshHelper,
 ) {
 
     private val cacheKey = "note"
 
     fun getNotes(student: Student, semester: Semester, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
-        shouldFetch = { it.isEmpty() || forceRefresh || sharedPref.isShouldBeRefreshed(getRefreshKey(cacheKey, semester)) },
+        shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester)) },
         query = { noteDb.loadAll(student.studentId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
@@ -42,7 +42,7 @@ class NoteRepository @Inject constructor(
                 }
             })
 
-            sharedPref.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )
 
