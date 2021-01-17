@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.account.accountdetails
 
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.ui.base.BaseView
+import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
 
 interface AccountDetailsView : BaseView {
 
@@ -14,4 +15,6 @@ interface AccountDetailsView : BaseView {
     fun popView()
 
     fun recreateMainView()
+
+    fun openStudentInfoView(infoType: StudentInfoView.Type)
 }

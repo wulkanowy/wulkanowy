@@ -207,11 +207,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         with(binding.mainToolbar) {
             if (SDK_INT >= LOLLIPOP) stateListAnimator = null
             setBackgroundColor(
-                overlayProvider.compositeOverlayWithThemeSurfaceColorIfNeeded(
-                    dpToPx(
-                        4f
-                    )
-                )
+                overlayProvider.compositeOverlayWithThemeSurfaceColorIfNeeded(dpToPx(4f))
             )
         }
 
@@ -247,7 +243,11 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         with(navController) {
             setOnViewChangeListener { section, name ->
                 binding.mainBottomNav.visibility =
-                    if (section == MainView.Section.ACCOUNT) View.GONE else View.VISIBLE
+                    if (section == MainView.Section.ACCOUNT || section == MainView.Section.STUDENT_INFO) {
+                        View.GONE
+                    } else {
+                        View.VISIBLE
+                    }
 
                 analytics.setCurrentScreen(this@MainActivity, name)
                 presenter.onViewChange(section)

@@ -7,6 +7,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.flow.onEach
@@ -32,6 +33,10 @@ class AccountDetailsPresenter @Inject constructor(
         ).launch("fafaf")
 
         view.showAccountData(studentWithSemesters)
+    }
+
+    fun onStudentInfoSelected(infoType: StudentInfoView.Type) {
+        view?.openStudentInfoView(infoType)
     }
 
     fun onStudentSelect() {

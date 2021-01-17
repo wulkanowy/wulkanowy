@@ -16,6 +16,8 @@ import io.github.wulkanowy.databinding.FragmentAccountDetailsBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoFragment
+import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -54,10 +56,22 @@ class AccountDetailsFragment :
         binding = FragmentAccountDetailsBinding.bind(view)
         presenter.onAttachView(this)
 
-
         binding.accountDetailsLogout.setOnClickListener { presenter.onRemoveSelected() }
         binding.accountDetailsSelect.setOnClickListener { presenter.onStudentSelect() }
         binding.accountDetailsSelect.isEnabled = !presenter.studentWithSemesters.student.isCurrent
+
+        binding.accountDetailsPersonalData.setOnClickListener {
+            presenter.onStudentInfoSelected(StudentInfoView.Type.PERSONAL)
+        }
+        binding.accountDetailsAddressData.setOnClickListener {
+            presenter.onStudentInfoSelected(StudentInfoView.Type.ADDRESS)
+        }
+        binding.accountDetailsContactData.setOnClickListener {
+            presenter.onStudentInfoSelected(StudentInfoView.Type.CONTACT)
+        }
+        binding.accountDetailsFamilyData.setOnClickListener {
+            presenter.onStudentInfoSelected(StudentInfoView.Type.FAMILY)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -108,6 +122,10 @@ class AccountDetailsFragment :
 
     override fun recreateMainView() {
         requireActivity().recreate()
+    }
+
+    override fun openStudentInfoView(infoType: StudentInfoView.Type) {
+        (requireActivity() as MainActivity).pushView(StudentInfoFragment.newInstance(infoType))
     }
 
     override fun onDestroyView() {
