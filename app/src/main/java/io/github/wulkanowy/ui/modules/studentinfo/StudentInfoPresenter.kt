@@ -7,6 +7,7 @@ import io.github.wulkanowy.data.repositories.StudentInfoRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -16,7 +17,8 @@ class StudentInfoPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val studentInfoRepository: StudentInfoRepository,
-    private val semesterRepository: SemesterRepository
+    private val semesterRepository: SemesterRepository,
+    private val analytics: AnalyticsHelper
 ) : BasePresenter<StudentInfoView>(errorHandler, studentRepository) {
 
     private lateinit var infoType: StudentInfoView.Type
@@ -46,11 +48,17 @@ class StudentInfoPresenter @Inject constructor(
             studentInfoRepository.getStudentInfo(student, semester, forceRefresh)
         }.onEach {
             when (it.status) {
-                Status.ERROR -> errorHandler.dispatch(it.error!!)
-                Status.LOADING -> {
-                }
+                Status.LOADING -> Timber.i("Loading student info started")
                 Status.SUCCESS -> {
                     showCorrectData(it.data!!)
+                    analytics.logEvent(
+                        "load_item",
+                        "type" to "student_info"
+                    )
+                }
+                Status.ERROR -> {
+                    Timber.i("Loading student info result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
                 }
             }
         }.launch()
