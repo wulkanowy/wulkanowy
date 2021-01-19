@@ -17,6 +17,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.ui.modules.main.MainActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -112,30 +113,37 @@ class GradeDetailsFragment :
     }
 
     override fun showProgress(show: Boolean) {
+        Timber.i("Show progress: $show")
         binding.gradeDetailsProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun enableSwipe(enable: Boolean) {
+        Timber.i("Show swipe: $enable")
         binding.gradeDetailsSwipe.isEnabled = enable
     }
 
     override fun showContent(show: Boolean) {
+        Timber.i("Show content: $show")
         binding.gradeDetailsRecycler.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showEmpty(show: Boolean) {
+        Timber.i("Show empty: $show")
         binding.gradeDetailsEmpty.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showErrorView(show: Boolean) {
+        Timber.i("Show error view: $show")
         binding.gradeDetailsError.visibility = if (show) VISIBLE else GONE
     }
 
     override fun setErrorDetails(message: String) {
+        Timber.i("Show error details: $message")
         binding.gradeDetailsErrorMessage.text = message
     }
 
     override fun showRefresh(show: Boolean) {
+        Timber.i("Show refresh: $show")
         binding.gradeDetailsSwipe.isRefreshing = show
     }
 
