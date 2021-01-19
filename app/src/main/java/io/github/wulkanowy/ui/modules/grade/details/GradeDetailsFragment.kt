@@ -6,9 +6,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
@@ -113,38 +114,52 @@ class GradeDetailsFragment :
     }
 
     override fun showProgress(show: Boolean) {
-        Timber.i("${this::class.java.simpleName} Show progress: $show")
-        binding.gradeDetailsProgress.visibility = if (show) VISIBLE else GONE
+        view?.findViewById<View>(R.id.gradeDetailsProgress)?.let {
+            Timber.i("${this::class.java.simpleName} Show progress: $show, Current: ${it.visibility == VISIBLE}")
+            it.visibility = if (show) VISIBLE else GONE
+        }
     }
 
     override fun enableSwipe(enable: Boolean) {
-        Timber.i("${this::class.java.simpleName} Show swipe: $enable")
-        binding.gradeDetailsSwipe.isEnabled = enable
+        view?.findViewById<SwipeRefreshLayout>(R.id.gradeDetailsSwipe)?.let {
+            Timber.i("${this::class.java.simpleName} Enable swipe: $enable, Current: ${it.isEnabled}")
+            it.isEnabled = enable
+        }
     }
 
     override fun showContent(show: Boolean) {
-        Timber.i("${this::class.java.simpleName} Show content: $show")
-        binding.gradeDetailsRecycler.visibility = if (show) VISIBLE else INVISIBLE
+        view?.findViewById<View>(R.id.gradeDetailsRecycler)?.let {
+            Timber.i("${this::class.java.simpleName} Show content: $show, Current: ${it.visibility == VISIBLE}")
+            it.visibility = if (show) VISIBLE else GONE
+        }
     }
 
     override fun showEmpty(show: Boolean) {
-        Timber.i("${this::class.java.simpleName} Show empty: $show")
-        binding.gradeDetailsEmpty.visibility = if (show) VISIBLE else INVISIBLE
+        view?.findViewById<View>(R.id.gradeDetailsEmpty)?.let {
+            Timber.i("${this::class.java.simpleName} Show empty: $show, Current: ${it.visibility == VISIBLE}")
+            it.visibility = if (show) VISIBLE else GONE
+        }
     }
 
     override fun showErrorView(show: Boolean) {
-        Timber.i("${this::class.java.simpleName} Show error view: $show")
-        binding.gradeDetailsError.visibility = if (show) VISIBLE else GONE
+        view?.findViewById<View>(R.id.gradeDetailsError)?.let {
+            Timber.i("${this::class.java.simpleName} Show error view: $show, Current: ${it.visibility == VISIBLE}")
+            it.visibility = if (show) VISIBLE else GONE
+        }
     }
 
     override fun setErrorDetails(message: String) {
-        Timber.i("${this::class.java.simpleName} Show error details: $message")
-        binding.gradeDetailsErrorMessage.text = message
+        view?.findViewById<TextView>(R.id.gradeDetailsErrorMessage)?.let {
+            Timber.i("${this::class.java.simpleName} Show error details: $message, Current: ${it.text}")
+            it.text = message
+        }
     }
 
     override fun showRefresh(show: Boolean) {
-        Timber.i("${this::class.java.simpleName} Show refresh: $show")
-        binding.gradeDetailsSwipe.isRefreshing = show
+        view?.findViewById<SwipeRefreshLayout>(R.id.gradeDetailsSwipe)?.let {
+            Timber.i("${this::class.java.simpleName} Show refresh: $show, Current: ${it.isRefreshing}")
+            it.isRefreshing = show
+        }
     }
 
     override fun showGradeDialog(grade: Grade, colorScheme: String) {

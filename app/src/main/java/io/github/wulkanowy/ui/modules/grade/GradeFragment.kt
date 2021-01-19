@@ -99,21 +99,28 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     }
 
     override fun showContent(show: Boolean) {
-        Timber.i("${this::class.java.simpleName} Show content: $show")
-        with(binding) {
-            gradeViewPager.visibility = if (show) VISIBLE else GONE
-            gradeTabLayout.visibility = if (show) VISIBLE else GONE
+        view?.findViewById<View>(R.id.gradeViewPager)?.let {
+            Timber.i("${this::class.java.simpleName} Show content: $show, Current: ${it.visibility == VISIBLE}")
+            it.visibility = if (show) VISIBLE else GONE
+        }
+
+        view?.findViewById<View>(R.id.gradeTabLayout)?.let {
+            it.visibility = if (show) VISIBLE else GONE
         }
     }
 
     override fun showProgress(show: Boolean) {
-        Timber.i("${this::class.java.simpleName} Show progress: $show")
-        binding.gradeProgress.visibility = if (show) VISIBLE else GONE
+        view?.findViewById<View>(R.id.gradeProgress)?.let {
+            Timber.i("${this::class.java.simpleName} Show progress: $show, Current: ${it.visibility == VISIBLE}")
+            it.visibility = if (show) VISIBLE else GONE
+        }
     }
 
     override fun showErrorView(show: Boolean) {
-        Timber.i("${this::class.java.simpleName} Show error view: $show")
-        binding.gradeError.visibility = if (show) VISIBLE else GONE
+        view?.findViewById<View>(R.id.gradeError)?.let {
+            Timber.i("${this::class.java.simpleName} Show error view: $show, Current: ${it.visibility == VISIBLE}")
+            it.visibility = if (show) VISIBLE else GONE
+        }
     }
 
     override fun setErrorDetails(message: String) {
@@ -122,11 +129,12 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     }
 
     override fun showSemesterSwitch(show: Boolean) {
-        Timber.i("${this::class.java.simpleName} Show semester switch: $show")
         semesterSwitchMenu?.isVisible = show
     }
 
     override fun showSemesterDialog(selectedIndex: Int) {
+        Timber.i("${this::class.java.simpleName} Show semester switch dialog: $selectedIndex")
+
         val choices = arrayOf(
             getString(R.string.grade_semester, 1),
             getString(R.string.grade_semester, 2)
