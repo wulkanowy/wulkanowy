@@ -99,7 +99,7 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     }
 
     override fun showContent(show: Boolean) {
-        Timber.i("Show content: $show")
+        Timber.i("${this::class.java.simpleName} Show content: $show")
         with(binding) {
             gradeViewPager.visibility = if (show) VISIBLE else GONE
             gradeTabLayout.visibility = if (show) VISIBLE else GONE
@@ -107,22 +107,22 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     }
 
     override fun showProgress(show: Boolean) {
-        Timber.i("Show progress: $show")
+        Timber.i("${this::class.java.simpleName} Show progress: $show")
         binding.gradeProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun showErrorView(show: Boolean) {
-        Timber.i("Show error view: $show")
+        Timber.i("${this::class.java.simpleName} Show error view: $show")
         binding.gradeError.visibility = if (show) VISIBLE else GONE
     }
 
     override fun setErrorDetails(message: String) {
-        Timber.i("Show error details: $message")
+        Timber.i("${this::class.java.simpleName} Show error details: $message")
         binding.gradeErrorMessage.text = message
     }
 
     override fun showSemesterSwitch(show: Boolean) {
-        Timber.i("Show semester switch: $show")
+        Timber.i("${this::class.java.simpleName} Show semester switch: $show")
         semesterSwitchMenu?.isVisible = show
     }
 

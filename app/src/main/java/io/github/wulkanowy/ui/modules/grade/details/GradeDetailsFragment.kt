@@ -113,37 +113,37 @@ class GradeDetailsFragment :
     }
 
     override fun showProgress(show: Boolean) {
-        Timber.i("Show progress: $show")
+        Timber.i("${this::class.java.simpleName} Show progress: $show")
         binding.gradeDetailsProgress.visibility = if (show) VISIBLE else GONE
     }
 
     override fun enableSwipe(enable: Boolean) {
-        Timber.i("Show swipe: $enable")
+        Timber.i("${this::class.java.simpleName} Show swipe: $enable")
         binding.gradeDetailsSwipe.isEnabled = enable
     }
 
     override fun showContent(show: Boolean) {
-        Timber.i("Show content: $show")
+        Timber.i("${this::class.java.simpleName} Show content: $show")
         binding.gradeDetailsRecycler.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showEmpty(show: Boolean) {
-        Timber.i("Show empty: $show")
+        Timber.i("${this::class.java.simpleName} Show empty: $show")
         binding.gradeDetailsEmpty.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showErrorView(show: Boolean) {
-        Timber.i("Show error view: $show")
+        Timber.i("${this::class.java.simpleName} Show error view: $show")
         binding.gradeDetailsError.visibility = if (show) VISIBLE else GONE
     }
 
     override fun setErrorDetails(message: String) {
-        Timber.i("Show error details: $message")
+        Timber.i("${this::class.java.simpleName} Show error details: $message")
         binding.gradeDetailsErrorMessage.text = message
     }
 
     override fun showRefresh(show: Boolean) {
-        Timber.i("Show refresh: $show")
+        Timber.i("${this::class.java.simpleName} Show refresh: $show")
         binding.gradeDetailsSwipe.isRefreshing = show
     }
 
