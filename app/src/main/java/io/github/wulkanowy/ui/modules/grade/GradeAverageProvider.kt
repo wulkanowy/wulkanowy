@@ -50,7 +50,7 @@ class GradeAverageProvider @Inject constructor(
         val selectedSemester = semesters.single { it.semesterId == semesterId }
         val firstSemester = semesters.single { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
 
-        return getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh).flatMapConcat { selectedDetails ->
+        return getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh).filter { it.status != Status.LOADING }.flatMapConcat { selectedDetails ->
             val isAnyAverage = selectedDetails.data.orEmpty().any { it.average != .0 }
 
             if (selectedSemester != firstSemester) {
@@ -71,7 +71,7 @@ class GradeAverageProvider @Inject constructor(
         val selectedSemester = semesters.single { it.semesterId == semesterId }
         val firstSemester = semesters.single { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
 
-        return getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh).flatMapConcat { selectedDetails ->
+        return getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh).filter { it.status != Status.LOADING }.flatMapConcat { selectedDetails ->
             val isAnyAverage = selectedDetails.data.orEmpty().any { it.average != .0 }
 
             if (selectedSemester != firstSemester) {
