@@ -47,19 +47,20 @@ class GradeAverageProvider @Inject constructor(
         val selectedSemester = semesters.single { it.semesterId == semesterId }
         val firstSemester = semesters.single { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
 
-        val firstSemesterDetailsWithAverage = getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh)
+        val selectedSemesterDetailsWithAverage = getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh)
 
-        return if (selectedSemester == firstSemester) {
-            firstSemesterDetailsWithAverage
-        } else firstSemesterDetailsWithAverage.combine(getSemesterDetailsWithAverage(student, firstSemester, forceRefresh)) { selectedDetails, secondDetails ->
-            val isAnyAverage = selectedDetails.data.orEmpty().any { it.average != .0 }
-            secondDetails.copy(data = selectedDetails.data?.map { selected ->
-                val second = secondDetails.data.orEmpty().singleOrNull { it.subject == selected.subject }
-                selected.copy(average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
-                    val selectedGrades = selected.grades.updateModifiers(student).calcAverage()
-                    (selectedGrades + (second?.grades?.updateModifiers(student)?.calcAverage() ?: selectedGrades)) / 2
-                } else (selected.average + (second?.average ?: selected.average)) / 2)
-            })
+        return if (selectedSemester == firstSemester) selectedSemesterDetailsWithAverage else {
+            val firstSemesterDetailsWithAverage = getSemesterDetailsWithAverage(student, firstSemester, forceRefresh)
+            selectedSemesterDetailsWithAverage.combine(firstSemesterDetailsWithAverage) { selectedDetails, secondDetails ->
+                val isAnyAverage = selectedDetails.data.orEmpty().any { it.average != .0 }
+                secondDetails.copy(data = selectedDetails.data?.map { selected ->
+                    val second = secondDetails.data.orEmpty().singleOrNull { it.subject == selected.subject }
+                    selected.copy(average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
+                        val selectedGrades = selected.grades.updateModifiers(student).calcAverage()
+                        (selectedGrades + (second?.grades?.updateModifiers(student)?.calcAverage() ?: selectedGrades)) / 2
+                    } else (selected.average + (second?.average ?: selected.average)) / 2)
+                })
+            }
         }
     }
 
@@ -67,19 +68,19 @@ class GradeAverageProvider @Inject constructor(
         val selectedSemester = semesters.single { it.semesterId == semesterId }
         val firstSemester = semesters.single { it.diaryId == selectedSemester.diaryId && it.semesterName == 1 }
 
-        val firstSemesterDetailsWithAverage = getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh)
-        val secondSemesterDetailsWithAverage = getSemesterDetailsWithAverage(student, firstSemester, forceRefresh)
+        val selectedSemesterDetailsWithAverage = getSemesterDetailsWithAverage(student, selectedSemester, forceRefresh)
 
-        return if (selectedSemester == firstSemester) {
-            firstSemesterDetailsWithAverage
-        } else firstSemesterDetailsWithAverage.combine(secondSemesterDetailsWithAverage) { selectedDetails, secondDetails ->
-            val isAnyAverage = selectedDetails.data.orEmpty().any { it.average != .0 }
-            secondDetails.copy(data = selectedDetails.data?.map { selected ->
-                val second = secondDetails.data.orEmpty().singleOrNull { it.subject == selected.subject }
-                selected.copy(average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
-                    (selected.grades.updateModifiers(student) + second?.grades?.updateModifiers(student).orEmpty()).calcAverage()
-                } else selected.average)
-            })
+        return if (selectedSemester == firstSemester) selectedSemesterDetailsWithAverage else {
+            val firstSemesterDetailsWithAverage = getSemesterDetailsWithAverage(student, firstSemester, forceRefresh)
+            selectedSemesterDetailsWithAverage.combine(firstSemesterDetailsWithAverage) { selectedDetails, secondDetails ->
+                val isAnyAverage = selectedDetails.data.orEmpty().any { it.average != .0 }
+                secondDetails.copy(data = selectedDetails.data?.map { selected ->
+                    val second = secondDetails.data.orEmpty().singleOrNull { it.subject == selected.subject }
+                    selected.copy(average = if (!isAnyAverage || preferencesRepository.gradeAverageForceCalc) {
+                        (selected.grades.updateModifiers(student) + second?.grades?.updateModifiers(student).orEmpty()).calcAverage()
+                    } else selected.average)
+                })
+            }
         }
     }
 
@@ -89,7 +90,7 @@ class GradeAverageProvider @Inject constructor(
             val isAnyAverage = summaries.orEmpty().any { it.average != .0 }
             val allGrades = details.orEmpty().groupBy { it.subject }
 
-            Resource(res.status, summaries?.emulateEmptySummaries(student, semester, allGrades.toList(), isAnyAverage)?.map { summary ->
+            val items = summaries?.emulateEmptySummaries(student, semester, allGrades.toList(), isAnyAverage)?.map { summary ->
                 val grades = allGrades[summary.subject].orEmpty()
                 GradeDetailsWithAverage(
                     subject = summary.subject,
@@ -100,7 +101,9 @@ class GradeAverageProvider @Inject constructor(
                     summary = summary,
                     grades = grades
                 )
-            }, res.error)
+            }
+
+            Resource(res.status, items, res.error)
         }
     }
 
