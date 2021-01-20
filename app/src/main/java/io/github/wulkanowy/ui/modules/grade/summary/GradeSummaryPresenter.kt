@@ -52,6 +52,7 @@ class GradeSummaryPresenter @Inject constructor(
                             enableSwipe(true)
                             showRefresh(true)
                             showProgress(false)
+                            showEmpty(false)
                             showContent(true)
                             updateData(items)
                         }
