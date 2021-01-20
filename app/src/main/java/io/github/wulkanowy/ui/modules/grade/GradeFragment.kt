@@ -5,7 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AlertDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +19,6 @@ import io.github.wulkanowy.ui.modules.grade.summary.GradeSummaryFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.setOnSelectPageListener
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -99,32 +98,21 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     }
 
     override fun showContent(show: Boolean) {
-        view?.findViewById<View>(R.id.gradeViewPager)?.let {
-            Timber.i("${this::class.java.simpleName} Show content: $show, Current: ${it.visibility == VISIBLE}")
-            it.visibility = if (show) VISIBLE else GONE
-        }
-
-        view?.findViewById<View>(R.id.gradeTabLayout)?.let {
-            it.visibility = if (show) VISIBLE else GONE
+        with(binding) {
+            gradeViewPager.visibility = if (show) VISIBLE else INVISIBLE
+            gradeTabLayout.visibility = if (show) VISIBLE else INVISIBLE
         }
     }
 
     override fun showProgress(show: Boolean) {
-        view?.findViewById<View>(R.id.gradeProgress)?.let {
-            Timber.i("${this::class.java.simpleName} Show progress: $show, Current: ${it.visibility == VISIBLE}")
-            it.visibility = if (show) VISIBLE else GONE
-        }
+        binding.gradeProgress.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showErrorView(show: Boolean) {
-        view?.findViewById<View>(R.id.gradeError)?.let {
-            Timber.i("${this::class.java.simpleName} Show error view: $show, Current: ${it.visibility == VISIBLE}")
-            it.visibility = if (show) VISIBLE else GONE
-        }
+        binding.gradeError.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun setErrorDetails(message: String) {
-        Timber.i("${this::class.java.simpleName} Show error details: $message")
         binding.gradeErrorMessage.text = message
     }
 
@@ -133,8 +121,6 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     }
 
     override fun showSemesterDialog(selectedIndex: Int) {
-        Timber.i("${this::class.java.simpleName} Show semester switch dialog: $selectedIndex")
-
         val choices = arrayOf(
             getString(R.string.grade_semester, 1),
             getString(R.string.grade_semester, 2)

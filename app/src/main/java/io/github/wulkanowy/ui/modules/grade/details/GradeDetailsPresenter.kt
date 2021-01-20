@@ -143,7 +143,6 @@ class GradeDetailsPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }.onEach {
-            Timber.i("Grade details: $it")
             when (it.status) {
                 Status.LOADING -> {
                     val items = createGradeItems(it.data.orEmpty())
@@ -165,13 +164,10 @@ class GradeDetailsPresenter @Inject constructor(
                     }
                 }
                 Status.SUCCESS -> {
-                    Timber.i("Loading grade details result: Success 1, list size: ${it.data?.size}")
+                    Timber.i("Loading grade details result: Success")
                     updateNewGradesAmount(it.data!!)
-                    Timber.i("Loading grade details result: Success 2")
                     updateMarkAsDoneButton()
-                    Timber.i("Loading grade details result: Success 3")
                     val items = createGradeItems(it.data)
-                    Timber.i("Loading grade details result: Success 4, view: $view")
                     view?.run {
                         showEmpty(items.isEmpty())
                         showErrorView(false)
@@ -182,13 +178,11 @@ class GradeDetailsPresenter @Inject constructor(
                             gradeColorTheme = preferencesRepository.gradeColorTheme
                         )
                     }
-                    Timber.i("Loading grade details result: Success 5")
                     analytics.logEvent(
                         "load_data",
                         "type" to "grade_details",
                         "items" to it.data.size
                     )
-                    Timber.i("Loading grade details result: Success 6")
                 }
                 Status.ERROR -> {
                     Timber.i("Loading grade details result: An exception occurred")
@@ -196,7 +190,6 @@ class GradeDetailsPresenter @Inject constructor(
                 }
             }
         }.afterLoading {
-            Timber.i("Loading grade details: AFTER LOADING, view: $view")
             view?.run {
                 showRefresh(false)
                 showProgress(false)
@@ -207,8 +200,7 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     private fun updateNewGradesAmount(grades: List<GradeDetailsWithAverage>) {
-        newGradesAmount =
-            grades.sumBy { item -> item.grades.sumBy { grade -> if (!grade.isRead) 1 else 0 } }
+        newGradesAmount = grades.sumBy { item -> item.grades.sumBy { grade -> if (!grade.isRead) 1 else 0 } }
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
@@ -241,18 +233,14 @@ class GradeDetailsPresenter @Inject constructor(
                     .sortedByDescending { it.date }
                     .map { GradeDetailsItem(it, ViewType.ITEM) }
 
-                listOf(
-                    GradeDetailsItem(
-                        GradeDetailsHeader(
-                            subject = subject,
-                            average = average,
-                            pointsSum = points,
-                            grades = subItems
-                        ).apply {
-                            newGrades = grades.filter { grade -> !grade.isRead }.size
-                        }, ViewType.HEADER
-                    )
-                ) + if (preferencesRepository.isGradeExpandable) emptyList() else subItems
+                listOf(GradeDetailsItem(GradeDetailsHeader(
+                    subject = subject,
+                    average = average,
+                    pointsSum = points,
+                    grades = subItems
+                ).apply {
+                    newGrades = grades.filter { grade -> !grade.isRead }.size
+                }, ViewType.HEADER)) + if (preferencesRepository.isGradeExpandable) emptyList() else subItems
             }.flatten()
     }
 
