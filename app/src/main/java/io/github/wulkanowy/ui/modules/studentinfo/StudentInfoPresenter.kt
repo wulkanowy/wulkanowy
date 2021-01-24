@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
+import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -23,12 +24,31 @@ class StudentInfoPresenter @Inject constructor(
 
     private lateinit var infoType: StudentInfoView.Type
 
+    private lateinit var lastError: Throwable
+
     fun onAttachView(view: StudentInfoView, type: StudentInfoView.Type) {
         super.onAttachView(view)
         infoType = type
         view.initView()
-        Timber.i("School view was initialized")
+        Timber.i("Student info $infoType view was initialized")
+        errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData()
+    }
+
+    fun onSwipeRefresh() {
+        loadData(true)
+    }
+
+    fun onRetry() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(true)
+    }
+
+    fun onDetailsClick() {
+        view?.showErrorDetailsDialog(lastError)
     }
 
     fun onItemSelected(position: Int) {
@@ -41,6 +61,10 @@ class StudentInfoPresenter @Inject constructor(
         }
     }
 
+    fun onItemLongClick(text: String) {
+        view?.copyToClipboard(text)
+    }
+
     private fun loadData(forceRefresh: Boolean = false) {
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
@@ -48,18 +72,36 @@ class StudentInfoPresenter @Inject constructor(
             studentInfoRepository.getStudentInfo(student, semester, forceRefresh)
         }.onEach {
             when (it.status) {
-                Status.LOADING -> Timber.i("Loading student info started")
+                Status.LOADING -> Timber.i("Loading student info $infoType started")
                 Status.SUCCESS -> {
-                    showCorrectData(it.data!!)
-                    analytics.logEvent(
-                        "load_item",
-                        "type" to "student_info"
-                    )
+                    if (it.data != null) {
+                        Timber.i("Loading student info $infoType result: Success")
+                        showCorrectData(it.data)
+                        view?.run {
+                            showContent(true)
+                            showEmpty(false)
+                            showErrorView(false)
+                        }
+                        analytics.logEvent("load_item", "type" to "student_info")
+                    } else {
+                        Timber.i("Loading student info $infoType result: No school info found")
+                        view?.run {
+                            showContent(!isViewEmpty)
+                            showEmpty(isViewEmpty)
+                            showErrorView(false)
+                        }
+                    }
                 }
                 Status.ERROR -> {
-                    Timber.i("Loading student info result: An exception occurred")
+                    Timber.i("Loading student info $infoType result: An exception occurred")
                     errorHandler.dispatch(it.error!!)
                 }
+            }
+        }.afterLoading {
+            view?.run {
+                hideRefresh()
+                showProgress(false)
+                enableSwipe(true)
             }
         }.launch()
     }
@@ -68,10 +110,22 @@ class StudentInfoPresenter @Inject constructor(
         when (infoType) {
             StudentInfoView.Type.PERSONAL -> view?.showPersonalTypeData(studentInfo)
             StudentInfoView.Type.CONTACT -> view?.showContactTypeData(studentInfo)
-            StudentInfoView.Type.ADDRESS -> view?.showPersonalTypeData(studentInfo)
+            StudentInfoView.Type.ADDRESS -> view?.showAddressTypeData(studentInfo)
             StudentInfoView.Type.FAMILY -> view?.showFamilyTypeData(studentInfo)
             StudentInfoView.Type.SECOND_GUARDIAN -> view?.showSecondGuardianTypeData(studentInfo)
             StudentInfoView.Type.FIRST_GUARDIAN -> view?.showFirstGuardianTypeData(studentInfo)
+        }
+    }
+
+    private fun showErrorViewOnError(message: String, error: Throwable) {
+        view?.run {
+            if (isViewEmpty) {
+                lastError = error
+                setErrorDetails(message)
+                showErrorView(true)
+                showEmpty(false)
+                showContent(false)
+            } else showError(message, error)
         }
     }
 }

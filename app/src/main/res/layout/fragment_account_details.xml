@@ -24,7 +24,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:background="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_all_account"
+                app:tint="@color/colorPrimary"
                 tools:ignore="ContentDescription" />
 
             <TextView

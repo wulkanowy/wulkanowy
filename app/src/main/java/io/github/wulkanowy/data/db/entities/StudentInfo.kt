@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import io.github.wulkanowy.data.enums.Gender
 import java.io.Serializable
 import java.time.LocalDate
 
@@ -30,7 +31,7 @@ data class StudentInfo(
     @ColumnInfo(name = "birth_place")
     val birthPlace: String,
 
-    val gender: String,
+    val gender: Gender,
 
     @ColumnInfo(name = "has_polish_citizenship")
     val hasPolishCitizenship: Boolean,

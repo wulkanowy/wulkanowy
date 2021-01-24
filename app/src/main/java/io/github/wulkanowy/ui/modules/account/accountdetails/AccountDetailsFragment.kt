@@ -7,8 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.get
-import com.avatarfirst.avatargenlib.AvatarConstants
-import com.avatarfirst.avatargenlib.AvatarGenerator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
@@ -76,7 +74,7 @@ class AccountDetailsFragment :
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu[0].isVisible = false
-        inflater.inflate(R.menu.action_menu_account_details, menu)
+        //inflater.inflate(R.menu.action_menu_account_details, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -87,18 +85,10 @@ class AccountDetailsFragment :
     }
 
     override fun showAccountData(studentWithSemesters: StudentWithSemesters) {
-        binding.accountDetailsName.text = studentWithSemesters.student.studentName
-        binding.accountDetailsSchool.text = studentWithSemesters.student.schoolName
-
-
-        binding.accountDetailsAvatar.setImageDrawable(
-            AvatarGenerator.avatarImage(
-                requireContext(),
-                200,
-                AvatarConstants.CIRCLE,
-                studentWithSemesters.student.studentName
-            )
-        )
+        with(binding) {
+            accountDetailsName.text = studentWithSemesters.student.studentName
+            accountDetailsSchool.text = studentWithSemesters.student.schoolName
+        }
     }
 
     override fun showAccountEditDetailsDialog() {

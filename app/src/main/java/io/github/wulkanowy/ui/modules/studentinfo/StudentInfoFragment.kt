@@ -1,10 +1,14 @@
 package io.github.wulkanowy.ui.modules.studentinfo
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import android.widget.Toast
+import androidx.core.content.getSystemService
 import androidx.core.view.get
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentInfo
+import io.github.wulkanowy.data.enums.Gender
 import io.github.wulkanowy.databinding.FragmentStudentInfoBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
@@ -31,6 +36,8 @@ class StudentInfoFragment :
 
     override val titleStringId: Int
         get() = R.string.student_info_title
+
+    override val isViewEmpty get() = studentInfoAdapter.items.isEmpty()
 
     companion object {
 
@@ -56,7 +63,16 @@ class StudentInfoFragment :
     }
 
     override fun initView() {
-        studentInfoAdapter.onItemClickListener = presenter::onItemSelected
+        with(binding) {
+            studentInfoSwipe.setOnRefreshListener { presenter.onSwipeRefresh() }
+            studentInfoErrorRetry.setOnClickListener { presenter.onRetry() }
+            studentInfoErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+        }
+
+        with(studentInfoAdapter) {
+            onItemClickListener = presenter::onItemSelected
+            onItemLongClickListener = presenter::onItemLongClick
+        }
 
         with(binding.studentInfoRecycler) {
             layoutManager = LinearLayoutManager(context)
@@ -80,12 +96,12 @@ class StudentInfoFragment :
     override fun showPersonalTypeData(studentInfo: StudentInfo) {
         updateData(
             listOf(
-                "Imię" to studentInfo.firstName,
-                "Drugię imię" to studentInfo.secondName,
-                "Płeć" to studentInfo.gender,
-                "Obywatelstwo polskie" to studentInfo.hasPolishCitizenship.toString(),
-                "Nazwisko rodowe" to studentInfo.familyName,
-                "Imię matki i ojca" to studentInfo.parentsNames
+                getString(R.string.student_info_first_name) to studentInfo.firstName,
+                getString(R.string.student_info_second_name) to studentInfo.secondName,
+                getString(R.string.student_info_gender) to getString(if (studentInfo.gender == Gender.MALE) R.string.student_info_male else R.string.student_info_female),
+                getString(R.string.student_info_polish_citizenship) to getString(if (studentInfo.hasPolishCitizenship) R.string.all_yes else R.string.all_no),
+                getString(R.string.student_info_family_name) to studentInfo.familyName,
+                getString(R.string.student_info_parents_name) to studentInfo.parentsNames
             )
         )
     }
@@ -93,9 +109,9 @@ class StudentInfoFragment :
     override fun showContactTypeData(studentInfo: StudentInfo) {
         updateData(
             listOf(
-                "Telefon" to studentInfo.phoneNumber,
-                "Telefon komórkowy" to studentInfo.cellPhoneNumber,
-                "E-mail" to studentInfo.email
+                getString(R.string.student_info_phone) to studentInfo.phoneNumber,
+                getString(R.string.student_info_cellphone) to studentInfo.cellPhoneNumber,
+                getString(R.string.student_info_email) to studentInfo.email
             )
         )
     }
@@ -113,9 +129,9 @@ class StudentInfoFragment :
     override fun showAddressTypeData(studentInfo: StudentInfo) {
         updateData(
             listOf(
-                "Adres zamieszkania" to studentInfo.address,
-                "Adres zameldowania" to studentInfo.registeredAddress,
-                "Adres korenspondencji" to studentInfo.correspondenceAddress
+                getString(R.string.student_info_address) to studentInfo.address,
+                getString(R.string.student_info_registered_address) to studentInfo.registeredAddress,
+                getString(R.string.student_info_correspondence_address) to studentInfo.correspondenceAddress
             )
         )
     }
@@ -123,11 +139,11 @@ class StudentInfoFragment :
     override fun showFirstGuardianTypeData(studentInfo: StudentInfo) {
         updateData(
             listOf(
-                "Nazwisko i imię" to studentInfo.firstGuardian.fullName,
-                "Stopień pokrewieństwa" to studentInfo.firstGuardian.kinship,
-                "Adres" to studentInfo.firstGuardian.address,
-                "Telefony" to studentInfo.firstGuardian.phones,
-                "E-mail" to studentInfo.firstGuardian.email
+                getString(R.string.student_info_full_name) to studentInfo.firstGuardian.fullName,
+                getString(R.string.student_info_kinship) to studentInfo.firstGuardian.kinship,
+                getString(R.string.student_info_guardian_address) to studentInfo.firstGuardian.address,
+                getString(R.string.student_info_phones) to studentInfo.firstGuardian.phones,
+                getString(R.string.student_info_email) to studentInfo.firstGuardian.email
             )
         )
     }
@@ -135,16 +151,55 @@ class StudentInfoFragment :
     override fun showSecondGuardianTypeData(studentInfo: StudentInfo) {
         updateData(
             listOf(
-                "Nazwisko i imię" to studentInfo.secondGuardian.fullName,
-                "Stopień pokrewieństwa" to studentInfo.secondGuardian.kinship,
-                "Adres" to studentInfo.secondGuardian.address,
-                "Telefony" to studentInfo.secondGuardian.phones,
-                "E-mail" to studentInfo.secondGuardian.email
+                getString(R.string.student_info_full_name) to studentInfo.secondGuardian.fullName,
+                getString(R.string.student_info_kinship) to studentInfo.secondGuardian.kinship,
+                getString(R.string.student_info_guardian_address) to studentInfo.secondGuardian.address,
+                getString(R.string.student_info_phones) to studentInfo.secondGuardian.phones,
+                getString(R.string.student_info_email) to studentInfo.secondGuardian.email
             )
         )
     }
 
     override fun openStudentInfoView(infoType: StudentInfoView.Type) {
         (requireActivity() as MainActivity).pushView(newInstance(infoType))
+    }
+
+    override fun showEmpty(show: Boolean) {
+        binding.studentInfoEmpty.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showErrorView(show: Boolean) {
+        binding.studentInfoError.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun setErrorDetails(message: String) {
+        binding.studentInfoErrorMessage.text = message
+    }
+
+    override fun showProgress(show: Boolean) {
+        binding.studentInfoProgress.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun enableSwipe(enable: Boolean) {
+        binding.studentInfoSwipe.isEnabled = enable
+    }
+
+    override fun showContent(show: Boolean) {
+        binding.studentInfoRecycler.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun hideRefresh() {
+        binding.studentInfoSwipe.isRefreshing = false
+    }
+
+    override fun copyToClipboard(text: String) {
+        val clipData = ClipData.newPlainText("student_info_wulkanowy", text)
+        requireActivity().getSystemService<ClipboardManager>()?.setPrimaryClip(clipData)
+        Toast.makeText(context, R.string.all_copied, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroyView() {
+        presenter.onDetachView()
+        super.onDestroyView()
     }
 }

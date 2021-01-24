@@ -13,6 +13,8 @@ class StudentInfoAdapter @Inject constructor() :
 
     var onItemClickListener: (position: Int) -> Unit = {}
 
+    var onItemLongClickListener: (text: String) -> Unit = {}
+
     override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -23,10 +25,16 @@ class StudentInfoAdapter @Inject constructor() :
         val item = items[position]
 
         with(holder.binding) {
-            studentInfoItemTitle.setText(item.first)
+            studentInfoItemTitle.text = item.first
             studentInfoItemSubtitle.text = item.second
 
-            root.setOnClickListener { onItemClickListener(position) }
+            with(root) {
+                setOnClickListener { onItemClickListener(position) }
+                setOnLongClickListener {
+                    onItemLongClickListener(studentInfoItemSubtitle.text.toString())
+                    true
+                }
+            }
         }
     }
 

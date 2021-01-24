@@ -9,6 +9,8 @@ interface StudentInfoView : BaseView {
         PERSONAL, ADDRESS, CONTACT, FAMILY, FIRST_GUARDIAN, SECOND_GUARDIAN
     }
 
+    val isViewEmpty: Boolean
+
     fun initView()
 
     fun updateData(data: List<Pair<String, String>>)
@@ -26,4 +28,20 @@ interface StudentInfoView : BaseView {
     fun showSecondGuardianTypeData(studentInfo: StudentInfo)
 
     fun openStudentInfoView(infoType: Type)
+
+    fun showEmpty(show: Boolean)
+
+    fun showErrorView(show: Boolean)
+
+    fun setErrorDetails(message: String)
+
+    fun showProgress(show: Boolean)
+
+    fun enableSwipe(enable: Boolean)
+
+    fun showContent(show: Boolean)
+
+    fun hideRefresh()
+
+    fun copyToClipboard(text: String)
 }
