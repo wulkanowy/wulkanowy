@@ -11,11 +11,12 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.HeaderAccountBinding
 import io.github.wulkanowy.databinding.ItemAccountBinding
-import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.getThemeAttrColor
 import javax.inject.Inject
 
 class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    var isAccountQuickDialogMode = false
 
     var items = emptyList<AccountItem<*>>()
 
@@ -81,25 +82,20 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
         val student = studentWithSemesters.student
         val semesters = studentWithSemesters.semesters
         val diary = semesters.maxByOrNull { it.semesterId }
+        val isDuplicatedStudent = items.filter {
+            if (it.value !is StudentWithSemesters) return@filter false
+            val studentToCompare = it.value.student
+
+            studentToCompare.studentId == student.studentId
+                && studentToCompare.schoolSymbol == student.schoolSymbol
+                && studentToCompare.symbol == student.symbol
+        }.size > 1 && isAccountQuickDialogMode
 
         with(binding) {
             accountItemName.text = "${student.studentName} ${diary?.diaryName.orEmpty()}"
             accountItemSchool.text = studentWithSemesters.student.schoolName
-            with(accountItemLoginMode) {
-                visibility = when (Sdk.Mode.valueOf(student.loginMode)) {
-                    Sdk.Mode.API -> {
-                        setText(R.string.account_login_mobile_api)
-                        VISIBLE
-                    }
-                    Sdk.Mode.HYBRID -> {
-                        setText(R.string.account_login_hybrid)
-                        VISIBLE
-                    }
-                    Sdk.Mode.SCRAPPER -> {
-                        GONE
-                    }
-                }
-            }
+            accountItemAccountType.setText(if (student.isParent) R.string.account_type_parent else R.string.account_type_student)
+            accountItemAccountType.visibility = if (isDuplicatedStudent) VISIBLE else GONE
 
             with(accountItemImage) {
                 val colorImage =

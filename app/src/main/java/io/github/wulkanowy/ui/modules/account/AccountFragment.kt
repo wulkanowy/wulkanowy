@@ -77,7 +77,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
         }
     }
 
-    override fun openAccountView(studentWithSemesters: StudentWithSemesters) {
+    override fun openAccountDetailsView(studentWithSemesters: StudentWithSemesters) {
         (activity as? MainActivity)?.pushView(
             AccountDetailsFragment.newInstance(
                 studentWithSemesters

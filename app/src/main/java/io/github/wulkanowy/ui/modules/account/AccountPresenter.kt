@@ -18,7 +18,7 @@ class AccountPresenter @Inject constructor(
     override fun onAttachView(view: AccountView) {
         super.onAttachView(view)
         view.initView()
-        Timber.i("Account dialog view was initialized")
+        Timber.i("Account view was initialized")
         loadData()
     }
 
@@ -28,7 +28,7 @@ class AccountPresenter @Inject constructor(
     }
 
     fun onItemSelected(studentWithSemesters: StudentWithSemesters) {
-        view?.openAccountView(studentWithSemesters)
+        view?.openAccountDetailsView(studentWithSemesters)
     }
 
     private fun createAccountItems(items: List<StudentWithSemesters>): List<AccountItem<*>> {

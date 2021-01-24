@@ -6,6 +6,8 @@ import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
 
 interface AccountDetailsView : BaseView {
 
+    fun initView()
+
     fun showAccountData(studentWithSemesters: StudentWithSemesters)
 
     fun showAccountEditDetailsDialog()

@@ -53,7 +53,9 @@ class AccountDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAccountDetailsBinding.bind(view)
         presenter.onAttachView(this)
+    }
 
+    override fun initView() {
         binding.accountDetailsLogout.setOnClickListener { presenter.onRemoveSelected() }
         binding.accountDetailsSelect.setOnClickListener { presenter.onStudentSelect() }
         binding.accountDetailsSelect.isEnabled = !presenter.studentWithSemesters.student.isCurrent

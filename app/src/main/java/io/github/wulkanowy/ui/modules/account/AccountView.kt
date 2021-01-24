@@ -11,6 +11,6 @@ interface AccountView : BaseView {
 
     fun openLoginView()
 
-    fun openAccountView(studentWithSemesters: StudentWithSemesters)
+    fun openAccountDetailsView(studentWithSemesters: StudentWithSemesters)
 }
 

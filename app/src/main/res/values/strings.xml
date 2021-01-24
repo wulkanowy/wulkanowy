@@ -353,6 +353,7 @@
     <string name="account_login_mobile_api">Mobile API mode</string>
     <string name="account_login_hybrid">Hybrid mode</string>
     <string name="account_details_edit">Edit data</string>
+    <string name="account_quick_manager">Accounts manager</string>
 
 
     <!--About-->
