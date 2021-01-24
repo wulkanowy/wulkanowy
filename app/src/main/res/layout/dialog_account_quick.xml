@@ -19,7 +19,7 @@
             android:paddingLeft="24dp"
             android:paddingEnd="24dp"
             android:paddingRight="24dp"
-            android:text="@string/account_title"
+            android:text="@string/account_quick_title"
             android:textSize="20sp"
             android:textStyle="bold"
             app:firstBaselineToTopHeight="40dp" />
