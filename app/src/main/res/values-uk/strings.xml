@@ -95,7 +95,7 @@
     <string name="grade_statistics_partial">Поточні</string>
     <string name="grade_statistics_semester">Семестрові</string>
     <string name="grade_statistics_points">Бали</string>
-    <string name="grade_statistics_legend">Legend</string>
+    <string name="grade_statistics_legend">Умовні позначення</string>
     <string name="grade_statistics_average">Average: %1$s</string>
     <string name="grade_statistics_average_class">Class</string>
     <string name="grade_statistics_average_student">Student</string>
