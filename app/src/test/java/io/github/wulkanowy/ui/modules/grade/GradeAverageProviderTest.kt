@@ -62,9 +62,7 @@ class GradeAverageProviderTest {
         "",
         1,
         true,
-        LocalDateTime.now(),
-        "",
-        ""
+        LocalDateTime.now()
     )
 
     private val semesters = mutableListOf(

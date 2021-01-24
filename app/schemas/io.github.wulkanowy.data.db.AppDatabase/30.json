@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 30,
-    "identityHash": "891980e378373d0a17bd341f9b07cc74",
+    "identityHash": "d642512ffa5fe81ae9308c9c55612539",
     "entities": [
       {
         "tableName": "Students",
@@ -1557,7 +1557,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "realId",
+            "fieldPath": "unitId",
             "columnName": "real_id",
             "affinity": "INTEGER",
             "notNull": true
@@ -1607,7 +1607,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "studentId",
+            "fieldPath": "userLoginId",
             "columnName": "student_id",
             "affinity": "INTEGER",
             "notNull": true
@@ -1675,7 +1675,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "studentId",
+            "fieldPath": "userLoginId",
             "columnName": "student_id",
             "affinity": "INTEGER",
             "notNull": true
@@ -1943,12 +1943,194 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "StudentInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `full_name` TEXT NOT NULL, `first_name` TEXT NOT NULL, `second_name` TEXT NOT NULL, `surname` TEXT NOT NULL, `birth_date` INTEGER NOT NULL, `birth_place` TEXT NOT NULL, `gender` TEXT NOT NULL, `has_polish_citizenship` INTEGER NOT NULL, `family_name` TEXT NOT NULL, `parents_names` TEXT NOT NULL, `address` TEXT NOT NULL, `registered_address` TEXT NOT NULL, `correspondence_address` TEXT NOT NULL, `phone_number` TEXT NOT NULL, `cell_phone_number` TEXT NOT NULL, `email` TEXT NOT NULL, `first_guardian_full_name` TEXT NOT NULL, `first_guardian_kinship` TEXT NOT NULL, `first_guardian_address` TEXT NOT NULL, `first_guardian_phones` TEXT NOT NULL, `first_guardian_email` TEXT NOT NULL, `second_guardian_full_name` TEXT NOT NULL, `second_guardian_kinship` TEXT NOT NULL, `second_guardian_address` TEXT NOT NULL, `second_guardian_phones` TEXT NOT NULL, `second_guardian_email` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "studentId",
+            "columnName": "student_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullName",
+            "columnName": "full_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "first_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "secondName",
+            "columnName": "second_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "surname",
+            "columnName": "surname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "birthDate",
+            "columnName": "birth_date",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "birthPlace",
+            "columnName": "birth_place",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hasPolishCitizenship",
+            "columnName": "has_polish_citizenship",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "familyName",
+            "columnName": "family_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parentsNames",
+            "columnName": "parents_names",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "registeredAddress",
+            "columnName": "registered_address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "correspondenceAddress",
+            "columnName": "correspondence_address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phoneNumber",
+            "columnName": "phone_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cellPhoneNumber",
+            "columnName": "cell_phone_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstGuardian.fullName",
+            "columnName": "first_guardian_full_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstGuardian.kinship",
+            "columnName": "first_guardian_kinship",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstGuardian.address",
+            "columnName": "first_guardian_address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstGuardian.phones",
+            "columnName": "first_guardian_phones",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstGuardian.email",
+            "columnName": "first_guardian_email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "secondGuardian.fullName",
+            "columnName": "second_guardian_full_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "secondGuardian.kinship",
+            "columnName": "second_guardian_kinship",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "secondGuardian.address",
+            "columnName": "second_guardian_address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "secondGuardian.phones",
+            "columnName": "second_guardian_phones",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "secondGuardian.email",
+            "columnName": "second_guardian_email",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '891980e378373d0a17bd341f9b07cc74')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd642512ffa5fe81ae9308c9c55612539')"
     ]
   }
 }

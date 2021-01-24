@@ -7,7 +7,13 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.time.LocalDateTime
 
-@Entity(tableName = "Students", indices = [Index(value = ["email", "symbol", "student_id", "school_id", "class_id"], unique = true)])
+@Entity(
+    tableName = "Students",
+    indices = [Index(
+        value = ["email", "symbol", "student_id", "school_id", "class_id"],
+        unique = true
+    )]
+)
 data class Student(
 
     @ColumnInfo(name = "scrapper_base_url")
@@ -68,13 +74,7 @@ data class Student(
     val isCurrent: Boolean,
 
     @ColumnInfo(name = "registration_date")
-    val registrationDate: LocalDateTime,
-
-    @ColumnInfo(name = "avatar_color")
-    val avatarColor: String,
-
-    @ColumnInfo(name = "nick")
-    val nick: String?
+    val registrationDate: LocalDateTime
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)

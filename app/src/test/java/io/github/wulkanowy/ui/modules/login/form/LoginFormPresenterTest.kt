@@ -120,9 +120,7 @@ class LoginFormPresenterTest {
             userLoginId = 0,
             schoolShortName = "",
             isParent = false,
-            userName = "",
-            nick = null,
-            avatarColor = ""
+            userName = ""
         )
         coEvery { repository.getStudentsScrapper(any(), any(), any(), any()) } returns listOf(
             StudentWithSemesters(studentTest, emptyList())

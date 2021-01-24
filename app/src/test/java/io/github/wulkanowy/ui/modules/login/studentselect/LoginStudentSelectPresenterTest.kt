@@ -60,9 +60,7 @@ class LoginStudentSelectPresenterTest {
             schoolShortName = "",
             userLoginId = 1,
             isParent = false,
-            userName = "",
-            avatarColor = "",
-            nick = null
+            userName = ""
         )
     }
 
