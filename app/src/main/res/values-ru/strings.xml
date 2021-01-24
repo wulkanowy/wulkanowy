@@ -47,7 +47,7 @@
     <string name="login_incorrect_symbol">Студент не найден. Подтвердите символ и выбранный вариант регистра UONET+</string>
     <string name="login_field_required">Обязательное поле</string>
     <string name="login_duplicate_student">Данный ученик уже авторизован</string>
-    <string name="login_symbol_helper">Этот символ можно найти на странице регистрации в &#160;<b>Uczeń</b> → &#160;<b>Dostęp Mobilny</b> → &#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nУбедитесь, что вы установили соответствующий вариант регистра в поле <b>Разновидностью бревна UONET+</b> на предыдущем экране. Wulkanowy на данный момент не обнаруживает дошкольников</string>
+    <string name="login_symbol_helper">Этот символ можно найти на странице регистрации в &#160;<b>Ученик</b> → &#160;<b>Телефонный доступ</b> → &#160;<b> Зарегистрируй мобильное устройство</b>.\n\nУбедитесь, что вы установили соответствующий вариант регистра в поле <b>Разновидностью бревна UONET+</b> на предыдущем экране. Wulkanowy на данный момент не обнаруживает дошкольников</string>
     <string name="login_select_student">Выберите учеников для авторизации в приложении</string>
     <string name="login_advanced">Другие варианты</string>
     <string name="login_advanced_warning_mobile_api">В этом режиме не работают: счастливый номер, статистика класса по оценкам, статистика посещаемости и уроков, информация о школе и список зарегистрированных устройств</string>
@@ -60,7 +60,7 @@
     <string name="login_email_intent_title">Отправить письмо</string>
     <string name="login_email_details">Опишите детали проблемы:</string>
     <string name="login_recover_warning">Убедитесь, что вы выбрали правильный вариант регистра UONET+!</string>
-    <string name="login_recover_button">Забыли пароль?</string>
+    <string name="login_recover_button">Я забыл свой пароль</string>
     <string name="login_recover_title">Восстановите свой аккаунт</string>
     <string name="login_recover">Восстановить</string>
     <string name="login_signed_in">Студент уже вошел в систему</string>
