@@ -84,20 +84,20 @@
     <string name="grade_no_average">Bez průměru</string>
     <string name="grade_predicted">Předpovězeno: %1$s</string>
     <string name="grade_final">Konečná: %1$s</string>
-    <string name="grade_summary_points">Celkem bodů</string>
+    <string name="grade_summary_points">Součet bodů</string>
     <string name="grade_summary_final_grade">Konečná známka</string>
     <string name="grade_summary_predicted_grade">Předpokládaná známka</string>
     <string name="grade_summary_calculated_average">Vypočítaný průměr</string>
     <string name="grade_summary_final_average">Konečný průměr</string>
-    <string name="grade_menu_summary">Souhrn</string>
+    <string name="grade_menu_summary">Shrnutí</string>
     <string name="grade_menu_statistics">Třída</string>
     <string name="grade_menu_read">Označit jako přečtené</string>
     <string name="grade_statistics_partial">Částečně</string>
     <string name="grade_statistics_semester">Semestr</string>
     <string name="grade_statistics_points">Body</string>
-    <string name="grade_statistics_legend">Legend</string>
-    <string name="grade_statistics_average">Average: %1$s</string>
-    <string name="grade_statistics_average_class">Class</string>
+    <string name="grade_statistics_legend">Vysvětlivky</string>
+    <string name="grade_statistics_average">Průměr: %1$s</string>
+    <string name="grade_statistics_average_class">Třída</string>
     <string name="grade_statistics_average_student">Žák</string>
     <plurals name="grade_number_item">
         <item quantity="one">%d známka</item>
@@ -168,7 +168,7 @@
     <string name="additional_lessons_button">Zobrazit další lekce</string>
     <string name="additional_lessons_no_items">Žádné informace o dalších lekcích</string>
     <!--Attendance-->
-    <string name="attendance_summary_button">Souhrn docházky</string>
+    <string name="attendance_summary_button">Shrnutí docházky</string>
     <string name="attendance_absence_school">Nepřítomen ze školních důvodů</string>
     <string name="attendance_absence_excused">Omluvená nepřítomnost</string>
     <string name="attendance_absence_unexcused">Neomluvená nepřítomnost</string>
@@ -193,7 +193,7 @@
     <string name="attendance_excuse_title">Ospravedlnit</string>
     <!--Attendance summary-->
     <string name="attendance_summary_final">Účast</string>
-    <string name="attendance_summary_total">Celkový</string>
+    <string name="attendance_summary_total">Společně</string>
     <!--Exam-->
     <string name="exam_no_items">Tento týden žádné testy</string>
     <string name="exam_type">Typ</string>
@@ -341,7 +341,7 @@
     <!--Account-->
     <string name="account_add_new">Přidat účet</string>
     <string name="account_logout">Odhlásit se</string>
-    <string name="account_confirm">Chcete se odhlásit z aktivního studenta?</string>
+    <string name="account_confirm">Chcete se odhlásit z aktivního žáka?</string>
     <string name="account_logout_student">Odhlášení žáků</string>
     <string name="account_type_student">Žákův účet</string>
     <string name="account_type_parent">Rodičovský účet</string>
