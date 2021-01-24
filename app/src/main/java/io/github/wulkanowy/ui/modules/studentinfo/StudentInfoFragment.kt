@@ -122,7 +122,9 @@ class StudentInfoFragment :
             listOf(
                 studentInfo.firstGuardian.kinship.capitalize() to studentInfo.firstGuardian.fullName,
                 studentInfo.secondGuardian.kinship.capitalize() to studentInfo.secondGuardian.fullName
-            )
+            ).map {
+                if (it.second.isBlank()) it.copy(second = getString(R.string.all_no_data)) else it
+            }
         )
     }
 
@@ -132,7 +134,9 @@ class StudentInfoFragment :
                 getString(R.string.student_info_address) to studentInfo.address,
                 getString(R.string.student_info_registered_address) to studentInfo.registeredAddress,
                 getString(R.string.student_info_correspondence_address) to studentInfo.correspondenceAddress
-            )
+            ).map {
+                if (it.second.isBlank()) it.copy(second = getString(R.string.all_no_data)) else it
+            }
         )
     }
 
@@ -144,7 +148,9 @@ class StudentInfoFragment :
                 getString(R.string.student_info_guardian_address) to studentInfo.firstGuardian.address,
                 getString(R.string.student_info_phones) to studentInfo.firstGuardian.phones,
                 getString(R.string.student_info_email) to studentInfo.firstGuardian.email
-            )
+            ).map {
+                if (it.second.isBlank()) it.copy(second = getString(R.string.all_no_data)) else it
+            }
         )
     }
 
@@ -156,7 +162,9 @@ class StudentInfoFragment :
                 getString(R.string.student_info_guardian_address) to studentInfo.secondGuardian.address,
                 getString(R.string.student_info_phones) to studentInfo.secondGuardian.phones,
                 getString(R.string.student_info_email) to studentInfo.secondGuardian.email
-            )
+            ).map {
+                if (it.second.isBlank()) it.copy(second = getString(R.string.all_no_data)) else it
+            }
         )
     }
 
