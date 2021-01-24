@@ -95,10 +95,10 @@
     <string name="grade_statistics_partial">Cząstkowe</string>
     <string name="grade_statistics_semester">Semestralne</string>
     <string name="grade_statistics_points">Punkty</string>
-    <string name="grade_statistics_legend">Legend</string>
-    <string name="grade_statistics_average">Average: %1$s</string>
-    <string name="grade_statistics_average_class">Class</string>
-    <string name="grade_statistics_average_student">Student</string>
+    <string name="grade_statistics_legend">Legenda</string>
+    <string name="grade_statistics_average">Średnia: %1$s</string>
+    <string name="grade_statistics_average_class">Klasa</string>
+    <string name="grade_statistics_average_student">Uczeń</string>
     <plurals name="grade_number_item">
         <item quantity="one">%d ocena</item>
         <item quantity="few">%d oceny</item>
