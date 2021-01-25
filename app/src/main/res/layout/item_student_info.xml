@@ -38,5 +38,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/student_info_item_title"
         tools:text="@tools:sample/lorem/random" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

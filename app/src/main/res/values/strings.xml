@@ -355,6 +355,11 @@
     <string name="account_login_hybrid">Hybrid mode</string>
     <string name="account_details_edit">Edit data</string>
     <string name="account_quick_manager">Accounts manager</string>
+    <string name="account_select_student">Select student</string>
+    <string name="account_family">Family</string>
+    <string name="account_contact">Contact</string>
+    <string name="account_address">Residence details</string>
+    <string name="account_personal_data">Personal information</string>
 
 
     <!--About-->
@@ -537,4 +542,5 @@
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
+
 </resources>

@@ -79,7 +79,7 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
                     android:gravity="center_vertical"
-                    android:text="Dane osobowe"
+                    android:text="@string/account_personal_data"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -110,7 +110,7 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
                     android:gravity="center_vertical"
-                    android:text="Dane zamieszkania"
+                    android:text="@string/account_address"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -141,7 +141,7 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
                     android:gravity="center_vertical"
-                    android:text="Kontakt"
+                    android:text="@string/account_contact"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -172,7 +172,7 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
                     android:gravity="center_vertical"
-                    android:text="Rodzina"
+                    android:text="@string/account_family"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -187,7 +187,7 @@
         android:insetTop="0dp"
         android:insetRight="0dp"
         android:insetBottom="0dp"
-        android:text="Wybierz ucznia"
+        android:text="@string/account_select_student"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@id/accountDetailsLogout" />
 
@@ -201,7 +201,6 @@
         android:insetTop="0dp"
         android:insetRight="0dp"
         android:insetBottom="0dp"
-        android:text="Wyloguj"
+        android:text="@string/account_logout"
         app:layout_constraintBottom_toBottomOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
