@@ -110,7 +110,9 @@ class StudentInfoFragment :
                 getString(R.string.student_info_polish_citizenship) to getString(if (studentInfo.hasPolishCitizenship) R.string.all_yes else R.string.all_no),
                 getString(R.string.student_info_family_name) to studentInfo.familyName,
                 getString(R.string.student_info_parents_name) to studentInfo.parentsNames
-            )
+            ).map {
+                if (it.second.isBlank()) it.copy(second = getString(R.string.all_no_data)) else it
+            }
         )
     }
 
@@ -120,7 +122,9 @@ class StudentInfoFragment :
                 getString(R.string.student_info_phone) to studentInfo.phoneNumber,
                 getString(R.string.student_info_cellphone) to studentInfo.cellPhoneNumber,
                 getString(R.string.student_info_email) to studentInfo.email
-            )
+            ).map {
+                if (it.second.isBlank()) it.copy(second = getString(R.string.all_no_data)) else it
+            }
         )
     }
 
