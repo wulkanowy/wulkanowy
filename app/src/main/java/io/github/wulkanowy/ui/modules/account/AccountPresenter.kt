@@ -46,7 +46,7 @@ class AccountPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
+        flowWithResource { studentRepository.getSavedStudents() }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading account data started")
                 Status.SUCCESS -> {
