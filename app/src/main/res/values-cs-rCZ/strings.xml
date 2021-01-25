@@ -143,7 +143,7 @@
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Lekce</string>
-    <string name="timetable_room">Pokoj</string>
+    <string name="timetable_room">Učebna</string>
     <string name="timetable_group">Skupina</string>
     <string name="timetable_time">Hodiny</string>
     <string name="timetable_changes">Změny</string>
