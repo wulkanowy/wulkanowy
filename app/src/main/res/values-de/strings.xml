@@ -95,10 +95,10 @@
     <string name="grade_statistics_partial">Partiell</string>
     <string name="grade_statistics_semester">Semester</string>
     <string name="grade_statistics_points">Punkte</string>
-    <string name="grade_statistics_legend">Legend</string>
-    <string name="grade_statistics_average">Average: %1$s</string>
-    <string name="grade_statistics_average_class">Class</string>
-    <string name="grade_statistics_average_student">Student</string>
+    <string name="grade_statistics_legend">Legende</string>
+    <string name="grade_statistics_average">Durchschnitt: %1$s</string>
+    <string name="grade_statistics_average_class">Klasse</string>
+    <string name="grade_statistics_average_student">Schüler</string>
     <plurals name="grade_number_item">
         <item quantity="one">%d Note</item>
         <item quantity="other">%d Noten</item>
@@ -150,9 +150,9 @@
     <string name="completed_lessons_absence">Abwesenheit</string>
     <string name="completed_lessons_resources">Ressourcen</string>
     <!--Additional lessons-->
-    <string name="additional_lessons_title">Additional lessons</string>
-    <string name="additional_lessons_button">Show additional lessons</string>
-    <string name="additional_lessons_no_items">No info about additional lessons</string>
+    <string name="additional_lessons_title">Zusätzliche Lektionen</string>
+    <string name="additional_lessons_button">Zusätzliche Lektionen anzeigen</string>
+    <string name="additional_lessons_no_items">Keine Infos zu zusätzlichen Lektionen</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Übersicht über die Schulbesuch</string>
     <string name="attendance_absence_school">Aus schulischen Gründen abwesend</string>
@@ -203,7 +203,7 @@
     <string name="message_subject">Thema</string>
     <string name="message_content">Inhalt</string>
     <string name="message_send_successful">Nachricht erfolgreich gesendet</string>
-    <string name="message_not_exists">Message does not exist</string>
+    <string name="message_not_exists">Nachricht existiert nicht</string>
     <string name="message_required_recipients">Sie müssen mindestens 1 Empfänger auswählen.</string>
     <string name="message_content_min_length">Der Inhalt der Nachricht muss mindestens 3 Zeichen lang sein.</string>
     <plurals name="message_number_item">
