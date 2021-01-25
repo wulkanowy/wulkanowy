@@ -2,7 +2,7 @@ package io.github.wulkanowy.ui.modules.studentinfo
 
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.StudentInfo
-import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.StudentInfoRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -10,6 +10,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
+import io.github.wulkanowy.utils.getCurrentOrLast
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -18,17 +19,23 @@ class StudentInfoPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val studentInfoRepository: StudentInfoRepository,
-    private val semesterRepository: SemesterRepository,
     private val analytics: AnalyticsHelper
 ) : BasePresenter<StudentInfoView>(errorHandler, studentRepository) {
 
     private lateinit var infoType: StudentInfoView.Type
 
+    private lateinit var studentWithSemesters: StudentWithSemesters
+
     private lateinit var lastError: Throwable
 
-    fun onAttachView(view: StudentInfoView, type: StudentInfoView.Type) {
+    fun onAttachView(
+        view: StudentInfoView,
+        type: StudentInfoView.Type,
+        studentWithSemesters: StudentWithSemesters
+    ) {
         super.onAttachView(view)
         infoType = type
+        this.studentWithSemesters = studentWithSemesters
         view.initView()
         Timber.i("Student info $infoType view was initialized")
         errorHandler.showErrorMessage = ::showErrorViewOnError
@@ -55,9 +62,9 @@ class StudentInfoPresenter @Inject constructor(
         if (infoType != StudentInfoView.Type.FAMILY) return
 
         if (position == 0) {
-            view?.openStudentInfoView(StudentInfoView.Type.FIRST_GUARDIAN)
+            view?.openStudentInfoView(StudentInfoView.Type.FIRST_GUARDIAN, studentWithSemesters)
         } else {
-            view?.openStudentInfoView(StudentInfoView.Type.SECOND_GUARDIAN)
+            view?.openStudentInfoView(StudentInfoView.Type.SECOND_GUARDIAN, studentWithSemesters)
         }
     }
 
@@ -66,13 +73,27 @@ class StudentInfoPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
+        Timber.i("Loading student info $infoType started")
         flowWithResourceIn {
-            val student = studentRepository.getCurrentStudent()
-            val semester = semesterRepository.getCurrentSemester(student)
-            studentInfoRepository.getStudentInfo(student, semester, forceRefresh)
+            val semester = studentWithSemesters.semesters.getCurrentOrLast()
+            studentInfoRepository.getStudentInfo(
+                studentWithSemesters.student,
+                semester,
+                forceRefresh
+            )
         }.onEach {
             when (it.status) {
-                Status.LOADING -> Timber.i("Loading student info $infoType started")
+                Status.LOADING -> {
+                    if (it.data != null) {
+                        view?.run {
+                            enableSwipe(true)
+                            hideRefresh()
+                            showProgress(false)
+                            showContent(true)
+                            showCorrectData(it.data)
+                        }
+                    }
+                }
                 Status.SUCCESS -> {
                     if (it.data != null) {
                         Timber.i("Loading student info $infoType result: Success")
@@ -125,6 +146,7 @@ class StudentInfoPresenter @Inject constructor(
                 showErrorView(true)
                 showEmpty(false)
                 showContent(false)
+                showProgress(false)
             } else showError(message, error)
         }
     }

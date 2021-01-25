@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.studentinfo
 
 import io.github.wulkanowy.data.db.entities.StudentInfo
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.ui.base.BaseView
 
 interface StudentInfoView : BaseView {
@@ -27,7 +28,7 @@ interface StudentInfoView : BaseView {
 
     fun showSecondGuardianTypeData(studentInfo: StudentInfo)
 
-    fun openStudentInfoView(infoType: Type)
+    fun openStudentInfoView(infoType: Type, studentWithSemesters: StudentWithSemesters)
 
     fun showEmpty(show: Boolean)
 

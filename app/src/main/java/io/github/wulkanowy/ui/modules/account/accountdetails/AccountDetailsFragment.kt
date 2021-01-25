@@ -116,8 +116,16 @@ class AccountDetailsFragment :
         requireActivity().recreate()
     }
 
-    override fun openStudentInfoView(infoType: StudentInfoView.Type) {
-        (requireActivity() as MainActivity).pushView(StudentInfoFragment.newInstance(infoType))
+    override fun openStudentInfoView(
+        infoType: StudentInfoView.Type,
+        studentWithSemesters: StudentWithSemesters
+    ) {
+        (requireActivity() as MainActivity).pushView(
+            StudentInfoFragment.newInstance(
+                infoType,
+                studentWithSemesters
+            )
+        )
     }
 
     override fun onDestroyView() {

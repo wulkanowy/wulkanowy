@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentInfo
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.enums.Gender
 import io.github.wulkanowy.databinding.FragmentStudentInfoBinding
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -41,11 +42,17 @@ class StudentInfoFragment :
 
     companion object {
 
-        private const val ARGUMENT_KEY = "info_type"
+        private const val INFO_TYPE_ARGUMENT_KEY = "info_type"
 
-        fun newInstance(type: StudentInfoView.Type) = StudentInfoFragment().apply {
-            arguments = Bundle().apply { putSerializable(ARGUMENT_KEY, type) }
-        }
+        private const val STUDENT_ARGUMENT_KEY = "student_with_semesters"
+
+        fun newInstance(type: StudentInfoView.Type, studentWithSemesters: StudentWithSemesters) =
+            StudentInfoFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(INFO_TYPE_ARGUMENT_KEY, type)
+                    putSerializable(STUDENT_ARGUMENT_KEY, studentWithSemesters)
+                }
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +65,8 @@ class StudentInfoFragment :
         binding = FragmentStudentInfoBinding.bind(view)
         presenter.onAttachView(
             this,
-            requireArguments().getSerializable(ARGUMENT_KEY) as StudentInfoView.Type
+            requireArguments().getSerializable(INFO_TYPE_ARGUMENT_KEY) as StudentInfoView.Type,
+            requireArguments().getSerializable(STUDENT_ARGUMENT_KEY) as StudentWithSemesters
         )
     }
 
@@ -168,8 +176,11 @@ class StudentInfoFragment :
         )
     }
 
-    override fun openStudentInfoView(infoType: StudentInfoView.Type) {
-        (requireActivity() as MainActivity).pushView(newInstance(infoType))
+    override fun openStudentInfoView(
+        infoType: StudentInfoView.Type,
+        studentWithSemesters: StudentWithSemesters
+    ) {
+        (requireActivity() as MainActivity).pushView(newInstance(infoType, studentWithSemesters))
     }
 
     override fun showEmpty(show: Boolean) {

@@ -30,7 +30,7 @@ class AccountDetailsPresenter @Inject constructor(
     }
 
     fun onStudentInfoSelected(infoType: StudentInfoView.Type) {
-        view?.openStudentInfoView(infoType)
+        view?.openStudentInfoView(infoType, studentWithSemesters)
     }
 
     fun onStudentSelect() {

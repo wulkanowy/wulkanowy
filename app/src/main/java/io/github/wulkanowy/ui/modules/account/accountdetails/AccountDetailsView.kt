@@ -18,5 +18,8 @@ interface AccountDetailsView : BaseView {
 
     fun recreateMainView()
 
-    fun openStudentInfoView(infoType: StudentInfoView.Type)
+    fun openStudentInfoView(
+        infoType: StudentInfoView.Type,
+        studentWithSemesters: StudentWithSemesters
+    )
 }
