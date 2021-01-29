@@ -17,7 +17,10 @@
     <string name="send_message_title">Нове повідомлення</string>
     <string name="note_title">Нотатки та досягнення</string>
     <string name="homework_title">Домашні завдання</string>
-    <string name="account_title">Оберіть аккаунт</string>
+    <string name="account_title">Accounts manager</string>
+    <string name="account_quick_title">Select account</string>
+    <string name="account_details_title">Account details</string>
+    <string name="student_info_title">Student info</string>
     <!--Subtitles-->
     <string name="grade_subtitle">%1$d семестр, %2$d/%3$d</string>
     <!--Login-->
@@ -341,12 +344,19 @@
     <!--Account-->
     <string name="account_add_new">Додати аккаунт</string>
     <string name="account_logout">Вийти</string>
-    <string name="account_confirm">Ви впевнені, що хочете вийти з цього аккаунту?</string>
+    <string name="account_confirm">Do you want to log out this student?</string>
     <string name="account_logout_student">Вийти з аккаунту учня</string>
     <string name="account_type_student">Студентський рахунок</string>
     <string name="account_type_parent">Головний рахунок</string>
     <string name="account_login_mobile_api">Режим мобільного API</string>
     <string name="account_login_hybrid">Гібридний режим</string>
+    <string name="account_details_edit">Edit data</string>
+    <string name="account_quick_manager">Accounts manager</string>
+    <string name="account_select_student">Select student</string>
+    <string name="account_family">Family</string>
+    <string name="account_contact">Contact</string>
+    <string name="account_address">Residence details</string>
+    <string name="account_personal_data">Personal information</string>
     <!--About-->
     <string name="about_version">Версія додатка</string>
     <string name="about_contributor">Розробники</string>
@@ -370,6 +380,26 @@
     <!--Contributor-->
     <string name="contributor_avatar_description">Аватар</string>
     <string name="contributor_see_more">Сторінка проекту на GitHub</string>
+    <!--Student info-->
+    <string name="student_info_empty">No info about student</string>
+    <string name="student_info_first_name">Name</string>
+    <string name="student_info_second_name">Second name</string>
+    <string name="student_info_gender">Gender</string>
+    <string name="student_info_polish_citizenship">Polish citizenship</string>
+    <string name="student_info_family_name">Family name</string>
+    <string name="student_info_parents_name">Mother\'s and father\'s names</string>
+    <string name="student_info_phone">Phone</string>
+    <string name="student_info_cellphone">Cellphone</string>
+    <string name="student_info_email">E-mail</string>
+    <string name="student_info_address">Address of residence</string>
+    <string name="student_info_registered_address">Address of registration</string>
+    <string name="student_info_correspondence_address">Correspondence address</string>
+    <string name="student_info_full_name">Surname and first name</string>
+    <string name="student_info_kinship">Degree of kinship</string>
+    <string name="student_info_guardian_address">Address</string>
+    <string name="student_info_phones">Phones</string>
+    <string name="student_info_male">Male</string>
+    <string name="student_info_female">Female</string>
     <!--Log viewer-->
     <string name="logviewer_share">Поділитися логами</string>
     <string name="logviewer_refresh">Оновити</string>
@@ -394,6 +424,8 @@
     <string name="all_next">Наступний</string>
     <string name="all_search">Пошук</string>
     <string name="all_search_hint">Пошук…</string>
+    <string name="all_yes">Yes</string>
+    <string name="all_no">No</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Брак уроків</string>
     <string name="widget_timetable_theme_title">Увібрати тему</string>
