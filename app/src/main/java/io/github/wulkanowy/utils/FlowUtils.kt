@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
@@ -72,15 +70,16 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
     })
 }
 
-fun <T> flowWithResource(block: suspend () -> T) = flowOf(Resource.loading<T>())
-    .map { Resource.success(block()) }
-    .catch { Resource.error<T>(it) }
+fun <T> flowWithResource(block: suspend () -> T) = flow {
+    emit(Resource.loading())
+    emit(Resource.success(block()))
+}.catch { emit(Resource.error(it)) }
 
 @OptIn(FlowPreview::class)
-fun <T> flowWithResourceIn(block: suspend () -> Flow<Resource<T>>) = flowOf(Resource.loading<T>())
-    .flatMapConcat { block() }
-    .filter { it.status != Status.LOADING || (it.status == Status.LOADING && it.data != null) }
-    .catch { emit(Resource.error(it)) }
+fun <T> flowWithResourceIn(block: suspend () -> Flow<Resource<T>>) = flow {
+    emit(Resource.loading())
+    emitAll(block().filter { it.status != Status.LOADING || (it.status == Status.LOADING && it.data != null) })
+}.catch { emit(Resource.error(it)) }
 
 fun <T> Flow<Resource<T>>.afterLoading(callback: () -> Unit) = onEach {
     if (it.status != Status.LOADING) callback()
