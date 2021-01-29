@@ -36,6 +36,8 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
 
     override var subtitleString = ""
 
+    override val isViewEmpty get() = accountAdapter.items.isEmpty()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -48,6 +50,9 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
     }
 
     override fun initView() {
+        binding.accountErrorRetry.setOnClickListener { presenter.onRetry() }
+        binding.accountErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+
         binding.accountRecycler.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = accountAdapter
@@ -83,5 +88,24 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
                 studentWithSemesters
             )
         )
+    }
+
+    override fun showErrorView(show: Boolean) {
+        binding.accountError.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun setErrorDetails(message: String) {
+        binding.accountErrorMessage.text = message
+    }
+
+    override fun showProgress(show: Boolean) {
+        binding.accountProgress.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    override fun showContent(show: Boolean) {
+        with(binding) {
+            accountRecycler.visibility = if (show) View.VISIBLE else View.GONE
+            accountAdd.visibility = if (show) View.VISIBLE else View.GONE
+        }
     }
 }
