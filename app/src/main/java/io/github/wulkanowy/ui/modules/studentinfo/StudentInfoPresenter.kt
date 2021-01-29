@@ -73,7 +73,6 @@ class StudentInfoPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        Timber.i("Loading student info $infoType started")
         flowWithResourceIn {
             val semester = studentWithSemesters.semesters.getCurrentOrLast()
             studentInfoRepository.getStudentInfo(
@@ -83,17 +82,7 @@ class StudentInfoPresenter @Inject constructor(
             )
         }.onEach {
             when (it.status) {
-                Status.LOADING -> {
-                    if (it.data != null) {
-                        view?.run {
-                            enableSwipe(true)
-                            hideRefresh()
-                            showProgress(false)
-                            showContent(true)
-                            showCorrectData(it.data)
-                        }
-                    }
-                }
+                Status.LOADING -> Timber.i("Loading student info $infoType started")
                 Status.SUCCESS -> {
                     if (it.data != null) {
                         Timber.i("Loading student info $infoType result: Success")

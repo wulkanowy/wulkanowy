@@ -76,7 +76,6 @@ class AccountDetailsFragment :
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu[0].isVisible = false
-        //inflater.inflate(R.menu.action_menu_account_details, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

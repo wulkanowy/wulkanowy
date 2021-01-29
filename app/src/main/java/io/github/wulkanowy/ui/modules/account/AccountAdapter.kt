@@ -31,18 +31,10 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
 
         return when (viewType) {
             AccountItem.ViewType.HEADER.id -> HeaderViewHolder(
-                HeaderAccountBinding.inflate(
-                    inflater,
-                    parent,
-                    false
-                )
+                HeaderAccountBinding.inflate(inflater, parent, false)
             )
             AccountItem.ViewType.ITEM.id -> ItemViewHolder(
-                ItemAccountBinding.inflate(
-                    inflater,
-                    parent,
-                    false
-                )
+                ItemAccountBinding.inflate(inflater, parent, false)
             )
             else -> throw IllegalStateException()
         }

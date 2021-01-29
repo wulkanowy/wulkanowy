@@ -76,12 +76,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             context: Context,
             startMenu: MainView.Section? = null,
             clear: Boolean = false
-        ): Intent {
-            return Intent(context, MainActivity::class.java)
-                .apply {
-                    if (clear) flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
-                    startMenu?.let { putExtra(EXTRA_START_MENU, it.id) }
-                }
+        ) = Intent(context, MainActivity::class.java).apply {
+            if (clear) flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK
+            startMenu?.let { putExtra(EXTRA_START_MENU, it.id) }
         }
     }
 
@@ -91,9 +88,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     override val currentViewTitle
         get() = (navController.currentFrag as? MainView.TitledView)?.titleStringId?.let {
-            getString(
-                it
-            )
+            getString(it)
         }
 
     override val currentViewSubtitle get() = (navController.currentFrag as? MainView.TitledView)?.subtitleString
@@ -117,10 +112,10 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         messageContainer = binding.mainFragmentContainer
         updateHelper.messageContainer = binding.mainFragmentContainer
 
-        presenter.onAttachView(
-            this,
-            MainView.Section.values()
-                .singleOrNull { it.id == intent.getIntExtra(EXTRA_START_MENU, -1) })
+        val section = MainView.Section.values()
+            .singleOrNull { it.id == intent.getIntExtra(EXTRA_START_MENU, -1) }
+
+        presenter.onAttachView(this, section)
 
         with(navController) {
             initialize(startMenuIndex, savedInstanceState)
@@ -179,14 +174,10 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
                     .setIcon(Icon.createWithResource(applicationContext, icon))
                     .setIntents(
                         arrayOf(
-                            Intent(
-                                applicationContext,
-                                MainActivity::class.java
-                            ).setAction(Intent.ACTION_VIEW),
-                            Intent(applicationContext, MainActivity::class.java).putExtra(
-                                EXTRA_START_MENU,
-                                enum.id
-                            )
+                            Intent(applicationContext, MainActivity::class.java)
+                                .setAction(Intent.ACTION_VIEW),
+                            Intent(applicationContext, MainActivity::class.java)
+                                .putExtra(EXTRA_START_MENU, enum.id)
                                 .setAction(Intent.ACTION_VIEW)
                                 .addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
                         )

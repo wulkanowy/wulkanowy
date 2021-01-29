@@ -53,7 +53,7 @@ fun getStudentEntity(mode: Sdk.Mode = Sdk.Mode.API) = Student(
     studentName = "",
     symbol = "",
     userLoginId = 1,
-    userName = ""
+    userName = "",
 ).apply {
     id = 1
 }
