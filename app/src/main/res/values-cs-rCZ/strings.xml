@@ -353,7 +353,7 @@
     <string name="account_details_edit">Edit data</string>
     <string name="account_quick_manager">Accounts manager</string>
     <string name="account_select_student">Select student</string>
-    <string name="account_family">Family</string>
+    <string name="account_family">Rodina</string>
     <string name="account_contact">Contact</string>
     <string name="account_address">Residence details</string>
     <string name="account_personal_data">Personal information</string>
@@ -424,8 +424,8 @@
     <string name="all_next">Další</string>
     <string name="all_search">Hledat</string>
     <string name="all_search_hint">Hledat…</string>
-    <string name="all_yes">Yes</string>
-    <string name="all_no">No</string>
+    <string name="all_yes">Ano</string>
+    <string name="all_no">Ne</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Žádné lekce</string>
     <string name="widget_timetable_theme_title">Vybrat motiv</string>
