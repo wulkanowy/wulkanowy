@@ -142,7 +142,7 @@ class GradeAverageProvider @Inject constructor(
             secondSemesterSubject.grades.updateModifiers(student).calcAverage()
         val firstSemesterAverage = firstSemesterSubject?.grades?.updateModifiers(student)
             ?.calcAverage() ?: secondSemesterAverage
-        val divider = if (secondSemesterSubject.grades.isEmpty()) 1 else 2
+        val divider = if (secondSemesterSubject.grades.any { it.weightValue > .0 }) 2 else 1
 
         (secondSemesterAverage + firstSemesterAverage) / divider
     } else {
