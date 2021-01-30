@@ -387,7 +387,7 @@
     <string name="student_info_gender">Płeć</string>
     <string name="student_info_polish_citizenship">Obywatelstwo polskie</string>
     <string name="student_info_family_name">Nazwisko rodowe</string>
-    <string name="student_info_parents_name">Nazwiska matki i ojca</string>
+    <string name="student_info_parents_name">Imiona matki i ojca</string>
     <string name="student_info_phone">Telefon</string>
     <string name="student_info_cellphone">Telefon komórkowy</string>
     <string name="student_info_email">E-mail</string>
