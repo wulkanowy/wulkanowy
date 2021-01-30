@@ -17,10 +17,10 @@
     <string name="send_message_title">neue Nachricht</string>
     <string name="note_title">Eintragen und Erfolgen</string>
     <string name="homework_title">Hausaufgaben</string>
-    <string name="account_title">Accounts manager</string>
-    <string name="account_quick_title">Select account</string>
-    <string name="account_details_title">Account details</string>
-    <string name="student_info_title">Student info</string>
+    <string name="account_title">Konten-Manager</string>
+    <string name="account_quick_title">Konto auswählen</string>
+    <string name="account_details_title">Kontodetails</string>
+    <string name="student_info_title">Schülerinfo</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semester %1$d, %2$d/%3$d</string>
     <!--Login-->
@@ -304,19 +304,19 @@
     <!--Account-->
     <string name="account_add_new">Konto hinzufügen</string>
     <string name="account_logout">Abmelden</string>
-    <string name="account_confirm">Do you want to log out this student?</string>
+    <string name="account_confirm">Wollen Sie diesen Schüler abmelden?</string>
     <string name="account_logout_student">Abmeldung von Student</string>
     <string name="account_type_student">Studentenkonto</string>
     <string name="account_type_parent">Elternkonto</string>
     <string name="account_login_mobile_api">Mobiler API Modus</string>
     <string name="account_login_hybrid">Hybrid Modus</string>
-    <string name="account_details_edit">Edit data</string>
-    <string name="account_quick_manager">Accounts manager</string>
-    <string name="account_select_student">Select student</string>
-    <string name="account_family">Family</string>
-    <string name="account_contact">Contact</string>
-    <string name="account_address">Residence details</string>
-    <string name="account_personal_data">Personal information</string>
+    <string name="account_details_edit">Daten bearbeiten</string>
+    <string name="account_quick_manager">Konten-Manager</string>
+    <string name="account_select_student">Schüler auswählen</string>
+    <string name="account_family">Familie</string>
+    <string name="account_contact">Kontakt</string>
+    <string name="account_address">Wohnungsdetails</string>
+    <string name="account_personal_data">Persönliche Information</string>
     <!--About-->
     <string name="about_version">Version der App</string>
     <string name="about_contributor">Mitarbeiter</string>
@@ -341,25 +341,25 @@
     <string name="contributor_avatar_description">Benutzerbild</string>
     <string name="contributor_see_more">Sehen Sie mehr auf GitHub</string>
     <!--Student info-->
-    <string name="student_info_empty">No info about student</string>
+    <string name="student_info_empty">Keine Informationen über Schüler</string>
     <string name="student_info_first_name">Name</string>
-    <string name="student_info_second_name">Second name</string>
-    <string name="student_info_gender">Gender</string>
-    <string name="student_info_polish_citizenship">Polish citizenship</string>
-    <string name="student_info_family_name">Family name</string>
-    <string name="student_info_parents_name">Mother\'s and father\'s names</string>
-    <string name="student_info_phone">Phone</string>
-    <string name="student_info_cellphone">Cellphone</string>
-    <string name="student_info_email">E-mail</string>
-    <string name="student_info_address">Address of residence</string>
-    <string name="student_info_registered_address">Address of registration</string>
-    <string name="student_info_correspondence_address">Correspondence address</string>
-    <string name="student_info_full_name">Surname and first name</string>
-    <string name="student_info_kinship">Degree of kinship</string>
-    <string name="student_info_guardian_address">Address</string>
-    <string name="student_info_phones">Phones</string>
-    <string name="student_info_male">Male</string>
-    <string name="student_info_female">Female</string>
+    <string name="student_info_second_name">Zweite Name</string>
+    <string name="student_info_gender">Geschlecht</string>
+    <string name="student_info_polish_citizenship">Polnische Staatsbürgerschaft</string>
+    <string name="student_info_family_name">Familienname</string>
+    <string name="student_info_parents_name">Mutter- und Vaternamen</string>
+    <string name="student_info_phone">Telefonnummer</string>
+    <string name="student_info_cellphone">Mobiltelefonnummer</string>
+    <string name="student_info_email">E-Mail</string>
+    <string name="student_info_address">Wohnadresse</string>
+    <string name="student_info_registered_address">Adresse der Registrierung</string>
+    <string name="student_info_correspondence_address">Korrespondenzadresse</string>
+    <string name="student_info_full_name">Nachname und Vorname</string>
+    <string name="student_info_kinship">Verwandtschaftsgrad</string>
+    <string name="student_info_guardian_address">Adresse</string>
+    <string name="student_info_phones">Telefonnummern</string>
+    <string name="student_info_male">Mann</string>
+    <string name="student_info_female">Frau</string>
     <!--Log viewer-->
     <string name="logviewer_share">Logs teilen</string>
     <string name="logviewer_refresh">Aktualisieren</string>
@@ -384,8 +384,8 @@
     <string name="all_next">Nächste</string>
     <string name="all_search">Suchen</string>
     <string name="all_search_hint">Suchen…</string>
-    <string name="all_yes">Yes</string>
-    <string name="all_no">No</string>
+    <string name="all_yes">Ja</string>
+    <string name="all_no">Nein</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Keine Lektionen</string>
     <string name="widget_timetable_theme_title">Thema wählen</string>
