@@ -347,7 +347,7 @@
     <string name="student_info_gender">Geschlecht</string>
     <string name="student_info_polish_citizenship">Polnische Staatsbürgerschaft</string>
     <string name="student_info_family_name">Familienname</string>
-    <string name="student_info_parents_name">Mutter- und Vaternamen</string>
+    <string name="student_info_parents_name">Namen von Mutter und Vater</string>
     <string name="student_info_phone">Telefonnummer</string>
     <string name="student_info_cellphone">Mobiltelefonnummer</string>
     <string name="student_info_email">E-Mail</string>
