@@ -18,6 +18,8 @@ import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.openAppInMarket
 import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
+import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.toLocalDateTime
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,7 +37,9 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(R.layout.fragment_about
 
     override val versionRes: Triple<String, String, Drawable?>?
         get() = context?.run {
-            Triple(getString(R.string.about_version), "${appInfo.versionName} (${appInfo.versionCode})", getCompatDrawable(R.drawable.ic_all_about))
+            val buildTimestamp = appInfo.buildTimestamp.toLocalDateTime().toFormattedString("yyyy-MM-dd")
+            val versionSignature = "${appInfo.versionName}-${appInfo.buildFlavor} (${appInfo.versionCode}), $buildTimestamp"
+            Triple(getString(R.string.about_version), versionSignature, getCompatDrawable(R.drawable.ic_all_about))
         }
 
     override val creatorsRes: Triple<String, String, Drawable?>?
