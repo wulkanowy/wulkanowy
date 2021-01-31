@@ -17,10 +17,10 @@
     <string name="send_message_title">Новое сообщение</string>
     <string name="note_title">Предупреждения и свершения</string>
     <string name="homework_title">Домашние задания</string>
-    <string name="account_title">Accounts manager</string>
-    <string name="account_quick_title">Select account</string>
-    <string name="account_details_title">Account details</string>
-    <string name="student_info_title">Student info</string>
+    <string name="account_title">Менеджер аккаунтов</string>
+    <string name="account_quick_title">Выбор учетной записи</string>
+    <string name="account_details_title">Данные аккаунта</string>
+    <string name="student_info_title">Информация о студенте</string>
     <!--Subtitles-->
     <string name="grade_subtitle">%1$d семестр, %2$d/%3$d</string>
     <!--Login-->
@@ -344,19 +344,19 @@
     <!--Account-->
     <string name="account_add_new">Добавить аккаунт</string>
     <string name="account_logout">Выйти</string>
-    <string name="account_confirm">Do you want to log out this student?</string>
+    <string name="account_confirm">Вы точно хотите выйти из данного аккаунта?</string>
     <string name="account_logout_student">Выйти</string>
     <string name="account_type_student">Профиль ученика</string>
     <string name="account_type_parent">Профиль родителя</string>
     <string name="account_login_mobile_api">Режим Mobile API</string>
     <string name="account_login_hybrid">Гибридный режим</string>
-    <string name="account_details_edit">Edit data</string>
-    <string name="account_quick_manager">Accounts manager</string>
-    <string name="account_select_student">Select student</string>
-    <string name="account_family">Family</string>
-    <string name="account_contact">Contact</string>
-    <string name="account_address">Residence details</string>
-    <string name="account_personal_data">Personal information</string>
+    <string name="account_details_edit">Изменить данные</string>
+    <string name="account_quick_manager">Менеджер аккаунтов</string>
+    <string name="account_select_student">Выберите Студента</string>
+    <string name="account_family">Семья</string>
+    <string name="account_contact">Контакт</string>
+    <string name="account_address">Детали проживания</string>
+    <string name="account_personal_data">Персональные данные</string>
     <!--About-->
     <string name="about_version">Версия приложения</string>
     <string name="about_contributor">Разработчики</string>
@@ -381,25 +381,25 @@
     <string name="contributor_avatar_description">Aватар</string>
     <string name="contributor_see_more">Страница проекта на GitHub</string>
     <!--Student info-->
-    <string name="student_info_empty">No info about student</string>
-    <string name="student_info_first_name">Name</string>
-    <string name="student_info_second_name">Second name</string>
-    <string name="student_info_gender">Gender</string>
-    <string name="student_info_polish_citizenship">Polish citizenship</string>
-    <string name="student_info_family_name">Family name</string>
-    <string name="student_info_parents_name">Mother\'s and father\'s names</string>
-    <string name="student_info_phone">Phone</string>
-    <string name="student_info_cellphone">Cellphone</string>
-    <string name="student_info_email">E-mail</string>
-    <string name="student_info_address">Address of residence</string>
-    <string name="student_info_registered_address">Address of registration</string>
-    <string name="student_info_correspondence_address">Correspondence address</string>
-    <string name="student_info_full_name">Surname and first name</string>
-    <string name="student_info_kinship">Degree of kinship</string>
-    <string name="student_info_guardian_address">Address</string>
-    <string name="student_info_phones">Phones</string>
-    <string name="student_info_male">Male</string>
-    <string name="student_info_female">Female</string>
+    <string name="student_info_empty">Нет информации о студенте</string>
+    <string name="student_info_first_name">Имя</string>
+    <string name="student_info_second_name">Фамилия</string>
+    <string name="student_info_gender">Пол</string>
+    <string name="student_info_polish_citizenship">Польское гражданство</string>
+    <string name="student_info_family_name">Фамилия</string>
+    <string name="student_info_parents_name">Имена матери и отца</string>
+    <string name="student_info_phone">Телефон</string>
+    <string name="student_info_cellphone">Сотовый телефон</string>
+    <string name="student_info_email">Эл. почта</string>
+    <string name="student_info_address">Адрес проживания</string>
+    <string name="student_info_registered_address">Адрес регистрации</string>
+    <string name="student_info_correspondence_address">Адрес переписки</string>
+    <string name="student_info_full_name">Фамилия и имя</string>
+    <string name="student_info_kinship">Степень родства</string>
+    <string name="student_info_guardian_address">Адрес</string>
+    <string name="student_info_phones">Телефоны</string>
+    <string name="student_info_male">Муж</string>
+    <string name="student_info_female">Женская</string>
     <!--Log viewer-->
     <string name="logviewer_share">Поделиться логами</string>
     <string name="logviewer_refresh">Обновить</string>
@@ -424,8 +424,8 @@
     <string name="all_next">Следующий</string>
     <string name="all_search">Поиск</string>
     <string name="all_search_hint">Поиск…</string>
-    <string name="all_yes">Yes</string>
-    <string name="all_no">No</string>
+    <string name="all_yes">Да</string>
+    <string name="all_no">Нет</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Нет уроков</string>
     <string name="widget_timetable_theme_title">Выбрать тему</string>
