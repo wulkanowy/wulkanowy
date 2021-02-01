@@ -412,7 +412,7 @@
     <string name="student_info_phones">Phones</string>
     <string name="student_info_male">Male</string>
     <string name="student_info_female">Female</string>
-    <string name="student_info_last_name">Nazwisko</string>
+    <string name="student_info_last_name">Last name</string>
 
 
     <!--Account edit-->
