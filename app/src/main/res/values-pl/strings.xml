@@ -400,10 +400,10 @@
     <string name="student_info_phones">Telefony</string>
     <string name="student_info_male">Mężczyzna</string>
     <string name="student_info_female">Kobieta</string>
-    <string name="student_info_last_name">Last name</string>
+    <string name="student_info_last_name">Nazwisko</string>
     <!--Account edit-->
-    <string name="account_edit_nick_hint">Nick</string>
-    <string name="account_edit_header">Add nick</string>
+    <string name="account_edit_nick_hint">Pseudonim</string>
+    <string name="account_edit_header">Dodaj pseudonim</string>
     <!--Log viewer-->
     <string name="logviewer_share">Udostępnij logi</string>
     <string name="logviewer_refresh">Odśwież</string>
@@ -430,7 +430,7 @@
     <string name="all_search_hint">Szukaj…</string>
     <string name="all_yes">Tak</string>
     <string name="all_no">Nie</string>
-    <string name="all_save">Save</string>
+    <string name="all_save">Zapisz</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Brak lekcji</string>
     <string name="widget_timetable_theme_title">Wybierz motyw</string>
