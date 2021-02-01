@@ -360,6 +360,10 @@
     <string name="student_info_phones">Telefonnummern</string>
     <string name="student_info_male">Mann</string>
     <string name="student_info_female">Frau</string>
+    <string name="student_info_last_name">Last name</string>
+    <!--Account edit-->
+    <string name="account_edit_nick_hint">Nick</string>
+    <string name="account_edit_header">Add nick</string>
     <!--Log viewer-->
     <string name="logviewer_share">Logs teilen</string>
     <string name="logviewer_refresh">Aktualisieren</string>
@@ -386,6 +390,7 @@
     <string name="all_search_hint">Suchen…</string>
     <string name="all_yes">Ja</string>
     <string name="all_no">Nein</string>
+    <string name="all_save">Save</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Keine Lektionen</string>
     <string name="widget_timetable_theme_title">Thema wählen</string>
