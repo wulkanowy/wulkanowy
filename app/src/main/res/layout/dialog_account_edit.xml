@@ -45,6 +45,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/accountEditDetailsNickText"
             android:layout_width="match_parent"
+            android:maxLength="20"
             android:layout_height="match_parent"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
