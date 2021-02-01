@@ -400,6 +400,10 @@
     <string name="student_info_phones">Телефоны</string>
     <string name="student_info_male">Муж</string>
     <string name="student_info_female">Женская</string>
+    <string name="student_info_last_name">Last name</string>
+    <!--Account edit-->
+    <string name="account_edit_nick_hint">Nick</string>
+    <string name="account_edit_header">Add nick</string>
     <!--Log viewer-->
     <string name="logviewer_share">Поделиться логами</string>
     <string name="logviewer_refresh">Обновить</string>
@@ -426,6 +430,7 @@
     <string name="all_search_hint">Поиск…</string>
     <string name="all_yes">Да</string>
     <string name="all_no">Нет</string>
+    <string name="all_save">Save</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Нет уроков</string>
     <string name="widget_timetable_theme_title">Выбрать тему</string>
