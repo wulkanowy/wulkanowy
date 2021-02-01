@@ -58,7 +58,7 @@ class MobileDeviceFragment :
 
         with(binding) {
             mobileDevicesSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            mobileDevicesSwipe.setColorSchemeResources(R.color.colorPrimary)
+            mobileDevicesSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             mobileDevicesSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             mobileDevicesErrorRetry.setOnClickListener { presenter.onRetry() }
             mobileDevicesErrorDetails.setOnClickListener { presenter.onDetailsClick() }

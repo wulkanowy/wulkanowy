@@ -74,7 +74,7 @@ class StudentInfoFragment :
     override fun initView() {
         with(binding) {
             studentInfoSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            studentInfoSwipe.setColorSchemeResources(R.color.colorPrimary)
+            studentInfoSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             studentInfoSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             studentInfoErrorRetry.setOnClickListener { presenter.onRetry() }
             studentInfoErrorDetails.setOnClickListener { presenter.onDetailsClick() }

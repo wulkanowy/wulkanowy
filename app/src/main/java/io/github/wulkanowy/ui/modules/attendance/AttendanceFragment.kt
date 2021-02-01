@@ -113,7 +113,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
 
         with(binding) {
             attendanceSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            attendanceSwipe.setColorSchemeResources(R.color.colorPrimary)
+            attendanceSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             attendanceSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             attendanceErrorRetry.setOnClickListener { presenter.onRetry() }
             attendanceErrorDetails.setOnClickListener { presenter.onDetailsClick() }

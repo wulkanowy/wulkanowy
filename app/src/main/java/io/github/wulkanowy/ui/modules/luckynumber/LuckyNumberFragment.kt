@@ -40,7 +40,7 @@ class LuckyNumberFragment :
     override fun initView() {
         with(binding) {
             luckyNumberSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            luckyNumberSwipe.setColorSchemeResources(R.color.colorPrimary)
+            luckyNumberSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             luckyNumberSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             luckyNumberErrorRetry.setOnClickListener { presenter.onRetry() }
             luckyNumberErrorDetails.setOnClickListener { presenter.onDetailsClick() }

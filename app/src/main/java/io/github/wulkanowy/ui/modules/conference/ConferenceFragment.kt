@@ -49,7 +49,7 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>(R.layout.frag
 
         with(binding) {
             conferenceSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            conferenceSwipe.setColorSchemeResources(R.color.colorPrimary)
+            conferenceSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             conferenceSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             conferenceErrorRetry.setOnClickListener { presenter.onRetry() }
             conferenceErrorDetails.setOnClickListener { presenter.onDetailsClick() }

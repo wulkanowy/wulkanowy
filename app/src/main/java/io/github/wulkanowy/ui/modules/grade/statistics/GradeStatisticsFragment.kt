@@ -70,7 +70,7 @@ class GradeStatisticsFragment :
             gradeStatisticsSubjectsContainer.setElevationCompat(requireContext().dpToPx(1f))
 
             gradeStatisticsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            gradeStatisticsSwipe.setColorSchemeResources(R.color.colorPrimary)
+            gradeStatisticsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             gradeStatisticsSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             gradeStatisticsErrorRetry.setOnClickListener { presenter.onRetry() }
             gradeStatisticsErrorDetails.setOnClickListener { presenter.onDetailsClick() }

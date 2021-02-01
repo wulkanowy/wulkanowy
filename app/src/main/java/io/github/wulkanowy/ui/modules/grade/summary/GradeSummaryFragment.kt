@@ -54,7 +54,7 @@ class GradeSummaryFragment :
         }
         with(binding) {
             gradeSummarySwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            gradeSummarySwipe.setColorSchemeResources(R.color.colorPrimary)
+            gradeSummarySwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             gradeSummarySwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             gradeSummaryErrorRetry.setOnClickListener { presenter.onRetry() }
             gradeSummaryErrorDetails.setOnClickListener { presenter.onDetailsClick() }

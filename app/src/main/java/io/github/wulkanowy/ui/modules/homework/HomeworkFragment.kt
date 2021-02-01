@@ -56,7 +56,7 @@ class HomeworkFragment : BaseFragment<FragmentHomeworkBinding>(R.layout.fragment
 
         with(binding) {
             homeworkSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            homeworkSwipe.setColorSchemeResources(R.color.colorPrimary)
+            homeworkSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             homeworkSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             homeworkErrorRetry.setOnClickListener { presenter.onRetry() }
             homeworkErrorDetails.setOnClickListener { presenter.onDetailsClick() }

@@ -70,7 +70,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
 
         with(binding) {
             timetableSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            timetableSwipe.setColorSchemeResources(R.color.colorPrimary)
+            timetableSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             timetableSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             timetableErrorRetry.setOnClickListener { presenter.onRetry() }
             timetableErrorDetails.setOnClickListener { presenter.onDetailsClick() }

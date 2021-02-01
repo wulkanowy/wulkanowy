@@ -53,7 +53,7 @@ class TeacherFragment : BaseFragment<FragmentTeacherBinding>(R.layout.fragment_t
         }
         with(binding) {
             teacherSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            teacherSwipe.setColorSchemeResources(R.color.colorPrimary)
+            teacherSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             teacherSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             teacherErrorRetry.setOnClickListener { presenter.onRetry() }
             teacherErrorDetails.setOnClickListener { presenter.onDetailsClick() }

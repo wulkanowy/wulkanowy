@@ -54,7 +54,7 @@ class AdditionalLessonsFragment :
 
         with(binding) {
             additionalLessonsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            additionalLessonsSwipe.setColorSchemeResources(R.color.colorPrimary)
+            additionalLessonsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             additionalLessonsSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             additionalLessonsErrorRetry.setOnClickListener { presenter.onRetry() }
 
