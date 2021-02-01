@@ -18,7 +18,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:text="Modify data"
+        android:text="Add nick"
         android:textSize="21sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/accountEditDetailsHeader">
 
+        <requestFocus />
+
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/accountEditDetailsNickText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPersonName" />
@@ -58,7 +61,7 @@
         android:insetTop="0dp"
         android:insetRight="0dp"
         android:insetBottom="0dp"
-        android:text="Save"
+        android:text="@string/all_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/accountEditDetailsNick" />
