@@ -33,7 +33,7 @@ class AccountEditPresenter @Inject constructor(
     fun changeStudentNick(nick: String) {
         flowWithResource {
             val studentNick =
-                StudentNick(nick = nick).apply { id = student.id }
+                StudentNick(nick = nick.trim()).apply { id = student.id }
             studentRepository.updateStudentNick(studentNick)
         }.onEach {
             when (it.status) {
