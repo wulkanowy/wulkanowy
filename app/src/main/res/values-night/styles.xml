@@ -9,14 +9,17 @@
         <item name="colorDivider">@color/colorDividerInverse</item>
         <item name="android:windowBackground">?colorSurface</item>
         <item name="android:textColor">?android:textColorPrimary</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">@android:color/black
-        </item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/black</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">#2E2E2E</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">#1C1C1C</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
         <item name="mdtp_theme_dark">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
     <style name="WulkanowyTheme.Black" parent="WulkanowyTheme.NoActionBar">
         <item name="colorSurface">@android:color/black</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">#1C1C1C</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">#0A0A0A</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 </resources>
