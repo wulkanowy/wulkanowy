@@ -18,6 +18,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoFragment
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
+import io.github.wulkanowy.utils.nickOrName
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -87,8 +88,7 @@ class AccountDetailsFragment :
 
     override fun showAccountData(student: Student) {
         with(binding) {
-            accountDetailsName.text =
-                if (student.nick.isBlank()) student.studentName else student.nick
+            accountDetailsName.text = student.nickOrName
             accountDetailsSchool.text = student.schoolName
         }
     }
