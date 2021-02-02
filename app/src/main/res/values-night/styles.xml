@@ -19,7 +19,7 @@
 
     <style name="WulkanowyTheme.Black" parent="WulkanowyTheme.NoActionBar">
         <item name="colorSurface">@android:color/black</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">#1C1C1C</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">#1E1E1E</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/black</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
