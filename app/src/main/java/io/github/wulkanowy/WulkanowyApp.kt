@@ -89,7 +89,6 @@ class WulkanowyApp : Application(), Configuration.Provider {
         try {
             WebView(this).destroy()
         } catch (e: Exception) {
-            Timber.e(e)
             //Ignore exceptions
         }
     }
