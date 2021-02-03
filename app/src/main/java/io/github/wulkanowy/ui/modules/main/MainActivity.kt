@@ -194,6 +194,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         return true
     }
 
+    @SuppressLint("NewApi")
     override fun initView() {
         with(binding.mainToolbar) {
             if (SDK_INT >= LOLLIPOP) stateListAnimator = null
@@ -233,12 +234,18 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
         with(navController) {
             setOnViewChangeListener { section, name ->
-                binding.mainBottomNav.visibility =
-                    if (section == MainView.Section.ACCOUNT || section == MainView.Section.STUDENT_INFO) {
-                        View.GONE
-                    } else {
-                        View.VISIBLE
+                if (section == MainView.Section.ACCOUNT || section == MainView.Section.STUDENT_INFO) {
+                    binding.mainBottomNav.visibility = View.GONE
+                    if (appInfo.systemVersion >= LOLLIPOP) {
+                        window.navigationBarColor = getThemeAttrColor(R.attr.colorSurface)
                     }
+                } else {
+                    binding.mainBottomNav.visibility = View.VISIBLE
+                    if (appInfo.systemVersion >= LOLLIPOP) {
+                        window.navigationBarColor =
+                            getThemeAttrColor(android.R.attr.navigationBarColor)
+                    }
+                }
 
                 analytics.setCurrentScreen(this@MainActivity, name)
                 presenter.onViewChange(section)
