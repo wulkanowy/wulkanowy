@@ -16,10 +16,20 @@ fun List<Grade>.calcAverage(): Double {
 }
 
 @JvmName("calcSummaryAverage")
-fun List<GradeSummary>.calcAverage() = asSequence()
+fun List<GradeSummary>.calcAverage(plusModifier: Double, minusModifier: Double) = asSequence()
     .mapNotNull {
-        if (it.finalGrade.matches("[0-6]".toRegex())) {
-            it.finalGrade.toDouble()
+        if (it.finalGrade.matches("[0-6][+-]?".toRegex())) {
+            when {
+                it.finalGrade.matches("\\d+\\+".toRegex()) -> {
+                    it.finalGrade.replace('+', ' ').toDouble() + plusModifier
+                }
+                it.finalGrade.matches("\\d+\\-".toRegex()) -> {
+                    it.finalGrade.replace('-', ' ').toDouble() - minusModifier
+                }
+                else -> {
+                    it.finalGrade.toDouble()
+                }
+            }
         } else null
     }
     .average()
