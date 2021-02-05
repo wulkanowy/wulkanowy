@@ -20,11 +20,11 @@ fun List<GradeSummary>.calcAverage(plusModifier: Double, minusModifier: Double) 
     .mapNotNull {
         if (it.finalGrade.matches("[0-6][+-]?".toRegex())) {
             when {
-                it.finalGrade.matches("\\d+\\+".toRegex()) -> {
-                    it.finalGrade.replace('+', ' ').toDouble() + plusModifier
+                it.finalGrade.endsWith('+') -> {
+                    it.finalGrade.removeSuffix("+").toDouble() + plusModifier
                 }
-                it.finalGrade.matches("\\d+\\-".toRegex()) -> {
-                    it.finalGrade.replace('-', ' ').toDouble() - minusModifier
+                it.finalGrade.endsWith('-') -> {
+                    it.finalGrade.removeSuffix("-").toDouble() - minusModifier
                 }
                 else -> {
                     it.finalGrade.toDouble()
