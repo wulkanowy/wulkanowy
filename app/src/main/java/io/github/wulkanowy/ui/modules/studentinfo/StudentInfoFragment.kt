@@ -143,12 +143,11 @@ class StudentInfoFragment :
             listOfNotNull(
                 studentInfo.firstGuardian?.let { it.kinship.capitalize() to it.fullName },
                 studentInfo.secondGuardian?.let { it.kinship.capitalize() to it.fullName },
-            ).map {
-                val updatedData = if (it.second.isBlank()) {
-                    it.copy(second = getString(R.string.all_no_data))
-                } else it
+            ).map { (title, value) ->
+                val updatedValue = value.ifBlank { getString(R.string.all_no_data) }
+                val updatedTitle = title.ifBlank { getString(R.string.all_no_data) }
 
-                if (updatedData.first.isBlank()) it.copy(first = getString(R.string.all_no_data)) else it
+                updatedTitle to updatedValue
             }
         )
     }
