@@ -28,4 +28,9 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">?colorSurface</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">?colorSurface</item>
     </style>
+
+        <style name="WulkanowyTheme.MessageSend" parent="WulkanowyTheme.NoActionBar">
+            <item name="android:navigationBarColor" tools:targetApi="lollipop">?colorSurface</item>
+            <item name="android:statusBarColor" tools:targetApi="lollipop">#1C1C1C</item>
+        </style>
 </resources>
