@@ -188,14 +188,73 @@ class GradeAverageProviderTest {
         every { preferencesRepository.gradeAverageForceCalc } returns true
         every { preferencesRepository.gradeAverageMode } returns GradeAverageMode.BOTH_SEMESTERS
 
-        coEvery { gradeRepository.getGrades(student, semesters[1], false) } returns flowWithResource { secondGradeWithModifier to secondSummariesWithModifier }
-        coEvery { gradeRepository.getGrades(student, semesters[2], false) } returns flowWithResource {
-            listOf(getGrade(semesters[2].semesterId, "Język polski", .0, .0, .0)) to listOf(getSummary(semesters[2].semesterId, "Język polski", 2.5))
+        coEvery {
+            gradeRepository.getGrades(
+                student,
+                semesters[1],
+                false
+            )
+        } returns flowWithResource { secondGradeWithModifier to secondSummariesWithModifier }
+        coEvery {
+            gradeRepository.getGrades(
+                student,
+                semesters[2],
+                false
+            )
+        } returns flowWithResource {
+            listOf(getGrade(semesters[2].semesterId, "Język polski", .0, .0, .0)) to listOf(
+                getSummary(semesters[2].semesterId, "Język polski", 2.5)
+            )
         }
 
-        val items = runBlocking { gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId, false).getResult() }
+        val items = runBlocking {
+            gradeAverageProvider.getGradesDetailsWithAverage(
+                student,
+                semesters[2].semesterId,
+                false
+            ).getResult()
+        }
 
         assertEquals(3.5, items.single { it.subject == "Język polski" }.average, .0)
+    }
+
+    @Test
+    fun `calc both semesters average with no grade in second semester but with average in first semester`() {
+        every { preferencesRepository.gradeAverageForceCalc } returns false
+        every { preferencesRepository.gradeAverageMode } returns GradeAverageMode.BOTH_SEMESTERS
+
+        coEvery {
+            gradeRepository.getGrades(
+                student,
+                semesters[1],
+                false
+            )
+        } returns flowWithResource { secondGradeWithModifier to secondSummariesWithModifier }
+        coEvery {
+            gradeRepository.getGrades(
+                student,
+                semesters[2],
+                false
+            )
+        } returns flowWithResource {
+            emptyList<Grade>() to listOf(
+                getSummary(
+                    24,
+                    "Język polski",
+                    .0
+                )
+            )
+        }
+
+        val items = runBlocking {
+            gradeAverageProvider.getGradesDetailsWithAverage(
+                student,
+                semesters[2].semesterId,
+                false
+            ).getResult()
+        }
+
+        assertEquals(3.49, items.single { it.subject == "Język polski" }.average, .0)
     }
 
     @Test
@@ -203,8 +262,20 @@ class GradeAverageProviderTest {
         every { preferencesRepository.gradeAverageForceCalc } returns true
         every { preferencesRepository.gradeAverageMode } returns GradeAverageMode.BOTH_SEMESTERS
 
-        coEvery { gradeRepository.getGrades(student, semesters[1], true) } returns flowWithResource { emptyList<Grade>() to emptyList() }
-        coEvery { gradeRepository.getGrades(student, semesters[2], true) } returns flowWithResource { emptyList<Grade>() to emptyList() }
+        coEvery {
+            gradeRepository.getGrades(
+                student,
+                semesters[1],
+                true
+            )
+        } returns flowWithResource { emptyList<Grade>() to emptyList() }
+        coEvery {
+            gradeRepository.getGrades(
+                student,
+                semesters[2],
+                true
+            )
+        } returns flowWithResource { emptyList<Grade>() to emptyList() }
 
         val items = runBlocking { gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId, true).getResult() }
 
