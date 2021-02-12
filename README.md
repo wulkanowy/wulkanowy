@@ -65,7 +65,7 @@ Możesz także pobrać [wersję rozwojową](https://wulkanowy.github.io/#downloa
 
 Wnieś swój wkład w projekt, tworząc PR lub wysyłając issue na GitHub.
 
-Dla osób zainteresowanych tłumaczeniem aplikacji na różne języki udostępnianym Crowdina
+Dla osób zainteresowanych tłumaczeniem aplikacji na różne języki udostępniamy Crowdina
 https://crowdin.com/project/wulkanowy2
 
 ## Licencja
