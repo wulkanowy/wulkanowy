@@ -195,7 +195,7 @@
     <string name="attendance_excuse_no_selection">Musíte vybrat alespoň jednu nepřítomnost!</string>
     <string name="attendance_excuse_title">Ospravedlnit</string>
     <!--Attendance summary-->
-    <string name="attendance_summary_final">Účast</string>
+    <string name="attendance_summary_final">Docházka</string>
     <string name="attendance_summary_total">Společně</string>
     <!--Exam-->
     <string name="exam_no_items">Tento týden žádné testy</string>
@@ -442,7 +442,7 @@
     <string name="pref_view_list">Výchozí zobrazení</string>
     <string name="pref_view_grade_average_mode">Výpočet koncoročního průměru</string>
     <string name="pref_view_grade_average_force_calc">Vynutit průměrný výpočet podle aplikace</string>
-    <string name="pref_view_present">Zobrazit přítomnost v účasti</string>
+    <string name="pref_view_present">Zobrazit přítomnost v docházce</string>
     <string name="pref_view_app_theme">Motiv aplikace</string>
     <string name="pref_view_expand_grade">Rozbalit známky</string>
     <string name="pref_view_timetable_show_timers">Označte aktuální lekci v plánu lekce</string>
