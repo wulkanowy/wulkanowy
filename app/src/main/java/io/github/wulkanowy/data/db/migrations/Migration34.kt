@@ -7,6 +7,7 @@ class Migration34 : Migration(33, 34) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("DELETE FROM ReportingUnits")
+        database.execSQL("DELETE FROM Recipients")
     }
 }
 
