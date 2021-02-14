@@ -205,7 +205,7 @@
     <string name="message_inbox">Doručená pošta</string>
     <string name="message_sent">Odesláno</string>
     <string name="message_trash">Koš</string>
-    <string name="message_no_subject">(žádné téma)</string>
+    <string name="message_no_subject">(žádný předmět)</string>
     <string name="message_no_items">Žádné zprávy</string>
     <string name="message_preview_error">Při stahování obsahu zprávy došlo k chybě</string>
     <string name="message_from">Od:</string>
@@ -215,11 +215,11 @@
     <string name="message_forward">Poslat dále</string>
     <string name="message_delete">Vymazat</string>
     <string name="message_move_to_bin">Přesunout do koše</string>
-    <string name="message_delete_forever">Trvale smazat</string>
+    <string name="message_delete_forever">Odstranit natrvalo</string>
     <string name="message_delete_success">Zpráva byla úspěšně smazána</string>
     <string name="message_share">Podíl</string>
     <string name="message_print">Vytisknout</string>
-    <string name="message_subject">Téma</string>
+    <string name="message_subject">Předmět</string>
     <string name="message_content">Obsah</string>
     <string name="message_send_successful">Zpráva úspěšně odeslána</string>
     <string name="message_not_exists">Zpráva neexistuje</string>
@@ -343,7 +343,7 @@
     <string name="conference_no_items">Žádné informace o setkání</string>
     <!--Account-->
     <string name="account_add_new">Přidat účet</string>
-    <string name="account_logout">Odhlásit se</string>
+    <string name="account_logout">Odhlásit</string>
     <string name="account_confirm">Chcete se odhlásit z aktivního žáka?</string>
     <string name="account_logout_student">Odhlášení žáků</string>
     <string name="account_type_student">Žákův účet</string>
@@ -478,7 +478,7 @@
     <string name="pref_other_grade_modifier_minus">Hodnota mínusu</string>
     <string name="pref_other_fill_message_content">Odpovědět s historií zpráv</string>
     <!--Notification Channels-->
-    <string name="channel_new_entries">Nové položky v deník</string>
+    <string name="channel_new_entries">Nové položky v deníku</string>
     <string name="channel_new_grades">Nové známky</string>
     <string name="channel_lucky_number">Šťastné číslo</string>
     <string name="channel_new_message">Nové zprávy</string>
