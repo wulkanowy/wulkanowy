@@ -217,7 +217,7 @@
     <string name="message_move_to_bin">Přesunout do koše</string>
     <string name="message_delete_forever">Odstranit natrvalo</string>
     <string name="message_delete_success">Zpráva byla úspěšně smazána</string>
-    <string name="message_share">Podíl</string>
+    <string name="message_share">Sdílet</string>
     <string name="message_print">Vytisknout</string>
     <string name="message_subject">Předmět</string>
     <string name="message_content">Obsah</string>
@@ -240,8 +240,8 @@
     <plurals name="message_notify_new_items">
         <item quantity="one">Máte %1$d novou zprávu</item>
         <item quantity="few">Máte %1$d nové zprávy</item>
-        <item quantity="many">Máte %1$d nové zprávy</item>
-        <item quantity="other">Máte %1$d nové zprávy</item>
+        <item quantity="many">Máte %1$d nových zpráv</item>
+        <item quantity="other">Máte %1$d nových zpráv</item>
     </plurals>
     <!--Note-->
     <string name="note_no_items">Žádné informace o poznámkách</string>
@@ -268,8 +268,8 @@
     <plurals name="praise_number_item">
         <item quantity="one">%d chvála</item>
         <item quantity="few">%d chvály</item>
-        <item quantity="many">%d chvály</item>
-        <item quantity="other">%d chvály</item>
+        <item quantity="many">%d chvál</item>
+        <item quantity="other">%d chvál</item>
     </plurals>
     <plurals name="praise_new_items">
         <item quantity="one">Nová chvála</item>
@@ -340,7 +340,7 @@
     <string name="teacher_no_subject">Žádný předmět</string>
     <!--Conference-->
     <string name="conferences_title">Setkání</string>
-    <string name="conference_no_items">Žádné informace o setkání</string>
+    <string name="conference_no_items">Žádné informace o setkáních</string>
     <!--Account-->
     <string name="account_add_new">Přidat účet</string>
     <string name="account_logout">Odhlásit</string>
