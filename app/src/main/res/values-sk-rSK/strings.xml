@@ -173,21 +173,21 @@
     <!--Attendance-->
     <string name="attendance_summary_button">Zhrnutie dochádzky</string>
     <string name="attendance_absence_school">Absent for school reasons</string>
-    <string name="attendance_absence_excused">Excused absence</string>
-    <string name="attendance_absence_unexcused">Unexcused absence</string>
-    <string name="attendance_exemption">Exemption</string>
+    <string name="attendance_absence_excused">Ospravedlnená neprítomnosť</string>
+    <string name="attendance_absence_unexcused">Neospravedlnená neprítomnosť</string>
+    <string name="attendance_exemption">Oslobodenie</string>
     <string name="attendance_excused_lateness">Excused lateness</string>
     <string name="attendance_unexcused_lateness">Unexcused lateness</string>
     <string name="attendance_present">Prítomnosť</string>
     <string name="attendance_deleted">Deleted</string>
     <string name="attendance_unknown">Neznámy</string>
-    <string name="attendance_number">Number of lesson</string>
+    <string name="attendance_number">Číslo lekcie</string>
     <string name="attendance_no_items">Žiadne položky</string>
     <plurals name="attendance_number_absences">
-        <item quantity="one">%1$d absence</item>
-        <item quantity="few">%1$d absences</item>
-        <item quantity="many">%1$d absences</item>
-        <item quantity="other">%1$d absences</item>
+        <item quantity="one">%1$d neprítomnosť</item>
+        <item quantity="few">%1$d neprítomnosti</item>
+        <item quantity="many">%1$d neprítomnosti</item>
+        <item quantity="other">%1$d neprítomnosti</item>
     </plurals>
     <string name="attendance_excuse_dialog_reason">Absence reason (optional)</string>
     <string name="attendance_excuse_dialog_submit">Poslať</string>
@@ -195,7 +195,7 @@
     <string name="attendance_excuse_no_selection">You must select at least one absence!</string>
     <string name="attendance_excuse_title">Ospravedlniť</string>
     <!--Attendance summary-->
-    <string name="attendance_summary_final">Attendance</string>
+    <string name="attendance_summary_final">Dochádzka</string>
     <string name="attendance_summary_total">Spoločne</string>
     <!--Exam-->
     <string name="exam_no_items">Spoločne</string>
@@ -208,18 +208,18 @@
     <string name="message_no_subject">(no subject)</string>
     <string name="message_no_items">Žiadne správy</string>
     <string name="message_preview_error">An error occurred while downloading message content</string>
-    <string name="message_from">From:</string>
-    <string name="message_to">To:</string>
-    <string name="message_date">Date: %s</string>
+    <string name="message_from">Od:</string>
+    <string name="message_to">Komu:</string>
+    <string name="message_date">Dátum: %s</string>
     <string name="message_reply">Odpoveď</string>
     <string name="message_forward">Poslať ďalej</string>
     <string name="message_delete">Vymazať</string>
     <string name="message_move_to_bin">Presunúť do koša</string>
-    <string name="message_delete_forever">Delete permanently</string>
+    <string name="message_delete_forever">Odstrániť natrvalo</string>
     <string name="message_delete_success">Message deleted successfully</string>
     <string name="message_share">Share</string>
-    <string name="message_print">Print</string>
-    <string name="message_subject">Subject</string>
+    <string name="message_print">Vytlačiť</string>
+    <string name="message_subject">Predmet</string>
     <string name="message_content">Obsah</string>
     <string name="message_send_successful">Správa úspešne odoslaná</string>
     <string name="message_not_exists">Správa neexistuje</string>
@@ -245,7 +245,7 @@
     </plurals>
     <!--Note-->
     <string name="note_no_items">No info about notes</string>
-    <string name="note_points">Points</string>
+    <string name="note_points">Body</string>
     <plurals name="note_number_item">
         <item quantity="one">%d note</item>
         <item quantity="few">%d notes</item>
@@ -272,10 +272,10 @@
         <item quantity="other">%d praises</item>
     </plurals>
     <plurals name="praise_new_items">
-        <item quantity="one">New praise</item>
-        <item quantity="few">New praises</item>
-        <item quantity="many">New praises</item>
-        <item quantity="other">New praises</item>
+        <item quantity="one">Nová chvála</item>
+        <item quantity="few">Nové chvály</item>
+        <item quantity="many">Nové chvály</item>
+        <item quantity="other">Nové chvály</item>
     </plurals>
     <plurals name="praise_notify_new_items">
         <item quantity="one">You received %1$d praise</item>
@@ -311,11 +311,11 @@
     <string name="lucky_number_title">Šťastné číslo</string>
     <string name="lucky_number_header">Dnešné šťastné číslo je</string>
     <string name="lucky_number_empty">No info about the lucky number</string>
-    <string name="lucky_number_notify_new_item_title">Lucky number for today</string>
+    <string name="lucky_number_notify_new_item_title">Šťastné číslo pre dnešok</string>
     <string name="lucky_number_notify_new_item">Today\'s lucky number is: %d</string>
     <!--Mobile devices-->
     <string name="mobile_devices_title">Mobile devices</string>
-    <string name="mobile_devices_no_items">No devices</string>
+    <string name="mobile_devices_no_items">Žiadne zariadenia</string>
     <string name="mobile_devices_unregister">Deregister</string>
     <string name="mobile_device_removed">Device removed</string>
     <string name="mobile_device_qr">QR kód</string>
@@ -323,27 +323,27 @@
     <string name="mobile_device_symbol">Symbol</string>
     <string name="mobile_device_pin">PIN</string>
     <!--School and teachers-->
-    <string name="schoolandteachers_title">School and teachers</string>
+    <string name="schoolandteachers_title">Škola a učitelia</string>
     <!--School-->
     <string name="school_title">Škola</string>
-    <string name="school_no_info">No info about school</string>
+    <string name="school_no_info">Žiadne informácie o škole</string>
     <string name="school_name">Názov školy</string>
     <string name="school_address">Adresa školy</string>
     <string name="school_telephone">Telefón</string>
     <string name="school_headmaster">Name of headmaster</string>
     <string name="school_pedagogue">Name of pedagogue</string>
-    <string name="school_address_button">Show on map</string>
+    <string name="school_address_button">Zobraziť na mape</string>
     <string name="school_telephone_button">Call</string>
     <!--Teacher-->
     <string name="teachers_title">Učitelia</string>
     <string name="teacher_no_items">No info about teachers</string>
-    <string name="teacher_no_subject">No subject</string>
+    <string name="teacher_no_subject">Žiadny predmet</string>
     <!--Conference-->
-    <string name="conferences_title">Conferences</string>
+    <string name="conferences_title">Stretnutie</string>
     <string name="conference_no_items">No info about conferences</string>
     <!--Account-->
-    <string name="account_add_new">Add account</string>
-    <string name="account_logout">Logout</string>
+    <string name="account_add_new">Pridať účet</string>
+    <string name="account_logout">Odhlásiť</string>
     <string name="account_confirm">Do you want to log out this student?</string>
     <string name="account_logout_student">Student logout</string>
     <string name="account_type_student">Student account</string>
@@ -402,20 +402,20 @@
     <string name="student_info_female">Žena</string>
     <string name="student_info_last_name">Last name</string>
     <!--Account edit-->
-    <string name="account_edit_nick_hint">Nick</string>
-    <string name="account_edit_header">Add nick</string>
+    <string name="account_edit_nick_hint">Prezývka</string>
+    <string name="account_edit_header">Pridať prezývku</string>
     <!--Log viewer-->
     <string name="logviewer_share">Share logs</string>
-    <string name="logviewer_refresh">Refresh</string>
+    <string name="logviewer_refresh">Obnoviť</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Check for updates</string>
     <string name="dialog_error_check_update_message">Before reporting a bug, check first if an update with the bug fix is available</string>
     <!--Generic-->
     <string name="all_content">Content</string>
     <string name="all_retry">Retry</string>
-    <string name="all_description">Description</string>
+    <string name="all_description">Popis</string>
     <string name="all_no_description">No description</string>
-    <string name="all_teacher">Teacher</string>
+    <string name="all_teacher">Učiteľ</string>
     <string name="all_date">Dátum</string>
     <string name="all_entry_date">Entry date</string>
     <string name="all_color">Farba</string>
@@ -423,20 +423,20 @@
     <string name="all_category">Category</string>
     <string name="all_close">Zavrieť</string>
     <string name="all_no_data">No data</string>
-    <string name="all_subject">Subject</string>
+    <string name="all_subject">Predmet</string>
     <string name="all_prev">Prev</string>
     <string name="all_next">Next</string>
-    <string name="all_search">Search</string>
+    <string name="all_search">Hľadať</string>
     <string name="all_search_hint">Search…</string>
-    <string name="all_yes">Yes</string>
-    <string name="all_no">No</string>
-    <string name="all_save">Save</string>
+    <string name="all_yes">Áno</string>
+    <string name="all_no">Nie</string>
+    <string name="all_save">Uložiť</string>
     <!--Timetable Widget-->
-    <string name="widget_timetable_no_items">No lessons</string>
+    <string name="widget_timetable_no_items">Žiadne lekcie</string>
     <string name="widget_timetable_theme_title">Choose theme</string>
-    <string name="widget_timetable_theme_light">Light</string>
-    <string name="widget_timetable_theme_dark">Dark</string>
-    <string name="widget_timetable_theme_system">System Theme</string>
+    <string name="widget_timetable_theme_light">Svetlý</string>
+    <string name="widget_timetable_theme_dark">Tmavý</string>
+    <string name="widget_timetable_theme_system">Motív systému</string>
     <!--Preferences-->
     <string name="pref_view_header">Appearance</string>
     <string name="pref_view_list">Default view</string>
@@ -452,7 +452,7 @@
     <string name="pref_view_subjects_without_grades">Show subjects without grades in Grades</string>
     <string name="pref_view_grade_color_scheme">Grades color scheme</string>
     <string name="pref_view_grade_sorting_mode">Subjects sorting in \"Grades\"</string>
-    <string name="pref_view_app_language">App language</string>
+    <string name="pref_view_app_language">Jazyk aplikácie</string>
     <string name="pref_notify_header">Oznámenia</string>
     <string name="pref_notify_switch">Zobraziť upozornenia</string>
     <string name="pref_notify_upcoming_lessons_switch">Show upcoming lesson notifications</string>
@@ -460,7 +460,7 @@
     <string name="pref_notify_fix_sync_issues_message">Your device may have data synchronization issues and with notifications.\n\nTo fix them, you need to add Wulkanowy to the autostart and turn off battery optimization/saving in the phone settings.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Go to settings</string>
     <string name="pref_notify_debug_switch">Show debug notifications</string>
-    <string name="pref_services_header">Synchronization</string>
+    <string name="pref_services_header">Synchronizácia</string>
     <string name="pref_services_switch">Automatic update</string>
     <string name="pref_services_suspended">Suspended on holidays</string>
     <string name="pref_services_interval">Updates interval</string>
@@ -474,15 +474,15 @@
         \nTo see the synced data relaunch the app after syncing.
     </string>
     <string name="pref_other_header">Iné</string>
-    <string name="pref_other_grade_modifier_plus">Value of the plus</string>
-    <string name="pref_other_grade_modifier_minus">Value of the minus</string>
+    <string name="pref_other_grade_modifier_plus">Hodnota plusu</string>
+    <string name="pref_other_grade_modifier_minus">Hodnota mínusu</string>
     <string name="pref_other_fill_message_content">Reply with message history</string>
     <!--Notification Channels-->
-    <string name="channel_new_entries">New entries in register</string>
-    <string name="channel_new_grades">New grades</string>
-    <string name="channel_lucky_number">Lucky number</string>
-    <string name="channel_new_message">New messages</string>
-    <string name="channel_new_notes">New notes</string>
+    <string name="channel_new_entries">Nové položky v denníku</string>
+    <string name="channel_new_grades">Nové známky</string>
+    <string name="channel_lucky_number">Šťastné číslo</string>
+    <string name="channel_new_message">Nové správy</string>
+    <string name="channel_new_notes">Nové poznámky</string>
     <string name="channel_push">Push notifications</string>
     <string name="channel_upcoming_lessons">Upcoming lessons</string>
     <string name="channel_debug">Debug</string>
@@ -495,7 +495,7 @@
     <string name="all_empty_color">Žiadna farba</string>
     <!--Others-->
     <string name="all_copied">Skopírované</string>
-    <string name="all_undo">Undo</string>
+    <string name="all_undo">Vrátiť</string>
     <!--Update helper-->
     <string name="update_download_started">Download of updates has started…</string>
     <string name="update_download_success">An update has just been downloaded.</string>
