@@ -205,7 +205,7 @@
     <string name="message_inbox">Inbox</string>
     <string name="message_sent">Odoslané</string>
     <string name="message_trash">Kôš</string>
-    <string name="message_no_subject">(no subject)</string>
+    <string name="message_no_subject">(žiadny predmet)</string>
     <string name="message_no_items">Žiadne správy</string>
     <string name="message_preview_error">An error occurred while downloading message content</string>
     <string name="message_from">Od:</string>
@@ -217,7 +217,7 @@
     <string name="message_move_to_bin">Presunúť do koša</string>
     <string name="message_delete_forever">Odstrániť natrvalo</string>
     <string name="message_delete_success">Message deleted successfully</string>
-    <string name="message_share">Share</string>
+    <string name="message_share">Zdieľať</string>
     <string name="message_print">Vytlačiť</string>
     <string name="message_subject">Predmet</string>
     <string name="message_content">Obsah</string>
@@ -238,10 +238,10 @@
         <item quantity="other">Nové správy</item>
     </plurals>
     <plurals name="message_notify_new_items">
-        <item quantity="one">You received %1$d message</item>
-        <item quantity="few">You received %1$d messages</item>
-        <item quantity="many">You received %1$d messages</item>
-        <item quantity="other">You received %1$d messages</item>
+        <item quantity="one">Máte %1$d novú správu</item>
+        <item quantity="few">Máte %1$d nové správy</item>
+        <item quantity="many">Máte %1$d nových správ</item>
+        <item quantity="other">Máte %1$d nových správ</item>
     </plurals>
     <!--Note-->
     <string name="note_no_items">No info about notes</string>
@@ -266,10 +266,10 @@
     </plurals>
     <!--Praise-->
     <plurals name="praise_number_item">
-        <item quantity="one">%d praise</item>
-        <item quantity="few">%d praises</item>
-        <item quantity="many">%d praises</item>
-        <item quantity="other">%d praises</item>
+        <item quantity="one">%d chvála</item>
+        <item quantity="few">%d chvály</item>
+        <item quantity="many">%d chvál</item>
+        <item quantity="other">%d chvál</item>
     </plurals>
     <plurals name="praise_new_items">
         <item quantity="one">Nová chvála</item>
@@ -336,7 +336,7 @@
     <string name="school_telephone_button">Call</string>
     <!--Teacher-->
     <string name="teachers_title">Učitelia</string>
-    <string name="teacher_no_items">No info about teachers</string>
+    <string name="teacher_no_items">Žiadne informácie o učiteľoch</string>
     <string name="teacher_no_subject">Žiadny predmet</string>
     <!--Conference-->
     <string name="conferences_title">Stretnutie</string>
@@ -350,9 +350,9 @@
     <string name="account_type_parent">Parent account</string>
     <string name="account_login_mobile_api">Mobile API mode</string>
     <string name="account_login_hybrid">Hybrid mode</string>
-    <string name="account_details_edit">Edit data</string>
+    <string name="account_details_edit">Upraviť dáta</string>
     <string name="account_quick_manager">Accounts manager</string>
-    <string name="account_select_student">Select student</string>
+    <string name="account_select_student">Vyberte žiaka</string>
     <string name="account_family">Rodina</string>
     <string name="account_contact">Kontakt</string>
     <string name="account_address">Residence details</string>
@@ -367,36 +367,36 @@
     <string name="about_faq_summary">Read Frequently Asked Questions</string>
     <string name="about_discord">Server Discord</string>
     <string name="about_discord_summary">Join the Wulkanowy community</string>
-    <string name="about_facebook">Facebook fanpage</string>
+    <string name="about_facebook">Facebooková fanpage</string>
     <string name="about_facebook_summary">Like our facebook fanpage</string>
     <string name="about_privacy">Privacy policy</string>
     <string name="about_privacy_summary">Rules for collecting personal data</string>
-    <string name="about_homepage">Homepage</string>
+    <string name="about_homepage">Domovská stránka</string>
     <string name="about_homepage_summary">Visit the website and help develop the application</string>
-    <string name="about_licenses">Licenses</string>
+    <string name="about_licenses">Licencie</string>
     <string name="about_licenses_summary">Licenses of libraries used in the application</string>
     <!--Licenses-->
-    <string name="license_dialog_title">License</string>
+    <string name="license_dialog_title">Licencia</string>
     <!--Contributor-->
     <string name="contributor_avatar_description">Avatar</string>
-    <string name="contributor_see_more">See more on GitHub</string>
+    <string name="contributor_see_more">Zobraziť viac na GitHub</string>
     <!--Student info-->
-    <string name="student_info_empty">No info about student or student family</string>
-    <string name="student_info_first_name">Name</string>
-    <string name="student_info_second_name">Second name</string>
-    <string name="student_info_gender">Gender</string>
-    <string name="student_info_polish_citizenship">Polish citizenship</string>
-    <string name="student_info_family_name">Family name</string>
-    <string name="student_info_parents_name">Mother\'s and father\'s names</string>
-    <string name="student_info_phone">Phone</string>
+    <string name="student_info_empty">Žiadne informácie o žiakov alebo rodine žiaka</string>
+    <string name="student_info_first_name">Meno</string>
+    <string name="student_info_second_name">Druhé meno</string>
+    <string name="student_info_gender">Pohlavie</string>
+    <string name="student_info_polish_citizenship">Poľské občianstvo</string>
+    <string name="student_info_family_name">Rodinné meno</string>
+    <string name="student_info_parents_name">Mená matky a otca</string>
+    <string name="student_info_phone">Telefón</string>
     <string name="student_info_cellphone">Cellphone</string>
     <string name="student_info_email">E-mail</string>
-    <string name="student_info_address">Address of residence</string>
-    <string name="student_info_registered_address">Address of registration</string>
-    <string name="student_info_correspondence_address">Correspondence address</string>
+    <string name="student_info_address">Adresa bydliska</string>
+    <string name="student_info_registered_address">Registrovaná adresa</string>
+    <string name="student_info_correspondence_address">Korešpondenčná adresa</string>
     <string name="student_info_full_name">Surname and first name</string>
-    <string name="student_info_kinship">Degree of kinship</string>
-    <string name="student_info_guardian_address">Address</string>
+    <string name="student_info_kinship">Stupeň príbuznosti</string>
+    <string name="student_info_guardian_address">Adresa</string>
     <string name="student_info_phones">Phones</string>
     <string name="student_info_male">Muž</string>
     <string name="student_info_female">Žena</string>
