@@ -1,5 +1,6 @@
 package io.github.wulkanowy.data.db.migrations
 
+import androidx.core.database.getLongOrNull
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.github.wulkanowy.utils.AppInfo
@@ -12,7 +13,7 @@ class Migration35(private val appInfo: AppInfo) : Migration(34, 35) {
         val studentsCursor = database.query("SELECT * FROM Students")
 
         while (studentsCursor.moveToNext()) {
-            val studentId = studentsCursor.getColumnIndexOrThrow("id")
+            val studentId = studentsCursor.getLongOrNull(0)
             database.execSQL(
                 """UPDATE Students 
                 SET avatar_color = ${appInfo.defaultColorsForAvatar.random()} 
