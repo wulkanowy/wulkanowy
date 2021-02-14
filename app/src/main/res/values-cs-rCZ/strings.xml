@@ -156,7 +156,7 @@
     <string name="timetable_time_left">dosud %1$s</string>
     <string name="timetable_time_until">za %1$s</string>
     <string name="timetable_finished">Lekce skončila</string>
-    <string name="timetable_now">Nyní: %s</string>
+    <string name="timetable_now">Teď: %s</string>
     <string name="timetable_next">Okamžik: %s</string>
     <string name="timetable_later">Později: %s</string>
     <!--Completed lessons-->
