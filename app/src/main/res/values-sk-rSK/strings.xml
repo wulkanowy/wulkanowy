@@ -153,14 +153,14 @@
     <string name="timetable_no_items">Žiadne lekcie tento deň</string>
     <string name="timetable_minutes">%s min</string>
     <string name="timetable_seconds">%s sek</string>
-    <string name="timetable_time_left">%1$s left</string>
-    <string name="timetable_time_until">in %1$s</string>
+    <string name="timetable_time_left">ešte %1$s</string>
+    <string name="timetable_time_until">za %1$s</string>
     <string name="timetable_finished">Lekcia skončila</string>
     <string name="timetable_now">Teraz: %s</string>
-    <string name="timetable_next">Next: %s</string>
+    <string name="timetable_next">Za chvíľu: %s</string>
     <string name="timetable_later">Later: %s</string>
     <!--Completed lessons-->
-    <string name="completed_lessons_title">Completed lessons</string>
+    <string name="completed_lessons_title">Dokončené lekcie</string>
     <string name="completed_lessons_button">Zobraziť dokončené lekcie</string>
     <string name="completed_lessons_no_items">Žiadne informácie o dokončených lekciách</string>
     <string name="completed_lessons_topic">Téma</string>
@@ -196,9 +196,9 @@
     <string name="attendance_excuse_title">Ospravedlniť</string>
     <!--Attendance summary-->
     <string name="attendance_summary_final">Attendance</string>
-    <string name="attendance_summary_total">Total</string>
+    <string name="attendance_summary_total">Spoločne</string>
     <!--Exam-->
-    <string name="exam_no_items">No exams this week</string>
+    <string name="exam_no_items">Spoločne</string>
     <string name="exam_type">Typ</string>
     <string name="exam_entry_date">Entry date</string>
     <!--Message-->
@@ -306,10 +306,10 @@
     <string name="homework_no_items">No info about homework</string>
     <string name="homework_mark_as_done">Mark as done</string>
     <string name="homework_mark_as_undone">Mark as undone</string>
-    <string name="homework_attachments">Attachments</string>
+    <string name="homework_attachments">Prílohy</string>
     <!--Lucky number-->
-    <string name="lucky_number_title">Lucky number</string>
-    <string name="lucky_number_header">Today\'s lucky number is</string>
+    <string name="lucky_number_title">Šťastné číslo</string>
+    <string name="lucky_number_header">Dnešné šťastné číslo je</string>
     <string name="lucky_number_empty">No info about the lucky number</string>
     <string name="lucky_number_notify_new_item_title">Lucky number for today</string>
     <string name="lucky_number_notify_new_item">Today\'s lucky number is: %d</string>
@@ -335,7 +335,7 @@
     <string name="school_address_button">Show on map</string>
     <string name="school_telephone_button">Call</string>
     <!--Teacher-->
-    <string name="teachers_title">Teachers</string>
+    <string name="teachers_title">Učitelia</string>
     <string name="teacher_no_items">No info about teachers</string>
     <string name="teacher_no_subject">No subject</string>
     <!--Conference-->
@@ -353,12 +353,12 @@
     <string name="account_details_edit">Edit data</string>
     <string name="account_quick_manager">Accounts manager</string>
     <string name="account_select_student">Select student</string>
-    <string name="account_family">Family</string>
-    <string name="account_contact">Contact</string>
+    <string name="account_family">Rodina</string>
+    <string name="account_contact">Kontakt</string>
     <string name="account_address">Residence details</string>
     <string name="account_personal_data">Personal information</string>
     <!--About-->
-    <string name="about_version">App version</string>
+    <string name="about_version">Verzia aplikácie</string>
     <string name="about_contributor">Contributors</string>
     <string name="about_contributor_summary">List of Wulkanowy developers</string>
     <string name="about_feedback">Nahlásiť chybu</string>
