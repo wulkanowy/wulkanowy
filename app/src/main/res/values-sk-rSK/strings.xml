@@ -156,7 +156,7 @@
     <string name="timetable_time_left">%1$s left</string>
     <string name="timetable_time_until">in %1$s</string>
     <string name="timetable_finished">Lekcia skončila</string>
-    <string name="timetable_now">Now: %s</string>
+    <string name="timetable_now">Teraz: %s</string>
     <string name="timetable_next">Next: %s</string>
     <string name="timetable_later">Later: %s</string>
     <!--Completed lessons-->
