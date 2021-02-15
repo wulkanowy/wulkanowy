@@ -200,7 +200,7 @@
     <!--Exam-->
     <string name="exam_no_items">Spoločne</string>
     <string name="exam_type">Typ</string>
-    <string name="exam_entry_date">Entry date</string>
+    <string name="exam_entry_date">Dátum vstupu</string>
     <!--Message-->
     <string name="message_inbox">Inbox</string>
     <string name="message_sent">Odoslané</string>
@@ -247,16 +247,16 @@
     <string name="note_no_items">No info about notes</string>
     <string name="note_points">Body</string>
     <plurals name="note_number_item">
-        <item quantity="one">%d note</item>
-        <item quantity="few">%d notes</item>
-        <item quantity="many">%d notes</item>
-        <item quantity="other">%d notes</item>
+        <item quantity="one">%d poznámka</item>
+        <item quantity="few">%d poznámky</item>
+        <item quantity="many">%d poznámok</item>
+        <item quantity="other">%d poznámok</item>
     </plurals>
     <plurals name="note_new_items">
-        <item quantity="one">New note</item>
-        <item quantity="few">New notes</item>
-        <item quantity="many">New notes</item>
-        <item quantity="other">New notes</item>
+        <item quantity="one">Nová poznámka</item>
+        <item quantity="few">Nové poznámky</item>
+        <item quantity="many">Nové poznámky</item>
+        <item quantity="other">Nové poznámky</item>
     </plurals>
     <plurals name="note_notify_new_items">
         <item quantity="one">You received %1$d note</item>
@@ -291,10 +291,10 @@
         <item quantity="other">%d neutral notes</item>
     </plurals>
     <plurals name="neutral_note_new_items">
-        <item quantity="one">New neutral note</item>
-        <item quantity="few">New neutral notes</item>
-        <item quantity="many">New neutral notes</item>
-        <item quantity="other">New neutral notes</item>
+        <item quantity="one">Nová neutrálny poznámka</item>
+        <item quantity="few">Nové neutrálne poznámky</item>
+        <item quantity="many">Nové neutrálne poznámky</item>
+        <item quantity="other">Nové neutrálne poznámky</item>
     </plurals>
     <plurals name="neutral_note_notify_new_items">
         <item quantity="one">You received %1$d neutral note</item>
@@ -303,16 +303,16 @@
         <item quantity="other">You received %1$d neutral notes</item>
     </plurals>
     <!--Homework-->
-    <string name="homework_no_items">No info about homework</string>
+    <string name="homework_no_items">Žiadne informácie o domácich úlohách</string>
     <string name="homework_mark_as_done">Mark as done</string>
     <string name="homework_mark_as_undone">Mark as undone</string>
     <string name="homework_attachments">Prílohy</string>
     <!--Lucky number-->
     <string name="lucky_number_title">Šťastné číslo</string>
     <string name="lucky_number_header">Dnešné šťastné číslo je</string>
-    <string name="lucky_number_empty">No info about the lucky number</string>
+    <string name="lucky_number_empty">Žiadne informácie o šťastnom čísle</string>
     <string name="lucky_number_notify_new_item_title">Šťastné číslo pre dnešok</string>
-    <string name="lucky_number_notify_new_item">Today\'s lucky number is: %d</string>
+    <string name="lucky_number_notify_new_item">Dnes je šťastným číslom: %d</string>
     <!--Mobile devices-->
     <string name="mobile_devices_title">Mobile devices</string>
     <string name="mobile_devices_no_items">Žiadne zariadenia</string>
