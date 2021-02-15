@@ -179,7 +179,7 @@
     <string name="attendance_excused_lateness">Excused lateness</string>
     <string name="attendance_unexcused_lateness">Unexcused lateness</string>
     <string name="attendance_present">Prítomnosť</string>
-    <string name="attendance_deleted">Deleted</string>
+    <string name="attendance_deleted">Odstránené</string>
     <string name="attendance_unknown">Neznámy</string>
     <string name="attendance_number">Číslo lekcie</string>
     <string name="attendance_no_items">Žiadne položky</string>
@@ -198,7 +198,7 @@
     <string name="attendance_summary_final">Dochádzka</string>
     <string name="attendance_summary_total">Spoločne</string>
     <!--Exam-->
-    <string name="exam_no_items">Spoločne</string>
+    <string name="exam_no_items">Tento týždeň žiadne testy</string>
     <string name="exam_type">Typ</string>
     <string name="exam_entry_date">Dátum vstupu</string>
     <!--Message-->
@@ -213,10 +213,10 @@
     <string name="message_date">Dátum: %s</string>
     <string name="message_reply">Odpoveď</string>
     <string name="message_forward">Poslať ďalej</string>
-    <string name="message_delete">Vymazať</string>
+    <string name="message_delete">Odstrániť</string>
     <string name="message_move_to_bin">Presunúť do koša</string>
     <string name="message_delete_forever">Odstrániť natrvalo</string>
-    <string name="message_delete_success">Message deleted successfully</string>
+    <string name="message_delete_success">Správa bola úspešne odstránená</string>
     <string name="message_share">Zdieľať</string>
     <string name="message_print">Vytlačiť</string>
     <string name="message_subject">Predmet</string>
@@ -422,7 +422,7 @@
     <string name="all_details">Details</string>
     <string name="all_category">Category</string>
     <string name="all_close">Zavrieť</string>
-    <string name="all_no_data">Žiadne dáta</string>
+    <string name="all_no_data">Žiadne údaje</string>
     <string name="all_subject">Predmet</string>
     <string name="all_prev">Prev</string>
     <string name="all_next">Next</string>
@@ -453,13 +453,13 @@
     <string name="pref_view_grade_color_scheme">Grades color scheme</string>
     <string name="pref_view_grade_sorting_mode">Subjects sorting in \"Grades\"</string>
     <string name="pref_view_app_language">Jazyk aplikácie</string>
-    <string name="pref_notify_header">Oznámenia</string>
+    <string name="pref_notify_header">Upozornenia</string>
     <string name="pref_notify_switch">Zobraziť upozornenia</string>
     <string name="pref_notify_upcoming_lessons_switch">Show upcoming lesson notifications</string>
     <string name="pref_notify_fix_sync_issues">Fix synchronization &amp; notifications issues</string>
     <string name="pref_notify_fix_sync_issues_message">Your device may have data synchronization issues and with notifications.\n\nTo fix them, you need to add Wulkanowy to the autostart and turn off battery optimization/saving in the phone settings.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Go to settings</string>
-    <string name="pref_notify_debug_switch">Show debug notifications</string>
+    <string name="pref_notify_debug_switch">Zobraziť upozornenia o ladení</string>
     <string name="pref_services_header">Synchronizácia</string>
     <string name="pref_services_switch">Automatic update</string>
     <string name="pref_services_suspended">Suspended on holidays</string>
@@ -483,7 +483,7 @@
     <string name="channel_lucky_number">Šťastné číslo</string>
     <string name="channel_new_message">Nové správy</string>
     <string name="channel_new_notes">Nové poznámky</string>
-    <string name="channel_push">Push notifications</string>
+    <string name="channel_push">Push upozornenia</string>
     <string name="channel_upcoming_lessons">Upcoming lessons</string>
     <string name="channel_debug">Ladenie</string>
     <!--Colors-->
@@ -509,7 +509,7 @@
     <string name="error_service_unavailable">Maintenance underway UONET + register. Try again later</string>
     <string name="error_unknown_uonet">Unknown UONET + register error. Try again later</string>
     <string name="error_unknown_app">Unknown application error. Please try again later</string>
-    <string name="error_unknown">Došlo k neočakávanej chybe</string>
-    <string name="error_feature_disabled">Funkcia deaktivovaná vašej školou</string>
+    <string name="error_unknown">Vyskytla sa neočakávaná chyba</string>
+    <string name="error_feature_disabled">Funkcia je deaktivovaná cez vašou školou</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
 </resources>
