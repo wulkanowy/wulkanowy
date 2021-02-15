@@ -469,7 +469,7 @@
     <string name="pref_services_message_sync_success">Synced!</string>
     <string name="pref_services_message_sync_failed">Sync failed</string>
     <string name="pref_services_sync_in_progress">Sync in progress</string>
-    <string name="pref_services_dialog_force_sync_title">Synchronization</string>
+    <string name="pref_services_dialog_force_sync_title">Synchronizácia</string>
     <string name="pref_services_dialog_force_sync_summary">        Manual sync doesn\'t refresh app views.
         \nTo see the synced data relaunch the app after syncing.
     </string>
