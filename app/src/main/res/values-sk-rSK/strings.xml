@@ -11,7 +11,7 @@
     <string name="more_title">Viac</string>
     <string name="about_title">O aplikácii</string>
     <string name="logviewer_title">Prehliadač protokolov</string>
-    <string name="contributors_title">Tvorcovia</string>
+    <string name="contributors_title">Contributors</string>
     <string name="license_title">Licencie</string>
     <string name="message_title">Správy</string>
     <string name="send_message_title">Nová správa</string>
@@ -66,12 +66,12 @@
     <string name="login_recover_button">Zabudol som heslo</string>
     <string name="login_recover_title">Obnovte svoj účet</string>
     <string name="login_recover">Obnoviť</string>
-    <string name="login_signed_in">Študent je už prihlásený</string>
+    <string name="login_signed_in">Žiak je už prihlásený</string>
     <!--Main-->
     <string name="main_account_picker">Manažér účtov</string>
     <string name="main_log_in">Prihlásiť sa</string>
-    <string name="main_session_expired">Platnosť relácie vypršala</string>
-    <string name="main_session_relogin">Vaša relácia vypršala, prihláste sa prosím znovu</string>
+    <string name="main_session_expired">Relácia vypršala</string>
+    <string name="main_session_relogin">Relácia vypršala. Prihláste sa prosím znovu</string>
     <!--Grade-->
     <string name="grade_header">Známka</string>
     <string name="grade_semester">Semester %d</string>
@@ -85,7 +85,7 @@
     <string name="grade_average">Priemer: %1$.2f</string>
     <string name="grade_points_sum">Body: %s</string>
     <string name="grade_no_average">Bez priemeru</string>
-    <string name="grade_predicted">Predpovedané: %1$s</string>
+    <string name="grade_predicted">Predpokladaná: %1$s</string>
     <string name="grade_final">Konečná: %1$s</string>
     <string name="grade_summary_points">Súčet bodov</string>
     <string name="grade_summary_final_grade">Konečná známka</string>
@@ -98,7 +98,7 @@
     <string name="grade_statistics_partial">Čiastočné</string>
     <string name="grade_statistics_semester">Semester</string>
     <string name="grade_statistics_points">Body</string>
-    <string name="grade_statistics_legend">Legenda</string>
+    <string name="grade_statistics_legend">Vysvetlivky</string>
     <string name="grade_statistics_average">Priemer: %1$s</string>
     <string name="grade_statistics_average_class">Trieda</string>
     <string name="grade_statistics_average_student">Žiák</string>
@@ -155,7 +155,7 @@
     <string name="timetable_seconds">%s sek</string>
     <string name="timetable_time_left">ešte %1$s</string>
     <string name="timetable_time_until">za %1$s</string>
-    <string name="timetable_finished">Lekcia skončila</string>
+    <string name="timetable_finished">Ukončila</string>
     <string name="timetable_now">Teraz: %s</string>
     <string name="timetable_next">Za chvíľu: %s</string>
     <string name="timetable_later">Later: %s</string>
@@ -427,30 +427,30 @@
     <string name="all_prev">Prev</string>
     <string name="all_next">Next</string>
     <string name="all_search">Hľadať</string>
-    <string name="all_search_hint">Search…</string>
+    <string name="all_search_hint">Hledať…</string>
     <string name="all_yes">Áno</string>
     <string name="all_no">Nie</string>
     <string name="all_save">Uložiť</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Žiadne lekcie</string>
-    <string name="widget_timetable_theme_title">Choose theme</string>
+    <string name="widget_timetable_theme_title">Vybrať motív</string>
     <string name="widget_timetable_theme_light">Svetlý</string>
     <string name="widget_timetable_theme_dark">Tmavý</string>
     <string name="widget_timetable_theme_system">Motív systému</string>
     <!--Preferences-->
-    <string name="pref_view_header">Appearance</string>
+    <string name="pref_view_header">Vzhľad</string>
     <string name="pref_view_list">Default view</string>
     <string name="pref_view_grade_average_mode">Calculation of the end-of-year average</string>
-    <string name="pref_view_grade_average_force_calc">Force average calculation by app</string>
-    <string name="pref_view_present">Show presence in attendance</string>
-    <string name="pref_view_app_theme">Application theme</string>
+    <string name="pref_view_grade_average_force_calc">Vynútiť priemerný výpočet podľa aplikácie</string>
+    <string name="pref_view_present">Zobraziť prítomnosť v dochádzke</string>
+    <string name="pref_view_app_theme">Motív aplikácie</string>
     <string name="pref_view_expand_grade">Expand grades</string>
-    <string name="pref_view_timetable_show_timers">Mark current lesson in timetable</string>
-    <string name="pref_view_timetable_show_groups">Show groups next to subjects in timetable</string>
+    <string name="pref_view_timetable_show_timers">Označiť aktuálne lekciu v pláne lekcie</string>
+    <string name="pref_view_timetable_show_groups">Zobraziť skupiny vedľa predmetov v pláne lekcie</string>
     <string name="pref_view_grade_statistics_list">Show chart list in class grades</string>
-    <string name="pref_view_timetable_show_whole_class">Show whole class lessons</string>
-    <string name="pref_view_subjects_without_grades">Show subjects without grades in Grades</string>
-    <string name="pref_view_grade_color_scheme">Grades color scheme</string>
+    <string name="pref_view_timetable_show_whole_class">Zobraziť lekcie pre celú triedu</string>
+    <string name="pref_view_subjects_without_grades">Zobraziť predmety bez známok v \"Známky\"</string>
+    <string name="pref_view_grade_color_scheme">Známky farebnú schému</string>
     <string name="pref_view_grade_sorting_mode">Subjects sorting in \"Grades\"</string>
     <string name="pref_view_app_language">Jazyk aplikácie</string>
     <string name="pref_notify_header">Upozornenia</string>
@@ -465,10 +465,10 @@
     <string name="pref_services_suspended">Suspended on holidays</string>
     <string name="pref_services_interval">Updates interval</string>
     <string name="pref_services_wifi">Wi-Fi only</string>
-    <string name="pref_services_force_sync">Sync now</string>
-    <string name="pref_services_message_sync_success">Synced!</string>
-    <string name="pref_services_message_sync_failed">Sync failed</string>
-    <string name="pref_services_sync_in_progress">Sync in progress</string>
+    <string name="pref_services_force_sync">Synchronizovať teraz</string>
+    <string name="pref_services_message_sync_success">Synchronizovano!</string>
+    <string name="pref_services_message_sync_failed">Synchronizácia zlyhala</string>
+    <string name="pref_services_sync_in_progress">Prebieha synchronizácia</string>
     <string name="pref_services_dialog_force_sync_title">Synchronizácia</string>
     <string name="pref_services_dialog_force_sync_summary">        Manual sync doesn\'t refresh app views.
         \nTo see the synced data relaunch the app after syncing.
@@ -498,18 +498,18 @@
     <string name="all_undo">Vrátiť</string>
     <!--Update helper-->
     <string name="update_download_started">Download of updates has started…</string>
-    <string name="update_download_success">An update has just been downloaded.</string>
+    <string name="update_download_success">Aktualizácia bola stiahnutá.</string>
     <string name="update_download_success_button">Reštartovať</string>
     <string name="update_failed">Update failed! Wulkanowy may not function properly. Consider updating</string>
     <!--Errors-->
     <string name="error_no_internet">Žiadne internetové pripojenie</string>
     <string name="error_timeout">Connection to register failed. Servers can be overloaded. Please try again later</string>
     <string name="error_login_failed">Loading data failed. Please try again later</string>
-    <string name="error_password_change_required">Register password change required</string>
-    <string name="error_service_unavailable">Maintenance underway UONET + register. Try again later</string>
-    <string name="error_unknown_uonet">Unknown UONET + register error. Try again later</string>
-    <string name="error_unknown_app">Unknown application error. Please try again later</string>
+    <string name="error_password_change_required">Je vyžadovaná zmena hesla pre denník</string>
+    <string name="error_service_unavailable">Prebieha údržba UONET+ denník. Skúste to neskôr znova</string>
+    <string name="error_unknown_uonet">Neznáma chyba dennika UONET+. Prosím skúste to znova neskôr</string>
+    <string name="error_unknown_app">Neznáma chyba aplikácie. Prosím skúste to znova neskôr</string>
     <string name="error_unknown">Vyskytla sa neočakávaná chyba</string>
     <string name="error_feature_disabled">Funkcia je deaktivovaná cez vašou školou</string>
-    <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
+    <string name="error_feature_not_available">Funkcia nie je k dispozícii. Prihláste sa v inom režime než Mobile API</string>
 </resources>
