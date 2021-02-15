@@ -49,8 +49,8 @@
     <string name="login_invalid_symbol">Neplatný symbol</string>
     <string name="login_incorrect_symbol">Žák nebyl nalezen. Zkontrolujte správnost symbolu a vybrané varianty deníku UONET+</string>
     <string name="login_field_required">Toto pole je povinné</string>
-    <string name="login_duplicate_student">Vybraný žák je již přihlášen</string>
-    <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b> → &#160;<b>Dostęp Mobilny</b> → &#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUjistěte se, že jste na předchozí obrazovce nastavili správnou variantu deníku do pole <b>Variace deníku UONET+</b>. Wulkanowy v tuto chvíli nezjistí předškolní studenty</string>
+    <string name="login_duplicate_student">Vybraný žák je už přihlášen</string>
+    <string name="login_symbol_helper">Symbol najdete na stránce deníku v &#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUjistěte se, že jste na předchozí obrazovce nastavili správnou variantu deníku do pole <b>Variace deníku UONET+</b>. Wulkanowy v tuto chvíli nezjistí předškolní żaków</string>
     <string name="login_select_student">Vyberte žáky, kteří se mají do aplikace přihlásit</string>
     <string name="login_advanced">Jiné možnosti</string>
     <string name="login_advanced_warning_mobile_api">V tomto režimu nefungují následující: šťastné číslo, statistiky třídy, shrnutí docházky, ospravedlnění nepřítomnosti, absolvované lekce, informace o škole a prohlížení seznamu registrovaných zařízení</string>
@@ -66,7 +66,7 @@
     <string name="login_recover_button">Zapomněl jsem své heslo</string>
     <string name="login_recover_title">Obnovte svůj účet</string>
     <string name="login_recover">Obnovit</string>
-    <string name="login_signed_in">Žák je již přihlášen</string>
+    <string name="login_signed_in">Žák je už přihlášen</string>
     <!--Main-->
     <string name="main_account_picker">Manažer účtů</string>
     <string name="main_log_in">Přihlásit se</string>
@@ -179,7 +179,7 @@
     <string name="attendance_excused_lateness">Omluvené zpoždění</string>
     <string name="attendance_unexcused_lateness">Neomluvené zpoždění</string>
     <string name="attendance_present">Přítomnost</string>
-    <string name="attendance_deleted">Smazáno</string>
+    <string name="attendance_deleted">Odstraněno</string>
     <string name="attendance_unknown">Neznámý</string>
     <string name="attendance_number">Číslo lekce</string>
     <string name="attendance_no_items">Žádné položky</string>
@@ -213,10 +213,10 @@
     <string name="message_date">Datum: %s</string>
     <string name="message_reply">Odpověď</string>
     <string name="message_forward">Poslat dále</string>
-    <string name="message_delete">Vymazat</string>
+    <string name="message_delete">Odstranit</string>
     <string name="message_move_to_bin">Přesunout do koše</string>
     <string name="message_delete_forever">Odstranit natrvalo</string>
-    <string name="message_delete_success">Zpráva byla úspěšně smazána</string>
+    <string name="message_delete_success">Zpráva byla úspěšně odstraněna</string>
     <string name="message_share">Sdílet</string>
     <string name="message_print">Vytisknout</string>
     <string name="message_subject">Předmět</string>
@@ -360,13 +360,13 @@
     <!--About-->
     <string name="about_version">Verze aplikace</string>
     <string name="about_contributor">Tvůrci</string>
-    <string name="about_contributor_summary">Seznam vývojářů Wulkanowy</string>
+    <string name="about_contributor_summary">Seznam vývojářů Wulkanového</string>
     <string name="about_feedback">Nahlásit chybu</string>
     <string name="about_feedback_summary">Odeslat zprávu o chybě e-mailem</string>
     <string name="about_faq">FAQ</string>
     <string name="about_faq_summary">Přečtěte si často kladené otázky</string>
     <string name="about_discord">Server Discord</string>
-    <string name="about_discord_summary">Připojte se ke komunitě Wulkanowy</string>
+    <string name="about_discord_summary">Připojte se ke komunitě Wulkanového</string>
     <string name="about_facebook">Facebooková fanpage</string>
     <string name="about_facebook_summary">Stejně jako naše facebooková fanpage</string>
     <string name="about_privacy">Zásady ochrany osobních údajů</string>
@@ -454,12 +454,12 @@
     <string name="pref_view_grade_sorting_mode">Předměty seřazené v \"Známky\"</string>
     <string name="pref_view_app_language">Jazyk aplikace</string>
     <string name="pref_notify_header">Upozornění</string>
-    <string name="pref_notify_switch">Zobrazit oznámení</string>
-    <string name="pref_notify_upcoming_lessons_switch">Zobrazit oznámení o nadcházející lekci</string>
+    <string name="pref_notify_switch">Zobrazit upozornění</string>
+    <string name="pref_notify_upcoming_lessons_switch">Zobrazit upozornění o nadcházející lekci</string>
     <string name="pref_notify_fix_sync_issues">Opravte problémy se synchronizací a upozorněním</string>
-    <string name="pref_notify_fix_sync_issues_message">Ve vašem zařízení mohou nastat problémy se synchronizací dat a oznámenímii.\n\nChcete-li je opravit, přidejte Wulkanowy do funkce Autostart a vypněte optimalizaci/úsporu baterie v nastavení systému telefonu.</string>
+    <string name="pref_notify_fix_sync_issues_message">Vaše zařízení může mít problémy se synchronizací dat as upozorněními.\n\nChcete-li je opravit, přidejte Wulkanového do funkce Autostart a vypněte optimalizaci/úsporu baterie v nastavení systému telefonu.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Přejít do nastavení</string>
-    <string name="pref_notify_debug_switch">Zobrazit oznámení o ladění</string>
+    <string name="pref_notify_debug_switch">Zobrazit upozornění o ladění</string>
     <string name="pref_services_header">Synchronizace</string>
     <string name="pref_services_switch">Automatická aktualizace</string>
     <string name="pref_services_suspended">Pozastaveno na dovolené</string>
@@ -483,7 +483,7 @@
     <string name="channel_lucky_number">Šťastné číslo</string>
     <string name="channel_new_message">Nové zprávy</string>
     <string name="channel_new_notes">Nové poznámky</string>
-    <string name="channel_push">Push oznámení</string>
+    <string name="channel_push">Push upozornění</string>
     <string name="channel_upcoming_lessons">Nadcházející lekce</string>
     <string name="channel_debug">Ladění</string>
     <!--Colors-->
@@ -509,7 +509,7 @@
     <string name="error_service_unavailable">Probíhá údržba UONET+ deník. Zkuste to později znovu</string>
     <string name="error_unknown_uonet">Neznámá chyba denika UONET+. Prosím zkuste to znovu později</string>
     <string name="error_unknown_app">Neznámá chyba aplikace. Prosím zkuste to znovu později</string>
-    <string name="error_unknown">Došlo k neočekávané chybě</string>
-    <string name="error_feature_disabled">Funkce deaktivována vaší školou</string>
+    <string name="error_unknown">Vyskytla se neočekávaná chyba</string>
+    <string name="error_feature_disabled">Funkce je deaktivována přes vaší školou</string>
     <string name="error_feature_not_available">Funkce není k dispozici. Přihlaste se v jiném režimu než Mobile API</string>
 </resources>
