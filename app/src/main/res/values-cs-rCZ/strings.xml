@@ -414,7 +414,7 @@
     <string name="all_content">Obsah</string>
     <string name="all_retry">Zkuste to znovu</string>
     <string name="all_description">Popis</string>
-    <string name="all_no_description">Bez popisu</string>
+    <string name="all_no_description">Žádný popis</string>
     <string name="all_teacher">Učitel</string>
     <string name="all_date">Datum</string>
     <string name="all_entry_date">Datum vstupu</string>
