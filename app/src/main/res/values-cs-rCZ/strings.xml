@@ -43,7 +43,7 @@
     <string name="login_incorrect_password">Přihlašovací údaje jsou nesprávné. Ujistěte se, že je v poli níže vybrána správná variace deníku UONET+</string>
     <string name="login_invalid_pin">Neplatný PIN</string>
     <string name="login_invalid_token">Neplatný token</string>
-    <string name="login_expired_token">Platnost tokenu vypršela</string>
+    <string name="login_expired_token">Token vypršel</string>
     <string name="login_invalid_email">Neplatný e-mail</string>
     <string name="login_invalid_login">Místo e-mailu použijte přiřazené přihlašovací údaje</string>
     <string name="login_invalid_symbol">Neplatný symbol</string>
@@ -70,8 +70,8 @@
     <!--Main-->
     <string name="main_account_picker">Manažer účtů</string>
     <string name="main_log_in">Přihlásit se</string>
-    <string name="main_session_expired">Platnost relace vypršela</string>
-    <string name="main_session_relogin">Vaše relace vypršela, přihlaste se prosím znovu</string>
+    <string name="main_session_expired">Relace vypršela</string>
+    <string name="main_session_relogin">Relace vypršela. Přihlaste se prosím znovu</string>
     <!--Grade-->
     <string name="grade_header">Známka</string>
     <string name="grade_semester">Semestr %d</string>
@@ -85,7 +85,7 @@
     <string name="grade_average">Průměr: %1$.2f</string>
     <string name="grade_points_sum">Body: %s</string>
     <string name="grade_no_average">Bez průměru</string>
-    <string name="grade_predicted">Předpovězeno: %1$s</string>
+    <string name="grade_predicted">Předpokládaná: %1$s</string>
     <string name="grade_final">Konečná: %1$s</string>
     <string name="grade_summary_points">Součet bodů</string>
     <string name="grade_summary_final_grade">Konečná známka</string>
@@ -155,7 +155,7 @@
     <string name="timetable_seconds">%s sek</string>
     <string name="timetable_time_left">ještě %1$s</string>
     <string name="timetable_time_until">za %1$s</string>
-    <string name="timetable_finished">Lekce skončila</string>
+    <string name="timetable_finished">Ukončila</string>
     <string name="timetable_now">Teď: %s</string>
     <string name="timetable_next">Za chvíli: %s</string>
     <string name="timetable_later">Později: %s</string>
@@ -465,7 +465,7 @@
     <string name="pref_services_suspended">Pozastaveno na dovolené</string>
     <string name="pref_services_interval">Interval aktualizací</string>
     <string name="pref_services_wifi">Pouze Wi-Fi</string>
-    <string name="pref_services_force_sync">Synchronizovat nyní</string>
+    <string name="pref_services_force_sync">Synchronizovat teď</string>
     <string name="pref_services_message_sync_success">Synchronizováno!</string>
     <string name="pref_services_message_sync_failed">Synchronizace selhala</string>
     <string name="pref_services_sync_in_progress">Probíhá synchronizace</string>
