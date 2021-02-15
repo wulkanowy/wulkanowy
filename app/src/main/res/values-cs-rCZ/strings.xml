@@ -19,7 +19,7 @@
     <string name="homework_title">Domácí úkoly</string>
     <string name="account_title">Manažer účtů</string>
     <string name="account_quick_title">Vyberte účet</string>
-    <string name="account_details_title">Detaily účtu</string>
+    <string name="account_details_title">Podrobnosti účtu</string>
     <string name="student_info_title">Informace o žáku</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
@@ -129,20 +129,20 @@
     <plurals name="grade_notify_new_items">
         <item quantity="one">Máte %1$d novou známku</item>
         <item quantity="few">Máte %1$d nové známky</item>
-        <item quantity="many">Máte %1$d nové známky</item>
-        <item quantity="other">Máte %1$d nové známky</item>
+        <item quantity="many">Máte %1$d nových známek</item>
+        <item quantity="other">Máte %1$d nových známek</item>
     </plurals>
     <plurals name="grade_notify_new_items_predicted">
         <item quantity="one">Máte %1$d novou předpokládanou známku</item>
         <item quantity="few">Máte %1$d nové předpokládané známky</item>
-        <item quantity="many">Máte %1$d nové předpokládané známky</item>
-        <item quantity="other">Máte %1$d nové předpokládané známky</item>
+        <item quantity="many">Máte %1$d nových předpokládaných známek</item>
+        <item quantity="other">Máte %1$d nových předpokládaných známek</item>
     </plurals>
     <plurals name="grade_notify_new_items_final">
         <item quantity="one">Máte %1$d novou konečnou známku</item>
         <item quantity="few">Máte %1$d nové konečné známky</item>
-        <item quantity="many">Máte %1$d nové konečné známky</item>
-        <item quantity="other">Máte %1$d nové konečné známky</item>
+        <item quantity="many">Máte %1$d nových konečných známek</item>
+        <item quantity="other">Máte %1$d nových konečných známek</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Lekce</string>
@@ -261,8 +261,8 @@
     <plurals name="note_notify_new_items">
         <item quantity="one">Máte %1$d novou poznámku</item>
         <item quantity="few">Máte %1$d nové poznámky</item>
-        <item quantity="many">Máte %1$d nové poznámky</item>
-        <item quantity="other">Máte %1$d nové poznámky</item>
+        <item quantity="many">Máte %1$d nových poznámek</item>
+        <item quantity="other">Máte %1$d nových poznámek</item>
     </plurals>
     <!--Praise-->
     <plurals name="praise_number_item">
@@ -280,8 +280,8 @@
     <plurals name="praise_notify_new_items">
         <item quantity="one">Máte %1$d novou chválu</item>
         <item quantity="few">Máte %1$d nové chvály</item>
-        <item quantity="many">Máte %1$d nové chvály</item>
-        <item quantity="other">Máte %1$d nové chvály</item>
+        <item quantity="many">Máte %1$d nových chvál</item>
+        <item quantity="other">Máte %1$d nových chvál</item>
     </plurals>
     <!--Neutral notes-->
     <plurals name="neutral_note_number_item">
@@ -297,10 +297,10 @@
         <item quantity="other">Nové neutrální poznámky</item>
     </plurals>
     <plurals name="neutral_note_notify_new_items">
-        <item quantity="one">Máte %1$d novou neutrální pozornost</item>
-        <item quantity="few">Máte %1$d nové neutrální 	pozornosti</item>
-        <item quantity="many">Máte %1$d nové neutrální 	pozornosti</item>
-        <item quantity="other">Máte %1$d nové neutrální 	pozornosti</item>
+        <item quantity="one">Máte %1$d novou neutrální poznámku</item>
+        <item quantity="few">Máte %1$d nové neutrální poznámky</item>
+        <item quantity="many">Máte %1$d nových neutrální poznámek</item>
+        <item quantity="other">Máte %1$d nových neutrální poznámek</item>
     </plurals>
     <!--Homework-->
     <string name="homework_no_items">Žádné informace o domácích úkolech</string>
@@ -317,7 +317,7 @@
     <string name="mobile_devices_title">Mobilní přístup</string>
     <string name="mobile_devices_no_items">Žádná zařízení</string>
     <string name="mobile_devices_unregister">Zrušit registraci</string>
-    <string name="mobile_device_removed">Zařízení odstraněno</string>
+    <string name="mobile_device_removed">Zařízení odstranění</string>
     <string name="mobile_device_qr">QR kód</string>
     <string name="mobile_device_token">Token</string>
     <string name="mobile_device_symbol">Symbol</string>
@@ -333,7 +333,7 @@
     <string name="school_headmaster">Jméno ředitele</string>
     <string name="school_pedagogue">Jméno pedagoga</string>
     <string name="school_address_button">Zobrazit na mapě</string>
-    <string name="school_telephone_button">Volání</string>
+    <string name="school_telephone_button">Volat</string>
     <!--Teacher-->
     <string name="teachers_title">Učitelé</string>
     <string name="teacher_no_items">Žádné informace o učitelích</string>
@@ -412,14 +412,14 @@
     <string name="dialog_error_check_update_message">Před hlášením chyby zkontrolujte, zda je k dispozici aktualizace s opravou chyb</string>
     <!--Generic-->
     <string name="all_content">Obsah</string>
-    <string name="all_retry">Zkuste to znovu</string>
+    <string name="all_retry">Zkusit znovu</string>
     <string name="all_description">Popis</string>
     <string name="all_no_description">Žádný popis</string>
     <string name="all_teacher">Učitel</string>
     <string name="all_date">Datum</string>
     <string name="all_entry_date">Datum vstupu</string>
     <string name="all_color">Barva</string>
-    <string name="all_details">Detaily</string>
+    <string name="all_details">Podrobnosti</string>
     <string name="all_category">Kategorie</string>
     <string name="all_close">Zavřít</string>
     <string name="all_no_data">Žádná data</string>
