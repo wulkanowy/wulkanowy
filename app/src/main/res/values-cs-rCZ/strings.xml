@@ -453,7 +453,7 @@
     <string name="pref_view_grade_color_scheme">Známky barevné schéma</string>
     <string name="pref_view_grade_sorting_mode">Předměty seřazené v \"Známky\"</string>
     <string name="pref_view_app_language">Jazyk aplikace</string>
-    <string name="pref_notify_header">Oznámení</string>
+    <string name="pref_notify_header">Upozornění</string>
     <string name="pref_notify_switch">Zobrazit oznámení</string>
     <string name="pref_notify_upcoming_lessons_switch">Zobrazit oznámení o nadcházející lekci</string>
     <string name="pref_notify_fix_sync_issues">Opravte problémy se synchronizací a upozorněním</string>
