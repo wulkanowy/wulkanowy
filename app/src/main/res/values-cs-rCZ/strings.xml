@@ -249,8 +249,8 @@
     <plurals name="note_number_item">
         <item quantity="one">%d poznámka</item>
         <item quantity="few">%d poznámky</item>
-        <item quantity="many">%d poznámky</item>
-        <item quantity="other">%d poznámky</item>
+        <item quantity="many">%d poznámek</item>
+        <item quantity="other">%d poznámek</item>
     </plurals>
     <plurals name="note_new_items">
         <item quantity="one">Nová poznámka</item>
