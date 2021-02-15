@@ -330,8 +330,8 @@
     <string name="school_name">Názov školy</string>
     <string name="school_address">Adresa školy</string>
     <string name="school_telephone">Telefón</string>
-    <string name="school_headmaster">Name of headmaster</string>
-    <string name="school_pedagogue">Name of pedagogue</string>
+    <string name="school_headmaster">Meno riaditeľa</string>
+    <string name="school_pedagogue">Meno pedagóga</string>
     <string name="school_address_button">Zobraziť na mape</string>
     <string name="school_telephone_button">Call</string>
     <!--Teacher-->
@@ -344,19 +344,19 @@
     <!--Account-->
     <string name="account_add_new">Pridať účet</string>
     <string name="account_logout">Odhlásiť</string>
-    <string name="account_confirm">Do you want to log out this student?</string>
-    <string name="account_logout_student">Student logout</string>
+    <string name="account_confirm">Chcete sa odhlásiť z aktívneho žiaka?</string>
+    <string name="account_logout_student">Odhlásenie žiakov</string>
     <string name="account_type_student">Student account</string>
     <string name="account_type_parent">Parent account</string>
-    <string name="account_login_mobile_api">Mobile API mode</string>
-    <string name="account_login_hybrid">Hybrid mode</string>
+    <string name="account_login_mobile_api">Režim Mobilného API</string>
+    <string name="account_login_hybrid">Hybridný režim</string>
     <string name="account_details_edit">Upraviť dáta</string>
-    <string name="account_quick_manager">Accounts manager</string>
+    <string name="account_quick_manager">Manažér účtov</string>
     <string name="account_select_student">Vyberte žiaka</string>
     <string name="account_family">Rodina</string>
     <string name="account_contact">Kontakt</string>
     <string name="account_address">Residence details</string>
-    <string name="account_personal_data">Personal information</string>
+    <string name="account_personal_data">Osobné údaje</string>
     <!--About-->
     <string name="about_version">Verzia aplikácie</string>
     <string name="about_contributor">Contributors</string>
@@ -364,13 +364,13 @@
     <string name="about_feedback">Nahlásiť chybu</string>
     <string name="about_feedback_summary">Send a bug report via e-mail</string>
     <string name="about_faq">FAQ</string>
-    <string name="about_faq_summary">Read Frequently Asked Questions</string>
+    <string name="about_faq_summary">Prečítajte si často kladené otázky</string>
     <string name="about_discord">Server Discord</string>
     <string name="about_discord_summary">Join the Wulkanowy community</string>
     <string name="about_facebook">Facebooková fanpage</string>
     <string name="about_facebook_summary">Like our facebook fanpage</string>
-    <string name="about_privacy">Privacy policy</string>
-    <string name="about_privacy_summary">Rules for collecting personal data</string>
+    <string name="about_privacy">Zásady ochrany osobných údajov</string>
+    <string name="about_privacy_summary">Pravidlá pre zhromažďovanie osobných údajov</string>
     <string name="about_homepage">Domovská stránka</string>
     <string name="about_homepage_summary">Visit the website and help develop the application</string>
     <string name="about_licenses">Licencie</string>
@@ -397,7 +397,7 @@
     <string name="student_info_full_name">Surname and first name</string>
     <string name="student_info_kinship">Stupeň príbuznosti</string>
     <string name="student_info_guardian_address">Adresa</string>
-    <string name="student_info_phones">Phones</string>
+    <string name="student_info_phones">Telefóny</string>
     <string name="student_info_male">Muž</string>
     <string name="student_info_female">Žena</string>
     <string name="student_info_last_name">Last name</string>
@@ -411,10 +411,10 @@
     <string name="dialog_error_check_update">Check for updates</string>
     <string name="dialog_error_check_update_message">Before reporting a bug, check first if an update with the bug fix is available</string>
     <!--Generic-->
-    <string name="all_content">Content</string>
+    <string name="all_content">Obsah</string>
     <string name="all_retry">Retry</string>
     <string name="all_description">Popis</string>
-    <string name="all_no_description">No description</string>
+    <string name="all_no_description">Žiadny popis</string>
     <string name="all_teacher">Učiteľ</string>
     <string name="all_date">Dátum</string>
     <string name="all_entry_date">Entry date</string>
@@ -422,7 +422,7 @@
     <string name="all_details">Details</string>
     <string name="all_category">Category</string>
     <string name="all_close">Zavrieť</string>
-    <string name="all_no_data">No data</string>
+    <string name="all_no_data">Žiadne dáta</string>
     <string name="all_subject">Predmet</string>
     <string name="all_prev">Prev</string>
     <string name="all_next">Next</string>
@@ -476,7 +476,7 @@
     <string name="pref_other_header">Iné</string>
     <string name="pref_other_grade_modifier_plus">Hodnota plusu</string>
     <string name="pref_other_grade_modifier_minus">Hodnota mínusu</string>
-    <string name="pref_other_fill_message_content">Reply with message history</string>
+    <string name="pref_other_fill_message_content">Odpovedať s históriou správ</string>
     <!--Notification Channels-->
     <string name="channel_new_entries">Nové položky v denníku</string>
     <string name="channel_new_grades">Nové známky</string>
