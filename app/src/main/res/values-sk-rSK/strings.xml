@@ -287,8 +287,8 @@
     <plurals name="neutral_note_number_item">
         <item quantity="one">%d neutrálny poznámka</item>
         <item quantity="few">%d neutrálne poznámky</item>
-        <item quantity="many">%d neutral notes</item>
-        <item quantity="other">%d neutral notes</item>
+        <item quantity="many">%d neutrálne poznámky</item>
+        <item quantity="other">%d neutrálne poznámky</item>
     </plurals>
     <plurals name="neutral_note_new_items">
         <item quantity="one">Nová neutrálny poznámka</item>
@@ -316,7 +316,7 @@
     <!--Mobile devices-->
     <string name="mobile_devices_title">Mobilný prístup</string>
     <string name="mobile_devices_no_items">Žiadne zariadenia</string>
-    <string name="mobile_devices_unregister">Deregister</string>
+    <string name="mobile_devices_unregister">Zrušiť registráciu</string>
     <string name="mobile_device_removed">Zariadenie odstránenie</string>
     <string name="mobile_device_qr">QR kód</string>
     <string name="mobile_device_token">Token</string>
@@ -504,7 +504,7 @@
     <!--Errors-->
     <string name="error_no_internet">Žiadne internetové pripojenie</string>
     <string name="error_timeout">Nedá sa pripojiť ku denníku. Servery môžu byť preťažené. Prosím skúste to znova neskôr</string>
-    <string name="error_login_failed">Loading data failed. Please try again later</string>
+    <string name="error_login_failed">Načítanie údajov zlyhalo. Skúste neskôr prosím</string>
     <string name="error_password_change_required">Je vyžadovaná zmena hesla pre denník</string>
     <string name="error_service_unavailable">Prebieha údržba UONET+ denník. Skúste to neskôr znova</string>
     <string name="error_unknown_uonet">Neznáma chyba dennika UONET+. Prosím skúste to znova neskôr</string>
