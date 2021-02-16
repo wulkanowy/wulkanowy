@@ -372,7 +372,7 @@
     <string name="about_privacy">Zásady ochrany osobních údajů</string>
     <string name="about_privacy_summary">Pravidla pro shromažďování osobních údajů</string>
     <string name="about_homepage">Domovská stránka</string>
-    <string name="about_homepage_summary">Navštivte web a pomozte s vývojem aplikace</string>
+    <string name="about_homepage_summary">Navštivte stránku a pomozte s vývojem aplikace</string>
     <string name="about_licenses">Licence</string>
     <string name="about_licenses_summary">Licence knihoven použitých v aplikaci</string>
     <!--Licenses-->
@@ -405,7 +405,7 @@
     <string name="account_edit_nick_hint">Přezdívka</string>
     <string name="account_edit_header">Přidat přezdívku</string>
     <!--Log viewer-->
-    <string name="logviewer_share">Sdílejte protokoly</string>
+    <string name="logviewer_share">Sdílet protokoly</string>
     <string name="logviewer_refresh">Obnovit</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Zkontrolovat aktualizace</string>
@@ -447,11 +447,11 @@
     <string name="pref_view_expand_grade">Rozbalit známky</string>
     <string name="pref_view_timetable_show_timers">Označit aktuální lekci v plánu lekce</string>
     <string name="pref_view_timetable_show_groups">Zobrazit skupiny vedle předmětů v plánu lekce</string>
-    <string name="pref_view_grade_statistics_list">Zobrazit seznam grafů ve třídních známkách</string>
+    <string name="pref_view_grade_statistics_list">Zobrazit seznam grafů v známkách třídy</string>
     <string name="pref_view_timetable_show_whole_class">Zobrazit lekce pro celou třídu</string>
     <string name="pref_view_subjects_without_grades">Zobrazit předměty bez známek v \"Známky\"</string>
     <string name="pref_view_grade_color_scheme">Známky barevné schéma</string>
-    <string name="pref_view_grade_sorting_mode">Předměty seřazené v \"Známky\"</string>
+    <string name="pref_view_grade_sorting_mode">Třídění předmětů v \"Známky\"</string>
     <string name="pref_view_app_language">Jazyk aplikace</string>
     <string name="pref_notify_header">Upozornění</string>
     <string name="pref_notify_switch">Zobrazit upozornění</string>
