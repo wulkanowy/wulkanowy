@@ -11,7 +11,7 @@
     <string name="more_title">Viac</string>
     <string name="about_title">O aplikácii</string>
     <string name="logviewer_title">Prehliadač protokolov</string>
-    <string name="contributors_title">Contributors</string>
+    <string name="contributors_title">Prispievatelia</string>
     <string name="license_title">Licencie</string>
     <string name="message_title">Správy</string>
     <string name="send_message_title">Nová správa</string>
@@ -55,7 +55,7 @@
     <string name="login_advanced">Iné možnosti</string>
     <string name="login_advanced_warning_mobile_api">In this mode, a lucky number does not work, a class grade stats, summary of attendance, excuse for absence, completed lessons, school information and preview of the list of registered devices</string>
     <string name="login_advanced_warning_scraper">This mode displays the same data as it appears on the register website</string>
-    <string name="login_advanced_warning_hybrid">The combination of the best features of the other two modes. It works faster than scraper and provides features not available in the Mobile API mode. It is in the experimental phase</string>
+    <string name="login_advanced_warning_hybrid">Kombinácia najlepších vlastností ostatných dvoch režimov. Funguje rýchlejšie ako scraper a poskytuje funkcie, ktoré nie sú k dispozícii v režime Mobilne API. Je to v experimentálnej fáze</string>
     <string name="login_privacy_policy">Zásady ochrany osobných údajov</string>
     <string name="login_contact_header">Problémy s prihlásením? Napíšte nám!</string>
     <string name="login_contact_email">Email</string>
@@ -191,7 +191,7 @@
     </plurals>
     <string name="attendance_excuse_dialog_reason">Absence reason (optional)</string>
     <string name="attendance_excuse_dialog_submit">Poslať</string>
-    <string name="attendance_excuse_success">Absence excused successfully!</string>
+    <string name="attendance_excuse_success">Neprítomnosť úspešne ospravedlnená!</string>
     <string name="attendance_excuse_no_selection">Musíte vybrať aspoň jednu neprítomnosť!</string>
     <string name="attendance_excuse_title">Ospravedlniť</string>
     <!--Attendance summary-->
@@ -207,7 +207,7 @@
     <string name="message_trash">Kôš</string>
     <string name="message_no_subject">(žiadny predmet)</string>
     <string name="message_no_items">Žiadne správy</string>
-    <string name="message_preview_error">An error occurred while downloading message content</string>
+    <string name="message_preview_error">Pri sťahovaní obsahu správy došlo k chybe</string>
     <string name="message_from">Od:</string>
     <string name="message_to">Komu:</string>
     <string name="message_date">Dátum: %s</string>
@@ -223,8 +223,8 @@
     <string name="message_content">Obsah</string>
     <string name="message_send_successful">Správa úspešne odoslaná</string>
     <string name="message_not_exists">Správa neexistuje</string>
-    <string name="message_required_recipients">You need to choose at least 1 recipient</string>
-    <string name="message_content_min_length">The message content must be at least 3 characters</string>
+    <string name="message_required_recipients">Musíte vybrať aspoň 1 príjemca</string>
+    <string name="message_content_min_length">Obsah správy musí mať aspoň 3 znaky</string>
     <plurals name="message_number_item">
         <item quantity="one">%d správa</item>
         <item quantity="few">%d správy</item>
@@ -355,26 +355,26 @@
     <string name="account_select_student">Vyberte žiaka</string>
     <string name="account_family">Rodina</string>
     <string name="account_contact">Kontakt</string>
-    <string name="account_address">Residence details</string>
+    <string name="account_address">Údaje o adresách</string>
     <string name="account_personal_data">Osobné údaje</string>
     <!--About-->
     <string name="about_version">Verzia aplikácie</string>
-    <string name="about_contributor">Contributors</string>
-    <string name="about_contributor_summary">List of Wulkanowy developers</string>
+    <string name="about_contributor">Prispievatelia</string>
+    <string name="about_contributor_summary">Zoznam vývojárov Wulkanového</string>
     <string name="about_feedback">Nahlásiť chybu</string>
-    <string name="about_feedback_summary">Send a bug report via e-mail</string>
+    <string name="about_feedback_summary">Odoslať správu o chybe e-mailom</string>
     <string name="about_faq">FAQ</string>
     <string name="about_faq_summary">Prečítajte si často kladené otázky</string>
     <string name="about_discord">Server Discord</string>
-    <string name="about_discord_summary">Join the Wulkanowy community</string>
+    <string name="about_discord_summary">Pripojte sa ku komunite Wulkanového</string>
     <string name="about_facebook">Facebooková fanpage</string>
-    <string name="about_facebook_summary">Like our facebook fanpage</string>
+    <string name="about_facebook_summary">Rovnako ako naše facebooková fanpage</string>
     <string name="about_privacy">Zásady ochrany osobných údajov</string>
     <string name="about_privacy_summary">Pravidlá pre zhromažďovanie osobných údajov</string>
     <string name="about_homepage">Domovská stránka</string>
-    <string name="about_homepage_summary">Visit the website and help develop the application</string>
+    <string name="about_homepage_summary">Navštívte stránku a pomôžte s vývojom aplikácie</string>
     <string name="about_licenses">Licencie</string>
-    <string name="about_licenses_summary">Licenses of libraries used in the application</string>
+    <string name="about_licenses_summary">Licencia knižníc použitých v aplikácii</string>
     <!--Licenses-->
     <string name="license_dialog_title">Licencia</string>
     <!--Contributor-->
@@ -405,11 +405,11 @@
     <string name="account_edit_nick_hint">Prezývka</string>
     <string name="account_edit_header">Pridať prezývku</string>
     <!--Log viewer-->
-    <string name="logviewer_share">Share logs</string>
+    <string name="logviewer_share">Zdieľať protokoly</string>
     <string name="logviewer_refresh">Obnoviť</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Skontrolovať aktualizácie</string>
-    <string name="dialog_error_check_update_message">Before reporting a bug, check first if an update with the bug fix is available</string>
+    <string name="dialog_error_check_update_message">Pred hlásením chyby skontrolujte, či je k dispozícii aktualizácia s opravou chýb</string>
     <!--Generic-->
     <string name="all_content">Obsah</string>
     <string name="all_retry">Skúsiť znova</string>
@@ -439,30 +439,30 @@
     <string name="widget_timetable_theme_system">Motív systému</string>
     <!--Preferences-->
     <string name="pref_view_header">Vzhľad</string>
-    <string name="pref_view_list">Default view</string>
+    <string name="pref_view_list">Predvolené zobrazenie</string>
     <string name="pref_view_grade_average_mode">Calculation of the end-of-year average</string>
     <string name="pref_view_grade_average_force_calc">Vynútiť priemerný výpočet podľa aplikácie</string>
     <string name="pref_view_present">Zobraziť prítomnosť v dochádzke</string>
     <string name="pref_view_app_theme">Motív aplikácie</string>
-    <string name="pref_view_expand_grade">Expand grades</string>
+    <string name="pref_view_expand_grade">Rozbaliť známky</string>
     <string name="pref_view_timetable_show_timers">Označiť aktuálne lekciu v pláne lekcie</string>
     <string name="pref_view_timetable_show_groups">Zobraziť skupiny vedľa predmetov v pláne lekcie</string>
-    <string name="pref_view_grade_statistics_list">Show chart list in class grades</string>
+    <string name="pref_view_grade_statistics_list">Zobraziť zoznam grafov v známkach triedy</string>
     <string name="pref_view_timetable_show_whole_class">Zobraziť lekcie pre celú triedu</string>
     <string name="pref_view_subjects_without_grades">Zobraziť predmety bez známok v \"Známky\"</string>
     <string name="pref_view_grade_color_scheme">Známky farebnú schému</string>
-    <string name="pref_view_grade_sorting_mode">Subjects sorting in \"Grades\"</string>
+    <string name="pref_view_grade_sorting_mode">Triedenie predmetov v \"Známky\"</string>
     <string name="pref_view_app_language">Jazyk aplikácie</string>
     <string name="pref_notify_header">Upozornenia</string>
     <string name="pref_notify_switch">Zobraziť upozornenia</string>
     <string name="pref_notify_upcoming_lessons_switch">Show upcoming lesson notifications</string>
     <string name="pref_notify_fix_sync_issues">Opravte problémy so synchronizáciou a upozornením</string>
-    <string name="pref_notify_fix_sync_issues_message">Your device may have data synchronization issues and with notifications.\n\nTo fix them, you need to add Wulkanowy to the autostart and turn off battery optimization/saving in the phone settings.</string>
+    <string name="pref_notify_fix_sync_issues_message">Vaše zariadenie môže mať problémy so synchronizáciou dát as upozorneniami.\n\nAk ich chcete opraviť, pridajte Wulkanového do funkcie Autostart a vypnite optimalizáciu/úsporu batérie v nastavení systému telefóne.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Prejsť do nastavení</string>
     <string name="pref_notify_debug_switch">Zobraziť upozornenia o ladení</string>
     <string name="pref_services_header">Synchronizácia</string>
     <string name="pref_services_switch">Automatická aktualizácia</string>
-    <string name="pref_services_suspended">Suspended on holidays</string>
+    <string name="pref_services_suspended">Pozastavený počas dovolenky</string>
     <string name="pref_services_interval">Interval aktualizácií</string>
     <string name="pref_services_wifi">Iba Wi-Fi</string>
     <string name="pref_services_force_sync">Synchronizovať teraz</string>
@@ -484,7 +484,7 @@
     <string name="channel_new_message">Nové správy</string>
     <string name="channel_new_notes">Nové poznámky</string>
     <string name="channel_push">Push upozornenia</string>
-    <string name="channel_upcoming_lessons">Upcoming lessons</string>
+    <string name="channel_upcoming_lessons">Nadchádzajúce lekcie</string>
     <string name="channel_debug">Ladenie</string>
     <!--Colors-->
     <string name="all_black">Čierny</string>
