@@ -50,11 +50,11 @@
     <string name="login_incorrect_symbol">Žiak nebol nájdený. Skontrolujte správnosť symbolu a vybrané varianty denníka UONET+</string>
     <string name="login_field_required">Toto pole je povinné</string>
     <string name="login_duplicate_student">Vybraný žiak už je prihlásený</string>
-    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the previous screen. Wulkanowy does not detect pre-school students at the moment</string>
+    <string name="login_symbol_helper">Symbol nájdete na stránke denníka v &#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nUistite sa, že ste na predchádzajúcu obrazovke nastaviť správny variant denníka do poľa <b>Variácie denníka UONET+</b>. Wulkanowy v túto chvíľu nezistí predškolské żaków</string>
     <string name="login_select_student">Vyberte žiakov, ktorí sa majú do aplikácie prihlásiť</string>
     <string name="login_advanced">Iné možnosti</string>
-    <string name="login_advanced_warning_mobile_api">In this mode, a lucky number does not work, a class grade stats, summary of attendance, excuse for absence, completed lessons, school information and preview of the list of registered devices</string>
-    <string name="login_advanced_warning_scraper">This mode displays the same data as it appears on the register website</string>
+    <string name="login_advanced_warning_mobile_api">V tomto režime nefungujú nasledovné: šťastné číslo, štatistiky triedy, zhrnutie dochádzky, ospravedlnenie neprítomnosti, dokončené lekcie, informácie o škole a prezeranie zoznamu registrovaných zariadení</string>
+    <string name="login_advanced_warning_scraper">Tento režim zobrazuje rovnaké dáta, ktoré sa zobrazujú na webových stránkach denníka</string>
     <string name="login_advanced_warning_hybrid">Kombinácia najlepších vlastností ostatných dvoch režimov. Funguje rýchlejšie ako scraper a poskytuje funkcie, ktoré nie sú k dispozícii v režime Mobilne API. Je to v experimentálnej fáze</string>
     <string name="login_privacy_policy">Zásady ochrany osobných údajov</string>
     <string name="login_contact_header">Problémy s prihlásením? Napíšte nám!</string>
@@ -158,7 +158,7 @@
     <string name="timetable_finished">Ukončila</string>
     <string name="timetable_now">Teraz: %s</string>
     <string name="timetable_next">Za chvíľu: %s</string>
-    <string name="timetable_later">Later: %s</string>
+    <string name="timetable_later">Neskôr: %s</string>
     <!--Completed lessons-->
     <string name="completed_lessons_title">Dokončené lekcie</string>
     <string name="completed_lessons_button">Zobraziť dokončené lekcie</string>
@@ -172,12 +172,12 @@
     <string name="additional_lessons_no_items">Žiadne informácie o ďalších lekciách</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Zhrnutie dochádzky</string>
-    <string name="attendance_absence_school">Absent for school reasons</string>
+    <string name="attendance_absence_school">Neprítomnosť zo školských dôvodov</string>
     <string name="attendance_absence_excused">Ospravedlnená neprítomnosť</string>
     <string name="attendance_absence_unexcused">Neospravedlnená neprítomnosť</string>
     <string name="attendance_exemption">Oslobodenie</string>
-    <string name="attendance_excused_lateness">Excused lateness</string>
-    <string name="attendance_unexcused_lateness">Unexcused lateness</string>
+    <string name="attendance_excused_lateness">Ospravedlnenie meškanie</string>
+    <string name="attendance_unexcused_lateness">Neospravedlnenie meškanie</string>
     <string name="attendance_present">Prítomnosť</string>
     <string name="attendance_deleted">Odstránené</string>
     <string name="attendance_unknown">Neznámy</string>
@@ -189,7 +189,7 @@
         <item quantity="many">%1$d neprítomnosti</item>
         <item quantity="other">%1$d neprítomnosti</item>
     </plurals>
-    <string name="attendance_excuse_dialog_reason">Absence reason (optional)</string>
+    <string name="attendance_excuse_dialog_reason">Dôvod neprítomnosti (voliteľný)</string>
     <string name="attendance_excuse_dialog_submit">Poslať</string>
     <string name="attendance_excuse_success">Neprítomnosť úspešne ospravedlnená!</string>
     <string name="attendance_excuse_no_selection">Musíte vybrať aspoň jednu neprítomnosť!</string>
@@ -305,7 +305,7 @@
     <!--Homework-->
     <string name="homework_no_items">Žiadne informácie o domácich úlohách</string>
     <string name="homework_mark_as_done">Označiť ako hotové</string>
-    <string name="homework_mark_as_undone">Mark as undone</string>
+    <string name="homework_mark_as_undone">Nevyrobené</string>
     <string name="homework_attachments">Prílohy</string>
     <!--Lucky number-->
     <string name="lucky_number_title">Šťastné číslo</string>
@@ -440,7 +440,7 @@
     <!--Preferences-->
     <string name="pref_view_header">Vzhľad</string>
     <string name="pref_view_list">Predvolené zobrazenie</string>
-    <string name="pref_view_grade_average_mode">Calculation of the end-of-year average</string>
+    <string name="pref_view_grade_average_mode">Výpočet koncoročního priemeru</string>
     <string name="pref_view_grade_average_force_calc">Vynútiť priemerný výpočet podľa aplikácie</string>
     <string name="pref_view_present">Zobraziť prítomnosť v dochádzke</string>
     <string name="pref_view_app_theme">Motív aplikácie</string>
@@ -455,7 +455,7 @@
     <string name="pref_view_app_language">Jazyk aplikácie</string>
     <string name="pref_notify_header">Upozornenia</string>
     <string name="pref_notify_switch">Zobraziť upozornenia</string>
-    <string name="pref_notify_upcoming_lessons_switch">Show upcoming lesson notifications</string>
+    <string name="pref_notify_upcoming_lessons_switch">Zobraziť upozornenia o nadchádzajúcej lekciu</string>
     <string name="pref_notify_fix_sync_issues">Opravte problémy so synchronizáciou a upozornením</string>
     <string name="pref_notify_fix_sync_issues_message">Vaše zariadenie môže mať problémy so synchronizáciou dát as upozorneniami.\n\nAk ich chcete opraviť, pridajte Wulkanového do funkcie Autostart a vypnite optimalizáciu/úsporu batérie v nastavení systému telefóne.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Prejsť do nastavení</string>
