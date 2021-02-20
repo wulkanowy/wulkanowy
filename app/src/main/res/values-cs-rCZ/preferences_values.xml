@@ -13,6 +13,7 @@
         <item>Українська</item>
         <item>Deutsch</item>
         <item>Čeština</item>
+        <item>Slovenčina</item>
     </string-array>
     <string-array name="services_interval_entries">
         <item>15 minut</item>
@@ -45,8 +46,8 @@
         <item>Průměr známek z celého roku</item>
     </string-array>
     <string-array name="timetable_show_whole_class_entries">
-        <item>Neukaž</item>
-        <item>Ukázat vše</item>
-        <item>Ukázat menší</item>
+        <item>Nezobrazovat</item>
+        <item>Zobrazit vše</item>
+        <item>Zobrazit menší</item>
     </string-array>
 </resources>
