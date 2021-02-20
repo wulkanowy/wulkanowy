@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.main
 
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.ui.base.BaseView
 
 interface MainView : BaseView {
@@ -35,6 +36,8 @@ interface MainView : BaseView {
     fun setViewSubTitle(subtitle: String?)
 
     fun popView(depth: Int = 1)
+
+    fun showStudentAvatar(student: Student)
 
     interface MainChildView {
 

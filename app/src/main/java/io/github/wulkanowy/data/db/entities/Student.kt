@@ -83,5 +83,5 @@ data class Student(
     var nick = ""
 
     @ColumnInfo(name = "avatar_color")
-    var avatarColor = 0
+    var avatarColor = 0L
 }

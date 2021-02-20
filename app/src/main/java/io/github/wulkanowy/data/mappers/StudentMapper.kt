@@ -5,7 +5,7 @@ import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import java.time.LocalDateTime
 import io.github.wulkanowy.sdk.pojo.Student as SdkStudent
 
-fun List<SdkStudent>.mapToEntities(password: String = "", colors: List<Int>) = map {
+fun List<SdkStudent>.mapToEntities(password: String = "", colors: List<Long>) = map {
     StudentWithSemesters(
         student = Student(
             email = it.email,

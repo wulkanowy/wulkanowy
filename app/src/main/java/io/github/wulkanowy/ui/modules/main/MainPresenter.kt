@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.main
 
+import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
@@ -9,6 +10,8 @@ import io.github.wulkanowy.ui.modules.main.MainView.Section.GRADE
 import io.github.wulkanowy.ui.modules.main.MainView.Section.MESSAGE
 import io.github.wulkanowy.ui.modules.main.MainView.Section.SCHOOL
 import io.github.wulkanowy.utils.AnalyticsHelper
+import io.github.wulkanowy.utils.flowWithResource
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -17,7 +20,7 @@ class MainPresenter @Inject constructor(
     studentRepository: StudentRepository,
     private val prefRepository: PreferencesRepository,
     private val syncManager: SyncManager,
-    private val analytics: AnalyticsHelper
+    private val analytics: AnalyticsHelper,
 ) : BasePresenter<MainView>(errorHandler, studentRepository) {
 
     fun onAttachView(view: MainView, initMenu: MainView.Section?) {
@@ -32,7 +35,27 @@ class MainPresenter @Inject constructor(
         }
 
         syncManager.startPeriodicSyncWorker()
+        loadStudentAvatar()
         analytics.logEvent("app_open", "destination" to initMenu?.name)
+    }
+
+    fun loadStudentAvatar() {
+        flowWithResource { studentRepository.getCurrentStudent(false) }
+            .onEach {
+                when (it.status) {
+                    Status.LOADING -> {
+                        Timber.i("Loading student avatar data started")
+                    }
+                    Status.SUCCESS -> {
+                        view?.showStudentAvatar(it.data!!)
+                    }
+                    Status.ERROR -> {
+                        Timber.i("Loading student avatar result: An exception occurred")
+                        errorHandler.dispatch(it.error!!)
+                    }
+                }
+            }
+            .launch("avatar")
     }
 
     fun onViewChange(section: MainView.Section?) {

@@ -18,6 +18,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoFragment
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
+import io.github.wulkanowy.utils.createNameInitialsDrawable
 import io.github.wulkanowy.utils.nickOrName
 import javax.inject.Inject
 
@@ -90,6 +91,12 @@ class AccountDetailsFragment :
         with(binding) {
             accountDetailsName.text = student.nickOrName
             accountDetailsSchool.text = student.schoolName
+            accountDetailsAvatar.setImageDrawable(
+                requireContext().createNameInitialsDrawable(
+                    student.nickOrName,
+                    student.avatarColor
+                )
+            )
         }
     }
 
