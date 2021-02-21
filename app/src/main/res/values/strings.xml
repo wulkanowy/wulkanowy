@@ -462,7 +462,7 @@
 
 
     <!--Preferences-->
-    <string name="pref_view_header">Appearance</string>
+    <string name="pref_view_header">App apearance &amp; behavior </string>
     <string name="pref_view_list">Default view</string>
     <string name="pref_view_grade_average_mode">Calculation of the end-of-year average</string>
     <string name="pref_view_grade_average_force_calc">Force average calculation by app</string>
@@ -549,5 +549,18 @@
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
-
+    <string name="pref_grades_appearance_header">Grades</string>
+    <string name="pref_attendance_appearance_view">Attendance</string>
+    <string name="pref_timetable_appearance_view">Timetable</string>
+    <string name="pref_grades_advanced_header">Grades</string>
+    <string name="pref_messages_advanced_header">Messages</string>
+    <string name="pref_appearance_category">Appearance &amp; Behavior</string>
+    <string name="pref_appearance_category_summary">Change app look and feel</string>
+    <string name="pref_notifications_category_summary">Enable or disable app notifications</string>
+    <string name="pref_notifications_category">Notifications</string>
+    <string name="pref_sync_category">Synchronization</string>
+    <string name="pref_sync_category_summary">Change synchronization interval</string>
+    <string name="pref_advanced_category_summary">Advanced options</string>
+    <string name="pref_advanced_category">Advanced</string>
+    <string name="pref_about_category_summary">Check informations about app</string>
 </resources>
