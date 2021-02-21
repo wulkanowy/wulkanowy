@@ -11,6 +11,7 @@ import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.HeaderAccountBinding
 import io.github.wulkanowy.databinding.ItemAccountBinding
 import io.github.wulkanowy.utils.createNameInitialsDrawable
+import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.nickOrName
 import javax.inject.Inject
 
@@ -92,6 +93,10 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
             accountItemAccountType.visibility = if (isDuplicatedStudent) VISIBLE else GONE
             accountItemImage.setImageDrawable(avatar)
             accountItemCheck.visibility = if (student.isCurrent) VISIBLE else GONE
+            accountItemCheck.borderColor =
+                binding.root.context.getThemeAttrColor(R.attr.colorBackgroundFloating)
+            accountItemCheck.circleColor =
+                binding.root.context.getThemeAttrColor(R.attr.colorBackgroundFloating)
 
             root.setOnClickListener { onClickListener(studentWithSemesters) }
         }
