@@ -35,11 +35,10 @@ class MainPresenter @Inject constructor(
         }
 
         syncManager.startPeriodicSyncWorker()
-        loadStudentAvatar()
         analytics.logEvent("app_open", "destination" to initMenu?.name)
     }
 
-    fun loadStudentAvatar() {
+    fun onActionMenuCreated() {
         flowWithResource { studentRepository.getCurrentStudent(false) }
             .onEach {
                 when (it.status) {

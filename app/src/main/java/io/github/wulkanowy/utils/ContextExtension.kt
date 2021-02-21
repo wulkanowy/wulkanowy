@@ -17,7 +17,6 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
-import androidx.core.graphics.TypefaceCompat
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
@@ -105,36 +104,37 @@ fun Context.shareText(text: String, subject: String?) {
 fun Context.dpToPx(dp: Float) = dp * resources.displayMetrics.densityDpi / DENSITY_DEFAULT
 
 @SuppressLint("DefaultLocale")
-fun Context.createNameInitialsDrawable(text: String, backgroundColor: Long): RoundedBitmapDrawable {
-    val firstChar =
-        text.split(" ").let { "${it.getOrElse(0) { "" }.first()}${it.getOrElse(1) { "" }.first()}" }
+fun Context.createNameInitialsDrawable(
+    text: String,
+    backgroundColor: Long,
+    scaleFactory: Float = 1f
+): RoundedBitmapDrawable {
+    val words = text.split(" ")
+    val firstCharFirstWord = words.getOrNull(0)?.firstOrNull() ?: ""
+    val firstCharSecondWord = words.getOrNull(1)?.firstOrNull() ?: ""
+
+    val initials = "$firstCharFirstWord$firstCharSecondWord".toUpperCase()
+
     val bounds = Rect()
-    val dimension = this.dpToPx(64f).toInt()
-    val paint = TextPaint().apply {
-        typeface = TypefaceCompat.create(
-            this@createNameInitialsDrawable,
-            Typeface.create("sans-serif-light", Typeface.NORMAL),
-            Typeface.NORMAL
-        )
+    val dimension = this.dpToPx(64f * scaleFactory).toInt()
+    val textPaint = TextPaint().apply {
+        typeface = Typeface.SANS_SERIF
         color = Color.WHITE
         textAlign = Paint.Align.CENTER
         isAntiAlias = true
-        textSize = this@createNameInitialsDrawable.dpToPx(32f)
-        getTextBounds(firstChar, 0, 1, bounds)
+        textSize = this@createNameInitialsDrawable.dpToPx(30f * scaleFactory)
+        getTextBounds(initials, 0, initials.length, bounds)
     }
+
+    val xCoordinate = (dimension / 2).toFloat()
+    val yCoordinate = (dimension / 2 + (bounds.bottom - bounds.top) / 2).toFloat()
 
     val bitmap = Bitmap.createBitmap(dimension, dimension, Bitmap.Config.ARGB_8888)
         .applyCanvas {
             drawColor(backgroundColor.toInt())
-            drawText(
-                firstChar,
-                0,
-                2,
-                (dimension / 2).toFloat(),
-                (dimension / 2 + (bounds.bottom - bounds.top) / 2).toFloat(),
-                paint
-            )
+            drawText(initials, 0, initials.length, xCoordinate, yCoordinate, textPaint)
         }
 
-    return RoundedBitmapDrawableFactory.create(this.resources, bitmap).apply { isCircular = true }
+    return RoundedBitmapDrawableFactory.create(this.resources, bitmap)
+        .apply { isCircular = true }
 }

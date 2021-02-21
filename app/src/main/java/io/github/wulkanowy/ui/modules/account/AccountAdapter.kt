@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.account
 
 import android.annotation.SuppressLint
-import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -11,7 +10,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.HeaderAccountBinding
 import io.github.wulkanowy.databinding.ItemAccountBinding
-import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.createNameInitialsDrawable
 import io.github.wulkanowy.utils.nickOrName
 import javax.inject.Inject
 
@@ -75,6 +74,8 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
         val student = studentWithSemesters.student
         val semesters = studentWithSemesters.semesters
         val diary = semesters.maxByOrNull { it.semesterId }
+        val avatar =
+            binding.root.context.createNameInitialsDrawable(student.nickOrName, student.avatarColor)
         val isDuplicatedStudent = items.filter {
             if (it.value !is StudentWithSemesters) return@filter false
             val studentToCompare = it.value.student
@@ -89,14 +90,8 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
             accountItemSchool.text = studentWithSemesters.student.schoolName
             accountItemAccountType.setText(if (student.isParent) R.string.account_type_parent else R.string.account_type_student)
             accountItemAccountType.visibility = if (isDuplicatedStudent) VISIBLE else GONE
-
-            with(accountItemImage) {
-                val colorImage =
-                    if (student.isCurrent) context.getThemeAttrColor(R.attr.colorPrimary)
-                    else context.getThemeAttrColor(R.attr.colorOnSurface, 153)
-
-                setColorFilter(colorImage, PorterDuff.Mode.SRC_IN)
-            }
+            accountItemImage.setImageDrawable(avatar)
+            accountItemCheck.visibility = if (student.isCurrent) VISIBLE else GONE
 
             root.setOnClickListener { onClickListener(studentWithSemesters) }
         }

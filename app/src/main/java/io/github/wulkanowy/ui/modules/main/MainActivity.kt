@@ -200,7 +200,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.action_menu_main, menu)
         actionMenu = menu
-        presenter.loadStudentAvatar()
+
+        presenter.onActionMenuCreated()
         return true
     }
 
@@ -334,7 +335,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     override fun showStudentAvatar(student: Student) {
         actionMenu?.findItem(R.id.mainMenuAccount)?.icon =
-            createNameInitialsDrawable(student.nickOrName, student.avatarColor)
+            createNameInitialsDrawable(student.nickOrName, student.avatarColor, 0.47f)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
