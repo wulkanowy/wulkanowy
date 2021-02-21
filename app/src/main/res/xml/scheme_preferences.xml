@@ -5,25 +5,25 @@
         app:icon="@drawable/ic_settings_appearance"
         app:summary="@string/pref_appearance_category_summary"
         app:title="@string/pref_appearance_category"
-        app:fragment="io.github.wulkanowy.ui.modules.settings.AppearanceFragment" />
+        app:fragment="io.github.wulkanowy.ui.modules.settings.appearance.AppearanceFragment" />
     <Preference
         app:key="notifications"
         app:icon="@drawable/ic_settings_notifications"
         app:summary="@string/pref_notifications_category_summary"
         app:title="@string/pref_notifications_category"
-        app:fragment="io.github.wulkanowy.ui.modules.settings.NotificationsFragment" />
+        app:fragment="io.github.wulkanowy.ui.modules.settings.notifications.NotificationsFragment" />
     <Preference
         app:key="sync"
         app:icon="@drawable/ic_settings_sync"
         app:summary="@string/pref_sync_category_summary"
         app:title="@string/pref_sync_category"
-        app:fragment="io.github.wulkanowy.ui.modules.settings.SyncFragment" />
+        app:fragment="io.github.wulkanowy.ui.modules.settings.sync.SyncFragment" />
     <Preference
         app:key="advanced"
         app:icon="@drawable/ic_settings_advanced"
         app:summary="@string/pref_advanced_category_summary"
         app:title="@string/pref_advanced_category"
-        app:fragment="io.github.wulkanowy.ui.modules.settings.AdvancedFragment" />
+        app:fragment="io.github.wulkanowy.ui.modules.settings.advanced.AdvancedFragment" />
     <Preference
         app:key="about"
         app:icon="@drawable/ic_all_about"
