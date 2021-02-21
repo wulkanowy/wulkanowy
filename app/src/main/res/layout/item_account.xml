@@ -22,8 +22,8 @@
         tools:src="@tools:sample/avatars" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginStart="28dp"
         android:id="@+id/account_item_check"
         android:layout_marginTop="28dp"
