@@ -48,13 +48,6 @@ class SyncFragment : PreferenceFragmentCompat(),
                 true
             }
         }
-        findPreference<Preference>(getString(R.string.pref_key_notifications_fix_issues))?.run {
-            isVisible = AppKillerManager.isDeviceSupported() && AppKillerManager.isAnyActionAvailable(requireContext())
-            setOnPreferenceClickListener {
-                presenter.onFixSyncIssuesClicked()
-                true
-            }
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -73,14 +66,6 @@ class SyncFragment : PreferenceFragmentCompat(),
 
     override fun recreateView() {
         activity?.recreate()
-    }
-
-    override fun updateLanguage(langCode: String) {
-        lingver.setLocale(requireContext(), langCode)
-    }
-
-    override fun updateLanguageToFollowSystem() {
-        lingver.setFollowSystemLocale(requireContext())
     }
 
     override fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean) {
