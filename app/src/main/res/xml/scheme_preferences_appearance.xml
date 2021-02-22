@@ -91,7 +91,7 @@
             app:key="@string/pref_key_timetable_show_groups"
             app:singleLineTitle="false"
             app:title="@string/pref_view_timetable_show_groups" />
- <!--
+ <!--Hidden due to not functional hybrid/mobile api modes
         <ListPreference
             app:defaultValue="@string/pref_default_timetable_show_whole_class"
             app:entries="@array/timetable_show_whole_class_entries"

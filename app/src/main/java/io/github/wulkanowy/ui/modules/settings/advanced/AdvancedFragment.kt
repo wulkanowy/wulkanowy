@@ -2,7 +2,6 @@ package io.github.wulkanowy.ui.modules.settings.advanced
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.yariksoffice.lingver.Lingver
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +41,6 @@ class AdvancedFragment : PreferenceFragmentCompat(),
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.scheme_preferences_advanced, rootKey)
-        findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible = appInfo.isDebug
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
