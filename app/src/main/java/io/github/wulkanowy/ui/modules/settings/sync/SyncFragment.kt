@@ -63,7 +63,7 @@ class SyncFragment : PreferenceFragmentCompat(),
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.scheme_preferences, rootKey)
+        setPreferencesFromResource(R.xml.scheme_preferences_sync, rootKey)
         findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible = appInfo.isDebug
     }
 

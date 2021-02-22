@@ -21,6 +21,8 @@ import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation.TitleState.ALWAYS_SHOW
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.elevation.ElevationOverlayProvider
@@ -51,7 +53,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainView {
+class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainView,
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     @Inject
     override lateinit var presenter: MainPresenter
@@ -260,6 +263,16 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
                 MoreFragment.newInstance()
             )
         }
+    }
+
+    override fun onPreferenceStartFragment(
+        caller: PreferenceFragmentCompat,
+        pref: Preference
+    ): Boolean {
+        val fragment =
+            supportFragmentManager.fragmentFactory.instantiate(classLoader, pref.fragment)
+        navController.pushFragment(fragment)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

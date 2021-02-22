@@ -63,7 +63,7 @@ class AdvancedFragment : PreferenceFragmentCompat(),
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.scheme_preferences, rootKey)
+        setPreferencesFromResource(R.xml.scheme_preferences_advanced, rootKey)
         findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible = appInfo.isDebug
     }
 
