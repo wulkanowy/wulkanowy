@@ -21,14 +21,6 @@
             app:title="@string/pref_view_app_theme"
             app:useSimpleSummaryProvider="true" />
         <ListPreference
-            app:defaultValue="@string/pref_default_grade_color_scheme"
-            app:entries="@array/grade_color_scheme_entries"
-            app:entryValues="@array/grade_color_scheme_values"
-            app:iconSpaceReserved="false"
-            app:key="@string/pref_key_grade_color_scheme"
-            app:title="@string/pref_view_grade_color_scheme"
-            app:useSimpleSummaryProvider="true" />
-        <ListPreference
             app:defaultValue="@string/pref_default_startup"
             app:entries="@array/startup_tab_entries"
             app:entryValues="@array/startup_tab_value"
@@ -40,11 +32,25 @@
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/pref_grades_appearance_header">
+        <ListPreference
+            app:defaultValue="@string/pref_default_grade_color_scheme"
+            app:entries="@array/grade_color_scheme_entries"
+            app:entryValues="@array/grade_color_scheme_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_key_grade_color_scheme"
+            app:title="@string/pref_view_grade_color_scheme"
+            app:useSimpleSummaryProvider="true" />
         <SwitchPreferenceCompat
             app:defaultValue="@bool/pref_default_expand_grade"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_expand_grade"
             app:title="@string/pref_view_expand_grade" />
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/pref_default_subjects_without_grades"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_key_subjects_without_grades"
+            app:singleLineTitle="false"
+            app:title="@string/pref_view_subjects_without_grades" />
         <ListPreference
             app:defaultValue="@string/pref_default_grade_sorting_mode"
             app:entries="@array/grade_sorting_mode_entries"
@@ -53,12 +59,6 @@
             app:key="@string/pref_key_grade_sorting_mode"
             app:title="@string/pref_view_grade_sorting_mode"
             app:useSimpleSummaryProvider="true" />
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/pref_default_subjects_without_grades"
-            app:iconSpaceReserved="false"
-            app:key="@string/pref_key_subjects_without_grades"
-            app:singleLineTitle="false"
-            app:title="@string/pref_view_subjects_without_grades" />
         <SwitchPreferenceCompat
             app:defaultValue="@bool/pref_default_grade_statistics_list"
             app:iconSpaceReserved="false"
