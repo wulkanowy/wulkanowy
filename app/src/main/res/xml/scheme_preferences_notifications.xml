@@ -3,12 +3,14 @@
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/pref_notify_header">
+        <!--
         <SwitchPreferenceCompat
             app:defaultValue="@bool/pref_default_notifications_enable"
             app:dependency="services_enable"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_notifications_enable"
             app:title="@string/pref_notify_switch" />
+            -->
         <SwitchPreferenceCompat
             app:defaultValue="@bool/pref_default_notification_upcoming_lessons_enable"
             app:iconSpaceReserved="false"

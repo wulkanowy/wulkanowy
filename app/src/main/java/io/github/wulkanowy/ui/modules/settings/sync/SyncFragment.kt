@@ -35,7 +35,7 @@ class SyncFragment : PreferenceFragmentCompat(),
         fun newInstance() = SyncFragment()
     }
 
-    override val titleStringId get() = R.string.settings_title
+    override val titleStringId get() = R.string.settings_sync_title
 
     override val syncSuccessString get() = getString(R.string.pref_services_message_sync_success)
 

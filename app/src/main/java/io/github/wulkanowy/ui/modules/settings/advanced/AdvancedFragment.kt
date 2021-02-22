@@ -31,7 +31,7 @@ class AdvancedFragment : PreferenceFragmentCompat(),
         fun newInstance() = AdvancedFragment()
     }
 
-    override val titleStringId get() = R.string.settings_title
+    override val titleStringId get() = R.string.settings_advanced_title
 
     override fun initView() {}
 

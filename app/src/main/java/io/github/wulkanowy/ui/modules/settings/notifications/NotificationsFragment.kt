@@ -35,7 +35,7 @@ class NotificationsFragment : PreferenceFragmentCompat(),
         fun newInstance() = NotificationsFragment()
     }
 
-    override val titleStringId get() = R.string.settings_title
+    override val titleStringId get() = R.string.settings_notifications_title
 
     override val syncSuccessString get() = getString(R.string.pref_services_message_sync_success)
 
