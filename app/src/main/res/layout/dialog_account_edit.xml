@@ -36,7 +36,6 @@
         android:layout_marginEnd="24dp"
         android:hint="@string/account_edit_nick_hint"
         app:endIconMode="clear_text"
-        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/accountEditDetailsHeader">
@@ -50,6 +49,30 @@
             android:inputType="textPersonName"
             android:maxLength="20" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/accountEditDetailsSecondHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
+        android:text="Wybierz kolor avatara"
+        android:textSize="21sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/accountEditDetailsNick" />
+
+    <com.thebluealliance.spectrum.SpectrumPalette
+        android:id="@+id/account_edit_colors"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/accountEditDetailsSecondHeader" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/accountEditDetailsSave"
@@ -66,7 +89,7 @@
         android:text="@string/all_save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/accountEditDetailsNick" />
+        app:layout_constraintTop_toBottomOf="@id/account_edit_colors" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/accountEditDetailsCancel"
@@ -83,5 +106,5 @@
         android:text="@android:string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/accountEditDetailsSave"
-        app:layout_constraintTop_toBottomOf="@id/accountEditDetailsNick" />
+        app:layout_constraintTop_toBottomOf="@id/account_edit_colors" />
 </androidx.constraintlayout.widget.ConstraintLayout>
