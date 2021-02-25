@@ -35,7 +35,7 @@ class AccountEditColorAdapter @Inject constructor() :
         with(holder.binding) {
             accountEditItemColor.setImageDrawable(GradientDrawable().apply {
                 shape = GradientDrawable.OVAL
-                color = ColorStateList.valueOf(item)
+                setColor(item)
             })
 
             val mask = GradientDrawable()
