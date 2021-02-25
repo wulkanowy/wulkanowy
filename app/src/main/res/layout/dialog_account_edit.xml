@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -70,14 +71,18 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/account_edit_colors"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="24dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/accountEditDetailsSecondHeader" />
+            app:layout_constraintTop_toBottomOf="@id/accountEditDetailsSecondHeader"
+            app:spanCount="4"
+            tools:itemCount="12"
+            tools:listitem="@layout/item_account_edit_color" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/accountEditDetailsSave"
