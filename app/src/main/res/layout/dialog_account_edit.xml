@@ -68,15 +68,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/accountEditDetailsNick" />
 
-        <com.thebluealliance.spectrum.SpectrumPalette
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/account_edit_colors"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/accountEditDetailsSecondHeader"
-            app:spectrum_columnCount="4" />
+            app:layout_constraintTop_toBottomOf="@id/accountEditDetailsSecondHeader" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/accountEditDetailsSave"

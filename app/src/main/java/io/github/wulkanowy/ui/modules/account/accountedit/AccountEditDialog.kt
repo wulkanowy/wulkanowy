@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.databinding.DialogAccountEditBinding
@@ -16,6 +17,9 @@ class AccountEditDialog : BaseDialogFragment<DialogAccountEditBinding>(), Accoun
 
     @Inject
     lateinit var presenter: AccountEditPresenter
+
+    @Inject
+    lateinit var accountEditColorAdapter: AccountEditColorAdapter
 
     companion object {
 
@@ -47,12 +51,16 @@ class AccountEditDialog : BaseDialogFragment<DialogAccountEditBinding>(), Accoun
 
     override fun initView() {
         with(binding) {
-            accountEditColors.setSelectedColor(AppInfo().defaultColorsForAvatar.first().toInt())
-            accountEditColors.setColors(AppInfo().defaultColorsForAvatar.map { it.toInt() }
-                .toIntArray())
             accountEditDetailsCancel.setOnClickListener { dismiss() }
             accountEditDetailsSave.setOnClickListener {
                 presenter.changeStudentNick(binding.accountEditDetailsNickText.text.toString())
+            }
+
+            accountEditColorAdapter.items = AppInfo().defaultColorsForAvatar.map { it.toInt() }
+
+            with(binding.accountEditColors) {
+                layoutManager = GridLayoutManager(context, 4)
+                adapter = accountEditColorAdapter
             }
         }
     }

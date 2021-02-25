@@ -167,7 +167,7 @@ dependencies {
     implementation "com.github.wulkanowy:material-chips-input:2.1.1"
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
     implementation 'com.mikhaellopez:circularimageview:4.2.0'
-    implementation 'com.thebluealliance:spectrum:0.7.1'
+    implementation 'com.google.android:flexbox:2.0.1'
 
     implementation "androidx.work:work-runtime-ktx:$work_manager"
     playImplementation "androidx.work:work-gcm:$work_manager"
