@@ -5,7 +5,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.db.entities.StudentNick
+import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import io.github.wulkanowy.data.mappers.mapToEntities
@@ -70,7 +70,7 @@ class StudentRepository @Inject constructor(
                 }
             }
 
-    suspend fun getStudentById(id: Int): Student {
+    suspend fun getStudentById(id: Long): Student {
         val student = studentDb.loadById(id) ?: throw NoCurrentStudentException()
 
         if (Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
@@ -118,5 +118,6 @@ class StudentRepository @Inject constructor(
 
     suspend fun logoutStudent(student: Student) = studentDb.delete(student)
 
-    suspend fun updateStudentNick(studentNick: StudentNick) = studentDb.update(studentNick)
+    suspend fun updateStudentNickAndAvatar(studentNickAndAvatar: StudentNickAndAvatar) =
+        studentDb.update(studentNickAndAvatar)
 }

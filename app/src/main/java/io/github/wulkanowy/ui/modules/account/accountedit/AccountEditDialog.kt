@@ -9,7 +9,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.databinding.DialogAccountEditBinding
 import io.github.wulkanowy.ui.base.BaseDialogFragment
-import io.github.wulkanowy.utils.AppInfo
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -53,15 +52,24 @@ class AccountEditDialog : BaseDialogFragment<DialogAccountEditBinding>(), Accoun
         with(binding) {
             accountEditDetailsCancel.setOnClickListener { dismiss() }
             accountEditDetailsSave.setOnClickListener {
-                presenter.changeStudentNick(binding.accountEditDetailsNickText.text.toString())
+                presenter.changeStudentNickAndAvatar(
+                    binding.accountEditDetailsNickText.text.toString(),
+                    accountEditColorAdapter.selectedColor
+                )
             }
-
-            accountEditColorAdapter.items = AppInfo().defaultColorsForAvatar.map { it.toInt() }
 
             with(binding.accountEditColors) {
                 layoutManager = GridLayoutManager(context, 4)
                 adapter = accountEditColorAdapter
             }
+        }
+    }
+
+    override fun updateColorData(colors: List<Int>, color: Int) {
+        with(accountEditColorAdapter) {
+            items = colors
+            selectedColor = color
+            notifyDataSetChanged()
         }
     }
 
