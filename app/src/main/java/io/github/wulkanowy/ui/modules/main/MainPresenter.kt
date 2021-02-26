@@ -42,12 +42,8 @@ class MainPresenter @Inject constructor(
         flowWithResource { studentRepository.getCurrentStudent(false) }
             .onEach {
                 when (it.status) {
-                    Status.LOADING -> {
-                        Timber.i("Loading student avatar data started")
-                    }
-                    Status.SUCCESS -> {
-                        view?.showStudentAvatar(it.data!!)
-                    }
+                    Status.LOADING -> Timber.i("Loading student avatar data started")
+                    Status.SUCCESS -> view?.showStudentAvatar(it.data!!)
                     Status.ERROR -> {
                         Timber.i("Loading student avatar result: An exception occurred")
                         errorHandler.dispatch(it.error!!)
