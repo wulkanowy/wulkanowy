@@ -24,7 +24,7 @@ class MainPresenter @Inject constructor(
     private val analytics: AnalyticsHelper,
 ) : BasePresenter<MainView>(errorHandler, studentRepository) {
 
-    private var studentsWitSemesters: List<StudentWithSemesters>? = null
+    var studentsWitSemesters: List<StudentWithSemesters>? = null
 
     fun onAttachView(view: MainView, initMenu: MainView.Section?) {
         super.onAttachView(view)
@@ -42,24 +42,25 @@ class MainPresenter @Inject constructor(
     }
 
     fun onActionMenuCreated() {
+        if (!studentsWitSemesters.isNullOrEmpty()) {
+            showCurrentStudentAvatar()
+            return
+        }
+
         flowWithResource { studentRepository.getSavedStudents(false) }
             .onEach { resource ->
                 when (resource.status) {
                     Status.LOADING -> Timber.i("Loading student avatar data started")
                     Status.SUCCESS -> {
                         studentsWitSemesters = resource.data
-                        val currentStudent =
-                            studentsWitSemesters!!.single { it.student.isCurrent }.student
-
-                        view?.showStudentAvatar(currentStudent)
+                        showCurrentStudentAvatar()
                     }
                     Status.ERROR -> {
                         Timber.i("Loading student avatar result: An exception occurred")
                         errorHandler.dispatch(resource.error!!)
                     }
                 }
-            }
-            .launch("avatar")
+            }.launch("avatar")
     }
 
     fun onViewChange(section: MainView.Section?) {
@@ -108,6 +109,13 @@ class MainPresenter @Inject constructor(
                 true
             }
         } == true
+    }
+
+    private fun showCurrentStudentAvatar() {
+        val currentStudent =
+            studentsWitSemesters!!.single { it.student.isCurrent }.student
+
+        view?.showStudentAvatar(currentStudent)
     }
 
     private fun getProperViewIndexes(initMenu: MainView.Section?): Pair<Int, Int> {

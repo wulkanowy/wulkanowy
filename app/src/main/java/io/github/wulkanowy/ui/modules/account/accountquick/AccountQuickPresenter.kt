@@ -17,8 +17,11 @@ class AccountQuickPresenter @Inject constructor(
     studentRepository: StudentRepository
 ) : BasePresenter<AccountQuickView>(errorHandler, studentRepository) {
 
+    private lateinit var studentsWithSemesters: List<StudentWithSemesters>
+
     fun onAttachView(view: AccountQuickView, studentsWithSemesters: List<StudentWithSemesters>) {
         super.onAttachView(view)
+        this.studentsWithSemesters = studentsWithSemesters
 
         view.initView()
         Timber.i("Account quick dialog view was initialized")
@@ -27,7 +30,7 @@ class AccountQuickPresenter @Inject constructor(
 
     fun onManagerSelected() {
         view?.run {
-            openAccountView()
+            openAccountView(studentsWithSemesters)
             popView()
         }
     }

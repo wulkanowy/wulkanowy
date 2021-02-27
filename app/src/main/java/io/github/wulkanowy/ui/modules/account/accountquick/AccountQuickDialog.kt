@@ -84,8 +84,10 @@ class AccountQuickDialog : BaseDialogFragment<DialogAccountQuickBinding>(), Acco
         activity?.recreate()
     }
 
-    override fun openAccountView() {
-        (requireActivity() as MainActivity).pushView(AccountFragment.newInstance())
+    override fun openAccountView(studentsWithSemesters: List<StudentWithSemesters>) {
+        (requireActivity() as MainActivity).pushView(
+            AccountFragment.newInstance(studentsWithSemesters)
+        )
     }
 
     override fun onDestroyView() {

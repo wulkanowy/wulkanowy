@@ -14,13 +14,4 @@ interface AccountView : BaseView {
     fun openLoginView()
 
     fun openAccountDetailsView(studentWithSemesters: StudentWithSemesters)
-
-    fun showErrorView(show: Boolean)
-
-    fun setErrorDetails(message: String)
-
-    fun showProgress(show: Boolean)
-
-    fun showContent(show: Boolean)
 }
-

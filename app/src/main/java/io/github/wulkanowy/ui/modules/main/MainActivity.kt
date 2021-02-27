@@ -21,7 +21,6 @@ import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation.TitleState.ALWAYS_SHOW
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.elevation.ElevationOverlayProvider
@@ -201,11 +200,6 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         menuInflater.inflate(R.menu.action_menu_main, menu)
         accountMenu = menu?.findItem(R.id.mainMenuAccount)
 
-        accountMenu?.icon = VectorDrawableCompat.create(
-            resources,
-            R.color.material_on_surface_emphasis_medium,
-            null
-        )
         presenter.onActionMenuCreated()
         return true
     }
@@ -339,8 +333,10 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     }
 
     override fun showStudentAvatar(student: Student) {
-        accountMenu?.icon =
-            createNameInitialsDrawable(student.nickOrName, student.avatarColor, 0.47f)
+        accountMenu?.run {
+            icon = createNameInitialsDrawable(student.nickOrName, student.avatarColor, 0.44f)
+            title = getString(R.string.main_account_picker)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
