@@ -12,5 +12,7 @@ interface AccountEditView : BaseView {
 
     fun showCurrentNick(nick: String)
 
-    fun updateColorData(colors: List<Int>, color: Int)
+    fun updateSelectedColorData(color: Int)
+
+    fun updateColorsData(colors: List<Int>)
 }

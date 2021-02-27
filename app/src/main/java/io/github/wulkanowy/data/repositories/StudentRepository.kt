@@ -70,10 +70,10 @@ class StudentRepository @Inject constructor(
                 }
             }
 
-    suspend fun getStudentById(id: Long): Student {
+    suspend fun getStudentById(id: Long, decryptPass: Boolean = true): Student {
         val student = studentDb.loadById(id) ?: throw NoCurrentStudentException()
 
-        if (Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
+        if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
             student.password = withContext(dispatchers.backgroundThread) {
                 decrypt(student.password)
             }

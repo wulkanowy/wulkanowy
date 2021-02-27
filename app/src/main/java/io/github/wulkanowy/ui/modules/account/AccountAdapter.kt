@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
@@ -72,11 +73,13 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
         binding: ItemAccountBinding,
         studentWithSemesters: StudentWithSemesters
     ) {
+        val context = binding.root.context
         val student = studentWithSemesters.student
         val semesters = studentWithSemesters.semesters
         val diary = semesters.maxByOrNull { it.semesterId }
-        val avatar =
-            binding.root.context.createNameInitialsDrawable(student.nickOrName, student.avatarColor)
+        val avatar = context.createNameInitialsDrawable(student.nickOrName, student.avatarColor)
+        val checkBackgroundColor =
+            context.getThemeAttrColor(if (isAccountQuickDialogMode) R.attr.colorBackgroundFloating else R.attr.colorSurface)
         val isDuplicatedStudent = items.filter {
             if (it.value !is StudentWithSemesters) return@filter false
             val studentToCompare = it.value.student
@@ -89,14 +92,18 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
         with(binding) {
             accountItemName.text = "${student.nickOrName} ${diary?.diaryName.orEmpty()}"
             accountItemSchool.text = studentWithSemesters.student.schoolName
-            accountItemAccountType.setText(if (student.isParent) R.string.account_type_parent else R.string.account_type_student)
-            accountItemAccountType.visibility = if (isDuplicatedStudent) VISIBLE else GONE
             accountItemImage.setImageDrawable(avatar)
-            accountItemCheck.visibility = if (student.isCurrent) VISIBLE else GONE
-            accountItemCheck.borderColor =
-                binding.root.context.getThemeAttrColor(R.attr.colorBackgroundFloating)
-            accountItemCheck.circleColor =
-                binding.root.context.getThemeAttrColor(R.attr.colorBackgroundFloating)
+
+            with(accountItemAccountType) {
+                setText(if (student.isParent) R.string.account_type_parent else R.string.account_type_student)
+                isVisible = isDuplicatedStudent
+            }
+
+            with(accountItemCheck) {
+                isVisible = student.isCurrent
+                borderColor = checkBackgroundColor
+                circleColor = checkBackgroundColor
+            }
 
             root.setOnClickListener { onClickListener(studentWithSemesters) }
         }

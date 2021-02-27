@@ -21,6 +21,8 @@ class AccountEditPresenter @Inject constructor(
 
     lateinit var student: Student
 
+    private val colors = appInfo.defaultColorsForAvatar.map { it.toInt() }
+
     fun onAttachView(view: AccountEditView, student: Student) {
         super.onAttachView(view)
         this.student = student
@@ -31,19 +33,18 @@ class AccountEditPresenter @Inject constructor(
         }
         Timber.i("Account edit dialog view was initialized")
         loadData()
+
+        view.updateColorsData(colors)
     }
 
     private fun loadData() {
         flowWithResource {
-            studentRepository.getStudentById(student.id).avatarColor
+            studentRepository.getStudentById(student.id, false).avatarColor
         }.onEach { resource ->
             when (resource.status) {
                 Status.LOADING -> Timber.i("Attempt to load student")
                 Status.SUCCESS -> {
-                    view?.updateColorData(
-                        appInfo.defaultColorsForAvatar.map { it.toInt() },
-                        resource.data?.toInt()!!
-                    )
+                    view?.updateSelectedColorData(resource.data?.toInt()!!)
                     Timber.i("Attempt to load student: Success")
                 }
                 Status.ERROR -> {

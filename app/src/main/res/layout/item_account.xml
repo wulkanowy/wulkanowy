@@ -22,10 +22,10 @@
         tools:src="@tools:sample/avatars" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/account_item_check"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="28dp"
-        android:id="@+id/account_item_check"
         android:layout_marginTop="28dp"
         app:civ_border_width="1dp"
         app:layout_constraintStart_toStartOf="@id/accountItemImage"

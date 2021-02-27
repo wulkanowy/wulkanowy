@@ -65,10 +65,16 @@ class AccountEditDialog : BaseDialogFragment<DialogAccountEditBinding>(), Accoun
         }
     }
 
-    override fun updateColorData(colors: List<Int>, color: Int) {
+    override fun updateSelectedColorData(color: Int) {
+        with(accountEditColorAdapter) {
+            selectedColor = color
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun updateColorsData(colors: List<Int>) {
         with(accountEditColorAdapter) {
             items = colors
-            selectedColor = color
             notifyDataSetChanged()
         }
     }
