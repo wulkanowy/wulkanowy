@@ -21,7 +21,7 @@ import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation.TitleState.ALWAYS_SHOW
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import com.google.android.material.elevation.ElevationOverlayProvider
@@ -69,7 +69,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     @Inject
     lateinit var appInfo: AppInfo
 
-    private var actionMenu: Menu? = null
+    private var accountMenu: MenuItem? = null
 
     private val overlayProvider by lazy { ElevationOverlayProvider(this) }
 
@@ -114,7 +114,6 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FragmentManager.enableNewStateManager(false)
         setContentView(ActivityMainBinding.inflate(layoutInflater).apply { binding = this }.root)
         setSupportActionBar(binding.mainToolbar)
         messageContainer = binding.mainFragmentContainer
@@ -199,8 +198,13 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.action_menu_main, menu)
-        actionMenu = menu
+        accountMenu = menu?.findItem(R.id.mainMenuAccount)
 
+        accountMenu?.icon = VectorDrawableCompat.create(
+            resources,
+            R.color.material_on_surface_emphasis_medium,
+            null
+        )
         presenter.onActionMenuCreated()
         return true
     }
@@ -334,7 +338,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     }
 
     override fun showStudentAvatar(student: Student) {
-        actionMenu?.findItem(R.id.mainMenuAccount)?.icon =
+        accountMenu?.icon =
             createNameInitialsDrawable(student.nickOrName, student.avatarColor, 0.47f)
     }
 

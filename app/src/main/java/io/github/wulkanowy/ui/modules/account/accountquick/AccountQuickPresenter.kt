@@ -58,19 +58,20 @@ class AccountQuickPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Loading account data started")
-                Status.SUCCESS -> {
-                    Timber.i("Loading account result: Success")
-                    view?.updateData(createAccountItems(it.data!!))
+        flowWithResource { studentRepository.getSavedStudents(false) }
+            .onEach {
+                when (it.status) {
+                    Status.LOADING -> Timber.i("Loading account data started")
+                    Status.SUCCESS -> {
+                        Timber.i("Loading account result: Success")
+                        view?.updateData(createAccountItems(it.data!!))
+                    }
+                    Status.ERROR -> {
+                        Timber.i("Loading account result: An exception occurred")
+                        errorHandler.dispatch(it.error!!)
+                    }
                 }
-                Status.ERROR -> {
-                    Timber.i("Loading account result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
-            }
-        }.launch()
+            }.launch()
     }
 
     private fun createAccountItems(items: List<StudentWithSemesters>) = items.map {
