@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.main
 
 import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
@@ -23,6 +24,8 @@ class MainPresenter @Inject constructor(
     private val analytics: AnalyticsHelper,
 ) : BasePresenter<MainView>(errorHandler, studentRepository) {
 
+    private var studentsWitSemesters: List<StudentWithSemesters>? = null
+
     fun onAttachView(view: MainView, initMenu: MainView.Section?) {
         super.onAttachView(view)
         view.apply {
@@ -39,14 +42,20 @@ class MainPresenter @Inject constructor(
     }
 
     fun onActionMenuCreated() {
-        flowWithResource { studentRepository.getCurrentStudent(false) }
-            .onEach {
-                when (it.status) {
+        flowWithResource { studentRepository.getSavedStudents(false) }
+            .onEach { resource ->
+                when (resource.status) {
                     Status.LOADING -> Timber.i("Loading student avatar data started")
-                    Status.SUCCESS -> view?.showStudentAvatar(it.data!!)
+                    Status.SUCCESS -> {
+                        studentsWitSemesters = resource.data
+                        val currentStudent =
+                            studentsWitSemesters!!.single { it.student.isCurrent }.student
+
+                        view?.showStudentAvatar(currentStudent)
+                    }
                     Status.ERROR -> {
                         Timber.i("Loading student avatar result: An exception occurred")
-                        errorHandler.dispatch(it.error!!)
+                        errorHandler.dispatch(resource.error!!)
                     }
                 }
             }
@@ -66,8 +75,10 @@ class MainPresenter @Inject constructor(
     }
 
     fun onAccountManagerSelected(): Boolean {
+        if (studentsWitSemesters.isNullOrEmpty()) return true
+
         Timber.i("Select account manager")
-        view?.showAccountPicker()
+        view?.showAccountPicker(studentsWitSemesters!!)
         return true
     }
 

@@ -30,6 +30,7 @@ import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.ActivityMainBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.account.accountquick.AccountQuickDialog
@@ -302,8 +303,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         supportActionBar?.setDisplayHomeAsUpEnabled(show)
     }
 
-    override fun showAccountPicker() {
-        navController.showDialogFragment(AccountQuickDialog.newInstance())
+    override fun showAccountPicker(studentWithSemesters: List<StudentWithSemesters>) {
+        navController.showDialogFragment(AccountQuickDialog.newInstance(studentWithSemesters))
     }
 
     override fun showActionBarElevation(show: Boolean) {
