@@ -46,11 +46,7 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
         if (SDK_INT >= LOLLIPOP) {
             @Suppress("DEPRECATION")
             setTaskDescription(
-                ActivityManager.TaskDescription(
-                    null,
-                    null,
-                    getThemeAttrColor(R.attr.colorSurface)
-                )
+                ActivityManager.TaskDescription(null, null, getThemeAttrColor(R.attr.colorSurface))
             )
         }
     }
