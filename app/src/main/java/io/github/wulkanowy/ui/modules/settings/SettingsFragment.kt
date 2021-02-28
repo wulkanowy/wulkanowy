@@ -37,21 +37,15 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override val titleStringId get() = R.string.settings_title
 
-    override val syncSuccessString get() = getString(R.string.pref_services_message_sync_success)
-
-    override val syncFailedString get() = getString(R.string.pref_services_message_sync_failed)
-
     override fun initView() {
         findPreference<Preference>(getString(R.string.pref_key_services_force_sync))?.run {
             onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                presenter.onSyncNowClicked()
                 true
             }
         }
         findPreference<Preference>(getString(R.string.pref_key_notifications_fix_issues))?.run {
             isVisible = AppKillerManager.isDeviceSupported() && AppKillerManager.isAnyActionAvailable(requireContext())
             setOnPreferenceClickListener {
-                presenter.onFixSyncIssuesClicked()
                 true
             }
         }
@@ -73,30 +67,6 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun recreateView() {
         activity?.recreate()
-    }
-
-    override fun updateLanguage(langCode: String) {
-        lingver.setLocale(requireContext(), langCode)
-    }
-
-    override fun updateLanguageToFollowSystem() {
-        lingver.setFollowSystemLocale(requireContext())
-    }
-
-    override fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean) {
-        findPreference<Preference>(serviceEnablesKey)?.run {
-            summary = if (isHolidays) getString(R.string.pref_services_suspended) else ""
-            isEnabled = !isHolidays
-        }
-    }
-
-    override fun setSyncInProgress(inProgress: Boolean) {
-        if (activity == null || !isAdded) return
-
-        findPreference<Preference>(getString(R.string.pref_key_services_force_sync))?.run {
-            isEnabled = !inProgress
-            summary = if (inProgress) getString(R.string.pref_services_sync_in_progress) else ""
-        }
     }
 
     override fun showError(text: String, error: Throwable) {

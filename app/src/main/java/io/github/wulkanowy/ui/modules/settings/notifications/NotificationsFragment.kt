@@ -44,7 +44,6 @@ class NotificationsFragment : PreferenceFragmentCompat(),
     override fun initView() {
         findPreference<Preference>(getString(R.string.pref_key_services_force_sync))?.run {
             onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                presenter.onSyncNowClicked()
                 true
             }
         }
@@ -75,27 +74,10 @@ class NotificationsFragment : PreferenceFragmentCompat(),
         activity?.recreate()
     }
 
-    override fun updateLanguage(langCode: String) {
-        lingver.setLocale(requireContext(), langCode)
-    }
-
-    override fun updateLanguageToFollowSystem() {
-        lingver.setFollowSystemLocale(requireContext())
-    }
-
     override fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean) {
         findPreference<Preference>(serviceEnablesKey)?.run {
             summary = if (isHolidays) getString(R.string.pref_services_suspended) else ""
             isEnabled = !isHolidays
-        }
-    }
-
-    override fun setSyncInProgress(inProgress: Boolean) {
-        if (activity == null || !isAdded) return
-
-        findPreference<Preference>(getString(R.string.pref_key_services_force_sync))?.run {
-            isEnabled = !inProgress
-            summary = if (inProgress) getString(R.string.pref_services_sync_in_progress) else ""
         }
     }
 

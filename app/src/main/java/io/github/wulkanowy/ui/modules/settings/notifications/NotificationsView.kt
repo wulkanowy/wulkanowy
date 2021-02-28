@@ -12,13 +12,7 @@ interface NotificationsView : BaseView {
 
     fun recreateView()
 
-    fun updateLanguage(langCode: String)
-
-    fun updateLanguageToFollowSystem()
-
     fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean)
-
-    fun setSyncInProgress(inProgress: Boolean)
 
     fun showFixSyncDialog()
 }

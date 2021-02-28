@@ -47,47 +47,11 @@ class NotificationsPresenter @Inject constructor(
                 appThemeKey -> view?.recreateView()
                 isUpcomingLessonsNotificationsEnableKey -> if (!isUpcomingLessonsNotificationsEnable) timetableNotificationHelper.cancelNotification()
                 appLanguageKey -> view?.run {
-                    if (appLanguage == "system") {
-                        updateLanguageToFollowSystem()
-                        analytics.logEvent("language", "setting_changed" to appInfo.systemLanguage)
-                    } else {
-                        updateLanguage(appLanguage)
-                        analytics.logEvent("language", "setting_changed" to appLanguage)
-                    }
                     recreateView()
                 }
             }
         }
         analytics.logEvent("setting_changed", "name" to key)
-    }
-
-    fun onSyncNowClicked() {
-        view?.run {
-            syncManager.startOneTimeSyncWorker().onEach { workInfo ->
-                when (workInfo.state) {
-                    WorkInfo.State.ENQUEUED -> {
-                        setSyncInProgress(true)
-                        Timber.i("Setting sync now started")
-                        analytics.logEvent("sync_now", "status" to "started")
-                    }
-                    WorkInfo.State.SUCCEEDED -> {
-                        showMessage(syncSuccessString)
-                        analytics.logEvent("sync_now", "status" to "success")
-                    }
-                    WorkInfo.State.FAILED -> {
-                        showError(
-                            syncFailedString,
-                            Throwable(workInfo.outputData.getString("error"))
-                        )
-                        analytics.logEvent("sync_now", "status" to "failed")
-                    }
-                    else -> Timber.d("Sync now state: ${workInfo.state}")
-                }
-                if (workInfo.state.isFinished) setSyncInProgress(false)
-            }.catch {
-                Timber.e(it, "Sync now failed")
-            }.launch("sync")
-        }
     }
 
     fun onFixSyncIssuesClicked() {
