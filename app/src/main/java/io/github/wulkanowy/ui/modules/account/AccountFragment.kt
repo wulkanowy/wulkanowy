@@ -67,6 +67,8 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
         }
 
         accountAdapter.onClickListener = presenter::onItemSelected
+
+        binding.accountAdd.setOnClickListener { presenter.onAddSelected() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

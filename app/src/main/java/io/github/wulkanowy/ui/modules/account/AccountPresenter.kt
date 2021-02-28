@@ -19,6 +19,11 @@ class AccountPresenter @Inject constructor(
         view.updateData(createAccountItems(studentsWithSemesters))
     }
 
+    fun onAddSelected() {
+        Timber.i("Select add account")
+        view?.openLoginView()
+    }
+
     fun onItemSelected(studentWithSemesters: StudentWithSemesters) {
         view?.openAccountDetailsView(studentWithSemesters)
     }
