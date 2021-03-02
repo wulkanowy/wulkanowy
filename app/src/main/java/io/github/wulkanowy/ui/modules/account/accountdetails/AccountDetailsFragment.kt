@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.get
+import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -89,6 +90,7 @@ class AccountDetailsFragment :
 
     override fun showAccountData(student: Student) {
         with(binding) {
+            accountDetailsCheck.isVisible = student.isCurrent
             accountDetailsName.text = student.nickOrName
             accountDetailsSchool.text = student.schoolName
             accountDetailsAvatar.setImageDrawable(
