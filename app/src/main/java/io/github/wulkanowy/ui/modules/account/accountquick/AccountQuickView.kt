@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.account.accountquick
 
-import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.ui.base.BaseView
 import io.github.wulkanowy.ui.modules.account.AccountItem
 
@@ -14,5 +13,5 @@ interface AccountQuickView : BaseView {
 
     fun popView()
 
-    fun openAccountView(studentsWithSemesters: List<StudentWithSemesters>)
+    fun openAccountView()
 }

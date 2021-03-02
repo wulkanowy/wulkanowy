@@ -30,7 +30,7 @@ class AccountQuickPresenter @Inject constructor(
 
     fun onManagerSelected() {
         view?.run {
-            openAccountView(studentsWithSemesters)
+            openAccountView()
             popView()
         }
     }

@@ -5,8 +5,6 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface AccountView : BaseView {
 
-    val isViewEmpty: Boolean
-
     fun initView()
 
     fun updateData(data: List<AccountItem<*>>)

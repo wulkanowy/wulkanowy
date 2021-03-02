@@ -29,21 +29,12 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
 
     companion object {
 
-        private const val STUDENTS_ARGUMENT_KEY = "students"
-
-        fun newInstance(studentsWithSemesters: List<StudentWithSemesters>) =
-            AccountFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(STUDENTS_ARGUMENT_KEY, studentsWithSemesters.toTypedArray())
-                }
-            }
+        fun newInstance() = AccountFragment()
     }
 
     override val titleStringId = R.string.account_title
 
     override var subtitleString = ""
-
-    override val isViewEmpty get() = accountAdapter.items.isEmpty()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,11 +44,9 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(R.layout.fragment_a
     @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val studentsWithSemesters =
-            (requireArguments()[STUDENTS_ARGUMENT_KEY] as Array<StudentWithSemesters>).toList()
 
         binding = FragmentAccountBinding.bind(view)
-        presenter.onAttachView(this, studentsWithSemesters)
+        presenter.onAttachView(this)
     }
 
     override fun initView() {
