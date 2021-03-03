@@ -88,7 +88,14 @@ class LoginFormPresenter @Inject constructor(
 
         if (!validateCredentials(email, password, host)) return
 
-        flowWithResource { studentRepository.getStudentsScrapper(email, password, host, symbol) }.onEach {
+        flowWithResource {
+            studentRepository.getStudentsScrapper(
+                email,
+                password,
+                host,
+                symbol
+            )
+        }.onEach {
             when (it.status) {
                 Status.LOADING -> view?.run {
                     Timber.i("Login started")
@@ -155,10 +162,10 @@ class LoginFormPresenter @Inject constructor(
                 view?.setErrorEmailRequired()
                 isCorrect = false
             }
-            if ("@" in login && "login" !in host && "email" !in host){
+            if ("@" in login && "login" !in host && "email" !in host) {
                 val emailHost = login.substringAfter("@")
                 val emailDomain = URL(host).host
-                if (emailHost!=emailDomain){
+                if (emailHost != emailDomain) {
                     view?.setErrorEmailInvalid(domain = emailDomain)
                     isCorrect = false
                 }
