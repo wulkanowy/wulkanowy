@@ -46,6 +46,7 @@
     <string name="login_expired_token">Token просрочен</string>
     <string name="login_invalid_email">Неверный адрес электронной почты</string>
     <string name="login_invalid_login">Используйте назначенный логин вместо электронной почты</string>
+    <string name="login_invalid_custom_email">Use the assigned login or email in @%1$s</string>
     <string name="login_invalid_symbol">Неправильный символ</string>
     <string name="login_incorrect_symbol">Студент не найден. Подтвердите символ и выбранный вариант регистра UONET+</string>
     <string name="login_field_required">Это обязательное поле</string>
