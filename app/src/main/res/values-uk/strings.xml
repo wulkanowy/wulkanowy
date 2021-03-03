@@ -46,6 +46,7 @@
     <string name="login_expired_token">Минув термін дії токену</string>
     <string name="login_invalid_email">Недійсна адреса електронної пошти</string>
     <string name="login_invalid_login">Використовуйте призначений логін замість електронної пошти</string>
+    <string name="login_invalid_custom_email">Use the assigned login or email in @%1$s</string>
     <string name="login_invalid_symbol">Неправильний симбвол</string>
     <string name="login_incorrect_symbol">Студента не знайдено Перевірте символ та обраний варіант реєстру UONET+</string>
     <string name="login_field_required">Обов\'язкове поле</string>
