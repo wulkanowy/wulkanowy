@@ -11,6 +11,7 @@ import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.net.URL
 import javax.inject.Inject
 
 class LoginFormPresenter @Inject constructor(
@@ -156,8 +157,7 @@ class LoginFormPresenter @Inject constructor(
             }
             if ("@" in login && "login" !in host && "email" !in host){
                 val emailHost = login.substringAfter("@")
-                val regex = Regex(pattern="^(?:https?://)?([A-Za-z.]*)")
-                val emailDomain = regex.find(host)?.groups?.get(1)?.value?:""
+                val emailDomain = URL(host).host
                 if (emailDomain!="" && emailHost!=emailDomain){
                     view?.setErrorEmailInvalid(domain = emailDomain)
                     isCorrect = false
