@@ -51,6 +51,7 @@ class WulkanowyApp : Application(), Configuration.Provider {
     @SuppressLint("UnsafeOptInUsageWarning")
     override fun onCreate() {
         super.onCreate()
+        FragmentManager.enableNewStateManager(false)
 
         FragmentManager.enableNewStateManager(false)
         initializeAppLanguage()
