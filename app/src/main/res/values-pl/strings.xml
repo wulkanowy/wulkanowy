@@ -404,6 +404,7 @@
     <!--Account edit-->
     <string name="account_edit_nick_hint">Pseudonim</string>
     <string name="account_edit_header">Dodaj pseudonim</string>
+    <string name="account_edit_avatar_title">Choose avatar color</string>
     <!--Log viewer-->
     <string name="logviewer_share">Udostępnij logi</string>
     <string name="logviewer_refresh">Odśwież</string>
