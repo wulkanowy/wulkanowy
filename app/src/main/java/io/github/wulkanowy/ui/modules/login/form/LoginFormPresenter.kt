@@ -150,10 +150,18 @@ class LoginFormPresenter @Inject constructor(
                 view?.setErrorLoginRequired()
                 isCorrect = false
             }
-
             if ("@" !in login && "email" in host) {
                 view?.setErrorEmailRequired()
                 isCorrect = false
+            }
+            if ("@" in login && "login" !in host && "email" !in host){
+                val emailHost = login.substringAfter("@")
+                val regex = Regex(pattern="^(?:https?://)?([A-Za-z.]*)")
+                val emailDomain = regex.find(host)?.groups?.get(1)?.value?:""
+                if (emailDomain!="" && emailHost!=emailDomain){
+                    view?.setErrorEmailInvalid(domain = emailDomain)
+                    isCorrect = false
+                }
             }
         }
 
