@@ -46,6 +46,7 @@
     <string name="login_expired_token">Token vypršel</string>
     <string name="login_invalid_email">Neplatný e-mail</string>
     <string name="login_invalid_login">Místo e-mailu použijte přiřazené přihlašovací údaje</string>
+    <string name="login_invalid_custom_email">Use the assigned login or email in @%1$s</string>
     <string name="login_invalid_symbol">Neplatný symbol</string>
     <string name="login_incorrect_symbol">Žák nebyl nalezen. Zkontrolujte správnost symbolu a vybrané varianty deníku UONET+</string>
     <string name="login_field_required">Toto pole je povinné</string>
