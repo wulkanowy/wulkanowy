@@ -404,6 +404,7 @@
     <!--Account edit-->
     <string name="account_edit_nick_hint">Nick</string>
     <string name="account_edit_header">Add nick</string>
+    <string name="account_edit_avatar_title">Choose avatar color</string>
     <!--Log viewer-->
     <string name="logviewer_share">Share logs</string>
     <string name="logviewer_refresh">Refresh</string>
