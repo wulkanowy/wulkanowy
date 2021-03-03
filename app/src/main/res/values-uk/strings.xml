@@ -404,6 +404,7 @@
     <!--Account edit-->
     <string name="account_edit_nick_hint">Псевдонім</string>
     <string name="account_edit_header">Додати псевдонім</string>
+    <string name="account_edit_avatar_title">Choose avatar color</string>
     <!--Log viewer-->
     <string name="logviewer_share">Поділитися логами</string>
     <string name="logviewer_refresh">Оновити</string>
