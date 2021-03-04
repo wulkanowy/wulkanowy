@@ -46,7 +46,7 @@
     <string name="login_expired_token">Token stracił ważność</string>
     <string name="login_invalid_email">Niepoprawny adres email</string>
     <string name="login_invalid_login">Użyj przydzielonego loginu zamiast emaila</string>
-    <string name="login_invalid_custom_email">Use the assigned login or email in @%1$s</string>
+    <string name="login_invalid_custom_email">Użyj przypisanego loginu lub adresu e-mail w @%1$s</string>
     <string name="login_invalid_symbol">Niepoprawny symbol</string>
     <string name="login_incorrect_symbol">Nie znaleziono ucznia. Sprawdź poprawność symbolu i wybranej odmiany dziennika UONET+</string>
     <string name="login_field_required">To pole jest wymagane</string>
