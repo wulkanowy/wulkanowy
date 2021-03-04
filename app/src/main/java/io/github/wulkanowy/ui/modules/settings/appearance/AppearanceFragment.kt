@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.settings.appearance
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
 import androidx.preference.PreferenceFragmentCompat
 import com.yariksoffice.lingver.Lingver
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,8 +35,8 @@ class AppearanceFragment : PreferenceFragmentCompat(),
 
     override fun initView() {}
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         presenter.onAttachView(this)
     }
 

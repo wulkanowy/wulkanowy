@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.settings.notifications
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -48,7 +49,10 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             }
         }
         findPreference<Preference>(getString(R.string.pref_key_notifications_fix_issues))?.run {
-            isVisible = AppKillerManager.isDeviceSupported() && AppKillerManager.isAnyActionAvailable(requireContext())
+            isVisible =
+                AppKillerManager.isDeviceSupported() && AppKillerManager.isAnyActionAvailable(
+                    requireContext()
+                )
             setOnPreferenceClickListener {
                 presenter.onFixSyncIssuesClicked()
                 true
@@ -56,14 +60,15 @@ class NotificationsFragment : PreferenceFragmentCompat(),
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         presenter.onAttachView(this)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.scheme_preferences_notifications, rootKey)
-        findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible = appInfo.isDebug
+        findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible =
+            appInfo.isDebug
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
