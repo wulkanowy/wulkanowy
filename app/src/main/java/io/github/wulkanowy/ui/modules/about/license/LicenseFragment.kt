@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.appcompat.app.AlertDialog
 import androidx.core.text.parseAsHtml
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,7 +58,7 @@ class LicenseFragment : BaseFragment<FragmentLicenseBinding>(R.layout.fragment_l
 
     override fun openLicense(licenseHtml: String) {
         context?.let {
-            AlertDialog.Builder(it).apply {
+            MaterialAlertDialogBuilder(it).apply {
                 setTitle(R.string.license_dialog_title)
                 setMessage(licenseHtml.parseAsHtml())
                 setPositiveButton(android.R.string.ok) { _, _ -> }
