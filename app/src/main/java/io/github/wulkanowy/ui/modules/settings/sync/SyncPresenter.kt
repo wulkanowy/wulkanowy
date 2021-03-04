@@ -69,8 +69,4 @@ class SyncPresenter @Inject constructor(
             }.launch("sync")
         }
     }
-
-    fun onFixSyncIssuesClicked() {
-        view?.showFixSyncDialog()
-    }
 }

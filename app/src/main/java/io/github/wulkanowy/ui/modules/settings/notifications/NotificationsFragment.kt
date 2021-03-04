@@ -2,10 +2,13 @@ package io.github.wulkanowy.ui.modules.settings.notifications
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.thelittlefireman.appkillermanager.AppKillerManager
 import com.thelittlefireman.appkillermanager.exceptions.NoActionFoundException
 import com.yariksoffice.lingver.Lingver
@@ -36,29 +39,36 @@ class NotificationsFragment : PreferenceFragmentCompat(),
         fun newInstance() = NotificationsFragment()
     }
 
-    override val titleStringId get() = R.string.settings_notifications_title
+    override val titleStringId get() = R.string.pref_settings_notifications_title
 
     override val syncSuccessString get() = getString(R.string.pref_services_message_sync_success)
 
     override val syncFailedString get() = getString(R.string.pref_services_message_sync_failed)
 
     override fun initView() {
-        findPreference<Preference>(getString(R.string.pref_key_services_force_sync))?.run {
-            onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                true
-            }
-        }
+        findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible =
+            appInfo.isDebug
+
         findPreference<Preference>(getString(R.string.pref_key_notifications_fix_issues))?.run {
-            isVisible =
-                AppKillerManager.isDeviceSupported() && AppKillerManager.isAnyActionAvailable(
-                    requireContext()
-                )
+            isVisible = AppKillerManager.isDeviceSupported()
+                && AppKillerManager.isAnyActionAvailable(requireContext())
+
             setOnPreferenceClickListener {
                 presenter.onFixSyncIssuesClicked()
                 true
             }
         }
     }
+
+    override fun onCreateRecyclerView(
+        inflater: LayoutInflater?,
+        parent: ViewGroup?,
+        state: Bundle?
+    ): RecyclerView? = super.onCreateRecyclerView(inflater, parent, state)
+        .also {
+            it.itemAnimator = null
+            it.layoutAnimation = null
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,8 +77,6 @@ class NotificationsFragment : PreferenceFragmentCompat(),
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.scheme_preferences_notifications, rootKey)
-        findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible =
-            appInfo.isDebug
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
@@ -79,10 +87,10 @@ class NotificationsFragment : PreferenceFragmentCompat(),
         activity?.recreate()
     }
 
-    override fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean) {
-        findPreference<Preference>(serviceEnablesKey)?.run {
-            summary = if (isHolidays) getString(R.string.pref_services_suspended) else ""
-            isEnabled = !isHolidays
+    override fun enableNotification(notificationKey: String, enable: Boolean) {
+        findPreference<Preference>(notificationKey)?.run {
+            isEnabled = enable
+            summary = if (enable) null else getString(R.string.pref_notify_disabled_summary)
         }
     }
 
@@ -117,7 +125,10 @@ class NotificationsFragment : PreferenceFragmentCompat(),
                     AppKillerManager.doActionAutoStart(requireContext())
                     AppKillerManager.doActionNotification(requireContext())
                 } catch (e: NoActionFoundException) {
-                    requireContext().openInternetBrowser("https://dontkillmyapp.com/${AppKillerManager.getDevice()?.manufacturer}", ::showMessage)
+                    requireContext().openInternetBrowser(
+                        "https://dontkillmyapp.com/${AppKillerManager.getDevice()?.manufacturer}",
+                        ::showMessage
+                    )
                 }
             }
             .show()

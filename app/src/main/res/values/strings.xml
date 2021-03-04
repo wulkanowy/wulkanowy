@@ -487,6 +487,7 @@
     <string name="pref_notify_fix_sync_issues_message">Your device may have data synchronization issues and with notifications.\n\nTo fix them, you need to add Wulkanowy to the autostart and turn off battery optimization/saving in the phone settings.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Go to settings</string>
     <string name="pref_notify_debug_switch">Show debug notifications</string>
+    <string name="pref_notify_disabled_summary">Synchronization is disabled</string>
 
     <string name="pref_services_header">Synchronization</string>
     <string name="pref_services_switch">Automatic update</string>
@@ -507,6 +508,27 @@
     <string name="pref_other_grade_modifier_plus">Value of the plus</string>
     <string name="pref_other_grade_modifier_minus">Value of the minus</string>
     <string name="pref_other_fill_message_content">Reply with message history</string>
+
+    <string name="pref_settings_advanced_title">Advanced</string>
+    <string name="pref_settings_appearance_title">Appearance &amp; Behavior</string>
+    <string name="pref_settings_notifications_title">Notifications</string>
+    <string name="pref_settings_sync_title">Synchronization</string>
+
+    <string name="pref_grades_appearance_header">Grades</string>
+    <string name="pref_attendance_appearance_view">Attendance</string>
+    <string name="pref_timetable_appearance_view">Timetable</string>
+    <string name="pref_grades_advanced_header">Grades</string>
+    <string name="pref_messages_advanced_header">Messages</string>
+
+    <string name="pref_appearance_category">Appearance &amp; Behavior</string>
+    <string name="pref_appearance_category_summary">Languages, themes, subjects sorting</string>
+    <string name="pref_notifications_category_summary">App notifications</string>
+    <string name="pref_notifications_category">Notifications</string>
+    <string name="pref_sync_category">Synchronization</string>
+    <string name="pref_sync_category_summary">Automatic update, synchronization interval</string>
+    <string name="pref_advanced_category_summary">Plus and minus values, average calculation</string>
+    <string name="pref_advanced_category">Advanced</string>
+    <string name="pref_about_category_summary">App version, contributors, social portals, licenses</string>
 
 
     <!--Notification Channels-->
@@ -551,22 +573,4 @@
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
-    <string name="pref_grades_appearance_header">Grades</string>
-    <string name="pref_attendance_appearance_view">Attendance</string>
-    <string name="pref_timetable_appearance_view">Timetable</string>
-    <string name="pref_grades_advanced_header">Grades</string>
-    <string name="pref_messages_advanced_header">Messages</string>
-    <string name="pref_appearance_category">Appearance &amp; Behavior</string>
-    <string name="pref_appearance_category_summary">Languages, themes, subjects sorting</string>
-    <string name="pref_notifications_category_summary">App notifications</string>
-    <string name="pref_notifications_category">Notifications</string>
-    <string name="pref_sync_category">Synchronization</string>
-    <string name="pref_sync_category_summary">Automatic update, synchronization interval</string>
-    <string name="pref_advanced_category_summary">Plus and minus values, average calculation</string>
-    <string name="pref_advanced_category">Advanced</string>
-    <string name="pref_about_category_summary">App version, contributors, social portals, licenses</string>
-    <string name="settings_advanced_title">Advanced</string>
-    <string name="settings_appearance_title">Appearance &amp; Behavior</string>
-    <string name="settings_notifications_title">Notifications</string>
-    <string name="settings_sync_title">Synchronization</string>
 </resources>

@@ -31,7 +31,7 @@ class AppearanceFragment : PreferenceFragmentCompat(),
         fun newInstance() = AppearanceFragment()
     }
 
-    override val titleStringId get() = R.string.settings_appearance_title
+    override val titleStringId get() = R.string.pref_settings_appearance_title
 
     override fun initView() {}
 

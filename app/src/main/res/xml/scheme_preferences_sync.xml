@@ -27,9 +27,5 @@
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_services_force_sync"
             app:title="@string/pref_services_force_sync" />
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="@string/pref_key_notifications_fix_issues"
-            app:title="@string/pref_notify_fix_sync_issues" />
     </PreferenceCategory>
 </PreferenceScreen>

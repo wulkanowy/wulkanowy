@@ -3,11 +3,8 @@ package io.github.wulkanowy.ui.modules.settings.sync
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.thelittlefireman.appkillermanager.AppKillerManager
-import com.thelittlefireman.appkillermanager.exceptions.NoActionFoundException
 import com.yariksoffice.lingver.Lingver
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -15,7 +12,6 @@ import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.ErrorDialog
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AppInfo
-import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,7 +32,7 @@ class SyncFragment : PreferenceFragmentCompat(),
         fun newInstance() = SyncFragment()
     }
 
-    override val titleStringId get() = R.string.settings_sync_title
+    override val titleStringId get() = R.string.pref_settings_sync_title
 
     override val syncSuccessString get() = getString(R.string.pref_services_message_sync_success)
 
@@ -62,10 +58,6 @@ class SyncFragment : PreferenceFragmentCompat(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         presenter.onSharedPreferenceChanged(key)
-    }
-
-    override fun recreateView() {
-        activity?.recreate()
     }
 
     override fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean) {
@@ -102,23 +94,6 @@ class SyncFragment : PreferenceFragmentCompat(),
 
     override fun showErrorDetailsDialog(error: Throwable) {
         ErrorDialog.newInstance(error).show(childFragmentManager, error.toString())
-    }
-
-    override fun showFixSyncDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.pref_notify_fix_sync_issues)
-            .setMessage(R.string.pref_notify_fix_sync_issues_message)
-            .setNegativeButton(android.R.string.cancel) { _, _ -> }
-            .setPositiveButton(R.string.pref_notify_fix_sync_issues_settings_button) { _, _ ->
-                try {
-                    AppKillerManager.doActionPowerSaving(requireContext())
-                    AppKillerManager.doActionAutoStart(requireContext())
-                    AppKillerManager.doActionNotification(requireContext())
-                } catch (e: NoActionFoundException) {
-                    requireContext().openInternetBrowser("https://dontkillmyapp.com/${AppKillerManager.getDevice()?.manufacturer}", ::showMessage)
-                }
-            }
-            .show()
     }
 
     override fun onResume() {
