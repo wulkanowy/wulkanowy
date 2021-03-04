@@ -26,14 +26,9 @@ class LicenseFragment : BaseFragment<FragmentLicenseBinding>(R.layout.fragment_l
     @Inject
     lateinit var licenseAdapter: LicenseAdapter
 
-    private val libs by lazy { Libs(requireContext()) }
-
     override val titleStringId get() = R.string.license_title
 
-    override val appLibraries: ArrayList<Library>?
-        get() = context?.let {
-            libs.prepareLibraries(it, emptyArray(), emptyArray(), autoDetect = true, checkCachedDetection = true, sort = true)
-        }
+    override val appLibraries by lazy { Libs(requireContext()).libraries }
 
     companion object {
         fun newInstance() = LicenseFragment()
