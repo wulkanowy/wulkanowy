@@ -12,7 +12,7 @@ interface NotificationsView : BaseView {
 
     fun recreateView()
 
-    fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean)
-
     fun showFixSyncDialog()
+
+    fun enableNotification(notificationKey: String, enable: Boolean)
 }

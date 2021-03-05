@@ -5,7 +5,6 @@
         app:title="@string/pref_notify_header">
         <SwitchPreferenceCompat
             app:defaultValue="@bool/pref_default_notifications_enable"
-            app:dependency="services_enable"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_notifications_enable"
             app:title="@string/pref_notify_switch" />
@@ -23,6 +22,7 @@
             app:title="@string/pref_notify_debug_switch" />
         <Preference
             app:iconSpaceReserved="false"
+            app:isPreferenceVisible="false"
             app:key="@string/pref_key_notifications_fix_issues"
             app:title="@string/pref_notify_fix_sync_issues" />
     </PreferenceCategory>

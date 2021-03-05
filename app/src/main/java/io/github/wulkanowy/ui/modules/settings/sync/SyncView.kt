@@ -10,11 +10,7 @@ interface SyncView : BaseView {
 
     fun initView()
 
-    fun recreateView()
-
     fun setServicesSuspended(serviceEnablesKey: String, isHolidays: Boolean)
 
     fun setSyncInProgress(inProgress: Boolean)
-
-    fun showFixSyncDialog()
 }

@@ -55,8 +55,12 @@ class PreferencesRepository @Inject constructor(
     val isServicesOnlyWifi: Boolean
         get() = getBoolean(servicesOnlyWifiKey, R.bool.pref_default_services_wifi_only)
 
+    val notificationsEnableKey = context.getString(R.string.pref_key_notifications_enable)
     val isNotificationsEnable: Boolean
-        get() = getBoolean(R.string.pref_key_notifications_enable, R.bool.pref_default_notifications_enable)
+        get() = getBoolean(
+            R.string.pref_key_notifications_enable,
+            R.bool.pref_default_notifications_enable
+        )
 
     val isUpcomingLessonsNotificationsEnableKey = context.getString(R.string.pref_key_notifications_upcoming_lessons_enable)
     val isUpcomingLessonsNotificationsEnable: Boolean
