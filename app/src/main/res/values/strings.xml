@@ -8,10 +8,6 @@
     <string name="exam_title">Exams</string>
     <string name="timetable_title">Timetable</string>
     <string name="settings_title">Settings</string>
-    <string name="settings_advanced_title">Advanced</string>
-    <string name="settings_appearance_title">Appearance &amp; Behavior</string>
-    <string name="settings_notifications_title">Notifications</string>
-    <string name="settings_sync_title">Synchronization</string>
     <string name="more_title">More</string>
     <string name="about_title">About</string>
     <string name="logviewer_title">Log viewer</string>
@@ -502,21 +498,6 @@
     <string name="pref_services_message_sync_success">Synced!</string>
     <string name="pref_services_message_sync_failed">Sync failed</string>
     <string name="pref_services_sync_in_progress">Sync in progress</string>
-
-    <string name="pref_grades_appearance_header">Grades</string>
-    <string name="pref_attendance_appearance_view">Attendance</string>
-    <string name="pref_timetable_appearance_view">Timetable</string>
-    <string name="pref_grades_advanced_header">Grades</string>
-    <string name="pref_messages_advanced_header">Messages</string>
-    <string name="pref_appearance_category">Appearance &amp; Behavior</string>
-    <string name="pref_appearance_category_summary">Languages, themes, subjects sorting</string>
-    <string name="pref_notifications_category_summary">App notifications, fix problems</string>
-    <string name="pref_notifications_category">Notifications</string>
-    <string name="pref_sync_category">Synchronization</string>
-    <string name="pref_sync_category_summary">Automatic update, synchronization interval</string>
-    <string name="pref_advanced_category_summary">Plus and minus values, average calculation</string>
-    <string name="pref_advanced_category">Advanced</string>
-    <string name="pref_about_category_summary">App version, contributors, social portals, licenses</string>
 
     <string name="pref_other_grade_modifier_plus">Value of the plus</string>
     <string name="pref_other_grade_modifier_minus">Value of the minus</string>
