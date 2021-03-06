@@ -217,7 +217,7 @@ class GradeStatisticsPresenter @Inject constructor(
                         showContent(!isNoContent)
                         showErrorView(false)
                         updateData(
-                            it.data + it.data + it.data + it.data + it.data + it.data + it.data + it.data,
+                            it.data,
                             preferencesRepository.gradeColorTheme,
                             preferencesRepository.showAllSubjectsOnStatisticsList
                         )
