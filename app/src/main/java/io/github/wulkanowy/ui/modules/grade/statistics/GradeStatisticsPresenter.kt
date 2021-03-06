@@ -59,11 +59,11 @@ class GradeStatisticsPresenter @Inject constructor(
     }
 
     fun onParentViewChangeSemester() {
+        clearDataInView()
         view?.run {
             showProgress(true)
             enableSwipe(false)
             showRefresh(false)
-            showContent(false)
             showErrorView(false)
             showEmpty(false)
             clearView()
@@ -90,8 +90,8 @@ class GradeStatisticsPresenter @Inject constructor(
 
     fun onSubjectSelected(name: String?) {
         Timber.i("Select grade stats subject $name")
+        clearDataInView()
         view?.run {
-            showContent(false)
             showProgress(true)
             enableSwipe(false)
             showEmpty(false)
@@ -107,8 +107,8 @@ class GradeStatisticsPresenter @Inject constructor(
         val type = view?.currentType ?: GradeStatisticsItem.DataType.POINTS
         Timber.i("Select grade stats semester: $type")
         cancelJobs("load")
+        clearDataInView()
         view?.run {
-            showContent(false)
             showProgress(true)
             enableSwipe(false)
             showEmpty(false)
@@ -195,13 +195,12 @@ class GradeStatisticsPresenter @Inject constructor(
                     if (!isNoContent) {
                         view?.run {
                             showEmpty(isNoContent)
-                            showContent(!isNoContent)
                             showErrorView(false)
                             enableSwipe(true)
                             showRefresh(true)
                             showProgress(false)
                             updateData(
-                                it.data!!,
+                                if (isNoContent) emptyList() else it.data!!,
                                 preferencesRepository.gradeColorTheme,
                                 preferencesRepository.showAllSubjectsOnStatisticsList
                             )
@@ -214,10 +213,9 @@ class GradeStatisticsPresenter @Inject constructor(
                     view?.run {
                         val isNoContent = checkIsNoContent(it.data!!, type)
                         showEmpty(isNoContent)
-                        showContent(!isNoContent)
                         showErrorView(false)
                         updateData(
-                            it.data,
+                            if (isNoContent) emptyList() else it.data,
                             preferencesRepository.gradeColorTheme,
                             preferencesRepository.showAllSubjectsOnStatisticsList
                         )
@@ -259,6 +257,14 @@ class GradeStatisticsPresenter @Inject constructor(
                 items.firstOrNull()?.points?.let { points -> points.student == .0 && points.others == .0 } ?: false
             }
         }
+    }
+
+    private fun clearDataInView() {
+        view?.updateData(
+            emptyList(),
+            preferencesRepository.gradeColorTheme,
+            preferencesRepository.showAllSubjectsOnStatisticsList
+        )
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

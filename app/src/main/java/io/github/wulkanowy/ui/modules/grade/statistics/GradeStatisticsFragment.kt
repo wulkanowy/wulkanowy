@@ -113,10 +113,6 @@ class GradeStatisticsFragment :
         binding.gradeStatisticsRecycler.scrollToPosition(0)
     }
 
-    override fun showContent(show: Boolean) {
-        binding.gradeStatisticsRecycler.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
     override fun showEmpty(show: Boolean) {
         binding.gradeStatisticsEmpty.visibility = if (show) View.VISIBLE else View.INVISIBLE
     }
