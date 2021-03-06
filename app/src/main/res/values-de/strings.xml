@@ -400,21 +400,21 @@
     <string name="widget_timetable_theme_dark">Dunkel</string>
     <string name="widget_timetable_theme_system">Systemthema</string>
     <!--Preferences-->
-    <string name="pref_view_header">Erscheinungsbild</string>
+    <string name="pref_view_header">App apearance &amp; behavior</string>
     <string name="pref_view_list">Standard Ansicht</string>
     <string name="pref_view_grade_average_mode">Berechnung des Jahresenddurchschnitts</string>
     <string name="pref_view_grade_average_force_calc">Mittelwertberechnung durch App erzwingen</string>
-    <string name="pref_view_present">Anwesenheit in Schulbesuch zeigen</string>
-    <string name="pref_view_app_theme">Thema der Anwendung</string>
+    <string name="pref_view_present">Show presence</string>
+    <string name="pref_view_app_theme">Theme</string>
     <string name="pref_view_expand_grade">Noten erweitern</string>
-    <string name="pref_view_timetable_show_timers">Aktuelle Lektion im Stundenplan markieren</string>
-    <string name="pref_view_timetable_show_groups">Gruppen neben Schulfächer im Zeitplan anzeigen</string>
+    <string name="pref_view_timetable_show_timers">Mark current lesson</string>
+    <string name="pref_view_timetable_show_groups">Show groups next to subjects</string>
     <string name="pref_view_grade_statistics_list">Liste der Diagramme in Klassenbewertungen anzeigen</string>
     <string name="pref_view_timetable_show_whole_class">Unterricht der ganzen Klasse anzeigen</string>
-    <string name="pref_view_subjects_without_grades">Schulfächer ohne Noten in \"Noten\" anzeigen</string>
+    <string name="pref_view_subjects_without_grades">Show subjects without grades</string>
     <string name="pref_view_grade_color_scheme">Farbschema der Noten</string>
-    <string name="pref_view_grade_sorting_mode">Schulfächer sortieren in \"Noten\"</string>
-    <string name="pref_view_app_language">App Sprache</string>
+    <string name="pref_view_grade_sorting_mode">Subjects sorting</string>
+    <string name="pref_view_app_language">Language</string>
     <string name="pref_notify_header">Benachrichtigungen</string>
     <string name="pref_notify_switch">Benachrichtigungen anzeigen</string>
     <string name="pref_notify_upcoming_lessons_switch">Benachrichtigungen über bevorstehende Lektionen anzeigen</string>
@@ -422,6 +422,7 @@
     <string name="pref_notify_fix_sync_issues_message">Ihr Gerät hat möglicherweise Probleme mit der Datensynchronisierung und Benachrichtigungen.\n\nUm diese zu reparieren, fügen Sie Wulkanowy zum Autostart hinzu und deaktivieren Sie die Batterieoptimierung in den Systemeinstellungen des Geräts.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Gehe zu den Einstellungen</string>
     <string name="pref_notify_debug_switch">Debug-Benachrichtigungen anzeigen</string>
+    <string name="pref_notify_disabled_summary">Synchronization is disabled</string>
     <string name="pref_services_header">Synchronisierung</string>
     <string name="pref_services_switch">Automatische Aktualisierung</string>
     <string name="pref_services_suspended">An Feiertagen suspendiert</string>
@@ -431,14 +432,27 @@
     <string name="pref_services_message_sync_success">Synchronisiert!</string>
     <string name="pref_services_message_sync_failed">Synchronisierung fehlgeschlagen</string>
     <string name="pref_services_sync_in_progress">Synchronisierung läuft</string>
-    <string name="pref_services_dialog_force_sync_title">Synchronisation</string>
-    <string name="pref_services_dialog_force_sync_summary">        Die manuelle Synchronisierung aktualisiert die App-Ansichten nicht.
-        \nUm die synchronisierten Daten anzuzeigen, starten Sie die App nach der Synchronisierung neu.
-    </string>
-    <string name="pref_other_header">Andere</string>
     <string name="pref_other_grade_modifier_plus">Wert des Plus</string>
     <string name="pref_other_grade_modifier_minus">Wert des Minus</string>
     <string name="pref_other_fill_message_content">Antwort mit Nachrichtenhistorie</string>
+    <string name="pref_settings_advanced_title">Advanced</string>
+    <string name="pref_settings_appearance_title">Appearance &amp; Behavior</string>
+    <string name="pref_settings_notifications_title">Notifications</string>
+    <string name="pref_settings_sync_title">Synchronization</string>
+    <string name="pref_grades_appearance_header">Grades</string>
+    <string name="pref_attendance_appearance_view">Attendance</string>
+    <string name="pref_timetable_appearance_view">Timetable</string>
+    <string name="pref_grades_advanced_header">Grades</string>
+    <string name="pref_messages_advanced_header">Messages</string>
+    <string name="pref_appearance_category">Appearance &amp; Behavior</string>
+    <string name="pref_appearance_category_summary">Languages, themes, subjects sorting</string>
+    <string name="pref_notifications_category_summary">App notifications, fix problems</string>
+    <string name="pref_notifications_category">Notifications</string>
+    <string name="pref_sync_category">Synchronization</string>
+    <string name="pref_sync_category_summary">Automatic update, synchronization interval</string>
+    <string name="pref_advanced_category_summary">Plus and minus values, average calculation</string>
+    <string name="pref_advanced_category">Advanced</string>
+    <string name="pref_about_category_summary">App version, contributors, social portals, licenses</string>
     <!--Notification Channels-->
     <string name="channel_new_entries">Neue Einträge im Klassenbuch</string>
     <string name="channel_new_grades">Neue Noten</string>
