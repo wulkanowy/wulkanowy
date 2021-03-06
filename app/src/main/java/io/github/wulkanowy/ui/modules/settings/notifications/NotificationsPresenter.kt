@@ -29,7 +29,7 @@ class NotificationsPresenter @Inject constructor(
             )
             initView()
         }
-        Timber.i("Settings view was initialized")
+        Timber.i("Settings notifications view was initialized")
     }
 
     fun onSharedPreferenceChanged(key: String) {
@@ -37,7 +37,11 @@ class NotificationsPresenter @Inject constructor(
 
         preferencesRepository.apply {
             when (key) {
-                isUpcomingLessonsNotificationsEnableKey -> if (!isUpcomingLessonsNotificationsEnable) timetableNotificationHelper.cancelNotification()
+                isUpcomingLessonsNotificationsEnableKey -> {
+                    if (!isUpcomingLessonsNotificationsEnable) {
+                        timetableNotificationHelper.cancelNotification()
+                    }
+                }
                 isDebugNotificationEnableKey -> {
                     chuckerCollector.showNotification = isDebugNotificationEnable
                 }

@@ -77,7 +77,6 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:layout_height="wrap_content"
-        android:rotationX="-4"
         app:iconSpaceReserved="false"
         app:title="@string/pref_timetable_appearance_view">
         <SwitchPreferenceCompat

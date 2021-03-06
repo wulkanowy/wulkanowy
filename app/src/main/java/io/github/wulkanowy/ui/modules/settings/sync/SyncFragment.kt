@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.yariksoffice.lingver.Lingver
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.ErrorDialog
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.AppInfo
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,12 +19,6 @@ class SyncFragment : PreferenceFragmentCompat(),
 
     @Inject
     lateinit var presenter: SyncPresenter
-
-    @Inject
-    lateinit var appInfo: AppInfo
-
-    @Inject
-    lateinit var lingver: Lingver
 
     companion object {
         fun newInstance() = SyncFragment()

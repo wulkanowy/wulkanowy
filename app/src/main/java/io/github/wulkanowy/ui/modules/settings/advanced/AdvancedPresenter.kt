@@ -15,8 +15,7 @@ class AdvancedPresenter @Inject constructor(
 
     override fun onAttachView(view: AdvancedView) {
         super.onAttachView(view)
-        Timber.i("Settings view was initialized")
-        view.initView()
+        Timber.i("Settings advanced view was initialized")
     }
 
     fun onSharedPreferenceChanged(key: String) {

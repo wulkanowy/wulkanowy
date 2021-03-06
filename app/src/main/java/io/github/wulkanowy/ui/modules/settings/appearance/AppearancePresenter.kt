@@ -19,7 +19,7 @@ class AppearancePresenter @Inject constructor(
 
     override fun onAttachView(view: AppearanceView) {
         super.onAttachView(view)
-        Timber.i("Settings view was initialized")
+        Timber.i("Settings appearance view was initialized")
         view.initView()
     }
 

@@ -33,8 +33,6 @@ class AdvancedFragment : PreferenceFragmentCompat(),
 
     override val titleStringId get() = R.string.pref_settings_advanced_title
 
-    override fun initView() {}
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.onAttachView(this)
@@ -46,10 +44,6 @@ class AdvancedFragment : PreferenceFragmentCompat(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         presenter.onSharedPreferenceChanged(key)
-    }
-
-    override fun recreateView() {
-        activity?.recreate()
     }
 
     override fun showError(text: String, error: Throwable) {
