@@ -26,6 +26,7 @@ class Migration35Test : AbstractMigrationTest() {
         with(helper.createDatabase(dbName, 34)) {
             createStudent(this, 1)
             createStudent(this, 2)
+            close()
         }
 
         helper.runMigrationsAndValidate(dbName, 35, true, Migration35(AppInfo()))
