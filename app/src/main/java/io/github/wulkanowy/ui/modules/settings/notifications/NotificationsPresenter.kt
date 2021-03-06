@@ -7,6 +7,7 @@ import io.github.wulkanowy.services.alarm.TimetableNotificationSchedulerHelper
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
+import io.github.wulkanowy.utils.AppInfo
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -15,6 +16,7 @@ class NotificationsPresenter @Inject constructor(
     studentRepository: StudentRepository,
     private val preferencesRepository: PreferencesRepository,
     private val timetableNotificationHelper: TimetableNotificationSchedulerHelper,
+    private val appInfo: AppInfo,
     private val analytics: AnalyticsHelper,
     private val chuckerCollector: ChuckerCollector
 ) : BasePresenter<NotificationsView>(errorHandler, studentRepository) {
@@ -27,7 +29,7 @@ class NotificationsPresenter @Inject constructor(
                 preferencesRepository.notificationsEnableKey,
                 preferencesRepository.isServiceEnabled
             )
-            initView()
+            initView(appInfo.isDebug)
         }
         Timber.i("Settings notifications view was initialized")
     }

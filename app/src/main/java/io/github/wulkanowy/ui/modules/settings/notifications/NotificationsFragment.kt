@@ -11,13 +11,11 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.thelittlefireman.appkillermanager.AppKillerManager
 import com.thelittlefireman.appkillermanager.exceptions.NoActionFoundException
-import com.yariksoffice.lingver.Lingver
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.ErrorDialog
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
@@ -29,18 +27,15 @@ class NotificationsFragment : PreferenceFragmentCompat(),
     @Inject
     lateinit var presenter: NotificationsPresenter
 
-    @Inject
-    lateinit var appInfo: AppInfo
-
     companion object {
         fun newInstance() = NotificationsFragment()
     }
 
     override val titleStringId get() = R.string.pref_settings_notifications_title
 
-    override fun initView() {
+    override fun initView(showDebugNotificationSwitch: Boolean) {
         findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible =
-            appInfo.isDebug
+            showDebugNotificationSwitch
 
         findPreference<Preference>(getString(R.string.pref_key_notifications_fix_issues))?.run {
             isVisible = AppKillerManager.isDeviceSupported()

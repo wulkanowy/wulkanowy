@@ -4,7 +4,7 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface NotificationsView : BaseView {
 
-    fun initView()
+    fun initView(showDebugNotificationSwitch: Boolean)
 
     fun showFixSyncDialog()
 
