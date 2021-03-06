@@ -2,14 +2,23 @@ package io.github.wulkanowy.data.db.migrations
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import android.os.Build
 import androidx.sqlite.db.SupportSQLiteDatabase
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.HiltTestApplication
 import io.github.wulkanowy.utils.AppInfo
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
+@HiltAndroidTest
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [Build.VERSION_CODES.O_MR1], application = HiltTestApplication::class)
 class Migration35Test : AbstractMigrationTest() {
 
     @Test
