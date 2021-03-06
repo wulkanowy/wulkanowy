@@ -35,12 +35,12 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private lateinit var lastError: Throwable
 
-    var currentType: ViewType = ViewType.PARTIAL
+    var currentType: GradeStatisticsItem.DataType = GradeStatisticsItem.DataType.PARTIAL
         private set
 
-    fun onAttachView(view: GradeStatisticsView, type: ViewType?) {
+    fun onAttachView(view: GradeStatisticsView, type: GradeStatisticsItem.DataType?) {
         super.onAttachView(view)
-        currentType = type ?: ViewType.PARTIAL
+        currentType = type ?: GradeStatisticsItem.DataType.PARTIAL
         view.initView()
         errorHandler.showErrorMessage = ::showErrorViewOnError
     }
@@ -104,7 +104,7 @@ class GradeStatisticsPresenter @Inject constructor(
     }
 
     fun onTypeChange() {
-        val type = view?.currentType ?: ViewType.POINTS
+        val type = view?.currentType ?: GradeStatisticsItem.DataType.POINTS
         Timber.i("Select grade stats semester: $type")
         cancelJobs("load")
         view?.run {
@@ -143,10 +143,16 @@ class GradeStatisticsPresenter @Inject constructor(
         }.launch("subjects")
     }
 
-    private fun loadDataByType(semesterId: Int, subjectName: String, type: ViewType, forceRefresh: Boolean = false) {
+    private fun loadDataByType(
+        semesterId: Int,
+        subjectName: String,
+        type: GradeStatisticsItem.DataType,
+        forceRefresh: Boolean = false
+    ) {
         Timber.i("Loading grade stats data started")
 
-        currentSubjectName = if (preferencesRepository.showAllSubjectsOnStatisticsList) "Wszystkie" else subjectName
+        currentSubjectName =
+            if (preferencesRepository.showAllSubjectsOnStatisticsList) "Wszystkie" else subjectName
         currentType = type
 
         flowWithResourceIn {
@@ -156,9 +162,30 @@ class GradeStatisticsPresenter @Inject constructor(
 
             with(gradeStatisticsRepository) {
                 when (type) {
-                    ViewType.PARTIAL -> getGradesPartialStatistics(student, semester, currentSubjectName, forceRefresh)
-                    ViewType.SEMESTER -> getGradesSemesterStatistics(student, semester, currentSubjectName, forceRefresh)
-                    ViewType.POINTS -> getGradesPointsStatistics(student, semester, currentSubjectName, forceRefresh)
+                    GradeStatisticsItem.DataType.PARTIAL -> {
+                        getGradesPartialStatistics(
+                            student = student,
+                            semester = semester,
+                            subjectName = currentSubjectName,
+                            forceRefresh = forceRefresh
+                        )
+                    }
+                    GradeStatisticsItem.DataType.SEMESTER -> {
+                        getGradesSemesterStatistics(
+                            student = student,
+                            semester = semester,
+                            subjectName = currentSubjectName,
+                            forceRefresh = forceRefresh
+                        )
+                    }
+                    GradeStatisticsItem.DataType.POINTS -> {
+                        getGradesPointsStatistics(
+                            student = student,
+                            semester = semester,
+                            subjectName = currentSubjectName,
+                            forceRefresh = forceRefresh
+                        )
+                    }
                 }
             }
         }.onEach {
@@ -173,7 +200,11 @@ class GradeStatisticsPresenter @Inject constructor(
                             enableSwipe(true)
                             showRefresh(true)
                             showProgress(false)
-                            updateData(it.data!!, preferencesRepository.gradeColorTheme, preferencesRepository.showAllSubjectsOnStatisticsList)
+                            updateData(
+                                it.data!!,
+                                preferencesRepository.gradeColorTheme,
+                                preferencesRepository.showAllSubjectsOnStatisticsList
+                            )
                             showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
                         }
                     }
@@ -185,7 +216,11 @@ class GradeStatisticsPresenter @Inject constructor(
                         showEmpty(isNoContent)
                         showContent(!isNoContent)
                         showErrorView(false)
-                        updateData(it.data, preferencesRepository.gradeColorTheme, preferencesRepository.showAllSubjectsOnStatisticsList)
+                        updateData(
+                            it.data + it.data + it.data + it.data + it.data + it.data + it.data + it.data,
+                            preferencesRepository.gradeColorTheme,
+                            preferencesRepository.showAllSubjectsOnStatisticsList
+                        )
                         showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
                     }
                     analytics.logEvent(
@@ -209,13 +244,20 @@ class GradeStatisticsPresenter @Inject constructor(
         }.launch("load")
     }
 
-    private fun checkIsNoContent(items: List<GradeStatisticsItem>, type: ViewType): Boolean {
+    private fun checkIsNoContent(
+        items: List<GradeStatisticsItem>,
+        type: GradeStatisticsItem.DataType
+    ): Boolean {
         return items.isEmpty() || when (type) {
-            ViewType.SEMESTER -> items.firstOrNull()?.semester?.amounts.orEmpty().sum() == 0
-            ViewType.PARTIAL -> items.firstOrNull()?.partial?.classAmounts.orEmpty().sum() == 0
-            ViewType.POINTS -> items.firstOrNull()?.points?.let { points ->
-                points.student == .0 && points.others == .0
-            } ?: false
+            GradeStatisticsItem.DataType.SEMESTER -> {
+                items.firstOrNull()?.semester?.amounts.orEmpty().sum() == 0
+            }
+            GradeStatisticsItem.DataType.PARTIAL -> {
+                items.firstOrNull()?.partial?.classAmounts.orEmpty().sum() == 0
+            }
+            GradeStatisticsItem.DataType.POINTS -> {
+                items.firstOrNull()?.points?.let { points -> points.student == .0 && points.others == .0 } ?: false
+            }
         }
     }
 
