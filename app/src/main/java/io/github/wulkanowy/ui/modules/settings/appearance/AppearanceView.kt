@@ -4,8 +4,6 @@ import io.github.wulkanowy.ui.base.BaseView
 
 interface AppearanceView : BaseView {
 
-    fun initView()
-
     fun recreateView()
 
     fun updateLanguage(langCode: String)

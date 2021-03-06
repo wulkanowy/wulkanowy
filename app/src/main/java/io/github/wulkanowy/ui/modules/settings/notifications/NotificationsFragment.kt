@@ -32,18 +32,11 @@ class NotificationsFragment : PreferenceFragmentCompat(),
     @Inject
     lateinit var appInfo: AppInfo
 
-    @Inject
-    lateinit var lingver: Lingver
-
     companion object {
         fun newInstance() = NotificationsFragment()
     }
 
     override val titleStringId get() = R.string.pref_settings_notifications_title
-
-    override val syncSuccessString get() = getString(R.string.pref_services_message_sync_success)
-
-    override val syncFailedString get() = getString(R.string.pref_services_message_sync_failed)
 
     override fun initView() {
         findPreference<Preference>(getString(R.string.pref_key_notification_debug))?.isVisible =
@@ -81,10 +74,6 @@ class NotificationsFragment : PreferenceFragmentCompat(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         presenter.onSharedPreferenceChanged(key)
-    }
-
-    override fun recreateView() {
-        activity?.recreate()
     }
 
     override fun enableNotification(notificationKey: String, enable: Boolean) {

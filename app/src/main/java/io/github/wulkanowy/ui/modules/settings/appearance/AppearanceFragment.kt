@@ -33,8 +33,6 @@ class AppearanceFragment : PreferenceFragmentCompat(),
 
     override val titleStringId get() = R.string.pref_settings_appearance_title
 
-    override fun initView() {}
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.onAttachView(this)
