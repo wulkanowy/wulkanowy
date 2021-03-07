@@ -13,12 +13,15 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 inline fun <ResultType, RequestType> networkBoundResource(
+    mutex: Mutex = Mutex(),
     showSavedOnLoading: Boolean = true,
     noinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend (ResultType) -> RequestType,
-    crossinline saveFetchResult: suspend (query: () -> Flow<ResultType>, new: RequestType) -> Unit,
+    crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
     crossinline onFetchFailed: (Throwable) -> Unit = { },
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline filterResult: (ResultType) -> ResultType = { it }
@@ -31,7 +34,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
 
         try {
             val newData = fetch(data)
-            saveFetchResult(query, newData)
+            mutex.withLock { saveFetchResult(query().first(), newData) }
             query().map { Resource.success(filterResult(it)) }
         } catch (throwable: Throwable) {
             onFetchFailed(throwable)
@@ -44,10 +47,11 @@ inline fun <ResultType, RequestType> networkBoundResource(
 
 @JvmName("networkBoundResourceWithMap")
 inline fun <ResultType, RequestType, T> networkBoundResource(
+    mutex: Mutex = Mutex(),
     showSavedOnLoading: Boolean = true,
     noinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend (ResultType) -> RequestType,
-    crossinline saveFetchResult: suspend (query: () -> Flow<ResultType>, new: RequestType) -> Unit,
+    crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
     crossinline onFetchFailed: (Throwable) -> Unit = { },
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline mapResult: (ResultType) -> T
@@ -60,7 +64,7 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
 
         try {
             val newData = fetch(data)
-            saveFetchResult(query, newData)
+            mutex.withLock { saveFetchResult(query().first(), newData) }
             query().map { Resource.success(mapResult(it)) }
         } catch (throwable: Throwable) {
             onFetchFailed(throwable)

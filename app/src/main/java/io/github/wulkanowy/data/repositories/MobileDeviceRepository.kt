@@ -13,9 +13,7 @@ import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,6 +29,7 @@ class MobileDeviceRepository @Inject constructor(
     private val cacheKey = "devices"
 
     fun getDevices(student: Student, semester: Semester, forceRefresh: Boolean) = networkBoundResource(
+        mutex = saveFetchResultMutex,
         shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, student)) },
         query = { mobileDb.loadAll(student.userLoginId.takeIf { it != 0 } ?: student.studentId) },
         fetch = {
@@ -38,14 +37,11 @@ class MobileDeviceRepository @Inject constructor(
                 .getRegisteredDevices()
                 .mapToEntities(semester)
         },
-        saveFetchResult = { query, new ->
-            saveFetchResultMutex.withLock {
-                val old = query().first()
-                mobileDb.deleteAll(old uniqueSubtract new)
-                mobileDb.insertAll(new uniqueSubtract old)
+        saveFetchResult = { old, new ->
+            mobileDb.deleteAll(old uniqueSubtract new)
+            mobileDb.insertAll(new uniqueSubtract old)
 
-                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student))
-            }
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student))
         }
     )
 

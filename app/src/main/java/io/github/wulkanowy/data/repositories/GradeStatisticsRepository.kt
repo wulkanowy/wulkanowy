@@ -17,9 +17,7 @@ import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,6 +40,7 @@ class GradeStatisticsRepository @Inject constructor(
     private val pointsCacheKey = "grade_stats_points"
 
     fun getGradesPartialStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
+        mutex = partialMutex,
         shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(partialCacheKey, semester)) },
         query = { gradePartialStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
@@ -49,13 +48,10 @@ class GradeStatisticsRepository @Inject constructor(
                 .getGradesPartialStatistics(semester.semesterId)
                 .mapToEntities(semester)
         },
-        saveFetchResult = { query, new ->
-            partialMutex.withLock {
-                val old = query().first()
-                gradePartialStatisticsDb.deleteAll(old uniqueSubtract new)
-                gradePartialStatisticsDb.insertAll(new uniqueSubtract old)
-                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(partialCacheKey, semester))
-            }
+        saveFetchResult = { old, new ->
+            gradePartialStatisticsDb.deleteAll(old uniqueSubtract new)
+            gradePartialStatisticsDb.insertAll(new uniqueSubtract old)
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(partialCacheKey, semester))
         },
         mapResult = { items ->
             when (subjectName) {
@@ -81,6 +77,7 @@ class GradeStatisticsRepository @Inject constructor(
     )
 
     fun getGradesSemesterStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
+        mutex = semesterMutex,
         shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(semesterCacheKey, semester)) },
         query = { gradeSemesterStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
@@ -88,13 +85,10 @@ class GradeStatisticsRepository @Inject constructor(
                 .getGradesSemesterStatistics(semester.semesterId)
                 .mapToEntities(semester)
         },
-        saveFetchResult = { query, new ->
-            semesterMutex.withLock {
-                val old = query().first()
-                gradeSemesterStatisticsDb.deleteAll(old uniqueSubtract new)
-                gradeSemesterStatisticsDb.insertAll(new uniqueSubtract old)
-                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(semesterCacheKey, semester))
-            }
+        saveFetchResult = { old, new ->
+            gradeSemesterStatisticsDb.deleteAll(old uniqueSubtract new)
+            gradeSemesterStatisticsDb.insertAll(new uniqueSubtract old)
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(semesterCacheKey, semester))
         },
         mapResult = { items ->
             val itemsWithAverage = items.map { item ->
@@ -125,6 +119,7 @@ class GradeStatisticsRepository @Inject constructor(
     )
 
     fun getGradesPointsStatistics(student: Student, semester: Semester, subjectName: String, forceRefresh: Boolean) = networkBoundResource(
+        mutex = pointsMutex,
         shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(pointsCacheKey, semester)) },
         query = { gradePointsStatisticsDb.loadAll(semester.semesterId, semester.studentId) },
         fetch = {
@@ -132,13 +127,9 @@ class GradeStatisticsRepository @Inject constructor(
                 .getGradesPointsStatistics(semester.semesterId)
                 .mapToEntities(semester)
         },
-        saveFetchResult = { query, new ->
-            pointsMutex.withLock {
-                val old = query().first()
-                gradePointsStatisticsDb.deleteAll(old uniqueSubtract new)
-                gradePointsStatisticsDb.insertAll(new uniqueSubtract old)
-                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(pointsCacheKey, semester))
-            }
+        saveFetchResult = { old, new ->gradePointsStatisticsDb.deleteAll(old uniqueSubtract new)
+            gradePointsStatisticsDb.insertAll(new uniqueSubtract old)
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(pointsCacheKey, semester))
         },
         mapResult = { items ->
             when (subjectName) {

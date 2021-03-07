@@ -14,9 +14,7 @@ import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.uniqueSubtract
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -35,6 +33,7 @@ class AttendanceRepository @Inject constructor(
     private val cacheKey = "attendance"
 
     fun getAttendance(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean) = networkBoundResource(
+        mutex = saveFetchResultMutex,
         shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester, start, end)) },
         query = { attendanceDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday) },
         fetch = {
@@ -42,14 +41,11 @@ class AttendanceRepository @Inject constructor(
                 .getAttendance(start.monday, end.sunday, semester.semesterId)
                 .mapToEntities(semester)
         },
-        saveFetchResult = { query, new ->
-            saveFetchResultMutex.withLock {
-                val old = query().first()
-                attendanceDb.deleteAll(old uniqueSubtract new)
-                attendanceDb.insertAll(new uniqueSubtract old)
+        saveFetchResult = { old, new ->
+            attendanceDb.deleteAll(old uniqueSubtract new)
+            attendanceDb.insertAll(new uniqueSubtract old)
 
-                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
-            }
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         },
         filterResult = { it.filter { item -> item.date in start..end } }
     )

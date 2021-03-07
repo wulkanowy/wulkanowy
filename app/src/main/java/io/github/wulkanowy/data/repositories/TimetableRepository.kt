@@ -17,10 +17,8 @@ import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -39,6 +37,7 @@ class TimetableRepository @Inject constructor(
     private val cacheKey = "timetable"
 
     fun getTimetable(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean, refreshAdditional: Boolean = false) = networkBoundResource(
+        mutex = saveFetchResultMutex,
         shouldFetch = { (timetable, additional) -> timetable.isEmpty() || (additional.isEmpty() && refreshAdditional) || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester, start, end)) },
         query = {
             timetableDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday)
@@ -53,15 +52,11 @@ class TimetableRepository @Inject constructor(
                 .let { (normal, additional) -> normal.mapToEntities(semester) to additional.mapToEntities(semester) }
 
         },
-        saveFetchResult = { query, (newTimetable, newAdditional) ->
-            saveFetchResultMutex.withLock {
-                val (oldTimetable, oldAdditional) = query().first()
+        saveFetchResult = { (oldTimetable, oldAdditional), (newTimetable, newAdditional) ->
+            refreshTimetable(student, oldTimetable, newTimetable)
+            refreshAdditional(oldAdditional, newAdditional)
 
-                refreshTimetable(student, oldTimetable, newTimetable)
-                refreshAdditional(oldAdditional, newAdditional)
-
-                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
-            }
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         },
         filterResult = { (timetable, additional) ->
             timetable.filter { item ->

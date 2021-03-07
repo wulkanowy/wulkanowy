@@ -12,10 +12,8 @@ import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,6 +29,7 @@ class NoteRepository @Inject constructor(
     private val cacheKey = "note"
 
     fun getNotes(student: Student, semester: Semester, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
+        mutex = saveFetchResultMutex,
         shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester)) },
         query = { noteDb.loadAll(student.studentId) },
         fetch = {
@@ -38,19 +37,16 @@ class NoteRepository @Inject constructor(
                 .getNotes(semester.semesterId)
                 .mapToEntities(semester)
         },
-        saveFetchResult = { query, new ->
-            saveFetchResultMutex.withLock {
-                val old = query().first()
-                noteDb.deleteAll(old uniqueSubtract new)
-                noteDb.insertAll((new uniqueSubtract old).onEach {
-                    if (it.date >= student.registrationDate.toLocalDate()) it.apply {
-                        isRead = false
-                        if (notify) isNotified = false
-                    }
-                })
+        saveFetchResult = { old, new ->
+            noteDb.deleteAll(old uniqueSubtract new)
+            noteDb.insertAll((new uniqueSubtract old).onEach {
+                if (it.date >= student.registrationDate.toLocalDate()) it.apply {
+                    isRead = false
+                    if (notify) isNotified = false
+                }
+            })
 
-                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
-            }
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )
 

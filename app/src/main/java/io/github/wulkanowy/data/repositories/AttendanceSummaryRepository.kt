@@ -10,9 +10,7 @@ import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,6 +26,7 @@ class AttendanceSummaryRepository @Inject constructor(
     private val cacheKey = "attendance_summary"
 
     fun getAttendanceSummary(student: Student, semester: Semester, subjectId: Int, forceRefresh: Boolean) = networkBoundResource(
+        mutex = saveFetchResultMutex,
         shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester)) },
         query = { attendanceDb.loadAll(semester.diaryId, semester.studentId, subjectId) },
         fetch = {
@@ -35,13 +34,10 @@ class AttendanceSummaryRepository @Inject constructor(
                 .getAttendanceSummary(subjectId)
                 .mapToEntities(semester, subjectId)
         },
-        saveFetchResult = { query, new ->
-            saveFetchResultMutex.withLock {
-                val old = query().first()
-                attendanceDb.deleteAll(old uniqueSubtract new)
-                attendanceDb.insertAll(new uniqueSubtract old)
-                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
-            }
+        saveFetchResult = { old, new ->
+            attendanceDb.deleteAll(old uniqueSubtract new)
+            attendanceDb.insertAll(new uniqueSubtract old)
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )
 }

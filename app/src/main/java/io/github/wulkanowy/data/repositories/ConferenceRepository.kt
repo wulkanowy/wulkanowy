@@ -10,9 +10,7 @@ import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,6 +26,7 @@ class ConferenceRepository @Inject constructor(
     private val cacheKey = "conference"
 
     fun getConferences(student: Student, semester: Semester, forceRefresh: Boolean) = networkBoundResource(
+        mutex = saveFetchResultMutex,
         shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester)) },
         query = { conferenceDb.loadAll(semester.diaryId, student.studentId) },
         fetch = {
@@ -35,13 +34,10 @@ class ConferenceRepository @Inject constructor(
                 .getConferences()
                 .mapToEntities(semester)
         },
-        saveFetchResult = { query, new ->
-            saveFetchResultMutex.withLock {
-                val old = query().first()
-                conferenceDb.deleteAll(old uniqueSubtract new)
-                conferenceDb.insertAll(new uniqueSubtract old)
-                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
-            }
+        saveFetchResult = { old, new ->
+            conferenceDb.deleteAll(old uniqueSubtract new)
+            conferenceDb.insertAll(new uniqueSubtract old)
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )
 }

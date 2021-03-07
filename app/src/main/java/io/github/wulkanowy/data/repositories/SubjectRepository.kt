@@ -8,9 +8,7 @@ import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,18 +21,16 @@ class SubjectRepository @Inject constructor(
     private val saveFetchResultMutex = Mutex()
 
     fun getSubjects(student: Student, semester: Semester, forceRefresh: Boolean = false) = networkBoundResource(
+        mutex = saveFetchResultMutex,
         shouldFetch = { it.isEmpty() || forceRefresh },
         query = { subjectDao.loadAll(semester.diaryId, semester.studentId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
                 .getSubjects().mapToEntities(semester)
         },
-        saveFetchResult = { query, new ->
-            saveFetchResultMutex.withLock {
-                val old = query().first()
-                subjectDao.deleteAll(old uniqueSubtract new)
-                subjectDao.insertAll(new uniqueSubtract old)
-            }
+        saveFetchResult = { old, new ->
+            subjectDao.deleteAll(old uniqueSubtract new)
+            subjectDao.insertAll(new uniqueSubtract old)
         }
     )
 }

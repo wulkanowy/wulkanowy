@@ -15,10 +15,8 @@ import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -36,6 +34,7 @@ class GradeRepository @Inject constructor(
     private val cacheKey = "grade"
 
     fun getGrades(student: Student, semester: Semester, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
+        mutex = saveFetchResultMutex,
         shouldFetch = { (details, summaries) ->
             val isShouldBeRefreshed = refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester))
             details.isEmpty() || summaries.isEmpty() || forceRefresh || isShouldBeRefreshed
@@ -52,14 +51,11 @@ class GradeRepository @Inject constructor(
 
             details.mapToEntities(semester) to summary.mapToEntities(semester)
         },
-        saveFetchResult = { query, (newDetails, newSummary) ->
-            saveFetchResultMutex.withLock {
-                val (oldDetails, oldSummary) = query().first()
-                refreshGradeDetails(student, oldDetails, newDetails, notify)
-                refreshGradeSummaries(oldSummary, newSummary, notify)
+        saveFetchResult = { (oldDetails, oldSummary), (newDetails, newSummary) ->
+            refreshGradeDetails(student, oldDetails, newDetails, notify)
+            refreshGradeSummaries(oldSummary, newSummary, notify)
 
-                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
-            }
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )
 
