@@ -480,7 +480,7 @@
     <string name="pref_other_grade_modifier_minus">Вага мінуса</string>
     <string name="pref_other_fill_message_content">Відповісти з історією повідомлень</string>
     <string name="pref_settings_advanced_title">Додатково</string>
-    <string name="pref_settings_appearance_title">Зовнішній вигляд &amp; amp; Поведінка</string>
+    <string name="pref_settings_appearance_title">Зовнішній вигляд &amp; Поведінка</string>
     <string name="pref_settings_notifications_title">Повідомлення</string>
     <string name="pref_settings_sync_title">Синхронізація</string>
     <string name="pref_grades_appearance_header">Оцінки</string>
