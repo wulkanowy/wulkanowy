@@ -274,6 +274,10 @@
     <string name="lucky_number_empty">Keine Information über die Glücksnummer.</string>
     <string name="lucky_number_notify_new_item_title">Glücksnummer für heute</string>
     <string name="lucky_number_notify_new_item">Die heutige Glücksnummer ist: %d</string>
+    <string name="lucky_number_history_button">Show history</string>
+    <!--Lucky number history-->
+    <string name="lucky_number_history_title">Lucky number history</string>
+    <string name="lucky_number_history_empty">No info about lucky numbers</string>
     <!--Mobile devices-->
     <string name="mobile_devices_title">Mobile Geräte</string>
     <string name="mobile_devices_no_items">Keine Geräte</string>
