@@ -316,7 +316,7 @@
     <string name="lucky_number_notify_new_item">Dziś szczęśliwym numerkiem jest: %d</string>
     <string name="lucky_number_history_button">Pokaż historię</string>
     <!--Lucky number history-->
-    <string name="lucky_number_history_title">Historia szczęśliwego numerka</string>
+    <string name="lucky_number_history_title">Historia numerków</string>
     <string name="lucky_number_history_empty">Brak informacji o szczęśliwych numerach</string>
     <!--Mobile devices-->
     <string name="mobile_devices_title">Dostęp mobilny</string>
