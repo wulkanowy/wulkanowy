@@ -127,7 +127,8 @@ class GradeStatisticsRepository @Inject constructor(
                 .getGradesPointsStatistics(semester.semesterId)
                 .mapToEntities(semester)
         },
-        saveFetchResult = { old, new ->gradePointsStatisticsDb.deleteAll(old uniqueSubtract new)
+        saveFetchResult = { old, new ->
+            gradePointsStatisticsDb.deleteAll(old uniqueSubtract new)
             gradePointsStatisticsDb.insertAll(new uniqueSubtract old)
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(pointsCacheKey, semester))
         },

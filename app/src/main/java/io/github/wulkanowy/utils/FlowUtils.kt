@@ -19,7 +19,7 @@ import kotlinx.coroutines.sync.withLock
 inline fun <ResultType, RequestType> networkBoundResource(
     mutex: Mutex = Mutex(),
     showSavedOnLoading: Boolean = true,
-    noinline query: () -> Flow<ResultType>,
+    crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend (ResultType) -> RequestType,
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
     crossinline onFetchFailed: (Throwable) -> Unit = { },
@@ -49,7 +49,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
 inline fun <ResultType, RequestType, T> networkBoundResource(
     mutex: Mutex = Mutex(),
     showSavedOnLoading: Boolean = true,
-    noinline query: () -> Flow<ResultType>,
+    crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend (ResultType) -> RequestType,
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
     crossinline onFetchFailed: (Throwable) -> Unit = { },
