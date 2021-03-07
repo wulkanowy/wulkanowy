@@ -14,8 +14,6 @@ interface LuckyNumberHistoryView : BaseView {
 
     fun clearData()
 
-    fun hideRefresh()
-
     fun showEmpty(show: Boolean)
 
     fun showErrorView(show: Boolean)
@@ -25,8 +23,6 @@ interface LuckyNumberHistoryView : BaseView {
     fun updateNavigationWeek(date: String)
 
     fun showProgress(show: Boolean)
-
-    fun enableSwipe(enable: Boolean)
 
     fun showPreButton(show: Boolean)
 

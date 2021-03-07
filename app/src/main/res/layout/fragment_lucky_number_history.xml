@@ -13,18 +13,12 @@
         android:indeterminate="true"
         tools:visibility="invisible" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/luckyNumberHistorySwipe"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/luckyNumberHistoryRecycler"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_lucky_number_history"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/luckyNumberHistoryRecycler"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_lucky_number_history"/>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/luckyNumberHistoryEmpty"

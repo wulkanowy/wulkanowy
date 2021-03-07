@@ -54,9 +54,6 @@ class LuckyNumberHistoryFragment :
         }
 
         with(binding) {
-            luckyNumberHistorySwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            luckyNumberHistorySwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
-            luckyNumberHistorySwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             luckyNumberHistoryNavDate.setOnClickListener { presenter.onPickDate() }
             luckyNumberHistoryErrorRetry.setOnClickListener { presenter.onRetry() }
             luckyNumberHistoryErrorDetails.setOnClickListener { presenter.onDetailsClick() }
@@ -82,10 +79,6 @@ class LuckyNumberHistoryFragment :
         }
     }
 
-    override fun hideRefresh() {
-        binding.luckyNumberHistorySwipe.isRefreshing = false
-    }
-
     override fun showEmpty(show: Boolean) {
         binding.luckyNumberHistoryEmpty.visibility = if (show) VISIBLE else GONE
     }
@@ -104,10 +97,6 @@ class LuckyNumberHistoryFragment :
 
     override fun showProgress(show: Boolean) {
         binding.luckyNumberHistoryProgress.visibility = if (show) VISIBLE else GONE
-    }
-
-    override fun enableSwipe(enable: Boolean) {
-        binding.luckyNumberHistorySwipe.isEnabled = enable
     }
 
     override fun showPreButton(show: Boolean) {

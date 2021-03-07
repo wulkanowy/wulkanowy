@@ -36,7 +36,6 @@ class LuckyNumberHistoryPresenter @Inject constructor(
             initView()
             reloadNavigation()
             showContent(false)
-            enableSwipe(false)
         }
         Timber.i("Lucky number history view was initialized")
         errorHandler.showErrorMessage = ::showErrorViewOnError
@@ -81,9 +80,7 @@ class LuckyNumberHistoryPresenter @Inject constructor(
             }
         }.afterLoading {
             view?.run {
-                hideRefresh()
                 showProgress(false)
-                enableSwipe(true)
             }
         }.launch()
     }
@@ -104,18 +101,12 @@ class LuckyNumberHistoryPresenter @Inject constructor(
         Timber.i("Reload lucky number history view with the date ${currentDate.toFormattedString()}")
         view?.apply {
             showProgress(true)
-            enableSwipe(false)
             showContent(false)
             showEmpty(false)
             showErrorView(false)
             clearData()
             reloadNavigation()
         }
-    }
-
-    fun onSwipeRefresh() {
-        Timber.i("Force refreshing the lucky number history")
-        loadData()
     }
 
     fun onRetry() {
