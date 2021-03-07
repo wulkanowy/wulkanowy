@@ -12,6 +12,9 @@ import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.uniqueSubtract
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,6 +26,8 @@ class CompletedLessonsRepository @Inject constructor(
     private val refreshHelper: AutoRefreshHelper,
 ) {
 
+    private val saveFetchResultMutex = Mutex()
+
     private val cacheKey = "completed"
 
     fun getCompletedLessons(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean) = networkBoundResource(
@@ -33,10 +38,13 @@ class CompletedLessonsRepository @Inject constructor(
                 .getCompletedLessons(start.monday, end.sunday)
                 .mapToEntities(semester)
         },
-        saveFetchResult = { old, new ->
-            completedLessonsDb.deleteAll(old uniqueSubtract new)
-            completedLessonsDb.insertAll(new uniqueSubtract old)
-            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
+        saveFetchResult = { query, new ->
+            saveFetchResultMutex.withLock {
+                val old = query().first()
+                completedLessonsDb.deleteAll(old uniqueSubtract new)
+                completedLessonsDb.insertAll(new uniqueSubtract old)
+                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
+            }
         },
         filterResult = { it.filter { item -> item.date in start..end } }
     )

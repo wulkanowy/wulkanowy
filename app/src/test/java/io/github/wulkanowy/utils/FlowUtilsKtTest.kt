@@ -7,6 +7,7 @@ import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -49,7 +50,7 @@ class FlowUtilsKtTest {
                 delay(2_000)
                 data
             },
-            saveFetchResult = repo::save
+            saveFetchResult = { fetch, new -> repo.save(fetch().first(), new) }
         ).launchIn(testScope)
 
         testScope.advanceTimeBy(1_000)
@@ -63,7 +64,7 @@ class FlowUtilsKtTest {
                 delay(2_000)
                 data
             },
-            saveFetchResult = repo::save
+            saveFetchResult = { fetch, new -> repo.save(fetch().first(), new) }
         ).launchIn(testScope)
 
         testScope.advanceTimeBy(3_000)

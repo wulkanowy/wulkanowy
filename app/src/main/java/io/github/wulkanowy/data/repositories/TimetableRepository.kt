@@ -17,7 +17,10 @@ import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,6 +33,8 @@ class TimetableRepository @Inject constructor(
     private val schedulerHelper: TimetableNotificationSchedulerHelper,
     private val refreshHelper: AutoRefreshHelper,
 ) {
+
+    private val saveFetchResultMutex = Mutex()
 
     private val cacheKey = "timetable"
 
@@ -48,11 +53,15 @@ class TimetableRepository @Inject constructor(
                 .let { (normal, additional) -> normal.mapToEntities(semester) to additional.mapToEntities(semester) }
 
         },
-        saveFetchResult = { (oldTimetable, oldAdditional), (newTimetable, newAdditional) ->
-            refreshTimetable(student, oldTimetable, newTimetable)
-            refreshAdditional(oldAdditional, newAdditional)
+        saveFetchResult = { query, (newTimetable, newAdditional) ->
+            saveFetchResultMutex.withLock {
+                val (oldTimetable, oldAdditional) = query().first()
 
-            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
+                refreshTimetable(student, oldTimetable, newTimetable)
+                refreshAdditional(oldAdditional, newAdditional)
+
+                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
+            }
         },
         filterResult = { (timetable, additional) ->
             timetable.filter { item ->

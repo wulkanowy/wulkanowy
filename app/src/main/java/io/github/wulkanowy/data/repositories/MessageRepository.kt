@@ -19,7 +19,10 @@ import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import java.time.LocalDateTime.now
 import javax.inject.Inject
@@ -33,6 +36,8 @@ class MessageRepository @Inject constructor(
     private val refreshHelper: AutoRefreshHelper,
 ) {
 
+    private val saveFetchResultMutex = Mutex()
+
     private val cacheKey = "message"
 
     @Suppress("UNUSED_PARAMETER")
@@ -40,13 +45,16 @@ class MessageRepository @Inject constructor(
         shouldFetch = { it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, student, folder)) },
         query = { messagesDb.loadAll(student.id.toInt(), folder.id) },
         fetch = { sdk.init(student).getMessages(Folder.valueOf(folder.name), now().minusMonths(3), now()).mapToEntities(student) },
-        saveFetchResult = { old, new ->
-            messagesDb.deleteAll(old uniqueSubtract new)
-            messagesDb.insertAll((new uniqueSubtract old).onEach {
-                it.isNotified = !notify
-            })
+        saveFetchResult = { query, new ->
+            saveFetchResultMutex.withLock {
+                val old = query().first()
+                messagesDb.deleteAll(old uniqueSubtract new)
+                messagesDb.insertAll((new uniqueSubtract old).onEach {
+                    it.isNotified = !notify
+                })
 
-            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student, folder))
+                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student, folder))
+            }
         }
     )
 
@@ -62,7 +70,8 @@ class MessageRepository @Inject constructor(
                 details.content to details.attachments.mapToEntities()
             }
         },
-        saveFetchResult = { old, (downloadedMessage, attachments) ->
+        saveFetchResult = { query, (downloadedMessage, attachments) ->
+            val old = query().first()
             checkNotNull(old, { "Fetched message no longer exist!" })
             messagesDb.updateAll(listOf(old.message.copy(unread = !markAsRead).apply {
                 id = old.message.id

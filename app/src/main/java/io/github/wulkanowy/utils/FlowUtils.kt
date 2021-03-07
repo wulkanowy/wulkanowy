@@ -16,9 +16,9 @@ import kotlinx.coroutines.flow.takeWhile
 
 inline fun <ResultType, RequestType> networkBoundResource(
     showSavedOnLoading: Boolean = true,
-    crossinline query: () -> Flow<ResultType>,
+    noinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend (ResultType) -> RequestType,
-    crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
+    crossinline saveFetchResult: suspend (query: () -> Flow<ResultType>, new: RequestType) -> Unit,
     crossinline onFetchFailed: (Throwable) -> Unit = { },
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline filterResult: (ResultType) -> ResultType = { it }
@@ -31,7 +31,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
 
         try {
             val newData = fetch(data)
-            saveFetchResult(query().first(), newData)
+            saveFetchResult(query, newData)
             query().map { Resource.success(filterResult(it)) }
         } catch (throwable: Throwable) {
             onFetchFailed(throwable)
@@ -45,9 +45,9 @@ inline fun <ResultType, RequestType> networkBoundResource(
 @JvmName("networkBoundResourceWithMap")
 inline fun <ResultType, RequestType, T> networkBoundResource(
     showSavedOnLoading: Boolean = true,
-    crossinline query: () -> Flow<ResultType>,
+    noinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend (ResultType) -> RequestType,
-    crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
+    crossinline saveFetchResult: suspend (query: () -> Flow<ResultType>, new: RequestType) -> Unit,
     crossinline onFetchFailed: (Throwable) -> Unit = { },
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline mapResult: (ResultType) -> T
@@ -60,7 +60,7 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
 
         try {
             val newData = fetch(data)
-            saveFetchResult(query().first(), newData)
+            saveFetchResult(query, newData)
             query().map { Resource.success(mapResult(it)) }
         } catch (throwable: Throwable) {
             onFetchFailed(throwable)

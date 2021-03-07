@@ -13,6 +13,9 @@ import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.uniqueSubtract
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,6 +27,8 @@ class HomeworkRepository @Inject constructor(
     private val refreshHelper: AutoRefreshHelper,
 ) {
 
+    private val saveFetchResultMutex = Mutex()
+
     private val cacheKey = "homework"
 
     fun getHomework(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean) = networkBoundResource(
@@ -34,11 +39,14 @@ class HomeworkRepository @Inject constructor(
                 .getHomework(start.monday, end.sunday)
                 .mapToEntities(semester)
         },
-        saveFetchResult = { old, new ->
-            homeworkDb.deleteAll(old uniqueSubtract new)
-            homeworkDb.insertAll(new uniqueSubtract old)
+        saveFetchResult = { query, new ->
+            saveFetchResultMutex.withLock {
+                val old = query().first()
+                homeworkDb.deleteAll(old uniqueSubtract new)
+                homeworkDb.insertAll(new uniqueSubtract old)
 
-            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
+                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
+            }
         }
     )
 

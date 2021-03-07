@@ -9,6 +9,8 @@ import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.LocalDate.now
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,16 +21,21 @@ class LuckyNumberRepository @Inject constructor(
     private val sdk: Sdk
 ) {
 
+    private val saveFetchResultMutex = Mutex()
+
     fun getLuckyNumber(student: Student, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
         shouldFetch = { it == null || forceRefresh },
         query = { luckyNumberDb.load(student.studentId, now()) },
         fetch = { sdk.init(student).getLuckyNumber(student.schoolShortName)?.mapToEntity(student) },
-        saveFetchResult = { old, new ->
-            if (new != old) {
-                old?.let { luckyNumberDb.deleteAll(listOfNotNull(it)) }
-                luckyNumberDb.insertAll(listOfNotNull((new?.apply {
-                    if (notify) isNotified = false
-                })))
+        saveFetchResult = { query, new ->
+            saveFetchResultMutex.withLock {
+                val old = query().first()
+                if (new != old) {
+                    old?.let { luckyNumberDb.deleteAll(listOfNotNull(it)) }
+                    luckyNumberDb.insertAll(listOfNotNull((new?.apply {
+                        if (notify) isNotified = false
+                    })))
+                }
             }
         }
     )

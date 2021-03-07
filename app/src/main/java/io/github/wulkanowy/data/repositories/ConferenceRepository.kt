@@ -10,6 +10,9 @@ import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,6 +22,8 @@ class ConferenceRepository @Inject constructor(
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
 ) {
+
+    private val saveFetchResultMutex = Mutex()
 
     private val cacheKey = "conference"
 
@@ -30,10 +35,13 @@ class ConferenceRepository @Inject constructor(
                 .getConferences()
                 .mapToEntities(semester)
         },
-        saveFetchResult = { old, new ->
-            conferenceDb.deleteAll(old uniqueSubtract new)
-            conferenceDb.insertAll(new uniqueSubtract old)
-            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
+        saveFetchResult = { query, new ->
+            saveFetchResultMutex.withLock {
+                val old = query().first()
+                conferenceDb.deleteAll(old uniqueSubtract new)
+                conferenceDb.insertAll(new uniqueSubtract old)
+                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
+            }
         }
     )
 }

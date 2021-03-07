@@ -7,6 +7,9 @@ import io.github.wulkanowy.data.mappers.mapToEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,6 +19,8 @@ class StudentInfoRepository @Inject constructor(
     private val sdk: Sdk
 ) {
 
+    private val saveFetchResultMutex = Mutex()
+
     fun getStudentInfo(student: Student, semester: Semester, forceRefresh: Boolean) =
         networkBoundResource(
             shouldFetch = { it == null || forceRefresh },
@@ -24,14 +29,17 @@ class StudentInfoRepository @Inject constructor(
                 sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
                     .getStudentInfo().mapToEntity(semester)
             },
-            saveFetchResult = { old, new ->
-                if (old != null && new != old) {
-                    with(studentInfoDao) {
-                        deleteAll(listOf(old))
-                        insertAll(listOf(new))
+            saveFetchResult = { query, new ->
+                saveFetchResultMutex.withLock {
+                    val old = query().first()
+                    if (old != null && new != old) {
+                        with(studentInfoDao) {
+                            deleteAll(listOf(old))
+                            insertAll(listOf(new))
+                        }
+                    } else if (old == null) {
+                        studentInfoDao.insertAll(listOf(new))
                     }
-                } else if (old == null) {
-                    studentInfoDao.insertAll(listOf(new))
                 }
             }
         )

@@ -12,7 +12,10 @@ import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,6 +25,8 @@ class NoteRepository @Inject constructor(
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
 ) {
+
+    private val saveFetchResultMutex = Mutex()
 
     private val cacheKey = "note"
 
@@ -33,16 +38,19 @@ class NoteRepository @Inject constructor(
                 .getNotes(semester.semesterId)
                 .mapToEntities(semester)
         },
-        saveFetchResult = { old, new ->
-            noteDb.deleteAll(old uniqueSubtract new)
-            noteDb.insertAll((new uniqueSubtract old).onEach {
-                if (it.date >= student.registrationDate.toLocalDate()) it.apply {
-                    isRead = false
-                    if (notify) isNotified = false
-                }
-            })
+        saveFetchResult = { query, new ->
+            saveFetchResultMutex.withLock {
+                val old = query().first()
+                noteDb.deleteAll(old uniqueSubtract new)
+                noteDb.insertAll((new uniqueSubtract old).onEach {
+                    if (it.date >= student.registrationDate.toLocalDate()) it.apply {
+                        isRead = false
+                        if (notify) isNotified = false
+                    }
+                })
 
-            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
+                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
+            }
         }
     )
 

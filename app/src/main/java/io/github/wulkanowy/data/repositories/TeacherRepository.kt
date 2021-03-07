@@ -8,6 +8,9 @@ import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,6 +20,8 @@ class TeacherRepository @Inject constructor(
     private val sdk: Sdk
 ) {
 
+    private val saveFetchResultMutex = Mutex()
+
     fun getTeachers(student: Student, semester: Semester, forceRefresh: Boolean) = networkBoundResource(
         shouldFetch = { it.isEmpty() || forceRefresh },
         query = { teacherDb.loadAll(semester.studentId, semester.classId) },
@@ -25,9 +30,12 @@ class TeacherRepository @Inject constructor(
                 .getTeachers(semester.semesterId)
                 .mapToEntities(semester)
         },
-        saveFetchResult = { old, new ->
-            teacherDb.deleteAll(old uniqueSubtract new)
-            teacherDb.insertAll(new uniqueSubtract old)
+        saveFetchResult = { query, new ->
+            saveFetchResultMutex.withLock {
+                val old = query().first()
+                teacherDb.deleteAll(old uniqueSubtract new)
+                teacherDb.insertAll(new uniqueSubtract old)
+            }
         }
     )
 }

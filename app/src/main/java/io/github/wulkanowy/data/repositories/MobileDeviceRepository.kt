@@ -13,6 +13,9 @@ import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,6 +25,8 @@ class MobileDeviceRepository @Inject constructor(
     private val sdk: Sdk,
     private val refreshHelper: AutoRefreshHelper,
 ) {
+
+    private val saveFetchResultMutex = Mutex()
 
     private val cacheKey = "devices"
 
@@ -33,11 +38,14 @@ class MobileDeviceRepository @Inject constructor(
                 .getRegisteredDevices()
                 .mapToEntities(semester)
         },
-        saveFetchResult = { old, new ->
-            mobileDb.deleteAll(old uniqueSubtract new)
-            mobileDb.insertAll(new uniqueSubtract old)
+        saveFetchResult = { query, new ->
+            saveFetchResultMutex.withLock {
+                val old = query().first()
+                mobileDb.deleteAll(old uniqueSubtract new)
+                mobileDb.insertAll(new uniqueSubtract old)
 
-            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student))
+                refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student))
+            }
         }
     )
 
