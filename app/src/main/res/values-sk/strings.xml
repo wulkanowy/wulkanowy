@@ -314,10 +314,10 @@
     <string name="lucky_number_empty">Žiadne informácie o šťastnom čísle</string>
     <string name="lucky_number_notify_new_item_title">Šťastné číslo pre dnešok</string>
     <string name="lucky_number_notify_new_item">Dnes je šťastným číslom: %d</string>
-    <string name="lucky_number_history_button">Show history</string>
+    <string name="lucky_number_history_button">Zobraziť históriu</string>
     <!--Lucky number history-->
-    <string name="lucky_number_history_title">Lucky number history</string>
-    <string name="lucky_number_history_empty">No info about lucky numbers</string>
+    <string name="lucky_number_history_title">História šťastných čísel</string>
+    <string name="lucky_number_history_empty">Žiadne informácie o šťastných číslach</string>
     <!--Mobile devices-->
     <string name="mobile_devices_title">Mobilný prístup</string>
     <string name="mobile_devices_no_items">Žiadne zariadenia</string>
