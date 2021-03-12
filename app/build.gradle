@@ -6,6 +6,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.huawei.agconnect'
 apply from: 'jacoco.gradle'
 apply from: 'sonarqube.gradle'
 apply from: 'hooks.gradle'
@@ -241,5 +242,3 @@ dependencies {
     androidTestImplementation "io.mockk:mockk-android:$mockk"
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 }
-
-apply plugin: 'com.huawei.agconnect'
