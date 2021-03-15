@@ -86,6 +86,8 @@ jobs:
               ~/.gradle/caches
               ~/.gradle/wrapper
             key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
+        - name: Set run number with offset
+          run: echo ::set-env name=RUN_NUMBER::$(($GITHUB_RUN_NUMBER+$BUILD_NUMBER_OFFSET))
         - name: Prepare build configuration
           run: |
             sed -i -e "s#applicationIdSuffix \".dev\"#applicationIdSuffix \".${GITHUB_HEAD_REF//[-.\/]/_}\"#" app/build.gradle
@@ -111,8 +113,8 @@ jobs:
           uses: chkfung/android-version-actions@v1.1
           with:
             gradlePath: app/build.gradle
-            versionCode: ${{ github.run_number }}
-            versionName: ${{ github.run_number }}-${{ github.head_ref }}
+            versionCode: $RUN_NUMBER
+            versionName: $RUN_NUMBER-${{ github.head_ref }}
         - name: Build apk
           env:
             BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
@@ -122,7 +124,7 @@ jobs:
         - name: Upload apk to github artifacts
           uses: actions/upload-artifact@v2
           with:
-            name: wulkanowyDEV-${{ github.run_number }}.apk
+            name: wulkanowyDEV-$RUN_NUMBER.apk
             path: app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
         - name: Deploy to app center
           uses: wzieba/AppCenter-Github-Action@v1
@@ -151,6 +153,8 @@ jobs:
               ~/.gradle/caches
               ~/.gradle/wrapper
             key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
+        - name: Set run number with offset
+          run: echo ::set-env name=RUN_NUMBER::$(($GITHUB_RUN_NUMBER+$BUILD_NUMBER_OFFSET))
         - name: Add signing config
           run: |
             cat >> app/build.gradle <<EOF
@@ -172,8 +176,8 @@ jobs:
           uses: chkfung/android-version-actions@v1.1
           with:
             gradlePath: app/build.gradle
-            versionCode: ${{ github.run_number }}
-            versionName: ${{ github.run_number }}
+            versionCode: $RUN_NUMBER
+            versionName: $RUN_NUMBER
         - name: Build apk
           env:
             BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
@@ -183,7 +187,7 @@ jobs:
         - name: Upload apk to github artifacts
           uses: actions/upload-artifact@v2
           with:
-            name: wulkanowyDEV-${{ github.run_number }}-dev.apk
+            name: wulkanowyDEV-$RUN_NUMBER-dev.apk
             path: app/build/outputs/apk/play/debug/app-play-debug.apk
         - name: Deploy to app distribution
           uses: wzieba/Firebase-Distribution-Github-Action@v1
