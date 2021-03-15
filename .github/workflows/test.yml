@@ -115,8 +115,8 @@ jobs:
           uses: chkfung/android-version-actions@v1.1
           with:
             gradlePath: app/build.gradle
-            versionCode: $RUN_NUMBER
-            versionName: $RUN_NUMBER-${{ github.head_ref }}
+            versionCode: ${{ env.RUN_NUMBER }}
+            versionName: ${{ env.RUN_NUMBER }}-${{ github.head_ref }}
         - name: Build apk
           env:
             BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
@@ -180,8 +180,8 @@ jobs:
           uses: chkfung/android-version-actions@v1.1
           with:
             gradlePath: app/build.gradle
-            versionCode: $RUN_NUMBER
-            versionName: $RUN_NUMBER
+            versionCode: ${{ env.RUN_NUMBER }}
+            versionName: ${{ env.RUN_NUMBER }}
         - name: Build apk
           env:
             BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
