@@ -7,7 +7,7 @@ trigger:
 - develop
 
 pool:
-  vmImage: 'macos-latest'
+  vmImage: 'ubuntu-latest'
 
 steps:
 - task: Gradle@2
@@ -18,3 +18,11 @@ steps:
     publishJUnitResults: false
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'assembleFdroidDebug'
+
+- task: AppCenterDistribute@3
+  inputs:
+    appSlug: 'wulkanowy/wulkanowy'
+    appFile: 
+    symbolsOption: 'Android'
+    releaseNotesOption: 'input'
+    destinationType: 'groups'
