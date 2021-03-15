@@ -88,6 +88,10 @@ jobs:
             key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
         - name: Build apk
           run: ./gradlew assembleFdroidDebug --stacktrace
+        - name: Upload apk to github artifacts
+          uses: actions/upload-artifact@v2
+          with:
+            path: app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
         - name: Deploy to app center
           uses: wzieba/AppCenter-Github-Action@v1
           with:
