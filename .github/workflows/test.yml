@@ -92,7 +92,26 @@ jobs:
             sed -i -e "s#.dev\"#.${GITHUB_HEAD_REF//[-.\/]/_}\"#" app/src/debug/google-services.json
             sed -i -e "s#.dev\"#.${GITHUB_HEAD_REF//[-.\/]/_}\"#" app/src/debug/agconnect-services.json
             sed -i -e '/versionNameSuffix/d' app/build.gradle
+        - name: Add signing config
+          run: |
+            cat >> app/build.gradle <<EOF
+            android.signingConfigs.debug {
+                storeFile file("bitrise.jks")
+                storePassword System.getenv("BITRISE_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("BITRISE_KEY_ALIAS")
+                keyPassword System.getenv("BITRISE_KEY_PASSWORD")
+            }
+            EOF
+        - name: Decrypt keys
+          env:
+            BITRISE_ENCRYPT_KEY: ${{ secrets.BITRISE_ENCRYPT_KEY }}
+          run: |
+            gpg --yes --batch --passphrase=$ENCRYPT_KEY ./app/bitrise.jks.gpg
         - name: Build apk
+          env:
+            BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
+            BITRISE_KEY_ALIAS: ${{ secrets.BITRISE_KEY_ALIAS }}
+            BITRISE_KEY_PASSWORD: ${{ secrets.BITRISE_KEY_PASSWORD }}
           run: ./gradlew assembleFdroidDebug --stacktrace
         - name: Upload apk to github artifacts
           uses: actions/upload-artifact@v2
@@ -129,8 +148,29 @@ jobs:
         - name: Prepare build configuration
           run: |
             sed -i -e '/versionNameSuffix/d' app/build.gradle
+        - name: Add signing config
+          run: |
+            cat >> app/build.gradle <<EOF
+            android.signingConfigs.debug {
+                storeFile file("bitrise.jks")
+                storePassword System.getenv("BITRISE_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("BITRISE_KEY_ALIAS")
+                keyPassword System.getenv("BITRISE_KEY_PASSWORD")
+            }
+            EOF
+        - name: Decrypt keys
+          env:
+            BITRISE_ENCRYPT_KEY: ${{ secrets.BITRISE_ENCRYPT_KEY }}
+            BITRISE_SERVICES_ENCRYPT_KEY: ${{ secrets.BITRISE_SERVICES_ENCRYPT_KEY }}
+          run: |
+            gpg --yes --batch --passphrase=$SERVICES_ENCRYPT_KEY ./app/src/debug/google-services.json.gpg
+            gpg --yes --batch --passphrase=$ENCRYPT_KEY ./app/bitrise.jks.gpg
         - name: Build apk
-          run: ./gradlew assemblePlayDebug --stacktrace
+          env:
+            BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
+            BITRISE_KEY_ALIAS: ${{ secrets.BITRISE_KEY_ALIAS }}
+            BITRISE_KEY_PASSWORD: ${{ secrets.BITRISE_KEY_PASSWORD }}
+          run: ./gradlew assemblePlayDebug -PenableFirebase --stacktrace
         - name: Upload apk to github artifacts
           uses: actions/upload-artifact@v2
           with:
