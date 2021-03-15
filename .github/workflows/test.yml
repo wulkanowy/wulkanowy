@@ -169,8 +169,8 @@ jobs:
             BITRISE_ENCRYPT_KEY: ${{ secrets.BITRISE_ENCRYPT_KEY }}
             BITRISE_SERVICES_ENCRYPT_KEY: ${{ secrets.BITRISE_SERVICES_ENCRYPT_KEY }}
           run: |
-            gpg --yes --batch --passphrase=$BITRISE_ENCRYPT_KEY ./app/src/debug/google-services.json.gpg
-            gpg --yes --batch --passphrase=$BITRISE_SERVICES_ENCRYPT_KEY ./app/bitrise.jks.gpg
+            gpg --yes --batch --passphrase=$BITRISE_SERVICES_ENCRYPT_KEY ./app/src/debug/google-services.json.gpg
+            gpg --yes --batch --passphrase=$BITRISE_ENCRYPT_KEY ./app/bitrise.jks.gpg
         - name: Bump version
           uses: chkfung/android-version-actions@v1.1
           with:
