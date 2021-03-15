@@ -89,7 +89,7 @@ jobs:
         - name: Set run number with offset
           env:
             BUILD_NUMBER_OFFSET: ${{ secrets.BUILD_NUMBER_OFFSET }}
-          run: echo ::set-env name=RUN_NUMBER::$(($GITHUB_RUN_NUMBER+$BUILD_NUMBER_OFFSET))
+          run: echo "RUN_NUMBER=$((GITHUB_RUN_NUMBER+BUILD_NUMBER_OFFSET))" >> $GITHUB_ENV
         - name: Prepare build configuration
           run: |
             sed -i -e "s#applicationIdSuffix \".dev\"#applicationIdSuffix \".${GITHUB_HEAD_REF//[-.\/]/_}\"#" app/build.gradle
@@ -158,7 +158,7 @@ jobs:
         - name: Set run number with offset
           env:
             BUILD_NUMBER_OFFSET: ${{ secrets.BUILD_NUMBER_OFFSET }}
-          run: echo ::set-env name=RUN_NUMBER::$(($GITHUB_RUN_NUMBER+$BUILD_NUMBER_OFFSET))
+          run: echo "RUN_NUMBER=$((GITHUB_RUN_NUMBER+BUILD_NUMBER_OFFSET))" >> $GITHUB_ENV
         - name: Add signing config
           run: |
             cat >> app/build.gradle <<EOF
