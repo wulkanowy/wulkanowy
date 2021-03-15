@@ -69,12 +69,12 @@ jobs:
             PLAY_STORE_PASSWORD: ${{ secrets.PLAY_STORE_PASSWORD }}
           run: ./gradlew publishPlayRelease -PenableFirebase --stacktrace;
 
-
   deploy-appcenter:
       name: Deploy to App Center
       runs-on: ubuntu-latest
       timeout-minutes: 10
       environment: app-center
+      if: github.ref != 'refs/heads/develop'
       steps:
         - uses: actions/checkout@v2
         - uses: actions/setup-java@v1
@@ -86,18 +86,60 @@ jobs:
               ~/.gradle/caches
               ~/.gradle/wrapper
             key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
+        - name: Prepare build configuration
+          run: |
+            sed -i -e "s#applicationIdSuffix \".dev\"#applicationIdSuffix \".${GITHUB_HEAD_REF//[-.\/]/_}\"#" app/build.gradle
+            sed -i -e "s#.dev\"#.${GITHUB_HEAD_REF//[-.\/]/_}\"#" app/src/debug/google-services.json
+            sed -i -e "s#.dev\"#.${GITHUB_HEAD_REF//[-.\/]/_}\"#" app/src/debug/agconnect-services.json
+            sed -i -e '/versionNameSuffix/d' app/build.gradle
         - name: Build apk
           run: ./gradlew assembleFdroidDebug --stacktrace
         - name: Upload apk to github artifacts
           uses: actions/upload-artifact@v2
           with:
+            name: wulkanowyDEV-${GITHUB_RUN_ID}-${GITHUB_HEAD_REF//\//-}.apk
             path: app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
         - name: Deploy to app center
           uses: wzieba/AppCenter-Github-Action@v1
           with:
             appName: wulkanowy/wulkanowy
-            token: ${{secrets.APP_CENTER_TOKEN}}
+            token: ${{ secrets.APP_CENTER_TOKEN }}
             group: Testers
             file: app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
             notifyTesters: true
             debug: true
+
+  deploy-app-distribution:
+      name: Deploy to AppDistribution
+      runs-on: ubuntu-latest
+      timeout-minutes: 10
+      environment: app-distribution
+      #if: github.ref == 'refs/heads/develop'
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-java@v1
+          with:
+            java-version: 11
+        - uses: actions/cache@v2
+          with:
+            path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+            key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
+        - name: Prepare build configuration
+          run: |
+            sed -i -e '/versionNameSuffix/d' app/build.gradle
+        - name: Build apk
+          run: ./gradlew assemblePlayDebug --stacktrace
+        - name: Upload apk to github artifacts
+          uses: actions/upload-artifact@v2
+          with:
+            name: wulkanowyDEV-${GITHUB_RUN_ID}-dev.apk
+            path: app/build/outputs/apk/play/debug/app-fdroid-play.apk
+        - name: Deploy to app distribution
+          uses: wzieba/Firebase-Distribution-Github-Action@v1
+          with:
+            appId: ${{ secrets.FIREBASE_APP_ID }}
+            token: ${{ secrets.FIREBASE_TOKEN }}
+            groups: discord
+            file: app/build/outputs/apk/play/debug/app-play-debug.apk
