@@ -107,6 +107,12 @@ jobs:
             BITRISE_ENCRYPT_KEY: ${{ secrets.BITRISE_ENCRYPT_KEY }}
           run: |
             gpg --yes --batch --passphrase=$BITRISE_ENCRYPT_KEY ./app/bitrise.jks.gpg
+        - name: Bump version
+          uses: chkfung/android-version-actions@v1.1
+          with:
+            gradlePath: app/build.gradle
+            versionCode: ${{ github.GITHUB_RUN_ID }}
+            versionName: ${{ github.GITHUB_RUN_ID }}-${GITHUB_HEAD_REF}
         - name: Build apk
           env:
             BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
@@ -165,6 +171,12 @@ jobs:
           run: |
             gpg --yes --batch --passphrase=$BITRISE_ENCRYPT_KEY ./app/src/debug/google-services.json.gpg
             gpg --yes --batch --passphrase=$BITRISE_SERVICES_ENCRYPT_KEY ./app/bitrise.jks.gpg
+        - name: Bump version
+          uses: chkfung/android-version-actions@v1.1
+          with:
+            gradlePath: app/build.gradle
+            versionCode: ${{ github.GITHUB_RUN_ID }}
+            versionName: ${{ github.GITHUB_RUN_ID }}-dev
         - name: Build apk
           env:
             BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
