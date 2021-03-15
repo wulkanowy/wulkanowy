@@ -68,3 +68,29 @@ jobs:
             PLAY_SERVICE_ACCOUNT_EMAIL: ${{ secrets.PLAY_SERVICE_ACCOUNT_EMAIL }}
             PLAY_STORE_PASSWORD: ${{ secrets.PLAY_STORE_PASSWORD }}
           run: ./gradlew publishPlayRelease -PenableFirebase --stacktrace;
+
+
+  deploy-appcenter:
+      name: Deploy to App Center
+      runs-on: ubuntu-latest
+      timeout-minutes: 10
+      environment: app-center
+      needs: [ unit-tests ]
+      steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-java@v1
+          with:
+            java-version: 11
+        - uses: actions/cache@v2
+          with:
+            path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+            key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
+        - name: Build apk
+          run: ./gradlew assembleFdroidDebug --stacktrace
+        - name: Deploy to app center
+          uses: joabalea/App-Center-action@v1.0.2
+          with:
+            command: appcenter distribute stores publish -s Beta -f app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk -r releaseNote -a user/app
+            token: ${{ secrets.APP_CENTER_TOKEN }}
