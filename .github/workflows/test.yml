@@ -89,8 +89,8 @@ jobs:
         - name: Prepare build configuration
           run: |
             sed -i -e "s#applicationIdSuffix \".dev\"#applicationIdSuffix \".${GITHUB_HEAD_REF//[-.\/]/_}\"#" app/build.gradle
-            sed -i -e "s#.dev\"#.${$GITHUB_HEAD_REF//[-.\/]/_}\"#" app/src/debug/google-services.json
-            sed -i -e "s#.dev\"#.${$GITHUB_HEAD_REF//[-.\/]/_}\"#" app/src/debug/agconnect-services.json
+            sed -i -e "s#.dev\"#.${GITHUB_HEAD_REF//[-.\/]/_}\"#" app/src/debug/google-services.json
+            sed -i -e "s#.dev\"#.${GITHUB_HEAD_REF//[-.\/]/_}\"#" app/src/debug/agconnect-services.json
             sed -i -e '/versionNameSuffix/d' app/build.gradle
         - name: Add signing config
           run: |
@@ -111,8 +111,8 @@ jobs:
           uses: chkfung/android-version-actions@v1.1
           with:
             gradlePath: app/build.gradle
-            versionCode: ${{ github.run_id }}
-            versionName: ${{ github.run_id }}-${github.head_ref}
+            versionCode: ${{ github.run_number }}
+            versionName: ${{ github.run_number }}-${github.head_ref}
         - name: Build apk
           env:
             BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
@@ -122,7 +122,7 @@ jobs:
         - name: Upload apk to github artifacts
           uses: actions/upload-artifact@v2
           with:
-            name: wulkanowyDEV-${github.run_id}-${github.head_ref//\//-}.apk
+            name: wulkanowyDEV-${github.run_number}-${github.head_ref//\//-}.apk
             path: app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
         - name: Deploy to app center
           uses: wzieba/AppCenter-Github-Action@v1
@@ -172,8 +172,8 @@ jobs:
           uses: chkfung/android-version-actions@v1.1
           with:
             gradlePath: app/build.gradle
-            versionCode: ${{ github.run_id }}
-            versionName: ${{ github.run_id }}
+            versionCode: ${{ github.run_number }}
+            versionName: ${{ github.run_number }}
         - name: Build apk
           env:
             BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
@@ -183,7 +183,7 @@ jobs:
         - name: Upload apk to github artifacts
           uses: actions/upload-artifact@v2
           with:
-            name: wulkanowyDEV-${github.run_id}-dev.apk
+            name: wulkanowyDEV-${github.run_number}-dev.apk
             path: app/build/outputs/apk/play/debug/app-fdroid-play.apk
         - name: Deploy to app distribution
           uses: wzieba/Firebase-Distribution-Github-Action@v1
