@@ -87,6 +87,8 @@ jobs:
               ~/.gradle/wrapper
             key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
         - name: Set run number with offset
+          env:
+            BUILD_NUMBER_OFFSET: ${{ secrets.BUILD_NUMBER_OFFSET }}
           run: echo ::set-env name=RUN_NUMBER::$(($GITHUB_RUN_NUMBER+$BUILD_NUMBER_OFFSET))
         - name: Prepare build configuration
           run: |
@@ -154,6 +156,8 @@ jobs:
               ~/.gradle/wrapper
             key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
         - name: Set run number with offset
+          env:
+            BUILD_NUMBER_OFFSET: ${{ secrets.BUILD_NUMBER_OFFSET }}
           run: echo ::set-env name=RUN_NUMBER::$(($GITHUB_RUN_NUMBER+$BUILD_NUMBER_OFFSET))
         - name: Add signing config
           run: |
