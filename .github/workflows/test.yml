@@ -126,7 +126,7 @@ jobs:
         - name: Upload apk to github artifacts
           uses: actions/upload-artifact@v2
           with:
-            name: wulkanowyDEV-$RUN_NUMBER.apk
+            name: wulkanowyDEV-${{ env.RUN_NUMBER }}.apk
             path: app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
         - name: Deploy to app center
           uses: wzieba/AppCenter-Github-Action@v1
@@ -191,7 +191,7 @@ jobs:
         - name: Upload apk to github artifacts
           uses: actions/upload-artifact@v2
           with:
-            name: wulkanowyDEV-$RUN_NUMBER-dev.apk
+            name: wulkanowyDEV-${{ env.RUN_NUMBER }}-dev.apk
             path: app/build/outputs/apk/play/debug/app-play-debug.apk
         - name: Deploy to app distribution
           uses: wzieba/Firebase-Distribution-Github-Action@v1
