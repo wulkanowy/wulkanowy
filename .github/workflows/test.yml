@@ -112,7 +112,7 @@ jobs:
           with:
             gradlePath: app/build.gradle
             versionCode: ${{ github.run_number }}
-            versionName: ${{ github.run_number }}-${github.head_ref}
+            versionName: ${{ github.run_number }}-${{ github.head_ref }}
         - name: Build apk
           env:
             BITRISE_KEYSTORE_PASSWORD: ${{ secrets.BITRISE_KEYSTORE_PASSWORD }}
