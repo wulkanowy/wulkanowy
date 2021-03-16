@@ -7,7 +7,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:paddingStart="24dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -15,13 +15,15 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:text="@string/all_details"
-            android:textSize="20sp" />
+            android:textSize="21sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/all_subject"
-            android:textSize="17sp" />
+            android:textColor="?android:textColorSecondary"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/attendanceDialogSubject"
@@ -30,14 +32,15 @@
             android:layout_marginTop="3dp"
             android:text="@string/all_no_data"
             android:textIsSelectable="true"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/all_description"
-            android:textSize="17sp" />
+            android:textColor="?android:textColorSecondary"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/attendanceDialogDescription"
@@ -46,14 +49,15 @@
             android:layout_marginTop="3dp"
             android:text="@string/all_no_data"
             android:textIsSelectable="true"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/all_date"
-            android:textSize="17sp" />
+            android:textColor="?android:textColorSecondary"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/attendanceDialogDate"
@@ -62,14 +66,15 @@
             android:layout_marginTop="3dp"
             android:text="@string/all_no_data"
             android:textIsSelectable="true"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/attendance_number"
-            android:textSize="17sp" />
+            android:textColor="?android:textColorSecondary"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/attendanceDialogNumber"
@@ -78,15 +83,22 @@
             android:layout_marginTop="3dp"
             android:text="@string/all_no_data"
             android:textIsSelectable="true"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/attendanceDialogClose"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="88dp"
             android:layout_gravity="end"
-            android:layout_marginTop="15dp"
             android:text="@string/all_close" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
