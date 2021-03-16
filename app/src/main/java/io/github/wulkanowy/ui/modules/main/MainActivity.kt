@@ -10,6 +10,7 @@ import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.KITKAT
 import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
@@ -17,6 +18,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -140,6 +142,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         }
 
         updateHelper.checkAndInstallUpdates(this)
+        showOldAndroidWarning()
     }
 
     override fun onResume() {
@@ -371,6 +374,18 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             icon = createNameInitialsDrawable(student.nickOrName, student.avatarColor, 0.44f)
             title = getString(R.string.main_account_picker)
         }
+    }
+
+    private fun showOldAndroidWarning() {
+        if (appInfo.systemVersion > KITKAT) return
+
+        AlertDialog.Builder(this)
+            .setTitle("Koniec wsparcia")
+            .setMessage(
+                "Aktualna wersja Wulkanowego jest ostatnią wersją dla twojego urządzenia. W przyszłości nie będą się już ukazywały aktualizacje dla tej aplikacji. " + "Zalecamy aktualizację oprogramowanie telefonu lub zakup nowego urządzenia"
+            )
+            .setPositiveButton("ok", null)
+            .show()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
