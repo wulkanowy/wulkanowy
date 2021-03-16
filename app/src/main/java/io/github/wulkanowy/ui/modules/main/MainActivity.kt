@@ -380,11 +380,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         if (appInfo.systemVersion > KITKAT) return
 
         AlertDialog.Builder(this)
-            .setTitle("Koniec wsparcia")
-            .setMessage(
-                "Aktualna wersja Wulkanowego jest ostatnią wersją dla twojego urządzenia. W przyszłości nie będą się już ukazywały aktualizacje dla tej aplikacji. " + "Zalecamy aktualizację oprogramowanie telefonu lub zakup nowego urządzenia"
-            )
-            .setPositiveButton("ok", null)
+            .setTitle(R.string.drop_kitkat_title)
+            .setMessage(R.string.drop_kitkat_content)
+            .setPositiveButton(android.R.string.ok, null)
             .show()
     }
 

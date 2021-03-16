@@ -541,6 +541,11 @@
     <string name="channel_debug">Debug</string>
 
 
+    <!--Drop kitkat alert dialog strings-->
+    <string name="drop_kitkat_title">End of support</string>
+    <string name="drop_kitkat_content">The current version of Wulkanowy is the latest version for your device. There will be no more updates for this app in the future. We recommend update your phone\'s software or purchase a new device</string>
+
+
     <!--Colors-->
     <string name="all_black">Black</string>
     <string name="all_red">Red</string>
@@ -553,6 +558,7 @@
     <!--Others-->
     <string name="all_copied">Copied</string>
     <string name="all_undo">Undo</string>
+
 
     <!--Update helper-->
     <string name="update_download_started">Download of updates has started…</string>
