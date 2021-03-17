@@ -135,7 +135,10 @@ class LoginRecoverFragment :
     }
 
     override fun setErrorDetails(message: String) {
-        bindingLocal.loginRecoverErrorMessage.text = message
+        with(bindingLocal.loginRecoverErrorDetails) {
+            isVisible = true
+            text = message
+        }
     }
 
     override fun showSuccessView(show: Boolean) {
