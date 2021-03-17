@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId "io.github.wulkanowy"
         testApplicationId "io.github.tests.wulkanowy"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 88
         versionName "1.1.2"
