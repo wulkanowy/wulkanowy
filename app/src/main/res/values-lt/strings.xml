@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Activity/Fragment title-->
-    <string name="login_title">Login</string>
+    <string name="login_title">Prisijungti</string>
     <string name="main_title">Wulkanowy</string>
     <string name="grade_title">Laipsnis</string>
     <string name="attendance_title">Attendance</string>
