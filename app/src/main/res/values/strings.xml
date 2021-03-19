@@ -543,7 +543,7 @@
 
     <!--Drop kitkat alert dialog strings-->
     <string name="drop_kitkat_title">End of support</string>
-    <string name="drop_kitkat_content">The current version of Wulkanowy is the latest version for your device. There will be no more updates for this app in the future. We recommend update your phone\'s software or purchase a new device</string>
+    <string name="drop_kitkat_content">We are ending support for your device. No more new features will appear for it in Wulkanowy. However, we will be releasing critical patches through the end of 2021 so you have time to move to a newer model</string>
     <string name="drop_kitkat_again">Don\'t show again</string>
 
 
