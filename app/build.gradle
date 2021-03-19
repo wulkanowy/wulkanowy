@@ -20,8 +20,8 @@ android {
         testApplicationId "io.github.tests.wulkanowy"
         minSdkVersion 17
         targetSdkVersion 30
-        versionCode 87
-        versionName "1.1.1"
+        versionCode 88
+        versionName "1.1.2"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -60,7 +60,7 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
         debug {
@@ -145,12 +145,12 @@ ext {
     work_hilt = "1.0.0-beta01"
     room = "2.3.0-beta03"
     chucker = "3.4.0"
-    mockk = "1.10.6"
+    mockk = "1.11.0"
     moshi = "1.11.0"
 }
 
 dependencies {
-    implementation "io.github.wulkanowy:sdk:1.1.1"
+    implementation "io.github.wulkanowy:sdk:1.1.2"
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
