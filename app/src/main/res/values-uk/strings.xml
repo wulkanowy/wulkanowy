@@ -46,7 +46,7 @@
     <string name="login_expired_token">Минув термін дії токену</string>
     <string name="login_invalid_email">Недійсна адреса електронної пошти</string>
     <string name="login_invalid_login">Використовуйте призначений логін замість електронної пошти</string>
-    <string name="login_invalid_custom_email">Використовуйте призначений логін або електронну адресу в @% 1 $ s</string>
+    <string name="login_invalid_custom_email">Використовуйте призначений логін або електронну адресу в @%1$s</string>
     <string name="login_invalid_symbol">Неправильний симбвол</string>
     <string name="login_incorrect_symbol">Студента не знайдено Перевірте символ та обраний варіант реєстру UONET+</string>
     <string name="login_field_required">Обов\'язкове поле</string>
@@ -506,6 +506,10 @@
     <string name="channel_push">Показувати push-повідомлення</string>
     <string name="channel_upcoming_lessons">Наступні уроки</string>
     <string name="channel_debug">Дебаг</string>
+    <!--Drop kitkat alert dialog strings-->
+    <string name="drop_kitkat_title">End of support</string>
+    <string name="drop_kitkat_content">We are ending support for your device. No more new features will appear for it in Wulkanowy. However, we will be releasing critical patches until the end of 2021 so you have time to switch to a newer model</string>
+    <string name="drop_kitkat_again">Don\'t show again</string>
     <!--Colors-->
     <string name="all_black">Чорний</string>
     <string name="all_red">Червоний</string>
