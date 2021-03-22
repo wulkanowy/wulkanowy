@@ -9,7 +9,6 @@ import android.view.View.VISIBLE
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -43,12 +42,10 @@ class LoginRecoverFragment :
     private lateinit var hostSymbols: Array<String>
 
     override val recoverHostValue: String
-        get() = hostValues.getOrNull(hostKeys.indexOf(bindingLocal.loginRecoverHost.text.toString()))
-            .orEmpty()
+        get() = hostValues.getOrNull(hostKeys.indexOf(bindingLocal.loginRecoverHost.text.toString())).orEmpty()
 
     override val formHostSymbol: String
-        get() = hostSymbols.getOrNull(hostKeys.indexOf(bindingLocal.loginRecoverHost.text.toString()))
-            .orEmpty()
+        get() = hostSymbols.getOrNull(hostKeys.indexOf(bindingLocal.loginRecoverHost.text.toString())).orEmpty()
 
     override val recoverNameValue: String
         get() = bindingLocal.loginRecoverName.text.toString().trim()
@@ -85,9 +82,7 @@ class LoginRecoverFragment :
 
         with(bindingLocal.loginRecoverHost) {
             setText(hostKeys.getOrNull(0).orEmpty())
-            setAdapter(
-                LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys)
-            )
+            setAdapter(LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys))
             setOnClickListener { if (bindingLocal.loginRecoverFormContainer.visibility == GONE) dismissDropDown() }
         }
     }
@@ -132,7 +127,6 @@ class LoginRecoverFragment :
 
     override fun showErrorView(show: Boolean) {
         bindingLocal.loginRecoverError.visibility = if (show) VISIBLE else GONE
-        bindingLocal.loginRecoverErrorDetails.isVisible = true
     }
 
     override fun setErrorDetails(message: String) {
@@ -172,7 +166,7 @@ class LoginRecoverFragment :
         with(bindingLocal.loginRecoverWebView) {
             settings.javaScriptEnabled = true
             webViewClient = object : WebViewClient() {
-                private var recoverWebViewSuccess = true
+                private var recoverWebViewSuccess: Boolean = true
 
                 override fun onPageFinished(view: WebView?, url: String?) {
                     if (recoverWebViewSuccess) {
@@ -181,16 +175,10 @@ class LoginRecoverFragment :
                     } else {
                         showProgress(false)
                         showErrorView(true)
-                        bindingLocal.loginRecoverErrorDetails.isVisible = false
                     }
                 }
 
-                override fun onReceivedError(
-                    view: WebView,
-                    errorCode: Int,
-                    description: String,
-                    failingUrl: String
-                ) {
+                override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                     recoverWebViewSuccess = false
                 }
             }

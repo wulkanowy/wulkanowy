@@ -51,17 +51,16 @@ class LuckyNumberWidgetConfigurePresenter @Inject constructor(
             when (it.status) {
                 Status.LOADING -> Timber.d("Lucky number widget configure students data load")
                 Status.SUCCESS -> {
-                    val selectedStudentId = appWidgetId?.let { id ->
-                        sharedPref.getLong(getStudentWidgetKey(id), 0)
-                    } ?: -1
-
+                    val widgetId = appWidgetId?.let { id -> sharedPref.getLong(getStudentWidgetKey(id), 0) }
                     when {
                         it.data!!.isEmpty() -> view?.openLoginView()
                         it.data.size == 1 -> {
                             selectedStudent = it.data.single().student
                             view?.showThemeDialog()
                         }
-                        else -> view?.updateData(it.data, selectedStudentId)
+                        else -> view?.updateData(it.data.map { entity ->
+                            entity.student to (entity.student.id == widgetId)
+                        })
                     }
                 }
                 Status.ERROR -> errorHandler.dispatch(it.error!!)

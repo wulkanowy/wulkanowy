@@ -74,8 +74,9 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
         studentWithSemesters: StudentWithSemesters
     ) {
         val context = binding.root.context
-        val (student, semesters) = studentWithSemesters
-        val semester = semesters.maxByOrNull { it.semesterId }
+        val student = studentWithSemesters.student
+        val semesters = studentWithSemesters.semesters
+        val diary = semesters.maxByOrNull { it.semesterId }
         val avatar = context.createNameInitialsDrawable(student.nickOrName, student.avatarColor)
         val checkBackgroundColor =
             context.getThemeAttrColor(if (isAccountQuickDialogMode) R.attr.colorBackgroundFloating else R.attr.colorSurface)
@@ -89,7 +90,7 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
         }.size > 1 && isAccountQuickDialogMode
 
         with(binding) {
-            accountItemName.text = "${student.nickOrName} ${semester?.diaryName.orEmpty()}"
+            accountItemName.text = "${student.nickOrName} ${diary?.diaryName.orEmpty()}"
             accountItemSchool.text = studentWithSemesters.student.schoolName
             accountItemImage.setImageDrawable(avatar)
 

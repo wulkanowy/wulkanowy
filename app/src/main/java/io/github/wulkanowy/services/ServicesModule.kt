@@ -15,6 +15,7 @@ import dagger.multibindings.IntoSet
 import io.github.wulkanowy.services.sync.channels.Channel
 import io.github.wulkanowy.services.sync.channels.DebugChannel
 import io.github.wulkanowy.services.sync.channels.LuckyNumberChannel
+import io.github.wulkanowy.services.sync.channels.NewHomeworkChannel
 import io.github.wulkanowy.services.sync.channels.NewGradesChannel
 import io.github.wulkanowy.services.sync.channels.NewMessagesChannel
 import io.github.wulkanowy.services.sync.channels.NewNotesChannel
@@ -118,6 +119,10 @@ abstract class ServicesModule {
     @Binds
     @IntoSet
     abstract fun provideNewGradesChannel(channel: NewGradesChannel): Channel
+
+    @Binds
+    @IntoSet
+    abstract fun provideNewHomeworkChannel(channel: NewHomeworkChannel): Channel
 
     @Binds
     @IntoSet

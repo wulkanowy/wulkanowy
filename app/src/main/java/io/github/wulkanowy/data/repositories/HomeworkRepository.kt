@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
 import io.github.wulkanowy.data.db.dao.HomeworkDao
+import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
@@ -13,6 +14,9 @@ import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.uniqueSubtract
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import java.time.LocalDate
 import javax.inject.Inject
@@ -50,5 +54,15 @@ class HomeworkRepository @Inject constructor(
         homeworkDb.updateAll(listOf(homework.apply {
             isDone = !isDone
         }))
+    }
+
+    fun getNotNotifiedHomework(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean): Flow<List<Homework>> {
+        return homeworkDb.loadAll(semester.semesterId, semester.studentId, start.monday, end.sunday).map {
+            it.filter { homework -> !homework.isNotified }
+        }
+    }
+
+    suspend fun updateHomework(homework: List<Homework>) {
+        return homeworkDb.updateAll(homework)
     }
 }

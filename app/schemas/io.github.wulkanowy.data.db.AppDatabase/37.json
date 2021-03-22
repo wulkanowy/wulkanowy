@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 35,
+    "version": 37,
     "identityHash": "d92e01763a9f768dd4be645fb437927b",
     "entities": [
       {
@@ -1300,26 +1300,8 @@
       },
       {
         "tableName": "Homework",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_done` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `content` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL, `attachments` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `content` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL, `attachments` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_done` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL)",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isDone",
-            "columnName": "is_done",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isNotified",
-            "columnName": "is_notified",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "semesterId",
             "columnName": "semester_id",
@@ -1372,6 +1354,24 @@
             "fieldPath": "attachments",
             "columnName": "attachments",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDone",
+            "columnName": "is_done",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isNotified",
+            "columnName": "is_notified",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
