@@ -14,7 +14,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:padding="20dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             tools:ignore="UselessParent">
 
             <LinearLayout
@@ -76,16 +77,16 @@
                     android:gravity="center_vertical"
                     android:maxLines="2"
                     android:text="@string/grade_header"
+                    android:textColor="?android:textColorSecondary"
                     android:textIsSelectable="true"
-                    android:textSize="20sp" />
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/gradeDialogDescriptionValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
                     android:text="@string/all_no_description"
-                    android:textColor="?android:textColorSecondary"
                     android:textIsSelectable="true"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -97,9 +98,10 @@
                 android:layout_below="@+id/gradeDialogHeader"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/grade_comment"
-                android:textSize="17sp" />
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/gradeDialogCommentValue"
@@ -108,10 +110,9 @@
                 android:layout_below="@+id/gradeDialogComment"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="3dp"
                 android:text="@string/grade_comment"
                 android:textIsSelectable="true"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/gradeDialogTeacher"
@@ -120,9 +121,10 @@
                 android:layout_below="@+id/gradeDialogCommentValue"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/all_teacher"
-                android:textSize="17sp" />
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/gradeDialogTeacherValue"
@@ -131,10 +133,9 @@
                 android:layout_below="@+id/gradeDialogTeacher"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="3dp"
                 android:text="@string/all_teacher"
                 android:textIsSelectable="true"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/gradeDialogColor"
@@ -143,9 +144,10 @@
                 android:layout_below="@+id/gradeDialogTeacherValue"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/all_color"
-                android:textSize="17sp" />
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/gradeDialogColorValue"
@@ -154,10 +156,9 @@
                 android:layout_below="@+id/gradeDialogColor"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="3dp"
                 android:text="@string/all_color"
                 android:textIsSelectable="true"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/gradeDialogDate"
@@ -166,9 +167,10 @@
                 android:layout_below="@+id/gradeDialogColorValue"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/all_date"
-                android:textSize="17sp" />
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/gradeDialogDateValue"
@@ -177,22 +179,28 @@
                 android:layout_below="@+id/gradeDialogDate"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginTop="3dp"
                 android:text="@string/all_date"
                 android:textIsSelectable="true"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/gradeDialogClose"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/gradeDialogDateValue"
-                android:layout_alignParentEnd="true"
+                android:layout_height="36dp"
+                android:layout_below="@+id/gradeDialogDateValue"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="8dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="88dp"
                 android:text="@string/all_close" />
+
         </RelativeLayout>
+
     </LinearLayout>
+
 </androidx.core.widget.NestedScrollView>
