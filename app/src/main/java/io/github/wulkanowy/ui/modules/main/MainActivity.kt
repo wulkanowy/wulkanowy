@@ -324,9 +324,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     }
 
     override fun showAccountPicker(studentWithSemesters: List<StudentWithSemesters>) {
-        if (supportFragmentManager.isStateSaved) return
-
-        navController.showDialogFragment(AccountQuickDialog.newInstance(studentWithSemesters))
+        showDialogFragment(AccountQuickDialog.newInstance(studentWithSemesters))
     }
 
     override fun showActionBarElevation(show: Boolean) {
@@ -344,6 +342,13 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     fun showDialogFragment(dialog: DialogFragment) {
         if (supportFragmentManager.isStateSaved) return
+
+        if (navController.currentDialogFrag?.isAdded == false) {
+            FragNavController::class.java.getDeclaredField("mCurrentDialogFrag").apply {
+                isAccessible = true
+                set(navController, null)
+            }
+        }
 
         navController.showDialogFragment(dialog)
     }
