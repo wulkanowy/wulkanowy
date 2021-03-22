@@ -7,13 +7,9 @@
     tools:context=".ui.modules.mobiledevice.token.MobileDeviceTokenDialog">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/mobileDeviceDialogContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="invisible"
-        tools:visibility="visible">
-
+        android:orientation="vertical">
 
         <View
             android:layout_width="292dp"
@@ -139,6 +135,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mobileDeviceDialogPinValue" />
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/mobileDeviceDialogContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            tools:visibility="visible"
+            app:constraint_referenced_ids="mobileDeviceQr,mobileDeviceDialogTokenTitle,mobileDeviceDialogTokenValue,mobileDeviceDialogSymbolTitle,mobileDeviceDialogSymbolValue,mobileDeviceDialogPinTitle,mobileDeviceDialogPinValue,mobileDeviceDialogClose" />
+
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/mobileDeviceDialogProgress"
             android:layout_width="wrap_content"
@@ -149,6 +153,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.core.widget.NestedScrollView>
