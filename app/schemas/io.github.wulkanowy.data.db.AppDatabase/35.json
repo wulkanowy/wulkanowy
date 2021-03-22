@@ -2,12 +2,30 @@
   "formatVersion": 1,
   "database": {
     "version": 35,
-    "identityHash": "d92e01763a9f768dd4be645fb437927b",
+    "identityHash": "15fb91ec180fe60bf400cfa729c3418d",
     "entities": [
       {
         "tableName": "Students",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`scrapper_base_url` TEXT NOT NULL, `mobile_base_url` TEXT NOT NULL, `login_type` TEXT NOT NULL, `login_mode` TEXT NOT NULL, `certificate_key` TEXT NOT NULL, `private_key` TEXT NOT NULL, `is_parent` INTEGER NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `symbol` TEXT NOT NULL, `student_id` INTEGER NOT NULL, `user_login_id` INTEGER NOT NULL, `user_name` TEXT NOT NULL, `student_name` TEXT NOT NULL, `school_id` TEXT NOT NULL, `school_short` TEXT NOT NULL, `school_name` TEXT NOT NULL, `class_name` TEXT NOT NULL, `class_id` INTEGER NOT NULL, `is_current` INTEGER NOT NULL, `registration_date` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nick` TEXT NOT NULL, `avatar_color` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nick` TEXT NOT NULL, `avatar_color` INTEGER NOT NULL, `scrapper_base_url` TEXT NOT NULL, `mobile_base_url` TEXT NOT NULL, `login_type` TEXT NOT NULL, `login_mode` TEXT NOT NULL, `certificate_key` TEXT NOT NULL, `private_key` TEXT NOT NULL, `is_parent` INTEGER NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `symbol` TEXT NOT NULL, `student_id` INTEGER NOT NULL, `user_login_id` INTEGER NOT NULL, `user_name` TEXT NOT NULL, `student_name` TEXT NOT NULL, `school_id` TEXT NOT NULL, `school_short` TEXT NOT NULL, `school_name` TEXT NOT NULL, `class_name` TEXT NOT NULL, `class_id` INTEGER NOT NULL, `is_current` INTEGER NOT NULL, `registration_date` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nick",
+            "columnName": "nick",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avatarColor",
+            "columnName": "avatar_color",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "scrapperBaseUrl",
             "columnName": "scrapper_base_url",
@@ -133,24 +151,6 @@
             "columnName": "registration_date",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "nick",
-            "columnName": "nick",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "avatarColor",
-            "columnName": "avatar_color",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -177,8 +177,20 @@
       },
       {
         "tableName": "Semesters",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `diary_name` TEXT NOT NULL, `school_year` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `semester_name` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_current` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_current` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `diary_name` TEXT NOT NULL, `school_year` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `semester_name` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "current",
+            "columnName": "is_current",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -238,18 +250,6 @@
             "columnName": "unit_id",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "current",
-            "columnName": "is_current",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -274,8 +274,14 @@
       },
       {
         "tableName": "Exams",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `group` TEXT NOT NULL, `type` TEXT NOT NULL, `description` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `group` TEXT NOT NULL, `type` TEXT NOT NULL, `description` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -335,12 +341,6 @@
             "columnName": "teacher_symbol",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -354,8 +354,14 @@
       },
       {
         "tableName": "Timetable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `number` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `subjectOld` TEXT NOT NULL, `group` TEXT NOT NULL, `room` TEXT NOT NULL, `roomOld` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacherOld` TEXT NOT NULL, `info` TEXT NOT NULL, `student_plan` INTEGER NOT NULL, `changes` INTEGER NOT NULL, `canceled` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `number` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `subjectOld` TEXT NOT NULL, `group` TEXT NOT NULL, `room` TEXT NOT NULL, `roomOld` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacherOld` TEXT NOT NULL, `info` TEXT NOT NULL, `student_plan` INTEGER NOT NULL, `changes` INTEGER NOT NULL, `canceled` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -457,12 +463,6 @@
             "columnName": "canceled",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -476,8 +476,14 @@
       },
       {
         "tableName": "Attendance",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `time_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `number` INTEGER NOT NULL, `subject` TEXT NOT NULL, `name` TEXT NOT NULL, `presence` INTEGER NOT NULL, `absence` INTEGER NOT NULL, `exemption` INTEGER NOT NULL, `lateness` INTEGER NOT NULL, `excused` INTEGER NOT NULL, `deleted` INTEGER NOT NULL, `excusable` INTEGER NOT NULL, `excuse_status` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `time_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `number` INTEGER NOT NULL, `subject` TEXT NOT NULL, `name` TEXT NOT NULL, `presence` INTEGER NOT NULL, `absence` INTEGER NOT NULL, `exemption` INTEGER NOT NULL, `lateness` INTEGER NOT NULL, `excused` INTEGER NOT NULL, `deleted` INTEGER NOT NULL, `excusable` INTEGER NOT NULL, `excuse_status` TEXT)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -567,12 +573,6 @@
             "columnName": "excuse_status",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -586,8 +586,14 @@
       },
       {
         "tableName": "AttendanceSummary",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `subject_id` INTEGER NOT NULL, `month` INTEGER NOT NULL, `presence` INTEGER NOT NULL, `absence` INTEGER NOT NULL, `absence_excused` INTEGER NOT NULL, `absence_for_school_reasons` INTEGER NOT NULL, `lateness` INTEGER NOT NULL, `lateness_excused` INTEGER NOT NULL, `exemption` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `subject_id` INTEGER NOT NULL, `month` INTEGER NOT NULL, `presence` INTEGER NOT NULL, `absence` INTEGER NOT NULL, `absence_excused` INTEGER NOT NULL, `absence_for_school_reasons` INTEGER NOT NULL, `lateness` INTEGER NOT NULL, `lateness_excused` INTEGER NOT NULL, `exemption` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -653,12 +659,6 @@
             "columnName": "exemption",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -672,8 +672,26 @@
       },
       {
         "tableName": "Grades",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `entry` TEXT NOT NULL, `value` REAL NOT NULL, `modifier` REAL NOT NULL, `comment` TEXT NOT NULL, `color` TEXT NOT NULL, `grade_symbol` TEXT NOT NULL, `description` TEXT NOT NULL, `weight` TEXT NOT NULL, `weightValue` REAL NOT NULL, `date` INTEGER NOT NULL, `teacher` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_read` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_read` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `entry` TEXT NOT NULL, `value` REAL NOT NULL, `modifier` REAL NOT NULL, `comment` TEXT NOT NULL, `color` TEXT NOT NULL, `grade_symbol` TEXT NOT NULL, `description` TEXT NOT NULL, `weight` TEXT NOT NULL, `weightValue` REAL NOT NULL, `date` INTEGER NOT NULL, `teacher` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isRead",
+            "columnName": "is_read",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isNotified",
+            "columnName": "is_notified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "semesterId",
             "columnName": "semester_id",
@@ -757,24 +775,6 @@
             "columnName": "teacher",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isRead",
-            "columnName": "is_read",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isNotified",
-            "columnName": "is_notified",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -788,8 +788,38 @@
       },
       {
         "tableName": "GradesSummary",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `position` INTEGER NOT NULL, `subject` TEXT NOT NULL, `predicted_grade` TEXT NOT NULL, `final_grade` TEXT NOT NULL, `proposed_points` TEXT NOT NULL, `final_points` TEXT NOT NULL, `points_sum` TEXT NOT NULL, `average` REAL NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_predicted_grade_notified` INTEGER NOT NULL, `is_final_grade_notified` INTEGER NOT NULL, `predicted_grade_last_change` INTEGER NOT NULL, `final_grade_last_change` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_predicted_grade_notified` INTEGER NOT NULL, `is_final_grade_notified` INTEGER NOT NULL, `predicted_grade_last_change` INTEGER NOT NULL, `final_grade_last_change` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `position` INTEGER NOT NULL, `subject` TEXT NOT NULL, `predicted_grade` TEXT NOT NULL, `final_grade` TEXT NOT NULL, `proposed_points` TEXT NOT NULL, `final_points` TEXT NOT NULL, `points_sum` TEXT NOT NULL, `average` REAL NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isPredictedGradeNotified",
+            "columnName": "is_predicted_grade_notified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFinalGradeNotified",
+            "columnName": "is_final_grade_notified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "predictedGradeLastChange",
+            "columnName": "predicted_grade_last_change",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "finalGradeLastChange",
+            "columnName": "final_grade_last_change",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "semesterId",
             "columnName": "semester_id",
@@ -849,36 +879,6 @@
             "columnName": "average",
             "affinity": "REAL",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isPredictedGradeNotified",
-            "columnName": "is_predicted_grade_notified",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isFinalGradeNotified",
-            "columnName": "is_final_grade_notified",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "predictedGradeLastChange",
-            "columnName": "predicted_grade_last_change",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "finalGradeLastChange",
-            "columnName": "final_grade_last_change",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -892,8 +892,14 @@
       },
       {
         "tableName": "GradePartialStatistics",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `class_average` TEXT NOT NULL, `student_average` TEXT NOT NULL, `class_amounts` TEXT NOT NULL, `student_amounts` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `class_average` TEXT NOT NULL, `student_average` TEXT NOT NULL, `class_amounts` TEXT NOT NULL, `student_amounts` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -935,12 +941,6 @@
             "columnName": "student_amounts",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -954,8 +954,14 @@
       },
       {
         "tableName": "GradesPointsStatistics",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `others` REAL NOT NULL, `student` REAL NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `others` REAL NOT NULL, `student` REAL NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -985,12 +991,6 @@
             "columnName": "student",
             "affinity": "REAL",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1004,8 +1004,14 @@
       },
       {
         "tableName": "GradeSemesterStatistics",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `amounts` TEXT NOT NULL, `student_grade` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `amounts` TEXT NOT NULL, `student_grade` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1035,12 +1041,6 @@
             "columnName": "student_grade",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1054,8 +1054,38 @@
       },
       {
         "tableName": "Messages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `sender_name` TEXT NOT NULL, `sender_id` INTEGER NOT NULL, `recipient_name` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `removed` INTEGER NOT NULL, `has_attachments` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `unread_by` INTEGER NOT NULL, `read_by` INTEGER NOT NULL, `content` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `unread_by` INTEGER NOT NULL, `read_by` INTEGER NOT NULL, `content` TEXT NOT NULL, `student_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `sender_name` TEXT NOT NULL, `sender_id` INTEGER NOT NULL, `recipient_name` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `removed` INTEGER NOT NULL, `has_attachments` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isNotified",
+            "columnName": "is_notified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unreadBy",
+            "columnName": "unread_by",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "readBy",
+            "columnName": "read_by",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1127,36 +1157,6 @@
             "columnName": "has_attachments",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isNotified",
-            "columnName": "is_notified",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "unreadBy",
-            "columnName": "unread_by",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "readBy",
-            "columnName": "read_by",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "content",
-            "columnName": "content",
-            "affinity": "TEXT",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1214,8 +1214,26 @@
       },
       {
         "tableName": "Notes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL, `category` TEXT NOT NULL, `category_type` INTEGER NOT NULL, `is_points_show` INTEGER NOT NULL, `points` INTEGER NOT NULL, `content` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_read` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_read` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL, `category` TEXT NOT NULL, `category_type` INTEGER NOT NULL, `is_points_show` INTEGER NOT NULL, `points` INTEGER NOT NULL, `content` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isRead",
+            "columnName": "is_read",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isNotified",
+            "columnName": "is_notified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1269,24 +1287,6 @@
             "columnName": "content",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isRead",
-            "columnName": "is_read",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isNotified",
-            "columnName": "is_notified",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1300,7 +1300,7 @@
       },
       {
         "tableName": "Homework",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_done` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `content` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL, `attachments` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_done` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `entry_date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `content` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL, `attachments` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -1311,12 +1311,6 @@
           {
             "fieldPath": "isDone",
             "columnName": "is_done",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isNotified",
-            "columnName": "is_notified",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1386,8 +1380,14 @@
       },
       {
         "tableName": "Subjects",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `name` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1411,12 +1411,6 @@
             "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1430,8 +1424,20 @@
       },
       {
         "tableName": "LuckyNumbers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `lucky_number` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `student_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `lucky_number` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isNotified",
+            "columnName": "is_notified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1449,18 +1455,6 @@
             "columnName": "lucky_number",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "isNotified",
-            "columnName": "is_notified",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1474,8 +1468,14 @@
       },
       {
         "tableName": "CompletedLesson",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `number` INTEGER NOT NULL, `subject` TEXT NOT NULL, `topic` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL, `substitution` TEXT NOT NULL, `absence` TEXT NOT NULL, `resources` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `number` INTEGER NOT NULL, `subject` TEXT NOT NULL, `topic` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacher_symbol` TEXT NOT NULL, `substitution` TEXT NOT NULL, `absence` TEXT NOT NULL, `resources` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1541,12 +1541,6 @@
             "columnName": "resources",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1560,8 +1554,14 @@
       },
       {
         "tableName": "ReportingUnits",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `short` TEXT NOT NULL, `sender_id` INTEGER NOT NULL, `sender_name` TEXT NOT NULL, `roles` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `short` TEXT NOT NULL, `sender_id` INTEGER NOT NULL, `sender_name` TEXT NOT NULL, `roles` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1597,12 +1597,6 @@
             "columnName": "roles",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1616,8 +1610,14 @@
       },
       {
         "tableName": "Recipients",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `real_id` TEXT NOT NULL, `name` TEXT NOT NULL, `real_name` TEXT NOT NULL, `login_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL, `role` INTEGER NOT NULL, `hash` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `real_id` TEXT NOT NULL, `name` TEXT NOT NULL, `real_name` TEXT NOT NULL, `login_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL, `role` INTEGER NOT NULL, `hash` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "userLoginId",
             "columnName": "student_id",
@@ -1665,12 +1665,6 @@
             "columnName": "hash",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1684,8 +1678,14 @@
       },
       {
         "tableName": "MobileDevices",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `device_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `date` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `device_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `date` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "userLoginId",
             "columnName": "student_id",
@@ -1709,12 +1709,6 @@
             "columnName": "date",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1728,8 +1722,14 @@
       },
       {
         "tableName": "Teachers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `name` TEXT NOT NULL, `short_name` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `subject` TEXT NOT NULL, `name` TEXT NOT NULL, `short_name` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1759,12 +1759,6 @@
             "columnName": "short_name",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1778,8 +1772,14 @@
       },
       {
         "tableName": "School",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `address` TEXT NOT NULL, `contact` TEXT NOT NULL, `headmaster` TEXT NOT NULL, `pedagogue` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `address` TEXT NOT NULL, `contact` TEXT NOT NULL, `headmaster` TEXT NOT NULL, `pedagogue` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1821,12 +1821,6 @@
             "columnName": "pedagogue",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1840,8 +1834,14 @@
       },
       {
         "tableName": "Conferences",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `subject` TEXT NOT NULL, `agenda` TEXT NOT NULL, `present_on_conference` TEXT NOT NULL, `conference_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `subject` TEXT NOT NULL, `agenda` TEXT NOT NULL, `present_on_conference` TEXT NOT NULL, `conference_id` INTEGER NOT NULL, `date` INTEGER NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1889,12 +1889,6 @@
             "columnName": "date",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1908,8 +1902,14 @@
       },
       {
         "tableName": "TimetableAdditional",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -1945,12 +1945,6 @@
             "columnName": "subject",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -1964,8 +1958,14 @@
       },
       {
         "tableName": "StudentInfo",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `full_name` TEXT NOT NULL, `first_name` TEXT NOT NULL, `second_name` TEXT NOT NULL, `surname` TEXT NOT NULL, `birth_date` INTEGER NOT NULL, `birth_place` TEXT NOT NULL, `gender` TEXT NOT NULL, `has_polish_citizenship` INTEGER NOT NULL, `family_name` TEXT NOT NULL, `parents_names` TEXT NOT NULL, `address` TEXT NOT NULL, `registered_address` TEXT NOT NULL, `correspondence_address` TEXT NOT NULL, `phone_number` TEXT NOT NULL, `cell_phone_number` TEXT NOT NULL, `email` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `first_guardian_full_name` TEXT, `first_guardian_kinship` TEXT, `first_guardian_address` TEXT, `first_guardian_phones` TEXT, `first_guardian_email` TEXT, `second_guardian_full_name` TEXT, `second_guardian_kinship` TEXT, `second_guardian_address` TEXT, `second_guardian_phones` TEXT, `second_guardian_email` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `student_id` INTEGER NOT NULL, `full_name` TEXT NOT NULL, `first_name` TEXT NOT NULL, `second_name` TEXT NOT NULL, `surname` TEXT NOT NULL, `birth_date` INTEGER NOT NULL, `birth_place` TEXT NOT NULL, `gender` TEXT NOT NULL, `has_polish_citizenship` INTEGER NOT NULL, `family_name` TEXT NOT NULL, `parents_names` TEXT NOT NULL, `address` TEXT NOT NULL, `registered_address` TEXT NOT NULL, `correspondence_address` TEXT NOT NULL, `phone_number` TEXT NOT NULL, `cell_phone_number` TEXT NOT NULL, `email` TEXT NOT NULL, `first_guardian_full_name` TEXT, `first_guardian_kinship` TEXT, `first_guardian_address` TEXT, `first_guardian_phones` TEXT, `first_guardian_email` TEXT, `second_guardian_full_name` TEXT, `second_guardian_kinship` TEXT, `second_guardian_address` TEXT, `second_guardian_phones` TEXT, `second_guardian_email` TEXT)",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "studentId",
             "columnName": "student_id",
@@ -2069,12 +2069,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
             "fieldPath": "firstGuardian.fullName",
             "columnName": "first_guardian_full_name",
             "affinity": "TEXT",
@@ -2148,7 +2142,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd92e01763a9f768dd4be645fb437927b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '15fb91ec180fe60bf400cfa729c3418d')"
     ]
   }
 }

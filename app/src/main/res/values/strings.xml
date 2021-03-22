@@ -566,6 +566,10 @@
     <string name="update_download_success_button">Restart</string>
     <string name="update_failed">Update failed! Wulkanowy may not function properly. Consider updating</string>
 
+    <!--Drop kitkat alert dialog strings-->
+    <string name="drop_kitkat_title">End of support</string>
+    <string name="drop_kitkat_content">We are ending support for your device. No more new features will appear for it in Wulkanowy. However, we will be releasing critical patches until the end of 2021 so you have time to switch to a newer model</string>
+    <string name="drop_kitkat_again">Don\'t show again</string>
 
     <!--Errors-->
     <string name="error_no_internet">No internet connection</string>
