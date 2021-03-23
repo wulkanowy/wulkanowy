@@ -208,6 +208,14 @@
     <string name="exam_no_items">No exams this week</string>
     <string name="exam_type">Type</string>
     <string name="exam_entry_date">Entry date</string>
+    <plurals name="exam_notify_new_item_title">
+        <item quantity="one">New grade</item>
+        <item quantity="other">New grades</item>
+    </plurals>
+    <plurals name="exam_number_item">
+        <item quantity="one">%d exam</item>
+        <item quantity="other">%d exams</item>
+    </plurals>
 
 
     <!--Message-->
@@ -298,7 +306,10 @@
     <string name="homework_mark_as_done">Mark as done</string>
     <string name="homework_mark_as_undone">Mark as undone</string>
     <string name="homework_attachments">Attachments</string>
-    <string name="homework_notify_new_item_title">New homework</string>
+    <plurals name="homework_notify_new_item_title">
+        <item quantity="one">New homework</item>
+        <item quantity="other">New homeworks</item>
+    </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d homework</item>
         <item quantity="other">%d homeworks</item>
@@ -539,6 +550,7 @@
     <string name="channel_new_entries">New entries in register</string>
     <string name="channel_new_grades">New grades</string>
     <string name="channel_new_homework">New homework</string>
+    <string name="channel_new_exam">New exam</string>
     <string name="channel_lucky_number">Lucky number</string>
     <string name="channel_new_message">New messages</string>
     <string name="channel_new_notes">New notes</string>

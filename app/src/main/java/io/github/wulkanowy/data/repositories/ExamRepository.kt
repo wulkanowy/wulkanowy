@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.repositories
 
 import io.github.wulkanowy.data.db.dao.ExamDao
+import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
@@ -9,9 +10,13 @@ import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.endExamsDay
 import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
+import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.startExamsDay
+import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.uniqueSubtract
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import java.time.LocalDate
 import javax.inject.Inject
@@ -44,4 +49,14 @@ class ExamRepository @Inject constructor(
         },
         filterResult = { it.filter { item -> item.date in start..end } }
     )
+
+    fun getNotNotifiedExam(student: Student, semester: Semester, start: LocalDate, end: LocalDate, forceRefresh: Boolean): Flow<List<Exam>> {
+        return examDb.loadAll(semester.diaryId, semester.studentId, start.startExamsDay, start.endExamsDay).map {
+            it.filter { exam -> !exam.isNotified }
+        }
+    }
+
+    suspend fun updateExam(exam: List<Exam>) {
+        return examDb.updateAll(exam)
+    }
 }
