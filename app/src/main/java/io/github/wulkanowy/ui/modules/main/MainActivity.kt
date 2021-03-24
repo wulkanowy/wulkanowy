@@ -230,6 +230,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
                 add(Menu.NONE, 4, Menu.NONE, R.string.more_title)
                     .setIcon(R.drawable.ic_main_more)
             }
+            selectedItemId = startMenuIndex
             setOnNavigationItemSelectedListener { presenter.onTabSelected(it.itemId, false) }
             setOnNavigationItemReselectedListener { presenter.onTabSelected(it.itemId, true) }
         }
