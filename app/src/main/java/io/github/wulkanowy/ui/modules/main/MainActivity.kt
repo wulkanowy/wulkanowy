@@ -340,10 +340,12 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         (navController.currentStack?.getOrNull(0) as? MainView.MainChildView)?.onFragmentChanged()
     }
 
+    @Suppress("DEPRECATION")
     fun showDialogFragment(dialog: DialogFragment) {
         if (supportFragmentManager.isStateSaved) return
 
-        if (navController.currentDialogFrag?.isAdded == false) {
+        //Deprecated method is used here to avoid fragnav bug
+        if (navController.currentDialogFrag?.fragmentManager == null) {
             FragNavController::class.java.getDeclaredField("mCurrentDialogFrag").apply {
                 isAccessible = true
                 set(navController, null)
