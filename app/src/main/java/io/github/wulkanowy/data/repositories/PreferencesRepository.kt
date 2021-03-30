@@ -145,6 +145,12 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_subjects_without_grades
         )
 
+    val isOptionalArithmeticAverage: Boolean
+        get() = getBoolean(
+            R.string.pref_key_optional_arithmetic_average,
+            R.bool.pref_default_optional_arithmetic_average
+        )
+
     private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
 
     private fun getString(id: String, default: Int) =
