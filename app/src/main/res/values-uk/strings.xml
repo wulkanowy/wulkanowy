@@ -479,6 +479,7 @@
     <string name="pref_other_grade_modifier_plus">Вартість плюсу</string>
     <string name="pref_other_grade_modifier_minus">Вага мінуса</string>
     <string name="pref_other_fill_message_content">Відповісти з історією повідомлень</string>
+    <string name="pref_other_optional_arithmetic_average">Show arithmetic average when no weights provided</string>
     <string name="pref_settings_advanced_title">Додатково</string>
     <string name="pref_settings_appearance_title">Вигляд &amp; Поведінка</string>
     <string name="pref_settings_notifications_title">Повідомлення</string>
