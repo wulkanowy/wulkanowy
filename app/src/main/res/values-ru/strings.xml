@@ -479,6 +479,7 @@
     <string name="pref_other_grade_modifier_plus">Стоимость плюса</string>
     <string name="pref_other_grade_modifier_minus">Стоимость минуса</string>
     <string name="pref_other_fill_message_content">Отвечать с историей сообщений</string>
+    <string name="pref_other_optional_arithmetic_average">Show arithmetic average when no weights provided</string>
     <string name="pref_settings_advanced_title">Расширенные</string>
     <string name="pref_settings_appearance_title">Внешний вид &amp; Поведение</string>
     <string name="pref_settings_notifications_title">Уведомления</string>
