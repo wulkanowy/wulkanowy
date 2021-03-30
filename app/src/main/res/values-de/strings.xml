@@ -439,6 +439,7 @@
     <string name="pref_other_grade_modifier_plus">Wert des Plus</string>
     <string name="pref_other_grade_modifier_minus">Wert des Minus</string>
     <string name="pref_other_fill_message_content">Antwort mit Nachrichtenhistorie</string>
+    <string name="pref_other_optional_arithmetic_average">Show arithmetic average when no weights provided</string>
     <string name="pref_settings_advanced_title">Erweitert</string>
     <string name="pref_settings_appearance_title">Aussehen &amp; Verhalten</string>
     <string name="pref_settings_notifications_title">Benachrichtigungen</string>
