@@ -291,7 +291,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     ): Boolean {
         val fragment =
             supportFragmentManager.fragmentFactory.instantiate(classLoader, pref.fragment)
-        navController.pushFragment(fragment)
+        pushView(fragment)
         return true
     }
 
@@ -305,6 +305,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     }
 
     override fun switchMenuView(position: Int) {
+        if (supportFragmentManager.isStateSaved) return
+
         analytics.popCurrentScreen(navController.currentFrag!!::class.simpleName)
         navController.switchTab(position)
     }
@@ -322,7 +324,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     }
 
     override fun showAccountPicker(studentWithSemesters: List<StudentWithSemesters>) {
-        navController.showDialogFragment(AccountQuickDialog.newInstance(studentWithSemesters))
+        showDialogFragment(AccountQuickDialog.newInstance(studentWithSemesters))
     }
 
     override fun showActionBarElevation(show: Boolean) {
@@ -338,16 +340,31 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         (navController.currentStack?.getOrNull(0) as? MainView.MainChildView)?.onFragmentChanged()
     }
 
+    @Suppress("DEPRECATION")
     fun showDialogFragment(dialog: DialogFragment) {
+        if (supportFragmentManager.isStateSaved) return
+
+        //Deprecated method is used here to avoid fragnav bug
+        if (navController.currentDialogFrag?.fragmentManager == null) {
+            FragNavController::class.java.getDeclaredField("mCurrentDialogFrag").apply {
+                isAccessible = true
+                set(navController, null)
+            }
+        }
+
         navController.showDialogFragment(dialog)
     }
 
     fun pushView(fragment: Fragment) {
+        if (supportFragmentManager.isStateSaved) return
+
         analytics.popCurrentScreen(navController.currentFrag!!::class.simpleName)
         navController.pushFragment(fragment)
     }
 
     override fun popView(depth: Int) {
+        if (supportFragmentManager.isStateSaved) return
+
         analytics.popCurrentScreen(navController.currentFrag!!::class.simpleName)
         navController.safelyPopFragments(depth)
     }
