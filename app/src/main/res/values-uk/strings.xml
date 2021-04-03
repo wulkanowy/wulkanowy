@@ -36,7 +36,6 @@
     <string name="login_type_hybrid">Hybrid</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
-    <string name="login_api_key_hint">Ключ API</string>
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Увійти</string>
     <string name="login_invalid_password">Занадто короткий пароль</string>
@@ -62,7 +61,6 @@
     <string name="login_contact_email">Електронна пошта</string>
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Відправити лист</string>
-    <string name="login_email_details">Опишіть деталі помилки:</string>
     <string name="login_recover_warning">Переконайтеся, що ви вибрали правильний варіант реєстрації UONET+!</string>
     <string name="login_recover_button">Забули пароль?</string>
     <string name="login_recover_title">Відновіть свій обліковий запис</string>
@@ -81,13 +79,10 @@
     <string name="grade_weight">Вартість</string>
     <string name="grade_weight_value">Вартість: %s</string>
     <string name="grade_comment">Коментар</string>
-    <string name="grade_no_new_items">Нові оцінки відсутні</string>
     <string name="grade_number_new_items">Кількість нових оцінок: %1$d</string>
     <string name="grade_average">Середня оцінка: %1$.2f</string>
     <string name="grade_points_sum">Балів: %s</string>
     <string name="grade_no_average">Відсутність середньої оцінки</string>
-    <string name="grade_predicted">Очікувана оцінка: %1$s</string>
-    <string name="grade_final">Підсумкова оцінка: %1$s</string>
     <string name="grade_summary_points">Сума балів</string>
     <string name="grade_summary_final_grade">Підсумкова оцінка</string>
     <string name="grade_summary_predicted_grade">Очікувана оцінка</string>
@@ -184,19 +179,12 @@
     <string name="attendance_unknown">Невідомо</string>
     <string name="attendance_number">Номер уроку</string>
     <string name="attendance_no_items">Брак записів</string>
-    <plurals name="attendance_number_absences">
-        <item quantity="one">%1$d відсутність</item>
-        <item quantity="few">%1$d відсутності</item>
-        <item quantity="many">%1$d відсутностей</item>
-        <item quantity="other">%1$d відсутностей</item>
-    </plurals>
     <string name="attendance_excuse_dialog_reason">Причина відсутності (необов’язково)</string>
     <string name="attendance_excuse_dialog_submit">Надіслати</string>
     <string name="attendance_excuse_success">Запит на виправдання відсутності успішно надіслано!</string>
     <string name="attendance_excuse_no_selection">Оберіть хоча б одну відсутність</string>
     <string name="attendance_excuse_title">Змінити статус</string>
     <!--Attendance summary-->
-    <string name="attendance_summary_final">Відвідуваність</string>
     <string name="attendance_summary_total">Загальна</string>
     <!--Exam-->
     <string name="exam_no_items">Брак тестів у цьому тижні</string>
@@ -208,7 +196,6 @@
     <string name="message_trash">Кошик</string>
     <string name="message_no_subject">(брак теми)</string>
     <string name="message_no_items">Нема повідомлень</string>
-    <string name="message_preview_error">З\'явилася помилка підчас завантаження змісту повідомлення</string>
     <string name="message_from">Від:</string>
     <string name="message_to">Кому:</string>
     <string name="message_date">Дата: %s</string>
@@ -353,8 +340,6 @@
     <string name="account_logout_student">Вийти з аккаунту учня</string>
     <string name="account_type_student">Студентський рахунок</string>
     <string name="account_type_parent">Головний рахунок</string>
-    <string name="account_login_mobile_api">Режим мобільного API</string>
-    <string name="account_login_hybrid">Гібридний режим</string>
     <string name="account_details_edit">Редагувати дані</string>
     <string name="account_quick_manager">Менеджер аккаунтів</string>
     <string name="account_select_student">Виберіть учня</string>
@@ -454,7 +439,6 @@
     <string name="pref_view_timetable_show_timers">Позначити поточний урок</string>
     <string name="pref_view_timetable_show_groups">Показувати групи поруч з темами</string>
     <string name="pref_view_grade_statistics_list">Показувати діаграми в оцінках класу</string>
-    <string name="pref_view_timetable_show_whole_class">Показати уроки всього класу</string>
     <string name="pref_view_subjects_without_grades">Показати предмети без оцінок</string>
     <string name="pref_view_grade_color_scheme">Схема кольорів оцінок</string>
     <string name="pref_view_grade_sorting_mode">Сортування предметів</string>
@@ -499,7 +483,6 @@
     <string name="pref_advanced_category">Додатково</string>
     <string name="pref_about_category_summary">Версія програми, учасники, соціальні портали, ліцензії</string>
     <!--Notification Channels-->
-    <string name="channel_new_entries">Нові дані в щоденнику</string>
     <string name="channel_new_grades">Нові оцінки</string>
     <string name="channel_lucky_number">Щасливий номер</string>
     <string name="channel_new_message">Нові повідомлення</string>
