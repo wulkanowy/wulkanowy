@@ -158,12 +158,10 @@ class TimetablePresenter @Inject constructor(
                     Timber.i("Loading timetable result: Success")
                     view?.apply {
                         updateData(it.data!!.lessons)
-                        if (it.data.lessons.isEmpty()) {
-                            val header = it.data.headers.singleOrNull { header ->
-                                header.date == currentDate
-                            }?.content?.takeIf { message -> message.isNotBlank() }
-                            showEmpty(header ?: noItemsString)
-                        } else hideEmpty()
+                        showEmpty(it.data.lessons.isEmpty())
+                        setDayHeaderMessage(it.data.headers.singleOrNull { header ->
+                            header.date == currentDate
+                        }?.content)
                         showErrorView(false)
                         showContent(it.data.lessons.isNotEmpty())
                     }
@@ -206,7 +204,7 @@ class TimetablePresenter @Inject constructor(
                 lastError = error
                 setErrorDetails(message)
                 showErrorView(true)
-                hideEmpty()
+                showEmpty(false)
             } else showError(message, error)
         }
     }
@@ -219,7 +217,7 @@ class TimetablePresenter @Inject constructor(
             showProgress(true)
             enableSwipe(false)
             showContent(false)
-            hideEmpty()
+            showEmpty(false)
             showErrorView(false)
             clearData()
             reloadNavigation()

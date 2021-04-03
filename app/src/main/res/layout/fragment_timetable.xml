@@ -27,7 +27,8 @@
                 android:id="@+id/timetableRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/item_timetable" />
+                tools:listitem="@layout/item_timetable"
+                tools:visibility="visible" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
@@ -48,13 +49,24 @@
                 tools:ignore="contentDescription" />
 
             <TextView
-                android:id="@+id/timetableEmptyMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="@string/timetable_no_items"
                 android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/timetableEmptyMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.4"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="16sp"
+                tools:maxLines="4"
+                tools:text="@tools:sample/lorem/random" />
         </LinearLayout>
 
         <LinearLayout

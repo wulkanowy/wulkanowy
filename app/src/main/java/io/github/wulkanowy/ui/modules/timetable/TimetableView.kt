@@ -10,8 +10,6 @@ interface TimetableView : BaseView {
 
     val currentStackSize: Int?
 
-    val noItemsString: String
-
     fun initView()
 
     fun updateData(data: List<Timetable>, showWholeClassPlanType: String, showGroupsInPlanType: Boolean, showTimetableTimers: Boolean)
@@ -24,9 +22,9 @@ interface TimetableView : BaseView {
 
     fun resetView()
 
-    fun showEmpty(message: String)
+    fun showEmpty(show: Boolean)
 
-    fun hideEmpty()
+    fun setDayHeaderMessage(message: String?)
 
     fun showErrorView(show: Boolean)
 
