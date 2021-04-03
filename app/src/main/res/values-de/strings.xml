@@ -36,7 +36,6 @@
     <string name="login_type_hybrid">Hybride</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
-    <string name="login_api_key_hint">API Schlüssel</string>
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Anmelden</string>
     <string name="login_invalid_password">Passwort ist zu kurz</string>
@@ -62,7 +61,6 @@
     <string name="login_contact_email">Email</string>
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">email senden</string>
-    <string name="login_email_details">Beschreiben Sie die Details des Problems:</string>
     <string name="login_recover_warning">Stellen Sie sicher, dass Sie die richtige UONET+ Registervariation wählen!</string>
     <string name="login_recover_button">Ich habe mein Passwort vergessen.</string>
     <string name="login_recover_title">Ihr Konto wiederherstellen</string>
@@ -81,13 +79,10 @@
     <string name="grade_weight">Gewichtung</string>
     <string name="grade_weight_value">Gewichtung: %s</string>
     <string name="grade_comment">Kommentar</string>
-    <string name="grade_no_new_items">Keine neuen Noten</string>
     <string name="grade_number_new_items">Anzahl der neuen Bewertungen: %1$d</string>
     <string name="grade_average">Durchschnitt: %1$.2f</string>
     <string name="grade_points_sum">Punkte: %s</string>
     <string name="grade_no_average">Kein Durchschnitt</string>
-    <string name="grade_predicted">Vorausgesagt: %1$s</string>
-    <string name="grade_final">Finale: %1$s</string>
     <string name="grade_summary_points">Gesamtpunkte</string>
     <string name="grade_summary_final_grade">Finaler Note</string>
     <string name="grade_summary_predicted_grade">Vorhergesagte Note</string>
@@ -170,17 +165,12 @@
     <string name="attendance_unknown">Unbekannt</string>
     <string name="attendance_number">Lektion Nummer</string>
     <string name="attendance_no_items">Keine Einträgen</string>
-    <plurals name="attendance_number_absences">
-        <item quantity="one">%1$d abwesenheit</item>
-        <item quantity="other">%1$d Abwesenheiten</item>
-    </plurals>
     <string name="attendance_excuse_dialog_reason">Abwesenheitsgrund (optional)</string>
     <string name="attendance_excuse_dialog_submit">Senden</string>
     <string name="attendance_excuse_success">Abwesenheitsentschuldigungsanfrage erfolgreich gesendet!</string>
     <string name="attendance_excuse_no_selection">Sie müssen mindestens eine Abwesenheit auswählen!</string>
     <string name="attendance_excuse_title">Verzeihung</string>
     <!--Attendance summary-->
-    <string name="attendance_summary_final">Schulbesuch</string>
     <string name="attendance_summary_total">Gesamt</string>
     <!--Exam-->
     <string name="exam_no_items">Diese Woche keine Prüfungen</string>
@@ -192,7 +182,6 @@
     <string name="message_trash">Korb</string>
     <string name="message_no_subject">(kein Thema)</string>
     <string name="message_no_items">Keine Nachrichten</string>
-    <string name="message_preview_error">Beim Herunterladen des Nachrichteninhalts ist ein Fehler aufgetreten</string>
     <string name="message_from">Von:</string>
     <string name="message_to">An:</string>
     <string name="message_date">Datum: %s</string>
@@ -313,8 +302,6 @@
     <string name="account_logout_student">Abmeldung von Student</string>
     <string name="account_type_student">Studentenkonto</string>
     <string name="account_type_parent">Elternkonto</string>
-    <string name="account_login_mobile_api">Mobiler API Modus</string>
-    <string name="account_login_hybrid">Hybrid Modus</string>
     <string name="account_details_edit">Daten bearbeiten</string>
     <string name="account_quick_manager">Konten-Manager</string>
     <string name="account_select_student">Schüler auswählen</string>
@@ -414,7 +401,6 @@
     <string name="pref_view_timetable_show_timers">Aktuelle Lektion markieren</string>
     <string name="pref_view_timetable_show_groups">Gruppen neben Schulfächen anzeigen</string>
     <string name="pref_view_grade_statistics_list">Liste der Diagramme in Klassenbewertungen anzeigen</string>
-    <string name="pref_view_timetable_show_whole_class">Unterricht der ganzen Klasse anzeigen</string>
     <string name="pref_view_subjects_without_grades">Schulfächer ohne Noten anzeigen</string>
     <string name="pref_view_grade_color_scheme">Farbschema der Noten</string>
     <string name="pref_view_grade_sorting_mode">Schulfachen sortieren</string>
@@ -459,7 +445,6 @@
     <string name="pref_advanced_category">Erweitert</string>
     <string name="pref_about_category_summary">App-Version, Mitarbeiter, soziale Portale, Lizenzen</string>
     <!--Notification Channels-->
-    <string name="channel_new_entries">Neue Einträge im Klassenbuch</string>
     <string name="channel_new_grades">Neue Noten</string>
     <string name="channel_lucky_number">Glückliche Nummer</string>
     <string name="channel_new_message">Neue Nachrichten</string>
