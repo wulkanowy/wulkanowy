@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,7 +74,9 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         with(binding) {
             timetableSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
             timetableSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
-            timetableSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
+            timetableSwipe.setProgressBackgroundColorSchemeColor(
+                requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh)
+            )
             timetableErrorRetry.setOnClickListener { presenter.onRetry() }
             timetableErrorDetails.setOnClickListener { presenter.onDetailsClick() }
 
@@ -97,7 +100,12 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         }
     }
 
-    override fun updateData(data: List<Timetable>, showWholeClassPlanType: String, showGroupsInPlanType: Boolean, showTimetableTimers: Boolean) {
+    override fun updateData(
+        data: List<Timetable>,
+        showWholeClassPlanType: String,
+        showGroupsInPlanType: Boolean,
+        showTimetableTimers: Boolean
+    ) {
         with(timetableAdapter) {
             items = data.toMutableList()
             showTimers = showTimetableTimers
@@ -136,7 +144,9 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
 
     override fun showEmpty(message: String) {
         binding.timetableEmpty.visibility = VISIBLE
-        binding.timetableEmptyMessage.text = message
+        binding.timetableEmptyMessage.text = HtmlCompat.fromHtml(
+            message, HtmlCompat.FROM_HTML_MODE_COMPACT
+        )
     }
 
     override fun hideEmpty() {
@@ -179,8 +189,10 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             presenter.onDateSet(year, month + 1, dayOfMonth)
         }
-        val datePickerDialog = DatePickerDialog.newInstance(dateSetListener,
-            currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth)
+        val datePickerDialog = DatePickerDialog.newInstance(
+            dateSetListener,
+            currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth
+        )
 
         with(datePickerDialog) {
             setDateRangeLimiter(SchooldaysRangeLimiter())
