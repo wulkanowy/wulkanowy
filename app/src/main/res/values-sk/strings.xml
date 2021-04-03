@@ -36,7 +36,6 @@
     <string name="login_type_hybrid">Hybridné</string>
     <string name="login_token_hint">Token</string>
     <string name="login_pin_hint">PIN</string>
-    <string name="login_api_key_hint">Kľúč API</string>
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Prihlásiť</string>
     <string name="login_invalid_password">Toto heslo je príliš krátke</string>
@@ -62,7 +61,6 @@
     <string name="login_contact_email">Email</string>
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Poslať e-mail</string>
-    <string name="login_email_details">Opíšte podrobnosti problému:</string>
     <string name="login_recover_warning">Uistite sa, že ste vybrali správny variant denníka UONET+!</string>
     <string name="login_recover_button">Zabudol som heslo</string>
     <string name="login_recover_title">Obnovte svoj účet</string>
@@ -81,13 +79,10 @@
     <string name="grade_weight">Váha</string>
     <string name="grade_weight_value">Váha: %s</string>
     <string name="grade_comment">Komentár</string>
-    <string name="grade_no_new_items">Žiadne nové známky</string>
     <string name="grade_number_new_items">Počet nových známok %1$d</string>
     <string name="grade_average">Priemer: %1$.2f</string>
     <string name="grade_points_sum">Body: %s</string>
     <string name="grade_no_average">Bez priemeru</string>
-    <string name="grade_predicted">Predpokladaná: %1$s</string>
-    <string name="grade_final">Konečná: %1$s</string>
     <string name="grade_summary_points">Súčet bodov</string>
     <string name="grade_summary_final_grade">Konečná známka</string>
     <string name="grade_summary_predicted_grade">Predpokladaná známka</string>
@@ -184,19 +179,12 @@
     <string name="attendance_unknown">Neznámy</string>
     <string name="attendance_number">Číslo lekcie</string>
     <string name="attendance_no_items">Žiadne položky</string>
-    <plurals name="attendance_number_absences">
-        <item quantity="one">%1$d neprítomnosť</item>
-        <item quantity="few">%1$d neprítomnosti</item>
-        <item quantity="many">%1$d neprítomnosti</item>
-        <item quantity="other">%1$d neprítomnosti</item>
-    </plurals>
     <string name="attendance_excuse_dialog_reason">Dôvod neprítomnosti (voliteľný)</string>
     <string name="attendance_excuse_dialog_submit">Poslať</string>
     <string name="attendance_excuse_success">Žiadosť o ospravedlnenie neprítomnosti bola úspešne odoslaná!</string>
     <string name="attendance_excuse_no_selection">Musíte vybrať aspoň jednu neprítomnosť!</string>
     <string name="attendance_excuse_title">Ospravedlniť</string>
     <!--Attendance summary-->
-    <string name="attendance_summary_final">Dochádzka</string>
     <string name="attendance_summary_total">Spoločne</string>
     <!--Exam-->
     <string name="exam_no_items">Tento týždeň žiadne testy</string>
@@ -208,7 +196,6 @@
     <string name="message_trash">Kôš</string>
     <string name="message_no_subject">(žiadny predmet)</string>
     <string name="message_no_items">Žiadne správy</string>
-    <string name="message_preview_error">Pri sťahovaní obsahu správy došlo k chybe</string>
     <string name="message_from">Od:</string>
     <string name="message_to">Komu:</string>
     <string name="message_date">Dátum: %s</string>
@@ -353,8 +340,6 @@
     <string name="account_logout_student">Odhlásenie žiakov</string>
     <string name="account_type_student">Zakov účet</string>
     <string name="account_type_parent">Rodičovský účet</string>
-    <string name="account_login_mobile_api">Režim Mobilného API</string>
-    <string name="account_login_hybrid">Hybridný režim</string>
     <string name="account_details_edit">Upraviť dáta</string>
     <string name="account_quick_manager">Manažér účtov</string>
     <string name="account_select_student">Vyberte žiaka</string>
@@ -454,7 +439,6 @@
     <string name="pref_view_timetable_show_timers">Označiť aktuálne lekciu</string>
     <string name="pref_view_timetable_show_groups">Zobraziť skupiny vedľa predmetov</string>
     <string name="pref_view_grade_statistics_list">Zobraziť zoznam grafov v známkach triedy</string>
-    <string name="pref_view_timetable_show_whole_class">Zobraziť lekcie pre celú triedu</string>
     <string name="pref_view_subjects_without_grades">Zobraziť predmety bez známok</string>
     <string name="pref_view_grade_color_scheme">Známky farebnú schému</string>
     <string name="pref_view_grade_sorting_mode">Triedenie predmetov</string>
@@ -499,7 +483,6 @@
     <string name="pref_advanced_category">Pokročilé</string>
     <string name="pref_about_category_summary">Verzia aplikácie, prispievatelia, sociálne portály, licencie</string>
     <!--Notification Channels-->
-    <string name="channel_new_entries">Nové položky v denníku</string>
     <string name="channel_new_grades">Nové známky</string>
     <string name="channel_lucky_number">Šťastné číslo</string>
     <string name="channel_new_message">Nové správy</string>
