@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories
 
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
+import io.github.wulkanowy.data.db.dao.TimetableHeaderDao
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
@@ -41,6 +42,9 @@ class TimetableRepositoryTest {
     @MockK
     private lateinit var timetableAdditionalDao: TimetableAdditionalDao
 
+    @MockK
+    private lateinit var timetableHeaderDao: TimetableHeaderDao
+
     @MockK(relaxUnitFun = true)
     private lateinit var refreshHelper: AutoRefreshHelper
 
@@ -59,7 +63,7 @@ class TimetableRepositoryTest {
         MockKAnnotations.init(this)
         every { refreshHelper.isShouldBeRefreshed(any()) } returns false
 
-        timetableRepository = TimetableRepository(timetableDb, timetableAdditionalDao, sdk, timetableNotificationSchedulerHelper, refreshHelper)
+        timetableRepository = TimetableRepository(timetableDb, timetableAdditionalDao, timetableHeaderDao, sdk, timetableNotificationSchedulerHelper, refreshHelper)
     }
 
     @Test
@@ -93,7 +97,7 @@ class TimetableRepositoryTest {
         }
 
         // verify
-        assertEquals(4, res.data?.first.orEmpty().size)
+        assertEquals(4, res.data?.lessons.orEmpty().size)
         coVerify {
             timetableDb.insertAll(withArg {
                 assertEquals(4, it.size)
@@ -155,7 +159,7 @@ class TimetableRepositoryTest {
 
         // verify
         assertEquals(null, res.error)
-        assertEquals(12, res.data!!.first.size)
+        assertEquals(12, res.data!!.lessons.size)
 
         coVerify {
             timetableDb.insertAll(withArg {
@@ -204,7 +208,7 @@ class TimetableRepositoryTest {
 
         // verify
         assertEquals(null, res.error)
-        assertEquals(2, res.data?.first?.size)
+        assertEquals(2, res.data?.lessons?.size)
         coVerify { sdk.getTimetable(startDate, endDate) }
         coVerify { timetableDb.loadAll(1, 1, startDate, endDate) }
         coVerify { timetableDb.insertAll(match { it.isEmpty() }) }

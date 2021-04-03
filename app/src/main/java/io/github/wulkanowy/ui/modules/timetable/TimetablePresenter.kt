@@ -142,28 +142,28 @@ class TimetablePresenter @Inject constructor(
         }.onEach {
             when (it.status) {
                 Status.LOADING -> {
-                    if (!it.data?.first.isNullOrEmpty()) {
+                    if (!it.data?.lessons.isNullOrEmpty()) {
                         view?.run {
                             enableSwipe(true)
                             showRefresh(true)
                             showProgress(false)
                             showContent(true)
-                            updateData(it.data!!.first)
+                            updateData(it.data!!.lessons)
                         }
                     }
                 }
                 Status.SUCCESS -> {
                     Timber.i("Loading timetable result: Success")
                     view?.apply {
-                        updateData(it.data!!.first)
-                        showEmpty(it.data.first.isEmpty())
+                        updateData(it.data!!.lessons)
+                        showEmpty(it.data.lessons.isEmpty())
                         showErrorView(false)
-                        showContent(it.data.first.isNotEmpty())
+                        showContent(it.data.lessons.isNotEmpty())
                     }
                     analytics.logEvent(
                         "load_data",
                         "type" to "timetable",
-                        "items" to it.data!!.first.size
+                        "items" to it.data!!.lessons.size
                     )
                 }
                 Status.ERROR -> {
