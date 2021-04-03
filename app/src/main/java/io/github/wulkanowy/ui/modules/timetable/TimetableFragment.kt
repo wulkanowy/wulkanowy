@@ -43,6 +43,8 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
 
     override val titleStringId get() = R.string.timetable_title
 
+    override val noItemsString get() = getString(R.string.timetable_no_items)
+
     override val isViewEmpty get() = timetableAdapter.items.isEmpty()
 
     override val currentStackSize get() = (activity as? MainActivity)?.currentStackSize
@@ -132,8 +134,13 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         (activity as? MainActivity)?.popView()
     }
 
-    override fun showEmpty(show: Boolean) {
-        binding.timetableEmpty.visibility = if (show) VISIBLE else GONE
+    override fun showEmpty(message: String) {
+        binding.timetableEmpty.visibility = VISIBLE
+        binding.timetableEmptyMessage.text = message
+    }
+
+    override fun hideEmpty() {
+        binding.timetableEmpty.visibility = GONE
     }
 
     override fun showErrorView(show: Boolean) {

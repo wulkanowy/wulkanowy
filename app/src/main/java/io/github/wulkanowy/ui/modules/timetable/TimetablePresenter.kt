@@ -138,7 +138,9 @@ class TimetablePresenter @Inject constructor(
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            timetableRepository.getTimetable(student, semester, currentDate, currentDate, forceRefresh)
+            timetableRepository.getTimetable(
+                student, semester, currentDate, currentDate, forceRefresh
+            )
         }.onEach {
             when (it.status) {
                 Status.LOADING -> {
@@ -156,7 +158,12 @@ class TimetablePresenter @Inject constructor(
                     Timber.i("Loading timetable result: Success")
                     view?.apply {
                         updateData(it.data!!.lessons)
-                        showEmpty(it.data.lessons.isEmpty())
+                        if (it.data.lessons.isEmpty()) {
+                            val header = it.data.headers.singleOrNull { header ->
+                                header.date == currentDate
+                            }?.content
+                            showEmpty(header ?: noItemsString)
+                        } else hideEmpty()
                         showErrorView(false)
                         showContent(it.data.lessons.isNotEmpty())
                     }
@@ -199,7 +206,7 @@ class TimetablePresenter @Inject constructor(
                 lastError = error
                 setErrorDetails(message)
                 showErrorView(true)
-                showEmpty(false)
+                hideEmpty()
             } else showError(message, error)
         }
     }
@@ -212,7 +219,7 @@ class TimetablePresenter @Inject constructor(
             showProgress(true)
             enableSwipe(false)
             showContent(false)
-            showEmpty(false)
+            hideEmpty()
             showErrorView(false)
             clearData()
             reloadNavigation()
