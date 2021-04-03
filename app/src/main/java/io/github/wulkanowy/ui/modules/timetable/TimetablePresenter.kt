@@ -161,7 +161,7 @@ class TimetablePresenter @Inject constructor(
                         if (it.data.lessons.isEmpty()) {
                             val header = it.data.headers.singleOrNull { header ->
                                 header.date == currentDate
-                            }?.content
+                            }?.content?.takeIf { message -> message.isNotBlank() }
                             showEmpty(header ?: noItemsString)
                         } else hideEmpty()
                         showErrorView(false)
