@@ -190,6 +190,18 @@
     <string name="exam_no_items">Нет тестов на этой неделе</string>
     <string name="exam_type">Тип</string>
     <string name="exam_entry_date">Дата записи</string>
+    <plurals name="exam_notify_new_item_title">
+        <item quantity="one">New exam</item>
+        <item quantity="few">New exams</item>
+        <item quantity="many">New exams</item>
+        <item quantity="other">New exams</item>
+    </plurals>
+    <plurals name="exam_number_item">
+        <item quantity="one">%d exam</item>
+        <item quantity="few">%d exams</item>
+        <item quantity="many">%d exams</item>
+        <item quantity="other">%d exams</item>
+    </plurals>
     <!--Message-->
     <string name="message_inbox">Полученные</string>
     <string name="message_sent">Отправленные</string>
@@ -295,6 +307,18 @@
     <string name="homework_mark_as_done">Отметить как выполненное</string>
     <string name="homework_mark_as_undone">Отметить как невыполненное</string>
     <string name="homework_attachments">Вложения</string>
+    <plurals name="homework_notify_new_item_title">
+        <item quantity="one">New homework</item>
+        <item quantity="few">New homework</item>
+        <item quantity="many">New homework</item>
+        <item quantity="other">New homework</item>
+    </plurals>
+    <plurals name="homework_number_item">
+        <item quantity="one">%d homework</item>
+        <item quantity="few">%d homework</item>
+        <item quantity="many">%d homework</item>
+        <item quantity="other">%d homework</item>
+    </plurals>
     <!--Lucky number-->
     <string name="lucky_number_title">Счастливый номер</string>
     <string name="lucky_number_header">Сегодняшний счастливый номер это</string>
@@ -484,16 +508,14 @@
     <string name="pref_about_category_summary">Версия приложения, участники, социальные порталы, лицензии</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Новые оценки</string>
+    <string name="channel_new_homework">New homework</string>
+    <string name="channel_new_exam">New exams</string>
     <string name="channel_lucky_number">Счастливый номер</string>
     <string name="channel_new_message">Новые сообщения</string>
     <string name="channel_new_notes">Новые заметки</string>
     <string name="channel_push">Показывать push-уведомления</string>
     <string name="channel_upcoming_lessons">Будущие уроки</string>
     <string name="channel_debug">Дебаг</string>
-    <!--Drop kitkat alert dialog strings-->
-    <string name="drop_kitkat_title">Конец поддержки</string>
-    <string name="drop_kitkat_content">Поддержка заканчивается на вашем устройстве. В Wulkanowy больше не появятся новые возможности. Однако до конца 2021 года мы выпустим критические патчи, чтобы у вас было время перейти на новую модель</string>
-    <string name="drop_kitkat_again">Не показывать снова</string>
     <!--Colors-->
     <string name="all_black">Чёрный</string>
     <string name="all_red">Красный</string>
