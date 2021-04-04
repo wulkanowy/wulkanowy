@@ -176,6 +176,14 @@
     <string name="exam_no_items">Diese Woche keine Prüfungen</string>
     <string name="exam_type">Form</string>
     <string name="exam_entry_date">Eintrittsdatum</string>
+    <plurals name="exam_notify_new_item_title">
+        <item quantity="one">New exam</item>
+        <item quantity="other">New exams</item>
+    </plurals>
+    <plurals name="exam_number_item">
+        <item quantity="one">%d exam</item>
+        <item quantity="other">%d exams</item>
+    </plurals>
     <!--Message-->
     <string name="message_inbox">Posteingang</string>
     <string name="message_sent">Gesendet</string>
@@ -257,6 +265,14 @@
     <string name="homework_mark_as_done">Gemacht</string>
     <string name="homework_mark_as_undone">Unvollständig</string>
     <string name="homework_attachments">Anhänge</string>
+    <plurals name="homework_notify_new_item_title">
+        <item quantity="one">New homework</item>
+        <item quantity="other">New homework</item>
+    </plurals>
+    <plurals name="homework_number_item">
+        <item quantity="one">%d homework</item>
+        <item quantity="other">%d homework</item>
+    </plurals>
     <!--Lucky number-->
     <string name="lucky_number_title">Glückliche Nummer</string>
     <string name="lucky_number_header">Die heutige Glücksnummer ist </string>
@@ -446,16 +462,14 @@
     <string name="pref_about_category_summary">App-Version, Mitarbeiter, soziale Portale, Lizenzen</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Neue Noten</string>
+    <string name="channel_new_homework">New homework</string>
+    <string name="channel_new_exam">New exams</string>
     <string name="channel_lucky_number">Glückliche Nummer</string>
     <string name="channel_new_message">Neue Nachrichten</string>
     <string name="channel_new_notes">Neue Eintragen</string>
     <string name="channel_push">Push-Benachrichtigungen</string>
     <string name="channel_upcoming_lessons">Bevorstehende Lektionen</string>
     <string name="channel_debug">Debuggen</string>
-    <!--Drop kitkat alert dialog strings-->
-    <string name="drop_kitkat_title">Ende der Unterstützung</string>
-    <string name="drop_kitkat_content">Wir beenden die Unterstützung für dein Gerät. Es werden keine neuen Funktionen mehr in Wulkanowy erscheinen. Allerdings werden wir bis Ende 2021 kritische Patches veröffentlichen, so dass du Zeit hast, zu einem neueren Modell zu wechseln</string>
-    <string name="drop_kitkat_again">Nicht mehr fragen</string>
     <!--Colors-->
     <string name="all_black">Schwarz</string>
     <string name="all_red">Rot</string>
