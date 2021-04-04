@@ -190,6 +190,18 @@
     <string name="exam_no_items">Tento týden žádné testy</string>
     <string name="exam_type">Typ</string>
     <string name="exam_entry_date">Datum vstupu</string>
+    <plurals name="exam_notify_new_item_title">
+        <item quantity="one">New exam</item>
+        <item quantity="few">New exams</item>
+        <item quantity="many">New exams</item>
+        <item quantity="other">New exams</item>
+    </plurals>
+    <plurals name="exam_number_item">
+        <item quantity="one">%d exam</item>
+        <item quantity="few">%d exams</item>
+        <item quantity="many">%d exams</item>
+        <item quantity="other">%d exams</item>
+    </plurals>
     <!--Message-->
     <string name="message_inbox">Doručená pošta</string>
     <string name="message_sent">Odesláno</string>
@@ -295,6 +307,18 @@
     <string name="homework_mark_as_done">Označit jako hotové</string>
     <string name="homework_mark_as_undone">Neudělané</string>
     <string name="homework_attachments">Přílohy</string>
+    <plurals name="homework_notify_new_item_title">
+        <item quantity="one">New homework</item>
+        <item quantity="few">New homework</item>
+        <item quantity="many">New homework</item>
+        <item quantity="other">New homework</item>
+    </plurals>
+    <plurals name="homework_number_item">
+        <item quantity="one">%d homework</item>
+        <item quantity="few">%d homework</item>
+        <item quantity="many">%d homework</item>
+        <item quantity="other">%d homework</item>
+    </plurals>
     <!--Lucky number-->
     <string name="lucky_number_title">Šťastné číslo</string>
     <string name="lucky_number_header">Dnešní šťastné číslo je</string>
@@ -484,16 +508,14 @@
     <string name="pref_about_category_summary">Verze aplikace, tvůrci, sociální portály, licence</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Nové známky</string>
+    <string name="channel_new_homework">New homework</string>
+    <string name="channel_new_exam">New exams</string>
     <string name="channel_lucky_number">Šťastné číslo</string>
     <string name="channel_new_message">Nové zprávy</string>
     <string name="channel_new_notes">Nové poznámky</string>
     <string name="channel_push">Push upozornění</string>
     <string name="channel_upcoming_lessons">Nadcházející lekce</string>
     <string name="channel_debug">Ladění</string>
-    <!--Drop kitkat alert dialog strings-->
-    <string name="drop_kitkat_title">Konec podpory</string>
-    <string name="drop_kitkat_content">Ukončujeme podporu pro vaše zařízení. V Wulkanovým už pro něj nebudou žádné nové funkce. Kritické opravy však budeme vydávat až do konce roku 2021, abyste měli čas přejít na novější model</string>
-    <string name="drop_kitkat_again">Nezobrazovat znovu</string>
     <!--Colors-->
     <string name="all_black">Černý</string>
     <string name="all_red">Červený</string>
