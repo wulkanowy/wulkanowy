@@ -191,16 +191,16 @@
     <string name="exam_type">Typ</string>
     <string name="exam_entry_date">Data wpisu</string>
     <plurals name="exam_notify_new_item_title">
-        <item quantity="one">New exam</item>
-        <item quantity="few">New exams</item>
-        <item quantity="many">New exams</item>
+        <item quantity="one">Nowy sprawdzian</item>
+        <item quantity="few">Nowe sprawdziany</item>
+        <item quantity="many">Nowe sprawdziany</item>
         <item quantity="other">New exams</item>
     </plurals>
     <plurals name="exam_number_item">
-        <item quantity="one">%d exam</item>
-        <item quantity="few">%d exams</item>
-        <item quantity="many">%d exams</item>
-        <item quantity="other">%d exams</item>
+        <item quantity="one">%d sprawdzian</item>
+        <item quantity="few">%d sprawdziany</item>
+        <item quantity="many">%d sprawdzianów</item>
+        <item quantity="other">%d sprawdzianów</item>
     </plurals>
     <!--Message-->
     <string name="message_inbox">Odebrane</string>
@@ -308,16 +308,16 @@
     <string name="homework_mark_as_undone">Niewykonane</string>
     <string name="homework_attachments">Załączniki</string>
     <plurals name="homework_notify_new_item_title">
-        <item quantity="one">New homework</item>
-        <item quantity="few">New homework</item>
-        <item quantity="many">New homework</item>
-        <item quantity="other">New homework</item>
+        <item quantity="one">Nowe zadanie domowe</item>
+        <item quantity="few">Nowe zadania domowe</item>
+        <item quantity="many">Nowe zadania domowe</item>
+        <item quantity="other">Nowe zadania domowe</item>
     </plurals>
     <plurals name="homework_number_item">
-        <item quantity="one">%d homework</item>
-        <item quantity="few">%d homework</item>
-        <item quantity="many">%d homework</item>
-        <item quantity="other">%d homework</item>
+        <item quantity="one">%d zadanie domowe</item>
+        <item quantity="few">%d zadania domowe</item>
+        <item quantity="many">%d zadań domowych</item>
+        <item quantity="other">%d zadań domowych</item>
     </plurals>
     <!--Lucky number-->
     <string name="lucky_number_title">Szczęśliwy numerek</string>
@@ -508,8 +508,8 @@
     <string name="pref_about_category_summary">Wersja aplikacji, twórcy, media społecznościowe, licencje</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Nowe oceny</string>
-    <string name="channel_new_homework">New homework</string>
-    <string name="channel_new_exam">New exams</string>
+    <string name="channel_new_homework">Nowe zadania domowe</string>
+    <string name="channel_new_exam">Nowe sprawdziany</string>
     <string name="channel_lucky_number">Szczęśliwy numerek</string>
     <string name="channel_new_message">Nowe wiadomości</string>
     <string name="channel_new_notes">Nowe uwagi</string>
