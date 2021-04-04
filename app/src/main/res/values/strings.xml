@@ -199,8 +199,8 @@
     <string name="exam_type">Type</string>
     <string name="exam_entry_date">Entry date</string>
     <plurals name="exam_notify_new_item_title">
-        <item quantity="one">New grade</item>
-        <item quantity="other">New grades</item>
+        <item quantity="one">New exam</item>
+        <item quantity="other">New exams</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d exam</item>
@@ -297,11 +297,11 @@
     <string name="homework_attachments">Attachments</string>
     <plurals name="homework_notify_new_item_title">
         <item quantity="one">New homework</item>
-        <item quantity="other">New homeworks</item>
+        <item quantity="other">New homework</item>
     </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d homework</item>
-        <item quantity="other">%d homeworks</item>
+        <item quantity="other">%d homework</item>
     </plurals>
 
 
