@@ -2,7 +2,6 @@ package io.github.wulkanowy.data.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.core.content.edit
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
@@ -146,9 +145,11 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_subjects_without_grades
         )
 
-    var isKitkatDialogDisabled: Boolean
-        get() = sharedPref.getBoolean("kitkat_dialog_disabled", false)
-        set(value) = sharedPref.edit { putBoolean("kitkat_dialog_disabled", value) }
+    val isOptionalArithmeticAverage: Boolean
+        get() = getBoolean(
+            R.string.pref_key_optional_arithmetic_average,
+            R.bool.pref_default_optional_arithmetic_average
+        )
 
     private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
 
