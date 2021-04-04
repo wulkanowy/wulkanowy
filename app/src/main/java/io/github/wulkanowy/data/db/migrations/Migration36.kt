@@ -6,16 +6,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 class Migration36 : Migration(35, 36) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
-            """
-            CREATE TABLE IF NOT EXISTS TimetableHeaders (
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                student_id INTEGER NOT NULL,
-                diary_id INTEGER NOT NULL, 
-                date INTEGER NOT NULL, 
-                content TEXT NOT NULL
-            )
-        """
-        )
+        database.execSQL("ALTER TABLE Exams ADD COLUMN is_notified INTEGER NOT NULL DEFAULT 1")
+        database.execSQL("ALTER TABLE Homework ADD COLUMN is_notified INTEGER NOT NULL DEFAULT 1")
     }
 }
