@@ -191,16 +191,16 @@
     <string name="exam_type">Typ</string>
     <string name="exam_entry_date">Datum vstupu</string>
     <plurals name="exam_notify_new_item_title">
-        <item quantity="one">New exam</item>
-        <item quantity="few">New exams</item>
-        <item quantity="many">New exams</item>
-        <item quantity="other">New exams</item>
+        <item quantity="one">Nová zkouška</item>
+        <item quantity="few">Nové zkoušky</item>
+        <item quantity="many">Nové zkoušky</item>
+        <item quantity="other">Nové zkoušky</item>
     </plurals>
     <plurals name="exam_number_item">
-        <item quantity="one">%d exam</item>
-        <item quantity="few">%d exams</item>
-        <item quantity="many">%d exams</item>
-        <item quantity="other">%d exams</item>
+        <item quantity="one">%d zkouška</item>
+        <item quantity="few">%d zkoušky</item>
+        <item quantity="many">%d zkoušek</item>
+        <item quantity="other">%d zkoušek</item>
     </plurals>
     <!--Message-->
     <string name="message_inbox">Doručená pošta</string>
@@ -308,16 +308,16 @@
     <string name="homework_mark_as_undone">Neudělané</string>
     <string name="homework_attachments">Přílohy</string>
     <plurals name="homework_notify_new_item_title">
-        <item quantity="one">New homework</item>
-        <item quantity="few">New homework</item>
-        <item quantity="many">New homework</item>
-        <item quantity="other">New homework</item>
+        <item quantity="one">Nový domácí úkol</item>
+        <item quantity="few">Nové domácí úkoly</item>
+        <item quantity="many">Nové domácí úkoly</item>
+        <item quantity="other">Nové domácí úkoly</item>
     </plurals>
     <plurals name="homework_number_item">
-        <item quantity="one">%d homework</item>
-        <item quantity="few">%d homework</item>
-        <item quantity="many">%d homework</item>
-        <item quantity="other">%d homework</item>
+        <item quantity="one">%d domácí úkol</item>
+        <item quantity="few">%d domácí úkoly</item>
+        <item quantity="many">%d domácích úkolů</item>
+        <item quantity="other">%d domácích úkolů</item>
     </plurals>
     <!--Lucky number-->
     <string name="lucky_number_title">Šťastné číslo</string>
@@ -487,7 +487,7 @@
     <string name="pref_other_grade_modifier_plus">Hodnota plusu</string>
     <string name="pref_other_grade_modifier_minus">Hodnota mínusu</string>
     <string name="pref_other_fill_message_content">Odpovědět s historií zpráv</string>
-    <string name="pref_other_optional_arithmetic_average">Show arithmetic average when no weights provided</string>
+    <string name="pref_other_optional_arithmetic_average">Vypočítat aritmetický průměr, pokud žádná známka nemá váhu</string>
     <string name="pref_settings_advanced_title">Pokročilé</string>
     <string name="pref_settings_appearance_title">Vzhled a chování</string>
     <string name="pref_settings_notifications_title">Upozornění</string>
@@ -508,8 +508,8 @@
     <string name="pref_about_category_summary">Verze aplikace, tvůrci, sociální portály, licence</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Nové známky</string>
-    <string name="channel_new_homework">New homework</string>
-    <string name="channel_new_exam">New exams</string>
+    <string name="channel_new_homework">Nové domácí úkoly</string>
+    <string name="channel_new_exam">Nové zkoušky</string>
     <string name="channel_lucky_number">Šťastné číslo</string>
     <string name="channel_new_message">Nové zprávy</string>
     <string name="channel_new_notes">Nové poznámky</string>
