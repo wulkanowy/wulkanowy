@@ -194,7 +194,7 @@
         <item quantity="one">Nowy sprawdzian</item>
         <item quantity="few">Nowe sprawdziany</item>
         <item quantity="many">Nowe sprawdziany</item>
-        <item quantity="other">New exams</item>
+        <item quantity="other">Nowe sprawdziany</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d sprawdzian</item>
@@ -487,7 +487,7 @@
     <string name="pref_other_grade_modifier_plus">Wartość plusa</string>
     <string name="pref_other_grade_modifier_minus">Wartość minusa</string>
     <string name="pref_other_fill_message_content">Odpowiadaj z historią wiadomości</string>
-    <string name="pref_other_optional_arithmetic_average">Show arithmetic average when no weights provided</string>
+    <string name="pref_other_optional_arithmetic_average">Licz średnią arytmetyczną, gdy żadna ocena nie ma wagi</string>
     <string name="pref_settings_advanced_title">Zaawansowane</string>
     <string name="pref_settings_appearance_title">Wygląd i zachowanie</string>
     <string name="pref_settings_notifications_title">Powiadomienia</string>
