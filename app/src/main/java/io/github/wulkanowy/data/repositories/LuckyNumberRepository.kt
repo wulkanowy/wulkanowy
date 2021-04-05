@@ -10,6 +10,7 @@ import io.github.wulkanowy.utils.networkBoundResource
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalDate.now
 import javax.inject.Inject
@@ -22,6 +23,10 @@ class LuckyNumberRepository @Inject constructor(
 ) {
 
     private val saveFetchResultMutex = Mutex()
+
+    suspend fun getLuckyNumber(student: Student): LuckyNumber? {
+        return  luckyNumberDb.load(student.studentId, now()).first()
+    }
 
     fun getLuckyNumber(student: Student, forceRefresh: Boolean, notify: Boolean = false) = networkBoundResource(
         mutex = saveFetchResultMutex,
@@ -39,7 +44,7 @@ class LuckyNumberRepository @Inject constructor(
     )
 
     fun getLuckyNumberHistory(student: Student, start: LocalDate, end: LocalDate) =
-        luckyNumberDb.getAll(student.studentId, start, end)
+        luckyNumberDb.loadAll(student.studentId, start, end)
 
     suspend fun getNotNotifiedLuckyNumber(student: Student) = luckyNumberDb.load(student.studentId, now()).map {
         if (it?.isNotified == false) it else null

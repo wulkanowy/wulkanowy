@@ -19,11 +19,15 @@ import androidx.work.WorkManager
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.SharedPrefProvider.Companion.APP_VERSION_CODE_KEY
 import io.github.wulkanowy.data.repositories.PreferencesRepository
+import io.github.wulkanowy.services.sync.SyncWorker.Companion.ONE_TIME_KEY
+import io.github.wulkanowy.services.sync.SyncWorker.Companion.WORKS_TO_RUN
 import io.github.wulkanowy.services.sync.channels.Channel
+import io.github.wulkanowy.ui.base.BaseAppWidgetProvider.Companion.WIDGET_IDS_KEY
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.isHolidays
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
+import java.lang.reflect.Type
 import java.time.LocalDate.now
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
@@ -57,27 +61,40 @@ class SyncManager @Inject constructor(
 
     fun startPeriodicSyncWorker(restart: Boolean = false) {
         if (preferencesRepository.isServiceEnabled && !now().isHolidays) {
-            workManager.enqueueUniquePeriodicWork(SyncWorker::class.java.simpleName, if (restart) REPLACE else KEEP,
-                PeriodicWorkRequestBuilder<SyncWorker>(preferencesRepository.servicesInterval, MINUTES)
+            workManager.enqueueUniquePeriodicWork(
+                SyncWorker::class.java.simpleName, if (restart) REPLACE else KEEP,
+                PeriodicWorkRequestBuilder<SyncWorker>(
+                    preferencesRepository.servicesInterval,
+                    MINUTES
+                )
                     .setInitialDelay(10, MINUTES)
                     .setBackoffCriteria(EXPONENTIAL, 30, MINUTES)
-                    .setConstraints(Constraints.Builder()
-                        .setRequiredNetworkType(if (preferencesRepository.isServicesOnlyWifi) UNMETERED else CONNECTED)
-                        .build())
-                    .build())
+                    .setConstraints(
+                        Constraints.Builder()
+                            .setRequiredNetworkType(if (preferencesRepository.isServicesOnlyWifi) UNMETERED else CONNECTED)
+                            .build()
+                    )
+                    .build()
+            )
         }
     }
 
-    fun startOneTimeSyncWorker(): Flow<WorkInfo> {
-        val work = OneTimeWorkRequestBuilder<SyncWorker>()
-            .setInputData(
-                Data.Builder()
-                    .putBoolean("one_time", true)
-                    .build()
-            )
-            .build()
+    fun startOneTimeSyncWorker(vararg worksToDo: Type): Flow<WorkInfo> {
+        return startOneTimeSyncWorker(IntArray(0), *worksToDo)
+    }
 
-        workManager.enqueueUniqueWork("${SyncWorker::class.java.simpleName}_one_time", ExistingWorkPolicy.REPLACE, work)
+    fun startOneTimeSyncWorker(widgetIds: IntArray = IntArray(0), vararg worksToDo: Type): Flow<WorkInfo> {
+        val work = OneTimeWorkRequestBuilder<SyncWorker>().setInputData(
+            Data.Builder()
+                .putBoolean(ONE_TIME_KEY, true)
+                .putIntArray(WIDGET_IDS_KEY, widgetIds)
+                .putStringArray(WORKS_TO_RUN, worksToDo.map { it.toString() }.toTypedArray())
+                .build()
+        ).build()
+
+        workManager.enqueueUniqueWork(
+            "${SyncWorker::class.java.simpleName}_one_time", ExistingWorkPolicy.REPLACE, work
+        )
 
         return workManager.getWorkInfoByIdLiveData(work.id).asFlow()
     }

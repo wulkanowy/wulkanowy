@@ -15,5 +15,5 @@ interface LuckyNumberDao : BaseDao<LuckyNumber> {
     fun load(studentId: Int, date: LocalDate): Flow<LuckyNumber?>
 
     @Query("SELECT * FROM LuckyNumbers WHERE student_id = :studentId AND date >= :start AND date <= :end")
-    fun getAll(studentId: Int, start: LocalDate, end: LocalDate): Flow<List<LuckyNumber>>
+    fun loadAll(studentId: Int, start: LocalDate, end: LocalDate): Flow<List<LuckyNumber>>
 }
