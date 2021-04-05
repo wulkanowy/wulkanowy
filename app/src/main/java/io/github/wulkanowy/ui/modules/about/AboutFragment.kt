@@ -21,6 +21,10 @@ import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.toLocalDateTime
 import javax.inject.Inject
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import android.util.Log
 
 @AndroidEntryPoint
 class AboutFragment : BaseFragment<FragmentAboutBinding>(R.layout.fragment_about), AboutView,
@@ -84,6 +88,11 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(R.layout.fragment_about
     override val privacyRes: Triple<String, String, Drawable?>?
         get() = context?.run {
             Triple(getString(R.string.about_privacy), getString(R.string.about_privacy_summary), getCompatDrawable(R.drawable.ic_about_privacy))
+        }
+
+    override val systemRes: Triple<String, String, Drawable?>?
+        get() = context?.run {
+            Triple(getString(R.string.about_system), getString(R.string.about_system_summary), getCompatDrawable(R.drawable.ic_more_settings))
         }
 
     override val titleStringId get() = R.string.about_title
@@ -168,6 +177,13 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(R.layout.fragment_about
 
     override fun openPrivacyPolicy() {
         context?.openInternetBrowser("https://wulkanowy.github.io/polityka-prywatnosci.html", ::showMessage)
+    }
+
+    override fun openSystemSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
+        intent.data = uri
+        requireActivity().startActivity(intent)
     }
 
     override fun onDestroyView() {
