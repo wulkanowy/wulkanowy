@@ -3,7 +3,7 @@ name: Deploy to app tests
 on:
   push:
     branches: [ develop ]
-  pull_request:
+  pull_request_target:
     branches: [ develop ]
 
   workflow_dispatch:
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: app-distribution
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request_target'
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
