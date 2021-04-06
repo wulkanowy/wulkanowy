@@ -2,9 +2,11 @@ name: Deploy to app tests
 
 on:
   push:
-    branches: [ develop ]
+#    branches: [ develop ]
+    branches: [ '!*' ]
   pull_request_target:
-    branches: [ develop ]
+#    branches: [ develop ]
+    branches: [ '!*' ]
 
   workflow_dispatch:
 
