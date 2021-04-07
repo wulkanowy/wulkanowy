@@ -385,6 +385,8 @@
     <string name="about_facebook_summary">Вподобати нашу фансторінку у Facebook</string>
     <string name="about_privacy">Політика конфіденційності</string>
     <string name="about_privacy_summary">Правила зберігання особистих даних</string>
+    <string name="about_system">System settings</string>
+    <string name="about_system_summary">Open system settings</string>
     <string name="about_homepage">Домашня сторінка</string>
     <string name="about_homepage_summary">Допомогти розвитку додатка</string>
     <string name="about_licenses">Ліцензії</string>
@@ -470,6 +472,7 @@
     <string name="pref_notify_header">Повідомлення</string>
     <string name="pref_notify_switch">Показувати повідомлення</string>
     <string name="pref_notify_upcoming_lessons_switch">Показувати повідомлення о наступних уроках</string>
+    <string name="pref_notify_open_system_settings">Open system notification settings</string>
     <string name="pref_notify_fix_sync_issues">Виправити помилки з синхронізацією і повідомленнями</string>
     <string name="pref_notify_fix_sync_issues_message">На вашому пристрої можуть бути помилки з синхронізацією і повідомленнями\n\nЩоб виправити іх, вам необхідно додати Wulkanowy в авто-старт и вимкнути оптимізацію/экономію батареї в налаштуваннях пристрою.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Перейти до налаштувань</string>
