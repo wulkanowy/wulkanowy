@@ -339,6 +339,8 @@
     <string name="about_facebook_summary">Gefällt unsere Facebook-Fanpage</string>
     <string name="about_privacy">Datenschutzerklärung</string>
     <string name="about_privacy_summary">Regeln für die Sammlung persönlicher Daten</string>
+    <string name="about_system">System settings</string>
+    <string name="about_system_summary">Open system settings</string>
     <string name="about_homepage">Startseite</string>
     <string name="about_homepage_summary">Besuchen Sie die Website und helfen Sie bei der Entwicklung der Anwendung</string>
     <string name="about_licenses">Lizenzen</string>
@@ -424,6 +426,7 @@
     <string name="pref_notify_header">Benachrichtigungen</string>
     <string name="pref_notify_switch">Benachrichtigungen anzeigen</string>
     <string name="pref_notify_upcoming_lessons_switch">Benachrichtigungen über bevorstehende Lektionen anzeigen</string>
+    <string name="pref_notify_open_system_settings">Open system notification settings</string>
     <string name="pref_notify_fix_sync_issues">Synchronisierungs- und Benachrichtigungsprobleme reparieren</string>
     <string name="pref_notify_fix_sync_issues_message">Ihr Gerät hat möglicherweise Probleme mit der Datensynchronisierung und Benachrichtigungen.\n\nUm diese zu reparieren, fügen Sie Wulkanowy zum Autostart hinzu und deaktivieren Sie die Batterieoptimierung in den Systemeinstellungen des Geräts.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Gehe zu den Einstellungen</string>
