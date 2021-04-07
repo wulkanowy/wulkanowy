@@ -71,11 +71,6 @@ class AboutPresenter @Inject constructor(
                     openPrivacyPolicy()
                     analytics.logEvent("about_open", "name" to "privacy")
                 }
-                systemRes?.first -> {
-                    Timber.i("Opening system settings ")
-                    openSystemSettings()
-                    analytics.logEvent("about_open", "name" to "system")
-                }
             }
         }
     }
@@ -91,8 +86,7 @@ class AboutPresenter @Inject constructor(
                 facebookRes,
                 homepageRes,
                 licensesRes,
-                privacyRes,
-                systemRes
+                privacyRes
             ))
         }
     }
