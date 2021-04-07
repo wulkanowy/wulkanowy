@@ -24,6 +24,7 @@ import io.github.wulkanowy.ui.base.ErrorDialog
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.openInternetBrowser
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -137,16 +138,21 @@ class NotificationsFragment : PreferenceFragmentCompat(),
 
     @SuppressLint("InlinedApi")
     override fun openSystemSettings() {
-        val intent: Intent
-        if (appInfo.systemVersion >= Build.VERSION_CODES.O) {
-            intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-            intent.putExtra("android.provider.extra.APP_PACKAGE", requireActivity().packageName);
+        val intent = if (appInfo.systemVersion >= Build.VERSION_CODES.O) {
+            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                putExtra("android.provider.extra.APP_PACKAGE", requireActivity().packageName)
+            }
         } else {
-            intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
-            intent.data = uri
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
+                data = uri
+            }
         }
-        requireActivity().startActivity(intent)
+        try {
+            requireActivity().startActivity(intent)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
     }
 
     override fun onResume() {
