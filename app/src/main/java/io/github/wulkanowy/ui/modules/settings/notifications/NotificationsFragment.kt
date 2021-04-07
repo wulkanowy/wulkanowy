@@ -10,7 +10,6 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -144,8 +143,7 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             }
         } else {
             Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
-                data = uri
+                data = Uri.fromParts("package", requireActivity().packageName, null)
             }
         }
         try {
