@@ -9,7 +9,8 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
@@ -20,7 +21,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.modules.timetable.additional.AdditionalLessonsFragment
 import io.github.wulkanowy.ui.modules.timetable.completed.CompletedLessonsFragment
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
-import io.github.wulkanowy.utils.SchooldaysRangeLimiter
+import io.github.wulkanowy.utils.SchoolDaysValidator
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
 import java.time.LocalDate
@@ -184,21 +185,20 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
-        val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            presenter.onDateSet(year, month + 1, dayOfMonth)
-        }
-        val datePickerDialog = DatePickerDialog.newInstance(
-            dateSetListener,
-            currentDate.year, currentDate.monthValue - 1, currentDate.dayOfMonth
-        )
+        val constraintsBuilder = CalendarConstraints.Builder()
+        constraintsBuilder.setValidator(SchoolDaysValidator())
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setCalendarConstraints(constraintsBuilder.build())
+                .setSelection(currentDate.toEpochDay())
+                .build()
 
-        with(datePickerDialog) {
-            setDateRangeLimiter(SchooldaysRangeLimiter())
-            version = DatePickerDialog.Version.VERSION_2
-            scrollOrientation = DatePickerDialog.ScrollOrientation.VERTICAL
-            vibrate(false)
-            show(this@TimetableFragment.parentFragmentManager, null)
+        datePicker.addOnPositiveButtonClickListener {
+            val date = LocalDate.ofEpochDay(it/3600000/24)
+            presenter.onDateSet(date.year, date.monthValue, date.dayOfMonth)
         }
+
+        datePicker.show(this@TimetableFragment.parentFragmentManager, null)
     }
 
     override fun openAdditionalLessonsView() {
