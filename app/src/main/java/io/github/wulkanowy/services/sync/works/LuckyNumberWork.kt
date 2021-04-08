@@ -3,10 +3,14 @@ package io.github.wulkanowy.services.sync.works
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.DEFAULT_ALL
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.LuckyNumber
@@ -39,10 +43,14 @@ class LuckyNumberWork @Inject constructor(
     }
 
     private fun notify(luckyNumber: LuckyNumber) {
+        val icon = ContextCompat.getDrawable(context, R.drawable.ic_stat_luckynumber)!!.mutate()
+        icon.colorFilter =
+            PorterDuffColorFilter(context.resources.getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, LuckyNumberChannel.CHANNEL_ID)
             .setContentTitle(context.getString(R.string.lucky_number_notify_new_item_title))
             .setContentText(context.getString(R.string.lucky_number_notify_new_item, luckyNumber.luckyNumber))
-            .setSmallIcon(R.drawable.ic_stat_luckynumber)
+            .setSmallIcon(R.drawable.ic_stat_push)
+            .setLargeIcon(icon.toBitmap())
             .setAutoCancel(true)
             .setDefaults(DEFAULT_ALL)
             .setPriority(PRIORITY_HIGH)

@@ -2,8 +2,12 @@ package io.github.wulkanowy.services.sync.works
 
 import android.app.PendingIntent
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
@@ -46,6 +50,9 @@ class ExamWork @Inject constructor(
     }
 
     private fun notify(exam: List<Exam>) {
+        val icon = ContextCompat.getDrawable(context, R.drawable.ic_main_exam)!!.mutate()
+        icon.colorFilter =
+            PorterDuffColorFilter(context.resources.getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
         notificationManager.notify(
             Random.nextInt(Int.MAX_VALUE),
             NotificationCompat.Builder(context, NewExamChannel.CHANNEL_ID)
@@ -56,7 +63,8 @@ class ExamWork @Inject constructor(
                         exam.size
                     )
                 )
-                .setSmallIcon(R.drawable.ic_main_exam)
+                .setSmallIcon(R.drawable.ic_stat_push)
+                .setLargeIcon(icon.toBitmap())
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

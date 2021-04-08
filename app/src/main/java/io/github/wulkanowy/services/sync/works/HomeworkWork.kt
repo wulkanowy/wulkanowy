@@ -2,8 +2,12 @@ package io.github.wulkanowy.services.sync.works
 
 import android.app.PendingIntent
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
@@ -51,6 +55,9 @@ class HomeworkWork @Inject constructor(
     }
 
     private fun notify(homework: List<Homework>) {
+        val icon = ContextCompat.getDrawable(context, R.drawable.ic_more_homework)!!.mutate()
+        icon.colorFilter =
+            PorterDuffColorFilter(context.resources.getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
         notificationManager.notify(
             Random.nextInt(Int.MAX_VALUE),
             NotificationCompat.Builder(context, NewHomeworkChannel.CHANNEL_ID)
@@ -61,7 +68,8 @@ class HomeworkWork @Inject constructor(
                         homework.size
                     )
                 )
-                .setSmallIcon(R.drawable.ic_more_homework)
+                .setSmallIcon(R.drawable.ic_stat_push)
+                .setLargeIcon(icon.toBitmap())
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

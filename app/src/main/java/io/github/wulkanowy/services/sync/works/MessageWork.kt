@@ -3,10 +3,14 @@ package io.github.wulkanowy.services.sync.works
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.DEFAULT_ALL
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
@@ -41,10 +45,14 @@ class MessageWork @Inject constructor(
     }
 
     private fun notify(messages: List<Message>) {
+        val icon = ContextCompat.getDrawable(context, R.drawable.ic_stat_message)!!.mutate()
+        icon.colorFilter =
+            PorterDuffColorFilter(context.resources.getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewMessagesChannel.CHANNEL_ID)
             .setContentTitle(context.resources.getQuantityString(R.plurals.message_new_items, messages.size, messages.size))
             .setContentText(context.resources.getQuantityString(R.plurals.message_notify_new_items, messages.size, messages.size))
-            .setSmallIcon(R.drawable.ic_stat_message)
+            .setSmallIcon(R.drawable.ic_stat_push)
+            .setLargeIcon(icon.toBitmap())
             .setAutoCancel(true)
             .setDefaults(DEFAULT_ALL)
             .setPriority(PRIORITY_HIGH)
