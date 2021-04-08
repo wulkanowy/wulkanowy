@@ -8,20 +8,20 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="300dp">
+        android:minWidth="300dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="8dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginTop="24dp"
             tools:ignore="UselessParent">
 
             <LinearLayout
                 android:id="@+id/gradeDialogValueLayout"
-                android:layout_width="86dp"
-                android:layout_height="match_parent"
+                android:layout_width="101dp"
+                android:layout_height="121dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -32,6 +32,8 @@
                     android:id="@+id/gradeDialogValue"
                     android:layout_width="match_parent"
                     android:layout_height="86dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="16dp"
                     android:background="@color/grade_material_default"
                     android:gravity="center"
                     android:textColor="@android:color/white"
@@ -43,7 +45,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:layout_marginStart="0dp"
                     android:layout_marginTop="2dp"
+                    android:layout_marginEnd="16dp"
                     android:background="@color/grade_black"
                     android:gravity="center"
                     android:maxLines="2"
