@@ -20,7 +20,11 @@ import io.github.wulkanowy.utils.SchoolDaysValidator
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.getThemeAttrColor
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -146,11 +150,12 @@ class CompletedLessonsFragment :
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(constraintsBuilder.build())
-                .setSelection(currentDate.toEpochDay()*3600000*24)
+                .setSelection(currentDate.atTime(LocalTime.now()).toEpochSecond(ZoneId.systemDefault().rules.getOffset(Instant.now()))*1000)
                 .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            val date = LocalDate.ofEpochDay(it/3600000/24)
+            val date = LocalDateTime.ofEpochSecond(it/1000, 0, ZoneId.systemDefault().rules.getOffset(
+                Instant.now()))
             presenter.onDateSet(date.year, date.monthValue, date.dayOfMonth)
         }
 
