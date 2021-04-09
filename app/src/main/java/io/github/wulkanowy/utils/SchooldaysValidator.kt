@@ -3,7 +3,9 @@ package io.github.wulkanowy.utils
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.android.material.datepicker.CalendarConstraints
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 class SchoolDaysValidator() : CalendarConstraints.DateValidator {
 
@@ -20,9 +22,7 @@ class SchoolDaysValidator() : CalendarConstraints.DateValidator {
         val endYear = if (now.monthValue > 6) now.year + 1 else now.year
         val endOfSchoolYear = now.withYear(endYear).lastSchoolDay
 
-        return date.year >= startOfSchoolYear.year && date.year <= endOfSchoolYear.year &&
-            (date.monthValue >= startOfSchoolYear.monthValue-1 || date.monthValue <= endOfSchoolYear.monthValue-1) &&
-            date.dayOfMonth >= startOfSchoolYear.dayOfMonth && date.dayOfMonth <= endOfSchoolYear.dayOfMonth
+        return date.until(endOfSchoolYear, ChronoUnit.DAYS) >= 0 && date.until(startOfSchoolYear, ChronoUnit.DAYS) <= 0 && date.dayOfWeek != DayOfWeek.SUNDAY
     }
 
     override fun describeContents(): Int {

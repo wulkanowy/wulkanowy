@@ -222,11 +222,11 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(constraintsBuilder.build())
-                .setSelection(currentDate.toEpochDay())
+                .setSelection(currentDate.toEpochDay()*3600000*24)
                 .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            val date = LocalDate.ofEpochDay(it)
+            val date = LocalDate.ofEpochDay(it/3600000/24)
             presenter.onDateSet(date.year, date.monthValue, date.dayOfMonth)
         }
 

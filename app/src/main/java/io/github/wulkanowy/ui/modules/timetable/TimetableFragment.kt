@@ -190,7 +190,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(constraintsBuilder.build())
-                .setSelection(currentDate.toEpochDay())
+                .setSelection(currentDate.toEpochDay()*3600000*24)
                 .build()
 
         datePicker.addOnPositiveButtonClickListener {
