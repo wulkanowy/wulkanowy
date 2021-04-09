@@ -11,6 +11,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 import java.time.LocalDateTime.ofInstant
+import java.time.LocalTime
 import java.time.Month
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -22,15 +23,20 @@ import java.util.Locale
 
 private const val DATE_PATTERN = "dd.MM.yyyy"
 
-fun String.toLocalDate(format: String = DATE_PATTERN): LocalDate = LocalDate.parse(this, ofPattern(format))
+fun String.toLocalDate(format: String = DATE_PATTERN): LocalDate =
+    LocalDate.parse(this, ofPattern(format))
 
-fun LocalDateTime.toTimestamp() = atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toInstant().toEpochMilli()
+fun LocalDateTime.toTimestamp() =
+    atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toInstant().toEpochMilli()
 
 fun Long.toLocalDateTime(): LocalDateTime = ofInstant(ofEpochMilli(this), ZoneId.systemDefault())
 
+fun LocalDate.toTimestamp() = atTime(LocalTime.now()).toTimestamp()
+
 fun LocalDate.toFormattedString(format: String = DATE_PATTERN): String = format(ofPattern(format))
 
-fun LocalDateTime.toFormattedString(format: String = DATE_PATTERN): String = format(ofPattern(format))
+fun LocalDateTime.toFormattedString(format: String = DATE_PATTERN): String =
+    format(ofPattern(format))
 
 @SuppressLint("DefaultLocale")
 fun Month.getFormattedName(): String {

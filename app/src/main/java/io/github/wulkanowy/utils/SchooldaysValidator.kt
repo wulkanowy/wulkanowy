@@ -4,10 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.android.material.datepicker.CalendarConstraints
 import java.time.DayOfWeek
-import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 class SchoolDaysValidator() : CalendarConstraints.DateValidator {
@@ -17,11 +14,7 @@ class SchoolDaysValidator() : CalendarConstraints.DateValidator {
     constructor(parcel: Parcel) : this()
 
     override fun isValid(dateLong: Long): Boolean {
-        val date = LocalDateTime.ofEpochSecond(
-            dateLong / 1000, 0, ZoneId.systemDefault().rules.getOffset(
-                Instant.now()
-            )
-        )
+        val date = dateLong.toLocalDateTime()
 
         val startYear = if (now.monthValue <= 6) now.year - 1 else now.year
         val startOfSchoolYear = now.withYear(startYear).firstSchoolDay
