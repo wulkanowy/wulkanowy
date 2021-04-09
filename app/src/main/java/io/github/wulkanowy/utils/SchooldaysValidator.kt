@@ -1,19 +1,16 @@
 package io.github.wulkanowy.utils
 
-import android.os.Parcel
-import android.os.Parcelable
 import com.google.android.material.datepicker.CalendarConstraints
+import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-class SchoolDaysValidator() : CalendarConstraints.DateValidator {
-
-    private var now = LocalDate.now()
-
-    constructor(parcel: Parcel) : this()
+@Parcelize
+class SchoolDaysValidator : CalendarConstraints.DateValidator {
 
     override fun isValid(dateLong: Long): Boolean {
+        val now = LocalDate.now()
         val date = dateLong.toLocalDateTime()
 
         val startYear = if (now.monthValue <= 6) now.year - 1 else now.year
@@ -23,38 +20,5 @@ class SchoolDaysValidator() : CalendarConstraints.DateValidator {
 
         return date.toLocalDate().until(endOfSchoolYear, ChronoUnit.DAYS) >= 0 && date.toLocalDate()
             .until(startOfSchoolYear, ChronoUnit.DAYS) <= 0 && date.dayOfWeek != DayOfWeek.SUNDAY
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    override fun hashCode(): Int {
-        val hashedFields = arrayOf<Any>()
-        return hashedFields.contentHashCode()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as SchoolDaysValidator
-
-        if (now != other.now) return false
-
-        return true
-    }
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-    }
-
-    companion object CREATOR : Parcelable.Creator<SchoolDaysValidator> {
-        override fun createFromParcel(parcel: Parcel): SchoolDaysValidator {
-            return SchoolDaysValidator(parcel)
-        }
-
-        override fun newArray(size: Int): Array<SchoolDaysValidator?> {
-            return arrayOfNulls(size)
-        }
     }
 }
