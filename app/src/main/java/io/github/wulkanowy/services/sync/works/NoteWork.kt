@@ -9,7 +9,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.DEFAULT_ALL
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
@@ -25,6 +24,7 @@ import io.github.wulkanowy.services.sync.channels.NewNotesChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.getCompatColor
+import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.waitForResult
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -47,9 +47,10 @@ class NoteWork @Inject constructor(
     }
 
     private fun notify(notes: List<Note>) {
-        val icon = ContextCompat.getDrawable(context, R.drawable.ic_stat_note)!!.mutate()
-        icon.colorFilter =
-            PorterDuffColorFilter(context.resources.getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
+        val icon = context.getCompatDrawable(R.drawable.ic_stat_note)?.mutate()?.apply {
+            colorFilter =
+                PorterDuffColorFilter(context.getCompatColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
+        }
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewNotesChannel.CHANNEL_ID)
             .setContentTitle(
                 when (NoteCategory.getByValue(notes.first().categoryType)) {
@@ -66,7 +67,7 @@ class NoteWork @Inject constructor(
                 }
             )
             .setSmallIcon(R.drawable.ic_stat_push)
-            .setLargeIcon(icon.toBitmap())
+            .setLargeIcon(icon?.toBitmap())
             .setAutoCancel(true)
             .setDefaults(DEFAULT_ALL)
             .setPriority(PRIORITY_HIGH)

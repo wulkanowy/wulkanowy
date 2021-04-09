@@ -6,7 +6,6 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
@@ -19,6 +18,7 @@ import io.github.wulkanowy.services.sync.channels.NewHomeworkChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.getCompatColor
+import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.waitForResult
@@ -55,9 +55,10 @@ class HomeworkWork @Inject constructor(
     }
 
     private fun notify(homework: List<Homework>) {
-        val icon = ContextCompat.getDrawable(context, R.drawable.ic_more_homework)!!.mutate()
-        icon.colorFilter =
-            PorterDuffColorFilter(context.resources.getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
+        val icon = context.getCompatDrawable(R.drawable.ic_more_homework)?.mutate()?.apply {
+            colorFilter =
+                PorterDuffColorFilter(context.getCompatColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
+        }
         notificationManager.notify(
             Random.nextInt(Int.MAX_VALUE),
             NotificationCompat.Builder(context, NewHomeworkChannel.CHANNEL_ID)
@@ -69,7 +70,7 @@ class HomeworkWork @Inject constructor(
                     )
                 )
                 .setSmallIcon(R.drawable.ic_stat_push)
-                .setLargeIcon(icon.toBitmap())
+                .setLargeIcon(icon?.toBitmap())
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
