@@ -38,7 +38,14 @@ class StudentInfoFragment :
     lateinit var studentInfoAdapter: StudentInfoAdapter
 
     override val titleStringId: Int
-        get() = R.string.student_info_title
+        get() = when (requireArguments().getSerializable(INFO_TYPE_ARGUMENT_KEY) as StudentInfoView.Type) {
+            StudentInfoView.Type.PERSONAL -> R.string.account_personal_data
+            StudentInfoView.Type.CONTACT -> R.string.account_contact
+            StudentInfoView.Type.ADDRESS -> R.string.account_address
+            StudentInfoView.Type.FAMILY -> R.string.account_family
+            StudentInfoView.Type.SECOND_GUARDIAN -> R.string.student_info_guardian_address
+            StudentInfoView.Type.FIRST_GUARDIAN -> R.string.student_info_guardian_address
+        }
 
     override val isViewEmpty get() = studentInfoAdapter.items.isEmpty()
 
@@ -110,7 +117,6 @@ class StudentInfoFragment :
     }
 
     override fun showPersonalTypeData(studentInfo: StudentInfo) {
-        (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.account_personal_data)
         updateData(
             listOf(
                 getString(R.string.student_info_first_name) to studentInfo.firstName,
@@ -127,7 +133,6 @@ class StudentInfoFragment :
     }
 
     override fun showContactTypeData(studentInfo: StudentInfo) {
-        (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.account_contact)
         updateData(
             listOf(
                 getString(R.string.student_info_phone) to studentInfo.phoneNumber,
@@ -141,7 +146,6 @@ class StudentInfoFragment :
 
     @SuppressLint("DefaultLocale")
     override fun showFamilyTypeData(studentInfo: StudentInfo) {
-        (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.account_family)
         updateData(
             listOfNotNull(
                 studentInfo.firstGuardian?.let { it.kinship.capitalize() to it.fullName },
@@ -156,7 +160,6 @@ class StudentInfoFragment :
     }
 
     override fun showAddressTypeData(studentInfo: StudentInfo) {
-        (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.account_address)
         updateData(
             listOf(
                 getString(R.string.student_info_address) to studentInfo.address,
@@ -169,7 +172,6 @@ class StudentInfoFragment :
     }
 
     override fun showFirstGuardianTypeData(studentGuardian: StudentGuardian) {
-        (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.student_info_guardian_address)
         updateData(
             listOf(
                 getString(R.string.student_info_full_name) to studentGuardian.fullName,
@@ -184,7 +186,6 @@ class StudentInfoFragment :
     }
 
     override fun showSecondGuardianTypeData(studentGuardian: StudentGuardian) {
-        (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.student_info_guardian_address)
         updateData(
             listOf(
                 getString(R.string.student_info_full_name) to studentGuardian.fullName,
