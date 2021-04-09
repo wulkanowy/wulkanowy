@@ -9,24 +9,28 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.LOLLIPOP
+import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation.TitleState.ALWAYS_SHOW
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.elevation.ElevationOverlayProvider
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.ActivityMainBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.account.accountquick.AccountQuickDialog
@@ -42,15 +46,18 @@ import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.UpdateHelper
+import io.github.wulkanowy.utils.createNameInitialsDrawable
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.nickOrName
 import io.github.wulkanowy.utils.safelyPopFragments
 import io.github.wulkanowy.utils.setOnViewChangeListener
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainView {
+class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainView,
+    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     @Inject
     override lateinit var presenter: MainPresenter
@@ -63,6 +70,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     @Inject
     lateinit var appInfo: AppInfo
+
+    private var accountMenu: MenuItem? = null
 
     private val overlayProvider by lazy { ElevationOverlayProvider(this) }
 
@@ -121,6 +130,11 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             initialize(startMenuIndex, savedInstanceState)
             pushFragment(moreMenuFragments[startMenuMoreIndex])
         }
+
+        if (appInfo.systemVersion >= Build.VERSION_CODES.N_MR1) {
+            initShortcuts()
+        }
+
         updateHelper.checkAndInstallUpdates(this)
     }
 
@@ -129,11 +143,11 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         updateHelper.onResume(this)
     }
 
-    @SuppressLint("NewApi")
+    //https://developer.android.com/guide/playcore/in-app-updates#status_callback
+    @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         updateHelper.onActivityResult(requestCode, resultCode)
-        if (appInfo.systemVersion >= Build.VERSION_CODES.N_MR1) initShortcuts()
     }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
@@ -160,11 +174,6 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
                 getString(R.string.timetable_title),
                 R.drawable.ic_shortcut_timetable,
                 MainView.Section.TIMETABLE
-            ),
-            Triple(
-                getString(R.string.message_title),
-                R.drawable.ic_shortcut_message,
-                MainView.Section.MESSAGE
             )
         ).forEach { (title, icon, enum) ->
             shortcutsList.add(
@@ -191,54 +200,61 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.action_menu_main, menu)
+        accountMenu = menu?.findItem(R.id.mainMenuAccount)
+
+        presenter.onActionMenuCreated()
         return true
     }
 
+    @SuppressLint("NewApi")
     override fun initView() {
         with(binding.mainToolbar) {
-            if (SDK_INT >= LOLLIPOP) stateListAnimator = null
+            stateListAnimator = null
             setBackgroundColor(
                 overlayProvider.compositeOverlayWithThemeSurfaceColorIfNeeded(dpToPx(4f))
             )
         }
 
         with(binding.mainBottomNav) {
-            addItems(
-                listOf(
-                    AHBottomNavigationItem(R.string.grade_title, R.drawable.ic_main_grade, 0),
-                    AHBottomNavigationItem(
-                        R.string.attendance_title,
-                        R.drawable.ic_main_attendance,
-                        0
-                    ),
-                    AHBottomNavigationItem(R.string.exam_title, R.drawable.ic_main_exam, 0),
-                    AHBottomNavigationItem(
-                        R.string.timetable_title,
-                        R.drawable.ic_main_timetable,
-                        0
-                    ),
-                    AHBottomNavigationItem(R.string.more_title, R.drawable.ic_main_more, 0)
-                )
-            )
-            accentColor = getThemeAttrColor(R.attr.colorPrimary)
-            inactiveColor = getThemeAttrColor(R.attr.colorOnSurface, 153)
-            defaultBackgroundColor =
-                overlayProvider.compositeOverlayWithThemeSurfaceColorIfNeeded(dpToPx(8f))
-            titleState = ALWAYS_SHOW
-            currentItem = startMenuIndex
-            isBehaviorTranslationEnabled = false
-            setTitleTextSizeInSp(10f, 10f)
-            setOnTabSelectedListener(presenter::onTabSelected)
+            with(menu) {
+                add(Menu.NONE, 0, Menu.NONE, R.string.grade_title)
+                    .setIcon(R.drawable.ic_main_grade)
+                add(Menu.NONE, 1, Menu.NONE, R.string.attendance_title)
+                    .setIcon(R.drawable.ic_main_attendance)
+                add(Menu.NONE, 2, Menu.NONE, R.string.exam_title)
+                    .setIcon(R.drawable.ic_main_exam)
+                add(Menu.NONE, 3, Menu.NONE, R.string.timetable_title)
+                    .setIcon(R.drawable.ic_main_timetable)
+                add(Menu.NONE, 4, Menu.NONE, R.string.more_title)
+                    .setIcon(R.drawable.ic_main_more)
+            }
+            selectedItemId = startMenuIndex
+            setOnNavigationItemSelectedListener { presenter.onTabSelected(it.itemId, false) }
+            setOnNavigationItemReselectedListener { presenter.onTabSelected(it.itemId, true) }
         }
 
         with(navController) {
             setOnViewChangeListener { section, name ->
-                binding.mainBottomNav.visibility =
-                    if (section == MainView.Section.ACCOUNT || section == MainView.Section.STUDENT_INFO) {
-                        View.GONE
-                    } else {
-                        View.VISIBLE
+                if (section == MainView.Section.ACCOUNT || section == MainView.Section.STUDENT_INFO) {
+                    binding.mainBottomNav.isVisible = false
+                    binding.mainFragmentContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        updateMargins(bottom = 0)
                     }
+
+                    if (appInfo.systemVersion >= P) {
+                        window.navigationBarColor = getThemeAttrColor(R.attr.colorSurface)
+                    }
+                } else {
+                    binding.mainBottomNav.isVisible = true
+                    binding.mainFragmentContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        updateMargins(bottom = dpToPx(56f).toInt())
+                    }
+
+                    if (appInfo.systemVersion >= P) {
+                        window.navigationBarColor =
+                            getThemeAttrColor(android.R.attr.navigationBarColor)
+                    }
+                }
 
                 analytics.setCurrentScreen(this@MainActivity, name)
                 presenter.onViewChange(section)
@@ -254,6 +270,16 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         }
     }
 
+    override fun onPreferenceStartFragment(
+        caller: PreferenceFragmentCompat,
+        pref: Preference
+    ): Boolean {
+        val fragment =
+            supportFragmentManager.fragmentFactory.instantiate(classLoader, pref.fragment)
+        pushView(fragment)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.mainMenuAccount) presenter.onAccountManagerSelected()
         else false
@@ -264,6 +290,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     }
 
     override fun switchMenuView(position: Int) {
+        if (supportFragmentManager.isStateSaved) return
+
         analytics.popCurrentScreen(navController.currentFrag!!::class.simpleName)
         navController.switchTab(position)
     }
@@ -280,8 +308,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         supportActionBar?.setDisplayHomeAsUpEnabled(show)
     }
 
-    override fun showAccountPicker() {
-        navController.showDialogFragment(AccountQuickDialog.newInstance())
+    override fun showAccountPicker(studentWithSemesters: List<StudentWithSemesters>) {
+        showDialogFragment(AccountQuickDialog.newInstance(studentWithSemesters))
     }
 
     override fun showActionBarElevation(show: Boolean) {
@@ -297,22 +325,44 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         (navController.currentStack?.getOrNull(0) as? MainView.MainChildView)?.onFragmentChanged()
     }
 
+    @Suppress("DEPRECATION")
     fun showDialogFragment(dialog: DialogFragment) {
+        if (supportFragmentManager.isStateSaved) return
+
+        //Deprecated method is used here to avoid fragnav bug
+        if (navController.currentDialogFrag?.fragmentManager == null) {
+            FragNavController::class.java.getDeclaredField("mCurrentDialogFrag").apply {
+                isAccessible = true
+                set(navController, null)
+            }
+        }
+
         navController.showDialogFragment(dialog)
     }
 
     fun pushView(fragment: Fragment) {
+        if (supportFragmentManager.isStateSaved) return
+
         analytics.popCurrentScreen(navController.currentFrag!!::class.simpleName)
         navController.pushFragment(fragment)
     }
 
     override fun popView(depth: Int) {
+        if (supportFragmentManager.isStateSaved) return
+
         analytics.popCurrentScreen(navController.currentFrag!!::class.simpleName)
         navController.safelyPopFragments(depth)
     }
 
     override fun onBackPressed() {
         presenter.onBackPressed { super.onBackPressed() }
+    }
+
+    override fun showStudentAvatar(student: Student) {
+        accountMenu?.run {
+            icon = createNameInitialsDrawable(student.nickOrName, student.avatarColor, 0.44f)
+            title = getString(R.string.main_account_picker)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

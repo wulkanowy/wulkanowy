@@ -8,7 +8,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentMoreBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.about.AboutFragment
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
@@ -62,9 +61,6 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>(R.layout.fragment_more), 
 
     override val settingsRes: Pair<String, Drawable?>?
         get() = context?.run { getString(R.string.settings_title) to getCompatDrawable(R.drawable.ic_more_settings) }
-
-    override val aboutRes: Pair<String, Drawable?>?
-        get() = context?.run { getString(R.string.about_title) to getCompatDrawable(R.drawable.ic_all_about) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -122,10 +118,6 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>(R.layout.fragment_more), 
 
     override fun openSettingsView() {
         (activity as? MainActivity)?.pushView(SettingsFragment.newInstance())
-    }
-
-    override fun openAboutView() {
-        (activity as? MainActivity)?.pushView(AboutFragment.newInstance())
     }
 
     override fun popView(depth: Int) {

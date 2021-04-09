@@ -17,11 +17,14 @@
     <string name="send_message_title">Нове повідомлення</string>
     <string name="note_title">Нотатки та досягнення</string>
     <string name="homework_title">Домашні завдання</string>
-    <string name="account_title">Оберіть аккаунт</string>
+    <string name="account_title">Менеджер аккаунтів</string>
+    <string name="account_quick_title">Виберіть обліковий запис</string>
+    <string name="account_details_title">Деталі облікового запису</string>
+    <string name="student_info_title">Інформація про учня</string>
     <!--Subtitles-->
     <string name="grade_subtitle">%1$d семестр, %2$d/%3$d</string>
     <!--Login-->
-    <string name="login_header_default">Авторизуйтеся за допомогою аккаунта учня або батька</string>
+    <string name="login_header_default">Авторизуйтеся за допомогою аккаунта учня або батьків</string>
     <string name="login_header_symbol">Введіть символ зі сторінки реєстру</string>
     <string name="login_nickname_hint">Ім\'я користувача</string>
     <string name="login_email_hint">Електронна пошта</string>
@@ -43,11 +46,12 @@
     <string name="login_expired_token">Минув термін дії токену</string>
     <string name="login_invalid_email">Недійсна адреса електронної пошти</string>
     <string name="login_invalid_login">Використовуйте призначений логін замість електронної пошти</string>
-    <string name="login_invalid_symbol">Неправильний symbol</string>
+    <string name="login_invalid_custom_email">Використовуйте призначений логін або електронну адресу в @%1$s</string>
+    <string name="login_invalid_symbol">Неправильний симбвол</string>
     <string name="login_incorrect_symbol">Студента не знайдено Перевірте символ та обраний варіант реєстру UONET+</string>
     <string name="login_field_required">Обов\'язкове поле</string>
     <string name="login_duplicate_student">Даного учня вже авторизовано</string>
-    <string name="login_symbol_helper">Символ можна знайти на сторінці реєстру в &#160; <b> Uczeń </b> → &#160; <b> Dostęp Mobilny </b> → &#160; <b> Zarejestruj urządzenie mobilne </b>.\n\nПереконайтесь, що ви встановили відповідний варіант реєстру в полі <b> UONET + варіант реєстрації </b> на попередньому екрані. На даний момент Wulkanowy не виявляє учнів дошкільних закладів</string>
+    <string name="login_symbol_helper">Символ можна знайти на сторінці реєстру в &#160; <b> Учень </b> → &#160; <b> Мобільний доступ </b> → &#160; <b> Додайте мобільне приладдя </b>.\n\nПереконайтесь, що ви встановили відповідний варіант реєстру в полі <b> UONET + варіант реєстрації </b> на попередньому екрані. На даний момент Wulkanowy не виявляє учнів дошкільних закладів</string>
     <string name="login_select_student">Виберіть учнів для авторизації в додатку</string>
     <string name="login_advanced">Інші варіанти</string>
     <string name="login_advanced_warning_mobile_api">У цьому режимі не працюють: щасливий номер, статистика класу по оцінкам, статистика відвідуваності і уроків, інформація про школу і список зареєстрованних пристроїв</string>
@@ -61,7 +65,7 @@
     <string name="login_email_details">Опишіть деталі помилки:</string>
     <string name="login_recover_warning">Переконайтеся, що ви вибрали правильний варіант реєстрації UONET+!</string>
     <string name="login_recover_button">Забули пароль?</string>
-    <string name="login_recover_title">Відновіть свій аккаунт</string>
+    <string name="login_recover_title">Відновіть свій обліковий запис</string>
     <string name="login_recover">Відновити</string>
     <string name="login_signed_in">Учень вже увійшов до системи</string>
     <!--Main-->
@@ -73,15 +77,15 @@
     <string name="grade_header">Оцінка</string>
     <string name="grade_semester">%d семестр</string>
     <string name="grade_switch_semester">Змінити семестр</string>
-    <string name="grade_no_items">Брак оцінок</string>
+    <string name="grade_no_items">Оцінки відсутні</string>
     <string name="grade_weight">Вартість</string>
     <string name="grade_weight_value">Вартість: %s</string>
     <string name="grade_comment">Коментар</string>
-    <string name="grade_no_new_items">Брак нових оцінок</string>
+    <string name="grade_no_new_items">Нові оцінки відсутні</string>
     <string name="grade_number_new_items">Кількість нових оцінок: %1$d</string>
     <string name="grade_average">Середня оцінка: %1$.2f</string>
-    <string name="grade_points_sum">точок: %s</string>
-    <string name="grade_no_average">Брак середньої оцінки</string>
+    <string name="grade_points_sum">Балів: %s</string>
+    <string name="grade_no_average">Відсутність середньої оцінки</string>
     <string name="grade_predicted">Очікувана оцінка: %1$s</string>
     <string name="grade_final">Підсумкова оцінка: %1$s</string>
     <string name="grade_summary_points">Сума балів</string>
@@ -95,6 +99,10 @@
     <string name="grade_statistics_partial">Поточні</string>
     <string name="grade_statistics_semester">Семестрові</string>
     <string name="grade_statistics_points">Бали</string>
+    <string name="grade_statistics_legend">Умовні позначення</string>
+    <string name="grade_statistics_average">Середня оцінка: %1$s</string>
+    <string name="grade_statistics_average_class">Клас</string>
+    <string name="grade_statistics_average_student">Учень</string>
     <plurals name="grade_number_item">
         <item quantity="one">%d оцінка</item>
         <item quantity="few">%d оцінки</item>
@@ -160,9 +168,9 @@
     <string name="completed_lessons_absence">Відсутність</string>
     <string name="completed_lessons_resources">Ресурси</string>
     <!--Additional lessons-->
-    <string name="additional_lessons_title">Additional lessons</string>
-    <string name="additional_lessons_button">Show additional lessons</string>
-    <string name="additional_lessons_no_items">No info about additional lessons</string>
+    <string name="additional_lessons_title">Додаткові уроки</string>
+    <string name="additional_lessons_button">Показати додаткові уроки</string>
+    <string name="additional_lessons_no_items">Немає інформації про додаткових уроків</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Підсумок відвідуваності</string>
     <string name="attendance_absence_school">Відсутність зі шкільних причин</string>
@@ -184,7 +192,7 @@
     </plurals>
     <string name="attendance_excuse_dialog_reason">Причина відсутності (необов’язково)</string>
     <string name="attendance_excuse_dialog_submit">Надіслати</string>
-    <string name="attendance_excuse_success">Змінено статус відсутності</string>
+    <string name="attendance_excuse_success">Запит на виправдання відсутності успішно надіслано!</string>
     <string name="attendance_excuse_no_selection">Оберіть хоча б одну відсутність</string>
     <string name="attendance_excuse_title">Змінити статус</string>
     <!--Attendance summary-->
@@ -215,7 +223,7 @@
     <string name="message_subject">Тема</string>
     <string name="message_content">Зміст</string>
     <string name="message_send_successful">Повідомлення було успішно відправлено</string>
-    <string name="message_not_exists">Message does not exist</string>
+    <string name="message_not_exists">Такого повідомлення не існує</string>
     <string name="message_required_recipients">Необхідно обрати принаймні 1 адресата</string>
     <string name="message_content_min_length">Зміст повідомлення мусить складатися принаймні з 3 знаків</string>
     <plurals name="message_number_item">
@@ -306,6 +314,10 @@
     <string name="lucky_number_empty">Брак інформації о щасливому номері</string>
     <string name="lucky_number_notify_new_item_title">Сьогоднішній щасливий номер</string>
     <string name="lucky_number_notify_new_item">Сьогоднішнім щасливим номером є %d</string>
+    <string name="lucky_number_history_button">Показати історію</string>
+    <!--Lucky number history-->
+    <string name="lucky_number_history_title">Історія щасливих чисел</string>
+    <string name="lucky_number_history_empty">Немає інформації про щасливі номери</string>
     <!--Mobile devices-->
     <string name="mobile_devices_title">Мобільні пристрої</string>
     <string name="mobile_devices_no_items">Брак пристроїв</string>
@@ -343,6 +355,13 @@
     <string name="account_type_parent">Головний рахунок</string>
     <string name="account_login_mobile_api">Режим мобільного API</string>
     <string name="account_login_hybrid">Гібридний режим</string>
+    <string name="account_details_edit">Редагувати дані</string>
+    <string name="account_quick_manager">Менеджер аккаунтів</string>
+    <string name="account_select_student">Виберіть учня</string>
+    <string name="account_family">Сім\'я</string>
+    <string name="account_contact">Контакт</string>
+    <string name="account_address">Деталі проживання</string>
+    <string name="account_personal_data">Особиста інформація</string>
     <!--About-->
     <string name="about_version">Версія додатка</string>
     <string name="about_contributor">Розробники</string>
@@ -366,6 +385,31 @@
     <!--Contributor-->
     <string name="contributor_avatar_description">Аватар</string>
     <string name="contributor_see_more">Сторінка проекту на GitHub</string>
+    <!--Student info-->
+    <string name="student_info_empty">Немає інформації про учня або сім\'ю учня</string>
+    <string name="student_info_first_name">Ім\'я</string>
+    <string name="student_info_second_name">Друге ім\'я</string>
+    <string name="student_info_gender">Стать</string>
+    <string name="student_info_polish_citizenship">Польське громадянство</string>
+    <string name="student_info_family_name">Прізвище</string>
+    <string name="student_info_parents_name">Імена батька і матері</string>
+    <string name="student_info_phone">Номер телефону</string>
+    <string name="student_info_cellphone">Мобільний телефон</string>
+    <string name="student_info_email">Електронна пошта</string>
+    <string name="student_info_address">Місця проживання</string>
+    <string name="student_info_registered_address">Адреса реєстрації</string>
+    <string name="student_info_correspondence_address">Адреса для кореспонденції</string>
+    <string name="student_info_full_name">Прізвище та ім\'я</string>
+    <string name="student_info_kinship">Ступінь спорідненості</string>
+    <string name="student_info_guardian_address">Адреса</string>
+    <string name="student_info_phones">Телефони</string>
+    <string name="student_info_male">Чоловіча</string>
+    <string name="student_info_female">Жінка</string>
+    <string name="student_info_last_name">Прізвище</string>
+    <!--Account edit-->
+    <string name="account_edit_nick_hint">Псевдонім</string>
+    <string name="account_edit_header">Додати псевдонім</string>
+    <string name="account_edit_avatar_title">Оберіть колір аватара</string>
     <!--Log viewer-->
     <string name="logviewer_share">Поділитися логами</string>
     <string name="logviewer_refresh">Оновити</string>
@@ -390,6 +434,9 @@
     <string name="all_next">Наступний</string>
     <string name="all_search">Пошук</string>
     <string name="all_search_hint">Пошук…</string>
+    <string name="all_yes">Так</string>
+    <string name="all_no">Ні</string>
+    <string name="all_save">Зберегти</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Брак уроків</string>
     <string name="widget_timetable_theme_title">Увібрати тему</string>
@@ -397,21 +444,21 @@
     <string name="widget_timetable_theme_dark">Темна</string>
     <string name="widget_timetable_theme_system">Тема системи</string>
     <!--Preferences-->
-    <string name="pref_view_header">Вигляд</string>
+    <string name="pref_view_header">Поява додатка &amp; amp; поведінки</string>
     <string name="pref_view_list">Вікно за замовчуванням</string>
     <string name="pref_view_grade_average_mode">Спосіб облічування оцінки на кінець року</string>
     <string name="pref_view_grade_average_force_calc">Примусово розрахувати середню оцінку через додаток</string>
-    <string name="pref_view_present">Показувати присутність у відвідуваності</string>
-    <string name="pref_view_app_theme">Тема додатку</string>
+    <string name="pref_view_present">Показати присутність</string>
+    <string name="pref_view_app_theme">Тема</string>
     <string name="pref_view_expand_grade">Більше оцінок</string>
-    <string name="pref_view_timetable_show_timers">Позначити поточний урок у розкладі</string>
-    <string name="pref_view_timetable_show_groups">Покажіть групи поруч із предметами в розкладі</string>
+    <string name="pref_view_timetable_show_timers">Позначити поточний урок</string>
+    <string name="pref_view_timetable_show_groups">Показувати групи поруч з темами</string>
     <string name="pref_view_grade_statistics_list">Показувати діаграми в оцінках класу</string>
     <string name="pref_view_timetable_show_whole_class">Показати уроки всього класу</string>
-    <string name="pref_view_subjects_without_grades">Показуйте предмети без оцінок у оцінках</string>
+    <string name="pref_view_subjects_without_grades">Показати предмети без оцінок</string>
     <string name="pref_view_grade_color_scheme">Схема кольорів оцінок</string>
-    <string name="pref_view_grade_sorting_mode">Сортування предметів за \"Оцінками\"</string>
-    <string name="pref_view_app_language">Мова додатку</string>
+    <string name="pref_view_grade_sorting_mode">Сортування предметів</string>
+    <string name="pref_view_app_language">Мова</string>
     <string name="pref_notify_header">Повідомлення</string>
     <string name="pref_notify_switch">Показувати повідомлення</string>
     <string name="pref_notify_upcoming_lessons_switch">Показувати повідомлення о наступних уроках</string>
@@ -419,6 +466,7 @@
     <string name="pref_notify_fix_sync_issues_message">На вашому пристрої можуть бути помилки з синхронізацією і повідомленнями\n\nЩоб виправити іх, вам необхідно додати Wulkanowy в авто-старт и вимкнути оптимізацію/экономію батареї в налаштуваннях пристрою.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Перейти до налаштувань</string>
     <string name="pref_notify_debug_switch">Показувати дебаг-повідомлення</string>
+    <string name="pref_notify_disabled_summary">Синхронізація вимкнена</string>
     <string name="pref_services_header">Синхронізація</string>
     <string name="pref_services_switch">Автоматична синхронізація</string>
     <string name="pref_services_suspended">Призупинено на час канікул</string>
@@ -428,14 +476,27 @@
     <string name="pref_services_message_sync_success">Синхронізовано!</string>
     <string name="pref_services_message_sync_failed">Синхронізація не вдалася</string>
     <string name="pref_services_sync_in_progress">Триває синхронізація</string>
-    <string name="pref_services_dialog_force_sync_title">Синхронізація</string>
-    <string name="pref_services_dialog_force_sync_summary">Ручна синхронізація не оновлює дані в додатку.
-        \nЩоб побачити оновлені дані, перезавантажте додаток.
-    </string>
-    <string name="pref_other_header">Інші</string>
     <string name="pref_other_grade_modifier_plus">Вартість плюсу</string>
     <string name="pref_other_grade_modifier_minus">Вага мінуса</string>
     <string name="pref_other_fill_message_content">Відповісти з історією повідомлень</string>
+    <string name="pref_settings_advanced_title">Додатково</string>
+    <string name="pref_settings_appearance_title">Вигляд &amp; Поведінка</string>
+    <string name="pref_settings_notifications_title">Повідомлення</string>
+    <string name="pref_settings_sync_title">Синхронізація</string>
+    <string name="pref_grades_appearance_header">Оцінки</string>
+    <string name="pref_attendance_appearance_view">Відвідуваність</string>
+    <string name="pref_timetable_appearance_view">Розклад</string>
+    <string name="pref_grades_advanced_header">Класи</string>
+    <string name="pref_messages_advanced_header">Повідомлення</string>
+    <string name="pref_appearance_category">Вигляд &amp; Поведінка</string>
+    <string name="pref_appearance_category_summary">Мови, теми, тема сортування</string>
+    <string name="pref_notifications_category_summary">Сповіщення додатку, виправляти проблеми</string>
+    <string name="pref_notifications_category">Повідомлення</string>
+    <string name="pref_sync_category">Синхронізація</string>
+    <string name="pref_sync_category_summary">Автоматичне оновлення, інтервал синхронізації</string>
+    <string name="pref_advanced_category_summary">Плюс і мінус значення, середні обчислення</string>
+    <string name="pref_advanced_category">Додатково</string>
+    <string name="pref_about_category_summary">Версія програми, учасники, соціальні портали, ліцензії</string>
     <!--Notification Channels-->
     <string name="channel_new_entries">Нові дані в щоденнику</string>
     <string name="channel_new_grades">Нові оцінки</string>
@@ -445,6 +506,10 @@
     <string name="channel_push">Показувати push-повідомлення</string>
     <string name="channel_upcoming_lessons">Наступні уроки</string>
     <string name="channel_debug">Дебаг</string>
+    <!--Drop kitkat alert dialog strings-->
+    <string name="drop_kitkat_title">Кінець підтримки</string>
+    <string name="drop_kitkat_content">Ми завершуємо підтримку вашого пристрою. Більше нових функцій не з\'явиться у Wulkanowy. Однак ми виробляємо критичні патчі до кінця 2021, тому у вас буде час перейти на новішу модель</string>
+    <string name="drop_kitkat_again">Не показувати знову</string>
     <!--Colors-->
     <string name="all_black">Чорний</string>
     <string name="all_red">Червоний</string>

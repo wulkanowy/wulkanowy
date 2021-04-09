@@ -10,6 +10,7 @@ import android.view.View.VISIBLE
 import androidx.appcompat.app.AlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.databinding.FragmentGradeBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.base.BaseFragmentPagerAdapter
@@ -63,11 +64,13 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     override fun initView() {
         with(pagerAdapter) {
             containerId = binding.gradeViewPager.id
-            addFragmentsWithTitle(mapOf(
-                GradeDetailsFragment.newInstance() to getString(R.string.all_details),
-                GradeSummaryFragment.newInstance() to getString(R.string.grade_menu_summary),
-                GradeStatisticsFragment.newInstance() to getString(R.string.grade_menu_statistics)
-            ))
+            addFragmentsWithTitle(
+                mapOf(
+                    GradeDetailsFragment.newInstance() to getString(R.string.all_details),
+                    GradeSummaryFragment.newInstance() to getString(R.string.grade_menu_summary),
+                    GradeStatisticsFragment.newInstance() to getString(R.string.grade_menu_statistics)
+                )
+            )
         }
 
         with(binding.gradeViewPager) {
@@ -119,11 +122,9 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
         semesterSwitchMenu?.isVisible = show
     }
 
-    override fun showSemesterDialog(selectedIndex: Int) {
-        val choices = arrayOf(
-            getString(R.string.grade_semester, 1),
-            getString(R.string.grade_semester, 2)
-        )
+    override fun showSemesterDialog(selectedIndex: Int, semesters: List<Semester>) {
+        val choices = semesters.map { getString(R.string.grade_semester, it.semesterName) }
+            .toTypedArray()
 
         AlertDialog.Builder(requireContext())
             .setSingleChoiceItems(choices, selectedIndex) { dialog, which ->
@@ -137,7 +138,10 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
 
     override fun setCurrentSemesterName(semester: Int, schoolYear: Int) {
         subtitleString = getString(R.string.grade_subtitle, semester, schoolYear, schoolYear + 1)
-        (activity as MainView).setViewSubTitle(subtitleString)
+
+        if (isVisible) {
+            (activity as MainView?)?.setViewSubTitle(subtitleString)
+        }
     }
 
     fun onChildRefresh() {
@@ -149,7 +153,8 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     }
 
     override fun notifyChildLoadData(index: Int, semesterId: Int, forceRefresh: Boolean) {
-        (pagerAdapter.getFragmentInstance(index) as? GradeView.GradeChildView)?.onParentLoadData(semesterId, forceRefresh)
+        (pagerAdapter.getFragmentInstance(index) as? GradeView.GradeChildView)
+            ?.onParentLoadData(semesterId, forceRefresh)
     }
 
     override fun notifyChildParentReselected(index: Int) {

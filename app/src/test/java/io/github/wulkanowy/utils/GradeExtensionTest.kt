@@ -28,17 +28,18 @@ class GradeExtensionTest {
             createGrade(4.0, 1.0, 0.0),
             createGrade(1.0, 9.0, 0.5),
             createGrade(0.0, .0, 0.0)
-        ).calcAverage(), 0.005)
+        ).calcAverage(false), 0.005)
     }
 
     @Test
     fun calcSummaryAverage() {
-        assertEquals(2.5, listOf(
-            createGradeSummary("5"),
-            createGradeSummary("-5"),
+        assertEquals(3.5, listOf(
+            createGradeSummary("4"),
+            createGradeSummary("5+"),
+            createGradeSummary("5-"),
             createGradeSummary("test"),
             createGradeSummary("0")
-        ).calcAverage(), 0.005)
+        ).calcAverage(0.5, 0.5), 0.005)
     }
 
     @Test

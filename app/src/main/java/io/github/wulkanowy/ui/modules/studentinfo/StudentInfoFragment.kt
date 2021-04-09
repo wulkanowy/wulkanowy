@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.StudentGuardian
 import io.github.wulkanowy.data.db.entities.StudentInfo
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.enums.Gender
@@ -75,7 +76,11 @@ class StudentInfoFragment :
         with(binding) {
             studentInfoSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
             studentInfoSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
-            studentInfoSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
+            studentInfoSwipe.setProgressBackgroundColorSchemeColor(
+                requireContext().getThemeAttrColor(
+                    R.attr.colorSwipeRefresh
+                )
+            )
             studentInfoErrorRetry.setOnClickListener { presenter.onRetry() }
             studentInfoErrorDetails.setOnClickListener { presenter.onDetailsClick() }
         }
@@ -110,6 +115,7 @@ class StudentInfoFragment :
             listOf(
                 getString(R.string.student_info_first_name) to studentInfo.firstName,
                 getString(R.string.student_info_second_name) to studentInfo.secondName,
+                getString(R.string.student_info_last_name) to studentInfo.surname,
                 getString(R.string.student_info_gender) to getString(if (studentInfo.gender == Gender.MALE) R.string.student_info_male else R.string.student_info_female),
                 getString(R.string.student_info_polish_citizenship) to getString(if (studentInfo.hasPolishCitizenship) R.string.all_yes else R.string.all_no),
                 getString(R.string.student_info_family_name) to studentInfo.familyName,
@@ -137,11 +143,14 @@ class StudentInfoFragment :
     override fun showFamilyTypeData(studentInfo: StudentInfo) {
         (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.account_family)
         updateData(
-            listOf(
-                studentInfo.firstGuardian.kinship.capitalize() to studentInfo.firstGuardian.fullName,
-                studentInfo.secondGuardian.kinship.capitalize() to studentInfo.secondGuardian.fullName
-            ).map {
-                if (it.second.isBlank()) it.copy(second = getString(R.string.all_no_data)) else it
+            listOfNotNull(
+                studentInfo.firstGuardian?.let { it.kinship.capitalize() to it.fullName },
+                studentInfo.secondGuardian?.let { it.kinship.capitalize() to it.fullName },
+            ).map { (title, value) ->
+                val updatedValue = value.ifBlank { getString(R.string.all_no_data) }
+                val updatedTitle = title.ifBlank { getString(R.string.all_no_data) }
+
+                updatedTitle to updatedValue
             }
         )
     }
@@ -159,30 +168,30 @@ class StudentInfoFragment :
         )
     }
 
-    override fun showFirstGuardianTypeData(studentInfo: StudentInfo) {
+    override fun showFirstGuardianTypeData(studentGuardian: StudentGuardian) {
         (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.student_info_guardian_address)
         updateData(
             listOf(
-                getString(R.string.student_info_full_name) to studentInfo.firstGuardian.fullName,
-                getString(R.string.student_info_kinship) to studentInfo.firstGuardian.kinship,
-                getString(R.string.student_info_guardian_address) to studentInfo.firstGuardian.address,
-                getString(R.string.student_info_phones) to studentInfo.firstGuardian.phones,
-                getString(R.string.student_info_email) to studentInfo.firstGuardian.email
+                getString(R.string.student_info_full_name) to studentGuardian.fullName,
+                getString(R.string.student_info_kinship) to studentGuardian.kinship,
+                getString(R.string.student_info_guardian_address) to studentGuardian.address,
+                getString(R.string.student_info_phones) to studentGuardian.phones,
+                getString(R.string.student_info_email) to studentGuardian.email
             ).map {
                 if (it.second.isBlank()) it.copy(second = getString(R.string.all_no_data)) else it
             }
         )
     }
 
-    override fun showSecondGuardianTypeData(studentInfo: StudentInfo) {
+    override fun showSecondGuardianTypeData(studentGuardian: StudentGuardian) {
         (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.student_info_guardian_address)
         updateData(
             listOf(
-                getString(R.string.student_info_full_name) to studentInfo.secondGuardian.fullName,
-                getString(R.string.student_info_kinship) to studentInfo.secondGuardian.kinship,
-                getString(R.string.student_info_guardian_address) to studentInfo.secondGuardian.address,
-                getString(R.string.student_info_phones) to studentInfo.secondGuardian.phones,
-                getString(R.string.student_info_email) to studentInfo.secondGuardian.email
+                getString(R.string.student_info_full_name) to studentGuardian.fullName,
+                getString(R.string.student_info_kinship) to studentGuardian.kinship,
+                getString(R.string.student_info_guardian_address) to studentGuardian.address,
+                getString(R.string.student_info_phones) to studentGuardian.phones,
+                getString(R.string.student_info_email) to studentGuardian.email
             ).map {
                 if (it.second.isBlank()) it.copy(second = getString(R.string.all_no_data)) else it
             }

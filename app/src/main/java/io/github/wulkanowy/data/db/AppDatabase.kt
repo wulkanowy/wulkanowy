@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabase.JournalMode.TRUNCATE
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
 import io.github.wulkanowy.data.db.dao.AttendanceDao
 import io.github.wulkanowy.data.db.dao.AttendanceSummaryDao
 import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
@@ -33,6 +32,7 @@ import io.github.wulkanowy.data.db.dao.SubjectDao
 import io.github.wulkanowy.data.db.dao.TeacherDao
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
+import io.github.wulkanowy.data.db.dao.TimetableHeaderDao
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.CompletedLesson
@@ -59,6 +59,7 @@ import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.db.entities.Teacher
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.entities.TimetableAdditional
+import io.github.wulkanowy.data.db.entities.TimetableHeader
 import io.github.wulkanowy.data.db.migrations.Migration10
 import io.github.wulkanowy.data.db.migrations.Migration11
 import io.github.wulkanowy.data.db.migrations.Migration12
@@ -83,12 +84,19 @@ import io.github.wulkanowy.data.db.migrations.Migration29
 import io.github.wulkanowy.data.db.migrations.Migration3
 import io.github.wulkanowy.data.db.migrations.Migration30
 import io.github.wulkanowy.data.db.migrations.Migration31
+import io.github.wulkanowy.data.db.migrations.Migration32
+import io.github.wulkanowy.data.db.migrations.Migration33
+import io.github.wulkanowy.data.db.migrations.Migration34
+import io.github.wulkanowy.data.db.migrations.Migration35
+import io.github.wulkanowy.data.db.migrations.Migration36
+import io.github.wulkanowy.data.db.migrations.Migration37
 import io.github.wulkanowy.data.db.migrations.Migration4
 import io.github.wulkanowy.data.db.migrations.Migration5
 import io.github.wulkanowy.data.db.migrations.Migration6
 import io.github.wulkanowy.data.db.migrations.Migration7
 import io.github.wulkanowy.data.db.migrations.Migration8
 import io.github.wulkanowy.data.db.migrations.Migration9
+import io.github.wulkanowy.utils.AppInfo
 import javax.inject.Singleton
 
 @Singleton
@@ -120,6 +128,7 @@ import javax.inject.Singleton
         Conference::class,
         TimetableAdditional::class,
         StudentInfo::class,
+        TimetableHeader::class,
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -128,51 +137,57 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 31
+        const val VERSION_SCHEMA = 37
 
-        fun getMigrations(sharedPrefProvider: SharedPrefProvider): Array<Migration> {
-            return arrayOf(
-                Migration2(),
-                Migration3(),
-                Migration4(),
-                Migration5(),
-                Migration6(),
-                Migration7(),
-                Migration8(),
-                Migration9(),
-                Migration10(),
-                Migration11(),
-                Migration12(),
-                Migration13(),
-                Migration14(),
-                Migration15(),
-                Migration16(),
-                Migration17(),
-                Migration18(),
-                Migration19(sharedPrefProvider),
-                Migration20(),
-                Migration21(),
-                Migration22(),
-                Migration23(),
-                Migration24(),
-                Migration25(),
-                Migration26(),
-                Migration27(),
-                Migration28(),
-                Migration29(),
-                Migration30(),
-                Migration31()
-            )
-        }
+        fun getMigrations(sharedPrefProvider: SharedPrefProvider, appInfo: AppInfo) = arrayOf(
+            Migration2(),
+            Migration3(),
+            Migration4(),
+            Migration5(),
+            Migration6(),
+            Migration7(),
+            Migration8(),
+            Migration9(),
+            Migration10(),
+            Migration11(),
+            Migration12(),
+            Migration13(),
+            Migration14(),
+            Migration15(),
+            Migration16(),
+            Migration17(),
+            Migration18(),
+            Migration19(sharedPrefProvider),
+            Migration20(),
+            Migration21(),
+            Migration22(),
+            Migration23(),
+            Migration24(),
+            Migration25(),
+            Migration26(),
+            Migration27(),
+            Migration28(),
+            Migration29(),
+            Migration30(),
+            Migration31(),
+            Migration32(),
+            Migration33(),
+            Migration34(),
+            Migration35(appInfo),
+            Migration36(),
+            Migration37(),
+        )
 
-        fun newInstance(context: Context, sharedPrefProvider: SharedPrefProvider): AppDatabase {
-            return Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
-                .setJournalMode(TRUNCATE)
-                .fallbackToDestructiveMigrationFrom(VERSION_SCHEMA + 1)
-                .fallbackToDestructiveMigrationOnDowngrade()
-                .addMigrations(*getMigrations(sharedPrefProvider))
-                .build()
-        }
+        fun newInstance(
+            context: Context,
+            sharedPrefProvider: SharedPrefProvider,
+            appInfo: AppInfo
+        ) = Room.databaseBuilder(context, AppDatabase::class.java, "wulkanowy_database")
+            .setJournalMode(TRUNCATE)
+            .fallbackToDestructiveMigrationFrom(VERSION_SCHEMA + 1)
+            .fallbackToDestructiveMigrationOnDowngrade()
+            .addMigrations(*getMigrations(sharedPrefProvider, appInfo))
+            .build()
     }
 
     abstract val studentDao: StudentDao
@@ -226,4 +241,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val timetableAdditionalDao: TimetableAdditionalDao
 
     abstract val studentInfoDao: StudentInfoDao
+
+    abstract val timetableHeaderDao: TimetableHeaderDao
 }

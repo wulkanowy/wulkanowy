@@ -11,22 +11,23 @@ import javax.inject.Inject
 
 class SplashPresenter @Inject constructor(
     errorHandler: ErrorHandler,
-    studentRepository: StudentRepository
+    studentRepository: StudentRepository,
 ) : BasePresenter<SplashView>(errorHandler, studentRepository) {
 
     fun onAttachView(view: SplashView, externalUrl: String?) {
         super.onAttachView(view)
 
         if (!externalUrl.isNullOrBlank()) {
-            return view.openExternalUrlAndFinish(externalUrl)
+            view.openExternalUrlAndFinish(externalUrl)
+            return
         }
 
         flowWithResource { studentRepository.isCurrentStudentSet() }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.d("Is current user set check started")
-                Status.SUCCESS -> with(view) {
-                    if (it.data!!) openMainView()
-                    else openLoginView()
+                Status.SUCCESS -> {
+                    if (it.data!!) view.openMainView()
+                    else view.openLoginView()
                 }
                 Status.ERROR -> errorHandler.dispatch(it.error!!)
             }

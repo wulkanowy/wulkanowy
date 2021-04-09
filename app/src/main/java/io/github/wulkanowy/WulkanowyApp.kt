@@ -1,13 +1,13 @@
 package io.github.wulkanowy
 
+import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
 import android.util.Log.DEBUG
 import android.util.Log.INFO
 import android.util.Log.VERBOSE
 import android.webkit.WebView
+import androidx.fragment.app.FragmentManager
 import androidx.hilt.work.HiltWorkerFactory
-import androidx.multidex.MultiDex
 import androidx.work.Configuration
 import com.yariksoffice.lingver.Lingver
 import dagger.hilt.android.HiltAndroidApp
@@ -41,14 +41,10 @@ class WulkanowyApp : Application(), Configuration.Provider {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
-    }
-
+    @SuppressLint("UnsafeOptInUsageWarning")
     override fun onCreate() {
         super.onCreate()
-
+        FragmentManager.enableNewStateManager(false)
         initializeAppLanguage()
         themeManager.applyDefaultTheme()
         initLogging()
@@ -86,7 +82,11 @@ class WulkanowyApp : Application(), Configuration.Provider {
 
     private fun fixWebViewLocale() {
         //https://stackoverflow.com/questions/40398528/android-webview-language-changes-abruptly-on-android-7-0-and-above
-        WebView(this).destroy()
+        try {
+            WebView(this).destroy()
+        } catch (e: Throwable) {
+            //Ignore exceptions
+        }
     }
 
     override fun getWorkManagerConfiguration() = Configuration.Builder()

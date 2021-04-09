@@ -17,7 +17,10 @@
     <string name="send_message_title">neue Nachricht</string>
     <string name="note_title">Eintragen und Erfolgen</string>
     <string name="homework_title">Hausaufgaben</string>
-    <string name="account_title">Wählen Sie ein Konto</string>
+    <string name="account_title">Konten-Manager</string>
+    <string name="account_quick_title">Konto auswählen</string>
+    <string name="account_details_title">Kontodetails</string>
+    <string name="student_info_title">Schülerinfo</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semester %1$d, %2$d/%3$d</string>
     <!--Login-->
@@ -43,6 +46,7 @@
     <string name="login_expired_token">Token ist nicht mehr gültig</string>
     <string name="login_invalid_email">Ungültige email</string>
     <string name="login_invalid_login">Den zugewiesenen Login anstelle von email verwenden</string>
+    <string name="login_invalid_custom_email">Benutze den zugewiesenen Login oder E-Mail in @%1$s</string>
     <string name="login_invalid_symbol">Ungültige symbol</string>
     <string name="login_incorrect_symbol">Schüler nicht gefunden. Überprüfen Sie das Symbol und die gewählte Variation des UONET+ Registers</string>
     <string name="login_field_required">Dieses Datenfeld ist erforderlich</string>
@@ -95,6 +99,10 @@
     <string name="grade_statistics_partial">Partiell</string>
     <string name="grade_statistics_semester">Semester</string>
     <string name="grade_statistics_points">Punkte</string>
+    <string name="grade_statistics_legend">Legende</string>
+    <string name="grade_statistics_average">Durchschnitt: %1$s</string>
+    <string name="grade_statistics_average_class">Klasse</string>
+    <string name="grade_statistics_average_student">Schüler</string>
     <plurals name="grade_number_item">
         <item quantity="one">%d Note</item>
         <item quantity="other">%d Noten</item>
@@ -146,9 +154,9 @@
     <string name="completed_lessons_absence">Abwesenheit</string>
     <string name="completed_lessons_resources">Ressourcen</string>
     <!--Additional lessons-->
-    <string name="additional_lessons_title">Additional lessons</string>
-    <string name="additional_lessons_button">Show additional lessons</string>
-    <string name="additional_lessons_no_items">No info about additional lessons</string>
+    <string name="additional_lessons_title">Zusätzliche Lektionen</string>
+    <string name="additional_lessons_button">Zusätzliche Lektionen anzeigen</string>
+    <string name="additional_lessons_no_items">Keine Infos zu zusätzlichen Lektionen</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Übersicht über die Schulbesuch</string>
     <string name="attendance_absence_school">Aus schulischen Gründen abwesend</string>
@@ -168,7 +176,7 @@
     </plurals>
     <string name="attendance_excuse_dialog_reason">Abwesenheitsgrund (optional)</string>
     <string name="attendance_excuse_dialog_submit">Senden</string>
-    <string name="attendance_excuse_success">Abwesenheit erfolgreich entschuldigt!</string>
+    <string name="attendance_excuse_success">Abwesenheitsentschuldigungsanfrage erfolgreich gesendet!</string>
     <string name="attendance_excuse_no_selection">Sie müssen mindestens eine Abwesenheit auswählen!</string>
     <string name="attendance_excuse_title">Verzeihung</string>
     <!--Attendance summary-->
@@ -199,7 +207,7 @@
     <string name="message_subject">Thema</string>
     <string name="message_content">Inhalt</string>
     <string name="message_send_successful">Nachricht erfolgreich gesendet</string>
-    <string name="message_not_exists">Message does not exist</string>
+    <string name="message_not_exists">Nachricht existiert nicht</string>
     <string name="message_required_recipients">Sie müssen mindestens 1 Empfänger auswählen.</string>
     <string name="message_content_min_length">Der Inhalt der Nachricht muss mindestens 3 Zeichen lang sein.</string>
     <plurals name="message_number_item">
@@ -266,6 +274,10 @@
     <string name="lucky_number_empty">Keine Information über die Glücksnummer.</string>
     <string name="lucky_number_notify_new_item_title">Glücksnummer für heute</string>
     <string name="lucky_number_notify_new_item">Die heutige Glücksnummer ist: %d</string>
+    <string name="lucky_number_history_button">Verlauf anzeigen</string>
+    <!--Lucky number history-->
+    <string name="lucky_number_history_title">Glücksnummerverlauf</string>
+    <string name="lucky_number_history_empty">Keine Information über die Glücksnummer</string>
     <!--Mobile devices-->
     <string name="mobile_devices_title">Mobile Geräte</string>
     <string name="mobile_devices_no_items">Keine Geräte</string>
@@ -297,12 +309,19 @@
     <!--Account-->
     <string name="account_add_new">Konto hinzufügen</string>
     <string name="account_logout">Abmelden</string>
-    <string name="account_confirm">Wollen Sie sich von einem aktiven Studenten abmelden?</string>
+    <string name="account_confirm">Wollen Sie diesen Schüler abmelden?</string>
     <string name="account_logout_student">Abmeldung von Student</string>
     <string name="account_type_student">Studentenkonto</string>
     <string name="account_type_parent">Elternkonto</string>
     <string name="account_login_mobile_api">Mobiler API Modus</string>
     <string name="account_login_hybrid">Hybrid Modus</string>
+    <string name="account_details_edit">Daten bearbeiten</string>
+    <string name="account_quick_manager">Konten-Manager</string>
+    <string name="account_select_student">Schüler auswählen</string>
+    <string name="account_family">Familie</string>
+    <string name="account_contact">Kontakt</string>
+    <string name="account_address">Wohnungsdetails</string>
+    <string name="account_personal_data">Persönliche Information</string>
     <!--About-->
     <string name="about_version">Version der App</string>
     <string name="about_contributor">Mitarbeiter</string>
@@ -326,6 +345,31 @@
     <!--Contributor-->
     <string name="contributor_avatar_description">Benutzerbild</string>
     <string name="contributor_see_more">Sehen Sie mehr auf GitHub</string>
+    <!--Student info-->
+    <string name="student_info_empty">Keine Informationen über Schüler- oder Studentenfamilie</string>
+    <string name="student_info_first_name">Name</string>
+    <string name="student_info_second_name">Zweite Name</string>
+    <string name="student_info_gender">Geschlecht</string>
+    <string name="student_info_polish_citizenship">Polnische Staatsbürgerschaft</string>
+    <string name="student_info_family_name">Familienname</string>
+    <string name="student_info_parents_name">Namen von Mutter und Vater</string>
+    <string name="student_info_phone">Telefonnummer</string>
+    <string name="student_info_cellphone">Mobiltelefonnummer</string>
+    <string name="student_info_email">E-Mail</string>
+    <string name="student_info_address">Wohnadresse</string>
+    <string name="student_info_registered_address">Adresse der Registrierung</string>
+    <string name="student_info_correspondence_address">Korrespondenzadresse</string>
+    <string name="student_info_full_name">Nachname und Vorname</string>
+    <string name="student_info_kinship">Verwandtschaftsgrad</string>
+    <string name="student_info_guardian_address">Adresse</string>
+    <string name="student_info_phones">Telefonnummern</string>
+    <string name="student_info_male">Mann</string>
+    <string name="student_info_female">Frau</string>
+    <string name="student_info_last_name">Nachname</string>
+    <!--Account edit-->
+    <string name="account_edit_nick_hint">Nick</string>
+    <string name="account_edit_header">Nick hinzufügen</string>
+    <string name="account_edit_avatar_title">Avatar-Farbe wählen</string>
     <!--Log viewer-->
     <string name="logviewer_share">Logs teilen</string>
     <string name="logviewer_refresh">Aktualisieren</string>
@@ -345,11 +389,14 @@
     <string name="all_category">Kategorie</string>
     <string name="all_close">Schließ</string>
     <string name="all_no_data">Keine Daten</string>
-    <string name="all_subject">Thema</string>
+    <string name="all_subject">Schulfach</string>
     <string name="all_prev">Zurück</string>
     <string name="all_next">Nächste</string>
     <string name="all_search">Suchen</string>
     <string name="all_search_hint">Suchen…</string>
+    <string name="all_yes">Ja</string>
+    <string name="all_no">Nein</string>
+    <string name="all_save">Speichern</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Keine Lektionen</string>
     <string name="widget_timetable_theme_title">Thema wählen</string>
@@ -357,21 +404,21 @@
     <string name="widget_timetable_theme_dark">Dunkel</string>
     <string name="widget_timetable_theme_system">Systemthema</string>
     <!--Preferences-->
-    <string name="pref_view_header">Erscheinungsbild</string>
+    <string name="pref_view_header">Aussehen &amp; Verhalten</string>
     <string name="pref_view_list">Standard Ansicht</string>
     <string name="pref_view_grade_average_mode">Berechnung des Jahresenddurchschnitts</string>
     <string name="pref_view_grade_average_force_calc">Mittelwertberechnung durch App erzwingen</string>
-    <string name="pref_view_present">Anwesenheit in Schulbesuch zeigen</string>
-    <string name="pref_view_app_theme">Thema der Anwendung</string>
+    <string name="pref_view_present">Anwesendheit zeigen</string>
+    <string name="pref_view_app_theme">Thema</string>
     <string name="pref_view_expand_grade">Noten erweitern</string>
-    <string name="pref_view_timetable_show_timers">Aktuelle Lektion im Stundenplan markieren</string>
-    <string name="pref_view_timetable_show_groups">Zeige Gruppen neben Themen im Zeitplan</string>
+    <string name="pref_view_timetable_show_timers">Aktuelle Lektion markieren</string>
+    <string name="pref_view_timetable_show_groups">Gruppen neben Schulfächen anzeigen</string>
     <string name="pref_view_grade_statistics_list">Liste der Diagramme in Klassenbewertungen anzeigen</string>
     <string name="pref_view_timetable_show_whole_class">Unterricht der ganzen Klasse anzeigen</string>
-    <string name="pref_view_subjects_without_grades">Zeigen Sie Themen ohne Noten in Noten</string>
+    <string name="pref_view_subjects_without_grades">Schulfächer ohne Noten anzeigen</string>
     <string name="pref_view_grade_color_scheme">Farbschema der Noten</string>
-    <string name="pref_view_grade_sorting_mode">Themen sortieren in \"Noten\"</string>
-    <string name="pref_view_app_language">App Sprache</string>
+    <string name="pref_view_grade_sorting_mode">Schulfachen sortieren</string>
+    <string name="pref_view_app_language">Sprache</string>
     <string name="pref_notify_header">Benachrichtigungen</string>
     <string name="pref_notify_switch">Benachrichtigungen anzeigen</string>
     <string name="pref_notify_upcoming_lessons_switch">Benachrichtigungen über bevorstehende Lektionen anzeigen</string>
@@ -379,6 +426,7 @@
     <string name="pref_notify_fix_sync_issues_message">Ihr Gerät hat möglicherweise Probleme mit der Datensynchronisierung und Benachrichtigungen.\n\nUm diese zu reparieren, fügen Sie Wulkanowy zum Autostart hinzu und deaktivieren Sie die Batterieoptimierung in den Systemeinstellungen des Geräts.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Gehe zu den Einstellungen</string>
     <string name="pref_notify_debug_switch">Debug-Benachrichtigungen anzeigen</string>
+    <string name="pref_notify_disabled_summary">Synchronisierung ist deaktiviert</string>
     <string name="pref_services_header">Synchronisierung</string>
     <string name="pref_services_switch">Automatische Aktualisierung</string>
     <string name="pref_services_suspended">An Feiertagen suspendiert</string>
@@ -388,14 +436,27 @@
     <string name="pref_services_message_sync_success">Synchronisiert!</string>
     <string name="pref_services_message_sync_failed">Synchronisierung fehlgeschlagen</string>
     <string name="pref_services_sync_in_progress">Synchronisierung läuft</string>
-    <string name="pref_services_dialog_force_sync_title">Synchronisation</string>
-    <string name="pref_services_dialog_force_sync_summary">        Die manuelle Synchronisierung aktualisiert die App-Ansichten nicht.
-        \nUm die synchronisierten Daten anzuzeigen, starten Sie die App nach der Synchronisierung neu.
-    </string>
-    <string name="pref_other_header">Andere</string>
     <string name="pref_other_grade_modifier_plus">Wert des Plus</string>
     <string name="pref_other_grade_modifier_minus">Wert des Minus</string>
     <string name="pref_other_fill_message_content">Antwort mit Nachrichtenhistorie</string>
+    <string name="pref_settings_advanced_title">Erweitert</string>
+    <string name="pref_settings_appearance_title">Aussehen &amp; Verhalten</string>
+    <string name="pref_settings_notifications_title">Benachrichtigungen</string>
+    <string name="pref_settings_sync_title">Synchronisierung</string>
+    <string name="pref_grades_appearance_header">Noten</string>
+    <string name="pref_attendance_appearance_view">Schulbesuch</string>
+    <string name="pref_timetable_appearance_view">Zeitplan</string>
+    <string name="pref_grades_advanced_header">Noten</string>
+    <string name="pref_messages_advanced_header">Nachrichten</string>
+    <string name="pref_appearance_category">Aussehen &amp; Verhalten</string>
+    <string name="pref_appearance_category_summary">Sprachen, Themen, Schulfachen sortieren</string>
+    <string name="pref_notifications_category_summary">App-Benachrichtigungen, Probleme beheben</string>
+    <string name="pref_notifications_category">Benachrichtigungen</string>
+    <string name="pref_sync_category">Synchronisierung</string>
+    <string name="pref_sync_category_summary">Automatisches Update, Synchronisierungsintervall</string>
+    <string name="pref_advanced_category_summary">Plus und Minus Werte, Durchschnittsberechnung</string>
+    <string name="pref_advanced_category">Erweitert</string>
+    <string name="pref_about_category_summary">App-Version, Mitarbeiter, soziale Portale, Lizenzen</string>
     <!--Notification Channels-->
     <string name="channel_new_entries">Neue Einträge im Klassenbuch</string>
     <string name="channel_new_grades">Neue Noten</string>
@@ -405,6 +466,10 @@
     <string name="channel_push">Push-Benachrichtigungen</string>
     <string name="channel_upcoming_lessons">Bevorstehende Lektionen</string>
     <string name="channel_debug">Debuggen</string>
+    <!--Drop kitkat alert dialog strings-->
+    <string name="drop_kitkat_title">Ende der Unterstützung</string>
+    <string name="drop_kitkat_content">Wir beenden die Unterstützung für dein Gerät. Es werden keine neuen Funktionen mehr in Wulkanowy erscheinen. Allerdings werden wir bis Ende 2021 kritische Patches veröffentlichen, so dass du Zeit hast, zu einem neueren Modell zu wechseln</string>
+    <string name="drop_kitkat_again">Nicht mehr fragen</string>
     <!--Colors-->
     <string name="all_black">Schwarz</string>
     <string name="all_red">Rot</string>

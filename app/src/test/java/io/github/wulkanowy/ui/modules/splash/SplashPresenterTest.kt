@@ -36,6 +36,7 @@ class SplashPresenterTest {
     @Test
     fun testOpenLoginView() {
         coEvery { studentRepository.isCurrentStudentSet() } returns false
+
         presenter.onAttachView(splashView, null)
         verify { splashView.openLoginView() }
     }
@@ -43,6 +44,7 @@ class SplashPresenterTest {
     @Test
     fun testMainMainView() {
         coEvery { studentRepository.isCurrentStudentSet() } returns true
+
         presenter.onAttachView(splashView, null)
         verify { splashView.openMainView() }
     }
