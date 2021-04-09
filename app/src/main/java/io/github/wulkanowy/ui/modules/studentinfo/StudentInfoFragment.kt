@@ -38,13 +38,14 @@ class StudentInfoFragment :
     lateinit var studentInfoAdapter: StudentInfoAdapter
 
     override val titleStringId: Int
-        get() = when (requireArguments().getSerializable(INFO_TYPE_ARGUMENT_KEY) as StudentInfoView.Type) {
+        get() = when (requireArguments().getSerializable(INFO_TYPE_ARGUMENT_KEY) as? StudentInfoView.Type) {
             StudentInfoView.Type.PERSONAL -> R.string.account_personal_data
             StudentInfoView.Type.CONTACT -> R.string.account_contact
             StudentInfoView.Type.ADDRESS -> R.string.account_address
             StudentInfoView.Type.FAMILY -> R.string.account_family
             StudentInfoView.Type.SECOND_GUARDIAN -> R.string.student_info_guardian_address
             StudentInfoView.Type.FIRST_GUARDIAN -> R.string.student_info_guardian_address
+            else -> R.string.student_info_title
         }
 
     override val isViewEmpty get() = studentInfoAdapter.items.isEmpty()
