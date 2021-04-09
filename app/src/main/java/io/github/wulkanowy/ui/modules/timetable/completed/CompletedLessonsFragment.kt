@@ -67,7 +67,11 @@ class CompletedLessonsFragment :
         with(binding) {
             completedLessonsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
             completedLessonsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
-            completedLessonsSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
+            completedLessonsSwipe.setProgressBackgroundColorSchemeColor(
+                requireContext().getThemeAttrColor(
+                    R.attr.colorSwipeRefresh
+                )
+            )
             completedLessonErrorRetry.setOnClickListener { presenter.onRetry() }
             completedLessonErrorDetails.setOnClickListener { presenter.onDetailsClick() }
 
@@ -141,7 +145,11 @@ class CompletedLessonsFragment :
     }
 
     override fun showCompletedLessonDialog(completedLesson: CompletedLesson) {
-        (activity as? MainActivity)?.showDialogFragment(CompletedLessonDialog.newInstance(completedLesson))
+        (activity as? MainActivity)?.showDialogFragment(
+            CompletedLessonDialog.newInstance(
+                completedLesson
+            )
+        )
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
@@ -150,12 +158,18 @@ class CompletedLessonsFragment :
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(constraintsBuilder.build())
-                .setSelection(currentDate.atTime(LocalTime.now()).toEpochSecond(ZoneId.systemDefault().rules.getOffset(Instant.now()))*1000)
+                .setSelection(
+                    currentDate.atTime(LocalTime.now())
+                        .toEpochSecond(ZoneId.systemDefault().rules.getOffset(Instant.now())) * 1000
+                )
                 .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            val date = LocalDateTime.ofEpochSecond(it/1000, 0, ZoneId.systemDefault().rules.getOffset(
-                Instant.now()))
+            val date = LocalDateTime.ofEpochSecond(
+                it / 1000, 0, ZoneId.systemDefault().rules.getOffset(
+                    Instant.now()
+                )
+            )
             presenter.onDateSet(date.year, date.monthValue, date.dayOfMonth)
         }
 
