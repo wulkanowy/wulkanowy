@@ -385,8 +385,8 @@
     <string name="about_facebook_summary">Polub nasz fanpage na Facebooku</string>
     <string name="about_privacy">Polityka prywatności</string>
     <string name="about_privacy_summary">Zasady zbierania danych osobowych</string>
-    <string name="about_system">System settings</string>
-    <string name="about_system_summary">Open system settings</string>
+    <string name="about_system">Ustawienia systemowe</string>
+    <string name="about_system_summary">Otwórz ustawienia systemowe</string>
     <string name="about_homepage">Strona domowa</string>
     <string name="about_homepage_summary">Odwiedź stronę i pomóż rozwijać aplikację</string>
     <string name="about_licenses">Licencje</string>
@@ -472,7 +472,7 @@
     <string name="pref_notify_header">Powiadomienia</string>
     <string name="pref_notify_switch">Pokazuj powiadomienia</string>
     <string name="pref_notify_upcoming_lessons_switch">Pokazuj powiadomienia o nadchodzących lekcjach</string>
-    <string name="pref_notify_open_system_settings">Open system notification settings</string>
+    <string name="pref_notify_open_system_settings">Otwórz ustawienia systemowe powiadomień</string>
     <string name="pref_notify_fix_sync_issues">Napraw problemy z synchronizacją i powiadomieniami</string>
     <string name="pref_notify_fix_sync_issues_message">Na twoim urządzeniu mogą występować problemy z synchronizacją danych i powiadomieniami.\n\nBy je naprawić, dodaj Wulkanowego do autostartu i wyłącz optymalizację/oszczędzanie baterii w ustawieniach systemowych telefonu.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Przejdź do ustawień</string>
