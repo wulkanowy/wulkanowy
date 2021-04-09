@@ -385,8 +385,8 @@
     <string name="about_facebook_summary">Stejně jako naše facebooková fanpage</string>
     <string name="about_privacy">Zásady ochrany osobních údajů</string>
     <string name="about_privacy_summary">Pravidla pro shromažďování osobních údajů</string>
-    <string name="about_system">System settings</string>
-    <string name="about_system_summary">Open system settings</string>
+    <string name="about_system">Systemová nastavení</string>
+    <string name="about_system_summary">Otevřít systémová nastavení</string>
     <string name="about_homepage">Domovská stránka</string>
     <string name="about_homepage_summary">Navštivte stránku a pomozte s vývojem aplikace</string>
     <string name="about_licenses">Licence</string>
