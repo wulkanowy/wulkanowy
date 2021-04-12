@@ -16,6 +16,7 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.SchoolDaysValidator
 import io.github.wulkanowy.utils.dpToPx
+import io.github.wulkanowy.utils.firstSchoolDay
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.github.wulkanowy.utils.toTimestamp
 import java.time.LocalDate
@@ -111,8 +112,15 @@ class LuckyNumberHistoryFragment :
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
-        val constraintsBuilder = CalendarConstraints.Builder()
-        constraintsBuilder.setValidator(SchoolDaysValidator())
+        val now = LocalDate.now()
+        val startYear = if (now.monthValue <= 6) now.year - 1 else now.year
+        val startOfSchoolYear = now.withYear(startYear).firstSchoolDay.toTimestamp()
+
+        val constraintsBuilder = CalendarConstraints.Builder().apply {
+            setValidator(SchoolDaysValidator(startOfSchoolYear, now.toTimestamp()))
+            setStart(startOfSchoolYear)
+            setEnd(now.toTimestamp())
+        }
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(constraintsBuilder.build())
