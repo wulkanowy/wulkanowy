@@ -27,8 +27,8 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.SchoolDaysValidator
 import io.github.wulkanowy.utils.dpToPx
-import io.github.wulkanowy.utils.firstSchoolDay
 import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.schoolYearStart
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.github.wulkanowy.utils.toTimestamp
 import java.time.LocalDate
@@ -221,8 +221,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
         val now = LocalDate.now()
-        val startYear = if (now.monthValue <= 6) now.year - 1 else now.year
-        val startOfSchoolYear = now.withYear(startYear).firstSchoolDay.toTimestamp()
+        val startOfSchoolYear = now.schoolYearStart.toTimestamp()
         val endWeek = now.plusWeeks(1).toTimestamp()
 
         val constraintsBuilder = CalendarConstraints.Builder().apply {

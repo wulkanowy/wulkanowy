@@ -111,6 +111,12 @@ inline val LocalDate.lastSchoolDay: LocalDate
     get() = LocalDate.of(year, 6, 20)
         .with(next(FRIDAY))
 
+inline val LocalDate.schoolYearStart: LocalDate
+    get() = withYear(if (this.monthValue <= 6) this.year - 1 else this.year).firstSchoolDay
+
+inline val LocalDate.schoolYearEnd: LocalDate
+    get() = withYear(if (this.monthValue > 6) this.year + 1 else this.year).lastSchoolDay
+
 private fun Int.getSchoolYearByMonth(monthValue: Int): Int {
     return when (monthValue) {
         in 9..12 -> this
