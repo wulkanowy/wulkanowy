@@ -76,7 +76,7 @@ class ExamRepository @Inject constructor(
             from = start.startExamsDay,
             end = start.endExamsDay
         ).map {
-            it.filter { exam -> !exam.isNotified }
+            it.filter { exam -> exam.isNotified }
         }
     }
 

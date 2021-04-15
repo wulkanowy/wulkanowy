@@ -56,6 +56,11 @@ class ExamWork @Inject constructor(
                         exam.size
                     )
                 )
+                .setContentText(context.resources.getQuantityString(
+                    R.plurals.exam_notify_new_item_content,
+                    exam.size,
+                    exam.size
+                ))
                 .setSmallIcon(R.drawable.ic_main_exam)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)

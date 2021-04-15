@@ -61,6 +61,11 @@ class HomeworkWork @Inject constructor(
                         homework.size
                     )
                 )
+                .setContentText(context.resources.getQuantityString(
+                    R.plurals.homework_notify_new_item_content,
+                    homework.size,
+                    homework.size
+                ))
                 .setSmallIcon(R.drawable.ic_more_homework)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)

@@ -202,11 +202,14 @@
         <item quantity="one">New exam</item>
         <item quantity="other">New exams</item>
     </plurals>
+    <plurals name="exam_notify_new_item_content">
+        <item quantity="one">You received new %d exam</item>
+        <item quantity="other">You received new %d exams</item>
+    </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d exam</item>
         <item quantity="other">%d exams</item>
     </plurals>
-
 
     <!--Message-->
     <string name="message_inbox">Inbox</string>
@@ -297,7 +300,11 @@
     <string name="homework_attachments">Attachments</string>
     <plurals name="homework_notify_new_item_title">
         <item quantity="one">New homework</item>
-        <item quantity="other">New homework</item>
+        <item quantity="other">New homeworks</item>
+    </plurals>
+    <plurals name="homework_notify_new_item_content">
+        <item quantity="one">You received new %d homework</item>
+        <item quantity="other">You received new %d homeworks</item>
     </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d homework</item>
