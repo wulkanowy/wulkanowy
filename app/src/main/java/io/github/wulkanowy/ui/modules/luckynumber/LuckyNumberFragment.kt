@@ -15,6 +15,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.getThemeAttrColor
 import javax.inject.Inject
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class LuckyNumberFragment :
@@ -93,7 +94,8 @@ class LuckyNumberFragment :
     }
 
     fun updateStudentNumber() {
-        this.openLuckyNumberHistory()
+        val number = Random.nextInt()
+        presenter.updateStudentNumber(number)
     }
 
     override fun openChangeNumberMenu() {
