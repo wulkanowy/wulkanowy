@@ -73,6 +73,9 @@ data class Student(
     @ColumnInfo(name = "is_current")
     val isCurrent: Boolean,
 
+    @ColumnInfo(name = "number")
+    val number: Int,
+
     @ColumnInfo(name = "registration_date")
     val registrationDate: LocalDateTime
 ) : Serializable {

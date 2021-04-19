@@ -99,7 +99,7 @@ class LuckyNumberFragment :
     override fun openChangeNumberMenu() {
         context?.let { MaterialAlertDialogBuilder(it) }
             ?.setNeutralButton(resources.getString(R.string.lucky_number_change_number_cancel)) { _, _ -> {} }
-            ?.setPositiveButton(resources.getString(R.string.lucky_number_change_number_accept)) { dialog, which -> this.updateStudentNumber() }
+            ?.setPositiveButton(resources.getString(R.string.lucky_number_change_number_accept)) { _, _ -> this.updateStudentNumber() }
             ?.setView(R.layout.dialog_edit_student_number)?.show()
     }
 
