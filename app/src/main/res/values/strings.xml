@@ -313,6 +313,8 @@
     <string name="lucky_number_notify_new_item">Today\'s lucky number is: %d</string>
     <string name="lucky_number_history_button">Show history</string>
     <string name="lucky_number_change_number_button">Change number</string>
+    <string name="lucky_number_change_number_accept">Change</string>
+    <string name="lucky_number_change_number_cancel">Cancel</string>
 
     <!--Lucky number history-->
     <string name="lucky_number_history_title">Lucky number history</string>
