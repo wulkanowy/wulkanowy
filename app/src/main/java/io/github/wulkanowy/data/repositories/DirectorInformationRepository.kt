@@ -24,7 +24,7 @@ class DirectorInformationRepository @Inject constructor(
 
     private val cacheKey = "director_information"
 
-    fun getDevices(student: Student, forceRefresh: Boolean) = networkBoundResource(
+    fun getDirectorInformationList(student: Student, forceRefresh: Boolean) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {
             it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(

@@ -355,6 +355,11 @@
     <string name="conference_no_items">No info about conferences</string>
 
 
+    <!--Director information-->
+    <string name="director_information_title">Director information</string>
+    <string name="director_information_no_items">No director information</string>
+
+
     <!--Account-->
     <string name="account_add_new">Add account</string>
     <string name="account_logout">Logout</string>
