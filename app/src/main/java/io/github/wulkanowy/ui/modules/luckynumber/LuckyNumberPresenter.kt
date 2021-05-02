@@ -88,6 +88,52 @@ class LuckyNumberPresenter @Inject constructor(
         }
     }
 
+    fun updateStudentNumber(number: Int) {
+        flowWithResourceIn {
+            val student = studentRepository.getCurrentStudent()
+            studentRepository.updateStudentNickAndAvatar()
+            luckyNumberRepository.getLuckyNumber(student, false)
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Loading lucky number started")
+                Status.SUCCESS -> {
+                    if (it.data != null) {
+                        Timber.i("Loading lucky number result: Success")
+                        view?.apply {
+                            updateData(it.data)
+                            showContent(true)
+                            showEmpty(false)
+                            showErrorView(false)
+                        }
+                        analytics.logEvent(
+                            "load_item",
+                            "type" to "lucky_number",
+                            "number" to it.data.luckyNumber
+                        )
+                    } else {
+                        Timber.i("Loading lucky number result: No lucky number found")
+                        view?.run {
+                            showContent(false)
+                            showEmpty(true)
+                            showErrorView(false)
+                        }
+                    }
+                }
+                Status.ERROR -> {
+                    Timber.i("Loading lucky number result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
+            }
+        }.afterLoading {
+            view?.run {
+                hideRefresh()
+                showProgress(false)
+                enableSwipe(true)
+            }
+        }.launch()
+
+    }
+
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the lucky number")
         loadData(true)

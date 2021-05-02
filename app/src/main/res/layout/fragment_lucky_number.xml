@@ -74,16 +74,28 @@
         android:layout_height="match_parent"
         android:visibility="visible"
         android:gravity="bottom"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginBottom="20dp"
+        >
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/luckyNumberHistoryButton"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:text="@string/lucky_number_history_button" />
+            android:layout_marginRight="10dp"
+            android:text="@string/lucky_number_history_button"
+            android:layout_width="match_parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/luckyNumberChangeNumberButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/lucky_number_change_number_button"
+            android:layout_width="match_parent" />
 
     </LinearLayout>
 

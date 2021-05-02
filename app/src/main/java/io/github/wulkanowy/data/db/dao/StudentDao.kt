@@ -25,6 +25,9 @@ interface StudentDao {
     @Update(entity = Student::class)
     suspend fun update(studentNickAndAvatar: StudentNickAndAvatar)
 
+    @Update(entity = Student::class)
+    suspend fun updateNumber(number: Int)
+
     @Query("SELECT * FROM Students WHERE is_current = 1")
     suspend fun loadCurrent(): Student?
 

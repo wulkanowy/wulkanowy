@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.LuckyNumber
@@ -14,6 +15,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.getThemeAttrColor
 import javax.inject.Inject
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class LuckyNumberFragment :
@@ -43,8 +45,13 @@ class LuckyNumberFragment :
         with(binding) {
             luckyNumberSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
             luckyNumberSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
-            luckyNumberSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
+            luckyNumberSwipe.setProgressBackgroundColorSchemeColor(
+                requireContext().getThemeAttrColor(
+                    R.attr.colorSwipeRefresh
+                )
+            )
             luckyNumberHistoryButton.setOnClickListener { openLuckyNumberHistory() }
+            luckyNumberChangeNumberButton.setOnClickListener { openChangeNumberMenu() }
             luckyNumberErrorRetry.setOnClickListener { presenter.onRetry() }
             luckyNumberErrorDetails.setOnClickListener { presenter.onDetailsClick() }
         }
@@ -84,6 +91,18 @@ class LuckyNumberFragment :
 
     override fun openLuckyNumberHistory() {
         (activity as? MainActivity)?.pushView(LuckyNumberHistoryFragment.newInstance())
+    }
+
+    fun updateStudentNumber() {
+        val number = Random.nextInt()
+        presenter.updateStudentNumber(number)
+    }
+
+    override fun openChangeNumberMenu() {
+        context?.let { MaterialAlertDialogBuilder(it) }
+            ?.setNeutralButton(resources.getString(R.string.lucky_number_change_number_cancel)) { _, _ -> {} }
+            ?.setPositiveButton(resources.getString(R.string.lucky_number_change_number_accept)) { _, _ -> this.updateStudentNumber() }
+            ?.setView(R.layout.dialog_edit_student_number)?.show()
     }
 
     override fun onDestroyView() {
