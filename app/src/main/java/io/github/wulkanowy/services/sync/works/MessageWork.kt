@@ -3,13 +3,10 @@ package io.github.wulkanowy.services.sync.works
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.DEFAULT_ALL
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
@@ -21,8 +18,8 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.services.sync.channels.NewMessagesChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.getCompatBitmap
 import io.github.wulkanowy.utils.getCompatColor
-import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.waitForResult
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -45,15 +42,13 @@ class MessageWork @Inject constructor(
     }
 
     private fun notify(messages: List<Message>) {
-        val icon = context.getCompatDrawable(R.drawable.ic_stat_message)?.mutate()?.apply {
-            colorFilter =
-                PorterDuffColorFilter(context.getCompatColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
-        }
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewMessagesChannel.CHANNEL_ID)
             .setContentTitle(context.resources.getQuantityString(R.plurals.message_new_items, messages.size, messages.size))
             .setContentText(context.resources.getQuantityString(R.plurals.message_notify_new_items, messages.size, messages.size))
             .setSmallIcon(R.drawable.ic_stat_push)
-            .setLargeIcon(icon?.toBitmap())
+            .setLargeIcon(
+                context.getCompatBitmap(R.drawable.ic_stat_message, R.color.colorPrimary)
+            )
             .setAutoCancel(true)
             .setDefaults(DEFAULT_ALL)
             .setPriority(PRIORITY_HIGH)

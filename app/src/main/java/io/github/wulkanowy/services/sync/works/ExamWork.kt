@@ -2,11 +2,8 @@ package io.github.wulkanowy.services.sync.works
 
 import android.app.PendingIntent
 import android.content.Context
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
@@ -17,8 +14,8 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.services.sync.channels.NewExamChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.getCompatBitmap
 import io.github.wulkanowy.utils.getCompatColor
-import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.waitForResult
 import kotlinx.coroutines.flow.first
 import java.time.LocalDate.now
@@ -50,22 +47,18 @@ class ExamWork @Inject constructor(
     }
 
     private fun notify(exam: List<Exam>) {
-        val icon = context.getCompatDrawable(R.drawable.ic_main_exam)?.mutate()?.apply {
-            colorFilter =
-                PorterDuffColorFilter(context.getCompatColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
-        }
         notificationManager.notify(
             Random.nextInt(Int.MAX_VALUE),
             NotificationCompat.Builder(context, NewExamChannel.CHANNEL_ID)
                 .setContentTitle(
                     context.resources.getQuantityString(
-                        R.plurals.exam_notify_new_item_title,
-                        exam.size,
-                        exam.size
+                        R.plurals.exam_notify_new_item_title, exam.size, exam.size
                     )
                 )
                 .setSmallIcon(R.drawable.ic_stat_push)
-                .setLargeIcon(icon?.toBitmap())
+                .setLargeIcon(
+                    context.getCompatBitmap(R.drawable.ic_main_exam, R.color.colorPrimary)
+                )
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

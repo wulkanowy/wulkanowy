@@ -3,13 +3,10 @@ package io.github.wulkanowy.services.sync.works
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.DEFAULT_ALL
 import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.graphics.drawable.toBitmap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Note
@@ -23,8 +20,8 @@ import io.github.wulkanowy.sdk.scrapper.notes.NoteCategory.POSITIVE
 import io.github.wulkanowy.services.sync.channels.NewNotesChannel
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.getCompatBitmap
 import io.github.wulkanowy.utils.getCompatColor
-import io.github.wulkanowy.utils.getCompatDrawable
 import io.github.wulkanowy.utils.waitForResult
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -47,10 +44,6 @@ class NoteWork @Inject constructor(
     }
 
     private fun notify(notes: List<Note>) {
-        val icon = context.getCompatDrawable(R.drawable.ic_stat_note)?.mutate()?.apply {
-            colorFilter =
-                PorterDuffColorFilter(context.getCompatColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
-        }
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewNotesChannel.CHANNEL_ID)
             .setContentTitle(
                 when (NoteCategory.getByValue(notes.first().categoryType)) {
@@ -67,7 +60,9 @@ class NoteWork @Inject constructor(
                 }
             )
             .setSmallIcon(R.drawable.ic_stat_push)
-            .setLargeIcon(icon?.toBitmap())
+            .setLargeIcon(
+                context.getCompatBitmap(R.drawable.ic_stat_note, R.color.colorPrimary)
+            )
             .setAutoCancel(true)
             .setDefaults(DEFAULT_ALL)
             .setPriority(PRIORITY_HIGH)
