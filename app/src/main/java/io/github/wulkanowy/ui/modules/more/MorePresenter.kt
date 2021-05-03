@@ -27,6 +27,7 @@ class MorePresenter @Inject constructor(
                 noteRes?.first -> openNoteView()
                 luckyNumberRes?.first -> openLuckyNumberView()
                 conferencesRes?.first -> openConferencesView()
+                schoolAnnouncementRes?.first -> openSchoolAnnouncementView()
                 schoolAndTeachersRes?.first -> openSchoolAndTeachersView()
                 mobileDevicesRes?.first -> openMobileDevicesView()
                 settingsRes?.first -> openSettingsView()
@@ -48,6 +49,7 @@ class MorePresenter @Inject constructor(
                 noteRes,
                 luckyNumberRes,
                 conferencesRes,
+                schoolAnnouncementRes,
                 schoolAndTeachersRes,
                 mobileDevicesRes,
                 settingsRes
