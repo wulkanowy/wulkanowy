@@ -7,7 +7,7 @@ class Migration38 : Migration(37, 38) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("""
-            CREATE TABLE IF NOT EXISTS `DirectorInformation` (
+            CREATE TABLE IF NOT EXISTS `SchoolAnnouncements` (
                 `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 `student_id` INTEGER NOT NULL,
                 `date` INTEGER NOT NULL,

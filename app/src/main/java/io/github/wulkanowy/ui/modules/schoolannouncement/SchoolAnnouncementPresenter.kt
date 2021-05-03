@@ -1,7 +1,7 @@
-package io.github.wulkanowy.ui.modules.directorinformation
+package io.github.wulkanowy.ui.modules.schoolannouncement
 
 import io.github.wulkanowy.data.Status
-import io.github.wulkanowy.data.repositories.DirectorInformationRepository
+import io.github.wulkanowy.data.repositories.SchoolAnnouncementRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -12,25 +12,25 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
-class DirectorInformationPresenter @Inject constructor(
+class SchoolAnnouncementPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val analytics: AnalyticsHelper,
-    private val directorInformationRepository: DirectorInformationRepository,
-) : BasePresenter<DirectorInformationView>(errorHandler, studentRepository) {
+    private val schoolAnnouncementRepository: SchoolAnnouncementRepository,
+) : BasePresenter<SchoolAnnouncementView>(errorHandler, studentRepository) {
 
     private lateinit var lastError: Throwable
 
-    override fun onAttachView(view: DirectorInformationView) {
+    override fun onAttachView(view: SchoolAnnouncementView) {
         super.onAttachView(view)
         view.initView()
-        Timber.i("Director information view was initialized")
+        Timber.i("School announcement view was initialized")
         errorHandler.showErrorMessage = ::showErrorViewOnError
         loadData()
     }
 
     fun onSwipeRefresh() {
-        Timber.i("Force refreshing the director information")
+        Timber.i("Force refreshing the School announcement")
         loadData(true)
     }
 
@@ -47,11 +47,11 @@ class DirectorInformationPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        Timber.i("Loading director information data started")
+        Timber.i("Loading School announcement data started")
 
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
-            directorInformationRepository.getDirectorInformationList(student, forceRefresh)
+            schoolAnnouncementRepository.getSchoolAnnouncements(student, forceRefresh)
         }.onEach {
             when (it.status) {
                 Status.LOADING -> {
@@ -66,7 +66,7 @@ class DirectorInformationPresenter @Inject constructor(
                     }
                 }
                 Status.SUCCESS -> {
-                    Timber.i("Loading director information result: Success")
+                    Timber.i("Loading School announcement result: Success")
                     view?.apply {
                         updateData(it.data!!.sortedByDescending { item -> item.date })
                         showEmpty(it.data.isEmpty())
@@ -74,12 +74,12 @@ class DirectorInformationPresenter @Inject constructor(
                         showContent(it.data.isNotEmpty())
                     }
                     analytics.logEvent(
-                        "load_director_information",
+                        "load_school_announcement",
                         "items" to it.data!!.size
                     )
                 }
                 Status.ERROR -> {
-                    Timber.i("Loading director information result: An exception occurred")
+                    Timber.i("Loading School announcement result: An exception occurred")
                     errorHandler.dispatch(it.error!!)
                 }
             }

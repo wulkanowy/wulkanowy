@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.time.LocalDate
 
-@Entity(tableName = "DirectorInformation")
-data class DirectorInformation(
+@Entity(tableName = "SchoolAnnouncements")
+data class SchoolAnnouncement(
 
     @ColumnInfo(name = "student_id")
     val studentId: Int,

@@ -1,12 +1,12 @@
-package io.github.wulkanowy.ui.modules.directorinformation
+package io.github.wulkanowy.ui.modules.schoolannouncement
 
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.DirectorInformation
-import io.github.wulkanowy.databinding.FragmentDirectorInformationBinding
+import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
+import io.github.wulkanowy.databinding.FragmentSchoolAnnouncementBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
@@ -14,36 +14,36 @@ import io.github.wulkanowy.utils.getThemeAttrColor
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DirectorInformationFragment :
-    BaseFragment<FragmentDirectorInformationBinding>(R.layout.fragment_director_information),
-    DirectorInformationView, MainView.TitledView {
+class SchoolAnnouncementFragment :
+    BaseFragment<FragmentSchoolAnnouncementBinding>(R.layout.fragment_school_announcement),
+    SchoolAnnouncementView, MainView.TitledView {
 
     @Inject
-    lateinit var presenter: DirectorInformationPresenter
+    lateinit var presenter: SchoolAnnouncementPresenter
 
     @Inject
-    lateinit var directorInformationAdapter: DirectorInformationAdapter
+    lateinit var schoolAnnouncementAdapter: SchoolAnnouncementAdapter
 
     companion object {
-        fun newInstance() = DirectorInformationFragment()
+        fun newInstance() = SchoolAnnouncementFragment()
     }
 
     override val titleStringId: Int
-        get() = R.string.director_information_title
+        get() = R.string.school_announcement_title
 
     override val isViewEmpty: Boolean
-        get() = directorInformationAdapter.items.isEmpty()
+        get() = schoolAnnouncementAdapter.items.isEmpty()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentDirectorInformationBinding.bind(view)
+        binding = FragmentSchoolAnnouncementBinding.bind(view)
         presenter.onAttachView(this)
     }
 
     override fun initView() {
         with(binding.directorInformationRecycler) {
             layoutManager = LinearLayoutManager(context)
-            adapter = directorInformationAdapter
+            adapter = schoolAnnouncementAdapter
             addItemDecoration(DividerItemDecoration(context))
         }
         with(binding) {
@@ -57,15 +57,15 @@ class DirectorInformationFragment :
         }
     }
 
-    override fun updateData(data: List<DirectorInformation>) {
-        with(directorInformationAdapter) {
+    override fun updateData(data: List<SchoolAnnouncement>) {
+        with(schoolAnnouncementAdapter) {
             items = data
             notifyDataSetChanged()
         }
     }
 
     override fun clearData() {
-        with(directorInformationAdapter) {
+        with(schoolAnnouncementAdapter) {
             items = listOf()
             notifyDataSetChanged()
         }

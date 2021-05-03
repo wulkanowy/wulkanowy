@@ -10,7 +10,7 @@ import io.github.wulkanowy.data.db.dao.AttendanceDao
 import io.github.wulkanowy.data.db.dao.AttendanceSummaryDao
 import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
 import io.github.wulkanowy.data.db.dao.ConferenceDao
-import io.github.wulkanowy.data.db.dao.DirectorInformationDao
+import io.github.wulkanowy.data.db.dao.SchoolAnnouncementDao
 import io.github.wulkanowy.data.db.dao.ExamDao
 import io.github.wulkanowy.data.db.dao.GradeDao
 import io.github.wulkanowy.data.db.dao.GradePartialStatisticsDao
@@ -38,7 +38,7 @@ import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.db.entities.Conference
-import io.github.wulkanowy.data.db.entities.DirectorInformation
+import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradePartialStatistics
@@ -132,7 +132,7 @@ import javax.inject.Singleton
         TimetableAdditional::class,
         StudentInfo::class,
         TimetableHeader::class,
-        DirectorInformation::class,
+        SchoolAnnouncement::class,
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -249,5 +249,5 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract val timetableHeaderDao: TimetableHeaderDao
 
-    abstract val directorInformationDao: DirectorInformationDao
+    abstract val schoolAnnouncementDao: SchoolAnnouncementDao
 }

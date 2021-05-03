@@ -356,8 +356,8 @@
 
 
     <!--Director information-->
-    <string name="director_information_title">Director information</string>
-    <string name="director_information_no_items">No director information</string>
+    <string name="school_announcement_title">School announcements</string>
+    <string name="school_announcement_no_items">No school announcements</string>
 
 
     <!--Account-->

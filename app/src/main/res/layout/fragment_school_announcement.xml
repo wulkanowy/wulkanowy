@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.modules.directorinformation.DirectorInformationFragment">
+    tools:context=".ui.modules.schoolannouncement.SchoolAnnouncementFragment">
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/directorInformationProgress"
@@ -22,7 +22,7 @@
             android:id="@+id/directorInformationRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/item_director_information" />
+            tools:listitem="@layout/item_school_announcement" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="@string/director_information_no_items"
+            android:text="@string/school_announcement_no_items"
             android:textSize="20sp" />
 
         <ImageView

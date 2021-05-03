@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
-    tools:context=".ui.modules.directorinformation.DirectorInformationAdapter">
+    tools:context=".ui.modules.schoolannouncement.SchoolAnnouncementAdapter">
 
     <TextView
-        android:id="@+id/directorInformationItemDate"
+        android:id="@+id/schoolAnnouncementItemDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -22,7 +22,7 @@
         tools:text="@tools:sample/date/ddmmyy" />
 
     <TextView
-        android:id="@+id/directorInformationItemType"
+        android:id="@+id/schoolAnnouncementItemType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -30,14 +30,14 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@id/directorInformationItemDate"
-        app:layout_constraintStart_toStartOf="@id/directorInformationItemDate"
-        app:layout_constraintTop_toBottomOf="@id/directorInformationItemDate"
+        app:layout_constraintEnd_toEndOf="@id/schoolAnnouncementItemDate"
+        app:layout_constraintStart_toStartOf="@id/schoolAnnouncementItemDate"
+        app:layout_constraintTop_toBottomOf="@id/schoolAnnouncementItemDate"
         app:layout_goneMarginEnd="0dp"
         tools:text="@tools:sample/lorem" />
 
     <TextView
-        android:id="@+id/directorInformationItemContent"
+        android:id="@+id/schoolAnnouncementItemContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -47,8 +47,8 @@
         android:maxLines="2"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/directorInformationItemType"
-        app:layout_constraintStart_toStartOf="@id/directorInformationItemDate"
-        app:layout_constraintTop_toBottomOf="@id/directorInformationItemType"
+        app:layout_constraintEnd_toEndOf="@+id/schoolAnnouncementItemType"
+        app:layout_constraintStart_toStartOf="@id/schoolAnnouncementItemDate"
+        app:layout_constraintTop_toBottomOf="@id/schoolAnnouncementItemType"
         tools:text="@tools:sample/lorem/random" />
 </androidx.constraintlayout.widget.ConstraintLayout>

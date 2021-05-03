@@ -1,15 +1,15 @@
-package io.github.wulkanowy.ui.modules.directorinformation
+package io.github.wulkanowy.ui.modules.schoolannouncement
 
-import io.github.wulkanowy.data.db.entities.DirectorInformation
+import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.ui.base.BaseView
 
-interface DirectorInformationView : BaseView {
+interface SchoolAnnouncementView : BaseView {
 
     val isViewEmpty: Boolean
 
     fun initView()
 
-    fun updateData(data: List<DirectorInformation>)
+    fun updateData(data: List<SchoolAnnouncement>)
 
     fun clearData()
 
