@@ -59,7 +59,7 @@ class NoteWork @Inject constructor(
                     else -> context.resources.getQuantityString(R.plurals.note_notify_new_items, notes.size, notes.size)
                 }
             )
-            .setSmallIcon(R.drawable.ic_stat_push)
+            .setSmallIcon(R.drawable.ic_stat_all)
             .setLargeIcon(
                 context.getCompatBitmap(R.drawable.ic_stat_note, R.color.colorPrimary)
             )

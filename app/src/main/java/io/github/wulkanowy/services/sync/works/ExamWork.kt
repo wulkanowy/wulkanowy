@@ -55,7 +55,7 @@ class ExamWork @Inject constructor(
                         R.plurals.exam_notify_new_item_title, exam.size, exam.size
                     )
                 )
-                .setSmallIcon(R.drawable.ic_stat_push)
+                .setSmallIcon(R.drawable.ic_stat_all)
                 .setLargeIcon(
                     context.getCompatBitmap(R.drawable.ic_main_exam, R.color.colorPrimary)
                 )

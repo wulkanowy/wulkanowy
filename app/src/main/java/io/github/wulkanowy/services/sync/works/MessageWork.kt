@@ -45,7 +45,7 @@ class MessageWork @Inject constructor(
         notificationManager.notify(Random.nextInt(Int.MAX_VALUE), NotificationCompat.Builder(context, NewMessagesChannel.CHANNEL_ID)
             .setContentTitle(context.resources.getQuantityString(R.plurals.message_new_items, messages.size, messages.size))
             .setContentText(context.resources.getQuantityString(R.plurals.message_notify_new_items, messages.size, messages.size))
-            .setSmallIcon(R.drawable.ic_stat_push)
+            .setSmallIcon(R.drawable.ic_stat_all)
             .setLargeIcon(
                 context.getCompatBitmap(R.drawable.ic_stat_message, R.color.colorPrimary)
             )

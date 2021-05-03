@@ -60,7 +60,7 @@ class HomeworkWork @Inject constructor(
                         R.plurals.homework_notify_new_item_title, homework.size, homework.size
                     )
                 )
-                .setSmallIcon(R.drawable.ic_stat_push)
+                .setSmallIcon(R.drawable.ic_stat_all)
                 .setLargeIcon(
                     context.getCompatBitmap(R.drawable.ic_more_homework, R.color.colorPrimary)
                 )
