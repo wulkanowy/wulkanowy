@@ -24,6 +24,7 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.graphics.drawable.toBitmap
 import io.github.wulkanowy.BuildConfig.APPLICATION_ID
+import java.util.Locale
 
 @ColorInt
 fun Context.getThemeAttrColor(@AttrRes colorAttr: Int): Int {
@@ -126,7 +127,7 @@ fun Context.createNameInitialsDrawable(
     val firstCharFirstWord = words.getOrNull(0)?.firstOrNull() ?: ""
     val firstCharSecondWord = words.getOrNull(1)?.firstOrNull() ?: ""
 
-    val initials = "$firstCharFirstWord$firstCharSecondWord".toUpperCase()
+    val initials = "$firstCharFirstWord$firstCharSecondWord".uppercase(Locale.getDefault())
 
     val bounds = Rect()
     val dimension = this.dpToPx(64f * scaleFactory).toInt()
