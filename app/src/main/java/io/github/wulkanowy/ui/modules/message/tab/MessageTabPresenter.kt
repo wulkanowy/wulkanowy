@@ -190,32 +190,32 @@ class MessageTabPresenter @Inject constructor(
 
     private fun calculateMatchRatio(message: Message, query: String): Int {
         val subjectRatio = FuzzySearch.tokenSortPartialRatio(
-            query.toLowerCase(Locale.getDefault()),
+            query.lowercase(Locale.getDefault()),
             message.subject
         )
 
         val senderOrRecipientRatio = FuzzySearch.tokenSortPartialRatio(
-            query.toLowerCase(Locale.getDefault()),
-            if (message.sender.isNotEmpty()) message.sender.toLowerCase(Locale.getDefault())
-            else message.recipient.toLowerCase(Locale.getDefault())
+            query.lowercase(Locale.getDefault()),
+            if (message.sender.isNotEmpty()) message.sender.lowercase(Locale.getDefault())
+            else message.recipient.lowercase(Locale.getDefault())
         )
 
         val dateRatio = listOf(
             FuzzySearch.ratio(
-                query.toLowerCase(Locale.getDefault()),
-                message.date.toFormattedString("dd.MM").toLowerCase(Locale.getDefault())
+                query.lowercase(Locale.getDefault()),
+                message.date.toFormattedString("dd.MM").lowercase(Locale.getDefault())
             ),
             FuzzySearch.ratio(
-                query.toLowerCase(Locale.getDefault()),
-                message.date.toFormattedString("dd.MM.yyyy").toLowerCase(Locale.getDefault())
+                query.lowercase(Locale.getDefault()),
+                message.date.toFormattedString("dd.MM.yyyy").lowercase(Locale.getDefault())
             ),
             FuzzySearch.ratio(
-                query.toLowerCase(Locale.getDefault()),
-                message.date.toFormattedString("d MMMM").toLowerCase(Locale.getDefault())
+                query.lowercase(Locale.getDefault()),
+                message.date.toFormattedString("d MMMM").lowercase(Locale.getDefault())
             ),
             FuzzySearch.ratio(
-                query.toLowerCase(Locale.getDefault()),
-                message.date.toFormattedString("d MMMM yyyy").toLowerCase(Locale.getDefault())
+                query.lowercase(Locale.getDefault()),
+                message.date.toFormattedString("d MMMM yyyy").lowercase(Locale.getDefault())
             )
         ).maxOrNull() ?: 0
 

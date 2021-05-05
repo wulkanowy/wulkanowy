@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
-import android.annotation.SuppressLint
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.repositories.GradeRepository
@@ -20,6 +19,7 @@ import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.util.Locale
 import javax.inject.Inject
 
 class GradeDetailsPresenter @Inject constructor(
@@ -218,7 +218,6 @@ class GradeDetailsPresenter @Inject constructor(
         }
     }
 
-    @SuppressLint("DefaultLocale")
     private fun createGradeItems(items: List<GradeSubject>): List<GradeDetailsItem> {
         return items
             .let { gradesWithAverages ->
@@ -229,7 +228,7 @@ class GradeDetailsPresenter @Inject constructor(
             .let {
                 when (preferencesRepository.gradeSortingMode) {
                     DATE -> it.sortedByDescending { gradeDetailsWithAverage -> gradeDetailsWithAverage.grades.firstOrNull()?.date }
-                    ALPHABETIC -> it.sortedBy { gradeDetailsWithAverage -> gradeDetailsWithAverage.subject.toLowerCase() }
+                    ALPHABETIC -> it.sortedBy { gradeDetailsWithAverage -> gradeDetailsWithAverage.subject.lowercase(Locale.getDefault()) }
                 }
             }
             .map { (subject, average, points, _, grades) ->
