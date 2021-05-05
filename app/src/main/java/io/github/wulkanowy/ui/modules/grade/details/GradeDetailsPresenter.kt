@@ -202,8 +202,9 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     private fun updateNewGradesAmount(grades: List<GradeSubject>) {
-        newGradesAmount =
-            grades.sumBy { item -> item.grades.sumBy { grade -> if (!grade.isRead) 1 else 0 } }
+        newGradesAmount = grades.sumOf { item ->
+            item.grades.sumOf { grade -> (if (!grade.isRead) 1 else 0).toInt() }
+        }
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
