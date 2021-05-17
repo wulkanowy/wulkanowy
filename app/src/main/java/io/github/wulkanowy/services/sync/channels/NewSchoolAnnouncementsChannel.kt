@@ -22,7 +22,7 @@ class NewSchoolAnnouncementsChannel @Inject constructor(
 
     override fun create() {
         notificationManager.createNotificationChannel(
-            NotificationChannel(CHANNEL_ID, context.getString(R.string.channel_new_schoolAnnouncement), NotificationManager.IMPORTANCE_HIGH)
+            NotificationChannel(CHANNEL_ID, context.getString(R.string.channel_new_school_announcement), NotificationManager.IMPORTANCE_HIGH)
                 .apply {
                     enableLights(true)
                     enableVibration(true)

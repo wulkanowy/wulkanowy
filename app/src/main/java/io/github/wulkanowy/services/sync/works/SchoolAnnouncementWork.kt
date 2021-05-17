@@ -48,11 +48,11 @@ class SchoolAnnouncementWork @Inject constructor(
             Random.nextInt(Int.MAX_VALUE),
             NotificationCompat.Builder(context, NewSchoolAnnouncementsChannel.CHANNEL_ID)
                 .setContentTitle(context.resources.getQuantityString(
-                        R.plurals.schoolAnnouncement_notify_new_item_title,
+                        R.plurals.school_announcement_notify_new_item_title,
                         schoolAnnouncement.size,
                         schoolAnnouncement.size
                     ))
-                .setContentText(context.resources.getQuantityString(R.plurals.schoolAnnouncement_notify_new_items, schoolAnnouncement.size, schoolAnnouncement.size))
+                .setContentText(context.resources.getQuantityString(R.plurals.school_announcement_notify_new_items, schoolAnnouncement.size, schoolAnnouncement.size))
                 .setSmallIcon(R.drawable.ic_stat_all)
                 .setLargeIcon(context.getCompatBitmap(R.drawable.ic_all_about, R.color.colorPrimary))
                 .setAutoCancel(true)
@@ -69,7 +69,7 @@ class SchoolAnnouncementWork @Inject constructor(
                 .setStyle(NotificationCompat.InboxStyle().run {
                     setSummaryText(
                         context.resources.getQuantityString(
-                            R.plurals.schoolAnnouncement_number_item,
+                            R.plurals.school_announcement_number_item,
                             schoolAnnouncement.size,
                             schoolAnnouncement.size
                         )

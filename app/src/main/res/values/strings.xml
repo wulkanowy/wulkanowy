@@ -370,15 +370,15 @@
     <!--Director information-->
     <string name="school_announcement_title">School announcements</string>
     <string name="school_announcement_no_items">No school announcements</string>
-    <plurals name="schoolAnnouncement_number_item">
+    <plurals name="school_announcement_number_item">
         <item quantity="one">%d school announcement</item>
         <item quantity="other">%d school announcements</item>
     </plurals>
-    <plurals name="schoolAnnouncement_notify_new_item_title">
+    <plurals name="school_announcement_notify_new_item_title">
         <item quantity="one">New school announcement</item>
         <item quantity="other">New school announcements</item>
     </plurals>
-    <plurals name="schoolAnnouncement_notify_new_items">
+    <plurals name="school_announcement_notify_new_items">
         <item quantity="one">You have %1$d new school announcement</item>
         <item quantity="other">You have %1$d new school announcements</item>
     </plurals>
@@ -574,7 +574,7 @@
     <string name="channel_lucky_number">Lucky number</string>
     <string name="channel_new_message">New messages</string>
     <string name="channel_new_notes">New notes</string>
-    <string name="channel_new_schoolAnnouncement">New school announcements</string>
+    <string name="channel_new_school_announcement">New school announcements</string>
     <string name="channel_push">Push notifications</string>
     <string name="channel_upcoming_lessons">Upcoming lessons</string>
     <string name="channel_debug">Debug</string>
