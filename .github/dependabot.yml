@@ -3,9 +3,10 @@ updates:
 - package-ecosystem: gradle
   directory: "/"
   schedule:
-    interval: daily
+    interval: weekly
   open-pull-requests-limit: 10
-  target-branch: develop
+  target-branch: dependabot/config
+  ignore:
+    - dependency-name: "sdk"
   reviewers:
   - Faierbel
-  - mklkj
