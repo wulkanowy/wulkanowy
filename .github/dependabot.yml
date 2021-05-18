@@ -5,7 +5,7 @@ updates:
   schedule:
     interval: weekly
   open-pull-requests-limit: 10
-  target-branch: dependabot/config
+  target-branch: develop
   ignore:
     - dependency-name: "sdk"
   reviewers:
