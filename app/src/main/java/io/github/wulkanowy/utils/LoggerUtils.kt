@@ -29,9 +29,14 @@ object ExceptionFilter : Filter {
     override fun isLoggable(priority: Int, tag: String?) = true
 
     override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?) =
-        t is FeatureDisabledException || t is FeatureNotAvailableException
-            || t is UnknownHostException || t is SocketTimeoutException
-            || t is InterruptedIOException
+        when (t) {
+            is FeatureDisabledException,
+            is FeatureNotAvailableException,
+            is UnknownHostException,
+            is SocketTimeoutException,
+            is InterruptedIOException -> true
+            else -> false
+        }
 }
 
 class ActivityLifecycleLogger : Application.ActivityLifecycleCallbacks {
