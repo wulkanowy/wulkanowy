@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/grade_title"
+        android:textSize="26dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/grade_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 notification" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/grade_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3 notifications" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/grade_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10 notifications" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/homework_title"
+        android:textSize="26dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/homework_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 notification" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/homework_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3 notifications" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/homework_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10 notifications" />
+
+</LinearLayout>

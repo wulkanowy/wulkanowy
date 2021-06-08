@@ -8,6 +8,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentDebugBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.debug.logviewer.LogViewerFragment
+import io.github.wulkanowy.ui.modules.debug.notification.NotificationDebugFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
@@ -51,6 +52,10 @@ class DebugFragment : BaseFragment<FragmentDebugBinding>(R.layout.fragment_debug
 
     override fun openLogViewer() {
         (activity as? MainActivity)?.pushView(LogViewerFragment.newInstance())
+    }
+
+    override fun openNotificationsDebug() {
+        (activity as? MainActivity)?.pushView(NotificationDebugFragment.newInstance())
     }
 
     override fun onDestroyView() {
