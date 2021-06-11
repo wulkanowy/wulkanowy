@@ -86,7 +86,7 @@ class HomeworkWork @Inject constructor(
                             homework.size
                         )
                     )
-                    homework.forEach { addLine("${it.subject}: ${it.content}") }
+                    homework.forEach { addLine("${it.subject}: ${it.content} - ${it.date}") }
                     this
                 })
                 .build()

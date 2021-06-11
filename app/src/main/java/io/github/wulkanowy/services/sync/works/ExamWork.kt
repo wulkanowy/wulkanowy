@@ -81,7 +81,7 @@ class ExamWork @Inject constructor(
                             exam.size
                         )
                     )
-                    exam.forEach { addLine("${it.subject}: ${it.description}") }
+                    exam.forEach { addLine("${it.subject}: ${it.description} - ${it.date}") }
                     this
                 })
                 .build()
