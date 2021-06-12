@@ -177,12 +177,12 @@
     <string name="exam_type">Form</string>
     <string name="exam_entry_date">Eintrittsdatum</string>
     <plurals name="exam_notify_new_item_title">
-        <item quantity="one">New exam</item>
-        <item quantity="other">New exams</item>
+        <item quantity="one">Neue prüfung</item>
+        <item quantity="other">Neue prüfungen</item>
     </plurals>
     <plurals name="exam_number_item">
-        <item quantity="one">%d exam</item>
-        <item quantity="other">%d exams</item>
+        <item quantity="one">%d prüfung</item>
+        <item quantity="other">%d prüfungen</item>
     </plurals>
     <!--Message-->
     <string name="message_inbox">Posteingang</string>
@@ -266,12 +266,12 @@
     <string name="homework_mark_as_undone">Unvollständig</string>
     <string name="homework_attachments">Anhänge</string>
     <plurals name="homework_notify_new_item_title">
-        <item quantity="one">New homework</item>
-        <item quantity="other">New homework</item>
+        <item quantity="one">Neue hausaufgaben</item>
+        <item quantity="other">Neue hausaufgaben</item>
     </plurals>
     <plurals name="homework_number_item">
-        <item quantity="one">%d homework</item>
-        <item quantity="other">%d homework</item>
+        <item quantity="one">%d hausaufgaben</item>
+        <item quantity="other">%d hausaufgaben</item>
     </plurals>
     <!--Lucky number-->
     <string name="lucky_number_title">Glückliche Nummer</string>
@@ -311,6 +311,33 @@
     <!--Conference-->
     <string name="conferences_title">Sitzungen</string>
     <string name="conference_no_items">Keine Informationen über Sitzungen</string>
+    <plurals name="conference_number_item">
+        <item quantity="one">%d konferenz</item>
+        <item quantity="other">%d konferenzen</item>
+    </plurals>
+    <plurals name="conference_notify_new_item_title">
+        <item quantity="one">Neue konferenz</item>
+        <item quantity="other">Neue konferenzen</item>
+    </plurals>
+    <plurals name="conference_notify_new_items">
+        <item quantity="one">Sie haben %1$d neue konferenz</item>
+        <item quantity="other">Sie haben %1$d neue konferenzen</item>
+    </plurals>
+    <!--Director information-->
+    <string name="school_announcement_title">Schulankündigungen</string>
+    <string name="school_announcement_no_items">Keine schulankündigungen</string>
+    <plurals name="school_announcement_number_item">
+        <item quantity="one">%d schulankündigung</item>
+        <item quantity="other">%d schulankündigungen</item>
+    </plurals>
+    <plurals name="school_announcement_notify_new_item_title">
+        <item quantity="one">Ankündigung der neuen schule</item>
+        <item quantity="other">Neue schulankündigungen</item>
+    </plurals>
+    <plurals name="school_announcement_notify_new_items">
+        <item quantity="one">Sie haben %1$d neue schulmitteilungen</item>
+        <item quantity="other">Sie haben %1$d neue schulankündigungen</item>
+    </plurals>
     <!--Account-->
     <string name="account_add_new">Konto hinzufügen</string>
     <string name="account_logout">Abmelden</string>
@@ -339,8 +366,8 @@
     <string name="about_facebook_summary">Gefällt unsere Facebook-Fanpage</string>
     <string name="about_privacy">Datenschutzerklärung</string>
     <string name="about_privacy_summary">Regeln für die Sammlung persönlicher Daten</string>
-    <string name="about_system">System settings</string>
-    <string name="about_system_summary">Open system settings</string>
+    <string name="about_system">Systemeinstellungen</string>
+    <string name="about_system_summary">Systemeinstellungen öffnen</string>
     <string name="about_homepage">Startseite</string>
     <string name="about_homepage_summary">Besuchen Sie die Website und helfen Sie bei der Entwicklung der Anwendung</string>
     <string name="about_licenses">Lizenzen</string>
@@ -371,6 +398,7 @@
     <string name="student_info_male">Mann</string>
     <string name="student_info_female">Frau</string>
     <string name="student_info_last_name">Nachname</string>
+    <string name="student_info_guardian">Wächter</string>
     <!--Account edit-->
     <string name="account_edit_nick_hint">Nick</string>
     <string name="account_edit_header">Nick hinzufügen</string>
@@ -426,7 +454,7 @@
     <string name="pref_notify_header">Benachrichtigungen</string>
     <string name="pref_notify_switch">Benachrichtigungen anzeigen</string>
     <string name="pref_notify_upcoming_lessons_switch">Benachrichtigungen über bevorstehende Lektionen anzeigen</string>
-    <string name="pref_notify_open_system_settings">Open system notification settings</string>
+    <string name="pref_notify_open_system_settings">Systembenachrichtigungseinstellungen öffnen</string>
     <string name="pref_notify_fix_sync_issues">Synchronisierungs- und Benachrichtigungsprobleme reparieren</string>
     <string name="pref_notify_fix_sync_issues_message">Ihr Gerät hat möglicherweise Probleme mit der Datensynchronisierung und Benachrichtigungen.\n\nUm diese zu reparieren, fügen Sie Wulkanowy zum Autostart hinzu und deaktivieren Sie die Batterieoptimierung in den Systemeinstellungen des Geräts.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Gehe zu den Einstellungen</string>
@@ -444,7 +472,7 @@
     <string name="pref_other_grade_modifier_plus">Wert des Plus</string>
     <string name="pref_other_grade_modifier_minus">Wert des Minus</string>
     <string name="pref_other_fill_message_content">Antwort mit Nachrichtenhistorie</string>
-    <string name="pref_other_optional_arithmetic_average">Show arithmetic average when no weights provided</string>
+    <string name="pref_other_optional_arithmetic_average">Arithmetisches Mittel anzeigen, wenn keine Gewichte angegeben sind</string>
     <string name="pref_settings_advanced_title">Erweitert</string>
     <string name="pref_settings_appearance_title">Aussehen &amp; Verhalten</string>
     <string name="pref_settings_notifications_title">Benachrichtigungen</string>
@@ -465,11 +493,13 @@
     <string name="pref_about_category_summary">App-Version, Mitarbeiter, soziale Portale, Lizenzen</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Neue Noten</string>
-    <string name="channel_new_homework">New homework</string>
-    <string name="channel_new_exam">New exams</string>
+    <string name="channel_new_homework">Neue Hausaufgaben</string>
+    <string name="channel_new_conference">Neue Konferenzen</string>
+    <string name="channel_new_exam">Neue Prüfungen</string>
     <string name="channel_lucky_number">Glückliche Nummer</string>
     <string name="channel_new_message">Neue Nachrichten</string>
     <string name="channel_new_notes">Neue Eintragen</string>
+    <string name="channel_new_school_announcement">Neue Schulankündigungen</string>
     <string name="channel_push">Push-Benachrichtigungen</string>
     <string name="channel_upcoming_lessons">Bevorstehende Lektionen</string>
     <string name="channel_debug">Debuggen</string>

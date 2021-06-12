@@ -357,6 +357,45 @@
     <!--Conference-->
     <string name="conferences_title">Зустрічі</string>
     <string name="conference_no_items">Немає інформації про зустрічі</string>
+    <plurals name="conference_number_item">
+        <item quantity="one">%d conference</item>
+        <item quantity="few">%d conferences</item>
+        <item quantity="many">%d conferences</item>
+        <item quantity="other">%d conferences</item>
+    </plurals>
+    <plurals name="conference_notify_new_item_title">
+        <item quantity="one">New conference</item>
+        <item quantity="few">New conferences</item>
+        <item quantity="many">New conferences</item>
+        <item quantity="other">New conferences</item>
+    </plurals>
+    <plurals name="conference_notify_new_items">
+        <item quantity="one">You have %1$d new conference</item>
+        <item quantity="few">You have %1$d new conferences</item>
+        <item quantity="many">You have %1$d new conferences</item>
+        <item quantity="other">You have %1$d new conferences</item>
+    </plurals>
+    <!--Director information-->
+    <string name="school_announcement_title">School announcements</string>
+    <string name="school_announcement_no_items">No school announcements</string>
+    <plurals name="school_announcement_number_item">
+        <item quantity="one">%d school announcement</item>
+        <item quantity="few">%d school announcements</item>
+        <item quantity="many">%d school announcements</item>
+        <item quantity="other">%d school announcements</item>
+    </plurals>
+    <plurals name="school_announcement_notify_new_item_title">
+        <item quantity="one">New school announcement</item>
+        <item quantity="few">New school announcements</item>
+        <item quantity="many">New school announcements</item>
+        <item quantity="other">New school announcements</item>
+    </plurals>
+    <plurals name="school_announcement_notify_new_items">
+        <item quantity="one">You have %1$d new school announcement</item>
+        <item quantity="few">You have %1$d new school announcements</item>
+        <item quantity="many">You have %1$d new school announcements</item>
+        <item quantity="other">You have %1$d new school announcements</item>
+    </plurals>
     <!--Account-->
     <string name="account_add_new">Додати аккаунт</string>
     <string name="account_logout">Вийти</string>
@@ -417,6 +456,7 @@
     <string name="student_info_male">Чоловіча</string>
     <string name="student_info_female">Жінка</string>
     <string name="student_info_last_name">Прізвище</string>
+    <string name="student_info_guardian">Guardian</string>
     <!--Account edit-->
     <string name="account_edit_nick_hint">Псевдонім</string>
     <string name="account_edit_header">Додати псевдонім</string>
@@ -512,10 +552,12 @@
     <!--Notification Channels-->
     <string name="channel_new_grades">Нові оцінки</string>
     <string name="channel_new_homework">New homework</string>
+    <string name="channel_new_conference">New conferences</string>
     <string name="channel_new_exam">New exams</string>
     <string name="channel_lucky_number">Щасливий номер</string>
     <string name="channel_new_message">Нові повідомлення</string>
     <string name="channel_new_notes">Нові нотатки</string>
+    <string name="channel_new_school_announcement">New school announcements</string>
     <string name="channel_push">Показувати push-повідомлення</string>
     <string name="channel_upcoming_lessons">Наступні уроки</string>
     <string name="channel_debug">Дебаг</string>

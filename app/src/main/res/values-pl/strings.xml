@@ -357,6 +357,45 @@
     <!--Conference-->
     <string name="conferences_title">Zebrania</string>
     <string name="conference_no_items">Brak informacji o zebraniach</string>
+    <plurals name="conference_number_item">
+        <item quantity="one">%d zebranie</item>
+        <item quantity="few">%d zebrania</item>
+        <item quantity="many">%d zebrań</item>
+        <item quantity="other">%d zebrań</item>
+    </plurals>
+    <plurals name="conference_notify_new_item_title">
+        <item quantity="one">Nowe zebranie</item>
+        <item quantity="few">Nowe zebrania</item>
+        <item quantity="many">Nowe zebrania</item>
+        <item quantity="other">Nowe zebrania</item>
+    </plurals>
+    <plurals name="conference_notify_new_items">
+        <item quantity="one">Masz %1$d nowe zebranie</item>
+        <item quantity="few">Masz %1$d nowe zebrania</item>
+        <item quantity="many">Masz %1$d nowych zebrań</item>
+        <item quantity="other">Masz %1$d nowych zebrań</item>
+    </plurals>
+    <!--Director information-->
+    <string name="school_announcement_title">Ogłoszenia szkolne</string>
+    <string name="school_announcement_no_items">Brak ogłoszeń szkolnych</string>
+    <plurals name="school_announcement_number_item">
+        <item quantity="one">%d ogłoszenie szkolne</item>
+        <item quantity="few">%d ogłoszenia szkolne</item>
+        <item quantity="many">%d ogłoszeń szkolnych</item>
+        <item quantity="other">%d ogłoszeń szkolnych</item>
+    </plurals>
+    <plurals name="school_announcement_notify_new_item_title">
+        <item quantity="one">Nowe ogłoszenie szkolne</item>
+        <item quantity="few">Nowe ogłoszenia szkolne</item>
+        <item quantity="many">Nowe ogłoszenia szkolne</item>
+        <item quantity="other">Nowe ogłoszenia szkolne</item>
+    </plurals>
+    <plurals name="school_announcement_notify_new_items">
+        <item quantity="one">Masz %1$d nowe ogłoszenie szkolne</item>
+        <item quantity="few">Masz %1$d nowe ogłoszenia szkolne</item>
+        <item quantity="many">Masz %1$d nowych ogłoszeń szkolnych</item>
+        <item quantity="other">Masz %1$d nowych ogłoszeń szkolnych</item>
+    </plurals>
     <!--Account-->
     <string name="account_add_new">Dodaj konto</string>
     <string name="account_logout">Wyloguj</string>
@@ -417,6 +456,7 @@
     <string name="student_info_male">Mężczyzna</string>
     <string name="student_info_female">Kobieta</string>
     <string name="student_info_last_name">Nazwisko</string>
+    <string name="student_info_guardian">Opiekun</string>
     <!--Account edit-->
     <string name="account_edit_nick_hint">Pseudonim</string>
     <string name="account_edit_header">Dodaj pseudonim</string>
@@ -512,10 +552,12 @@
     <!--Notification Channels-->
     <string name="channel_new_grades">Nowe oceny</string>
     <string name="channel_new_homework">Nowe zadania domowe</string>
+    <string name="channel_new_conference">Nowe zebrania</string>
     <string name="channel_new_exam">Nowe sprawdziany</string>
     <string name="channel_lucky_number">Szczęśliwy numerek</string>
     <string name="channel_new_message">Nowe wiadomości</string>
     <string name="channel_new_notes">Nowe uwagi</string>
+    <string name="channel_new_school_announcement">Nowe ogłoszenia szkolne</string>
     <string name="channel_push">Powiadomienia push</string>
     <string name="channel_upcoming_lessons">Nadchodzące lekcje</string>
     <string name="channel_debug">Debugowanie</string>

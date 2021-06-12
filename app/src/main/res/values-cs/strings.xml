@@ -357,6 +357,45 @@
     <!--Conference-->
     <string name="conferences_title">Setkání</string>
     <string name="conference_no_items">Žádné informace o setkáních</string>
+    <plurals name="conference_number_item">
+        <item quantity="one">%d setkání</item>
+        <item quantity="few">%d setkání</item>
+        <item quantity="many">%d setkání</item>
+        <item quantity="other">%d setkání</item>
+    </plurals>
+    <plurals name="conference_notify_new_item_title">
+        <item quantity="one">Nové setkání</item>
+        <item quantity="few">Nová setkání</item>
+        <item quantity="many">Nová setkání</item>
+        <item quantity="other">Nová setkání</item>
+    </plurals>
+    <plurals name="conference_notify_new_items">
+        <item quantity="one">Máte %1$d nové setkání</item>
+        <item quantity="few">Máte %1$d nové setkání</item>
+        <item quantity="many">Máte %1$d nových setkání</item>
+        <item quantity="other">Máte %1$d nových setkání</item>
+    </plurals>
+    <!--Director information-->
+    <string name="school_announcement_title">Školní oznámení</string>
+    <string name="school_announcement_no_items">Žádná školní oznámení</string>
+    <plurals name="school_announcement_number_item">
+        <item quantity="one">%d školní oznámení</item>
+        <item quantity="few">%d školní oznámení</item>
+        <item quantity="many">%d školní oznámení</item>
+        <item quantity="other">%d školní oznámení</item>
+    </plurals>
+    <plurals name="school_announcement_notify_new_item_title">
+        <item quantity="one">Nové školní oznámení</item>
+        <item quantity="few">Nová školní oznámení</item>
+        <item quantity="many">Nová školní oznámení</item>
+        <item quantity="other">Nová školní oznámení</item>
+    </plurals>
+    <plurals name="school_announcement_notify_new_items">
+        <item quantity="one">Máte %1$d nové školní oznámení</item>
+        <item quantity="few">Máte %1$d nové školní oznámení</item>
+        <item quantity="many">Máte %1$d nových školních oznámení</item>
+        <item quantity="other">Máte %1$d nových školních oznámení</item>
+    </plurals>
     <!--Account-->
     <string name="account_add_new">Přidat účet</string>
     <string name="account_logout">Odhlásit</string>
@@ -417,6 +456,7 @@
     <string name="student_info_male">Muž</string>
     <string name="student_info_female">Žena</string>
     <string name="student_info_last_name">Příjmení</string>
+    <string name="student_info_guardian">Opatrovník</string>
     <!--Account edit-->
     <string name="account_edit_nick_hint">Přezdívka</string>
     <string name="account_edit_header">Přidat přezdívku</string>
@@ -512,19 +552,21 @@
     <!--Notification Channels-->
     <string name="channel_new_grades">Nové známky</string>
     <string name="channel_new_homework">Nové domácí úkoly</string>
+    <string name="channel_new_conference">Nová setkání</string>
     <string name="channel_new_exam">Nové zkoušky</string>
     <string name="channel_lucky_number">Šťastné číslo</string>
     <string name="channel_new_message">Nové zprávy</string>
     <string name="channel_new_notes">Nové poznámky</string>
+    <string name="channel_new_school_announcement">Nové školní oznámení</string>
     <string name="channel_push">Push upozornění</string>
     <string name="channel_upcoming_lessons">Nadcházející lekce</string>
     <string name="channel_debug">Ladění</string>
     <!--Colors-->
-    <string name="all_black">Černý</string>
-    <string name="all_red">Červený</string>
-    <string name="all_blue">Modrý</string>
-    <string name="all_green">Zelený</string>
-    <string name="all_purple">Fialový</string>
+    <string name="all_black">Černá</string>
+    <string name="all_red">Červená</string>
+    <string name="all_blue">Modrá</string>
+    <string name="all_green">Zelená</string>
+    <string name="all_purple">Fialová</string>
     <string name="all_empty_color">Žádná barva</string>
     <!--Others-->
     <string name="all_copied">Zkopírováno</string>

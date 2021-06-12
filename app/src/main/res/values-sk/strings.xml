@@ -357,6 +357,45 @@
     <!--Conference-->
     <string name="conferences_title">Stretnutie</string>
     <string name="conference_no_items">Žiadne informácie o stretnutiach</string>
+    <plurals name="conference_number_item">
+        <item quantity="one">%d stretnutie</item>
+        <item quantity="few">%d stretnutia</item>
+        <item quantity="many">%d stretnutí</item>
+        <item quantity="other">%d stretnutí</item>
+    </plurals>
+    <plurals name="conference_notify_new_item_title">
+        <item quantity="one">Nové stretnutie</item>
+        <item quantity="few">Nová stretnutia</item>
+        <item quantity="many">Nová stretnutia</item>
+        <item quantity="other">Nová stretnutia</item>
+    </plurals>
+    <plurals name="conference_notify_new_items">
+        <item quantity="one">Máte %1$d nové stretnutie</item>
+        <item quantity="few">Máte %1$d nové stretnutia</item>
+        <item quantity="many">Máte %1$d nových stretnutí</item>
+        <item quantity="other">Máte %1$d nových stretnutí</item>
+    </plurals>
+    <!--Director information-->
+    <string name="school_announcement_title">Školské oznámenia</string>
+    <string name="school_announcement_no_items">Žiadne školské oznámenia</string>
+    <plurals name="school_announcement_number_item">
+        <item quantity="one">%d školské oznámenie</item>
+        <item quantity="few">%d školské oznámenia</item>
+        <item quantity="many">%d školských oznámení</item>
+        <item quantity="other">%d školských oznámení</item>
+    </plurals>
+    <plurals name="school_announcement_notify_new_item_title">
+        <item quantity="one">Nové školské oznámenie</item>
+        <item quantity="few">Nové školské oznámenia</item>
+        <item quantity="many">Nové školské oznámenia</item>
+        <item quantity="other">Nové školské oznámenia</item>
+    </plurals>
+    <plurals name="school_announcement_notify_new_items">
+        <item quantity="one">Máte %1$d nové školské oznámenie</item>
+        <item quantity="few">Máte %1$d nové školské oznámenia</item>
+        <item quantity="many">Máte %1$d nových školských oznámení</item>
+        <item quantity="other">Máte %1$d nových školských oznámení</item>
+    </plurals>
     <!--Account-->
     <string name="account_add_new">Pridať účet</string>
     <string name="account_logout">Odhlásiť</string>
@@ -417,6 +456,7 @@
     <string name="student_info_male">Muž</string>
     <string name="student_info_female">Žena</string>
     <string name="student_info_last_name">Priezvisko</string>
+    <string name="student_info_guardian">Opatrovník</string>
     <!--Account edit-->
     <string name="account_edit_nick_hint">Prezývka</string>
     <string name="account_edit_header">Pridať prezývku</string>
@@ -512,19 +552,21 @@
     <!--Notification Channels-->
     <string name="channel_new_grades">Nové známky</string>
     <string name="channel_new_homework">Nové domáce úlohy</string>
+    <string name="channel_new_conference">Nová stretnutia</string>
     <string name="channel_new_exam">Nové skúšky</string>
     <string name="channel_lucky_number">Šťastné číslo</string>
     <string name="channel_new_message">Nové správy</string>
     <string name="channel_new_notes">Nové poznámky</string>
+    <string name="channel_new_school_announcement">Nové školské oznámenia</string>
     <string name="channel_push">Push upozornenia</string>
     <string name="channel_upcoming_lessons">Nadchádzajúce lekcie</string>
     <string name="channel_debug">Ladenie</string>
     <!--Colors-->
-    <string name="all_black">Čierny</string>
-    <string name="all_red">Červený</string>
-    <string name="all_blue">Modrý</string>
-    <string name="all_green">Zelený</string>
-    <string name="all_purple">Fialový</string>
+    <string name="all_black">Čierna</string>
+    <string name="all_red">Červená</string>
+    <string name="all_blue">Modrá</string>
+    <string name="all_green">Zelená</string>
+    <string name="all_purple">Fialová</string>
     <string name="all_empty_color">Žiadna farba</string>
     <!--Others-->
     <string name="all_copied">Skopírované</string>
