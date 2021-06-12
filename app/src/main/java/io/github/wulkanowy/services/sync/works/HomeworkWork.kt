@@ -65,9 +65,9 @@ class HomeworkWork @Inject constructor(
                     homework.size,
                     homework.size
                 ))
-                .setSmallIcon(R.drawable.ic_more_homework)
+                .setSmallIcon(R.drawable.ic_stat_all)
                 .setLargeIcon(
-                    context.getCompatBitmap(R.drawable.ic_more_homework, R.color.colorPrimary)
+                    context.getCompatBitmap(R.drawable.ic_stat_homework, R.color.colorPrimary)
                 )
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)

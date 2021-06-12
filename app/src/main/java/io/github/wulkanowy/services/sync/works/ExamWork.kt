@@ -60,10 +60,9 @@ class ExamWork @Inject constructor(
                     exam.size,
                     exam.size
                 ))
-                .setSmallIcon(R.drawable.ic_main_exam)
                 .setSmallIcon(R.drawable.ic_stat_all)
                 .setLargeIcon(
-                    context.getCompatBitmap(R.drawable.ic_main_exam, R.color.colorPrimary)
+                    context.getCompatBitmap(R.drawable.ic_stat_exam, R.color.colorPrimary)
                 )
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
