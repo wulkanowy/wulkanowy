@@ -5,6 +5,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -58,6 +59,8 @@ class GradeSummaryFragment :
             gradeSummarySwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             gradeSummaryErrorRetry.setOnClickListener { presenter.onRetry() }
             gradeSummaryErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+
+            gradeSummaryAdapter.onHelpClickListener = presenter::onCalculatedAverageHelpClick
         }
     }
 
@@ -105,6 +108,14 @@ class GradeSummaryFragment :
 
     override fun showRefresh(show: Boolean) {
         binding.gradeSummarySwipe.isRefreshing = show
+    }
+
+    override fun showCalculatedAverageHelpDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.grade_summary_calculated_average_help_dialog_title)
+            .setMessage(R.string.grade_summary_calculated_average_help_dialog_message)
+            .setPositiveButton(R.string.all_close) { _, _ -> }
+            .show()
     }
 
     override fun onParentLoadData(semesterId: Int, forceRefresh: Boolean) {

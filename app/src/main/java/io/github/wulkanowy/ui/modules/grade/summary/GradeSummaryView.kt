@@ -33,6 +33,8 @@ interface GradeSummaryView : BaseView {
 
     fun showEmpty(show: Boolean)
 
+    fun showCalculatedAverageHelpDialog()
+
     fun notifyParentDataLoaded(semesterId: Int)
 
     fun notifyParentRefresh()

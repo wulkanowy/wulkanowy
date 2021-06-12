@@ -87,6 +87,8 @@
     <string name="grade_summary_final_grade">Ocena końcowa</string>
     <string name="grade_summary_predicted_grade">Przewidywana ocena</string>
     <string name="grade_summary_calculated_average">Obliczona średnia</string>
+    <string name="grade_summary_calculated_average_help_dialog_title">Jak działa obliczanie średniej?</string>
+    <string name="grade_summary_calculated_average_help_dialog_message">Obliczona wartość to średnia arytmetyczna średnich ze wszystkich przedmiotów</string>
     <string name="grade_summary_final_average">Końcowa średnia</string>
     <string name="grade_menu_summary">Podsumowanie</string>
     <string name="grade_menu_statistics">Klasa</string>
