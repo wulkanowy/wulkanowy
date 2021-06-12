@@ -54,7 +54,7 @@ class SchoolAnnouncementWork @Inject constructor(
                     ))
                 .setContentText(context.resources.getQuantityString(R.plurals.school_announcement_notify_new_items, schoolAnnouncement.size, schoolAnnouncement.size))
                 .setSmallIcon(R.drawable.ic_stat_all)
-                .setLargeIcon(context.getCompatBitmap(R.drawable.ic_all_about, R.color.colorPrimary))
+                .setLargeIcon(context.getCompatBitmap(R.drawable.ic_stat_school_announcement, R.color.colorPrimary))
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

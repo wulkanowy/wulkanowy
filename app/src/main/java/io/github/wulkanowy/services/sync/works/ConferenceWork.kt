@@ -50,7 +50,7 @@ class ConferenceWork @Inject constructor(
                 .setContentTitle(context.resources.getQuantityString(R.plurals.conference_notify_new_item_title, conference.size, conference.size))
                 .setContentText(context.resources.getQuantityString(R.plurals.conference_notify_new_items, conference.size, conference.size))
                 .setSmallIcon(R.drawable.ic_stat_all)
-                .setLargeIcon(context.getCompatBitmap(R.drawable.ic_more_conferences, R.color.colorPrimary))
+                .setLargeIcon(context.getCompatBitmap(R.drawable.ic_stat_conferences, R.color.colorPrimary))
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
