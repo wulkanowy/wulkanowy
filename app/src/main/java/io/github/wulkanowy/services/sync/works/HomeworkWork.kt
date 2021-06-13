@@ -28,7 +28,8 @@ class HomeworkWork @Inject constructor(
             notify = preferencesRepository.isNotificationsEnable
         ).waitForResult()
 
-        homeworkRepository.getNotNotifiedHomework(semester, now().monday, now().sunday).first()
+        homeworkRepository.getHomeworkFromDatabase(semester, now().monday, now().sunday).first()
+            .filter { !it.isNotified }
             .let {
                 if (it.isNotEmpty()) newHomeworkNotification.notify(it)
 

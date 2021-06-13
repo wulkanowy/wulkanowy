@@ -104,10 +104,8 @@ class GradeRepository @Inject constructor(
         }
     }
 
-    fun getNotNotifiedGrades(semester: Semester): Flow<List<Grade>> {
-        return gradeDb.loadAll(semester.semesterId, semester.studentId).map {
-            it.filter { grade -> !grade.isNotified }
-        }
+    fun getGradesFromDatabase(semester: Semester): Flow<List<Grade>> {
+        return gradeDb.loadAll(semester.semesterId, semester.studentId)
     }
 
     fun getNotNotifiedPredictedGrades(semester: Semester): Flow<List<GradeSummary>> {

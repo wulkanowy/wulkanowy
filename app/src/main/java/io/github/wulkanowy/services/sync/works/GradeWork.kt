@@ -23,7 +23,7 @@ class GradeWork @Inject constructor(
             notify = preferencesRepository.isNotificationsEnable
         ).waitForResult()
 
-        gradeRepository.getNotNotifiedGrades(semester).first().let {
+        gradeRepository.getGradesFromDatabase(semester).first().filter { !it.isNotified }.let {
             if (it.isNotEmpty()) newGradeNotification.notifyDetails(it)
 
             gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true })

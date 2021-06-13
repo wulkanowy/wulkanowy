@@ -9,7 +9,8 @@ import io.github.wulkanowy.services.sync.notifications.NewGradeNotification
 import io.github.wulkanowy.services.sync.notifications.NewHomeworkNotification
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.flowWithResourceIn
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,34 +40,29 @@ class NotificationDebugPresenter @Inject constructor(
     }
 
     fun sendGradeNotifications(numberOf: Int) {
-        flowWithResourceIn {
+        flow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
+            val items = gradeRepository.getGradesFromDatabase(semester)
 
-            gradeRepository.getGrades(student, semester, false)
+            emitAll(items)
         }.onEach {
-            val (details, _) = it.data ?: return@onEach
-
-            newGradeNotification.notifyDetails(details.take(numberOf))
+            newGradeNotification.notifyDetails(it.take(numberOf))
         }.launch("grades")
     }
 
     fun sendHomeworkNotifications(numberOf: Int) {
-        flowWithResourceIn {
+        flow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-
-            homeworkRepository.getHomework(
-                student = student,
+            val items = homeworkRepository.getHomeworkFromDatabase(
                 semester = semester,
                 start = semester.start,
                 end = semester.end,
-                forceRefresh = false
             )
+            emitAll(items)
         }.onEach {
-            val items = it.data ?: return@onEach
-
-            newHomeworkNotification.notify(items.take(numberOf))
+            newHomeworkNotification.notify(it.take(numberOf))
         }.launch("homework")
     }
 }
