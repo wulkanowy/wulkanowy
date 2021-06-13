@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.debug.notification
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentDebugNotificationsBinding
@@ -17,6 +18,8 @@ class NotificationDebugFragment :
     @Inject
     lateinit var presenter: NotificationDebugPresenter
 
+    private val notificationDebugAdapter = NotificationDebugAdapter()
+
     override val titleStringId: Int
         get() = R.string.notification_debug_title
 
@@ -31,13 +34,17 @@ class NotificationDebugFragment :
     }
 
     override fun initView() {
-        binding.grade1.setOnClickListener { presenter.sendGradeNotifications(1) }
-        binding.grade3.setOnClickListener { presenter.sendGradeNotifications(3) }
-        binding.grade10.setOnClickListener { presenter.sendGradeNotifications(10) }
+        with(binding.recyclerView) {
+            adapter = notificationDebugAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
 
-        binding.homework1.setOnClickListener { presenter.sendHomeworkNotifications(1) }
-        binding.homework3.setOnClickListener { presenter.sendHomeworkNotifications(3) }
-        binding.homework10.setOnClickListener { presenter.sendHomeworkNotifications(10) }
+    override fun setItems(notificationDebugs: List<NotificationDebugItem>) {
+        with(notificationDebugAdapter) {
+            items = notificationDebugs
+            notifyDataSetChanged()
+        }
     }
 
     override fun onDestroyView() {

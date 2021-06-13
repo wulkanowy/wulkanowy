@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.debug.notification
 
+import io.github.wulkanowy.R
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -11,7 +12,6 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import java.time.LocalDate
 import javax.inject.Inject
 
 class NotificationDebugPresenter @Inject constructor(
@@ -24,10 +24,18 @@ class NotificationDebugPresenter @Inject constructor(
     private val newHomeworkNotification: NewHomeworkNotification,
 ) : BasePresenter<NotificationDebugView>(errorHandler, studentRepository) {
 
+    private val items = listOf(
+        NotificationDebugItem(R.string.grade_title) { sendGradeNotifications(it) },
+        NotificationDebugItem(R.string.homework_title) { sendHomeworkNotifications(it) },
+    )
+
     override fun onAttachView(view: NotificationDebugView) {
         super.onAttachView(view)
         Timber.i("Notification debug view was initialized")
-        view.initView()
+        with(view) {
+            initView()
+            setItems(items)
+        }
     }
 
     fun sendGradeNotifications(numberOf: Int) {
@@ -51,8 +59,8 @@ class NotificationDebugPresenter @Inject constructor(
             homeworkRepository.getHomework(
                 student = student,
                 semester = semester,
-                start = LocalDate.now().minusDays(10),
-                end = LocalDate.now(),
+                start = semester.start,
+                end = semester.end,
                 forceRefresh = false
             )
         }.onEach {
