@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.time.LocalDate
 import javax.inject.Inject
 
 class NotificationDebugPresenter @Inject constructor(
@@ -57,8 +58,8 @@ class NotificationDebugPresenter @Inject constructor(
             val semester = semesterRepository.getCurrentSemester(student)
             val items = homeworkRepository.getHomeworkFromDatabase(
                 semester = semester,
-                start = semester.start,
-                end = semester.end,
+                start = LocalDate.now().minusMonths(6),
+                end = LocalDate.now(),
             )
             emitAll(items)
         }.onEach {
