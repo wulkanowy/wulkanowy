@@ -1,10 +1,12 @@
 package io.github.wulkanowy.ui.modules.debug.notification
 
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.repositories.ConferenceRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.services.sync.notifications.NewConferenceNotification
 import io.github.wulkanowy.services.sync.notifications.NewGradeNotification
 import io.github.wulkanowy.services.sync.notifications.NewHomeworkNotification
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -24,6 +26,8 @@ class NotificationDebugPresenter @Inject constructor(
     private val newGradeNotification: NewGradeNotification,
     private val homeworkRepository: HomeworkRepository,
     private val newHomeworkNotification: NewHomeworkNotification,
+    private val conferenceRepository: ConferenceRepository,
+    private val newConferenceNotification: NewConferenceNotification,
 ) : BasePresenter<NotificationDebugView>(errorHandler, studentRepository) {
 
     private val items = listOf(
@@ -33,6 +37,7 @@ class NotificationDebugPresenter @Inject constructor(
         },
         NotificationDebugItem(R.string.grade_summary_final_grade) { sendGradeFinalNotifications(it) },
         NotificationDebugItem(R.string.homework_title) { sendHomeworkNotifications(it) },
+        NotificationDebugItem(R.string.conferences_title) { sendConferenceNotifications(it) }
     )
 
     override fun onAttachView(view: NotificationDebugView) {
@@ -99,5 +104,16 @@ class NotificationDebugPresenter @Inject constructor(
         }.onEach {
             newHomeworkNotification.notify(it.take(numberOf))
         }.launch("homework")
+    }
+
+    fun sendConferenceNotifications(numberOf: Int) {
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            val items = conferenceRepository.getConferenceFromDatabase(semester)
+            emitAll(items)
+        }.onEach {
+            newConferenceNotification.notify(it.take(numberOf))
+        }.launch("conference")
     }
 }
