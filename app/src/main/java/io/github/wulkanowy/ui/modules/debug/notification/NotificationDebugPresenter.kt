@@ -7,6 +7,7 @@ import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.MessageRepository
 import io.github.wulkanowy.data.repositories.NoteRepository
+import io.github.wulkanowy.data.repositories.SchoolAnnouncementRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.sync.notifications.NewConferenceNotification
@@ -15,6 +16,7 @@ import io.github.wulkanowy.services.sync.notifications.NewGradeNotification
 import io.github.wulkanowy.services.sync.notifications.NewHomeworkNotification
 import io.github.wulkanowy.services.sync.notifications.NewMessageNotification
 import io.github.wulkanowy.services.sync.notifications.NewNoteNotification
+import io.github.wulkanowy.services.sync.notifications.NewSchoolAnnouncementNotification
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import kotlinx.coroutines.flow.emitAll
@@ -40,6 +42,8 @@ class NotificationDebugPresenter @Inject constructor(
     private val newMessageNotification: NewMessageNotification,
     private val noteRepository: NoteRepository,
     private val newNoteNotification: NewNoteNotification,
+    private val schoolAnnouncementRepository: SchoolAnnouncementRepository,
+    private val newSchoolAnnouncementNotification: NewSchoolAnnouncementNotification,
 ) : BasePresenter<NotificationDebugView>(errorHandler, studentRepository) {
 
     private val items = listOf(
@@ -52,7 +56,10 @@ class NotificationDebugPresenter @Inject constructor(
         NotificationDebugItem(R.string.conferences_title) { sendConferenceNotifications(it) },
         NotificationDebugItem(R.string.exam_title) { sendExamNotifications(it) },
         NotificationDebugItem(R.string.message_title) { sendMessageNotifications(it) },
-        NotificationDebugItem(R.string.note_title) { sendNoteNotifications(it) }
+        NotificationDebugItem(R.string.note_title) { sendNoteNotifications(it) },
+        NotificationDebugItem(R.string.school_announcement_title) {
+            sendSchoolAnnouncementNotifications(it)
+        },
     )
 
     override fun onAttachView(view: NotificationDebugView) {
@@ -164,5 +171,15 @@ class NotificationDebugPresenter @Inject constructor(
         }.onEach {
             newNoteNotification.notify(it.take(numberOf))
         }.launch("note")
+    }
+
+    fun sendSchoolAnnouncementNotifications(numberOf: Int) {
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val items = schoolAnnouncementRepository.getSchoolAnnouncementFromDatabase(student)
+            emitAll(items)
+        }.onEach {
+            newSchoolAnnouncementNotification.notify(it.take(numberOf))
+        }.launch("school_announcement")
     }
 }
