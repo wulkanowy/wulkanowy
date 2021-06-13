@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.MessageRepository
+import io.github.wulkanowy.data.repositories.NoteRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.sync.notifications.NewConferenceNotification
@@ -13,6 +14,7 @@ import io.github.wulkanowy.services.sync.notifications.NewExamNotification
 import io.github.wulkanowy.services.sync.notifications.NewGradeNotification
 import io.github.wulkanowy.services.sync.notifications.NewHomeworkNotification
 import io.github.wulkanowy.services.sync.notifications.NewMessageNotification
+import io.github.wulkanowy.services.sync.notifications.NewNoteNotification
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import kotlinx.coroutines.flow.emitAll
@@ -36,6 +38,8 @@ class NotificationDebugPresenter @Inject constructor(
     private val newExamNotification: NewExamNotification,
     private val messageRepository: MessageRepository,
     private val newMessageNotification: NewMessageNotification,
+    private val noteRepository: NoteRepository,
+    private val newNoteNotification: NewNoteNotification,
 ) : BasePresenter<NotificationDebugView>(errorHandler, studentRepository) {
 
     private val items = listOf(
@@ -48,6 +52,7 @@ class NotificationDebugPresenter @Inject constructor(
         NotificationDebugItem(R.string.conferences_title) { sendConferenceNotifications(it) },
         NotificationDebugItem(R.string.exam_title) { sendExamNotifications(it) },
         NotificationDebugItem(R.string.message_title) { sendMessageNotifications(it) },
+        NotificationDebugItem(R.string.note_title) { sendNoteNotifications(it) }
     )
 
     override fun onAttachView(view: NotificationDebugView) {
@@ -149,5 +154,15 @@ class NotificationDebugPresenter @Inject constructor(
         }.onEach {
             newMessageNotification.notify(it.take(numberOf))
         }.launch("message")
+    }
+
+    fun sendNoteNotifications(numberOf: Int) {
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val items = noteRepository.getNotesFromDatabase(student)
+            emitAll(items)
+        }.onEach {
+            newNoteNotification.notify(it.take(numberOf))
+        }.launch("note")
     }
 }
