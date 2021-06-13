@@ -2,11 +2,13 @@ package io.github.wulkanowy.ui.modules.debug.notification
 
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.repositories.ConferenceRepository
+import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.sync.notifications.NewConferenceNotification
+import io.github.wulkanowy.services.sync.notifications.NewExamNotification
 import io.github.wulkanowy.services.sync.notifications.NewGradeNotification
 import io.github.wulkanowy.services.sync.notifications.NewHomeworkNotification
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -28,6 +30,8 @@ class NotificationDebugPresenter @Inject constructor(
     private val newHomeworkNotification: NewHomeworkNotification,
     private val conferenceRepository: ConferenceRepository,
     private val newConferenceNotification: NewConferenceNotification,
+    private val examRepository: ExamRepository,
+    private val newExamNotification: NewExamNotification,
 ) : BasePresenter<NotificationDebugView>(errorHandler, studentRepository) {
 
     private val items = listOf(
@@ -37,7 +41,8 @@ class NotificationDebugPresenter @Inject constructor(
         },
         NotificationDebugItem(R.string.grade_summary_final_grade) { sendGradeFinalNotifications(it) },
         NotificationDebugItem(R.string.homework_title) { sendHomeworkNotifications(it) },
-        NotificationDebugItem(R.string.conferences_title) { sendConferenceNotifications(it) }
+        NotificationDebugItem(R.string.conferences_title) { sendConferenceNotifications(it) },
+        NotificationDebugItem(R.string.exam_title) { sendExamNotifications(it) },
     )
 
     override fun onAttachView(view: NotificationDebugView) {
@@ -115,5 +120,19 @@ class NotificationDebugPresenter @Inject constructor(
         }.onEach {
             newConferenceNotification.notify(it.take(numberOf))
         }.launch("conference")
+    }
+
+    fun sendExamNotifications(numberOf: Int) {
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            val items = examRepository.getExamsFromDatabase(
+                semester = semester,
+                start = LocalDate.now().minusMonths(1),
+            )
+            emitAll(items)
+        }.onEach {
+            newExamNotification.notify(it.take(numberOf))
+        }.launch("exam")
     }
 }
