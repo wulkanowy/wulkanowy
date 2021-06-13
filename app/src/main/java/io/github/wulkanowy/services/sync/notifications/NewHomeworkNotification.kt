@@ -15,7 +15,7 @@ class NewHomeworkNotification @Inject constructor(
     notificationManager: NotificationManagerCompat,
 ): BaseNotification(context, notificationManager) {
 
-    fun notify(homework: List<Homework>) {
+    fun notify(items: List<Homework>) {
         val notification = Notification(
             channelId = NewHomeworkChannel.CHANNEL_ID,
             icon = R.drawable.ic_more_homework,
@@ -23,7 +23,7 @@ class NewHomeworkNotification @Inject constructor(
             contentStringRes = R.plurals.homework_notify_new_item_title, // todo: you received %d new homework
             summaryStringRes = R.plurals.homework_number_item,
             startMenu = MainView.Section.HOMEWORK,
-            lines = homework.map {
+            lines = items.map {
                 "${it.subject}: ${it.content}"
             }
         )

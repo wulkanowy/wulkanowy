@@ -16,7 +16,7 @@ class NewGradeNotification @Inject constructor(
     notificationManager: NotificationManagerCompat,
 ) : BaseNotification(context, notificationManager) {
 
-     fun notifyDetails(grades: List<Grade>) {
+     fun notifyDetails(items: List<Grade>) {
         val notification = Notification(
             channelId = NewGradesChannel.CHANNEL_ID,
             icon = R.drawable.ic_stat_grade,
@@ -24,7 +24,7 @@ class NewGradeNotification @Inject constructor(
             contentStringRes = R.plurals.grade_notify_new_items,
             summaryStringRes = R.plurals.grade_number_item,
             startMenu = MainView.Section.GRADE,
-            lines = grades.map {
+            lines = items.map {
                 "${it.subject}: ${it.entry}"
             }
         )
@@ -32,7 +32,7 @@ class NewGradeNotification @Inject constructor(
         sendNotification(notification)
     }
 
-     fun notifyPredicted(gradesSummary: List<GradeSummary>) {
+     fun notifyPredicted(items: List<GradeSummary>) {
         val notification = Notification(
             channelId = NewGradesChannel.CHANNEL_ID,
             icon = R.drawable.ic_stat_grade,
@@ -40,7 +40,7 @@ class NewGradeNotification @Inject constructor(
             contentStringRes = R.plurals.grade_notify_new_items_predicted,
             summaryStringRes = R.plurals.grade_number_item,
             startMenu = MainView.Section.GRADE,
-            lines = gradesSummary.map {
+            lines = items.map {
                 "${it.subject}: ${it.predictedGrade}"
             }
         )
@@ -48,7 +48,7 @@ class NewGradeNotification @Inject constructor(
         sendNotification(notification)
     }
 
-     fun notifyFinal(gradesSummary: List<GradeSummary>) {
+     fun notifyFinal(items: List<GradeSummary>) {
         val notification = Notification(
             channelId = NewGradesChannel.CHANNEL_ID,
             icon = R.drawable.ic_stat_grade,
@@ -56,7 +56,7 @@ class NewGradeNotification @Inject constructor(
             contentStringRes = R.plurals.grade_notify_new_items_final,
             summaryStringRes = R.plurals.grade_number_item,
             startMenu = MainView.Section.GRADE,
-            lines = gradesSummary.map {
+            lines = items.map {
                 "${it.subject}: ${it.finalGrade}"
             }
         )
