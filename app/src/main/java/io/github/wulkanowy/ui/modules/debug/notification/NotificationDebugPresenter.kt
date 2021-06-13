@@ -28,6 +28,10 @@ class NotificationDebugPresenter @Inject constructor(
 
     private val items = listOf(
         NotificationDebugItem(R.string.grade_title) { sendGradeNotifications(it) },
+        NotificationDebugItem(R.string.grade_summary_predicted_grade) {
+            sendGradePredictedNotifications(it)
+        },
+        NotificationDebugItem(R.string.grade_summary_final_grade) { sendGradeFinalNotifications(it) },
         NotificationDebugItem(R.string.homework_title) { sendHomeworkNotifications(it) },
     )
 
@@ -50,6 +54,36 @@ class NotificationDebugPresenter @Inject constructor(
         }.onEach {
             newGradeNotification.notifyDetails(it.take(numberOf))
         }.launch("grades")
+    }
+
+    fun sendGradePredictedNotifications(numberOf: Int) {
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            val items = gradeRepository.getGradesPredictedFromDatabase(semester)
+
+            emitAll(items)
+        }.onEach { items ->
+            newGradeNotification.notifyPredicted(items
+                .filter { it.predictedGrade.isNotEmpty() }
+                .take(numberOf)
+            )
+        }.launch("grades_predicted")
+    }
+
+    fun sendGradeFinalNotifications(numberOf: Int) {
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            val items = gradeRepository.getGradesFinalFromDatabase(semester)
+
+            emitAll(items)
+        }.onEach { items ->
+            newGradeNotification.notifyFinal(items
+                .filter { it.finalGrade.isNotEmpty() }
+                .take(numberOf)
+            )
+        }.launch("grades_final")
     }
 
     fun sendHomeworkNotifications(numberOf: Int) {

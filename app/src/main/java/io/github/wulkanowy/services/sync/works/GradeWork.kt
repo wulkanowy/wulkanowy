@@ -23,26 +23,29 @@ class GradeWork @Inject constructor(
             notify = preferencesRepository.isNotificationsEnable
         ).waitForResult()
 
-        gradeRepository.getGradesFromDatabase(semester).first().filter { !it.isNotified }.let {
-            if (it.isNotEmpty()) newGradeNotification.notifyDetails(it)
+        gradeRepository.getGradesFromDatabase(semester).first()
+            .filter { !it.isNotified }.let {
+                if (it.isNotEmpty()) newGradeNotification.notifyDetails(it)
 
-            gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true })
-        }
+                gradeRepository.updateGrades(it.onEach { grade -> grade.isNotified = true })
+            }
 
-        gradeRepository.getNotNotifiedPredictedGrades(semester).first().let {
-            if (it.isNotEmpty()) newGradeNotification.notifyPredicted(it)
+        gradeRepository.getGradesPredictedFromDatabase(semester).first()
+            .filter { !it.isPredictedGradeNotified }.let {
+                if (it.isNotEmpty()) newGradeNotification.notifyPredicted(it)
 
-            gradeRepository.updateGradesSummary(it.onEach { grade ->
-                grade.isPredictedGradeNotified = true
-            })
-        }
+                gradeRepository.updateGradesSummary(it.onEach { grade ->
+                    grade.isPredictedGradeNotified = true
+                })
+            }
 
-        gradeRepository.getNotNotifiedFinalGrades(semester).first().let {
-            if (it.isNotEmpty()) newGradeNotification.notifyFinal(it)
+        gradeRepository.getGradesFinalFromDatabase(semester).first()
+            .filter { !it.isFinalGradeNotified }.let {
+                if (it.isNotEmpty()) newGradeNotification.notifyFinal(it)
 
-            gradeRepository.updateGradesSummary(it.onEach { grade ->
-                grade.isFinalGradeNotified = true
-            })
-        }
+                gradeRepository.updateGradesSummary(it.onEach { grade ->
+                    grade.isFinalGradeNotified = true
+                })
+            }
     }
 }

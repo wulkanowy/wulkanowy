@@ -108,16 +108,12 @@ class GradeRepository @Inject constructor(
         return gradeDb.loadAll(semester.semesterId, semester.studentId)
     }
 
-    fun getNotNotifiedPredictedGrades(semester: Semester): Flow<List<GradeSummary>> {
-        return gradeSummaryDb.loadAll(semester.semesterId, semester.studentId).map {
-            it.filter { gradeSummary -> !gradeSummary.isPredictedGradeNotified }
-        }
+    fun getGradesPredictedFromDatabase(semester: Semester): Flow<List<GradeSummary>> {
+        return gradeSummaryDb.loadAll(semester.semesterId, semester.studentId)
     }
 
-    fun getNotNotifiedFinalGrades(semester: Semester): Flow<List<GradeSummary>> {
-        return gradeSummaryDb.loadAll(semester.semesterId, semester.studentId).map {
-            it.filter { gradeSummary -> !gradeSummary.isFinalGradeNotified }
-        }
+    fun getGradesFinalFromDatabase(semester: Semester): Flow<List<GradeSummary>> {
+        return gradeSummaryDb.loadAll(semester.semesterId, semester.studentId)
     }
 
     suspend fun updateGrade(grade: Grade) {
