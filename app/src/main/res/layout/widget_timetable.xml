@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@drawable/widget_background"
     tools:context=".ui.modules.timetablewidget.TimetableWidgetProvider">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/colorPrimary">
+        android:background="@drawable/widget_foreground">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -51,22 +51,23 @@
 
         <ImageButton
             android:id="@+id/timetableWidgetPrev"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:backgroundTint="@color/colorPrimaryDark"
+            android:background="@drawable/widget_button"
             android:contentDescription="@string/all_prev"
             android:src="@drawable/ic_widget_chevron"
             tools:targetApi="lollipop" />
 
         <ImageButton
             android:id="@+id/timetableWidgetNext"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="2dp"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/timetableWidgetPrev"
-            android:backgroundTint="@color/colorPrimaryDark"
+            android:background="@drawable/widget_button"
             android:contentDescription="@string/all_next"
             android:rotation="180"
             android:src="@drawable/ic_widget_chevron"
