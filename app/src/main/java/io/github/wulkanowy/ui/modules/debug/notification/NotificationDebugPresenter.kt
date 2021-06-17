@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.repositories.ConferenceRepository
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.HomeworkRepository
+import io.github.wulkanowy.data.repositories.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.MessageRepository
 import io.github.wulkanowy.data.repositories.NoteRepository
 import io.github.wulkanowy.data.repositories.SchoolAnnouncementRepository
@@ -14,6 +15,7 @@ import io.github.wulkanowy.services.sync.notifications.NewConferenceNotification
 import io.github.wulkanowy.services.sync.notifications.NewExamNotification
 import io.github.wulkanowy.services.sync.notifications.NewGradeNotification
 import io.github.wulkanowy.services.sync.notifications.NewHomeworkNotification
+import io.github.wulkanowy.services.sync.notifications.NewLuckyNumberNotification
 import io.github.wulkanowy.services.sync.notifications.NewMessageNotification
 import io.github.wulkanowy.services.sync.notifications.NewNoteNotification
 import io.github.wulkanowy.services.sync.notifications.NewSchoolAnnouncementNotification
@@ -44,6 +46,8 @@ class NotificationDebugPresenter @Inject constructor(
     private val newNoteNotification: NewNoteNotification,
     private val schoolAnnouncementRepository: SchoolAnnouncementRepository,
     private val newSchoolAnnouncementNotification: NewSchoolAnnouncementNotification,
+    private val luckyNumberRepository: LuckyNumberRepository,
+    private val newLuckyNumberNotification: NewLuckyNumberNotification,
 ) : BasePresenter<NotificationDebugView>(errorHandler, studentRepository) {
 
     private val items = listOf(
@@ -60,6 +64,7 @@ class NotificationDebugPresenter @Inject constructor(
         NotificationDebugItem(R.string.school_announcement_title) {
             sendSchoolAnnouncementNotifications(it)
         },
+        NotificationDebugItem(R.string.lucky_number_title) { sendLuckyNumberNotification(it) },
     )
 
     override fun onAttachView(view: NotificationDebugView) {
@@ -181,5 +186,19 @@ class NotificationDebugPresenter @Inject constructor(
         }.onEach {
             newSchoolAnnouncementNotification.notify(it.take(numberOf))
         }.launch("school_announcement")
+    }
+
+    fun sendLuckyNumberNotification(numberOf: Int) {
+        flow {
+            val student = studentRepository.getCurrentStudent()
+            val items = luckyNumberRepository.getLuckyNumberHistory(
+                student = student,
+                start = LocalDate.now().minusMonths(1),
+                end = LocalDate.now()
+            )
+            emitAll(items)
+        }.onEach {
+            it.take(numberOf).forEach(newLuckyNumberNotification::notify)
+        }.launch("lucky_number")
     }
 }

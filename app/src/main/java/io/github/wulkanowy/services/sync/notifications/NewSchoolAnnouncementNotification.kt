@@ -5,7 +5,7 @@ import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
-import io.github.wulkanowy.data.pojos.Notification
+import io.github.wulkanowy.data.pojos.MultipleNotifications
 import io.github.wulkanowy.services.sync.channels.NewSchoolAnnouncementsChannel
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class NewSchoolAnnouncementNotification @Inject constructor(
 ) : BaseNotification(context, notificationManager) {
 
     fun notify(items: List<SchoolAnnouncement>) {
-        val notification = Notification(
+        val notification = MultipleNotifications(
             channelId = NewSchoolAnnouncementsChannel.CHANNEL_ID,
             icon = R.drawable.ic_all_about,
             titleStringRes = R.plurals.school_announcement_notify_new_item_title,

@@ -6,7 +6,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
-import io.github.wulkanowy.data.pojos.Notification
+import io.github.wulkanowy.data.pojos.MultipleNotifications
 import io.github.wulkanowy.services.sync.channels.NewGradesChannel
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
@@ -17,7 +17,7 @@ class NewGradeNotification @Inject constructor(
 ) : BaseNotification(context, notificationManager) {
 
      fun notifyDetails(items: List<Grade>) {
-        val notification = Notification(
+        val notification = MultipleNotifications(
             channelId = NewGradesChannel.CHANNEL_ID,
             icon = R.drawable.ic_stat_grade,
             titleStringRes = R.plurals.grade_new_items,
@@ -33,7 +33,7 @@ class NewGradeNotification @Inject constructor(
     }
 
      fun notifyPredicted(items: List<GradeSummary>) {
-        val notification = Notification(
+        val notification = MultipleNotifications(
             channelId = NewGradesChannel.CHANNEL_ID,
             icon = R.drawable.ic_stat_grade,
             titleStringRes = R.plurals.grade_new_items_predicted,
@@ -49,7 +49,7 @@ class NewGradeNotification @Inject constructor(
     }
 
      fun notifyFinal(items: List<GradeSummary>) {
-        val notification = Notification(
+        val notification = MultipleNotifications(
             channelId = NewGradesChannel.CHANNEL_ID,
             icon = R.drawable.ic_stat_grade,
             titleStringRes = R.plurals.grade_new_items_final,

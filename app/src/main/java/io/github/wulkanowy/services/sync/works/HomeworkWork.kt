@@ -29,8 +29,7 @@ class HomeworkWork @Inject constructor(
         ).waitForResult()
 
         homeworkRepository.getHomeworkFromDatabase(semester, now().monday, now().sunday).first()
-            .filter { !it.isNotified }
-            .let {
+            .filter { !it.isNotified }.let {
                 if (it.isNotEmpty()) newHomeworkNotification.notify(it)
 
                 homeworkRepository.updateHomework(it.onEach { homework ->

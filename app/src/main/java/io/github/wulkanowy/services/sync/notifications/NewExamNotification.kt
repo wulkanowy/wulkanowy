@@ -5,7 +5,7 @@ import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Exam
-import io.github.wulkanowy.data.pojos.Notification
+import io.github.wulkanowy.data.pojos.MultipleNotifications
 import io.github.wulkanowy.services.sync.channels.NewExamChannel
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class NewExamNotification @Inject constructor(
 ) : BaseNotification(context, notificationManager) {
 
     fun notify(items: List<Exam>) {
-        val notification = Notification(
+        val notification = MultipleNotifications(
             channelId = NewExamChannel.CHANNEL_ID,
             icon = R.drawable.ic_main_exam,
             titleStringRes = R.plurals.exam_notify_new_item_title,

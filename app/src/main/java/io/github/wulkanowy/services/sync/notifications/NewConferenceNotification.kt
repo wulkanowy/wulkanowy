@@ -5,7 +5,7 @@ import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Conference
-import io.github.wulkanowy.data.pojos.Notification
+import io.github.wulkanowy.data.pojos.MultipleNotifications
 import io.github.wulkanowy.services.sync.channels.NewConferencesChannel
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class NewConferenceNotification @Inject constructor(
 ) : BaseNotification(context, notificationManager) {
 
     fun notify(items: List<Conference>) {
-        val notification = Notification(
+        val notification = MultipleNotifications(
             channelId = NewConferencesChannel.CHANNEL_ID,
             icon = R.drawable.ic_more_conferences,
             titleStringRes = R.plurals.conference_notify_new_item_title,
