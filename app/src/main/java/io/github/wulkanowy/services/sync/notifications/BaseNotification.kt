@@ -19,35 +19,10 @@ abstract class BaseNotification(
 ) {
 
     protected fun sendNotification(notification: Notification) {
-        val linesSize = when (notification) {
-            is MultipleNotifications -> notification.lines.size
-            is OneNotification -> -1
-        }
         notificationManager.notify(
             Random.nextInt(Int.MAX_VALUE),
             NotificationCompat.Builder(context, notification.channelId)
-                .setContentTitle(
-                    when (notification) {
-                        is OneNotification -> context.getString(notification.titleStringRes)
-                        is MultipleNotifications -> context.resources.getQuantityString(
-                            notification.titleStringRes, linesSize, linesSize,
-                        )
-                    }
-                )
-                .setContentText(
-                    when (notification) {
-                        is OneNotification -> context.getString(
-                            notification.contentStringRes,
-                            *notification.contentValues.toTypedArray()
-                        )
-                        is MultipleNotifications -> context.resources.getQuantityString(
-                            notification.contentStringRes, linesSize, linesSize,
-                        )
-                    }
-                )
-                .setLargeIcon(
-                    context.getCompatBitmap(notification.icon, R.color.colorPrimary)
-                )
+                .setLargeIcon(context.getCompatBitmap(notification.icon, R.color.colorPrimary))
                 .setSmallIcon(R.drawable.ic_stat_all)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -60,30 +35,36 @@ abstract class BaseNotification(
                         PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )
-                .setStyle(NotificationCompat.InboxStyle().run {
+                .apply {
                     when (notification) {
-                        is MultipleNotifications -> {
-                            setSummaryText(
-                                context.resources.getQuantityString(
-                                    notification.summaryStringRes,
-                                    notification.lines.size,
-                                    notification.lines.size
-                                )
-                            )
-                            notification.lines.forEach(::addLine)
-                        }
-                        is OneNotification -> {
-                            addLine(
-                                context.getString(
-                                    notification.contentStringRes,
-                                    *notification.contentValues.toTypedArray(),
-                                )
-                            )
-                        }
+                        is OneNotification -> buildForOneNotification(notification)
+                        is MultipleNotifications -> buildForMultipleNotification(notification)
                     }
-                    this
-                })
+                }
                 .build()
         )
+    }
+
+    private fun NotificationCompat.Builder.buildForOneNotification(n: OneNotification) {
+        val content = context.getString(n.contentStringRes, *n.contentValues.toTypedArray())
+        setContentTitle(context.getString(n.titleStringRes))
+        setContentText(content)
+        setStyle(NotificationCompat.BigTextStyle().run {
+            bigText(content)
+            this
+        })
+    }
+
+    private fun NotificationCompat.Builder.buildForMultipleNotification(n: MultipleNotifications) {
+        val lines = n.lines.size
+        setContentTitle(context.resources.getQuantityString(n.titleStringRes, lines, lines))
+        setContentText(context.resources.getQuantityString(n.contentStringRes, lines, lines))
+        setStyle(NotificationCompat.InboxStyle().run {
+            setSummaryText(
+                context.resources.getQuantityString(n.summaryStringRes, n.lines.size, n.lines.size)
+            )
+            n.lines.forEach(::addLine)
+            this
+        })
     }
 }
