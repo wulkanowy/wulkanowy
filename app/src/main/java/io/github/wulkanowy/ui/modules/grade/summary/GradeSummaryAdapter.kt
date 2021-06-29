@@ -24,6 +24,8 @@ class GradeSummaryAdapter @Inject constructor(
 
     var items = emptyList<GradeSummary>()
 
+    var onHelpClickListener: () -> Unit = {}
+
     override fun getItemCount() = items.size + if (items.isNotEmpty()) 1 else 0
 
     override fun getItemViewType(position: Int) = when (position) {
@@ -59,6 +61,8 @@ class GradeSummaryAdapter @Inject constructor(
                 .reversed() // fix average precision
                 .average()
             )
+
+            gradeSummaryCalculatedAverageHelp.setOnClickListener { onHelpClickListener() }
         }
     }
 
