@@ -37,4 +37,46 @@ class HomeworkWork @Inject constructor(
                 })
             }
     }
+
+    private fun notify(homework: List<Homework>) {
+        notificationManager.notify(
+            Random.nextInt(Int.MAX_VALUE),
+            NotificationCompat.Builder(context, NewHomeworkChannel.CHANNEL_ID)
+                .setContentTitle(
+                    context.resources.getQuantityString(
+                        R.plurals.homework_notify_new_item_title, homework.size, homework.size
+                    )
+                )
+                .setContentText(context.resources.getQuantityString(
+                    R.plurals.homework_notify_new_item_content,
+                    homework.size,
+                    homework.size
+                ))
+                .setSmallIcon(R.drawable.ic_stat_all)
+                .setLargeIcon(
+                    context.getCompatBitmap(R.drawable.ic_stat_homework, R.color.colorPrimary)
+                )
+                .setAutoCancel(true)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setColor(context.getCompatColor(R.color.colorPrimary))
+                .setContentIntent(
+                    PendingIntent.getActivity(
+                        context, MainView.Section.MESSAGE.id,
+                        MainActivity.getStartIntent(context, MainView.Section.HOMEWORK, true),
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                )
+                .setStyle(NotificationCompat.InboxStyle().run {
+                    setSummaryText(
+                        context.resources.getQuantityString(
+                            R.plurals.homework_number_item, homework.size, homework.size
+                        )
+                    )
+                    homework.forEach { addLine("${it.subject}: ${it.content} - ${it.date}") }
+                    this
+                })
+                .build()
+        )
+    }
 }
