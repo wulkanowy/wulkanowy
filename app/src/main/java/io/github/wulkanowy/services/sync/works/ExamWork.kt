@@ -1,32 +1,19 @@
 package io.github.wulkanowy.services.sync.works
 
-import android.app.PendingIntent
-import android.content.Context
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import dagger.hilt.android.qualifiers.ApplicationContext
-import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.github.wulkanowy.services.sync.channels.NewExamChannel
-import io.github.wulkanowy.ui.modules.main.MainActivity
-import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.getCompatBitmap
-import io.github.wulkanowy.utils.getCompatColor
+import io.github.wulkanowy.services.sync.notifications.NewExamNotification
 import io.github.wulkanowy.utils.waitForResult
 import kotlinx.coroutines.flow.first
 import java.time.LocalDate.now
 import javax.inject.Inject
-import kotlin.random.Random
 
 class ExamWork @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val examRepository: ExamRepository,
-    private val notificationManager: NotificationManagerCompat,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    private val newExamNotification: NewExamNotification,
 ) : Work {
 
     override suspend fun doWork(student: Student, semester: Semester) {
@@ -39,8 +26,9 @@ class ExamWork @Inject constructor(
             notify = preferencesRepository.isNotificationsEnable
         ).waitForResult()
 
-        examRepository.getNotNotifiedExam(semester, now()).first().let {
-            if (it.isNotEmpty()) notify(it)
+        examRepository.getExamsFromDatabase(semester, now()).first()
+            .filter { !it.isNotified }.let {
+                if (it.isNotEmpty()) newExamNotification.notify(it)
 
             examRepository.updateExam(it.onEach { exam -> exam.isNotified = true })
         }

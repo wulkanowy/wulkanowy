@@ -1,31 +1,18 @@
 package io.github.wulkanowy.services.sync.works
 
-import android.app.PendingIntent
-import android.content.Context
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import dagger.hilt.android.qualifiers.ApplicationContext
-import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.ConferenceRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.github.wulkanowy.services.sync.channels.NewConferencesChannel
-import io.github.wulkanowy.ui.modules.main.MainActivity
-import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.getCompatBitmap
-import io.github.wulkanowy.utils.getCompatColor
+import io.github.wulkanowy.services.sync.notifications.NewConferenceNotification
 import io.github.wulkanowy.utils.waitForResult
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
-import kotlin.random.Random
 
 class ConferenceWork @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val conferenceRepository: ConferenceRepository,
-    private val notificationManager: NotificationManagerCompat,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    private val newConferenceNotification: NewConferenceNotification,
 ) : Work {
 
     override suspend fun doWork(student: Student, semester: Semester) {
@@ -36,8 +23,9 @@ class ConferenceWork @Inject constructor(
             notify = preferencesRepository.isNotificationsEnable
         ).waitForResult()
 
-        conferenceRepository.getNotNotifiedConference(semester).first().let {
-            if (it.isNotEmpty()) notify(it)
+        conferenceRepository.getConferenceFromDatabase(semester).first()
+            .filter { !it.isNotified }.let {
+                if (it.isNotEmpty()) newConferenceNotification.notify(it)
 
             conferenceRepository.updateConference(it.onEach { conference -> conference.isNotified = true })
         }
@@ -73,7 +61,6 @@ class ConferenceWork @Inject constructor(
                     conference.forEach { addLine("${it.title}: ${it.subject}") }
                     this
                 })
-                .build()
-        )
+            }
     }
 }
