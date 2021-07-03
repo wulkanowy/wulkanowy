@@ -12,7 +12,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
         android:paddingStart="6dp"
         android:paddingLeft="6dp"
         android:paddingTop="6dp"
