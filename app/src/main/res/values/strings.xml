@@ -614,4 +614,6 @@
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
+    <string name="message_chip_only_unread">Only unread</string>
+    <string name="message_chip_only_with_attachments">Only with attachments</string>
 </resources>

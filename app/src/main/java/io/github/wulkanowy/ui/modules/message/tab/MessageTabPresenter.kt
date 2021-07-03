@@ -1,5 +1,7 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
+import android.widget.CompoundButton
+import io.github.wulkanowy.R
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.enums.MessageFolder
@@ -55,15 +57,15 @@ class MessageTabPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the $folder message")
-        onParentViewLoadData(true)
+        view?.run { onParentViewLoadData(true, onlyUnread, onlyWithAttachments) }
     }
 
     fun onRetry() {
         view?.run {
             showErrorView(false)
             showProgress(true)
+            loadData(true, onlyUnread == true, onlyWithAttachments)
         }
-        loadData(true)
     }
 
     fun onDetailsClick() {
@@ -71,11 +73,15 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onDeleteMessage() {
-        loadData(true)
+        view?.run { loadData(true, onlyUnread == true, onlyWithAttachments) }
     }
 
-    fun onParentViewLoadData(forceRefresh: Boolean) {
-        loadData(forceRefresh)
+    fun onParentViewLoadData(
+        forceRefresh: Boolean,
+        onlyUnread: Boolean? = view?.onlyUnread,
+        onlyWithAttachments: Boolean = view?.onlyWithAttachments == true
+    ) {
+        loadData(forceRefresh, onlyUnread == true, onlyWithAttachments)
     }
 
     fun onMessageItemSelected(message: Message, position: Int) {
@@ -83,7 +89,28 @@ class MessageTabPresenter @Inject constructor(
         view?.openMessage(message)
     }
 
-    private fun loadData(forceRefresh: Boolean) {
+    fun onChipChecked(chip: CompoundButton, isChecked: Boolean) {
+        when (chip.id) {
+            R.id.chip_unread -> {
+                view?.run {
+                    onlyUnread = isChecked
+                    onParentViewLoadData(false, onlyUnread, onlyWithAttachments)
+                }
+            }
+            R.id.chip_attachments -> {
+                view?.run {
+                    onlyWithAttachments = isChecked
+                    onParentViewLoadData(false, onlyUnread, onlyWithAttachments)
+                }
+            }
+        }
+    }
+
+    private fun loadData(
+        forceRefresh: Boolean,
+        onlyUnread: Boolean,
+        onlyWithAttachments: Boolean
+    ) {
         Timber.i("Loading $folder message data started")
 
         flowWithResourceIn {
@@ -100,7 +127,14 @@ class MessageTabPresenter @Inject constructor(
                             showProgress(false)
                             showContent(true)
                             messages = it.data
-                            updateData(getFilteredData(lastSearchQuery))
+                            updateData(
+                                getFilteredData(
+                                    lastSearchQuery,
+                                    onlyUnread,
+                                    onlyWithAttachments
+                                ),
+                                folder.id == MessageFolder.SENT.id
+                            )
                             notifyParentDataLoaded()
                         }
                     }
@@ -108,7 +142,7 @@ class MessageTabPresenter @Inject constructor(
                 Status.SUCCESS -> {
                     Timber.i("Loading $folder message result: Success")
                     messages = it.data!!
-                    updateData(getFilteredData(lastSearchQuery))
+                    updateData(getFilteredData(lastSearchQuery, onlyUnread, onlyWithAttachments))
                     analytics.logEvent(
                         "load_data",
                         "type" to "messages",
@@ -166,24 +200,42 @@ class MessageTabPresenter @Inject constructor(
         }
     }
 
-    private fun getFilteredData(query: String): List<Message> {
+    private fun getFilteredData(
+        query: String,
+        onlyUnread: Boolean = false,
+        onlyWithAttachments: Boolean = false
+    ): List<Message> {
         return if (query.trim().isEmpty()) {
-            messages.sortedByDescending { it.date }
+            with(messages.sortedByDescending { it.date }) {
+                when {
+                    onlyUnread && onlyWithAttachments -> filter { it.unread == onlyUnread && it.hasAttachments == onlyWithAttachments }
+                    onlyUnread -> filter { it.unread == onlyUnread }
+                    onlyWithAttachments -> filter { it.hasAttachments == onlyWithAttachments }
+                    else -> this
+                }
+            }
         } else {
-            messages
+            with(messages
                 .map { it to calculateMatchRatio(it, query) }
-                .sortedByDescending { it.second }
-                .filter { it.second > 5000 }
-                .map { it.first }
+                .sortedWith(compareBy<Pair<Message, Int>> { -it.second }.thenByDescending { it.first.date })
+                .filter { it.second > 6000 }
+                .map { it.first }) {
+                when {
+                    onlyUnread && onlyWithAttachments -> filter { it.unread == onlyUnread && it.hasAttachments == onlyWithAttachments }
+                    onlyUnread -> filter { it.unread == onlyUnread }
+                    onlyWithAttachments -> filter { it.hasAttachments == onlyWithAttachments }
+                    else -> this
+                }
+            }
         }
     }
 
     private fun updateData(data: List<Message>) {
         view?.run {
             showEmpty(data.isEmpty())
-            showContent(data.isNotEmpty())
+            showContent(true)
             showErrorView(false)
-            updateData(data)
+            updateData(data, folder.id == MessageFolder.SENT.id)
         }
     }
 
@@ -204,14 +256,6 @@ class MessageTabPresenter @Inject constructor(
             FuzzySearch.ratio(
                 query.lowercase(),
                 message.date.toFormattedString("dd.MM.yyyy").lowercase()
-            ),
-            FuzzySearch.ratio(
-                query.lowercase(),
-                message.date.toFormattedString("d MMMM").lowercase()
-            ),
-            FuzzySearch.ratio(
-                query.lowercase(),
-                message.date.toFormattedString("d MMMM yyyy").lowercase()
             )
         ).maxOrNull() ?: 0
 
