@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.grade.details
 
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.base.BaseView
+import java.time.LocalDate
 
 interface GradeDetailsView : BaseView {
 
@@ -41,7 +42,9 @@ interface GradeDetailsView : BaseView {
 
     fun notifyParentRefresh()
 
-    fun enableMarkAsDoneButton(enable: Boolean)
+    fun disableMarkAsDoneButton()
+
+    fun enableMarkAsDoneButton(oldestUnread: LocalDate)
 
     fun getHeaderOfItem(subject: String): GradeDetailsItem
 }

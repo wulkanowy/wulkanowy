@@ -18,6 +18,7 @@ import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getThemeAttrColor
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,6 +40,14 @@ class GradeDetailsFragment :
 
     override val isViewEmpty
         get() = gradeDetailsAdapter.itemCount == 0
+
+    private val menuReadItems = listOf(
+            GradeDetailsMenuReadItem(null, R.id.gradeDetailsMenuReadAll),
+            GradeDetailsMenuReadItem(1, R.id.gradeDetailsMenuReadOneDay),
+            GradeDetailsMenuReadItem(3, R.id.gradeDetailsMenuReadThreeDays),
+            GradeDetailsMenuReadItem(7, R.id.gradeDetailsMenuReadOneWeek),
+            GradeDetailsMenuReadItem(14, R.id.gradeDetailsMenuReadTwoWeeks)
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +84,12 @@ class GradeDetailsFragment :
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.gradeDetailsMenuRead) presenter.onMarkAsReadSelected()
-        else false
+        val menuReadItem = menuReadItems.find { item.itemId == it.id }
+        if (menuReadItem != null) {
+            presenter.onMarkAsReadSelected(menuReadItem.date)
+            return true
+        }
+        return false
     }
 
     override fun updateData(data: List<GradeDetailsItem>, isGradeExpandable: Boolean, gradeColorTheme: String) {
@@ -85,10 +98,12 @@ class GradeDetailsFragment :
             setDataItems(data, isGradeExpandable)
             notifyDataSetChanged()
         }
+        presenter.updateMarkAsDoneButton()
     }
 
     override fun updateItem(item: Grade, position: Int) {
         gradeDetailsAdapter.updateDetailsItem(position, item)
+        presenter.updateMarkAsDoneButton()
     }
 
     override fun clearView() {
@@ -166,8 +181,23 @@ class GradeDetailsFragment :
         (parentFragment as? GradeFragment)?.onChildRefresh()
     }
 
-    override fun enableMarkAsDoneButton(enable: Boolean) {
-        gradeDetailsMenu?.findItem(R.id.gradeDetailsMenuRead)?.isEnabled = enable
+    override fun disableMarkAsDoneButton() {
+        gradeDetailsMenu?.apply {
+            findItem(R.id.gradeDetailsMenuRead).isEnabled = false
+            menuReadItems.forEach {
+                findItem(it.id).isEnabled = false
+            }
+        }
+    }
+
+    override fun enableMarkAsDoneButton(oldestUnread: LocalDate) {
+        gradeDetailsMenu?.apply {
+            findItem(R.id.gradeDetailsMenuRead).isEnabled = true
+            menuReadItems.forEach {
+                val date = it.date
+                findItem(it.id).isEnabled = date == null || date >= oldestUnread
+            }
+        }
     }
 
     override fun onDestroyView() {

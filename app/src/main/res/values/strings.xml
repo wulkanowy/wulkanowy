@@ -103,6 +103,11 @@
     <string name="grade_menu_summary">Summary</string>
     <string name="grade_menu_statistics">Class</string>
     <string name="grade_menu_read">Mark as read</string>
+    <string name="grade_menu_read_all">All</string>
+    <string name="grade_menu_read_one_day">Older than 1 day</string>
+    <string name="grade_menu_read_three_days">Older than 3 days</string>
+    <string name="grade_menu_read_one_week">Older than 1 week</string>
+    <string name="grade_menu_read_two_weeks">Older than 2 weeks</string>
     <string name="grade_statistics_partial">Partial</string>
     <string name="grade_statistics_semester">Semester</string>
     <string name="grade_statistics_points">Points</string>

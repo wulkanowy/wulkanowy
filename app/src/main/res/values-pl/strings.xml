@@ -91,6 +91,11 @@
     <string name="grade_menu_summary">Podsumowanie</string>
     <string name="grade_menu_statistics">Klasa</string>
     <string name="grade_menu_read">Oznacz jako przeczytane</string>
+    <string name="grade_menu_read_all">Wszystkie</string>
+    <string name="grade_menu_read_one_day">Starsze niż 1 dzień</string>
+    <string name="grade_menu_read_three_days">Starsze niż 3 dni</string>
+    <string name="grade_menu_read_one_week">Starsze niż tydzień</string>
+    <string name="grade_menu_read_two_weeks">Starsze niż 2 tygodnie</string>
     <string name="grade_statistics_partial">Cząstkowe</string>
     <string name="grade_statistics_semester">Semestralne</string>
     <string name="grade_statistics_points">Punkty</string>

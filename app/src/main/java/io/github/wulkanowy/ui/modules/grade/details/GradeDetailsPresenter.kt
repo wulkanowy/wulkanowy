@@ -19,6 +19,7 @@ import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.time.LocalDate
 import javax.inject.Inject
 
 class GradeDetailsPresenter @Inject constructor(
@@ -30,8 +31,6 @@ class GradeDetailsPresenter @Inject constructor(
     private val averageProvider: GradeAverageProvider,
     private val analytics: AnalyticsHelper
 ) : BasePresenter<GradeDetailsView>(errorHandler, studentRepository) {
-
-    private var newGradesAmount: Int = 0
 
     private var currentSemesterId = 0
 
@@ -61,22 +60,24 @@ class GradeDetailsPresenter @Inject constructor(
                     (header.value as GradeDetailsHeader).newGrades--
                     updateHeaderItem(header)
                 }
-                newGradesAmount--
-                updateMarkAsDoneButton()
                 updateGrade(grade)
+                updateMarkAsDoneButton()
             }
         }
     }
 
-    fun onMarkAsReadSelected(): Boolean {
+    fun onMarkAsReadSelected(until: LocalDate?): Boolean {
         flowWithResource {
             val student = studentRepository.getCurrentStudent()
             val semesters = semesterRepository.getSemesters(student)
             val semester = semesters.first { item -> item.semesterId == currentSemesterId }
             val unreadGrades = gradeRepository.getUnreadGrades(semester).first()
+            val updatedGrades =
+                if (until == null) unreadGrades
+                else unreadGrades.filter { it.date <= until }
 
-            Timber.i("Mark as read ${unreadGrades.size} grades")
-            gradeRepository.updateGrades(unreadGrades.map { it.apply { isRead = true } })
+            Timber.i("Mark as read ${updatedGrades.size} grades")
+            gradeRepository.updateGrades(updatedGrades.map { it.apply { isRead = true } })
         }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Select mark grades as read")
@@ -132,7 +133,26 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     fun updateMarkAsDoneButton() {
-        view?.enableMarkAsDoneButton(newGradesAmount > 0)
+        flowWithResource {
+            val student = studentRepository.getCurrentStudent()
+            val semesters = semesterRepository.getSemesters(student)
+            val semester = semesters.first { item -> item.semesterId == currentSemesterId }
+            val unreadGrades = gradeRepository.getUnreadGrades(semester).first()
+
+            val oldestUnreadGrade = unreadGrades
+                .minByOrNull { it.date }
+            if (oldestUnreadGrade == null) view?.disableMarkAsDoneButton()
+            else view?.enableMarkAsDoneButton(oldestUnreadGrade.date)
+        }.onEach {
+            when (it.status) {
+                Status.LOADING -> Timber.i("Attempt to update mark as done button")
+                Status.SUCCESS -> Timber.i("Update mark as done button result: Success")
+                Status.ERROR -> {
+                    Timber.i("Update mark as done button result: An exception occurred")
+                    errorHandler.dispatch(it.error!!)
+                }
+            }
+        }.launch("update")
     }
 
     private fun loadData(semesterId: Int, forceRefresh: Boolean) {
@@ -149,7 +169,6 @@ class GradeDetailsPresenter @Inject constructor(
                     if (items.isNotEmpty()) {
                         Timber.i("Loading grade details result: load cached data")
                         view?.run {
-                            updateNewGradesAmount(it.data.orEmpty())
                             enableSwipe(true)
                             showRefresh(true)
                             showProgress(false)
@@ -166,9 +185,8 @@ class GradeDetailsPresenter @Inject constructor(
                 }
                 Status.SUCCESS -> {
                     Timber.i("Loading grade details result: Success")
-                    updateNewGradesAmount(it.data!!)
                     updateMarkAsDoneButton()
-                    val items = createGradeItems(it.data)
+                    val items = createGradeItems(it.data!!)
                     view?.run {
                         showEmpty(items.isEmpty())
                         showErrorView(false)
@@ -198,12 +216,6 @@ class GradeDetailsPresenter @Inject constructor(
                 notifyParentDataLoaded(semesterId)
             }
         }.launch()
-    }
-
-    private fun updateNewGradesAmount(grades: List<GradeSubject>) {
-        newGradesAmount = grades.sumOf { item ->
-            item.grades.sumOf { grade -> (if (!grade.isRead) 1 else 0).toInt() }
-        }
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
