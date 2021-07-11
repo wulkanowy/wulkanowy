@@ -1,8 +1,10 @@
 package io.github.wulkanowy.ui.base
 
 import android.app.ActivityManager
+import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.LOLLIPOP
 import android.os.Bundle
@@ -75,6 +77,17 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
             .setPositiveButton(R.string.main_log_in) { _, _ -> presenter.onExpiredLoginSelected() }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .show()
+    }
+
+    override fun showChangePasswordSnackbar(redirectUrl: String) {
+        messageContainer?.let {
+            Snackbar.make(it, R.string.error_password_change_required, LENGTH_LONG)
+                .setAction(R.string.all_change) {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(redirectUrl))
+                    startActivity(intent)
+                }
+                .show()
+        }
     }
 
     override fun openClearLoginView() {
