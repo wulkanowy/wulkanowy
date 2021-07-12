@@ -109,6 +109,10 @@ class DashboardPresenter @Inject constructor(
                 updatedHorizontalGroup = updatedHorizontalGroup.copy(unreadMessagesCount = null)
             }
 
+            if (horizontalGroup.error != null) {
+                updatedHorizontalGroup = updatedHorizontalGroup.copy(error = null, isLoading = true)
+            }
+
             dashboardTileLoadedList.add(horizontalIndex, updatedHorizontalGroup)
         }
 
@@ -559,7 +563,6 @@ class DashboardPresenter @Inject constructor(
             updateData(DashboardTile.HorizontalGroup(error = error), forceRefresh)
             return
         }
-
 
         if (isLoading) {
             val horizontalGroup =
