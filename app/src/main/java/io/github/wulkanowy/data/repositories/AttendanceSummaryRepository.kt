@@ -33,14 +33,10 @@ class AttendanceSummaryRepository @Inject constructor(
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {
-            it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(
-                getRefreshKey(cacheKey, semester)
-            )
+            it.isEmpty() || forceRefresh
+                || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester))
         },
-        query = {
-            // throw IllegalArgumentException()
-            attendanceDb.loadAll(semester.diaryId, semester.studentId, subjectId)
-        },
+        query = { attendanceDb.loadAll(semester.diaryId, semester.studentId, subjectId) },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
                 .getAttendanceSummary(subjectId)
