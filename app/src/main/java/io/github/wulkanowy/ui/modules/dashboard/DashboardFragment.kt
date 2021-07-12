@@ -13,7 +13,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentDashboardBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.account.AccountFragment
+import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
+import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
+import io.github.wulkanowy.ui.modules.exam.ExamFragment
+import io.github.wulkanowy.ui.modules.grade.GradeFragment
+import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
+import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.modules.message.MessageFragment
+import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragment
+import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
@@ -56,6 +67,29 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
     }
 
     override fun initView() {
+        val mainActivity = requireActivity() as MainActivity
+
+        dashboardAdapter.apply {
+            onAccountTileClickListener = { mainActivity.pushView(AccountFragment.newInstance()) }
+            onLuckyNumberTileClickListener = {
+                mainActivity.pushView(LuckyNumberFragment.newInstance())
+            }
+            onMessageTileClickListener = { mainActivity.pushView(MessageFragment.newInstance()) }
+            onAttendanceTileClickListener = {
+                mainActivity.pushView(AttendanceFragment.newInstance())
+            }
+            onLessonsTileClickListener = { mainActivity.pushView(TimetableFragment.newInstance()) }
+            onGradeTileClickListener = { mainActivity.pushView(GradeFragment.newInstance()) }
+            onHomeworkTileClickListener = { mainActivity.pushView(HomeworkFragment.newInstance()) }
+            onAnnouncementsTileClickListener = {
+                mainActivity.pushView(SchoolAnnouncementFragment.newInstance())
+            }
+            onExamsTileClickListener = { mainActivity.pushView(ExamFragment.newInstance()) }
+            onConferencesTileClickListener = {
+                mainActivity.pushView(ConferenceFragment.newInstance())
+            }
+        }
+
         with(binding) {
             dashboardErrorRetry.setOnClickListener { presenter.onRetry() }
             dashboardErrorDetails.setOnClickListener { presenter.onDetailsClick() }
@@ -127,6 +161,10 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
 
     override fun resetView() {
         binding.dashboardRecycler.smoothScrollToPosition(0)
+    }
+
+    override fun popViewToRoot() {
+        (requireActivity() as MainActivity).popView(20)
     }
 
     override fun onFragmentReselected() {

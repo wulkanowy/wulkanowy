@@ -21,4 +21,6 @@ interface DashboardView : BaseView {
     fun setErrorDetails(message: String)
 
     fun resetView()
+
+    fun popViewToRoot()
 }

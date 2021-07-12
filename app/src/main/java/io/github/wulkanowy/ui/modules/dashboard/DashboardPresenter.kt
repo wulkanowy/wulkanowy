@@ -157,7 +157,10 @@ class DashboardPresenter @Inject constructor(
 
     fun onViewReselected() {
         Timber.i("Dashboard view is reselected")
-        view?.resetView()
+        view?.run {
+            resetView()
+            popViewToRoot()
+        }
     }
 
     fun onDetailsClick() {

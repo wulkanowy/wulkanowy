@@ -41,6 +41,26 @@ class DashboardAdapter @Inject constructor() :
 
     var lessonsTimer: Timer? = null
 
+    var onAccountTileClickListener: () -> Unit = {}
+
+    var onLuckyNumberTileClickListener: () -> Unit = {}
+
+    var onMessageTileClickListener: () -> Unit = {}
+
+    var onGradeTileClickListener: () -> Unit = {}
+
+    var onAttendanceTileClickListener: () -> Unit = {}
+
+    var onLessonsTileClickListener: () -> Unit = {}
+
+    var onHomeworkTileClickListener: () -> Unit = {}
+
+    var onAnnouncementsTileClickListener: () -> Unit = {}
+
+    var onExamsTileClickListener: () -> Unit = {}
+
+    var onConferencesTileClickListener: () -> Unit = {}
+
     override fun getItemViewType(position: Int) = getItem(position).type.id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -115,6 +135,8 @@ class DashboardAdapter @Inject constructor() :
             dashboardAccountItemAvatar.setImageDrawable(avatar)
             dashboardAccountItemName.text = student?.nickOrName.orEmpty()
             dashboardAccountItemSchoolName.text = student?.schoolName.orEmpty()
+
+            root.setOnClickListener { onAccountTileClickListener() }
         }
     }
 
@@ -154,18 +176,26 @@ class DashboardAdapter @Inject constructor() :
 
             dashboardHorizontalGroupItemInfoErrorText.isVisible = error != null
 
-            dashboardHorizontalGroupItemLuckyContainer.isVisible =
-                error == null && !isLoading && luckyNumber != null
-            dashboardHorizontalGroupItemAttendanceContainer.isVisible =
-                error == null && !isLoading && attendancePercentage != null
-            dashboardHorizontalGroupItemMessageContainer.isVisible =
-                error == null && !isLoading && unreadMessagesCount != null
-            dashboardHorizontalGroupItemAttendanceContainer.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                matchConstraintPercentWidth = when {
-                    luckyNumber == null && unreadMessagesCount == null -> 1.0f
-                    luckyNumber == null || unreadMessagesCount == null -> 0.5f
-                    else -> 0.4f
+            with(dashboardHorizontalGroupItemLuckyContainer) {
+                isVisible = error == null && !isLoading && luckyNumber != null
+                setOnClickListener { onLuckyNumberTileClickListener() }
+            }
+
+            with(dashboardHorizontalGroupItemAttendanceContainer) {
+                isVisible = error == null && !isLoading && attendancePercentage != null
+                updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    matchConstraintPercentWidth = when {
+                        luckyNumber == null && unreadMessagesCount == null -> 1.0f
+                        luckyNumber == null || unreadMessagesCount == null -> 0.5f
+                        else -> 0.4f
+                    }
                 }
+                setOnClickListener { onAttendanceTileClickListener() }
+            }
+
+            with(dashboardHorizontalGroupItemMessageContainer) {
+                isVisible = error == null && !isLoading && unreadMessagesCount != null
+                setOnClickListener { onMessageTileClickListener() }
             }
         }
     }
@@ -192,7 +222,10 @@ class DashboardAdapter @Inject constructor() :
                 adapter = dashboardGradesAdapter
                 layoutManager = LinearLayoutManager(context)
                 isVisible = subjectWithGrades.isNotEmpty() && error == null
+                suppressLayout(true)
             }
+
+            root.setOnClickListener { onGradeTileClickListener() }
         }
     }
 
@@ -250,6 +283,8 @@ class DashboardAdapter @Inject constructor() :
         lessonsTimer = timer(period = 1000) {
             Handler(Looper.getMainLooper()).post { updateLessonState() }
         }
+
+        binding.root.setOnClickListener { onLessonsTileClickListener() }
     }
 
     private fun updateLessonView(
@@ -487,7 +522,10 @@ class DashboardAdapter @Inject constructor() :
                 adapter = homeworkAdapter
                 layoutManager = LinearLayoutManager(context)
                 isVisible = homeworkList.isNotEmpty() && error == null
+                suppressLayout(true)
             }
+
+            root.setOnClickListener { onHomeworkTileClickListener() }
         }
     }
 
@@ -517,11 +555,15 @@ class DashboardAdapter @Inject constructor() :
                 schoolAnnouncementList.size - 5,
                 schoolAnnouncementList.size - 5
             )
+
             with(dashboardAnnouncementsItemRecycler) {
                 layoutManager = LinearLayoutManager(context)
                 adapter = schoolAnnouncementsAdapter
                 isVisible = schoolAnnouncementList.isNotEmpty() && error == null
+                suppressLayout(true)
             }
+
+            root.setOnClickListener { onAnnouncementsTileClickListener() }
         }
     }
 
@@ -551,7 +593,10 @@ class DashboardAdapter @Inject constructor() :
                 layoutManager = LinearLayoutManager(context)
                 adapter = examAdapter
                 isVisible = exams.isNotEmpty() && error == null
+                suppressLayout(true)
             }
+
+            root.setOnClickListener { onExamsTileClickListener() }
         }
     }
 
@@ -586,7 +631,10 @@ class DashboardAdapter @Inject constructor() :
                 layoutManager = LinearLayoutManager(context)
                 adapter = conferenceAdapter
                 isVisible = conferences.isNotEmpty() && error == null
+                suppressLayout(true)
             }
+
+            root.setOnClickListener { onConferencesTileClickListener() }
         }
     }
 
