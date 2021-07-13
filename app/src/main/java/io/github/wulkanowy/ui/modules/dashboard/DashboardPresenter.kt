@@ -513,15 +513,12 @@ class DashboardPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent(true)
             val semester = semesterRepository.getCurrentSemester(student)
 
-            conferenceRepository.getConferences(student, semester, forceRefresh)
-        }.map { conferencesResource ->
-            val currentDateTime = LocalDateTime.now()
-
-            val filteredConferences = conferencesResource.data?.filter {
-                it.date.isAfter(currentDateTime)
-            }
-
-            conferencesResource.copy(data = filteredConferences)
+            conferenceRepository.getConferences(
+                student = student,
+                semester = semester,
+                forceRefresh = forceRefresh,
+                date = LocalDateTime.now()
+            )
         }.onEach {
             when (it.status) {
                 Status.LOADING -> {
