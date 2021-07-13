@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlin_version = '1.5.10'
+        kotlin_version = '1.5.20'
         about_libraries = '8.9.0'
         hilt_version = "2.37"
     }
@@ -12,11 +12,11 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath 'com.android.tools.build:gradle:4.2.2'
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath 'com.google.gms:google-services:4.3.8'
-        classpath 'com.huawei.agconnect:agcp:1.5.2.300'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.0'
+        classpath 'com.huawei.agconnect:agcp:1.5.3.200'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
         classpath "com.github.triplet.gradle:play-publisher:2.8.0"
         classpath "ru.cian:huawei-publish-gradle-plugin:1.2.4"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3"
