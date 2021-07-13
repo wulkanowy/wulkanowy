@@ -72,6 +72,7 @@
             android:textColor="?colorError"
             android:textSize="14sp"
             android:visibility="gone"
+            android:gravity="center_vertical"
             app:drawableStartCompat="@drawable/ic_error"
             app:drawableTint="?colorError"
             app:layout_constraintBottom_toBottomOf="parent"

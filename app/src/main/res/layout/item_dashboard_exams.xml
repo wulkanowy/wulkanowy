@@ -90,6 +90,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:drawablePadding="8dp"
+            android:gravity="center_vertical"
             android:text="@string/dashboard_exams_error"
             android:textColor="?colorError"
             android:textSize="14sp"
