@@ -12,6 +12,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
+import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
@@ -23,6 +24,7 @@ import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
+@Suppress("UNCHECKED_CAST")
 @AndroidEntryPoint
 class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessageBinding>(), SendMessageView {
 
@@ -47,14 +49,11 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
         get() = binding.sendMessageTo.isDropdownListVisible
 
     @Suppress("UNCHECKED_CAST")
-    override val formRecipientsData: List<RecipientChipItem>
-        get() = binding.sendMessageTo.addedChipItems as List<RecipientChipItem>
+    override lateinit var formRecipientsData: List<RecipientChipItem>
 
-    override val formSubjectValue: String
-        get() = binding.sendMessageSubject.text.toString()
+    override lateinit var formSubjectValue: String
 
-    override val formContentValue: String
-        get() = binding.sendMessageMessageContent.text.toString()
+    override lateinit var formContentValue: String
 
     override val messageRequiredRecipients: String
         get() = getString(R.string.message_required_recipients)
@@ -65,12 +64,17 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
     override val messageSuccess: String
         get() = getString(R.string.message_send_successful)
 
+    @SuppressLint("CommitPrefEdits")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ActivitySendMessageBinding.inflate(layoutInflater).apply { binding = this }.root)
         setSupportActionBar(binding.sendMessageToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         messageContainer = binding.sendMessageContainer
+
+        formRecipientsData = binding.sendMessageTo.addedChipItems as List<RecipientChipItem>
+        formSubjectValue = binding.sendMessageSubject.text.toString()
+        formContentValue = binding.sendMessageMessageContent.text.toString()
 
         presenter.onAttachView(this, intent.getSerializableExtra(EXTRA_MESSAGE) as? Message, intent.getSerializableExtra(EXTRA_REPLY) as? Boolean)
     }
@@ -80,8 +84,25 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
         setUpExtendedHitArea()
         with(binding) {
             sendMessageScroll.setOnTouchListener { _, _ -> presenter.onTouchScroll() }
+            sendMessageTo.onChipAddListener = { onRecipientChange() }
             sendMessageTo.onTextChangeListener = presenter::onRecipientsTextChange
+            sendMessageSubject.doOnTextChanged { text, _, _, _ -> onMessageSubjectChange(text) }
+            sendMessageMessageContent.doOnTextChanged { text, _, _, _ -> onMessageContentChange(text) }
         }
+    }
+
+    private fun onMessageSubjectChange(text: CharSequence?) {
+        formSubjectValue = text.toString()
+        presenter.onSendMessageChange()
+    }
+
+    private fun onMessageContentChange(text: CharSequence?) {
+        formContentValue = text.toString()
+        presenter.onSendMessageChange()
+    }
+
+    private fun onRecipientChange() {
+        presenter.onSendMessageChange()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -180,5 +201,14 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
                 extendHitArea()
             }
         }
+    }
+
+    override fun showMessageBackupDialog() {
+        SendMessageDialog().show(supportFragmentManager, "backupMessage")
+    }
+
+    override fun clearDraft() {
+        formRecipientsData = binding.sendMessageTo.addedChipItems as List<RecipientChipItem>
+        presenter.clearDraft()
     }
 }

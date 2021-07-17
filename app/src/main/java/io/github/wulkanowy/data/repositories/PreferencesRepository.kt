@@ -2,6 +2,7 @@ package io.github.wulkanowy.data.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.squareup.moshi.Moshi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
@@ -11,8 +12,8 @@ import javax.inject.Singleton
 
 @Singleton
 class PreferencesRepository @Inject constructor(
+    @ApplicationContext val context: Context,
     private val sharedPref: SharedPreferences,
-    @ApplicationContext val context: Context
 ) {
     val startMenuIndex: Int
         get() = getString(R.string.pref_key_start_menu, R.string.pref_default_startup).toInt()

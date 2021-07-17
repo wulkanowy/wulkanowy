@@ -187,6 +187,7 @@ class MessageTabPresenter @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     private fun calculateMatchRatio(message: Message, query: String): Int {
         val subjectRatio = FuzzySearch.tokenSortPartialRatio(query.lowercase(), message.subject)
 
