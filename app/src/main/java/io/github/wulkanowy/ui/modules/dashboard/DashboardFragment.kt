@@ -137,6 +137,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
     }
 
     override fun showMessage(text: String) {
+        //Empty function to avoid message flood
     }
 
     override fun showRefresh(show: Boolean) {
