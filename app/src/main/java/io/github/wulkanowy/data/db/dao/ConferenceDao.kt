@@ -11,6 +11,6 @@ import javax.inject.Singleton
 @Singleton
 interface ConferenceDao : BaseDao<Conference> {
 
-    @Query("SELECT * FROM Conferences WHERE diary_id = :diaryId AND student_id = :studentId AND date >= :date")
-    fun loadAll(diaryId: Int, studentId: Int, date: LocalDateTime): Flow<List<Conference>>
+    @Query("SELECT * FROM Conferences WHERE diary_id = :diaryId AND student_id = :studentId AND date >= :startDate")
+    fun loadAll(diaryId: Int, studentId: Int, startDate: LocalDateTime): Flow<List<Conference>>
 }

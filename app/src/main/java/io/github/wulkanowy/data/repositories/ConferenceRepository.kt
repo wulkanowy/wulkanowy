@@ -35,7 +35,7 @@ class ConferenceRepository @Inject constructor(
         semester: Semester,
         forceRefresh: Boolean,
         notify: Boolean = false,
-        date: LocalDateTime = LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)
+        startDate: LocalDateTime = LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {
@@ -43,13 +43,13 @@ class ConferenceRepository @Inject constructor(
                 || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester))
         },
         query = {
-            conferenceDb.loadAll(semester.diaryId, student.studentId, date)
+            conferenceDb.loadAll(semester.diaryId, student.studentId, startDate)
         },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
                 .getConferences()
                 .mapToEntities(semester)
-                .filter { it.date >= date }
+                .filter { it.date >= startDate }
         },
         saveFetchResult = { old, new ->
             val conferencesToSave = (new uniqueSubtract old).onEach {
@@ -66,7 +66,7 @@ class ConferenceRepository @Inject constructor(
         conferenceDb.loadAll(
             diaryId = semester.diaryId,
             studentId = semester.studentId,
-            date = LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)
+            startDate = LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)
         )
 
     suspend fun updateConference(conference: List<Conference>) = conferenceDb.updateAll(conference)

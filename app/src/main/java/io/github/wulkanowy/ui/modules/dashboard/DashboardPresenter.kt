@@ -517,7 +517,7 @@ class DashboardPresenter @Inject constructor(
                 student = student,
                 semester = semester,
                 forceRefresh = forceRefresh,
-                date = LocalDateTime.now()
+                startDate = LocalDateTime.now()
             )
         }.onEach {
             when (it.status) {
