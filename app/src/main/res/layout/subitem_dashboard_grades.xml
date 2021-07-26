@@ -11,10 +11,10 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="Urządzenia techniki kompu..."
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Urządzenia techniki kompu..." />
 
     <LinearLayout
         android:id="@+id/dashboard_grades_subitem_grade_container"

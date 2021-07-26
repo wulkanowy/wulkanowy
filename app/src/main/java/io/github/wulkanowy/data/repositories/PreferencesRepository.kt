@@ -2,8 +2,8 @@ package io.github.wulkanowy.data.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.core.content.edit
 import com.fredporciuncula.flow.preferences.FlowSharedPreferences
+import com.fredporciuncula.flow.preferences.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.modules.dashboard.DashboardTile
@@ -159,40 +159,34 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_optional_arithmetic_average
         )
 
-    val dashboardDataFlow: Flow<Set<DashboardTile.DataType>>
+    val selectedDashboardDataFlow: Flow<Set<DashboardTile.DataType>>
+        get() = selectedDashboardDataPreference.asFlow()
+            .map { set ->
+                set.map { DashboardTile.DataType.valueOf(it) }
+                    .plus(DashboardTile.DataType.ACCOUNT)
+                    .toSet()
+            }
+
+    var selectedDashboardData: Set<DashboardTile.DataType>
+        get() = selectedDashboardDataPreference.get()
+            .map { DashboardTile.DataType.valueOf(it) }
+            .plus(DashboardTile.DataType.ACCOUNT)
+            .toSet()
+        set(value) {
+            val filteredValue = value.filterNot { it == DashboardTile.DataType.ACCOUNT }
+                .map { it.name }
+                .toSet()
+
+            selectedDashboardDataPreference.set(filteredValue)
+        }
+
+    private val selectedDashboardDataPreference: Preference<Set<String>>
         get() {
             val defaultSet =
                 context.resources.getStringArray(R.array.pref_default_dashboard_tiles).toSet()
             val prefKey = context.getString(R.string.pref_key_dashboard_tiles)
 
             return flowSharedPref.getStringSet(prefKey, defaultSet)
-                .asFlow()
-                .map { set ->
-                    set.map { DashboardTile.DataType.valueOf(it) }
-                        .plus(DashboardTile.DataType.ACCOUNT)
-                        .toSet()
-                }
-        }
-
-    var dashboardData: Set<DashboardTile.DataType>
-        get() {
-            val defaultSet =
-                context.resources.getStringArray(R.array.pref_default_dashboard_tiles).toSet()
-            val prefKey = context.getString(R.string.pref_key_dashboard_tiles)
-
-            val dashboardTileStrings = sharedPref.getStringSet(prefKey, defaultSet) ?: defaultSet
-
-            return dashboardTileStrings.map { DashboardTile.DataType.valueOf(it) }
-                .plus(DashboardTile.DataType.ACCOUNT)
-                .toSet()
-        }
-        set(value) {
-            val filteredValue = value.filterNot { it == DashboardTile.DataType.ACCOUNT }
-                .map { it.name }
-                .toSet()
-            val prefKey = context.getString(R.string.pref_key_dashboard_tiles)
-
-            sharedPref.edit { putStringSet(prefKey, filteredValue) }
         }
 
     private fun getString(id: Int, default: Int) = getString(context.getString(id), default)

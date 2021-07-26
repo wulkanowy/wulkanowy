@@ -50,7 +50,7 @@ class DashboardPresenter @Inject constructor(
 
     private lateinit var dashboardTilesToLoad: Set<DashboardTile.Type>
 
-    private var dashboardDataToLoad: Set<DashboardTile.DataType>? = null
+    private var dashboardDataToLoad: Set<DashboardTile.DataType> = emptySet()
 
     private lateinit var lastError: Throwable
 
@@ -63,16 +63,16 @@ class DashboardPresenter @Inject constructor(
             showContent(false)
         }
 
-        preferencesRepository.dashboardDataFlow
+        preferencesRepository.selectedDashboardDataFlow
             .onEach { loadData(dataToLoad = it) }
             .launch("dashboard_pref")
     }
 
     fun loadData(forceRefresh: Boolean = false, dataToLoad: Set<DashboardTile.DataType>) {
-        val oldDashboardDataToLoad = dashboardDataToLoad.orEmpty()
+        val oldDashboardDataToLoad = dashboardDataToLoad
 
         dashboardDataToLoad = dataToLoad
-        dashboardTilesToLoad = dashboardDataToLoad.orEmpty().map { it.toDashboardType() }.toSet()
+        dashboardTilesToLoad = dashboardDataToLoad.map { it.toDashboardType() }.toSet()
 
         removeUnselectedTiles()
         loadSelectedTiles(forceRefresh, oldDashboardDataToLoad)
@@ -80,11 +80,11 @@ class DashboardPresenter @Inject constructor(
 
     private fun removeUnselectedTiles() {
         val isLuckyNumberToLoad =
-            dashboardDataToLoad.orEmpty().any { it == DashboardTile.DataType.LUCKY_NUMBER }
+            dashboardDataToLoad.any { it == DashboardTile.DataType.LUCKY_NUMBER }
         val isMessagesToLoad =
-            dashboardDataToLoad.orEmpty().any { it == DashboardTile.DataType.MESSAGES }
+            dashboardDataToLoad.any { it == DashboardTile.DataType.MESSAGES }
         val isAttendanceToLoad =
-            dashboardDataToLoad.orEmpty().any { it == DashboardTile.DataType.ATTENDANCE }
+            dashboardDataToLoad.any { it == DashboardTile.DataType.ATTENDANCE }
 
         dashboardTileLoadedList.removeAll { loadedTile -> dashboardTilesToLoad.none { it == loadedTile.type } }
 
@@ -123,7 +123,7 @@ class DashboardPresenter @Inject constructor(
         forceRefresh: Boolean,
         oldDashboardDataToLoad: Set<DashboardTile.DataType>
     ) {
-        dashboardDataToLoad.orEmpty()
+        dashboardDataToLoad
             .filter { newDataTypeToLoad -> oldDashboardDataToLoad.none { it == newDataTypeToLoad } || forceRefresh }
             .forEach {
                 when (it) {
@@ -144,7 +144,7 @@ class DashboardPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the dashboard")
-        loadData(true, preferencesRepository.dashboardData)
+        loadData(true, preferencesRepository.selectedDashboardData)
     }
 
     fun onRetry() {
@@ -152,7 +152,7 @@ class DashboardPresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        loadData(true, preferencesRepository.dashboardData)
+        loadData(true, preferencesRepository.selectedDashboardData)
     }
 
     fun onViewReselected() {
@@ -168,12 +168,12 @@ class DashboardPresenter @Inject constructor(
     }
 
     fun onDashboardTileSettingsSelected(): Boolean {
-        view?.showDashboardTileSettings(preferencesRepository.dashboardData.toList())
+        view?.showDashboardTileSettings(preferencesRepository.selectedDashboardData.toList())
         return true
     }
 
     fun onDashboardTileSettingSelected(selectedItems: List<String>) {
-        preferencesRepository.dashboardData = selectedItems.map {
+        preferencesRepository.selectedDashboardData = selectedItems.map {
             DashboardTile.DataType.valueOf(it)
         }.toSet()
     }
@@ -491,7 +491,7 @@ class DashboardPresenter @Inject constructor(
                     Timber.i("Loading dashboard exams data started")
                     if (forceRefresh) return@onEach
                     updateData(
-                        DashboardTile.Exams(it.data ?: emptyList(), isLoading = true),
+                        DashboardTile.Exams(it.data.orEmpty(), isLoading = true),
                         forceRefresh
                     )
                 }
@@ -551,11 +551,11 @@ class DashboardPresenter @Inject constructor(
         forceRefresh: Boolean
     ) {
         val isLuckyNumberToLoad =
-            dashboardDataToLoad.orEmpty().any { it == DashboardTile.DataType.LUCKY_NUMBER }
+            dashboardDataToLoad.any { it == DashboardTile.DataType.LUCKY_NUMBER }
         val isMessagesToLoad =
-            dashboardDataToLoad.orEmpty().any { it == DashboardTile.DataType.MESSAGES }
+            dashboardDataToLoad.any { it == DashboardTile.DataType.MESSAGES }
         val isAttendanceToLoad =
-            dashboardDataToLoad.orEmpty().any { it == DashboardTile.DataType.ATTENDANCE }
+            dashboardDataToLoad.any { it == DashboardTile.DataType.ATTENDANCE }
         val isPushedToList =
             dashboardTileLoadedList.any { it.type == DashboardTile.Type.HORIZONTAL_GROUP }
 
