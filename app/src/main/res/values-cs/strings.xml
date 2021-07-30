@@ -424,6 +424,8 @@
     <string name="about_discord">Server Discord</string>
     <string name="about_discord_summary">Připojte se ke komunitě Wulkanového</string>
     <string name="about_facebook">Facebooková fanpage</string>
+    <string name="about_twitter">Twitter page</string>
+    <string name="about_twitter_summary">Follow us on twitter</string>
     <string name="about_facebook_summary">Stejně jako naše facebooková fanpage</string>
     <string name="about_privacy">Zásady ochrany osobních údajů</string>
     <string name="about_privacy_summary">Pravidla pro shromažďování osobních údajů</string>
