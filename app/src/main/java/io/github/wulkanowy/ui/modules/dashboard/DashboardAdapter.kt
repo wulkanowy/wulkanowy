@@ -37,7 +37,7 @@ import javax.inject.Inject
 import kotlin.concurrent.timer
 
 class DashboardAdapter @Inject constructor() :
-    ListAdapter<DashboardTile, RecyclerView.ViewHolder>(DashboardAdapterDiffCallback()) {
+    ListAdapter<DashboardItem, RecyclerView.ViewHolder>(DashboardAdapterDiffCallback()) {
 
     var lessonsTimer: Timer? = null
 
@@ -61,34 +61,34 @@ class DashboardAdapter @Inject constructor() :
 
     var onConferencesTileClickListener: () -> Unit = {}
 
-    override fun getItemViewType(position: Int) = getItem(position).type.id
+    override fun getItemViewType(position: Int) = getItem(position).type.ordinal
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
         return when (viewType) {
-            DashboardTile.Type.ACCOUNT.id -> AccountViewHolder(
+            DashboardItem.Type.ACCOUNT.ordinal -> AccountViewHolder(
                 ItemDashboardAccountBinding.inflate(inflater, parent, false)
             )
-            DashboardTile.Type.HORIZONTAL_GROUP.id -> HorizontalGroupViewHolder(
+            DashboardItem.Type.HORIZONTAL_GROUP.ordinal -> HorizontalGroupViewHolder(
                 ItemDashboardHorizontalGroupBinding.inflate(inflater, parent, false)
             )
-            DashboardTile.Type.GRADES.id -> GradesViewHolder(
+            DashboardItem.Type.GRADES.ordinal -> GradesViewHolder(
                 ItemDashboardGradesBinding.inflate(inflater, parent, false)
             )
-            DashboardTile.Type.LESSONS.id -> LessonsViewHolder(
+            DashboardItem.Type.LESSONS.ordinal -> LessonsViewHolder(
                 ItemDashboardLessonsBinding.inflate(inflater, parent, false)
             )
-            DashboardTile.Type.HOMEWORK.id -> HomeworkViewHolder(
+            DashboardItem.Type.HOMEWORK.ordinal -> HomeworkViewHolder(
                 ItemDashboardHomeworkBinding.inflate(inflater, parent, false)
             )
-            DashboardTile.Type.ANNOUNCEMENTS.id -> AnnouncementsViewHolder(
+            DashboardItem.Type.ANNOUNCEMENTS.ordinal -> AnnouncementsViewHolder(
                 ItemDashboardAnnouncementsBinding.inflate(inflater, parent, false)
             )
-            DashboardTile.Type.EXAMS.id -> ExamsViewHolder(
+            DashboardItem.Type.EXAMS.ordinal -> ExamsViewHolder(
                 ItemDashboardExamsBinding.inflate(inflater, parent, false)
             )
-            DashboardTile.Type.CONFERENCES.id -> ConferencesViewHolder(
+            DashboardItem.Type.CONFERENCES.ordinal -> ConferencesViewHolder(
                 ItemDashboardConferencesBinding.inflate(inflater, parent, false)
             )
             else -> throw IllegalArgumentException()
@@ -117,7 +117,7 @@ class DashboardAdapter @Inject constructor() :
     }
 
     private fun bindAccountViewHolder(accountViewHolder: AccountViewHolder, position: Int) {
-        val item = getItem(position) as DashboardTile.Account
+        val item = getItem(position) as DashboardItem.Account
         val student = item.student
         val isLoading = item.isLoading
 
@@ -145,14 +145,21 @@ class DashboardAdapter @Inject constructor() :
         horizontalGroupViewHolder: HorizontalGroupViewHolder,
         position: Int
     ) {
-        val (unreadMessagesCount, attendancePercentage, luckyNumber, error, isLoading) = getItem(
-            position
-        ) as DashboardTile.HorizontalGroup
+        val item = getItem(position) as DashboardItem.HorizontalGroup
+        val unreadMessagesCount = item.unreadMessagesCount
+        val attendancePercentage = item.attendancePercentage
+        val luckyNumber = item.luckyNumber
+        val error = item.error
+        val isLoading = item.isLoading
         val binding = horizontalGroupViewHolder.binding
         val context = binding.root.context
         val attendanceColor = when {
-            attendancePercentage ?: 0.0 <= 50.0 -> context.getThemeAttrColor(R.attr.colorPrimary)
-            attendancePercentage ?: 0.0 <= 75.0 -> context.getThemeAttrColor(R.attr.colorTimetableChange)
+            attendancePercentage ?: 0.0 <= ATTENDANCE_SECOND_WARNING_THRESHOLD -> {
+                context.getThemeAttrColor(R.attr.colorPrimary)
+            }
+            attendancePercentage ?: 0.0 <= ATTENDANCE_FIRST_WARNING_THRESHOLD -> {
+                context.getThemeAttrColor(R.attr.colorTimetableChange)
+            }
             else -> context.getThemeAttrColor(R.attr.colorOnSurface)
         }
 
@@ -162,9 +169,10 @@ class DashboardAdapter @Inject constructor() :
         }
 
         with(binding) {
-            dashboardHorizontalGroupItemLuckyValue.text =
-                if (luckyNumber == -1) "No" else luckyNumber?.toString()
             dashboardHorizontalGroupItemMessageValue.text = unreadMessagesCount.toString()
+            dashboardHorizontalGroupItemLuckyValue.text = if (luckyNumber == -1) {
+                context.getString(R.string.dashboard_horizontal_group_no_lukcy_number)
+            } else luckyNumber?.toString()
 
             if (dashboardHorizontalGroupItemInfoContainer.isVisible != (error != null || isLoading)) {
                 dashboardHorizontalGroupItemInfoContainer.isVisible = error != null || isLoading
@@ -201,7 +209,7 @@ class DashboardAdapter @Inject constructor() :
     }
 
     private fun bindGradesViewHolder(gradesViewHolder: GradesViewHolder, position: Int) {
-        val item = getItem(position) as DashboardTile.Grades
+        val item = getItem(position) as DashboardItem.Grades
         val subjectWithGrades = item.subjectWithGrades.orEmpty()
         val gradeTheme = item.gradeTheme
         val error = item.error
@@ -230,7 +238,7 @@ class DashboardAdapter @Inject constructor() :
     }
 
     private fun bindLessonsViewHolder(lessonsViewHolder: LessonsViewHolder, position: Int) {
-        val item = getItem(position) as DashboardTile.Lessons
+        val item = getItem(position) as DashboardItem.Lessons
         val timetableFull = item.lessons
         val binding = lessonsViewHolder.binding
 
@@ -288,7 +296,7 @@ class DashboardAdapter @Inject constructor() :
     }
 
     private fun updateLessonView(
-        item: DashboardTile.Lessons,
+        item: DashboardItem.Lessons,
         timetableToShow: List<Timetable>,
         binding: ItemDashboardLessonsBinding,
         header: TimetableHeader? = null,
@@ -469,15 +477,19 @@ class DashboardAdapter @Inject constructor() :
         val formattedEndTime = nextLessons.lastOrNull()?.end?.toFormattedString("HH:mm")
 
         with(binding) {
-            dashboardLessonsItemThirdTime.isVisible = nextLessons.size > 2
-            dashboardLessonsItemThirdTitle.isVisible = nextLessons.size > 2
-            dashboardLessonsItemThirdValue.isVisible = nextLessons.size > 2
-            dashboardLessonsItemDivider.isVisible = nextLessons.size > 2
+            dashboardLessonsItemThirdTime.isVisible =
+                nextLessons.size > LESSON_SUMMARY_VISIBILITY_THRESHOLD
+            dashboardLessonsItemThirdTitle.isVisible =
+                nextLessons.size > LESSON_SUMMARY_VISIBILITY_THRESHOLD
+            dashboardLessonsItemThirdValue.isVisible =
+                nextLessons.size > LESSON_SUMMARY_VISIBILITY_THRESHOLD
+            dashboardLessonsItemDivider.isVisible =
+                nextLessons.size > LESSON_SUMMARY_VISIBILITY_THRESHOLD
 
             dashboardLessonsItemThirdValue.text = context.resources.getQuantityString(
                 R.plurals.dashboard_timetable_third_value,
-                nextLessons.size - 2,
-                nextLessons.size - 2
+                nextLessons.size - LESSON_SUMMARY_VISIBILITY_THRESHOLD,
+                nextLessons.size - LESSON_SUMMARY_VISIBILITY_THRESHOLD
             )
             dashboardLessonsItemThirdTime.text =
                 context.getString(R.string.dashboard_timetable_third_time, formattedEndTime)
@@ -495,13 +507,13 @@ class DashboardAdapter @Inject constructor() :
     }
 
     private fun bindHomeworkViewHolder(homeworkViewHolder: HomeworkViewHolder, position: Int) {
-        val item = getItem(position) as DashboardTile.Homework
+        val item = getItem(position) as DashboardItem.Homework
         val homeworkList = item.homework.orEmpty()
         val error = item.error
         val isLoading = item.isLoading
         val context = homeworkViewHolder.binding.root.context
         val homeworkAdapter = homeworkViewHolder.adapter.apply {
-            this.items = homeworkList.take(5)
+            this.items = homeworkList.take(MAX_VISIBLE_LIST_ITEMS)
         }
 
         with(homeworkViewHolder.binding) {
@@ -510,12 +522,12 @@ class DashboardAdapter @Inject constructor() :
             dashboardHomeworkItemError.isVisible = error != null && !isLoading
             dashboardHomeworkItemProgress.isVisible =
                 isLoading && error == null && homeworkList.isEmpty()
-            dashboardHomeworkItemDivider.isVisible = homeworkList.size > 5
-            dashboardHomeworkItemMore.isVisible = homeworkList.size > 5
+            dashboardHomeworkItemDivider.isVisible = homeworkList.size > MAX_VISIBLE_LIST_ITEMS
+            dashboardHomeworkItemMore.isVisible = homeworkList.size > MAX_VISIBLE_LIST_ITEMS
             dashboardHomeworkItemMore.text = context.resources.getQuantityString(
                 R.plurals.dashboard_homework_more,
-                homeworkList.size - 5,
-                homeworkList.size - 5
+                homeworkList.size - MAX_VISIBLE_LIST_ITEMS,
+                homeworkList.size - MAX_VISIBLE_LIST_ITEMS
             )
 
             with(dashboardHomeworkItemRecycler) {
@@ -533,13 +545,13 @@ class DashboardAdapter @Inject constructor() :
         announcementsViewHolder: AnnouncementsViewHolder,
         position: Int
     ) {
-        val item = getItem(position) as DashboardTile.Announcements
+        val item = getItem(position) as DashboardItem.Announcements
         val schoolAnnouncementList = item.announcement.orEmpty()
         val error = item.error
         val isLoading = item.isLoading
         val context = announcementsViewHolder.binding.root.context
         val schoolAnnouncementsAdapter = announcementsViewHolder.adapter.apply {
-            this.items = schoolAnnouncementList.take(5)
+            this.items = schoolAnnouncementList.take(MAX_VISIBLE_LIST_ITEMS)
         }
 
         with(announcementsViewHolder.binding) {
@@ -548,12 +560,14 @@ class DashboardAdapter @Inject constructor() :
             dashboardAnnouncementsItemError.isVisible = error != null && !isLoading
             dashboardAnnouncementsItemProgress.isVisible =
                 isLoading && error == null && schoolAnnouncementList.isEmpty()
-            dashboardAnnouncementsItemDivider.isVisible = schoolAnnouncementList.size > 5
-            dashboardAnnouncementsItemMore.isVisible = schoolAnnouncementList.size > 5
+            dashboardAnnouncementsItemDivider.isVisible =
+                schoolAnnouncementList.size > MAX_VISIBLE_LIST_ITEMS
+            dashboardAnnouncementsItemMore.isVisible =
+                schoolAnnouncementList.size > MAX_VISIBLE_LIST_ITEMS
             dashboardAnnouncementsItemMore.text = context.resources.getQuantityString(
                 R.plurals.dashboard_announcements_more,
-                schoolAnnouncementList.size - 5,
-                schoolAnnouncementList.size - 5
+                schoolAnnouncementList.size - MAX_VISIBLE_LIST_ITEMS,
+                schoolAnnouncementList.size - MAX_VISIBLE_LIST_ITEMS
             )
 
             with(dashboardAnnouncementsItemRecycler) {
@@ -568,25 +582,25 @@ class DashboardAdapter @Inject constructor() :
     }
 
     private fun bindExamsViewHolder(examsViewHolder: ExamsViewHolder, position: Int) {
-        val item = getItem(position) as DashboardTile.Exams
+        val item = getItem(position) as DashboardItem.Exams
         val exams = item.exams.orEmpty()
         val error = item.error
         val isLoading = item.isLoading
         val context = examsViewHolder.binding.root.context
         val examAdapter = examsViewHolder.adapter.apply {
-            this.items = exams.take(5)
+            this.items = exams.take(MAX_VISIBLE_LIST_ITEMS)
         }
 
         with(examsViewHolder.binding) {
             dashboardExamsItemEmpty.isVisible = exams.isEmpty() && error == null && !isLoading
             dashboardExamsItemError.isVisible = error != null && !isLoading
             dashboardExamsItemProgress.isVisible = isLoading && error == null && exams.isEmpty()
-            dashboardExamsItemDivider.isVisible = exams.size > 5
-            dashboardExamsItemMore.isVisible = exams.size > 5
+            dashboardExamsItemDivider.isVisible = exams.size > MAX_VISIBLE_LIST_ITEMS
+            dashboardExamsItemMore.isVisible = exams.size > MAX_VISIBLE_LIST_ITEMS
             dashboardExamsItemMore.text = context.resources.getQuantityString(
                 R.plurals.dashboard_exams_more,
-                exams.size - 5,
-                exams.size - 5
+                exams.size - MAX_VISIBLE_LIST_ITEMS,
+                exams.size - MAX_VISIBLE_LIST_ITEMS
             )
 
             with(dashboardExamsItemRecycler) {
@@ -604,13 +618,13 @@ class DashboardAdapter @Inject constructor() :
         conferencesViewHolder: ConferencesViewHolder,
         position: Int
     ) {
-        val item = getItem(position) as DashboardTile.Conferences
+        val item = getItem(position) as DashboardItem.Conferences
         val conferences = item.conferences.orEmpty()
         val error = item.error
         val isLoading = item.isLoading
         val context = conferencesViewHolder.binding.root.context
         val conferenceAdapter = conferencesViewHolder.adapter.apply {
-            this.items = conferences.take(5)
+            this.items = conferences.take(MAX_VISIBLE_LIST_ITEMS)
         }
 
         with(conferencesViewHolder.binding) {
@@ -619,12 +633,12 @@ class DashboardAdapter @Inject constructor() :
             dashboardConferencesItemError.isVisible = error != null && !isLoading
             dashboardConferencesItemProgress.isVisible =
                 isLoading && error == null && conferences.isEmpty()
-            dashboardConferencesItemDivider.isVisible = conferences.size > 5
-            dashboardConferencesItemMore.isVisible = conferences.size > 5
+            dashboardConferencesItemDivider.isVisible = conferences.size > MAX_VISIBLE_LIST_ITEMS
+            dashboardConferencesItemMore.isVisible = conferences.size > MAX_VISIBLE_LIST_ITEMS
             dashboardConferencesItemMore.text = context.resources.getQuantityString(
                 R.plurals.dashboard_conference_more,
-                conferences.size - 5,
-                conferences.size - 5
+                conferences.size - MAX_VISIBLE_LIST_ITEMS,
+                conferences.size - MAX_VISIBLE_LIST_ITEMS
             )
 
             with(dashboardConferencesItemRecycler) {
@@ -677,12 +691,23 @@ class DashboardAdapter @Inject constructor() :
         val adapter by lazy { DashboardConferencesAdapter() }
     }
 
-    class DashboardAdapterDiffCallback : DiffUtil.ItemCallback<DashboardTile>() {
+    class DashboardAdapterDiffCallback : DiffUtil.ItemCallback<DashboardItem>() {
 
-        override fun areItemsTheSame(oldItem: DashboardTile, newItem: DashboardTile) =
+        override fun areItemsTheSame(oldItem: DashboardItem, newItem: DashboardItem) =
             oldItem.type == newItem.type
 
-        override fun areContentsTheSame(oldItem: DashboardTile, newItem: DashboardTile) =
+        override fun areContentsTheSame(oldItem: DashboardItem, newItem: DashboardItem) =
             oldItem == newItem
+    }
+
+    private companion object {
+
+        private const val LESSON_SUMMARY_VISIBILITY_THRESHOLD = 2
+
+        private const val MAX_VISIBLE_LIST_ITEMS = 5
+
+        private const val ATTENDANCE_FIRST_WARNING_THRESHOLD = 75.0
+
+        private const val ATTENDANCE_SECOND_WARNING_THRESHOLD = 50.0
     }
 }

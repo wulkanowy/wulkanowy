@@ -6,7 +6,7 @@ import com.fredporciuncula.flow.preferences.FlowSharedPreferences
 import com.fredporciuncula.flow.preferences.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
-import io.github.wulkanowy.ui.modules.dashboard.DashboardTile
+import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
 import io.github.wulkanowy.ui.modules.grade.GradeSortingMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -159,28 +159,28 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_optional_arithmetic_average
         )
 
-    val selectedDashboardDataFlow: Flow<Set<DashboardTile.DataType>>
-        get() = selectedDashboardDataPreference.asFlow()
+    val selectedDashboardTilesFlow: Flow<Set<DashboardItem.Tile>>
+        get() = selectedDashboardTilesPreference.asFlow()
             .map { set ->
-                set.map { DashboardTile.DataType.valueOf(it) }
-                    .plus(DashboardTile.DataType.ACCOUNT)
+                set.map { DashboardItem.Tile.valueOf(it) }
+                    .plus(DashboardItem.Tile.ACCOUNT)
                     .toSet()
             }
 
-    var selectedDashboardData: Set<DashboardTile.DataType>
-        get() = selectedDashboardDataPreference.get()
-            .map { DashboardTile.DataType.valueOf(it) }
-            .plus(DashboardTile.DataType.ACCOUNT)
+    var selectedDashboardTiles: Set<DashboardItem.Tile>
+        get() = selectedDashboardTilesPreference.get()
+            .map { DashboardItem.Tile.valueOf(it) }
+            .plus(DashboardItem.Tile.ACCOUNT)
             .toSet()
         set(value) {
-            val filteredValue = value.filterNot { it == DashboardTile.DataType.ACCOUNT }
+            val filteredValue = value.filterNot { it == DashboardItem.Tile.ACCOUNT }
                 .map { it.name }
                 .toSet()
 
-            selectedDashboardDataPreference.set(filteredValue)
+            selectedDashboardTilesPreference.set(filteredValue)
         }
 
-    private val selectedDashboardDataPreference: Preference<Set<String>>
+    private val selectedDashboardTilesPreference: Preference<Set<String>>
         get() {
             val defaultSet =
                 context.resources.getStringArray(R.array.pref_default_dashboard_tiles).toSet()

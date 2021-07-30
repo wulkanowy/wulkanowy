@@ -8,7 +8,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.TimetableFull
 import io.github.wulkanowy.data.db.entities.Homework as EntitiesHomework
 
-sealed class DashboardTile(val type: Type) {
+sealed class DashboardItem(val type: Type) {
 
     abstract val error: Throwable?
 
@@ -20,7 +20,7 @@ sealed class DashboardTile(val type: Type) {
         val student: Student? = null,
         override val error: Throwable? = null,
         override val isLoading: Boolean = false
-    ) : DashboardTile(Type.ACCOUNT) {
+    ) : DashboardItem(Type.ACCOUNT) {
 
         override val isDataLoaded get() = student != null
     }
@@ -31,7 +31,7 @@ sealed class DashboardTile(val type: Type) {
         val luckyNumber: Int? = null,
         override val error: Throwable? = null,
         override val isLoading: Boolean = false
-    ) : DashboardTile(Type.HORIZONTAL_GROUP) {
+    ) : DashboardItem(Type.HORIZONTAL_GROUP) {
 
         override val isDataLoaded
             get() = unreadMessagesCount != null || attendancePercentage != null || luckyNumber != null
@@ -42,7 +42,7 @@ sealed class DashboardTile(val type: Type) {
         val gradeTheme: String? = null,
         override val error: Throwable? = null,
         override val isLoading: Boolean = false
-    ) : DashboardTile(Type.GRADES) {
+    ) : DashboardItem(Type.GRADES) {
 
         override val isDataLoaded get() = subjectWithGrades != null
     }
@@ -51,7 +51,7 @@ sealed class DashboardTile(val type: Type) {
         val lessons: TimetableFull? = null,
         override val error: Throwable? = null,
         override val isLoading: Boolean = false
-    ) : DashboardTile(Type.LESSONS) {
+    ) : DashboardItem(Type.LESSONS) {
 
         override val isDataLoaded get() = lessons != null
     }
@@ -60,7 +60,7 @@ sealed class DashboardTile(val type: Type) {
         val homework: List<EntitiesHomework>? = null,
         override val error: Throwable? = null,
         override val isLoading: Boolean = false
-    ) : DashboardTile(Type.HOMEWORK) {
+    ) : DashboardItem(Type.HOMEWORK) {
 
         override val isDataLoaded get() = homework != null
     }
@@ -69,7 +69,7 @@ sealed class DashboardTile(val type: Type) {
         val announcement: List<SchoolAnnouncement>? = null,
         override val error: Throwable? = null,
         override val isLoading: Boolean = false
-    ) : DashboardTile(Type.ANNOUNCEMENTS) {
+    ) : DashboardItem(Type.ANNOUNCEMENTS) {
 
         override val isDataLoaded get() = announcement != null
     }
@@ -78,7 +78,7 @@ sealed class DashboardTile(val type: Type) {
         val exams: List<Exam>? = null,
         override val error: Throwable? = null,
         override val isLoading: Boolean = false
-    ) : DashboardTile(Type.EXAMS) {
+    ) : DashboardItem(Type.EXAMS) {
 
         override val isDataLoaded get() = exams != null
     }
@@ -87,24 +87,24 @@ sealed class DashboardTile(val type: Type) {
         val conferences: List<Conference>? = null,
         override val error: Throwable? = null,
         override val isLoading: Boolean = false
-    ) : DashboardTile(Type.CONFERENCES) {
+    ) : DashboardItem(Type.CONFERENCES) {
 
         override val isDataLoaded get() = conferences != null
     }
 
-    enum class Type(val id: Int) {
-        ACCOUNT(1),
-        HORIZONTAL_GROUP(2),
-        LESSONS(3),
-        GRADES(4),
-        HOMEWORK(5),
-        ANNOUNCEMENTS(6),
-        EXAMS(7),
-        CONFERENCES(8),
-        ADS(9)
+    enum class Type {
+        ACCOUNT,
+        HORIZONTAL_GROUP,
+        LESSONS,
+        GRADES,
+        HOMEWORK,
+        ANNOUNCEMENTS,
+        EXAMS,
+        CONFERENCES,
+        ADS
     }
 
-    enum class DataType {
+    enum class Tile {
         ACCOUNT,
         LUCKY_NUMBER,
         MESSAGES,
@@ -119,16 +119,16 @@ sealed class DashboardTile(val type: Type) {
     }
 }
 
-fun DashboardTile.DataType.toDashboardType() = when (this) {
-    DashboardTile.DataType.ACCOUNT -> DashboardTile.Type.ACCOUNT
-    DashboardTile.DataType.LUCKY_NUMBER -> DashboardTile.Type.HORIZONTAL_GROUP
-    DashboardTile.DataType.MESSAGES -> DashboardTile.Type.HORIZONTAL_GROUP
-    DashboardTile.DataType.ATTENDANCE -> DashboardTile.Type.HORIZONTAL_GROUP
-    DashboardTile.DataType.LESSONS -> DashboardTile.Type.LESSONS
-    DashboardTile.DataType.GRADES -> DashboardTile.Type.GRADES
-    DashboardTile.DataType.HOMEWORK -> DashboardTile.Type.HOMEWORK
-    DashboardTile.DataType.ANNOUNCEMENTS -> DashboardTile.Type.ANNOUNCEMENTS
-    DashboardTile.DataType.EXAMS -> DashboardTile.Type.EXAMS
-    DashboardTile.DataType.CONFERENCES -> DashboardTile.Type.CONFERENCES
-    DashboardTile.DataType.ADS -> DashboardTile.Type.ADS
+fun DashboardItem.Tile.toDashboardItemType() = when (this) {
+    DashboardItem.Tile.ACCOUNT -> DashboardItem.Type.ACCOUNT
+    DashboardItem.Tile.LUCKY_NUMBER -> DashboardItem.Type.HORIZONTAL_GROUP
+    DashboardItem.Tile.MESSAGES -> DashboardItem.Type.HORIZONTAL_GROUP
+    DashboardItem.Tile.ATTENDANCE -> DashboardItem.Type.HORIZONTAL_GROUP
+    DashboardItem.Tile.LESSONS -> DashboardItem.Type.LESSONS
+    DashboardItem.Tile.GRADES -> DashboardItem.Type.GRADES
+    DashboardItem.Tile.HOMEWORK -> DashboardItem.Type.HOMEWORK
+    DashboardItem.Tile.ANNOUNCEMENTS -> DashboardItem.Type.ANNOUNCEMENTS
+    DashboardItem.Tile.EXAMS -> DashboardItem.Type.EXAMS
+    DashboardItem.Tile.CONFERENCES -> DashboardItem.Type.CONFERENCES
+    DashboardItem.Tile.ADS -> DashboardItem.Type.ADS
 }
