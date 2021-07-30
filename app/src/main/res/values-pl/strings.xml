@@ -424,6 +424,8 @@
     <string name="about_discord">Serwer Discord</string>
     <string name="about_discord_summary">Dołącz do społeczności Wulkanowego</string>
     <string name="about_facebook">Fanpage na Facebooku</string>
+    <string name="about_twitter">Twitter page</string>
+    <string name="about_twitter_summary">Follow us on twitter</string>
     <string name="about_facebook_summary">Polub nasz fanpage na Facebooku</string>
     <string name="about_privacy">Polityka prywatności</string>
     <string name="about_privacy_summary">Zasady zbierania danych osobowych</string>
