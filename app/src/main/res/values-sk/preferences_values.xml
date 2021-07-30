@@ -45,4 +45,15 @@
         <item>Priemer známok z oboch semestrov</item>
         <item>Priemer známok z celého roka</item>
     </string-array>
+    <string-array name="dashboard_tile_entries">
+        <item>Lucky number</item>
+        <item>Unread messages</item>
+        <item>Attendance</item>
+        <item>Lessons</item>
+        <item>Grades</item>
+        <item>Homework</item>
+        <item>School announcements</item>
+        <item>Exams</item>
+        <item>Conferences</item>
+    </string-array>
 </resources>
