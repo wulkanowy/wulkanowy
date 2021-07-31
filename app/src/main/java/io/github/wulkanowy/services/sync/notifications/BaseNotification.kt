@@ -58,6 +58,7 @@ abstract class BaseNotification(
         notificationManager.notify(
             Random.nextInt(Int.MAX_VALUE),
             getNotificationBuilder(notification).apply {
+                setSmallIcon(notification.icon)
                 setContentTitle(
                     getQuantityString(notification.titleStringRes, notification.lines.size)
                 )
