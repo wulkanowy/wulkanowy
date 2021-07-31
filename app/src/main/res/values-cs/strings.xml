@@ -11,7 +11,7 @@
     <string name="more_title">Více</string>
     <string name="about_title">O aplikaci</string>
     <string name="logviewer_title">Prohlížeč protokolů</string>
-    <string name="debug_title">Debug</string>
+    <string name="debug_title">Ladění</string>
     <string name="notification_debug_title">Notification debug</string>
     <string name="contributors_title">Tvůrci</string>
     <string name="license_title">Licence</string>
@@ -472,8 +472,8 @@
     <string name="logviewer_share">Sdílet protokoly</string>
     <string name="logviewer_refresh">Obnovit</string>
     <!--Dashboard-->
-    <string name="dashboard_timetable_title">Lessons</string>
-    <string name="dashboard_timetable_title_tomorrow">(Tomorrow)</string>
+    <string name="dashboard_timetable_title">Lekce</string>
+    <string name="dashboard_timetable_title_tomorrow">(Zítra)</string>
     <string name="dashboard_timetable_lesson_value">%1$s (%2$s)</string>
     <string name="dashboard_timetable_first_lesson_title_moment">In a moment:</string>
     <string name="dashboard_timetable_first_lesson_title_soon">Soon:</string>
@@ -493,7 +493,7 @@
     </plurals>
     <string name="dashboard_timetable_second_lesson_value_end">End of lessons</string>
     <string name="dashboard_timetable_second_lessons_title">Next:</string>
-    <string name="dashboard_timetable_third_title">Later:</string>
+    <string name="dashboard_timetable_third_title">Později:</string>
     <plurals name="dashboard_timetable_third_value">
         <item quantity="one">%1$d more lesson</item>
         <item quantity="few">%1$d more lessons</item>
