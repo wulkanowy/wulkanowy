@@ -55,6 +55,9 @@ abstract class BaseNotification(
                 }.build()
             )
         }
+
+        if (notification.lines.size == 1) return
+
         notificationManager.notify(
             Random.nextInt(Int.MAX_VALUE),
             getNotificationBuilder(notification).apply {
