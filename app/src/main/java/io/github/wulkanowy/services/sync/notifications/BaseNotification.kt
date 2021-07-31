@@ -2,6 +2,7 @@ package io.github.wulkanowy.services.sync.notifications
 
 import android.app.PendingIntent
 import android.content.Context
+import android.os.SystemClock
 import androidx.annotation.PluralsRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -40,6 +41,9 @@ abstract class BaseNotification(
     }
 
     private fun sendMultipleNotifications(notification: MultipleNotifications) {
+        // we don't want to update notifications group later - every group should live separately
+        val group = notification.group + SystemClock.elapsedRealtimeNanos()
+
         notification.lines.forEach { item ->
             notificationManager.notify(
                 Random.nextInt(Int.MAX_VALUE),
@@ -47,9 +51,26 @@ abstract class BaseNotification(
                     setContentTitle(getQuantityString(notification.titleStringRes, 1))
                     setContentText(item)
                     setStyle(NotificationCompat.BigTextStyle().bigText(item))
+                    setGroup(group)
                 }.build()
             )
         }
+        notificationManager.notify(
+            Random.nextInt(Int.MAX_VALUE),
+            getNotificationBuilder(notification).apply {
+                setContentTitle(
+                    getQuantityString(notification.titleStringRes, notification.lines.size)
+                )
+                setStyle(NotificationCompat.InboxStyle().also {
+                    it.setSummaryText(
+                        getQuantityString(notification.summaryStringRes, notification.lines.size)
+                    )
+                    notification.lines.forEach(it::addLine)
+                })
+                setGroup(group)
+                setGroupSummary(true)
+            }.build()
+        )
     }
 
     private fun getNotificationBuilder(notification: Notification) = NotificationCompat
