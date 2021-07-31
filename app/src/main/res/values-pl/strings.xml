@@ -11,8 +11,8 @@
     <string name="more_title">Więcej</string>
     <string name="about_title">O aplikacji</string>
     <string name="logviewer_title">Przeglądarka logów</string>
-    <string name="debug_title">Debug</string>
-    <string name="notification_debug_title">Notification debug</string>
+    <string name="debug_title">Debugowanie</string>
+    <string name="notification_debug_title">Debugowanie powiadomień</string>
     <string name="contributors_title">Twórcy</string>
     <string name="license_title">Licencje</string>
     <string name="message_title">Wiadomości</string>
@@ -470,8 +470,8 @@
     <string name="logviewer_share">Udostępnij logi</string>
     <string name="logviewer_refresh">Odśwież</string>
     <!--Dashboard-->
-    <string name="dashboard_timetable_title">Lessons</string>
-    <string name="dashboard_timetable_title_tomorrow">(Tomorrow)</string>
+    <string name="dashboard_timetable_title">Lekcje</string>
+    <string name="dashboard_timetable_title_tomorrow">(Jutro)</string>
     <string name="dashboard_timetable_lesson_value">%1$s (%2$s)</string>
     <string name="dashboard_timetable_first_lesson_title_moment">In a moment:</string>
     <string name="dashboard_timetable_first_lesson_title_soon">Soon:</string>
@@ -499,21 +499,21 @@
         <item quantity="other">%1$d more lessons</item>
     </plurals>
     <string name="dashboard_timetable_third_time">until %1$s</string>
-    <string name="dashboard_timetable_no_lessons">No lessons</string>
-    <string name="dashboard_timetable_error">An error occurred while loading the lesson</string>
-    <string name="dashboard_homework_title">Homework</string>
-    <string name="dashboard_homework_no_homework">No homework</string>
-    <string name="dashboard_homework_error">An error occurred while loading the homework</string>
+    <string name="dashboard_timetable_no_lessons">Brak lekcji</string>
+    <string name="dashboard_timetable_error">Wystąpił błąd podczas ładowania lekcji</string>
+    <string name="dashboard_homework_title">Zadania domowe</string>
+    <string name="dashboard_homework_no_homework">Brak zadań domowych</string>
+    <string name="dashboard_homework_error">Wystąpił błąd podczas ładowania zadań domowych</string>
     <plurals name="dashboard_homework_more">
         <item quantity="one">%1$d more homework</item>
         <item quantity="few">%1$d more homework</item>
         <item quantity="many">%1$d more homework</item>
         <item quantity="other">%1$d more homework</item>
     </plurals>
-    <string name="dashboard_homework_time">due %1$s</string>
-    <string name="dashboard_grade_title">Last grades</string>
-    <string name="dashboard_grade_no_grade">No new grades</string>
-    <string name="dashboard_grade_error">An error occurred while loading the grades</string>
+    <string name="dashboard_homework_time">do %1$s</string>
+    <string name="dashboard_grade_title">Ostatnie oceny</string>
+    <string name="dashboard_grade_no_grade">Brak nowych ocen</string>
+    <string name="dashboard_grade_error">Wystąpił błąd podczas ładowania ocen</string>
     <string name="dashboard_announcements_title">School announcements</string>
     <string name="dashboard_announcements_no_announcements">No announcements</string>
     <string name="dashboard_announcements_error">An error occurred while loading the announcements</string>
@@ -523,26 +523,26 @@
         <item quantity="many">%1$d more announcements</item>
         <item quantity="other">%1$d more announcements</item>
     </plurals>
-    <string name="dashboard_exams_title">Exams</string>
-    <string name="dashboard_exams_no_exams">No exams</string>
-    <string name="dashboard_exams_error">An error occurred while loading the exams</string>
+    <string name="dashboard_exams_title">Sprawdziany</string>
+    <string name="dashboard_exams_no_exams">Brak sprawdzianów</string>
+    <string name="dashboard_exams_error">Wystąpił błąd podczas ładowania sprawdzianów</string>
     <plurals name="dashboard_exams_more">
         <item quantity="one">%1$d more exam</item>
         <item quantity="few">%1$d more exams</item>
         <item quantity="many">%1$d more exams</item>
         <item quantity="other">%1$d more exams</item>
     </plurals>
-    <string name="dashboard_conferences_title">Conferences</string>
-    <string name="dashboard_conferences_no_conferences">No conferences</string>
-    <string name="dashboard_conferences_error">An error occurred while loading the conferences</string>
+    <string name="dashboard_conferences_title">Zebrania</string>
+    <string name="dashboard_conferences_no_conferences">Brak zebrań</string>
+    <string name="dashboard_conferences_error">Wystąpił błąd podczas ładowania zebrań</string>
     <plurals name="dashboard_conference_more">
         <item quantity="one">%1$d more conference</item>
         <item quantity="few">%1$d more conferences</item>
         <item quantity="many">%1$d more conferences</item>
         <item quantity="other">%1$d more conferences</item>
     </plurals>
-    <string name="dashboard_horizontal_group_error">An error occurred while loading data</string>
-    <string name="dashboard_horizontal_group_no_lukcy_number">No</string>
+    <string name="dashboard_horizontal_group_error">Wystąpił błąd podczas ładowania danych</string>
+    <string name="dashboard_horizontal_group_no_lukcy_number">Brak</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Sprawdź dostępność aktualizacji</string>
     <string name="dialog_error_check_update_message">Przed zgłoszeniem błędu sprawdź wcześniej, czy dostępna jest już aktualizacja z poprawką błędu</string>
