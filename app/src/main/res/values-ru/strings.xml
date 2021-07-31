@@ -240,6 +240,8 @@
         <item quantity="many">Новые сообщения</item>
         <item quantity="other">Новые сообщения</item>
     </plurals>
+    <string name="message_restore_dialog">Do you want to restore draft message?</string>
+    <string name="message_restore_dialog_with_recipients">Do you want to restore draft message with recipients: %s?</string>
     <plurals name="message_notify_new_items">
         <item quantity="one">Вы получили %1$d новое сообщение</item>
         <item quantity="few">Вы получили %1$d новых сообщения</item>
