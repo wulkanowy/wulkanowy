@@ -46,14 +46,14 @@
         <item>Średnia wszystkich ocen z całego roku</item>
     </string-array>
     <string-array name="dashboard_tile_entries">
-        <item>Lucky number</item>
-        <item>Unread messages</item>
-        <item>Attendance</item>
-        <item>Lessons</item>
-        <item>Grades</item>
-        <item>Homework</item>
+        <item>Szczęśliwy numerek</item>
+        <item>Nieprzeczytane wiadomości</item>
+        <item>Frekwencja</item>
+        <item>Lekcje</item>
+        <item>Oceny</item>
+        <item>Zadania domowe</item>
         <item>School announcements</item>
-        <item>Exams</item>
-        <item>Conferences</item>
+        <item>Sprawdziany</item>
+        <item>Zebrania</item>
     </string-array>
 </resources>
