@@ -495,10 +495,10 @@
     <string name="dashboard_timetable_second_lessons_title">Następnie:</string>
     <string name="dashboard_timetable_third_title">Później:</string>
     <plurals name="dashboard_timetable_third_value">
-        <item quantity="one">jeszcze %1$d lekcja</item>
-        <item quantity="few">jeszcze %1$d lekcje</item>
-        <item quantity="many">jeszcze %1$d lekcji</item>
-        <item quantity="other">jeszcze %1$d lekcji</item>
+        <item quantity="one">%1$d dodatkowa lekcja</item>
+        <item quantity="few">%1$d dodatkowe lekcje</item>
+        <item quantity="many">%1$d dodatkowych lekcji</item>
+        <item quantity="other">%1$d dodatkowych lekcji</item>
     </plurals>
     <string name="dashboard_timetable_third_time">do %1$s</string>
     <string name="dashboard_timetable_no_lessons">Brak lekcji</string>
