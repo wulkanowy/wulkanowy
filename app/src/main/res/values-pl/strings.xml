@@ -476,7 +476,7 @@
     <string name="dashboard_timetable_title_tomorrow">(Jutro)</string>
     <string name="dashboard_timetable_lesson_value">%1$s (%2$s)</string>
     <string name="dashboard_timetable_first_lesson_title_moment">Za chwilę:</string>
-    <string name="dashboard_timetable_first_lesson_title_soon">Soon:</string>
+    <string name="dashboard_timetable_first_lesson_title_soon">Wkrótce:</string>
     <string name="dashboard_timetable_first_lesson_title_first">Pierwsza:</string>
     <string name="dashboard_timetable_first_lesson_title_now">Teraz:</string>
     <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
@@ -492,7 +492,7 @@
         <item quantity="other">jeszcze %1$d minut</item>
     </plurals>
     <string name="dashboard_timetable_second_lesson_value_end">Koniec lekcji</string>
-    <string name="dashboard_timetable_second_lessons_title">Next:</string>
+    <string name="dashboard_timetable_second_lessons_title">Następnie:</string>
     <string name="dashboard_timetable_third_title">Później:</string>
     <plurals name="dashboard_timetable_third_value">
         <item quantity="one">jeszcze %1$d lekcja</item>
