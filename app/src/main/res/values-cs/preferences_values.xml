@@ -46,14 +46,14 @@
         <item>Průměr známek z celého roku</item>
     </string-array>
     <string-array name="dashboard_tile_entries">
-        <item>Lucky number</item>
-        <item>Unread messages</item>
-        <item>Attendance</item>
-        <item>Lessons</item>
-        <item>Grades</item>
-        <item>Homework</item>
-        <item>School announcements</item>
-        <item>Exams</item>
-        <item>Conferences</item>
+        <item>Šťastné číslo</item>
+        <item>Nepřečtené zprávy</item>
+        <item>Docházka</item>
+        <item>Lekce</item>
+        <item>Známky</item>
+        <item>Domácí úkoly</item>
+        <item>Školní oznámení</item>
+        <item>Zkoušky</item>
+        <item>Setkání</item>
     </string-array>
 </resources>
