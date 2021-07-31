@@ -475,10 +475,10 @@
     <string name="dashboard_timetable_title">Lekcje</string>
     <string name="dashboard_timetable_title_tomorrow">(Jutro)</string>
     <string name="dashboard_timetable_lesson_value">%1$s (%2$s)</string>
-    <string name="dashboard_timetable_first_lesson_title_moment">In a moment:</string>
+    <string name="dashboard_timetable_first_lesson_title_moment">Za chwilę:</string>
     <string name="dashboard_timetable_first_lesson_title_soon">Soon:</string>
     <string name="dashboard_timetable_first_lesson_title_first">First:</string>
-    <string name="dashboard_timetable_first_lesson_title_now">Now:</string>
+    <string name="dashboard_timetable_first_lesson_title_now">Teraz:</string>
     <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
         <item quantity="one">in %1$d minute</item>
         <item quantity="few">in %1$d minutes</item>
@@ -491,7 +491,7 @@
         <item quantity="many">%1$d more minutes</item>
         <item quantity="other">%1$d more minutes</item>
     </plurals>
-    <string name="dashboard_timetable_second_lesson_value_end">End of lessons</string>
+    <string name="dashboard_timetable_second_lesson_value_end">Koniec lekcji</string>
     <string name="dashboard_timetable_second_lessons_title">Next:</string>
     <string name="dashboard_timetable_third_title">Later:</string>
     <plurals name="dashboard_timetable_third_value">
@@ -500,7 +500,7 @@
         <item quantity="many">%1$d more lessons</item>
         <item quantity="other">%1$d more lessons</item>
     </plurals>
-    <string name="dashboard_timetable_third_time">until %1$s</string>
+    <string name="dashboard_timetable_third_time">do %1$s</string>
     <string name="dashboard_timetable_no_lessons">Brak lekcji</string>
     <string name="dashboard_timetable_error">Wystąpił błąd podczas ładowania lekcji</string>
     <string name="dashboard_homework_title">Zadania domowe</string>
@@ -516,9 +516,9 @@
     <string name="dashboard_grade_title">Ostatnie oceny</string>
     <string name="dashboard_grade_no_grade">Brak nowych ocen</string>
     <string name="dashboard_grade_error">Wystąpił błąd podczas ładowania ocen</string>
-    <string name="dashboard_announcements_title">School announcements</string>
-    <string name="dashboard_announcements_no_announcements">No announcements</string>
-    <string name="dashboard_announcements_error">An error occurred while loading the announcements</string>
+    <string name="dashboard_announcements_title">Ogłoszenia szkolne</string>
+    <string name="dashboard_announcements_no_announcements">Brak ogłoszeń</string>
+    <string name="dashboard_announcements_error">Wystąpił błąd podczas ładowania ogłoszeń</string>
     <plurals name="dashboard_announcements_more">
         <item quantity="one">%1$d more announcement</item>
         <item quantity="few">%1$d more announcements</item>
