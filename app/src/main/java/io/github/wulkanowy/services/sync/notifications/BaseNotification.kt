@@ -2,7 +2,7 @@ package io.github.wulkanowy.services.sync.notifications
 
 import android.app.PendingIntent
 import android.content.Context
-import android.os.SystemClock
+import android.os.Build
 import androidx.annotation.PluralsRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -41,9 +41,6 @@ abstract class BaseNotification(
     }
 
     private fun sendMultipleNotifications(notification: MultipleNotifications) {
-        // we don't want to update notifications group later - every group should live separately
-        val group = notification.group + SystemClock.elapsedRealtimeNanos()
-
         notification.lines.forEach { item ->
             notificationManager.notify(
                 Random.nextInt(Int.MAX_VALUE),
@@ -51,30 +48,19 @@ abstract class BaseNotification(
                     setContentTitle(getQuantityString(notification.titleStringRes, 1))
                     setContentText(item)
                     setStyle(NotificationCompat.BigTextStyle().bigText(item))
-                    setGroup(group)
+                    setGroup(notification.group)
                 }.build()
             )
         }
 
         if (notification.lines.size == 1) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
 
         notificationManager.notify(
-            Random.nextInt(Int.MAX_VALUE),
+            notification.startMenu.id,
             getNotificationBuilder(notification).apply {
                 setSmallIcon(notification.icon)
-                setContentTitle(
-                    getQuantityString(notification.titleStringRes, notification.lines.size)
-                )
-                setContentText(
-                    getQuantityString(notification.contentStringRes, notification.lines.size)
-                )
-                setStyle(NotificationCompat.InboxStyle().also {
-                    it.setSummaryText(
-                        getQuantityString(notification.summaryStringRes, notification.lines.size)
-                    )
-                    notification.lines.forEach(it::addLine)
-                })
-                setGroup(group)
+                setGroup(notification.group)
                 setGroupSummary(true)
             }.build()
         )
