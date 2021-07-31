@@ -61,6 +61,9 @@ abstract class BaseNotification(
                 setContentTitle(
                     getQuantityString(notification.titleStringRes, notification.lines.size)
                 )
+                setContentText(
+                    getQuantityString(notification.contentStringRes, notification.lines.size)
+                )
                 setStyle(NotificationCompat.InboxStyle().also {
                     it.setSummaryText(
                         getQuantityString(notification.summaryStringRes, notification.lines.size)
