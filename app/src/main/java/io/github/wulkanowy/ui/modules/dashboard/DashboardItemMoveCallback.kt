@@ -3,7 +3,8 @@ package io.github.wulkanowy.ui.modules.dashboard
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
-class DashboardItemMoveCallback : ItemTouchHelper.Callback() {
+class DashboardItemMoveCallback(private val dashboardAdapter: DashboardAdapter) :
+    ItemTouchHelper.Callback() {
 
     override fun isLongPressDragEnabled() = true
 
@@ -23,6 +24,13 @@ class DashboardItemMoveCallback : ItemTouchHelper.Callback() {
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        return false
+        val list = dashboardAdapter.currentList.toMutableList()
+        val item = list[viewHolder.bindingAdapterPosition]
+
+        list.removeAt(viewHolder.bindingAdapterPosition)
+        list.add(target.bindingAdapterPosition, item)
+
+        dashboardAdapter.submitList(list)
+        return true
     }
 }

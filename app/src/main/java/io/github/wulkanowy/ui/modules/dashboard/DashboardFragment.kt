@@ -69,7 +69,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
 
     override fun initView() {
         val mainActivity = requireActivity() as MainActivity
-        val itemTouchHelper = ItemTouchHelper(DashboardItemMoveCallback())
+        val itemTouchHelper = ItemTouchHelper(DashboardItemMoveCallback(dashboardAdapter))
 
         dashboardAdapter.apply {
             onAccountTileClickListener = { mainActivity.pushView(AccountFragment.newInstance()) }
