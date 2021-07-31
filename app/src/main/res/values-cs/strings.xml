@@ -240,6 +240,8 @@
         <item quantity="many">Nové zprávy</item>
         <item quantity="other">Nové zprávy</item>
     </plurals>
+    <string name="message_restore_dialog">Do you want to restore draft message?</string>
+    <string name="message_restore_dialog_with_recipients">Do you want to restore draft message with recipients: %s?</string>
     <plurals name="message_notify_new_items">
         <item quantity="one">Máte %1$d novou zprávu</item>
         <item quantity="few">Máte %1$d nové zprávy</item>
