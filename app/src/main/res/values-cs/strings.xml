@@ -495,10 +495,10 @@
     <string name="dashboard_timetable_second_lessons_title">Další:</string>
     <string name="dashboard_timetable_third_title">Později:</string>
     <plurals name="dashboard_timetable_third_value">
-        <item quantity="one">Ještě %1$d další lekce</item>
-        <item quantity="few">Ještě %1$d další lekce</item>
-        <item quantity="many">Ještě %1$d dalších lekcí</item>
-        <item quantity="other">Ještě %1$d dalších lekcí</item>
+        <item quantity="one">ještě %1$d další lekce</item>
+        <item quantity="few">ještě %1$d další lekce</item>
+        <item quantity="many">ještě %1$d dalších lekcí</item>
+        <item quantity="other">ještě %1$d dalších lekcí</item>
     </plurals>
     <string name="dashboard_timetable_third_time">do %1$s</string>
     <string name="dashboard_timetable_no_lessons">Žádné lekce</string>
