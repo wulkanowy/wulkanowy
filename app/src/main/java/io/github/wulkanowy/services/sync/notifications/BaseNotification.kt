@@ -53,7 +53,6 @@ abstract class BaseNotification(
             )
         }
 
-        if (notification.lines.size == 1) return
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
 
         notificationManager.notify(
