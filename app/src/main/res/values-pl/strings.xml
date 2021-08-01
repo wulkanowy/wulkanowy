@@ -23,7 +23,7 @@
     <string name="account_quick_title">Wybierz konto</string>
     <string name="account_details_title">Szczegóły konta</string>
     <string name="student_info_title">Informacje o uczniu</string>
-    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_title">Start</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
@@ -240,8 +240,8 @@
         <item quantity="many">Nowe wiadomości</item>
         <item quantity="other">Nowe wiadomości</item>
     </plurals>
-    <string name="message_restore_dialog">Do you want to restore draft message?</string>
-    <string name="message_restore_dialog_with_recipients">Do you want to restore draft message with recipients: %s?</string>
+    <string name="message_restore_dialog">Czy chcesz przywrócić wersję roboczą wiadomości?</string>
+    <string name="message_restore_dialog_with_recipients">Czy chcesz przywrócić wersję roboczą wiadomości z adresatami: %s?</string>
     <plurals name="message_notify_new_items">
         <item quantity="one">Masz %1$d nową wiadomość</item>
         <item quantity="few">Masz %1$d nowe wiadomości</item>
@@ -329,7 +329,7 @@
     <string name="lucky_number_header">Dzisiejszym szczęśliwym numerkiem jest</string>
     <string name="lucky_number_empty">Brak informacji o szczęśliwym numerku</string>
     <string name="lucky_number_notify_new_item_title">Szczęśliwy numerek na dzisiaj</string>
-    <string name="lucky_number_notify_new_item">Today\'s lucky number is: %s</string>
+    <string name="lucky_number_notify_new_item">Dzisiejszym szczęśliwym numerkiem jest: %s</string>
     <string name="lucky_number_history_button">Pokaż historię</string>
     <!--Lucky number history-->
     <string name="lucky_number_history_title">Historia numerków</string>
@@ -426,8 +426,8 @@
     <string name="about_discord">Serwer Discord</string>
     <string name="about_discord_summary">Dołącz do społeczności Wulkanowego</string>
     <string name="about_facebook">Fanpage na Facebooku</string>
-    <string name="about_twitter">Twitter page</string>
-    <string name="about_twitter_summary">Follow us on twitter</string>
+    <string name="about_twitter">Strona na Twitterze</string>
+    <string name="about_twitter_summary">Śledź nas na Twitterze</string>
     <string name="about_facebook_summary">Polub nasz fanpage na Facebooku</string>
     <string name="about_privacy">Polityka prywatności</string>
     <string name="about_privacy_summary">Zasady zbierania danych osobowych</string>
@@ -476,29 +476,29 @@
     <string name="dashboard_timetable_title_tomorrow">(Jutro)</string>
     <string name="dashboard_timetable_lesson_value">%1$s (%2$s)</string>
     <string name="dashboard_timetable_first_lesson_title_moment">Za chwilę:</string>
-    <string name="dashboard_timetable_first_lesson_title_soon">Soon:</string>
-    <string name="dashboard_timetable_first_lesson_title_first">First:</string>
+    <string name="dashboard_timetable_first_lesson_title_soon">Wkrótce:</string>
+    <string name="dashboard_timetable_first_lesson_title_first">Pierwsza:</string>
     <string name="dashboard_timetable_first_lesson_title_now">Teraz:</string>
     <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
-        <item quantity="one">in %1$d minute</item>
-        <item quantity="few">in %1$d minutes</item>
-        <item quantity="many">in %1$d minutes</item>
-        <item quantity="other">in %1$d minutes</item>
+        <item quantity="one">za %1$d minutę</item>
+        <item quantity="few">za %1$d minuty</item>
+        <item quantity="many">za %1$d minut</item>
+        <item quantity="other">za %1$d minut</item>
     </plurals>
     <plurals name="dashboard_timetable_first_lesson_time_more_minutes">
-        <item quantity="one">%1$d more minute</item>
-        <item quantity="few">%1$d more minutes</item>
-        <item quantity="many">%1$d more minutes</item>
-        <item quantity="other">%1$d more minutes</item>
+        <item quantity="one">jeszcze %1$d minuta</item>
+        <item quantity="few">jeszcze %1$d minuty</item>
+        <item quantity="many">jeszcze %1$d minut</item>
+        <item quantity="other">jeszcze %1$d minut</item>
     </plurals>
     <string name="dashboard_timetable_second_lesson_value_end">Koniec lekcji</string>
-    <string name="dashboard_timetable_second_lessons_title">Next:</string>
-    <string name="dashboard_timetable_third_title">Later:</string>
+    <string name="dashboard_timetable_second_lessons_title">Następnie:</string>
+    <string name="dashboard_timetable_third_title">Później:</string>
     <plurals name="dashboard_timetable_third_value">
-        <item quantity="one">%1$d more lesson</item>
-        <item quantity="few">%1$d more lessons</item>
-        <item quantity="many">%1$d more lessons</item>
-        <item quantity="other">%1$d more lessons</item>
+        <item quantity="one">Jeszcze %1$d dodatkowa lekcja</item>
+        <item quantity="few">Jeszcze %1$d dodatkowe lekcje</item>
+        <item quantity="many">Jeszcze %1$d dodatkowych lekcji</item>
+        <item quantity="other">Jeszcze %1$d dodatkowych lekcji</item>
     </plurals>
     <string name="dashboard_timetable_third_time">do %1$s</string>
     <string name="dashboard_timetable_no_lessons">Brak lekcji</string>
@@ -507,10 +507,10 @@
     <string name="dashboard_homework_no_homework">Brak zadań domowych</string>
     <string name="dashboard_homework_error">Wystąpił błąd podczas ładowania zadań domowych</string>
     <plurals name="dashboard_homework_more">
-        <item quantity="one">%1$d more homework</item>
-        <item quantity="few">%1$d more homework</item>
-        <item quantity="many">%1$d more homework</item>
-        <item quantity="other">%1$d more homework</item>
+        <item quantity="one">Jeszcze %1$d dodatkowe zadanie domowe</item>
+        <item quantity="few">Jeszcze %1$d dodatkowe zadania domowe</item>
+        <item quantity="many">Jeszcze %1$d dodatkowych zadań domowych</item>
+        <item quantity="other">Jeszcze %1$d dodatkowych zadań domowych</item>
     </plurals>
     <string name="dashboard_homework_time">do %1$s</string>
     <string name="dashboard_grade_title">Ostatnie oceny</string>
@@ -520,28 +520,28 @@
     <string name="dashboard_announcements_no_announcements">Brak ogłoszeń</string>
     <string name="dashboard_announcements_error">Wystąpił błąd podczas ładowania ogłoszeń</string>
     <plurals name="dashboard_announcements_more">
-        <item quantity="one">%1$d more announcement</item>
-        <item quantity="few">%1$d more announcements</item>
-        <item quantity="many">%1$d more announcements</item>
-        <item quantity="other">%1$d more announcements</item>
+        <item quantity="one">Jeszcze %1$d dodatkowe ogłoszenie</item>
+        <item quantity="few">Jeszcze %1$d dodatkowe ogłoszenia</item>
+        <item quantity="many">Jeszcze %1$d dodatkowych ogłoszeń</item>
+        <item quantity="other">Jeszcze %1$d dodatkowych ogłoszeń</item>
     </plurals>
     <string name="dashboard_exams_title">Sprawdziany</string>
     <string name="dashboard_exams_no_exams">Brak sprawdzianów</string>
     <string name="dashboard_exams_error">Wystąpił błąd podczas ładowania sprawdzianów</string>
     <plurals name="dashboard_exams_more">
-        <item quantity="one">%1$d more exam</item>
-        <item quantity="few">%1$d more exams</item>
-        <item quantity="many">%1$d more exams</item>
-        <item quantity="other">%1$d more exams</item>
+        <item quantity="one">Jeszcze %1$d dodatkowy sprawdzian</item>
+        <item quantity="few">Jeszcze %1$d dodatkowe sprawdziany</item>
+        <item quantity="many">Jeszcze %1$d dodatkowych sprawdzianów</item>
+        <item quantity="other">Jeszcze %1$d dodatkowych sprawdzianów</item>
     </plurals>
     <string name="dashboard_conferences_title">Zebrania</string>
     <string name="dashboard_conferences_no_conferences">Brak zebrań</string>
     <string name="dashboard_conferences_error">Wystąpił błąd podczas ładowania zebrań</string>
     <plurals name="dashboard_conference_more">
-        <item quantity="one">%1$d more conference</item>
-        <item quantity="few">%1$d more conferences</item>
-        <item quantity="many">%1$d more conferences</item>
-        <item quantity="other">%1$d more conferences</item>
+        <item quantity="one">Jeszcze %1$d dodatkowe zebranie</item>
+        <item quantity="few">Jeszcze %1$d dodatkowe zebrania</item>
+        <item quantity="many">Jeszcze %1$d dodatkowych zebrań</item>
+        <item quantity="other">Jeszcze %1$d dodatkowych zebrań</item>
     </plurals>
     <string name="dashboard_horizontal_group_error">Wystąpił błąd podczas ładowania danych</string>
     <string name="dashboard_horizontal_group_no_lukcy_number">Brak</string>
@@ -617,8 +617,8 @@
     <string name="pref_settings_notifications_title">Powiadomienia</string>
     <string name="pref_settings_sync_title">Synchronizacja</string>
     <string name="pref_grades_appearance_header">Oceny</string>
-    <string name="pref_dashboard_appearance_header">Dashboard</string>
-    <string name="pref_dashboard_appearance_tiles_title">Tiles visibility</string>
+    <string name="pref_dashboard_appearance_header">Start</string>
+    <string name="pref_dashboard_appearance_tiles_title">Widoczność kafelków</string>
     <string name="pref_attendance_appearance_view">Frekwencja</string>
     <string name="pref_timetable_appearance_view">Plan lekcji</string>
     <string name="pref_grades_advanced_header">Oceny</string>
