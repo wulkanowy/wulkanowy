@@ -495,7 +495,7 @@
     <string name="dashboard_timetable_second_lessons_title">Další:</string>
     <string name="dashboard_timetable_third_title">Později:</string>
     <plurals name="dashboard_timetable_third_value">
-        <item quantity="one">%1$d more lesson</item>
+        <item quantity="one">Ještě %1$d další lekce</item>
         <item quantity="few">%1$d more lessons</item>
         <item quantity="many">%1$d more lessons</item>
         <item quantity="other">%1$d more lessons</item>
@@ -512,7 +512,7 @@
         <item quantity="many">%1$d more homework</item>
         <item quantity="other">%1$d more homework</item>
     </plurals>
-    <string name="dashboard_homework_time">due %1$s</string>
+    <string name="dashboard_homework_time">do %1$s</string>
     <string name="dashboard_grade_title">Poslední známky</string>
     <string name="dashboard_grade_no_grade">Žádné nové známky</string>
     <string name="dashboard_grade_error">An error occurred while loading the grades</string>
