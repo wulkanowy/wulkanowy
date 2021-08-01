@@ -12,6 +12,8 @@ import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.databinding.DialogTimetableBinding
+import io.github.wulkanowy.utils.capitalise
+import io.github.wulkanowy.utils.decapitalise
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.lifecycleAwareVariable
 import io.github.wulkanowy.utils.toFormattedString
@@ -101,8 +103,8 @@ class TimetableDialog : DialogFragment() {
                     timetableDialogChangesValue.text = when {
                         canceled && !changes -> "Lekcja odwołana: $info"
                         changes && teacher.isNotBlank() -> "Zastępstwo: $teacher"
-                        changes && teacher.isBlank() -> "Zastępstwo, ${info.decapitalize()}"
-                        else -> info.capitalize()
+                        changes && teacher.isBlank() -> "Zastępstwo, ${info.decapitalise()}"
+                        else -> info.capitalise()
                     }
                 }
                 else -> {
