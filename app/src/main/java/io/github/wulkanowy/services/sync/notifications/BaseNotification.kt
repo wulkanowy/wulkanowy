@@ -56,7 +56,7 @@ abstract class BaseNotification(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
 
         notificationManager.notify(
-            notification.startMenu.id,
+            notification.group.hashCode(),
             getNotificationBuilder(notification).apply {
                 setSmallIcon(notification.icon)
                 setGroup(notification.group)
