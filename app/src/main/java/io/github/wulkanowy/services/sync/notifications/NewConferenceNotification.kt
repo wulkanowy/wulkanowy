@@ -7,7 +7,6 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.MultipleNotifications
-import io.github.wulkanowy.services.sync.channels.NewConferencesChannel
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
@@ -18,8 +17,7 @@ class NewConferenceNotification @Inject constructor(
 
     fun notify(items: List<Conference>, student: Student) {
         val notification = MultipleNotifications(
-            channelId = NewConferencesChannel.CHANNEL_ID,
-            group = NewConferencesChannel.GROUP_ID,
+            type = NotificationType.NEW_CONFERENCE,
             icon = R.drawable.ic_more_conferences,
             titleStringRes = R.plurals.conference_notify_new_item_title,
             contentStringRes = R.plurals.conference_notify_new_items,

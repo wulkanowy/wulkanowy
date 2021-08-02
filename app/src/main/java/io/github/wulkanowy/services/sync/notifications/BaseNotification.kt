@@ -22,7 +22,7 @@ abstract class BaseNotification(
     private val notificationManager: NotificationManagerCompat,
 ) {
 
-    protected fun sendNotification(notification: Notification, student: Student? = null) =
+    protected fun sendNotification(notification: Notification, student: Student) =
         when (notification) {
             is OneNotification -> sendOneNotification(notification, student)
             is MultipleNotifications -> sendMultipleNotifications(notification, student)
@@ -47,7 +47,10 @@ abstract class BaseNotification(
         )
     }
 
-    private fun sendMultipleNotifications(notification: MultipleNotifications, student: Student?) {
+    private fun sendMultipleNotifications(notification: MultipleNotifications, student: Student) {
+        val group = notification.type.group + student.id
+        val groupId = student.id * 100 + notification.type.ordinal
+
         notification.lines.forEach { item ->
             notificationManager.notify(
                 Random.nextInt(Int.MAX_VALUE),
@@ -56,10 +59,10 @@ abstract class BaseNotification(
                     setContentText(item)
                     setStyle(
                         NotificationCompat.BigTextStyle()
-                            .setSummaryText(student?.nickOrName)
+                            .setSummaryText(student.nickOrName)
                             .bigText(item)
                     )
-                    setGroup(notification.group)
+                    setGroup(group)
                 }.build()
             )
         }
@@ -67,18 +70,18 @@ abstract class BaseNotification(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
 
         notificationManager.notify(
-            notification.group.hashCode(),
+            groupId.toInt(),
             getNotificationBuilder(notification).apply {
                 setSmallIcon(notification.icon)
-                setGroup(notification.group)
-                setStyle(NotificationCompat.InboxStyle().setSummaryText(student?.nickOrName))
+                setGroup(group)
+                setStyle(NotificationCompat.InboxStyle().setSummaryText(student.nickOrName))
                 setGroupSummary(true)
             }.build()
         )
     }
 
     private fun getNotificationBuilder(notification: Notification) = NotificationCompat
-        .Builder(context, notification.channelId)
+        .Builder(context, notification.type.channel)
         .setLargeIcon(context.getCompatBitmap(notification.icon, R.color.colorPrimary))
         .setSmallIcon(R.drawable.ic_stat_all)
         .setAutoCancel(true)

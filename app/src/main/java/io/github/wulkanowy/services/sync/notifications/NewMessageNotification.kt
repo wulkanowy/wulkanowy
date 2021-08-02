@@ -7,7 +7,6 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.MultipleNotifications
-import io.github.wulkanowy.services.sync.channels.NewMessagesChannel
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
@@ -18,8 +17,7 @@ class NewMessageNotification @Inject constructor(
 
     fun notify(items: List<Message>, student: Student) {
         val notification = MultipleNotifications(
-            channelId = NewMessagesChannel.CHANNEL_ID,
-            group = NewMessagesChannel.GROUP_ID,
+            type = NotificationType.NEW_MESSAGE,
             icon = R.drawable.ic_stat_message,
             titleStringRes = R.plurals.message_new_items,
             contentStringRes = R.plurals.message_notify_new_items,

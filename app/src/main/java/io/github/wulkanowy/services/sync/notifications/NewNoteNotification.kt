@@ -8,7 +8,6 @@ import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.MultipleNotifications
 import io.github.wulkanowy.sdk.scrapper.notes.NoteCategory
-import io.github.wulkanowy.services.sync.channels.NewNotesChannel
 import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
@@ -19,8 +18,7 @@ class NewNoteNotification @Inject constructor(
 
     fun notify(items: List<Note>, student: Student) {
         val notification = MultipleNotifications(
-            channelId = NewNotesChannel.CHANNEL_ID,
-            group = NewNotesChannel.GROUP_ID,
+            type = NotificationType.NEW_NOTE,
             icon = R.drawable.ic_stat_note,
             titleStringRes = when (NoteCategory.getByValue(items.first().categoryType)) {
                 NoteCategory.POSITIVE -> R.plurals.praise_new_items
