@@ -19,23 +19,25 @@ import javax.inject.Inject
 class MessageTabAdapter @Inject constructor() :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val ITEM_VIEW_TYPE_HEADER = 0
-    private val ITEM_VIEW_TYPE_ITEM = 1
+    enum class ViewType { HEADER, ITEM }
 
     var onItemClickListener: (Message, position: Int) -> Unit = { _, _ -> }
     var onHeaderClickListener: (chip: CompoundButton, isChecked: Boolean) -> Unit = { _, _ -> }
 
     var onChangesDetectedListener = {}
 
-    private var items = mutableListOf<DataItem>()
+    private var items = mutableListOf<MessageTabDataItem>()
     private var onlyUnread: Boolean? = null
     private var onlyWithAttachments = false
 
-    fun setDataItems(data: List<Message>, _onlyUnread: Boolean?, _onlyWithAttachments: Boolean) {
+    fun setDataItems(
+        data: List<MessageTabDataItem>,
+        _onlyUnread: Boolean?,
+        _onlyWithAttachments: Boolean
+    ) {
         if (items.size != data.size) onChangesDetectedListener()
-        val newItems = listOf(DataItem.Header) + data.map { DataItem.MessageItem(it) }
-        val diffResult = DiffUtil.calculateDiff(MessageTabDiffUtil(items, newItems))
-        items = newItems.toMutableList()
+        val diffResult = DiffUtil.calculateDiff(MessageTabDiffUtil(items, data))
+        items = data.toMutableList()
         onlyUnread = _onlyUnread
         onlyWithAttachments = _onlyWithAttachments
         diffResult.dispatchUpdatesTo(this)
@@ -43,8 +45,8 @@ class MessageTabAdapter @Inject constructor() :
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
-            0 -> ITEM_VIEW_TYPE_HEADER
-            else -> ITEM_VIEW_TYPE_ITEM
+            0 -> ViewType.HEADER.ordinal
+            else -> ViewType.ITEM.ordinal
         }
     }
 
@@ -53,14 +55,14 @@ class MessageTabAdapter @Inject constructor() :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            ITEM_VIEW_TYPE_ITEM -> ItemViewHolder(
+            ViewType.ITEM.ordinal -> ItemViewHolder(
                 ItemMessageBinding.inflate(
                     inflater,
                     parent,
                     false
                 )
             )
-            ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder(
+            ViewType.HEADER.ordinal -> HeaderViewHolder(
                 ItemMessageChipsBinding.inflate(
                     inflater,
                     parent,
@@ -74,7 +76,7 @@ class MessageTabAdapter @Inject constructor() :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ItemViewHolder -> {
-                val item = (items[position] as DataItem.MessageItem).message
+                val item = (items[position] as MessageTabDataItem.MessageItem).message
 
                 with(holder.binding) {
                     val style = if (item.unread) Typeface.BOLD else Typeface.NORMAL
@@ -125,8 +127,8 @@ class MessageTabAdapter @Inject constructor() :
         RecyclerView.ViewHolder(binding.root)
 
     private class MessageTabDiffUtil(
-        private val old: List<DataItem>,
-        private val new: List<DataItem>
+        private val old: List<MessageTabDataItem>,
+        private val new: List<MessageTabDataItem>
     ) :
         DiffUtil.Callback() {
         override fun getOldListSize(): Int = old.size
@@ -141,16 +143,4 @@ class MessageTabAdapter @Inject constructor() :
             return old[oldItemPosition] == new[newItemPosition]
         }
     }
-}
-
-sealed class DataItem {
-    data class MessageItem(val message: Message) : DataItem() {
-        override val id = message.id
-    }
-
-    object Header : DataItem() {
-        override val id = Long.MIN_VALUE
-    }
-
-    abstract val id: Long
 }

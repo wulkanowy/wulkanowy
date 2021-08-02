@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.CompoundButton
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,7 +73,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
     override fun initView() {
         with(tabAdapter) {
             onItemClickListener = presenter::onMessageItemSelected
-            onHeaderClickListener = presenter::onChipChecked
+            onHeaderClickListener = ::onChipChecked
             onChangesDetectedListener = ::resetListPosition
         }
 
@@ -112,7 +113,9 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
     override fun updateData(data: List<Message>, hide: Boolean) {
         if (hide) onlyUnread = null
-        tabAdapter.setDataItems(data, onlyUnread, onlyWithAttachments)
+        val newItems =
+            listOf(MessageTabDataItem.Header) + data.map { MessageTabDataItem.MessageItem(it) }
+        tabAdapter.setDataItems(newItems, onlyUnread, onlyWithAttachments)
     }
 
     override fun showProgress(show: Boolean) {
@@ -157,10 +160,21 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
     fun onParentLoadData(
         forceRefresh: Boolean,
-        _onlyUnread: Boolean? = onlyUnread,
-        _onlyWithAttachments: Boolean = onlyWithAttachments
+        onlyUnread: Boolean? = this.onlyUnread,
+        onlyWithAttachments: Boolean = this.onlyWithAttachments
     ) {
-        presenter.onParentViewLoadData(forceRefresh, _onlyUnread, _onlyWithAttachments)
+        presenter.onParentViewLoadData(forceRefresh, onlyUnread, onlyWithAttachments)
+    }
+
+    fun onChipChecked(chip: CompoundButton, isChecked: Boolean) {
+        when (chip.id) {
+            R.id.chip_unread -> {
+                presenter.onUnreadFilterSelected(isChecked)
+            }
+            R.id.chip_attachments -> {
+                presenter.onAttachmentsFilterSelected(isChecked)
+            }
+        }
     }
 
     fun onParentDeleteMessage() {
