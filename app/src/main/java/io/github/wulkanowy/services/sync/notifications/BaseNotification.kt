@@ -7,12 +7,14 @@ import androidx.annotation.PluralsRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.MultipleNotifications
 import io.github.wulkanowy.data.pojos.Notification
 import io.github.wulkanowy.data.pojos.OneNotification
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getCompatBitmap
 import io.github.wulkanowy.utils.getCompatColor
+import io.github.wulkanowy.utils.nickOrName
 import kotlin.random.Random
 
 abstract class BaseNotification(
@@ -20,12 +22,13 @@ abstract class BaseNotification(
     private val notificationManager: NotificationManagerCompat,
 ) {
 
-    protected fun sendNotification(notification: Notification) = when (notification) {
-        is OneNotification -> sendOneNotification(notification)
-        is MultipleNotifications -> sendMultipleNotifications(notification)
-    }
+    protected fun sendNotification(notification: Notification, student: Student? = null) =
+        when (notification) {
+            is OneNotification -> sendOneNotification(notification, student)
+            is MultipleNotifications -> sendMultipleNotifications(notification, student)
+        }
 
-    private fun sendOneNotification(notification: OneNotification) {
+    private fun sendOneNotification(notification: OneNotification, student: Student?) {
         notificationManager.notify(
             Random.nextInt(Int.MAX_VALUE),
             getNotificationBuilder(notification).apply {
@@ -35,19 +38,27 @@ abstract class BaseNotification(
                 )
                 setContentTitle(context.getString(notification.titleStringRes))
                 setContentText(content)
-                setStyle(NotificationCompat.BigTextStyle().bigText(content))
+                setStyle(
+                    NotificationCompat.BigTextStyle()
+                        .setSummaryText(student?.nickOrName)
+                        .bigText(content)
+                )
             }.build()
         )
     }
 
-    private fun sendMultipleNotifications(notification: MultipleNotifications) {
+    private fun sendMultipleNotifications(notification: MultipleNotifications, student: Student?) {
         notification.lines.forEach { item ->
             notificationManager.notify(
                 Random.nextInt(Int.MAX_VALUE),
                 getNotificationBuilder(notification).apply {
                     setContentTitle(getQuantityString(notification.titleStringRes, 1))
                     setContentText(item)
-                    setStyle(NotificationCompat.BigTextStyle().bigText(item))
+                    setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .setSummaryText(student?.nickOrName)
+                            .bigText(item)
+                    )
                     setGroup(notification.group)
                 }.build()
             )
@@ -60,6 +71,7 @@ abstract class BaseNotification(
             getNotificationBuilder(notification).apply {
                 setSmallIcon(notification.icon)
                 setGroup(notification.group)
+                setStyle(NotificationCompat.InboxStyle().setSummaryText(student?.nickOrName))
                 setGroupSummary(true)
             }.build()
         )

@@ -5,6 +5,7 @@ import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Note
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.MultipleNotifications
 import io.github.wulkanowy.sdk.scrapper.notes.NoteCategory
 import io.github.wulkanowy.services.sync.channels.NewNotesChannel
@@ -16,7 +17,7 @@ class NewNoteNotification @Inject constructor(
     notificationManager: NotificationManagerCompat,
 ) : BaseNotification(context, notificationManager) {
 
-    fun notify(items: List<Note>) {
+    fun notify(items: List<Note>, student: Student) {
         val notification = MultipleNotifications(
             channelId = NewNotesChannel.CHANNEL_ID,
             group = NewNotesChannel.GROUP_ID,
@@ -42,6 +43,6 @@ class NewNoteNotification @Inject constructor(
             }
         )
 
-        sendNotification(notification)
+        sendNotification(notification, student)
     }
 }
