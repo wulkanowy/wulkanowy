@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
@@ -32,14 +33,14 @@ class MessageTabAdapter @Inject constructor() :
 
     fun setDataItems(
         data: List<MessageTabDataItem>,
-        _onlyUnread: Boolean?,
-        _onlyWithAttachments: Boolean
+        onlyUnread: Boolean?,
+        onlyWithAttachments: Boolean
     ) {
         if (items.size != data.size) onChangesDetectedListener()
         val diffResult = DiffUtil.calculateDiff(MessageTabDiffUtil(items, data))
         items = data.toMutableList()
-        onlyUnread = _onlyUnread
-        onlyWithAttachments = _onlyWithAttachments
+        this.onlyUnread = onlyUnread
+        this.onlyWithAttachments = onlyWithAttachments
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -110,8 +111,9 @@ class MessageTabAdapter @Inject constructor() :
             }
             is HeaderViewHolder -> {
                 with(holder.binding) {
-                    if (onlyUnread == null) chipUnread.visibility = View.GONE
+                    if (onlyUnread == null) chipUnread.isVisible = false
                     else {
+                        chipUnread.isVisible = true
                         chipUnread.isChecked = onlyUnread!!
                         chipUnread.setOnCheckedChangeListener(onHeaderClickListener)
                     }

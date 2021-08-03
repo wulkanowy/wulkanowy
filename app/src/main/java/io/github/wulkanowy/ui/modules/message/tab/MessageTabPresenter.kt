@@ -200,27 +200,25 @@ class MessageTabPresenter @Inject constructor(
         onlyUnread: Boolean = false,
         onlyWithAttachments: Boolean = false
     ): List<Message> {
-        return if (query.trim().isEmpty()) {
-            with(messages.sortedByDescending { it.date }) {
-                when {
-                    onlyUnread && onlyWithAttachments -> filter { it.unread == onlyUnread && it.hasAttachments == onlyWithAttachments }
-                    onlyUnread -> filter { it.unread == onlyUnread }
-                    onlyWithAttachments -> filter { it.hasAttachments == onlyWithAttachments }
-                    else -> this
-                }
+        if (query.trim().isEmpty()) {
+            val sortedMessages = messages.sortedByDescending { it.date }
+            return when {
+                onlyUnread && onlyWithAttachments -> sortedMessages.filter { it.unread == onlyUnread && it.hasAttachments == onlyWithAttachments }
+                onlyUnread -> sortedMessages.filter { it.unread == onlyUnread }
+                onlyWithAttachments -> sortedMessages.filter { it.hasAttachments == onlyWithAttachments }
+                else -> sortedMessages
             }
         } else {
-            with(messages
+            val sortedMessages = messages
                 .map { it to calculateMatchRatio(it, query) }
                 .sortedWith(compareBy<Pair<Message, Int>> { -it.second }.thenByDescending { it.first.date })
                 .filter { it.second > 6000 }
-                .map { it.first }) {
-                when {
-                    onlyUnread && onlyWithAttachments -> filter { it.unread == onlyUnread && it.hasAttachments == onlyWithAttachments }
-                    onlyUnread -> filter { it.unread == onlyUnread }
-                    onlyWithAttachments -> filter { it.hasAttachments == onlyWithAttachments }
-                    else -> this
-                }
+                .map { it.first }
+            return when {
+                onlyUnread && onlyWithAttachments -> sortedMessages.filter { it.unread == onlyUnread && it.hasAttachments == onlyWithAttachments }
+                onlyUnread -> sortedMessages.filter { it.unread == onlyUnread }
+                onlyWithAttachments -> sortedMessages.filter { it.hasAttachments == onlyWithAttachments }
+                else -> sortedMessages
             }
         }
     }

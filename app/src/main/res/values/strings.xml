@@ -231,6 +231,8 @@
     <string name="message_not_exists">Message does not exist</string>
     <string name="message_required_recipients">You need to choose at least 1 recipient</string>
     <string name="message_content_min_length">The message content must be at least 3 characters</string>
+    <string name="message_chip_only_unread">Only unread</string>
+    <string name="message_chip_only_with_attachments">Only with attachments</string>
     <plurals name="message_number_item">
         <item quantity="one">%d message</item>
         <item quantity="other">%d messages</item>
@@ -612,6 +614,4 @@
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
-    <string name="message_chip_only_unread">Only unread</string>
-    <string name="message_chip_only_with_attachments">Only with attachments</string>
 </resources>
