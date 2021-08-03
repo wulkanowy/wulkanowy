@@ -544,7 +544,7 @@
         <item quantity="other">%1$d more conferences</item>
     </plurals>
     <string name="dashboard_horizontal_group_error">An error occurred while loading data</string>
-    <string name="dashboard_horizontal_group_no_lukcy_number">None</string>
+    <string name="dashboard_horizontal_group_no_lukcy_number">Žádné</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Zkontrolovat aktualizace</string>
     <string name="dialog_error_check_update_message">Před hlášením chyby zkontrolujte, zda je k dispozici aktualizace s opravou chyb</string>
