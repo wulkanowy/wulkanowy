@@ -15,7 +15,7 @@ interface MessageTabView : BaseView {
 
     fun resetListPosition()
 
-    fun updateData(data: List<Message>, hide: Boolean)
+    fun updateData(data: List<MessageTabDataItem>, hide: Boolean)
 
     fun showProgress(show: Boolean)
 

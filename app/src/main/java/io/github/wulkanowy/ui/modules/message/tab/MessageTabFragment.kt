@@ -111,11 +111,9 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         })
     }
 
-    override fun updateData(data: List<Message>, hide: Boolean) {
+    override fun updateData(data: List<MessageTabDataItem>, hide: Boolean) {
         if (hide) onlyUnread = null
-        val newItems =
-            listOf(MessageTabDataItem.Header) + data.map { MessageTabDataItem.MessageItem(it) }
-        tabAdapter.setDataItems(newItems, onlyUnread, onlyWithAttachments)
+        tabAdapter.setDataItems(data, onlyUnread, onlyWithAttachments)
     }
 
     override fun showProgress(show: Boolean) {
@@ -166,7 +164,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         presenter.onParentViewLoadData(forceRefresh, onlyUnread, onlyWithAttachments)
     }
 
-    fun onChipChecked(chip: CompoundButton, isChecked: Boolean) {
+    private fun onChipChecked(chip: CompoundButton, isChecked: Boolean) {
         when (chip.id) {
             R.id.chip_unread -> {
                 presenter.onUnreadFilterSelected(isChecked)

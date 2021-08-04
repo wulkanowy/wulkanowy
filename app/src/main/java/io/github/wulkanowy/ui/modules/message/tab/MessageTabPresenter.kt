@@ -122,12 +122,16 @@ class MessageTabPresenter @Inject constructor(
                             showProgress(false)
                             showContent(true)
                             messages = it.data
+                            val filteredData = getFilteredData(
+                                lastSearchQuery,
+                                onlyUnread,
+                                onlyWithAttachments
+                            )
+                            val newItems = listOf(MessageTabDataItem.Header) + filteredData.map {
+                                MessageTabDataItem.MessageItem(it)
+                            }
                             updateData(
-                                getFilteredData(
-                                    lastSearchQuery,
-                                    onlyUnread,
-                                    onlyWithAttachments
-                                ),
+                                newItems,
                                 folder.id == MessageFolder.SENT.id
                             )
                             notifyParentDataLoaded()
@@ -228,7 +232,9 @@ class MessageTabPresenter @Inject constructor(
             showEmpty(data.isEmpty())
             showContent(true)
             showErrorView(false)
-            updateData(data, folder.id == MessageFolder.SENT.id)
+            val newItems =
+                listOf(MessageTabDataItem.Header) + data.map { MessageTabDataItem.MessageItem(it) }
+            updateData(newItems, folder.id == MessageFolder.SENT.id)
         }
     }
 
