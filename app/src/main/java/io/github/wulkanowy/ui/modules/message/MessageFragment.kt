@@ -45,13 +45,11 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
     override fun initView() {
         with(pagerAdapter) {
             containerId = binding.messageViewPager.id
-            addFragmentsWithTitle(
-                mapOf(
-                    MessageTabFragment.newInstance(RECEIVED) to getString(R.string.message_inbox),
-                    MessageTabFragment.newInstance(SENT) to getString(R.string.message_sent),
-                    MessageTabFragment.newInstance(TRASHED) to getString(R.string.message_trash)
-                )
-            )
+            addFragmentsWithTitle(mapOf(
+                MessageTabFragment.newInstance(RECEIVED) to getString(R.string.message_inbox),
+                MessageTabFragment.newInstance(SENT) to getString(R.string.message_sent),
+                MessageTabFragment.newInstance(TRASHED) to getString(R.string.message_trash)
+            ))
         }
 
         with(binding.messageViewPager) {
@@ -88,9 +86,7 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
     }
 
     override fun notifyChildLoadData(index: Int, forceRefresh: Boolean) {
-        (pagerAdapter.getFragmentInstance(index) as? MessageTabFragment)?.onParentLoadData(
-            forceRefresh
-        )
+        (pagerAdapter.getFragmentInstance(index) as? MessageTabFragment)?.onParentLoadData(forceRefresh)
     }
 
     override fun openSendMessage() {

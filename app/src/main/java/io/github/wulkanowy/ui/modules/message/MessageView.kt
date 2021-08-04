@@ -12,10 +12,7 @@ interface MessageView : BaseView {
 
     fun showProgress(show: Boolean)
 
-    fun notifyChildLoadData(
-        index: Int,
-        forceRefresh: Boolean
-    )
+    fun notifyChildLoadData(index: Int, forceRefresh: Boolean)
 
     fun notifyChildMessageDeleted(tabId: Int)
 
