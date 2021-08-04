@@ -228,6 +228,8 @@
     <string name="message_not_exists">Zpráva neexistuje</string>
     <string name="message_required_recipients">Musíte vybrat alespoň 1 příjemce</string>
     <string name="message_content_min_length">Obsah zprávy musí mít alespoň 3 znaky</string>
+    <string name="message_chip_only_unread">Only unread</string>
+    <string name="message_chip_only_with_attachments">Only with attachments</string>
     <plurals name="message_number_item">
         <item quantity="one">%d zpráva</item>
         <item quantity="few">%d zprávy</item>
