@@ -166,12 +166,8 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
     private fun onChipChecked(chip: CompoundButton, isChecked: Boolean) {
         when (chip.id) {
-            R.id.chip_unread -> {
-                presenter.onUnreadFilterSelected(isChecked)
-            }
-            R.id.chip_attachments -> {
-                presenter.onAttachmentsFilterSelected(isChecked)
-            }
+            R.id.chip_unread -> presenter.onUnreadFilterSelected(isChecked)
+            R.id.chip_attachments -> presenter.onAttachmentsFilterSelected(isChecked)
         }
     }
 

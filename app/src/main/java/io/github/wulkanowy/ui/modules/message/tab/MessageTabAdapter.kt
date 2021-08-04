@@ -57,18 +57,10 @@ class MessageTabAdapter @Inject constructor() :
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             ViewType.ITEM.ordinal -> ItemViewHolder(
-                ItemMessageBinding.inflate(
-                    inflater,
-                    parent,
-                    false
-                )
+                ItemMessageBinding.inflate(inflater, parent, false)
             )
             ViewType.HEADER.ordinal -> HeaderViewHolder(
-                ItemMessageChipsBinding.inflate(
-                    inflater,
-                    parent,
-                    false
-                )
+                ItemMessageChipsBinding.inflate(inflater, parent, false)
             )
             else -> throw IllegalStateException()
         }
@@ -101,10 +93,7 @@ class MessageTabAdapter @Inject constructor() :
 
                     root.setOnClickListener {
                         holder.bindingAdapterPosition.let {
-                            if (it != NO_POSITION) onItemClickListener(
-                                item,
-                                it
-                            )
+                            if (it != NO_POSITION) onItemClickListener(item, it)
                         }
                     }
                 }
