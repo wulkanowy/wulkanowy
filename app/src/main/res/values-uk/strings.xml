@@ -228,6 +228,8 @@
     <string name="message_not_exists">Такого повідомлення не існує</string>
     <string name="message_required_recipients">Необхідно обрати принаймні 1 адресата</string>
     <string name="message_content_min_length">Зміст повідомлення мусить складатися принаймні з 3 знаків</string>
+    <string name="message_chip_only_unread">Only unread</string>
+    <string name="message_chip_only_with_attachments">Only with attachments</string>
     <plurals name="message_number_item">
         <item quantity="one">%d повідомлення</item>
         <item quantity="few">%d повідомлення</item>
