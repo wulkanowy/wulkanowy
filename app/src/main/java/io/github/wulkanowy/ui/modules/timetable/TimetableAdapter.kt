@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
@@ -25,7 +26,8 @@ import java.util.Timer
 import javax.inject.Inject
 import kotlin.concurrent.timer
 
-class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class TimetableAdapter @Inject constructor() :
+    ListAdapter<Timetable, RecyclerView.ViewHolder>(TimetableAdapterDiffCallback()) {
 
     private enum class ViewType(val id: Int) {
         ITEM_NORMAL(1),
@@ -35,9 +37,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
     var items = mutableListOf<Timetable>()
 
     fun setDataItems(data: List<Timetable>) {
-        val diffResult = DiffUtil.calculateDiff(TimetableTabDiffUtil(items, data))
         items = data.toMutableList()
-        diffResult.dispatchUpdatesTo(this)
     }
 
     var onClickListener: (Timetable) -> Unit = {}
@@ -305,21 +305,14 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
     private class SmallItemViewHolder(val binding: ItemTimetableSmallBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    private class TimetableTabDiffUtil(
-        private val old: List<Timetable>,
-        private val new: List<Timetable>
-    ) :
-        DiffUtil.Callback() {
-        override fun getOldListSize(): Int = old.size
 
-        override fun getNewListSize(): Int = new.size
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return old[oldItemPosition].id == new[newItemPosition].id
-        }
+    class TimetableAdapterDiffCallback : DiffUtil.ItemCallback<Timetable>() {
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return old[oldItemPosition] == new[newItemPosition]
-        }
+        override fun areItemsTheSame(oldItem: Timetable, newItem: Timetable) =
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: Timetable, newItem: Timetable) =
+            oldItem == newItem
     }
 }
