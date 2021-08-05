@@ -185,12 +185,14 @@ class MessageTabPresenter @Inject constructor(
                 .debounce(250)
                 .map { query ->
                     lastSearchQuery = query
-                    view?.run {getFilteredData(query, onlyUnread == true, onlyWithAttachments)}
+                    val isOnlyUnread = view?.onlyUnread == true
+                    val isOnlyWithAttachments = view?.onlyWithAttachments == true
+                    getFilteredData(query, isOnlyUnread, isOnlyWithAttachments)
                 }
                 .catch { Timber.e(it) }
                 .collect {
-                    Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${it?.size}")
-                    updateData(it ?: emptyList())
+                    Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${it.size}")
+                    updateData(it)
                     view?.resetListPosition()
                 }
         }
