@@ -149,10 +149,20 @@ class AttendancePresenter @Inject constructor(
     fun onExcuseDialogSubmit(reason: String) {
         view?.finishActionMode()
         val useExcuseAbsence = view?.useExcuseFunction == true
-        if (!useExcuseAbsence) {
+        if (!useExcuseAbsence/*TODO wykrzyknik*/) {
             excuseAbsence(if (reason != "") reason else null, attendanceToExcuseList.toList())
         } else {
-            view?.startSendMessageIntent(reason)
+            var attendanceText = "\n"
+            attendanceToExcuseList.forEach { attendance ->
+                attendanceText += "${attendance.date.toFormattedString()} lekcja ${attendance.number}\n"
+            }
+            val reasonFullText = "Dzień dobry,\n" +
+                "Proszę o usprawiedliwienie mojego dziecka w dniu:" +
+                attendanceText +
+                (if (reason.isNotEmpty()) "z powodu " else "") + "$reason.\n" +
+                "\n" +
+                "Pozdrawiam\n"
+            view?.startSendMessageIntent(reasonFullText)
         }
     }
 

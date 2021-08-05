@@ -53,7 +53,7 @@ class SendMessagePresenter @Inject constructor(
             }
             reason?.let {
                 setSubject("Usprawiedliwenie")
-                setContent("Dzień dobry, proszę o usprawiedliwienie z powodu $it")
+                setContent(it)
             }
             message?.let {
                 setSubject(when (reply) {
