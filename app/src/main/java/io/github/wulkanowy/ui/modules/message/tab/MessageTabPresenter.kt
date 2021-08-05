@@ -185,12 +185,12 @@ class MessageTabPresenter @Inject constructor(
                 .debounce(250)
                 .map { query ->
                     lastSearchQuery = query
-                    getFilteredData(query)
+                    view?.run {getFilteredData(query, onlyUnread == true, onlyWithAttachments)}
                 }
                 .catch { Timber.e(it) }
                 .collect {
-                    Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${it.size}")
-                    updateData(it)
+                    Timber.d("Applying filter. Full list: ${messages.size}, filtered: ${it?.size}")
+                    updateData(it ?: emptyList())
                     view?.resetListPosition()
                 }
         }
