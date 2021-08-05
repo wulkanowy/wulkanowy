@@ -32,12 +32,9 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         ITEM_SMALL(2)
     }
 
-    var onChangesDetectedListener = {}
-
     var items = mutableListOf<Timetable>()
 
     fun setDataItems(data: List<Timetable>) {
-        if (items.size != data.size) onChangesDetectedListener()
         val diffResult = DiffUtil.calculateDiff(TimetableTabDiffUtil(items, data))
         items = data.toMutableList()
         diffResult.dispatchUpdatesTo(this)
