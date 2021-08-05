@@ -7,6 +7,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
@@ -31,11 +32,16 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         ITEM_SMALL(2)
     }
 
+    var onChangesDetectedListener = {}
+
     var items = mutableListOf<Timetable>()
-        set(value) {
-            field = value
-            resetTimers()
-        }
+
+    fun setDataItems(data: List<Timetable>) {
+        if (items.size != data.size) onChangesDetectedListener()
+        val diffResult = DiffUtil.calculateDiff(TimetableTabDiffUtil(items, data))
+        items = data.toMutableList()
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     var onClickListener: (Timetable) -> Unit = {}
 
@@ -301,4 +307,22 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
     private class SmallItemViewHolder(val binding: ItemTimetableSmallBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    private class TimetableTabDiffUtil(
+        private val old: List<Timetable>,
+        private val new: List<Timetable>
+    ) :
+        DiffUtil.Callback() {
+        override fun getOldListSize(): Int = old.size
+
+        override fun getNewListSize(): Int = new.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return old[oldItemPosition].id == new[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return old[oldItemPosition] == new[newItemPosition]
+        }
+    }
 }

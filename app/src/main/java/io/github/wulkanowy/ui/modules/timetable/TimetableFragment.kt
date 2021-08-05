@@ -110,18 +110,16 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         showTimetableTimers: Boolean
     ) {
         with(timetableAdapter) {
-            items = data.toMutableList()
+            setDataItems(data.toMutableList())
             showTimers = showTimetableTimers
             showWholeClassPlan = showWholeClassPlanType
             showGroupsInPlan = showGroupsInPlanType
-            notifyDataSetChanged()
         }
     }
 
     override fun clearData() {
         with(timetableAdapter) {
-            items = mutableListOf()
-            notifyDataSetChanged()
+            setDataItems(mutableListOf())
         }
     }
 
