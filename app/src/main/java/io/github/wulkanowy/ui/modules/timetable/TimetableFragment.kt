@@ -49,7 +49,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
 
     override val titleStringId get() = R.string.timetable_title
 
-    override val isViewEmpty get() = timetableAdapter.items.isEmpty()
+    override val isViewEmpty get() = timetableAdapter.itemCount > 0
 
     override val currentStackSize get() = (activity as? MainActivity)?.currentStackSize
 
@@ -110,7 +110,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         showTimetableTimers: Boolean
     ) {
         with(timetableAdapter) {
-            setDataItems(data.toMutableList())
+            submitList(data.toMutableList())
             showTimers = showTimetableTimers
             showWholeClassPlan = showWholeClassPlanType
             showGroupsInPlan = showGroupsInPlanType
@@ -118,9 +118,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
     }
 
     override fun clearData() {
-        with(timetableAdapter) {
-            setDataItems(mutableListOf())
-        }
+        timetableAdapter.submitList(mutableListOf())
     }
 
     override fun updateNavigationDay(date: String) {

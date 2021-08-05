@@ -34,12 +34,6 @@ class TimetableAdapter @Inject constructor() :
         ITEM_SMALL(2)
     }
 
-    var items = mutableListOf<Timetable>()
-
-    fun setDataItems(data: List<Timetable>) {
-        items = data.toMutableList()
-    }
-
     var onClickListener: (Timetable) -> Unit = {}
 
     var showWholeClassPlan: String = "no"
@@ -58,10 +52,8 @@ class TimetableAdapter @Inject constructor() :
         }
     }
 
-    override fun getItemCount() = items.size
-
     override fun getItemViewType(position: Int) = when {
-        !items[position].isStudentPlan && showWholeClassPlan == "small" -> ViewType.ITEM_SMALL.id
+        !getItem(position).isStudentPlan && showWholeClassPlan == "small" -> ViewType.ITEM_SMALL.id
         else -> ViewType.ITEM_NORMAL.id
     }
 
@@ -76,7 +68,7 @@ class TimetableAdapter @Inject constructor() :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val lesson = items[position]
+        val lesson = getItem(position)
 
         when (holder) {
             is ItemViewHolder -> bindNormalView(holder.binding, lesson, position)
@@ -131,7 +123,7 @@ class TimetableAdapter @Inject constructor() :
     }
 
     private fun getPreviousLesson(position: Int): LocalDateTime? {
-        return items.filter { it.isStudentPlan }.getOrNull(position - 1 - items.filterIndexed { i, item -> i < position && !item.isStudentPlan }.size)?.let {
+        return currentList.filter { it.isStudentPlan }.getOrNull(position - 1 - currentList.filterIndexed { i, item -> i < position && !item.isStudentPlan }.size)?.let {
             if (!it.canceled && it.isStudentPlan) it.end
             else null
         }
