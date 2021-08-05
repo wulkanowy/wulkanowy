@@ -24,6 +24,7 @@ import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.modules.message.send.SendMessageActivity
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.SchoolDaysValidator
 import io.github.wulkanowy.utils.dpToPx
@@ -59,6 +60,8 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
     override val titleStringId get() = R.string.attendance_title
 
     override val isViewEmpty get() = attendanceAdapter.items.isEmpty()
+
+    override var useExcuseFunction: Boolean = false
 
     override val currentStackSize get() = (activity as? MainActivity)?.currentStackSize
 
@@ -263,6 +266,10 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
 
     override fun startActionMode() {
         actionMode = (activity as MainActivity?)?.startSupportActionMode(actionModeCallback)
+    }
+
+    override fun startSendMessageIntent(reason: String) {
+        context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, reason)) }
     }
 
     override fun showExcuseCheckboxes(show: Boolean) {

@@ -148,7 +148,12 @@ class AttendancePresenter @Inject constructor(
 
     fun onExcuseDialogSubmit(reason: String) {
         view?.finishActionMode()
-        excuseAbsence(if (reason != "") reason else null, attendanceToExcuseList.toList())
+        val useExcuseAbsence = view?.useExcuseFunction == true
+        if (!useExcuseAbsence) {
+            excuseAbsence(if (reason != "") reason else null, attendanceToExcuseList.toList())
+        } else {
+            view?.startSendMessageIntent(reason)
+        }
     }
 
     fun onPrepareActionMode(): Boolean {
@@ -232,7 +237,8 @@ class AttendancePresenter @Inject constructor(
                         showEmpty(filteredAttendance.isEmpty())
                         showErrorView(false)
                         showContent(filteredAttendance.isNotEmpty())
-                        showExcuseButton(filteredAttendance.any { item -> item.excusable })
+                        showExcuseButton(true)
+                        useExcuseFunction = filteredAttendance.any { item -> item.excusable }
                     }
                     analytics.logEvent(
                         "load_data",
