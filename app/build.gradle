@@ -158,7 +158,7 @@ ext {
     work_manager = "2.5.0"
     android_hilt = "1.0.0"
     room = "2.3.0"
-    chucker = "3.5.1"
+    chucker = "3.5.2"
     mockk = "1.12.0"
     moshi = "1.12.0"
 }
@@ -172,7 +172,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
 
     implementation "androidx.core:core-ktx:1.6.0"
-    implementation "androidx.activity:activity-ktx:1.2.4"
+    implementation "androidx.activity:activity-ktx:1.3.0"
     implementation "androidx.appcompat:appcompat:1.3.1"
     implementation "androidx.appcompat:appcompat-resources:1.3.1"
     implementation "androidx.fragment:fragment-ktx:1.3.6"
@@ -182,7 +182,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "androidx.viewpager:viewpager:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation "androidx.constraintlayout:constraintlayout:2.1.0-beta02"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.0"
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
     implementation "com.google.android.material:material:1.4.0"
     implementation "com.github.wulkanowy:material-chips-input:2.2.0"
@@ -214,7 +214,7 @@ dependencies {
     implementation "at.favre.lib:slf4j-timber:1.0.1"
     implementation 'com.github.bastienpaulfr:Treessence:1.0.4'
     implementation "com.mikepenz:aboutlibraries-core:$about_libraries"
-    implementation "io.coil-kt:coil:1.3.0"
+    implementation "io.coil-kt:coil:1.3.1"
     implementation "io.github.wulkanowy:AppKillerManager:3.0.0"
     implementation 'me.xdrop:fuzzywuzzy:1.3.1'
     implementation 'com.fredporciuncula:flow-preferences:1.5.0'
@@ -226,7 +226,7 @@ dependencies {
     playImplementation 'com.google.android.play:core-ktx:1.8.1'
 
     hmsImplementation 'com.huawei.hms:hianalytics:6.1.0.300'
-    hmsImplementation 'com.huawei.agconnect:agconnect-crash:1.5.3.200'
+    hmsImplementation 'com.huawei.agconnect:agconnect-crash:1.6.0.300'
 
     releaseImplementation "com.github.ChuckerTeam.Chucker:library-no-op:$chucker"
 
