@@ -506,7 +506,7 @@
     <string name="dashboard_timetable_no_lessons">Brak nadchodzących lekcji</string>
     <string name="dashboard_timetable_error">Wystąpił błąd podczas ładowania lekcji</string>
     <string name="dashboard_homework_title">Zadania domowe</string>
-    <string name="dashboard_homework_no_homework">Brak pracy domowej do wykonania</string>
+    <string name="dashboard_homework_no_homework">Brak prac domowych do wykonania</string>
     <string name="dashboard_homework_error">Wystąpił błąd podczas ładowania zadań domowych</string>
     <plurals name="dashboard_homework_more">
         <item quantity="one">Jeszcze %1$d dodatkowe zadanie domowe</item>
