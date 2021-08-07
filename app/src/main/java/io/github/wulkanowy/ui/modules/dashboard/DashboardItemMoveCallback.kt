@@ -4,8 +4,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Collections
 
-class DashboardItemMoveCallback(private val dashboardAdapter: DashboardAdapter) :
-    ItemTouchHelper.Callback() {
+class DashboardItemMoveCallback(
+    private val dashboardAdapter: DashboardAdapter,
+    private var onUserInteractionEndListener: (List<DashboardItem>) -> Unit = {}
+) : ItemTouchHelper.Callback() {
 
     override fun isLongPressDragEnabled() = true
 
@@ -31,5 +33,11 @@ class DashboardItemMoveCallback(private val dashboardAdapter: DashboardAdapter) 
 
         dashboardAdapter.submitList(list)
         return true
+    }
+
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        super.clearView(recyclerView, viewHolder)
+
+        onUserInteractionEndListener(dashboardAdapter.items.toList())
     }
 }
