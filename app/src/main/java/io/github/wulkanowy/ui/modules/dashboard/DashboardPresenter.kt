@@ -648,11 +648,10 @@ class DashboardPresenter @Inject constructor(
         }
 
         dashboardItemLoadedList.sortBy { tile ->
-            if (dashboardItemsPosition == null) {
-                dashboardItemsToLoad.single { it == tile.type }.ordinal
-            } else {
-                dashboardItemsPosition[tile.type]
-            }
+            dashboardItemsPosition?.getOrDefault(
+                tile.type,
+                tile.type.ordinal + 100
+            ) ?: tile.type.ordinal
         }
 
         val isItemsLoaded =
