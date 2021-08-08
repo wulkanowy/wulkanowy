@@ -429,7 +429,7 @@
     <string name="about_discord_summary">Připojte se ke komunitě Wulkanového</string>
     <string name="about_facebook">Facebooková fanpage</string>
     <string name="about_twitter">Twitter stránka</string>
-    <string name="about_twitter_summary">Sleduj nás na twitteru</string>
+    <string name="about_twitter_summary">Sledujte nás na Twitteru</string>
     <string name="about_facebook_summary">Stejně jako naše facebooková fanpage</string>
     <string name="about_privacy">Zásady ochrany osobních údajů</string>
     <string name="about_privacy_summary">Pravidla pro shromažďování osobních údajů</string>
@@ -504,7 +504,7 @@
     </plurals>
     <string name="dashboard_timetable_third_time">do %1$s</string>
     <string name="dashboard_timetable_no_lessons">Žádné nadcházející lekce</string>
-    <string name="dashboard_timetable_error">An error occurred while loading the lesson</string>
+    <string name="dashboard_timetable_error">Při načítání lekcí došlo k chybě</string>
     <string name="dashboard_homework_title">Domácí úkoly</string>
     <string name="dashboard_homework_no_homework">Žádné domácí úkoly</string>
     <string name="dashboard_homework_error">Při načítání domácích úkolů došlo k chybě</string>
@@ -540,10 +540,10 @@
     <string name="dashboard_conferences_no_conferences">Žádná nadcházející setkání</string>
     <string name="dashboard_conferences_error">Při načítání setkání došlo k chybě</string>
     <plurals name="dashboard_conference_more">
-        <item quantity="one">%1$d more conference</item>
-        <item quantity="few">%1$d more conferences</item>
-        <item quantity="many">%1$d more conferences</item>
-        <item quantity="other">%1$d more conferences</item>
+        <item quantity="one">Ještě %1$d další setkání</item>
+        <item quantity="few">Ještě %1$d další setkání</item>
+        <item quantity="many">Ještě %1$d dalších setkání</item>
+        <item quantity="other">Ještě %1$d dalších setkání</item>
     </plurals>
     <string name="dashboard_horizontal_group_error">Při načítání dat došlo k chybě</string>
     <string name="dashboard_horizontal_group_no_lukcy_number">Žádné</string>
