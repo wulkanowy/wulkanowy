@@ -255,7 +255,10 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
             .create()
             .apply {
                 setButton(BUTTON_POSITIVE, getString(R.string.attendance_excuse_dialog_submit)) { _, _ ->
-                    presenter.onExcuseDialogSubmit(dialogBinding.excuseReason.text?.toString().orEmpty())
+                    presenter.onExcuseDialogSubmit(
+                        dialogBinding.excuseReason.text?.toString().orEmpty(),
+                        context
+                    )
                 }
             }.show()
     }

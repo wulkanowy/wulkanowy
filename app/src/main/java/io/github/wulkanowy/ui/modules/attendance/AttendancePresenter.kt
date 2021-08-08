@@ -1,6 +1,8 @@
 package io.github.wulkanowy.ui.modules.attendance
 
 import android.annotation.SuppressLint
+import android.content.Context
+import io.github.wulkanowy.R
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.repositories.AttendanceRepository
@@ -146,22 +148,23 @@ class AttendancePresenter @Inject constructor(
         return false
     }
 
-    fun onExcuseDialogSubmit(reason: String) {
+    fun onExcuseDialogSubmit(reason: String, context: Context) {
         view?.finishActionMode()
         val useExcuseAbsence = view?.useExcuseFunction == true
         if (!useExcuseAbsence/*TODO wykrzyknik*/) {
             excuseAbsence(if (reason != "") reason else null, attendanceToExcuseList.toList())
         } else {
-            var attendanceText = "\n"
+            val attendanceToExcuseNumbers = mutableListOf<Int>()
             attendanceToExcuseList.forEach { attendance ->
-                attendanceText += "${attendance.date.toFormattedString()} lekcja ${attendance.number}\n"
+                attendanceToExcuseNumbers.add(attendance.number)
             }
-            val reasonFullText = "Dzień dobry,\n" +
-                "Proszę o usprawiedliwienie mojego dziecka w dniu:" +
-                attendanceText +
-                (if (reason.isNotEmpty()) "z powodu " else "") + "$reason.\n" +
-                "\n" +
-                "Pozdrawiam\n"
+            val reasonFullText = context.getString(
+                R.string.attendance_excuse_formula,
+                attendanceToExcuseList[0].date,
+                attendanceToExcuseNumbers.joinToString(", "),
+                if (reason.isNotBlank()) " ${context.getString(R.string.attendance_excuse_reason)} " else "",
+                reason.ifBlank { "" }
+            )
             view?.startSendMessageIntent(reasonFullText)
         }
     }
@@ -247,7 +250,7 @@ class AttendancePresenter @Inject constructor(
                         showEmpty(filteredAttendance.isEmpty())
                         showErrorView(false)
                         showContent(filteredAttendance.isNotEmpty())
-                        showExcuseButton(filteredAttendance.any { item -> item.excusable && ((item.absence || item.lateness) && !item.excused)})
+                        showExcuseButton(filteredAttendance.any { item -> item.excusable && ((item.absence || item.lateness) && !item.excused) })
                         useExcuseFunction = filteredAttendance.any { item -> item.excusable }
                     }
                     analytics.logEvent(
