@@ -228,8 +228,8 @@
     <string name="message_not_exists">Správa neexistuje</string>
     <string name="message_required_recipients">Musíte vybrať aspoň 1 príjemca</string>
     <string name="message_content_min_length">Obsah správy musí mať aspoň 3 znaky</string>
-    <string name="message_chip_only_unread">Only unread</string>
-    <string name="message_chip_only_with_attachments">Only with attachments</string>
+    <string name="message_chip_only_unread">Iba neprečítané</string>
+    <string name="message_chip_only_with_attachments">Iba s prílohami</string>
     <plurals name="message_number_item">
         <item quantity="one">%d správa</item>
         <item quantity="few">%d správy</item>
@@ -242,7 +242,7 @@
         <item quantity="many">Nové správy</item>
         <item quantity="other">Nové správy</item>
     </plurals>
-    <string name="message_restore_dialog">Do you want to restore draft message?</string>
+    <string name="message_restore_dialog">Chcete obnoviť koncept správy?</string>
     <string name="message_restore_dialog_with_recipients">Do you want to restore draft message with recipients: %s?</string>
     <plurals name="message_notify_new_items">
         <item quantity="one">Máte %1$d novú správu</item>
@@ -428,8 +428,8 @@
     <string name="about_discord">Server Discord</string>
     <string name="about_discord_summary">Pripojte sa ku komunite Wulkanového</string>
     <string name="about_facebook">Facebooková fanpage</string>
-    <string name="about_twitter">Twitter page</string>
-    <string name="about_twitter_summary">Follow us on twitter</string>
+    <string name="about_twitter">Twitter stránka</string>
+    <string name="about_twitter_summary">Sledujte nás na Twitteri</string>
     <string name="about_facebook_summary">Rovnako ako naše facebooková fanpage</string>
     <string name="about_privacy">Zásady ochrany osobných údajov</string>
     <string name="about_privacy_summary">Pravidlá pre zhromažďovanie osobných údajov</string>
@@ -479,7 +479,7 @@
     <string name="dashboard_timetable_lesson_value">%1$s (%2$s)</string>
     <string name="dashboard_timetable_first_lesson_title_moment">Za chvíľu:</string>
     <string name="dashboard_timetable_first_lesson_title_soon">Čoskoro:</string>
-    <string name="dashboard_timetable_first_lesson_title_first">First:</string>
+    <string name="dashboard_timetable_first_lesson_title_first">Prvá:</string>
     <string name="dashboard_timetable_first_lesson_title_now">Teraz:</string>
     <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
         <item quantity="one">in %1$d minute</item>
@@ -518,7 +518,7 @@
     <string name="dashboard_grade_title">Last grades</string>
     <string name="dashboard_grade_no_grade">Žiadne nové známky</string>
     <string name="dashboard_grade_error">An error occurred while loading the grades</string>
-    <string name="dashboard_announcements_title">School announcements</string>
+    <string name="dashboard_announcements_title">Školské oznámenia</string>
     <string name="dashboard_announcements_no_announcements">No current announcements</string>
     <string name="dashboard_announcements_error">An error occurred while loading the announcements</string>
     <plurals name="dashboard_announcements_more">
