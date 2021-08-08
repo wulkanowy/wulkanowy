@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetable
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -103,6 +104,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun updateData(
         data: List<Timetable>,
         showWholeClassPlanType: String,
@@ -110,15 +112,20 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         showTimetableTimers: Boolean
     ) {
         with(timetableAdapter) {
-            submitList(data.toMutableList())
             showTimers = showTimetableTimers
             showWholeClassPlan = showWholeClassPlanType
             showGroupsInPlan = showGroupsInPlanType
+            resetTimers()
+            submitList(data.toMutableList())
+            notifyDataSetChanged()
         }
     }
 
     override fun clearData() {
-        timetableAdapter.submitList(mutableListOf())
+        with(timetableAdapter) {
+            submitList(mutableListOf())
+            resetTimers()
+        }
     }
 
     override fun updateNavigationDay(date: String) {
