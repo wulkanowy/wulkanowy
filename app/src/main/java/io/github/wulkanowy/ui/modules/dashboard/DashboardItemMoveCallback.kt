@@ -20,7 +20,19 @@ class DashboardItemMoveCallback(
     override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
-    ) = makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0)
+    ): Int {
+        val dragFlags = if (viewHolder.bindingAdapterPosition != 0) {
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN
+        } else 0
+
+        return makeMovementFlags(dragFlags, 0)
+    }
+
+    override fun canDropOver(
+        recyclerView: RecyclerView,
+        current: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ) = target.bindingAdapterPosition != 0
 
     override fun onMove(
         recyclerView: RecyclerView,
