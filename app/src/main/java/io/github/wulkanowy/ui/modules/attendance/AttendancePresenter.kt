@@ -151,7 +151,7 @@ class AttendancePresenter @Inject constructor(
     fun onExcuseDialogSubmit(reason: String, context: Context) {
         view?.finishActionMode()
         val useExcuseAbsence = view?.useExcuseFunction == true
-        if (!useExcuseAbsence/*TODO wykrzyknik*/) {
+        if (useExcuseAbsence) {
             excuseAbsence(if (reason != "") reason else null, attendanceToExcuseList.toList())
         } else {
             val attendanceToExcuseNumbers = mutableListOf<Int>()
