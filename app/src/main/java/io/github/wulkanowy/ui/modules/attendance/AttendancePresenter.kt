@@ -247,7 +247,7 @@ class AttendancePresenter @Inject constructor(
                         showEmpty(filteredAttendance.isEmpty())
                         showErrorView(false)
                         showContent(filteredAttendance.isNotEmpty())
-                        showExcuseButton(true)
+                        showExcuseButton(filteredAttendance.any { item -> item.excusable && ((item.absence || item.lateness) && !item.excused)})
                         useExcuseFunction = filteredAttendance.any { item -> item.excusable }
                     }
                     analytics.logEvent(
