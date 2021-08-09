@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.elevation.ElevationOverlayProvider
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
 import dagger.hilt.android.AndroidEntryPoint
@@ -357,6 +358,24 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         accountMenu?.run {
             icon = createNameInitialsDrawable(student.nickOrName, student.avatarColor, 0.44f)
             title = getString(R.string.main_account_picker)
+        }
+    }
+
+    override fun showInAppReview() {
+        val manager = ReviewManagerFactory.create(applicationContext)
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val reviewInfo = task.result
+                val flow = manager.launchReviewFlow(this, reviewInfo)
+                flow.addOnCompleteListener { _ ->
+                    // The flow has finished. The API does not indicate whether the user
+                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+                    // matter the result, we continue our app flow.
+                }
+            } else {
+                Timber.e(task.exception)
+            }
         }
     }
 

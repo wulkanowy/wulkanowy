@@ -2,7 +2,6 @@ package io.github.wulkanowy.data.repositories
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.squareup.moshi.Moshi
 import com.fredporciuncula.flow.preferences.FlowSharedPreferences
 import com.fredporciuncula.flow.preferences.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -189,6 +188,20 @@ class PreferencesRepository @Inject constructor(
 
             return flowSharedPref.getStringSet(prefKey, defaultSet)
         }
+
+    var inAppReviewCount: Int
+        get() = getString(
+            R.string.pref_key_in_app_review,
+            R.string.pref_default_in_app_review
+        ).toInt()
+        set(value) = sharedPref.edit().putString("in_app_review", value.toString()).apply()
+
+    var isAppReviewDone: Boolean
+        get() = getBoolean(
+            R.string.pref_key_in_app_review_done,
+            R.bool.pref_default_in_app_review_done
+        )
+        set(value) = sharedPref.edit().putBoolean("in_app_review_done", value).apply()
 
     private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
 

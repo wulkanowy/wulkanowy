@@ -106,6 +106,11 @@ class MainPresenter @Inject constructor(
             } else {
                 notifyMenuViewChanged()
                 switchMenuView(index)
+                prefRepository.inAppReviewCount++
+                if (!prefRepository.isAppReviewDone && prefRepository.inAppReviewCount >= 30) {
+                    showInAppReview()
+                    prefRepository.isAppReviewDone = true
+                }
                 true
             }
         } == true
