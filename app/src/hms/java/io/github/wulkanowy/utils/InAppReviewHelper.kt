@@ -2,8 +2,9 @@ package io.github.wulkanowy.utils
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Singleton
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class InAppReviewHelper @Inject constructor(
