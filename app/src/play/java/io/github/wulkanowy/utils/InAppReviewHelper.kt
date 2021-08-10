@@ -19,12 +19,7 @@ class InAppReviewHelper @Inject constructor(
         request.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val reviewInfo = task.result
-                val flow = manager.launchReviewFlow(activity, reviewInfo)
-                flow.addOnCompleteListener { _ ->
-                    // The flow has finished. The API does not indicate whether the user
-                    // reviewed or not, or even whether the review dialog was shown. Thus, no
-                    // matter the result, we continue our app flow.
-                }
+                manager.launchReviewFlow(activity, reviewInfo)
             } else {
                 Timber.e(task.exception)
             }
