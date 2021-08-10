@@ -22,7 +22,6 @@ import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.elevation.ElevationOverlayProvider
-import com.google.android.play.core.review.ReviewManagerFactory
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +44,7 @@ import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragm
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.AppInfo
+import io.github.wulkanowy.utils.InAppReviewHelper
 import io.github.wulkanowy.utils.UpdateHelper
 import io.github.wulkanowy.utils.createNameInitialsDrawable
 import io.github.wulkanowy.utils.dpToPx
@@ -67,6 +67,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     @Inject
     lateinit var updateHelper: UpdateHelper
+
+    @Inject
+    lateinit var inAppReviewHelper: InAppReviewHelper
 
     @Inject
     lateinit var appInfo: AppInfo
@@ -362,21 +365,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     }
 
     override fun showInAppReview() {
-        val manager = ReviewManagerFactory.create(applicationContext)
-        val request = manager.requestReviewFlow()
-        request.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val reviewInfo = task.result
-                val flow = manager.launchReviewFlow(this, reviewInfo)
-                flow.addOnCompleteListener { _ ->
-                    // The flow has finished. The API does not indicate whether the user
-                    // reviewed or not, or even whether the review dialog was shown. Thus, no
-                    // matter the result, we continue our app flow.
-                }
-            } else {
-                Timber.e(task.exception)
-            }
-        }
+        inAppReviewHelper.showInAppReview(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

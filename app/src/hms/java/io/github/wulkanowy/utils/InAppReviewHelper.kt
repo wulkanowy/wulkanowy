@@ -1,0 +1,16 @@
+package io.github.wulkanowy.utils
+
+import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Singleton
+import javax.inject.Inject
+
+@Singleton
+class InAppReviewHelper @Inject constructor(
+    @ApplicationContext private val context: Context
+)  {
+
+    fun showInAppReview(activity: MainActivity) {
+        // do nothing
+    }
+}
