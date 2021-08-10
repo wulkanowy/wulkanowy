@@ -32,5 +32,6 @@
     <string name="pref_key_message_send_is_draft">message_send_is_draft</string>
     <string name="pref_key_message_send_draft">message_send_recipients</string>
     <string name="pref_key_in_app_review">in_app_review</string>
+    <string name="pref_key_in_app_review_date">in_app_review_date</string>
     <string name="pref_key_in_app_review_done">in_app_review_done</string>
 </resources>

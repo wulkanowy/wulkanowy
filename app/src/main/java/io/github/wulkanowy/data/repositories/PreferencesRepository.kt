@@ -13,9 +13,12 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
 import io.github.wulkanowy.ui.modules.grade.GradeSortingMode
+import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.toLocalDate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -217,6 +220,13 @@ class PreferencesRepository @Inject constructor(
             R.string.pref_default_in_app_review
         ).toInt()
         set(value) = sharedPref.edit().putString("in_app_review", value.toString()).apply()
+
+    var inAppReviewDate: LocalDate
+        get() = getString(
+            R.string.pref_key_in_app_review_date,
+            R.string.pref_default_in_app_review_date
+        ).toLocalDate()
+        set(value) = sharedPref.edit().putString("in_app_review_date", value.toFormattedString()).apply()
 
     var isAppReviewDone: Boolean
         get() = getBoolean(

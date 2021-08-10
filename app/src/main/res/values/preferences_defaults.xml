@@ -26,6 +26,7 @@
     <bool name="pref_default_subjects_without_grades">false</bool>
     <bool name="pref_default_optional_arithmetic_average">false</bool>
     <string name="pref_default_in_app_review">0</string>
+    <string name="pref_default_in_app_review_date">01.01.1970</string>
     <bool name="pref_default_in_app_review_done">false</bool>
     <string-array name="pref_default_dashboard_tiles">
         <item>LUCKY_NUMBER</item>

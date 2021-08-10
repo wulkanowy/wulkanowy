@@ -14,6 +14,7 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.time.LocalDate
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
@@ -107,7 +108,12 @@ class MainPresenter @Inject constructor(
                 notifyMenuViewChanged()
                 switchMenuView(index)
                 prefRepository.inAppReviewCount++
-                if (!prefRepository.isAppReviewDone && prefRepository.inAppReviewCount >= 30) {
+                if (prefRepository.inAppReviewDate.year == 1970) prefRepository.inAppReviewDate =
+                    LocalDate.now()
+                if (!prefRepository.isAppReviewDone &&
+                    prefRepository.inAppReviewCount >= 50 &&
+                    LocalDate.now().minusDays(14).isAfter(prefRepository.inAppReviewDate)
+                ) {
                     showInAppReview()
                     prefRepository.isAppReviewDone = true
                 }
