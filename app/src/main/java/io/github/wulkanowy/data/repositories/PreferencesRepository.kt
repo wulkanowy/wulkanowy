@@ -13,9 +13,12 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
 import io.github.wulkanowy.ui.modules.grade.GradeSortingMode
+import io.github.wulkanowy.utils.toLocalDateTime
+import io.github.wulkanowy.utils.toTimestamp
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -167,6 +170,13 @@ class PreferencesRepository @Inject constructor(
             R.string.pref_key_optional_arithmetic_average,
             R.bool.pref_default_optional_arithmetic_average
         )
+
+    var lasSyncDate: LocalDateTime
+        get() = getString(
+            R.string.pref_key_last_sync_date,
+            R.string.pref_default_last_sync_date
+        ).toLong().toLocalDateTime()
+        set(value) = sharedPref.edit().putString("last_sync_date", value.toTimestamp().toString()).apply()
 
     var dashboardItemsPosition: Map<DashboardItem.Type, Int>?
         get() {
