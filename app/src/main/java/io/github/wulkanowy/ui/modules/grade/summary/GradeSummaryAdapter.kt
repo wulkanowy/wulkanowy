@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.ItemGradeSummaryBinding
@@ -59,6 +60,10 @@ class GradeSummaryAdapter @Inject constructor(
                 .reversed() // fix average precision
                 .average()
             )
+            val finalItemsCount = items.filter { it.finalGrade.matches("[0-6][+-]?".toRegex()) }.size
+            val calculatedItemsCount = items.filter { value -> value.average != 0.0 }.size
+            gradeSummaryScrollableHeaderFinalSubjectCount.text = binding.root.context.getString(R.string.grade_summary_from_subjects, finalItemsCount)
+            gradeSummaryScrollableHeaderCalculatedSubjectCount.text = binding.root.context.getString(R.string.grade_summary_from_subjects, calculatedItemsCount)
         }
     }
 
