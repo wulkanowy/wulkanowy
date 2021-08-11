@@ -172,11 +172,11 @@ class PreferencesRepository @Inject constructor(
         )
 
     var lasSyncDate: LocalDateTime
-        get() = getString(
+        get() = getLong(
             R.string.pref_key_last_sync_date,
             R.string.pref_default_last_sync_date
-        ).toLong().toLocalDateTime()
-        set(value) = sharedPref.edit().putString("last_sync_date", value.toTimestamp().toString()).apply()
+        ).toLocalDateTime()
+        set(value) = sharedPref.edit().putLong("last_sync_date", value.toTimestamp()).apply()
 
     var dashboardItemsPosition: Map<DashboardItem.Type, Int>?
         get() {
@@ -220,6 +220,11 @@ class PreferencesRepository @Inject constructor(
 
             return flowSharedPref.getStringSet(prefKey, defaultSet)
         }
+
+    private fun getLong(id: Int, default: Int) = getLong(context.getString(id), default)
+
+    private fun getLong(id: String, default: Int) =
+        sharedPref.getLong(id, context.resources.getString(default).toLong())
 
     private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
 

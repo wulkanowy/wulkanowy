@@ -25,8 +25,6 @@ import io.github.wulkanowy.utils.isHolidays
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import java.time.LocalDate.now
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,7 +57,6 @@ class SyncManager @Inject constructor(
 
     fun startPeriodicSyncWorker(restart: Boolean = false) {
         if (preferencesRepository.isServiceEnabled && !now().isHolidays) {
-            preferencesRepository.lasSyncDate = LocalDateTime.now(ZoneId.systemDefault())
             workManager.enqueueUniquePeriodicWork(SyncWorker::class.java.simpleName, if (restart) REPLACE else KEEP,
                 PeriodicWorkRequestBuilder<SyncWorker>(preferencesRepository.servicesInterval, MINUTES)
                     .setInitialDelay(10, MINUTES)
@@ -72,7 +69,6 @@ class SyncManager @Inject constructor(
     }
 
     fun startOneTimeSyncWorker(): Flow<WorkInfo> {
-        preferencesRepository.lasSyncDate = LocalDateTime.now(ZoneId.systemDefault())
         val work = OneTimeWorkRequestBuilder<SyncWorker>()
             .setInputData(
                 Data.Builder()
