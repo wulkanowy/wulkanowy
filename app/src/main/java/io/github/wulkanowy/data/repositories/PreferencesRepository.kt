@@ -215,11 +215,11 @@ class PreferencesRepository @Inject constructor(
         }
 
     var inAppReviewCount: Int
-        get() = getString(
+        get() = getInt(
             R.string.pref_key_in_app_review,
             R.string.pref_default_in_app_review
-        ).toInt()
-        set(value) = sharedPref.edit().putString("in_app_review", value.toString()).apply()
+        )
+        set(value) = sharedPref.edit().putInt("in_app_review", value).apply()
 
     var inAppReviewDate: LocalDate
         get() = getString(
@@ -234,6 +234,11 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_in_app_review_done
         )
         set(value) = sharedPref.edit().putBoolean("in_app_review_done", value).apply()
+
+    private fun getInt(id: Int, default: Int) = getInt(context.getString(id), default)
+
+    private fun getInt(id: String, default: Int) =
+        sharedPref.getInt(id, context.getString(default).toInt())
 
     private fun getString(id: Int, default: Int) = getString(context.getString(id), default)
 
