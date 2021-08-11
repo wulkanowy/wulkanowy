@@ -74,4 +74,8 @@ class HomeworkRepository @Inject constructor(
         homeworkDb.loadAll(semester.semesterId, semester.studentId, start.monday, end.sunday)
 
     suspend fun updateHomework(homework: List<Homework>) = homeworkDb.updateAll(homework)
+
+    suspend fun insertHomework(homework: List<Homework>) = homeworkDb.insertAll(homework)
+
+    suspend fun deleteHomework(homework: List<Homework>) = homeworkDb.deleteAll(homework)
 }
