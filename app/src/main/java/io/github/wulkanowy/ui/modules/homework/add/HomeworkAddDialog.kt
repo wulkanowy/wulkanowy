@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.databinding.DialogHomeworkBinding
 import io.github.wulkanowy.ui.base.BaseDialogFragment
-import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,7 +56,7 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkBinding>(), HomeworkA
         with(binding.homeworkDialogRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = addAdapter.apply {
-                onAttachmentClickListener = { context.openInternetBrowser(it, ::showMessage) }
+                //onAttachmentClickListener = { context.openInternetBrowser(it, ::showMessage) }
                 onFullScreenClickListener = {
                     dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
                     presenter.isHomeworkFullscreen = true
