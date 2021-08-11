@@ -301,6 +301,7 @@
     <string name="homework_no_items">No info about homework</string>
     <string name="homework_mark_as_done">Mark as done</string>
     <string name="homework_mark_as_undone">Mark as undone</string>
+    <string name="homework_add">Add homework</string>
     <string name="homework_attachments">Attachments</string>
     <plurals name="homework_notify_new_item_title">
         <item quantity="one">New homework</item>
