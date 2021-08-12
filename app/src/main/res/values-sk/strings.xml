@@ -503,7 +503,7 @@
         <item quantity="other">%1$d more lessons</item>
     </plurals>
     <string name="dashboard_timetable_third_time">do %1$s</string>
-    <string name="dashboard_timetable_no_lessons">No upcoming lessons</string>
+    <string name="dashboard_timetable_no_lessons">Žiadne nadchádzajúce lekcie</string>
     <string name="dashboard_timetable_error">An error occurred while loading the lessons</string>
     <string name="dashboard_homework_title">Domáce úlohy</string>
     <string name="dashboard_homework_no_homework">No homework to do</string>
@@ -528,7 +528,7 @@
         <item quantity="other">%1$d more announcements</item>
     </plurals>
     <string name="dashboard_exams_title">Skúšky</string>
-    <string name="dashboard_exams_no_exams">No upcoming exams</string>
+    <string name="dashboard_exams_no_exams">Žiadne nadchádzajúce skúšky</string>
     <string name="dashboard_exams_error">An error occurred while loading the exams</string>
     <plurals name="dashboard_exams_more">
         <item quantity="one">%1$d more exam</item>
