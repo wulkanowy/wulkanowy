@@ -108,10 +108,9 @@ class MainPresenter @Inject constructor(
                 notifyMenuViewChanged()
                 switchMenuView(index)
                 prefRepository.inAppReviewCount++
-                if (prefRepository.inAppReviewDate.year == 1970) prefRepository.inAppReviewDate =
+                if (prefRepository.inAppReviewDate == null) prefRepository.inAppReviewDate =
                     LocalDate.now()
-                if (!prefRepository.isAppReviewDone &&
-                    prefRepository.inAppReviewCount >= 50 &&
+                if (!prefRepository.isAppReviewDone && prefRepository.inAppReviewCount >= 50 &&
                     LocalDate.now().minusDays(14).isAfter(prefRepository.inAppReviewDate)
                 ) {
                     showInAppReview()
