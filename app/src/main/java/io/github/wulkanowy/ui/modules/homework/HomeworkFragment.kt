@@ -10,7 +10,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.databinding.FragmentHomeworkBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.homework.details.HomeworkDetailsDialog
+import io.github.wulkanowy.ui.modules.homework.add.HomeworkAddDialog
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
@@ -123,7 +123,8 @@ class HomeworkFragment : BaseFragment<FragmentHomeworkBinding>(R.layout.fragment
     }
 
     override fun showTimetableDialog(homework: Homework) {
-        (activity as? MainActivity)?.showDialogFragment(HomeworkDetailsDialog.newInstance(homework))
+        //(activity as? MainActivity)?.showDialogFragment(HomeworkDetailsDialog.newInstance(homework))
+        (activity as? MainActivity)?.showDialogFragment(HomeworkAddDialog())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

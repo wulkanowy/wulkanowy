@@ -7,20 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.wulkanowy.databinding.DialogHomeworkBinding
+import io.github.wulkanowy.databinding.DialogHomeworkAddBinding
 import io.github.wulkanowy.ui.base.BaseDialogFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkBinding>(), HomeworkAddView {
+class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), HomeworkAddView {
 
     @Inject
     lateinit var presenter: HomeworkAddPresenter
-
-    @Inject
-    lateinit var addAdapter: HomeworkAddAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +27,7 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkBinding>(), HomeworkA
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = DialogHomeworkBinding.inflate(inflater).apply { binding = this }.root
+    ) = DialogHomeworkAddBinding.inflate(inflater).apply { binding = this }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,21 +49,46 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkBinding>(), HomeworkA
             dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
         }
 
-        with(binding.homeworkDialogRecycler) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = addAdapter.apply {
-                //onAttachmentClickListener = { context.openInternetBrowser(it, ::showMessage) }
-                onFullScreenClickListener = {
-                    dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
-                    presenter.isHomeworkFullscreen = true
-                }
-                onFullScreenExitClickListener = {
-                    dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
-                    presenter.isHomeworkFullscreen = false
-                }
-                isHomeworkFullscreen = presenter.isHomeworkFullscreen
+        with(binding) {
+//            homeworkDialogDate.text = homework?.date?.toFormattedString()
+//            homeworkDialogSubject.text = homework?.subject
+//            homeworkDialogTeacher.text = homework?.teacher
+//            homeworkDialogContent.text = homework?.content
+            homeworkDialogFullScreen.visibility =
+                if (presenter.isHomeworkFullscreen) android.view.View.GONE else android.view.View.VISIBLE
+            homeworkDialogFullScreenExit.visibility =
+                if (presenter.isHomeworkFullscreen) android.view.View.VISIBLE else android.view.View.GONE
+            homeworkDialogFullScreen.setOnClickListener {
+                homeworkDialogFullScreen.visibility = android.view.View.GONE
+                homeworkDialogFullScreenExit.visibility = android.view.View.VISIBLE
+                dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
+                presenter.isHomeworkFullscreen = true
+
+            }
+            homeworkDialogFullScreenExit.setOnClickListener {
+                homeworkDialogFullScreen.visibility = android.view.View.VISIBLE
+                homeworkDialogFullScreenExit.visibility = android.view.View.GONE
+                dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
+                presenter.isHomeworkFullscreen = false
+
             }
         }
+
+//        with(binding.homeworkDialogRecycler) {
+//            layoutManager = LinearLayoutManager(context)
+//            adapter = addAdapter.apply {
+//                //onAttachmentClickListener = { context.openInternetBrowser(it, ::showMessage) }
+//                onFullScreenClickListener = {
+//                    dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
+//                    presenter.isHomeworkFullscreen = true
+//                }
+//                onFullScreenExitClickListener = {
+//                    dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
+//                    presenter.isHomeworkFullscreen = false
+//                }
+//                isHomeworkFullscreen = presenter.isHomeworkFullscreen
+//            }
+//        }
     }
 
     override fun onDestroyView() {
