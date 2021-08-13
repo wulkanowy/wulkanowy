@@ -25,17 +25,6 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/homework_dialog_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:background="?selectableItemBackgroundBorderless"
-            android:padding="5dp"
-            app:srcCompat="@drawable/ic_menu_message_delete"
-            app:tint="@color/grade_red"
-            tools:ignore="ContentDescription" />
-
-        <ImageButton
             android:id="@+id/homework_dialog_full_screen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,6 +90,8 @@
         app:startIconDrawable="@drawable/ic_main_timetable">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:editable="false"
+            android:focusable="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -113,6 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:hint="@string/all_content">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -129,7 +121,7 @@
         android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/homeworkDialogRead"
+            android:id="@+id/homeworkDialogClose"
             style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
@@ -144,12 +136,12 @@
             android:insetRight="0dp"
             android:insetBottom="0dp"
             android:minWidth="88dp"
-            android:text="@string/homework_mark_as_done"
+            android:text="@string/all_close"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/homeworkDialogClose"
+            android:id="@+id/homeworkDialogAdd"
             style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
@@ -164,7 +156,7 @@
             android:insetRight="0dp"
             android:insetBottom="0dp"
             android:minWidth="88dp"
-            android:text="@string/all_close"
+            android:text="@string/homework_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

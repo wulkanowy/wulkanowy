@@ -11,6 +11,7 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.time.LocalDate
 import javax.inject.Inject
 
 class HomeworkAddPresenter @Inject constructor(
@@ -31,6 +32,14 @@ class HomeworkAddPresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         Timber.i("Homework details view was initialized")
+    }
+
+    fun onAddHomeworkClicked() {
+        view?.checkFields()
+    }
+
+    fun showDatePicker(date: LocalDate?) {
+        view?.showDatePickerDialog(date ?: LocalDate.now())
     }
 
     fun toggleDone(homework: Homework) {
