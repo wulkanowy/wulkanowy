@@ -94,18 +94,10 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
         return when (viewType) {
             ViewType.ITEM_NORMAL.ordinal -> ItemViewHolder(
-                ItemTimetableBinding.inflate(
-                    inflater,
-                    parent,
-                    false
-                )
+                ItemTimetableBinding.inflate(inflater, parent, false)
             )
             ViewType.ITEM_SMALL.ordinal -> SmallItemViewHolder(
-                ItemTimetableSmallBinding.inflate(
-                    inflater,
-                    parent,
-                    false
-                )
+                ItemTimetableSmallBinding.inflate(inflater, parent, false)
             )
             else -> throw IllegalStateException()
         }
