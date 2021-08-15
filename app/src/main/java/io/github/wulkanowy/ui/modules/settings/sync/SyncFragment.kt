@@ -7,7 +7,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.sdk.toLocalDateTime
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.ErrorDialog
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -42,8 +41,7 @@ class SyncFragment : PreferenceFragmentCompat(),
 
     override fun setLastSyncDate(lastSyncDate: String) {
         findPreference<Preference>(getString(R.string.pref_key_services_force_sync))?.run {
-            if (lastSyncDate.toLocalDateTime("dd.MM.yyyy HH:mm:ss").year != 1970)
-                summary = getString(R.string.pref_services_last_full_sync_date, lastSyncDate)
+            summary = getString(R.string.pref_services_last_full_sync_date, lastSyncDate)
         }
     }
 

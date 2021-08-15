@@ -28,7 +28,7 @@ class SyncPresenter @Inject constructor(
         Timber.i("Settings sync view was initialized")
         view.setServicesSuspended(preferencesRepository.serviceEnableKey, now().isHolidays)
         view.initView()
-        view.setLastSyncDate(preferencesRepository.lasSyncDate.toFormattedString("dd.MM.yyyy HH:mm:ss"))
+        setSyncDateInView()
     }
 
     fun onSharedPreferenceChanged(key: String) {
@@ -67,11 +67,19 @@ class SyncPresenter @Inject constructor(
                 }
                 if (workInfo.state.isFinished) {
                     setSyncInProgress(false)
-                    setLastSyncDate(preferencesRepository.lasSyncDate.toFormattedString("dd.MM.yyyy HH:mm:ss"))
+                    setSyncDateInView()
                 }
             }.catch {
                 Timber.e(it, "Sync now failed")
             }.launch("sync")
         }
+    }
+
+    private fun setSyncDateInView() {
+        val lastSyncDate = preferencesRepository.lasSyncDate
+
+        if (lastSyncDate.year == 1970) return
+
+        view?.setLastSyncDate(lastSyncDate.toFormattedString("dd.MM.yyyy HH:mm:ss"))
     }
 }
