@@ -506,7 +506,7 @@
     <string name="dashboard_timetable_no_lessons">Žádné nadcházející lekce</string>
     <string name="dashboard_timetable_error">Při načítání lekcí došlo k chybě</string>
     <string name="dashboard_homework_title">Domácí úkoly</string>
-    <string name="dashboard_homework_no_homework">Žádné domácí úkoly</string>
+    <string name="dashboard_homework_no_homework">Žádné domácí úkoly do vykonána</string>
     <string name="dashboard_homework_error">Při načítání domácích úkolů došlo k chybě</string>
     <plurals name="dashboard_homework_more">
         <item quantity="one">Ještě %1$d další domácí úkol</item>
