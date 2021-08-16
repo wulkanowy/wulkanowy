@@ -519,7 +519,7 @@
     <string name="dashboard_grade_no_grade">Žiadne nové známky</string>
     <string name="dashboard_grade_error">An error occurred while loading the grades</string>
     <string name="dashboard_announcements_title">Školské oznámenia</string>
-    <string name="dashboard_announcements_no_announcements">No current announcements</string>
+    <string name="dashboard_announcements_no_announcements">Žiadne aktuálne oznámenia</string>
     <string name="dashboard_announcements_error">An error occurred while loading the announcements</string>
     <plurals name="dashboard_announcements_more">
         <item quantity="one">%1$d more announcement</item>
@@ -529,7 +529,7 @@
     </plurals>
     <string name="dashboard_exams_title">Skúšky</string>
     <string name="dashboard_exams_no_exams">Žiadne nadchádzajúce skúšky</string>
-    <string name="dashboard_exams_error">An error occurred while loading the exams</string>
+    <string name="dashboard_exams_error">Pri načítaní skúšok došlo k chybe</string>
     <plurals name="dashboard_exams_more">
         <item quantity="one">%1$d more exam</item>
         <item quantity="few">%1$d more exams</item>
@@ -537,15 +537,15 @@
         <item quantity="other">%1$d more exams</item>
     </plurals>
     <string name="dashboard_conferences_title">Stretnutie</string>
-    <string name="dashboard_conferences_no_conferences">No upcoming conferences</string>
-    <string name="dashboard_conferences_error">An error occurred while loading the conferences</string>
+    <string name="dashboard_conferences_no_conferences">Žiadna nadchádzajúce stretnutie</string>
+    <string name="dashboard_conferences_error">Pri načítaní stretnutí došlo k chybe</string>
     <plurals name="dashboard_conference_more">
         <item quantity="one">%1$d more conference</item>
         <item quantity="few">%1$d more conferences</item>
         <item quantity="many">%1$d more conferences</item>
         <item quantity="other">%1$d more conferences</item>
     </plurals>
-    <string name="dashboard_horizontal_group_error">An error occurred while loading data</string>
+    <string name="dashboard_horizontal_group_error">Pri načítaní dát došlo k chybe</string>
     <string name="dashboard_horizontal_group_no_lukcy_number">Žiadne</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Skontrolovať aktualizácie</string>
@@ -610,7 +610,7 @@
     <string name="pref_services_message_sync_success">Synchronizovano!</string>
     <string name="pref_services_message_sync_failed">Synchronizácia zlyhala</string>
     <string name="pref_services_sync_in_progress">Prebieha synchronizácia</string>
-    <string name="pref_services_last_full_sync_date">Last full sync: %s</string>
+    <string name="pref_services_last_full_sync_date">Posledná úplná synchronizácia: %s</string>
     <string name="pref_other_grade_modifier_plus">Hodnota plusu</string>
     <string name="pref_other_grade_modifier_minus">Hodnota mínusu</string>
     <string name="pref_other_fill_message_content">Odpovedať s históriou správ</string>
