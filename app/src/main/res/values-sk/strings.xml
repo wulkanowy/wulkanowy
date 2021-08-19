@@ -520,7 +520,7 @@
     <string name="dashboard_grade_error">Pri načítaní známok došlo k chybe</string>
     <string name="dashboard_announcements_title">Školské oznámenia</string>
     <string name="dashboard_announcements_no_announcements">Žiadne aktuálne oznámenia</string>
-    <string name="dashboard_announcements_error">An error occurred while loading the announcements</string>
+    <string name="dashboard_announcements_error">Pri načítaní oznámení došlo k chybe</string>
     <plurals name="dashboard_announcements_more">
         <item quantity="one">%1$d more announcement</item>
         <item quantity="few">%1$d more announcements</item>
