@@ -522,10 +522,10 @@
     <string name="dashboard_announcements_no_announcements">Žádná aktuální oznámení</string>
     <string name="dashboard_announcements_error">Při načítání oznámení došlo k chybě</string>
     <plurals name="dashboard_announcements_more">
-        <item quantity="one">Ještě %1$d další školní oznámení</item>
-        <item quantity="few">Ještě %1$d další školní oznámení</item>
-        <item quantity="many">Ještě %1$d dalších školní oznámení</item>
-        <item quantity="other">Ještě %1$d dalších školní oznámení</item>
+        <item quantity="one">Ještě %1$d další oznámení</item>
+        <item quantity="few">Ještě %1$d další oznámení</item>
+        <item quantity="many">Ještě %1$d dalších oznámení</item>
+        <item quantity="other">Ještě %1$d dalších oznámení</item>
     </plurals>
     <string name="dashboard_exams_title">Zkoušky</string>
     <string name="dashboard_exams_no_exams">Žádné nadcházející zkoušky</string>
