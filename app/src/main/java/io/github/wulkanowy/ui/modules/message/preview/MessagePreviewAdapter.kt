@@ -93,8 +93,12 @@ class MessagePreviewAdapter @Inject constructor() :
                 R.string.message_date,
                 message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")
             )
-            val unreadText = root.context.getString(R.string.message_unread_by, message.unreadBy) +
-                "\n${root.context.getString(R.string.message_read_by, message.readBy)}"
+            val unreadText = when {
+                message.unreadBy + message.readBy > 1 -> root.context.getString(R.string.message_unread_by, message.unreadBy) +
+                    "\n${root.context.getString(R.string.message_read_by, message.readBy)}"
+                message.readBy == 1 -> root.context.getString(R.string.message_read, root.context.getString(R.string.all_yes))
+                else -> root.context.getString(R.string.message_read, root.context.getString(R.string.all_no))
+            }
             messagePreviewUnread.text = unreadText
             messagePreviewContent.text = message.content
             messagePreviewFromSender.text = message.sender
