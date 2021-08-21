@@ -60,10 +60,10 @@ class GradeSummaryAdapter @Inject constructor(
                 .reversed() // fix average precision
                 .average()
             )
-            val finalItemsCount = items.filter { it.finalGrade.matches("[0-6][+-]?".toRegex()) }.size
-            val calculatedItemsCount = items.filter { value -> value.average != 0.0 }.size
-            gradeSummaryScrollableHeaderFinalSubjectCount.text = binding.root.context.getString(R.string.grade_summary_from_subjects, finalItemsCount)
-            gradeSummaryScrollableHeaderCalculatedSubjectCount.text = binding.root.context.getString(R.string.grade_summary_from_subjects, calculatedItemsCount)
+            val finalItemsCount = items.count { it.finalGrade.matches("[0-6][+-]?".toRegex()) }
+            val calculatedItemsCount = items.count { value -> value.average != 0.0 }
+            gradeSummaryScrollableHeaderFinalSubjectCount.text = binding.root.context.getString(R.string.grade_summary_from_subjects, finalItemsCount, items.size)
+            gradeSummaryScrollableHeaderCalculatedSubjectCount.text = binding.root.context.getString(R.string.grade_summary_from_subjects, calculatedItemsCount, items.size)
         }
     }
 
