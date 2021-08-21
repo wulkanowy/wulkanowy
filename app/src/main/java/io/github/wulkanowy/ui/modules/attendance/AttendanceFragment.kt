@@ -211,7 +211,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
     }
 
     override fun showNextButton(show: Boolean) {
-        binding. attendanceNextButton.visibility = if (show) VISIBLE else INVISIBLE
+        binding.attendanceNextButton.visibility = if (show) VISIBLE else INVISIBLE
     }
 
     override fun showExcuseButton(show: Boolean) {
@@ -256,8 +256,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
             .apply {
                 setButton(BUTTON_POSITIVE, getString(R.string.attendance_excuse_dialog_submit)) { _, _ ->
                     presenter.onExcuseDialogSubmit(
-                        dialogBinding.excuseReason.text?.toString().orEmpty(),
-                        context
+                        dialogBinding.excuseReason.text?.toString().orEmpty()
                     )
                 }
             }.show()
@@ -271,8 +270,15 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
         actionMode = (activity as MainActivity?)?.startSupportActionMode(actionModeCallback)
     }
 
-    override fun startSendMessageIntent(reason: String) {
-        context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, reason)) }
+    override fun startSendMessageIntent(date: LocalDate, numbers: String, reason: String) {
+        val reasonFullText = getString(
+            R.string.attendance_excuse_formula,
+            date,
+            numbers,
+            if (reason.isNotBlank()) " ${getString(R.string.attendance_excuse_reason)} " else "",
+            reason.ifBlank { "" }
+        )
+        context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, reasonFullText)) }
     }
 
     override fun showExcuseCheckboxes(show: Boolean) {

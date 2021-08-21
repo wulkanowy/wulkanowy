@@ -1,8 +1,6 @@
 package io.github.wulkanowy.ui.modules.attendance
 
 import android.annotation.SuppressLint
-import android.content.Context
-import io.github.wulkanowy.R
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.repositories.AttendanceRepository
@@ -148,7 +146,7 @@ class AttendancePresenter @Inject constructor(
         return false
     }
 
-    fun onExcuseDialogSubmit(reason: String, context: Context) {
+    fun onExcuseDialogSubmit(reason: String) {
         view?.finishActionMode()
         val useExcuseAbsence = view?.useExcuseFunction == true
         if (useExcuseAbsence) {
@@ -158,14 +156,11 @@ class AttendancePresenter @Inject constructor(
             attendanceToExcuseList.forEach { attendance ->
                 attendanceToExcuseNumbers.add(attendance.number)
             }
-            val reasonFullText = context.getString(
-                R.string.attendance_excuse_formula,
+            view?.startSendMessageIntent(
                 attendanceToExcuseList[0].date,
                 attendanceToExcuseNumbers.joinToString(", "),
-                if (reason.isNotBlank()) " ${context.getString(R.string.attendance_excuse_reason)} " else "",
-                reason.ifBlank { "" }
+                reason
             )
-            view?.startSendMessageIntent(reasonFullText)
         }
     }
 
@@ -250,7 +245,7 @@ class AttendancePresenter @Inject constructor(
                         showEmpty(filteredAttendance.isEmpty())
                         showErrorView(false)
                         showContent(filteredAttendance.isNotEmpty())
-                        showExcuseButton(filteredAttendance.any { item -> item.excusable && ((item.absence || item.lateness) && !item.excused) })
+                        showExcuseButton(filteredAttendance.any { item -> item.excusable || ((item.absence || item.lateness) && !item.excused) })
                         useExcuseFunction = filteredAttendance.any { item -> item.excusable }
                     }
                     analytics.logEvent(
