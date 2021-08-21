@@ -107,18 +107,22 @@ class MainPresenter @Inject constructor(
             } else {
                 notifyMenuViewChanged()
                 switchMenuView(index)
-                prefRepository.inAppReviewCount++
-                if (prefRepository.inAppReviewDate == null) prefRepository.inAppReviewDate =
-                    LocalDate.now()
-                if (!prefRepository.isAppReviewDone && prefRepository.inAppReviewCount >= 50 &&
-                    LocalDate.now().minusDays(14).isAfter(prefRepository.inAppReviewDate)
-                ) {
-                    showInAppReview()
-                    prefRepository.isAppReviewDone = true
-                }
+                checkInAppReview()
                 true
             }
         } == true
+    }
+
+    private fun MainView.checkInAppReview() {
+        prefRepository.inAppReviewCount++
+        if (prefRepository.inAppReviewDate == null) prefRepository.inAppReviewDate =
+            LocalDate.now()
+        if (!prefRepository.isAppReviewDone && prefRepository.inAppReviewCount >= 50 &&
+            LocalDate.now().minusDays(14).isAfter(prefRepository.inAppReviewDate)
+        ) {
+            showInAppReview()
+            prefRepository.isAppReviewDone = true
+        }
     }
 
     private fun showCurrentStudentAvatar() {
