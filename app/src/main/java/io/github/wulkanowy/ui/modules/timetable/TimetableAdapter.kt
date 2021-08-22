@@ -46,12 +46,13 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
     fun submitList(
         newTimetable: List<Timetable>,
-        showWholeClassPlan: String = "no",
-        showGroupsInPlan: Boolean = false,
-        showTimers: Boolean = false
+        showWholeClassPlan: String = this.showWholeClassPlan,
+        showGroupsInPlan: Boolean = this.showGroupsInPlan,
+        showTimers: Boolean = this.showTimers
     ) {
         val isFlagsDifferent = this.showWholeClassPlan != showWholeClassPlan
-            || this.showGroupsInPlan != showGroupsInPlan || this.showTimers != showTimers
+            || this.showGroupsInPlan != showGroupsInPlan
+            || this.showTimers != showTimers
 
         val diffResult = DiffUtil.calculateDiff(
             TimetableAdapterDiffCallback(
