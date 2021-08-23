@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
@@ -76,14 +75,15 @@ class MessagePreviewAdapter @Inject constructor() :
     @SuppressLint("SetTextI18n")
     private fun bindMessage(holder: MessageViewHolder, message: Message) {
         val context = holder.binding.root.context
-        val isMoreThanOneRecipient = (message.unreadBy + message.readBy) > 1
+        val recipientCount = message.unreadBy + message.readBy
 
         val readText = when {
-            isMoreThanOneRecipient -> {
+            recipientCount > 1 -> {
                 context.resources.getQuantityString(
                     R.plurals.message_read_by,
                     message.readBy,
-                    message.readBy
+                    message.readBy,
+                    recipientCount
                 )
             }
             message.readBy == 1 -> {
@@ -92,12 +92,6 @@ class MessagePreviewAdapter @Inject constructor() :
             else -> context.getString(R.string.message_read, context.getString(R.string.all_no))
         }
 
-        val unreadText = context.resources.getQuantityString(
-            R.plurals.message_unread_by,
-            message.unreadBy,
-            message.unreadBy
-        )
-
         with(holder.binding) {
             messagePreviewSubject.text =
                 message.subject.ifBlank { root.context.getString(R.string.message_no_subject) }
@@ -105,8 +99,6 @@ class MessagePreviewAdapter @Inject constructor() :
                 R.string.message_date,
                 message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")
             )
-            messagePreviewUnread.text = unreadText
-            messagePreviewUnread.isVisible = isMoreThanOneRecipient
             messagePreviewRead.text = readText
             messagePreviewContent.text = message.content
             messagePreviewFromSender.text = message.sender

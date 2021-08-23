@@ -101,7 +101,7 @@
     <string name="grade_summary_predicted_grade">Predicted grade</string>
     <string name="grade_summary_calculated_average">Calculated average</string>
     <string name="grade_summary_final_average">Final average</string>
-    <string name="grade_summary_from_subjects">From %d of %d subjects</string>
+    <string name="grade_summary_from_subjects">From %1$d of %2$d subjects</string>
     <string name="grade_menu_summary">Summary</string>
     <string name="grade_menu_statistics">Class</string>
     <string name="grade_menu_read">Mark as read</string>
@@ -238,13 +238,9 @@
     <string name="message_chip_only_unread">Only unread</string>
     <string name="message_chip_only_with_attachments">Only with attachments</string>
     <string name="message_read">Read: %s</string>
-    <plurals name="message_unread_by">
-        <item quantity="one">Unread by: %d people</item>
-        <item quantity="other">Unread by: %d people</item>
-    </plurals>
     <plurals name="message_read_by">
-        <item quantity="one">Read by: %d people</item>
-        <item quantity="other">Read by: %d people</item>
+        <item quantity="one">Read by: %1$d of %2$d people</item>
+        <item quantity="other">Read by: %1$d of %2$d people</item>
     </plurals>
     <plurals name="message_number_item">
         <item quantity="one">%d message</item>
