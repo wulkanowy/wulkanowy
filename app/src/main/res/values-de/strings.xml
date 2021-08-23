@@ -91,6 +91,7 @@
     <string name="grade_summary_predicted_grade">Vorhergesagte Note</string>
     <string name="grade_summary_calculated_average">Berechnender Durchschnitt</string>
     <string name="grade_summary_final_average">Finaler Durchschnitt</string>
+    <string name="grade_summary_from_subjects">From %d of %d subjects</string>
     <string name="grade_menu_summary">Zusammenfassung</string>
     <string name="grade_menu_statistics">Klasse</string>
     <string name="grade_menu_read">Als gelesen markieren</string>
