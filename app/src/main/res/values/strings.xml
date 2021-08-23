@@ -236,9 +236,15 @@
     <string name="message_content_min_length">The message content must be at least 3 characters</string>
     <string name="message_chip_only_unread">Only unread</string>
     <string name="message_chip_only_with_attachments">Only with attachments</string>
-    <string name="message_unread_by">Unread by: %d</string>
-    <string name="message_read_by">Read by: %d</string>
     <string name="message_read">Read: %s</string>
+    <plurals name="message_unread_by">
+        <item quantity="one">Unread by: %d people</item>
+        <item quantity="other">Unread by: %d people</item>
+    </plurals>
+    <plurals name="message_read_by">
+        <item quantity="one">Read by: %d people</item>
+        <item quantity="other">Read by: %d people</item>
+    </plurals>
     <plurals name="message_number_item">
         <item quantity="one">%d message</item>
         <item quantity="other">%d messages</item>
