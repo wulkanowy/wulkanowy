@@ -91,7 +91,7 @@
     <string name="grade_summary_predicted_grade">Ожидаемая оценка</string>
     <string name="grade_summary_calculated_average">Рассчитанная средняя оценка</string>
     <string name="grade_summary_final_average">Итоговая средняя оценка</string>
-    <string name="grade_summary_from_subjects">From %d of %d subjects</string>
+    <string name="grade_summary_from_subjects">From %1$d of %2$d subjects</string>
     <string name="grade_menu_summary">Итоги</string>
     <string name="grade_menu_statistics">Класс</string>
     <string name="grade_menu_read">Пометить как \"прочитанное\"</string>
@@ -231,6 +231,13 @@
     <string name="message_content_min_length">Текст сообщения должен содержать как минимум 3 знака</string>
     <string name="message_chip_only_unread">Only unread</string>
     <string name="message_chip_only_with_attachments">Only with attachments</string>
+    <string name="message_read">Read: %s</string>
+    <plurals name="message_read_by">
+        <item quantity="one">Read by: %1$d of %2$d people</item>
+        <item quantity="few">Read by: %1$d of %2$d people</item>
+        <item quantity="many">Read by: %1$d of %2$d people</item>
+        <item quantity="other">Read by: %1$d of %2$d people</item>
+    </plurals>
     <plurals name="message_number_item">
         <item quantity="one">%d сообщение</item>
         <item quantity="few">%d сообщения</item>
