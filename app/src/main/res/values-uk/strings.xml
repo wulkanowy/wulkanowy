@@ -91,7 +91,7 @@
     <string name="grade_summary_predicted_grade">Очікувана оцінка</string>
     <string name="grade_summary_calculated_average">Розрахована середня оцінка</string>
     <string name="grade_summary_final_average">Підсумкова середня оцінка</string>
-    <string name="grade_summary_from_subjects">From %d of %d subjects</string>
+    <string name="grade_summary_from_subjects">From %1$d of %2$d subjects</string>
     <string name="grade_menu_summary">Підсумок</string>
     <string name="grade_menu_statistics">Клас</string>
     <string name="grade_menu_read">Позначити як прочитане</string>
@@ -231,6 +231,13 @@
     <string name="message_content_min_length">Зміст повідомлення мусить складатися принаймні з 3 знаків</string>
     <string name="message_chip_only_unread">Only unread</string>
     <string name="message_chip_only_with_attachments">Only with attachments</string>
+    <string name="message_read">Read: %s</string>
+    <plurals name="message_read_by">
+        <item quantity="one">Read by: %1$d of %2$d people</item>
+        <item quantity="few">Read by: %1$d of %2$d people</item>
+        <item quantity="many">Read by: %1$d of %2$d people</item>
+        <item quantity="other">Read by: %1$d of %2$d people</item>
+    </plurals>
     <plurals name="message_number_item">
         <item quantity="one">%d повідомлення</item>
         <item quantity="few">%d повідомлення</item>
