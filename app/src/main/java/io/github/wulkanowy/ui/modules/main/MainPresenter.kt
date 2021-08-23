@@ -113,14 +113,17 @@ class MainPresenter @Inject constructor(
         } == true
     }
 
-    private fun MainView.checkInAppReview() {
+    private fun checkInAppReview() {
         prefRepository.inAppReviewCount++
-        if (prefRepository.inAppReviewDate == null) prefRepository.inAppReviewDate =
-            LocalDate.now()
+
+        if (prefRepository.inAppReviewDate == null) {
+            prefRepository.inAppReviewDate = LocalDate.now()
+        }
+
         if (!prefRepository.isAppReviewDone && prefRepository.inAppReviewCount >= 50 &&
             LocalDate.now().minusDays(14).isAfter(prefRepository.inAppReviewDate)
         ) {
-            showInAppReview()
+            view?.showInAppReview()
             prefRepository.isAppReviewDone = true
         }
     }
