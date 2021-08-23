@@ -111,5 +111,4 @@
             tools:text="Lekcja odwołana: uczniowie zwolnieni do domu"
             tools:visibility="gone" />
     </RelativeLayout>
-
 </LinearLayout>
