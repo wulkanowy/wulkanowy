@@ -36,8 +36,9 @@
             android:id="@+id/gradeSummaryScrollableHeaderCalculatedSubjectCount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:gravity="center_horizontal"
-            android:textSize="14sp"
+            android:textSize="13sp"
             tools:text="from 8 subjects" />
     </LinearLayout>
 
@@ -67,9 +68,10 @@
         <TextView
             android:id="@+id/gradeSummaryScrollableHeaderFinalSubjectCount"
             android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="14sp"
+            android:textSize="13sp"
             tools:text="from 5 subjects" />
     </LinearLayout>
 </LinearLayout>
