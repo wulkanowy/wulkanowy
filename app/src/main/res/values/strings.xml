@@ -101,6 +101,7 @@
     <string name="grade_summary_predicted_grade">Predicted grade</string>
     <string name="grade_summary_calculated_average">Calculated average</string>
     <string name="grade_summary_final_average">Final average</string>
+    <string name="grade_summary_from_subjects">From %d of %d subjects</string>
     <string name="grade_menu_summary">Summary</string>
     <string name="grade_menu_statistics">Class</string>
     <string name="grade_menu_read">Mark as read</string>
@@ -510,7 +511,7 @@
     </plurals>
     <string name="dashboard_timetable_third_time">until %1$s</string>
     <string name="dashboard_timetable_no_lessons">No upcoming lessons</string>
-    <string name="dashboard_timetable_error">An error occurred while loading the lesson</string>
+    <string name="dashboard_timetable_error">An error occurred while loading the lessons</string>
 
     <string name="dashboard_homework_title">Homework</string>
     <string name="dashboard_homework_no_homework">No homework to do</string>
@@ -624,6 +625,7 @@
     <string name="pref_services_message_sync_success">Synced!</string>
     <string name="pref_services_message_sync_failed">Sync failed</string>
     <string name="pref_services_sync_in_progress">Sync in progress</string>
+    <string name="pref_services_last_full_sync_date">Last full sync: %s</string>
 
     <string name="pref_other_grade_modifier_plus">Value of the plus</string>
     <string name="pref_other_grade_modifier_minus">Value of the minus</string>
