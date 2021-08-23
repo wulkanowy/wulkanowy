@@ -91,7 +91,7 @@
     <string name="grade_summary_predicted_grade">Przewidywana ocena</string>
     <string name="grade_summary_calculated_average">Obliczona średnia</string>
     <string name="grade_summary_final_average">Końcowa średnia</string>
-    <string name="grade_summary_from_subjects">From %d of %d subjects</string>
+    <string name="grade_summary_from_subjects">From %1$d of %2$d subjects</string>
     <string name="grade_menu_summary">Podsumowanie</string>
     <string name="grade_menu_statistics">Klasa</string>
     <string name="grade_menu_read">Oznacz jako przeczytane</string>
@@ -231,6 +231,13 @@
     <string name="message_content_min_length">Treść wiadomości musi zawierać co najmniej 3 znaki</string>
     <string name="message_chip_only_unread">Tylko nieprzeczytane</string>
     <string name="message_chip_only_with_attachments">Tylko z załącznikami</string>
+    <string name="message_read">Read: %s</string>
+    <plurals name="message_read_by">
+        <item quantity="one">Read by: %1$d of %2$d people</item>
+        <item quantity="few">Read by: %1$d of %2$d people</item>
+        <item quantity="many">Read by: %1$d of %2$d people</item>
+        <item quantity="other">Read by: %1$d of %2$d people</item>
+    </plurals>
     <plurals name="message_number_item">
         <item quantity="one">%d wiadomość</item>
         <item quantity="few">%d wiadomości</item>
