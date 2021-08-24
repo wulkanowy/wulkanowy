@@ -91,7 +91,7 @@
     <string name="grade_summary_predicted_grade">Predpokladaná známka</string>
     <string name="grade_summary_calculated_average">Vypočítaný priemer</string>
     <string name="grade_summary_final_average">Konečný priemer</string>
-    <string name="grade_summary_from_subjects">From %1$d of %2$d subjects</string>
+    <string name="grade_summary_from_subjects">from %1$d of %2$d subjects</string>
     <string name="grade_menu_summary">Zhrnutie</string>
     <string name="grade_menu_statistics">Trieda</string>
     <string name="grade_menu_read">Označiť ako prečítané</string>
