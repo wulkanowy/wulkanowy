@@ -91,7 +91,7 @@
     <string name="grade_summary_predicted_grade">Очікувана оцінка</string>
     <string name="grade_summary_calculated_average">Розрахована середня оцінка</string>
     <string name="grade_summary_final_average">Підсумкова середня оцінка</string>
-    <string name="grade_summary_from_subjects">From %1$d of %2$d subjects</string>
+    <string name="grade_summary_from_subjects">from %1$d of %2$d subjects</string>
     <string name="grade_menu_summary">Підсумок</string>
     <string name="grade_menu_statistics">Клас</string>
     <string name="grade_menu_read">Позначити як прочитане</string>
