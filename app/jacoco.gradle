@@ -17,7 +17,7 @@ task jacocoTestReport(type: JacocoReport) {
 
     reports {
         xml.required.set(true)
-        csv.required.set(true)
+        html.required.set(true)
     }
 
     def excludes = ['**/R.class',
