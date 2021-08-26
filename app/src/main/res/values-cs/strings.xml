@@ -91,7 +91,7 @@
     <string name="grade_summary_predicted_grade">Předpokládaná známka</string>
     <string name="grade_summary_calculated_average">Vypočítaný průměr</string>
     <string name="grade_summary_final_average">Konečný průměr</string>
-    <string name="grade_summary_from_subjects">from %1$d of %2$d subjects</string>
+    <string name="grade_summary_from_subjects">z %1$d z %2$d předmětů</string>
     <string name="grade_menu_summary">Shrnutí</string>
     <string name="grade_menu_statistics">Třída</string>
     <string name="grade_menu_read">Označit jako přečtené</string>
@@ -207,7 +207,7 @@
         <item quantity="other">%d zkoušek</item>
     </plurals>
     <!--Message-->
-    <string name="message_inbox">Doručená pošta</string>
+    <string name="message_inbox">Doručené</string>
     <string name="message_sent">Odesláno</string>
     <string name="message_trash">Koš</string>
     <string name="message_no_subject">(žádný předmět)</string>
@@ -233,10 +233,10 @@
     <string name="message_chip_only_with_attachments">Pouze s přílohami</string>
     <string name="message_read">Přečtena: %s</string>
     <plurals name="message_read_by">
-        <item quantity="one">Read by: %1$d of %2$d people</item>
-        <item quantity="few">Read by: %1$d of %2$d people</item>
-        <item quantity="many">Read by: %1$d of %2$d people</item>
-        <item quantity="other">Read by: %1$d of %2$d people</item>
+        <item quantity="one">Přečtena přes: %1$d z %2$d osob</item>
+        <item quantity="few">Přečtena přes: %1$d z %2$d osob</item>
+        <item quantity="many">Přečtena přes: %1$d z %2$d osob</item>
+        <item quantity="other">Přečtena přes: %1$d z %2$d osob</item>
     </plurals>
     <plurals name="message_number_item">
         <item quantity="one">%d zpráva</item>
