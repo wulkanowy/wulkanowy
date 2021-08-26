@@ -591,6 +591,7 @@
     <!--Others-->
     <string name="all_copied">Kopiert</string>
     <string name="all_undo">lösen</string>
+    <string name="all_change">Change</string>
     <!--Update helper-->
     <string name="update_download_started">Download der Updates wurde gestartet…</string>
     <string name="update_download_success">Ein Update wurde gerade heruntergeladen.</string>
