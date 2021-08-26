@@ -231,7 +231,7 @@
     <string name="message_content_min_length">Obsah zprávy musí mít alespoň 3 znaky</string>
     <string name="message_chip_only_unread">Pouze nepřečtené</string>
     <string name="message_chip_only_with_attachments">Pouze s přílohami</string>
-    <string name="message_read">Read: %s</string>
+    <string name="message_read">Přečtena: %s</string>
     <plurals name="message_read_by">
         <item quantity="one">Read by: %1$d of %2$d people</item>
         <item quantity="few">Read by: %1$d of %2$d people</item>
