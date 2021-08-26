@@ -665,6 +665,7 @@
     <!--Others-->
     <string name="all_copied">Скопійовано</string>
     <string name="all_undo">Відмінити</string>
+    <string name="all_change">Change</string>
     <!--Update helper-->
     <string name="update_download_started">Завантаження оновлень розпочато…</string>
     <string name="update_download_success">Щойно завантажено оновлення.</string>
