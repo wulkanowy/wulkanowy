@@ -91,7 +91,7 @@
     <string name="grade_summary_predicted_grade">Predpokladaná známka</string>
     <string name="grade_summary_calculated_average">Vypočítaný priemer</string>
     <string name="grade_summary_final_average">Konečný priemer</string>
-    <string name="grade_summary_from_subjects">from %1$d of %2$d subjects</string>
+    <string name="grade_summary_from_subjects">z %1$d z %2$d predmetov</string>
     <string name="grade_menu_summary">Zhrnutie</string>
     <string name="grade_menu_statistics">Trieda</string>
     <string name="grade_menu_read">Označiť ako prečítané</string>
@@ -207,7 +207,7 @@
         <item quantity="other">%d skúšok</item>
     </plurals>
     <!--Message-->
-    <string name="message_inbox">Doručená pošta</string>
+    <string name="message_inbox">Doručené</string>
     <string name="message_sent">Odoslané</string>
     <string name="message_trash">Kôš</string>
     <string name="message_no_subject">(žiadny predmet)</string>
@@ -233,10 +233,10 @@
     <string name="message_chip_only_with_attachments">Iba s prílohami</string>
     <string name="message_read">Prečítaná: %s</string>
     <plurals name="message_read_by">
-        <item quantity="one">Read by: %1$d of %2$d people</item>
-        <item quantity="few">Read by: %1$d of %2$d people</item>
-        <item quantity="many">Read by: %1$d of %2$d people</item>
-        <item quantity="other">Read by: %1$d of %2$d people</item>
+        <item quantity="one">Prečítaná cez: %1$d z %2$d osôb</item>
+        <item quantity="few">Prečítaná cez: %1$d z %2$d osôb</item>
+        <item quantity="many">Prečítaná cez: %1$d z %2$d osôb</item>
+        <item quantity="other">Prečítaná cez: %1$d z %2$d osôb</item>
     </plurals>
     <plurals name="message_number_item">
         <item quantity="one">%d správa</item>
@@ -665,7 +665,7 @@
     <!--Others-->
     <string name="all_copied">Skopírované</string>
     <string name="all_undo">Vrátiť</string>
-    <string name="all_change">Change</string>
+    <string name="all_change">Zmeniť</string>
     <!--Update helper-->
     <string name="update_download_started">Sťahovanie aktualizácií začalo…</string>
     <string name="update_download_success">Aktualizácia bola stiahnutá.</string>
