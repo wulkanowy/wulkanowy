@@ -233,10 +233,10 @@
     <string name="message_chip_only_with_attachments">Tylko z załącznikami</string>
     <string name="message_read">Przeczytana: %s</string>
     <plurals name="message_read_by">
-        <item quantity="one">Read by: %1$d of %2$d people</item>
-        <item quantity="few">Read by: %1$d of %2$d people</item>
-        <item quantity="many">Read by: %1$d of %2$d people</item>
-        <item quantity="other">Read by: %1$d of %2$d people</item>
+        <item quantity="one">Przeczytana przez: %1$d z %2$d osób</item>
+        <item quantity="few">Przeczytana przez: %1$d z %2$d osób</item>
+        <item quantity="many">Przeczytana przez: %1$d z %2$d osób</item>
+        <item quantity="other">Przeczytana przez: %1$d z %2$d osób</item>
     </plurals>
     <plurals name="message_number_item">
         <item quantity="one">%d wiadomość</item>
