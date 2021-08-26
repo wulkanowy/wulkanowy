@@ -91,7 +91,7 @@
     <string name="grade_summary_predicted_grade">Przewidywana ocena</string>
     <string name="grade_summary_calculated_average">Obliczona średnia</string>
     <string name="grade_summary_final_average">Końcowa średnia</string>
-    <string name="grade_summary_from_subjects">from %1$d of %2$d subjects</string>
+    <string name="grade_summary_from_subjects">z %1$d na %2$d przedmiotów</string>
     <string name="grade_menu_summary">Podsumowanie</string>
     <string name="grade_menu_statistics">Klasa</string>
     <string name="grade_menu_read">Oznacz jako przeczytane</string>
@@ -231,7 +231,7 @@
     <string name="message_content_min_length">Treść wiadomości musi zawierać co najmniej 3 znaki</string>
     <string name="message_chip_only_unread">Tylko nieprzeczytane</string>
     <string name="message_chip_only_with_attachments">Tylko z załącznikami</string>
-    <string name="message_read">Read: %s</string>
+    <string name="message_read">Przeczytana: %s</string>
     <plurals name="message_read_by">
         <item quantity="one">Read by: %1$d of %2$d people</item>
         <item quantity="few">Read by: %1$d of %2$d people</item>
@@ -603,7 +603,7 @@
     <string name="pref_notify_header">Powiadomienia</string>
     <string name="pref_notify_switch">Pokazuj powiadomienia</string>
     <string name="pref_notify_upcoming_lessons_switch">Pokazuj powiadomienia o nadchodzących lekcjach</string>
-    <string name="pref_notify_open_system_settings">Otwórz ustawienia systemowe powiadomień</string>
+    <string name="pref_notify_open_system_settings">Otwórz systemowe ustawienia powiadomień</string>
     <string name="pref_notify_fix_sync_issues">Napraw problemy z synchronizacją i powiadomieniami</string>
     <string name="pref_notify_fix_sync_issues_message">Na twoim urządzeniu mogą występować problemy z synchronizacją danych i powiadomieniami.\n\nBy je naprawić, dodaj Wulkanowego do autostartu i wyłącz optymalizację/oszczędzanie baterii w ustawieniach systemowych telefonu.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Przejdź do ustawień</string>
