@@ -665,6 +665,7 @@
     <!--Others-->
     <string name="all_copied">Скопировано</string>
     <string name="all_undo">Отменить</string>
+    <string name="all_change">Change</string>
     <!--Update helper-->
     <string name="update_download_started">Загрузка обновлений началась…</string>
     <string name="update_download_success">Только что было скачано обновление.</string>
