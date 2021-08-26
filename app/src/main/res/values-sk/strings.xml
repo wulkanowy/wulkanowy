@@ -665,6 +665,7 @@
     <!--Others-->
     <string name="all_copied">Skopírované</string>
     <string name="all_undo">Vrátiť</string>
+    <string name="all_change">Change</string>
     <!--Update helper-->
     <string name="update_download_started">Sťahovanie aktualizácií začalo…</string>
     <string name="update_download_success">Aktualizácia bola stiahnutá.</string>
