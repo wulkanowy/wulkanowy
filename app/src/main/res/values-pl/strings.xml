@@ -665,6 +665,7 @@
     <!--Others-->
     <string name="all_copied">Skopiowano</string>
     <string name="all_undo">Cofnij</string>
+    <string name="all_change">Change</string>
     <!--Update helper-->
     <string name="update_download_started">Rozpoczęto pobieranie aktualizacji…</string>
     <string name="update_download_success">Aktualizacja została pobrana.</string>
