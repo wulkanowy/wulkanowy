@@ -46,14 +46,14 @@
         <item>Середнє оцінювання за весь рік</item>
     </string-array>
     <string-array name="dashboard_tile_entries">
-        <item>Lucky number</item>
-        <item>Unread messages</item>
-        <item>Attendance</item>
-        <item>Lessons</item>
-        <item>Grades</item>
-        <item>Homework</item>
-        <item>School announcements</item>
-        <item>Exams</item>
-        <item>Conferences</item>
+        <item>Щасливий номер</item>
+        <item>Непрочитані повідомлення</item>
+        <item>Відвідуваність</item>
+        <item>Уроки</item>
+        <item>Оцінки</item>
+        <item>Домашні завдання</item>
+        <item>Оголошення школи</item>
+        <item>Тести</item>
+        <item>Конференції</item>
     </string-array>
 </resources>
