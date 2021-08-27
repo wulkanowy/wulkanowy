@@ -12,8 +12,10 @@ import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -32,7 +34,8 @@ class ConferenceRepository @Inject constructor(
         student: Student,
         semester: Semester,
         forceRefresh: Boolean,
-        notify: Boolean = false
+        notify: Boolean = false,
+        startDate: LocalDateTime = LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {
@@ -40,15 +43,13 @@ class ConferenceRepository @Inject constructor(
                 || refreshHelper.isShouldBeRefreshed(getRefreshKey(cacheKey, semester))
         },
         query = {
-            conferenceDb.loadAll(
-                semester.diaryId,
-                student.studentId
-            )
+            conferenceDb.loadAll(semester.diaryId, student.studentId, startDate)
         },
         fetch = {
             sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
                 .getConferences()
                 .mapToEntities(semester)
+                .filter { it.date >= startDate }
         },
         saveFetchResult = { old, new ->
             val conferencesToSave = (new uniqueSubtract old).onEach {
@@ -60,14 +61,13 @@ class ConferenceRepository @Inject constructor(
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester))
         }
     )
-    fun getNotNotifiedConference(semester: Semester): Flow<List<Conference>> {
-        return conferenceDb.loadAll(
+
+    fun getConferenceFromDatabase(semester: Semester): Flow<List<Conference>> =
+        conferenceDb.loadAll(
             diaryId = semester.diaryId,
-            studentId = semester.studentId
-        ).map {
-            it.filter { conference -> !conference.isNotified }
-        }
-    }
+            studentId = semester.studentId,
+            startDate = LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)
+        )
 
     suspend fun updateConference(conference: List<Conference>) = conferenceDb.updateAll(conference)
 }

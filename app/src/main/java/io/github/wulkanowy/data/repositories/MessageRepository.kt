@@ -1,5 +1,10 @@
 package io.github.wulkanowy.data.repositories
 
+import android.content.Context
+import com.squareup.moshi.Moshi
+import dagger.hilt.android.qualifiers.ApplicationContext
+import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.entities.Message
@@ -10,6 +15,8 @@ import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.enums.MessageFolder.RECEIVED
 import io.github.wulkanowy.data.mappers.mapFromEntities
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.pojos.MessageDraft
+import io.github.wulkanowy.data.pojos.MessageDraftJsonAdapter
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Folder
 import io.github.wulkanowy.sdk.pojo.SentMessage
@@ -19,7 +26,6 @@ import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.networkBoundResource
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import timber.log.Timber
 import java.time.LocalDateTime.now
@@ -31,7 +37,10 @@ class MessageRepository @Inject constructor(
     private val messagesDb: MessagesDao,
     private val messageAttachmentDao: MessageAttachmentDao,
     private val sdk: Sdk,
+    @ApplicationContext private val context: Context,
     private val refreshHelper: AutoRefreshHelper,
+    private val sharedPrefProvider: SharedPrefProvider,
+    private val moshi: Moshi,
 ) {
 
     private val saveFetchResultMutex = Mutex()
@@ -68,8 +77,9 @@ class MessageRepository @Inject constructor(
         },
         saveFetchResult = { old, (downloadedMessage, attachments) ->
             checkNotNull(old, { "Fetched message no longer exist!" })
-            messagesDb.updateAll(listOf(old.message.copy(unread = !markAsRead).apply {
+            messagesDb.updateAll(listOf(old.message.apply {
                 id = old.message.id
+                unread = !markAsRead
                 content = content.ifBlank { downloadedMessage }
             }))
             messageAttachmentDao.insertAttachments(attachments)
@@ -77,8 +87,8 @@ class MessageRepository @Inject constructor(
         }
     )
 
-    fun getNotNotifiedMessages(student: Student): Flow<List<Message>> {
-        return messagesDb.loadAll(student.id.toInt(), RECEIVED.id).map { it.filter { message -> !message.isNotified && message.unread } }
+    fun getMessagesFromDatabase(student: Student): Flow<List<Message>> {
+        return messagesDb.loadAll(student.id.toInt(), RECEIVED.id)
     }
 
     suspend fun updateMessages(messages: List<Message>) {
@@ -103,4 +113,8 @@ class MessageRepository @Inject constructor(
             }))
         } else messagesDb.deleteAll(listOf(message))
     }
+
+    var draftMessage: MessageDraft?
+        get() = sharedPrefProvider.getString(context.getString(R.string.pref_key_message_send_draft))?.let { MessageDraftJsonAdapter(moshi).fromJson(it) }
+        set(value) = sharedPrefProvider.putString(context.getString(R.string.pref_key_message_send_draft), value?.let { MessageDraftJsonAdapter(moshi).toJson(it) })
 }
