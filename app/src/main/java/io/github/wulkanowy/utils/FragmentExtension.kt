@@ -6,6 +6,7 @@ import io.github.wulkanowy.ui.modules.account.AccountFragment
 import io.github.wulkanowy.ui.modules.account.accountdetails.AccountDetailsFragment
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
+import io.github.wulkanowy.ui.modules.dashboard.DashboardFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
@@ -39,6 +40,7 @@ fun Fragment.toSection(): MainView.Section? {
         is StudentInfoFragment -> MainView.Section.STUDENT_INFO
         is ConferenceFragment -> MainView.Section.CONFERENCE
         is SchoolAnnouncementFragment -> MainView.Section.SCHOOL_ANNOUNCEMENT
+        is DashboardFragment -> MainView.Section.DASHBOARD
         else -> null
     }
 }
