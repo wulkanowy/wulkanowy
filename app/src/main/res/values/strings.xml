@@ -100,8 +100,10 @@
     <string name="grade_summary_final_grade">Final grade</string>
     <string name="grade_summary_predicted_grade">Predicted grade</string>
     <string name="grade_summary_calculated_average">Calculated average</string>
-    <string name="grade_summary_calculated_average_help_dialog_title">How does it work?</string>
-    <string name="grade_summary_calculated_average_help_dialog_message">This value is an arithmetic average of each subject average</string>
+    <string name="grade_summary_calculated_average_help_dialog_title">How does Calculated Average work?</string>
+    <string name="grade_summary_calculated_average_help_dialog_message">The Calculated average is the arithmetic average calculated from the weighted averages for each subject in a given semester. It allows you to know the approximate final average.\n\nThe calculation diagram consists of the following steps:\n1. Calculating the weighted average of each subject where at least one grade is entered\n2. Counting the sum of all averages\n3. Divide by the number of items</string>
+    <string name="grade_summary_final_average_help_dialog_title">How does the Final Average work?</string>
+    <string name="grade_summary_final_average_help_dialog_message">The Final average is the arithmetic average calculated from all currently available final grades. It is calculated in a way selected by the user in the application settings. It is recommended that you choose the appropriate option. This is because the methods of calculating averages in schools differ.\n\nCalculation schemes\n\nAverage of grades only from selected semester:\n1. Calculation of the sum of the final grades given by teachers in the selected semester\n2. Calculation of the arithmetic average of the summed grades\n\nAverage of averages from both semesters:\n1. Calculation of the final averages in semester 1 and 2 with the grades given by teachers \n2. Summing up the final averages for both semesters \n3. Calculation of the arithmetic average of the summed averages\n\nAverage of grades from the whole year\n1. Calculation of the sum of the final grades of subjects issued by teachers in both semesters. The final grade from the 1st semester is omitted\n2. Calculation of the arithmetic averages of the summed grades</string>
     <string name="grade_summary_final_average">Final average</string>
     <string name="grade_summary_from_subjects">from %1$d of %2$d subjects</string>
     <string name="grade_menu_summary">Summary</string>
@@ -240,10 +242,7 @@
     <string name="message_chip_only_unread">Only unread</string>
     <string name="message_chip_only_with_attachments">Only with attachments</string>
     <string name="message_read">Read: %s</string>
-    <plurals name="message_read_by">
-        <item quantity="one">Read by: %1$d of %2$d people</item>
-        <item quantity="other">Read by: %1$d of %2$d people</item>
-    </plurals>
+    <string name="message_read_by">Read by: %1$d of %2$d people</string>
     <plurals name="message_number_item">
         <item quantity="one">%d message</item>
         <item quantity="other">%d messages</item>
@@ -591,7 +590,7 @@
     <!--Preferences-->
     <string name="pref_view_header">App appearance &amp; behavior</string>
     <string name="pref_view_list">Default view</string>
-    <string name="pref_view_grade_average_mode">Calculation of the end-of-year average</string>
+    <string name="pref_view_grade_average_mode">Calculation of the final average</string>
     <string name="pref_view_grade_average_force_calc">Force average calculation by app</string>
     <string name="pref_view_present">Show presence</string>
     <string name="pref_view_app_theme">Theme</string>

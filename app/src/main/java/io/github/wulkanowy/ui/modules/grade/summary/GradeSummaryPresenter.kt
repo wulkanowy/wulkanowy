@@ -139,6 +139,10 @@ class GradeSummaryPresenter @Inject constructor(
         view?.showCalculatedAverageHelpDialog()
     }
 
+    fun onFinalAverageHelpClick() {
+        view?.showFinalAverageHelpDialog()
+    }
+
     private fun createGradeSummaryItems(items: List<GradeSubject>): List<GradeSummary> {
         return items
             .filter { !checkEmpty(it) }

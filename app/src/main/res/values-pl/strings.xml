@@ -87,9 +87,11 @@
     <string name="grade_summary_final_grade">Ocena końcowa</string>
     <string name="grade_summary_predicted_grade">Przewidywana ocena</string>
     <string name="grade_summary_calculated_average">Obliczona średnia</string>
-    <string name="grade_summary_calculated_average_help_dialog_title">Jak działa obliczanie średniej?</string>
-    <string name="grade_summary_calculated_average_help_dialog_message">Obliczona wartość to średnia arytmetyczna średnich ze wszystkich przedmiotów</string>
+    <string name="grade_summary_calculated_average_help_dialog_title">Jak działa Obliczona średnia?</string>
+    <string name="grade_summary_calculated_average_help_dialog_message">Obliczona średnia to średnia arytmetyczna, wyliczona ze średnich ważonych z każdego przedmiotu w danym semestrze. Pozwala ona na poznanie przybliżonej średniej końcowej.\n\nSchemat obliczania składa się z następujących kroków:\n1. Obliczenie średniej ważonej każdego przedmiotu, gdzie wpisana jest przynajmniej jedna ocena\n2. Liczenie sumy wszystkich średnich\n3. Podzielenie przez liczbę przedmiotów</string>
     <string name="grade_summary_final_average">Końcowa średnia</string>
+    <string name="grade_summary_final_average_help_dialog_title">Jak działa Końcowa średnia?</string>
+    <string name="grade_summary_final_average_help_dialog_message">Końcowa średnia to średnia arytmetyczna, wyliczona ze wszystkich aktualnie dostępnych ocen końcowych. Jest obliczana w sposób wybrany przez użytkownika w ustawieniach aplikacji. Zalecane jest, aby wybrać odpowiednią opcję. Wynika to z tego, że sposoby obliczania średnich w szkołach różnią się.\n\nSchematy obliczania\n\nŚrednia ocen z aktualnie wybranego semestru:\n1. Obliczenie sumy ocen końcowych wystawionych przez nauczycieli w wybranym semestrze\n2. Obliczenie średniej arytmetycznej z zsumowanych ocen\n\nŚrednia średnich z obu semestrów:\n1. Obliczenie średnich końcowy w semestrze 1 i 2 z ocen wystawionych przez nauczycieli\n2. Zsumowanie średnich końcowych obu semestrów\n3. Obliczenie średniej arytmetycznej z zsumowanych średnich\n\nŚrednia wszystkich ocen z całego roku\n1. Obliczenie sumy z ocen końcowych przedmiotów wystawionych przez nauczycieli w obu semestrach. Ocena końcowa z 1 semestru jest pomijana\n2. Obliczenie średniej arytmetycznej z zsumowanych ocen</string>
     <string name="grade_menu_summary">Podsumowanie</string>
     <string name="grade_menu_statistics">Klasa</string>
     <string name="grade_menu_read">Oznacz jako przeczytane</string>

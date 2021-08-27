@@ -49,6 +49,11 @@ class GradeSummaryFragment :
     }
 
     override fun initView() {
+        with(gradeSummaryAdapter) {
+            onCalculatedHelpClickListener = presenter::onCalculatedAverageHelpClick
+            onFinalHelpClickListener = presenter::onFinalAverageHelpClick
+        }
+
         with(binding.gradeSummaryRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = gradeSummaryAdapter
@@ -56,11 +61,13 @@ class GradeSummaryFragment :
         with(binding) {
             gradeSummarySwipe.setOnRefreshListener(presenter::onSwipeRefresh)
             gradeSummarySwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
-            gradeSummarySwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
+            gradeSummarySwipe.setProgressBackgroundColorSchemeColor(
+                requireContext().getThemeAttrColor(
+                    R.attr.colorSwipeRefresh
+                )
+            )
             gradeSummaryErrorRetry.setOnClickListener { presenter.onRetry() }
             gradeSummaryErrorDetails.setOnClickListener { presenter.onDetailsClick() }
-
-            gradeSummaryAdapter.onHelpClickListener = presenter::onCalculatedAverageHelpClick
         }
     }
 
@@ -114,6 +121,14 @@ class GradeSummaryFragment :
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.grade_summary_calculated_average_help_dialog_title)
             .setMessage(R.string.grade_summary_calculated_average_help_dialog_message)
+            .setPositiveButton(R.string.all_close) { _, _ -> }
+            .show()
+    }
+
+    override fun showFinalAverageHelpDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.grade_summary_final_average_help_dialog_title)
+            .setMessage(R.string.grade_summary_final_average_help_dialog_message)
             .setPositiveButton(R.string.all_close) { _, _ -> }
             .show()
     }

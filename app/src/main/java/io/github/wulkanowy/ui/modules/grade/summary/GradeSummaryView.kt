@@ -35,6 +35,8 @@ interface GradeSummaryView : BaseView {
 
     fun showCalculatedAverageHelpDialog()
 
+    fun showFinalAverageHelpDialog()
+
     fun notifyParentDataLoaded(semesterId: Int)
 
     fun notifyParentRefresh()

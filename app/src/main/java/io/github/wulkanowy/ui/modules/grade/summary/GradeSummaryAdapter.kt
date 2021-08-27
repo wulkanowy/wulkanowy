@@ -25,7 +25,9 @@ class GradeSummaryAdapter @Inject constructor(
 
     var items = emptyList<GradeSummary>()
 
-    var onHelpClickListener: () -> Unit = {}
+    var onCalculatedHelpClickListener: () -> Unit = {}
+
+    var onFinalHelpClickListener: () -> Unit = {}
 
     override fun getItemCount() = items.size + if (items.isNotEmpty()) 1 else 0
 
@@ -86,7 +88,8 @@ class GradeSummaryAdapter @Inject constructor(
                 allItemsCount
             )
 
-            gradeSummaryCalculatedAverageHelp.setOnClickListener { onHelpClickListener() }
+            gradeSummaryCalculatedAverageHelp.setOnClickListener { onCalculatedHelpClickListener() }
+            gradeSummaryFinalAverageHelp.setOnClickListener { onFinalHelpClickListener() }
         }
     }
 
