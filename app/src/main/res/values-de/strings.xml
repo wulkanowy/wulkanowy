@@ -184,6 +184,10 @@
         <item quantity="one">Neue prüfung</item>
         <item quantity="other">Neue prüfungen</item>
     </plurals>
+    <plurals name="exam_notify_new_item_content">
+        <item quantity="one">You received %d new exam</item>
+        <item quantity="other">You received %d new exams</item>
+    </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d prüfung</item>
         <item quantity="other">%d prüfungen</item>
@@ -281,6 +285,10 @@
     <plurals name="homework_notify_new_item_title">
         <item quantity="one">Neue hausaufgaben</item>
         <item quantity="other">Neue hausaufgaben</item>
+    </plurals>
+    <plurals name="homework_notify_new_item_content">
+        <item quantity="one">You received %d new homework</item>
+        <item quantity="other">You received %d new homework</item>
     </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d hausaufgaben</item>
