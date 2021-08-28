@@ -200,6 +200,12 @@
         <item quantity="many">Nowe sprawdziany</item>
         <item quantity="other">Nowe sprawdziany</item>
     </plurals>
+    <plurals name="exam_notify_new_item_content">
+        <item quantity="one">You received %d new exam</item>
+        <item quantity="few">You received %d new exams</item>
+        <item quantity="many">You received %d new exams</item>
+        <item quantity="other">You received %d new exams</item>
+    </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d sprawdzian</item>
         <item quantity="few">%d sprawdziany</item>
@@ -327,6 +333,12 @@
         <item quantity="few">Nowe zadania domowe</item>
         <item quantity="many">Nowe zadania domowe</item>
         <item quantity="other">Nowe zadania domowe</item>
+    </plurals>
+    <plurals name="homework_notify_new_item_content">
+        <item quantity="one">You received %d new homework</item>
+        <item quantity="few">You received %d new homework</item>
+        <item quantity="many">You received %d new homework</item>
+        <item quantity="other">You received %d new homework</item>
     </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d zadanie domowe</item>
