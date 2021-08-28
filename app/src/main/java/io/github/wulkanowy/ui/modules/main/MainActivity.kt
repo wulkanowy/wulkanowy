@@ -33,6 +33,7 @@ import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.account.accountquick.AccountQuickDialog
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
+import io.github.wulkanowy.ui.modules.dashboard.DashboardFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
@@ -107,11 +108,12 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     private val moreMenuFragments = mapOf<Int, Fragment>(
         MainView.Section.MESSAGE.id to MessageFragment.newInstance(),
+        MainView.Section.EXAM.id to ExamFragment.newInstance(),
         MainView.Section.HOMEWORK.id to HomeworkFragment.newInstance(),
         MainView.Section.NOTE.id to NoteFragment.newInstance(),
-        MainView.Section.LUCKY_NUMBER.id to LuckyNumberFragment.newInstance(),
-        MainView.Section.SCHOOL_ANNOUNCEMENT.id to SchoolAnnouncementFragment.newInstance(),
         MainView.Section.CONFERENCE.id to ConferenceFragment.newInstance(),
+        MainView.Section.SCHOOL_ANNOUNCEMENT.id to SchoolAnnouncementFragment.newInstance(),
+        MainView.Section.LUCKY_NUMBER.id to LuckyNumberFragment.newInstance(),
     )
 
     @SuppressLint("NewApi")
@@ -218,20 +220,20 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
         with(binding.mainBottomNav) {
             with(menu) {
-                add(Menu.NONE, 0, Menu.NONE, R.string.grade_title)
+                add(Menu.NONE, 0, Menu.NONE, R.string.dashboard_title)
+                    .setIcon(R.drawable.ic_main_dashboard)
+                add(Menu.NONE, 1, Menu.NONE, R.string.grade_title)
                     .setIcon(R.drawable.ic_main_grade)
-                add(Menu.NONE, 1, Menu.NONE, R.string.attendance_title)
+                add(Menu.NONE, 2, Menu.NONE, R.string.attendance_title)
                     .setIcon(R.drawable.ic_main_attendance)
-                add(Menu.NONE, 2, Menu.NONE, R.string.exam_title)
-                    .setIcon(R.drawable.ic_main_exam)
                 add(Menu.NONE, 3, Menu.NONE, R.string.timetable_title)
                     .setIcon(R.drawable.ic_main_timetable)
                 add(Menu.NONE, 4, Menu.NONE, R.string.more_title)
                     .setIcon(R.drawable.ic_main_more)
             }
             selectedItemId = startMenuIndex
-            setOnNavigationItemSelectedListener { presenter.onTabSelected(it.itemId, false) }
-            setOnNavigationItemReselectedListener { presenter.onTabSelected(it.itemId, true) }
+            setOnItemSelectedListener { presenter.onTabSelected(it.itemId, false) }
+            setOnItemReselectedListener { presenter.onTabSelected(it.itemId, true) }
         }
 
         with(navController) {
@@ -256,9 +258,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             }
             fragmentHideStrategy = HIDE
             rootFragments = listOf(
+                DashboardFragment.newInstance(),
                 GradeFragment.newInstance(),
                 AttendanceFragment.newInstance(),
-                ExamFragment.newInstance(),
                 TimetableFragment.newInstance(),
                 MoreFragment.newInstance()
             )

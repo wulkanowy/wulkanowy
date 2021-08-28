@@ -2,15 +2,19 @@ package io.github.wulkanowy.services.sync.notifications
 
 import android.app.PendingIntent
 import android.content.Context
+import android.os.Build
+import androidx.annotation.PluralsRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.MultipleNotifications
 import io.github.wulkanowy.data.pojos.Notification
 import io.github.wulkanowy.data.pojos.OneNotification
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getCompatBitmap
 import io.github.wulkanowy.utils.getCompatColor
+import io.github.wulkanowy.utils.nickOrName
 import kotlin.random.Random
 
 abstract class BaseNotification(
@@ -18,53 +22,81 @@ abstract class BaseNotification(
     private val notificationManager: NotificationManagerCompat,
 ) {
 
-    protected fun sendNotification(notification: Notification) {
+    protected fun sendNotification(notification: Notification, student: Student) =
+        when (notification) {
+            is OneNotification -> sendOneNotification(notification, student)
+            is MultipleNotifications -> sendMultipleNotifications(notification, student)
+        }
+
+    private fun sendOneNotification(notification: OneNotification, student: Student?) {
         notificationManager.notify(
             Random.nextInt(Int.MAX_VALUE),
-            NotificationCompat.Builder(context, notification.channelId)
-                .setLargeIcon(context.getCompatBitmap(notification.icon, R.color.colorPrimary))
-                .setSmallIcon(R.drawable.ic_stat_all)
-                .setAutoCancel(true)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setColor(context.getCompatColor(R.color.colorPrimary))
-                .setContentIntent(
-                    PendingIntent.getActivity(
-                        context, notification.startMenu.id,
-                        MainActivity.getStartIntent(context, notification.startMenu, true),
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    )
+            getNotificationBuilder(notification).apply {
+                val content = context.getString(
+                    notification.contentStringRes,
+                    *notification.contentValues.toTypedArray()
                 )
-                .apply {
-                    when (notification) {
-                        is OneNotification -> buildForOneNotification(notification)
-                        is MultipleNotifications -> buildForMultipleNotification(notification)
-                    }
-                }
-                .build()
+                setContentTitle(context.getString(notification.titleStringRes))
+                setContentText(content)
+                setStyle(
+                    NotificationCompat.BigTextStyle()
+                        .setSummaryText(student?.nickOrName)
+                        .bigText(content)
+                )
+            }.build()
         )
     }
 
-    private fun NotificationCompat.Builder.buildForOneNotification(n: OneNotification) {
-        val content = context.getString(n.contentStringRes, *n.contentValues.toTypedArray())
-        setContentTitle(context.getString(n.titleStringRes))
-        setContentText(content)
-        setStyle(NotificationCompat.BigTextStyle().run {
-            bigText(content)
-            this
-        })
+    private fun sendMultipleNotifications(notification: MultipleNotifications, student: Student) {
+        val group = notification.type.group + student.id
+        val groupId = student.id * 100 + notification.type.ordinal
+
+        notification.lines.forEach { item ->
+            notificationManager.notify(
+                Random.nextInt(Int.MAX_VALUE),
+                getNotificationBuilder(notification).apply {
+                    setContentTitle(getQuantityString(notification.titleStringRes, 1))
+                    setContentText(item)
+                    setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .setSummaryText(student.nickOrName)
+                            .bigText(item)
+                    )
+                    setGroup(group)
+                }.build()
+            )
+        }
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
+
+        notificationManager.notify(
+            groupId.toInt(),
+            getNotificationBuilder(notification).apply {
+                setSmallIcon(notification.icon)
+                setGroup(group)
+                setStyle(NotificationCompat.InboxStyle().setSummaryText(student.nickOrName))
+                setGroupSummary(true)
+            }.build()
+        )
     }
 
-    private fun NotificationCompat.Builder.buildForMultipleNotification(n: MultipleNotifications) {
-        val lines = n.lines.size
-        setContentTitle(context.resources.getQuantityString(n.titleStringRes, lines, lines))
-        setContentText(context.resources.getQuantityString(n.contentStringRes, lines, lines))
-        setStyle(NotificationCompat.InboxStyle().run {
-            setSummaryText(
-                context.resources.getQuantityString(n.summaryStringRes, n.lines.size, n.lines.size)
+    private fun getNotificationBuilder(notification: Notification) = NotificationCompat
+        .Builder(context, notification.type.channel)
+        .setLargeIcon(context.getCompatBitmap(notification.icon, R.color.colorPrimary))
+        .setSmallIcon(R.drawable.ic_stat_all)
+        .setAutoCancel(true)
+        .setDefaults(NotificationCompat.DEFAULT_ALL)
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setColor(context.getCompatColor(R.color.colorPrimary))
+        .setContentIntent(
+            PendingIntent.getActivity(
+                context, notification.startMenu.id,
+                MainActivity.getStartIntent(context, notification.startMenu, true),
+                PendingIntent.FLAG_UPDATE_CURRENT
             )
-            n.lines.forEach(::addLine)
-            this
-        })
+        )
+
+    private fun getQuantityString(@PluralsRes id: Int, value: Int): String {
+        return context.resources.getQuantityString(id, value, value)
     }
 }
