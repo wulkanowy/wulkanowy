@@ -44,7 +44,6 @@ class MessageTabPresenter @Inject constructor(
 
     private val searchChannel = Channel<String>()
 
-    @FlowPreview
     fun onAttachView(view: MessageTabView, folder: MessageFolder) {
         super.onAttachView(view)
         view.initView()
@@ -178,14 +177,16 @@ class MessageTabPresenter @Inject constructor(
         }
     }
 
-    @FlowPreview
+    @OptIn(FlowPreview::class)
     private fun initializeSearchStream() {
         launch {
             searchChannel.consumeAsFlow()
                 .debounce(250)
                 .map { query ->
                     lastSearchQuery = query
-                    getFilteredData(query)
+                    val isOnlyUnread = view?.onlyUnread == true
+                    val isOnlyWithAttachments = view?.onlyWithAttachments == true
+                    getFilteredData(query, isOnlyUnread, isOnlyWithAttachments)
                 }
                 .catch { Timber.e(it) }
                 .collect {

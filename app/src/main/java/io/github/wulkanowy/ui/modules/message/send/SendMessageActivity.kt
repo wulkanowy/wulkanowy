@@ -23,7 +23,6 @@ import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
-import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -73,7 +72,6 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
     override val messageSuccess: String
         get() = getString(R.string.message_send_successful)
 
-    @FlowPreview
     @Suppress("UNCHECKED_CAST")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +86,6 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
 
         presenter.onAttachView(
             view = this,
-            reason = intent.getSerializableExtra(EXTRA_REASON) as? String,
             message = intent.getSerializableExtra(EXTRA_MESSAGE) as? Message,
             reply = intent.getSerializableExtra(EXTRA_REPLY) as? Boolean
         )
@@ -228,6 +225,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
             .show()
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun clearDraft() {
         formRecipientsData = binding.sendMessageTo.addedChipItems as List<RecipientChipItem>
         presenter.clearDraft()

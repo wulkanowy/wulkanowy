@@ -40,7 +40,6 @@ class SendMessagePresenter @Inject constructor(
 
     private val messageUpdateChannel = Channel<Unit>()
 
-    @FlowPreview
     fun onAttachView(view: SendMessageView, reason: String?, message: Message?, reply: Boolean?) {
         super.onAttachView(view)
         view.initView()
