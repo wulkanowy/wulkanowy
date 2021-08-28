@@ -15,6 +15,7 @@ import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
+import io.github.wulkanowy.utils.isExcusableOrNotExcused
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
@@ -245,7 +246,7 @@ class AttendancePresenter @Inject constructor(
                         showEmpty(filteredAttendance.isEmpty())
                         showErrorView(false)
                         showContent(filteredAttendance.isNotEmpty())
-                        showExcuseButton(filteredAttendance.any { item -> item.excusable || ((item.absence || item.lateness) && !item.excused) })
+                        showExcuseButton(filteredAttendance.any { item -> item.isExcusableOrNotExcused })
                         useExcuseFunction = filteredAttendance.any { item -> item.excusable }
                     }
                     analytics.logEvent(
