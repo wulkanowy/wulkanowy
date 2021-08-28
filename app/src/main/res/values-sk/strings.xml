@@ -200,6 +200,12 @@
         <item quantity="many">Nové skúšky</item>
         <item quantity="other">Nové skúšky</item>
     </plurals>
+    <plurals name="exam_notify_new_item_content">
+        <item quantity="one">You received %d new exam</item>
+        <item quantity="few">You received %d new exams</item>
+        <item quantity="many">You received %d new exams</item>
+        <item quantity="other">You received %d new exams</item>
+    </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d skúška</item>
         <item quantity="few">%d skúšky</item>
@@ -327,6 +333,12 @@
         <item quantity="few">Nové domáce úlohy</item>
         <item quantity="many">Nové domáce úlohy</item>
         <item quantity="other">Nové domáce úlohy</item>
+    </plurals>
+    <plurals name="homework_notify_new_item_content">
+        <item quantity="one">You received %d new homework</item>
+        <item quantity="few">You received %d new homework</item>
+        <item quantity="many">You received %d new homework</item>
+        <item quantity="other">You received %d new homework</item>
     </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d domáci úloh</item>
