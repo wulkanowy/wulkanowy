@@ -86,6 +86,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
 
         presenter.onAttachView(
             view = this,
+            reason = intent.getSerializableExtra(EXTRA_REASON) as? String,
             message = intent.getSerializableExtra(EXTRA_MESSAGE) as? Message,
             reply = intent.getSerializableExtra(EXTRA_REPLY) as? Boolean
         )
