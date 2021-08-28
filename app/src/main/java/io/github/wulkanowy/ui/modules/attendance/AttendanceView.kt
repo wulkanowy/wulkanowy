@@ -8,8 +8,6 @@ interface AttendanceView : BaseView {
 
     val isViewEmpty: Boolean
 
-    var useExcuseFunction: Boolean
-
     val currentStackSize: Int?
 
     val excuseSuccessString: String

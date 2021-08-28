@@ -48,6 +48,8 @@ class AttendancePresenter @Inject constructor(
 
     private val attendanceToExcuseList = mutableListOf<Attendance>()
 
+    private var isVulcanExcusedFunctionEnabled = false
+
     fun onAttachView(view: AttendanceView, date: Long?) {
         super.onAttachView(view)
         view.initView()
@@ -149,8 +151,8 @@ class AttendancePresenter @Inject constructor(
 
     fun onExcuseDialogSubmit(reason: String) {
         view?.finishActionMode()
-        val useExcuseAbsence = view?.useExcuseFunction == true
-        if (useExcuseAbsence) {
+
+        if (isVulcanExcusedFunctionEnabled) {
             excuseAbsence(if (reason != "") reason else null, attendanceToExcuseList.toList())
         } else {
             val attendanceToExcuseNumbers = mutableListOf<Int>()
@@ -247,7 +249,8 @@ class AttendancePresenter @Inject constructor(
                         showErrorView(false)
                         showContent(filteredAttendance.isNotEmpty())
                         showExcuseButton(filteredAttendance.any { item -> item.isExcusableOrNotExcused })
-                        useExcuseFunction = filteredAttendance.any { item -> item.excusable }
+                        isVulcanExcusedFunctionEnabled =
+                            filteredAttendance.any { item -> item.excusable }
                     }
                     analytics.logEvent(
                         "load_data",

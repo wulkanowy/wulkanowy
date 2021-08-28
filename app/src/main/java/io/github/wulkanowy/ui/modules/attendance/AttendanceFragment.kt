@@ -61,8 +61,6 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
 
     override val isViewEmpty get() = attendanceAdapter.items.isEmpty()
 
-    override var useExcuseFunction: Boolean = false
-
     override val currentStackSize get() = (activity as? MainActivity)?.currentStackSize
 
     override val excuseActionMode: Boolean get() = attendanceAdapter.excuseActionMode
