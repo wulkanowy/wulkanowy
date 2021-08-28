@@ -30,9 +30,6 @@ class PreferencesRepository @Inject constructor(
     @ApplicationContext val context: Context,
     moshi: Moshi
 ) {
-    init {
-        migrateStartMenuIndex()
-    }
 
     @OptIn(ExperimentalStdlibApi::class)
     private val dashboardItemsPositionAdapter: JsonAdapter<Map<DashboardItem.Type, Int>> =
@@ -240,21 +237,8 @@ class PreferencesRepository @Inject constructor(
     private fun getBoolean(id: String, default: Int) =
         sharedPref.getBoolean(id, context.resources.getBoolean(default))
 
-    private fun migrateStartMenuIndex() {
-        if (sharedPref.getBoolean(PREF_KEY_MIGRATED_START_MENU, false)) return
-
-        val defaultStartMenuIndex = context.getString(R.string.pref_default_startup)
-
-        sharedPref.edit {
-            putString(context.getString(R.string.pref_key_start_menu), defaultStartMenuIndex)
-            putBoolean(PREF_KEY_MIGRATED_START_MENU, true)
-        }
-    }
-
     private companion object {
 
         private const val PREF_KEY_DASHBOARD_ITEMS_POSITION = "dashboard_items_position"
-
-        private const val PREF_KEY_MIGRATED_START_MENU = "migrated_start_menu"
     }
 }
