@@ -461,7 +461,7 @@
     <!--Preferences-->
     <string name="pref_view_header">Wygląd i zachowanie aplikacji</string>
     <string name="pref_view_list">Domyślny widok</string>
-    <string name="pref_view_grade_average_mode">Obliczanie średniej końcoworocznej</string>
+    <string name="pref_view_grade_average_mode">Obliczanie średniej końcowej</string>
     <string name="pref_view_grade_average_force_calc">Wymuś obliczanie średniej przez aplikację</string>
     <string name="pref_view_present">Pokazuj obecność</string>
     <string name="pref_view_app_theme">Motyw</string>
