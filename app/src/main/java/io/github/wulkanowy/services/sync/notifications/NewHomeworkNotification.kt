@@ -8,6 +8,8 @@ import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.MultipleNotifications
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.toFormattedString
+import java.time.LocalDate
 import javax.inject.Inject
 
 class NewHomeworkNotification @Inject constructor(
@@ -16,6 +18,11 @@ class NewHomeworkNotification @Inject constructor(
 ) : BaseNotification(context, notificationManager) {
 
     fun notify(items: List<Homework>, student: Student) {
+        val today = LocalDate.now()
+        val lines = items.filter { !it.date.isBefore(today) }.map {
+            "${it.date.toFormattedString("dd.MM")} - ${it.subject}: ${it.content}"
+        }.ifEmpty { return }
+
         val notification = MultipleNotifications(
             type = NotificationType.NEW_HOMEWORK,
             icon = R.drawable.ic_more_homework,
@@ -23,9 +30,7 @@ class NewHomeworkNotification @Inject constructor(
             contentStringRes = R.plurals.homework_notify_new_item_content,
             summaryStringRes = R.plurals.homework_number_item,
             startMenu = MainView.Section.HOMEWORK,
-            lines = items.map {
-                "${it.subject}: ${it.content} - ${it.date}"
-            }
+            lines = lines
         )
 
         sendNotification(notification, student)

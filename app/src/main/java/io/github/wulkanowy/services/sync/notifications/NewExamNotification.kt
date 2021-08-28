@@ -8,6 +8,8 @@ import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.MultipleNotifications
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.toFormattedString
+import java.time.LocalDate
 import javax.inject.Inject
 
 class NewExamNotification @Inject constructor(
@@ -16,6 +18,11 @@ class NewExamNotification @Inject constructor(
 ) : BaseNotification(context, notificationManager) {
 
     fun notify(items: List<Exam>, student: Student) {
+        val today = LocalDate.now()
+        val lines = items.filter { !it.date.isBefore(today) }.map {
+            "${it.date.toFormattedString("dd.MM")} - ${it.subject}: ${it.description}"
+        }.ifEmpty { return }
+
         val notification = MultipleNotifications(
             type = NotificationType.NEW_EXAM,
             icon = R.drawable.ic_main_exam,
@@ -23,9 +30,7 @@ class NewExamNotification @Inject constructor(
             contentStringRes = R.plurals.exam_notify_new_item_content,
             summaryStringRes = R.plurals.exam_number_item,
             startMenu = MainView.Section.EXAM,
-            lines = items.map {
-                "${it.subject}: ${it.description} - ${it.date}"
-            }
+            lines = lines
         )
 
         sendNotification(notification, student)
