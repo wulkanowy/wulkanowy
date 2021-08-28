@@ -215,6 +215,7 @@
         <item quantity="other">%d exams</item>
     </plurals>
 
+
     <!--Message-->
     <string name="message_inbox">Inbox</string>
     <string name="message_sent">Sent</string>
@@ -316,8 +317,8 @@
         <item quantity="other">New homework</item>
     </plurals>
     <plurals name="homework_notify_new_item_content">
-        <item quantity="one">You received new %d homework</item>
-        <item quantity="other">You received new %d homework</item>
+        <item quantity="one">You received %d new homework</item>
+        <item quantity="other">You received %d new homework</item>
     </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d homework</item>

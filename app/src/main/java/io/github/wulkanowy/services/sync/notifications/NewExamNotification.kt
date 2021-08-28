@@ -20,7 +20,7 @@ class NewExamNotification @Inject constructor(
             type = NotificationType.NEW_EXAM,
             icon = R.drawable.ic_main_exam,
             titleStringRes = R.plurals.exam_notify_new_item_title,
-            contentStringRes = R.plurals.exam_notify_new_item_title, // TODO add missing string
+            contentStringRes = R.plurals.exam_notify_new_item_content,
             summaryStringRes = R.plurals.exam_number_item,
             startMenu = MainView.Section.EXAM,
             lines = items.map {

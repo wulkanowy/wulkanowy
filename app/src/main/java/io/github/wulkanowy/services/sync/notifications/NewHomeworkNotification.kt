@@ -20,7 +20,7 @@ class NewHomeworkNotification @Inject constructor(
             type = NotificationType.NEW_HOMEWORK,
             icon = R.drawable.ic_more_homework,
             titleStringRes = R.plurals.homework_notify_new_item_title,
-            contentStringRes = R.plurals.homework_notify_new_item_title, // todo: you received %d new homework
+            contentStringRes = R.plurals.homework_notify_new_item_content,
             summaryStringRes = R.plurals.homework_number_item,
             startMenu = MainView.Section.HOMEWORK,
             lines = items.map {
