@@ -30,7 +30,7 @@ class ExamWork @Inject constructor(
             .filter { !it.isNotified }.let {
                 if (it.isNotEmpty()) newExamNotification.notify(it, student)
 
-            examRepository.updateExam(it.onEach { exam -> exam.isNotified = true })
-        }
+                examRepository.updateExam(it.onEach { exam -> exam.isNotified = true })
+            }
     }
 }
