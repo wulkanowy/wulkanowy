@@ -1,7 +1,6 @@
 package io.github.wulkanowy.utils
 
 import androidx.fragment.app.Fragment
-import io.github.wulkanowy.ui.modules.about.AboutFragment
 import io.github.wulkanowy.ui.modules.account.AccountFragment
 import io.github.wulkanowy.ui.modules.account.accountdetails.AccountDetailsFragment
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
@@ -33,7 +32,6 @@ fun Fragment.toSection(): MainView.Section? {
         is NoteFragment -> MainView.Section.NOTE
         is LuckyNumberFragment -> MainView.Section.LUCKY_NUMBER
         is SettingsFragment -> MainView.Section.SETTINGS
-        is AboutFragment -> MainView.Section.ABOUT
         is SchoolAndTeachersFragment -> MainView.Section.SCHOOL
         is AccountFragment -> MainView.Section.ACCOUNT
         is AccountDetailsFragment -> MainView.Section.ACCOUNT
