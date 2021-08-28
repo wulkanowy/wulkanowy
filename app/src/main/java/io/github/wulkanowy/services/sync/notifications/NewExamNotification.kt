@@ -24,7 +24,7 @@ class NewExamNotification @Inject constructor(
             summaryStringRes = R.plurals.exam_number_item,
             startMenu = MainView.Section.EXAM,
             lines = items.map {
-                "${it.subject}: ${it.description}"
+                "${it.subject}: ${it.description} - ${it.date}"
             }
         )
 

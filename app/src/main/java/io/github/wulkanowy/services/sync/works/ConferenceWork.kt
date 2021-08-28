@@ -30,37 +30,4 @@ class ConferenceWork @Inject constructor(
             conferenceRepository.updateConference(it.onEach { conference -> conference.isNotified = true })
         }
     }
-
-    private fun notify(conference: List<Conference>) {
-        notificationManager.notify(
-            Random.nextInt(Int.MAX_VALUE),
-            NotificationCompat.Builder(context, NewConferencesChannel.CHANNEL_ID)
-                .setContentTitle(context.resources.getQuantityString(R.plurals.conference_notify_new_item_title, conference.size, conference.size))
-                .setContentText(context.resources.getQuantityString(R.plurals.conference_notify_new_items, conference.size, conference.size))
-                .setSmallIcon(R.drawable.ic_stat_all)
-                .setLargeIcon(context.getCompatBitmap(R.drawable.ic_stat_conferences, R.color.colorPrimary))
-                .setAutoCancel(true)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setColor(context.getCompatColor(R.color.colorPrimary))
-                .setContentIntent(
-                    PendingIntent.getActivity(
-                        context, MainView.Section.CONFERENCE.id,
-                        MainActivity.getStartIntent(context, MainView.Section.CONFERENCE, true),
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-                )
-                .setStyle(NotificationCompat.InboxStyle().run {
-                    setSummaryText(
-                        context.resources.getQuantityString(
-                            R.plurals.conference_number_item,
-                            conference.size,
-                            conference.size
-                        )
-                    )
-                    conference.forEach { addLine("${it.title}: ${it.subject}") }
-                    this
-                })
-            }
-    }
 }

@@ -24,7 +24,7 @@ class NewHomeworkNotification @Inject constructor(
             summaryStringRes = R.plurals.homework_number_item,
             startMenu = MainView.Section.HOMEWORK,
             lines = items.map {
-                "${it.subject}: ${it.content}"
+                "${it.subject}: ${it.content} - ${it.date}"
             }
         )
 
