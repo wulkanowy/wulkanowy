@@ -21,12 +21,12 @@ fun List<SdkMessage>.mapToEntities(student: Student) = map {
         date = it.date ?: LocalDateTime.now(),
         folderId = it.folderId,
         unread = it.unread ?: false,
+        unreadBy = it.unreadBy ?: 0,
+        readBy = it.readBy ?: 0,
         removed = it.removed,
         hasAttachments = it.hasAttachments
     ).apply {
         content = it.content.orEmpty()
-        unreadBy = it.unreadBy ?: 0
-        readBy = it.readBy ?: 0
     }
 }
 

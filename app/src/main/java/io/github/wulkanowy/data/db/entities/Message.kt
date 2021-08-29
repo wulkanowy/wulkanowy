@@ -36,6 +36,12 @@ data class Message(
 
     var unread: Boolean,
 
+    @ColumnInfo(name = "unread_by")
+    val unreadBy: Int = 0,
+
+    @ColumnInfo(name = "read_by")
+    val readBy: Int = 0,
+
     val removed: Boolean,
 
     @ColumnInfo(name = "has_attachments")
@@ -47,12 +53,6 @@ data class Message(
 
     @ColumnInfo(name = "is_notified")
     var isNotified: Boolean = true
-
-    @ColumnInfo(name = "unread_by")
-    var unreadBy: Int = 0
-
-    @ColumnInfo(name = "read_by")
-    var readBy: Int = 0
 
     var content: String = ""
 }

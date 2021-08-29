@@ -67,8 +67,10 @@ class MessageRepository @Inject constructor(
         },
         saveFetchResult = { old, new ->
             messagesDb.deleteAll(old uniqueSubtract new)
-            messagesDb.insertAll((new uniqueSubtract old).onEach {
-                it.isNotified = !notify
+            messagesDb.insertAll((new uniqueSubtract old).onEach { message ->
+                val isOldNotified = old.find { it.messageId == message.messageId }?.isNotified
+
+                message.isNotified = isOldNotified ?: !notify
             })
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student, folder))
