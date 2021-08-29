@@ -70,21 +70,27 @@ class MessageRepository @Inject constructor(
             messagesDb.insertAll((new uniqueSubtract old).onEach {
                 it.isNotified = !notify
             })
-            messagesDb.updateAll(getMessagesWithReadByChange(old, new))
+            messagesDb.updateAll(getMessagesWithReadByChange(old, new, !notify))
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student, folder))
         }
     )
 
-    private fun getMessagesWithReadByChange(old: List<Message>, new: List<Message>): List<Message> {
+    private fun getMessagesWithReadByChange(
+        old: List<Message>, new: List<Message>,
+        setNotified: Boolean
+    ): List<Message> {
         val oldMeta = old.map { Triple(it, it.readBy, it.unreadBy) }
         val newMeta = new.map { Triple(it, it.readBy, it.unreadBy) }
 
         val updatedItems = newMeta uniqueSubtract oldMeta
 
         return updatedItems.map {
+            val oldItem = old.find { item -> item.messageId == it.first.messageId }
             it.first.apply {
-                id = old.find { item -> item.messageId == it.first.messageId }?.id ?: 0
+                id = oldItem?.id ?: 0
+                isNotified = oldItem?.isNotified ?: setNotified
+                content = oldItem?.content.orEmpty()
             }
         }
     }
