@@ -201,10 +201,10 @@
         <item quantity="other">Nowe sprawdziany</item>
     </plurals>
     <plurals name="exam_notify_new_item_content">
-        <item quantity="one">You received %d new exam</item>
-        <item quantity="few">You received %d new exams</item>
-        <item quantity="many">You received %d new exams</item>
-        <item quantity="other">You received %d new exams</item>
+        <item quantity="one">Masz %d nowy sprawdzian</item>
+        <item quantity="few">Masz %d nowe sprawdziany</item>
+        <item quantity="many">Masz %d nowych sprawdzianów</item>
+        <item quantity="other">Masz %d nowych sprawdzianów</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d sprawdzian</item>
@@ -335,10 +335,10 @@
         <item quantity="other">Nowe zadania domowe</item>
     </plurals>
     <plurals name="homework_notify_new_item_content">
-        <item quantity="one">You received %d new homework</item>
-        <item quantity="few">You received %d new homework</item>
-        <item quantity="many">You received %d new homework</item>
-        <item quantity="other">You received %d new homework</item>
+        <item quantity="one">Masz %d nowe zadanie domowe</item>
+        <item quantity="few">Masz %d nowe zadania domowe</item>
+        <item quantity="many">Masz %d nowych zadań domowych</item>
+        <item quantity="other">Masz %d nowych zadań domowych</item>
     </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d zadanie domowe</item>
