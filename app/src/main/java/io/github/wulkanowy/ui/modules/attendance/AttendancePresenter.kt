@@ -155,7 +155,10 @@ class AttendancePresenter @Inject constructor(
         view?.finishActionMode()
 
         if (isVulcanExcusedFunctionEnabled) {
-            excuseAbsence(if (reason != "") reason else null, attendanceToExcuseList.toList())
+            excuseAbsence(
+                reason.takeIf { it.isNotBlank() },
+                attendanceToExcuseList.toList()
+            )
         } else {
             val attendanceToExcuseNumbers = mutableListOf<Int>()
             attendanceToExcuseList.forEach { attendance ->
