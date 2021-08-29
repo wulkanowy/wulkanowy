@@ -62,7 +62,15 @@ class MessageRepositoryTest {
         MockKAnnotations.init(this)
         every { refreshHelper.isShouldBeRefreshed(any()) } returns false
 
-        messageRepository = MessageRepository(messageDb, messageAttachmentDao, sdk, context, refreshHelper, sharedPrefProvider, moshi)
+        messageRepository = MessageRepository(
+            messagesDb = messageDb,
+            messageAttachmentDao = messageAttachmentDao,
+            sdk = sdk,
+            context = context,
+            refreshHelper = refreshHelper,
+            sharedPrefProvider = sharedPrefProvider,
+            moshi = moshi,
+        )
     }
 
     @Test(expected = NoSuchElementException::class)
