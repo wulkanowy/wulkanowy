@@ -85,10 +85,9 @@ class MessageRepositoryTest {
     @Test
     fun `get messages when read by values was changed on already read message`() = runBlocking {
         every { messageDb.loadAll(any(), any()) } returns flow {
-            val dbMessage = getMessageEntity(3, "", false).copy(
-                unreadBy = 10,
-                readBy = 5,
-            ).apply {
+            val dbMessage = getMessageEntity(3, "", false).apply {
+                unreadBy = 10
+                readBy = 5
                 isNotified = true
             }
             emit(listOf(dbMessage))
@@ -110,15 +109,13 @@ class MessageRepositoryTest {
             notify = true, // all new messages will be marked as not notified
         ).toFirstResult().data.orEmpty()
 
+        coVerify(exactly = 1) { messageDb.deleteAll(emptyList()) }
+        coVerify(exactly = 1) { messageDb.insertAll(emptyList()) }
         coVerify(exactly = 1) {
-            messageDb.deleteAll(withArg {
-                assertEquals(3, it.single().messageId)
-            })
-        }
-        coVerify {
-            messageDb.insertAll(withArg {
-                assertEquals(3, it.single().messageId)
-                assertTrue(it.single().isNotified) // already notified, because state was copied from old entity
+            messageDb.updateAll(withArg {
+                assertEquals(1, it.size)
+                assertEquals(5, it.single().unreadBy)
+                assertEquals(10, it.single().readBy)
             })
         }
     }
@@ -242,20 +239,18 @@ class MessageRepositoryTest {
         realId = 1,
         messageId = messageId,
         sender = "",
-        senderId = 1,
-        recipient = "",
+        senderId = 0,
+        recipient = "Wielu adresatów",
         subject = "",
-        date = LocalDateTime.now(),
+        date = LocalDateTime.MAX,
         folderId = 1,
         unread = unread,
-        unreadBy = 1,
-        readBy = 1,
         removed = false,
         hasAttachments = false
     ).apply {
         this.content = content
-//        unreadBy = 1
-//        readBy = 1
+        unreadBy = 1
+        readBy = 1
     }
 
     private fun getMessageDto(
@@ -269,7 +264,7 @@ class MessageRepositoryTest {
         recipients = listOf(),
         subject = "",
         content = content,
-        date = null,
+        date = LocalDateTime.MAX,
         folderId = 1,
         unread = unread,
         unreadBy = 0,
