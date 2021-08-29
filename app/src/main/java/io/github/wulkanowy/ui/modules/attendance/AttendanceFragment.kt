@@ -226,20 +226,19 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
-        val now = LocalDate.now()
-        val startOfSchoolYear = now.schoolYearStart.toTimestamp()
-        val endWeek = now.plusWeeks(1).toTimestamp()
+        val baseDate = currentDate.schoolYearStart
+        val rangeStart = baseDate.toTimestamp()
+        val rangeEnd = LocalDate.now().plusWeeks(1).toTimestamp()
 
         val constraintsBuilder = CalendarConstraints.Builder().apply {
-            setValidator(SchoolDaysValidator(startOfSchoolYear, endWeek))
-            setStart(startOfSchoolYear)
-            setEnd(endWeek)
+            setValidator(SchoolDaysValidator(rangeStart, rangeEnd))
+            setStart(rangeStart)
+            setEnd(rangeEnd)
         }
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setCalendarConstraints(constraintsBuilder.build())
-                .setSelection(currentDate.toTimestamp())
-                .build()
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setCalendarConstraints(constraintsBuilder.build())
+            .setSelection(currentDate.toTimestamp())
+            .build()
 
         datePicker.addOnPositiveButtonClickListener {
             val date = it.toLocalDateTime()
