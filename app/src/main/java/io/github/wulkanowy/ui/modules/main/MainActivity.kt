@@ -34,6 +34,7 @@ import io.github.wulkanowy.ui.modules.account.accountquick.AccountQuickDialog
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
 import io.github.wulkanowy.ui.modules.dashboard.DashboardFragment
+import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
@@ -44,6 +45,7 @@ import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragm
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.AppInfo
+import io.github.wulkanowy.utils.InAppReviewHelper
 import io.github.wulkanowy.utils.UpdateHelper
 import io.github.wulkanowy.utils.createNameInitialsDrawable
 import io.github.wulkanowy.utils.dpToPx
@@ -66,6 +68,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     @Inject
     lateinit var updateHelper: UpdateHelper
+
+    @Inject
+    lateinit var inAppReviewHelper: InAppReviewHelper
 
     @Inject
     lateinit var appInfo: AppInfo
@@ -107,11 +112,12 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     private val moreMenuFragments = mapOf<Int, Fragment>(
         MainView.Section.MESSAGE.id to MessageFragment.newInstance(),
+        MainView.Section.EXAM.id to ExamFragment.newInstance(),
         MainView.Section.HOMEWORK.id to HomeworkFragment.newInstance(),
         MainView.Section.NOTE.id to NoteFragment.newInstance(),
-        MainView.Section.LUCKY_NUMBER.id to LuckyNumberFragment.newInstance(),
-        MainView.Section.SCHOOL_ANNOUNCEMENT.id to SchoolAnnouncementFragment.newInstance(),
         MainView.Section.CONFERENCE.id to ConferenceFragment.newInstance(),
+        MainView.Section.SCHOOL_ANNOUNCEMENT.id to SchoolAnnouncementFragment.newInstance(),
+        MainView.Section.LUCKY_NUMBER.id to LuckyNumberFragment.newInstance(),
     )
 
     @SuppressLint("NewApi")
@@ -358,6 +364,10 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             icon = createNameInitialsDrawable(student.nickOrName, student.avatarColor, 0.44f)
             title = getString(R.string.main_account_picker)
         }
+    }
+
+    override fun showInAppReview() {
+        inAppReviewHelper.showInAppReview(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
