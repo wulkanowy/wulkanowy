@@ -50,6 +50,8 @@ class AttendancePresenter @Inject constructor(
 
     private var isVulcanExcusedFunctionEnabled = false
 
+    private var isParent = false
+
     fun onAttachView(view: AttendanceView, date: Long?) {
         super.onAttachView(view)
         view.initView()
@@ -206,6 +208,8 @@ class AttendancePresenter @Inject constructor(
 
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
+            isParent = student.isParent
+
             val semester = semesterRepository.getCurrentSemester(student)
             attendanceRepository.getAttendance(
                 student,
@@ -243,14 +247,17 @@ class AttendancePresenter @Inject constructor(
                         it.data?.filter { item -> !item.presence }.orEmpty()
                     }
 
+                    isVulcanExcusedFunctionEnabled =
+                        filteredAttendance.any { item -> item.excusable }
+
                     view?.apply {
                         updateData(filteredAttendance.sortedBy { item -> item.number })
                         showEmpty(filteredAttendance.isEmpty())
                         showErrorView(false)
                         showContent(filteredAttendance.isNotEmpty())
-                        showExcuseButton(filteredAttendance.any { item -> item.isExcusableOrNotExcused })
-                        isVulcanExcusedFunctionEnabled =
-                            filteredAttendance.any { item -> item.excusable }
+                        showExcuseButton(filteredAttendance.any { item ->
+                            (!isParent && isVulcanExcusedFunctionEnabled) || (isParent && item.isExcusableOrNotExcused)
+                        })
                     }
                     analytics.logEvent(
                         "load_data",
