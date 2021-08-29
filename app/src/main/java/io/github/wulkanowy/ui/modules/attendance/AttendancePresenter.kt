@@ -50,8 +50,6 @@ class AttendancePresenter @Inject constructor(
 
     private var isVulcanExcusedFunctionEnabled = false
 
-    private var isParent = false
-
     fun onAttachView(view: AttendanceView, date: Long?) {
         super.onAttachView(view)
         view.initView()
@@ -156,18 +154,16 @@ class AttendancePresenter @Inject constructor(
 
         if (isVulcanExcusedFunctionEnabled) {
             excuseAbsence(
-                reason.takeIf { it.isNotBlank() },
-                attendanceToExcuseList.toList()
+                reason = reason.takeIf { it.isNotBlank() },
+                toExcuseList = attendanceToExcuseList.toList()
             )
         } else {
-            val attendanceToExcuseNumbers = mutableListOf<Int>()
-            attendanceToExcuseList.forEach { attendance ->
-                attendanceToExcuseNumbers.add(attendance.number)
-            }
+            val attendanceToExcuseNumbers = attendanceToExcuseList.map { it.number }
+
             view?.startSendMessageIntent(
-                attendanceToExcuseList[0].date,
-                attendanceToExcuseNumbers.joinToString(", "),
-                reason
+                date = attendanceToExcuseList[0].date,
+                numbers = attendanceToExcuseNumbers.joinToString(", "),
+                reason = reason
             )
         }
     }
@@ -208,6 +204,8 @@ class AttendancePresenter @Inject constructor(
 
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading attendance data started")
+
+        var isParent = false
 
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()

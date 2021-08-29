@@ -36,7 +36,8 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.fragment_attendance), AttendanceView, MainView.MainChildView,
+class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.fragment_attendance),
+    AttendanceView, MainView.MainChildView,
     MainView.TitledView {
 
     @Inject
@@ -119,7 +120,11 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
         with(binding) {
             attendanceSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
             attendanceSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
-            attendanceSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
+            attendanceSwipe.setProgressBackgroundColorSchemeColor(
+                requireContext().getThemeAttrColor(
+                    R.attr.colorSwipeRefresh
+                )
+            )
             attendanceErrorRetry.setOnClickListener { presenter.onRetry() }
             attendanceErrorDetails.setOnClickListener { presenter.onDetailsClick() }
 
@@ -252,7 +257,10 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .create()
             .apply {
-                setButton(BUTTON_POSITIVE, getString(R.string.attendance_excuse_dialog_submit)) { _, _ ->
+                setButton(
+                    BUTTON_POSITIVE,
+                    getString(R.string.attendance_excuse_dialog_submit)
+                ) { _, _ ->
                     presenter.onExcuseDialogSubmit(
                         dialogBinding.excuseReason.text?.toString().orEmpty()
                     )
@@ -276,7 +284,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
             if (reason.isNotBlank()) " ${getString(R.string.attendance_excuse_reason)} " else "",
             reason.ifBlank { "" }
         )
-        context?.let { it.startActivity(SendMessageActivity.getStartIntent(it, reasonFullText)) }
+        startActivity(SendMessageActivity.getStartIntent(requireContext(), reasonFullText))
     }
 
     override fun showExcuseCheckboxes(show: Boolean) {
