@@ -11,8 +11,8 @@
     <string name="more_title">Mehr</string>
     <string name="about_title">Über die Applikation</string>
     <string name="logviewer_title">Log Viewer</string>
-    <string name="debug_title">Debug</string>
-    <string name="notification_debug_title">Notification debug</string>
+    <string name="debug_title">Debuggen</string>
+    <string name="notification_debug_title">Benachrichtigungen debuggen</string>
     <string name="contributors_title">Mitarbeiter</string>
     <string name="license_title">Lizenzen</string>
     <string name="message_title">Nachrichten</string>
@@ -23,7 +23,7 @@
     <string name="account_quick_title">Konto auswählen</string>
     <string name="account_details_title">Kontodetails</string>
     <string name="student_info_title">Schülerinfo</string>
-    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_title">Übersicht</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semester %1$d, %2$d/%3$d</string>
     <!--Login-->
@@ -91,7 +91,7 @@
     <string name="grade_summary_predicted_grade">Vorhergesagte Note</string>
     <string name="grade_summary_calculated_average">Berechnender Durchschnitt</string>
     <string name="grade_summary_final_average">Finaler Durchschnitt</string>
-    <string name="grade_summary_from_subjects">from %1$d of %2$d subjects</string>
+    <string name="grade_summary_from_subjects">aus %1$d von %2$d Schulfächern</string>
     <string name="grade_menu_summary">Zusammenfassung</string>
     <string name="grade_menu_statistics">Klasse</string>
     <string name="grade_menu_read">Als gelesen markieren</string>
@@ -186,7 +186,7 @@
     </plurals>
     <plurals name="exam_notify_new_item_content">
         <item quantity="one">You received %d new exam</item>
-        <item quantity="other">You received %d new exams</item>
+        <item quantity="other">Du hast %d neue Prüfungen bekommen</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d prüfung</item>
@@ -215,9 +215,9 @@
     <string name="message_not_exists">Nachricht existiert nicht</string>
     <string name="message_required_recipients">Sie müssen mindestens 1 Empfänger auswählen.</string>
     <string name="message_content_min_length">Der Inhalt der Nachricht muss mindestens 3 Zeichen lang sein.</string>
-    <string name="message_chip_only_unread">Only unread</string>
-    <string name="message_chip_only_with_attachments">Only with attachments</string>
-    <string name="message_read">Read: %s</string>
+    <string name="message_chip_only_unread">Nur ungelesen</string>
+    <string name="message_chip_only_with_attachments">Nur mit Anhängen</string>
+    <string name="message_read">Lesen: %s</string>
     <plurals name="message_read_by">
         <item quantity="one">Read by: %1$d of %2$d people</item>
         <item quantity="other">Read by: %1$d of %2$d people</item>
@@ -288,7 +288,7 @@
     </plurals>
     <plurals name="homework_notify_new_item_content">
         <item quantity="one">You received %d new homework</item>
-        <item quantity="other">You received %d new homework</item>
+        <item quantity="other">Du hast %d neue Hausaufgaben bekommen</item>
     </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d hausaufgaben</item>
@@ -299,7 +299,7 @@
     <string name="lucky_number_header">Die heutige Glücksnummer ist </string>
     <string name="lucky_number_empty">Keine Information über die Glücksnummer.</string>
     <string name="lucky_number_notify_new_item_title">Glücksnummer für heute</string>
-    <string name="lucky_number_notify_new_item">Today\'s lucky number is: %s</string>
+    <string name="lucky_number_notify_new_item">Heutige Glückszahl ist: %s</string>
     <string name="lucky_number_history_button">Verlauf anzeigen</string>
     <!--Lucky number history-->
     <string name="lucky_number_history_title">Glücksnummerverlauf</string>
@@ -384,8 +384,8 @@
     <string name="about_discord">Discord server</string>
     <string name="about_discord_summary">Treten Sie der Wulkanowy-Gemeinschaft bei</string>
     <string name="about_facebook">Facebook fanpage</string>
-    <string name="about_twitter">Twitter page</string>
-    <string name="about_twitter_summary">Follow us on twitter</string>
+    <string name="about_twitter">Twitter-Seite</string>
+    <string name="about_twitter_summary">Folgen Sie uns bei Twitter</string>
     <string name="about_facebook_summary">Gefällt unsere Facebook-Fanpage</string>
     <string name="about_privacy">Datenschutzerklärung</string>
     <string name="about_privacy_summary">Regeln für die Sammlung persönlicher Daten</string>
@@ -430,26 +430,26 @@
     <string name="logviewer_share">Logs teilen</string>
     <string name="logviewer_refresh">Aktualisieren</string>
     <!--Dashboard-->
-    <string name="dashboard_timetable_title">Lessons</string>
-    <string name="dashboard_timetable_title_tomorrow">(Tomorrow)</string>
+    <string name="dashboard_timetable_title">Lektionen</string>
+    <string name="dashboard_timetable_title_tomorrow">(Morgen)</string>
     <string name="dashboard_timetable_lesson_value">%1$s (%2$s)</string>
-    <string name="dashboard_timetable_first_lesson_title_moment">In a moment:</string>
-    <string name="dashboard_timetable_first_lesson_title_soon">Soon:</string>
-    <string name="dashboard_timetable_first_lesson_title_first">First:</string>
-    <string name="dashboard_timetable_first_lesson_title_now">Now:</string>
+    <string name="dashboard_timetable_first_lesson_title_moment">Gleich:</string>
+    <string name="dashboard_timetable_first_lesson_title_soon">Bald:</string>
+    <string name="dashboard_timetable_first_lesson_title_first">Erstens:</string>
+    <string name="dashboard_timetable_first_lesson_title_now">Jetzt:</string>
     <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
-        <item quantity="one">in %1$d minute</item>
-        <item quantity="other">in %1$d minutes</item>
+        <item quantity="one">in %1$d Minute</item>
+        <item quantity="other">in %1$d Minuten</item>
     </plurals>
     <plurals name="dashboard_timetable_first_lesson_time_more_minutes">
-        <item quantity="one">%1$d more minute</item>
-        <item quantity="other">%1$d more minutes</item>
+        <item quantity="one">Noch %1$d Minute</item>
+        <item quantity="other">Noch %1$d Minuten</item>
     </plurals>
-    <string name="dashboard_timetable_second_lesson_value_end">End of lessons</string>
-    <string name="dashboard_timetable_second_lessons_title">Next:</string>
-    <string name="dashboard_timetable_third_title">Later:</string>
+    <string name="dashboard_timetable_second_lesson_value_end">Ende der Lektion</string>
+    <string name="dashboard_timetable_second_lessons_title">Nächste:</string>
+    <string name="dashboard_timetable_third_title">Später:</string>
     <plurals name="dashboard_timetable_third_value">
-        <item quantity="one">%1$d more lesson</item>
+        <item quantity="one">Noch %1$d Lektion</item>
         <item quantity="other">%1$d more lessons</item>
     </plurals>
     <string name="dashboard_timetable_third_time">until %1$s</string>
