@@ -170,24 +170,32 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         val binding = horizontalGroupViewHolder.binding
         val context = binding.root.context
         val attendanceColor = when {
-            attendancePercentage ?: 0.0 <= ATTENDANCE_SECOND_WARNING_THRESHOLD -> {
+            attendancePercentage == null || attendancePercentage == .0 -> {
+                context.getThemeAttrColor(R.attr.colorOnSurface)
+            }
+            attendancePercentage <= ATTENDANCE_SECOND_WARNING_THRESHOLD -> {
                 context.getThemeAttrColor(R.attr.colorPrimary)
             }
-            attendancePercentage ?: 0.0 <= ATTENDANCE_FIRST_WARNING_THRESHOLD -> {
+            attendancePercentage <= ATTENDANCE_FIRST_WARNING_THRESHOLD -> {
                 context.getThemeAttrColor(R.attr.colorTimetableChange)
             }
             else -> context.getThemeAttrColor(R.attr.colorOnSurface)
         }
+        val attendanceString = if (attendancePercentage == null || attendancePercentage == .0) {
+            context.getString(R.string.dashboard_horizontal_group_no_data)
+        } else {
+            "%.2f%%".format(attendancePercentage)
+        }
 
         with(binding.dashboardHorizontalGroupItemAttendanceValue) {
-            text = "%.2f%%".format(attendancePercentage)
+            text = attendanceString
             setTextColor(attendanceColor)
         }
 
         with(binding) {
             dashboardHorizontalGroupItemMessageValue.text = unreadMessagesCount.toString()
             dashboardHorizontalGroupItemLuckyValue.text = if (luckyNumber == -1) {
-                context.getString(R.string.dashboard_horizontal_group_no_lukcy_number)
+                context.getString(R.string.dashboard_horizontal_group_no_data)
             } else luckyNumber?.toString()
 
             if (dashboardHorizontalGroupItemInfoContainer.isVisible != (error != null || isLoading)) {
@@ -382,7 +390,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
                 val formattedStartTime = firstLesson.start.toFormattedString("HH:mm")
                 val formattedEndTime = firstLesson.end.toFormattedString("HH:mm")
 
-                firstTimeRangeText = "${formattedStartTime}-${formattedEndTime}"
+                firstTimeRangeText = "$formattedStartTime - $formattedEndTime"
                 firstTimeText = ""
 
                 isFirstTimeRangeVisible = true
@@ -470,7 +478,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         val formattedStartTime = secondLesson?.start?.toFormattedString("HH:mm")
         val formattedEndTime = secondLesson?.end?.toFormattedString("HH:mm")
 
-        val secondTimeText = "${formattedStartTime}-${formattedEndTime}"
+        val secondTimeText = "$formattedStartTime - $formattedEndTime"
         val secondValueText = if (secondLesson != null) {
             val roomString = if (secondLesson.room.isNotBlank()) "(${secondLesson.room})" else ""
 

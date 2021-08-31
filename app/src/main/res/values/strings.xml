@@ -556,7 +556,7 @@
     </plurals>
 
     <string name="dashboard_horizontal_group_error">An error occurred while loading data</string>
-    <string name="dashboard_horizontal_group_no_lukcy_number">None</string>
+    <string name="dashboard_horizontal_group_no_data">None</string>
 
 
     <!--Error dialog-->
