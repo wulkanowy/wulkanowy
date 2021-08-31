@@ -171,8 +171,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
         android:visibility="gone"
         app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
