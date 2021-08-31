@@ -348,6 +348,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateFirstLessonView(
         binding: ItemDashboardLessonsBinding,
         firstLesson: Timetable?,
@@ -454,11 +455,8 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         with(binding.dashboardLessonsItemFirstValue) {
             setTextColor(firstTitleAndValueTextColor)
             typeface = firstTitleAndValueTextFont
-            text = context.getString(
-                R.string.dashboard_timetable_lesson_value,
-                firstLesson.subject,
-                firstLesson.room
-            )
+            text =
+                "${firstLesson.subject} ${if (firstLesson.room.isNotBlank()) "(${firstLesson.room})" else ""}"
         }
     }
 
@@ -474,11 +472,9 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
         val secondTimeText = "${formattedStartTime}-${formattedEndTime}"
         val secondValueText = if (secondLesson != null) {
-            context.getString(
-                R.string.dashboard_timetable_lesson_value,
-                secondLesson.subject,
-                secondLesson.room
-            )
+            val roomString = if (secondLesson.room.isNotBlank()) "(${secondLesson.room})" else ""
+
+            "${secondLesson.subject} $roomString"
         } else {
             context.getString(R.string.dashboard_timetable_second_lesson_value_end)
         }

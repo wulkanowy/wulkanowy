@@ -496,7 +496,6 @@
     <!--Dashboard-->
     <string name="dashboard_timetable_title">Lekcje</string>
     <string name="dashboard_timetable_title_tomorrow">(Jutro)</string>
-    <string name="dashboard_timetable_lesson_value">%1$s (%2$s)</string>
     <string name="dashboard_timetable_first_lesson_title_moment">Za chwilę:</string>
     <string name="dashboard_timetable_first_lesson_title_soon">Wkrótce:</string>
     <string name="dashboard_timetable_first_lesson_title_first">Pierwsza:</string>

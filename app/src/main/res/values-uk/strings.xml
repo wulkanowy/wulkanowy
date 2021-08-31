@@ -496,7 +496,6 @@
     <!--Dashboard-->
     <string name="dashboard_timetable_title">Уроки</string>
     <string name="dashboard_timetable_title_tomorrow">(Завтра)</string>
-    <string name="dashboard_timetable_lesson_value">%1$s (%2$s)</string>
     <string name="dashboard_timetable_first_lesson_title_moment">Через мить:</string>
     <string name="dashboard_timetable_first_lesson_title_soon">Незабаром:</string>
     <string name="dashboard_timetable_first_lesson_title_first">Перше:</string>
