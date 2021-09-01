@@ -385,7 +385,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         val firstTitleAndValueTextColor: Int
         val firstTitleAndValueTextFont: Typeface
 
-        if (currentDateTime.isBefore(firstLesson.start)) {
+        if (currentDateTime < firstLesson.start) {
             if (minutesToStartLesson > 60) {
                 val formattedStartTime = firstLesson.start.toFormattedString("HH:mm")
                 val formattedEndTime = firstLesson.end.toFormattedString("HH:mm")
