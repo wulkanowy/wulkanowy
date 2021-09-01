@@ -21,6 +21,13 @@ import io.github.wulkanowy.utils.calculatePercentage
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -50,8 +57,6 @@ class DashboardPresenter @Inject constructor(
 
     private lateinit var dashboardItemsToLoad: Set<DashboardItem.Type>
 
-    private var dashboardTilesToLoad: Set<DashboardItem.Tile> = emptySet()
-
     private lateinit var lastError: Throwable
 
     override fun onAttachView(view: DashboardView) {
@@ -79,81 +84,24 @@ class DashboardPresenter @Inject constructor(
     }
 
     fun loadData(forceRefresh: Boolean = false, tilesToLoad: Set<DashboardItem.Tile>) {
-        val oldDashboardDataToLoad = dashboardTilesToLoad
-
-        dashboardTilesToLoad = tilesToLoad
-        dashboardItemsToLoad = dashboardTilesToLoad.map { it.toDashboardItemType() }.toSet()
-
-        removeUnselectedTiles()
-
-        val newTileList = generateTileListToLoad(oldDashboardDataToLoad, forceRefresh)
-        loadTiles(forceRefresh, newTileList)
+        dashboardItemsToLoad = tilesToLoad.map { it.toDashboardItemType() }.toSet()
+        loadTiles(forceRefresh, dashboardItemsToLoad.toList())
     }
 
-    private fun removeUnselectedTiles() {
-        val isLuckyNumberToLoad =
-            dashboardTilesToLoad.any { it == DashboardItem.Tile.LUCKY_NUMBER }
-        val isMessagesToLoad =
-            dashboardTilesToLoad.any { it == DashboardItem.Tile.MESSAGES }
-        val isAttendanceToLoad =
-            dashboardTilesToLoad.any { it == DashboardItem.Tile.ATTENDANCE }
-
-        dashboardItemLoadedList.removeAll { loadedTile -> dashboardItemsToLoad.none { it == loadedTile.type } }
-
-        val horizontalGroup =
-            dashboardItemLoadedList.find { it is DashboardItem.HorizontalGroup } as DashboardItem.HorizontalGroup?
-
-        if (horizontalGroup != null) {
-            val horizontalIndex = dashboardItemLoadedList.indexOf(horizontalGroup)
-            dashboardItemLoadedList.remove(horizontalGroup)
-
-            var updatedHorizontalGroup = horizontalGroup
-
-            if (horizontalGroup.luckyNumber != null && !isLuckyNumberToLoad) {
-                updatedHorizontalGroup = updatedHorizontalGroup.copy(luckyNumber = null)
-            }
-
-            if (horizontalGroup.attendancePercentage != null && !isAttendanceToLoad) {
-                updatedHorizontalGroup = updatedHorizontalGroup.copy(attendancePercentage = null)
-            }
-
-            if (horizontalGroup.unreadMessagesCount != null && !isMessagesToLoad) {
-                updatedHorizontalGroup = updatedHorizontalGroup.copy(unreadMessagesCount = null)
-            }
-
-            if (horizontalGroup.error != null) {
-                updatedHorizontalGroup = updatedHorizontalGroup.copy(error = null, isLoading = true)
-            }
-
-            dashboardItemLoadedList.add(horizontalIndex, updatedHorizontalGroup)
-        }
-
-        view?.updateData(dashboardItemLoadedList)
-    }
-
-    private fun loadTiles(forceRefresh: Boolean, tileList: List<DashboardItem.Tile>) {
+    private fun loadTiles(forceRefresh: Boolean, tileList: List<DashboardItem.Type>) {
         tileList.forEach {
             when (it) {
-                DashboardItem.Tile.ACCOUNT -> loadCurrentAccount(forceRefresh)
-                DashboardItem.Tile.LUCKY_NUMBER -> loadLuckyNumber(forceRefresh)
-                DashboardItem.Tile.MESSAGES -> loadMessages(forceRefresh)
-                DashboardItem.Tile.ATTENDANCE -> loadAttendance(forceRefresh)
-                DashboardItem.Tile.LESSONS -> loadLessons(forceRefresh)
-                DashboardItem.Tile.GRADES -> loadGrades(forceRefresh)
-                DashboardItem.Tile.HOMEWORK -> loadHomework(forceRefresh)
-                DashboardItem.Tile.ANNOUNCEMENTS -> loadSchoolAnnouncements(forceRefresh)
-                DashboardItem.Tile.EXAMS -> loadExams(forceRefresh)
-                DashboardItem.Tile.CONFERENCES -> loadConferences(forceRefresh)
-                DashboardItem.Tile.ADS -> TODO()
+                DashboardItem.Type.ACCOUNT -> loadCurrentAccount(forceRefresh)
+                DashboardItem.Type.HORIZONTAL_GROUP -> loadHorizontalGroup(forceRefresh)
+                DashboardItem.Type.LESSONS -> loadLessons(forceRefresh)
+                DashboardItem.Type.GRADES -> loadGrades(forceRefresh)
+                DashboardItem.Type.HOMEWORK -> loadHomework(forceRefresh)
+                DashboardItem.Type.ANNOUNCEMENTS -> loadSchoolAnnouncements(forceRefresh)
+                DashboardItem.Type.EXAMS -> loadExams(forceRefresh)
+                DashboardItem.Type.CONFERENCES -> loadConferences(forceRefresh)
+                DashboardItem.Type.ADS -> TODO()
             }
         }
-    }
-
-    private fun generateTileListToLoad(
-        oldDashboardTileToLoad: Set<DashboardItem.Tile>,
-        forceRefresh: Boolean
-    ) = dashboardTilesToLoad.filter { newTileToLoad ->
-        oldDashboardTileToLoad.none { it == newTileToLoad } || forceRefresh
     }
 
     fun onSwipeRefresh() {
@@ -215,111 +163,59 @@ class DashboardPresenter @Inject constructor(
             .launch("dashboard_account")
     }
 
-    private fun loadLuckyNumber(forceRefresh: Boolean) {
-        flowWithResourceIn {
-            val student = studentRepository.getCurrentStudent(true)
-
-            luckyNumberRepository.getLuckyNumber(student, forceRefresh)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    Timber.i("Loading dashboard lucky number data started")
-                    if (forceRefresh) return@onEach
-                    processHorizontalGroupData(
-                        luckyNumber = it.data?.luckyNumber,
-                        isLoading = true,
-                        forceRefresh = forceRefresh
-                    )
-                }
-                Status.SUCCESS -> {
-                    Timber.i("Loading dashboard lucky number result: Success")
-                    processHorizontalGroupData(
-                        luckyNumber = it.data?.luckyNumber ?: -1,
-                        forceRefresh = forceRefresh
-                    )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading dashboard lucky number result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                    processHorizontalGroupData(error = it.error, forceRefresh = forceRefresh)
-                }
-            }
-        }.launch("dashboard_lucky_number")
-    }
-
-    private fun loadMessages(forceRefresh: Boolean) {
-        flowWithResourceIn {
+    private fun loadHorizontalGroup(forceRefresh: Boolean) {
+        flow {
             val student = studentRepository.getCurrentStudent(true)
             val semester = semesterRepository.getCurrentSemester(student)
 
-            messageRepository.getMessages(student, semester, MessageFolder.RECEIVED, forceRefresh)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    Timber.i("Loading dashboard messages data started")
-                    if (forceRefresh) return@onEach
-                    val unreadMessagesCount = it.data?.count { message -> message.unread }
+            val luckyNumberFlow = luckyNumberRepository.getLuckyNumber(student, forceRefresh)
+            val messageFLow = messageRepository.getMessages(
+                student = student,
+                semester = semester,
+                folder = MessageFolder.RECEIVED,
+                forceRefresh = forceRefresh
+            )
+            val attendanceFlow = attendanceSummaryRepository.getAttendanceSummary(
+                student = student,
+                semester = semester,
+                subjectId = -1,
+                forceRefresh = forceRefresh
+            )
 
-                    processHorizontalGroupData(
-                        unreadMessagesCount = unreadMessagesCount,
-                        isLoading = true,
-                        forceRefresh = forceRefresh
-                    )
-                }
-                Status.SUCCESS -> {
-                    Timber.i("Loading dashboard messages result: Success")
-                    val unreadMessagesCount = it.data?.count { message -> message.unread }
+            emitAll(combine(
+                if (DashboardItem.Tile.LUCKY_NUMBER in preferencesRepository.selectedDashboardTiles)
+                    luckyNumberFlow else flowOf(null),
+                if (DashboardItem.Tile.MESSAGES in preferencesRepository.selectedDashboardTiles)
+                    messageFLow else flowOf(null),
+                if (DashboardItem.Tile.ATTENDANCE in preferencesRepository.selectedDashboardTiles)
+                    attendanceFlow else flowOf(null)
+            ) { luckyNumberResource, messageResource, attendanceResource ->
+                val error =
+                    luckyNumberResource?.error ?: messageResource?.error ?: attendanceResource?.error
+                error?.let { throw it }
 
-                    processHorizontalGroupData(
-                        unreadMessagesCount = unreadMessagesCount,
-                        forceRefresh = forceRefresh
-                    )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading dashboard messages result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                    processHorizontalGroupData(error = it.error, forceRefresh = forceRefresh)
-                }
+                val luckyNumber = luckyNumberResource?.data?.luckyNumber
+                val messageCount = messageResource?.data?.count { it.unread }
+                val attendancePercentage = attendanceResource?.data?.calculatePercentage()
+
+                DashboardItem.HorizontalGroup(
+                    isLoading = (luckyNumberResource?.status == Status.LOADING || messageResource?.status == Status.LOADING || attendanceResource?.status == Status.LOADING),
+                    attendancePercentage = attendancePercentage,
+                    unreadMessagesCount = messageCount,
+                    luckyNumber = luckyNumber
+                )
+            })
+        }
+            .filterNot { it.isLoading && forceRefresh }
+            .distinctUntilChanged()
+            .onEach {
+                updateData(it, forceRefresh)
             }
-        }.launch("dashboard_messages")
-    }
-
-    private fun loadAttendance(forceRefresh: Boolean) {
-        flowWithResourceIn {
-            val student = studentRepository.getCurrentStudent(true)
-            val semester = semesterRepository.getCurrentSemester(student)
-
-            attendanceSummaryRepository.getAttendanceSummary(student, semester, -1, forceRefresh)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    Timber.i("Loading dashboard attendance data started")
-                    if (forceRefresh) return@onEach
-                    val attendancePercentage = it.data?.calculatePercentage()
-
-                    processHorizontalGroupData(
-                        attendancePercentage = attendancePercentage,
-                        isLoading = true,
-                        forceRefresh = forceRefresh
-                    )
-                }
-                Status.SUCCESS -> {
-                    Timber.i("Loading dashboard attendance result: Success")
-                    val attendancePercentage = it.data?.calculatePercentage()
-
-                    processHorizontalGroupData(
-                        attendancePercentage = attendancePercentage,
-                        forceRefresh = forceRefresh
-                    )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading dashboard attendance result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-
-                    processHorizontalGroupData(error = it.error, forceRefresh = forceRefresh)
-                }
+            .catch {
+                updateData(DashboardItem.HorizontalGroup(error = it), forceRefresh)
+                errorHandler.dispatch(it)
             }
-        }.launch("dashboard_attendance")
+            .launch("horizontal")
     }
 
     private fun loadGrades(forceRefresh: Boolean) {
@@ -554,80 +450,6 @@ class DashboardPresenter @Inject constructor(
                 }
             }
         }.launch("dashboard_conferences")
-    }
-
-    private fun processHorizontalGroupData(
-        luckyNumber: Int? = null,
-        unreadMessagesCount: Int? = null,
-        attendancePercentage: Double? = null,
-        error: Throwable? = null,
-        isLoading: Boolean = false,
-        forceRefresh: Boolean
-    ) {
-        val isLuckyNumberToLoad =
-            dashboardTilesToLoad.any { it == DashboardItem.Tile.LUCKY_NUMBER }
-        val isMessagesToLoad =
-            dashboardTilesToLoad.any { it == DashboardItem.Tile.MESSAGES }
-        val isAttendanceToLoad =
-            dashboardTilesToLoad.any { it == DashboardItem.Tile.ATTENDANCE }
-        val isPushedToList =
-            dashboardItemLoadedList.any { it.type == DashboardItem.Type.HORIZONTAL_GROUP }
-
-        if (error != null) {
-            updateData(DashboardItem.HorizontalGroup(error = error), forceRefresh)
-            return
-        }
-
-        if (isLoading) {
-            val horizontalGroup =
-                dashboardItemLoadedList.find { it is DashboardItem.HorizontalGroup } as DashboardItem.HorizontalGroup?
-            val updatedHorizontalGroup =
-                horizontalGroup?.copy(isLoading = true) ?: DashboardItem.HorizontalGroup(isLoading = true)
-
-            updateData(updatedHorizontalGroup, forceRefresh)
-        }
-
-        if (forceRefresh && !isPushedToList) {
-            updateData(DashboardItem.HorizontalGroup(), forceRefresh)
-        }
-
-        val horizontalGroup =
-            dashboardItemLoadedList.single { it is DashboardItem.HorizontalGroup } as DashboardItem.HorizontalGroup
-
-        when {
-            luckyNumber != null -> {
-                updateData(horizontalGroup.copy(luckyNumber = luckyNumber), forceRefresh)
-            }
-            unreadMessagesCount != null -> {
-                updateData(
-                    horizontalGroup.copy(unreadMessagesCount = unreadMessagesCount),
-                    forceRefresh
-                )
-            }
-            attendancePercentage != null -> {
-                updateData(
-                    horizontalGroup.copy(attendancePercentage = attendancePercentage),
-                    forceRefresh
-                )
-            }
-        }
-
-        val isHorizontalGroupLoaded = dashboardItemLoadedList.any {
-            if (it !is DashboardItem.HorizontalGroup) return@any false
-
-            val isLuckyNumberStateCorrect = (it.luckyNumber != null) == isLuckyNumberToLoad
-            val isMessagesStateCorrect = (it.unreadMessagesCount != null) == isMessagesToLoad
-            val isAttendanceStateCorrect = (it.attendancePercentage != null) == isAttendanceToLoad
-
-            isLuckyNumberStateCorrect && isAttendanceStateCorrect && isMessagesStateCorrect
-        }
-
-        if (isHorizontalGroupLoaded) {
-            val updatedHorizontalGroup =
-                dashboardItemLoadedList.single { it is DashboardItem.HorizontalGroup } as DashboardItem.HorizontalGroup
-
-            updateData(updatedHorizontalGroup.copy(isLoading = false, error = null), forceRefresh)
-        }
     }
 
     private fun updateData(dashboardItem: DashboardItem, forceRefresh: Boolean) {
