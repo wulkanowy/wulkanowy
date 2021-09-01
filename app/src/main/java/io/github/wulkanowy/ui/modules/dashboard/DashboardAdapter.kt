@@ -299,13 +299,13 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
                     updateLessonView(item, currentTimetable, binding)
                     binding.dashboardLessonsItemTitleTomorrow.isVisible = false
                 }
-                currentDayHeader != null && currentDayHeader.content.isNotBlank() -> {
-                    updateLessonView(item, emptyList(), binding, currentDayHeader)
-                    binding.dashboardLessonsItemTitleTomorrow.isVisible = false
-                }
                 tomorrowTimetable.isNotEmpty() -> {
                     updateLessonView(item, tomorrowTimetable, binding)
                     binding.dashboardLessonsItemTitleTomorrow.isVisible = true
+                }
+                currentDayHeader != null && currentDayHeader.content.isNotBlank() -> {
+                    updateLessonView(item, emptyList(), binding, currentDayHeader)
+                    binding.dashboardLessonsItemTitleTomorrow.isVisible = false
                 }
                 tomorrowDayHeader != null && tomorrowDayHeader.content.isNotBlank() -> {
                     updateLessonView(item, emptyList(), binding, tomorrowDayHeader)
