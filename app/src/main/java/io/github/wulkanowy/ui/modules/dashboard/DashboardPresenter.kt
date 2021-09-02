@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.dashboard
 
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.repositories.AttendanceSummaryRepository
 import io.github.wulkanowy.data.repositories.ConferenceRepository
@@ -18,7 +19,6 @@ import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.calculatePercentage
-import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import kotlinx.coroutines.flow.catch
@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -139,17 +140,35 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadTiles(forceRefresh: Boolean, tileList: List<DashboardItem.Type>) {
-        tileList.forEach {
-            when (it) {
-                DashboardItem.Type.ACCOUNT -> loadCurrentAccount(forceRefresh)
-                DashboardItem.Type.HORIZONTAL_GROUP -> loadHorizontalGroup(forceRefresh)
-                DashboardItem.Type.LESSONS -> loadLessons(forceRefresh)
-                DashboardItem.Type.GRADES -> loadGrades(forceRefresh)
-                DashboardItem.Type.HOMEWORK -> loadHomework(forceRefresh)
-                DashboardItem.Type.ANNOUNCEMENTS -> loadSchoolAnnouncements(forceRefresh)
-                DashboardItem.Type.EXAMS -> loadExams(forceRefresh)
-                DashboardItem.Type.CONFERENCES -> loadConferences(forceRefresh)
-                DashboardItem.Type.ADS -> TODO()
+        launch {
+            Timber.i("Loading dashboard account data started")
+            val student = runCatching { studentRepository.getCurrentStudent(true) }
+                .onFailure {
+                    Timber.i("Loading dashboard account result: An exception occurred")
+                    errorHandler.dispatch(it)
+                    updateData(DashboardItem.Account(error = it), forceRefresh)
+                }
+                .onSuccess { Timber.i("Loading dashboard account result: Success") }
+                .getOrNull() ?: return@launch
+
+            tileList.forEach {
+                when (it) {
+                    DashboardItem.Type.ACCOUNT -> {
+                        updateData(DashboardItem.Account(student), forceRefresh)
+                    }
+                    DashboardItem.Type.HORIZONTAL_GROUP -> {
+                        loadHorizontalGroup(student, forceRefresh)
+                    }
+                    DashboardItem.Type.LESSONS -> loadLessons(student, forceRefresh)
+                    DashboardItem.Type.GRADES -> loadGrades(student, forceRefresh)
+                    DashboardItem.Type.HOMEWORK -> loadHomework(student, forceRefresh)
+                    DashboardItem.Type.ANNOUNCEMENTS -> {
+                        loadSchoolAnnouncements(student, forceRefresh)
+                    }
+                    DashboardItem.Type.EXAMS -> loadExams(student, forceRefresh)
+                    DashboardItem.Type.CONFERENCES -> loadConferences(student, forceRefresh)
+                    DashboardItem.Type.ADS -> TODO()
+                }
             }
         }
     }
@@ -190,32 +209,8 @@ class DashboardPresenter @Inject constructor(
         }.toSet()
     }
 
-    private fun loadCurrentAccount(forceRefresh: Boolean) {
-        flowWithResource { studentRepository.getCurrentStudent(false) }
-            .onEach {
-                when (it.status) {
-                    Status.LOADING -> {
-                        Timber.i("Loading dashboard account data started")
-                        if (forceRefresh) return@onEach
-                        updateData(DashboardItem.Account(it.data, isLoading = true), forceRefresh)
-                    }
-                    Status.SUCCESS -> {
-                        Timber.i("Loading dashboard account result: Success")
-                        updateData(DashboardItem.Account(it.data), forceRefresh)
-                    }
-                    Status.ERROR -> {
-                        Timber.i("Loading dashboard account result: An exception occurred")
-                        errorHandler.dispatch(it.error!!)
-                        updateData(DashboardItem.Account(error = it.error), forceRefresh)
-                    }
-                }
-            }
-            .launch("dashboard_account")
-    }
-
-    private fun loadHorizontalGroup(forceRefresh: Boolean) {
+    private fun loadHorizontalGroup(student: Student, forceRefresh: Boolean) {
         flow {
-            val student = studentRepository.getCurrentStudent(true)
             val semester = semesterRepository.getCurrentSemester(student)
             val selectedTiles = preferencesRepository.selectedDashboardTiles
 
@@ -242,21 +237,21 @@ class DashboardPresenter @Inject constructor(
                     messageFLow,
                     attendanceFlow
                 ) { luckyNumberResource, messageResource, attendanceResource ->
-                val error =
-                    luckyNumberResource?.error ?: messageResource?.error ?: attendanceResource?.error
-                error?.let { throw it }
+                    val error =
+                        luckyNumberResource?.error ?: messageResource?.error ?: attendanceResource?.error
+                    error?.let { throw it }
 
-                val luckyNumber = luckyNumberResource?.data?.luckyNumber
-                val messageCount = messageResource?.data?.count { it.unread }
-                val attendancePercentage = attendanceResource?.data?.calculatePercentage()
+                    val luckyNumber = luckyNumberResource?.data?.luckyNumber
+                    val messageCount = messageResource?.data?.count { it.unread }
+                    val attendancePercentage = attendanceResource?.data?.calculatePercentage()
 
-                DashboardItem.HorizontalGroup(
-                    isLoading = (luckyNumberResource?.status == Status.LOADING || messageResource?.status == Status.LOADING || attendanceResource?.status == Status.LOADING),
-                    attendancePercentage = attendancePercentage,
-                    unreadMessagesCount = messageCount,
-                    luckyNumber = luckyNumber
-                )
-            })
+                    DashboardItem.HorizontalGroup(
+                        isLoading = (luckyNumberResource?.status == Status.LOADING || messageResource?.status == Status.LOADING || attendanceResource?.status == Status.LOADING),
+                        attendancePercentage = attendancePercentage,
+                        unreadMessagesCount = messageCount,
+                        luckyNumber = luckyNumber
+                    )
+                })
         }
             .filterNot { it.isLoading && forceRefresh }
             .distinctUntilChanged()
@@ -277,9 +272,8 @@ class DashboardPresenter @Inject constructor(
             .launch("horizontal_group")
     }
 
-    private fun loadGrades(forceRefresh: Boolean) {
+    private fun loadGrades(student: Student, forceRefresh: Boolean) {
         flowWithResourceIn {
-            val student = studentRepository.getCurrentStudent(true)
             val semester = semesterRepository.getCurrentSemester(student)
 
             gradeRepository.getGrades(student, semester, forceRefresh)
@@ -334,9 +328,8 @@ class DashboardPresenter @Inject constructor(
         }.launch("dashboard_grades")
     }
 
-    private fun loadLessons(forceRefresh: Boolean) {
+    private fun loadLessons(student: Student, forceRefresh: Boolean) {
         flowWithResourceIn {
-            val student = studentRepository.getCurrentStudent(true)
             val semester = semesterRepository.getCurrentSemester(student)
             val date = LocalDate.now().nextOrSameSchoolDay
 
@@ -368,9 +361,8 @@ class DashboardPresenter @Inject constructor(
         }.launch("dashboard_lessons")
     }
 
-    private fun loadHomework(forceRefresh: Boolean) {
+    private fun loadHomework(student: Student, forceRefresh: Boolean) {
         flowWithResourceIn {
-            val student = studentRepository.getCurrentStudent(true)
             val semester = semesterRepository.getCurrentSemester(student)
             val date = LocalDate.now().nextOrSameSchoolDay
 
@@ -412,10 +404,8 @@ class DashboardPresenter @Inject constructor(
         }.launch("dashboard_homework")
     }
 
-    private fun loadSchoolAnnouncements(forceRefresh: Boolean) {
+    private fun loadSchoolAnnouncements(student: Student, forceRefresh: Boolean) {
         flowWithResourceIn {
-            val student = studentRepository.getCurrentStudent(true)
-
             schoolAnnouncementRepository.getSchoolAnnouncements(student, forceRefresh)
         }.onEach {
             when (it.status) {
@@ -442,9 +432,8 @@ class DashboardPresenter @Inject constructor(
         }.launch("dashboard_announcements")
     }
 
-    private fun loadExams(forceRefresh: Boolean) {
+    private fun loadExams(student: Student, forceRefresh: Boolean) {
         flowWithResourceIn {
-            val student = studentRepository.getCurrentStudent(true)
             val semester = semesterRepository.getCurrentSemester(student)
 
             examRepository.getExams(
@@ -477,9 +466,8 @@ class DashboardPresenter @Inject constructor(
         }.launch("dashboard_exams")
     }
 
-    private fun loadConferences(forceRefresh: Boolean) {
+    private fun loadConferences(student: Student, forceRefresh: Boolean) {
         flowWithResourceIn {
-            val student = studentRepository.getCurrentStudent(true)
             val semester = semesterRepository.getCurrentSemester(student)
 
             conferenceRepository.getConferences(
