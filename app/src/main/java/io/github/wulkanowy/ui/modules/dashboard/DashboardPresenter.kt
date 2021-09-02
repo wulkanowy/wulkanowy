@@ -55,7 +55,9 @@ class DashboardPresenter @Inject constructor(
 
     private val dashboardItemRefreshLoadedList = mutableListOf<DashboardItem>()
 
-    private lateinit var dashboardItemsToLoad: Set<DashboardItem.Type>
+    private var dashboardItemsToLoad = emptySet<DashboardItem.Type>()
+
+    private var dashboardTileLoadedList = emptySet<DashboardItem.Tile>()
 
     private lateinit var lastError: Throwable
 
@@ -74,8 +76,10 @@ class DashboardPresenter @Inject constructor(
     }
 
     fun onDragAndDropEnd(list: List<DashboardItem>) {
-        dashboardItemLoadedList.clear()
-        dashboardItemLoadedList.addAll(list)
+        with(dashboardItemLoadedList) {
+            clear()
+            addAll(list)
+        }
 
         val positionList =
             list.mapIndexed { index, dashboardItem -> Pair(dashboardItem.type, index) }.toMap()
@@ -84,8 +88,54 @@ class DashboardPresenter @Inject constructor(
     }
 
     fun loadData(forceRefresh: Boolean = false, tilesToLoad: Set<DashboardItem.Tile>) {
+        val oldDashboardTileLoadedList = dashboardTileLoadedList
         dashboardItemsToLoad = tilesToLoad.map { it.toDashboardItemType() }.toSet()
-        loadTiles(forceRefresh, dashboardItemsToLoad.toList())
+        dashboardTileLoadedList = tilesToLoad
+
+        val itemsToLoad = generateDashboardTileListToLoad(
+            dashboardTilesToLoad = tilesToLoad,
+            dashboardLoadedTiles = oldDashboardTileLoadedList,
+            forceRefresh = forceRefresh
+        ).map { it.toDashboardItemType() }
+
+        removeUnselectedTiles(tilesToLoad.toList())
+        loadTiles(forceRefresh, itemsToLoad)
+    }
+
+    private fun generateDashboardTileListToLoad(
+        dashboardTilesToLoad: Set<DashboardItem.Tile>,
+        dashboardLoadedTiles: Set<DashboardItem.Tile>,
+        forceRefresh: Boolean
+    ) = dashboardTilesToLoad.filter { newItemToLoad ->
+        dashboardLoadedTiles.none { it == newItemToLoad } || forceRefresh
+    }
+
+    private fun removeUnselectedTiles(tilesToLoad: List<DashboardItem.Tile>) {
+        dashboardItemLoadedList.removeAll { loadedTile -> dashboardItemsToLoad.none { it == loadedTile.type } }
+
+        val horizontalGroup =
+            dashboardItemLoadedList.find { it is DashboardItem.HorizontalGroup } as DashboardItem.HorizontalGroup?
+
+        if (horizontalGroup != null) {
+            val isLuckyNumberToLoad = DashboardItem.Tile.LUCKY_NUMBER in tilesToLoad
+            val isMessagesToLoad = DashboardItem.Tile.MESSAGES in tilesToLoad
+            val isAttendanceToLoad = DashboardItem.Tile.ATTENDANCE in tilesToLoad
+
+            val horizontalGroupIndex = dashboardItemLoadedList.indexOf(horizontalGroup)
+
+            val newHorizontalGroup = horizontalGroup.copy(
+                attendancePercentage = horizontalGroup.attendancePercentage.takeIf { isAttendanceToLoad },
+                unreadMessagesCount = horizontalGroup.unreadMessagesCount.takeIf { isMessagesToLoad },
+                luckyNumber = horizontalGroup.luckyNumber.takeIf { isLuckyNumberToLoad }
+            )
+
+            with(dashboardItemLoadedList) {
+                removeAt(horizontalGroupIndex)
+                add(horizontalGroupIndex, newHorizontalGroup)
+            }
+        }
+
+        view?.updateData(dashboardItemLoadedList)
     }
 
     private fun loadTiles(forceRefresh: Boolean, tileList: List<DashboardItem.Type>) {
@@ -167,29 +217,31 @@ class DashboardPresenter @Inject constructor(
         flow {
             val student = studentRepository.getCurrentStudent(true)
             val semester = semesterRepository.getCurrentSemester(student)
+            val selectedTiles = preferencesRepository.selectedDashboardTiles
 
             val luckyNumberFlow = luckyNumberRepository.getLuckyNumber(student, forceRefresh)
+                .takeIf { DashboardItem.Tile.LUCKY_NUMBER in selectedTiles } ?: flowOf(null)
+
             val messageFLow = messageRepository.getMessages(
                 student = student,
                 semester = semester,
                 folder = MessageFolder.RECEIVED,
                 forceRefresh = forceRefresh
-            )
+            ).takeIf { DashboardItem.Tile.MESSAGES in selectedTiles } ?: flowOf(null)
+
             val attendanceFlow = attendanceSummaryRepository.getAttendanceSummary(
                 student = student,
                 semester = semester,
                 subjectId = -1,
                 forceRefresh = forceRefresh
-            )
+            ).takeIf { DashboardItem.Tile.ATTENDANCE in selectedTiles } ?: flowOf(null)
 
-            emitAll(combine(
-                if (DashboardItem.Tile.LUCKY_NUMBER in preferencesRepository.selectedDashboardTiles)
-                    luckyNumberFlow else flowOf(null),
-                if (DashboardItem.Tile.MESSAGES in preferencesRepository.selectedDashboardTiles)
-                    messageFLow else flowOf(null),
-                if (DashboardItem.Tile.ATTENDANCE in preferencesRepository.selectedDashboardTiles)
-                    attendanceFlow else flowOf(null)
-            ) { luckyNumberResource, messageResource, attendanceResource ->
+            emitAll(
+                combine(
+                    luckyNumberFlow,
+                    messageFLow,
+                    attendanceFlow
+                ) { luckyNumberResource, messageResource, attendanceResource ->
                 val error =
                     luckyNumberResource?.error ?: messageResource?.error ?: attendanceResource?.error
                 error?.let { throw it }
@@ -209,13 +261,20 @@ class DashboardPresenter @Inject constructor(
             .filterNot { it.isLoading && forceRefresh }
             .distinctUntilChanged()
             .onEach {
+                if (it.isLoading) {
+                    Timber.i("Loading horizontal group result: Success")
+                } else {
+                    Timber.i("Loading horizontal group data started")
+                }
+
                 updateData(it, forceRefresh)
             }
             .catch {
+                Timber.i("Loading horizontal group result: An exception occurred")
                 updateData(DashboardItem.HorizontalGroup(error = it), forceRefresh)
                 errorHandler.dispatch(it)
             }
-            .launch("horizontal")
+            .launch("horizontal_group")
     }
 
     private fun loadGrades(forceRefresh: Boolean) {
@@ -454,42 +513,19 @@ class DashboardPresenter @Inject constructor(
 
     private fun updateData(dashboardItem: DashboardItem, forceRefresh: Boolean) {
         val isForceRefreshError = forceRefresh && dashboardItem.error != null
-        val dashboardItemsPosition = preferencesRepository.dashboardItemsPosition
 
         with(dashboardItemLoadedList) {
             removeAll { it.type == dashboardItem.type && !isForceRefreshError }
             if (!isForceRefreshError) add(dashboardItem)
-            sortBy { tile -> dashboardItemsToLoad.single { it == tile.type }.ordinal }
         }
 
-        if (forceRefresh) {
-            with(dashboardItemRefreshLoadedList) {
-                removeAll { it.type == dashboardItem.type }
-                add(dashboardItem)
-            }
-        }
-
-        dashboardItemLoadedList.sortBy { tile ->
-            dashboardItemsPosition?.getOrDefault(
-                tile.type,
-                tile.type.ordinal + 100
-            ) ?: tile.type.ordinal
-        }
+        if (forceRefresh) processForceRefresh(dashboardItem)
+        sortDashboardItems()
 
         val isItemsLoaded =
             dashboardItemsToLoad.all { type -> dashboardItemLoadedList.any { it.type == type } }
-        val isRefreshItemLoaded =
-            dashboardItemsToLoad.all { type -> dashboardItemRefreshLoadedList.any { it.type == type } }
         val isItemsDataLoaded = isItemsLoaded && dashboardItemLoadedList.all {
             it.isDataLoaded || it.error != null
-        }
-        val isRefreshItemsDataLoaded = isRefreshItemLoaded && dashboardItemRefreshLoadedList.all {
-            it.isDataLoaded || it.error != null
-        }
-
-        if (isRefreshItemsDataLoaded) {
-            view?.showRefresh(false)
-            dashboardItemRefreshLoadedList.clear()
         }
 
         view?.run {
@@ -500,23 +536,54 @@ class DashboardPresenter @Inject constructor(
             updateData(dashboardItemLoadedList.toList())
         }
 
-        if (isItemsLoaded) {
-            val filteredItems =
-                dashboardItemLoadedList.filterNot { it.type == DashboardItem.Type.ACCOUNT }
-            val isAccountItemError =
-                dashboardItemLoadedList.single { it.type == DashboardItem.Type.ACCOUNT }.error != null
-            val isGeneralError =
-                filteredItems.all { it.error != null } && filteredItems.isNotEmpty() || isAccountItemError
+        if (isItemsLoaded) processErrorIfExists()
+    }
 
-            val errorMessage = filteredItems.map { it.error?.stackTraceToString() }.toString()
+    private fun processForceRefresh(dashboardItem: DashboardItem) {
+        with(dashboardItemRefreshLoadedList) {
+            removeAll { it.type == dashboardItem.type }
+            add(dashboardItem)
+        }
 
-            lastError = Exception(errorMessage)
+        val isRefreshItemLoaded =
+            dashboardItemsToLoad.all { type -> dashboardItemRefreshLoadedList.any { it.type == type } }
+        val isRefreshItemsDataLoaded = isRefreshItemLoaded && dashboardItemRefreshLoadedList.all {
+            it.isDataLoaded || it.error != null
+        }
 
-            view?.run {
-                showProgress(false)
-                showContent(!isGeneralError)
-                showErrorView(isGeneralError)
-            }
+        if (isRefreshItemsDataLoaded) {
+            view?.showRefresh(false)
+            dashboardItemRefreshLoadedList.clear()
+        }
+    }
+
+    private fun processErrorIfExists() {
+        val filteredItems =
+            dashboardItemLoadedList.filterNot { it.type == DashboardItem.Type.ACCOUNT }
+        val isAccountItemError =
+            dashboardItemLoadedList.single { it.type == DashboardItem.Type.ACCOUNT }.error != null
+        val isGeneralError =
+            filteredItems.all { it.error != null } && filteredItems.isNotEmpty() || isAccountItemError
+
+        val errorMessage = filteredItems.map { it.error?.stackTraceToString() }.toString()
+
+        lastError = Exception(errorMessage)
+
+        view?.run {
+            showProgress(false)
+            showContent(!isGeneralError)
+            showErrorView(isGeneralError)
+        }
+    }
+
+    private fun sortDashboardItems() {
+        val dashboardItemsPosition = preferencesRepository.dashboardItemsPosition
+
+        dashboardItemLoadedList.sortBy { tile ->
+            dashboardItemsPosition?.getOrDefault(
+                tile.type,
+                tile.type.ordinal + 100
+            ) ?: tile.type.ordinal
         }
     }
 }
