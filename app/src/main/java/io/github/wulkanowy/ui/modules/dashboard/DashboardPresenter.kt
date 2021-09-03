@@ -507,9 +507,16 @@ class DashboardPresenter @Inject constructor(
             if (!isForceRefreshError) add(dashboardItem)
         }
 
-        if (forceRefresh) processForceRefresh(dashboardItem)
         sortDashboardItems()
 
+        if (forceRefresh) {
+            updateForceRefreshData(dashboardItem)
+        } else {
+            updateNormalData(dashboardItem)
+        }
+    }
+
+    private fun updateNormalData(dashboardItem: DashboardItem) {
         val isItemsLoaded =
             dashboardItemsToLoad.all { type -> dashboardItemLoadedList.any { it.type == type } }
         val isItemsDataLoaded = isItemsLoaded && dashboardItemLoadedList.all {
@@ -517,17 +524,15 @@ class DashboardPresenter @Inject constructor(
         }
 
         view?.run {
-            if (!forceRefresh) {
-                showProgress(!isItemsDataLoaded)
-                showContent(isItemsDataLoaded)
-            }
+            showProgress(!isItemsDataLoaded)
+            showContent(isItemsDataLoaded)
             updateData(dashboardItemLoadedList.toList())
         }
 
-        if (isItemsLoaded) processErrorIfExists()
+        showErrorIfExists(isItemsLoaded, dashboardItemLoadedList)
     }
 
-    private fun processForceRefresh(dashboardItem: DashboardItem) {
+    private fun updateForceRefreshData(dashboardItem: DashboardItem) {
         with(dashboardItemRefreshLoadedList) {
             removeAll { it.type == dashboardItem.type }
             add(dashboardItem)
@@ -542,23 +547,28 @@ class DashboardPresenter @Inject constructor(
         if (isRefreshItemsDataLoaded) {
             view?.showRefresh(false)
             dashboardItemRefreshLoadedList.clear()
+            view?.updateData(dashboardItemLoadedList.toList())
         }
+
+        showErrorIfExists(isRefreshItemLoaded, dashboardItemRefreshLoadedList)
     }
 
-    private fun processErrorIfExists() {
+    private fun showErrorIfExists(isItemsLoaded: Boolean, itemsLoadedList: List<DashboardItem>) {
         val filteredItems =
             dashboardItemLoadedList.filterNot { it.type == DashboardItem.Type.ACCOUNT }
         val isAccountItemError =
-            dashboardItemLoadedList.single { it.type == DashboardItem.Type.ACCOUNT }.error != null
+            dashboardItemLoadedList.singleOrNull { it.type == DashboardItem.Type.ACCOUNT }?.error != null
         val isGeneralError =
             filteredItems.all { it.error != null } && filteredItems.isNotEmpty() || isAccountItemError
+        val errorMessage = dashboardItemLoadedList.map { it.error?.stackTraceToString() }.toString()
 
-        val errorMessage = filteredItems.map { it.error?.stackTraceToString() }.toString()
+        if (!isAccountItemError && !isItemsLoaded) return
 
         lastError = Exception(errorMessage)
 
         view?.run {
             showProgress(false)
+            showRefresh(false)
             showContent(!isGeneralError)
             showErrorView(isGeneralError)
         }
