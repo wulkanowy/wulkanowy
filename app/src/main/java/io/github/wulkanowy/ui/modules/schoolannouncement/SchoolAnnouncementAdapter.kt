@@ -14,6 +14,8 @@ class SchoolAnnouncementAdapter @Inject constructor() :
 
     var items = emptyList<SchoolAnnouncement>()
 
+    var onItemClickListener: (SchoolAnnouncement) -> Unit = {}
+
     override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -29,6 +31,8 @@ class SchoolAnnouncementAdapter @Inject constructor() :
             schoolAnnouncementItemContent.text = HtmlCompat.fromHtml(
                 item.content, HtmlCompat.FROM_HTML_MODE_COMPACT
             )
+
+            root.setOnClickListener { onItemClickListener(item) }
         }
     }
 
