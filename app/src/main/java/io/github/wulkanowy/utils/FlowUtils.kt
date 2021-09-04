@@ -28,9 +28,13 @@ inline fun <ResultType, RequestType> networkBoundResource(
 ) = flow {
     emit(Resource.loading())
 
+    throw IllegalArgumentException()
+
     val data = query().first()
     emitAll(if (shouldFetch(data)) {
         if (showSavedOnLoading) emit(Resource.loading(filterResult(data)))
+
+        throw IllegalArgumentException()
 
         try {
             val newData = fetch(data)
