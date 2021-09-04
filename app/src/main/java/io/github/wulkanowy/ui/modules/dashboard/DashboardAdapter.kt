@@ -198,18 +198,12 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
                 context.getString(R.string.dashboard_horizontal_group_no_data)
             } else luckyNumber?.toString()
 
-            if (dashboardHorizontalGroupItemInfoContainer.isVisible != (error != null || isLoading)) {
-                dashboardHorizontalGroupItemInfoContainer.isVisible = error != null || isLoading
-            }
-
-            if (dashboardHorizontalGroupItemInfoProgress.isVisible != isLoading) {
-                dashboardHorizontalGroupItemInfoProgress.isVisible = isLoading
-            }
-
+            dashboardHorizontalGroupItemInfoContainer.isVisible = error != null || isLoading
+            dashboardHorizontalGroupItemInfoProgress.isVisible = isLoading && !item.isDataLoaded
             dashboardHorizontalGroupItemInfoErrorText.isVisible = error != null
 
             with(dashboardHorizontalGroupItemLuckyContainer) {
-                isVisible = error == null && !isLoading && luckyNumber != null
+                isVisible = luckyNumber != null
                 setOnClickListener { onLuckyNumberTileClickListener() }
 
                 updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -224,7 +218,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             }
 
             with(dashboardHorizontalGroupItemAttendanceContainer) {
-                isVisible = error == null && !isLoading && attendancePercentage != null
+                isVisible = attendancePercentage != null
                 updateLayoutParams<ConstraintLayout.LayoutParams> {
                     matchConstraintPercentWidth = when {
                         luckyNumber == null && unreadMessagesCount == null -> 1.0f
@@ -236,7 +230,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             }
 
             with(dashboardHorizontalGroupItemMessageContainer) {
-                isVisible = error == null && !isLoading && unreadMessagesCount != null
+                isVisible = unreadMessagesCount != null
                 setOnClickListener { onMessageTileClickListener() }
             }
         }

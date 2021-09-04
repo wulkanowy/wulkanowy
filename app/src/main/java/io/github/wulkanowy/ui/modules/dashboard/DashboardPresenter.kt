@@ -60,6 +60,8 @@ class DashboardPresenter @Inject constructor(
 
     private var dashboardTileLoadedList = emptySet<DashboardItem.Tile>()
 
+    private val firstLoadedItemList = mutableListOf<DashboardItem.Type>()
+
     private lateinit var lastError: Throwable
 
     override fun onAttachView(view: DashboardView) {
