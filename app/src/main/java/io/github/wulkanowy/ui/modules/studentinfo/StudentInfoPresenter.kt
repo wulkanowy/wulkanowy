@@ -58,15 +58,12 @@ class StudentInfoPresenter @Inject constructor(
         view?.showErrorDetailsDialog(lastError)
     }
 
-    fun onItemSelected(position: Int) {
-        if (infoType != StudentInfoView.Type.FAMILY) return
+    fun onItemSelected(viewType: StudentInfoView.Type?) {
+        viewType ?: return
 
         view?.openStudentInfoView(
             studentWithSemesters = studentWithSemesters,
-            infoType = when (position) {
-                0 -> StudentInfoView.Type.FIRST_GUARDIAN
-                else -> StudentInfoView.Type.SECOND_GUARDIAN
-            },
+            infoType = viewType,
         )
     }
 

@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.studentinfo
 
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
@@ -154,17 +153,25 @@ class StudentInfoFragment :
         )
     }
 
-    @SuppressLint("DefaultLocale")
+    @OptIn(ExperimentalStdlibApi::class)
     override fun showFamilyTypeData(studentInfo: StudentInfo) {
+        val items = buildList {
+            add(studentInfo.firstGuardian?.let {
+                Triple(it.kinship.capitalise(), it.fullName, StudentInfoView.Type.FIRST_GUARDIAN)
+            })
+
+            add(studentInfo.secondGuardian?.let {
+                Triple(it.kinship.capitalise(), it.fullName, StudentInfoView.Type.SECOND_GUARDIAN)
+            })
+        }.filterNotNull()
+
         updateData(
-            listOfNotNull(
-                studentInfo.firstGuardian?.let { it.kinship.capitalise() to it.fullName },
-                studentInfo.secondGuardian?.let { it.kinship.capitalise() to it.fullName },
-            ).map { (title, value) ->
+            items.map { (title, value, type) ->
                 StudentInfoItem(
                     title = title.ifBlank { getString(R.string.all_no_data) },
                     subtitle = value.ifBlank { getString(R.string.all_no_data) },
                     showArrow = true,
+                    viewType = type,
                 )
             }
         )
