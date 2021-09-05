@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.dashboard
 
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.repositories.AttendanceSummaryRepository
@@ -225,6 +226,11 @@ class DashboardPresenter @Inject constructor(
             val selectedTiles = preferencesRepository.selectedDashboardTiles
 
             val luckyNumberFlow = luckyNumberRepository.getLuckyNumber(student, forceRefresh)
+                .map {
+                    if (it.data == null) {
+                        it.copy(data = LuckyNumber(0, LocalDate.now(), 0))
+                    } else it
+                }
                 .takeIf { DashboardItem.Tile.LUCKY_NUMBER in selectedTiles } ?: flowOf(null)
 
             val messageFLow = messageRepository.getMessages(
@@ -262,7 +268,7 @@ class DashboardPresenter @Inject constructor(
                         isLoading = isLoading,
                         attendancePercentage = if (attendancePercentage == 0.0 && isLoading) -1.0 else attendancePercentage,
                         unreadMessagesCount = if (messageCount == 0 && isLoading) -1 else messageCount,
-                        luckyNumber = if (luckyNumber == null && isLoading) -1 else luckyNumber
+                        luckyNumber = if (luckyNumber == 0 && isLoading) -1 else luckyNumber
                     )
                 })
         }

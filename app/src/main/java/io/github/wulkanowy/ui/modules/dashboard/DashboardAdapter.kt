@@ -195,7 +195,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
         with(binding) {
             dashboardHorizontalGroupItemMessageValue.text = unreadMessagesCount.toString()
-            dashboardHorizontalGroupItemLuckyValue.text = if (luckyNumber == -1) {
+            dashboardHorizontalGroupItemLuckyValue.text = if (luckyNumber == 0) {
                 context.getString(R.string.dashboard_horizontal_group_no_data)
             } else luckyNumber?.toString()
 
@@ -372,7 +372,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         firstLesson ?: return
 
         val minutesToStartLesson =
-            Duration.between(currentDateTime, firstLesson.start).toMinutes()
+            Duration.between(currentDateTime, firstLesson.start).toMinutes() + 1
         val isFirstTimeVisible: Boolean
         val isFirstTimeRangeVisible: Boolean
         val firstTimeText: String
@@ -426,7 +426,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
                 }
             }
         } else {
-            val minutesToEndLesson = firstLesson.left!!.toMinutes()
+            val minutesToEndLesson = firstLesson.left!!.toMinutes() + 1
 
             firstTimeText = context.resources.getQuantityString(
                 R.plurals.dashboard_timetable_first_lesson_time_more_minutes,
