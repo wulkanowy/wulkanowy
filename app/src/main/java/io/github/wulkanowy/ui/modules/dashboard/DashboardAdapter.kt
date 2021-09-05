@@ -167,6 +167,8 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         val luckyNumber = item.luckyNumber
         val error = item.error
         val isLoading = item.isLoading
+        val isHorizontalDataLoaded =
+            luckyNumber != -1 && attendancePercentage != -1.0 && unreadMessagesCount != -1
         val binding = horizontalGroupViewHolder.binding
         val context = binding.root.context
         val attendanceColor = when {
@@ -199,11 +201,12 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             } else luckyNumber?.toString()
 
             dashboardHorizontalGroupItemInfoContainer.isVisible = error != null || isLoading
-            dashboardHorizontalGroupItemInfoProgress.isVisible = isLoading && !item.isDataLoaded
+            dashboardHorizontalGroupItemInfoProgress.isVisible =
+                (isLoading && !item.isDataLoaded) || (isLoading && !isHorizontalDataLoaded)
             dashboardHorizontalGroupItemInfoErrorText.isVisible = error != null
 
             with(dashboardHorizontalGroupItemLuckyContainer) {
-                isVisible = luckyNumber != null
+                isVisible = luckyNumber != null && luckyNumber != -1
                 setOnClickListener { onLuckyNumberTileClickListener() }
 
                 updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -218,7 +221,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             }
 
             with(dashboardHorizontalGroupItemAttendanceContainer) {
-                isVisible = attendancePercentage != null
+                isVisible = attendancePercentage != null && attendancePercentage != -1.0
                 updateLayoutParams<ConstraintLayout.LayoutParams> {
                     matchConstraintPercentWidth = when {
                         luckyNumber == null && unreadMessagesCount == null -> 1.0f
@@ -230,7 +233,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             }
 
             with(dashboardHorizontalGroupItemMessageContainer) {
-                isVisible = unreadMessagesCount != null
+                isVisible = unreadMessagesCount != null && unreadMessagesCount != -1
                 setOnClickListener { onMessageTileClickListener() }
             }
         }

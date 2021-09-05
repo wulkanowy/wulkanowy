@@ -28,14 +28,13 @@ inline fun <ResultType, RequestType> networkBoundResource(
 ) = flow {
     emit(Resource.loading())
 
-    throw IllegalArgumentException()
-
     val data = query().first()
-    emitAll(if (shouldFetch(data)) {
+    emitAll(if (true) {
+        kotlinx.coroutines.delay(2000)
         if (showSavedOnLoading) emit(Resource.loading(filterResult(data)))
 
+        kotlinx.coroutines.delay(2000)
         throw IllegalArgumentException()
-
         try {
             val newData = fetch(data)
             mutex.withLock { saveFetchResult(query().first(), newData) }

@@ -90,7 +90,10 @@ class DashboardPresenter @Inject constructor(
         preferencesRepository.dashboardItemsPosition = positionList
     }
 
-    fun loadData(forceRefresh: Boolean = false, tilesToLoad: Set<DashboardItem.Tile>) {
+    fun loadData(
+        tilesToLoad: Set<DashboardItem.Tile>,
+        forceRefresh: Boolean = false,
+    ) {
         val oldDashboardTileLoadedList = dashboardTileLoadedList
         dashboardItemsToLoad = tilesToLoad.map { it.toDashboardItemType() }.toSet()
         dashboardTileLoadedList = tilesToLoad
@@ -102,7 +105,7 @@ class DashboardPresenter @Inject constructor(
         ).map { it.toDashboardItemType() }
 
         removeUnselectedTiles(tilesToLoad.toList())
-        loadTiles(forceRefresh, itemsToLoad)
+        loadTiles(tileList = itemsToLoad, forceRefresh = forceRefresh)
     }
 
     private fun generateDashboardTileListToLoad(
@@ -141,7 +144,10 @@ class DashboardPresenter @Inject constructor(
         view?.updateData(dashboardItemLoadedList)
     }
 
-    private fun loadTiles(forceRefresh: Boolean, tileList: List<DashboardItem.Type>) {
+    private fun loadTiles(
+        tileList: List<DashboardItem.Type>,
+        forceRefresh: Boolean
+    ) {
         launch {
             Timber.i("Loading dashboard account data started")
             val student = runCatching { studentRepository.getCurrentStudent(true) }
@@ -168,7 +174,9 @@ class DashboardPresenter @Inject constructor(
                         loadSchoolAnnouncements(student, forceRefresh)
                     }
                     DashboardItem.Type.EXAMS -> loadExams(student, forceRefresh)
-                    DashboardItem.Type.CONFERENCES -> loadConferences(student, forceRefresh)
+                    DashboardItem.Type.CONFERENCES -> {
+                        loadConferences(student, forceRefresh)
+                    }
                     DashboardItem.Type.ADS -> TODO()
                 }
             }
@@ -177,7 +185,7 @@ class DashboardPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the dashboard")
-        loadData(true, preferencesRepository.selectedDashboardTiles)
+        loadData(preferencesRepository.selectedDashboardTiles, forceRefresh = true)
     }
 
     fun onRetry() {
@@ -185,7 +193,7 @@ class DashboardPresenter @Inject constructor(
             showErrorView(false)
             showProgress(true)
         }
-        loadData(true, preferencesRepository.selectedDashboardTiles)
+        loadData(preferencesRepository.selectedDashboardTiles, forceRefresh = true)
     }
 
     fun onViewReselected() {
@@ -247,11 +255,14 @@ class DashboardPresenter @Inject constructor(
                     val messageCount = messageResource?.data?.count { it.unread }
                     val attendancePercentage = attendanceResource?.data?.calculatePercentage()
 
+                    val isLoading =
+                        luckyNumberResource?.status == Status.LOADING || messageResource?.status == Status.LOADING || attendanceResource?.status == Status.LOADING
+
                     DashboardItem.HorizontalGroup(
-                        isLoading = (luckyNumberResource?.status == Status.LOADING || messageResource?.status == Status.LOADING || attendanceResource?.status == Status.LOADING),
-                        attendancePercentage = attendancePercentage,
-                        unreadMessagesCount = messageCount,
-                        luckyNumber = luckyNumber
+                        isLoading = isLoading,
+                        attendancePercentage = if (attendancePercentage == 0.0 && isLoading) -1.0 else attendancePercentage,
+                        unreadMessagesCount = if (messageCount == 0 && isLoading) -1 else messageCount,
+                        luckyNumber = if (luckyNumber == null && isLoading) -1 else luckyNumber
                     )
                 })
         }
@@ -268,7 +279,10 @@ class DashboardPresenter @Inject constructor(
             }
             .catch {
                 Timber.i("Loading horizontal group result: An exception occurred")
-                updateData(DashboardItem.HorizontalGroup(error = it), forceRefresh)
+                updateData(
+                    DashboardItem.HorizontalGroup(error = it),
+                    forceRefresh,
+                )
                 errorHandler.dispatch(it)
             }
             .launch("horizontal_group")
@@ -304,6 +318,7 @@ class DashboardPresenter @Inject constructor(
                 Status.LOADING -> {
                     Timber.i("Loading dashboard grades data started")
                     if (forceRefresh) return@onEach
+
                     updateData(
                         DashboardItem.Grades(
                             subjectWithGrades = it.data,
@@ -311,6 +326,10 @@ class DashboardPresenter @Inject constructor(
                             isLoading = true
                         ), forceRefresh
                     )
+
+                    if (!it.data.isNullOrEmpty()) {
+                        firstLoadedItemList += DashboardItem.Type.GRADES
+                    }
                 }
                 Status.SUCCESS -> {
                     Timber.i("Loading dashboard grades result: Success")
@@ -318,7 +337,8 @@ class DashboardPresenter @Inject constructor(
                         DashboardItem.Grades(
                             subjectWithGrades = it.data,
                             gradeTheme = preferencesRepository.gradeColorTheme
-                        ), forceRefresh
+                        ),
+                        forceRefresh
                     )
                 }
                 Status.ERROR -> {
@@ -348,16 +368,27 @@ class DashboardPresenter @Inject constructor(
                 Status.LOADING -> {
                     Timber.i("Loading dashboard lessons data started")
                     if (forceRefresh) return@onEach
-                    updateData(DashboardItem.Lessons(it.data, isLoading = true), forceRefresh)
+                    updateData(
+                        DashboardItem.Lessons(it.data, isLoading = true),
+                        forceRefresh
+                    )
+
+                    if (!it.data?.lessons.isNullOrEmpty()) {
+                        firstLoadedItemList += DashboardItem.Type.LESSONS
+                    }
                 }
                 Status.SUCCESS -> {
                     Timber.i("Loading dashboard lessons result: Success")
-                    updateData(DashboardItem.Lessons(it.data), forceRefresh)
+                    updateData(
+                        DashboardItem.Lessons(it.data), forceRefresh
+                    )
                 }
                 Status.ERROR -> {
                     Timber.i("Loading dashboard lessons result: An exception occurred")
                     errorHandler.dispatch(it.error!!)
-                    updateData(DashboardItem.Lessons(error = it.error), forceRefresh)
+                    updateData(
+                        DashboardItem.Lessons(error = it.error), forceRefresh
+                    )
                 }
             }
         }.launch("dashboard_lessons")
@@ -392,6 +423,10 @@ class DashboardPresenter @Inject constructor(
                         DashboardItem.Homework(it.data ?: emptyList(), isLoading = true),
                         forceRefresh
                     )
+
+                    if (!it.data.isNullOrEmpty()) {
+                        firstLoadedItemList += DashboardItem.Type.HOMEWORK
+                    }
                 }
                 Status.SUCCESS -> {
                     Timber.i("Loading dashboard homework result: Success")
@@ -415,11 +450,13 @@ class DashboardPresenter @Inject constructor(
                     Timber.i("Loading dashboard announcements data started")
                     if (forceRefresh) return@onEach
                     updateData(
-                        DashboardItem.Announcements(
-                            it.data ?: emptyList(),
-                            isLoading = true
-                        ), forceRefresh
+                        DashboardItem.Announcements(it.data ?: emptyList(), isLoading = true),
+                        forceRefresh
                     )
+
+                    if (!it.data.isNullOrEmpty()) {
+                        firstLoadedItemList += DashboardItem.Type.ANNOUNCEMENTS
+                    }
                 }
                 Status.SUCCESS -> {
                     Timber.i("Loading dashboard announcements result: Success")
@@ -454,6 +491,10 @@ class DashboardPresenter @Inject constructor(
                         DashboardItem.Exams(it.data.orEmpty(), isLoading = true),
                         forceRefresh
                     )
+
+                    if (!it.data.isNullOrEmpty()) {
+                        firstLoadedItemList += DashboardItem.Type.EXAMS
+                    }
                 }
                 Status.SUCCESS -> {
                     Timber.i("Loading dashboard exams result: Success")
@@ -487,6 +528,10 @@ class DashboardPresenter @Inject constructor(
                         DashboardItem.Conferences(it.data ?: emptyList(), isLoading = true),
                         forceRefresh
                     )
+
+                    if (!it.data.isNullOrEmpty()) {
+                        firstLoadedItemList += DashboardItem.Type.CONFERENCES
+                    }
                 }
                 Status.SUCCESS -> {
                     Timber.i("Loading dashboard conferences result: Success")
@@ -503,10 +548,12 @@ class DashboardPresenter @Inject constructor(
 
     private fun updateData(dashboardItem: DashboardItem, forceRefresh: Boolean) {
         val isForceRefreshError = forceRefresh && dashboardItem.error != null
+        val isFirstRunDataLoadedError =
+            dashboardItem.type in firstLoadedItemList && dashboardItem.error != null
 
         with(dashboardItemLoadedList) {
-            removeAll { it.type == dashboardItem.type && !isForceRefreshError }
-            if (!isForceRefreshError) add(dashboardItem)
+            removeAll { it.type == dashboardItem.type && !isForceRefreshError && !isFirstRunDataLoadedError }
+            if (!isForceRefreshError && !isFirstRunDataLoadedError) add(dashboardItem)
         }
 
         sortDashboardItems()
@@ -525,8 +572,8 @@ class DashboardPresenter @Inject constructor(
             it.isDataLoaded || it.error != null
         }
 
-        view?.run {
-            if (isItemsDataLoaded) {
+        if (isItemsDataLoaded) {
+            view?.run {
                 showProgress(false)
                 showErrorView(false)
                 showContent(true)
@@ -534,7 +581,11 @@ class DashboardPresenter @Inject constructor(
             }
         }
 
-        showErrorIfExists(isItemsLoaded, dashboardItemLoadedList, false)
+        showErrorIfExists(
+            isItemsLoaded = isItemsLoaded,
+            itemsLoadedList = dashboardItemLoadedList,
+            forceRefresh = false
+        )
     }
 
     private fun updateForceRefreshData(dashboardItem: DashboardItem) {
@@ -558,10 +609,13 @@ class DashboardPresenter @Inject constructor(
             }
         }
 
-        showErrorIfExists(isRefreshItemLoaded, dashboardItemRefreshLoadedList, true)
-        if (isRefreshItemsDataLoaded) {
-            dashboardItemRefreshLoadedList.clear()
-        }
+        showErrorIfExists(
+            isItemsLoaded = isRefreshItemLoaded,
+            itemsLoadedList = dashboardItemRefreshLoadedList,
+            forceRefresh = true
+        )
+
+        if (isRefreshItemsDataLoaded) dashboardItemRefreshLoadedList.clear()
     }
 
     private fun showErrorIfExists(
@@ -576,14 +630,20 @@ class DashboardPresenter @Inject constructor(
             filteredItems.none { it.error == null } && filteredItems.isNotEmpty() || isAccountItemError
         val errorMessage = itemsLoadedList.map { it.error?.stackTraceToString() }.toString()
 
+        val filteredOriginalLoadedList =
+            dashboardItemLoadedList.filterNot { it.type == DashboardItem.Type.ACCOUNT }
+        val wasAccountItemError =
+            dashboardItemLoadedList.find { it.type == DashboardItem.Type.ACCOUNT }?.error != null
+        val wasGeneralError =
+            filteredOriginalLoadedList.none { it.error == null } && filteredOriginalLoadedList.isNotEmpty() || wasAccountItemError
+
         if (isGeneralError && isItemsLoaded) {
             lastError = Exception(errorMessage)
 
             view?.run {
                 showProgress(false)
                 showRefresh(false)
-
-                if (!forceRefresh) {
+                if ((forceRefresh && wasGeneralError) || !forceRefresh) {
                     showContent(false)
                     showErrorView(true)
                 }
