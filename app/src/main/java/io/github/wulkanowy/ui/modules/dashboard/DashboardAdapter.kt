@@ -167,8 +167,6 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         val luckyNumber = item.luckyNumber
         val error = item.error
         val isLoading = item.isLoading
-        val isHorizontalDataLoaded =
-            luckyNumber != -1 && attendancePercentage != -1.0 && unreadMessagesCount != -1
         val binding = horizontalGroupViewHolder.binding
         val context = binding.root.context
         val attendanceColor = when {
@@ -202,7 +200,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
             dashboardHorizontalGroupItemInfoContainer.isVisible = error != null || isLoading
             dashboardHorizontalGroupItemInfoProgress.isVisible =
-                (isLoading && !item.isDataLoaded) || (isLoading && !isHorizontalDataLoaded)
+                (isLoading && !item.isDataLoaded) || (isLoading && !item.isFullDataLoaded)
             dashboardHorizontalGroupItemInfoErrorText.isVisible = error != null
 
             with(dashboardHorizontalGroupItemLuckyContainer) {

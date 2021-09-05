@@ -269,13 +269,17 @@ class DashboardPresenter @Inject constructor(
             .filterNot { it.isLoading && forceRefresh }
             .distinctUntilChanged()
             .onEach {
-                if (it.isLoading) {
-                    Timber.i("Loading horizontal group result: Success")
-                } else {
-                    Timber.i("Loading horizontal group data started")
-                }
-
                 updateData(it, forceRefresh)
+
+                if (it.isLoading) {
+                    Timber.i("Loading horizontal group data started")
+
+                    if (it.isFullDataLoaded) {
+                        firstLoadedItemList += DashboardItem.Type.HORIZONTAL_GROUP
+                    }
+                } else {
+                    Timber.i("Loading horizontal group result: Success")
+                }
             }
             .catch {
                 Timber.i("Loading horizontal group result: An exception occurred")
