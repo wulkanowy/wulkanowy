@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.entities.TimetableHeader
 import io.github.wulkanowy.databinding.ItemDashboardAccountBinding
@@ -41,7 +42,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
     private var lessonsTimer: Timer? = null
 
-    var onAccountTileClickListener: () -> Unit = {}
+    var onAccountTileClickListener: (Student) -> Unit = {}
 
     var onLuckyNumberTileClickListener: () -> Unit = {}
 
@@ -152,7 +153,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             dashboardAccountItemName.text = student?.nickOrName.orEmpty()
             dashboardAccountItemSchoolName.text = student?.schoolName.orEmpty()
 
-            root.setOnClickListener { onAccountTileClickListener() }
+            root.setOnClickListener { student?.let(onAccountTileClickListener) }
         }
     }
 
