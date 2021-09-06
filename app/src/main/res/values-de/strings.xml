@@ -487,7 +487,7 @@
         <item quantity="other">%1$d weitere Konferenzen</item>
     </plurals>
     <string name="dashboard_horizontal_group_error">Fehler beim Laden der Daten</string>
-    <string name="dashboard_horizontal_group_no_data">None</string>
+    <string name="dashboard_horizontal_group_no_data">Keine</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Auf Updates prüfen</string>
     <string name="dialog_error_check_update_message">Bevor Sie einen Fehler melden, prüfen Sie zuerst, ob ein Update mit der Fehlerbehebung verfügbar ist</string>
