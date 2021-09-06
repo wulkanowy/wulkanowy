@@ -565,7 +565,7 @@
         <item quantity="other">%1$d більше конференцій</item>
     </plurals>
     <string name="dashboard_horizontal_group_error">Помилка при завантаженні даних</string>
-    <string name="dashboard_horizontal_group_no_data">None</string>
+    <string name="dashboard_horizontal_group_no_data">Нічого</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Провірити наявність оновлень</string>
     <string name="dialog_error_check_update_message">Перед тим, як повідомлювати о помілці, перевірте наявність оновлень</string>
