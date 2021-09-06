@@ -565,7 +565,7 @@
         <item quantity="other">Ešte %1$d ďalších stretnutí</item>
     </plurals>
     <string name="dashboard_horizontal_group_error">Pri načítaní dát došlo k chybe</string>
-    <string name="dashboard_horizontal_group_no_data">None</string>
+    <string name="dashboard_horizontal_group_no_data">Žiadne</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Skontrolovať aktualizácie</string>
     <string name="dialog_error_check_update_message">Pred hlásením chyby skontrolujte, či je k dispozícii aktualizácia s opravou chýb</string>
