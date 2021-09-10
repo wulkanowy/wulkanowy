@@ -620,6 +620,7 @@
     <string name="pref_notify_fix_sync_issues_settings_button">Go to settings</string>
     <string name="pref_notify_debug_switch">Show debug notifications</string>
     <string name="pref_notify_disabled_summary">Synchronization is disabled</string>
+    <string name="pref_notify_notifications_piggyback">Capture official app notifications</string>
 
     <string name="pref_services_header">Synchronization</string>
     <string name="pref_services_switch">Automatic update</string>
