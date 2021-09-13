@@ -89,11 +89,7 @@ class LoginStudentSelectPresenterTest {
     @Test
     fun onSelectedStudentTest() {
         coEvery {
-            studentRepository.saveStudents(
-                listOf(
-                    StudentWithSemesters(testStudent.copy(isCurrent = true), emptyList())
-                )
-            )
+            studentRepository.saveStudents(listOf(StudentWithSemesters(testStudent, emptyList())))
         } just Runs
 
         every { loginStudentSelectView.openMainView() } just Runs
@@ -109,11 +105,7 @@ class LoginStudentSelectPresenterTest {
     @Test
     fun onSelectedStudentErrorTest() {
         coEvery {
-            studentRepository.saveStudents(
-                listOf(
-                    StudentWithSemesters(testStudent.copy(isCurrent = true), emptyList())
-                )
-            )
+            studentRepository.saveStudents(listOf(StudentWithSemesters(testStudent, emptyList())))
         } throws testException
 
         coEvery { studentRepository.logoutStudent(testStudent) } just Runs
