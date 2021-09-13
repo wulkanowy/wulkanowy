@@ -14,7 +14,7 @@ interface NotificationsView : BaseView {
 
     fun enableNotification(notificationKey: String, enable: Boolean)
 
-    fun openNotificationPermissionSettings()
+    fun openNotificationPermissionDialog()
 
     fun setNotificationPiggybackPreferenceChecked(isChecked: Boolean)
 }

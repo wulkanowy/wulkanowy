@@ -174,8 +174,17 @@ class NotificationsFragment : PreferenceFragmentCompat(),
         }
     }
 
-    override fun openNotificationPermissionSettings() {
-        notificationSettingsContract.launch(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+    override fun openNotificationPermissionDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.pref_notification_piggyback_popup_title))
+            .setMessage(getString(R.string.pref_notification_piggyback_popup_description))
+            .setPositiveButton(getString(R.string.pref_notification_piggyback_popup_positive)) { _, _ ->
+                notificationSettingsContract.launch(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                setNotificationPiggybackPreferenceChecked(false)
+            }
+            .show()
     }
 
     override fun setNotificationPiggybackPreferenceChecked(isChecked: Boolean) {

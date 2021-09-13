@@ -52,7 +52,7 @@ class NotificationsPresenter @Inject constructor(
                 }
                 isNotificationPiggybackEnabledKey -> {
                     if (isNotificationPiggybackEnabled && view?.isNotificationPermissionGranted == false) {
-                        view?.openNotificationPermissionSettings()
+                        view?.openNotificationPermissionDialog()
                     }
                 }
             }
