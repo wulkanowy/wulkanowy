@@ -1,7 +1,9 @@
 package io.github.wulkanowy.data.repositories
 
 import android.content.Context
+import androidx.room.withTransaction
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.dao.SemesterDao
 import io.github.wulkanowy.data.db.dao.StudentDao
 import io.github.wulkanowy.data.db.entities.Student
@@ -25,7 +27,8 @@ class StudentRepository @Inject constructor(
     private val studentDb: StudentDao,
     private val semesterDb: SemesterDao,
     private val sdk: Sdk,
-    private val appInfo: AppInfo
+    private val appInfo: AppInfo,
+    private val appDatabase: AppDatabase
 ) {
 
     suspend fun isStudentSaved() = getSavedStudents(false).isNotEmpty()
@@ -92,7 +95,7 @@ class StudentRepository @Inject constructor(
         return student
     }
 
-    suspend fun saveStudents(studentsWithSemesters: List<StudentWithSemesters>): List<Long> {
+    suspend fun saveStudents(studentsWithSemesters: List<StudentWithSemesters>) {
         val semesters = studentsWithSemesters.flatMap { it.semesters }
         val students = studentsWithSemesters.map { it.student }
             .map {
@@ -105,15 +108,14 @@ class StudentRepository @Inject constructor(
                 }
             }
 
-        semesterDb.insertSemesters(semesters)
-        return studentDb.insertAll(students)
+        appDatabase.withTransaction {
+            semesterDb.insertSemesters(semesters)
+            studentDb.insertAll(students)
+        }
     }
 
     suspend fun switchStudent(studentWithSemesters: StudentWithSemesters) {
-        with(studentDb) {
-            resetCurrent()
-            updateCurrent(studentWithSemesters.student.id)
-        }
+        studentDb.switchCurrent(studentWithSemesters.student.id)
     }
 
     suspend fun logoutStudent(student: Student) = studentDb.delete(student)

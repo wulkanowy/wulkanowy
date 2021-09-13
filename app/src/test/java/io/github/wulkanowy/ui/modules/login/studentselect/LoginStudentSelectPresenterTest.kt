@@ -91,22 +91,13 @@ class LoginStudentSelectPresenterTest {
         coEvery {
             studentRepository.saveStudents(
                 listOf(
-                    StudentWithSemesters(
-                        testStudent,
-                        emptyList()
-                    )
-                )
-            )
-        } returns listOf(1L)
-        coEvery {
-            studentRepository.switchStudent(
-                StudentWithSemesters(
-                    testStudent,
-                    emptyList()
+                    StudentWithSemesters(testStudent.copy(isCurrent = true), emptyList())
                 )
             )
         } just Runs
+
         every { loginStudentSelectView.openMainView() } just Runs
+
         presenter.onItemSelected(StudentWithSemesters(testStudent, emptyList()), false)
         presenter.onSignIn()
 
@@ -120,16 +111,16 @@ class LoginStudentSelectPresenterTest {
         coEvery {
             studentRepository.saveStudents(
                 listOf(
-                    StudentWithSemesters(
-                        testStudent,
-                        emptyList()
-                    )
+                    StudentWithSemesters(testStudent.copy(isCurrent = true), emptyList())
                 )
             )
         } throws testException
+
         coEvery { studentRepository.logoutStudent(testStudent) } just Runs
+
         presenter.onItemSelected(StudentWithSemesters(testStudent, emptyList()), false)
         presenter.onSignIn()
+
         verify { loginStudentSelectView.showContent(false) }
         verify { loginStudentSelectView.showProgress(true) }
         verify { errorHandler.dispatch(match { testException.message == it.message }) }
