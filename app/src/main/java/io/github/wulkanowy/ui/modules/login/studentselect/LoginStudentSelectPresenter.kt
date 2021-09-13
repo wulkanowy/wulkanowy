@@ -97,43 +97,32 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     private fun registerStudents(studentsWithSemesters: List<StudentWithSemesters>) {
-        flowWithResource {
-            val studentsWithSemestersToSave =
-                studentsWithSemesters.mapIndexed { index, studentWithSemesters ->
-                    if (index == 0) {
-                        val updatedStudent = studentWithSemesters.student.copy(isCurrent = true)
-                            .apply { avatarColor = studentWithSemesters.student.avatarColor }
-
-                        studentWithSemesters.copy(student = updatedStudent)
-                    } else studentWithSemesters
-                }
-
-            studentRepository.saveStudents(studentsWithSemestersToSave)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> view?.run {
-                    Timber.i("Registration started")
-                    showProgress(true)
-                    showContent(false)
-                }
-                Status.SUCCESS -> {
-                    Timber.i("Registration result: Success")
-                    view?.openMainView()
-                    logRegisterEvent(studentsWithSemesters)
-                }
-                Status.ERROR -> {
-                    Timber.i("Registration result: An exception occurred ")
-                    view?.apply {
-                        showProgress(false)
-                        showContent(true)
-                        showContact(true)
+        flowWithResource { studentRepository.saveStudents(studentsWithSemesters) }
+            .onEach {
+                when (it.status) {
+                    Status.LOADING -> view?.run {
+                        Timber.i("Registration started")
+                        showProgress(true)
+                        showContent(false)
                     }
-                    lastError = it.error
-                    loginErrorHandler.dispatch(it.error!!)
-                    logRegisterEvent(studentsWithSemesters, it.error)
+                    Status.SUCCESS -> {
+                        Timber.i("Registration result: Success")
+                        view?.openMainView()
+                        logRegisterEvent(studentsWithSemesters)
+                    }
+                    Status.ERROR -> {
+                        Timber.i("Registration result: An exception occurred ")
+                        view?.apply {
+                            showProgress(false)
+                            showContent(true)
+                            showContact(true)
+                        }
+                        lastError = it.error
+                        loginErrorHandler.dispatch(it.error!!)
+                        logRegisterEvent(studentsWithSemesters, it.error)
+                    }
                 }
-            }
-        }.launch("register")
+            }.launch("register")
     }
 
     fun onDiscordClick() {

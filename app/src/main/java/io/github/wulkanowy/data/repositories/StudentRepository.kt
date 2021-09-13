@@ -107,8 +107,14 @@ class StudentRepository @Inject constructor(
                     }
                 }
             }
+            .mapIndexed { index, student ->
+                if (index == 0) {
+                    student.copy(isCurrent = true).apply { avatarColor = student.avatarColor }
+                } else student
+            }
 
         appDatabase.withTransaction {
+            studentDb.resetCurrent()
             semesterDb.insertSemesters(semesters)
             studentDb.insertAll(students)
         }
