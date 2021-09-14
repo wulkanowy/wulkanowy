@@ -553,7 +553,7 @@
         <item quantity="one">Jeszcze %1$d sprawdzian</item>
         <item quantity="few">Jeszcze %1$d sprawdziany</item>
         <item quantity="many">Jeszcze %1$d sprawdzianów</item>
-        <item quantity="other">Jeszcze %1$d dodatkowych sprawdzianów</item>
+        <item quantity="other">Jeszcze %1$d sprawdzianów</item>
     </plurals>
     <string name="dashboard_conferences_title">Zebrania</string>
     <string name="dashboard_conferences_no_conferences">Brak nadchodzących zebrań</string>
@@ -562,7 +562,7 @@
         <item quantity="one">Jeszcze %1$d dodatkowe zebranie</item>
         <item quantity="few">Jeszcze %1$d dodatkowe zebrania</item>
         <item quantity="many">Jeszcze %1$d dodatkowych zebrań</item>
-        <item quantity="other">Jeszcze %1$d dodatkowych zebrań</item>
+        <item quantity="other">Jeszcze %1$d zebrań</item>
     </plurals>
     <string name="dashboard_horizontal_group_error">Wystąpił błąd podczas ładowania danych</string>
     <string name="dashboard_horizontal_group_no_data">Brak</string>
