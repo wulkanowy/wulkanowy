@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.databinding.DialogConferenceBinding
 import io.github.wulkanowy.utils.lifecycleAwareVariable
+import io.github.wulkanowy.utils.toFormattedString
 
 class ConferenceDialog : DialogFragment() {
 
@@ -43,6 +45,16 @@ class ConferenceDialog : DialogFragment() {
 
         with(binding) {
             conferenceDialogClose.setOnClickListener { dismiss() }
+
+            conferenceDialogSubjectValue.text = conference.subject
+            conferenceDialogDateValue.text = conference.date.toFormattedString("dd.MM.yyyy HH:mm")
+            conferenceDialogHeaderValue.text = conference.title
+            conferenceDialogAgendaValue.text = conference.agenda
+            conferenceDialogPresentValue.text = conference.presentOnConference
+            conferenceDialogPresentValue.isVisible = conference.presentOnConference.isNotBlank()
+            conferenceDialogPresentTitle.isVisible = conference.presentOnConference.isNotBlank()
+            conferenceDialogAgendaValue.isVisible = conference.agenda.isNotBlank()
+            conferenceDialogAgendaTitle.isVisible = conference.agenda.isNotBlank()
         }
     }
 }

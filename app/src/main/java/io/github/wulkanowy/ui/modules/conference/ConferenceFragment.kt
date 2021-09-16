@@ -42,6 +42,8 @@ class ConferenceFragment : BaseFragment<FragmentConferenceBinding>(R.layout.frag
     }
 
     override fun initView() {
+        conferencesAdapter.onItemClickListener = presenter::onItemSelected
+
         with(binding.conferenceRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = conferencesAdapter
