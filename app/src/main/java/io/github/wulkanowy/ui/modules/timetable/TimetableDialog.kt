@@ -102,8 +102,6 @@ class TimetableDialog : DialogFragment() {
 
                     timetableDialogChangesValue.text = when {
                         canceled && !changes -> "Lekcja odwołana: $info"
-                        changes && teacher.isNotBlank() -> "Zastępstwo: $teacher"
-                        changes && teacher.isBlank() -> "Zastępstwo, ${info.decapitalise()}"
                         else -> info.capitalise()
                     }
                 }
