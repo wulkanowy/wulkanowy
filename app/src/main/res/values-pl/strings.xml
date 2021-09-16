@@ -402,6 +402,8 @@
         <item quantity="many">Masz %1$d nowych zebrań</item>
         <item quantity="other">Masz %1$d nowych zebrań</item>
     </plurals>
+    <string name="conferences_present">Obecność na zebraniu</string>
+    <string name="conference_agenda">Agenda</string>
     <!--Director information-->
     <string name="school_announcement_title">Ogłoszenia szkolne</string>
     <string name="school_announcement_no_items">Brak ogłoszeń szkolnych</string>
@@ -590,6 +592,7 @@
     <string name="all_yes">Tak</string>
     <string name="all_no">Nie</string>
     <string name="all_save">Zapisz</string>
+    <string name="all_title">Tytuł</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Brak lekcji</string>
     <string name="widget_timetable_theme_title">Wybierz motyw</string>
