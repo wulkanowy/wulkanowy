@@ -402,7 +402,7 @@
         <item quantity="many">Máte %1$d nových setkání</item>
         <item quantity="other">Máte %1$d nových setkání</item>
     </plurals>
-    <string name="conferences_present">Present at conference</string>
+    <string name="conferences_present">Přítomnost na setkání</string>
     <string name="conference_agenda">Agenda</string>
     <!--Director information-->
     <string name="school_announcement_title">Školní oznámení</string>
@@ -592,7 +592,7 @@
     <string name="all_yes">Ano</string>
     <string name="all_no">Ne</string>
     <string name="all_save">Uložit</string>
-    <string name="all_title">Title</string>
+    <string name="all_title">Titul</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Žádné lekce</string>
     <string name="widget_timetable_theme_title">Vybrat motiv</string>
