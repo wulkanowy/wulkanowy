@@ -6,7 +6,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.pojos.MultipleNotifications
+import io.github.wulkanowy.data.pojos.MultipleNotificationsData
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.toFormattedString
 import java.time.LocalDate
@@ -23,7 +23,7 @@ class NewHomeworkNotification @Inject constructor(
             "${it.date.toFormattedString("dd.MM")} - ${it.subject}: ${it.content}"
         }.ifEmpty { return }
 
-        val notification = MultipleNotifications(
+        val notification = MultipleNotificationsData(
             type = NotificationType.NEW_HOMEWORK,
             icon = R.drawable.ic_more_homework,
             titleStringRes = R.plurals.homework_notify_new_item_title,

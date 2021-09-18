@@ -8,9 +8,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.pojos.MultipleNotifications
-import io.github.wulkanowy.data.pojos.Notification
-import io.github.wulkanowy.data.pojos.OneNotification
+import io.github.wulkanowy.data.pojos.MultipleNotificationsData
+import io.github.wulkanowy.data.pojos.NotificationData
+import io.github.wulkanowy.data.pojos.OneNotificationData
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getCompatBitmap
 import io.github.wulkanowy.utils.getCompatColor
@@ -22,13 +22,13 @@ abstract class BaseNotification(
     private val notificationManager: NotificationManagerCompat,
 ) {
 
-    protected fun sendNotification(notification: Notification, student: Student) =
-        when (notification) {
-            is OneNotification -> sendOneNotification(notification, student)
-            is MultipleNotifications -> sendMultipleNotifications(notification, student)
+    protected fun sendNotification(notificationData: NotificationData, student: Student) =
+        when (notificationData) {
+            is OneNotificationData -> sendOneNotification(notificationData, student)
+            is MultipleNotificationsData -> sendMultipleNotifications(notificationData, student)
         }
 
-    private fun sendOneNotification(notification: OneNotification, student: Student?) {
+    private fun sendOneNotification(notification: OneNotificationData, student: Student?) {
         notificationManager.notify(
             Random.nextInt(Int.MAX_VALUE),
             getNotificationBuilder(notification).apply {
@@ -47,7 +47,10 @@ abstract class BaseNotification(
         )
     }
 
-    private fun sendMultipleNotifications(notification: MultipleNotifications, student: Student) {
+    private fun sendMultipleNotifications(
+        notification: MultipleNotificationsData,
+        student: Student
+    ) {
         val group = notification.type.group + student.id
         val groupId = student.id * 100 + notification.type.ordinal
 
@@ -80,21 +83,21 @@ abstract class BaseNotification(
         )
     }
 
-    private fun getNotificationBuilder(notification: Notification) = NotificationCompat
-        .Builder(context, notification.type.channel)
-        .setLargeIcon(context.getCompatBitmap(notification.icon, R.color.colorPrimary))
-        .setSmallIcon(R.drawable.ic_stat_all)
-        .setAutoCancel(true)
-        .setDefaults(NotificationCompat.DEFAULT_ALL)
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
-        .setColor(context.getCompatColor(R.color.colorPrimary))
-        .setContentIntent(
-            PendingIntent.getActivity(
-                context, notification.startMenu.id,
-                MainActivity.getStartIntent(context, notification.startMenu, true),
-                PendingIntent.FLAG_UPDATE_CURRENT
+    private fun getNotificationBuilder(notificationData: NotificationData) =
+        NotificationCompat.Builder(context, notificationData.type.channel)
+            .setLargeIcon(context.getCompatBitmap(notificationData.icon, R.color.colorPrimary))
+            .setSmallIcon(R.drawable.ic_stat_all)
+            .setAutoCancel(true)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setColor(context.getCompatColor(R.color.colorPrimary))
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    context, notificationData.startMenu.id,
+                    MainActivity.getStartIntent(context, notificationData.startMenu, true),
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
             )
-        )
 
     private fun getQuantityString(@PluralsRes id: Int, value: Int): String {
         return context.resources.getQuantityString(id, value, value)

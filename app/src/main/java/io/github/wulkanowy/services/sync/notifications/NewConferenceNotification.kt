@@ -6,7 +6,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.pojos.MultipleNotifications
+import io.github.wulkanowy.data.pojos.MultipleNotificationsData
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.toFormattedString
 import java.time.LocalDateTime
@@ -23,7 +23,7 @@ class NewConferenceNotification @Inject constructor(
             "${it.date.toFormattedString("dd.MM")} - ${it.title}: ${it.subject}"
         }.ifEmpty { return }
 
-        val notification = MultipleNotifications(
+        val notification = MultipleNotificationsData(
             type = NotificationType.NEW_CONFERENCE,
             icon = R.drawable.ic_more_conferences,
             titleStringRes = R.plurals.conference_notify_new_item_title,
