@@ -12,4 +12,6 @@ interface NotificationsCentreView : BaseView {
     fun showProgress(show: Boolean)
 
     fun showEmpty(show: Boolean)
+
+    fun showContent(show: Boolean)
 }
