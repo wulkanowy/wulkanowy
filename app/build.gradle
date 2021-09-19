@@ -96,6 +96,10 @@ android {
         }
     }
 
+    playConfigs {
+        play { enabled.set(true) }
+    }
+
     buildFeatures {
         viewBinding true
     }
@@ -133,6 +137,7 @@ play {
     defaultToAppBundles = false
     track = 'production'
     updatePriority = 3
+    enabled.set(false)
 }
 
 huaweiPublish {

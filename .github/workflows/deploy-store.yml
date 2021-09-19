@@ -35,7 +35,7 @@ jobs:
           PLAY_KEY_ALIAS: ${{ secrets.PLAY_KEY_ALIAS }}
           PLAY_KEY_PASSWORD: ${{ secrets.PLAY_KEY_PASSWORD }}
           ANDROID_PUBLISHER_CREDENTIALS: ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}
-        run: ./gradlew publishPlayRelease -PenableFirebase --stacktrace;
+        run: ./gradlew publishPlayReleaseApps -PenableFirebase --stacktrace;
 
   deploy-app-gallery:
     name: Deploy to AppGallery
