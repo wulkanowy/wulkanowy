@@ -1,8 +1,5 @@
 package io.github.wulkanowy.services.sync.notifications
 
-import android.content.Context
-import androidx.core.app.NotificationManagerCompat
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
@@ -12,9 +9,8 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
 class NewGradeNotification @Inject constructor(
-    @ApplicationContext private val context: Context,
-    notificationManager: NotificationManagerCompat,
-) : BaseNotification(context, notificationManager) {
+    private val appNotificationManager: AppNotificationManager
+) {
 
     fun notifyDetails(items: List<Grade>, student: Student) {
         val notification = MultipleNotificationsData(
@@ -29,7 +25,7 @@ class NewGradeNotification @Inject constructor(
             }
         )
 
-        sendNotification(notification, student)
+        appNotificationManager.sendNotification(notification, student)
     }
 
     fun notifyPredicted(items: List<GradeSummary>, student: Student) {
@@ -45,7 +41,7 @@ class NewGradeNotification @Inject constructor(
             }
         )
 
-        sendNotification(notification, student)
+        appNotificationManager.sendNotification(notification, student)
     }
 
     fun notifyFinal(items: List<GradeSummary>, student: Student) {
@@ -61,6 +57,6 @@ class NewGradeNotification @Inject constructor(
             }
         )
 
-        sendNotification(notification, student)
+        appNotificationManager.sendNotification(notification, student)
     }
 }

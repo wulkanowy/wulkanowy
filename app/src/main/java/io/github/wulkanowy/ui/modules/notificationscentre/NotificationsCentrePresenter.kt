@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.modules.notificationlist
+package io.github.wulkanowy.ui.modules.notificationscentre
 
 import io.github.wulkanowy.data.repositories.NotificationRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -6,9 +6,9 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import javax.inject.Inject
 
-class NotificationListPresenter @Inject constructor(
+class NotificationsCentrePresenter @Inject constructor(
     private val notificationRepository: NotificationRepository,
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository
-) : BasePresenter<NotificationListView>(errorHandler, studentRepository) {
+) : BasePresenter<NotificationsCentreView>(errorHandler, studentRepository) {
 }

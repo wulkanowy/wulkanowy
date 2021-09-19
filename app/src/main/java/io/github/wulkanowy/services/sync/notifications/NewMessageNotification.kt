@@ -1,8 +1,5 @@
 package io.github.wulkanowy.services.sync.notifications
 
-import android.content.Context
-import androidx.core.app.NotificationManagerCompat
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Student
@@ -11,9 +8,8 @@ import io.github.wulkanowy.ui.modules.main.MainView
 import javax.inject.Inject
 
 class NewMessageNotification @Inject constructor(
-    @ApplicationContext private val context: Context,
-    notificationManager: NotificationManagerCompat,
-) : BaseNotification(context, notificationManager) {
+    private val appNotificationManager: AppNotificationManager
+) {
 
     fun notify(items: List<Message>, student: Student) {
         val notification = MultipleNotificationsData(
@@ -28,6 +24,6 @@ class NewMessageNotification @Inject constructor(
             }
         )
 
-        sendNotification(notification, student)
+        appNotificationManager.sendNotification(notification, student)
     }
 }

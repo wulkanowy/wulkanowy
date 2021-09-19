@@ -1,8 +1,5 @@
 package io.github.wulkanowy.services.sync.notifications
 
-import android.content.Context
-import androidx.core.app.NotificationManagerCompat
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.data.db.entities.Student
@@ -13,9 +10,8 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 class NewConferenceNotification @Inject constructor(
-    @ApplicationContext private val context: Context,
-    notificationManager: NotificationManagerCompat,
-) : BaseNotification(context, notificationManager) {
+    private val appNotificationManager: AppNotificationManager
+) {
 
     fun notify(items: List<Conference>, student: Student) {
         val today = LocalDateTime.now()
@@ -33,6 +29,6 @@ class NewConferenceNotification @Inject constructor(
             lines = lines
         )
 
-        sendNotification(notification, student)
+        appNotificationManager.sendNotification(notification, student)
     }
 }
