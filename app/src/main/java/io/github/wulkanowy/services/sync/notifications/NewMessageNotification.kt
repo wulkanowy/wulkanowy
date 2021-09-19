@@ -11,7 +11,7 @@ class NewMessageNotification @Inject constructor(
     private val appNotificationManager: AppNotificationManager
 ) {
 
-    fun notify(items: List<Message>, student: Student) {
+    suspend fun notify(items: List<Message>, student: Student) {
         val notification = MultipleNotificationsData(
             type = NotificationType.NEW_MESSAGE,
             icon = R.drawable.ic_stat_message,

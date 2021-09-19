@@ -12,7 +12,7 @@ class NewGradeNotification @Inject constructor(
     private val appNotificationManager: AppNotificationManager
 ) {
 
-    fun notifyDetails(items: List<Grade>, student: Student) {
+    suspend fun notifyDetails(items: List<Grade>, student: Student) {
         val notification = MultipleNotificationsData(
             type = NotificationType.NEW_GRADE_DETAILS,
             icon = R.drawable.ic_stat_grade,
@@ -28,7 +28,7 @@ class NewGradeNotification @Inject constructor(
         appNotificationManager.sendNotification(notification, student)
     }
 
-    fun notifyPredicted(items: List<GradeSummary>, student: Student) {
+    suspend fun notifyPredicted(items: List<GradeSummary>, student: Student) {
         val notification = MultipleNotificationsData(
             type = NotificationType.NEW_GRADE_PREDICTED,
             icon = R.drawable.ic_stat_grade,
@@ -44,7 +44,7 @@ class NewGradeNotification @Inject constructor(
         appNotificationManager.sendNotification(notification, student)
     }
 
-    fun notifyFinal(items: List<GradeSummary>, student: Student) {
+    suspend fun notifyFinal(items: List<GradeSummary>, student: Student) {
         val notification = MultipleNotificationsData(
             type = NotificationType.NEW_GRADE_FINAL,
             icon = R.drawable.ic_stat_grade,

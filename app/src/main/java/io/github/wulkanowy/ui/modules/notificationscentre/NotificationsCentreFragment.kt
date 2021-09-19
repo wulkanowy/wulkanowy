@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.notificationscentre
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentNotificationsCentreBinding
@@ -17,6 +18,9 @@ class NotificationsCentreFragment :
     @Inject
     lateinit var presenter: NotificationsCentrePresenter
 
+    @Inject
+    lateinit var notificationsCentreAdapter: NotificationsCentreAdapter
+
     companion object {
 
         fun newInstance() = NotificationsCentreFragment()
@@ -29,6 +33,13 @@ class NotificationsCentreFragment :
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentNotificationsCentreBinding.bind(view)
         presenter.onAttachView(this)
+    }
+
+    override fun initView() {
+        with(binding.notificationsCentreRecycler) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = notificationsCentreAdapter
+        }
     }
 
     override fun onDestroyView() {

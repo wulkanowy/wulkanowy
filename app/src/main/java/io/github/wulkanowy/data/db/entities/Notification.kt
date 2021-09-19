@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import io.github.wulkanowy.services.sync.notifications.NotificationType
+import java.time.LocalDateTime
 
 @Entity(tableName = "Notifications")
 data class Notification(
@@ -15,7 +16,9 @@ data class Notification(
 
     val content: String,
 
-    val type: NotificationType
+    val type: NotificationType,
+
+    val date: LocalDateTime
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

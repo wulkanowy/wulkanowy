@@ -13,7 +13,7 @@ class NewExamNotification @Inject constructor(
     private val appNotificationManager: AppNotificationManager
 ) {
 
-    fun notify(items: List<Exam>, student: Student) {
+    suspend fun notify(items: List<Exam>, student: Student) {
         val today = LocalDate.now()
         val lines = items.filter { !it.date.isBefore(today) }.map {
             "${it.date.toFormattedString("dd.MM")} - ${it.subject}: ${it.description}"

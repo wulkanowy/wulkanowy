@@ -12,7 +12,7 @@ class NewNoteNotification @Inject constructor(
     private val appNotificationManager: AppNotificationManager
 ) {
 
-    fun notify(items: List<Note>, student: Student) {
+    suspend fun notify(items: List<Note>, student: Student) {
         val notification = MultipleNotificationsData(
             type = NotificationType.NEW_NOTE,
             icon = R.drawable.ic_stat_note,
