@@ -15,6 +15,7 @@ import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
+import io.github.wulkanowy.utils.isExcusableOrNotExcused
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
@@ -46,6 +47,8 @@ class AttendancePresenter @Inject constructor(
     private lateinit var lastError: Throwable
 
     private val attendanceToExcuseList = mutableListOf<Attendance>()
+
+    private var isVulcanExcusedFunctionEnabled = false
 
     fun onAttachView(view: AttendanceView, date: Long?) {
         super.onAttachView(view)
@@ -148,7 +151,23 @@ class AttendancePresenter @Inject constructor(
 
     fun onExcuseDialogSubmit(reason: String) {
         view?.finishActionMode()
-        excuseAbsence(if (reason != "") reason else null, attendanceToExcuseList.toList())
+
+        if (attendanceToExcuseList.isEmpty()) return
+
+        if (isVulcanExcusedFunctionEnabled) {
+            excuseAbsence(
+                reason = reason.takeIf { it.isNotBlank() },
+                toExcuseList = attendanceToExcuseList.toList()
+            )
+        } else {
+            val attendanceToExcuseNumbers = attendanceToExcuseList.map { it.number }
+
+            view?.startSendMessageIntent(
+                date = attendanceToExcuseList[0].date,
+                numbers = attendanceToExcuseNumbers.joinToString(", "),
+                reason = reason
+            )
+        }
     }
 
     fun onPrepareActionMode(): Boolean {
@@ -188,8 +207,12 @@ class AttendancePresenter @Inject constructor(
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading attendance data started")
 
+        var isParent = false
+
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
+            isParent = student.isParent
+
             val semester = semesterRepository.getCurrentSemester(student)
             attendanceRepository.getAttendance(
                 student,
@@ -213,6 +236,7 @@ class AttendancePresenter @Inject constructor(
                             enableSwipe(true)
                             showRefresh(true)
                             showProgress(false)
+                            showErrorView(false)
                             showEmpty(filteredAttendance.isEmpty())
                             showContent(filteredAttendance.isNotEmpty())
                             updateData(filteredAttendance.sortedBy { item -> item.number })
@@ -227,12 +251,17 @@ class AttendancePresenter @Inject constructor(
                         it.data?.filter { item -> !item.presence }.orEmpty()
                     }
 
+                    isVulcanExcusedFunctionEnabled =
+                        filteredAttendance.any { item -> item.excusable }
+
                     view?.apply {
                         updateData(filteredAttendance.sortedBy { item -> item.number })
                         showEmpty(filteredAttendance.isEmpty())
                         showErrorView(false)
                         showContent(filteredAttendance.isNotEmpty())
-                        showExcuseButton(filteredAttendance.any { item -> item.excusable })
+                        showExcuseButton(filteredAttendance.any { item ->
+                            (!isParent && isVulcanExcusedFunctionEnabled) || (isParent && item.isExcusableOrNotExcused)
+                        })
                     }
                     analytics.logEvent(
                         "load_data",

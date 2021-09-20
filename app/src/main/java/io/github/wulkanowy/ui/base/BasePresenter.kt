@@ -18,7 +18,7 @@ open class BasePresenter<T : BaseView>(
     protected val studentRepository: StudentRepository
 ) : CoroutineScope {
 
-    private var job: Job = Job()
+    private var job = Job()
 
     private val jobs = mutableMapOf<String, Job>()
 
@@ -34,6 +34,7 @@ open class BasePresenter<T : BaseView>(
             showErrorMessage = view::showError
             onSessionExpired = view::showExpiredDialog
             onNoCurrentStudent = view::openClearLoginView
+            onPasswordChangeRequired = view::showChangePasswordSnackbar
         }
     }
 

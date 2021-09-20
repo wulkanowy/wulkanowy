@@ -1,6 +1,7 @@
 package io.github.wulkanowy.utils
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -56,10 +57,13 @@ fun Context.getCompatDrawable(@DrawableRes drawableRes: Int, @ColorRes colorRes:
 fun Context.getCompatBitmap(@DrawableRes drawableRes: Int, @ColorRes colorRes: Int) =
     getCompatDrawable(drawableRes, colorRes)?.toBitmap()
 
-fun Context.openInternetBrowser(uri: String, onActivityNotFound: (uri: String) -> Unit) {
+fun Context.openInternetBrowser(uri: String, onActivityNotFound: (uri: String) -> Unit = {}) {
     Intent.parseUri(uri, 0).let {
-        if (it.resolveActivity(packageManager) != null) startActivity(it)
-        else onActivityNotFound(uri)
+        try {
+            startActivity(it)
+        } catch (e: ActivityNotFoundException) {
+            onActivityNotFound(uri)
+        }
     }
 }
 
@@ -98,7 +102,9 @@ fun Context.openNavigation(location: String) {
 fun Context.openDialer(phone: String) {
     val intentUri = Uri.parse("tel:$phone")
     val intent = Intent(Intent.ACTION_DIAL, intentUri)
-    startActivity(intent)
+    if (intent.resolveActivity(packageManager) != null) {
+        startActivity(intent)
+    }
 }
 
 fun Context.shareText(text: String, subject: String?) {

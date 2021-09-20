@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.message.send
 
-import io.github.wulkanowy.R
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
@@ -41,8 +40,7 @@ class SendMessagePresenter @Inject constructor(
 
     private val messageUpdateChannel = Channel<Unit>()
 
-    @FlowPreview
-    fun onAttachView(view: SendMessageView, message: Message?, reply: Boolean?) {
+    fun onAttachView(view: SendMessageView, reason: String?, message: Message?, reply: Boolean?) {
         super.onAttachView(view)
         view.initView()
         initializeSubjectStream()
@@ -51,6 +49,10 @@ class SendMessagePresenter @Inject constructor(
         with(view) {
             if (messageRepository.draftMessage != null && reply == null) {
                 view.showMessageBackupDialog()
+            }
+            reason?.let {
+                setSubject("Usprawiedliwenie")
+                setContent(it)
             }
             message?.let {
                 setSubject(when (reply) {

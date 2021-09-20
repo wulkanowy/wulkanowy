@@ -69,7 +69,7 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Send email</string>
     <string name="login_email_subject" translatable="false">Zgłoszenie: Problemy z logowaniem</string>
-    <string name="login_email_text" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nDodatkowe informacje: %4$s\nOstatni błąd: %5$s\n\nOpis problemu: </string>
+    <string name="login_email_text" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nDodatkowe informacje: %4$s\nOstatni błąd: %5$s\n\nOpis problemu (pełna nazwa szkoły, klasa ucznia): </string>
     <string name="login_recover_warning">Make sure you select the correct UONET+ register variation!</string>
     <string name="login_recover_button">I forgot my password</string>
     <string name="login_recover_title">Recover your account</string>
@@ -101,6 +101,7 @@
     <string name="grade_summary_predicted_grade">Predicted grade</string>
     <string name="grade_summary_calculated_average">Calculated average</string>
     <string name="grade_summary_final_average">Final average</string>
+    <string name="grade_summary_from_subjects">from %1$d of %2$d subjects</string>
     <string name="grade_menu_summary">Summary</string>
     <string name="grade_menu_statistics">Class</string>
     <string name="grade_menu_read">Mark as read</string>
@@ -191,6 +192,8 @@
     <string name="attendance_excuse_success">Absence excuse request sent successfully!</string>
     <string name="attendance_excuse_no_selection">You must select at least one absence!</string>
     <string name="attendance_excuse_title">Excuse</string>
+    <string name="attendance_excuse_reason" translatable="false">z powodu</string>
+    <string name="attendance_excuse_formula" translatable="false">Dzień dobry,\nProszę o usprawiedliwienie mojego dziecka w dniu %s z lekcji %s%s%s.\n\nPozdrawiam.</string>
 
 
     <!--Attendance summary-->
@@ -204,6 +207,10 @@
     <plurals name="exam_notify_new_item_title">
         <item quantity="one">New exam</item>
         <item quantity="other">New exams</item>
+    </plurals>
+    <plurals name="exam_notify_new_item_content">
+        <item quantity="one">You received %d new exam</item>
+        <item quantity="other">You received %d new exams</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d exam</item>
@@ -236,6 +243,11 @@
     <string name="message_content_min_length">The message content must be at least 3 characters</string>
     <string name="message_chip_only_unread">Only unread</string>
     <string name="message_chip_only_with_attachments">Only with attachments</string>
+    <string name="message_read">Read: %s</string>
+    <plurals name="message_read_by">
+        <item quantity="one">Read by: %1$d of %2$d people</item>
+        <item quantity="other">Read by: %1$d of %2$d people</item>
+    </plurals>
     <plurals name="message_number_item">
         <item quantity="one">%d message</item>
         <item quantity="other">%d messages</item>
@@ -307,6 +319,10 @@
         <item quantity="one">New homework</item>
         <item quantity="other">New homework</item>
     </plurals>
+    <plurals name="homework_notify_new_item_content">
+        <item quantity="one">You received %d new homework</item>
+        <item quantity="other">You received %d new homework</item>
+    </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d homework</item>
         <item quantity="other">%d homework</item>
@@ -321,9 +337,11 @@
     <string name="lucky_number_notify_new_item">Today\'s lucky number is: %s</string>
     <string name="lucky_number_history_button">Show history</string>
 
+
     <!--Lucky number history-->
     <string name="lucky_number_history_title">Lucky number history</string>
     <string name="lucky_number_history_empty">No info about lucky numbers</string>
+
 
     <!--Mobile devices-->
     <string name="mobile_devices_title">Mobile devices</string>
@@ -373,7 +391,8 @@
         <item quantity="one">You have %1$d new conference</item>
         <item quantity="other">You have %1$d new conferences</item>
     </plurals>
-
+    <string name="conferences_present">Present at conference</string>
+    <string name="conference_agenda">Agenda</string>
 
     <!--Director information-->
     <string name="school_announcement_title">School announcements</string>
@@ -480,7 +499,6 @@
     <!--Dashboard-->
     <string name="dashboard_timetable_title">Lessons</string>
     <string name="dashboard_timetable_title_tomorrow">(Tomorrow)</string>
-    <string name="dashboard_timetable_lesson_value">%1$s (%2$s)</string>
     <string name="dashboard_timetable_first_lesson_title_moment">In a moment:</string>
     <string name="dashboard_timetable_first_lesson_title_soon">Soon:</string>
     <string name="dashboard_timetable_first_lesson_title_first">First:</string>
@@ -542,7 +560,7 @@
     </plurals>
 
     <string name="dashboard_horizontal_group_error">An error occurred while loading data</string>
-    <string name="dashboard_horizontal_group_no_lukcy_number">None</string>
+    <string name="dashboard_horizontal_group_no_data">None</string>
 
 
     <!--Error dialog-->
@@ -571,6 +589,7 @@
     <string name="all_yes">Yes</string>
     <string name="all_no">No</string>
     <string name="all_save">Save</string>
+    <string name="all_title">Title</string>
 
 
     <!--Timetable Widget-->
@@ -616,6 +635,7 @@
     <string name="pref_services_message_sync_success">Synced!</string>
     <string name="pref_services_message_sync_failed">Sync failed</string>
     <string name="pref_services_sync_in_progress">Sync in progress</string>
+    <string name="pref_services_last_full_sync_date">Last full sync: %s</string>
 
     <string name="pref_other_grade_modifier_plus">Value of the plus</string>
     <string name="pref_other_grade_modifier_minus">Value of the minus</string>
@@ -672,6 +692,7 @@
     <!--Others-->
     <string name="all_copied">Copied</string>
     <string name="all_undo">Undo</string>
+    <string name="all_change">Change</string>
 
 
     <!--Update helper-->

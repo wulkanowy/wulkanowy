@@ -3,11 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'ru.cian.huawei-publish'
 apply plugin: 'com.mikepenz.aboutlibraries.plugin'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.huawei.agconnect'
 apply from: 'jacoco.gradle'
 apply from: 'sonarqube.gradle'
@@ -15,15 +15,14 @@ apply from: 'hooks.gradle'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "io.github.wulkanowy"
         testApplicationId "io.github.tests.wulkanowy"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 92
-        versionName "1.1.6"
+        versionCode 96
+        versionName "1.2.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -97,8 +96,12 @@ android {
         }
     }
 
+    playConfigs {
+        play { enabled.set(true) }
+    }
+
     buildFeatures {
-        viewBinding = true
+        viewBinding true
     }
 
     testOptions.unitTests {
@@ -107,12 +110,12 @@ android {
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
         freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn", "-Xjvm-default=all"]
     }
 
@@ -128,34 +131,27 @@ android {
 
 kapt {
     correctErrorTypes true
-
-    javacOptions {
-        //Bug workaround https://youtrack.jetbrains.com/issue/KT-47416
-        option("-Adagger.fastInit=ENABLED")
-        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
-    }
 }
 
 play {
-    serviceAccountEmail = System.getenv("PLAY_SERVICE_ACCOUNT_EMAIL") ?: "jan@fakelog.cf"
-    serviceAccountCredentials = file('key.p12')
     defaultToAppBundles = false
     track = 'production'
-    updatePriority = 5
+    updatePriority = 3
+    enabled.set(false)
 }
 
 huaweiPublish {
     instances {
         hmsRelease {
             credentialsPath = "$rootDir/app/src/release/agconnect-credentials.json"
-            buildFormat = "apk"
+            buildFormat = "aab"
             deployType = "draft"
         }
     }
 }
 
 ext {
-    work_manager = "2.5.0"
+    work_manager = "2.6.0"
     android_hilt = "1.0.0"
     room = "2.3.0"
     chucker = "3.5.2"
@@ -164,12 +160,11 @@ ext {
 }
 
 dependencies {
-    implementation "io.github.wulkanowy:sdk:496dc01d15"
+    implementation "io.github.wulkanowy:sdk:1.2.3"
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
 
     implementation "androidx.core:core-ktx:1.6.0"
     implementation "androidx.activity:activity-ktx:1.3.1"
@@ -185,7 +180,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.1.0"
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
     implementation "com.google.android.material:material:1.4.0"
-    implementation "com.github.wulkanowy:material-chips-input:2.2.0"
+    implementation "com.github.wulkanowy:material-chips-input:2.3.1"
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
     implementation 'com.github.lopspower:CircularImageView:4.2.0'
 
@@ -210,7 +205,7 @@ dependencies {
     implementation "com.squareup.moshi:moshi-adapters:$moshi"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi"
 
-    implementation "com.jakewharton.timber:timber:4.7.1"
+    implementation "com.jakewharton.timber:timber:5.0.1"
     implementation "at.favre.lib:slf4j-timber:1.0.1"
     implementation 'com.github.bastienpaulfr:Treessence:1.0.4'
     implementation "com.mikepenz:aboutlibraries-core:$about_libraries"
@@ -219,13 +214,14 @@ dependencies {
     implementation 'me.xdrop:fuzzywuzzy:1.3.1'
     implementation 'com.fredporciuncula:flow-preferences:1.5.0'
 
-    playImplementation platform('com.google.firebase:firebase-bom:28.3.1')
+    playImplementation platform('com.google.firebase:firebase-bom:28.4.1')
     playImplementation 'com.google.firebase:firebase-analytics-ktx'
     playImplementation 'com.google.firebase:firebase-messaging:'
     playImplementation 'com.google.firebase:firebase-crashlytics:'
+    playImplementation 'com.google.android.play:core:1.10.1'
     playImplementation 'com.google.android.play:core-ktx:1.8.1'
 
-    hmsImplementation 'com.huawei.hms:hianalytics:6.1.0.300'
+    hmsImplementation 'com.huawei.hms:hianalytics:6.2.0.301'
     hmsImplementation 'com.huawei.agconnect:agconnect-crash:1.6.0.300'
 
     releaseImplementation "com.github.ChuckerTeam.Chucker:library-no-op:$chucker"
@@ -235,7 +231,7 @@ dependencies {
 
     testImplementation "junit:junit:4.13.2"
     testImplementation "io.mockk:mockk:$mockk"
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2'
     testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 
     testImplementation 'org.robolectric:robolectric:4.6.1'

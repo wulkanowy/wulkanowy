@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.account.accountdetails
 
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.sync.SyncManager
@@ -27,9 +28,9 @@ class AccountDetailsPresenter @Inject constructor(
 
     private var studentId: Long? = null
 
-    fun onAttachView(view: AccountDetailsView, studentWithSemesters: StudentWithSemesters) {
+    fun onAttachView(view: AccountDetailsView, student: Student) {
         super.onAttachView(view)
-        studentId = studentWithSemesters.student.id
+        studentId = student.id
 
         view.initView()
         errorHandler.showErrorMessage = ::showErrorViewOnError
@@ -118,7 +119,7 @@ class AccountDetailsPresenter @Inject constructor(
                     }
                 }
             }.afterLoading {
-                view?.popView()
+                view?.popViewToMain()
             }.launch("switch")
     }
 
@@ -151,11 +152,14 @@ class AccountDetailsPresenter @Inject constructor(
                             syncManager.stopSyncWorker()
                             openClearLoginView()
                         }
-                        studentWithSemesters!!.student.isCurrent -> {
+                        studentWithSemesters?.student?.isCurrent == true -> {
                             Timber.i("Logout result: Logout student and switch to another")
                             recreateMainView()
                         }
-                        else -> Timber.i("Logout result: Logout student")
+                        else -> {
+                            Timber.i("Logout result: Logout student")
+                            recreateMainView()
+                        }
                     }
                 }
                 Status.ERROR -> {
@@ -164,7 +168,11 @@ class AccountDetailsPresenter @Inject constructor(
                 }
             }
         }.afterLoading {
-            view?.popView()
+            if (studentWithSemesters?.student?.isCurrent == true) {
+                view?.popViewToMain()
+            } else {
+                view?.popViewToAccounts()
+            }
         }.launch("logout")
     }
 

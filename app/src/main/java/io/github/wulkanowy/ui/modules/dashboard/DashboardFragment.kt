@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentDashboardBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.account.AccountFragment
+import io.github.wulkanowy.ui.modules.account.accountdetails.AccountDetailsFragment
 import io.github.wulkanowy.ui.modules.attendance.summary.AttendanceSummaryFragment
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
@@ -70,14 +70,13 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
     override fun initView() {
         val mainActivity = requireActivity() as MainActivity
         val itemTouchHelper = ItemTouchHelper(
-            DashboardItemMoveCallback(
-                dashboardAdapter,
-                presenter::onDragAndDropEnd
-            )
+            DashboardItemMoveCallback(dashboardAdapter, presenter::onDragAndDropEnd)
         )
 
         dashboardAdapter.apply {
-            onAccountTileClickListener = { mainActivity.pushView(AccountFragment.newInstance()) }
+            onAccountTileClickListener = {
+                mainActivity.pushView(AccountDetailsFragment.newInstance(it))
+            }
             onLuckyNumberTileClickListener = {
                 mainActivity.pushView(LuckyNumberFragment.newInstance())
             }
@@ -85,7 +84,9 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
             onAttendanceTileClickListener = {
                 mainActivity.pushView(AttendanceSummaryFragment.newInstance())
             }
-            onLessonsTileClickListener = { mainActivity.pushView(TimetableFragment.newInstance()) }
+            onLessonsTileClickListener = {
+                mainActivity.pushView(TimetableFragment.newInstance(it))
+            }
             onGradeTileClickListener = { mainActivity.pushView(GradeFragment.newInstance()) }
             onHomeworkTileClickListener = { mainActivity.pushView(HomeworkFragment.newInstance()) }
             onAnnouncementsTileClickListener = {

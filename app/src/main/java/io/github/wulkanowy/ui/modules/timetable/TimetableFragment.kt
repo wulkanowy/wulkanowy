@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.core.text.HtmlCompat
+import androidx.core.text.parseAsHtml
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -44,12 +44,18 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
     companion object {
         private const val SAVED_DATE_KEY = "CURRENT_DATE"
 
-        fun newInstance() = TimetableFragment()
+        private const val ARGUMENT_DATE_KEY = "ARGUMENT_DATE"
+
+        fun newInstance(date: LocalDate? = null) = TimetableFragment().apply {
+            arguments = Bundle().apply {
+                date?.let { putLong(ARGUMENT_DATE_KEY, it.toEpochDay()) }
+            }
+        }
     }
 
     override val titleStringId get() = R.string.timetable_title
 
-    override val isViewEmpty get() = timetableAdapter.items.isEmpty()
+    override val isViewEmpty get() = timetableAdapter.itemCount == 0
 
     override val currentStackSize get() = (activity as? MainActivity)?.currentStackSize
 
@@ -62,7 +68,11 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTimetableBinding.bind(view)
         messageContainer = binding.timetableRecycler
-        presenter.onAttachView(this, savedInstanceState?.getLong(SAVED_DATE_KEY))
+
+        val initDate = savedInstanceState?.getLong(SAVED_DATE_KEY)
+            ?: arguments?.getLong(ARGUMENT_DATE_KEY)?.takeUnless { it == 0L }
+
+        presenter.onAttachView(this, initDate)
     }
 
     override fun initView() {
@@ -109,20 +119,16 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         showGroupsInPlanType: Boolean,
         showTimetableTimers: Boolean
     ) {
-        with(timetableAdapter) {
-            items = data.toMutableList()
-            showTimers = showTimetableTimers
+        timetableAdapter.submitList(
+            newTimetable = data.toMutableList(),
+            showGroupsInPlan = showGroupsInPlanType,
+            showTimers = showTimetableTimers,
             showWholeClassPlan = showWholeClassPlanType
-            showGroupsInPlan = showGroupsInPlanType
-            notifyDataSetChanged()
-        }
+        )
     }
 
     override fun clearData() {
-        with(timetableAdapter) {
-            items = mutableListOf()
-            notifyDataSetChanged()
-        }
+        timetableAdapter.submitList(listOf())
     }
 
     override fun updateNavigationDay(date: String) {
@@ -151,9 +157,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
 
     override fun setDayHeaderMessage(message: String?) {
         binding.timetableEmptyMessage.visibility = if (message.isNullOrEmpty()) GONE else VISIBLE
-        binding.timetableEmptyMessage.text = HtmlCompat.fromHtml(
-            message.orEmpty(), HtmlCompat.FROM_HTML_MODE_COMPACT
-        )
+        binding.timetableEmptyMessage.text = message.orEmpty().parseAsHtml()
     }
 
     override fun showErrorView(show: Boolean) {
@@ -189,27 +193,28 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
-        val now = LocalDate.now()
-        val startOfSchoolYear = now.schoolYearStart.toTimestamp()
-        val endOfSchoolYear = now.schoolYearEnd.toTimestamp()
+        val baseDate = currentDate.schoolYearStart
+        val rangeStart = baseDate.toTimestamp()
+        val rangeEnd = LocalDate.now().schoolYearEnd.toTimestamp()
 
         val constraintsBuilder = CalendarConstraints.Builder().apply {
-            setValidator(SchoolDaysValidator(startOfSchoolYear, endOfSchoolYear))
-            setStart(startOfSchoolYear)
-            setEnd(endOfSchoolYear)
+            setValidator(SchoolDaysValidator(rangeStart, rangeEnd))
+            setStart(rangeStart)
+            setEnd(rangeEnd)
         }
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setCalendarConstraints(constraintsBuilder.build())
-                .setSelection(currentDate.toTimestamp())
-                .build()
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setCalendarConstraints(constraintsBuilder.build())
+            .setSelection(currentDate.toTimestamp())
+            .build()
 
         datePicker.addOnPositiveButtonClickListener {
             val date = it.toLocalDateTime()
             presenter.onDateSet(date.year, date.monthValue, date.dayOfMonth)
         }
 
-        datePicker.show(this@TimetableFragment.parentFragmentManager, null)
+        if (!parentFragmentManager.isStateSaved) {
+            datePicker.show(parentFragmentManager, null)
+        }
     }
 
     override fun openAdditionalLessonsView() {
@@ -226,7 +231,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
     }
 
     override fun onDestroyView() {
-        timetableAdapter.resetTimers()
+        timetableAdapter.clearTimers()
         presenter.onDetachView()
         super.onDestroyView()
     }
