@@ -42,17 +42,16 @@ class HomeworkAddPresenter @Inject constructor(
         view?.showDatePickerDialog(date ?: LocalDate.now())
     }
 
-    fun toggleDone(homework: Homework) {
-        flowWithResource { homeworkRepository.toggleDone(homework) }.onEach {
+    fun addHomework(homework: Homework) {
+        flowWithResource { homeworkRepository.insertHomework(listOf(homework)) }.onEach {
             when (it.status) {
-                Status.LOADING -> Timber.i("Homework details update start")
+                Status.LOADING -> Timber.i("Homework insert start")
                 Status.SUCCESS -> {
-                    Timber.i("Homework details update: Success")
-                    //view?.updateMarkAsDoneLabel(homework.isDone)
-                    analytics.logEvent("homework_mark_as_done")
+                    Timber.i("Homework insert: Success")
+                    view?.closeDialog()
                 }
                 Status.ERROR -> {
-                    Timber.i("Homework details update result: An exception occurred")
+                    Timber.i("Homework insert result: An exception occurred")
                     errorHandler.dispatch(it.error!!)
                 }
             }

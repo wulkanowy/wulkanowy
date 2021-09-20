@@ -75,8 +75,17 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
         }
     }
 
-    override fun checkFields() {
+    override fun closeDialog() {
+        dialog?.dismiss()
+        dialog?.cancel()
+    }
 
+    override fun checkFields() {
+        with(binding) {
+            homeworkDialogDate.error =
+                if (homeworkDialogDate.editText?.text.isNullOrBlank()) "No text" else ""
+
+        }
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
