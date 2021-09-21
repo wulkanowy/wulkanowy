@@ -50,12 +50,30 @@
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/homeworkDialogSubject"
+        android:id="@+id/homeworkDialogDate"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginTop="28dp"
+        android:hint="@string/all_date"
+        app:startIconDrawable="@drawable/ic_main_timetable">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:editable="false"
+            android:focusable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/homeworkDialogSubject"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="16dp"
         android:hint="@string/all_subject">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -74,24 +92,6 @@
         android:hint="@string/all_teacher">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/homeworkDialogDate"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="16dp"
-        android:hint="@string/all_date"
-        app:startIconDrawable="@drawable/ic_main_timetable">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:editable="false"
-            android:focusable="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -156,7 +156,7 @@
             android:insetRight="0dp"
             android:insetBottom="0dp"
             android:minWidth="88dp"
-            android:text="@string/homework_add"
+            android:text="@string/all_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

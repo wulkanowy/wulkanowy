@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
+import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -18,6 +19,7 @@ class HomeworkAddPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val homeworkRepository: HomeworkRepository,
+    private val semesterRepository: SemesterRepository,
     private val analytics: AnalyticsHelper,
     private val preferencesRepository: PreferencesRepository
 ) : BasePresenter<HomeworkAddView>(errorHandler, studentRepository) {
@@ -42,13 +44,40 @@ class HomeworkAddPresenter @Inject constructor(
         view?.showDatePickerDialog(date ?: LocalDate.now())
     }
 
-    fun addHomework(homework: Homework) {
-        flowWithResource { homeworkRepository.insertHomework(listOf(homework)) }.onEach {
+    fun addHomework(
+        subject: String,
+        teacher: String,
+        date: LocalDate,
+        content: String
+    ) {
+        flowWithResource {
+            val student = studentRepository.getCurrentStudent()
+            val semester = semesterRepository.getCurrentSemester(student)
+            val entryDate = LocalDate.now()
+            homeworkRepository.insertHomework(
+                listOf(
+                    Homework(
+                        semester.semesterId,
+                        student.studentId,
+                        date,
+                        entryDate,
+                        subject,
+                        content,
+                        teacher,
+                        "Database",
+                        emptyList()
+                    )
+                )
+            )
+        }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Homework insert start")
                 Status.SUCCESS -> {
                     Timber.i("Homework insert: Success")
-                    view?.closeDialog()
+                    view?.run {
+                        showMessage(homeworkAddSuccess)
+                        closeDialog()
+                    }
                 }
                 Status.ERROR -> {
                     Timber.i("Homework insert result: An exception occurred")

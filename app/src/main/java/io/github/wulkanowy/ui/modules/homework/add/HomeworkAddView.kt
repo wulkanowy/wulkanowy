@@ -5,11 +5,13 @@ import java.time.LocalDate
 
 interface HomeworkAddView : BaseView {
 
+    val homeworkAddSuccess: String
+
     fun initView()
 
-    fun closeDialog()
-
     fun checkFields()
+
+    fun closeDialog()
 
     fun showDatePickerDialog(currentDate: LocalDate)
 }
