@@ -1,9 +1,11 @@
-package io.github.wulkanowy.ui.modules.notificationscentre
+package io.github.wulkanowy.ui.modules.notificationscenter
 
 import io.github.wulkanowy.data.db.entities.Notification
 import io.github.wulkanowy.ui.base.BaseView
 
-interface NotificationsCentreView : BaseView {
+interface NotificationsCenterView : BaseView {
+
+    val isViewEmpty: Boolean
 
     fun initView()
 
@@ -14,4 +16,8 @@ interface NotificationsCentreView : BaseView {
     fun showEmpty(show: Boolean)
 
     fun showContent(show: Boolean)
+
+    fun showErrorView(show: Boolean)
+
+    fun setErrorDetails(message: String)
 }

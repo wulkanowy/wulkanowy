@@ -1,4 +1,4 @@
-package io.github.wulkanowy.ui.modules.notificationscentre
+package io.github.wulkanowy.ui.modules.notificationscenter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,26 +7,26 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Notification
-import io.github.wulkanowy.databinding.ItemNotificationsCentreBinding
+import io.github.wulkanowy.databinding.ItemNotificationsCenterBinding
 import io.github.wulkanowy.services.sync.notifications.NotificationType
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
-class NotificationsCentreAdapter @Inject constructor() :
-    ListAdapter<Notification, NotificationsCentreAdapter.ViewHolder>(DiffUtilCallback()) {
+class NotificationsCenterAdapter @Inject constructor() :
+    ListAdapter<Notification, NotificationsCenterAdapter.ViewHolder>(DiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        ItemNotificationsCentreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ItemNotificationsCenterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
 
         with(holder.binding) {
-            notificationsCentreItemTitle.text = item.title
-            notificationsCentreItemContent.text = item.content
-            notificationsCentreItemDate.text = item.date.toFormattedString("HH:mm, d MMM")
-            notificationsCentreItemIcon.setImageResource(
+            notificationsCenterItemTitle.text = item.title
+            notificationsCenterItemContent.text = item.content
+            notificationsCenterItemDate.text = item.date.toFormattedString("HH:mm, d MMM")
+            notificationsCenterItemIcon.setImageResource(
                 when (item.type) {
                     NotificationType.NEW_CONFERENCE -> R.drawable.ic_more_conferences
                     NotificationType.NEW_EXAM -> R.drawable.ic_main_exam
@@ -43,7 +43,7 @@ class NotificationsCentreAdapter @Inject constructor() :
         }
     }
 
-    class ViewHolder(val binding: ItemNotificationsCentreBinding) :
+    class ViewHolder(val binding: ItemNotificationsCenterBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     private class DiffUtilCallback : DiffUtil.ItemCallback<Notification>() {

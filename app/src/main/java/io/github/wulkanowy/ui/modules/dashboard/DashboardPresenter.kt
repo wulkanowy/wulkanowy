@@ -209,8 +209,8 @@ class DashboardPresenter @Inject constructor(
         view?.showErrorDetailsDialog(lastError)
     }
 
-    fun onNotificationsCentreSelected(): Boolean {
-        view?.openNotificationsCentreView()
+    fun onNotificationscenterSelected(): Boolean {
+        view?.openNotificationscenterView()
         return true
     }
 
