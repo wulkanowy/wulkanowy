@@ -64,9 +64,9 @@ class HomeworkAddPresenter @Inject constructor(
                         subject,
                         content,
                         teacher,
-                        "Database",
-                        emptyList()
-                    )
+                        "",
+                        emptyList(),
+                    ).apply { isAddedByUser = true }
                 )
             )
         }.onEach {

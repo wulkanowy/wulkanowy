@@ -315,7 +315,8 @@
     <string name="homework_mark_as_done">Mark as done</string>
     <string name="homework_mark_as_undone">Mark as undone</string>
     <string name="homework_add">Add homework</string>
-    <string name="homework_success">Homework added successfully</string>
+    <string name="homework_add_success">Homework added successfully</string>
+    <string name="homework_delete_success">Homework deleted successfully</string>
     <string name="homework_attachments">Attachments</string>
     <plurals name="homework_notify_new_item_title">
         <item quantity="one">New homework</item>

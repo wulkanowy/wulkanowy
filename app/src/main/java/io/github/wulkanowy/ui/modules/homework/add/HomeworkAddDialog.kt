@@ -29,7 +29,7 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
     private var date: LocalDate? = null
 
     override val homeworkAddSuccess: String
-        get() = getString(R.string.homework_success)
+        get() = getString(R.string.homework_add_success)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -59,7 +59,7 @@ class HomeworkRepository @Inject constructor(
                 if (notify) it.isNotified = false
             }
 
-            homeworkDb.deleteAll(old.filter { it.teacherSymbol != "Database" } uniqueSubtract new)
+            homeworkDb.deleteAll(old.filter { it.isAddedByUser != true } uniqueSubtract new)
             homeworkDb.insertAll(homeWorkToSave)
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))

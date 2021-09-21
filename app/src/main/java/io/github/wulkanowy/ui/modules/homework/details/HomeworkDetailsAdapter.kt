@@ -37,6 +37,8 @@ class HomeworkDetailsAdapter @Inject constructor() :
 
     var onFullScreenExitClickListener = {}
 
+    var onDeleteClickListener: (homework: Homework) -> Unit = {}
+
     override fun getItemCount() = 1 + if (attachments.isNotEmpty()) attachments.size + 1 else 0
 
     override fun getItemViewType(position: Int) = when (position) {
@@ -69,6 +71,7 @@ class HomeworkDetailsAdapter @Inject constructor() :
             homeworkDialogSubject.text = homework?.subject
             homeworkDialogTeacher.text = homework?.teacher
             homeworkDialogContent.text = homework?.content
+            homeworkDialogDelete.visibility = if (homework?.isAddedByUser == true) VISIBLE else GONE
             homeworkDialogFullScreen.visibility = if (isHomeworkFullscreen) GONE else VISIBLE
             homeworkDialogFullScreenExit.visibility = if (isHomeworkFullscreen) VISIBLE else GONE
             homeworkDialogFullScreen.setOnClickListener {
@@ -80,6 +83,9 @@ class HomeworkDetailsAdapter @Inject constructor() :
                 homeworkDialogFullScreen.visibility = VISIBLE
                 homeworkDialogFullScreenExit.visibility = GONE
                 onFullScreenExitClickListener()
+            }
+            homeworkDialogDelete.setOnClickListener {
+                onDeleteClickListener(homework!!)
             }
         }
     }
