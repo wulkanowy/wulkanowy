@@ -96,8 +96,18 @@ android {
         }
     }
 
+    playConfigs {
+        play { enabled.set(true) }
+    }
+
     buildFeatures {
         viewBinding true
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
     }
 
     testOptions.unitTests {
@@ -130,11 +140,10 @@ kapt {
 }
 
 play {
-    serviceAccountEmail = System.getenv("PLAY_SERVICE_ACCOUNT_EMAIL") ?: "jan@fakelog.cf"
-    serviceAccountCredentials = file('key.p12')
     defaultToAppBundles = false
     track = 'production'
     updatePriority = 3
+    enabled.set(false)
 }
 
 huaweiPublish {
