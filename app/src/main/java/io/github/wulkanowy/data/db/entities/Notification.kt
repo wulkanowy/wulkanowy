@@ -18,7 +18,9 @@ data class Notification(
 
     val type: NotificationType,
 
-    val date: LocalDateTime
+    val date: LocalDateTime,
+
+    val data: String? = null
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
