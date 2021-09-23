@@ -96,26 +96,26 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
 
                         if (lesson.start > now()) {
                             scheduleBroadcast(
-                                intent,
-                                student.studentId,
-                                NOTIFICATION_TYPE_UPCOMING,
-                                getUpcomingLessonTime(index, active, lesson)
+                                intent = intent,
+                                studentId = student.studentId,
+                                notificationType = NOTIFICATION_TYPE_UPCOMING,
+                                time = getUpcomingLessonTime(index, active, lesson)
                             )
                         }
 
                         if (lesson.end > now()) {
                             scheduleBroadcast(
-                                intent,
-                                student.studentId,
-                                NOTIFICATION_TYPE_CURRENT,
-                                lesson.start
+                                intent = intent,
+                                studentId = student.studentId,
+                                notificationType = NOTIFICATION_TYPE_CURRENT,
+                                time = lesson.start
                             )
                             if (active.lastIndex == index) {
                                 scheduleBroadcast(
-                                    intent,
-                                    student.studentId,
-                                    NOTIFICATION_TYPE_LAST_LESSON_CANCELLATION,
-                                    lesson.end
+                                    intent = intent,
+                                    studentId = student.studentId,
+                                    notificationType = NOTIFICATION_TYPE_LAST_LESSON_CANCELLATION,
+                                    time = lesson.end
                                 )
                             }
                         }
@@ -143,17 +143,21 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
         notificationType: Int,
         time: LocalDateTime
     ) {
-        AlarmManagerCompat.setExactAndAllowWhileIdle(
-            alarmManager, RTC_WAKEUP, time.toTimestamp(),
-            PendingIntent.getBroadcast(context, getRequestCode(time, studentId), intent.also {
-                it.putExtra(NOTIFICATION_ID, MainView.Section.TIMETABLE.id)
-                it.putExtra(LESSON_TYPE, notificationType)
-            }, FLAG_UPDATE_CURRENT)
-        )
-        Timber.d(
-            "TimetableNotification scheduled: type: $notificationType, subject: ${
-                intent.getStringExtra(LESSON_TITLE)
-            }, start: $time, student: $studentId"
-        )
+        try {
+            AlarmManagerCompat.setExactAndAllowWhileIdle(
+                alarmManager, RTC_WAKEUP, time.toTimestamp(),
+                PendingIntent.getBroadcast(context, getRequestCode(time, studentId), intent.also {
+                    it.putExtra(NOTIFICATION_ID, MainView.Section.TIMETABLE.id)
+                    it.putExtra(LESSON_TYPE, notificationType)
+                }, FLAG_UPDATE_CURRENT)
+            )
+            Timber.d(
+                "TimetableNotification scheduled: type: $notificationType, subject: ${
+                    intent.getStringExtra(LESSON_TITLE)
+                }, start: $time, student: $studentId"
+            )
+        } catch (e: IllegalStateException) {
+            Timber.e(e)
+        }
     }
 }
