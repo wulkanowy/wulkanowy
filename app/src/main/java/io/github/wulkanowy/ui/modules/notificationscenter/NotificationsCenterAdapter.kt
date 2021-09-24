@@ -38,6 +38,7 @@ class NotificationsCenterAdapter @Inject constructor() :
                     NotificationType.NEW_MESSAGE -> R.drawable.ic_stat_message
                     NotificationType.NEW_NOTE -> R.drawable.ic_stat_note
                     NotificationType.NEW_ANNOUNCEMENT -> R.drawable.ic_all_about
+                    NotificationType.PUSH -> R.drawable.ic_stat_all
                 }
             )
         }

@@ -117,7 +117,8 @@ class AppNotificationManager @Inject constructor(
             .setColor(context.getCompatColor(R.color.colorPrimary))
             .setContentIntent(
                 PendingIntent.getActivity(
-                    context, notificationData.startMenu.id,
+                    context,
+                    notificationData.startMenu.id,
                     MainActivity.getStartIntent(context, notificationData.startMenu, true),
                     pendingIntentsFlags
                 )
