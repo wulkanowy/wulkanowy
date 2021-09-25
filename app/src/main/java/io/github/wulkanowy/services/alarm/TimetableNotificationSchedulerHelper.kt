@@ -86,7 +86,7 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
             return cancelScheduled(lessons, student)
         }
 
-        if (lessons.firstOrNull()?.date?.isAfter(LocalDate.now().plusWeeks(2)) == true) {
+        if (lessons.firstOrNull()?.date?.isAfter(LocalDate.now().plusDays(2)) == true) {
             Timber.d("Timetable notification scheduling skipped - lessons are too far")
             return
         }
