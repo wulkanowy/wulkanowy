@@ -42,7 +42,8 @@
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Anmelden</string>
     <string name="login_invalid_password">Passwort ist zu kurz</string>
-    <string name="login_incorrect_password">Anmeldedaten sind falsch. Stellen Sie sicher, dass die richtige UONET+ Registervariation im unteren Feld ausgewählt ist</string>
+    <string name="login_incorrect_password_default">Anmeldedaten sind falsch</string>
+    <string name="login_incorrect_password">%1$s. Stellen Sie sicher, dass die richtige UONET+ Registervariation im unteren Feld ausgewählt ist</string>
     <string name="login_invalid_pin">Ungültige PIN</string>
     <string name="login_invalid_token">Ungültige token</string>
     <string name="login_expired_token">Token ist nicht mehr gültig</string>
@@ -344,6 +345,8 @@
         <item quantity="one">Sie haben %1$d neue konferenz</item>
         <item quantity="other">Sie haben %1$d neue konferenzen</item>
     </plurals>
+    <string name="conferences_present">Present at conference</string>
+    <string name="conference_agenda">Agenda</string>
     <!--Director information-->
     <string name="school_announcement_title">Schulankündigungen</string>
     <string name="school_announcement_no_items">Keine schulankündigungen</string>
@@ -512,6 +515,7 @@
     <string name="all_yes">Ja</string>
     <string name="all_no">Nein</string>
     <string name="all_save">Speichern</string>
+    <string name="all_title">Title</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Keine Lektionen</string>
     <string name="widget_timetable_theme_title">Thema wählen</string>

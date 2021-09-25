@@ -21,8 +21,8 @@ android {
         testApplicationId "io.github.tests.wulkanowy"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 95
-        versionName "1.2.2"
+        versionCode 96
+        versionName "1.2.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -96,8 +96,18 @@ android {
         }
     }
 
+    playConfigs {
+        play { enabled.set(true) }
+    }
+
     buildFeatures {
         viewBinding true
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
     }
 
     testOptions.unitTests {
@@ -130,11 +140,10 @@ kapt {
 }
 
 play {
-    serviceAccountEmail = System.getenv("PLAY_SERVICE_ACCOUNT_EMAIL") ?: "jan@fakelog.cf"
-    serviceAccountCredentials = file('key.p12')
     defaultToAppBundles = false
     track = 'production'
     updatePriority = 3
+    enabled.set(false)
 }
 
 huaweiPublish {
@@ -157,7 +166,7 @@ ext {
 }
 
 dependencies {
-    implementation "io.github.wulkanowy:sdk:d74acd3989"
+    implementation "io.github.wulkanowy:sdk:49c2071d10"
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
@@ -211,7 +220,7 @@ dependencies {
     implementation 'me.xdrop:fuzzywuzzy:1.3.1'
     implementation 'com.fredporciuncula:flow-preferences:1.5.0'
 
-    playImplementation platform('com.google.firebase:firebase-bom:28.4.0')
+    playImplementation platform('com.google.firebase:firebase-bom:28.4.1')
     playImplementation 'com.google.firebase:firebase-analytics-ktx'
     playImplementation 'com.google.firebase:firebase-messaging:'
     playImplementation 'com.google.firebase:firebase-crashlytics:'

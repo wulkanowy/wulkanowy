@@ -42,7 +42,8 @@
     <string name="login_symbol_hint">Symbol</string>
     <string name="login_sign_in">Увійти</string>
     <string name="login_invalid_password">Занадто короткий пароль</string>
-    <string name="login_incorrect_password">Дані для входу неправильні. Переконайтеся, що у полі нижче вказано правильний варіант реєстрації UONET+</string>
+    <string name="login_incorrect_password_default">Дані для входу неправильні</string>
+    <string name="login_incorrect_password">%1$s. Переконайтеся, що у полі нижче вказано правильний варіант реєстрації UONET+</string>
     <string name="login_invalid_pin">Неправильний PIN</string>
     <string name="login_invalid_token">Неправильний token</string>
     <string name="login_expired_token">Минув термін дії токену</string>
@@ -402,6 +403,8 @@
         <item quantity="many">У вас є %1$d нова конференція</item>
         <item quantity="other">У вас є %1$d нових конференцій</item>
     </plurals>
+    <string name="conferences_present">Present at conference</string>
+    <string name="conference_agenda">Agenda</string>
     <!--Director information-->
     <string name="school_announcement_title">Оголошення школи</string>
     <string name="school_announcement_no_items">Жодних навчальних оголошень</string>
@@ -590,6 +593,7 @@
     <string name="all_yes">Так</string>
     <string name="all_no">Ні</string>
     <string name="all_save">Зберегти</string>
+    <string name="all_title">Title</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Брак уроків</string>
     <string name="widget_timetable_theme_title">Увібрати тему</string>
