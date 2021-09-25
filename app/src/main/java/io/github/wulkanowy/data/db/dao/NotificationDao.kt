@@ -10,6 +10,6 @@ import javax.inject.Singleton
 @Dao
 interface NotificationDao : BaseDao<Notification> {
 
-    @Query("SELECT * FROM Notifications")
-    fun loadAll(): Flow<List<Notification>>
+    @Query("SELECT * FROM Notifications WHERE student_id = :studentId OR student_id = -1")
+    fun loadAll(studentId: Long): Flow<List<Notification>>
 }

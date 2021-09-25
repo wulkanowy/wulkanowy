@@ -5,6 +5,8 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -41,7 +43,10 @@ class NotificationsCenterPresenter @Inject constructor(
     private fun loadData() {
         Timber.i("Loading notifications data started")
 
-        notificationRepository.getNotifications()
+        flow {
+            val studentId = studentRepository.getCurrentStudent(false).id
+            emitAll(notificationRepository.getNotifications(studentId))
+        }
             .map { notificationList -> notificationList.sortedByDescending { it.date } }
             .catch { Timber.i("Loading notifications result: An exception occurred") }
             .onEach {
