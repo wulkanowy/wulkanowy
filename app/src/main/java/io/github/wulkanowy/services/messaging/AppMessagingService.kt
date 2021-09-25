@@ -30,7 +30,7 @@ class AppMessagingService : FirebaseMessagingService() {
         val remoteMessageData = remoteMessage.data
         val title = remoteMessageData["title"] ?: return
         val content = remoteMessageData["content"] ?: return
-        val customData = remoteMessageData["custom_data"] ?: return
+        val customData = remoteMessageData["custom_data"]
 
         val notification = Notification(
             title = title,
