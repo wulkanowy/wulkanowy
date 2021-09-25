@@ -13,7 +13,6 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.databinding.DialogTimetableBinding
 import io.github.wulkanowy.utils.capitalise
-import io.github.wulkanowy.utils.decapitalise
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.lifecycleAwareVariable
 import io.github.wulkanowy.utils.toFormattedString
@@ -52,7 +51,7 @@ class TimetableDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(lesson) {
-            setInfo(info, teacher, canceled, changes)
+            setInfo(info, canceled, changes)
             setSubject(subject, subjectOld)
             setTeacher(teacher, teacherOld)
             setGroup(group)
@@ -80,7 +79,7 @@ class TimetableDialog : DialogFragment() {
     }
 
     @SuppressLint("DefaultLocale")
-    private fun setInfo(info: String, teacher: String, canceled: Boolean, changes: Boolean) {
+    private fun setInfo(info: String, canceled: Boolean, changes: Boolean) {
         with(binding) {
             when {
                 info.isNotBlank() -> {
@@ -90,20 +89,26 @@ class TimetableDialog : DialogFragment() {
                                 R.attr.colorPrimary
                             )
                         )
-                        timetableDialogChangesValue.setTextColor(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+                        timetableDialogChangesValue.setTextColor(
+                            requireContext().getThemeAttrColor(
+                                R.attr.colorPrimary
+                            )
+                        )
                     } else {
                         timetableDialogChangesTitle.setTextColor(
                             requireContext().getThemeAttrColor(
                                 R.attr.colorTimetableChange
                             )
                         )
-                        timetableDialogChangesValue.setTextColor(requireContext().getThemeAttrColor(R.attr.colorTimetableChange))
+                        timetableDialogChangesValue.setTextColor(
+                            requireContext().getThemeAttrColor(
+                                R.attr.colorTimetableChange
+                            )
+                        )
                     }
 
                     timetableDialogChangesValue.text = when {
                         canceled && !changes -> "Lekcja odwołana: $info"
-                        changes && teacher.isNotBlank() -> "Zastępstwo: $teacher"
-                        changes && teacher.isBlank() -> "Zastępstwo, ${info.decapitalise()}"
                         else -> info.capitalise()
                     }
                 }
@@ -129,6 +134,15 @@ class TimetableDialog : DialogFragment() {
                             visibility = VISIBLE
                             text = teacher
                         }
+                    }
+                }
+                teacherOld.isNotBlank() && teacherOld == teacher -> {
+                    timetableDialogTeacherValue.run {
+                        visibility = GONE
+                    }
+                    timetableDialogTeacherNewValue.run {
+                        visibility = VISIBLE
+                        text = teacher
                     }
                 }
                 teacher.isNotBlank() -> timetableDialogTeacherValue.text = teacher

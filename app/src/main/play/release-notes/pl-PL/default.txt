@@ -1,6 +1,8 @@
-Wersja 1.1.6
+Wersja 1.2.3
 
-- naprawiliśmy błąd przy wysyłaniu wiadomości
-- naprawiliśmy oznaczanie odwołanych lekcji jako zastępstwa
+- naprawiliśmy pomieszane imiona nauczycieli z salami w planie lekcji
+- dodaliśmy brakujące okienka ze szczegółami na ekranie zebrań
+- klikając w kafelek z lekcjami na jutro aplikacja teraz przekierowuje na ekran z planem na jutro
+- naprawiliśmy błąd przy wylogowywaniu innego niż bieżący uczeń
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

@@ -30,7 +30,7 @@ class LoginFormPresenter @Inject constructor(
             showVersion()
 
             loginErrorHandler.onBadCredentials = {
-                setErrorPassIncorrect()
+                setErrorPassIncorrect(it)
                 showSoftKeyboard()
                 Timber.i("Entered wrong username or password")
             }
@@ -90,10 +90,10 @@ class LoginFormPresenter @Inject constructor(
 
         flowWithResource {
             studentRepository.getStudentsScrapper(
-                email,
-                password,
-                host,
-                symbol
+                email = email,
+                password = password,
+                scrapperBaseUrl = host,
+                symbol = symbol
             )
         }.onEach {
             when (it.status) {

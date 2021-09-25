@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.schoolannouncement
 
 import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.data.repositories.SchoolAnnouncementRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -46,6 +47,10 @@ class SchoolAnnouncementPresenter @Inject constructor(
         view?.showErrorDetailsDialog(lastError)
     }
 
+    fun onItemClickListener(item: SchoolAnnouncement) {
+        view?.openSchoolAnnouncementDialog(item)
+    }
+
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading School announcement data started")
 
@@ -59,6 +64,7 @@ class SchoolAnnouncementPresenter @Inject constructor(
                         view?.run {
                             enableSwipe(true)
                             showRefresh(true)
+                            showErrorView(false)
                             showProgress(false)
                             showContent(true)
                             updateData(it.data)
