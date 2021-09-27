@@ -24,6 +24,7 @@
     <string name="account_details_title">Podrobnosti účtu</string>
     <string name="student_info_title">Informace o žáku</string>
     <string name="dashboard_title">Domů</string>
+    <string name="notifications_center_title">Notifications center</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
