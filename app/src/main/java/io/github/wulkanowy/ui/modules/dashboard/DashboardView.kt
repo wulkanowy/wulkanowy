@@ -24,5 +24,5 @@ interface DashboardView : BaseView {
 
     fun popViewToRoot()
 
-    fun openNotificationscenterView()
+    fun openNotificationsCenterView()
 }

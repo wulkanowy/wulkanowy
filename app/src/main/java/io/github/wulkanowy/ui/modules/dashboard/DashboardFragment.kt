@@ -121,7 +121,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.dashboard_menu_tiles -> presenter.onDashboardTileSettingsSelected()
-            R.id.dashboard_menu_notifaction_list -> presenter.onNotificationscenterSelected()
+            R.id.dashboard_menu_notifaction_list -> presenter.onNotificationsCenterSelected()
             else -> false
         }
     }
@@ -184,7 +184,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
         if (::presenter.isInitialized) presenter.onViewReselected()
     }
 
-    override fun openNotificationscenterView() {
+    override fun openNotificationsCenterView() {
         (requireActivity() as MainActivity).pushView(NotificationsCenterFragment.newInstance())
     }
 

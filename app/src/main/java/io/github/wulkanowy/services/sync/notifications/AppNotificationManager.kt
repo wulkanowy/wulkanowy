@@ -66,7 +66,8 @@ class AppNotificationManager @Inject constructor(
         notificationData: MultipleNotificationsData,
         student: Student
     ) {
-        val group = notificationData.type.group + student.id
+        val groupType = notificationData.type.group ?: return
+        val group = "${groupType}_${student.id}"
         val groupId = student.id * 100 + notificationData.type.ordinal
 
         notificationData.lines.forEach { item ->
