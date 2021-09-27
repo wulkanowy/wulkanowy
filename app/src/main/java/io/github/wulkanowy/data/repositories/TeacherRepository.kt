@@ -20,7 +20,10 @@ class TeacherRepository @Inject constructor(
 
     private val saveFetchResultMutex = Mutex()
 
-    fun getTeachers(student: Student, semester: Semester, forceRefresh: Boolean) = networkBoundResource(
+    fun getTeachers(
+        student: Student, semester: Semester,
+        forceRefresh: Boolean,
+    ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = { it.isEmpty() || forceRefresh },
         query = { teacherDb.loadAll(semester.studentId, semester.classId) },

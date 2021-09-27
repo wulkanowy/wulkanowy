@@ -56,9 +56,10 @@ class MessageRepository @Inject constructor(
     ): Flow<Resource<List<Message>>> = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {
-            it.isEmpty() || forceRefresh || refreshHelper.isShouldBeRefreshed(
-                getRefreshKey(cacheKey, student, folder)
+            val isExpired = refreshHelper.shouldBeRefreshed(
+                key = getRefreshKey(cacheKey, student, folder)
             )
+            it.isEmpty() || forceRefresh || isExpired
         },
         query = { messagesDb.loadAll(student.id.toInt(), folder.id) },
         fetch = {

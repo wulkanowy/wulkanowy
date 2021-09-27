@@ -20,7 +20,10 @@ class SubjectRepository @Inject constructor(
 
     private val saveFetchResultMutex = Mutex()
 
-    fun getSubjects(student: Student, semester: Semester, forceRefresh: Boolean = false) = networkBoundResource(
+    fun getSubjects(
+        student: Student, semester: Semester,
+        forceRefresh: Boolean = false,
+    ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = { it.isEmpty() || forceRefresh },
         query = { subjectDao.loadAll(semester.diaryId, semester.studentId) },

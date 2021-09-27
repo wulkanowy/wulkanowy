@@ -35,6 +35,7 @@ class RecipientRepository @Inject constructor(
     }
 
     suspend fun getMessageRecipients(student: Student, message: Message): List<Recipient> {
-        return sdk.init(student).getMessageRecipients(message.messageId, message.senderId).mapToEntities(student.studentId)
+        return sdk.init(student).getMessageRecipients(message.messageId, message.senderId)
+            .mapToEntities(student.studentId)
     }
 }

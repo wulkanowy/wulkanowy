@@ -31,19 +31,16 @@ class ExamRepository @Inject constructor(
     private val cacheKey = "exam"
 
     fun getExams(
-        student: Student,
-        semester: Semester,
-        start: LocalDate,
-        end: LocalDate,
-        forceRefresh: Boolean,
-        notify: Boolean = false
+        student: Student, semester: Semester,
+        start: LocalDate, end: LocalDate,
+        forceRefresh: Boolean, notify: Boolean = false
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {
-            val isShouldBeRefreshed = refreshHelper.isShouldBeRefreshed(
+            val isExpired = refreshHelper.shouldBeRefreshed(
                 key = getRefreshKey(cacheKey, semester, start, end)
             )
-            it.isEmpty() || forceRefresh || isShouldBeRefreshed
+            it.isEmpty() || forceRefresh || isExpired
         },
         query = {
             examDb.loadAll(
