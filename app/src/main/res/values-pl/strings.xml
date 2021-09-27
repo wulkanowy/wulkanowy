@@ -24,6 +24,7 @@
     <string name="account_details_title">Szczegóły konta</string>
     <string name="student_info_title">Informacje o uczniu</string>
     <string name="dashboard_title">Start</string>
+    <string name="notifications_center_title">Notifications center</string>
     <!--Subtitles-->
     <string name="grade_subtitle">Semestr %1$d, %2$d/%3$d</string>
     <!--Login-->
