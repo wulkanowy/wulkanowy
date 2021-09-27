@@ -38,6 +38,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
         const val NOTIFICATION_TYPE_LAST_LESSON_CANCELLATION = 3
 
         const val NOTIFICATION_ID = "id"
+        const val NOTIFICATION_PERSISTENT = "persistent"
 
         const val STUDENT_NAME = "student_name"
         const val STUDENT_ID = "student_id"
@@ -68,6 +69,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
     private fun prepareNotification(context: Context, intent: Intent) {
         val type = intent.getIntExtra(LESSON_TYPE, 0)
         val notificationId = intent.getIntExtra(NOTIFICATION_ID, MainView.Section.TIMETABLE.id)
+        val isPersistent = intent.getIntExtra(NOTIFICATION_PERSISTENT, 1)
 
         if (type == NOTIFICATION_TYPE_LAST_LESSON_CANCELLATION) {
             return NotificationManagerCompat.from(context).cancel(notificationId)
@@ -87,33 +89,57 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
 
         Timber.d("TimetableNotification receive: type: $type, subject: $subject, start: ${start.toLocalDateTime()}, student: $studentId")
 
-        showNotification(context, notificationId, studentName,
+        showNotification(context, notificationId, isPersistent, studentName,
             if (type == NOTIFICATION_TYPE_CURRENT) end else start, end - start,
-            context.getString(if (type == NOTIFICATION_TYPE_CURRENT) R.string.timetable_now else R.string.timetable_next, "($room) $subject".removePrefix("()")),
-            nextSubject?.let { context.getString(R.string.timetable_later, "($nextRoom) $nextSubject".removePrefix("()")) }
+            context.getString(
+                if (type == NOTIFICATION_TYPE_CURRENT) R.string.timetable_now else R.string.timetable_next,
+                "($room) $subject".removePrefix("()")
+            ),
+            nextSubject?.let {
+                context.getString(
+                    R.string.timetable_later,
+                    "($nextRoom) $nextSubject".removePrefix("()")
+                )
+            }
         )
     }
 
-    private fun showNotification(context: Context, notificationId: Int, studentName: String?, countDown: Long, timeout: Long, title: String, next: String?) {
-        NotificationManagerCompat.from(context).notify(notificationId, NotificationCompat.Builder(context, CHANNEL_ID)
-            .setContentTitle(title)
-            .setContentText(next)
-            .setAutoCancel(false)
-            .setOngoing(true)
-            .setWhen(countDown)
-            .apply {
-                if (Build.VERSION.SDK_INT >= N) setUsesChronometer(true)
-            }
-            .setTimeoutAfter(timeout)
-            .setSmallIcon(R.drawable.ic_stat_timetable)
-            .setColor(context.getCompatColor(R.color.colorPrimary))
-            .setStyle(NotificationCompat.InboxStyle().also {
-                it.setSummaryText(studentName)
-                it.addLine(next)
-            })
-            .setContentIntent(PendingIntent.getActivity(context, MainView.Section.TIMETABLE.id,
-                MainActivity.getStartIntent(context, MainView.Section.TIMETABLE, true), FLAG_UPDATE_CURRENT))
-            .build()
-        )
+    private fun showNotification(
+        context: Context,
+        notificationId: Int,
+        isPersistent: Int,
+        studentName: String?,
+        countDown: Long,
+        timeout: Long,
+        title: String,
+        next: String?
+    ) {
+        NotificationManagerCompat.from(context)
+            .notify(notificationId, NotificationCompat.Builder(context, CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(next)
+                .setAutoCancel(false)
+                .setWhen(countDown)
+                .setOngoing(isPersistent == 1)
+                .apply {
+                    if (Build.VERSION.SDK_INT >= N) setUsesChronometer(true)
+                }
+                .setTimeoutAfter(timeout)
+                .setSmallIcon(R.drawable.ic_stat_timetable)
+                .setColor(context.getCompatColor(R.color.colorPrimary))
+                .setStyle(NotificationCompat.InboxStyle().also {
+                    it.setSummaryText(studentName)
+                    it.addLine(next)
+                })
+                .setContentIntent(
+                    PendingIntent.getActivity(
+                        context,
+                        MainView.Section.TIMETABLE.id,
+                        MainActivity.getStartIntent(context, MainView.Section.TIMETABLE, true),
+                        FLAG_UPDATE_CURRENT
+                    )
+                )
+                .build()
+            )
     }
 }

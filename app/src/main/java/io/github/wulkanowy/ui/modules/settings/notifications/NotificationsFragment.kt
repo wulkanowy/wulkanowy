@@ -112,6 +112,12 @@ class NotificationsFragment : PreferenceFragmentCompat(),
         }
     }
 
+    override fun enablePersistentNotification(notificationKey: String, enable: Boolean) {
+        findPreference<Preference>(notificationKey)?.run {
+            isEnabled = enable
+        }
+    }
+
     override fun showError(text: String, error: Throwable) {
         (activity as? BaseActivity<*, *>)?.showError(text, error)
     }
