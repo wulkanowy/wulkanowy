@@ -11,6 +11,7 @@ import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.HiltBroadcastReceiver
 import io.github.wulkanowy.services.sync.channels.UpcomingLessonsChannel.Companion.CHANNEL_ID
@@ -32,13 +33,15 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
     @Inject
     lateinit var studentRepository: StudentRepository
 
+    @Inject
+    lateinit var preferencesRepository: PreferencesRepository
+
     companion object {
         const val NOTIFICATION_TYPE_CURRENT = 1
         const val NOTIFICATION_TYPE_UPCOMING = 2
         const val NOTIFICATION_TYPE_LAST_LESSON_CANCELLATION = 3
 
         const val NOTIFICATION_ID = "id"
-        const val NOTIFICATION_PERSISTENT = "persistent"
 
         const val STUDENT_NAME = "student_name"
         const val STUDENT_ID = "student_id"
@@ -69,7 +72,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
     private fun prepareNotification(context: Context, intent: Intent) {
         val type = intent.getIntExtra(LESSON_TYPE, 0)
         val notificationId = intent.getIntExtra(NOTIFICATION_ID, MainView.Section.TIMETABLE.id)
-        val isPersistent = intent.getIntExtra(NOTIFICATION_PERSISTENT, 1)
+        val isPersistent = preferencesRepository.isUpcomingLessonsNotificationsPersistent
 
         if (type == NOTIFICATION_TYPE_LAST_LESSON_CANCELLATION) {
             return NotificationManagerCompat.from(context).cancel(notificationId)
@@ -107,7 +110,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
     private fun showNotification(
         context: Context,
         notificationId: Int,
-        isPersistent: Int,
+        isPersistent: Boolean,
         studentName: String?,
         countDown: Long,
         timeout: Long,
@@ -120,7 +123,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
                 .setContentText(next)
                 .setAutoCancel(false)
                 .setWhen(countDown)
-                .setOngoing(isPersistent == 1)
+                .setOngoing(isPersistent)
                 .apply {
                     if (Build.VERSION.SDK_INT >= N) setUsesChronometer(true)
                 }

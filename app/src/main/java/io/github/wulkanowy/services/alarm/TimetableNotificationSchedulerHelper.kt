@@ -20,7 +20,6 @@ import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companio
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.LESSON_TITLE
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.LESSON_TYPE
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.NOTIFICATION_ID
-import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.NOTIFICATION_PERSISTENT
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.NOTIFICATION_TYPE_CURRENT
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.NOTIFICATION_TYPE_LAST_LESSON_CANCELLATION
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.NOTIFICATION_TYPE_UPCOMING
@@ -159,10 +158,6 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
                 PendingIntent.getBroadcast(context, getRequestCode(time, studentId), intent.also {
                     it.putExtra(NOTIFICATION_ID, MainView.Section.TIMETABLE.id)
                     it.putExtra(LESSON_TYPE, notificationType)
-                    it.putExtra(
-                        NOTIFICATION_PERSISTENT,
-                        if (preferencesRepository.isUpcomingLessonsNotificationsPersistent) 1 else 0
-                    )
                 }, FLAG_UPDATE_CURRENT)
             )
             Timber.d(
