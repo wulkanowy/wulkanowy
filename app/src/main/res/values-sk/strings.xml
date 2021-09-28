@@ -94,8 +94,8 @@
     <string name="grade_summary_calculated_average">Vypočítaný priemer</string>
     <string name="grade_summary_calculated_average_help_dialog_title">Ako funguje vypočítaný priemer?</string>
     <string name="grade_summary_calculated_average_help_dialog_message">The Calculated Average is the arithmetic average calculated from the subjects averages. It allows you to know the approximate final average. It is calculated in a way selected by the user in the application settings. It is recommended that you choose the appropriate option. This is because the calculation of school averages differs. Additionally, if your school reports the average of the subjects on the Vulcan page, the application downloads them and does not calculate these averages. This can be changed by forcing the calculation of the average in the application settings.\n\n<b>Average of grades only from selected semester</b>:\n1. Calculating the weighted average for each subject in a given semester\n2.Adding calculated averages\n3. Calculation of the arithmetic average of the summed averages\n\n<b>Average of averages from both semesters</b>:\n1.Calculating the weighted average for each subject in semester 1 and 2\n2. Calculating the arithmetic average of the calculated averages for semesters 1 and 2 for each subject.\n3. Adding calculated averages\n4. Calculation of the arithmetic average of the summed averages\n\n<b>Average of grades from the whole year:</b>\n1. Calculating weighted average over the year for each subject. The final average in the 1st semester is irrelevant.\n3. Adding calculated averages\n4. Calculating the arithmetic average of summed averages</string>
-    <string name="grade_summary_final_average_help_dialog_title">How does the Final Average work?</string>
-    <string name="grade_summary_final_average_help_dialog_message">The Final Average is the arithmetic average calculated from all currently available final grades in the given semester.\n\nThe calculation scheme consists of the following steps:\n1. Summing up the final grades given by teachers\n2. Divide by the number of subjects that have already been graded</string>
+    <string name="grade_summary_final_average_help_dialog_title">Ako funguje konečný priemer?</string>
+    <string name="grade_summary_final_average_help_dialog_message">Konečný priemer je aritmetický priemer vypočítaný zo všetkých aktuálne dostupných konečných známok v danom semestri.\n\nSchéma výpočtu sa skladá z nasledujúcich krokov:\n1. Sčítanie konečných známok zadaných učiteľmi\n2. Delené počtom predmetov, pre ktoré už boli vydané známky</string>
     <string name="grade_summary_final_average">Konečný priemer</string>
     <string name="grade_summary_from_subjects">z %1$d z %2$d predmetov</string>
     <string name="grade_menu_summary">Zhrnutie</string>
@@ -603,7 +603,7 @@
     <!--Preferences-->
     <string name="pref_view_header">Vzhľad a správanie aplikácií</string>
     <string name="pref_view_list">Predvolené zobrazenie</string>
-    <string name="pref_view_grade_average_mode">Calculated average options</string>
+    <string name="pref_view_grade_average_mode">Možnosti vypočítaného priemeru</string>
     <string name="pref_view_grade_average_force_calc">Vynútiť priemerný výpočet podľa aplikácie</string>
     <string name="pref_view_present">Zobraziť prítomnosť</string>
     <string name="pref_view_app_theme">Motív</string>
@@ -618,15 +618,15 @@
     <string name="pref_notify_header">Upozornenia</string>
     <string name="pref_notify_switch">Zobraziť upozornenia</string>
     <string name="pref_notify_upcoming_lessons_switch">Zobraziť upozornenia o nadchádzajúcej lekciu</string>
-    <string name="pref_notify_upcoming_lessons_persistent_switch">Make upcoming lesson notification persistent</string>
-    <string name="pref_notify_upcoming_lessons_persistent_summary">Turn off when notification is not showing in your watch/band</string>
+    <string name="pref_notify_upcoming_lessons_persistent_switch">Nastaviť upozornenia o nadchádzajúcej lekcii ako trvalé</string>
+    <string name="pref_notify_upcoming_lessons_persistent_summary">Vypnúť, keď upozornenia nie je vo vašom hodinkách/náramku viditeľné</string>
     <string name="pref_notify_open_system_settings">Otvoriť systémové nastavenia upozornení</string>
     <string name="pref_notify_fix_sync_issues">Opravte problémy so synchronizáciou a upozornením</string>
     <string name="pref_notify_fix_sync_issues_message">Vaše zariadenie môže mať problémy so synchronizáciou dát as upozorneniami.\n\nAk ich chcete opraviť, pridajte Wulkanového do funkcie Autostart a vypnite optimalizáciu/úsporu batérie v nastavení systému telefóne.</string>
     <string name="pref_notify_fix_sync_issues_settings_button">Prejsť do nastavení</string>
     <string name="pref_notify_debug_switch">Zobraziť upozornenia o ladení</string>
     <string name="pref_notify_disabled_summary">Synchronizácia je vypnutá</string>
-    <string name="pref_notify_notifications_piggyback">Capture official app notifications</string>
+    <string name="pref_notify_notifications_piggyback">Zachytiť upozornenia oficiálnej aplikácie</string>
     <string name="pref_notification_piggyback_popup_title">Zachytiť upozornenia</string>
     <string name="pref_notification_piggyback_popup_description">With this feature you can gain a substitute of push notifications like in the official app. All you need to do is allow Wulkanowy to receive all notifications in your system settings.\n\nHow it works?\nWhen you get a notification in Dziennik VULCAN, Wulkanowy will be notified (that\'s what these extra permissions are for) and will trigger a sync so that can send its own notification.\n\nFOR ADVANCED USERS ONLY</string>
     <string name="pref_notification_piggyback_popup_positive">Prejsť do nastavení</string>
