@@ -552,7 +552,7 @@
     <string name="pref_notify_disabled_summary">Synchronisierung ist deaktiviert</string>
     <string name="pref_notify_notifications_piggyback">Offizielle App-Benachrichtigungen erfassen</string>
     <string name="pref_notification_piggyback_popup_title">Benachrichtigungen erfassen</string>
-    <string name="pref_notification_piggyback_popup_description">Mit dieser Funktion können Sie einen Ersatz für Push-Benachrichtigungen erhalten, wie in der offiziellen App. Alles, was Sie tun müssen, ist es Wulkanowy erlauben, alle Benachrichtigungen in Ihren Systemeinstellungen zu erhalten.\n\nWie funktioniert es?\nWenn Sie eine Benachrichtigung in Dziennik VULKO erhalten, Wulkanowy wird benachrichtigt (dafür sind diese zusätzlichen Berechtigungen) und wird eine Synchronisierung auslösen, so dass eine eigene Benachrichtigung gesendet werden kann.\n\nFÜR NUR FÜR VERWENDUNGEN</string>
+    <string name="pref_notification_piggyback_popup_description">With this feature you can gain a substitute of push notifications like in the official app. All you need to do is allow Wulkanowy to receive all notifications in your system settings.\n\nHow it works?\nWhen you get a notification in Dziennik VULCAN, Wulkanowy will be notified (that\'s what these extra permissions are for) and will trigger a sync so that can send its own notification.\n\nFOR ADVANCED USERS ONLY</string>
     <string name="pref_notification_piggyback_popup_positive">Gehe zu Einstellungen</string>
     <string name="pref_services_header">Synchronisierung</string>
     <string name="pref_services_switch">Automatische Aktualisierung</string>
