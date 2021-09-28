@@ -618,6 +618,8 @@
     <string name="pref_notify_header">Уведомления</string>
     <string name="pref_notify_switch">Показывать уведомления</string>
     <string name="pref_notify_upcoming_lessons_switch">Показывать уведомления о будущих уроках</string>
+    <string name="pref_notify_upcoming_lessons_persistent_switch">Make upcoming lesson notification persistent</string>
+    <string name="pref_notify_upcoming_lessons_persistent_summary">Turn off when notification is not showing in your watch/band</string>
     <string name="pref_notify_open_system_settings">Открыть настройки уведомлений системы</string>
     <string name="pref_notify_fix_sync_issues">Исправить проблемы с синхронизацией и уведомлениями</string>
     <string name="pref_notify_fix_sync_issues_message">На вашем устройстве могут быть проблемы с синхронизацией данных и уведомлениями.\n\nЧтобы их исправить, вам необходимо добавить Wulkanowy в авто-старт и выключить оптимизацию/экономию батареи в настройках устройства.</string>
