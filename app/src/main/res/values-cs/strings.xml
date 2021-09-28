@@ -603,7 +603,7 @@
     <!--Preferences-->
     <string name="pref_view_header">Vzhled a chování aplikací</string>
     <string name="pref_view_list">Výchozí zobrazení</string>
-    <string name="pref_view_grade_average_mode">Calculated average options</string>
+    <string name="pref_view_grade_average_mode">Možnosti vypočítaného průměru</string>
     <string name="pref_view_grade_average_force_calc">Vynutit průměrný výpočet podle aplikace</string>
     <string name="pref_view_present">Zobrazit přítomnost</string>
     <string name="pref_view_app_theme">Motiv</string>
@@ -618,8 +618,8 @@
     <string name="pref_notify_header">Upozornění</string>
     <string name="pref_notify_switch">Zobrazit upozornění</string>
     <string name="pref_notify_upcoming_lessons_switch">Zobrazit upozornění o nadcházející lekci</string>
-    <string name="pref_notify_upcoming_lessons_persistent_switch">Make upcoming lesson notification persistent</string>
-    <string name="pref_notify_upcoming_lessons_persistent_summary">Turn off when notification is not showing in your watch/band</string>
+    <string name="pref_notify_upcoming_lessons_persistent_switch">Nastavit upozornění o nadcházející lekci jako trvalé</string>
+    <string name="pref_notify_upcoming_lessons_persistent_summary">Vypnout, když upozornění není ve vašem hodinkách/náramku viditelné</string>
     <string name="pref_notify_open_system_settings">Otevřít systémová nastavení upozornění</string>
     <string name="pref_notify_fix_sync_issues">Opravte problémy se synchronizací a upozorněním</string>
     <string name="pref_notify_fix_sync_issues_message">Vaše zařízení může mít problémy se synchronizací dat as upozorněními.\n\nChcete-li je opravit, přidejte Wulkanového do funkce Autostart a vypněte optimalizaci/úsporu baterie v nastavení systému telefonu.</string>
