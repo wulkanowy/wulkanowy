@@ -29,6 +29,8 @@ class RecipientRepository @Inject constructor(
 
         recipientDb.deleteAll(old uniqueSubtract new)
         recipientDb.insertAll(new uniqueSubtract old)
+
+        refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student))
     }
 
     suspend fun getRecipients(student: Student, unit: ReportingUnit, role: Int): List<Recipient> {
@@ -37,7 +39,6 @@ class RecipientRepository @Inject constructor(
         val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(cacheKey, student))
         return if (cached.isEmpty() || isExpired) {
             refreshRecipients(student, unit, role)
-            refreshHelper.updateLastRefreshTimestamp(cacheKey)
             recipientDb.loadAll(unit.studentId, unit.unitId, role)
         } else cached
     }
