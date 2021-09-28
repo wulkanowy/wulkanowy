@@ -40,8 +40,10 @@ class GradeStatisticsRepository @Inject constructor(
     private val pointsCacheKey = "grade_stats_points"
 
     fun getGradesPartialStatistics(
-        student: Student, semester: Semester,
-        subjectName: String, forceRefresh: Boolean
+        student: Student,
+        semester: Semester,
+        subjectName: String,
+        forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = partialMutex,
         shouldFetch = {
@@ -85,8 +87,10 @@ class GradeStatisticsRepository @Inject constructor(
     )
 
     fun getGradesSemesterStatistics(
-        student: Student, semester: Semester,
-        subjectName: String, forceRefresh: Boolean
+        student: Student,
+        semester: Semester,
+        subjectName: String,
+        forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = semesterMutex,
         shouldFetch = {
@@ -139,8 +143,10 @@ class GradeStatisticsRepository @Inject constructor(
     )
 
     fun getGradesPointsStatistics(
-        student: Student, semester: Semester,
-        subjectName: String, forceRefresh: Boolean
+        student: Student,
+        semester: Semester,
+        subjectName: String,
+        forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = pointsMutex,
         shouldFetch = {

@@ -30,9 +30,12 @@ class HomeworkRepository @Inject constructor(
     private val cacheKey = "homework"
 
     fun getHomework(
-        student: Student, semester: Semester,
-        start: LocalDate, end: LocalDate,
-        forceRefresh: Boolean, notify: Boolean = false,
+        student: Student,
+        semester: Semester,
+        start: LocalDate,
+        end: LocalDate,
+        forceRefresh: Boolean,
+        notify: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {

@@ -26,7 +26,8 @@ class SubjectRepository @Inject constructor(
     private val cacheKey = "subjects"
 
     fun getSubjects(
-        student: Student, semester: Semester,
+        student: Student,
+        semester: Semester,
         forceRefresh: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,

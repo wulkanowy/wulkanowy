@@ -24,7 +24,8 @@ class LuckyNumberRepository @Inject constructor(
     private val saveFetchResultMutex = Mutex()
 
     fun getLuckyNumber(
-        student: Student, forceRefresh: Boolean,
+        student: Student,
+        forceRefresh: Boolean,
         notify: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,

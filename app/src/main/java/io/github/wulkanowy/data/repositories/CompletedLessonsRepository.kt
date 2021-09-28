@@ -29,8 +29,10 @@ class CompletedLessonsRepository @Inject constructor(
     private val cacheKey = "completed"
 
     fun getCompletedLessons(
-        student: Student, semester: Semester,
-        start: LocalDate, end: LocalDate,
+        student: Student,
+        semester: Semester,
+        start: LocalDate,
+        end: LocalDate,
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,

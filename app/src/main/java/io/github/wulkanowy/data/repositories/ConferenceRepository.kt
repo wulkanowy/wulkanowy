@@ -31,9 +31,11 @@ class ConferenceRepository @Inject constructor(
     private val cacheKey = "conference"
 
     fun getConferences(
-        student: Student, semester: Semester,
-        forceRefresh: Boolean, notify: Boolean = false,
-        startDate: LocalDateTime = LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC)
+        student: Student,
+        semester: Semester,
+        forceRefresh: Boolean,
+        notify: Boolean = false,
+        startDate: LocalDateTime = LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC),
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {

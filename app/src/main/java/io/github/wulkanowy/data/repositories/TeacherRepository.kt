@@ -26,7 +26,8 @@ class TeacherRepository @Inject constructor(
     private val cacheKey = "teachers"
 
     fun getTeachers(
-        student: Student, semester: Semester,
+        student: Student,
+        semester: Semester,
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,

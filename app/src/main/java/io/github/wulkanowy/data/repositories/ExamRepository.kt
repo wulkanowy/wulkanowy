@@ -31,9 +31,12 @@ class ExamRepository @Inject constructor(
     private val cacheKey = "exam"
 
     fun getExams(
-        student: Student, semester: Semester,
-        start: LocalDate, end: LocalDate,
-        forceRefresh: Boolean, notify: Boolean = false
+        student: Student,
+        semester: Semester,
+        start: LocalDate,
+        end: LocalDate,
+        forceRefresh: Boolean,
+        notify: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {

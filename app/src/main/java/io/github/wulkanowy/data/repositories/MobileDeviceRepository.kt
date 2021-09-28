@@ -29,7 +29,8 @@ class MobileDeviceRepository @Inject constructor(
     private val cacheKey = "devices"
 
     fun getDevices(
-        student: Student, semester: Semester,
+        student: Student,
+        semester: Semester,
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,

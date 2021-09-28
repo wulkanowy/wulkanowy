@@ -41,8 +41,12 @@ class TimetableRepository @Inject constructor(
     private val cacheKey = "timetable"
 
     fun getTimetable(
-        student: Student, semester: Semester, start: LocalDate, end: LocalDate,
-        forceRefresh: Boolean, refreshAdditional: Boolean = false,
+        student: Student,
+        semester: Semester,
+        start: LocalDate,
+        end: LocalDate,
+        forceRefresh: Boolean,
+        refreshAdditional: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = { (timetable, additional, headers) ->
@@ -79,8 +83,10 @@ class TimetableRepository @Inject constructor(
     )
 
     private fun getFullTimetableFromDatabase(
-        student: Student, semester: Semester,
-        start: LocalDate, end: LocalDate
+        student: Student,
+        semester: Semester,
+        start: LocalDate,
+        end: LocalDate,
     ): Flow<TimetableFull> {
         val timetableFlow = timetableDb.loadAll(
             diaryId = semester.diaryId,
@@ -113,7 +119,8 @@ class TimetableRepository @Inject constructor(
 
     private suspend fun refreshTimetable(
         student: Student,
-        lessonsOld: List<Timetable>, lessonsNew: List<Timetable>
+        lessonsOld: List<Timetable>,
+        lessonsNew: List<Timetable>,
     ) {
         val lessonsToRemove = lessonsOld uniqueSubtract lessonsNew
         val lessonsToAdd = (lessonsNew uniqueSubtract lessonsOld).map { new ->

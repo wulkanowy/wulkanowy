@@ -20,7 +20,8 @@ class StudentInfoRepository @Inject constructor(
     private val saveFetchResultMutex = Mutex()
 
     fun getStudentInfo(
-        student: Student, semester: Semester,
+        student: Student,
+        semester: Semester,
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,

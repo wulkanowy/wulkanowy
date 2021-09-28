@@ -28,8 +28,10 @@ class NoteRepository @Inject constructor(
     private val cacheKey = "note"
 
     fun getNotes(
-        student: Student, semester: Semester,
-        forceRefresh: Boolean, notify: Boolean = false
+        student: Student,
+        semester: Semester,
+        forceRefresh: Boolean,
+        notify: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {
