@@ -18,6 +18,7 @@
             app:defaultValue="@bool/pref_default_notification_upcoming_lessons_persistent"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_notifications_upcoming_lessons_persistent"
+            app:dependency="@string/pref_key_notifications_upcoming_lessons_enable"
             app:singleLineTitle="false"
             app:summary="@string/pref_notify_upcoming_lessons_persistent_summary"
             app:title="@string/pref_notify_upcoming_lessons_persistent_switch" />

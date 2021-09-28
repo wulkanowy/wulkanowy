@@ -29,10 +29,6 @@ class NotificationsPresenter @Inject constructor(
                 preferencesRepository.notificationsEnableKey,
                 preferencesRepository.isServiceEnabled
             )
-            enablePersistentNotification(
-                preferencesRepository.isUpcomingLessonsNotificationsPersistentKey,
-                preferencesRepository.isUpcomingLessonsNotificationsEnable
-            )
             initView(appInfo.isDebug)
         }
 
