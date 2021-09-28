@@ -47,12 +47,12 @@ class TimetableRepository @Inject constructor(
         mutex = saveFetchResultMutex,
         shouldFetch = { (timetable, additional, headers) ->
             val refreshKey = getRefreshKey(cacheKey, semester, start, end)
-            val isShouldRefresh = refreshHelper.shouldBeRefreshed(refreshKey)
+            val isExpired = refreshHelper.shouldBeRefreshed(refreshKey)
             val isRefreshAdditional = additional.isEmpty() && refreshAdditional
 
             val isNoData = timetable.isEmpty() || isRefreshAdditional || headers.isEmpty()
 
-            isNoData || forceRefresh || isShouldRefresh
+            isNoData || forceRefresh || isExpired
         },
         query = { getFullTimetableFromDatabase(student, semester, start, end) },
         fetch = {
