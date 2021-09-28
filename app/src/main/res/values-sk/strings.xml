@@ -628,7 +628,7 @@
     <string name="pref_notify_disabled_summary">Synchronizácia je vypnutá</string>
     <string name="pref_notify_notifications_piggyback">Zachytiť upozornenia oficiálnej aplikácie</string>
     <string name="pref_notification_piggyback_popup_title">Zachytiť upozornenia</string>
-    <string name="pref_notification_piggyback_popup_description">S touto funkciou môžete získať náhradu za push notifikácie ako v oficiálnej aplikácii. Všetko, čo musíte urobiť, je povoliť Wulkanowymu prijímať všetky oznámenia v systémových nastaveniach. \ N \ nAko to funguje? \ NKeď dostanete upozornenie v Dziennik VULCAN, Wulkanowy dostane upozornenie (na to slúžia tieto dodatočné povolenia) a spustí sa synchronizácia, aby mohol odosielať vlastné oznámenia. \ n \ nLEN PRE POKROČILÝCH UŽÍVATEĽOV</string>
+    <string name="pref_notification_piggyback_popup_description">S touto funkciou môžete získať náhradu push upozornení ako v oficiálnej aplikácii. Všetko, čo musíte urobiť, je povoliť Wulkanowému čítať všetky vaše upozornenia v nastaveniach systému.\n\nAko to funguje?\nKeď dostanete oznámenie v Deníčku VULCAN, Wulkanowy bude o tom informovaný (k tomu je to dodatočné povolenie) a spustí synchronizáciu, aby mohol zaslať vlastné upozornenie.\n\nLEN PRE POKROČILÝCH POUŽĺVATEĹOV</string>
     <string name="pref_notification_piggyback_popup_positive">Prejsť do nastavení</string>
     <string name="pref_services_header">Synchronizácia</string>
     <string name="pref_services_switch">Automatická aktualizácia</string>
