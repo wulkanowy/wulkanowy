@@ -389,8 +389,12 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         val firstTimeText: String
         val firstTimeRangeText: String
         val firstTitleText: String
-        val firstTitleAndValueTextColor: Int
         val firstTitleAndValueTextFont: Typeface
+        val firstTitleAndValueTextColor = if (firstLesson.changes) {
+            context.getThemeAttrColor(R.attr.colorTimetableChange)
+        } else {
+            context.getThemeAttrColor(R.attr.colorOnSurface)
+        }
 
         if (currentDateTime < firstLesson.start) {
             if (minutesToStartLesson > 60) {
@@ -416,21 +420,16 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
             when {
                 minutesToStartLesson < 60 -> {
-                    firstTitleAndValueTextColor = context.getThemeAttrColor(R.attr.colorPrimary)
                     firstTitleAndValueTextFont = sansSerifMediumFont
                     firstTitleText =
                         context.getString(R.string.dashboard_timetable_first_lesson_title_moment)
                 }
                 minutesToStartLesson < 240 -> {
-                    firstTitleAndValueTextColor =
-                        context.getThemeAttrColor(R.attr.colorOnSurface)
                     firstTitleAndValueTextFont = sansSerifFont
                     firstTitleText =
                         context.getString(R.string.dashboard_timetable_first_lesson_title_soon)
                 }
                 else -> {
-                    firstTitleAndValueTextColor =
-                        context.getThemeAttrColor(R.attr.colorOnSurface)
                     firstTitleAndValueTextFont = sansSerifFont
                     firstTitleText =
                         context.getString(R.string.dashboard_timetable_first_lesson_title_first)
@@ -452,7 +451,6 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             isFirstTimeRangeVisible = false
             isFirstTimeVisible = true
 
-            firstTitleAndValueTextColor = context.getThemeAttrColor(R.attr.colorPrimary)
             firstTitleAndValueTextFont = sansSerifMediumFont
             firstTitleText = context.getString(R.string.dashboard_timetable_first_lesson_title_now)
         }
@@ -497,11 +495,21 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             context.getString(R.string.dashboard_timetable_second_lesson_value_end)
         }
 
+        val titleAndValueTextColor = if (secondLesson?.changes == true) {
+            context.getThemeAttrColor(R.attr.colorTimetableChange)
+        } else {
+            context.getThemeAttrColor(R.attr.colorOnSurface)
+        }
+
         with(binding.dashboardLessonsItemSecondTime) {
             isVisible = secondLesson != null
             text = secondTimeText
         }
+        with(binding.dashboardLessonsItemSecondTitle) {
+            setTextColor(titleAndValueTextColor)
+        }
         with(binding.dashboardLessonsItemSecondValue) {
+            setTextColor(titleAndValueTextColor)
             isVisible = !(secondLesson == null && firstLesson == null)
             text = secondValueText
         }
