@@ -18,6 +18,7 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.entities.TimetableHeader
 import io.github.wulkanowy.databinding.ItemDashboardAccountBinding
+import io.github.wulkanowy.databinding.ItemDashboardAdminMessageBinding
 import io.github.wulkanowy.databinding.ItemDashboardAnnouncementsBinding
 import io.github.wulkanowy.databinding.ItemDashboardConferencesBinding
 import io.github.wulkanowy.databinding.ItemDashboardExamsBinding
@@ -109,6 +110,9 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             DashboardItem.Type.CONFERENCES.ordinal -> ConferencesViewHolder(
                 ItemDashboardConferencesBinding.inflate(inflater, parent, false)
             )
+            DashboardItem.Type.ADMIN_MESSAGE.ordinal -> AdminMessageViewHolder(
+                ItemDashboardAdminMessageBinding.inflate(inflater, parent, false)
+            )
             else -> throw IllegalArgumentException()
         }
     }
@@ -123,6 +127,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             is AnnouncementsViewHolder -> bindAnnouncementsViewHolder(holder, position)
             is ExamsViewHolder -> bindExamsViewHolder(holder, position)
             is ConferencesViewHolder -> bindConferencesViewHolder(holder, position)
+            is AdminMessageViewHolder -> bindAdminMessage(holder, position)
         }
     }
 
@@ -692,6 +697,15 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         }
     }
 
+    private fun bindAdminMessage(adminMessageViewHolder: AdminMessageViewHolder, position: Int) {
+        val item = (items[position] as DashboardItem.AdminMessages).adminMessage ?: return
+
+        with(adminMessageViewHolder.binding) {
+            dashboardAdminMessageItemTitle.text = item.title
+            dashboardAdminMessageItemDescription.text = item.content
+        }
+    }
+
     class AccountViewHolder(val binding: ItemDashboardAccountBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -730,6 +744,9 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
         val adapter by lazy { DashboardConferencesAdapter() }
     }
+
+    class AdminMessageViewHolder(val binding: ItemDashboardAdminMessageBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     private class DiffCallback(
         private val newList: List<DashboardItem>,

@@ -213,6 +213,7 @@ class PreferencesRepository @Inject constructor(
             .map { set ->
                 set.map { DashboardItem.Tile.valueOf(it) }
                     .plus(DashboardItem.Tile.ACCOUNT)
+                    .plus(DashboardItem.Tile.ADMIN_MESSAGE)
                     .toSet()
             }
 

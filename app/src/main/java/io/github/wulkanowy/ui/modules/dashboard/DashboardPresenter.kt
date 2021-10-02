@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
+import io.github.wulkanowy.data.repositories.AdminMessageRepository
 import io.github.wulkanowy.data.repositories.AttendanceSummaryRepository
 import io.github.wulkanowy.data.repositories.ConferenceRepository
 import io.github.wulkanowy.data.repositories.ExamRepository
@@ -50,7 +51,8 @@ class DashboardPresenter @Inject constructor(
     private val examRepository: ExamRepository,
     private val conferenceRepository: ConferenceRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val schoolAnnouncementRepository: SchoolAnnouncementRepository
+    private val schoolAnnouncementRepository: SchoolAnnouncementRepository,
+    private val adminMessageRepository: AdminMessageRepository
 ) : BasePresenter<DashboardView>(errorHandler, studentRepository) {
 
     private val dashboardItemLoadedList = mutableListOf<DashboardItem>()
@@ -179,6 +181,7 @@ class DashboardPresenter @Inject constructor(
                         loadConferences(student, forceRefresh)
                     }
                     DashboardItem.Type.ADS -> TODO()
+                    DashboardItem.Type.ADMIN_MESSAGE -> loadAdminMessage(forceRefresh)
                 }
             }
         }
@@ -565,6 +568,14 @@ class DashboardPresenter @Inject constructor(
                 }
             }
         }.launch("dashboard_conferences")
+    }
+
+    private fun loadAdminMessage(forceRefresh: Boolean) {
+        launch {
+            val adminMessage = adminMessageRepository.getAdminMessages().first()
+
+            updateData(DashboardItem.AdminMessages(adminMessage = adminMessage), forceRefresh)
+        }
     }
 
     private fun updateData(dashboardItem: DashboardItem, forceRefresh: Boolean) {

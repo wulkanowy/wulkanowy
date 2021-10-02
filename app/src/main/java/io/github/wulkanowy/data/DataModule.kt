@@ -2,8 +2,6 @@ package io.github.wulkanowy.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.AssetManager
-import android.content.res.Resources
 import androidx.preference.PreferenceManager
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
@@ -15,23 +13,30 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.github.wulkanowy.data.api.services.AdminMessageService
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AppInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal class RepositoryModule {
+internal class DataModule {
 
     @Singleton
     @Provides
-    fun provideSdk(chuckerCollector: ChuckerCollector, @ApplicationContext context: Context): Sdk {
-        return Sdk().apply {
+    fun provideSdk(chuckerCollector: ChuckerCollector, @ApplicationContext context: Context) =
+        Sdk().apply {
             androidVersion = android.os.Build.VERSION.RELEASE
             buildTag = android.os.Build.MODEL
             setSimpleHttpLogger { Timber.d(it) }
@@ -44,20 +49,43 @@ internal class RepositoryModule {
                     .build(), network = true
             )
         }
-    }
 
     @Singleton
     @Provides
     fun provideChuckerCollector(
         @ApplicationContext context: Context,
         prefRepository: PreferencesRepository
-    ): ChuckerCollector {
-        return ChuckerCollector(
-            context = context,
-            showNotification = prefRepository.isDebugNotificationEnable,
-            retentionPeriod = RetentionManager.Period.ONE_HOUR
-        )
-    }
+    ) = ChuckerCollector(
+        context = context,
+        showNotification = prefRepository.isDebugNotificationEnable,
+        retentionPeriod = RetentionManager.Period.ONE_HOUR
+    )
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        moshi: Moshi,
+    ): Retrofit = Retrofit.Builder()
+        .baseUrl("https://wulkanowy.github.io")
+        .client(okHttpClient)
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .build()
+
+    @Singleton
+    @Provides
+    fun provideAdminMessageService(retrofit: Retrofit): AdminMessageService = retrofit.create()
 
     @Singleton
     @Provides
@@ -66,14 +94,6 @@ internal class RepositoryModule {
         sharedPrefProvider: SharedPrefProvider,
         appInfo: AppInfo
     ) = AppDatabase.newInstance(context, sharedPrefProvider, appInfo)
-
-    @Singleton
-    @Provides
-    fun provideResources(@ApplicationContext context: Context): Resources = context.resources
-
-    @Singleton
-    @Provides
-    fun provideAssets(@ApplicationContext context: Context): AssetManager = context.assets
 
     @Singleton
     @Provides
@@ -88,7 +108,7 @@ internal class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideMoshi() = Moshi.Builder().build()
+    fun provideMoshi(): Moshi = Moshi.Builder().build()
 
     @Singleton
     @Provides
