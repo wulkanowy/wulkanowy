@@ -30,6 +30,7 @@ import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragm
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.openInternetBrowser
 import io.github.wulkanowy.utils.toFormattedString
 import java.time.LocalDate
 import javax.inject.Inject
@@ -98,6 +99,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
             onConferencesTileClickListener = {
                 mainActivity.pushView(ConferenceFragment.newInstance())
             }
+            onAdminMessageClickListener = presenter::onAdminMessageSelected
 
             registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
@@ -193,6 +195,10 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
 
     override fun openNotificationsCenterView() {
         (requireActivity() as MainActivity).pushView(NotificationsCenterFragment.newInstance())
+    }
+
+    override fun openInternetBrowser(url: String) {
+        requireContext().openInternetBrowser(url)
     }
 
     override fun onDestroyView() {

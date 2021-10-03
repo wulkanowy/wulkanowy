@@ -64,6 +64,8 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
     var onConferencesTileClickListener: () -> Unit = {}
 
+    var onAdminMessageClickListener: (String?) -> Unit = {}
+
     val items = mutableListOf<DashboardItem>()
 
     fun submitList(newItems: List<DashboardItem>) {
@@ -703,6 +705,8 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         with(adminMessageViewHolder.binding) {
             dashboardAdminMessageItemTitle.text = item.title
             dashboardAdminMessageItemDescription.text = item.content
+
+            root.setOnClickListener { onAdminMessageClickListener(item.destinationUrl) }
         }
     }
 

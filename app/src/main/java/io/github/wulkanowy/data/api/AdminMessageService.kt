@@ -1,12 +1,12 @@
-package io.github.wulkanowy.data.api.services
+package io.github.wulkanowy.data.api
 
-import io.github.wulkanowy.data.api.models.AdminMessage
+import io.github.wulkanowy.data.db.entities.AdminMessage
 import retrofit2.http.GET
 import javax.inject.Singleton
 
 @Singleton
 interface AdminMessageService {
 
-    @GET("/messages/messages.json")
+    @GET("/v1.json")
     suspend fun getAdminMessages(): List<AdminMessage>
 }

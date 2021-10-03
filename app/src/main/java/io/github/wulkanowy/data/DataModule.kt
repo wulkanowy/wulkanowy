@@ -13,7 +13,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.github.wulkanowy.data.api.services.AdminMessageService
+import io.github.wulkanowy.data.api.AdminMessageService
 import io.github.wulkanowy.data.db.AppDatabase
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.repositories.PreferencesRepository
@@ -227,4 +227,8 @@ internal class DataModule {
     @Singleton
     @Provides
     fun provideNotificationDao(database: AppDatabase) = database.notificationDao
+
+    @Singleton
+    @Provides
+    fun provideAdminMessageDao(database: AppDatabase) = database.adminMessagesDao
 }

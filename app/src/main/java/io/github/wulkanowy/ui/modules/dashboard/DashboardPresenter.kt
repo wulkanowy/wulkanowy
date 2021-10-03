@@ -228,6 +228,10 @@ class DashboardPresenter @Inject constructor(
         }.toSet()
     }
 
+    fun onAdminMessageSelected(url: String?) {
+        url?.let { view?.openInternetBrowser(it) }
+    }
+
     private fun loadHorizontalGroup(student: Student, forceRefresh: Boolean) {
         flow {
             val semester = semesterRepository.getCurrentSemester(student)
@@ -571,7 +575,7 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadAdminMessage(forceRefresh: Boolean) {
-        launch {
+        presenterScope.launch {
             Timber.i("Loading dashboard admin message data started")
             updateData(DashboardItem.AdminMessages(), forceRefresh)
 
