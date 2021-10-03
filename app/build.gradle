@@ -62,12 +62,14 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            buildConfigField "String", "MESSAGES_BASE_URL", "\"https://wulkanowy.github.io\""
         }
         debug {
             resValue "string", "app_name", "Wulkanowy DEV " + defaultConfig.versionCode
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
             ext.enableCrashlytics = project.hasProperty("enableFirebase")
+            buildConfigField "String", "MESSAGES_BASE_URL", "\"https://wulkanowy.github.io\""
         }
     }
 
@@ -237,7 +239,7 @@ dependencies {
     releaseImplementation "com.github.ChuckerTeam.Chucker:library-no-op:$chucker"
 
     debugImplementation "com.github.ChuckerTeam.Chucker:library:$chucker"
-    debugImplementation 'com.github.amitshekhariitbhu.Android-Debug-Database:debug-db:v1.0.6'
+    debugImplementation 'com.github.amitshekhariitbhu.Android-Debug-Database:debug-db:1.0.6'
 
     testImplementation "junit:junit:4.13.2"
     testImplementation "io.mockk:mockk:$mockk"

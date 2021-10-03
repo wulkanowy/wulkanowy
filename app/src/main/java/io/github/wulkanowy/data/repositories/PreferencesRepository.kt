@@ -221,6 +221,7 @@ class PreferencesRepository @Inject constructor(
         get() = selectedDashboardTilesPreference.get()
             .map { DashboardItem.Tile.valueOf(it) }
             .plus(DashboardItem.Tile.ACCOUNT)
+            .plus(DashboardItem.Tile.ADMIN_MESSAGE)
             .toSet()
         set(value) {
             val filteredValue = value.filterNot { it == DashboardItem.Tile.ACCOUNT }

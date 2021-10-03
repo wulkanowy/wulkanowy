@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentDashboardBinding
@@ -97,6 +98,12 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
             onConferencesTileClickListener = {
                 mainActivity.pushView(ConferenceFragment.newInstance())
             }
+
+            registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    binding.dashboardRecycler.scrollToPosition(0)
+                }
+            })
         }
 
         with(binding) {

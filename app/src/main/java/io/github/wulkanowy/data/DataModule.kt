@@ -77,8 +77,9 @@ internal class DataModule {
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         moshi: Moshi,
+        appInfo: AppInfo
     ): Retrofit = Retrofit.Builder()
-        .baseUrl("https://wulkanowy.github.io")
+        .baseUrl(appInfo.messagesBaseUrl)
         .client(okHttpClient)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()

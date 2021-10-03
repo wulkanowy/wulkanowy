@@ -572,9 +572,19 @@ class DashboardPresenter @Inject constructor(
 
     private fun loadAdminMessage(forceRefresh: Boolean) {
         launch {
-            val adminMessage = adminMessageRepository.getAdminMessages().first()
+            Timber.i("Loading dashboard admin message data started")
+            updateData(DashboardItem.AdminMessages(), forceRefresh)
 
-            updateData(DashboardItem.AdminMessages(adminMessage = adminMessage), forceRefresh)
+            runCatching { adminMessageRepository.getAdminMessages().firstOrNull() }
+                .onFailure {
+                    Timber.i("Loading dashboard admin message result: An exception occurred")
+                    errorHandler.dispatch(it)
+                    updateData(DashboardItem.AdminMessages(error = it), forceRefresh)
+                }
+                .onSuccess {
+                    Timber.i("Loading dashboard admin message result: Success")
+                    updateData(DashboardItem.AdminMessages(adminMessage = it), forceRefresh)
+                }
         }
     }
 
@@ -589,6 +599,11 @@ class DashboardPresenter @Inject constructor(
         }
 
         sortDashboardItems()
+
+        if (dashboardItem is DashboardItem.AdminMessages && !dashboardItem.isDataLoaded) {
+            dashboardItemsToLoad = dashboardItemsToLoad - DashboardItem.Type.ADMIN_MESSAGE
+            dashboardItemLoadedList.removeAll { it.type == DashboardItem.Type.ADMIN_MESSAGE }
+        }
 
         if (forceRefresh) {
             updateForceRefreshData(dashboardItem)
