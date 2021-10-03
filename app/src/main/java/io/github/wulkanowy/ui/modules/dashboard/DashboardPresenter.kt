@@ -181,7 +181,7 @@ class DashboardPresenter @Inject constructor(
                         loadConferences(student, forceRefresh)
                     }
                     DashboardItem.Type.ADS -> TODO()
-                    DashboardItem.Type.ADMIN_MESSAGE -> loadAdminMessage(forceRefresh)
+                    DashboardItem.Type.ADMIN_MESSAGE -> loadAdminMessage(student, forceRefresh)
                 }
             }
         }
@@ -574,22 +574,36 @@ class DashboardPresenter @Inject constructor(
         }.launch("dashboard_conferences")
     }
 
-    private fun loadAdminMessage(forceRefresh: Boolean) {
-        presenterScope.launch {
-            Timber.i("Loading dashboard admin message data started")
-            updateData(DashboardItem.AdminMessages(), forceRefresh)
-
-            runCatching { adminMessageRepository.getAdminMessages().firstOrNull() }
-                .onFailure {
-                    Timber.i("Loading dashboard admin message result: An exception occurred")
-                    errorHandler.dispatch(it)
-                    updateData(DashboardItem.AdminMessages(error = it), forceRefresh)
+    private fun loadAdminMessage(student: Student, forceRefresh: Boolean) {
+        flowWithResourceIn { adminMessageRepository.getAdminMessages(student) }
+            .onEach {
+                when (it.status) {
+                    Status.LOADING -> {
+                        Timber.i("Loading dashboard admin message data started")
+                        if (forceRefresh) return@onEach
+                        updateData(DashboardItem.AdminMessages(), forceRefresh)
+                    }
+                    Status.SUCCESS -> {
+                        Timber.i("Loading dashboard admin message result: Success")
+                        updateData(
+                            dashboardItem = DashboardItem.AdminMessages(adminMessage = it.data),
+                            forceRefresh = forceRefresh
+                        )
+                    }
+                    Status.ERROR -> {
+                        Timber.i("Loading dashboard admin message result: An exception occurred")
+                        errorHandler.dispatch(it.error!!)
+                        updateData(
+                            dashboardItem = DashboardItem.AdminMessages(
+                                adminMessage = it.data,
+                                error = it.error
+                            ),
+                            forceRefresh = forceRefresh
+                        )
+                    }
                 }
-                .onSuccess {
-                    Timber.i("Loading dashboard admin message result: Success")
-                    updateData(DashboardItem.AdminMessages(adminMessage = it), forceRefresh)
-                }
-        }
+            }
+            .launch("dashboard_admin_messages")
     }
 
     private fun updateData(dashboardItem: DashboardItem, forceRefresh: Boolean) {
