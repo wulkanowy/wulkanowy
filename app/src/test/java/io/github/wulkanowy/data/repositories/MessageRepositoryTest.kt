@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -74,6 +75,7 @@ class MessageRepositoryTest {
             context = context,
             refreshHelper = refreshHelper,
             sharedPrefProvider = sharedPrefProvider,
+            json = Json,
         )
     }
 
