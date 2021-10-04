@@ -29,20 +29,18 @@ class AdminMessageRepository @Inject constructor(
     ).map { adminMessagesResource ->
         val adminMessages = adminMessagesResource.data
 
-        val validAdminMessage = adminMessages
-            ?.filter { adminMessage ->
-                val isCorrectRegister =
-                    adminMessage.targetRegisterHost?.contains(student.scrapperBaseUrl, true) ?: true
-                val isCorrectFlavor =
-                    adminMessage.targetFlavor?.equals(appInfo.buildFlavor, true) ?: true
-                val isCorrectMaxVersion =
-                    adminMessage.versionMax?.let { it >= appInfo.versionCode } ?: true
-                val isCorrectMinVersion =
-                    adminMessage.versionMin?.let { it <= appInfo.versionCode } ?: true
+        val validAdminMessage = adminMessages?.filter { adminMessage ->
+            val isCorrectRegister =
+                adminMessage.targetRegisterHost?.contains(student.scrapperBaseUrl, true) ?: true
+            val isCorrectFlavor =
+                adminMessage.targetFlavor?.equals(appInfo.buildFlavor, true) ?: true
+            val isCorrectMaxVersion =
+                adminMessage.versionMax?.let { it >= appInfo.versionCode } ?: true
+            val isCorrectMinVersion =
+                adminMessage.versionMin?.let { it <= appInfo.versionCode } ?: true
 
-                isCorrectRegister && isCorrectFlavor && isCorrectMaxVersion && isCorrectMinVersion
-            }
-            ?.maxByOrNull { it.id }
+            isCorrectRegister && isCorrectFlavor && isCorrectMaxVersion && isCorrectMinVersion
+        }?.maxByOrNull { it.id }
 
         return@map Resource(
             status = adminMessagesResource.status,
