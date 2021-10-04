@@ -1,6 +1,8 @@
 package io.github.wulkanowy.ui.modules.dashboard
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Handler
 import android.os.Looper
@@ -701,11 +703,26 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
     private fun bindAdminMessage(adminMessageViewHolder: AdminMessageViewHolder, position: Int) {
         val item = (items[position] as DashboardItem.AdminMessages).adminMessage ?: return
+        val context = adminMessageViewHolder.binding.root.context
+        val (backgroundColor, textColor) = when (item.priority) {
+            "HIGH" -> {
+                context.getThemeAttrColor(R.attr.colorPrimary) to
+                    context.getThemeAttrColor(R.attr.colorOnPrimary)
+            }
+            "MEDIUM" -> {
+                context.getThemeAttrColor(R.attr.colorMessageMedium) to Color.BLACK
+            }
+            else -> null to context.getThemeAttrColor(R.attr.colorOnSurface)
+        }
 
         with(adminMessageViewHolder.binding) {
             dashboardAdminMessageItemTitle.text = item.title
+            dashboardAdminMessageItemTitle.setTextColor(textColor)
             dashboardAdminMessageItemDescription.text = item.content
+            dashboardAdminMessageItemDescription.setTextColor(textColor)
+            dashboardAdminMessageItemIcon.setColorFilter(textColor)
 
+            root.setCardBackgroundColor(backgroundColor?.let { ColorStateList.valueOf(it) })
             root.setOnClickListener { onAdminMessageClickListener(item.destinationUrl) }
         }
     }
