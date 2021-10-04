@@ -9,6 +9,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.flowWithResource
+import io.github.wulkanowy.utils.toLocalDate
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.time.LocalDate
@@ -43,7 +44,7 @@ class HomeworkAddPresenter @Inject constructor(
         teacher: String,
         date: String,
         content: String
-    ): Boolean {
+    ) {
         view?.run {
             clearErrors()
             if (subject.isBlank()) setErrorSubjectRequired()
@@ -51,14 +52,15 @@ class HomeworkAddPresenter @Inject constructor(
             if (date.isBlank()) setErrorDateRequired()
             if (content.isBlank()) setErrorContentRequired()
         }
-        return !(subject.isBlank() || teacher.isBlank() || date.isBlank() || content.isBlank())
+        if (!(subject.isBlank() || teacher.isBlank() || date.isBlank() || content.isBlank())) return
+        addHomework(subject, teacher, date.toLocalDate(), content)
     }
 
     fun showDatePicker(date: LocalDate?) {
         view?.showDatePickerDialog(date ?: LocalDate.now())
     }
 
-    fun addHomework(
+    private fun addHomework(
         subject: String,
         teacher: String,
         date: LocalDate,

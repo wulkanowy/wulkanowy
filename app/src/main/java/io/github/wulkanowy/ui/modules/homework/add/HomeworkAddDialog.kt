@@ -14,7 +14,6 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.DialogHomeworkAddBinding
 import io.github.wulkanowy.ui.base.BaseDialogFragment
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.toLocalDate
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.github.wulkanowy.utils.toTimestamp
 import java.time.LocalDate
@@ -84,9 +83,6 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
             val date: String = homeworkDialogDate.editText?.text.toString()
             val content: String = homeworkDialogContent.editText?.text.toString()
             presenter.checkFields(subject, teacher, date, content)
-            if (presenter.checkFields(subject, teacher, date, content)) {
-                presenter.addHomework(subject, teacher, date.toLocalDate(), content)
-            }
         }
     }
 
