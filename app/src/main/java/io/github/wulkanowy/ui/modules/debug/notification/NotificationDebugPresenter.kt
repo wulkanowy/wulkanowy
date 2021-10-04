@@ -87,8 +87,8 @@ class NotificationDebugPresenter @Inject constructor(
         }
     }
 
-    private fun withStudent(block: (Student) -> Unit) {
-        launch {
+    private fun withStudent(block: suspend (Student) -> Unit) {
+        presenterScope.launch {
             block(studentRepository.getCurrentStudent(false))
         }
     }

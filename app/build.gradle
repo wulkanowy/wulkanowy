@@ -21,16 +21,16 @@ android {
         testApplicationId "io.github.tests.wulkanowy"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 96
-        versionName "1.2.3"
+        versionCode 97
+        versionName "1.3.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
         resValue "string", "app_name", "Wulkanowy"
-        buildConfigField "long", "BUILD_TIMESTAMP", String.valueOf(System.currentTimeMillis())
 
         manifestPlaceholders = [
-                firebase_enabled: project.hasProperty("enableFirebase")
+                firebase_enabled: project.hasProperty("enableFirebase"),
+                buildTimestamp: String.valueOf(System.currentTimeMillis())
         ]
         javaCompileOptions {
             annotationProcessorOptions {
@@ -104,6 +104,12 @@ android {
         viewBinding true
     }
 
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
     testOptions.unitTests {
         includeAndroidResources = true
     }
@@ -160,7 +166,7 @@ ext {
 }
 
 dependencies {
-    implementation "io.github.wulkanowy:sdk:1.2.3"
+    implementation "io.github.wulkanowy:sdk:1.3.0"
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
@@ -177,7 +183,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "androidx.viewpager:viewpager:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation "androidx.constraintlayout:constraintlayout:2.1.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.1"
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
     implementation "com.google.android.material:material:1.4.0"
     implementation "com.github.wulkanowy:material-chips-input:2.3.1"
@@ -218,7 +224,7 @@ dependencies {
     playImplementation 'com.google.firebase:firebase-analytics-ktx'
     playImplementation 'com.google.firebase:firebase-messaging:'
     playImplementation 'com.google.firebase:firebase-crashlytics:'
-    playImplementation 'com.google.android.play:core:1.10.1'
+    playImplementation 'com.google.android.play:core:1.10.2'
     playImplementation 'com.google.android.play:core-ktx:1.8.1'
 
     hmsImplementation 'com.huawei.hms:hianalytics:6.2.0.301'
