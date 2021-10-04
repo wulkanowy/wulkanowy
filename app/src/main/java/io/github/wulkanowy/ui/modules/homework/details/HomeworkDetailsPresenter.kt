@@ -34,7 +34,7 @@ class HomeworkDetailsPresenter @Inject constructor(
     }
 
     fun deleteHomework(homework: Homework) {
-        flowWithResource { homeworkRepository.deleteHomework(listOf(homework)) }.onEach {
+        flowWithResource { homeworkRepository.deleteHomework(homework) }.onEach {
             when (it.status) {
                 Status.LOADING -> Timber.i("Homework delete start")
                 Status.SUCCESS -> {

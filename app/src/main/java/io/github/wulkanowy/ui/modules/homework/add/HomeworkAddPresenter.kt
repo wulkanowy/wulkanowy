@@ -8,7 +8,6 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -20,7 +19,6 @@ class HomeworkAddPresenter @Inject constructor(
     studentRepository: StudentRepository,
     private val homeworkRepository: HomeworkRepository,
     private val semesterRepository: SemesterRepository,
-    private val analytics: AnalyticsHelper,
     private val preferencesRepository: PreferencesRepository
 ) : BasePresenter<HomeworkAddView>(errorHandler, studentRepository) {
 
@@ -55,19 +53,17 @@ class HomeworkAddPresenter @Inject constructor(
             val semester = semesterRepository.getCurrentSemester(student)
             val entryDate = LocalDate.now()
             homeworkRepository.insertHomework(
-                listOf(
-                    Homework(
-                        semester.semesterId,
-                        student.studentId,
-                        date,
-                        entryDate,
-                        subject,
-                        content,
-                        teacher,
-                        "",
-                        emptyList(),
-                    ).apply { isAddedByUser = true }
-                )
+                Homework(
+                    semesterId = semester.semesterId,
+                    studentId = student.studentId,
+                    date = date,
+                    entryDate = entryDate,
+                    subject = subject,
+                    content = content,
+                    teacher = teacher,
+                    teacherSymbol = "",
+                    attachments = emptyList(),
+                ).apply { isAddedByUser = true }
             )
         }.onEach {
             when (it.status) {
