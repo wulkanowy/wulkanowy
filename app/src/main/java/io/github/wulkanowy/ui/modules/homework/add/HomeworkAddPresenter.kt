@@ -35,7 +35,23 @@ class HomeworkAddPresenter @Inject constructor(
     }
 
     fun onAddHomeworkClicked() {
-        view?.checkFields()
+        view?.onAddClicked()
+    }
+
+    fun checkFields(
+        subject: String,
+        teacher: String,
+        date: String,
+        content: String
+    ): Boolean {
+        view?.run {
+            clearErrors()
+            if (subject.isBlank()) setErrorSubjectRequired()
+            if (teacher.isBlank()) setErrorTeacherRequired()
+            if (date.isBlank()) setErrorDateRequired()
+            if (content.isBlank()) setErrorContentRequired()
+        }
+        return !(subject.isBlank() || teacher.isBlank() || date.isBlank() || content.isBlank())
     }
 
     fun showDatePicker(date: LocalDate?) {
@@ -71,7 +87,7 @@ class HomeworkAddPresenter @Inject constructor(
                 Status.SUCCESS -> {
                     Timber.i("Homework insert: Success")
                     view?.run {
-                        showMessage(homeworkAddSuccess)
+                        showSuccessMessage()
                         closeDialog()
                     }
                 }

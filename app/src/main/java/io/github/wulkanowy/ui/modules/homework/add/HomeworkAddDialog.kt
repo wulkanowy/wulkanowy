@@ -28,9 +28,6 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
 
     private var date: LocalDate? = null
 
-    override val homeworkAddSuccess: String
-        get() = getString(R.string.homework_add_success)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, 0)
@@ -80,52 +77,67 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
         }
     }
 
-    override fun checkFields() {
+    override fun onAddClicked() {
         with(binding) {
-            var subject: String? = null
-            var teacher: String? = null
-            var date: LocalDate? = null
-            var content: String? = null
+            val subject: String = homeworkDialogSubject.editText?.text.toString()
+            val teacher: String = homeworkDialogTeacher.editText?.text.toString()
+            val date: String = homeworkDialogDate.editText?.text.toString()
+            val content: String = homeworkDialogContent.editText?.text.toString()
+            presenter.checkFields(subject, teacher, date, content)
+            if (presenter.checkFields(subject, teacher, date, content)) {
+                presenter.addHomework(subject, teacher, date.toLocalDate(), content)
+            }
+        }
+    }
 
-            with(homeworkDialogSubject) {
-                if (editText?.text.isNullOrBlank()) {
-                    isErrorEnabled = true
-                    error = getString(R.string.all_no_data)
-                } else {
-                    subject = editText?.text.toString()
-                    isErrorEnabled = false
-                }
-            }
-            with(homeworkDialogTeacher) {
-                if (editText?.text.isNullOrBlank()) {
-                    isErrorEnabled = true
-                    error = getString(R.string.all_no_data)
-                } else {
-                    teacher = editText?.text.toString()
-                    isErrorEnabled = false
-                }
-            }
-            with(homeworkDialogDate) {
-                if (editText?.text.isNullOrBlank()) {
-                    isErrorEnabled = true
-                    error = getString(R.string.all_no_data)
-                } else {
-                    date = editText?.text.toString().toLocalDate()
-                    isErrorEnabled = false
-                }
-            }
-            with(homeworkDialogContent) {
-                if (editText?.text.isNullOrBlank()) {
-                    isErrorEnabled = true
-                    error = getString(R.string.all_no_data)
-                } else {
-                    content = editText?.text.toString()
-                    isErrorEnabled = false
-                }
-            }
-            if (subject != null && teacher != null && date != null && content != null) {
-                presenter.addHomework(subject!!, teacher!!, date!!, content!!)
-            }
+    override fun showSuccessMessage() {
+        showMessage(getString(R.string.homework_add_success))
+    }
+
+    override fun setErrorSubjectRequired() {
+        with(binding.homeworkDialogSubject) {
+            isErrorEnabled = true
+            error = getString(R.string.all_no_data)
+        }
+    }
+
+    override fun setErrorTeacherRequired() {
+        with(binding.homeworkDialogTeacher) {
+            isErrorEnabled = true
+            error = getString(R.string.all_no_data)
+        }
+    }
+
+    override fun setErrorDateRequired() {
+        with(binding.homeworkDialogDate) {
+            isErrorEnabled = true
+            error = getString(R.string.all_no_data)
+        }
+    }
+
+    override fun setErrorContentRequired() {
+        with(binding.homeworkDialogContent) {
+            isErrorEnabled = true
+            error = getString(R.string.all_no_data)
+        }
+    }
+
+    override fun clearErrors() {
+        with(binding.homeworkDialogSubject) {
+            isErrorEnabled = false
+            error = ""
+        }
+        with(binding.homeworkDialogTeacher) {
+            isErrorEnabled = false
+            error = ""
+        }
+        with(binding.homeworkDialogDate) {
+            isErrorEnabled = false
+            error = ""
+        }
+        with(binding.homeworkDialogContent) {
+            isErrorEnabled = false
+            error = ""
         }
     }
 

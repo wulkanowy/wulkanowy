@@ -5,11 +5,21 @@ import java.time.LocalDate
 
 interface HomeworkAddView : BaseView {
 
-    val homeworkAddSuccess: String
-
     fun initView()
 
-    fun checkFields()
+    fun onAddClicked()
+
+    fun showSuccessMessage()
+
+    fun setErrorSubjectRequired()
+
+    fun setErrorTeacherRequired()
+
+    fun setErrorDateRequired()
+
+    fun setErrorContentRequired()
+
+    fun clearErrors()
 
     fun closeDialog()
 
