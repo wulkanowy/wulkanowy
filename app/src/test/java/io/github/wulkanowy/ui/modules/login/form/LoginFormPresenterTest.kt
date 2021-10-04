@@ -112,7 +112,7 @@ class LoginFormPresenterTest {
         val studentTest = Student(
             email = "test@",
             password = "123",
-            scrapperBaseUrl = "https://fakelog.cf/?email",
+            scrapperBaseUrl = "https://wulkanowy.net.pl/?email",
             loginType = "AUTO",
             studentName = "",
             schoolSymbol = "",
@@ -138,7 +138,7 @@ class LoginFormPresenterTest {
 
         every { loginFormView.formUsernameValue } returns "@"
         every { loginFormView.formPassValue } returns "123456"
-        every { loginFormView.formHostValue } returns "https://fakelog.cf/?email"
+        every { loginFormView.formHostValue } returns "https://wulkanowy.net.pl/?email"
         every { loginFormView.formHostSymbol } returns "Default"
         presenter.onSignInClick()
 
@@ -154,7 +154,7 @@ class LoginFormPresenterTest {
         coEvery { repository.getStudentsScrapper(any(), any(), any(), any()) } returns listOf()
         every { loginFormView.formUsernameValue } returns "@"
         every { loginFormView.formPassValue } returns "123456"
-        every { loginFormView.formHostValue } returns "https://fakelog.cf/?email"
+        every { loginFormView.formHostValue } returns "https://wulkanowy.net.pl/?email"
         every { loginFormView.formHostSymbol } returns "Default"
         presenter.onSignInClick()
 
@@ -170,7 +170,7 @@ class LoginFormPresenterTest {
         coEvery { repository.getStudentsScrapper(any(), any(), any(), any()) } returns listOf()
         every { loginFormView.formUsernameValue } returns "@"
         every { loginFormView.formPassValue } returns "123456"
-        every { loginFormView.formHostValue } returns "https://fakelog.cf/?email"
+        every { loginFormView.formHostValue } returns "https://wulkanowy.net.pl/?email"
         every { loginFormView.formHostSymbol } returns "Default"
         presenter.onSignInClick()
         presenter.onSignInClick()
@@ -188,7 +188,7 @@ class LoginFormPresenterTest {
         coEvery { repository.getStudentsScrapper(any(), any(), any(), any()) } throws testException
         every { loginFormView.formUsernameValue } returns "@"
         every { loginFormView.formPassValue } returns "123456"
-        every { loginFormView.formHostValue } returns "https://fakelog.cf/?email"
+        every { loginFormView.formHostValue } returns "https://wulkanowy.net.pl/?email"
         every { loginFormView.formHostSymbol } returns "Default"
         every { loginFormView.showProgress(any()) } just Runs
         every { loginFormView.showProgress(any()) } just Runs

@@ -33,7 +33,7 @@ fun getSemesterPojo(diaryId: Int, semesterId: Int, start: LocalDate, end: LocalD
 )
 
 fun getStudentEntity(mode: Sdk.Mode = Sdk.Mode.API) = Student(
-    scrapperBaseUrl = "http://fakelog.cf",
+    scrapperBaseUrl = "http://wulkanowy.net.pl",
     email = "jan@fakelog.cf",
     certificateKey = "",
     classId = 0,

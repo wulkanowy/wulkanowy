@@ -48,7 +48,7 @@ class StudentTest {
             getStudent("test")
         )
 
-        val students = runBlocking { studentRepository.getStudentsScrapper("", "", "http://fakelog.cf", "") }
+        val students = runBlocking { studentRepository.getStudentsScrapper("", "", "http://wulkanowy.net.pl", "") }
         assertEquals(1, students.size)
         assertEquals("test Kowalski", students.first().student.studentName)
     }

@@ -42,7 +42,7 @@ class LoginStudentSelectPresenterTest {
         Student(
             email = "test",
             password = "test123",
-            scrapperBaseUrl = "https://fakelog.cf",
+            scrapperBaseUrl = "https://wulkanowy.net.pl",
             loginType = "AUTO",
             symbol = "",
             isCurrent = false,
