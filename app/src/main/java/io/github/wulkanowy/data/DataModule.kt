@@ -37,19 +37,14 @@ internal class DataModule {
 
     @Singleton
     @Provides
-    fun provideSdk(chuckerCollector: ChuckerCollector, @ApplicationContext context: Context) =
+    fun provideSdk(chuckerInterceptor: ChuckerInterceptor) =
         Sdk().apply {
             androidVersion = android.os.Build.VERSION.RELEASE
             buildTag = android.os.Build.MODEL
             setSimpleHttpLogger { Timber.d(it) }
 
             // for debug only
-            addInterceptor(
-                ChuckerInterceptor.Builder(context)
-                    .collector(chuckerCollector)
-                    .alwaysReadResponseBody(true)
-                    .build(), network = true
-            )
+            addInterceptor(chuckerInterceptor, network = true)
         }
 
     @Singleton
@@ -65,8 +60,19 @@ internal class DataModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient =
+    fun provideChuckerInterceptor(
+        @ApplicationContext context: Context,
+        chuckerCollector: ChuckerCollector
+    ) = ChuckerInterceptor.Builder(context)
+        .collector(chuckerCollector)
+        .alwaysReadResponseBody(true)
+        .build()
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(chuckerInterceptor: ChuckerInterceptor): OkHttpClient =
         OkHttpClient.Builder()
+            .addNetworkInterceptor(chuckerInterceptor)
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
