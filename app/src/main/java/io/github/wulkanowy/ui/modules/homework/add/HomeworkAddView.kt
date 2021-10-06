@@ -7,8 +7,6 @@ interface HomeworkAddView : BaseView {
 
     fun initView()
 
-    fun onAddClicked()
-
     fun showSuccessMessage()
 
     fun setErrorSubjectRequired()
@@ -18,8 +16,6 @@ interface HomeworkAddView : BaseView {
     fun setErrorDateRequired()
 
     fun setErrorContentRequired()
-
-    fun clearErrors()
 
     fun closeDialog()
 

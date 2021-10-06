@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.core.widget.doOnTextChanged
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,44 +44,33 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
 
     @SuppressLint("SetTextI18n")
     override fun initView() {
-        if (presenter.isHomeworkFullscreen) {
-            dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
-        } else {
-            dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
-        }
-
         with(binding) {
-            homeworkDialogAdd.setOnClickListener { presenter.onAddHomeworkClicked() }
+            homeworkDialogSubjectEdit.doOnTextChanged { _, _, _, _ ->
+                homeworkDialogSubject.error = null
+                homeworkDialogSubject.isErrorEnabled = false
+            }
+            homeworkDialogTeacherEdit.doOnTextChanged { _, _, _, _ ->
+                homeworkDialogTeacher.error = null
+                homeworkDialogTeacher.isErrorEnabled = false
+            }
+            homeworkDialogDateEdit.doOnTextChanged { _, _, _, _ ->
+                homeworkDialogDate.error = null
+                homeworkDialogDate.isErrorEnabled = false
+            }
+            homeworkDialogContentEdit.doOnTextChanged { _, _, _, _ ->
+                homeworkDialogContent.error = null
+                homeworkDialogContent.isErrorEnabled = false
+            }
             homeworkDialogClose.setOnClickListener { dismiss() }
-            homeworkDialogDate.editText?.setOnClickListener { presenter.showDatePicker(date) }
-            homeworkDialogFullScreen.visibility =
-                if (presenter.isHomeworkFullscreen) View.GONE else View.VISIBLE
-            homeworkDialogFullScreenExit.visibility =
-                if (presenter.isHomeworkFullscreen) View.VISIBLE else View.GONE
-            homeworkDialogFullScreen.setOnClickListener {
-                homeworkDialogFullScreen.visibility = View.GONE
-                homeworkDialogFullScreenExit.visibility = View.VISIBLE
-                dialog?.window?.setLayout(MATCH_PARENT, MATCH_PARENT)
-                presenter.isHomeworkFullscreen = true
-
+            homeworkDialogDateEdit.setOnClickListener { presenter.showDatePicker(date) }
+            homeworkDialogAdd.setOnClickListener {
+                presenter.onAddHomeworkClicked(
+                    subject = homeworkDialogSubjectEdit.text?.toString(),
+                    teacher = homeworkDialogTeacherEdit.text?.toString(),
+                    date = homeworkDialogDateEdit.text?.toString(),
+                    content = homeworkDialogContentEdit.text?.toString()
+                )
             }
-            homeworkDialogFullScreenExit.setOnClickListener {
-                homeworkDialogFullScreen.visibility = View.VISIBLE
-                homeworkDialogFullScreenExit.visibility = View.GONE
-                dialog?.window?.setLayout(WRAP_CONTENT, WRAP_CONTENT)
-                presenter.isHomeworkFullscreen = false
-
-            }
-        }
-    }
-
-    override fun onAddClicked() {
-        with(binding) {
-            val subject: String = homeworkDialogSubject.editText?.text.toString()
-            val teacher: String = homeworkDialogTeacher.editText?.text.toString()
-            val date: String = homeworkDialogDate.editText?.text.toString()
-            val content: String = homeworkDialogContent.editText?.text.toString()
-            presenter.checkFields(subject, teacher, date, content)
         }
     }
 
@@ -118,25 +106,6 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
         }
     }
 
-    override fun clearErrors() {
-        with(binding.homeworkDialogSubject) {
-            isErrorEnabled = false
-            error = ""
-        }
-        with(binding.homeworkDialogTeacher) {
-            isErrorEnabled = false
-            error = ""
-        }
-        with(binding.homeworkDialogDate) {
-            isErrorEnabled = false
-            error = ""
-        }
-        with(binding.homeworkDialogContent) {
-            isErrorEnabled = false
-            error = ""
-        }
-    }
-
     override fun closeDialog() {
         dismiss()
     }
@@ -157,7 +126,9 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
             binding.homeworkDialogDate.editText?.setText(date!!.toFormattedString())
         }
 
-        datePicker.show(this.parentFragmentManager, "null")
+        if (!parentFragmentManager.isStateSaved) {
+            datePicker.show(this.parentFragmentManager, null)
+        }
     }
 
     override fun onDestroyView() {

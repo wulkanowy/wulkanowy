@@ -3,7 +3,6 @@ package io.github.wulkanowy.ui.modules.homework.add
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.HomeworkRepository
-import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -19,15 +18,8 @@ class HomeworkAddPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val homeworkRepository: HomeworkRepository,
-    private val semesterRepository: SemesterRepository,
-    private val preferencesRepository: PreferencesRepository
+    private val semesterRepository: SemesterRepository
 ) : BasePresenter<HomeworkAddView>(errorHandler, studentRepository) {
-
-    var isHomeworkFullscreen
-        get() = preferencesRepository.isHomeworkFullscreen
-        set(value) {
-            preferencesRepository.isHomeworkFullscreen = value
-        }
 
     override fun onAttachView(view: HomeworkAddView) {
         super.onAttachView(view)
@@ -35,37 +27,39 @@ class HomeworkAddPresenter @Inject constructor(
         Timber.i("Homework details view was initialized")
     }
 
-    fun onAddHomeworkClicked() {
-        view?.onAddClicked()
-    }
-
-    fun checkFields(
-        subject: String,
-        teacher: String,
-        date: String,
-        content: String
-    ) {
-        view?.run {
-            clearErrors()
-            if (subject.isBlank()) setErrorSubjectRequired()
-            if (teacher.isBlank()) setErrorTeacherRequired()
-            if (date.isBlank()) setErrorDateRequired()
-            if (content.isBlank()) setErrorContentRequired()
-        }
-        if (!(subject.isBlank() || teacher.isBlank() || date.isBlank() || content.isBlank())) return
-        addHomework(subject, teacher, date.toLocalDate(), content)
-    }
-
     fun showDatePicker(date: LocalDate?) {
         view?.showDatePickerDialog(date ?: LocalDate.now())
     }
 
-    private fun addHomework(
-        subject: String,
-        teacher: String,
-        date: LocalDate,
-        content: String
-    ) {
+    fun onAddHomeworkClicked(subject: String?, teacher: String?, date: String?, content: String?) {
+        var isError = false
+
+        if (subject.isNullOrBlank()) {
+            view?.setErrorSubjectRequired()
+            isError = true
+        }
+
+        if (teacher.isNullOrBlank()) {
+            view?.setErrorTeacherRequired()
+            isError = true
+        }
+
+        if (date.isNullOrBlank()) {
+            view?.setErrorDateRequired()
+            isError = true
+        }
+
+        if (content.isNullOrBlank()) {
+            view?.setErrorContentRequired()
+            isError = true
+        }
+
+        if (!isError) {
+            saveHomework(subject!!, teacher!!, date!!.toLocalDate(), content!!)
+        }
+    }
+
+    private fun saveHomework(subject: String, teacher: String, date: LocalDate, content: String) {
         flowWithResource {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
@@ -98,6 +92,6 @@ class HomeworkAddPresenter @Inject constructor(
                     errorHandler.dispatch(it.error!!)
                 }
             }
-        }.launch("toggle")
+        }.launch("add_homework")
     }
 }
