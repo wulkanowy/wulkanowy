@@ -61,8 +61,8 @@ class HomeworkRepository @Inject constructor(
             val homeWorkToSave = (new uniqueSubtract old).onEach {
                 if (notify) it.isNotified = false
             }
+            val filteredOld = old.filterNot { it.isAddedByUser }
 
-            val filteredOld = old.filter { !it.isAddedByUser }
             homeworkDb.deleteAll(filteredOld uniqueSubtract new)
             homeworkDb.insertAll(homeWorkToSave)
 
@@ -81,7 +81,7 @@ class HomeworkRepository @Inject constructor(
 
     suspend fun updateHomework(homework: List<Homework>) = homeworkDb.updateAll(homework)
 
-    suspend fun insertHomework(homework: Homework) = homeworkDb.insertAll(listOf(homework))
+    suspend fun saveHomework(homework: Homework) = homeworkDb.insertAll(listOf(homework))
 
     suspend fun deleteHomework(homework: Homework) = homeworkDb.deleteAll(listOf(homework))
 }

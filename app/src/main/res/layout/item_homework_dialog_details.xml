@@ -164,6 +164,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
         android:autoLink="web"
         android:lineSpacingMultiplier="1.2"
         android:paddingStart="0dp"
@@ -171,6 +172,6 @@
         android:text="@string/all_no_data"
         android:textIsSelectable="true"
         android:textSize="16sp"
+        tools:maxLines="7"
         tools:text="@tools:sample/lorem/random" />
-
 </LinearLayout>

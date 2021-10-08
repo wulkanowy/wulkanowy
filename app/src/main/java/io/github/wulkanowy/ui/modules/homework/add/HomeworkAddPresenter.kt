@@ -39,11 +39,6 @@ class HomeworkAddPresenter @Inject constructor(
             isError = true
         }
 
-        if (teacher.isNullOrBlank()) {
-            view?.setErrorTeacherRequired()
-            isError = true
-        }
-
         if (date.isNullOrBlank()) {
             view?.setErrorDateRequired()
             isError = true
@@ -55,7 +50,7 @@ class HomeworkAddPresenter @Inject constructor(
         }
 
         if (!isError) {
-            saveHomework(subject!!, teacher!!, date!!.toLocalDate(), content!!)
+            saveHomework(subject!!, teacher.orEmpty(), date!!.toLocalDate(), content!!)
         }
     }
 
@@ -64,7 +59,7 @@ class HomeworkAddPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             val entryDate = LocalDate.now()
-            homeworkRepository.insertHomework(
+            homeworkRepository.saveHomework(
                 Homework(
                     semesterId = semester.semesterId,
                     studentId = student.studentId,

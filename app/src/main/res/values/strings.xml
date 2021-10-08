@@ -58,7 +58,6 @@
     <string name="login_invalid_custom_email">Use the assigned login or email in @%1$s</string>
     <string name="login_invalid_symbol">Invalid symbol</string>
     <string name="login_incorrect_symbol">Student not found. Validate the symbol and the chosen variation of the UONET+ register</string>
-    <string name="login_field_required">This field is required</string>
     <string name="login_duplicate_student">Selected student is already logged in</string>
     <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the previous screen. Wulkanowy does not detect pre-school students at the moment</string>
     <string name="login_select_student">Select students to log in to the application</string>
@@ -597,6 +596,9 @@
     <string name="all_save">Save</string>
     <string name="all_title">Title</string>
     <string name="all_add">Add</string>
+    <string name="all_copied">Copied</string>
+    <string name="all_undo">Undo</string>
+    <string name="all_change">Change</string>
 
 
     <!--Timetable Widget-->
@@ -702,12 +704,6 @@
     <string name="all_empty_color">No color</string>
 
 
-    <!--Others-->
-    <string name="all_copied">Copied</string>
-    <string name="all_undo">Undo</string>
-    <string name="all_change">Change</string>
-
-
     <!--Update helper-->
     <string name="update_download_started">Download of updates has started…</string>
     <string name="update_download_success">An update has just been downloaded.</string>
@@ -726,4 +722,5 @@
     <string name="error_unknown">An unexpected error occurred</string>
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
+    <string name="error_field_required">This field is required</string>
 </resources>

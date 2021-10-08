@@ -11,8 +11,6 @@ interface HomeworkAddView : BaseView {
 
     fun setErrorSubjectRequired()
 
-    fun setErrorTeacherRequired()
-
     fun setErrorDateRequired()
 
     fun setErrorContentRequired()

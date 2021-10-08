@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.homework.add
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,16 +41,11 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
         presenter.onAttachView(this)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun initView() {
         with(binding) {
             homeworkDialogSubjectEdit.doOnTextChanged { _, _, _, _ ->
                 homeworkDialogSubject.error = null
                 homeworkDialogSubject.isErrorEnabled = false
-            }
-            homeworkDialogTeacherEdit.doOnTextChanged { _, _, _, _ ->
-                homeworkDialogTeacher.error = null
-                homeworkDialogTeacher.isErrorEnabled = false
             }
             homeworkDialogDateEdit.doOnTextChanged { _, _, _, _ ->
                 homeworkDialogDate.error = null
@@ -81,28 +75,21 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
     override fun setErrorSubjectRequired() {
         with(binding.homeworkDialogSubject) {
             isErrorEnabled = true
-            error = getString(R.string.all_no_data)
-        }
-    }
-
-    override fun setErrorTeacherRequired() {
-        with(binding.homeworkDialogTeacher) {
-            isErrorEnabled = true
-            error = getString(R.string.all_no_data)
+            error = getString(R.string.error_field_required)
         }
     }
 
     override fun setErrorDateRequired() {
         with(binding.homeworkDialogDate) {
             isErrorEnabled = true
-            error = getString(R.string.all_no_data)
+            error = getString(R.string.error_field_required)
         }
     }
 
     override fun setErrorContentRequired() {
         with(binding.homeworkDialogContent) {
             isErrorEnabled = true
-            error = getString(R.string.all_no_data)
+            error = getString(R.string.error_field_required)
         }
     }
 
@@ -111,7 +98,6 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
-
         val constraintsBuilder = CalendarConstraints.Builder().apply {
             setStart(LocalDate.now().toEpochDay())
         }
