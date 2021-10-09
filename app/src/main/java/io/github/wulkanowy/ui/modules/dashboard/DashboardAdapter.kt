@@ -322,7 +322,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
                     binding.dashboardLessonsItemTitleTodayAndTomorrow.isVisible = false
                 }
                 else -> {
-                    dateToNavigate = tomorrowDate
+                    dateToNavigate = currentDate
                     updateLessonView(item, emptyList(), binding)
                     binding.dashboardLessonsItemTitleTomorrow.isVisible = false
                     binding.dashboardLessonsItemTitleTodayAndTomorrow.isVisible =
