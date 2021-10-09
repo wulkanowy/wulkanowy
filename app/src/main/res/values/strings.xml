@@ -504,6 +504,7 @@
     <!--Dashboard-->
     <string name="dashboard_timetable_title">Lessons</string>
     <string name="dashboard_timetable_title_tomorrow">(Tomorrow)</string>
+    <string name="dashboard_timetable_title_today_and_tomorrow">(Today and tomorrow)</string>
     <string name="dashboard_timetable_first_lesson_title_moment">In a moment:</string>
     <string name="dashboard_timetable_first_lesson_title_soon">Soon:</string>
     <string name="dashboard_timetable_first_lesson_title_first">First:</string>
@@ -668,6 +669,7 @@
     <string name="pref_attendance_appearance_view">Attendance</string>
     <string name="pref_timetable_appearance_view">Timetable</string>
     <string name="pref_grades_advanced_header">Grades</string>
+    <string name="pref_counted_average_advanced_header">Calculated average</string>
     <string name="pref_messages_advanced_header">Messages</string>
 
     <string name="pref_appearance_category">Appearance &amp; Behavior</string>

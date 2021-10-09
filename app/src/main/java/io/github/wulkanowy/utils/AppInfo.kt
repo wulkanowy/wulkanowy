@@ -1,30 +1,19 @@
 package io.github.wulkanowy.utils
 
-import android.content.Context
-import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.BuildConfig
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-open class AppInfo @Inject constructor(
-    @ApplicationContext private val context: Context,
-) {
+open class AppInfo @Inject constructor() {
 
     open val isDebug get() = BuildConfig.DEBUG
 
     open val versionCode get() = BuildConfig.VERSION_CODE
 
-    open val buildTimestamp: Long
-        get() {
-            val info = context.packageManager.getApplicationInfo(
-                context.packageName, PackageManager.GET_META_DATA,
-            )
-            return info.metaData?.getFloat("buildTimestamp")?.toLong() ?: 0
-        }
+    open val buildTimestamp get() = BuildConfig.BUILD_TIMESTAMP
 
     open val buildFlavor get() = BuildConfig.FLAVOR
 
