@@ -575,7 +575,7 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadAdminMessage(student: Student, forceRefresh: Boolean) {
-        flowWithResourceIn { adminMessageRepository.getAdminMessages(student) }
+        flowWithResourceIn { adminMessageRepository.getAdminMessages(student, forceRefresh) }
             .onEach {
                 when (it.status) {
                     Status.LOADING -> {
