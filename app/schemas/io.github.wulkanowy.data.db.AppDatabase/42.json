@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 41,
-    "identityHash": "d9ce44a78495a358606612bd91603c0f",
+    "version": 42,
+    "identityHash": "5c8b7f9409294ecdebf9f74a44f8e883",
     "entities": [
       {
         "tableName": "Students",
@@ -2311,12 +2311,86 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "AdminMessages",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `version_name` INTEGER, `version_max` INTEGER, `target_register_host` TEXT, `target_flavor` TEXT, `destination_url` TEXT, `priority` TEXT NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "versionMin",
+            "columnName": "version_name",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "versionMax",
+            "columnName": "version_max",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "targetRegisterHost",
+            "columnName": "target_register_host",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "targetFlavor",
+            "columnName": "target_flavor",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "destinationUrl",
+            "columnName": "destination_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "priority",
+            "columnName": "priority",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd9ce44a78495a358606612bd91603c0f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5c8b7f9409294ecdebf9f74a44f8e883')"
     ]
   }
 }

@@ -688,7 +688,9 @@ class DashboardPresenter @Inject constructor(
         itemsLoadedList: List<DashboardItem>,
         forceRefresh: Boolean
     ) {
-        val filteredItems = itemsLoadedList.filterNot { it.type == DashboardItem.Type.ACCOUNT }
+        val filteredItems = itemsLoadedList.filterNot {
+            it.type == DashboardItem.Type.ACCOUNT || it.type == DashboardItem.Type.ADMIN_MESSAGE
+        }
         val isAccountItemError =
             itemsLoadedList.find { it.type == DashboardItem.Type.ACCOUNT }?.error != null
         val isGeneralError =
