@@ -38,6 +38,12 @@ android {
                 ]
             }
         }
+
+        if (System.env.SET_BUILD_TIMESTAMP) {
+            buildConfigField "long", "BUILD_TIMESTAMP", String.valueOf(System.currentTimeMillis())
+        } else {
+            buildConfigField "long", "BUILD_TIMESTAMP", "1486235849000"
+        }
     }
 
     sourceSets {
@@ -60,14 +66,12 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            buildConfigField "long", "BUILD_TIMESTAMP", String.valueOf(System.currentTimeMillis())
         }
         debug {
             resValue "string", "app_name", "Wulkanowy DEV " + defaultConfig.versionCode
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
             ext.enableCrashlytics = project.hasProperty("enableFirebase")
-            buildConfigField "long", "BUILD_TIMESTAMP", "1486235849000"
         }
     }
 
