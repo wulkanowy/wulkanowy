@@ -321,16 +321,12 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
                     binding.dashboardLessonsItemTitleTomorrow.isVisible = true
                     binding.dashboardLessonsItemTitleTodayAndTomorrow.isVisible = false
                 }
-                currentTimetable.isEmpty() && tomorrowTimetable.isEmpty() -> {
-                    dateToNavigate = currentDate
-                    updateLessonView(item, currentTimetable, binding)
-                    binding.dashboardLessonsItemTitleTomorrow.isVisible = false
-                    binding.dashboardLessonsItemTitleTodayAndTomorrow.isVisible = true
-                }
                 else -> {
                     dateToNavigate = tomorrowDate
                     updateLessonView(item, emptyList(), binding)
                     binding.dashboardLessonsItemTitleTomorrow.isVisible =
+                        !(item.isLoading && item.error == null)
+                    binding.dashboardLessonsItemTitleTodayAndTomorrow.isVisible =
                         !(item.isLoading && item.error == null)
                 }
             }
