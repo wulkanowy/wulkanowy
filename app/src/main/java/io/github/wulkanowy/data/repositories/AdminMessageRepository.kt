@@ -36,8 +36,9 @@ class AdminMessageRepository @Inject constructor(
         showSavedOnLoading = false,
         mapResult = { adminMessages ->
             adminMessages.filter { adminMessage ->
-                val isCorrectRegister =
-                    adminMessage.targetRegisterHost?.contains(student.scrapperBaseUrl, true) ?: true
+                val isCorrectRegister = adminMessage.targetRegisterHost?.let {
+                    student.scrapperBaseUrl.contains(it, true)
+                } ?: true
                 val isCorrectFlavor =
                     adminMessage.targetFlavor?.equals(appInfo.buildFlavor, true) ?: true
                 val isCorrectMaxVersion =
