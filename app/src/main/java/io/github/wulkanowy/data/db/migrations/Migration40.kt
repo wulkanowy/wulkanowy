@@ -7,14 +7,17 @@ class Migration40 : Migration(39, 40) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL(
-            """CREATE TABLE IF NOT EXISTS `Notifications` (
-            `student_id` INTEGER NOT NULL, 
-            `title` TEXT NOT NULL, 
-            `content` TEXT NOT NULL,
-            `type` TEXT NOT NULL, 
-            `date` INTEGER NOT NULL, 
-            `data` TEXT,
-            `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)"""
+            """
+            CREATE TABLE IF NOT EXISTS `Notifications` (
+                `student_id` INTEGER NOT NULL, 
+                `title` TEXT NOT NULL, 
+                `content` TEXT NOT NULL, 
+                `type` TEXT NOT NULL, 
+                `date` INTEGER NOT NULL, 
+                `data` TEXT,
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+            )
+            """
         )
     }
 }
