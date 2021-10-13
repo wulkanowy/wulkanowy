@@ -16,7 +16,9 @@ import io.github.wulkanowy.ui.base.BaseExpandableAdapter
 import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
+import java.util.BitSet
 import javax.inject.Inject
+import kotlin.math.exp
 
 class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<RecyclerView.ViewHolder>() {
 
@@ -24,7 +26,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
 
     private var items = mutableListOf<GradeDetailsItem>()
 
-    private var expandedPosition = NO_POSITION
+    private val expandedPositions = BitSet(items.size)
 
     private var isExpandable = false
 
@@ -36,7 +38,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
         headers = data.filter { it.viewType == ViewType.HEADER }.toMutableList()
         items = if (isExpanded) headers else data.toMutableList()
         isExpandable = isExpanded
-        expandedPosition = NO_POSITION
+        expandedPositions.clear()
     }
 
     fun updateDetailsItem(position: Int, grade: Grade) {
@@ -48,7 +50,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
         val candidates = headers.filter { (it.value as GradeDetailsHeader).subject == subject }
 
         if (candidates.size > 1) {
-            Timber.e("Header with subject $subject found ${candidates.size} times! Expanded: $expandedPosition. Items: $candidates")
+            Timber.e("Header with subject $subject found ${candidates.size} times! Expanded: $expandedPositions. Items: $candidates")
         }
 
         return candidates.first()
@@ -64,9 +66,9 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
     }
 
     fun collapseAll() {
-        if (expandedPosition != -1) {
+        if (!expandedPositions.isEmpty) {
             refreshList(headers)
-            expandedPosition = NO_POSITION
+            expandedPositions.clear()
         }
     }
 
@@ -107,14 +109,15 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
     }
 
     private fun bindHeaderViewHolder(holder: HeaderViewHolder, header: GradeDetailsHeader, position: Int) {
-        val headerPosition = headers.indexOf(items[position])
+        val item = items[position]
+        val headerPosition = headers.indexOf(item)
         val adapterPosition = holder.bindingAdapterPosition
 
         with(holder.binding) {
             gradeHeaderDivider.visibility = if (adapterPosition == 0) View.GONE else View.VISIBLE
             with(gradeHeaderSubject) {
                 text = header.subject
-                maxLines = if (headerPosition == expandedPosition) 2 else 1
+                maxLines = if (expandedPositions.get(headerPosition)) 2 else 1
             }
             gradeHeaderAverage.text = formatAverage(header.average, root.context.resources)
             gradeHeaderPointsSum.text = root.context.getString(R.string.grade_points_sum, header.pointsSum)
@@ -125,15 +128,18 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
 
             gradeHeaderContainer.isEnabled = isExpandable
             gradeHeaderContainer.setOnClickListener {
-                expandedPosition = if (expandedPosition == adapterPosition) -1 else adapterPosition
+                expandedPositions.flip(headerPosition)
 
-                if (expandedPosition != NO_POSITION) {
-                    refreshList(headers.toMutableList().apply {
-                        addAll(headerPosition + 1, header.grades)
-                    })
-                    scrollToHeaderWithSubItems(headerPosition, header.grades.size)
+                // Once this listener is invoked, there may have been other grades expanded
+                // thus invalidating the `position` argument from the initial method call
+                val newPosition = items.indexOf(item)
+                if (expandedPositions[headerPosition]) {
+                    items.addAll(newPosition + 1, header.grades)
+                    notifyItemRangeInserted(newPosition + 1, header.grades.size)
+                    scrollToHeaderWithSubItems(newPosition, header.grades.size)
                 } else {
-                    refreshList(headers)
+                    items.subList(newPosition + 1, newPosition + 1 + header.grades.size).clear()
+                    notifyItemRangeRemoved(newPosition + 1, header.grades.size)
                 }
             }
         }
