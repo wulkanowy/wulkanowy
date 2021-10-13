@@ -728,7 +728,9 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             dashboardAdminMessageItemIcon.setColorFilter(textColor)
 
             root.setCardBackgroundColor(backgroundColor?.let { ColorStateList.valueOf(it) })
-            root.setOnClickListener { onAdminMessageClickListener(item.destinationUrl) }
+            item.destinationUrl?.let { url ->
+                root.setOnClickListener { onAdminMessageClickListener(url) }
+            }
         }
     }
 
