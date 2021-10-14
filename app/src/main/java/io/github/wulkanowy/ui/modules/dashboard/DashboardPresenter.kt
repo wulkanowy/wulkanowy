@@ -620,6 +620,8 @@ class DashboardPresenter @Inject constructor(
 
         if (dashboardItem is DashboardItem.AdminMessages && !dashboardItem.isDataLoaded) {
             dashboardItemsToLoad = dashboardItemsToLoad - DashboardItem.Type.ADMIN_MESSAGE
+            dashboardTileLoadedList = dashboardTileLoadedList - DashboardItem.Tile.ADMIN_MESSAGE
+
             dashboardItemLoadedList.removeAll { it.type == DashboardItem.Type.ADMIN_MESSAGE }
         }
 
