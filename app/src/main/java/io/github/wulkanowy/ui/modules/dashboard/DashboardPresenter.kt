@@ -654,9 +654,12 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun updateForceRefreshData(dashboardItem: DashboardItem) {
+        val isNotLoadedAdminMessage =
+            dashboardItem is DashboardItem.AdminMessages && !dashboardItem.isDataLoaded
+
         with(dashboardItemRefreshLoadedList) {
             removeAll { it.type == dashboardItem.type }
-            add(dashboardItem)
+            if (!isNotLoadedAdminMessage) add(dashboardItem)
         }
 
         val isRefreshItemLoaded =
