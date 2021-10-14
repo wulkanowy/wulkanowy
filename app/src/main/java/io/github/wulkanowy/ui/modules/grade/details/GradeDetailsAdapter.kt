@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.data.repositories.GradeExpandMode
 import io.github.wulkanowy.databinding.HeaderGradeDetailsBinding
 import io.github.wulkanowy.databinding.ItemGradeDetailsBinding
 import io.github.wulkanowy.ui.base.BaseExpandableAdapter
@@ -18,7 +19,6 @@ import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
 import java.util.BitSet
 import javax.inject.Inject
-import kotlin.math.exp
 
 class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<RecyclerView.ViewHolder>() {
 
@@ -28,16 +28,16 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
 
     private val expandedPositions = BitSet(items.size)
 
-    private var isExpandable = false
+    private var expandMode: GradeExpandMode = GradeExpandMode.AlwaysExpanded
 
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
     var colorTheme = ""
 
-    fun setDataItems(data: List<GradeDetailsItem>, isExpanded: Boolean = isExpandable) {
+    fun setDataItems(data: List<GradeDetailsItem>, expandMode: GradeExpandMode = this.expandMode) {
         headers = data.filter { it.viewType == ViewType.HEADER }.toMutableList()
-        items = if (isExpanded) headers else data.toMutableList()
-        isExpandable = isExpanded
+        items = (if (expandMode.isExpandable) headers else data).toMutableList()
+        this.expandMode = expandMode
         expandedPositions.clear()
     }
 
@@ -117,7 +117,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
             gradeHeaderDivider.visibility = if (adapterPosition == 0) View.GONE else View.VISIBLE
             with(gradeHeaderSubject) {
                 text = header.subject
-                maxLines = if (expandedPositions.get(headerPosition)) 2 else 1
+                maxLines = if (expandedPositions[headerPosition]) 2 else 1
             }
             gradeHeaderAverage.text = formatAverage(header.average, root.context.resources)
             gradeHeaderPointsSum.text = root.context.getString(R.string.grade_points_sum, header.pointsSum)
@@ -126,20 +126,39 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
             gradeHeaderNote.visibility = if (header.newGrades > 0) View.VISIBLE else View.GONE
             if (header.newGrades > 0) gradeHeaderNote.text = header.newGrades.toString(10)
 
-            gradeHeaderContainer.isEnabled = isExpandable
+            gradeHeaderContainer.isEnabled = expandMode.isExpandable
             gradeHeaderContainer.setOnClickListener {
-                expandedPositions.flip(headerPosition)
+                if (expandMode == GradeExpandMode.One) {
+                    val oldExpandedHeaderPos = expandedPositions.nextSetBit(0)
+                    val newExpanded = !expandedPositions[headerPosition]
+                    expandedPositions.clear()
+                    if (newExpanded) {
+                        if (oldExpandedHeaderPos != -1) {
+                            val oldHeader = headers[oldExpandedHeaderPos].value as GradeDetailsHeader
+                            items.subList(oldExpandedHeaderPos + 1, oldExpandedHeaderPos + 1 + oldHeader.grades.size).clear()
+                            notifyItemRangeRemoved(oldExpandedHeaderPos + 1, oldHeader.grades.size)
+                        }
+                        expandedPositions.set(headerPosition)
+                        items.addAll(headerPosition + 1, header.grades)
+                        notifyItemRangeInserted(headerPosition + 1, header.grades.size)
+                    } else {
+                        items.subList(headerPosition + 1, headerPosition + 1 + header.grades.size).clear()
+                        notifyItemRangeRemoved(headerPosition + 1, header.grades.size)
+                    }
+                } else if (expandMode == GradeExpandMode.Unlimited) {
+                    expandedPositions.flip(headerPosition)
 
-                // Once this listener is invoked, there may have been other grades expanded
-                // thus invalidating the `position` argument from the initial method call
-                val newPosition = items.indexOf(item)
-                if (expandedPositions[headerPosition]) {
-                    items.addAll(newPosition + 1, header.grades)
-                    notifyItemRangeInserted(newPosition + 1, header.grades.size)
-                    scrollToHeaderWithSubItems(newPosition, header.grades.size)
-                } else {
-                    items.subList(newPosition + 1, newPosition + 1 + header.grades.size).clear()
-                    notifyItemRangeRemoved(newPosition + 1, header.grades.size)
+                    // Once this listener is invoked, there may have been other grades expanded
+                    // thus invalidating the `position` argument from the initial method call
+                    val newPosition = items.indexOf(item)
+                    if (expandedPositions[headerPosition]) {
+                        items.addAll(newPosition + 1, header.grades)
+                        notifyItemRangeInserted(newPosition + 1, header.grades.size)
+                        scrollToHeaderWithSubItems(newPosition, header.grades.size)
+                    } else {
+                        items.subList(newPosition + 1, newPosition + 1 + header.grades.size).clear()
+                        notifyItemRangeRemoved(newPosition + 1, header.grades.size)
+                    }
                 }
             }
         }

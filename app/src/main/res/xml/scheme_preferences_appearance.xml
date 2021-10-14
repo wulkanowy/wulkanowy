@@ -50,8 +50,10 @@
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_grade_color_scheme"
             app:title="@string/pref_view_grade_color_scheme" />
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/pref_default_expand_grade"
+        <ListPreference
+            app:defaultValue="@string/pref_default_expand_grade"
+            app:entries="@array/default_expand_grade_entries"
+            app:entryValues="@array/default_expand_grade_values"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_expand_grade"
             app:title="@string/pref_view_expand_grade" />

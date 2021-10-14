@@ -113,7 +113,7 @@ class GradeDetailsPresenter @Inject constructor(
     fun onParentViewReselected() {
         view?.run {
             if (!isViewEmpty) {
-                if (preferencesRepository.isGradeExpandable) collapseAllItems()
+                if (preferencesRepository.gradeExpandMode.isExpandable) collapseAllItems()
                 scrollToStart()
             }
         }
@@ -157,7 +157,7 @@ class GradeDetailsPresenter @Inject constructor(
                             showContent(true)
                             updateData(
                                 data = items,
-                                isGradeExpandable = preferencesRepository.isGradeExpandable,
+                                expandMode = preferencesRepository.gradeExpandMode,
                                 gradeColorTheme = preferencesRepository.gradeColorTheme
                             )
                             notifyParentDataLoaded(semesterId)
@@ -175,7 +175,7 @@ class GradeDetailsPresenter @Inject constructor(
                         showContent(items.isNotEmpty())
                         updateData(
                             data = items,
-                            isGradeExpandable = preferencesRepository.isGradeExpandable,
+                            expandMode = preferencesRepository.gradeExpandMode,
                             gradeColorTheme = preferencesRepository.gradeColorTheme
                         )
                     }
@@ -242,7 +242,7 @@ class GradeDetailsPresenter @Inject constructor(
                     grades = subItems
                 ).apply {
                     newGrades = grades.filter { grade -> !grade.isRead }.size
-                }, ViewType.HEADER)) + if (preferencesRepository.isGradeExpandable) emptyList() else subItems
+                }, ViewType.HEADER)) + if (preferencesRepository.gradeExpandMode.isExpandable) emptyList() else subItems
             }.flatten()
     }
 
