@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.timetable.completed
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.repositories.CompletedLessonsRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -13,10 +13,13 @@ import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -111,29 +114,32 @@ class CompletedLessonsPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        Timber.i("Loading completed lessons data started")
-
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            completedLessonsRepository.getCompletedLessons(student, semester, currentDate, currentDate, forceRefresh)
+            completedLessonsRepository.getCompletedLessons(
+                student,
+                semester,
+                currentDate,
+                currentDate,
+                forceRefresh
+            )
+        }.logStatus("load completed lessons").withErrorHandler(errorHandler).mapData {
+            it.sortedBy { lesson -> lesson.number }
         }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    if (!it.data.isNullOrEmpty()) {
-                        view?.run {
-                            enableSwipe(true)
-                            showRefresh(true)
-                            showProgress(false)
-                            showContent(true)
-                            updateData(it.data.sortedBy { item -> item.number })
-                        }
+            when (it) {
+                is Resource.Intermediate -> {
+                    view?.apply {
+                        updateData(it.data)
+                        enableSwipe(true)
+                        showRefresh(true)
+                        showProgress(false)
+                        showContent(true)
                     }
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Loading completed lessons lessons result: Success")
+                is Resource.Success -> {
                     view?.apply {
-                        updateData(it.data!!.sortedBy { item -> item.number })
+                        updateData(it.data)
                         showEmpty(it.data.isEmpty())
                         showErrorView(false)
                         showContent(it.data.isNotEmpty())
@@ -141,12 +147,8 @@ class CompletedLessonsPresenter @Inject constructor(
                     analytics.logEvent(
                         "load_data",
                         "type" to "completed_lessons",
-                        "items" to it.data!!.size
+                        "items" to it.data.size
                     )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading completed lessons result: An exception occurred")
-                    completedLessonsErrorHandler.dispatch(it.error!!)
                 }
             }
         }.afterLoading {

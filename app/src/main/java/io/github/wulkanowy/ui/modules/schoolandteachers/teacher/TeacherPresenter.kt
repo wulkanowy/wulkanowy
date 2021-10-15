@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.schoolandteachers.teacher
 
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.TeacherRepository
@@ -10,7 +9,9 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -57,28 +58,18 @@ class TeacherPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             teacherRepository.getTeachers(student, semester, forceRefresh)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Loading teachers data started")
-                Status.SUCCESS -> {
-                    Timber.i("Loading teachers result: Success")
-                    view?.run {
-                        updateData(it.data!!.filter { item -> item.name.isNotBlank() })
-                        showContent(it.data.isNotEmpty())
-                        showEmpty(it.data.isEmpty())
-                        showErrorView(false)
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "teachers",
-                        "items" to it.data!!.size
-                    )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading teachers result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
+        }.logStatus("load teachers data").withErrorHandler(errorHandler).onSuccess {
+            view?.run {
+                updateData(it.filter { item -> item.name.isNotBlank() })
+                showContent(it.isNotEmpty())
+                showEmpty(it.isEmpty())
+                showErrorView(false)
             }
+            analytics.logEvent(
+                "load_data",
+                "type" to "teachers",
+                "items" to it.size
+            )
         }.afterLoading {
             view?.run {
                 hideRefresh()

@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.account.accountquick
 
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -8,7 +7,9 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.account.AccountItem
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,18 +45,10 @@ class AccountQuickPresenter @Inject constructor(
         }
 
         flowWithResource { studentRepository.switchStudent(studentWithSemesters) }
-            .onEach {
-                when (it.status) {
-                    Status.LOADING -> Timber.i("Attempt to change a student")
-                    Status.SUCCESS -> {
-                        Timber.i("Change a student result: Success")
-                        view?.recreateMainView()
-                    }
-                    Status.ERROR -> {
-                        Timber.i("Change a student result: An exception occurred")
-                        errorHandler.dispatch(it.error!!)
-                    }
-                }
+            .logStatus("change student")
+            .withErrorHandler(errorHandler)
+            .onSuccess {
+                view?.recreateMainView()
             }
             .afterLoading { view?.popView() }
             .launch("switch")

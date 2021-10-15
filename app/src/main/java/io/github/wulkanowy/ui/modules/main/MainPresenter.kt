@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.main
 
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -17,7 +16,9 @@ import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersView
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.flowWithResource
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -75,18 +76,11 @@ class MainPresenter @Inject constructor(
         }
 
         flowWithResource { studentRepository.getSavedStudents(false) }
-            .onEach { resource ->
-                when (resource.status) {
-                    Status.LOADING -> Timber.i("Loading student avatar data started")
-                    Status.SUCCESS -> {
-                        studentsWitSemesters = resource.data
-                        showCurrentStudentAvatar()
-                    }
-                    Status.ERROR -> {
-                        Timber.i("Loading student avatar result: An exception occurred")
-                        errorHandler.dispatch(resource.error!!)
-                    }
-                }
+            .logStatus("load student avatar")
+            .withErrorHandler(errorHandler)
+            .onSuccess {
+                studentsWitSemesters = it
+                showCurrentStudentAvatar()
             }.launch("avatar")
     }
 

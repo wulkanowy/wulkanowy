@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.exam
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -12,10 +12,14 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -96,51 +100,50 @@ class ExamPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        Timber.i("Loading exam data started")
-
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            examRepository.getExams(student, semester, currentDate.monday, currentDate.sunday, forceRefresh)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    if (!it.data.isNullOrEmpty()) {
-                        view?.run {
-                            enableSwipe(true)
-                            showRefresh(true)
-                            showProgress(false)
-                            showContent(true)
-                            updateData(createExamItems(it.data))
+            examRepository.getExams(
+                student,
+                semester,
+                currentDate.monday,
+                currentDate.sunday,
+                forceRefresh
+            )
+        }.logStatus("load exam data").withErrorHandler(errorHandler)
+            .onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "exam",
+                    "items" to it.size
+                )
+            }.mapData {
+                createExamItems(it)
+            }.onEach {
+                when (it) {
+                    is Resource.Intermediate -> view?.apply {
+                        enableSwipe(true)
+                        showRefresh(true)
+                        showProgress(false)
+                        showContent(it.data.isNotEmpty())
+                        updateData(it.data)
+                    }
+                    is Resource.Success -> {
+                        view?.apply {
+                            updateData(it.data)
+                            showEmpty(it.data.isEmpty())
+                            showErrorView(false)
+                            showContent(it.data.isNotEmpty())
                         }
                     }
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Loading exam result: Success")
-                    view?.apply {
-                        updateData(createExamItems(it.data!!))
-                        showEmpty(it.data.isEmpty())
-                        showErrorView(false)
-                        showContent(it.data.isNotEmpty())
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "exam",
-                        "items" to it.data!!.size
-                    )
+            }.afterLoading {
+                view?.run {
+                    showRefresh(false)
+                    showProgress(false)
+                    enableSwipe(true)
                 }
-                Status.ERROR -> {
-                    Timber.i("Loading exam result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
-            }
-        }.afterLoading {
-            view?.run {
-                showRefresh(false)
-                showProgress(false)
-                enableSwipe(true)
-            }
-        }.launch()
+            }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
@@ -181,8 +184,10 @@ class ExamPresenter @Inject constructor(
         view?.apply {
             showPreButton(!currentDate.minusDays(7).isHolidays)
             showNextButton(!currentDate.plusDays(7).isHolidays)
-            updateNavigationWeek("${currentDate.monday.toFormattedString("dd.MM")} - " +
-                currentDate.sunday.toFormattedString("dd.MM"))
+            updateNavigationWeek(
+                "${currentDate.monday.toFormattedString("dd.MM")} - " +
+                    currentDate.sunday.toFormattedString("dd.MM")
+            )
         }
     }
 }

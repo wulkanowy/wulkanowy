@@ -81,7 +81,7 @@ class GradeStatisticsFragment :
         }
     }
 
-    override fun updateSubjects(data: ArrayList<String>) {
+    override fun updateSubjects(data: Collection<String>) {
         with(subjectsAdapter) {
             clear()
             addAll(data)

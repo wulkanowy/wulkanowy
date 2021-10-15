@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.enums.MessageFolder
@@ -13,9 +13,9 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
+import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
 import javax.inject.Inject
 
 class MessagePreviewPresenter @Inject constructor(
@@ -57,23 +57,22 @@ class MessagePreviewPresenter @Inject constructor(
         flowWithResourceIn {
             val student = studentRepository.getStudentById(message.studentId)
             messageRepository.getMessage(student, message, true)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Loading message ${message.messageId} preview started")
-                Status.SUCCESS -> {
-                    Timber.i("Loading message ${message.messageId} preview result: Success ")
-                    if (it.data != null) {
-                        this@MessagePreviewPresenter.message = it.data.message
-                        this@MessagePreviewPresenter.attachments = it.data.attachments
+        }.logStatus("message ${message.messageId} preview").onEach {
+            when (it) {
+                is Resource.Success -> {
+                    val data = it.data
+                    if (data != null) {
+                        this@MessagePreviewPresenter.message = data.message
+                        this@MessagePreviewPresenter.attachments = data.attachments
                         view?.apply {
-                            setMessageWithAttachment(it.data)
+                            setMessageWithAttachment(data)
                             showContent(true)
                             initOptions()
                         }
                         analytics.logEvent(
                             "load_item",
                             "type" to "message_preview",
-                            "length" to it.data.message.content.length
+                            "length" to data.message.content.length
                         )
                     } else {
                         view?.run {
@@ -82,10 +81,9 @@ class MessagePreviewPresenter @Inject constructor(
                         }
                     }
                 }
-                Status.ERROR -> {
-                    Timber.i("Loading message ${message.messageId} preview result: An exception occurred ")
+                is Resource.Error -> {
                     retryCallback = { onMessageLoadRetry(message) }
-                    errorHandler.dispatch(it.error!!)
+                    errorHandler.dispatch(it.error)
                 }
             }
         }.afterLoading {
@@ -179,20 +177,17 @@ class MessagePreviewPresenter @Inject constructor(
         flowWithResource {
             val student = studentRepository.getCurrentStudent()
             messageRepository.deleteMessage(student, message!!)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.d("Message ${message?.id} delete started")
-                Status.SUCCESS -> {
-                    Timber.d("Message ${message?.id} delete success")
+        }.logStatus("message ${message?.id} delete").onEach {
+            when (it) {
+                is Resource.Success -> {
                     view?.run {
                         showMessage(deleteMessageSuccessString)
                         popView()
                     }
                 }
-                Status.ERROR -> {
-                    Timber.d("Message ${message?.id} delete failed")
+                is Resource.Error -> {
                     retryCallback = { onMessageDelete() }
-                    errorHandler.dispatch(it.error!!)
+                    errorHandler.dispatch(it.error)
                 }
             }
         }.afterLoading {

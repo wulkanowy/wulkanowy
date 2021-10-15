@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.schoolandteachers.school
 
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.SchoolRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -10,7 +9,9 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -69,30 +70,22 @@ class SchoolPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             schoolRepository.getSchoolInfo(student, semester, forceRefresh)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Loading school info started")
-                Status.SUCCESS -> if (it.data != null) {
-                    Timber.i("Loading teachers result: Success")
-                    view?.run {
-                        address = it.data.address.ifBlank { null }
-                        contact = it.data.contact.ifBlank { null }
-                        updateData(it.data)
-                        showContent(true)
-                        showEmpty(false)
-                        showErrorView(false)
-                    }
-                    analytics.logEvent("load_item", "type" to "school")
-                } else view?.run {
-                    Timber.i("Loading school result: No school info found")
-                    showContent(!isViewEmpty)
-                    showEmpty(isViewEmpty)
+        }.logStatus("load school info").withErrorHandler(errorHandler).onSuccess {
+            if (it != null) {
+                view?.run {
+                    address = it.address.ifBlank { null }
+                    contact = it.contact.ifBlank { null }
+                    updateData(it)
+                    showContent(true)
+                    showEmpty(false)
                     showErrorView(false)
                 }
-                Status.ERROR -> {
-                    Timber.i("Loading school result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
+                analytics.logEvent("load_item", "type" to "school")
+            } else view?.run {
+                Timber.i("Loading school result: No school info found")
+                showContent(!isViewEmpty)
+                showEmpty(isViewEmpty)
+                showErrorView(false)
             }
         }.afterLoading {
             view?.run {

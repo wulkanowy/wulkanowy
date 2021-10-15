@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.repositories.MessageRepository
@@ -11,7 +11,9 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
+import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
@@ -111,10 +113,10 @@ class MessageTabPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             messageRepository.getMessages(student, semester, folder, forceRefresh)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    if (!it.data.isNullOrEmpty()) {
+        }.logStatus("load $folder message").withErrorHandler(errorHandler).onEach {
+            when (it) {
+                is Resource.Intermediate -> {
+                    if (it.data.isNotEmpty()) {
                         view?.run {
                             enableSwipe(true)
                             showErrorView(false)
@@ -138,9 +140,8 @@ class MessageTabPresenter @Inject constructor(
                         }
                     }
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Loading $folder message result: Success")
-                    messages = it.data!!
+                is Resource.Success -> {
+                    messages = it.data
                     updateData(getFilteredData(lastSearchQuery, onlyUnread, onlyWithAttachments))
                     analytics.logEvent(
                         "load_data",
@@ -148,10 +149,6 @@ class MessageTabPresenter @Inject constructor(
                         "items" to it.data.size,
                         "folder" to folder.name
                     )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading $folder message result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
                 }
             }
         }.afterLoading {

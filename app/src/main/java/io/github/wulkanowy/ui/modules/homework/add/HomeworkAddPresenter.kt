@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.homework.add
 
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -8,8 +7,10 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.flowWithResource
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.toLocalDate
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -72,20 +73,10 @@ class HomeworkAddPresenter @Inject constructor(
                     attachments = emptyList(),
                 ).apply { isAddedByUser = true }
             )
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Homework insert start")
-                Status.SUCCESS -> {
-                    Timber.i("Homework insert: Success")
-                    view?.run {
-                        showSuccessMessage()
-                        closeDialog()
-                    }
-                }
-                Status.ERROR -> {
-                    Timber.i("Homework insert result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
+        }.logStatus("homework insert").withErrorHandler(errorHandler).onSuccess {
+            view?.run {
+                showSuccessMessage()
+                closeDialog()
             }
         }.launch("add_homework")
     }

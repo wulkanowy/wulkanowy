@@ -1,8 +1,10 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.dao.GradePartialStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradeSemesterStatisticsDao
+import io.github.wulkanowy.data.errorOrNull
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
@@ -76,8 +78,8 @@ class GradeStatisticsRepositoryTest {
         val res = runBlocking { gradeStatisticsRepository.getGradesPartialStatistics(student, semester, "Wszystkie", true).toFirstResult() }
 
         // verify
-        assertEquals(null, res.error)
-        assertEquals(2 + 1, res.data?.size)
+        assertEquals(null, res.errorOrNull)
+        assertEquals(2 + 1, res.dataOrNull?.size)
         coVerify { sdk.getGradesPartialStatistics(1) }
         coVerify { gradePartialStatisticsDb.loadAll(1, 1) }
         coVerify { gradePartialStatisticsDb.insertAll(match { it.isEmpty() }) }

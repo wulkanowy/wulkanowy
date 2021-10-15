@@ -21,6 +21,7 @@ import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.toFirstResult
+import io.github.wulkanowy.utils.toSuccess
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
@@ -71,7 +72,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                     .apply {
                         setTextViewText(
                             R.id.luckyNumberWidgetNumber,
-                            luckyNumber?.luckyNumber?.toString() ?: "#"
+                            luckyNumber?.data?.toString() ?: "#"
                         )
                         setOnClickPendingIntent(R.id.luckyNumberWidgetContainer, appIntent)
                     }
@@ -168,7 +169,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
             }
 
             currentStudent?.let {
-                luckyNumberRepository.getLuckyNumber(it, false).toFirstResult().data
+                luckyNumberRepository.getLuckyNumber(it, false).toSuccess()
             }
         } catch (e: Exception) {
             if (e.cause !is NoCurrentStudentException) {

@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.send
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.pojos.MessageDraft
@@ -15,6 +15,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
+import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
@@ -131,19 +132,22 @@ class SendMessagePresenter @Inject constructor(
             Timber.i("Loaded message recipients to reply result: Success, fetched %d recipients", messageRecipients.size)
 
             Triple(unit, recipients, messageRecipients)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> view?.run {
-                    Timber.i("Loading recipients started")
+        }
+            .logStatus("load recipients")
+            .onEach {
+            when (it) {
+                is Resource.Loading -> view?.run {
                     showProgress(true)
                     showContent(false)
                 }
-                Status.SUCCESS -> it.data!!.let { (reportingUnit, recipientChips, selectedRecipientChips) ->
+                is Resource.Success -> it.data.let { (reportingUnit, recipientChips, selectedRecipientChips) ->
                     view?.run {
                         if (reportingUnit != null) {
                             setReportingUnit(reportingUnit)
                             setRecipients(recipientChips)
-                            if (selectedRecipientChips.isNotEmpty()) setSelectedRecipients(selectedRecipientChips)
+                            if (selectedRecipientChips.isNotEmpty()) setSelectedRecipients(
+                                selectedRecipientChips
+                            )
                             showContent(true)
                         } else {
                             Timber.i("Loading recipients result: Can't find the reporting unit")
@@ -151,10 +155,9 @@ class SendMessagePresenter @Inject constructor(
                         }
                     }
                 }
-                Status.ERROR -> {
-                    Timber.i("Loading recipients result: An exception occurred")
+                is Resource.Error -> {
                     view?.showContent(true)
-                    errorHandler.dispatch(it.error!!)
+                    errorHandler.dispatch(it.error)
                 }
             }
         }.afterLoading {
@@ -166,17 +169,15 @@ class SendMessagePresenter @Inject constructor(
         flowWithResource {
             val student = studentRepository.getCurrentStudent()
             messageRepository.sendMessage(student, subject, content, recipients)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> view?.run {
-                    Timber.i("Sending message started")
+        }.logStatus("sending message").onEach {
+            when (it) {
+                is Resource.Loading -> view?.run {
                     showSoftInput(false)
                     showContent(false)
                     showProgress(true)
                     showActionBar(false)
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Sending message result: Success")
+                is Resource.Success -> {
                     view?.clearDraft()
                     view?.run {
                         showMessage(messageSuccess)
@@ -184,14 +185,13 @@ class SendMessagePresenter @Inject constructor(
                     }
                     analytics.logEvent("send_message", "recipients" to recipients.size)
                 }
-                Status.ERROR -> {
-                    Timber.i("Sending message result: An exception occurred")
+                is Resource.Error -> {
                     view?.run {
                         showContent(true)
                         showProgress(false)
                         showActionBar(true)
                     }
-                    errorHandler.dispatch(it.error!!)
+                    errorHandler.dispatch(it.error)
                 }
             }
         }.launch("send")

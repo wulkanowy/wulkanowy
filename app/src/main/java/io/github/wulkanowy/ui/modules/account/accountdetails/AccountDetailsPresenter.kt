@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.account.accountdetails
 
 import io.github.wulkanowy.data.Resource
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -11,7 +10,9 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
-import kotlinx.coroutines.flow.map
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -51,25 +52,18 @@ class AccountDetailsPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        flowWithResource { studentRepository.getSavedStudents() }
-            .map { studentWithSemesters ->
-                Resource(
-                    data = studentWithSemesters.data?.single { it.student.id == studentId },
-                    status = studentWithSemesters.status,
-                    error = studentWithSemesters.error
-                )
-            }
+        flowWithResource { studentRepository.getSavedStudentById(studentId ?: -1) }
+            .logStatus("loading account details view")
+            .withErrorHandler(errorHandler)
             .onEach {
-                when (it.status) {
-                    Status.LOADING -> {
+                when (it) {
+                    is Resource.Loading -> {
                         view?.run {
                             showProgress(true)
                             showContent(false)
                         }
-                        Timber.i("Loading account details view started")
                     }
-                    Status.SUCCESS -> {
-                        Timber.i("Loading account details view result: Success")
+                    is Resource.Success -> {
                         studentWithSemesters = it.data
                         view?.run {
                             showAccountData(studentWithSemesters!!.student)
@@ -78,10 +72,7 @@ class AccountDetailsPresenter @Inject constructor(
                             showErrorView(false)
                         }
                     }
-                    Status.ERROR -> {
-                        Timber.i("Loading account details view result: An exception occurred")
-                        errorHandler.dispatch(it.error!!)
-                    }
+                    else -> Unit
                 }
             }
             .afterLoading { view?.showProgress(false) }
@@ -106,18 +97,10 @@ class AccountDetailsPresenter @Inject constructor(
         Timber.i("Select student ${studentWithSemesters!!.student.id}")
 
         flowWithResource { studentRepository.switchStudent(studentWithSemesters!!) }
-            .onEach {
-                when (it.status) {
-                    Status.LOADING -> Timber.i("Attempt to change a student")
-                    Status.SUCCESS -> {
-                        Timber.i("Change a student result: Success")
-                        view?.recreateMainView()
-                    }
-                    Status.ERROR -> {
-                        Timber.i("Change a student result: An exception occurred")
-                        errorHandler.dispatch(it.error!!)
-                    }
-                }
+            .logStatus("change student")
+            .withErrorHandler(errorHandler)
+            .onSuccess {
+                view?.recreateMainView()
             }.afterLoading {
                 view?.popViewToMain()
             }.launch("switch")
@@ -142,12 +125,12 @@ class AccountDetailsPresenter @Inject constructor(
             }
 
             return@flowWithResource students
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Attempt to logout user")
-                Status.SUCCESS -> view?.run {
+        }.logStatus("logout user")
+            .withErrorHandler(errorHandler)
+            .onSuccess {
+                view?.run {
                     when {
-                        it.data!!.isEmpty() -> {
+                        it.isEmpty() -> {
                             Timber.i("Logout result: Open login view")
                             syncManager.stopSyncWorker()
                             openClearLoginView()
@@ -162,18 +145,13 @@ class AccountDetailsPresenter @Inject constructor(
                         }
                     }
                 }
-                Status.ERROR -> {
-                    Timber.i("Logout result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
+            }.afterLoading {
+                if (studentWithSemesters?.student?.isCurrent == true) {
+                    view?.popViewToMain()
+                } else {
+                    view?.popViewToAccounts()
                 }
-            }
-        }.afterLoading {
-            if (studentWithSemesters?.student?.isCurrent == true) {
-                view?.popViewToMain()
-            } else {
-                view?.popViewToAccounts()
-            }
-        }.launch("logout")
+            }.launch("logout")
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

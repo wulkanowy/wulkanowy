@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.conference
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.data.repositories.ConferenceRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -10,6 +10,9 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.mapData
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -64,29 +67,28 @@ class ConferencePresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        Timber.i("Loading conference data started")
-
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             conferenceRepository.getConferences(student, semester, forceRefresh)
+        }.logStatus("load conference data").withErrorHandler(errorHandler).mapData {
+            it.sortedByDescending { conference -> conference.date }
         }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    if (!it.data.isNullOrEmpty()) {
+            when (it) {
+                is Resource.Intermediate -> {
+                    if (it.data.isNotEmpty()) {
                         view?.run {
                             enableSwipe(true)
                             showRefresh(true)
                             showProgress(false)
                             showContent(true)
-                            updateData(it.data.sortedByDescending { conference -> conference.date })
+                            updateData(it.data)
                         }
                     }
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Loading conference result: Success")
+                is Resource.Success -> {
                     view?.run {
-                        updateData(it.data!!.sortedByDescending { conference -> conference.date })
+                        updateData(it.data)
                         showContent(it.data.isNotEmpty())
                         showEmpty(it.data.isEmpty())
                         showErrorView(false)
@@ -94,12 +96,8 @@ class ConferencePresenter @Inject constructor(
                     analytics.logEvent(
                         "load_data",
                         "type" to "conferences",
-                        "items" to it.data!!.size
+                        "items" to it.data.size
                     )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading conference result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
                 }
             }
         }.afterLoading {

@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.note
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.repositories.NoteRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -11,6 +11,9 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.mapData
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -51,29 +54,26 @@ class NotePresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        Timber.i("Loading note data started")
-
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             noteRepository.getNotes(student, semester, forceRefresh)
+        }.logStatus("load note data").withErrorHandler(errorHandler).mapData {
+            it.sortedByDescending { note -> note.date }
         }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    if (!it.data.isNullOrEmpty()) {
-                        view?.run {
-                            enableSwipe(true)
-                            showRefresh(true)
-                            showProgress(false)
-                            showContent(true)
-                            updateData(it.data.sortedByDescending { item -> item.date })
-                        }
+            when (it) {
+                is Resource.Intermediate -> {
+                    view?.apply {
+                        enableSwipe(true)
+                        showRefresh(true)
+                        showProgress(false)
+                        showContent(true)
+                        updateData(it.data)
                     }
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Loading note result: Success")
+                is Resource.Success -> {
                     view?.apply {
-                        updateData(it.data!!.sortedByDescending { item -> item.date })
+                        updateData(it.data)
                         showEmpty(it.data.isEmpty())
                         showErrorView(false)
                         showContent(it.data.isNotEmpty())
@@ -81,12 +81,8 @@ class NotePresenter @Inject constructor(
                     analytics.logEvent(
                         "load_data",
                         "type" to "note",
-                        "items" to it.data!!.size
+                        "items" to it.data.size
                     )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading note result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
                 }
             }
         }.afterLoading {
@@ -124,12 +120,12 @@ class NotePresenter @Inject constructor(
     private fun updateNote(note: Note) {
         flowWithResource { noteRepository.updateNote(note) }
             .onEach {
-                when (it.status) {
-                    Status.LOADING -> Timber.i("Attempt to update note ${note.id}")
-                    Status.SUCCESS -> Timber.i("Update note result: Success")
-                    Status.ERROR -> {
+                when (it) {
+                    is Resource.Loading -> Timber.i("Attempt to update note ${note.id}")
+                    is Resource.Success -> Timber.i("Update note result: Success")
+                    is Resource.Error -> {
                         Timber.i("Update note result: An exception occurred")
-                        errorHandler.dispatch(it.error!!)
+                        errorHandler.dispatch(it.error)
                     }
                 }
             }

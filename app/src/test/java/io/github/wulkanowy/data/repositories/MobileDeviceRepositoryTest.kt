@@ -1,6 +1,8 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.dao.MobileDeviceDao
+import io.github.wulkanowy.data.errorOrNull
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
@@ -68,8 +70,8 @@ class MobileDeviceRepositoryTest {
         val res = runBlocking { mobileDeviceRepository.getDevices(student, semester, true).toFirstResult() }
 
         // verify
-        Assert.assertEquals(null, res.error)
-        Assert.assertEquals(2, res.data?.size)
+        Assert.assertEquals(null, res.errorOrNull)
+        Assert.assertEquals(2, res.dataOrNull?.size)
         coVerify { sdk.getRegisteredDevices() }
         coVerify { mobileDeviceDb.loadAll(1) }
         coVerify { mobileDeviceDb.insertAll(match { it.isEmpty() }) }
@@ -92,8 +94,8 @@ class MobileDeviceRepositoryTest {
         val res = runBlocking { mobileDeviceRepository.getDevices(student, semester, true).toFirstResult() }
 
         // verify
-        Assert.assertEquals(null, res.error)
-        Assert.assertEquals(2, res.data?.size)
+        Assert.assertEquals(null, res.errorOrNull)
+        Assert.assertEquals(2, res.dataOrNull?.size)
         coVerify { sdk.getRegisteredDevices() }
         coVerify { mobileDeviceDb.loadAll(1) }
         coVerify {
@@ -120,8 +122,8 @@ class MobileDeviceRepositoryTest {
         val res = runBlocking { mobileDeviceRepository.getDevices(student, semester, true).toFirstResult() }
 
         // verify
-        Assert.assertEquals(null, res.error)
-        Assert.assertEquals(1, res.data?.size)
+        Assert.assertEquals(null, res.errorOrNull)
+        Assert.assertEquals(1, res.dataOrNull?.size)
         coVerify { sdk.getRegisteredDevices() }
         coVerify { mobileDeviceDb.loadAll(1) }
         coVerify { mobileDeviceDb.insertAll(match { it.isEmpty() }) }

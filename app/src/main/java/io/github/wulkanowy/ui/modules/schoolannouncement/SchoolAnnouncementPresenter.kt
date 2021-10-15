@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.schoolannouncement
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.data.repositories.SchoolAnnouncementRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -9,6 +9,8 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -52,16 +54,14 @@ class SchoolAnnouncementPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        Timber.i("Loading School announcement data started")
-
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             schoolAnnouncementRepository.getSchoolAnnouncements(student, forceRefresh)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    if (!it.data.isNullOrEmpty()) {
-                        view?.run {
+        }.logStatus("load school announcement").onEach {
+            when (it) {
+                is Resource.Intermediate -> {
+                    if (it.data.isNotEmpty()) {
+                        view?.apply {
                             enableSwipe(true)
                             showRefresh(true)
                             showErrorView(false)
@@ -71,22 +71,17 @@ class SchoolAnnouncementPresenter @Inject constructor(
                         }
                     }
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Loading School announcement result: Success")
+                is Resource.Success -> {
                     view?.apply {
-                        updateData(it.data!!)
+                        updateData(it.data)
                         showEmpty(it.data.isEmpty())
                         showErrorView(false)
                         showContent(it.data.isNotEmpty())
                     }
                     analytics.logEvent(
                         "load_school_announcement",
-                        "items" to it.data!!.size
+                        "items" to it.data.size
                     )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading School announcement result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
                 }
             }
         }.afterLoading {
@@ -95,7 +90,7 @@ class SchoolAnnouncementPresenter @Inject constructor(
                 showProgress(false)
                 enableSwipe(true)
             }
-        }.launch()
+        }.withErrorHandler(errorHandler).launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

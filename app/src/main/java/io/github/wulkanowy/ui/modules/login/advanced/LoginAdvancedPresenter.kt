@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.login.advanced
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.sdk.Sdk
@@ -10,6 +10,7 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
+import io.github.wulkanowy.utils.logStatus
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -126,29 +127,29 @@ class LoginAdvancedPresenter @Inject constructor(
     fun onSignInClick() {
         if (!validateCredentials()) return
 
-        flowWithResource { getStudentsAppropriatesToLoginType() }.onEach {
-            when (it.status) {
-                Status.LOADING -> view?.run {
-                    Timber.i("Login started")
+        flowWithResource { getStudentsAppropriatesToLoginType() }
+            .logStatus("login")
+            .onEach {
+            when (it) {
+                is Resource.Loading -> view?.run {
                     hideSoftKeyboard()
                     showProgress(true)
                     showContent(false)
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Login result: Success")
-                    analytics.logEvent("registration_form",
+                is Resource.Success -> {
+                    analytics.logEvent(
+                        "registration_form",
                         "success" to true,
-                        "students" to it.data!!.size,
+                        "students" to it.data.size,
                         "error" to "No error"
                     )
                     view?.notifyParentAccountLogged(it.data)
                 }
-                Status.ERROR -> {
-                    Timber.i("Login result: An exception occurred")
+                is Resource.Error -> {
                     analytics.logEvent(
                         "registration_form",
                         "success" to false, "students" to -1,
-                        "error" to it.error!!.message.ifNullOrBlank { "No message" }
+                        "error" to it.error.message.ifNullOrBlank { "No message" }
                     )
                     loginErrorHandler.dispatch(it.error)
                 }

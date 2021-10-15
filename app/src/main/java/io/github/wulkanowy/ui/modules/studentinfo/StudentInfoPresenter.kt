@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.studentinfo
 
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.StudentInfo
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.StudentInfoRepository
@@ -11,7 +10,9 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getCurrentOrLast
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -79,38 +80,29 @@ class StudentInfoPresenter @Inject constructor(
                 semester = semester,
                 forceRefresh = forceRefresh
             )
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Loading student info $infoType started")
-                Status.SUCCESS -> {
-                    val isFamily = infoType == StudentInfoView.Type.FAMILY
-                    val isFirstGuardianEmpty = it.data?.firstGuardian == null
-                    val isSecondGuardianEmpty = it.data?.secondGuardian == null
-
-                    if (it.data != null && !(isFamily && isFirstGuardianEmpty && isSecondGuardianEmpty)) {
-                        Timber.i("Loading student info $infoType result: Success")
-                        showCorrectData(it.data)
-                        view?.run {
-                            showContent(true)
-                            showEmpty(false)
-                            showErrorView(false)
-                        }
-                        analytics.logEvent("load_item", "type" to "student_info")
-                    } else {
-                        Timber.i("Loading student info $infoType result: No student or family info found")
-                        view?.run {
-                            showContent(!isViewEmpty)
-                            showEmpty(isViewEmpty)
-                            showErrorView(false)
-                        }
+        }.logStatus("load student info $infoType").withErrorHandler(errorHandler)
+            .onSuccess {
+                val isFamily = infoType == StudentInfoView.Type.FAMILY
+                val isFirstGuardianEmpty = it?.firstGuardian == null
+                val isSecondGuardianEmpty = it?.secondGuardian == null
+                if (it != null && !(isFamily && isFirstGuardianEmpty && isSecondGuardianEmpty)) {
+                    Timber.i("Loading student info $infoType result: Success")
+                    showCorrectData(it)
+                    view?.run {
+                        showContent(true)
+                        showEmpty(false)
+                        showErrorView(false)
+                    }
+                    analytics.logEvent("load_item", "type" to "student_info")
+                } else {
+                    Timber.i("Loading student info $infoType result: No student or family info found")
+                    view?.run {
+                        showContent(!isViewEmpty)
+                        showEmpty(isViewEmpty)
+                        showErrorView(false)
                     }
                 }
-                Status.ERROR -> {
-                    Timber.i("Loading student info $infoType result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
-            }
-        }.afterLoading {
+            }.afterLoading {
             view?.run {
                 hideRefresh()
                 showProgress(false)

@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetable.additional
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
@@ -13,10 +12,13 @@ import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
+import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -105,28 +107,18 @@ class AdditionalLessonsPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             timetableRepository.getTimetable(student, semester, date, date, forceRefresh, true)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Loading additional lessons data started")
-                Status.SUCCESS -> {
-                    Timber.i("Loading additional lessons lessons result: Success")
-                    view?.apply {
-                        updateData(it.data!!.additional.sortedBy { item -> item.date })
-                        showEmpty(it.data.additional.isEmpty())
-                        showErrorView(false)
-                        showContent(it.data.additional.isNotEmpty())
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "additional_lessons",
-                        "items" to it.data!!.additional.size
-                    )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading additional lessons result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
+        }.logStatus("load additional lessons").withErrorHandler(errorHandler).onSuccess {
+            view?.apply {
+                updateData(it.additional.sortedBy { item -> item.date })
+                showEmpty(it.additional.isEmpty())
+                showErrorView(false)
+                showContent(it.additional.isNotEmpty())
             }
+            analytics.logEvent(
+                "load_data",
+                "type" to "additional_lessons",
+                "items" to it.additional.size
+            )
         }.afterLoading {
             view?.run {
                 hideRefresh()

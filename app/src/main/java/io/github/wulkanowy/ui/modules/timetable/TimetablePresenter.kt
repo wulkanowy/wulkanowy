@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.timetable
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.enums.TimetableMode
 import io.github.wulkanowy.data.repositories.PreferencesRepository
@@ -16,10 +16,12 @@ import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -135,32 +137,30 @@ class TimetablePresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        Timber.i("Loading timetable data started")
-
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             timetableRepository.getTimetable(
                 student, semester, currentDate, currentDate, forceRefresh
             )
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    if (!it.data?.lessons.isNullOrEmpty()) {
+        }.logStatus("load timetable data").withErrorHandler(errorHandler).onEach {
+            when (it) {
+                is Resource.Intermediate -> {
+                    val lessons = it.data.lessons
+                    if (lessons.isNotEmpty()) {
                         view?.run {
                             enableSwipe(true)
                             showRefresh(true)
                             showErrorView(false)
                             showProgress(false)
                             showContent(true)
-                            updateData(it.data!!.lessons)
+                            updateData(lessons)
                         }
                     }
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Loading timetable result: Success")
+                is Resource.Success -> {
                     view?.apply {
-                        updateData(it.data!!.lessons)
+                        updateData(it.data.lessons)
                         showEmpty(it.data.lessons.isEmpty())
                         setDayHeaderMessage(it.data.headers.singleOrNull { header ->
                             header.date == currentDate
@@ -171,12 +171,8 @@ class TimetablePresenter @Inject constructor(
                     analytics.logEvent(
                         "load_data",
                         "type" to "timetable",
-                        "items" to it.data!!.lessons.size
+                        "items" to it.data.lessons.size
                     )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading timetable result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
                 }
             }
         }.afterLoading {

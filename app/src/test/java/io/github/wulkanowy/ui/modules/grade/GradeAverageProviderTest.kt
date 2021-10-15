@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.grade
 
 import io.github.wulkanowy.data.Resource
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Student
@@ -10,7 +10,9 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.sdk.Sdk
+import io.github.wulkanowy.utils.Status
 import io.github.wulkanowy.utils.flowWithResource
+import io.github.wulkanowy.utils.status
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -29,7 +31,7 @@ import java.time.LocalDateTime
 
 class GradeAverageProviderTest {
 
-    private suspend fun <T> Flow<Resource<T>>.getResult() = toList()[1].data!!
+    private suspend fun <T> Flow<Resource<T>>.getResult() = toList()[1].dataOrNull!!
 
     @MockK
     lateinit var preferencesRepository: PreferencesRepository
@@ -179,18 +181,18 @@ class GradeAverageProviderTest {
 
         with(items[0]) {
             assertEquals(Status.LOADING, status)
-            assertEquals(null, data)
+            assertEquals(null, dataOrNull)
         }
         with(items[1]) {
             assertEquals(Status.LOADING, status)
-            assertEquals(1, data!!.size)
+            assertEquals(1, dataOrNull?.size)
         }
         with(items[2]) {
             assertEquals(Status.SUCCESS, status)
-            assertEquals(1, data!!.size)
+            assertEquals(1, dataOrNull?.size)
         }
 
-        assertEquals(3.5, items[1].data?.single { it.subject == "Język polski" }!!.average, .0) // from details and after set custom plus/minus
+        assertEquals(3.5, items[1].dataOrNull?.single { it.subject == "Język polski" }?.average ?: 0.0, .0) // from details and after set custom plus/minus
     }
 
     @Test
@@ -214,14 +216,14 @@ class GradeAverageProviderTest {
 
         with(items[0]) {
             assertEquals(Status.LOADING, status)
-            assertEquals(null, data)
+            assertEquals(null, dataOrNull)
         }
         with(items[1]) {
             assertEquals(Status.SUCCESS, status)
-            assertEquals(1, data!!.size)
+            assertEquals(1, dataOrNull?.size)
         }
 
-        assertEquals(3.5, items[1].data?.single { it.subject == "Język polski" }!!.average, .0) // from details and after set custom plus/minus
+        assertEquals(3.5, items[1].dataOrNull?.single { it.subject == "Język polski" }?.average ?: 0.0, .0) // from details and after set custom plus/minus
     }
 
     @Test
@@ -393,20 +395,20 @@ class GradeAverageProviderTest {
 
         with(items[0]) {
             assertEquals(Status.LOADING, status)
-            assertEquals(null, data)
+            assertEquals(null, dataOrNull)
         }
         with(items[1]) {
             assertEquals(Status.LOADING, status)
-            assertEquals(2, data!!.size)
+            assertEquals(2, dataOrNull?.size)
         }
         with(items[2]) {
             assertEquals(Status.SUCCESS, status)
-            assertEquals(2, data!!.size)
+            assertEquals(2, dataOrNull?.size)
         }
 
-        assertEquals(2, items[2].data!!.size)
-        assertEquals(3.5, items[2].data!!.single { it.subject == "Matematyka" }.average, .0) // (from summary): 3,5
-        assertEquals(3.5, items[2].data!!.single { it.subject == "Fizyka" }.average, .0) // (from summary): 3,5
+        assertEquals(2, items[2].dataOrNull?.size)
+        assertEquals(3.5, items[2].dataOrNull?.single { it.subject == "Matematyka" }?.average ?: 0.0, .0) // (from summary): 3,5
+        assertEquals(3.5, items[2].dataOrNull?.single { it.subject == "Fizyka" }?.average ?: 0.0, .0) // (from summary): 3,5
     }
 
     @Test
@@ -466,20 +468,20 @@ class GradeAverageProviderTest {
 
         with(items[0]) {
             assertEquals(Status.LOADING, status)
-            assertEquals(null, data)
+            assertEquals(null, dataOrNull)
         }
         with(items[1]) {
             assertEquals(Status.LOADING, status)
-            assertEquals(2, data!!.size)
+            assertEquals(2, dataOrNull?.size)
         }
         with(items[2]) {
             assertEquals(Status.SUCCESS, status)
-            assertEquals(2, data!!.size)
+            assertEquals(2, dataOrNull?.size)
         }
 
-        assertEquals(2, items[2].data!!.size)
-        assertEquals(3.25, items[2].data!!.single { it.subject == "Matematyka" }.average, .0) // (from summaries ↑): 3,0 + 3,5 → 3,25
-        assertEquals(3.75, items[2].data!!.single { it.subject == "Fizyka" }.average, .0) // (from summaries ↑): 3,5 + 4,0 → 3,75
+        assertEquals(2, items[2].dataOrNull?.size)
+        assertEquals(3.25, items[2].dataOrNull?.single { it.subject == "Matematyka" }?.average ?: 0.0, .0) // (from summaries ↑): 3,0 + 3,5 → 3,25
+        assertEquals(3.75, items[2].dataOrNull?.single { it.subject == "Fizyka" }?.average ?: 0.0, .0) // (from summaries ↑): 3,5 + 4,0 → 3,75
     }
 
     @Test
@@ -586,20 +588,20 @@ class GradeAverageProviderTest {
 
         with(items[0]) {
             assertEquals(Status.LOADING, status)
-            assertEquals(null, data)
+            assertEquals(null, dataOrNull)
         }
         with(items[1]) {
             assertEquals(Status.LOADING, status)
-            assertEquals(2, data!!.size)
+            assertEquals(2, dataOrNull?.size)
         }
         with(items[2]) {
             assertEquals(Status.SUCCESS, status)
-            assertEquals(2, data!!.size)
+            assertEquals(2, dataOrNull?.size)
         }
 
-        assertEquals(2, items[2].data!!.size)
-        assertEquals(3.0, items[2].data!!.single { it.subject == "Matematyka" }.average, .0) // (from details): 3,5 + 2,5 → 3,0
-        assertEquals(3.25, items[2].data!!.single { it.subject == "Fizyka" }.average, .0) // (from details): 3,5  + 3,0 → 3,25
+        assertEquals(2, items[2].dataOrNull?.size)
+        assertEquals(3.0, items[2].dataOrNull?.single { it.subject == "Matematyka" }?.average ?: 0.0, .0) // (from details): 3,5 + 2,5 → 3,0
+        assertEquals(3.25, items[2].dataOrNull?.single { it.subject == "Fizyka" }?.average ?: 0.0, .0) // (from details): 3,5  + 3,0 → 3,25
     }
 
     @Test

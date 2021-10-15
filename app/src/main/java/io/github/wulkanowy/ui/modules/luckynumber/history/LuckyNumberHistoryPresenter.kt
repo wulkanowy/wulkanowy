@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.luckynumber.history
 
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -11,10 +10,13 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.monday
+import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -64,36 +66,26 @@ class LuckyNumberHistoryPresenter @Inject constructor(
         flowWithResource {
             val student = studentRepository.getCurrentStudent()
             luckyNumberRepository.getLuckyNumberHistory(student, currentDate.monday, currentDate.sunday)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Loading lucky number history started")
-                Status.SUCCESS -> {
-                    if (!it.data?.first().isNullOrEmpty()) {
-                        Timber.i("Loading lucky number result: Success")
-                        view?.apply {
-                            updateData(it.data!!.first())
-                            showContent(true)
-                            showEmpty(false)
-                            showErrorView(false)
-                            showProgress(false)
-                        }
-                        analytics.logEvent(
-                            "load_items",
-                            "type" to "lucky_number_history",
-                            "numbers" to it.data
-                        )
-                    } else {
-                        Timber.i("Loading lucky number history result: No lucky numbers found")
-                        view?.run {
-                            showContent(false)
-                            showEmpty(true)
-                            showErrorView(false)
-                        }
-                    }
+        }.logStatus("load lucky number history").withErrorHandler(errorHandler).onSuccess {
+            val first = it.first()
+            if (!first.isNullOrEmpty()) {
+                view?.apply {
+                    updateData(first)
+                    showContent(true)
+                    showEmpty(false)
+                    showErrorView(false)
+                    showProgress(false)
                 }
-                Status.ERROR -> {
-                    Timber.i("Loading lucky number history result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
+                analytics.logEvent(
+                    "load_items",
+                    "type" to "lucky_number_history",
+                    "numbers" to it
+                )
+            } else {
+                view?.run {
+                    showContent(false)
+                    showEmpty(true)
+                    showErrorView(false)
                 }
             }
         }.afterLoading {

@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.base
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.utils.flowWithResource
 import kotlinx.coroutines.CoroutineScope
@@ -47,15 +47,15 @@ open class BasePresenter<T : BaseView>(
                 studentRepository.switchStudent(students[0])
             }
         }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Attempt to switch the student after the session expires")
-                Status.SUCCESS -> {
+            when (it) {
+                is Resource.Loading -> Timber.i("Attempt to switch the student after the session expires")
+                is Resource.Success -> {
                     Timber.i("Switch student result: Open login view")
                     view?.openClearLoginView()
                 }
-                Status.ERROR -> {
+                is Resource.Error -> {
                     Timber.i("Switch student result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
+                    errorHandler.dispatch(it.error)
                 }
             }
         }.launch("expired")

@@ -9,7 +9,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.HiltBroadcastReceiver
@@ -19,11 +18,11 @@ import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.getCompatColor
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.toLocalDateTime
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -64,8 +63,8 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
             val studentId = intent.getIntExtra(STUDENT_ID, 0)
             if (student.studentId == studentId) prepareNotification(context, intent)
             else Timber.d("Notification studentId($studentId) differs from current(${student.studentId})")
-        }.onEach {
-            if (it.status == Status.ERROR) Timber.e(it.error!!)
+        }.onError {
+            Timber.e(it)
         }.launchIn(GlobalScope)
     }
 

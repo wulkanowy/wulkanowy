@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.about.license
 
 import com.mikepenz.aboutlibraries.entity.Library
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -35,10 +35,10 @@ class LicensePresenter @Inject constructor(
                 view?.appLibraries.orEmpty()
             }
         }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.d("License data load started")
-                Status.SUCCESS -> view?.updateData(it.data!!)
-                Status.ERROR -> errorHandler.dispatch(it.error!!)
+            when (it) {
+                is Resource.Loading -> Timber.d("License data load started")
+                is Resource.Success -> view?.updateData(it.data)
+                is Resource.Error -> errorHandler.dispatch(it.error)
             }
         }.afterLoading {
             view?.showProgress(false)

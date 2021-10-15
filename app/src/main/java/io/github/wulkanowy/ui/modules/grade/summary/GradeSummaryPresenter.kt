@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.grade.summary
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -10,6 +10,10 @@ import io.github.wulkanowy.ui.modules.grade.GradeSubject
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.mapData
+import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -37,56 +41,51 @@ class GradeSummaryPresenter @Inject constructor(
     }
 
     private fun loadData(semesterId: Int, forceRefresh: Boolean) {
-        Timber.i("Loading grade summary started")
-
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
-        }.onEach {
-            Timber.d("Loading grade summary status: ${it.status}, data: ${it.data != null}")
-            when (it.status) {
-                Status.LOADING -> {
-                    val items = createGradeSummaryItems(it.data.orEmpty())
-                    if (items.isNotEmpty()) {
-                        Timber.i("Loading grade summary result: load cached data")
+        }
+            .logStatus("load grade summary", showData = true)
+            .withErrorHandler(errorHandler)
+            .onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "grade_summary",
+                    "items" to it.size
+                )
+            }.mapData {
+                createGradeSummaryItems(it)
+            }.onEach {
+                when (it) {
+                    is Resource.Intermediate -> {
+                        if (it.data.isNotEmpty()) {
+                            view?.run {
+                                enableSwipe(true)
+                                showRefresh(true)
+                                showProgress(false)
+                                showEmpty(false)
+                                showContent(true)
+                                updateData(it.data)
+                            }
+                        }
+                    }
+                    is Resource.Success -> {
                         view?.run {
-                            enableSwipe(true)
-                            showRefresh(true)
-                            showProgress(false)
-                            showEmpty(false)
-                            showContent(true)
-                            updateData(items)
+                            showEmpty(it.data.isEmpty())
+                            showContent(it.data.isNotEmpty())
+                            showErrorView(false)
+                            updateData(it.data)
                         }
                     }
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Loading grade summary result: Success")
-                    val items = createGradeSummaryItems(it.data!!)
-                    view?.run {
-                        showEmpty(items.isEmpty())
-                        showContent(items.isNotEmpty())
-                        showErrorView(false)
-                        updateData(items)
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "grade_summary",
-                        "items" to it.data.size
-                    )
+            }.afterLoading {
+                view?.run {
+                    showRefresh(false)
+                    showProgress(false)
+                    enableSwipe(true)
+                    notifyParentDataLoaded(semesterId)
                 }
-                Status.ERROR -> {
-                    Timber.i("Loading grade summary result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
-            }
-        }.afterLoading {
-            view?.run {
-                showRefresh(false)
-                showProgress(false)
-                enableSwipe(true)
-                notifyParentDataLoaded(semesterId)
-            }
-        }.launch()
+            }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

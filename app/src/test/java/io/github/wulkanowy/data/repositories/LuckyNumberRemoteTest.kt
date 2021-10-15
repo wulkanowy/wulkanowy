@@ -1,6 +1,8 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.dao.LuckyNumberDao
+import io.github.wulkanowy.data.errorOrNull
 import io.github.wulkanowy.data.mappers.mapToEntity
 import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
@@ -58,8 +60,8 @@ class LuckyNumberRemoteTest {
         val res = runBlocking { luckyNumberRepository.getLuckyNumber(student, true).toFirstResult() }
 
         // verify
-        assertEquals(null, res.error)
-        assertEquals(luckyNumber.number, res.data?.luckyNumber)
+        assertEquals(null, res.errorOrNull)
+        assertEquals(luckyNumber.number, res.dataOrNull?.luckyNumber)
         coVerify { sdk.getLuckyNumber(student.schoolShortName) }
         coVerify { luckyNumberDb.load(1, date) }
         coVerify(exactly = 0) { luckyNumberDb.insertAll(any()) }
@@ -82,8 +84,8 @@ class LuckyNumberRemoteTest {
         val res = runBlocking { luckyNumberRepository.getLuckyNumber(student, true).toFirstResult() }
 
         // verify
-        assertEquals(null, res.error)
-        assertEquals(luckyNumber.number, res.data?.luckyNumber)
+        assertEquals(null, res.errorOrNull)
+        assertEquals(luckyNumber.number, res.dataOrNull?.luckyNumber)
         coVerify { sdk.getLuckyNumber(student.schoolShortName) }
         coVerify { luckyNumberDb.load(1, date) }
         coVerify {
@@ -112,8 +114,8 @@ class LuckyNumberRemoteTest {
         val res = runBlocking { luckyNumberRepository.getLuckyNumber(student, true).toFirstResult() }
 
         // verify
-        assertEquals(null, res.error)
-        assertEquals(luckyNumber.number, res.data?.luckyNumber)
+        assertEquals(null, res.errorOrNull)
+        assertEquals(luckyNumber.number, res.dataOrNull?.luckyNumber)
         coVerify { sdk.getLuckyNumber(student.schoolShortName) }
         coVerify { luckyNumberDb.load(1, date) }
         coVerify {

@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.account.accountedit
 
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -9,7 +8,9 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,18 +41,8 @@ class AccountEditPresenter @Inject constructor(
     private fun loadData() {
         flowWithResource {
             studentRepository.getStudentById(student.id, false).avatarColor
-        }.onEach { resource ->
-            when (resource.status) {
-                Status.LOADING -> Timber.i("Attempt to load student")
-                Status.SUCCESS -> {
-                    view?.updateSelectedColorData(resource.data?.toInt()!!)
-                    Timber.i("Attempt to load student: Success")
-                }
-                Status.ERROR -> {
-                    Timber.i("Attempt to load student: An exception occurred")
-                    errorHandler.dispatch(resource.error!!)
-                }
-            }
+        }.logStatus("load student").withErrorHandler(errorHandler).onSuccess {
+            view?.updateSelectedColorData(it.toInt())
         }.launch("load_data")
     }
 
@@ -61,19 +52,10 @@ class AccountEditPresenter @Inject constructor(
                 StudentNickAndAvatar(nick = nick.trim(), avatarColor = avatarColor.toLong())
                     .apply { id = student.id }
             studentRepository.updateStudentNickAndAvatar(studentNick)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Attempt to change a student nick and avatar")
-                Status.SUCCESS -> {
-                    Timber.i("Change a student nick and avatar result: Success")
-                    view?.recreateMainView()
-                }
-                Status.ERROR -> {
-                    Timber.i("Change a student nick and avatar result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
+        }.logStatus("change student nick and avatar").withErrorHandler(errorHandler)
+            .onSuccess {
+                view?.recreateMainView()
             }
-        }
             .afterLoading { view?.popView() }
             .launch("update_student")
     }

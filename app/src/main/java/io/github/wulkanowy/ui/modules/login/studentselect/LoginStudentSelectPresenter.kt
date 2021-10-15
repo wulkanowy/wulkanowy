@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.login.studentselect
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -9,6 +9,7 @@ import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
+import io.github.wulkanowy.utils.logStatus
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.io.Serializable
@@ -75,15 +76,15 @@ class LoginStudentSelectPresenter @Inject constructor(
         this.students = studentsWithSemesters
 
         flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.d("Login student select students load started")
-                Status.SUCCESS -> view?.updateData(studentsWithSemesters.map { studentWithSemesters ->
-                    studentWithSemesters to it.data!!.any { item ->
+            when (it) {
+                is Resource.Loading -> Timber.d("Login student select students load started")
+                is Resource.Success -> view?.updateData(studentsWithSemesters.map { studentWithSemesters ->
+                    studentWithSemesters to it.data.any { item ->
                         compareStudents(studentWithSemesters.student, item.student)
                     }
                 })
-                Status.ERROR -> {
-                    errorHandler.dispatch(it.error!!)
+                is Resource.Error -> {
+                    errorHandler.dispatch(it.error)
                     lastError = it.error
                     view?.updateData(studentsWithSemesters.map { student -> student to false })
                 }
@@ -98,27 +99,25 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     private fun registerStudents(studentsWithSemesters: List<StudentWithSemesters>) {
         flowWithResource { studentRepository.saveStudents(studentsWithSemesters) }
+            .logStatus("registration")
             .onEach {
-                when (it.status) {
-                    Status.LOADING -> view?.run {
-                        Timber.i("Registration started")
+                when (it) {
+                    is Resource.Loading -> view?.run {
                         showProgress(true)
                         showContent(false)
                     }
-                    Status.SUCCESS -> {
-                        Timber.i("Registration result: Success")
+                    is Resource.Success -> {
                         view?.openMainView()
                         logRegisterEvent(studentsWithSemesters)
                     }
-                    Status.ERROR -> {
-                        Timber.i("Registration result: An exception occurred ")
+                    is Resource.Error -> {
                         view?.apply {
                             showProgress(false)
                             showContent(true)
                             showContact(true)
                         }
                         lastError = it.error
-                        loginErrorHandler.dispatch(it.error!!)
+                        loginErrorHandler.dispatch(it.error)
                         logRegisterEvent(studentsWithSemesters, it.error)
                     }
                 }

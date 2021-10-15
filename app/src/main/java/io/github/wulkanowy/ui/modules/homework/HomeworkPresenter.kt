@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.homework
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -12,8 +12,10 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
+import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.flow.catch
@@ -104,37 +106,46 @@ class HomeworkPresenter @Inject constructor(
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            homeworkRepository.getHomework(student, semester, currentDate, currentDate, forceRefresh)
+            homeworkRepository.getHomework(
+                student,
+                semester,
+                currentDate,
+                currentDate,
+                forceRefresh
+            )
+        }.onSuccess {
+            analytics.logEvent(
+                "load_data",
+                "type" to "homework",
+                "items" to it.size
+            )
+        }.mapData {
+            createHomeworkItem(it)
         }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    if (!it.data.isNullOrEmpty()) {
+            when (it) {
+                is Resource.Intermediate -> {
+                    if (it.data.isNotEmpty()) {
                         view?.run {
                             enableSwipe(true)
                             showRefresh(true)
                             showProgress(false)
                             showContent(true)
-                            updateData(createHomeworkItem(it.data))
+                            updateData(it.data)
                         }
                     }
                 }
-                Status.SUCCESS -> {
+                is Resource.Success -> {
                     Timber.i("Loading homework result: Success")
                     view?.apply {
-                        updateData(createHomeworkItem(it.data!!))
+                        updateData(it.data)
                         showEmpty(it.data.isEmpty())
                         showErrorView(false)
                         showContent(it.data.isNotEmpty())
                     }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "homework",
-                        "items" to it.data!!.size
-                    )
                 }
-                Status.ERROR -> {
+                is Resource.Error -> {
                     Timber.i("Loading homework result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
+                    errorHandler.dispatch(it.error)
                 }
             }
         }.afterLoading {

@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.homework.details
 
-import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.repositories.HomeworkRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
@@ -9,7 +8,9 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.flowWithResource
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,38 +35,25 @@ class HomeworkDetailsPresenter @Inject constructor(
     }
 
     fun deleteHomework(homework: Homework) {
-        flowWithResource { homeworkRepository.deleteHomework(homework) }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Homework delete start")
-                Status.SUCCESS -> {
-                    Timber.i("Homework delete: Success")
-                    view?.run {
-                        showMessage(homeworkDeleteSuccess)
-                        closeDialog()
-                    }
+        flowWithResource { homeworkRepository.deleteHomework(homework) }
+            .logStatus("homework delete")
+            .withErrorHandler(errorHandler)
+            .onSuccess {
+                view?.run {
+                    showMessage(homeworkDeleteSuccess)
+                    closeDialog()
                 }
-                Status.ERROR -> {
-                    Timber.i("Homework delete result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
-            }
-        }.launch("delete")
+            }.launch("delete")
     }
 
     fun toggleDone(homework: Homework) {
-        flowWithResource { homeworkRepository.toggleDone(homework) }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Homework details update start")
-                Status.SUCCESS -> {
-                    Timber.i("Homework details update: Success")
-                    view?.updateMarkAsDoneLabel(homework.isDone)
-                    analytics.logEvent("homework_mark_as_done")
-                }
-                Status.ERROR -> {
-                    Timber.i("Homework details update result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
+        flowWithResource { homeworkRepository.toggleDone(homework) }
+            .logStatus("homework details update")
+            .withErrorHandler(errorHandler)
+            .onSuccess {
+                view?.updateMarkAsDoneLabel(homework.isDone)
+                analytics.logEvent("homework_mark_as_done")
             }
-        }.launch("toggle")
+            .launch("toggle")
     }
 }

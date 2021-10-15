@@ -1,8 +1,10 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.dao.TimetableHeaderDao
+import io.github.wulkanowy.data.errorOrNull
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
@@ -95,8 +97,8 @@ class TimetableRepositoryTest {
         val res = runBlocking { timetableRepository.getTimetable(student, semester, startDate, endDate, true).toFirstResult() }
 
         // verify
-        assertEquals(null, res.error)
-        assertEquals(2, res.data?.lessons?.size)
+        assertEquals(null, res.errorOrNull)
+        assertEquals(2, res.dataOrNull!!.lessons.size)
         coVerify { sdk.getTimetableFull(startDate, endDate) }
         coVerify { timetableDb.loadAll(1, 1, startDate, endDate) }
         coVerify { timetableDb.insertAll(match { it.isEmpty() }) }

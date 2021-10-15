@@ -1,6 +1,8 @@
 package io.github.wulkanowy.data.repositories
 
+import io.github.wulkanowy.data.dataOrNull
 import io.github.wulkanowy.data.db.dao.AttendanceDao
+import io.github.wulkanowy.data.errorOrNull
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
@@ -73,8 +75,8 @@ class AttendanceRepositoryTest {
         val res = runBlocking { attendanceRepository.getAttendance(student, semester, startDate, endDate, true).toFirstResult() }
 
         // verify
-        assertEquals(null, res.error)
-        assertEquals(2, res.data?.size)
+        assertEquals(null, res.errorOrNull)
+        assertEquals(2, res.dataOrNull?.size)
         coVerify { sdk.getAttendance(startDate, endDate, 1) }
         coVerify { attendanceDb.loadAll(1, 1, startDate, endDate) }
         coVerify { attendanceDb.insertAll(match { it.isEmpty() }) }
@@ -97,8 +99,8 @@ class AttendanceRepositoryTest {
         val res = runBlocking { attendanceRepository.getAttendance(student, semester, startDate, endDate, true).toFirstResult() }
 
         // verify
-        assertEquals(null, res.error)
-        assertEquals(2, res.data?.size)
+        assertEquals(null, res.errorOrNull)
+        assertEquals(2, res.dataOrNull?.size)
         coVerify { sdk.getAttendance(startDate, endDate, 1) }
         coVerify { attendanceDb.loadAll(1, 1, startDate, endDate) }
         coVerify {
@@ -125,8 +127,8 @@ class AttendanceRepositoryTest {
         val res = runBlocking { attendanceRepository.getAttendance(student, semester, startDate, endDate, true).toFirstResult() }
 
         // verify
-        assertEquals(null, res.error)
-        assertEquals(1, res.data?.size)
+        assertEquals(null, res.errorOrNull)
+        assertEquals(1, res.dataOrNull?.size)
         coVerify { sdk.getAttendance(startDate, endDate, 1) }
         coVerify { attendanceDb.loadAll(1, 1, startDate, endDate) }
         coVerify { attendanceDb.insertAll(match { it.isEmpty() }) }

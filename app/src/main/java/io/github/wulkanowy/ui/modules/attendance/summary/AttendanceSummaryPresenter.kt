@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.attendance.summary
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.repositories.AttendanceSummaryRepository
@@ -12,6 +12,10 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
+import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.mapData
+import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.time.Month
@@ -75,8 +79,6 @@ class AttendanceSummaryPresenter @Inject constructor(
     }
 
     private fun loadData(subjectId: Int, forceRefresh: Boolean = false) {
-        Timber.i("Loading attendance summary data started")
-
         currentSubjectId = subjectId
 
         flowWithResourceIn {
@@ -89,38 +91,33 @@ class AttendanceSummaryPresenter @Inject constructor(
                 subjectId = subjectId,
                 forceRefresh = forceRefresh
             )
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    if (!it.data.isNullOrEmpty()) {
+        }.logStatus("load attendance summary").withErrorHandler(errorHandler).mapData(this::sortItems).onEach {
+            when (it) {
+                is Resource.Intermediate -> {
+                    if (it.data.isNotEmpty()) {
                         view?.run {
                             enableSwipe(true)
                             showRefresh(true)
                             showProgress(false)
                             showContent(true)
                             showErrorView(false)
-                            updateDataSet(sortItems(it.data))
+                            updateDataSet(it.data)
                         }
                     }
                 }
-                Status.SUCCESS -> {
-                    Timber.i("Loading attendance summary result: Success")
+                is Resource.Success -> {
                     view?.apply {
                         showErrorView(false)
-                        showEmpty(it.data!!.isEmpty())
+                        showEmpty(it.data.isEmpty())
                         showContent(it.data.isNotEmpty())
-                        updateDataSet(sortItems(it.data))
+                        updateDataSet(it.data)
                     }
                     analytics.logEvent(
                         "load_data",
                         "type" to "attendance_summary",
-                        "items" to it.data!!.size,
+                        "items" to it.data.size,
                         "item_id" to subjectId
                     )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading attendance summary result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
                 }
             }
         }.afterLoading {
@@ -152,23 +149,13 @@ class AttendanceSummaryPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             subjectRepository.getSubjects(student, semester)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Loading attendance summary subjects started")
-                Status.SUCCESS -> {
-                    subjects = it.data!!
-
-                    Timber.i("Loading attendance summary subjects result: Success")
-                    view?.run {
-                        view?.updateSubjects(ArrayList(it.data.map { subject -> subject.name }))
-                        showSubjects(true)
-                    }
+        }.logStatus("load attendance summary subjects")
+            .withErrorHandler(errorHandler).onSuccess {
+                subjects = it
+                view?.run {
+                    view?.updateSubjects(it.map { subject -> subject.name }.toList())
+                    showSubjects(true)
                 }
-                Status.ERROR -> {
-                    Timber.i("Loading attendance summary subjects result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
-                }
-            }
-        }.launch("subjects")
+            }.launch("subjects")
     }
 }
