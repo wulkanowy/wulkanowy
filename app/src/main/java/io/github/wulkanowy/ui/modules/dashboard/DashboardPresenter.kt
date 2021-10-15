@@ -248,25 +248,26 @@ class DashboardPresenter @Inject constructor(
             val semester = semesterRepository.getCurrentSemester(student)
             val selectedTiles = preferencesRepository.selectedDashboardTiles
 
+            val flowSuccess = flowOf(Resource.success(null))
             val luckyNumberFlow = luckyNumberRepository.getLuckyNumber(student, forceRefresh)
                 .mapData {
                     it ?: LuckyNumber(0, LocalDate.now(), 0)
                 }
-                .takeIf { DashboardItem.Tile.LUCKY_NUMBER in selectedTiles } ?: flowOf(null)
+                .takeIf { DashboardItem.Tile.LUCKY_NUMBER in selectedTiles } ?: flowSuccess
 
             val messageFLow = messageRepository.getMessages(
                 student = student,
                 semester = semester,
                 folder = MessageFolder.RECEIVED,
                 forceRefresh = forceRefresh
-            ).takeIf { DashboardItem.Tile.MESSAGES in selectedTiles } ?: flowOf(null)
+            ).takeIf { DashboardItem.Tile.MESSAGES in selectedTiles } ?: flowSuccess
 
             val attendanceFlow = attendanceSummaryRepository.getAttendanceSummary(
                 student = student,
                 semester = semester,
                 subjectId = -1,
                 forceRefresh = forceRefresh
-            ).takeIf { DashboardItem.Tile.ATTENDANCE in selectedTiles } ?: flowOf(null)
+            ).takeIf { DashboardItem.Tile.ATTENDANCE in selectedTiles } ?: flowSuccess
 
             emitAll(
                 combine(
@@ -274,16 +275,13 @@ class DashboardPresenter @Inject constructor(
                     messageFLow,
                     attendanceFlow
                 ) { luckyNumberResource, messageResource, attendanceResource ->
-                    val error =
-                        luckyNumberResource?.errorOrNull ?: messageResource?.errorOrNull ?: attendanceResource?.errorOrNull
-                    error?.let { throw it }
+                    val resList = listOf(luckyNumberResource, messageResource, attendanceResource)
+                    resList.firstNotNullOfOrNull { it.errorOrNull }?.let { throw it }
+                    val isLoading = resList.any { it.isLoading }
 
-                    val luckyNumber = luckyNumberResource?.dataOrNull?.luckyNumber
-                    val messageCount = messageResource?.dataOrNull?.count { it.unread }
-                    val attendancePercentage = attendanceResource?.dataOrNull?.calculatePercentage()
-
-                    val isLoading =
-                        luckyNumberResource.isLoading || messageResource.isLoading || attendanceResource.isLoading
+                    val luckyNumber = luckyNumberResource.dataOrNull?.luckyNumber
+                    val messageCount = messageResource.dataOrNull?.count { it.unread }
+                    val attendancePercentage = attendanceResource.dataOrNull?.calculatePercentage()
 
                     DashboardItem.HorizontalGroup(
                         isLoading = isLoading,
