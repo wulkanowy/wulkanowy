@@ -139,7 +139,7 @@ class GradeDetailsPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }
-            .logStatus("load grade details", showData = true)
+            .logStatus("load grade details")
             .withErrorHandler(errorHandler)
             .onEach {
                 when (it) {
