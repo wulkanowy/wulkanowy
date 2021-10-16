@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetable.completed
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.repositories.CompletedLessonsRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -17,6 +16,8 @@ import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
+import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.withErrorHandler
@@ -127,36 +128,26 @@ class CompletedLessonsPresenter @Inject constructor(
         }.logStatus("load completed lessons").withErrorHandler(errorHandler).mapData {
             it.sortedBy { lesson -> lesson.number }
         }.onEach {
-            when (it) {
-                is Resource.Intermediate -> {
-                    view?.apply {
-                        updateData(it.data)
-                        enableSwipe(true)
-                        showRefresh(true)
-                        showProgress(false)
-                        showContent(true)
-                    }
-                }
-                is Resource.Success -> {
-                    view?.apply {
-                        updateData(it.data)
-                        showEmpty(it.data.isEmpty())
-                        showErrorView(false)
-                        showContent(it.data.isNotEmpty())
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "completed_lessons",
-                        "items" to it.data.size
-                    )
-                }
+            view?.run {
+                enableSwipe(true)
+                showProgress(false)
+            }
+        }.onData {
+            view?.run {
+                showRefresh(true)
+                showErrorView(false)
+                showContent(it.isNotEmpty())
+                showEmpty(it.isEmpty())
+                updateData(it)
             }
         }.afterLoading {
-            view?.run {
-                showRefresh(false)
-                showProgress(false)
-                enableSwipe(true)
-            }
+            view?.showRefresh(false)
+        }.onSuccess {
+            analytics.logEvent(
+                "load_data",
+                "type" to "completed_lessons",
+                "items" to it.size
+            )
         }.launch()
     }
 

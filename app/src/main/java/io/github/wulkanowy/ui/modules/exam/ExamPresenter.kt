@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.exam
 
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.repositories.ExamRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -16,6 +15,7 @@ import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import io.github.wulkanowy.utils.onData
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
@@ -110,40 +110,30 @@ class ExamPresenter @Inject constructor(
                 currentDate.sunday,
                 forceRefresh
             )
-        }.logStatus("load exam data").withErrorHandler(errorHandler)
-            .onSuccess {
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "exam",
-                    "items" to it.size
-                )
-            }.mapData {
-                createExamItems(it)
-            }.onEach {
-                when (it) {
-                    is Resource.Intermediate -> view?.apply {
-                        enableSwipe(true)
-                        showRefresh(true)
-                        showProgress(false)
-                        showContent(it.data.isNotEmpty())
-                        updateData(it.data)
-                    }
-                    is Resource.Success -> {
-                        view?.apply {
-                            updateData(it.data)
-                            showEmpty(it.data.isEmpty())
-                            showErrorView(false)
-                            showContent(it.data.isNotEmpty())
-                        }
-                    }
-                }
-            }.afterLoading {
-                view?.run {
-                    showRefresh(false)
-                    showProgress(false)
-                    enableSwipe(true)
-                }
-            }.launch()
+        }.logStatus("load exam data").withErrorHandler(errorHandler).mapData {
+            createExamItems(it)
+        }.onEach {
+            view?.run {
+                enableSwipe(true)
+                showProgress(false)
+            }
+        }.onData {
+            view?.run {
+                showRefresh(true)
+                showErrorView(false)
+                showContent(it.isNotEmpty())
+                showEmpty(it.isEmpty())
+                updateData(it)
+            }
+        }.onSuccess {
+            analytics.logEvent(
+                "load_data",
+                "type" to "exam",
+                "items" to it.size
+            )
+        }.afterLoading {
+            view?.showRefresh(false)
+        }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

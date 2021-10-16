@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetable
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.enums.TimetableMode
 import io.github.wulkanowy.data.repositories.PreferencesRepository
@@ -19,6 +18,8 @@ import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
+import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.withErrorHandler
@@ -143,45 +144,30 @@ class TimetablePresenter @Inject constructor(
             timetableRepository.getTimetable(
                 student, semester, currentDate, currentDate, forceRefresh
             )
-        }.logStatus("load timetable data").withErrorHandler(errorHandler).onEach {
-            when (it) {
-                is Resource.Intermediate -> {
-                    val lessons = it.data.lessons
-                    if (lessons.isNotEmpty()) {
-                        view?.run {
-                            enableSwipe(true)
-                            showRefresh(true)
-                            showErrorView(false)
-                            showProgress(false)
-                            showContent(true)
-                            updateData(lessons)
-                        }
-                    }
+        }.logStatus("load timetable data").withErrorHandler(errorHandler)
+            .onEach {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
                 }
-                is Resource.Success -> {
-                    view?.apply {
-                        updateData(it.data.lessons)
-                        showEmpty(it.data.lessons.isEmpty())
-                        setDayHeaderMessage(it.data.headers.singleOrNull { header ->
-                            header.date == currentDate
-                        }?.content)
-                        showErrorView(false)
-                        showContent(it.data.lessons.isNotEmpty())
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "timetable",
-                        "items" to it.data.lessons.size
-                    )
+            }.onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    showContent(it.lessons.isNotEmpty())
+                    showEmpty(it.lessons.isEmpty())
+                    updateData(it.lessons)
+                    setDayHeaderMessage(it.headers.singleOrNull { header -> header.date == currentDate }?.content)
                 }
-            }
-        }.afterLoading {
-            view?.run {
-                showRefresh(false)
-                showProgress(false)
-                enableSwipe(true)
-            }
-        }.launch()
+            }.afterLoading {
+                view?.showRefresh(false)
+            }.onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "timetable",
+                    "items" to it.lessons.size
+                )
+            }.launch()
     }
 
     private fun updateData(lessons: List<Timetable>) {

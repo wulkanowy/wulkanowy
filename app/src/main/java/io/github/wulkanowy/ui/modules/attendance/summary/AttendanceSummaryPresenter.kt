@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.attendance.summary
 
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.repositories.AttendanceSummaryRepository
@@ -14,6 +13,7 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
+import io.github.wulkanowy.utils.onData
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
@@ -91,42 +91,34 @@ class AttendanceSummaryPresenter @Inject constructor(
                 subjectId = subjectId,
                 forceRefresh = forceRefresh
             )
-        }.logStatus("load attendance summary").withErrorHandler(errorHandler).mapData(this::sortItems).onEach {
-            when (it) {
-                is Resource.Intermediate -> {
-                    if (it.data.isNotEmpty()) {
-                        view?.run {
-                            enableSwipe(true)
-                            showRefresh(true)
-                            showProgress(false)
-                            showContent(true)
-                            showErrorView(false)
-                            updateDataSet(it.data)
-                        }
-                    }
-                }
-                is Resource.Success -> {
-                    view?.apply {
-                        showErrorView(false)
-                        showEmpty(it.data.isEmpty())
-                        showContent(it.data.isNotEmpty())
-                        updateDataSet(it.data)
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "attendance_summary",
-                        "items" to it.data.size,
-                        "item_id" to subjectId
-                    )
+        }
+            .logStatus("load attendance summary")
+            .withErrorHandler(errorHandler)
+            .mapData(this::sortItems)
+            .onEach {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
                 }
             }
-        }.afterLoading {
-            view?.run {
-                showRefresh(false)
-                showProgress(false)
-                enableSwipe(true)
-            }
-        }.launch()
+            .onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    updateDataSet(it)
+                }
+            }.onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "attendance_summary",
+                    "items" to it.size,
+                    "item_id" to subjectId
+                )
+            }.afterLoading {
+                view?.showRefresh(false)
+            }.launch()
     }
 
     private fun sortItems(items: List<AttendanceSummary>) = items.sortedByDescending { item ->

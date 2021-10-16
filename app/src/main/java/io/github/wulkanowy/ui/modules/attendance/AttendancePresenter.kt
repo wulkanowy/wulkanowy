@@ -20,6 +20,8 @@ import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.nextSchoolDay
+import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onLoading
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
@@ -244,35 +246,22 @@ class AttendancePresenter @Inject constructor(
                 } else {
                     it.filter { item -> !item.presence }
                 }.sortedBy { item -> item.number }
-            }.onEach {
-                when (it) {
-                    is Resource.Loading -> {
-                        view?.showExcuseButton(false)
-                        if (it is Resource.Intermediate && it.data.isNotEmpty()) {
-                            view?.run {
-                                enableSwipe(true)
-                                showRefresh(true)
-                                showProgress(false)
-                                showErrorView(false)
-                                showEmpty(it.data.isEmpty())
-                                showContent(it.data.isNotEmpty())
-                                updateData(it.data)
-                            }
-                        }
-                    }
-                    is Resource.Success -> {
-                        isVulcanExcusedFunctionEnabled =
-                            it.data.any { item -> item.excusable }
-                        view?.apply {
-                            updateData(it.data)
-                            showEmpty(it.data.isEmpty())
-                            showErrorView(false)
-                            showContent(it.data.isNotEmpty())
-                            val anyExcusables = it.data.any { it.isExcusableOrNotExcused }
-                            showExcuseButton(anyExcusables && (isParent || isVulcanExcusedFunctionEnabled))
-                        }
-                    }
+            }.onLoading {
+                view?.showExcuseButton(false)
+            }.onData {
+                view?.run {
+                    enableSwipe(true)
+                    showRefresh(true)
+                    showProgress(false)
+                    showErrorView(false)
+                    showEmpty(it.isEmpty())
+                    showContent(it.isNotEmpty())
+                    updateData(it)
                 }
+            }.onSuccess {
+                isVulcanExcusedFunctionEnabled = it.any { item -> item.excusable }
+                val anyExcusables = it.any { it.isExcusableOrNotExcused }
+                view?.showExcuseButton(anyExcusables && (isParent || isVulcanExcusedFunctionEnabled))
             }.afterLoading {
                 view?.run {
                     showRefresh(false)

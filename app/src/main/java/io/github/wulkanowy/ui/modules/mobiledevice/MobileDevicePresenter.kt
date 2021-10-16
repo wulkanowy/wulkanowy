@@ -12,6 +12,7 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onData
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
@@ -59,38 +60,29 @@ class MobileDevicePresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             mobileDeviceRepository.getDevices(student, semester, forceRefresh)
-        }.logStatus("load mobile devices data").withErrorHandler(errorHandler).onEach {
-            when (it) {
-                is Resource.Intermediate -> {
-                    view?.run {
-                        enableSwipe(true)
-                        showRefresh(true)
-                        showProgress(false)
-                        showContent(true)
-                        updateData(it.data)
-                    }
+        }.logStatus("load mobile devices data").withErrorHandler(errorHandler)
+            .onEach {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
                 }
-                is Resource.Success -> {
-                    view?.run {
-                        updateData(it.data)
-                        showContent(it.data.isNotEmpty())
-                        showEmpty(it.data.isEmpty())
-                        showErrorView(false)
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "devices",
-                        "items" to it.data.size
-                    )
+            }.onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    updateData(it)
                 }
-            }
-        }.afterLoading {
-            view?.run {
-                showRefresh(false)
-                showProgress(false)
-                enableSwipe(true)
-            }
-        }.launch()
+            }.onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "devices",
+                    "items" to it.size
+                )
+            }.afterLoading {
+                view?.showRefresh(false)
+            }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

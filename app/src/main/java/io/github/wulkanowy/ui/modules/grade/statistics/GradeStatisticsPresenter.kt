@@ -15,6 +15,7 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
+import io.github.wulkanowy.utils.onData
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
@@ -182,6 +183,7 @@ class GradeStatisticsPresenter @Inject constructor(
             }
         }
             .logStatus("load grade stats data")
+            .withErrorHandler(errorHandler)
             .onSuccess {
                 analytics.logEvent(
                     "load_data",
@@ -192,45 +194,23 @@ class GradeStatisticsPresenter @Inject constructor(
                 val isNoContent = checkIsNoContent(it, type)
                 if (isNoContent) emptyList() else it
             }.onEach {
-                when (it) {
-                    is Resource.Intermediate -> {
-                        view?.run {
-                            showEmpty(it.data.isEmpty())
-                            showErrorView(false)
-                            enableSwipe(true)
-                            showRefresh(true)
-                            showProgress(false)
-                            updateData(
-                                it.data,
-                                preferencesRepository.gradeColorTheme,
-                                preferencesRepository.showAllSubjectsOnStatisticsList
-                            )
-                            showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
-                        }
-                    }
-                    is Resource.Success -> {
-                        Timber.i("Loading grade stats result: Success")
-                        view?.run {
-                            showEmpty(it.data.isEmpty())
-                            showErrorView(false)
-                            updateData(
-                                it.data,
-                                preferencesRepository.gradeColorTheme,
-                                preferencesRepository.showAllSubjectsOnStatisticsList
-                            )
-                            showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
-                        }
-                    }
-                    is Resource.Error -> {
-                        Timber.i("Loading grade stats result: An exception occurred")
-                        errorHandler.dispatch(it.error)
-                    }
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
+                }
+            }.onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    //showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    updateData(it,
+                        preferencesRepository.gradeColorTheme,
+                        preferencesRepository.showAllSubjectsOnStatisticsList)
                 }
             }.afterLoading {
                 view?.run {
                     showRefresh(false)
-                    showProgress(false)
-                    enableSwipe(true)
                     notifyParentDataLoaded(semesterId)
                 }
             }.launch("load")

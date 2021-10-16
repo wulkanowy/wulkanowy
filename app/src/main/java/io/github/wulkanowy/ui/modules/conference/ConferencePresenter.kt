@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.conference
 
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.data.repositories.ConferenceRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -12,6 +11,8 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
+import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -74,38 +75,26 @@ class ConferencePresenter @Inject constructor(
         }.logStatus("load conference data").withErrorHandler(errorHandler).mapData {
             it.sortedByDescending { conference -> conference.date }
         }.onEach {
-            when (it) {
-                is Resource.Intermediate -> {
-                    if (it.data.isNotEmpty()) {
-                        view?.run {
-                            enableSwipe(true)
-                            showRefresh(true)
-                            showProgress(false)
-                            showContent(true)
-                            updateData(it.data)
-                        }
-                    }
-                }
-                is Resource.Success -> {
-                    view?.run {
-                        updateData(it.data)
-                        showContent(it.data.isNotEmpty())
-                        showEmpty(it.data.isEmpty())
-                        showErrorView(false)
-                    }
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "conferences",
-                        "items" to it.data.size
-                    )
-                }
-            }
-        }.afterLoading {
             view?.run {
-                showRefresh(false)
-                showProgress(false)
                 enableSwipe(true)
+                showProgress(false)
             }
+        }.onData {
+            view?.run {
+                showRefresh(true)
+                showErrorView(false)
+                showContent(it.isNotEmpty())
+                showEmpty(it.isEmpty())
+                updateData(it)
+            }
+        }.onSuccess {
+            analytics.logEvent(
+                "load_data",
+                "type" to "conferences",
+                "items" to it.size
+            )
+        }.afterLoading {
+            view?.showRefresh(false)
         }.launch()
     }
 }

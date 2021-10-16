@@ -12,6 +12,7 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
+import io.github.wulkanowy.utils.onData
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
@@ -56,33 +57,27 @@ class GradeSummaryPresenter @Inject constructor(
             }.mapData {
                 createGradeSummaryItems(it)
             }.onEach {
-                when (it) {
-                    is Resource.Intermediate -> {
-                        if (it.data.isNotEmpty()) {
-                            view?.run {
-                                enableSwipe(true)
-                                showRefresh(true)
-                                showProgress(false)
-                                showEmpty(false)
-                                showContent(true)
-                                updateData(it.data)
-                            }
-                        }
-                    }
-                    is Resource.Success -> {
-                        view?.run {
-                            showEmpty(it.data.isEmpty())
-                            showContent(it.data.isNotEmpty())
-                            showErrorView(false)
-                            updateData(it.data)
-                        }
-                    }
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
                 }
+            }.onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    updateData(it)
+                }
+            }.onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "conferences",
+                    "items" to it.size
+                )
             }.afterLoading {
                 view?.run {
                     showRefresh(false)
-                    showProgress(false)
-                    enableSwipe(true)
                     notifyParentDataLoaded(semesterId)
                 }
             }.launch()

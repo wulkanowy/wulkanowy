@@ -18,6 +18,7 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onData
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
@@ -142,52 +143,29 @@ class GradeDetailsPresenter @Inject constructor(
             .logStatus("load grade details")
             .withErrorHandler(errorHandler)
             .onEach {
-                when (it) {
-                    is Resource.Intermediate -> {
-                        val items = createGradeItems(it.data)
-                        if (items.isNotEmpty()) {
-                            view?.run {
-                                updateNewGradesAmount(it.data)
-                                enableSwipe(true)
-                                showRefresh(true)
-                                showProgress(false)
-                                showEmpty(false)
-                                showContent(true)
-                                updateData(
-                                    data = items,
-                                    expandMode = preferencesRepository.gradeExpandMode,
-                                    gradeColorTheme = preferencesRepository.gradeColorTheme
-                                )
-                                notifyParentDataLoaded(semesterId)
-                            }
-                        }
-                    }
-                    is Resource.Success -> {
-                        updateNewGradesAmount(it.data)
-                        updateMarkAsDoneButton()
-                        val items = createGradeItems(it.data)
-                        view?.run {
-                            showEmpty(items.isEmpty())
-                            showErrorView(false)
-                            showContent(items.isNotEmpty())
-                            updateData(
-                                data = items,
-                                expandMode = preferencesRepository.gradeExpandMode,
-                                gradeColorTheme = preferencesRepository.gradeColorTheme
-                            )
-                        }
-                        analytics.logEvent(
-                            "load_data",
-                            "type" to "grade_details",
-                            "items" to it.data.size
-                        )
-                    }
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
                 }
+            }.onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    updateNewGradesAmount(it)
+                    updateMarkAsDoneButton()
+                    updateData(data = createGradeItems(it), expandMode = preferencesRepository.gradeExpandMode, preferencesRepository.gradeColorTheme)
+                }
+            }.onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "grade_details",
+                    "items" to it.size
+                )
             }.afterLoading {
                 view?.run {
                     showRefresh(false)
-                    showProgress(false)
-                    enableSwipe(true)
                     notifyParentDataLoaded(semesterId)
                 }
             }.catch {
