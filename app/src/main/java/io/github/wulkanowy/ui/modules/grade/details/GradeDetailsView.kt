@@ -1,7 +1,7 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
 import io.github.wulkanowy.data.db.entities.Grade
-import io.github.wulkanowy.data.repositories.GradeExpandMode
+import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
 import io.github.wulkanowy.ui.base.BaseView
 
 interface GradeDetailsView : BaseView {

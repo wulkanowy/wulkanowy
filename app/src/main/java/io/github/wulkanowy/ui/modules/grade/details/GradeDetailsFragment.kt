@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
-import io.github.wulkanowy.data.repositories.GradeExpandMode
+import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
 import io.github.wulkanowy.databinding.FragmentGradeDetailsBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment

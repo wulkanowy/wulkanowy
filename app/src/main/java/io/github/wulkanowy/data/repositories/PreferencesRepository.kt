@@ -10,6 +10,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.sdk.toLocalDate
 import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
+import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
 import io.github.wulkanowy.ui.modules.grade.GradeSortingMode
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.github.wulkanowy.utils.toTimestamp
@@ -26,13 +27,6 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
-enum class GradeExpandMode {
-    One, Unlimited, AlwaysExpanded;
-
-    val isExpandable: Boolean
-        get() = this != AlwaysExpanded
-}
-
 @OptIn(ExperimentalCoroutinesApi::class)
 @Singleton
 class PreferencesRepository @Inject constructor(
@@ -41,16 +35,7 @@ class PreferencesRepository @Inject constructor(
     private val flowSharedPref: FlowSharedPreferences,
     private val json: Json,
 ) {
-    
-    init {
-        try {
-            val legacyExpandMode = getBoolean(R.string.pref_key_expand_grade, false)
-            sharedPref.edit().putString(context.getString(R.string.pref_key_expand_grade), if (legacyExpandMode) "always" else "any").apply()
-        } catch(_: ClassCastException) {
-            // pref_key_expand_grade is a string - already migrated, ignore exception
-        }
-    }
-    
+
     val startMenuIndex: Int
         get() = getString(R.string.pref_key_start_menu, R.string.pref_default_startup).toInt()
 
@@ -75,15 +60,12 @@ class PreferencesRepository @Inject constructor(
         )
 
     val gradeExpandMode: GradeExpandMode
-        get() {
-            val str = getString(R.string.pref_key_expand_grade, R.string.pref_default_expand_grade)
-            return when(str) {
-                "one" -> GradeExpandMode.One
-                "always" -> GradeExpandMode.AlwaysExpanded
-                "any" -> GradeExpandMode.Unlimited
-                else -> throw IllegalStateException("Invalid expand mode: $str")
-            }
-        }
+        get() = GradeExpandMode.getByValue(
+            getString(
+                R.string.pref_key_expand_grade_mode,
+                R.string.pref_default_expand_grade_mode
+            )
+        )
 
     val showAllSubjectsOnStatisticsList: Boolean
         get() = getBoolean(

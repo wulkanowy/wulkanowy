@@ -5,12 +5,11 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
-import io.github.wulkanowy.data.repositories.GradeExpandMode
+import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
 import io.github.wulkanowy.databinding.HeaderGradeDetailsBinding
 import io.github.wulkanowy.databinding.ItemGradeDetailsBinding
 import io.github.wulkanowy.ui.base.BaseExpandableAdapter
@@ -28,7 +27,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
 
     private val expandedPositions = BitSet(items.size)
 
-    private var expandMode: GradeExpandMode = GradeExpandMode.AlwaysExpanded
+    private var expandMode: GradeExpandMode = GradeExpandMode.ALWAYS_EXPANDED
 
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
@@ -66,18 +65,19 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
     }
 
     fun collapseAll() {
-        if (!expandedPositions.isEmpty) {
-            refreshList(headers)
-            expandedPositions.clear()
-        }
-    }
+        while(true) {
+            val expandedHeaderPos = expandedPositions.nextSetBit(0)
+            if (expandedHeaderPos == -1) break
+            expandedPositions.clear(expandedHeaderPos)
 
-    @Synchronized
-    private fun refreshList(newItems: MutableList<GradeDetailsItem>) {
-        val diffCallback = GradeDetailsDiffUtil(items, newItems)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        items = newItems
-        diffResult.dispatchUpdatesTo(this)
+            val header = headers[expandedHeaderPos].value as GradeDetailsHeader
+            val headerPosInAdapter = items.indexOf(headers[expandedHeaderPos])
+            if (headerPosInAdapter == -1) {
+                throw IllegalStateException("Header expanded but not in items")
+            }
+            items.subList(headerPosInAdapter + 1, headerPosInAdapter + 1 + header.grades.size).clear()
+            notifyItemRangeRemoved(headerPosInAdapter + 1, header.grades.size)
+        }
     }
 
     override fun getItemCount() = items.size
@@ -128,7 +128,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
 
             gradeHeaderContainer.isEnabled = expandMode.isExpandable
             gradeHeaderContainer.setOnClickListener {
-                if (expandMode == GradeExpandMode.One) {
+                if (expandMode == GradeExpandMode.ONE) {
                     val oldExpandedHeaderPos = expandedPositions.nextSetBit(0)
                     val newExpanded = !expandedPositions[headerPosition]
                     expandedPositions.clear()
@@ -145,7 +145,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
                         items.subList(headerPosition + 1, headerPosition + 1 + header.grades.size).clear()
                         notifyItemRangeRemoved(headerPosition + 1, header.grades.size)
                     }
-                } else if (expandMode == GradeExpandMode.Unlimited) {
+                } else if (expandMode == GradeExpandMode.UNLIMITED) {
                     expandedPositions.flip(headerPosition)
 
                     // Once this listener is invoked, there may have been other grades expanded
@@ -196,20 +196,4 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
 
     private class ItemViewHolder(val binding: ItemGradeDetailsBinding) :
         RecyclerView.ViewHolder(binding.root)
-
-    class GradeDetailsDiffUtil(private val old: List<GradeDetailsItem>, private val new: List<GradeDetailsItem>) :
-        DiffUtil.Callback() {
-
-        override fun getOldListSize() = old.size
-
-        override fun getNewListSize() = new.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return old[oldItemPosition] == new[newItemPosition]
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return old[oldItemPosition] == new[newItemPosition]
-        }
-    }
 }
