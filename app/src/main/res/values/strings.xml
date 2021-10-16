@@ -664,6 +664,7 @@
     <string name="pref_ads_privacy_description">To view an advertisement you must agree to the data processing terms of our Privacy Policy</string>
     <string name="pref_ads_privacy_agree">Agree</string>
     <string name="pref_ads_privacy_link">Privacy policy</string>
+    <string name="pref_ads_loading">Ad is loading</string>
 
     <string name="pref_settings_advanced_title">Advanced</string>
     <string name="pref_settings_appearance_title">Appearance &amp; Behavior</string>

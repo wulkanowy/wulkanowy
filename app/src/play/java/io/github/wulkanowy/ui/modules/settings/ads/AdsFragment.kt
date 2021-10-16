@@ -64,7 +64,7 @@ class AdsFragment : PreferenceFragmentCompat(), MainView.TitledView, AdsView {
     override fun showLoadingSupportAd(show: Boolean) {
         findPreference<Preference>(getString(R.string.pref_key_ads_single_support))?.run {
             isEnabled = !show
-            setSummary(if (show) "Trwa ładowanie reklamy" else null)
+            summary = if (show) getString(R.string.pref_ads_loading) else null
         }
     }
 
