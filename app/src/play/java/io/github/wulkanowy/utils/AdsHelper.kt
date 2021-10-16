@@ -4,32 +4,34 @@ import android.content.Context
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.github.wulkanowy.BuildConfig
 import javax.inject.Inject
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class AdsHelper @Inject constructor(@ApplicationContext private val context: Context) {
 
-    suspend fun getSupportAd(): InterstitialAd? {
+    suspend fun getSupportAd(): RewardedInterstitialAd? {
         MobileAds.initialize(context)
 
         val adRequest = AdRequest.Builder().build()
 
         return suspendCoroutine {
-            InterstitialAd.load(
+            RewardedInterstitialAd.load(
                 context,
-                "ca-app-pub-3940256099942544/1033173712",
+                BuildConfig.SINGLE_SUPPORT_AD_ID,
                 adRequest,
-                object : InterstitialAdLoadCallback() {
-                    override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                        it.resume(interstitialAd)
+                object : RewardedInterstitialAdLoadCallback() {
+                    override fun onAdLoaded(rewardedInterstitialAd: RewardedInterstitialAd) {
+                        it.resume(rewardedInterstitialAd)
                     }
 
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                        it.resume(null)
+                        it.resumeWithException(IllegalArgumentException(loadAdError.message))
                     }
                 })
         }

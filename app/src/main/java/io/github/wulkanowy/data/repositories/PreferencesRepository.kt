@@ -250,6 +250,8 @@ class PreferencesRepository @Inject constructor(
         get() = sharedPref.getBoolean(PREF_KEY_IN_APP_REVIEW_DONE, false)
         set(value) = sharedPref.edit().putBoolean(PREF_KEY_IN_APP_REVIEW_DONE, value).apply()
 
+    val singleAdSupportKey = context.getString(R.string.pref_key_ads_single_support)
+
     private fun getLong(id: Int, default: Int) = getLong(context.getString(id), default)
 
     private fun getLong(id: String, default: Int) =
