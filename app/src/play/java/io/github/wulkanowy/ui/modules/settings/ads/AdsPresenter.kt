@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.settings.ads
 
-import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -12,7 +11,6 @@ import javax.inject.Inject
 class AdsPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
-    private val preferencesRepository: PreferencesRepository,
     private val adsHelper: AdsHelper
 ) : BasePresenter<AdsView>(errorHandler, studentRepository) {
 
@@ -23,10 +21,21 @@ class AdsPresenter @Inject constructor(
     }
 
     fun onWatchSingleAdSelected() {
+        view?.showPrivacyPolicyDialog()
+    }
+
+    fun onPrivacySelected() {
+        view?.openPrivacyPolicy()
+    }
+
+    fun onAgreedPrivacy() {
+        view?.showLoadingSupportAd(true)
         presenterScope.launch {
             runCatching { adsHelper.getSupportAd() }
                 .onFailure(errorHandler::dispatch)
                 .onSuccess { it?.let { view?.showAd(it) } }
+
+            view?.showLoadingSupportAd(false)
         }
     }
 }

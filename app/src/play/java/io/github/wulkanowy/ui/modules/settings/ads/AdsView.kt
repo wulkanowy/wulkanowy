@@ -8,4 +8,10 @@ interface AdsView : BaseView {
     fun initView()
 
     fun showAd(ad: RewardedInterstitialAd)
+
+    fun showPrivacyPolicyDialog()
+
+    fun openPrivacyPolicy()
+
+    fun showLoadingSupportAd(show: Boolean)
 }

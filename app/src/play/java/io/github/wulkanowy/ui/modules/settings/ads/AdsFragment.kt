@@ -5,11 +5,13 @@ import android.view.View
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.ErrorDialog
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.utils.openInternetBrowser
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,7 +39,33 @@ class AdsFragment : PreferenceFragmentCompat(), MainView.TitledView, AdsView {
     }
 
     override fun showAd(ad: RewardedInterstitialAd) {
-        ad.show(requireActivity()) {}
+        if (isVisible) {
+            ad.show(requireActivity()) {}
+        }
+    }
+
+    override fun showPrivacyPolicyDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.pref_ads_privacy_title))
+            .setMessage(getString(R.string.pref_ads_privacy_description))
+            .setPositiveButton(getString(R.string.pref_ads_privacy_agree)) { _, _ -> presenter.onAgreedPrivacy() }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> }
+            .setNeutralButton(getString(R.string.pref_ads_privacy_link)) { _, _ -> presenter.onPrivacySelected() }
+            .show()
+    }
+
+    override fun openPrivacyPolicy() {
+        requireContext().openInternetBrowser(
+            "https://wulkanowy.github.io/polityka-prywatnosci.html",
+            ::showMessage
+        )
+    }
+
+    override fun showLoadingSupportAd(show: Boolean) {
+        findPreference<Preference>(getString(R.string.pref_key_ads_single_support))?.run {
+            isEnabled = !show
+            setSummary(if (show) "Trwa ładowanie reklamy" else null)
+        }
     }
 
     override fun showError(text: String, error: Throwable) {
