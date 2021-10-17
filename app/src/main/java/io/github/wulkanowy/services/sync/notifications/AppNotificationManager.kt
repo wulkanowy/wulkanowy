@@ -105,7 +105,6 @@ class AppNotificationManager @Inject constructor(
                     .also { builder -> lines.forEach { builder.addLine(it) } }
             )
             .setLocalOnly(true)
-            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
             .setGroup(group)
             .setGroupSummary(true)
             .build()
