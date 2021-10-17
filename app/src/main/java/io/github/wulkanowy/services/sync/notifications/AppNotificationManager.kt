@@ -105,7 +105,6 @@ class AppNotificationManager @Inject constructor(
                     .also { builder -> lines.forEach { builder.addLine(it) } }
             )
             .setLocalOnly(true)
-            .setSilent(true)
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
             .setGroup(group)
             .setGroupSummary(true)
@@ -130,6 +129,7 @@ class AppNotificationManager @Inject constructor(
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setColor(context.getCompatColor(R.color.colorPrimary))
+            .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_SUMMARY)
             .setContentIntent(
                 PendingIntent.getActivity(
                     context,
