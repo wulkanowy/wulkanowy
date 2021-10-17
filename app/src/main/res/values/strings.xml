@@ -670,7 +670,7 @@
     <string name="pref_settings_appearance_title">Appearance &amp; Behavior</string>
     <string name="pref_settings_notifications_title">Notifications</string>
     <string name="pref_settings_sync_title">Synchronization</string>
-    <string name="pref_settings_ads_title">Ads</string>
+    <string name="pref_settings_ads_title">Advertisements</string>
 
     <string name="pref_grades_appearance_header">Grades</string>
     <string name="pref_dashboard_appearance_header">Dashboard</string>
@@ -690,7 +690,7 @@
     <string name="pref_advanced_category_summary">Plus and minus values, average calculation</string>
     <string name="pref_advanced_category">Advanced</string>
     <string name="pref_about_category_summary">App version, contributors, social portals, licenses</string>
-    <string name="pref_ads_category_summary">Ads settings, project support</string>
+    <string name="pref_ads_category_summary">Displaying advertisements, project support</string>
 
 
     <!--Notification Channels-->
