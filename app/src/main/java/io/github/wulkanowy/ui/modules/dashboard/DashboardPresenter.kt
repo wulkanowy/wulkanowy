@@ -23,6 +23,7 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.calculatePercentage
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -307,7 +308,7 @@ class DashboardPresenter @Inject constructor(
                 )
                 errorHandler.dispatch(it)
             }
-            .launch("horizontal_group")
+            .launch("horizontal_group" + if(forceRefresh) "-forceRefresh" else "")
     }
 
     private fun loadGrades(student: Student, forceRefresh: Boolean) {
@@ -369,7 +370,7 @@ class DashboardPresenter @Inject constructor(
                     updateData(DashboardItem.Grades(error = it.error), forceRefresh)
                 }
             }
-        }.launch("dashboard_grades")
+        }.launch("dashboard_grades", forceRefresh = forceRefresh)
     }
 
     private fun loadLessons(student: Student, forceRefresh: Boolean) {
@@ -413,7 +414,7 @@ class DashboardPresenter @Inject constructor(
                     )
                 }
             }
-        }.launch("dashboard_lessons")
+        }.launch("dashboard_lessons", forceRefresh = forceRefresh)
     }
 
     private fun loadHomework(student: Student, forceRefresh: Boolean) {
@@ -460,7 +461,7 @@ class DashboardPresenter @Inject constructor(
                     updateData(DashboardItem.Homework(error = it.error), forceRefresh)
                 }
             }
-        }.launch("dashboard_homework")
+        }.launch("dashboard_homework", forceRefresh = forceRefresh)
     }
 
     private fun loadSchoolAnnouncements(student: Student, forceRefresh: Boolean) {
@@ -490,7 +491,7 @@ class DashboardPresenter @Inject constructor(
                     updateData(DashboardItem.Announcements(error = it.error), forceRefresh)
                 }
             }
-        }.launch("dashboard_announcements")
+        }.launch("dashboard_announcements", forceRefresh = forceRefresh)
     }
 
     private fun loadExams(student: Student, forceRefresh: Boolean) {
@@ -534,7 +535,7 @@ class DashboardPresenter @Inject constructor(
                         updateData(DashboardItem.Exams(error = it.error), forceRefresh)
                     }
                 }
-            }.launch("dashboard_exams")
+            }.launch("dashboard_exams", forceRefresh = forceRefresh)
     }
 
     private fun loadConferences(student: Student, forceRefresh: Boolean) {
@@ -571,7 +572,7 @@ class DashboardPresenter @Inject constructor(
                     updateData(DashboardItem.Conferences(error = it.error), forceRefresh)
                 }
             }
-        }.launch("dashboard_conferences")
+        }.launch("dashboard_conferences", forceRefresh = forceRefresh)
     }
 
     private fun loadAdminMessage(student: Student, forceRefresh: Boolean) {
@@ -603,7 +604,7 @@ class DashboardPresenter @Inject constructor(
                     }
                 }
             }
-            .launch("dashboard_admin_messages")
+            .launch("dashboard_admin_messages", forceRefresh = forceRefresh)
     }
 
     private fun updateData(dashboardItem: DashboardItem, forceRefresh: Boolean) {
@@ -734,6 +735,19 @@ class DashboardPresenter @Inject constructor(
             }
 
             dashboardItemsPosition?.getOrDefault(tile.type, defaultPosition) ?: tile.type.ordinal
+        }
+    }
+
+    private fun Flow<Resource<*>>.launch(name: String, forceRefresh: Boolean) {
+        val jobName = if (forceRefresh) "$name-forceRefresh" else name
+        if (forceRefresh) {
+            onEach {
+                if (it.status == Status.SUCCESS) {
+                    cancelJobs(jobName)
+                }
+            }.launch(jobName)
+        } else {
+            launch(jobName)
         }
     }
 }
