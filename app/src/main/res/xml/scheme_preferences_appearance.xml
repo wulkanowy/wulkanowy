@@ -87,6 +87,16 @@
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_attendance_present"
             app:title="@string/pref_view_present" />
+        <SeekBarPreference
+            app:defaultValue="@integer/pref_default_attendance_target"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_key_attendance_target"
+            app:title="@string/pref_attendance_target"
+            android:min="1"
+            android:max="99"
+            app:seekBarIncrement="1"
+            app:showSeekBarValue="true"
+            />
     </PreferenceCategory>
     <PreferenceCategory
         android:layout_height="wrap_content"

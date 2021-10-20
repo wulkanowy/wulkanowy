@@ -803,4 +803,6 @@
     <string name="error_feature_disabled">Funkcja wyłączona przez szkołę</string>
     <string name="error_feature_not_available">Funkcja niedostępna. Zaloguj się w trybie innym niż Mobilne API</string>
     <string name="error_field_required">To pole jest wymagane</string>
+    <string name="pref_attendance_target">Docelowa frekwencja (w %)</string>
+    <string name="attendance_calculator_button">Kalkulator frekwencji</string>
 </resources>

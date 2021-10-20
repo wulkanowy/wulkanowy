@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="8dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="6dp">
+
+    <TextView
+        android:id="@+id/attendanceCalculatorPercentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right|center_vertical"
+        android:minWidth="32dp"
+        android:minHeight="36dp"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="0" />
+
+    <TextView
+        android:id="@+id/attendanceCalculatorPercentagePercentSign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="%"
+        android:textColor="?android:textColorSecondary"
+        app:layout_constraintBaseline_toBaselineOf="@+id/attendanceCalculatorPercentage"
+        app:layout_constraintStart_toEndOf="@+id/attendanceCalculatorPercentage" />
+
+    <TextView
+        android:id="@+id/attendanceCalculatorTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:minWidth="24dp"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/attendanceCalculatorPercentage"
+        app:layout_constraintStart_toEndOf="@+id/attendanceCalculatorPercentagePercentSign"
+        app:layout_constraintTop_toBottomOf="@+id/timetableItemTimeStart3"
+        app:layout_constraintVertical_bias="1.0"
+        tools:text="123" />
+
+    <TextView
+        android:id="@+id/attendanceCalculatorPresence"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@+id/attendanceCalculatorTotal"
+        app:layout_constraintStart_toEndOf="@+id/attendanceCalculatorPercentagePercentSign"
+        app:layout_constraintTop_toTopOf="@+id/attendanceCalculatorPercentage"
+        tools:text="11" />
+
+    <TextView
+        android:id="@+id/attendanceCalculatorTitle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/attendanceCalculatorTotal"
+        app:layout_constraintEnd_toStartOf="@+id/attendanceCalculatorBarrier"
+        app:layout_constraintStart_toEndOf="@+id/attendanceCalculatorPresence"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Metody programowania i projektowania w mechatronice" />
+
+    <TextView
+        android:id="@+id/attendanceCalculatorBalancePositive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|right"
+        android:minWidth="34dp"
+        android:textColor="@color/note_positive"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="+3"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/attendanceCalculatorBalanceNeutral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|right"
+        android:minWidth="34dp"
+        android:text="0"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/attendanceCalculatorBalanceNegative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|right"
+        android:minWidth="34dp"
+        android:textColor="@color/note_negative"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="-10"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/attendanceCalculatorBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="left"
+        app:constraint_referenced_ids="attendanceCalculatorBalancePositive,attendanceCalculatorBalanceNeutral,attendanceCalculatorBalanceNegative" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

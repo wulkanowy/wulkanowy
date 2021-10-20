@@ -37,6 +37,12 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_attendance_present
         )
 
+    val targetAttendanceFlow: Flow<Int>
+        get() = flowSharedPref.getInt(
+            context.getString(R.string.pref_key_attendance_target),
+            context.resources.getInteger(R.integer.pref_default_attendance_target)
+        ).asFlow()
+
     val gradeAverageMode: GradeAverageMode
         get() = GradeAverageMode.getByValue(
             getString(

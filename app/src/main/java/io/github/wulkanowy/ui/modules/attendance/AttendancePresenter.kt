@@ -188,6 +188,11 @@ class AttendancePresenter @Inject constructor(
         return true
     }
 
+    fun onCalculatorSwitchSelected(): Boolean {
+        view?.openCalculatorView()
+        return true
+    }
+
     private fun setBaseDateOnHolidays() {
         flow {
             val student = studentRepository.getCurrentStudent()

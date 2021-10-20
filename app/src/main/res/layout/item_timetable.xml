@@ -49,6 +49,7 @@
         android:maxLines="1"
         android:textColor="?android:textColorSecondary"
         android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@+id/timetableItemTimeFinish"
         app:layout_constraintStart_toEndOf="@id/timetableItemNumber"
         app:layout_constraintTop_toTopOf="@id/timetableItemNumber"
         tools:text="11:11" />
