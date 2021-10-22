@@ -5,14 +5,15 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
-import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
 import io.github.wulkanowy.databinding.HeaderGradeDetailsBinding
 import io.github.wulkanowy.databinding.ItemGradeDetailsBinding
 import io.github.wulkanowy.ui.base.BaseExpandableAdapter
+import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
 import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
@@ -65,19 +66,18 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
     }
 
     fun collapseAll() {
-        while(true) {
-            val expandedHeaderPos = expandedPositions.nextSetBit(0)
-            if (expandedHeaderPos == -1) break
-            expandedPositions.clear(expandedHeaderPos)
-
-            val header = headers[expandedHeaderPos].value as GradeDetailsHeader
-            val headerPosInAdapter = items.indexOf(headers[expandedHeaderPos])
-            if (headerPosInAdapter == -1) {
-                throw IllegalStateException("Header expanded but not in items")
-            }
-            items.subList(headerPosInAdapter + 1, headerPosInAdapter + 1 + header.grades.size).clear()
-            notifyItemRangeRemoved(headerPosInAdapter + 1, header.grades.size)
+        if (!expandedPositions.isEmpty) {
+            refreshList(headers.toMutableList())
+            expandedPositions.clear()
         }
+    }
+
+    @Synchronized
+    private fun refreshList(newItems: MutableList<GradeDetailsItem>) {
+        val diffCallback = GradeDetailsDiffUtil(items, newItems)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        items = newItems
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun getItemCount() = items.size
@@ -88,8 +88,20 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
         val inflater = LayoutInflater.from(parent.context)
 
         return when (viewType) {
-            ViewType.HEADER.id -> HeaderViewHolder(HeaderGradeDetailsBinding.inflate(inflater, parent, false))
-            ViewType.ITEM.id -> ItemViewHolder(ItemGradeDetailsBinding.inflate(inflater, parent, false))
+            ViewType.HEADER.id -> HeaderViewHolder(
+                HeaderGradeDetailsBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
+            ViewType.ITEM.id -> ItemViewHolder(
+                ItemGradeDetailsBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
             else -> throw IllegalStateException()
         }
     }
@@ -108,7 +120,11 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
         }
     }
 
-    private fun bindHeaderViewHolder(holder: HeaderViewHolder, header: GradeDetailsHeader, position: Int) {
+    private fun bindHeaderViewHolder(
+        holder: HeaderViewHolder,
+        header: GradeDetailsHeader,
+        position: Int
+    ) {
         val item = items[position]
         val headerPosition = headers.indexOf(item)
         val adapterPosition = holder.bindingAdapterPosition
@@ -120,30 +136,30 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
                 maxLines = if (expandedPositions[headerPosition]) 2 else 1
             }
             gradeHeaderAverage.text = formatAverage(header.average, root.context.resources)
-            gradeHeaderPointsSum.text = root.context.getString(R.string.grade_points_sum, header.pointsSum)
-            gradeHeaderPointsSum.visibility = if (!header.pointsSum.isNullOrEmpty()) View.VISIBLE else View.GONE
-            gradeHeaderNumber.text = root.context.resources.getQuantityString(R.plurals.grade_number_item, header.grades.size, header.grades.size)
+            gradeHeaderPointsSum.text =
+                root.context.getString(R.string.grade_points_sum, header.pointsSum)
+            gradeHeaderPointsSum.visibility =
+                if (!header.pointsSum.isNullOrEmpty()) View.VISIBLE else View.GONE
+            gradeHeaderNumber.text = root.context.resources.getQuantityString(
+                R.plurals.grade_number_item,
+                header.grades.size,
+                header.grades.size
+            )
             gradeHeaderNote.visibility = if (header.newGrades > 0) View.VISIBLE else View.GONE
-            if (header.newGrades > 0) gradeHeaderNote.text = header.newGrades.toString(10)
+            if (header.newGrades > 0) gradeHeaderNote.text = header.newGrades.toString()
 
             gradeHeaderContainer.isEnabled = expandMode.isExpandable
             gradeHeaderContainer.setOnClickListener {
                 if (expandMode == GradeExpandMode.ONE) {
-                    val oldExpandedHeaderPos = expandedPositions.nextSetBit(0)
                     val newExpanded = !expandedPositions[headerPosition]
-                    expandedPositions.clear()
                     if (newExpanded) {
-                        if (oldExpandedHeaderPos != -1) {
-                            val oldHeader = headers[oldExpandedHeaderPos].value as GradeDetailsHeader
-                            items.subList(oldExpandedHeaderPos + 1, oldExpandedHeaderPos + 1 + oldHeader.grades.size).clear()
-                            notifyItemRangeRemoved(oldExpandedHeaderPos + 1, oldHeader.grades.size)
-                        }
+                        refreshList(headers.toMutableList().apply {
+                            addAll(headerPosition + 1, header.grades)
+                        })
                         expandedPositions.set(headerPosition)
-                        items.addAll(headerPosition + 1, header.grades)
-                        notifyItemRangeInserted(headerPosition + 1, header.grades.size)
+                        scrollToHeaderWithSubItems(headerPosition, header.grades.size)
                     } else {
-                        items.subList(headerPosition + 1, headerPosition + 1 + header.grades.size).clear()
-                        notifyItemRangeRemoved(headerPosition + 1, header.grades.size)
+                        refreshList(headers.toMutableList())
                     }
                 } else if (expandMode == GradeExpandMode.UNLIMITED) {
                     expandedPositions.flip(headerPosition)
@@ -182,11 +198,17 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
                 else -> root.context.getString(R.string.all_no_description)
             }
             gradeItemDate.text = grade.date.toFormattedString()
-            gradeItemWeight.text = "${root.context.getString(R.string.grade_weight)}: ${grade.weight}"
+            gradeItemWeight.text =
+                "${root.context.getString(R.string.grade_weight)}: ${grade.weight}"
             gradeItemNote.visibility = if (!grade.isRead) View.VISIBLE else View.GONE
 
             root.setOnClickListener {
-                holder.bindingAdapterPosition.let { if (it != NO_POSITION) onClickListener(grade, it) }
+                holder.bindingAdapterPosition.let {
+                    if (it != NO_POSITION) onClickListener(
+                        grade,
+                        it
+                    )
+                }
             }
         }
     }
@@ -196,4 +218,22 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
 
     private class ItemViewHolder(val binding: ItemGradeDetailsBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    private class GradeDetailsDiffUtil(
+        private val old: List<GradeDetailsItem>,
+        private val new: List<GradeDetailsItem>
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize() = old.size
+
+        override fun getNewListSize() = new.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return old[oldItemPosition] == new[newItemPosition]
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return old[oldItemPosition] == new[newItemPosition]
+        }
+    }
 }
