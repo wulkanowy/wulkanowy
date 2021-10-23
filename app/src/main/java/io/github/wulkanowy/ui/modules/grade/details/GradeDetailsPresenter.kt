@@ -236,7 +236,7 @@ class GradeDetailsPresenter @Inject constructor(
                     .sortedByDescending { it.date }
                     .map { GradeDetailsItem(it, ViewType.ITEM) }
 
-                listOf(
+                val gradeDetailsItems = listOf(
                     GradeDetailsItem(
                         GradeDetailsHeader(
                             subject = subject,
@@ -247,7 +247,13 @@ class GradeDetailsPresenter @Inject constructor(
                             newGrades = grades.filter { grade -> !grade.isRead }.size
                         }, ViewType.HEADER
                     )
-                ) + if (preferencesRepository.gradeExpandMode != GradeExpandMode.ALWAYS_EXPANDED) emptyList() else subItems
+                )
+
+                if (preferencesRepository.gradeExpandMode == GradeExpandMode.ALWAYS_EXPANDED) {
+                    gradeDetailsItems + subItems
+                } else {
+                    gradeDetailsItems
+                }
             }.flatten()
     }
 

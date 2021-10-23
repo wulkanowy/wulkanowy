@@ -146,40 +146,51 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
 
             gradeHeaderContainer.isEnabled = expandMode != GradeExpandMode.ALWAYS_EXPANDED
             gradeHeaderContainer.setOnClickListener {
-                if (expandMode == GradeExpandMode.ONE) {
-                    val isHeaderExpanded = !expandedPositions[headerPosition]
+                expandGradeHeader(headerPosition, header, holder)
+            }
+        }
+    }
 
-                    if (isHeaderExpanded) {
-                        val updatedItemList = headers.toMutableList()
-                            .apply { addAll(headerPosition + 1, header.grades) }
+    private fun expandGradeHeader(
+        headerPosition: Int,
+        header: GradeDetailsHeader,
+        holder: HeaderViewHolder
+    ) {
+        if (expandMode == GradeExpandMode.ONE) {
+            val isHeaderExpanded = expandedPositions[headerPosition]
 
-                        refreshList(updatedItemList)
-                        expandedPositions.set(headerPosition)
-                        scrollToHeaderWithSubItems(headerPosition, header.grades.size)
-                    } else {
-                        refreshList(headers.toMutableList())
+            expandedPositions.clear()
+
+            if (!isHeaderExpanded) {
+                val updatedItemList = headers.toMutableList()
+                    .apply { addAll(headerPosition + 1, header.grades) }
+
+                expandedPositions.set(headerPosition)
+                refreshList(updatedItemList)
+                scrollToHeaderWithSubItems(headerPosition, header.grades.size)
+            } else {
+                refreshList(headers.toMutableList())
+            }
+        } else if (expandMode == GradeExpandMode.UNLIMITED) {
+            val headerAdapterPosition = holder.bindingAdapterPosition
+            val isHeaderExpanded = expandedPositions[headerPosition]
+
+            expandedPositions.flip(headerPosition)
+
+            if (!isHeaderExpanded) {
+                val updatedList = items.toMutableList()
+                    .apply { addAll(headerAdapterPosition + 1, header.grades) }
+
+                refreshList(updatedList)
+                scrollToHeaderWithSubItems(headerAdapterPosition, header.grades.size)
+            } else {
+                val startPosition = headerAdapterPosition + 1
+                val updatedList = items.toMutableList()
+                    .apply {
+                        subList(startPosition, startPosition + header.grades.size).clear()
                     }
-                } else if (expandMode == GradeExpandMode.UNLIMITED) {
-                    val headerAdapterPosition = holder.bindingAdapterPosition
-                    val isHeaderExpanded = expandedPositions[headerPosition]
 
-                    if (!isHeaderExpanded) {
-                        val updatedList = items.toMutableList()
-                            .apply { addAll(headerAdapterPosition + 1, header.grades) }
-
-                        refreshList(updatedList)
-                        scrollToHeaderWithSubItems(headerAdapterPosition, header.grades.size)
-                    } else {
-                        val startPosition = headerAdapterPosition + 1
-                        val updatedList = items.toMutableList()
-                            .apply {
-                                subList(startPosition, startPosition + header.grades.size).clear()
-                            }
-
-                        refreshList(updatedList)
-                    }
-                    expandedPositions.flip(headerPosition)
-                }
+                refreshList(updatedList)
             }
         }
     }
