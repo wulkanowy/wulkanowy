@@ -158,6 +158,9 @@ class MessageTabPresenter @Inject constructor(
                 enableSwipe(true)
                 notifyParentDataLoaded()
             }
+        }.catch {
+            errorHandler.dispatch(it)
+            view?.notifyParentDataLoaded()
         }.launch()
     }
 
@@ -168,6 +171,7 @@ class MessageTabPresenter @Inject constructor(
                 setErrorDetails(message)
                 showErrorView(true)
                 showEmpty(false)
+                showProgress(false)
             } else showError(message, error)
         }
     }
