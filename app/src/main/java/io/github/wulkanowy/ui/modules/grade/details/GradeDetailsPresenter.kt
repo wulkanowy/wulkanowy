@@ -16,6 +16,7 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -197,6 +198,13 @@ class GradeDetailsPresenter @Inject constructor(
                 enableSwipe(true)
                 notifyParentDataLoaded(semesterId)
             }
+        }.catch {
+            errorHandler.dispatch(it)
+            view?.run {
+                // Important! Otherwise the parent view will be forever loading and will not
+                // display any content, including this error!
+                notifyParentDataLoaded(semesterId)
+            }
         }.launch()
     }
 
@@ -213,6 +221,7 @@ class GradeDetailsPresenter @Inject constructor(
                 setErrorDetails(message)
                 showErrorView(true)
                 showEmpty(false)
+                showProgress(false)
             } else showError(message, error)
         }
     }
