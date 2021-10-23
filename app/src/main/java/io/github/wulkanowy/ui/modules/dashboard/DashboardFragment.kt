@@ -157,6 +157,10 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
         dashboardAdapter.submitList(data.toMutableList())
     }
 
+    override fun showMessage(text: Int) {
+        //Empty function to avoid message flood
+    }
+
     override fun showMessage(text: String) {
         //Empty function to avoid message flood
     }

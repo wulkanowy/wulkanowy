@@ -168,6 +168,10 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
         binding.sendMessageMessageContent.setText(content)
     }
 
+    override fun showMessage(text: Int) {
+        showMessage(applicationContext.getString(text))
+    }
+
     override fun showMessage(text: String) {
         Toast.makeText(this, text, LENGTH_LONG).show()
     }

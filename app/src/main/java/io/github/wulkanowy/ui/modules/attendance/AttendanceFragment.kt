@@ -130,36 +130,16 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
             attendanceErrorDetails.setOnClickListener { presenter.onDetailsClick() }
 
             attendancePreviousButton.setOnLongClickListener {
-                presenter.onPreviousDay()
+                presenter.onPreviousDay(force = true)
                 true
             }
-            attendancePreviousButton.setOnClickListener {
-                if (excuseActionMode) {
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.attendance_exit_excuse_to_switch_day,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    presenter.onPreviousDay()
-                }
-            }
+            attendancePreviousButton.setOnClickListener { presenter.onPreviousDay() }
             attendanceNavDate.setOnClickListener { presenter.onPickDate() }
             attendanceNextButton.setOnLongClickListener {
-                presenter.onNextDay()
+                presenter.onNextDay(force = true)
                 true
             }
-            attendanceNextButton.setOnClickListener {
-                if (excuseActionMode) {
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.attendance_exit_excuse_to_switch_day,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    presenter.onNextDay()
-                }
-            }
+            attendanceNextButton.setOnClickListener { presenter.onNextDay() }
 
             attendanceExcuseButton.setOnClickListener { presenter.onExcuseButtonClick() }
 

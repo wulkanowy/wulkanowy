@@ -18,6 +18,10 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment(), BaseView
         showMessage(text)
     }
 
+    override fun showMessage(text: Int) {
+        showMessage(requireContext().getString(text))
+    }
+
     override fun showMessage(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }

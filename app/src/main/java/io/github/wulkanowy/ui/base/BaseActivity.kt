@@ -60,6 +60,10 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
         ErrorDialog.newInstance(error).show(supportFragmentManager, error.toString())
     }
 
+    override fun showMessage(text: Int) {
+        showMessage(applicationContext.getString(text))
+    }
+
     override fun showMessage(text: String) {
         if (messageContainer != null) Snackbar.make(messageContainer!!, text, LENGTH_LONG).show()
         else Toast.makeText(this, text, Toast.LENGTH_LONG).show()
