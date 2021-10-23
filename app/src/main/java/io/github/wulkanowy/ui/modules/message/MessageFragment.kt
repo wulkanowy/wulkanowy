@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.enums.MessageFolder.RECEIVED
@@ -26,7 +27,7 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
     @Inject
     lateinit var presenter: MessagePresenter
 
-    private val pagerAdapter by lazy { BaseFragmentPagerAdapter(childFragmentManager) }
+    private val pagerAdapter by lazy { BaseFragmentPagerAdapter(this) }
 
     companion object {
         fun newInstance() = MessageFragment()
@@ -43,23 +44,22 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
     }
 
     override fun initView() {
-        with(pagerAdapter) {
-            containerId = binding.messageViewPager.id
-            addFragmentsWithTitle(mapOf(
-                MessageTabFragment.newInstance(RECEIVED) to getString(R.string.message_inbox),
-                MessageTabFragment.newInstance(SENT) to getString(R.string.message_sent),
-                MessageTabFragment.newInstance(TRASHED) to getString(R.string.message_trash)
-            ))
-        }
-
         with(binding.messageViewPager) {
             adapter = pagerAdapter
             offscreenPageLimit = 2
             setOnSelectPageListener(presenter::onPageSelected)
         }
 
+        with(pagerAdapter) {
+            addFragmentsWithTitle(mapOf(
+                    MessageTabFragment.newInstance(RECEIVED) to getString(R.string.message_inbox),
+                    MessageTabFragment.newInstance(SENT) to getString(R.string.message_sent),
+                    MessageTabFragment.newInstance(TRASHED) to getString(R.string.message_trash)
+            ))
+            TabLayoutMediator(binding.messageTabLayout, binding.messageViewPager, this).attach()
+        }
+
         with(binding.messageTabLayout) {
-            setupWithViewPager(binding.messageViewPager)
             setElevationCompat(context.dpToPx(4f))
         }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentSchoolandteachersBinding
@@ -24,7 +25,7 @@ class SchoolAndTeachersFragment :
     @Inject
     lateinit var presenter: SchoolAndTeachersPresenter
 
-    private val pagerAdapter by lazy { BaseFragmentPagerAdapter(childFragmentManager) }
+    private val pagerAdapter by lazy { BaseFragmentPagerAdapter(this) }
 
     companion object {
         fun newInstance() = SchoolAndTeachersFragment()
@@ -41,22 +42,21 @@ class SchoolAndTeachersFragment :
     }
 
     override fun initView() {
-        with(pagerAdapter) {
-            containerId = binding.schoolandteachersViewPager.id
-            addFragmentsWithTitle(mapOf(
-                SchoolFragment.newInstance() to getString(R.string.school_title),
-                TeacherFragment.newInstance() to getString(R.string.teachers_title)
-            ))
-        }
-
         with(binding.schoolandteachersViewPager) {
             adapter = pagerAdapter
             offscreenPageLimit = 2
             setOnSelectPageListener(presenter::onPageSelected)
         }
 
+        with(pagerAdapter) {
+            addFragmentsWithTitle(mapOf(
+                SchoolFragment.newInstance() to getString(R.string.school_title),
+                TeacherFragment.newInstance() to getString(R.string.teachers_title)
+            ))
+            TabLayoutMediator(binding.schoolandteachersTabLayout, binding.schoolandteachersViewPager, this).attach()
+        }
+
         with(binding.schoolandteachersTabLayout) {
-            setupWithViewPager(binding.schoolandteachersViewPager)
             setElevationCompat(context.dpToPx(4f))
         }
     }

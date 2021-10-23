@@ -24,7 +24,7 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
     @Inject
     override lateinit var presenter: LoginPresenter
 
-    private val loginAdapter = BaseFragmentPagerAdapter(supportFragmentManager)
+    private val loginAdapter by lazy { BaseFragmentPagerAdapter(this) }
 
     @Inject
     lateinit var updateHelper: UpdateHelper
@@ -65,8 +65,14 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
             setDisplayShowTitleEnabled(false)
         }
 
+        with(binding.loginViewpager) {
+            offscreenPageLimit = 2
+            adapter = loginAdapter
+            isUserInputEnabled = false
+            setOnSelectPageListener(presenter::onViewSelected)
+        }
+
         with(loginAdapter) {
-            containerId = binding.loginViewpager.id
             addFragments(
                 listOf(
                     LoginFormFragment.newInstance(),
@@ -76,12 +82,6 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
                     LoginRecoverFragment.newInstance()
                 )
             )
-        }
-
-        with(binding.loginViewpager) {
-            offscreenPageLimit = 2
-            adapter = loginAdapter
-            setOnSelectPageListener(presenter::onViewSelected)
         }
     }
 

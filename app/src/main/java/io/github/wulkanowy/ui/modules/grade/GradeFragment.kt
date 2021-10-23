@@ -8,6 +8,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Semester
@@ -29,7 +30,7 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     @Inject
     lateinit var presenter: GradePresenter
 
-    private val pagerAdapter by lazy { BaseFragmentPagerAdapter(childFragmentManager) }
+    private val pagerAdapter by lazy { BaseFragmentPagerAdapter(this) }
 
     private var semesterSwitchMenu: MenuItem? = null
 
@@ -62,8 +63,13 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     }
 
     override fun initView() {
+        with(binding.gradeViewPager) {
+            adapter = pagerAdapter
+            offscreenPageLimit = 3
+            setOnSelectPageListener(presenter::onPageSelected)
+        }
+
         with(pagerAdapter) {
-            containerId = binding.gradeViewPager.id
             addFragmentsWithTitle(
                 mapOf(
                     GradeDetailsFragment.newInstance() to getString(R.string.all_details),
@@ -71,16 +77,10 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
                     GradeStatisticsFragment.newInstance() to getString(R.string.grade_menu_statistics)
                 )
             )
-        }
-
-        with(binding.gradeViewPager) {
-            adapter = pagerAdapter
-            offscreenPageLimit = 3
-            setOnSelectPageListener(presenter::onPageSelected)
+            TabLayoutMediator(binding.gradeTabLayout, binding.gradeViewPager, this).attach()
         }
 
         with(binding.gradeTabLayout) {
-            setupWithViewPager(binding.gradeViewPager)
             setElevationCompat(context.dpToPx(4f))
         }
 

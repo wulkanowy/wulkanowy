@@ -16,9 +16,9 @@ class MessagePresenter @Inject constructor(
     override fun onAttachView(view: MessageView) {
         super.onAttachView(view)
         presenterScope.launch {
-            delay(150)
             view.initView()
             Timber.i("Message view was initialized")
+            delay(150)
             loadData()
         }
     }
