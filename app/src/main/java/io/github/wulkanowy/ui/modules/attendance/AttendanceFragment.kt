@@ -10,6 +10,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -128,9 +129,37 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
             attendanceErrorRetry.setOnClickListener { presenter.onRetry() }
             attendanceErrorDetails.setOnClickListener { presenter.onDetailsClick() }
 
-            attendancePreviousButton.setOnClickListener { presenter.onPreviousDay() }
+            attendancePreviousButton.setOnLongClickListener {
+                presenter.onPreviousDay()
+                true
+            }
+            attendancePreviousButton.setOnClickListener {
+                if (excuseActionMode) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.attendance_exit_excuse_to_switch_day,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    presenter.onPreviousDay()
+                }
+            }
             attendanceNavDate.setOnClickListener { presenter.onPickDate() }
-            attendanceNextButton.setOnClickListener { presenter.onNextDay() }
+            attendanceNextButton.setOnLongClickListener {
+                presenter.onNextDay()
+                true
+            }
+            attendanceNextButton.setOnClickListener {
+                if (excuseActionMode) {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.attendance_exit_excuse_to_switch_day,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    presenter.onNextDay()
+                }
+            }
 
             attendanceExcuseButton.setOnClickListener { presenter.onExcuseButtonClick() }
 

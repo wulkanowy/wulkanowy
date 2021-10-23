@@ -193,6 +193,7 @@
     <string name="attendance_unknown">Unknown</string>
     <string name="attendance_number">Number of lesson</string>
     <string name="attendance_no_items">No entries</string>
+    <string name="attendance_exit_excuse_to_switch_day">To switch the day, exit excuse mode (you can long click the arrow to do that)</string>
     <string name="attendance_excuse_dialog_reason">Absence reason (optional)</string>
     <string name="attendance_excuse_dialog_submit">Send</string>
     <string name="attendance_excuse_success">Absence excuse request sent successfully!</string>
