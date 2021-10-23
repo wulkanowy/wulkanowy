@@ -9,31 +9,39 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Month
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.Date
 
 class Converters {
-
+    private val schoolTz = ZoneId.of("Europe/Warsaw")
     private val json = Json
 
     @TypeConverter
     fun timestampToDate(value: Long?): LocalDate? = value?.run {
-        Date(value).toInstant().atZone(ZoneOffset.UTC).toLocalDate()
+        Date(value)
+            .toInstant()
+            .atZone(ZoneOffset.UTC)
+            .withZoneSameLocal(schoolTz)
+            .withZoneSameInstant(ZoneId.systemDefault())
+            .toLocalDate()
     }
 
     @TypeConverter
     fun dateToTimestamp(date: LocalDate?): Long? {
-        return date?.atStartOfDay()?.toInstant(ZoneOffset.UTC)?.toEpochMilli()
+        return date?.atStartOfDay()?.atZone(ZoneId.systemDefault())?.withZoneSameInstant(schoolTz)?.withZoneSameLocal(ZoneOffset.UTC)
+            ?.toInstant()?.toEpochMilli()
     }
 
     @TypeConverter
     fun timestampToTime(value: Long?): LocalDateTime? = value?.let {
-        LocalDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC)
+        Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).withZoneSameLocal(schoolTz).withZoneSameInstant(ZoneId.systemDefault())
+            .toLocalDateTime()
     }
 
     @TypeConverter
-    fun timeToTimestamp(date: LocalDateTime?): Long? {
-        return date?.atZone(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()
+    fun timeToTimestamp(date: LocalDateTime?): Long? = date?.let {
+        it.atZone(ZoneOffset.UTC).withZoneSameLocal(schoolTz).withZoneSameInstant(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
     @TypeConverter
