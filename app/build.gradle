@@ -14,6 +14,15 @@ apply from: 'jacoco.gradle'
 apply from: 'sonarqube.gradle'
 apply from: 'hooks.gradle'
 
+static def debugAppName(versionCode) {
+    var branch = System.getenv("\$BITRISE_GIT_BRANCH")
+    if (branch?.trim?.isEmpty() != false) {
+        return "Wulkanowy DEV $versionCode"
+    } else {
+        return "W$versionCode $branch"
+    }
+}
+
 android {
     compileSdkVersion 30
 
@@ -74,7 +83,7 @@ android {
             buildConfigField "String", "MESSAGES_BASE_URL", "\"https://messages.wulkanowy.net.pl\""
         }
         debug {
-            resValue "string", "app_name", "Wulkanowy DEV " + defaultConfig.versionCode
+            resValue "string", "app_name", debugAppName(defaultConfig.versionCode)
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
             ext.enableCrashlytics = project.hasProperty("enableFirebase")
