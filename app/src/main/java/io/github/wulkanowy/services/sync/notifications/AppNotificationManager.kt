@@ -15,6 +15,7 @@ import io.github.wulkanowy.data.pojos.MultipleNotificationsData
 import io.github.wulkanowy.data.pojos.NotificationData
 import io.github.wulkanowy.data.pojos.OneNotificationData
 import io.github.wulkanowy.data.repositories.NotificationRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.getCompatBitmap
@@ -27,9 +28,12 @@ import kotlin.random.Random
 class AppNotificationManager @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
     @ApplicationContext private val context: Context,
+    private val studentRepository: StudentRepository,
     private val appInfo: AppInfo,
     private val notificationRepository: NotificationRepository
 ) {
+
+    private suspend fun shouldShowStudentName(): Boolean = studentRepository.getSavedStudents(decryptPass = false).size > 1
 
     suspend fun sendNotification(notificationData: NotificationData, student: Student) =
         when (notificationData) {
@@ -53,7 +57,9 @@ class AppNotificationManager @Inject constructor(
             .setContentText(content)
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .setSummaryText(student.nickOrName)
+                    .also {
+                        if (shouldShowStudentName()) it.setSummaryText(student.nickOrName)
+                    }
                     .bigText(content)
             )
             .build()
@@ -80,7 +86,9 @@ class AppNotificationManager @Inject constructor(
                 .setContentText(item)
                 .setStyle(
                     NotificationCompat.BigTextStyle()
-                        .setSummaryText(student.nickOrName)
+                        .also {
+                            if (shouldShowStudentName()) it.setSummaryText(student.nickOrName)
+                        }
                         .bigText(item)
                 )
                 .setGroup(group)
@@ -92,7 +100,7 @@ class AppNotificationManager @Inject constructor(
         }
     }
 
-    private fun MultipleNotificationsData.sendSummaryNotification(group: String, student: Student) {
+    private suspend fun MultipleNotificationsData.sendSummaryNotification(group: String, student: Student) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return
 
         val summaryNotification = getDefaultNotificationBuilder(this)
@@ -101,7 +109,9 @@ class AppNotificationManager @Inject constructor(
             .setContentText(getQuantityString(contentStringRes, lines.size))
             .setStyle(
                 NotificationCompat.InboxStyle()
-                    .setSummaryText(student.nickOrName)
+                    .also {
+                        if (shouldShowStudentName()) it.setSummaryText(student.nickOrName)
+                    }
                     .also { builder -> lines.forEach { builder.addLine(it) } }
             )
             .setLocalOnly(true)
