@@ -74,7 +74,7 @@ android {
             buildConfigField "String", "MESSAGES_BASE_URL", "\"https://messages.wulkanowy.net.pl\""
         }
         debug {
-            resValue "string", "app_name", "Wulkanowy DEV " + defaultConfig.versionCode
+            resValue "string", "app_name", "Wulkanowy DEV"
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
             ext.enableCrashlytics = project.hasProperty("enableFirebase")
@@ -239,7 +239,7 @@ dependencies {
     playImplementation 'com.google.android.gms:play-services-ads:20.4.0'
 
     hmsImplementation 'com.huawei.hms:hianalytics:6.3.0.301'
-    hmsImplementation 'com.huawei.agconnect:agconnect-crash:1.6.1.200'
+    hmsImplementation 'com.huawei.agconnect:agconnect-crash:1.6.1.300'
 
     releaseImplementation "com.github.ChuckerTeam.Chucker:library-no-op:$chucker"
 
