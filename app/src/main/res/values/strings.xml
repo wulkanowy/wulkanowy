@@ -627,6 +627,7 @@
     <string name="pref_view_app_language">Language</string>
 
     <string name="pref_notify_header">Notifications</string>
+    <string name="pref_notify_header_other">Other</string>
     <string name="pref_notify_switch">Show notifications</string>
     <string name="pref_notify_upcoming_lessons_switch">Show upcoming lesson notifications</string>
     <string name="pref_notify_upcoming_lessons_persistent_switch">Make upcoming lesson notification persistent</string>
@@ -735,5 +736,4 @@
     <string name="error_feature_disabled">Feature disabled by your school</string>
     <string name="error_feature_not_available">Feature not available. Login in a mode other than Mobile API</string>
     <string name="error_field_required">This field is required</string>
-    <string name="pref_notify_header_other">Other</string>
 </resources>
