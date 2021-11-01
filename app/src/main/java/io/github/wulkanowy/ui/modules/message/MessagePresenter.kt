@@ -18,7 +18,6 @@ class MessagePresenter @Inject constructor(
         presenterScope.launch {
             view.initView()
             Timber.i("Message view was initialized")
-            delay(150)
             loadData()
         }
     }
