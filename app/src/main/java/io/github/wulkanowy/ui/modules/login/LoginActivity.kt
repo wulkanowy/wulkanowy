@@ -24,7 +24,13 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
     @Inject
     override lateinit var presenter: LoginPresenter
 
-    private val loginAdapter by lazy { BaseFragmentPagerAdapter(this) }
+    private val pagerAdapter by lazy {
+        BaseFragmentPagerAdapter(
+            fragmentManager = supportFragmentManager,
+            pagesCount = 5,
+            lifecycle = lifecycle,
+        )
+    }
 
     @Inject
     lateinit var updateHelper: UpdateHelper
@@ -67,21 +73,23 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
 
         with(binding.loginViewpager) {
             offscreenPageLimit = 2
-            adapter = loginAdapter
+            adapter = pagerAdapter
             isUserInputEnabled = false
             setOnSelectPageListener(presenter::onViewSelected)
         }
 
-        with(loginAdapter) {
-            addFragments(
-                listOf(
-                    LoginFormFragment.newInstance(),
-                    LoginSymbolFragment.newInstance(),
-                    LoginStudentSelectFragment.newInstance(),
-                    LoginAdvancedFragment.newInstance(),
-                    LoginRecoverFragment.newInstance()
-                )
-            )
+        with(pagerAdapter) {
+            containerId = binding.loginViewpager.id
+            itemFactory = {
+                when (it) {
+                    0 -> LoginFormFragment.newInstance()
+                    1 -> LoginSymbolFragment.newInstance()
+                    2 -> LoginStudentSelectFragment.newInstance()
+                    3 -> LoginAdvancedFragment.newInstance()
+                    4 -> LoginRecoverFragment.newInstance()
+                    else -> throw IllegalStateException()
+                }
+            }
         }
     }
 
@@ -103,12 +111,12 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
     }
 
     override fun notifyInitSymbolFragment(loginData: Triple<String, String, String>) {
-        (loginAdapter.getFragmentInstance(1) as? LoginSymbolFragment)
+        (pagerAdapter.getFragmentInstance(1) as? LoginSymbolFragment)
             ?.onParentInitSymbolFragment(loginData)
     }
 
     override fun notifyInitStudentSelectFragment(studentsWithSemesters: List<StudentWithSemesters>) {
-        (loginAdapter.getFragmentInstance(2) as? LoginStudentSelectFragment)
+        (pagerAdapter.getFragmentInstance(2) as? LoginStudentSelectFragment)
             ?.onParentInitStudentSelectFragment(studentsWithSemesters)
     }
 

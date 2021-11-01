@@ -30,7 +30,13 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
     @Inject
     lateinit var presenter: GradePresenter
 
-    private val pagerAdapter by lazy { BaseFragmentPagerAdapter(this) }
+    private val pagerAdapter by lazy {
+        BaseFragmentPagerAdapter(
+            fragmentManager = childFragmentManager,
+            pagesCount = 3,
+            lifecycle = lifecycle,
+        )
+    }
 
     private var semesterSwitchMenu: MenuItem? = null
 
@@ -70,13 +76,23 @@ class GradeFragment : BaseFragment<FragmentGradeBinding>(R.layout.fragment_grade
         }
 
         with(pagerAdapter) {
-            addFragmentsWithTitle(
-                mapOf(
-                    GradeDetailsFragment.newInstance() to getString(R.string.all_details),
-                    GradeSummaryFragment.newInstance() to getString(R.string.grade_menu_summary),
-                    GradeStatisticsFragment.newInstance() to getString(R.string.grade_menu_statistics)
-                )
-            )
+            containerId = binding.gradeViewPager.id
+            titleFactory = {
+                when (it) {
+                    0 -> getString(R.string.all_details)
+                    1 -> getString(R.string.grade_menu_summary)
+                    2 -> getString(R.string.grade_menu_statistics)
+                    else -> throw IllegalStateException()
+                }
+            }
+            itemFactory = {
+                when (it) {
+                    0 -> GradeDetailsFragment.newInstance()
+                    1 -> GradeSummaryFragment.newInstance()
+                    2 -> GradeStatisticsFragment.newInstance()
+                    else -> throw IllegalStateException()
+                }
+            }
             TabLayoutMediator(binding.gradeTabLayout, binding.gradeViewPager, this).attach()
         }
 

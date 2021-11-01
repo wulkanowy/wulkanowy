@@ -1,39 +1,34 @@
 package io.github.wulkanowy.ui.base
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
-class BaseFragmentPagerAdapter : FragmentStateAdapter, TabLayoutMediator.TabConfigurationStrategy {
+class BaseFragmentPagerAdapter(
+    private val fragmentManager: FragmentManager,
+    private val pagesCount: Int,
+    lifecycle: Lifecycle,
+) : FragmentStateAdapter(fragmentManager, lifecycle), TabLayoutMediator.TabConfigurationStrategy {
 
-    constructor(fragment: Fragment) : super(fragment)
-    constructor(activity: FragmentActivity) : super(activity)
+    lateinit var itemFactory: (position: Int) -> Fragment
 
-    private val pages = mutableListOf<Pair<Fragment, String?>>()
+    var titleFactory: (position: Int) -> String? = { "" }
 
-    fun addFragments(fragments: List<Fragment>) {
-        val size = pages.size
-        pages.addAll(fragments.map { it to null })
-        notifyItemRangeInserted(size, fragments.size)
+    var containerId = 0
+
+    fun getFragmentInstance(position: Int): Fragment? {
+        require(containerId != 0) { "Container id is 0" }
+        return fragmentManager.findFragmentByTag("f$position")
     }
 
-    fun addFragmentsWithTitle(pages: Map<Fragment, String>) {
-        val size = pages.size
-        this.pages.addAll(pages.map { it.key to it.value })
-        notifyItemRangeInserted(size, pages.size)
-    }
+    override fun createFragment(position: Int): Fragment = itemFactory(position)
+
+    override fun getItemCount() = pagesCount
 
     override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
-        pages[position].second?.let {
-            tab.text = it
-        }
+        tab.text = titleFactory(position)
     }
-
-    fun getFragmentInstance(position: Int) = pages[position].first
-
-    override fun getItemCount() = pages.size
-
-    override fun createFragment(position: Int): Fragment = pages[position].first
 }

@@ -27,7 +27,13 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
     @Inject
     lateinit var presenter: MessagePresenter
 
-    private val pagerAdapter by lazy { BaseFragmentPagerAdapter(this) }
+    private val pagerAdapter by lazy {
+        BaseFragmentPagerAdapter(
+            fragmentManager = childFragmentManager,
+            pagesCount = 3,
+            lifecycle = lifecycle,
+        )
+    }
 
     companion object {
         fun newInstance() = MessageFragment()
@@ -51,11 +57,23 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
         }
 
         with(pagerAdapter) {
-            addFragmentsWithTitle(mapOf(
-                    MessageTabFragment.newInstance(RECEIVED) to getString(R.string.message_inbox),
-                    MessageTabFragment.newInstance(SENT) to getString(R.string.message_sent),
-                    MessageTabFragment.newInstance(TRASHED) to getString(R.string.message_trash)
-            ))
+            containerId = binding.messageViewPager.id
+            titleFactory = {
+                when (it) {
+                    0 -> getString(R.string.message_inbox)
+                    1 -> getString(R.string.message_sent)
+                    2 -> getString(R.string.message_trash)
+                    else -> throw IllegalStateException()
+                }
+            }
+            itemFactory = {
+                when (it) {
+                    0 -> MessageTabFragment.newInstance(RECEIVED)
+                    1 -> MessageTabFragment.newInstance(SENT)
+                    2 -> MessageTabFragment.newInstance(TRASHED)
+                    else -> throw IllegalStateException()
+                }
+            }
             TabLayoutMediator(binding.messageTabLayout, binding.messageViewPager, this).attach()
         }
 

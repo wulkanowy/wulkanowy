@@ -25,7 +25,13 @@ class SchoolAndTeachersFragment :
     @Inject
     lateinit var presenter: SchoolAndTeachersPresenter
 
-    private val pagerAdapter by lazy { BaseFragmentPagerAdapter(this) }
+    private val pagerAdapter by lazy {
+        BaseFragmentPagerAdapter(
+            fragmentManager = childFragmentManager,
+            pagesCount = 2,
+            lifecycle = lifecycle,
+        )
+    }
 
     companion object {
         fun newInstance() = SchoolAndTeachersFragment()
@@ -49,11 +55,26 @@ class SchoolAndTeachersFragment :
         }
 
         with(pagerAdapter) {
-            addFragmentsWithTitle(mapOf(
-                SchoolFragment.newInstance() to getString(R.string.school_title),
-                TeacherFragment.newInstance() to getString(R.string.teachers_title)
-            ))
-            TabLayoutMediator(binding.schoolandteachersTabLayout, binding.schoolandteachersViewPager, this).attach()
+            containerId = binding.schoolandteachersViewPager.id
+            titleFactory = {
+                when (it) {
+                    0 -> getString(R.string.school_title)
+                    1 -> getString(R.string.teachers_title)
+                    else -> throw IllegalStateException()
+                }
+            }
+            itemFactory = {
+                when (it) {
+                    0 -> SchoolFragment.newInstance()
+                    1 -> TeacherFragment.newInstance()
+                    else -> throw IllegalStateException()
+                }
+            }
+            TabLayoutMediator(
+                binding.schoolandteachersTabLayout,
+                binding.schoolandteachersViewPager,
+                this
+            ).attach()
         }
 
         with(binding.schoolandteachersTabLayout) {
@@ -77,7 +98,8 @@ class SchoolAndTeachersFragment :
     }
 
     override fun notifyChildLoadData(index: Int, forceRefresh: Boolean) {
-        (pagerAdapter.getFragmentInstance(index) as? SchoolAndTeachersChildView)?.onParentLoadData(forceRefresh)
+        (pagerAdapter.getFragmentInstance(index) as? SchoolAndTeachersChildView)
+            ?.onParentLoadData(forceRefresh)
     }
 
     override fun onDestroyView() {
