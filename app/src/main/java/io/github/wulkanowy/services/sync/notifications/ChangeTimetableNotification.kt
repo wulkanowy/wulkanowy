@@ -8,6 +8,8 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.pojos.GroupNotificationData
 import io.github.wulkanowy.data.pojos.NotificationData
+import io.github.wulkanowy.ui.modules.Destination
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getPlural
 import io.github.wulkanowy.utils.toFormattedString
 import java.time.LocalDate
@@ -29,7 +31,11 @@ class ChangeTimetableNotification @Inject constructor(
             NotificationData(
                 title = context.getPlural(R.plurals.timetable_notify_new_items_title, 1),
                 content = it,
-                intentToStart = Intent()
+                intentToStart = MainActivity.getStartIntent(
+                    context,
+                    Destination.Timetable(LocalDate.now().minusDays(5)),
+                    true
+                )
             )
         }
 
