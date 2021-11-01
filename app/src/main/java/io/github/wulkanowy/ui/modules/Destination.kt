@@ -8,6 +8,7 @@ import io.github.wulkanowy.ui.modules.exam.ExamFragment
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
 import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
+import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.schoolandteachers.school.SchoolFragment
@@ -30,7 +31,8 @@ sealed interface Destination : Serializable {
         SCHOOL_ANNOUNCEMENT,
         SCHOOL,
         LUCKY_NUMBER,
-        MORE;
+        MORE,
+        MESSAGE;
 
         fun toDestination() = when (this) {
             DASHBOARD -> Dashboard
@@ -45,6 +47,7 @@ sealed interface Destination : Serializable {
             SCHOOL -> School
             LUCKY_NUMBER -> LuckyNumber
             MORE -> More
+            MESSAGE -> Message
         }
     }
 
@@ -134,5 +137,12 @@ sealed interface Destination : Serializable {
         override val type = Type.MORE
 
         override val fragment get() = MoreFragment.newInstance()
+    }
+
+    object Message : Destination {
+
+        override val type = Type.MESSAGE
+
+        override val fragment get() = MessageFragment.newInstance()
     }
 }

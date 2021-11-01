@@ -5,16 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
-import android.graphics.drawable.Icon
-import android.os.Build
 import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.annotation.RequiresApi
-import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -29,6 +23,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.ActivityMainBinding
+import io.github.wulkanowy.services.shortcuts.ShortcutsHelper
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.account.accountquick.AccountQuickDialog
@@ -42,8 +37,6 @@ import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.nickOrName
 import io.github.wulkanowy.utils.safelyPopFragments
 import io.github.wulkanowy.utils.setOnViewChangeListener
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -65,6 +58,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     @Inject
     lateinit var appInfo: AppInfo
+
+    @Inject
+    lateinit var shortcutsHelper: ShortcutsHelper
 
     private var accountMenu: MenuItem? = null
 
@@ -113,11 +109,9 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         updateHelper.messageContainer = binding.mainFragmentContainer
 
         val destination = intent.getSerializableExtra(EXTRA_START_DESTINATION) as Destination?
-        presenter.onAttachView(this, destination)
+            ?: shortcutsHelper.getDestination(intent)
 
-        if (appInfo.systemVersion >= Build.VERSION_CODES.N_MR1) {
-            //initShortcuts()
-        }
+        presenter.onAttachView(this, destination)
         updateHelper.checkAndInstallUpdates(this)
     }
 
@@ -131,54 +125,6 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         updateHelper.onActivityResult(requestCode, resultCode)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    fun initShortcuts() {
-        val shortcutsList = mutableListOf<ShortcutInfo>()
-
-        listOf(
-            Triple(
-                getString(R.string.grade_title),
-                R.drawable.ic_shortcut_grade,
-                Destination.Grade
-            ),
-            Triple(
-                getString(R.string.attendance_title),
-                R.drawable.ic_shortcut_attendance,
-                Destination.Attendance
-            ),
-            Triple(
-                getString(R.string.exam_title),
-                R.drawable.ic_shortcut_exam,
-                Destination.Exam
-            ),
-            Triple(
-                getString(R.string.timetable_title),
-                R.drawable.ic_shortcut_timetable,
-                Destination.Timetable()
-            )
-        ).forEach { (title, icon, destination) ->
-            shortcutsList.add(
-                ShortcutInfo.Builder(applicationContext, title)
-                    .setShortLabel(title)
-                    .setLongLabel(title)
-                    .setIcon(Icon.createWithResource(applicationContext, icon))
-                    .setIntents(
-                        arrayOf(
-                            Intent(applicationContext, MainActivity::class.java)
-                                .setAction(Intent.ACTION_VIEW),
-                            Intent(applicationContext, MainActivity::class.java)
-                                .putExtra(EXTRA_START_DESTINATION, Json.encodeToString(destination))
-                                .setAction(Intent.ACTION_VIEW)
-                                .addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
-                        )
-                    )
-                    .build()
-            )
-        }
-
-        getSystemService<ShortcutManager>()?.dynamicShortcuts = shortcutsList
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

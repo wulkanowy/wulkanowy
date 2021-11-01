@@ -32,36 +32,32 @@ class MainPresenter @Inject constructor(
 
     private var studentsWitSemesters: List<StudentWithSemesters>? = null
 
+    private val rootDestinationType = listOf(
+        Destination.Type.DASHBOARD,
+        Destination.Type.GRADE,
+        Destination.Type.ATTENDANCE,
+        Destination.Type.TIMETABLE,
+        Destination.Type.MORE
+    )
+
     private val Destination?.startMenuIndex
-        get() = when (this) {
-            is Destination.Dashboard -> 0
-            is Destination.Grade -> 1
-            is Destination.Attendance -> 2
-            is Destination.Timetable -> 3
-            null -> prefRepository.startMenuIndex
+        get() = when {
+            this == null -> prefRepository.startMenuIndex
+            type in rootDestinationType -> {
+                rootDestinationType.indexOf(type)
+            }
             else -> 4
         }
 
     fun onAttachView(view: MainView, initDestination: Destination?) {
         super.onAttachView(view)
 
-        val rootDestinations = listOf(
-            Destination.Type.DASHBOARD,
-            Destination.Type.GRADE,
-            Destination.Type.ATTENDANCE,
-            Destination.Type.TIMETABLE,
-            Destination.Type.MORE
-        ).map {
-            if (it == initDestination?.type) {
-                initDestination
-            } else {
-                it.toDestination()
-            }
+        val startMenuIndex = initDestination.startMenuIndex
+        val destinations = rootDestinationType.map {
+            if (it == initDestination?.type) initDestination else it.toDestination()
         }
 
-        val startMenuIndex = initDestination.startMenuIndex
-        view.initView(startMenuIndex, rootDestinations)
-
+        view.initView(startMenuIndex, destinations)
         if (initDestination != null && startMenuIndex == 4) {
             view.openMoreDestination(initDestination)
         }

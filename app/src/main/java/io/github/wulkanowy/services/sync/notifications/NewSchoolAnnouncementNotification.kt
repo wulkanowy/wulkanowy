@@ -1,13 +1,14 @@
 package io.github.wulkanowy.services.sync.notifications
 
 import android.content.Context
-import android.content.Intent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.GroupNotificationData
 import io.github.wulkanowy.data.pojos.NotificationData
+import io.github.wulkanowy.ui.modules.Destination
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getPlural
 import javax.inject.Inject
 
@@ -19,7 +20,11 @@ class NewSchoolAnnouncementNotification @Inject constructor(
     suspend fun notify(items: List<SchoolAnnouncement>, student: Student) {
         val notificationDataList = items.map {
             NotificationData(
-                intentToStart = Intent(),
+                intentToStart = MainActivity.getStartIntent(
+                    context = context,
+                    destination = Destination.SchoolAnnouncement,
+                    startNewTask = true
+                ),
                 title = context.getPlural(
                     R.plurals.school_announcement_notify_new_item_title,
                     1
@@ -29,7 +34,11 @@ class NewSchoolAnnouncementNotification @Inject constructor(
         }
         val groupNotificationData = GroupNotificationData(
             type = NotificationType.NEW_ANNOUNCEMENT,
-            intentToStart = Intent(),
+            intentToStart = MainActivity.getStartIntent(
+                context = context,
+                destination = Destination.SchoolAnnouncement,
+                startNewTask = true
+            ),
             title = context.getPlural(
                 R.plurals.school_announcement_notify_new_item_title,
                 items.size

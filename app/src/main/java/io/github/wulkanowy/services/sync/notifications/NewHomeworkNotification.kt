@@ -1,13 +1,14 @@
 package io.github.wulkanowy.services.sync.notifications
 
 import android.content.Context
-import android.content.Intent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Homework
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.GroupNotificationData
 import io.github.wulkanowy.data.pojos.NotificationData
+import io.github.wulkanowy.ui.modules.Destination
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getPlural
 import io.github.wulkanowy.utils.toFormattedString
 import java.time.LocalDate
@@ -30,7 +31,7 @@ class NewHomeworkNotification @Inject constructor(
             NotificationData(
                 title = context.getPlural(R.plurals.homework_notify_new_item_title, 1),
                 content = it,
-                intentToStart = Intent()
+                intentToStart = MainActivity.getStartIntent(context, Destination.Homework, true),
             )
         }
 
@@ -41,7 +42,7 @@ class NewHomeworkNotification @Inject constructor(
                 lines.size,
                 lines.size
             ),
-            intentToStart = Intent(),
+            intentToStart = MainActivity.getStartIntent(context, Destination.Homework, true),
             type = NotificationType.NEW_HOMEWORK,
             notificationDataList = notificationDataList
         )

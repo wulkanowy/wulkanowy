@@ -1,13 +1,14 @@
 package io.github.wulkanowy.services.sync.notifications
 
 import android.content.Context
-import android.content.Intent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.GroupNotificationData
 import io.github.wulkanowy.data.pojos.NotificationData
+import io.github.wulkanowy.ui.modules.Destination
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.descriptionRes
 import io.github.wulkanowy.utils.getPlural
 import io.github.wulkanowy.utils.toFormattedString
@@ -30,19 +31,22 @@ class NewAttendanceNotification @Inject constructor(
             NotificationData(
                 title = context.getPlural(R.plurals.attendance_notify_new_items_title, 1),
                 content = it,
-                intentToStart = Intent()
+                intentToStart = MainActivity.getStartIntent(context, Destination.Attendance, true)
             )
         }
 
         val groupNotificationData = GroupNotificationData(
             notificationDataList = notificationDataList,
-            title = context.getPlural(R.plurals.attendance_notify_new_items_title, lines.size),
+            title = context.getPlural(
+                R.plurals.attendance_notify_new_items_title,
+                notificationDataList.size
+            ),
             content = context.getPlural(
                 R.plurals.attendance_notify_new_items,
-                lines.size,
-                lines.size
+                notificationDataList.size,
+                notificationDataList.size
             ),
-            intentToStart = Intent(),
+            intentToStart = MainActivity.getStartIntent(context, Destination.Attendance, true),
             type = NotificationType.NEW_ATTENDANCE
         )
 

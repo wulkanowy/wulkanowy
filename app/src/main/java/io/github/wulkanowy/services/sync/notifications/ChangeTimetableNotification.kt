@@ -1,7 +1,6 @@
 package io.github.wulkanowy.services.sync.notifications
 
 import android.content.Context
-import android.content.Intent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Student
@@ -22,22 +21,25 @@ class ChangeTimetableNotification @Inject constructor(
 
     suspend fun notify(items: List<Timetable>, student: Student) {
         val changedLessons = items.filter { it.canceled || it.changes }
-        val lines = changedLessons.groupBy { it.date }
-            .map { (date, lessons) -> getNotificationContent(date, lessons) }
+        val notificationDataList = changedLessons.groupBy { it.date }
+            .map { (date, lessons) ->
+                getNotificationContents(date, lessons).map {
+                    NotificationData(
+                        title = context.getPlural(
+                            R.plurals.timetable_notify_new_items_title,
+                            1
+                        ),
+                        content = it,
+                        intentToStart = MainActivity.getStartIntent(
+                            context = context,
+                            destination = Destination.Timetable(date),
+                            startNewTask = true
+                        )
+                    )
+                }
+            }
             .flatten()
             .ifEmpty { return }
-
-        val notificationDataList = lines.map {
-            NotificationData(
-                title = context.getPlural(R.plurals.timetable_notify_new_items_title, 1),
-                content = it,
-                intentToStart = MainActivity.getStartIntent(
-                    context,
-                    Destination.Timetable(LocalDate.now().minusDays(5)),
-                    true
-                )
-            )
-        }
 
         val groupNotificationData = GroupNotificationData(
             notificationDataList = notificationDataList,
@@ -50,14 +52,14 @@ class ChangeTimetableNotification @Inject constructor(
                 changedLessons.size,
                 changedLessons.size
             ),
-            intentToStart = Intent(),
+            intentToStart = MainActivity.getStartIntent(context, Destination.Timetable(), true),
             type = NotificationType.CHANGE_TIMETABLE
         )
 
         appNotificationManager.sendMultipleNotifications(groupNotificationData, student)
     }
 
-    private fun getNotificationContent(date: LocalDate, lessons: List<Timetable>): List<String> {
+    private fun getNotificationContents(date: LocalDate, lessons: List<Timetable>): List<String> {
         val formattedDate = date.toFormattedString("EEE dd.MM")
 
         return if (lessons.size > 2) {
