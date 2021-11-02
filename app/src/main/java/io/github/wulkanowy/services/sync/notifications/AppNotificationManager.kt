@@ -13,7 +13,6 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.pojos.GroupNotificationData
 import io.github.wulkanowy.data.pojos.NotificationData
 import io.github.wulkanowy.data.repositories.NotificationRepository
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.getCompatBitmap
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.nickOrName
@@ -24,16 +23,8 @@ import kotlin.random.Random
 class AppNotificationManager @Inject constructor(
     private val notificationManager: NotificationManagerCompat,
     @ApplicationContext private val context: Context,
-    appInfo: AppInfo,
     private val notificationRepository: NotificationRepository
 ) {
-
-    @SuppressLint("InlinedApi")
-    private val pendingIntentsFlags = if (appInfo.systemVersion >= Build.VERSION_CODES.M) {
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-    } else {
-        PendingIntent.FLAG_UPDATE_CURRENT
-    }
 
     @SuppressLint("InlinedApi")
     suspend fun sendSingleNotification(
@@ -54,7 +45,7 @@ class AppNotificationManager @Inject constructor(
                     context,
                     Random.nextInt(),
                     notificationData.intentToStart,
-                    pendingIntentsFlags
+                    PendingIntent.FLAG_UPDATE_CURRENT
                 )
             )
             .setContentTitle(notificationData.title)
@@ -95,7 +86,7 @@ class AppNotificationManager @Inject constructor(
                         context,
                         Random.nextInt(),
                         notificationData.intentToStart,
-                        pendingIntentsFlags
+                        PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )
                 .setContentTitle(notificationData.title)
@@ -143,7 +134,7 @@ class AppNotificationManager @Inject constructor(
                         context,
                         Random.nextInt(),
                         groupNotificationData.intentToStart,
-                        pendingIntentsFlags
+                        PendingIntent.FLAG_UPDATE_CURRENT
                     )
                 )
                 .setLocalOnly(true)

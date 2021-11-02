@@ -73,37 +73,46 @@ class ChangeTimetableNotification @Inject constructor(
             )
         } else {
             lessons.map {
-                var text = context.getString(
-                    R.string.timetable_notify_lesson,
-                    formattedDate,
-                    it.number,
-                    it.subject
-                )
-
-                if (it.roomOld.isNotBlank()) {
-                    text += context.getString(
-                        R.string.timetable_notify_change_room,
-                        it.roomOld,
-                        it.room
+                buildString {
+                    append(
+                        context.getString(
+                            R.string.timetable_notify_lesson,
+                            formattedDate,
+                            it.number,
+                            it.subject
+                        )
                     )
+                    if (it.roomOld.isNotBlank()) {
+                        append(
+                            context.getString(
+                                R.string.timetable_notify_change_room,
+                                it.roomOld,
+                                it.room
+                            )
+                        )
+                    }
+                    if (it.teacherOld.isNotBlank() && it.teacher != it.teacherOld) {
+                        append(
+                            context.getString(
+                                R.string.timetable_notify_change_teacher,
+                                it.teacherOld,
+                                it.teacher
+                            )
+                        )
+                    }
+                    if (it.subjectOld.isNotBlank()) {
+                        append(
+                            context.getString(
+                                R.string.timetable_notify_change_subject,
+                                it.subjectOld,
+                                it.subject
+                            )
+                        )
+                    }
+                    if (it.info.isNotBlank()) {
+                        append("\n${it.info}")
+                    }
                 }
-                if (it.teacherOld.isNotBlank() && it.teacher != it.teacherOld) {
-                    text += context.getString(
-                        R.string.timetable_notify_change_teacher,
-                        it.teacherOld,
-                        it.teacher
-                    )
-                }
-                if (it.subjectOld.isNotBlank()) {
-                    text += context.getString(
-                        R.string.timetable_notify_change_subject,
-                        it.subjectOld,
-                        it.subject
-                    )
-                }
-
-                text += if (it.info.isNotBlank()) "\n${it.info}" else ""
-                text
             }
         }
     }
