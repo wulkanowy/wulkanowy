@@ -615,7 +615,7 @@
     <string name="pref_view_grade_average_force_calc">Vynutit průměrný výpočet podle aplikace</string>
     <string name="pref_view_present">Zobrazit přítomnost</string>
     <string name="pref_view_app_theme">Motiv</string>
-    <string name="pref_view_expand_grade">Grades expanding</string>
+    <string name="pref_view_expand_grade">Rozvíjení známek</string>
     <string name="pref_view_timetable_show_timers">Označit aktuální lekci</string>
     <string name="pref_view_timetable_show_groups">Zobrazit skupiny vedle předmětů</string>
     <string name="pref_view_grade_statistics_list">Zobrazit seznam grafů v známkách třídy</string>
