@@ -609,13 +609,13 @@
     <string name="widget_timetable_theme_dark">Темна</string>
     <string name="widget_timetable_theme_system">Тема системи</string>
     <!--Preferences-->
-    <string name="pref_view_header">Поява додатка &amp; amp; поведінки</string>
+    <string name="pref_view_header">App</string>
     <string name="pref_view_list">Вікно за замовчуванням</string>
     <string name="pref_view_grade_average_mode">Розрахункові середні параметри</string>
     <string name="pref_view_grade_average_force_calc">Примусово розрахувати середню оцінку через додаток</string>
     <string name="pref_view_present">Показати присутність</string>
     <string name="pref_view_app_theme">Тема</string>
-    <string name="pref_view_expand_grade">Більше оцінок</string>
+    <string name="pref_view_expand_grade">Grades expanding</string>
     <string name="pref_view_timetable_show_timers">Позначити поточний урок</string>
     <string name="pref_view_timetable_show_groups">Показувати групи поруч з темами</string>
     <string name="pref_view_grade_statistics_list">Показувати діаграми в оцінках класу</string>
@@ -624,6 +624,7 @@
     <string name="pref_view_grade_sorting_mode">Сортування предметів</string>
     <string name="pref_view_app_language">Мова</string>
     <string name="pref_notify_header">Повідомлення</string>
+    <string name="pref_notify_header_other">Other</string>
     <string name="pref_notify_switch">Показувати повідомлення</string>
     <string name="pref_notify_upcoming_lessons_switch">Показувати повідомлення о наступних уроках</string>
     <string name="pref_notify_upcoming_lessons_persistent_switch">Зробити сповіщення майбутнього уроку нестійкими</string>
@@ -680,7 +681,7 @@
     <string name="pref_sync_category_summary">Автоматичне оновлення, інтервал синхронізації</string>
     <string name="pref_advanced_category_summary">Плюс і мінус значення, середні обчислення</string>
     <string name="pref_advanced_category">Додатково</string>
-    <string name="pref_about_category_summary">Версія програми, учасники, соціальні портали, ліцензії</string>
+    <string name="pref_about_category_summary">App version, contributors, social portals</string>
     <string name="pref_ads_category_summary">Displaying advertisements, project support</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Нові оцінки</string>
