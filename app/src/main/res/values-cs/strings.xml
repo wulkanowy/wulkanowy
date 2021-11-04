@@ -609,7 +609,7 @@
     <string name="widget_timetable_theme_dark">Tmavý</string>
     <string name="widget_timetable_theme_system">Motiv systému</string>
     <!--Preferences-->
-    <string name="pref_view_header">App</string>
+    <string name="pref_view_header">Aplikace</string>
     <string name="pref_view_list">Výchozí zobrazení</string>
     <string name="pref_view_grade_average_mode">Možnosti vypočítaného průměru</string>
     <string name="pref_view_grade_average_force_calc">Vynutit průměrný výpočet podle aplikace</string>
@@ -624,7 +624,7 @@
     <string name="pref_view_grade_sorting_mode">Třídění předmětů</string>
     <string name="pref_view_app_language">Jazyk</string>
     <string name="pref_notify_header">Upozornění</string>
-    <string name="pref_notify_header_other">Other</string>
+    <string name="pref_notify_header_other">Jiné</string>
     <string name="pref_notify_switch">Zobrazit upozornění</string>
     <string name="pref_notify_upcoming_lessons_switch">Zobrazit upozornění o nadcházející lekci</string>
     <string name="pref_notify_upcoming_lessons_persistent_switch">Nastavit upozornění o nadcházející lekci jako trvalé</string>
@@ -681,7 +681,7 @@
     <string name="pref_sync_category_summary">Automatická aktualizace, interval aktualizací</string>
     <string name="pref_advanced_category_summary">Hodnota plusu a mínusu, výpočet průměru</string>
     <string name="pref_advanced_category">Pokročilé</string>
-    <string name="pref_about_category_summary">App version, contributors, social portals</string>
+    <string name="pref_about_category_summary">Verze aplikace, tvůrci, sociální portály</string>
     <string name="pref_ads_category_summary">Zobrazování reklam, podpora projektu</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Nové známky</string>
