@@ -609,13 +609,13 @@
     <string name="widget_timetable_theme_dark">Тёмная</string>
     <string name="widget_timetable_theme_system">Тема системы</string>
     <!--Preferences-->
-    <string name="pref_view_header">Внешний вид приложения &amp; поведение</string>
+    <string name="pref_view_header">App</string>
     <string name="pref_view_list">Окно по умолчанию</string>
     <string name="pref_view_grade_average_mode">Рассчитанные средние параметры</string>
     <string name="pref_view_grade_average_force_calc">Принудительно высчитать среднюю оценку через приложение</string>
     <string name="pref_view_present">Показать присутствие</string>
     <string name="pref_view_app_theme">Тема</string>
-    <string name="pref_view_expand_grade">Разворачивать оценки</string>
+    <string name="pref_view_expand_grade">Grades expanding</string>
     <string name="pref_view_timetable_show_timers">Отметить текущий урок</string>
     <string name="pref_view_timetable_show_groups">Показать группы рядом с темами</string>
     <string name="pref_view_grade_statistics_list">Показывать диаграммы в оценках класса</string>
@@ -624,6 +624,7 @@
     <string name="pref_view_grade_sorting_mode">Сортировка уроков</string>
     <string name="pref_view_app_language">Язык</string>
     <string name="pref_notify_header">Уведомления</string>
+    <string name="pref_notify_header_other">Other</string>
     <string name="pref_notify_switch">Показывать уведомления</string>
     <string name="pref_notify_upcoming_lessons_switch">Показывать уведомления о будущих уроках</string>
     <string name="pref_notify_upcoming_lessons_persistent_switch">Сделать уведомления о предстоящем уроке постоянным</string>
@@ -680,7 +681,7 @@
     <string name="pref_sync_category_summary">Автоматическое обновление, интервал синхронизации</string>
     <string name="pref_advanced_category_summary">Значения плюс и минус, средний расчет</string>
     <string name="pref_advanced_category">Расширенные</string>
-    <string name="pref_about_category_summary">Версия приложения, участники, социальные порталы, лицензии</string>
+    <string name="pref_about_category_summary">App version, contributors, social portals</string>
     <string name="pref_ads_category_summary">Displaying advertisements, project support</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Новые оценки</string>
