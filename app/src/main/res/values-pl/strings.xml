@@ -609,13 +609,13 @@
     <string name="widget_timetable_theme_dark">Ciemny</string>
     <string name="widget_timetable_theme_system">Motyw systemu</string>
     <!--Preferences-->
-    <string name="pref_view_header">App</string>
+    <string name="pref_view_header">Aplikacja</string>
     <string name="pref_view_list">Domyślny widok</string>
     <string name="pref_view_grade_average_mode">Opcje obliczonej średniej</string>
     <string name="pref_view_grade_average_force_calc">Wymuś obliczanie średniej przez aplikację</string>
     <string name="pref_view_present">Pokazuj obecność</string>
     <string name="pref_view_app_theme">Motyw</string>
-    <string name="pref_view_expand_grade">Grades expanding</string>
+    <string name="pref_view_expand_grade">Rozwijanie ocen</string>
     <string name="pref_view_timetable_show_timers">Oznaczaj bieżącą lekcję</string>
     <string name="pref_view_timetable_show_groups">Pokazuj grupę obok przedmiotu</string>
     <string name="pref_view_grade_statistics_list">Pokazuj listę wykresów w ocenach klasy</string>
@@ -624,7 +624,7 @@
     <string name="pref_view_grade_sorting_mode">Sortowanie przedmiotów</string>
     <string name="pref_view_app_language">Język</string>
     <string name="pref_notify_header">Powiadomienia</string>
-    <string name="pref_notify_header_other">Other</string>
+    <string name="pref_notify_header_other">Inne</string>
     <string name="pref_notify_switch">Pokazuj powiadomienia</string>
     <string name="pref_notify_upcoming_lessons_switch">Pokazuj powiadomienia o nadchodzących lekcjach</string>
     <string name="pref_notify_upcoming_lessons_persistent_switch">Ustaw powiadomienie o nadchodzącej lekcji jako trwałe</string>
@@ -681,7 +681,7 @@
     <string name="pref_sync_category_summary">Automatyczna aktualizacja, interwał synchronizacji</string>
     <string name="pref_advanced_category_summary">Wartości plusa i minusa, obliczanie średniej</string>
     <string name="pref_advanced_category">Zaawansowane</string>
-    <string name="pref_about_category_summary">App version, contributors, social portals</string>
+    <string name="pref_about_category_summary">Wersja aplikacji, twórcy, media społecznościowe</string>
     <string name="pref_ads_category_summary">Wyświetlanie reklam, wsparcie projektu</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Nowe oceny</string>
