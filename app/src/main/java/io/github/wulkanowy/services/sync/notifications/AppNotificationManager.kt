@@ -1,6 +1,5 @@
 package io.github.wulkanowy.services.sync.notifications
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
@@ -114,7 +113,6 @@ class AppNotificationManager @Inject constructor(
         notificationManager.notify(groupId.toInt(), summaryNotification)
     }
 
-    @SuppressLint("InlinedApi")
     private fun getDefaultNotificationBuilder(notificationData: NotificationData): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, notificationData.type.channel)
             .setLargeIcon(context.getCompatBitmap(notificationData.icon, R.color.colorPrimary))

@@ -1,6 +1,5 @@
 package io.github.wulkanowy.services.alarm
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.AlarmManager.RTC_WAKEUP
 import android.app.PendingIntent
@@ -75,7 +74,6 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
         }
     }
 
-    @SuppressLint("InlinedApi")
     private fun cancelScheduledTo(range: ClosedRange<LocalDateTime>, requestCode: Int) {
         if (now() in range) cancelNotification()
 
@@ -156,7 +154,6 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
             putExtra(LESSON_NEXT_ROOM, nextLesson?.room)
         }
 
-    @SuppressLint("InlinedApi")
     private fun scheduleBroadcast(
         intent: Intent,
         studentId: Int,

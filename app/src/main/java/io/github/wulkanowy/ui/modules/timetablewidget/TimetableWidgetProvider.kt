@@ -219,7 +219,6 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
         }
     }
 
-    @SuppressLint("InlinedApi")
     private fun createNavIntent(
         context: Context,
         code: Int,

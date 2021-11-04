@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.luckynumberwidget
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
@@ -53,7 +52,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
         fun getWidthWidgetKey(appWidgetId: Int) = "lucky_number_widget_width_$appWidgetId"
     }
 
-    @SuppressLint("InlinedApi")
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,

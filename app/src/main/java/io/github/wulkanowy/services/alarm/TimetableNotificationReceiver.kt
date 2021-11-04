@@ -1,6 +1,5 @@
 package io.github.wulkanowy.services.alarm
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -112,7 +111,6 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
         )
     }
 
-    @SuppressLint("InlinedApi")
     private fun showNotification(
         context: Context,
         notificationId: Int,
