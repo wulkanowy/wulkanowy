@@ -19,7 +19,6 @@ import io.github.wulkanowy.data.repositories.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.toFirstResult
 import kotlinx.coroutines.runBlocking
@@ -37,9 +36,6 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
 
     @Inject
     lateinit var sharedPref: SharedPrefProvider
-
-    @Inject
-    lateinit var appInfo: AppInfo
 
     companion object {
 

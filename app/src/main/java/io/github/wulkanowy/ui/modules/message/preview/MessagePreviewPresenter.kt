@@ -10,7 +10,6 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
@@ -23,8 +22,7 @@ class MessagePreviewPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val messageRepository: MessageRepository,
-    private val analytics: AnalyticsHelper,
-    private var appInfo: AppInfo
+    private val analytics: AnalyticsHelper
 ) : BasePresenter<MessagePreviewView>(errorHandler, studentRepository) {
 
     var message: Message? = null
@@ -111,10 +109,11 @@ class MessagePreviewPresenter @Inject constructor(
 
     fun onShare(): Boolean {
         message?.let {
-            var text = "Temat: ${it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() }}\n" + when (it.sender.isNotEmpty()) {
-                true -> "Od: ${it.sender}\n"
-                false -> "Do: ${it.recipient}\n"
-            } + "Data: ${it.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${it.content}"
+            var text =
+                "Temat: ${it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() }}\n" + when (it.sender.isNotEmpty()) {
+                    true -> "Od: ${it.sender}\n"
+                    false -> "Do: ${it.recipient}\n"
+                } + "Data: ${it.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${it.content}"
 
             attachments?.let { attachments ->
                 if (attachments.isNotEmpty()) {
@@ -126,7 +125,10 @@ class MessagePreviewPresenter @Inject constructor(
                 }
             }
 
-            view?.shareText(text, "FW: ${it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() }}")
+            view?.shareText(
+                text,
+                "FW: ${it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() }}"
+            )
             return true
         }
         return false
@@ -152,7 +154,9 @@ class MessagePreviewPresenter @Inject constructor(
 
             view?.apply {
                 val html = printHTML
-                    .replace("%SUBJECT%", it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() })
+                    .replace(
+                        "%SUBJECT%",
+                        it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() })
                     .replace("%CONTENT%", messageContent)
                     .replace("%INFO%", infoContent)
                 printDocument(html, jobName)

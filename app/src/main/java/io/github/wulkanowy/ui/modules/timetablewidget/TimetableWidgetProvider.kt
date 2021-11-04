@@ -26,7 +26,6 @@ import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.createNameInitialsDrawable
@@ -58,9 +57,6 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
 
     @Inject
     lateinit var analytics: AnalyticsHelper
-
-    @Inject
-    lateinit var appInfo: AppInfo
 
     companion object {
 
@@ -140,7 +136,7 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
         }
     }
 
-    @SuppressLint("DefaultLocale", "InlinedApi")
+    @SuppressLint("DefaultLocale")
     private fun updateWidget(
         context: Context,
         appWidgetId: Int,

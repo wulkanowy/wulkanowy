@@ -16,7 +16,6 @@ import io.github.wulkanowy.services.HiltBroadcastReceiver
 import io.github.wulkanowy.services.sync.channels.UpcomingLessonsChannel.Companion.CHANNEL_ID
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.getCompatColor
@@ -36,9 +35,6 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
 
     @Inject
     lateinit var preferencesRepository: PreferencesRepository
-
-    @Inject
-    lateinit var appInfo: AppInfo
 
     companion object {
         const val NOTIFICATION_TYPE_CURRENT = 1

@@ -25,7 +25,6 @@ import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companio
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.STUDENT_ID
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.STUDENT_NAME
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.DispatchersProvider
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.nickOrName
@@ -41,8 +40,7 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
     @ApplicationContext private val context: Context,
     private val alarmManager: AlarmManager,
     private val preferencesRepository: PreferencesRepository,
-    private val dispatchersProvider: DispatchersProvider,
-    private val appInfo: AppInfo
+    private val dispatchersProvider: DispatchersProvider
 ) {
 
     private fun getRequestCode(time: LocalDateTime, studentId: Int) =

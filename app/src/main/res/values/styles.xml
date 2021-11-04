@@ -25,7 +25,7 @@
 
     <style name="WulkanowyTheme.SplashScreen" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorPrimaryDark</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/img_splash_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
         <item name="postSplashScreenTheme">@style/WulkanowyTheme.NoActionBar</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
