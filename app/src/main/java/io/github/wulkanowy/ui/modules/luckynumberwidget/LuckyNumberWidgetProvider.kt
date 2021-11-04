@@ -8,7 +8,6 @@ import android.appwidget.AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -22,6 +21,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AppInfo
+import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.toFirstResult
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
@@ -65,16 +65,11 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
             val luckyNumber =
                 getLuckyNumber(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)
             val intent = MainActivity.getStartIntent(context, MainView.Section.LUCKY_NUMBER, true)
-            val pendingIntentFlags = if (appInfo.versionCode >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            } else {
-                PendingIntent.FLAG_UPDATE_CURRENT
-            }
             val appPendingIntent = PendingIntent.getActivity(
                 context,
                 MainView.Section.LUCKY_NUMBER.id,
                 intent,
-                pendingIntentFlags
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
             )
 
             val remoteView =

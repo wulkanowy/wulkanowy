@@ -14,7 +14,6 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Build
 import android.widget.RemoteViews
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -28,6 +27,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.AppInfo
+import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.createNameInitialsDrawable
 import io.github.wulkanowy.utils.getCompatColor
@@ -158,11 +158,6 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
             layoutId = R.layout.widget_timetable_dark
         }
 
-        val pendingIntentFlags = if (appInfo.versionCode >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
         val nextNavIntent = createNavIntent(context, appWidgetId, appWidgetId, BUTTON_NEXT)
         val prevNavIntent = createNavIntent(context, -appWidgetId, appWidgetId, BUTTON_PREV)
         val resetNavIntent =
@@ -179,13 +174,13 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
                 addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
                 putExtra(EXTRA_APPWIDGET_ID, appWidgetId)
                 putExtra(EXTRA_FROM_PROVIDER, true)
-            }, pendingIntentFlags
+            }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
         val appIntent = PendingIntent.getActivity(
             context,
             MainView.Section.TIMETABLE.id,
             MainActivity.getStartIntent(context, MainView.Section.TIMETABLE, true),
-            pendingIntentFlags
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
 
         val remoteView = RemoteViews(context.packageName, layoutId).apply {
@@ -231,19 +226,13 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
         appWidgetId: Int,
         buttonType: String
     ): PendingIntent {
-        val pendingIntentFlags = if (appInfo.versionCode >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
-
         return PendingIntent.getBroadcast(
             context, code,
             Intent(context, TimetableWidgetProvider::class.java).apply {
                 action = ACTION_APPWIDGET_UPDATE
                 putExtra(EXTRA_BUTTON_TYPE, buttonType)
                 putExtra(EXTRA_TOGGLED_WIDGET_ID, appWidgetId)
-            }, pendingIntentFlags
+            }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
     }
 

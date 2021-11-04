@@ -18,6 +18,7 @@ import io.github.wulkanowy.services.sync.channels.UpcomingLessonsChannel.Compani
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AppInfo
+import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toLocalDateTime
@@ -122,12 +123,6 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
         title: String,
         next: String?
     ) {
-        val pendingIntentFlags = if (appInfo.versionCode >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
-
         NotificationManagerCompat.from(context)
             .notify(notificationId, NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(title)
@@ -151,7 +146,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
                         context,
                         MainView.Section.TIMETABLE.id,
                         MainActivity.getStartIntent(context, MainView.Section.TIMETABLE, true),
-                        pendingIntentFlags
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
                     )
                 )
                 .build()

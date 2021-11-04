@@ -6,7 +6,6 @@ import android.app.AlarmManager.RTC_WAKEUP
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -29,6 +28,7 @@ import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companio
 import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.DispatchersProvider
+import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.nickOrName
 import io.github.wulkanowy.utils.toTimestamp
 import kotlinx.coroutines.withContext
@@ -79,14 +79,13 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
     private fun cancelScheduledTo(range: ClosedRange<LocalDateTime>, requestCode: Int) {
         if (now() in range) cancelNotification()
 
-        val pendingIntentFlags = if (appInfo.versionCode >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
-
         alarmManager.cancel(
-            PendingIntent.getBroadcast(context, requestCode, Intent(), pendingIntentFlags)
+            PendingIntent.getBroadcast(
+                context,
+                requestCode,
+                Intent(),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            )
         )
     }
 
@@ -165,11 +164,6 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
         time: LocalDateTime
     ) {
         try {
-            val pendingIntentFlags = if (appInfo.versionCode >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            } else {
-                PendingIntent.FLAG_UPDATE_CURRENT
-            }
             val updatedIntent = intent.apply {
                 putExtra(NOTIFICATION_ID, MainView.Section.TIMETABLE.id)
                 putExtra(LESSON_TYPE, notificationType)
@@ -178,7 +172,7 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
                 context,
                 getRequestCode(time, studentId),
                 updatedIntent,
-                pendingIntentFlags
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
             )
 
             AlarmManagerCompat.setExactAndAllowWhileIdle(

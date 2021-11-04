@@ -17,6 +17,7 @@ import io.github.wulkanowy.data.pojos.OneNotificationData
 import io.github.wulkanowy.data.repositories.NotificationRepository
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.AppInfo
+import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.getCompatBitmap
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.nickOrName
@@ -115,12 +116,6 @@ class AppNotificationManager @Inject constructor(
 
     @SuppressLint("InlinedApi")
     private fun getDefaultNotificationBuilder(notificationData: NotificationData): NotificationCompat.Builder {
-        val pendingIntentsFlags = if (appInfo.systemVersion >= Build.VERSION_CODES.M) {
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
-        }
-
         return NotificationCompat.Builder(context, notificationData.type.channel)
             .setLargeIcon(context.getCompatBitmap(notificationData.icon, R.color.colorPrimary))
             .setSmallIcon(R.drawable.ic_stat_all)
@@ -134,7 +129,7 @@ class AppNotificationManager @Inject constructor(
                     context,
                     notificationData.startMenu.id,
                     MainActivity.getStartIntent(context, notificationData.startMenu, true),
-                    pendingIntentsFlags
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
                 )
             )
     }
