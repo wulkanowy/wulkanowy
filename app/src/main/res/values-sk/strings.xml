@@ -445,7 +445,7 @@
     <string name="account_personal_data">Osobné údaje</string>
     <!--About-->
     <string name="about_version">Verzia aplikácie</string>
-    <string name="about_contributor">Prispievatelia</string>
+    <string name="about_contributor">Tvorcovia</string>
     <string name="about_contributor_summary">Zoznam vývojárov Wulkanového</string>
     <string name="about_feedback">Nahlásiť chybu</string>
     <string name="about_feedback_summary">Odoslať správu o chybe e-mailom</string>
@@ -615,7 +615,7 @@
     <string name="pref_view_grade_average_force_calc">Vynútiť priemerný výpočet podľa aplikácie</string>
     <string name="pref_view_present">Zobraziť prítomnosť</string>
     <string name="pref_view_app_theme">Motív</string>
-    <string name="pref_view_expand_grade">Grades expanding</string>
+    <string name="pref_view_expand_grade">Rozvijanie známok</string>
     <string name="pref_view_timetable_show_timers">Označiť aktuálne lekciu</string>
     <string name="pref_view_timetable_show_groups">Zobraziť skupiny vedľa predmetov</string>
     <string name="pref_view_grade_statistics_list">Zobraziť zoznam grafov v známkach triedy</string>
