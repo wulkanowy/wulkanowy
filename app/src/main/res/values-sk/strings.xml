@@ -609,13 +609,13 @@
     <string name="widget_timetable_theme_dark">Tmavý</string>
     <string name="widget_timetable_theme_system">Motív systému</string>
     <!--Preferences-->
-    <string name="pref_view_header">Vzhľad a správanie aplikácií</string>
+    <string name="pref_view_header">App</string>
     <string name="pref_view_list">Predvolené zobrazenie</string>
     <string name="pref_view_grade_average_mode">Možnosti vypočítaného priemeru</string>
     <string name="pref_view_grade_average_force_calc">Vynútiť priemerný výpočet podľa aplikácie</string>
     <string name="pref_view_present">Zobraziť prítomnosť</string>
     <string name="pref_view_app_theme">Motív</string>
-    <string name="pref_view_expand_grade">Rozbaliť známky</string>
+    <string name="pref_view_expand_grade">Grades expanding</string>
     <string name="pref_view_timetable_show_timers">Označiť aktuálne lekciu</string>
     <string name="pref_view_timetable_show_groups">Zobraziť skupiny vedľa predmetov</string>
     <string name="pref_view_grade_statistics_list">Zobraziť zoznam grafov v známkach triedy</string>
@@ -624,6 +624,7 @@
     <string name="pref_view_grade_sorting_mode">Triedenie predmetov</string>
     <string name="pref_view_app_language">Jazyk</string>
     <string name="pref_notify_header">Upozornenia</string>
+    <string name="pref_notify_header_other">Other</string>
     <string name="pref_notify_switch">Zobraziť upozornenia</string>
     <string name="pref_notify_upcoming_lessons_switch">Zobraziť upozornenia o nadchádzajúcej lekciu</string>
     <string name="pref_notify_upcoming_lessons_persistent_switch">Nastaviť upozornenia o nadchádzajúcej lekcii ako trvalé</string>
@@ -680,7 +681,7 @@
     <string name="pref_sync_category_summary">Automatická aktualizácia, interval aktualizácií</string>
     <string name="pref_advanced_category_summary">Hodnota plusu a mínusu, výpočet priemeru</string>
     <string name="pref_advanced_category">Pokročilé</string>
-    <string name="pref_about_category_summary">Verzia aplikácie, prispievatelia, sociálne portály, licencie</string>
+    <string name="pref_about_category_summary">App version, contributors, social portals</string>
     <string name="pref_ads_category_summary">Zobrazovanie reklám, podpora projektu</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Nové známky</string>
