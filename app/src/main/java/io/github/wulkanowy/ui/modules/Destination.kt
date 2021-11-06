@@ -19,41 +19,25 @@ import java.time.LocalDate
 
 sealed interface Destination : Serializable {
 
-    enum class Type {
-        DASHBOARD,
-        GRADE,
-        ATTENDANCE,
-        EXAM,
-        TIMETABLE,
-        HOMEWORK,
-        NOTE,
-        CONFERENCE,
-        SCHOOL_ANNOUNCEMENT,
-        SCHOOL,
-        LUCKY_NUMBER,
-        MORE,
-        MESSAGE;
-
-        fun toDestination() = when (this) {
-            DASHBOARD -> Dashboard
-            GRADE -> Grade
-            ATTENDANCE -> Attendance
-            EXAM -> Exam
-            TIMETABLE -> Timetable()
-            HOMEWORK -> Homework
-            NOTE -> Note
-            CONFERENCE -> Conference
-            SCHOOL_ANNOUNCEMENT -> SchoolAnnouncement
-            SCHOOL -> School
-            LUCKY_NUMBER -> LuckyNumber
-            MORE -> More
-            MESSAGE -> Message
-        }
-    }
-
     val type: Type
 
     val fragment: Fragment
+
+    enum class Type(val defaultDestination: Destination) {
+        DASHBOARD(Dashboard),
+        GRADE(Grade),
+        ATTENDANCE(Attendance),
+        EXAM(Exam),
+        TIMETABLE(Timetable()),
+        HOMEWORK(Homework),
+        NOTE(Note),
+        CONFERENCE(Conference),
+        SCHOOL_ANNOUNCEMENT(SchoolAnnouncement),
+        SCHOOL(School),
+        LUCKY_NUMBER(More),
+        MORE(More),
+        MESSAGE(Message);
+    }
 
     object Dashboard : Destination {
 

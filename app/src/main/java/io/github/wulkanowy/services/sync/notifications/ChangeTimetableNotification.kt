@@ -12,6 +12,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.getPlural
 import io.github.wulkanowy.utils.toFormattedString
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class ChangeTimetableNotification @Inject constructor(
@@ -20,7 +21,8 @@ class ChangeTimetableNotification @Inject constructor(
 ) {
 
     suspend fun notify(items: List<Timetable>, student: Student) {
-        val changedLessons = items.filter { it.canceled || it.changes }
+        val currentTime = LocalDateTime.now()
+        val changedLessons = items.filter { (it.canceled || it.changes) && it.start > currentTime }
         val notificationDataList = changedLessons.groupBy { it.date }
             .map { (date, lessons) ->
                 getNotificationContents(date, lessons).map {
@@ -83,6 +85,7 @@ class ChangeTimetableNotification @Inject constructor(
                         )
                     )
                     if (it.roomOld.isNotBlank()) {
+                        appendLine()
                         append(
                             context.getString(
                                 R.string.timetable_notify_change_room,
@@ -92,6 +95,7 @@ class ChangeTimetableNotification @Inject constructor(
                         )
                     }
                     if (it.teacherOld.isNotBlank() && it.teacher != it.teacherOld) {
+                        appendLine()
                         append(
                             context.getString(
                                 R.string.timetable_notify_change_teacher,
@@ -101,6 +105,7 @@ class ChangeTimetableNotification @Inject constructor(
                         )
                     }
                     if (it.subjectOld.isNotBlank()) {
+                        appendLine()
                         append(
                             context.getString(
                                 R.string.timetable_notify_change_subject,
@@ -110,7 +115,8 @@ class ChangeTimetableNotification @Inject constructor(
                         )
                     }
                     if (it.info.isNotBlank()) {
-                        append("\n${it.info}")
+                        appendLine()
+                        append(it.info)
                     }
                 }
             }

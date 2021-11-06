@@ -32,7 +32,7 @@ class MainPresenter @Inject constructor(
 
     private var studentsWitSemesters: List<StudentWithSemesters>? = null
 
-    private val rootDestinationType = listOf(
+    private val rootDestinationTypeList = listOf(
         Destination.Type.DASHBOARD,
         Destination.Type.GRADE,
         Destination.Type.ATTENDANCE,
@@ -43,8 +43,8 @@ class MainPresenter @Inject constructor(
     private val Destination?.startMenuIndex
         get() = when {
             this == null -> prefRepository.startMenuIndex
-            type in rootDestinationType -> {
-                rootDestinationType.indexOf(type)
+            type in rootDestinationTypeList -> {
+                rootDestinationTypeList.indexOf(type)
             }
             else -> 4
         }
@@ -53,8 +53,8 @@ class MainPresenter @Inject constructor(
         super.onAttachView(view)
 
         val startMenuIndex = initDestination.startMenuIndex
-        val destinations = rootDestinationType.map {
-            if (it == initDestination?.type) initDestination else it.toDestination()
+        val destinations = rootDestinationTypeList.map {
+            if (it == initDestination?.type) initDestination else it.defaultDestination
         }
 
         view.initView(startMenuIndex, destinations)
