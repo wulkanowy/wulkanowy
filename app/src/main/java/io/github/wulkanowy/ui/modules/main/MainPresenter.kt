@@ -27,7 +27,7 @@ class MainPresenter @Inject constructor(
 
     private var studentsWitSemesters: List<StudentWithSemesters>? = null
 
-    fun onAttachView(view: MainView, initMenu: MainView.Section?): Boolean {
+    fun onAttachView(view: MainView, initMenu: MainView.Section?) {
         super.onAttachView(view)
         with(view) {
             getProperViewIndexes(initMenu).let { (main, more) ->
@@ -40,7 +40,6 @@ class MainPresenter @Inject constructor(
 
         syncManager.startPeriodicSyncWorker()
         analytics.logEvent("app_open", "destination" to initMenu?.name)
-        return true
     }
 
     fun onActionMenuCreated() {

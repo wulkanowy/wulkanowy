@@ -132,7 +132,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         val section = MainView.Section.values()
             .singleOrNull { it.id == intent.getIntExtra(EXTRA_START_MENU, -1) }
 
-        presenter.onAttachView(this@MainActivity, section)
+        presenter.onAttachView(this, section)
 
         with(navController) {
             initialize(startMenuIndex, savedInstanceState)
