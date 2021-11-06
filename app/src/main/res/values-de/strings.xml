@@ -151,6 +151,26 @@
     <string name="timetable_now">Jetzt: %s</string>
     <string name="timetable_next">In einem Moment: %s</string>
     <string name="timetable_later">Später: %s</string>
+    <string name="timetable_notify_lesson">%1$s lesson %2$d - %3$s</string>
+    <string name="timetable_notify_change_room">Change of room from %1$s to %2$s</string>
+    <string name="timetable_notify_change_teacher">Change of teacher from %1$s to %2$s</string>
+    <string name="timetable_notify_change_subject">Change of subject from %1$s to %2$s</string>
+    <plurals name="timetable_notify_new_items_title">
+        <item quantity="one">Timetable change</item>
+        <item quantity="other">Timetable changes</item>
+    </plurals>
+    <plurals name="timetable_notify_new_items">
+        <item quantity="one">%1$s - %2$d change in timetable</item>
+        <item quantity="other">%1$s - %2$d  changes in timetable</item>
+    </plurals>
+    <plurals name="timetable_notify_new_items_group">
+        <item quantity="one">%1$d change in timetable</item>
+        <item quantity="other">%1$d changes in timetable</item>
+    </plurals>
+    <plurals name="timetable_number_item">
+        <item quantity="one">%d change</item>
+        <item quantity="other">%d changes</item>
+    </plurals>
     <!--Completed lessons-->
     <string name="completed_lessons_title">Beendete Lektionen</string>
     <string name="completed_lessons_button">Beendete Lektionen anzeigen</string>
@@ -180,6 +200,18 @@
     <string name="attendance_excuse_success">Abwesenheitsentschuldigungsanfrage erfolgreich gesendet!</string>
     <string name="attendance_excuse_no_selection">Sie müssen mindestens eine Abwesenheit auswählen!</string>
     <string name="attendance_excuse_title">Verzeihung</string>
+    <plurals name="attendance_notify_new_items_title">
+        <item quantity="one">New attendance</item>
+        <item quantity="other">New attendance</item>
+    </plurals>
+    <plurals name="attendance_notify_new_items">
+        <item quantity="one">%1$d new attendance</item>
+        <item quantity="other">%1$d attendance</item>
+    </plurals>
+    <plurals name="attendance_number_item">
+        <item quantity="one">%d attendance</item>
+        <item quantity="other">%d attendance</item>
+    </plurals>
     <!--Attendance summary-->
     <string name="attendance_summary_total">Gesamt</string>
     <!--Exam-->
@@ -619,6 +651,8 @@
     <string name="channel_push">Push-Benachrichtigungen</string>
     <string name="channel_upcoming_lessons">Bevorstehende Lektionen</string>
     <string name="channel_debug">Debuggen</string>
+    <string name="channel_change_timetable">Timetable change</string>
+    <string name="channel_new_attendance">New attendance</string>
     <!--Colors-->
     <string name="all_black">Schwarz</string>
     <string name="all_red">Rot</string>
