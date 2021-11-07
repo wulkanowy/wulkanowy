@@ -165,33 +165,33 @@
     <string name="timetable_now">Teď: %s</string>
     <string name="timetable_next">Za chvíli: %s</string>
     <string name="timetable_later">Později: %s</string>
-    <string name="timetable_notify_lesson">%1$s lesson %2$d - %3$s</string>
-    <string name="timetable_notify_change_room">Change of room from %1$s to %2$s</string>
-    <string name="timetable_notify_change_teacher">Change of teacher from %1$s to %2$s</string>
-    <string name="timetable_notify_change_subject">Change of subject from %1$s to %2$s</string>
+    <string name="timetable_notify_lesson">%1$s lekce %2$d - %3$s</string>
+    <string name="timetable_notify_change_room">Změna učebny z %1$s na %2$s</string>
+    <string name="timetable_notify_change_teacher">Změna učitele z %1$s na %2$s</string>
+    <string name="timetable_notify_change_subject">Změna předmětu z %1$s na %2$s</string>
     <plurals name="timetable_notify_new_items_title">
-        <item quantity="one">Timetable change</item>
-        <item quantity="few">Timetable changes</item>
-        <item quantity="many">Timetable changes</item>
-        <item quantity="other">Timetable changes</item>
+        <item quantity="one">Změna plánu lekcí</item>
+        <item quantity="few">Změny plánu lekcí</item>
+        <item quantity="many">Změny plánu lekcí</item>
+        <item quantity="other">Změny plánu lekcí</item>
     </plurals>
     <plurals name="timetable_notify_new_items">
-        <item quantity="one">%1$s - %2$d change in timetable</item>
-        <item quantity="few">%1$s - %2$d  changes in timetable</item>
-        <item quantity="many">%1$s - %2$d  changes in timetable</item>
-        <item quantity="other">%1$s - %2$d  changes in timetable</item>
+        <item quantity="one">%1$s - %2$d změna plánu lekcí</item>
+        <item quantity="few">%1$s - %2$d změny plánu lekcí</item>
+        <item quantity="many">%1$s - %2$d změn plánu lekcí</item>
+        <item quantity="other">%1$s - %2$d změn plánu lekcí</item>
     </plurals>
     <plurals name="timetable_notify_new_items_group">
-        <item quantity="one">%1$d change in timetable</item>
-        <item quantity="few">%1$d changes in timetable</item>
-        <item quantity="many">%1$d changes in timetable</item>
-        <item quantity="other">%1$d changes in timetable</item>
+        <item quantity="one">%1$d změna plánu lekcí</item>
+        <item quantity="few">%1$d změny plánu lekcí</item>
+        <item quantity="many">%1$d změn plánu lekcí</item>
+        <item quantity="other">%1$d změn plánu lekcí</item>
     </plurals>
     <plurals name="timetable_number_item">
-        <item quantity="one">%d change</item>
-        <item quantity="few">%d changes</item>
-        <item quantity="many">%d changes</item>
-        <item quantity="other">%d changes</item>
+        <item quantity="one">%d změna</item>
+        <item quantity="few">%d změny</item>
+        <item quantity="many">%d změn</item>
+        <item quantity="other">%d změn</item>
     </plurals>
     <!--Completed lessons-->
     <string name="completed_lessons_title">Dokončené lekce</string>
@@ -223,22 +223,22 @@
     <string name="attendance_excuse_no_selection">Musíte vybrat alespoň jednu nepřítomnost!</string>
     <string name="attendance_excuse_title">Ospravedlnit</string>
     <plurals name="attendance_notify_new_items_title">
-        <item quantity="one">New attendance</item>
-        <item quantity="few">New attendance</item>
-        <item quantity="many">New attendance</item>
-        <item quantity="other">New attendance</item>
+        <item quantity="one">Nové frekvence</item>
+        <item quantity="few">Nové frekvence</item>
+        <item quantity="many">Nové frekvence</item>
+        <item quantity="other">Nové frekvence</item>
     </plurals>
     <plurals name="attendance_notify_new_items">
-        <item quantity="one">%1$d new attendance</item>
-        <item quantity="few">%1$d attendance</item>
-        <item quantity="many">%1$d attendance</item>
-        <item quantity="other">%1$d attendance</item>
+        <item quantity="one">%1$d nové frekvence</item>
+        <item quantity="few">%1$d nové frekvence</item>
+        <item quantity="many">%1$d nových frekvencí</item>
+        <item quantity="other">%1$d nových frekvencí</item>
     </plurals>
     <plurals name="attendance_number_item">
-        <item quantity="one">%d attendance</item>
-        <item quantity="few">%d attendance</item>
-        <item quantity="many">%d attendance</item>
-        <item quantity="other">%d attendance</item>
+        <item quantity="one">%d frekvence</item>
+        <item quantity="few">%d frekvence</item>
+        <item quantity="many">%d frekvencí</item>
+        <item quantity="other">%d frekvencí</item>
     </plurals>
     <!--Attendance summary-->
     <string name="attendance_summary_total">Společně</string>
@@ -741,8 +741,8 @@
     <string name="channel_push">Push upozornění</string>
     <string name="channel_upcoming_lessons">Nadcházející lekce</string>
     <string name="channel_debug">Ladění</string>
-    <string name="channel_change_timetable">Timetable change</string>
-    <string name="channel_new_attendance">New attendance</string>
+    <string name="channel_change_timetable">Změny plánu lekcí</string>
+    <string name="channel_new_attendance">Nové frekvence</string>
     <!--Colors-->
     <string name="all_black">Černá</string>
     <string name="all_red">Červená</string>
