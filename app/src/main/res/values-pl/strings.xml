@@ -165,27 +165,27 @@
     <string name="timetable_now">Teraz: %s</string>
     <string name="timetable_next">Za chwilę: %s</string>
     <string name="timetable_later">Później: %s</string>
-    <string name="timetable_notify_lesson">%1$s lesson %2$d - %3$s</string>
+    <string name="timetable_notify_lesson">%1$s lekcja %2$d - %3$s</string>
     <string name="timetable_notify_change_room">Zmiana sali z %1$s na %2$s</string>
     <string name="timetable_notify_change_teacher">Zmiana nauczyciela z %1$s na %2$s</string>
     <string name="timetable_notify_change_subject">Zmiana przedmiotu z %1$s na %2$s</string>
     <plurals name="timetable_notify_new_items_title">
-        <item quantity="one">Timetable change</item>
-        <item quantity="few">Timetable changes</item>
-        <item quantity="many">Timetable changes</item>
-        <item quantity="other">Timetable changes</item>
+        <item quantity="one">Zmiana planu lekcji</item>
+        <item quantity="few">Zmiany planu lekcji</item>
+        <item quantity="many">Zmiany planu lekcji</item>
+        <item quantity="other">Zmiany planu lekcji</item>
     </plurals>
     <plurals name="timetable_notify_new_items">
-        <item quantity="one">%1$s - %2$d change in timetable</item>
-        <item quantity="few">%1$s - %2$d  changes in timetable</item>
-        <item quantity="many">%1$s - %2$d  changes in timetable</item>
-        <item quantity="other">%1$s - %2$d  changes in timetable</item>
+        <item quantity="one">%1$s - %2$d zmiana planu lekcji</item>
+        <item quantity="few">%1$s - %2$d zmiany planu lekcji</item>
+        <item quantity="many">%1$s - %2$d zmian planu lekcji</item>
+        <item quantity="other">%1$s - %2$d zmian planu lekcji</item>
     </plurals>
     <plurals name="timetable_notify_new_items_group">
-        <item quantity="one">%1$d change in timetable</item>
-        <item quantity="few">%1$d changes in timetable</item>
-        <item quantity="many">%1$d changes in timetable</item>
-        <item quantity="other">%1$d changes in timetable</item>
+        <item quantity="one">%1$d zmiana planu lekcji</item>
+        <item quantity="few">%1$d zmiany planu lekcji</item>
+        <item quantity="many">%1$d zmian planu lekcji</item>
+        <item quantity="other">%1$d zmian planu lekcji</item>
     </plurals>
     <plurals name="timetable_number_item">
         <item quantity="one">%d zmiana</item>
@@ -223,22 +223,22 @@
     <string name="attendance_excuse_no_selection">Musisz wybrać co najmniej jedną nieobecność!</string>
     <string name="attendance_excuse_title">Usprawiedliw</string>
     <plurals name="attendance_notify_new_items_title">
-        <item quantity="one">New attendance</item>
-        <item quantity="few">New attendance</item>
-        <item quantity="many">New attendance</item>
-        <item quantity="other">New attendance</item>
+        <item quantity="one">Nowa frekwencja</item>
+        <item quantity="few">Nowe frekwencje</item>
+        <item quantity="many">Nowe frekwencje</item>
+        <item quantity="other">Nowe frekwencje</item>
     </plurals>
     <plurals name="attendance_notify_new_items">
-        <item quantity="one">%1$d new attendance</item>
-        <item quantity="few">%1$d attendance</item>
-        <item quantity="many">%1$d attendance</item>
-        <item quantity="other">%1$d attendance</item>
+        <item quantity="one">%1$d nowa frekwencja</item>
+        <item quantity="few">%1$d nowe frekwencje</item>
+        <item quantity="many">%1$d nowych frekwencji</item>
+        <item quantity="other">%1$d nowych frekwencji</item>
     </plurals>
     <plurals name="attendance_number_item">
         <item quantity="one">%d frekwencja</item>
-        <item quantity="few">%d attendance</item>
-        <item quantity="many">%d attendance</item>
-        <item quantity="other">%d attendance</item>
+        <item quantity="few">%d frekwencje</item>
+        <item quantity="many">%d frekwencji</item>
+        <item quantity="other">%d frekwencji</item>
     </plurals>
     <!--Attendance summary-->
     <string name="attendance_summary_total">Razem</string>
