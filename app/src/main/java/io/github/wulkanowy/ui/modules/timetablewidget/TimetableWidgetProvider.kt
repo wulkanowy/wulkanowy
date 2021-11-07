@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.timetablewidget
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_DELETED
 import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
@@ -23,10 +24,9 @@ import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.HiltBroadcastReceiver
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
+import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.main.MainActivity
-import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.capitalise
 import io.github.wulkanowy.utils.createNameInitialsDrawable
 import io.github.wulkanowy.utils.getCompatColor
@@ -59,6 +59,8 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
     lateinit var analytics: AnalyticsHelper
 
     companion object {
+
+        private const val TIMETABLE_PENDING_INTENT_ID = 201
 
         private const val EXTRA_TOGGLED_WIDGET_ID = "extraToggledWidget"
 
@@ -170,13 +172,13 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
                 addFlags(FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
                 putExtra(EXTRA_APPWIDGET_ID, appWidgetId)
                 putExtra(EXTRA_FROM_PROVIDER, true)
-            }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            }, FLAG_UPDATE_CURRENT
         )
         val appIntent = PendingIntent.getActivity(
             context,
-            MainView.Section.TIMETABLE.id,
-            MainActivity.getStartIntent(context, MainView.Section.TIMETABLE, true),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            TIMETABLE_PENDING_INTENT_ID,
+            MainActivity.getStartIntent(context, Destination.Timetable(), true),
+            FLAG_UPDATE_CURRENT
         )
 
         val remoteView = RemoteViews(context.packageName, layoutId).apply {
@@ -227,7 +229,7 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
                 action = ACTION_APPWIDGET_UPDATE
                 putExtra(EXTRA_BUTTON_TYPE, buttonType)
                 putExtra(EXTRA_TOGGLED_WIDGET_ID, appWidgetId)
-            }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            }, FLAG_UPDATE_CURRENT
         )
     }
 
