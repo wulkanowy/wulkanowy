@@ -15,7 +15,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.HiltBroadcastReceiver
 import io.github.wulkanowy.services.sync.channels.UpcomingLessonsChannel.Companion.CHANNEL_ID
 import io.github.wulkanowy.ui.modules.Destination
-import io.github.wulkanowy.ui.modules.main.MainActivity
+import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.getCompatColor
@@ -138,7 +138,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
                     PendingIntent.getActivity(
                         context,
                         NOTIFICATION_ID,
-                        MainActivity.getStartIntent(context, Destination.Timetable(), true),
+                        SplashActivity.getStartIntent(context, Destination.Timetable(), true),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
                     )
                 )
