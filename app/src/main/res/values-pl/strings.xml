@@ -166,9 +166,9 @@
     <string name="timetable_next">Za chwilę: %s</string>
     <string name="timetable_later">Później: %s</string>
     <string name="timetable_notify_lesson">%1$s lesson %2$d - %3$s</string>
-    <string name="timetable_notify_change_room">Change of room from %1$s to %2$s</string>
-    <string name="timetable_notify_change_teacher">Change of teacher from %1$s to %2$s</string>
-    <string name="timetable_notify_change_subject">Change of subject from %1$s to %2$s</string>
+    <string name="timetable_notify_change_room">Zmiana sali z %1$s na %2$s</string>
+    <string name="timetable_notify_change_teacher">Zmiana nauczyciela z %1$s na %2$s</string>
+    <string name="timetable_notify_change_subject">Zmiana przedmiotu z %1$s na %2$s</string>
     <plurals name="timetable_notify_new_items_title">
         <item quantity="one">Timetable change</item>
         <item quantity="few">Timetable changes</item>
@@ -188,10 +188,10 @@
         <item quantity="other">%1$d changes in timetable</item>
     </plurals>
     <plurals name="timetable_number_item">
-        <item quantity="one">%d change</item>
-        <item quantity="few">%d changes</item>
-        <item quantity="many">%d changes</item>
-        <item quantity="other">%d changes</item>
+        <item quantity="one">%d zmiana</item>
+        <item quantity="few">%d zmiany</item>
+        <item quantity="many">%d zmian</item>
+        <item quantity="other">%d zmian</item>
     </plurals>
     <!--Completed lessons-->
     <string name="completed_lessons_title">Lekcje zrealizowane</string>
@@ -235,7 +235,7 @@
         <item quantity="other">%1$d attendance</item>
     </plurals>
     <plurals name="attendance_number_item">
-        <item quantity="one">%d attendance</item>
+        <item quantity="one">%d frekwencja</item>
         <item quantity="few">%d attendance</item>
         <item quantity="many">%d attendance</item>
         <item quantity="other">%d attendance</item>
@@ -741,8 +741,8 @@
     <string name="channel_push">Powiadomienia push</string>
     <string name="channel_upcoming_lessons">Nadchodzące lekcje</string>
     <string name="channel_debug">Debugowanie</string>
-    <string name="channel_change_timetable">Timetable change</string>
-    <string name="channel_new_attendance">New attendance</string>
+    <string name="channel_change_timetable">Zmiany planu lekcji</string>
+    <string name="channel_new_attendance">Nowe frekwencje</string>
     <!--Colors-->
     <string name="all_black">Czarny</string>
     <string name="all_red">Czerwony</string>
