@@ -6,7 +6,7 @@
     <string name="grade_title">Noten</string>
     <string name="attendance_title">Schulbesuch</string>
     <string name="exam_title">Prüfungen</string>
-    <string name="timetable_title">Zeitplan</string>
+    <string name="timetable_title">Stundenplan</string>
     <string name="settings_title">Einstellungen</string>
     <string name="more_title">Mehr</string>
     <string name="about_title">Über die Applikation</string>
@@ -625,7 +625,7 @@
     <string name="pref_dashboard_appearance_header">Dashboard</string>
     <string name="pref_dashboard_appearance_tiles_title">Sichtbarkeit der Kacheln</string>
     <string name="pref_attendance_appearance_view">Schulbesuch</string>
-    <string name="pref_timetable_appearance_view">Zeitplan</string>
+    <string name="pref_timetable_appearance_view">Stundenplan</string>
     <string name="pref_grades_advanced_header">Noten</string>
     <string name="pref_counted_average_advanced_header">Calculated average</string>
     <string name="pref_messages_advanced_header">Nachrichten</string>
