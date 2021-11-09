@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
@@ -38,7 +37,6 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
         themeManager.applyActivityTheme(this)
         super.onCreate(savedInstanceState)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleLogger, true)
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
         @Suppress("DEPRECATION")
         setTaskDescription(
