@@ -133,7 +133,6 @@ class AppNotificationManager @Inject constructor(
                 .setColor(context.getCompatColor(R.color.colorPrimary))
                 .setStyle(
                     NotificationCompat.InboxStyle()
-                        .setSummaryText(student.nickOrName)
                         .also { builder ->
                             if (shouldShowStudentName()) {
                                 builder.setSummaryText(student.nickOrName)
