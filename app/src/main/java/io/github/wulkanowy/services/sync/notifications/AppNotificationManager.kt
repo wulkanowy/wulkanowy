@@ -55,8 +55,12 @@ class AppNotificationManager @Inject constructor(
             .setContentText(notificationData.content)
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .setSummaryText(student.nickOrName)
                     .bigText(notificationData.content)
+                    .also { builder ->
+                        if (shouldShowStudentName()) {
+                            builder.setSummaryText(student.nickOrName)
+                        }
+                    }
             )
             .build()
 
@@ -96,8 +100,12 @@ class AppNotificationManager @Inject constructor(
                 .setContentText(notificationData.content)
                 .setStyle(
                     NotificationCompat.BigTextStyle()
-                        .setSummaryText(student.nickOrName)
                         .bigText(notificationData.content)
+                        .also { builder ->
+                            if (shouldShowStudentName()) {
+                                builder.setSummaryText(student.nickOrName)
+                            }
+                        }
                 )
                 .setGroup(group)
                 .build()
@@ -107,7 +115,7 @@ class AppNotificationManager @Inject constructor(
         }
     }
 
-    private fun sendSummaryNotification(
+    private suspend fun sendSummaryNotification(
         groupNotificationData: GroupNotificationData,
         group: String,
         student: Student
@@ -127,6 +135,9 @@ class AppNotificationManager @Inject constructor(
                     NotificationCompat.InboxStyle()
                         .setSummaryText(student.nickOrName)
                         .also { builder ->
+                            if (shouldShowStudentName()) {
+                                builder.setSummaryText(student.nickOrName)
+                            }
                             groupNotificationData.notificationDataList.forEach {
                                 builder.addLine(it.content)
                             }
