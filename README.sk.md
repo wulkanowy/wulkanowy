@@ -1,8 +1,8 @@
+[English version of README](README.en.md)
+
 [Polska wersja README](README.md)
 
 [Česká verze README](README.cs.md)
-
-[Slovenská verzia README](README.sk.md)
 
 # Wulkanowy
 
@@ -12,65 +12,65 @@
 [![F-Droid](https://img.shields.io/f-droid/v/io.github.wulkanowy.svg?style=flat-square)](https://f-droid.org/packages/io.github.wulkanowy/)
 [![Last release](https://img.shields.io/github/release/wulkanowy/wulkanowy.svg?logo=github&style=flat-square)](https://github.com/wulkanowy/wulkanowy/releases)
 
-Unofficial android VULCAN UONET+ register client for both students and their parents
+Neoficiálny klient denníka VULCAN UONET+ pre žiaka a rodičov
 
-## Features
+## Funkcie
 
-* logging in using the email and password
-* functions from the register website:
-    * grades
-    * grade statistics
-    * attendance
-    * percentage of attendance
-    * exams
-    * timetable
-    * completed lessons
-    * messages
-    * homework
-    * notes
-    * lucky number
-    * additional lessons
-    * school conferences
-    * student and school information
-* calculation of the average independently of school's preferences
-* notifications, e.g. about a new grade
-* support for multiple accounts with the ability to rename students 
-* dark and black (AMOLED) theme
-* offline mode
-* no ads
+* prihlásenie pomocou emailu a hesla
+* funkcie z webovej stránky denníka:
+    * známky
+    * štatistiky známok
+    * frekvencia
+    * percento frekvencie
+    * skúšky
+    * plán lekcie
+    * dokončené lekcie
+    * správy
+    * domáce úlohy
+    * poznámky
+    * šťastné číslo
+    * ďalšie lekcie
+    * školské stretnutie
+    * informácie o žiakovi a škole
+* výpočet priemeru nezávisle od preferencií školy
+* upozornenia, napr. o nových známkach
+* podpora viacerých účtov s možnosťou premenovania žiakov
+* tmavý a čierny (AMOLED) motív
+* offline režim
+* žiadne reklamy
 
-## Download
+## Stiahnuť
 
-You can download the current version from the Google Play, F-Droid or Huawei AppGallery store
+Aktuálnu verziu si môžete stiahnuť z Google Play, F-Droid alebo Huawei AppGallery
 
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
-    alt="Get it on Google Play"
+[<img src="https://play.google.com/intl/sk/badges/images/generic/sk_badge_web_generic.png"
+    alt="Nyní na Google Play"
     height="80">](https://play.google.com/store/apps/details?id=io.github.wulkanowy)
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-    alt="Get it on F-Droid"
+    alt="Stiahnuť s F-Droid"
     height="80">](https://f-droid.org/packages/io.github.wulkanowy/)
 [<img src="appgallery_badge.png"
     alt="Explore it on AppGallery"
     height="80">](https://appgallery.cloud.huawei.com/ag/n/app/C101440411?channelId=Badge&id=1b3f7fbb700849a9be0dba6b520b2282&s=EB1D3BF9ED9D1564D869B7B94B18016D3CABFCA5AEFB8E29F675FA04E0DC131D&detailType=0&v=)
-    
-You can also download a [development version](https://wulkanowy.github.io/#download) that includes new features being prepared for the next release
 
-## Built With
+Môžete si tiež stiahnuť [vývojovú verziu](https://wulkanowy.github.io/#download), ktorá zahrňuje nové funkcie pripravované pre budúce vydanie
+
+## Postavené s
 
 
 * [Wulkanowy SDK](https://github.com/wulkanowy/sdk)
 * [Kotlin Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)
 * [Hilt](https://dagger.dev/hilt/)
 * [Room](https://developer.android.com/topic/libraries/architecture/room)
-* [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) 
+* [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 
-## Contributing
+## Spolupráca
 
-Please contribute to the project either by creating a PR or submitting an issue on GitHub.
+Prispejte do projektu vytvorením PR alebo odoslaním issue na GitHub.
 
-For people interested in translating the application into different languages, we provide Crowdin
+Pre záujemcov o preklad aplikácie do rôznych jazykov poskytujeme Crowdin:
 https://crowdin.com/project/wulkanowy2
 
-## License
+## Licencia
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details
+Tento projekt je licencovaný pod licenciou Apache License 2.0 - podrobnosti v súbore [LICENSE](LICENSE)
