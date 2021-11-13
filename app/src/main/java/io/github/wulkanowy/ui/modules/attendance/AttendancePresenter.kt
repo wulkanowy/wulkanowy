@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.attendance
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.R
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.repositories.AttendanceRepository
@@ -61,24 +60,14 @@ class AttendancePresenter @Inject constructor(
         if (currentDate.isHolidays) setBaseDateOnHolidays()
     }
 
-    fun onPreviousDay(force: Boolean = false) {
-        val view = this.view
-        if (!force && view?.excuseActionMode == true) {
-            view.showMessage(R.string.attendance_exit_excuse_to_switch_day)
-            return
-        }
+    fun onPreviousDay() {
         view?.finishActionMode()
         attendanceToExcuseList.clear()
         reloadView(currentDate.previousSchoolDay)
         loadData()
     }
 
-    fun onNextDay(force: Boolean = false) {
-        val view = this.view
-        if (!force && view?.excuseActionMode == true) {
-            view.showMessage(R.string.attendance_exit_excuse_to_switch_day)
-            return
-        }
+    fun onNextDay() {
         view?.finishActionMode()
         attendanceToExcuseList.clear()
         reloadView(currentDate.nextSchoolDay)

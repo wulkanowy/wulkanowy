@@ -1,12 +1,8 @@
 package io.github.wulkanowy.ui.base
 
-import androidx.annotation.StringRes
-
 interface BaseView {
 
     fun showError(text: String, error: Throwable)
-
-    fun showMessage(@StringRes text: Int)
 
     fun showMessage(text: String)
 

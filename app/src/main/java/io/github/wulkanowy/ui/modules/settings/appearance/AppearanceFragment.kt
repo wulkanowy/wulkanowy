@@ -58,10 +58,6 @@ class AppearanceFragment : PreferenceFragmentCompat(),
         (activity as? BaseActivity<*, *>)?.showError(text, error)
     }
 
-    override fun showMessage(text: Int) {
-        (activity as? BaseActivity<*, *>)?.showMessage(text)
-    }
-
     override fun showMessage(text: String) {
         (activity as? BaseActivity<*, *>)?.showMessage(text)
     }

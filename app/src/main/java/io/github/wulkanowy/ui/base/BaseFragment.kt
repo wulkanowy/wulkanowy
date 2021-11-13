@@ -30,10 +30,6 @@ abstract class BaseFragment<VB : ViewBinding>(@LayoutRes layoutId: Int) : Fragme
         ErrorDialog.newInstance(error).show(childFragmentManager, error.toString())
     }
 
-    override fun showMessage(text: Int) {
-        showMessage(requireContext().getString(text))
-    }
-
     override fun showMessage(text: String) {
         if (messageContainer != null) {
             Snackbar.make(messageContainer!!, text, LENGTH_LONG).show()

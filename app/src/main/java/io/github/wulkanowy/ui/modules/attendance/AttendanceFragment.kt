@@ -10,9 +10,9 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ActionMode
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -127,16 +127,8 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
             attendanceErrorRetry.setOnClickListener { presenter.onRetry() }
             attendanceErrorDetails.setOnClickListener { presenter.onDetailsClick() }
 
-            attendancePreviousButton.setOnLongClickListener {
-                presenter.onPreviousDay(force = true)
-                true
-            }
             attendancePreviousButton.setOnClickListener { presenter.onPreviousDay() }
             attendanceNavDate.setOnClickListener { presenter.onPickDate() }
-            attendanceNextButton.setOnLongClickListener {
-                presenter.onNextDay(force = true)
-                true
-            }
             attendanceNextButton.setOnClickListener { presenter.onNextDay() }
 
             attendanceExcuseButton.setOnClickListener { presenter.onExcuseButtonClick() }
@@ -302,10 +294,11 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
     }
 
     override fun showExcuseCheckboxes(show: Boolean) {
-        attendanceAdapter.apply {
+        with(attendanceAdapter) {
             excuseActionMode = show
             notifyDataSetChanged()
         }
+        binding.attendanceNavContainer.isVisible = !show
     }
 
     override fun finishActionMode() {
