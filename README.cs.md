@@ -49,8 +49,8 @@ Aktuální verzi si můžete stáhnout z Google Play, F-Droid nebo Huawei AppGal
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
     alt="Stáhnout s F-Droid"
     height="80">](https://f-droid.org/packages/io.github.wulkanowy/)
-[<img src="appgallery_badge.png"
-    alt="Explore it on AppGallery"
+[<img src="https://i.imgur.com/baTGiDP.png"
+    alt="Objevuj v AppGallery"
     height="80">](https://appgallery.cloud.huawei.com/ag/n/app/C101440411?channelId=Badge&id=1b3f7fbb700849a9be0dba6b520b2282&s=EB1D3BF9ED9D1564D869B7B94B18016D3CABFCA5AEFB8E29F675FA04E0DC131D&detailType=0&v=)
 
 Můžete si také stáhnout [vývojovou verzi](https://wulkanowy.github.io/#download), která zahrnuje nové funkce připravované pro příští vydání
