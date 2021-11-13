@@ -217,13 +217,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
     }
 
     override fun showExcuseButton(show: Boolean) {
-        with(binding.attendanceExcuseButton) {
-            if (show) {
-                show()
-            } else {
-                hide()
-            }
-        }
+        binding.attendanceExcuseButton.isVisible = show
     }
 
     override fun showAttendanceDialog(lesson: Attendance) {
