@@ -48,8 +48,8 @@ class GradeDetailsPresenter @Inject constructor(
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         currentSemesterId = semesterId
 
-        loadData(semesterId, forceRefresh)
         if (!forceRefresh) view?.showErrorView(false)
+        loadData(semesterId, forceRefresh)
     }
 
     fun onGradeItemSelected(grade: Grade, position: Int) {
