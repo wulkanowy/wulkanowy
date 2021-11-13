@@ -298,7 +298,10 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
             excuseActionMode = show
             notifyDataSetChanged()
         }
-        binding.attendanceNavContainer.isVisible = !show
+    }
+
+    override fun showDayNavigation(show: Boolean) {
+        binding.attendanceNavContainer.isVisible = show
     }
 
     override fun finishActionMode() {
