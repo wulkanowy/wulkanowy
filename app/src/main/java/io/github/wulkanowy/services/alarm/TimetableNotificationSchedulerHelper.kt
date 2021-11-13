@@ -3,7 +3,6 @@ package io.github.wulkanowy.services.alarm
 import android.app.AlarmManager
 import android.app.AlarmManager.RTC_WAKEUP
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.AlarmManagerCompat
@@ -25,8 +24,8 @@ import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companio
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.NOTIFICATION_TYPE_UPCOMING
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.STUDENT_ID
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.STUDENT_NAME
-import io.github.wulkanowy.ui.modules.main.MainView
 import io.github.wulkanowy.utils.DispatchersProvider
+import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.nickOrName
 import io.github.wulkanowy.utils.toTimestamp
 import kotlinx.coroutines.withContext
@@ -73,13 +72,19 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
 
     private fun cancelScheduledTo(range: ClosedRange<LocalDateTime>, requestCode: Int) {
         if (now() in range) cancelNotification()
+
         alarmManager.cancel(
-            PendingIntent.getBroadcast(context, requestCode, Intent(), FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(
+                context,
+                requestCode,
+                Intent(),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
+            )
         )
     }
 
     fun cancelNotification() =
-        NotificationManagerCompat.from(context).cancel(MainView.Section.TIMETABLE.id)
+        NotificationManagerCompat.from(context).cancel(NOTIFICATION_ID)
 
     suspend fun scheduleNotifications(lessons: List<Timetable>, student: Student) {
         if (!preferencesRepository.isUpcomingLessonsNotificationsEnable) {
@@ -156,9 +161,8 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
             AlarmManagerCompat.setExactAndAllowWhileIdle(
                 alarmManager, RTC_WAKEUP, time.toTimestamp(),
                 PendingIntent.getBroadcast(context, getRequestCode(time, studentId), intent.also {
-                    it.putExtra(NOTIFICATION_ID, MainView.Section.TIMETABLE.id)
                     it.putExtra(LESSON_TYPE, notificationType)
-                }, FLAG_UPDATE_CURRENT)
+                }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE)
             )
             Timber.d(
                 "TimetableNotification scheduled: type: $notificationType, subject: ${
