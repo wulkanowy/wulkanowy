@@ -75,4 +75,9 @@ class SplashActivity : BaseActivity<SplashPresenter, ViewBinding>(), SplashView 
     override fun showError(text: String, error: Throwable) {
         Toast.makeText(this, text, LENGTH_LONG).show()
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        intent.removeExtra(EXTRA_START_DESTINATION)
+    }
 }

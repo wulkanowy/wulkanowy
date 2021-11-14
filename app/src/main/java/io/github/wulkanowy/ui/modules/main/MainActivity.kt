@@ -143,6 +143,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
             initialize(startMenuIndex, savedInstanceState)
         }
+        savedInstanceState = null
     }
 
     private fun initializeToolbar() {
