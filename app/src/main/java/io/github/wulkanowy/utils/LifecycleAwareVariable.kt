@@ -4,13 +4,15 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-class LifecycleAwareVariable<T : Any> : ReadWriteProperty<Fragment, T>, LifecycleObserver {
+class LifecycleAwareVariable<T : Any> : ReadWriteProperty<Fragment, T>, DefaultLifecycleObserver {
 
     private var _value: T? = null
 
@@ -23,10 +25,10 @@ class LifecycleAwareVariable<T : Any> : ReadWriteProperty<Fragment, T>, Lifecycl
     override fun getValue(thisRef: Fragment, property: KProperty<*>) = _value
         ?: throw IllegalStateException("Trying to call an lifecycle-aware value outside of the view lifecycle, or the value has not been initialized")
 
-    @Suppress("unused")
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun onDestroyView() {
-        _value = null
+    override fun onDestroy(owner: LifecycleOwner) {
+        Handler(Looper.getMainLooper()).post {
+            _value = null
+        }
     }
 }
 
