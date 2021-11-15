@@ -431,9 +431,9 @@ class DashboardPresenter @Inject constructor(
         }.map { homeworkResource ->
             val currentDate = LocalDate.now()
 
-            val filteredHomework = homeworkResource.data?.filter {
-                (it.date.isAfter(currentDate) || it.date == currentDate) && !it.isDone
-            }
+            val filteredHomework = homeworkResource.data
+                ?.filter { (it.date.isAfter(currentDate) || it.date == currentDate) && !it.isDone }
+                ?.sortedBy { it.date }
 
             homeworkResource.copy(data = filteredHomework)
         }.onEach {
