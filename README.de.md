@@ -18,12 +18,12 @@ Inoffizieller Android VULCAN UONET+ Registrierungsclient für Schüler und ihre 
 * Funktionen von der Registerwebsite:
     * Noten
     * Notenstatistik
-    * Teilnahme
+    * Anwesenheit
     * Prozentsatz der Anwesenheit
     * Prüfungen
-    * Zeitplan
+    * Stundenplan
     * Unterricht abgeschlossen
-    * Mitteilungen
+    * Nachrichten
     * Hausaufgaben
     * Anmerkungen
     * Glückszahl
@@ -31,15 +31,15 @@ Inoffizieller Android VULCAN UONET+ Registrierungsclient für Schüler und ihre 
     * Schulkonferenzen
     * Schüler- und Schulinformationen
 * Berechnung des Durchschnitts unabhängig von den Präferenzen der Schule
-* Benachrichtigungen inkl. über die neue Einschätzung
-* Unterstützung für mehrere Konten mit der Möglichkeit, Schüler umzubenennen
+* Benachrichtigungen, z. B. über eine neue Note
+* Unterstützung für mehrere Konten mit der Möglichkeit, den Namen des Schülers zu ändern
 * dunkles und schwarzes (AMOLED) Thema
 * Offline-Modus
 * keine Werbung
 
 ## Herunterladen
 
-Die aktuelle Version können Sie von der Google Play, F-Droid oder Huawei AppGallery store
+Die aktuelle Version können Sie von der Google Play, F-Droid oder Huawei AppGallery store herunterladen
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
     alt="Get it on Google Play"
@@ -51,7 +51,7 @@ Die aktuelle Version können Sie von der Google Play, F-Droid oder Huawei AppGal
     alt="Explore it on AppGallery"
     height="80">](https://appgallery.cloud.huawei.com/ag/n/app/C101440411?channelId=Badge&id=1b3f7fbb700849a9be0dba6b520b2282&s=EB1D3BF9ED9D1564D869B7B94B18016D3CABFCA5AEFB8E29F675FA04E0DC131D&detailType=0&v=)
     
-Sie können auch ein herunterladen [Entwicklungsversion](https://wulkanowy.github.io/#download) das beinhaltet neue Funktionen, die für die nächste Version vorbereitet werden
+Sie können auch ein [Entwicklungsversion herunterladen](https://wulkanowy.github.io/#download) das beinhaltet neue Funktionen, die für die nächste Version vorbereitet werden
 
 ## Gebaut mit
 
