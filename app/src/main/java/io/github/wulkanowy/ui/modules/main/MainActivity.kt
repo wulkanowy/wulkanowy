@@ -95,7 +95,8 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
         messageContainer = binding.mainMessageContainer
         updateHelper.messageContainer = binding.mainFragmentContainer
 
-        val destination = intent.getSerializableExtra(EXTRA_START_DESTINATION) as Destination?
+        val destination = (intent.getSerializableExtra(EXTRA_START_DESTINATION) as Destination?)
+            ?.takeIf { savedInstanceState == null }
 
         presenter.onAttachView(this, destination)
         updateHelper.checkAndInstallUpdates(this)
@@ -291,6 +292,5 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         navController.onSaveInstanceState(outState)
-        intent.removeExtra(EXTRA_START_DESTINATION)
     }
 }
