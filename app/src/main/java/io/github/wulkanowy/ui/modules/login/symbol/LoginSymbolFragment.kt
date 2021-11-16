@@ -7,8 +7,7 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.EditorInfo.IME_NULL
 import android.widget.ArrayAdapter
-import androidx.core.text.bold
-import androidx.core.text.buildSpannedString
+import androidx.core.text.parseAsHtml
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -76,11 +75,7 @@ class LoginSymbolFragment :
     }
 
     override fun setLoginToHeading(login: String) {
-        binding.loginSymbolHeader.text = buildSpannedString {
-            append(getString(R.string.login_header_symbol))
-            appendLine()
-            bold { append(login) }
-        }
+        binding.loginSymbolHeader.text = getString(R.string.login_header_symbol, login).parseAsHtml()
     }
 
     override fun setErrorSymbolIncorrect() {
