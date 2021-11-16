@@ -201,11 +201,7 @@ class GradeDetailsPresenter @Inject constructor(
             }
         }.catch {
             errorHandler.dispatch(it)
-            view?.run {
-                // Important! Otherwise the parent view will be forever loading and will not
-                // display any content, including this error!
-                notifyParentDataLoaded(semesterId)
-            }
+            view?.notifyParentDataLoaded(semesterId)
         }.launch()
     }
 
