@@ -7,6 +7,8 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.EditorInfo.IME_NULL
 import android.widget.ArrayAdapter
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -58,13 +60,27 @@ class LoginSymbolFragment :
                 setOnEditorActionListener { _, id, _ ->
                     if (id == IME_ACTION_DONE || id == IME_NULL) loginSymbolSignIn.callOnClick() else false
                 }
-                setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
+                setAdapter(
+                    ArrayAdapter(
+                        context,
+                        android.R.layout.simple_list_item_1,
+                        resources.getStringArray(R.array.symbols_values)
+                    )
+                )
             }
         }
     }
 
     fun onParentInitSymbolFragment(loginData: Triple<String, String, String>) {
         presenter.onParentInitSymbolView(loginData)
+    }
+
+    override fun setLoginToHeading(login: String) {
+        binding.loginSymbolHeader.text = buildSpannedString {
+            append(getString(R.string.login_header_symbol))
+            appendLine()
+            bold { append(login) }
+        }
     }
 
     override fun setErrorSymbolIncorrect() {
@@ -127,7 +143,10 @@ class LoginSymbolFragment :
     }
 
     override fun openFaqPage() {
-        context?.openInternetBrowser("https://wulkanowy.github.io/czesto-zadawane-pytania/co-to-jest-symbol", ::showMessage)
+        context?.openInternetBrowser(
+            "https://wulkanowy.github.io/czesto-zadawane-pytania/co-to-jest-symbol",
+            ::showMessage
+        )
     }
 
     override fun openEmail(host: String, lastError: String) {
@@ -135,7 +154,8 @@ class LoginSymbolFragment :
             chooserTitle = requireContext().getString(R.string.login_email_intent_title),
             email = "wulkanowyinc@gmail.com",
             subject = requireContext().getString(R.string.login_email_subject),
-            body = requireContext().getString(R.string.login_email_text,
+            body = requireContext().getString(
+                R.string.login_email_text,
                 "${appInfo.systemManufacturer} ${appInfo.systemModel}",
                 appInfo.systemVersion.toString(),
                 appInfo.versionName,
