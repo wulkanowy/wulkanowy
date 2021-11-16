@@ -33,17 +33,11 @@ class SplashActivity : BaseActivity<SplashPresenter, ViewBinding>(), SplashView 
 
         private const val EXTRA_EXTERNAL_URL = "external_url"
 
-        fun getStartIntent(
-            context: Context,
-            destination: Destination? = null,
-            startNewTask: Boolean = false
-        ) = Intent(context, SplashActivity::class.java).apply {
-            putExtra(EXTRA_START_DESTINATION, destination)
-
-            if (startNewTask) {
+        fun getStartIntent(context: Context, destination: Destination? = null) =
+            Intent(context, SplashActivity::class.java).apply {
+                putExtra(EXTRA_START_DESTINATION, destination)
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,10 +68,5 @@ class SplashActivity : BaseActivity<SplashPresenter, ViewBinding>(), SplashView 
 
     override fun showError(text: String, error: Throwable) {
         Toast.makeText(this, text, LENGTH_LONG).show()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        intent.removeExtra(EXTRA_START_DESTINATION)
     }
 }

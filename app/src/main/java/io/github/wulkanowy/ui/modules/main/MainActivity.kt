@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.main
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build.VERSION_CODES.P
@@ -88,7 +87,6 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     private var savedInstanceState: Bundle? = null
 
-    @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ActivityMainBinding.inflate(layoutInflater).apply { binding = this }.root)
