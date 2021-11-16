@@ -13,7 +13,7 @@ import io.github.wulkanowy.ui.modules.account.AccountView
 import io.github.wulkanowy.ui.modules.account.accountdetails.AccountDetailsView
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.ui.modules.message.MessageView
-import io.github.wulkanowy.ui.modules.schoolandteachers.school.SchoolView
+import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersView
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.flowWithResource
@@ -93,7 +93,7 @@ class MainPresenter @Inject constructor(
     fun onViewChange(destinationView: BaseView) {
         view?.apply {
             showBottomNavigation(destinationView !is AccountView && destinationView !is StudentInfoView && destinationView !is AccountDetailsView)
-            showActionBarElevation(destinationView !is GradeView && destinationView !is MessageView && destinationView !is SchoolView)
+            showActionBarElevation(destinationView !is GradeView && destinationView !is MessageView && destinationView !is SchoolAndTeachersView)
             currentViewTitle?.let { setViewTitle(it) }
             currentViewSubtitle?.let { setViewSubTitle(it.ifBlank { null }) }
             currentStackSize?.let {
