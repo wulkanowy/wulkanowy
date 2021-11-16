@@ -24,7 +24,9 @@
             android:orientation="vertical"
             android:paddingVertical="8dp"
             android:paddingStart="8dp"
-            android:paddingEnd="12dp">
+            android:paddingEnd="12dp"
+            android:visibility="invisible"
+            tools:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
