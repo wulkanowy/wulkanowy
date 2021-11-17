@@ -169,7 +169,7 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
                     intent.getStringExtra(LESSON_TITLE)
                 }, start: $time, student: $studentId"
             )
-        } catch (e: IllegalStateException) {
+        } catch (e: Throwable) {
             Timber.e(e)
         }
     }
