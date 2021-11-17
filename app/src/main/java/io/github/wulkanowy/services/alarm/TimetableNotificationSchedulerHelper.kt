@@ -94,6 +94,7 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
 
         if (!canScheduleExactAlarms()) {
             Timber.w("Exact alarms are disabled by user")
+            preferencesRepository.isUpcomingLessonsNotificationsEnable = false
             return
         }
 
