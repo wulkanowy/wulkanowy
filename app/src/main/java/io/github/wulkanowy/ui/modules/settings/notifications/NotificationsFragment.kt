@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.settings.notifications
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -50,10 +51,14 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             return appPackageName in packageNameList
         }
 
-    private val notificationSettingsContract =
+    private val notificationSettingsPiggybackContract =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            presenter.onNotificationPiggybackPermissionResult()
+        }
 
-            presenter.onNotificationPermissionResult()
+    private val notificationSettingsExactAlarmsContract =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            presenter.onNotificationExactAlarmPermissionResult()
         }
 
     override fun initView(showDebugNotificationSwitch: Boolean) {
@@ -151,6 +156,7 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             .show()
     }
 
+    @SuppressLint("InlinedApi")
     override fun openSystemSettings() {
         val intent = if (appInfo.systemVersion >= Build.VERSION_CODES.O) {
             Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
@@ -173,7 +179,7 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             .setTitle(getString(R.string.pref_notification_piggyback_popup_title))
             .setMessage(getString(R.string.pref_notification_piggyback_popup_description))
             .setPositiveButton(getString(R.string.pref_notification_piggyback_popup_positive)) { _, _ ->
-                notificationSettingsContract.launch(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+                notificationSettingsPiggybackContract.launch(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
             }
             .setNegativeButton(android.R.string.cancel) { _, _ ->
                 setNotificationPiggybackPreferenceChecked(false)
@@ -182,8 +188,17 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             .show()
     }
 
+    override fun openNotificationExactAlarmSettings() {
+        notificationSettingsExactAlarmsContract.launch(Intent("android.settings.REQUEST_SCHEDULE_EXACT_ALARM"))
+    }
+
     override fun setNotificationPiggybackPreferenceChecked(isChecked: Boolean) {
         findPreference<SwitchPreferenceCompat>(getString(R.string.pref_key_notifications_piggyback))?.isChecked =
+            isChecked
+    }
+
+    override fun setUpcomingLessonsNotificationPreferenceChecked(isChecked: Boolean) {
+        findPreference<SwitchPreferenceCompat>(getString(R.string.pref_key_notifications_upcoming_lessons_enable))?.isChecked =
             isChecked
     }
 
