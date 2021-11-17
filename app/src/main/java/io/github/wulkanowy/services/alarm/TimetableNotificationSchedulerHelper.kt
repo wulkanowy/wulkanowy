@@ -5,6 +5,7 @@ import android.app.AlarmManager.RTC_WAKEUP
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -91,6 +92,11 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
             return cancelScheduled(lessons, student)
         }
 
+        if (!canScheduleExactAlarms()) {
+            Timber.w("Exact alarms are disabled by user")
+            return
+        }
+
         if (lessons.firstOrNull()?.date?.isAfter(LocalDate.now().plusDays(2)) == true) {
             Timber.d("Timetable notification scheduling skipped - lessons are too far")
             return
@@ -172,5 +178,13 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
         } catch (e: Throwable) {
             Timber.e(e)
         }
+    }
+
+    private fun canScheduleExactAlarms(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) try {
+            alarmManager.canScheduleExactAlarms()
+        } catch (e: Throwable) {
+            false
+        } else true
     }
 }
