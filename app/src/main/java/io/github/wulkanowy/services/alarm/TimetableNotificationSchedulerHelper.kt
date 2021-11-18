@@ -182,10 +182,12 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
     }
 
     fun canScheduleExactAlarms(): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) try {
-            alarmManager.canScheduleExactAlarms()
-        } catch (e: Throwable) {
-            false
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                alarmManager.canScheduleExactAlarms()
+            } catch (e: Throwable) {
+                false
+            }
         } else true
     }
 }

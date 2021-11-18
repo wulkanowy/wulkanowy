@@ -141,7 +141,7 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             .setTitle(R.string.pref_notify_fix_sync_issues)
             .setMessage(R.string.pref_notify_fix_sync_issues_message)
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
-            .setPositiveButton(R.string.pref_notify_fix_sync_issues_settings_button) { _, _ ->
+            .setPositiveButton(R.string.pref_notify_open_system_settings) { _, _ ->
                 try {
                     AppKillerManager.doActionPowerSaving(requireContext())
                     AppKillerManager.doActionAutoStart(requireContext())
@@ -178,7 +178,7 @@ class NotificationsFragment : PreferenceFragmentCompat(),
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.pref_notification_piggyback_popup_title))
             .setMessage(getString(R.string.pref_notification_piggyback_popup_description))
-            .setPositiveButton(getString(R.string.pref_notification_piggyback_popup_positive)) { _, _ ->
+            .setPositiveButton(getString(R.string.pref_notification_go_to_settings)) { _, _ ->
                 notificationSettingsPiggybackContract.launch(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
             }
             .setNegativeButton(android.R.string.cancel) { _, _ ->
@@ -189,7 +189,17 @@ class NotificationsFragment : PreferenceFragmentCompat(),
     }
 
     override fun openNotificationExactAlarmSettings() {
-        notificationSettingsExactAlarmsContract.launch(Intent("android.settings.REQUEST_SCHEDULE_EXACT_ALARM"))
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.pref_notification_exact_alarm_popup_title))
+            .setMessage(getString(R.string.pref_notification_exact_alarm_popup_descriptions))
+            .setPositiveButton(getString(R.string.pref_notification_go_to_settings)) { _, _ ->
+                notificationSettingsExactAlarmsContract.launch(Intent("android.settings.REQUEST_SCHEDULE_EXACT_ALARM"))
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                setUpcomingLessonsNotificationPreferenceChecked(false)
+            }
+            .setOnDismissListener { setUpcomingLessonsNotificationPreferenceChecked(false) }
+            .show()
     }
 
     override fun setNotificationPiggybackPreferenceChecked(isChecked: Boolean) {
