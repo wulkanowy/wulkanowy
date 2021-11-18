@@ -1,5 +1,7 @@
 [English version of README](README.en.md)
 
+[Deutsche Version von README](README.de.md)
+
 [Polska wersja README](README.md)
 
 [Slovenská verzia README](README.sk.md)
