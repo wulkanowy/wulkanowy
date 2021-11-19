@@ -683,9 +683,9 @@
     <string name="pref_notify_notifications_piggyback">Zachytiť upozornenia oficiálnej aplikácie</string>
     <string name="pref_notification_piggyback_popup_title">Zachytiť upozornenia</string>
     <string name="pref_notification_piggyback_popup_description">S touto funkciou môžete získať náhradu push upozornení ako v oficiálnej aplikácii. Všetko, čo musíte urobiť, je povoliť Wulkanowému čítať všetky vaše upozornenia v nastaveniach systému.\n\nAko to funguje?\nKeď dostanete oznámenie v Deníčku VULCAN, Wulkanowy bude o tom informovaný (k tomu je to dodatočné povolenie) a spustí synchronizáciu, aby mohol zaslať vlastné upozornenie.\n\nLEN PRE POKROČILÝCH POUŽĺVATEĹOV</string>
-    <string name="pref_notification_exact_alarm_popup_title">Upcoming lesson notifications</string>
-    <string name="pref_notification_exact_alarm_popup_descriptions">You must allow the Wulkanowy app to set alarms and reminders in your system settings to use this feature.</string>
-    <string name="pref_notification_go_to_settings">Go to settings</string>
+    <string name="pref_notification_exact_alarm_popup_title">Upozornenia o nadchádzajúcej lekciu</string>
+    <string name="pref_notification_exact_alarm_popup_descriptions">Musíte povoliť Wulkanovému nastaviť budíky a pripomenutie v nastavení vášho systému pre použitie tejto funkcie.</string>
+    <string name="pref_notification_go_to_settings">Prejsť do nastavení</string>
     <string name="pref_services_header">Synchronizácia</string>
     <string name="pref_services_switch">Automatická aktualizácia</string>
     <string name="pref_services_suspended">Pozastavený počas dovolenky</string>
