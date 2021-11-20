@@ -31,16 +31,22 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private var currentSemesterId = 0
 
-    private var currentSubjectName: String = "Wszystkie"
+    var currentSubjectName: String = "Wszystkie"
+        private set
 
     private lateinit var lastError: Throwable
 
     var currentType: GradeStatisticsItem.DataType = GradeStatisticsItem.DataType.PARTIAL
         private set
 
-    fun onAttachView(view: GradeStatisticsView, type: GradeStatisticsItem.DataType?) {
+    fun onAttachView(
+        view: GradeStatisticsView,
+        type: GradeStatisticsItem.DataType?,
+        subjectName: String?
+    ) {
         super.onAttachView(view)
         currentType = type ?: GradeStatisticsItem.DataType.PARTIAL
+        currentSubjectName = subjectName ?: currentSubjectName
         view.initView()
         errorHandler.showErrorMessage = ::showErrorViewOnError
     }
@@ -131,7 +137,18 @@ class GradeStatisticsPresenter @Inject constructor(
 
                     Timber.i("Loading grade stats subjects result: Success")
                     view?.run {
-                        view?.updateSubjects(ArrayList(it.data.map { subject -> subject.name }))
+                        val selected = it.data.indexOfFirst { it.name == currentSubjectName }
+                        if (selected == -1) {
+                            Timber.e(
+                                "GradeStatisticsView: selected = -1,  currentSubjectName: `%s`, data: `%s`",
+                                currentSubjectName,
+                                it.data
+                            )
+                        }
+                        view?.updateSubjects(
+                            selected,
+                            it.data.map { subject -> subject.name }.toList()
+                        )
                         showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
                     }
                 }
