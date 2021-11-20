@@ -246,11 +246,11 @@ class PreferencesRepository @Inject constructor(
         }
 
     var dismissedAdminMessageIds: List<Int>
-        get() = sharedPref.getStringSet(PREF_KEY_DISMISSED_ADMIN_MESSAGE_IDS, emptySet())
+        get() = sharedPref.getStringSet(PREF_KEY_ADMIN_DISMISSED_MESSAGE_IDS, emptySet())
             .orEmpty()
             .map { it.toInt() }
         set(value) = sharedPref.edit {
-            putStringSet(PREF_KEY_DISMISSED_ADMIN_MESSAGE_IDS, value.map { it.toString() }.toSet())
+            putStringSet(PREF_KEY_ADMIN_DISMISSED_MESSAGE_IDS, value.map { it.toString() }.toSet())
         }
 
     var inAppReviewCount: Int
@@ -295,6 +295,6 @@ class PreferencesRepository @Inject constructor(
 
         private const val PREF_KEY_IN_APP_REVIEW_DONE = "in_app_review_done"
 
-        private const val PREF_KEY_DISMISSED_ADMIN_MESSAGE_IDS = "dismissed_admin_message_ids"
+        private const val PREF_KEY_ADMIN_DISMISSED_MESSAGE_IDS = "admin_message_dismissed_ids"
     }
 }
