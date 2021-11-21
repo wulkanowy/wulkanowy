@@ -86,7 +86,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
 
         with(binding) {
             timetableSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            timetableSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            timetableSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             timetableSwipe.setProgressBackgroundColorSchemeColor(
                 requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh)
             )

@@ -71,7 +71,7 @@ class GradeStatisticsFragment :
             gradeStatisticsSubjectsContainer.elevation = requireContext().dpToPx(1f)
 
             gradeStatisticsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            gradeStatisticsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            gradeStatisticsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             gradeStatisticsSwipe.setProgressBackgroundColorSchemeColor(
                 requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh)
             )

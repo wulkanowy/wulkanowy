@@ -66,7 +66,7 @@ class CompletedLessonsFragment :
 
         with(binding) {
             completedLessonsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            completedLessonsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            completedLessonsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             completedLessonsSwipe.setProgressBackgroundColorSchemeColor(
                 requireContext().getThemeAttrColor(
                     R.attr.colorSwipeRefresh

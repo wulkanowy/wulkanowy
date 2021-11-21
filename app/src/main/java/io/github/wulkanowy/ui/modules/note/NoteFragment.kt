@@ -52,7 +52,7 @@ class NoteFragment : BaseFragment<FragmentNoteBinding>(R.layout.fragment_note), 
         }
         with(binding) {
             noteSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            noteSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            noteSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             noteSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             noteErrorRetry.setOnClickListener { presenter.onRetry() }
             noteErrorDetails.setOnClickListener { presenter.onDetailsClick() }

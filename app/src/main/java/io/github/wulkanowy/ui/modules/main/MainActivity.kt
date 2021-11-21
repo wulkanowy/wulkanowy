@@ -227,7 +227,7 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
             window.navigationBarColor = if (show) {
                 getThemeAttrColor(android.R.attr.navigationBarColor)
             } else {
-                getThemeAttrColor(R.attr.colorSurface)
+                getThemeAttrColor(com.google.android.material.R.attr.colorSurface)
             }
         }
     }

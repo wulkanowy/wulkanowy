@@ -42,7 +42,7 @@ class LuckyNumberFragment :
     override fun initView() {
         with(binding) {
             luckyNumberSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            luckyNumberSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            luckyNumberSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             luckyNumberSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             luckyNumberHistoryButton.setOnClickListener { openLuckyNumberHistory() }
             luckyNumberErrorRetry.setOnClickListener { presenter.onRetry() }

@@ -68,7 +68,7 @@ class GradeDetailsFragment :
                 adapter = gradeDetailsAdapter
             }
             gradeDetailsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            gradeDetailsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            gradeDetailsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             gradeDetailsSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             gradeDetailsErrorRetry.setOnClickListener { presenter.onRetry() }
             gradeDetailsErrorDetails.setOnClickListener { presenter.onDetailsClick() }

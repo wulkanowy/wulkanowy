@@ -57,7 +57,7 @@ class AttendanceSummaryFragment :
 
         with(binding) {
             attendanceSummarySwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            attendanceSummarySwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            attendanceSummarySwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             attendanceSummarySwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             attendanceSummaryErrorRetry.setOnClickListener { presenter.onRetry() }
             attendanceSummaryErrorDetails.setOnClickListener { presenter.onDetailsClick() }

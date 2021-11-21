@@ -32,14 +32,14 @@ class DashboardExamsAdapter :
         val context = holder.binding.root.context
         val primaryWarningTextColor = context.getThemeAttrColor(
             if (item.date == LocalDate.now()) {
-                R.attr.colorPrimary
+                androidx.appcompat.R.attr.colorPrimary
             } else {
                 android.R.attr.textColorPrimary
             }
         )
         val secondaryWarningTextColor = context.getThemeAttrColor(
             if (item.date == LocalDate.now()) {
-                R.attr.colorPrimary
+                androidx.appcompat.R.attr.colorPrimary
             } else {
                 android.R.attr.textColorSecondary
             }

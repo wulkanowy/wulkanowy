@@ -82,7 +82,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         }
         with(binding) {
             messageTabSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            messageTabSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            messageTabSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             messageTabSwipe.setProgressBackgroundColorSchemeColor(
                 requireContext().getThemeAttrColor(
                     R.attr.colorSwipeRefresh

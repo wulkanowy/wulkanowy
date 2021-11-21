@@ -86,12 +86,12 @@ class TimetableDialog : DialogFragment() {
                     if (canceled) {
                         timetableDialogChangesTitle.setTextColor(
                             requireContext().getThemeAttrColor(
-                                R.attr.colorPrimary
+                                androidx.appcompat.R.attr.colorPrimary
                             )
                         )
                         timetableDialogChangesValue.setTextColor(
                             requireContext().getThemeAttrColor(
-                                R.attr.colorPrimary
+                                androidx.appcompat.R.attr.colorPrimary
                             )
                         )
                     } else {

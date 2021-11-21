@@ -40,7 +40,7 @@ abstract class BaseActivity<T : BasePresenter<out BaseView>, VB : ViewBinding> :
 
         @Suppress("DEPRECATION")
         setTaskDescription(
-            ActivityManager.TaskDescription(null, null, getThemeAttrColor(R.attr.colorSurface))
+            ActivityManager.TaskDescription(null, null, getThemeAttrColor(com.google.android.material.R.attr.colorSurface))
         )
     }
 

@@ -28,14 +28,14 @@ class DashboardHomeworkAdapter : RecyclerView.Adapter<DashboardHomeworkAdapter.V
         val formattedDate = item.date.toFormattedString("dd.MM")
         val primaryWarningTextColor = context.getThemeAttrColor(
             if (item.date == LocalDate.now()) {
-                R.attr.colorPrimary
+                androidx.appcompat.R.attr.colorPrimary
             } else {
                 android.R.attr.textColorPrimary
             }
         )
         val secondaryWarningTextColor = context.getThemeAttrColor(
             if (item.date == LocalDate.now()) {
-                R.attr.colorPrimary
+                androidx.appcompat.R.attr.colorPrimary
             } else {
                 android.R.attr.textColorSecondary
             }

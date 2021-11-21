@@ -51,7 +51,8 @@ class SchoolAnnouncementFragment :
         }
         with(binding) {
             directorInformationSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            directorInformationSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            directorInformationSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(
+                androidx.appcompat.R.attr.colorPrimary))
             directorInformationSwipe.setProgressBackgroundColorSchemeColor(
                 requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh)
             )

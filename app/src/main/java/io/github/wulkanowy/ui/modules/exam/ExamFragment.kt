@@ -56,7 +56,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(R.layout.fragment_exam), 
 
         with(binding) {
             examSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            examSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            examSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             examSwipe.setProgressBackgroundColorSchemeColor(requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh))
             examErrorRetry.setOnClickListener { presenter.onRetry() }
             examErrorDetails.setOnClickListener { presenter.onDetailsClick() }

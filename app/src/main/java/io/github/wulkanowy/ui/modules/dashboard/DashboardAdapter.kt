@@ -187,15 +187,15 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             (isLoading && !item.isDataLoaded) || (isLoading && !item.isFullDataLoaded)
         val attendanceColor = when {
             attendancePercentage == null || attendancePercentage == .0 -> {
-                context.getThemeAttrColor(R.attr.colorOnSurface)
+                context.getThemeAttrColor(com.google.android.material.R.attr.colorOnSurface)
             }
             attendancePercentage <= ATTENDANCE_SECOND_WARNING_THRESHOLD -> {
-                context.getThemeAttrColor(R.attr.colorPrimary)
+                context.getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary)
             }
             attendancePercentage <= ATTENDANCE_FIRST_WARNING_THRESHOLD -> {
                 context.getThemeAttrColor(R.attr.colorTimetableChange)
             }
-            else -> context.getThemeAttrColor(R.attr.colorOnSurface)
+            else -> context.getThemeAttrColor(com.google.android.material.R.attr.colorOnSurface)
         }
         val attendanceString = if (attendancePercentage == null || attendancePercentage == .0) {
             context.getString(R.string.dashboard_horizontal_group_no_data)
@@ -434,21 +434,21 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
             when {
                 minutesToStartLesson < 60 -> {
-                    firstTitleAndValueTextColor = context.getThemeAttrColor(R.attr.colorPrimary)
+                    firstTitleAndValueTextColor = context.getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary)
                     firstTitleAndValueTextFont = sansSerifMediumFont
                     firstTitleText =
                         context.getString(R.string.dashboard_timetable_first_lesson_title_moment)
                 }
                 minutesToStartLesson < 240 -> {
                     firstTitleAndValueTextColor =
-                        context.getThemeAttrColor(R.attr.colorOnSurface)
+                        context.getThemeAttrColor(com.google.android.material.R.attr.colorOnSurface)
                     firstTitleAndValueTextFont = sansSerifFont
                     firstTitleText =
                         context.getString(R.string.dashboard_timetable_first_lesson_title_soon)
                 }
                 else -> {
                     firstTitleAndValueTextColor =
-                        context.getThemeAttrColor(R.attr.colorOnSurface)
+                        context.getThemeAttrColor(com.google.android.material.R.attr.colorOnSurface)
                     firstTitleAndValueTextFont = sansSerifFont
                     firstTitleText =
                         context.getString(R.string.dashboard_timetable_first_lesson_title_first)
@@ -470,7 +470,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             isFirstTimeRangeVisible = false
             isFirstTimeVisible = true
 
-            firstTitleAndValueTextColor = context.getThemeAttrColor(R.attr.colorPrimary)
+            firstTitleAndValueTextColor = context.getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary)
             firstTitleAndValueTextFont = sansSerifMediumFont
             firstTitleText = context.getString(R.string.dashboard_timetable_first_lesson_title_now)
         }
@@ -715,13 +715,13 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         val context = adminMessageViewHolder.binding.root.context
         val (backgroundColor, textColor) = when (item.priority) {
             "HIGH" -> {
-                context.getThemeAttrColor(R.attr.colorPrimary) to
-                    context.getThemeAttrColor(R.attr.colorOnPrimary)
+                context.getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary) to
+                    context.getThemeAttrColor(com.google.android.material.R.attr.colorOnPrimary)
             }
             "MEDIUM" -> {
                 context.getThemeAttrColor(R.attr.colorMessageMedium) to Color.BLACK
             }
-            else -> null to context.getThemeAttrColor(R.attr.colorOnSurface)
+            else -> null to context.getThemeAttrColor(com.google.android.material.R.attr.colorOnSurface)
         }
 
         with(adminMessageViewHolder.binding) {

@@ -113,7 +113,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
             dashboardErrorRetry.setOnClickListener { presenter.onRetry() }
             dashboardErrorDetails.setOnClickListener { presenter.onDetailsClick() }
             dashboardSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            dashboardSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            dashboardSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             dashboardSwipe.setProgressBackgroundColorSchemeColor(
                 requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh)
             )

@@ -86,7 +86,7 @@ class LoginRecoverFragment :
         with(bindingLocal.loginRecoverHost) {
             setText(hostKeys.getOrNull(0).orEmpty())
             setAdapter(
-                LoginSymbolAdapter(context, R.layout.support_simple_spinner_dropdown_item, hostKeys)
+                LoginSymbolAdapter(context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hostKeys)
             )
             setOnClickListener { if (bindingLocal.loginRecoverFormContainer.visibility == GONE) dismissDropDown() }
         }

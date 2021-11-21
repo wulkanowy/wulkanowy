@@ -59,7 +59,7 @@ class AdditionalLessonsFragment :
 
         with(binding) {
             additionalLessonsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            additionalLessonsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            additionalLessonsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             additionalLessonsSwipe.setProgressBackgroundColorSchemeColor(
                 requireContext().getThemeAttrColor(
                     R.attr.colorSwipeRefresh

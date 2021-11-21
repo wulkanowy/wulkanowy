@@ -78,7 +78,7 @@ class AccountAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
         val semester = semesters.maxByOrNull { it.semesterId }
         val avatar = context.createNameInitialsDrawable(student.nickOrName, student.avatarColor)
         val checkBackgroundColor =
-            context.getThemeAttrColor(if (isAccountQuickDialogMode) R.attr.colorBackgroundFloating else R.attr.colorSurface)
+            context.getThemeAttrColor(if (isAccountQuickDialogMode) androidx.appcompat.R.attr.colorBackgroundFloating else com.google.android.material.R.attr.colorSurface)
         val isDuplicatedStudent = items.filter {
             if (it.value !is StudentWithSemesters) return@filter false
             val studentToCompare = it.value.student

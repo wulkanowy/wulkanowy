@@ -120,7 +120,7 @@ class AttendanceFragment : BaseFragment<FragmentAttendanceBinding>(R.layout.frag
 
         with(binding) {
             attendanceSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
-            attendanceSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
+            attendanceSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
             attendanceSwipe.setProgressBackgroundColorSchemeColor(
                 requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh)
             )

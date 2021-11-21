@@ -34,7 +34,7 @@ class WidgetConfigureAdapter @Inject constructor() :
         val (student, semesters) = items[position]
         val semester = semesters.maxByOrNull { it.semesterId }
         val context = holder.binding.root.context
-        val checkBackgroundColor = context.getThemeAttrColor(R.attr.colorSurface)
+        val checkBackgroundColor = context.getThemeAttrColor(com.google.android.material.R.attr.colorSurface)
         val avatar = context.createNameInitialsDrawable(student.nickOrName, student.avatarColor)
         val isDuplicatedStudent = items.filter {
             val studentToCompare = it.student

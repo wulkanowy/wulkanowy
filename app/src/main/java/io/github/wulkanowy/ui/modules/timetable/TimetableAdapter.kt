@@ -245,7 +245,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
                 timetableSmallItemDescription.setTextColor(
                     root.context.getThemeAttrColor(
-                        if (lesson.canceled) R.attr.colorPrimary
+                        if (lesson.canceled) androidx.appcompat.R.attr.colorPrimary
                         else R.attr.colorTimetableChange
                     )
                 )
@@ -269,7 +269,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
                 timetableItemDescription.setTextColor(
                     root.context.getThemeAttrColor(
-                        if (lesson.canceled) R.attr.colorPrimary
+                        if (lesson.canceled) androidx.appcompat.R.attr.colorPrimary
                         else R.attr.colorTimetableChange
                     )
                 )
@@ -313,8 +313,8 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
     }
 
     private fun updateNumberAndSubjectCanceledColor(numberView: TextView, subjectView: TextView) {
-        numberView.setTextColor(numberView.context.getThemeAttrColor(R.attr.colorPrimary))
-        subjectView.setTextColor(subjectView.context.getThemeAttrColor(R.attr.colorPrimary))
+        numberView.setTextColor(numberView.context.getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
+        subjectView.setTextColor(subjectView.context.getThemeAttrColor(androidx.appcompat.R.attr.colorPrimary))
     }
 
     private fun updateNumberColor(numberView: TextView, lesson: Timetable) {
