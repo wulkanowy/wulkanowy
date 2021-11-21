@@ -10,6 +10,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.sdk.toLocalDate
 import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
+import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
 import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
 import io.github.wulkanowy.ui.modules.grade.GradeSortingMode
 import io.github.wulkanowy.utils.toLocalDateTime
@@ -75,10 +76,12 @@ class PreferencesRepository @Inject constructor(
     val appTheme: String
         get() = getString(appThemeKey, R.string.pref_default_app_theme)
 
-    val gradeColorTheme: String
-        get() = getString(
-            R.string.pref_key_grade_color_scheme,
-            R.string.pref_default_grade_color_scheme
+    val gradeColorTheme: GradeColorTheme
+        get() = GradeColorTheme.getByValue(
+            getString(
+                R.string.pref_key_grade_color_scheme,
+                R.string.pref_default_grade_color_scheme
+            )
         )
 
     val appLanguageKey = context.getString(R.string.pref_key_app_language)

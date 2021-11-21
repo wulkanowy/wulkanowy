@@ -29,6 +29,7 @@ import io.github.wulkanowy.databinding.ItemDashboardGradesBinding
 import io.github.wulkanowy.databinding.ItemDashboardHomeworkBinding
 import io.github.wulkanowy.databinding.ItemDashboardHorizontalGroupBinding
 import io.github.wulkanowy.databinding.ItemDashboardLessonsBinding
+import io.github.wulkanowy.ui.modules.grade.orDefault
 import io.github.wulkanowy.utils.createNameInitialsDrawable
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
@@ -262,7 +263,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         val isLoading = item.isLoading
         val dashboardGradesAdapter = gradesViewHolder.adapter.apply {
             this.items = subjectWithGrades.toList()
-            this.gradeTheme = gradeTheme.orEmpty()
+            this.gradeTheme = gradeTheme.orDefault()
         }
 
         with(gradesViewHolder.binding) {

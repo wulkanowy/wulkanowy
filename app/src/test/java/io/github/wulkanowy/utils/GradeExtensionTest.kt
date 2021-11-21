@@ -3,6 +3,8 @@ package io.github.wulkanowy.utils
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
+import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
+import io.github.wulkanowy.ui.modules.grade.getBackgroundColor
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import org.junit.Assert.assertEquals
@@ -46,10 +48,10 @@ class GradeExtensionTest {
 
     @Test
     fun getBackgroundColor() {
-        assertEquals(R.color.grade_material_five, createGrade(5.0).getBackgroundColor("material"))
-        assertEquals(R.color.grade_material_five, createGrade(5.5).getBackgroundColor("material"))
-        assertEquals(R.color.grade_material_five, createGrade(5.9).getBackgroundColor("material"))
-        assertEquals(R.color.grade_vulcan_five, createGrade(5.9).getBackgroundColor("whatever"))
+        assertEquals(R.color.grade_material_five, createGrade(5.0).getBackgroundColor(GradeColorTheme.MATERIAL))
+        assertEquals(R.color.grade_material_five, createGrade(5.5).getBackgroundColor(GradeColorTheme.MATERIAL))
+        assertEquals(R.color.grade_material_five, createGrade(5.9).getBackgroundColor(GradeColorTheme.MATERIAL))
+        assertEquals(R.color.grade_vulcan_five, createGrade(5.9).getBackgroundColor(GradeColorTheme.DEFAULT))
     }
 
     @Test

@@ -24,6 +24,7 @@ import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.databinding.ItemGradeStatisticsBarBinding
 import io.github.wulkanowy.databinding.ItemGradeStatisticsHeaderBinding
 import io.github.wulkanowy.databinding.ItemGradeStatisticsPieBinding
+import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
 import io.github.wulkanowy.utils.getThemeAttrColor
 import javax.inject.Inject
 
@@ -34,7 +35,7 @@ class GradeStatisticsAdapter @Inject constructor() :
 
     var items = emptyList<GradeStatisticsItem>()
 
-    var theme: String = "vulcan"
+    var theme = GradeColorTheme.DEFAULT
 
     var showAllSubjectsOnList: Boolean = false
 
@@ -157,7 +158,7 @@ class GradeStatisticsAdapter @Inject constructor() :
         }
 
         val gradeColors = when (theme) {
-            "vulcan" -> vulcanGradeColors
+            GradeColorTheme.VULCAN -> vulcanGradeColors
             else -> materialGradeColors
         }
 

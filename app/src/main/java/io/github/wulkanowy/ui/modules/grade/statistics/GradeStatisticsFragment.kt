@@ -10,6 +10,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.databinding.FragmentGradeStatisticsBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.utils.dpToPx
@@ -90,7 +91,7 @@ class GradeStatisticsFragment :
 
     override fun updateData(
         newItems: List<GradeStatisticsItem>,
-        newTheme: String,
+        newTheme: GradeColorTheme,
         showAllSubjectsOnStatisticsList: Boolean
     ) {
         with(statisticsAdapter) {

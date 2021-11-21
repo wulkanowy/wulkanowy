@@ -6,13 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.databinding.SubitemDashboardGradesBinding
 import io.github.wulkanowy.databinding.SubitemDashboardSmallGradeBinding
-import io.github.wulkanowy.utils.getBackgroundColor
+import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
+import io.github.wulkanowy.ui.modules.grade.getBackgroundColor
 
 class DashboardGradesAdapter : RecyclerView.Adapter<DashboardGradesAdapter.ViewHolder>() {
 
     var items = listOf<Pair<String, List<Grade>>>()
 
-    var gradeTheme = ""
+    var gradeTheme = GradeColorTheme.DEFAULT
 
     override fun getItemCount() = items.size
 

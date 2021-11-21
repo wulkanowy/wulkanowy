@@ -15,6 +15,7 @@ import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
 import io.github.wulkanowy.databinding.FragmentGradeDetailsBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.ui.modules.main.MainActivity
@@ -80,7 +81,7 @@ class GradeDetailsFragment :
         else false
     }
 
-    override fun updateData(data: List<GradeDetailsItem>, expandMode: GradeExpandMode, gradeColorTheme: String) {
+    override fun updateData(data: List<GradeDetailsItem>, expandMode: GradeExpandMode, gradeColorTheme: GradeColorTheme) {
         with(gradeDetailsAdapter) {
             colorTheme = gradeColorTheme
             setDataItems(data, expandMode)
@@ -143,8 +144,8 @@ class GradeDetailsFragment :
         binding.gradeDetailsSwipe.isRefreshing = show
     }
 
-    override fun showGradeDialog(grade: Grade, colorScheme: String) {
-        (activity as? MainActivity)?.showDialogFragment(GradeDetailsDialog.newInstance(grade, colorScheme))
+    override fun showGradeDialog(grade: Grade, colorTheme: GradeColorTheme) {
+        (activity as? MainActivity)?.showDialogFragment(GradeDetailsDialog.newInstance(grade, colorTheme))
     }
 
     override fun onParentLoadData(semesterId: Int, forceRefresh: Boolean) {

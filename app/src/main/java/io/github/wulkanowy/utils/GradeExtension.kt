@@ -37,28 +37,6 @@ fun List<GradeSummary>.calcFinalAverage(plusModifier: Double, minusModifier: Dou
     .average()
     .let { if (it.isNaN()) 0.0 else it }
 
-fun Grade.getBackgroundColor(theme: String) = when (theme) {
-    "grade_color" -> getGradeColor()
-    "material" -> when (value.toInt()) {
-        6 -> R.color.grade_material_six
-        5 -> R.color.grade_material_five
-        4 -> R.color.grade_material_four
-        3 -> R.color.grade_material_three
-        2 -> R.color.grade_material_two
-        1 -> R.color.grade_material_one
-        else -> R.color.grade_material_default
-    }
-    else -> when (value.toInt()) {
-        6 -> R.color.grade_vulcan_six
-        5 -> R.color.grade_vulcan_five
-        4 -> R.color.grade_vulcan_four
-        3 -> R.color.grade_vulcan_three
-        2 -> R.color.grade_vulcan_two
-        1 -> R.color.grade_vulcan_one
-        else -> R.color.grade_vulcan_default
-    }
-}
-
 fun Grade.getGradeColor() = when (color) {
     "000000" -> R.color.grade_black
     "F04C4C" -> R.color.grade_red

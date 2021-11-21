@@ -9,8 +9,9 @@ import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.databinding.DialogGradeBinding
+import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
+import io.github.wulkanowy.ui.modules.grade.getBackgroundColor
 import io.github.wulkanowy.utils.colorStringId
-import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.getGradeColor
 import io.github.wulkanowy.utils.lifecycleAwareVariable
 import io.github.wulkanowy.utils.toFormattedString
@@ -21,19 +22,19 @@ class GradeDetailsDialog : DialogFragment() {
 
     private lateinit var grade: Grade
 
-    private lateinit var colorScheme: String
+    private lateinit var colorTheme: GradeColorTheme
 
     companion object {
 
         private const val ARGUMENT_KEY = "Item"
 
-        private const val COLOR_SCHEME_KEY = "Scheme"
+        private const val COLOR_THEME_KEY = "Theme"
 
-        fun newInstance(grade: Grade, colorScheme: String) =
+        fun newInstance(grade: Grade, colorTheme: GradeColorTheme) =
             GradeDetailsDialog().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARGUMENT_KEY, grade)
-                    putString(COLOR_SCHEME_KEY, colorScheme)
+                    putSerializable(COLOR_THEME_KEY, colorTheme)
                 }
             }
     }
@@ -43,7 +44,7 @@ class GradeDetailsDialog : DialogFragment() {
         setStyle(STYLE_NO_TITLE, 0)
         arguments?.run {
             grade = getSerializable(ARGUMENT_KEY) as Grade
-            colorScheme = getString(COLOR_SCHEME_KEY) ?: "default"
+            colorTheme = getSerializable(COLOR_THEME_KEY) as GradeColorTheme
         }
     }
 
@@ -76,7 +77,7 @@ class GradeDetailsDialog : DialogFragment() {
 
             gradeDialogValue.run {
                 text = grade.entry
-                setBackgroundResource(grade.getBackgroundColor(colorScheme))
+                setBackgroundResource(grade.getBackgroundColor(colorTheme))
             }
 
             gradeDialogTeacherValue.text = if (grade.teacher.isBlank()) {
