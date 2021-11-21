@@ -707,7 +707,7 @@
     <string name="pref_ads_privacy_agree">Akceptuję</string>
     <string name="pref_ads_privacy_link">Polityka prywatności</string>
     <string name="pref_ads_loading">Ładowanie reklamy</string>
-    <string name="pref_ads_once_per_visit">Thank you for your support, come back later for more ads</string>
+    <string name="pref_ads_once_per_visit">Dziękujemy za wsparcie, wróć później po więcej reklam</string>
     <string name="pref_settings_advanced_title">Zaawansowane</string>
     <string name="pref_settings_appearance_title">Wygląd i zachowanie</string>
     <string name="pref_settings_notifications_title">Powiadomienia</string>
