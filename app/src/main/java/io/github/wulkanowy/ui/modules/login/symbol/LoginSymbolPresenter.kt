@@ -50,7 +50,7 @@ class LoginSymbolPresenter @Inject constructor(
     }
 
     fun attemptLogin(symbol: String) {
-        if (loginData == null) throw IllegalArgumentException("Login data is null")
+        if (loginData == null) Timber.w("LoginSymbolPresenter - Login data is null")
 
         if (symbol.isBlank()) {
             view?.setErrorSymbolRequire()
