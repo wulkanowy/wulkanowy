@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.databinding.DialogGradeBinding
-import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
-import io.github.wulkanowy.ui.modules.grade.getBackgroundColor
 import io.github.wulkanowy.utils.colorStringId
+import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.getGradeColor
 import io.github.wulkanowy.utils.lifecycleAwareVariable
 import io.github.wulkanowy.utils.toFormattedString
@@ -22,7 +22,7 @@ class GradeDetailsDialog : DialogFragment() {
 
     private lateinit var grade: Grade
 
-    private lateinit var colorTheme: GradeColorTheme
+    private lateinit var gradeColorTheme: GradeColorTheme
 
     companion object {
 
@@ -44,7 +44,7 @@ class GradeDetailsDialog : DialogFragment() {
         setStyle(STYLE_NO_TITLE, 0)
         arguments?.run {
             grade = getSerializable(ARGUMENT_KEY) as Grade
-            colorTheme = getSerializable(COLOR_THEME_KEY) as GradeColorTheme
+            gradeColorTheme = getSerializable(COLOR_THEME_KEY) as GradeColorTheme
         }
     }
 
@@ -77,7 +77,7 @@ class GradeDetailsDialog : DialogFragment() {
 
             gradeDialogValue.run {
                 text = grade.entry
-                setBackgroundResource(grade.getBackgroundColor(colorTheme))
+                setBackgroundResource(grade.getBackgroundColor(gradeColorTheme))
             }
 
             gradeDialogTeacherValue.text = if (grade.teacher.isBlank()) {

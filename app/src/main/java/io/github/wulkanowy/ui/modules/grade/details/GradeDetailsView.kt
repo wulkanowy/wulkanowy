@@ -1,9 +1,9 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
 import io.github.wulkanowy.data.db.entities.Grade
-import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
+import io.github.wulkanowy.data.enums.GradeColorTheme
+import io.github.wulkanowy.data.enums.GradeExpandMode
 import io.github.wulkanowy.ui.base.BaseView
-import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
 
 interface GradeDetailsView : BaseView {
 

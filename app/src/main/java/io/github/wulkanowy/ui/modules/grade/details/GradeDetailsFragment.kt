@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
-import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
+import io.github.wulkanowy.data.enums.GradeColorTheme
+import io.github.wulkanowy.data.enums.GradeExpandMode
 import io.github.wulkanowy.databinding.FragmentGradeDetailsBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.ui.modules.main.MainActivity
@@ -83,7 +83,7 @@ class GradeDetailsFragment :
 
     override fun updateData(data: List<GradeDetailsItem>, expandMode: GradeExpandMode, gradeColorTheme: GradeColorTheme) {
         with(gradeDetailsAdapter) {
-            colorTheme = gradeColorTheme
+            this.gradeColorTheme = gradeColorTheme
             setDataItems(data, expandMode)
             notifyDataSetChanged()
         }

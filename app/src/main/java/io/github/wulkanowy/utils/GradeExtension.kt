@@ -3,6 +3,7 @@ package io.github.wulkanowy.utils
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
+import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.sdk.scrapper.grades.isGradeValid
 
 fun List<Grade>.calcAverage(isOptionalArithmeticAverage: Boolean): Double {
@@ -60,4 +61,26 @@ fun Grade.changeModifier(plusModifier: Double, minusModifier: Double) = when {
     modifier > 0 -> copy(modifier = plusModifier)
     modifier < 0 -> copy(modifier = -minusModifier)
     else -> this
+}
+
+fun Grade.getBackgroundColor(theme: GradeColorTheme) = when (theme) {
+    GradeColorTheme.GRADE_COLOR -> getGradeColor()
+    GradeColorTheme.MATERIAL -> when (value.toInt()) {
+        6 -> R.color.grade_material_six
+        5 -> R.color.grade_material_five
+        4 -> R.color.grade_material_four
+        3 -> R.color.grade_material_three
+        2 -> R.color.grade_material_two
+        1 -> R.color.grade_material_one
+        else -> R.color.grade_material_default
+    }
+    GradeColorTheme.VULCAN -> when (value.toInt()) {
+        6 -> R.color.grade_vulcan_six
+        5 -> R.color.grade_vulcan_five
+        4 -> R.color.grade_vulcan_four
+        3 -> R.color.grade_vulcan_three
+        2 -> R.color.grade_vulcan_two
+        1 -> R.color.grade_vulcan_one
+        else -> R.color.grade_vulcan_default
+    }
 }

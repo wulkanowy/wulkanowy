@@ -1,8 +1,8 @@
 package io.github.wulkanowy.ui.modules.grade.statistics
 
+import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.ui.base.BaseView
-import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
 
 interface GradeStatisticsView : BaseView {
 

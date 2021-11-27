@@ -6,8 +6,8 @@ import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.data.pojos.TimetableFull
-import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
 import io.github.wulkanowy.data.db.entities.Homework as EntitiesHomework
 
 sealed class DashboardItem(val type: Type) {

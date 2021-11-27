@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.data.enums.GradeColorTheme
+import io.github.wulkanowy.data.enums.GradeExpandMode
 import io.github.wulkanowy.databinding.HeaderGradeDetailsBinding
 import io.github.wulkanowy.databinding.ItemGradeDetailsBinding
 import io.github.wulkanowy.ui.base.BaseExpandableAdapter
-import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
-import io.github.wulkanowy.ui.modules.grade.GradeExpandMode
-import io.github.wulkanowy.ui.modules.grade.getBackgroundColor
+import io.github.wulkanowy.utils.getBackgroundColor
 import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
 import java.util.BitSet
@@ -34,7 +34,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
 
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
-    var colorTheme = GradeColorTheme.DEFAULT
+    lateinit var gradeColorTheme: GradeColorTheme
 
     fun setDataItems(data: List<GradeDetailsItem>, expandMode: GradeExpandMode = this.expandMode) {
         headers = data.filter { it.viewType == ViewType.HEADER }.toMutableList()
@@ -203,7 +203,7 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
         with(holder.binding) {
             gradeItemValue.run {
                 text = grade.entry
-                setBackgroundResource(grade.getBackgroundColor(colorTheme))
+                setBackgroundResource(grade.getBackgroundColor(gradeColorTheme))
             }
             gradeItemDescription.text = when {
                 grade.description.isNotBlank() -> grade.description

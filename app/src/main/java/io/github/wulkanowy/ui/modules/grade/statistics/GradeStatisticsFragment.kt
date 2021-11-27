@@ -7,10 +7,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.databinding.FragmentGradeStatisticsBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.grade.GradeColorTheme
 import io.github.wulkanowy.ui.modules.grade.GradeFragment
 import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.utils.dpToPx
@@ -96,7 +96,7 @@ class GradeStatisticsFragment :
     ) {
         with(statisticsAdapter) {
             showAllSubjectsOnList = showAllSubjectsOnStatisticsList
-            theme = newTheme
+            gradeColorTheme = newTheme
             items = newItems
             notifyDataSetChanged()
         }
