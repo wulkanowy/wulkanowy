@@ -32,16 +32,11 @@ class LoginSymbolPresenter @Inject constructor(
         }
         if (savedLoginData is Triple<*, *, *>) {
             loginData = savedLoginData as Triple<String, String, String>
-            view.setLoginToHeading(requireNotNull(loginData?.first))
-        }
-    }
-
-    fun onParentInitSymbolView(loginData: Triple<String, String, String>) {
-        this.loginData = loginData
-        view?.apply {
-            setLoginToHeading(loginData.first)
-            clearAndFocusSymbol()
-            showSoftKeyboard()
+            view.apply {
+                setLoginToHeading(loginData!!.first)
+                clearAndFocusSymbol()
+                showSoftKeyboard()
+            }
         }
     }
 
@@ -80,10 +75,13 @@ class LoginSymbolPresenter @Inject constructor(
                         if (it.data!!.isEmpty()) {
                             Timber.i("Login with symbol result: Empty student list")
                             setErrorSymbolIncorrect()
-                            view?.showContact(true)
+                            showContact(true)
                         } else {
                             Timber.i("Login with symbol result: Success")
-                            notifyParentAccountLogged(it.data)
+                            when (it.data.size) {
+                                1 -> navigateToSuccess(it.data)
+                                else -> navigateToStudentSelect(it.data)
+                            }
                         }
                     }
                     analytics.logEvent(

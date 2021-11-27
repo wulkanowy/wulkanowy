@@ -116,7 +116,12 @@ class LoginFormPresenter @Inject constructor(
                         "scrapperBaseUrl" to host,
                         "error" to "No error"
                     )
-                    view?.notifyParentAccountLogged(it.data, Triple(email, password, host))
+                    val loginData = Triple(email, password, host)
+                    when {
+                        it.data.isEmpty() -> view?.navigateToSymbol(loginData)
+                        it.data.size == 1 -> view?.navigateToSuccess(it.data)
+                        it.data.size > 1 -> view?.navigateToStudentSelect(it.data)
+                    }
                 }
                 Status.ERROR -> {
                     Timber.i("Login result: An exception occurred")

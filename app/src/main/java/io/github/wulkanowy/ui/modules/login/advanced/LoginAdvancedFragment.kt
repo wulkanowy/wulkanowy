@@ -321,13 +321,14 @@ class LoginAdvancedFragment :
     }
 
     override fun notifyParentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>) {
-        (activity as? LoginActivity)?.onFormFragmentAccountLogged(
-            studentsWithSemesters, Triple(
-                binding.loginFormUsername.text.toString(),
-                binding.loginFormPass.text.toString(),
-                resources.getStringArray(R.array.hosts_values)[1]
-            )
-        )
+        // todo
+//        (activity as? LoginActivity)?.onFormFragmentAccountLogged(
+//            studentsWithSemesters, Triple(
+//                binding.loginFormUsername.text.toString(),
+//                binding.loginFormPass.text.toString(),
+//                resources.getStringArray(R.array.hosts_values)[1]
+//            )
+//        )
     }
 
     override fun onResume() {

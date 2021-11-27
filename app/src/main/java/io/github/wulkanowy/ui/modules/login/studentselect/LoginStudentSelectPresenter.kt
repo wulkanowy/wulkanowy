@@ -22,7 +22,7 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     private var lastError: Throwable? = null
 
-    var students = emptyList<StudentWithSemesters>()
+    private var students = emptyList<StudentWithSemesters>()
 
     private val selectedStudents = mutableListOf<StudentWithSemesters>()
 
@@ -39,17 +39,14 @@ class LoginStudentSelectPresenter @Inject constructor(
         }
 
         if (students is List<*> && students.isNotEmpty()) {
-            loadData(students.filterIsInstance<StudentWithSemesters>())
+            val studentsWithSemesters = students.filterIsInstance<StudentWithSemesters>()
+            loadData(studentsWithSemesters)
+            if (studentsWithSemesters.size == 1) registerStudents(studentsWithSemesters)
         }
     }
 
     fun onSignIn() {
         registerStudents(selectedStudents)
-    }
-
-    fun onParentInitStudentSelectView(studentsWithSemesters: List<StudentWithSemesters>) {
-        loadData(studentsWithSemesters)
-        if (studentsWithSemesters.size == 1) registerStudents(studentsWithSemesters)
     }
 
     fun onItemSelected(studentWithSemester: StudentWithSemesters, alreadySaved: Boolean) {
@@ -143,7 +140,8 @@ class LoginStudentSelectPresenter @Inject constructor(
                 "success" to (error != null),
                 "scrapperBaseUrl" to student.student.scrapperBaseUrl,
                 "symbol" to student.student.symbol,
-                "error" to (error?.message?.ifBlank { "No message" } ?: "No error"))
+                "error" to (error?.message?.ifBlank { "No message" } ?: "No error")
+            )
         }
     }
 }

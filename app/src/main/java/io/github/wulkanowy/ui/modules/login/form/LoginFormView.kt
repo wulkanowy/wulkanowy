@@ -57,7 +57,11 @@ interface LoginFormView : BaseView {
 
     fun showVersion()
 
-    fun notifyParentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>, loginData: Triple<String, String, String>)
+    fun navigateToSymbol(loginData: Triple<String, String, String>)
+
+    fun navigateToStudentSelect(studentsWithSemesters: List<StudentWithSemesters>)
+
+    fun navigateToSuccess(studentsWithSemesters: List<StudentWithSemesters>)
 
     fun openPrivacyPolicyPage()
 

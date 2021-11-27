@@ -21,52 +21,42 @@ class LoginPresenter @Inject constructor(
         Timber.i("Login view was initialized")
     }
 
-    fun onFormViewAccountLogged(studentsWithSemesters: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
-        view?.apply {
-            if (studentsWithSemesters.isEmpty()) {
-                Timber.i("Switch to symbol form")
-                notifyInitSymbolFragment(loginData)
-                switchView(1)
-            } else {
-                Timber.i("Switch to student select")
-                notifyInitStudentSelectFragment(studentsWithSemesters)
-                switchView(2)
-            }
-        }
-    }
+//    fun onFormViewAccountLogged(studentsWithSemesters: List<StudentWithSemesters>, loginData: Triple<String, String, String>) {
+//        view?.apply {
+//            if (studentsWithSemesters.isEmpty()) {
+//                Timber.i("Switch to symbol form")
+//                notifyInitSymbolFragment(loginData)
+//                switchView(1)
+//            } else {
+//                Timber.i("Switch to student select")
+//                notifyInitStudentSelectFragment(studentsWithSemesters)
+//                switchView(2)
+//            }
+//        }
+//    }
 
-    fun onSymbolViewAccountLogged(studentsWithSemesters: List<StudentWithSemesters>) {
-        view?.apply {
-            Timber.i("Switch to student select")
-            notifyInitStudentSelectFragment(studentsWithSemesters)
-            switchView(2)
-        }
-    }
+//    fun onSymbolViewAccountLogged(studentsWithSemesters: List<StudentWithSemesters>) {
+//        view?.apply {
+//            Timber.i("Switch to student select")
+//            notifyInitStudentSelectFragment(studentsWithSemesters)
+//            switchView(2)
+//        }
+//    }
+//
+//    fun onAdvancedLoginClick() {
+//        view?.switchView(3)
+//    }
+//
+//    fun onRecoverClick() {
+//        view?.switchView(4)
+//    }
 
-    fun onAdvancedLoginClick() {
-        view?.switchView(3)
-    }
-
-    fun onRecoverClick() {
-        view?.switchView(4)
-    }
-
-    fun onViewSelected(index: Int) {
-        view?.apply {
-            when (index) {
-                0 -> showActionBar(false)
-                1, 2, 3, 4 -> showActionBar(true)
-            }
-        }
-    }
-
-    fun onBackPressed(default: () -> Unit) {
-        Timber.i("Back pressed in login view")
-        view?.apply {
-            when (currentViewIndex) {
-                1, 2, 3, 4 -> switchView(0)
-                else -> default()
-            }
-        }
-    }
+//    fun onViewSelected(index: Int) {
+//        view?.apply {
+//            when (index) {
+//                0 -> showActionBar(false)
+//                1, 2, 3, 4 -> showActionBar(true)
+//            }
+//        }
+//    }
 }

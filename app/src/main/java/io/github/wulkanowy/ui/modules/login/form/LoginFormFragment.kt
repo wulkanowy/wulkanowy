@@ -203,11 +203,9 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         binding.loginFormVersion.text = "v${appInfo.versionName}"
     }
 
-    override fun notifyParentAccountLogged(
-        studentsWithSemesters: List<StudentWithSemesters>,
-        loginData: Triple<String, String, String>
-    ) {
-        (activity as? LoginActivity)?.onFormFragmentAccountLogged(studentsWithSemesters, loginData)
+    override fun showContact(show: Boolean) {
+        binding.loginFormContact.visibility = if (show) VISIBLE else GONE
+        binding.loginFormRecoverLink.visibility = if (show) GONE else VISIBLE
     }
 
     override fun openPrivacyPolicyPage() {
@@ -217,9 +215,16 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         )
     }
 
-    override fun showContact(show: Boolean) {
-        binding.loginFormContact.visibility = if (show) VISIBLE else GONE
-        binding.loginFormRecoverLink.visibility = if (show) GONE else VISIBLE
+    override fun navigateToSymbol(loginData: Triple<String, String, String>) {
+        (activity as? LoginActivity)?.navigateToSymbolFragment(loginData)
+    }
+
+    override fun navigateToStudentSelect(studentsWithSemesters: List<StudentWithSemesters>) {
+        (activity as? LoginActivity)?.navigateToStudentSelect(studentsWithSemesters)
+    }
+
+    override fun navigateToSuccess(studentsWithSemesters: List<StudentWithSemesters>) {
+        (activity as? LoginActivity)?.navigateToSuccess(studentsWithSemesters)
     }
 
     override fun openAdvancedLogin() {

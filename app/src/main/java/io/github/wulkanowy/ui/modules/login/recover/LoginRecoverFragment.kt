@@ -15,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.FragmentLoginRecoverBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.login.form.LoginSymbolAdapter
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
@@ -80,7 +79,7 @@ class LoginRecoverFragment :
             loginRecoverButton.setOnClickListener { presenter.onRecoverClick() }
             loginRecoverErrorRetry.setOnClickListener { presenter.onRecoverClick() }
             loginRecoverErrorDetails.setOnClickListener { presenter.onDetailsClick() }
-            loginRecoverLogin.setOnClickListener { (activity as LoginActivity).switchView(0) }
+//            loginRecoverLogin.setOnClickListener { (activity as LoginActivity).switchView(0) } // todo
         }
 
         with(bindingLocal.loginRecoverHost) {
