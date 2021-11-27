@@ -10,7 +10,9 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.TimetableAdditional
 import io.github.wulkanowy.databinding.FragmentTimetableAdditionalBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
+import io.github.wulkanowy.ui.modules.timetable.additional.add.AdditionalLessonAddDialog
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.SchoolDaysValidator
 import io.github.wulkanowy.utils.dpToPx

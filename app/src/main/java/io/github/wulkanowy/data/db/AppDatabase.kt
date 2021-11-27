@@ -102,7 +102,6 @@ import io.github.wulkanowy.data.db.migrations.Migration4
 import io.github.wulkanowy.data.db.migrations.Migration40
 import io.github.wulkanowy.data.db.migrations.Migration41
 import io.github.wulkanowy.data.db.migrations.Migration42
-import io.github.wulkanowy.data.db.migrations.Migration45
 import io.github.wulkanowy.data.db.migrations.Migration43
 import io.github.wulkanowy.data.db.migrations.Migration44
 import io.github.wulkanowy.data.db.migrations.Migration45
