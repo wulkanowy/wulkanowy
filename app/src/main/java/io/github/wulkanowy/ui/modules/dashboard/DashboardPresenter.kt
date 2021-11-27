@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.dashboard
 
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
@@ -81,6 +82,12 @@ class DashboardPresenter @Inject constructor(
             .launch("dashboard_pref")
     }
 
+    fun onAdminMessageDismissed(adminMessage: AdminMessage) {
+        preferencesRepository.dismissedAdminMessageIds += adminMessage.id
+
+        loadData(preferencesRepository.selectedDashboardTiles)
+    }
+
     fun onDragAndDropEnd(list: List<DashboardItem>) {
         with(dashboardItemLoadedList) {
             clear()
@@ -117,6 +124,7 @@ class DashboardPresenter @Inject constructor(
         forceRefresh: Boolean
     ) = dashboardTilesToLoad.filter { newItemToLoad ->
         dashboardLoadedTiles.none { it == newItemToLoad } || forceRefresh
+            || newItemToLoad == DashboardItem.Tile.ADMIN_MESSAGE
     }
 
     private fun removeUnselectedTiles(tilesToLoad: List<DashboardItem.Tile>) {
@@ -316,18 +324,17 @@ class DashboardPresenter @Inject constructor(
 
             gradeRepository.getGrades(student, semester, forceRefresh)
         }.map { originalResource ->
-            val filteredSubjectWithGrades = originalResource.data?.first.orEmpty()
-                .filter { grade ->
-                    grade.date.isAfter(LocalDate.now().minusDays(7))
-                }
-                .groupBy { grade -> grade.subject }
+            val filteredSubjectWithGrades = originalResource.data?.first
+                .orEmpty()
+                .filter { it.date >= LocalDate.now().minusDays(7) }
+                .groupBy { it.subject }
                 .mapValues { entry ->
                     entry.value
                         .take(5)
-                        .sortedBy { grade -> grade.date }
+                        .sortedByDescending { it.date }
                 }
                 .toList()
-                .sortedBy { subjectWithGrades -> subjectWithGrades.second[0].date }
+                .sortedByDescending { (_, grades) -> grades[0].date }
                 .toMap()
 
             Resource(
@@ -431,9 +438,9 @@ class DashboardPresenter @Inject constructor(
         }.map { homeworkResource ->
             val currentDate = LocalDate.now()
 
-            val filteredHomework = homeworkResource.data?.filter {
-                (it.date.isAfter(currentDate) || it.date == currentDate) && !it.isDone
-            }
+            val filteredHomework = homeworkResource.data
+                ?.filter { (it.date.isAfter(currentDate) || it.date == currentDate) && !it.isDone }
+                ?.sortedBy { it.date }
 
             homeworkResource.copy(data = filteredHomework)
         }.onEach {
@@ -576,6 +583,10 @@ class DashboardPresenter @Inject constructor(
 
     private fun loadAdminMessage(student: Student, forceRefresh: Boolean) {
         flowWithResourceIn { adminMessageRepository.getAdminMessages(student, forceRefresh) }
+            .map {
+                val isDismissed = it.data?.id in preferencesRepository.dismissedAdminMessageIds
+                it.copy(data = it.data.takeUnless { isDismissed })
+            }
             .onEach {
                 when (it.status) {
                     Status.LOADING -> {
@@ -618,11 +629,16 @@ class DashboardPresenter @Inject constructor(
 
         sortDashboardItems()
 
-        if (dashboardItem is DashboardItem.AdminMessages && !dashboardItem.isDataLoaded) {
-            dashboardItemsToLoad = dashboardItemsToLoad - DashboardItem.Type.ADMIN_MESSAGE
-            dashboardTileLoadedList = dashboardTileLoadedList - DashboardItem.Tile.ADMIN_MESSAGE
+        if (dashboardItem is DashboardItem.AdminMessages) {
+            if (!dashboardItem.isDataLoaded) {
+                dashboardItemsToLoad = dashboardItemsToLoad - DashboardItem.Type.ADMIN_MESSAGE
+                dashboardTileLoadedList = dashboardTileLoadedList - DashboardItem.Tile.ADMIN_MESSAGE
 
-            dashboardItemLoadedList.removeAll { it.type == DashboardItem.Type.ADMIN_MESSAGE }
+                dashboardItemLoadedList.removeAll { it.type == DashboardItem.Type.ADMIN_MESSAGE }
+            } else {
+                dashboardItemsToLoad = dashboardItemsToLoad + DashboardItem.Type.ADMIN_MESSAGE
+                dashboardTileLoadedList = dashboardTileLoadedList + DashboardItem.Tile.ADMIN_MESSAGE
+            }
         }
 
         if (forceRefresh) {

@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.entities.TimetableHeader
+import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.databinding.ItemDashboardAccountBinding
 import io.github.wulkanowy.databinding.ItemDashboardAdminMessageBinding
 import io.github.wulkanowy.databinding.ItemDashboardAnnouncementsBinding
@@ -67,6 +69,8 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
     var onConferencesTileClickListener: () -> Unit = {}
 
     var onAdminMessageClickListener: (String?) -> Unit = {}
+
+    var onAdminMessageDismissClickListener: (AdminMessage) -> Unit = {}
 
     val items = mutableListOf<DashboardItem>()
 
@@ -259,7 +263,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         val isLoading = item.isLoading
         val dashboardGradesAdapter = gradesViewHolder.adapter.apply {
             this.items = subjectWithGrades.toList()
-            this.gradeTheme = gradeTheme.orEmpty()
+            this.gradeColorTheme = gradeTheme ?: GradeColorTheme.VULCAN
         }
 
         with(gradesViewHolder.binding) {
@@ -299,7 +303,8 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             val currentDayHeader =
                 timetableFull?.headers.orEmpty().singleOrNull { it.date == currentDate }
 
-            val tomorrowTimetable = timetableFull?.lessons.orEmpty()
+            val tomorrowTimetable = timetableFull?.lessons
+                .orEmpty()
                 .filter { it.date == currentDate.plusDays(1) }
                 .filterNot { it.canceled }
             val tomorrowDayHeader =
@@ -726,6 +731,10 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             dashboardAdminMessageItemDescription.text = item.content
             dashboardAdminMessageItemDescription.setTextColor(textColor)
             dashboardAdminMessageItemIcon.setColorFilter(textColor)
+            dashboardAdminMessageItemDismiss.isVisible = item.isDismissible
+            dashboardAdminMessageItemDismiss.setOnClickListener {
+                onAdminMessageDismissClickListener(item)
+            }
 
             root.setCardBackgroundColor(backgroundColor?.let { ColorStateList.valueOf(it) })
             item.destinationUrl?.let { url ->

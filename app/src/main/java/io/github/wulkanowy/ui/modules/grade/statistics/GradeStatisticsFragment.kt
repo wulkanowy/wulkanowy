@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.databinding.FragmentGradeStatisticsBinding
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -43,7 +44,7 @@ class GradeStatisticsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentGradeStatisticsBinding.bind(view)
-        messageContainer = binding.gradeStatisticsSwipe
+        messageContainer = binding.gradeStatisticsRecycler
         presenter.onAttachView(
             this,
             savedInstanceState?.getSerializable(SAVED_CHART_TYPE) as? GradeStatisticsItem.DataType
@@ -68,7 +69,7 @@ class GradeStatisticsFragment :
         }
 
         with(binding) {
-            gradeStatisticsSubjectsContainer.setElevationCompat(requireContext().dpToPx(1f))
+            gradeStatisticsSubjectsContainer.elevation = requireContext().dpToPx(1f)
 
             gradeStatisticsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
             gradeStatisticsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
@@ -90,12 +91,12 @@ class GradeStatisticsFragment :
 
     override fun updateData(
         newItems: List<GradeStatisticsItem>,
-        newTheme: String,
+        newTheme: GradeColorTheme,
         showAllSubjectsOnStatisticsList: Boolean
     ) {
         with(statisticsAdapter) {
             showAllSubjectsOnList = showAllSubjectsOnStatisticsList
-            theme = newTheme
+            gradeColorTheme = newTheme
             items = newItems
             notifyDataSetChanged()
         }

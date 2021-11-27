@@ -10,9 +10,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.TimetableAdditional
 import io.github.wulkanowy.databinding.FragmentTimetableAdditionalBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.ui.modules.timetable.additional.add.AdditionalLessonAddDialog
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.SchoolDaysValidator
 import io.github.wulkanowy.utils.dpToPx
@@ -56,8 +54,7 @@ class AdditionalLessonsFragment :
         with(binding.additionalLessonsRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = additionalLessonsAdapter.apply {
-                onDeleteClickListener =
-                    { additional -> presenter.deleteAdditionalLesson(additional) }
+                onDeleteClickListener = { presenter.deleteAdditionalLesson(it) }
             }
             addItemDecoration(DividerItemDecoration(context))
         }
@@ -79,7 +76,7 @@ class AdditionalLessonsFragment :
 
             openAddAdditionalLessonButton.setOnClickListener { presenter.onAdditionalLessonAddButtonClicked() }
 
-            additionalLessonsNavContainer.setElevationCompat(requireContext().dpToPx(8f))
+            additionalLessonsNavContainer.elevation = requireContext().dpToPx(8f)
         }
     }
 

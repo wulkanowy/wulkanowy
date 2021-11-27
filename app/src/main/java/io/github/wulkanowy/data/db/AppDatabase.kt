@@ -103,6 +103,9 @@ import io.github.wulkanowy.data.db.migrations.Migration40
 import io.github.wulkanowy.data.db.migrations.Migration41
 import io.github.wulkanowy.data.db.migrations.Migration42
 import io.github.wulkanowy.data.db.migrations.Migration45
+import io.github.wulkanowy.data.db.migrations.Migration43
+import io.github.wulkanowy.data.db.migrations.Migration44
+import io.github.wulkanowy.data.db.migrations.Migration45
 import io.github.wulkanowy.data.db.migrations.Migration5
 import io.github.wulkanowy.data.db.migrations.Migration6
 import io.github.wulkanowy.data.db.migrations.Migration7
@@ -194,8 +197,10 @@ abstract class AppDatabase : RoomDatabase() {
             Migration38(),
             Migration39(),
             Migration40(),
-            Migration41(),
+            Migration41(sharedPrefProvider),
             Migration42(),
+            Migration43(),
+            Migration44(),
             Migration45()
         )
 

@@ -7,10 +7,12 @@ import com.fredporciuncula.flow.preferences.FlowSharedPreferences
 import com.fredporciuncula.flow.preferences.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.enums.GradeColorTheme
+import io.github.wulkanowy.data.enums.GradeExpandMode
+import io.github.wulkanowy.data.enums.GradeSortingMode
 import io.github.wulkanowy.sdk.toLocalDate
 import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
-import io.github.wulkanowy.ui.modules.grade.GradeSortingMode
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.github.wulkanowy.utils.toTimestamp
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -56,8 +58,13 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_grade_average_force_calc
         )
 
-    val isGradeExpandable: Boolean
-        get() = !getBoolean(R.string.pref_key_expand_grade, R.bool.pref_default_expand_grade)
+    val gradeExpandMode: GradeExpandMode
+        get() = GradeExpandMode.getByValue(
+            getString(
+                R.string.pref_key_expand_grade_mode,
+                R.string.pref_default_expand_grade_mode
+            )
+        )
 
     val showAllSubjectsOnStatisticsList: Boolean
         get() = getBoolean(
@@ -69,10 +76,12 @@ class PreferencesRepository @Inject constructor(
     val appTheme: String
         get() = getString(appThemeKey, R.string.pref_default_app_theme)
 
-    val gradeColorTheme: String
-        get() = getString(
-            R.string.pref_key_grade_color_scheme,
-            R.string.pref_default_grade_color_scheme
+    val gradeColorTheme: GradeColorTheme
+        get() = GradeColorTheme.getByValue(
+            getString(
+                R.string.pref_key_grade_color_scheme,
+                R.string.pref_default_grade_color_scheme
+            )
         )
 
     val appLanguageKey = context.getString(R.string.pref_key_app_language)
@@ -97,7 +106,10 @@ class PreferencesRepository @Inject constructor(
 
     val isUpcomingLessonsNotificationsEnableKey =
         context.getString(R.string.pref_key_notifications_upcoming_lessons_enable)
-    val isUpcomingLessonsNotificationsEnable: Boolean
+    var isUpcomingLessonsNotificationsEnable: Boolean
+        set(value) {
+            sharedPref.edit { putBoolean(isUpcomingLessonsNotificationsEnableKey, value) }
+        }
         get() = getBoolean(
             isUpcomingLessonsNotificationsEnableKey,
             R.bool.pref_default_notification_upcoming_lessons_enable
@@ -236,6 +248,14 @@ class PreferencesRepository @Inject constructor(
             return flowSharedPref.getStringSet(prefKey, defaultSet)
         }
 
+    var dismissedAdminMessageIds: List<Int>
+        get() = sharedPref.getStringSet(PREF_KEY_ADMIN_DISMISSED_MESSAGE_IDS, emptySet())
+            .orEmpty()
+            .map { it.toInt() }
+        set(value) = sharedPref.edit {
+            putStringSet(PREF_KEY_ADMIN_DISMISSED_MESSAGE_IDS, value.map { it.toString() }.toSet())
+        }
+
     var inAppReviewCount: Int
         get() = sharedPref.getInt(PREF_KEY_IN_APP_REVIEW_COUNT, 0)
         set(value) = sharedPref.edit().putInt(PREF_KEY_IN_APP_REVIEW_COUNT, value).apply()
@@ -265,6 +285,9 @@ class PreferencesRepository @Inject constructor(
     private fun getBoolean(id: String, default: Int) =
         sharedPref.getBoolean(id, context.resources.getBoolean(default))
 
+    private fun getBoolean(id: Int, default: Boolean) =
+        sharedPref.getBoolean(context.getString(id), default)
+
     private companion object {
 
         private const val PREF_KEY_DASHBOARD_ITEMS_POSITION = "dashboard_items_position"
@@ -274,5 +297,7 @@ class PreferencesRepository @Inject constructor(
         private const val PREF_KEY_IN_APP_REVIEW_DATE = "in_app_review_date"
 
         private const val PREF_KEY_IN_APP_REVIEW_DONE = "in_app_review_done"
+
+        private const val PREF_KEY_ADMIN_DISMISSED_MESSAGE_IDS = "admin_message_dismissed_ids"
     }
 }

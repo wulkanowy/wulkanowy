@@ -1,5 +1,11 @@
 [English version of README](README.en.md)
 
+[Deutsche Version von README](README.de.md)
+
+[Česká verze README](README.cs.md)
+
+[Slovenská verzia README](README.sk.md)
+
 # Wulkanowy
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wulkanowy/wulkanowy/Tests/develop?style=flat-square)](https://github.com/wulkanowy/wulkanowy/actions)

@@ -127,10 +127,13 @@ class MessageTabPresenter @Inject constructor(
                                 onlyUnread,
                                 onlyWithAttachments
                             )
-                            val newItems = listOf(MessageTabDataItem.Header) + filteredData.map {
-                                MessageTabDataItem.MessageItem(it)
+                            val messageItems = filteredData.map { message ->
+                                MessageTabDataItem.MessageItem(message)
                             }
-                            updateData(newItems, folder.id == MessageFolder.SENT.id)
+                            val messageItemsWithHeader =
+                                listOf(MessageTabDataItem.Header) + messageItems
+
+                            updateData(messageItemsWithHeader, folder.id == MessageFolder.SENT.id)
                             notifyParentDataLoaded()
                         }
                     }
@@ -158,6 +161,9 @@ class MessageTabPresenter @Inject constructor(
                 enableSwipe(true)
                 notifyParentDataLoaded()
             }
+        }.catch {
+            errorHandler.dispatch(it)
+            view?.notifyParentDataLoaded()
         }.launch()
     }
 
@@ -168,6 +174,7 @@ class MessageTabPresenter @Inject constructor(
                 setErrorDetails(message)
                 showErrorView(true)
                 showEmpty(false)
+                showProgress(false)
             } else showError(message, error)
         }
     }
