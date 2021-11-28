@@ -171,10 +171,13 @@ class AdditionalLessonsFragment :
 
     override fun showDeleteLessonDialog(timetableAdditional: TimetableAdditional) {
         AlertDialog.Builder(requireContext())
-            .setTitle("Usuń dodatkową lekcję")
-            .setItems(arrayOf("Pojedyńcze wystąpienie", "Wszytskie z serii")) { _, position ->
-                presenter.onDeleteDialogSelectItem(position, timetableAdditional)
-            }
+            .setTitle(getString(R.string.additional_lessons_delete_title))
+            .setItems(
+                arrayOf(
+                    getString(R.string.additional_lessons_delete_one),
+                    getString(R.string.additional_lessons_delete_series)
+                )
+            ) { _, position -> presenter.onDeleteDialogSelectItem(position, timetableAdditional) }
             .show()
     }
 
