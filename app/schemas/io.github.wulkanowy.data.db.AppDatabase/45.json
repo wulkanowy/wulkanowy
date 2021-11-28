@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 45,
-    "identityHash": "1fcbffcab48fcb2f1671d2e872db14a8",
+    "identityHash": "f310243440ca00cbc35e62ebaca5c7d8",
     "entities": [
       {
         "tableName": "Students",
@@ -170,6 +170,7 @@
               "school_id",
               "class_id"
             ],
+            "orders": [],
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Students_email_symbol_student_id_school_id_class_id` ON `${TABLE_NAME}` (`email`, `symbol`, `student_id`, `school_id`, `class_id`)"
           }
         ],
@@ -267,6 +268,7 @@
               "diary_id",
               "semester_id"
             ],
+            "orders": [],
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Semesters_student_id_diary_id_semester_id` ON `${TABLE_NAME}` (`student_id`, `diary_id`, `semester_id`)"
           }
         ],
@@ -1938,7 +1940,7 @@
       },
       {
         "tableName": "TimetableAdditional",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_added_by_user` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `repeat_id` BLOB DEFAULT NULL, `is_added_by_user` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "studentId",
@@ -1983,10 +1985,18 @@
             "notNull": true
           },
           {
+            "fieldPath": "repeatId",
+            "columnName": "repeat_id",
+            "affinity": "BLOB",
+            "notNull": false,
+            "defaultValue": "NULL"
+          },
+          {
             "fieldPath": "isAddedByUser",
             "columnName": "is_added_by_user",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           }
         ],
         "primaryKey": {
@@ -2414,7 +2424,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1fcbffcab48fcb2f1671d2e872db14a8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f310243440ca00cbc35e62ebaca5c7d8')"
     ]
   }
 }

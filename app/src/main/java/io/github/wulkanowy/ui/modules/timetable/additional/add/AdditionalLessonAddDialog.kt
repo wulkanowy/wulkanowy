@@ -34,6 +34,10 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
 
     private var end: LocalTime? = null
 
+    companion object {
+        fun newInstance() = AdditionalLessonAddDialog()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, 0)
@@ -75,13 +79,14 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
                     start = additionalLessonDialogStartEdit.text?.toString(),
                     end = additionalLessonDialogEndEdit.text?.toString(),
                     date = additionalLessonDialogDateEdit.text?.toString(),
-                    content = additionalLessonDialogContentEdit.text?.toString()
+                    content = additionalLessonDialogContentEdit.text?.toString(),
+                    isRepeat = additionalLessonDialogRepeat.isChecked
                 )
             }
             additionalLessonDialogClose.setOnClickListener { dismiss() }
-            additionalLessonDialogDate.editText?.setOnClickListener { presenter.showDatePicker(date) }
-            additionalLessonDialogStart.editText?.setOnClickListener { presenter.showStartTimePicker() }
-            additionalLessonDialogEnd.editText?.setOnClickListener { presenter.showEndTimePicker() }
+            additionalLessonDialogDateEdit.setOnClickListener { presenter.showDatePicker(date) }
+            additionalLessonDialogStartEdit.setOnClickListener { presenter.showStartTimePicker() }
+            additionalLessonDialogEndEdit.setOnClickListener { presenter.showEndTimePicker() }
         }
     }
 

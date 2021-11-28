@@ -21,7 +21,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
-            android:text="@string/additional_lessons_add"
+            android:text="@string/additional_lessons_add_title"
             android:textSize="21sp"
             android:textStyle="bold" />
 
@@ -92,7 +92,6 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
             android:hint="@string/all_subject">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -101,6 +100,15 @@
                 android:layout_height="wrap_content"
                 android:maxLines="4" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/additionalLessonDialogRepeat"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/additional_lesson_repeat" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

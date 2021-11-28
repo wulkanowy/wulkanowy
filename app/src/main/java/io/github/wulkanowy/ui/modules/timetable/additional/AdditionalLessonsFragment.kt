@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.timetable.additional
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -16,9 +17,9 @@ import io.github.wulkanowy.ui.modules.timetable.additional.add.AdditionalLessonA
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.SchoolDaysValidator
 import io.github.wulkanowy.utils.dpToPx
+import io.github.wulkanowy.utils.firstSchoolDayInSchoolYear
 import io.github.wulkanowy.utils.getThemeAttrColor
-import io.github.wulkanowy.utils.schoolYearEnd
-import io.github.wulkanowy.utils.schoolYearStart
+import io.github.wulkanowy.utils.lastSchoolDayInSchoolYear
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.github.wulkanowy.utils.toTimestamp
 import java.time.LocalDate
@@ -56,7 +57,7 @@ class AdditionalLessonsFragment :
         with(binding.additionalLessonsRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = additionalLessonsAdapter.apply {
-                onDeleteClickListener = { presenter.deleteAdditionalLesson(it) }
+                onDeleteClickListener = { presenter.onDeleteLessonsSelected(it) }
             }
             addItemDecoration(DividerItemDecoration(context))
         }
@@ -65,9 +66,7 @@ class AdditionalLessonsFragment :
             additionalLessonsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
             additionalLessonsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
             additionalLessonsSwipe.setProgressBackgroundColorSchemeColor(
-                requireContext().getThemeAttrColor(
-                    R.attr.colorSwipeRefresh
-                )
+                requireContext().getThemeAttrColor(R.attr.colorSwipeRefresh)
             )
             additionalLessonsErrorRetry.setOnClickListener { presenter.onRetry() }
             additionalLessonsErrorDetails.setOnClickListener { presenter.onDetailsClick() }
@@ -142,24 +141,23 @@ class AdditionalLessonsFragment :
     }
 
     override fun showAddAdditionalLessonDialog() {
-        (activity as? MainActivity)?.showDialogFragment(AdditionalLessonAddDialog())
+        (activity as? MainActivity)?.showDialogFragment(AdditionalLessonAddDialog.newInstance())
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
         val now = LocalDate.now()
-        val startOfSchoolYear = now.schoolYearStart.toTimestamp()
-        val endOfSchoolYear = now.schoolYearEnd.toTimestamp()
+        val startOfSchoolYear = now.firstSchoolDayInSchoolYear.toTimestamp()
+        val endOfSchoolYear = now.lastSchoolDayInSchoolYear.toTimestamp()
 
         val constraintsBuilder = CalendarConstraints.Builder().apply {
             setValidator(SchoolDaysValidator(startOfSchoolYear, endOfSchoolYear))
             setStart(startOfSchoolYear)
             setEnd(endOfSchoolYear)
         }
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setCalendarConstraints(constraintsBuilder.build())
-                .setSelection(currentDate.toTimestamp())
-                .build()
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setCalendarConstraints(constraintsBuilder.build())
+            .setSelection(currentDate.toTimestamp())
+            .build()
 
         datePicker.addOnPositiveButtonClickListener {
             val date = it.toLocalDateTime()
@@ -169,6 +167,15 @@ class AdditionalLessonsFragment :
         if (!parentFragmentManager.isStateSaved) {
             datePicker.show(parentFragmentManager, null)
         }
+    }
+
+    override fun showDeleteLessonDialog(timetableAdditional: TimetableAdditional) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Usuń dodatkową lekcję")
+            .setItems(arrayOf("Pojedyńcze wystąpienie", "Wszytskie z serii")) { _, position ->
+                presenter.onDeleteDialogSelectItem(position, timetableAdditional)
+            }
+            .show()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

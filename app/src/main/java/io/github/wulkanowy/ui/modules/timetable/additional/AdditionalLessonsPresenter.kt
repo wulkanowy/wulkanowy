@@ -11,7 +11,6 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.capitalise
-import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
@@ -22,6 +21,7 @@ import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -104,22 +104,34 @@ class AdditionalLessonsPresenter @Inject constructor(
         }.launch("holidays")
     }
 
-    fun deleteAdditionalLesson(timetableAdditional: TimetableAdditional) {
-        flowWithResource { timetableRepository.deleteAdditional(timetableAdditional) }.onEach {
-            when (it.status) {
-                Status.LOADING -> Timber.i("Additional Lesson delete start")
-                Status.SUCCESS -> {
+    fun onDeleteLessonsSelected(timetableAdditional: TimetableAdditional) {
+        if (timetableAdditional.repeatId == null) {
+            deleteAdditionalLessons(timetableAdditional, false)
+        } else {
+            view?.showDeleteLessonDialog(timetableAdditional)
+        }
+    }
+
+    fun onDeleteDialogSelectItem(position: Int, timetableAdditional: TimetableAdditional) {
+        deleteAdditionalLessons(timetableAdditional, position == 1)
+    }
+
+    private fun deleteAdditionalLessons(
+        timetableAdditional: TimetableAdditional,
+        deleteSeries: Boolean
+    ) {
+        presenterScope.launch {
+            Timber.i("Additional Lesson delete start")
+            runCatching { timetableRepository.deleteAdditional(timetableAdditional, deleteSeries) }
+                .onSuccess {
                     Timber.i("Additional Lesson delete: Success")
-                    view?.run {
-                        showSuccessMessage()
-                    }
+                    view?.showSuccessMessage()
                 }
-                Status.ERROR -> {
+                .onFailure {
                     Timber.i("Additional Lesson delete result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
+                    errorHandler.dispatch(it)
                 }
-            }
-        }.launch("delete")
+        }
     }
 
     private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
@@ -135,7 +147,7 @@ class AdditionalLessonsPresenter @Inject constructor(
                 Status.SUCCESS -> {
                     Timber.i("Loading additional lessons lessons result: Success")
                     view?.apply {
-                        updateData(it.data!!.additional.sortedBy { item -> item.date })
+                        updateData(it.data!!.additional.sortedBy { item -> item.start })
                         showEmpty(it.data.additional.isEmpty())
                         showErrorView(false)
                         showContent(it.data.additional.isNotEmpty())

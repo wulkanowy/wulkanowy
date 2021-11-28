@@ -39,4 +39,6 @@ interface AdditionalLessonsView : BaseView {
     fun showAddAdditionalLessonDialog()
 
     fun showSuccessMessage()
+
+    fun showDeleteLessonDialog(timetableAdditional: TimetableAdditional)
 }

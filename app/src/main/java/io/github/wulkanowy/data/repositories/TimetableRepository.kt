@@ -162,9 +162,13 @@ class TimetableRepository @Inject constructor(
         timetableHeaderDb.insertAll(new uniqueSubtract old)
     }
 
-    suspend fun saveAdditional(additional: TimetableAdditional) =
-        timetableAdditionalDb.insertAll(listOf(additional))
+    suspend fun saveAdditionalList(additionalList: List<TimetableAdditional>) =
+        timetableAdditionalDb.insertAll(additionalList)
 
-    suspend fun deleteAdditional(additional: TimetableAdditional) =
-        timetableAdditionalDb.deleteAll(listOf(additional))
+    suspend fun deleteAdditional(additional: TimetableAdditional, deleteSeries: Boolean) =
+        if (deleteSeries) {
+            timetableAdditionalDb.deleteAllByRepeatId(additional.repeatId!!)
+        } else {
+            timetableAdditionalDb.deleteAll(listOf(additional))
+        }
 }

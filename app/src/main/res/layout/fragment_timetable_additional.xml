@@ -119,7 +119,7 @@
             android:layout_margin="16dp"
             android:clickable="true"
             android:focusable="true"
-            android:text="@string/additional_add_title"
+            android:text="@string/additional_lessons_add"
             android:tint="?colorOnSecondary"
             app:icon="@drawable/ic_all_add" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.db
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -104,7 +105,6 @@ import io.github.wulkanowy.data.db.migrations.Migration41
 import io.github.wulkanowy.data.db.migrations.Migration42
 import io.github.wulkanowy.data.db.migrations.Migration43
 import io.github.wulkanowy.data.db.migrations.Migration44
-import io.github.wulkanowy.data.db.migrations.Migration45
 import io.github.wulkanowy.data.db.migrations.Migration5
 import io.github.wulkanowy.data.db.migrations.Migration6
 import io.github.wulkanowy.data.db.migrations.Migration7
@@ -146,6 +146,9 @@ import javax.inject.Singleton
         SchoolAnnouncement::class,
         Notification::class,
         AdminMessage::class
+    ],
+    autoMigrations = [
+        AutoMigration(from = 44, to = 45)
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -200,7 +203,6 @@ abstract class AppDatabase : RoomDatabase() {
             Migration42(),
             Migration43(),
             Migration44(),
-            Migration45()
         )
 
         fun newInstance(
