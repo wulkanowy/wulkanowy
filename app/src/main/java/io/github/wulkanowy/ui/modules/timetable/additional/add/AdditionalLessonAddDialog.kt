@@ -14,6 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.DialogAdditionalAddBinding
 import io.github.wulkanowy.ui.base.BaseDialogFragment
+import io.github.wulkanowy.utils.SchoolDaysValidator
+import io.github.wulkanowy.utils.lastSchoolDayInSchoolYear
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.github.wulkanowy.utils.toTimestamp
@@ -127,14 +129,17 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
     }
 
     override fun showDatePickerDialog(currentDate: LocalDate) {
+        val rangeStart = LocalDate.now().toTimestamp()
+        val rangeEnd = LocalDate.now().lastSchoolDayInSchoolYear.toTimestamp()
         val constraintsBuilder = CalendarConstraints.Builder().apply {
-            setStart(LocalDate.now().toEpochDay())
+            setStart(rangeStart)
+            setEnd(rangeEnd)
+            setValidator(SchoolDaysValidator(rangeStart, rangeEnd))
         }
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setCalendarConstraints(constraintsBuilder.build())
-                .setSelection(currentDate.toTimestamp())
-                .build()
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setCalendarConstraints(constraintsBuilder.build())
+            .setSelection(currentDate.toTimestamp())
+            .build()
 
         datePicker.addOnPositiveButtonClickListener {
             date = it.toLocalDateTime().toLocalDate()
@@ -149,8 +154,8 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
     override fun showStartTimePickerDialog() {
         val timePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
-            .setHour(12)
-            .setMinute(15)
+            .setHour(start?.hour ?: 12)
+            .setMinute(start?.minute ?: 15)
             .build()
 
         timePicker.addOnPositiveButtonClickListener {
@@ -166,8 +171,8 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
     override fun showEndTimePickerDialog() {
         val timePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
-            .setHour(12)
-            .setMinute(15)
+            .setHour(end?.hour ?: 12)
+            .setMinute(end?.minute ?: 15)
             .build()
 
         timePicker.addOnPositiveButtonClickListener {
