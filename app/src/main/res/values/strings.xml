@@ -206,6 +206,8 @@
     <string name="additional_lessons_delete_title">Delete additional lesson</string>
     <string name="additional_lessons_delete_one">Just this lesson</string>
     <string name="additional_lessons_delete_series">All in the series</string>
+    <string name="additional_lessons_start">Start time</string>
+    <string name="additional_lessons_end">End time</string>
 
 
     <!--Attendance-->
@@ -640,8 +642,6 @@
     <string name="all_copied">Copied</string>
     <string name="all_undo">Undo</string>
     <string name="all_change">Change</string>
-    <string name="all_start">Start</string>
-    <string name="all_end">End</string>
 
 
     <!--Timetable Widget-->

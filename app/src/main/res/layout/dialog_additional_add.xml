@@ -60,8 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="6dp"
-            android:hint="@string/all_start"
-            app:startIconDrawable="@drawable/ic_main_timetable">
+            android:hint="@string/additional_lessons_start"
+            app:startIconDrawable="@drawable/ic_all_clock">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/additionalLessonDialogStartEdit"
@@ -80,8 +80,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            android:hint="@string/all_end"
-            app:startIconDrawable="@drawable/ic_main_timetable">
+            android:hint="@string/additional_lessons_end"
+            app:startIconDrawable="@drawable/ic_all_clock">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/additionalLessonDialogEndEdit"
