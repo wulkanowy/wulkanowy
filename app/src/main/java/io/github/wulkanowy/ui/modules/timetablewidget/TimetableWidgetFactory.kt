@@ -14,6 +14,7 @@ import android.widget.RemoteViewsService
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.data.enums.TimetableShowWholeClass
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -88,7 +89,7 @@ class TimetableWidgetFactory(
 
     private fun getItemLayout(lesson: Timetable): Int {
         return when {
-            prefRepository.showWholeClassPlan == "small" && !lesson.isStudentPlan -> {
+            prefRepository.showWholeClassPlan == TimetableShowWholeClass.SMALL && !lesson.isStudentPlan -> {
                 if (savedCurrentTheme == 0L) R.layout.item_widget_timetable_small
                 else R.layout.item_widget_timetable_small_dark
             }
@@ -109,7 +110,7 @@ class TimetableWidgetFactory(
             timetableRepository.getTimetable(student, semester, date, date, false)
                 .toFirstResult().data?.lessons.orEmpty()
                 .sortedWith(compareBy({ it.number }, { !it.isStudentPlan }))
-                .filter { if (prefRepository.showWholeClassPlan == "no") it.isStudentPlan else true }
+                .filter { if (prefRepository.showWholeClassPlan == TimetableShowWholeClass.NO) it.isStudentPlan else true }
         }
     } catch (e: Exception) {
         Timber.e(e, "An error has occurred in timetable widget factory")
