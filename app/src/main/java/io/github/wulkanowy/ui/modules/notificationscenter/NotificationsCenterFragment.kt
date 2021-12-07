@@ -23,6 +23,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragment
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
+import io.github.wulkanowy.ui.modules.toStartIntent
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -54,9 +55,9 @@ class NotificationsCenterFragment :
     }
 
     override fun initView() {
-        notificationsCenterAdapter.onItemClickListener = { notificationType ->
-            notificationType.toDestinationFragment()
-                ?.let { (requireActivity() as MainActivity).pushView(it) }
+        notificationsCenterAdapter.onItemClickListener = { destination ->
+            val activity = requireActivity() as MainActivity
+            activity.pushView(destination.fragment)
         }
 
         with(binding.notificationsCenterRecycler) {
@@ -92,21 +93,5 @@ class NotificationsCenterFragment :
     override fun onDestroyView() {
         presenter.onDetachView()
         super.onDestroyView()
-    }
-
-    private fun NotificationType.toDestinationFragment(): Fragment? = when (this) {
-        NotificationType.NEW_CONFERENCE -> ConferenceFragment.newInstance()
-        NotificationType.NEW_EXAM -> ExamFragment.newInstance()
-        NotificationType.NEW_GRADE_DETAILS -> GradeFragment.newInstance()
-        NotificationType.NEW_GRADE_PREDICTED -> GradeFragment.newInstance()
-        NotificationType.NEW_GRADE_FINAL -> GradeFragment.newInstance()
-        NotificationType.NEW_HOMEWORK -> HomeworkFragment.newInstance()
-        NotificationType.NEW_LUCKY_NUMBER -> LuckyNumberFragment.newInstance()
-        NotificationType.NEW_MESSAGE -> MessageFragment.newInstance()
-        NotificationType.NEW_NOTE -> NoteFragment.newInstance()
-        NotificationType.NEW_ANNOUNCEMENT -> SchoolAnnouncementFragment.newInstance()
-        NotificationType.PUSH -> null
-        NotificationType.CHANGE_TIMETABLE -> TimetableFragment.newInstance()
-        NotificationType.NEW_ATTENDANCE -> AttendanceFragment.newInstance()
     }
 }

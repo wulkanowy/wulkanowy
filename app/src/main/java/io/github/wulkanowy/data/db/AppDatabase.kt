@@ -104,6 +104,7 @@ import io.github.wulkanowy.data.db.migrations.Migration41
 import io.github.wulkanowy.data.db.migrations.Migration42
 import io.github.wulkanowy.data.db.migrations.Migration43
 import io.github.wulkanowy.data.db.migrations.Migration44
+import io.github.wulkanowy.data.db.migrations.Migration45
 import io.github.wulkanowy.data.db.migrations.Migration5
 import io.github.wulkanowy.data.db.migrations.Migration6
 import io.github.wulkanowy.data.db.migrations.Migration7
@@ -153,7 +154,7 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 44
+        const val VERSION_SCHEMA = 45
 
         fun getMigrations(sharedPrefProvider: SharedPrefProvider, appInfo: AppInfo) = arrayOf(
             Migration2(),
@@ -198,7 +199,8 @@ abstract class AppDatabase : RoomDatabase() {
             Migration41(sharedPrefProvider),
             Migration42(),
             Migration43(),
-            Migration44()
+            Migration44(),
+            Migration45(),
         )
 
         fun newInstance(

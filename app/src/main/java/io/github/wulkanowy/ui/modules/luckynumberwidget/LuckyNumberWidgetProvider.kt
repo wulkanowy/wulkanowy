@@ -19,6 +19,7 @@ import io.github.wulkanowy.data.repositories.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
+import io.github.wulkanowy.ui.modules.toStartIntent
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.toFirstResult
 import kotlinx.coroutines.runBlocking
@@ -62,7 +63,7 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
             val appIntent = PendingIntent.getActivity(
                 context,
                 LUCKY_NUMBER_PENDING_INTENT_ID,
-                SplashActivity.getStartIntent(context, Destination.LuckyNumber),
+                Destination.LuckyNumber.toStartIntent(context),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
             )
 

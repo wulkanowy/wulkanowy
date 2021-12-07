@@ -8,7 +8,6 @@ import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.pojos.GroupNotificationData
 import io.github.wulkanowy.data.pojos.NotificationData
 import io.github.wulkanowy.ui.modules.Destination
-import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.getPlural
 import io.github.wulkanowy.utils.toFormattedString
 import java.time.LocalDate
@@ -23,8 +22,9 @@ class ChangeTimetableNotification @Inject constructor(
     suspend fun notify(items: List<Timetable>, student: Student) {
         val currentTime = LocalDateTime.now()
         val changedLessons = items.filter { (it.canceled || it.changes) && it.start > currentTime }
-        val notificationDataList = changedLessons.groupBy { it.date }
-            .map { (date, lessons) ->
+        val lessonsByDate = changedLessons.groupBy { it.date }
+        val notificationDataList = lessonsByDate
+            .flatMap { (date, lessons) ->
                 getNotificationContents(date, lessons).map {
                     NotificationData(
                         title = context.getPlural(
@@ -32,14 +32,10 @@ class ChangeTimetableNotification @Inject constructor(
                             1
                         ),
                         content = it,
-                        intentToStart = SplashActivity.getStartIntent(
-                            context = context,
-                            destination = Destination.Timetable(date)
-                        )
+                        destination = Destination.Timetable.withDate(date)
                     )
                 }
             }
-            .flatten()
             .ifEmpty { return }
 
         val groupNotificationData = GroupNotificationData(
@@ -53,7 +49,10 @@ class ChangeTimetableNotification @Inject constructor(
                 changedLessons.size,
                 changedLessons.size
             ),
-            intentToStart = SplashActivity.getStartIntent(context, Destination.Timetable()),
+            destination = when (lessonsByDate.size) {
+                1 -> Destination.Timetable.withDate(lessonsByDate.keys.single())
+                else -> Destination.Timetable.TODAY
+            },
             type = NotificationType.CHANGE_TIMETABLE
         )
 

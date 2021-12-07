@@ -38,6 +38,7 @@ class AppMessagingService : FirebaseMessagingService() {
             data = customData,
             date = LocalDateTime.now(),
             type = NotificationType.PUSH,
+            destination = Destination.Dashboard,
             studentId = -1
         )
 

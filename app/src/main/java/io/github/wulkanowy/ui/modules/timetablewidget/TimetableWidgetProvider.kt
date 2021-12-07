@@ -24,7 +24,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.HiltBroadcastReceiver
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.Destination
-import io.github.wulkanowy.ui.modules.splash.SplashActivity
+import io.github.wulkanowy.ui.modules.toStartIntent
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.capitalise
@@ -179,7 +179,7 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
         val appIntent = PendingIntent.getActivity(
             context,
             TIMETABLE_PENDING_INTENT_ID,
-            SplashActivity.getStartIntent(context, Destination.Timetable()),
+            Destination.Timetable.TODAY.toStartIntent(context),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
 

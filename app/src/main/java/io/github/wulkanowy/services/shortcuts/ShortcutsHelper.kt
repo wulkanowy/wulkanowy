@@ -15,14 +15,14 @@ import javax.inject.Singleton
 @Singleton
 class ShortcutsHelper @Inject constructor(@ApplicationContext private val context: Context) {
 
-    // `SplashActivity.getStartIntent(context, Destination.XYZ)` cannot be used here as shortcuts
+    // `Destination.XYZ.getStartIntent(context)` cannot be used here as shortcuts
     // require their intents to only use primitive types (see PersistableBundle.isValidType).
 
     private val destinations = mapOf(
         "grade" to Destination.Grade,
         "attendance" to Destination.Attendance,
         "exam" to Destination.Exam,
-        "timetable" to Destination.Timetable()
+        "timetable" to Destination.Timetable.TODAY
     )
 
     init {
