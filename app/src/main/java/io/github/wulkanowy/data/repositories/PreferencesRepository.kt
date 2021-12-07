@@ -48,10 +48,6 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_attendance_present
         )
 
-    @get:TestOnly
-    val gradeAverageMode: GradeAverageMode
-        get() = gradeAverageModePref.get()
-
     val gradeAverageModeFlow: Flow<GradeAverageMode>
         get() = gradeAverageModePref.asFlow()
 
@@ -60,12 +56,6 @@ class PreferencesRepository @Inject constructor(
             R.string.pref_key_grade_average_mode,
             R.string.pref_default_grade_average_mode,
             GradeAverageMode.Serializer
-        )
-
-    val gradeAverageForceCalc: Boolean
-        get() = getBoolean(
-            R.string.pref_key_grade_average_force_calc,
-            R.bool.pref_default_grade_average_force_calc
         )
 
     val gradeAverageForceCalcFlow: Flow<Boolean>
@@ -223,13 +213,6 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_subjects_without_grades
         )
 
-    @get:TestOnly
-    val isOptionalArithmeticAverage: Boolean
-        get() = getBoolean(
-            R.string.pref_key_optional_arithmetic_average,
-            R.bool.pref_default_optional_arithmetic_average
-        )
-
     val isOptionalArithmeticAverageFlow: Flow<Boolean>
         get() = flowSharedPref.getBoolean(
             context.getString(R.string.pref_key_optional_arithmetic_average),
@@ -332,9 +315,6 @@ class PreferencesRepository @Inject constructor(
 
     private fun getBoolean(id: String, default: Int) =
         sharedPref.getBoolean(id, context.resources.getBoolean(default))
-
-    private fun getBoolean(id: Int, default: Boolean) =
-        sharedPref.getBoolean(context.getString(id), default)
 
     private companion object {
 
