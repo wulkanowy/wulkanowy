@@ -76,7 +76,7 @@
         android:layout_height="1dp"
         android:background="@drawable/ic_all_divider" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
@@ -92,48 +92,63 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:insetLeft="0dp"
+            android:insetLeft="8dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
             android:insetBottom="0dp"
             android:minWidth="88dp"
             android:text="@string/about_feedback" />
 
-        <Space
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/linearlayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/errorDialogCancel"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="88dp"
+                android:text="@android:string/cancel" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/errorDialogCopy"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="88dp"
+                android:text="@android:string/copy" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow4"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            app:flow_wrapMode="chain"
+            app:flow_firstHorizontalStyle="spread_inside"
+            app:constraint_referenced_ids="errorDialogReport,linearlayout1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/errorDialogCancel"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            android:minWidth="88dp"
-            android:text="@android:string/cancel" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/errorDialogCopy"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            android:minWidth="88dp"
-            android:text="@android:string/copy" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
