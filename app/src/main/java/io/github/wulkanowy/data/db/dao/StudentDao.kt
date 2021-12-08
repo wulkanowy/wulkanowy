@@ -49,4 +49,7 @@ abstract class StudentDao {
         resetCurrent()
         updateCurrent(id)
     }
+
+    @Query("SELECT COUNT(*) FROM Students")
+    abstract suspend fun studentCount(): Int
 }

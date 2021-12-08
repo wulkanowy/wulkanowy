@@ -128,4 +128,6 @@ class StudentRepository @Inject constructor(
 
     suspend fun updateStudentNickAndAvatar(studentNickAndAvatar: StudentNickAndAvatar) =
         studentDb.update(studentNickAndAvatar)
+
+    suspend fun onlyOneStudent(): Boolean = studentDb.studentCount() == 1
 }

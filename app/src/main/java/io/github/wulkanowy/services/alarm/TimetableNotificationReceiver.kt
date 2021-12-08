@@ -36,11 +36,15 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
     @Inject
     lateinit var preferencesRepository: PreferencesRepository
 
+    private var onlyOneStudent: Boolean? = null
+
     companion object {
         const val NOTIFICATION_TYPE_CURRENT = 1
         const val NOTIFICATION_TYPE_UPCOMING = 2
         const val NOTIFICATION_TYPE_LAST_LESSON_CANCELLATION = 3
 
+        // FIXME only shows one notification even if there are multiple students.
+        //       Probably want to fix after #721 is merged.
         const val NOTIFICATION_ID = 2137
 
         const val STUDENT_NAME = "student_name"
@@ -60,6 +64,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
         Timber.d("Receiving intent... ${intent.toUri(0)}")
 
         flowWithResource {
+            if (onlyOneStudent == null) onlyOneStudent = studentRepository.onlyOneStudent()
             val student = studentRepository.getCurrentStudent(false)
             val studentId = intent.getIntExtra(STUDENT_ID, 0)
             if (student.studentId == studentId) prepareNotification(context, intent)
@@ -130,9 +135,8 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
                 .setTimeoutAfter(timeout)
                 .setSmallIcon(R.drawable.ic_stat_timetable)
                 .setColor(context.getCompatColor(R.color.colorPrimary))
-                .setStyle(NotificationCompat.InboxStyle().also {
-                    it.setSummaryText(studentName)
-                    it.addLine(next)
+                .setStyle(NotificationCompat.InboxStyle().addLine(next).also {
+                    if (onlyOneStudent != true) it.setSummaryText(studentName)
                 })
                 .setContentIntent(
                     PendingIntent.getActivity(

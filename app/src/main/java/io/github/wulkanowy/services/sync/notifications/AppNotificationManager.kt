@@ -175,6 +175,5 @@ class AppNotificationManager @Inject constructor(
         notificationRepository.saveNotification(notificationEntity)
     }
 
-    private suspend fun shouldShowStudentName(): Boolean =
-        studentRepository.getSavedStudents(decryptPass = false).size > 1
+    private suspend fun shouldShowStudentName() = !studentRepository.onlyOneStudent()
 }
