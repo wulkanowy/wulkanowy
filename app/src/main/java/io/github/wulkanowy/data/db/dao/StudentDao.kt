@@ -50,6 +50,6 @@ abstract class StudentDao {
         updateCurrent(id)
     }
 
-    @Query("SELECT COUNT(*) FROM Students")
+    @Query("SELECT COUNT(DISTINCT student_name) FROM Students")
     abstract suspend fun studentCount(): Int
 }
