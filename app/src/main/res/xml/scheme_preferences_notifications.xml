@@ -38,6 +38,13 @@
             app:key="@string/pref_key_notifications_piggyback"
             app:singleLineTitle="false"
             app:title="@string/pref_notify_notifications_piggyback" />
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/pref_default_notification_piggyback_cancel_original"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_key_notifications_piggyback_cancel_original"
+            app:singleLineTitle="false"
+            app:dependency="@string/pref_key_notifications_piggyback"
+            app:title="@string/pref_notify_notifications_piggyback_cancel_original" />
         <Preference
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_notifications_system_settings"
