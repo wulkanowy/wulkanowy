@@ -46,8 +46,11 @@ class SyncWorker @AssistedInject constructor(
         val student = studentRepository.getCurrentStudent()
         val semester = semesterRepository.getCurrentSemester(student, true)
 
+        val quiet = inputData.getBoolean("quiet", false)
+        val notificationsEnabled = preferencesRepository.isNotificationsEnable
         val exceptions = works.mapNotNull { work ->
             try {
+                if (quiet) preferencesRepository.isNotificationsEnable = false
                 Timber.i("${work::class.java.simpleName} is starting")
                 work.doWork(student, semester)
                 Timber.i("${work::class.java.simpleName} result: Success")
@@ -60,6 +63,8 @@ class SyncWorker @AssistedInject constructor(
                     Timber.e(e)
                     e
                 }
+            } finally {
+                if (quiet) preferencesRepository.isNotificationsEnable = notificationsEnabled
             }
         }
         val result = when {
