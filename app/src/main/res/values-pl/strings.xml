@@ -253,10 +253,10 @@
         <item quantity="other">Nowe sprawdziany</item>
     </plurals>
     <plurals name="exam_notify_new_item_content">
-        <item quantity="one">Masz %d nowy sprawdzian</item>
-        <item quantity="few">Masz %d nowe sprawdziany</item>
-        <item quantity="many">Masz %d nowych sprawdzianów</item>
-        <item quantity="other">Masz %d nowych sprawdzianów</item>
+        <item quantity="one">%d new exam</item>
+        <item quantity="few">%d new exams</item>
+        <item quantity="many">%d new exams</item>
+        <item quantity="other">%d new exams</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d sprawdzian</item>
@@ -553,18 +553,6 @@
     <string name="dashboard_timetable_first_lesson_title_soon">Wkrótce:</string>
     <string name="dashboard_timetable_first_lesson_title_first">Pierwsza:</string>
     <string name="dashboard_timetable_first_lesson_title_now">Teraz:</string>
-    <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
-        <item quantity="one">za %1$d minutę</item>
-        <item quantity="few">za %1$d minuty</item>
-        <item quantity="many">za %1$d minut</item>
-        <item quantity="other">za %1$d minut</item>
-    </plurals>
-    <plurals name="dashboard_timetable_first_lesson_time_more_minutes">
-        <item quantity="one">jeszcze %1$d minuta</item>
-        <item quantity="few">jeszcze %1$d minuty</item>
-        <item quantity="many">jeszcze %1$d minut</item>
-        <item quantity="other">jeszcze %1$d minut</item>
-    </plurals>
     <string name="dashboard_timetable_second_lesson_value_end">Koniec lekcji</string>
     <string name="dashboard_timetable_second_lessons_title">Następnie:</string>
     <string name="dashboard_timetable_third_title">Później:</string>
