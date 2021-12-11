@@ -253,10 +253,10 @@
         <item quantity="other">Нові іспити</item>
     </plurals>
     <plurals name="exam_notify_new_item_content">
-        <item quantity="one">Ви отримали %d новий іспит</item>
-        <item quantity="few">Ви отримали %d новий іспит</item>
-        <item quantity="many">Ви отримали %d новий іспит</item>
-        <item quantity="other">Ви отримали %d нових іспитів</item>
+        <item quantity="one">%d new exam</item>
+        <item quantity="few">%d new exams</item>
+        <item quantity="many">%d new exams</item>
+        <item quantity="other">%d new exams</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d екзамен</item>
@@ -553,18 +553,6 @@
     <string name="dashboard_timetable_first_lesson_title_soon">Незабаром:</string>
     <string name="dashboard_timetable_first_lesson_title_first">Перше:</string>
     <string name="dashboard_timetable_first_lesson_title_now">Зараз:</string>
-    <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
-        <item quantity="one">через %1$d хвилину</item>
-        <item quantity="few">через %1$d хвилину</item>
-        <item quantity="many">через %1$d хвилину</item>
-        <item quantity="other">через %1$d хвилин</item>
-    </plurals>
-    <plurals name="dashboard_timetable_first_lesson_time_more_minutes">
-        <item quantity="one">%1$d більше хвилини</item>
-        <item quantity="few">%1$d більше хвилини</item>
-        <item quantity="many">%1$d більше хвилини</item>
-        <item quantity="other">%1$d ще хвилин</item>
-    </plurals>
     <string name="dashboard_timetable_second_lesson_value_end">Кінець уроків</string>
     <string name="dashboard_timetable_second_lessons_title">Далі:</string>
     <string name="dashboard_timetable_third_title">Пізніше :</string>
