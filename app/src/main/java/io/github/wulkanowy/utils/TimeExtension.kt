@@ -31,6 +31,12 @@ fun Long.toLocalDateTime(): LocalDateTime =
 
 fun LocalDate.toTimestamp() = atTime(LocalTime.now()).toTimestamp()
 
+fun LocalDate.toUtcTimestamp() = atTime(LocalTime.now())
+    .atZone(ZoneId.systemDefault())
+    .withZoneSameLocal(ZoneOffset.UTC)
+    .toInstant()
+    .toEpochMilli()
+
 fun LocalDate.toFormattedString(pattern: String = DEFAULT_DATE_PATTERN): String =
     format(DateTimeFormatter.ofPattern(pattern))
 

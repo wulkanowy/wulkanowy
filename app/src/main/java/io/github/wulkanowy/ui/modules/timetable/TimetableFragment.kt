@@ -29,6 +29,7 @@ import io.github.wulkanowy.utils.schoolYearEnd
 import io.github.wulkanowy.utils.schoolYearStart
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.github.wulkanowy.utils.toTimestamp
+import io.github.wulkanowy.utils.toUtcTimestamp
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -205,7 +206,7 @@ class TimetableFragment : BaseFragment<FragmentTimetableBinding>(R.layout.fragme
         }
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(constraintsBuilder.build())
-            .setSelection(currentDate.toTimestamp())
+            .setSelection(currentDate.toUtcTimestamp())
             .build()
 
         datePicker.addOnPositiveButtonClickListener {

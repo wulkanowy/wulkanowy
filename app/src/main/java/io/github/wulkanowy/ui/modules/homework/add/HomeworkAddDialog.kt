@@ -14,6 +14,7 @@ import io.github.wulkanowy.ui.base.BaseDialogFragment
 import io.github.wulkanowy.utils.toFormattedString
 import io.github.wulkanowy.utils.toLocalDateTime
 import io.github.wulkanowy.utils.toTimestamp
+import io.github.wulkanowy.utils.toUtcTimestamp
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -104,7 +105,7 @@ class HomeworkAddDialog : BaseDialogFragment<DialogHomeworkAddBinding>(), Homewo
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(constraintsBuilder.build())
-                .setSelection(currentDate.toTimestamp())
+                .setSelection(currentDate.toUtcTimestamp())
                 .build()
 
         datePicker.addOnPositiveButtonClickListener {
