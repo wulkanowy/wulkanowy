@@ -253,10 +253,10 @@
         <item quantity="other">Nové zkoušky</item>
     </plurals>
     <plurals name="exam_notify_new_item_content">
-        <item quantity="one">%d new exam</item>
-        <item quantity="few">%d new exams</item>
-        <item quantity="many">%d new exams</item>
-        <item quantity="other">%d new exams</item>
+        <item quantity="one">%d nová zkouška</item>
+        <item quantity="few">%d nové zkoušky</item>
+        <item quantity="many">%d nových zkoušek</item>
+        <item quantity="other">%d nových zkoušek</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d zkouška</item>
