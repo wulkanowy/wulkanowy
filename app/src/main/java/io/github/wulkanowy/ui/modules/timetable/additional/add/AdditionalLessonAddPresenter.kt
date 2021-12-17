@@ -67,29 +67,7 @@ class AdditionalLessonAddPresenter @Inject constructor(
         content: String?,
         isRepeat: Boolean
     ) {
-        var isError = false
-
-        if (start.isNullOrBlank()) {
-            view?.setErrorStartRequired()
-            isError = true
-        }
-
-        if (end.isNullOrBlank()) {
-            view?.setErrorEndRequired()
-            isError = true
-        }
-
-        if (date.isNullOrBlank()) {
-            view?.setErrorDateRequired()
-            isError = true
-        }
-
-        if (content.isNullOrBlank()) {
-            view?.setErrorContentRequired()
-            isError = true
-        }
-
-        if (!isError) {
+        if (isUserInputValid(start, end, date, content)) {
             addAdditionalLesson(
                 start = LocalTime.parse(start!!),
                 end = LocalTime.parse(end),
@@ -98,6 +76,37 @@ class AdditionalLessonAddPresenter @Inject constructor(
                 isRepeat = isRepeat
             )
         }
+    }
+
+    private fun isUserInputValid(
+        start: String?,
+        end: String?,
+        date: String?,
+        content: String?
+    ): Boolean {
+        var isValid = true
+
+        if (start.isNullOrBlank()) {
+            view?.setErrorStartRequired()
+            isValid = false
+        }
+
+        if (end.isNullOrBlank()) {
+            view?.setErrorEndRequired()
+            isValid = false
+        }
+
+        if (date.isNullOrBlank()) {
+            view?.setErrorDateRequired()
+            isValid = false
+        }
+
+        if (content.isNullOrBlank()) {
+            view?.setErrorContentRequired()
+            isValid = false
+        }
+
+        return isValid
     }
 
     private fun addAdditionalLesson(
