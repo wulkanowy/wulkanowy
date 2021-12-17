@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.timetable.additional.add
 
 import io.github.wulkanowy.ui.base.BaseView
 import java.time.LocalDate
+import java.time.LocalTime
 
 interface AdditionalLessonAddView : BaseView {
 
@@ -9,11 +10,11 @@ interface AdditionalLessonAddView : BaseView {
 
     fun closeDialog()
 
-    fun showDatePickerDialog(currentDate: LocalDate)
+    fun showDatePickerDialog(defaultDate: LocalDate)
 
-    fun showStartTimePickerDialog()
+    fun showStartTimePickerDialog(defaultTime: LocalTime)
 
-    fun showEndTimePickerDialog()
+    fun showEndTimePickerDialog(defaultTime: LocalTime)
 
     fun showSuccessMessage()
 

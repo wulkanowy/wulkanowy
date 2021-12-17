@@ -30,12 +30,6 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
     @Inject
     lateinit var presenter: AdditionalLessonAddPresenter
 
-    private var date: LocalDate? = null
-
-    private var start: LocalTime? = null
-
-    private var end: LocalTime? = null
-
     companion object {
         fun newInstance() = AdditionalLessonAddDialog()
     }
@@ -86,7 +80,7 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
                 )
             }
             additionalLessonDialogClose.setOnClickListener { dismiss() }
-            additionalLessonDialogDateEdit.setOnClickListener { presenter.showDatePicker(date) }
+            additionalLessonDialogDateEdit.setOnClickListener { presenter.showDatePicker() }
             additionalLessonDialogStartEdit.setOnClickListener { presenter.showStartTimePicker() }
             additionalLessonDialogEndEdit.setOnClickListener { presenter.showEndTimePicker() }
         }
@@ -128,7 +122,7 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
         dismiss()
     }
 
-    override fun showDatePickerDialog(currentDate: LocalDate) {
+    override fun showDatePickerDialog(defaultDate: LocalDate) {
         val rangeStart = LocalDate.now().toTimestamp()
         val rangeEnd = LocalDate.now().lastSchoolDayInSchoolYear.toTimestamp()
         val constraintsBuilder = CalendarConstraints.Builder().apply {
@@ -138,12 +132,13 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
         }
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(constraintsBuilder.build())
-            .setSelection(currentDate.toTimestamp())
+            .setSelection(defaultDate.toTimestamp())
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
-            date = it.toLocalDateTime().toLocalDate()
-            binding.additionalLessonDialogDateEdit.setText(date?.toFormattedString())
+            val date = it.toLocalDateTime().toLocalDate()
+            presenter.onDateSelected(date)
+            binding.additionalLessonDialogDateEdit.setText(date.toFormattedString())
         }
 
         if (!parentFragmentManager.isStateSaved) {
@@ -151,33 +146,29 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
         }
     }
 
-    override fun showStartTimePickerDialog() {
-        val timePicker = MaterialTimePicker.Builder()
-            .setTimeFormat(TimeFormat.CLOCK_24H)
-            .setHour(start?.hour ?: 12)
-            .setMinute(start?.minute ?: 15)
-            .build()
-
-        timePicker.addOnPositiveButtonClickListener {
-            start = LocalTime.of(timePicker.hour, timePicker.minute)
-            binding.additionalLessonDialogStartEdit.setText(start?.toString())
-        }
-
-        if (!parentFragmentManager.isStateSaved) {
-            timePicker.show(parentFragmentManager, null)
+    override fun showStartTimePickerDialog(defaultTime: LocalTime) {
+        showTimePickerDialog(defaultTime) {
+            presenter.onStartTimeSelected(it)
+            binding.additionalLessonDialogStartEdit.setText(it.toString())
         }
     }
 
-    override fun showEndTimePickerDialog() {
+    override fun showEndTimePickerDialog(defaultTime: LocalTime) {
+        showTimePickerDialog(defaultTime) {
+            presenter.onEndTimeSelected(it)
+            binding.additionalLessonDialogEndEdit.setText(it.toString())
+        }
+    }
+
+    private fun showTimePickerDialog(defaultTime: LocalTime, onTimeSelected: (LocalTime) -> Unit) {
         val timePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
-            .setHour(end?.hour ?: 12)
-            .setMinute(end?.minute ?: 15)
+            .setHour(defaultTime.hour)
+            .setMinute(defaultTime.minute)
             .build()
 
         timePicker.addOnPositiveButtonClickListener {
-            end = LocalTime.of(timePicker.hour, timePicker.minute)
-            binding.additionalLessonDialogEndEdit.setText(end?.toString())
+            onTimeSelected(LocalTime.of(timePicker.hour, timePicker.minute))
         }
 
         if (!parentFragmentManager.isStateSaved) {

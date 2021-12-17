@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:focusable="false"
-                android:inputType="none"
+                android:inputType="text"
                 tools:ignore="Deprecated" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:focusable="false"
-                android:inputType="none"
+                android:inputType="text"
                 tools:ignore="Deprecated" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:focusable="false"
-                android:inputType="none"
+                android:inputType="text"
                 tools:ignore="Deprecated" />
         </com.google.android.material.textfield.TextInputLayout>
 

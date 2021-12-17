@@ -24,22 +24,40 @@ class AdditionalLessonAddPresenter @Inject constructor(
     private val semesterRepository: SemesterRepository
 ) : BasePresenter<AdditionalLessonAddView>(errorHandler, studentRepository) {
 
+    private var selectedStartTime = LocalTime.of(15, 0)
+
+    private var selectedEndTime = LocalTime.of(15, 45)
+
+    private var selectedDate = LocalDate.now()
+
     override fun onAttachView(view: AdditionalLessonAddView) {
         super.onAttachView(view)
         view.initView()
         Timber.i("AdditionalLesson details view was initialized")
     }
 
-    fun showDatePicker(date: LocalDate?) {
-        view?.showDatePickerDialog(date ?: LocalDate.now())
+    fun showDatePicker() {
+        view?.showDatePickerDialog(selectedDate)
     }
 
     fun showStartTimePicker() {
-        view?.showStartTimePickerDialog()
+        view?.showStartTimePickerDialog(selectedStartTime)
     }
 
     fun showEndTimePicker() {
-        view?.showEndTimePickerDialog()
+        view?.showEndTimePickerDialog(selectedEndTime)
+    }
+
+    fun onStartTimeSelected(time: LocalTime) {
+        selectedStartTime = time
+    }
+
+    fun onEndTimeSelected(time: LocalTime) {
+        selectedEndTime = time
+    }
+
+    fun onDateSelected(date: LocalDate) {
+        selectedDate = date
     }
 
     fun onAddAdditionalClicked(
@@ -90,8 +108,14 @@ class AdditionalLessonAddPresenter @Inject constructor(
         isRepeat: Boolean
     ) {
         presenterScope.launch {
-            val student = studentRepository.getCurrentStudent()
-            val semester = semesterRepository.getCurrentSemester(student)
+            val student = runCatching { studentRepository.getCurrentStudent() }
+                .onFailure { errorHandler.dispatch(it) }
+                .getOrNull() ?: return@launch
+
+            val semester = runCatching { semesterRepository.getCurrentSemester(student) }
+                .onFailure(errorHandler::dispatch)
+                .getOrNull() ?: return@launch
+
             val weeks = if (isRepeat) {
                 ChronoUnit.WEEKS.between(date, date.lastSchoolDayInSchoolYear)
             } else 0
