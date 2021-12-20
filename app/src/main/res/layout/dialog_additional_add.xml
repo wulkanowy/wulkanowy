@@ -107,7 +107,7 @@
                 android:id="@+id/additionalLessonDialogContentEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="4" />
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
