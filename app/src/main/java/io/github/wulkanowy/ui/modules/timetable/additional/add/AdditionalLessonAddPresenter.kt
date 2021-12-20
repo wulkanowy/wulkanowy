@@ -106,6 +106,11 @@ class AdditionalLessonAddPresenter @Inject constructor(
             isValid = false
         }
 
+        if (selectedStartTime >= selectedEndTime) {
+            view?.setErrorIncorrectEndTime()
+            isValid = false
+        }
+
         return isValid
     }
 

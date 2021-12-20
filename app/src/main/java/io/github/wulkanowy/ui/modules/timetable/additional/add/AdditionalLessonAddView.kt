@@ -25,4 +25,6 @@ interface AdditionalLessonAddView : BaseView {
     fun setErrorEndRequired()
 
     fun setErrorContentRequired()
+
+    fun setErrorIncorrectEndTime()
 }

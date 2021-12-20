@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.timetable.additional.add
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +49,6 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
         presenter.onAttachView(this)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun initView() {
         with(binding) {
             additionalLessonDialogStartEdit.doOnTextChanged { _, _, _, _ ->
@@ -115,6 +113,13 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
         with(binding.additionalLessonDialogContent) {
             isErrorEnabled = true
             error = getString(R.string.error_field_required)
+        }
+    }
+
+    override fun setErrorIncorrectEndTime() {
+        with(binding.additionalLessonDialogEnd) {
+            isErrorEnabled = true
+            error = getString(R.string.additional_lessons_end_time_error)
         }
     }
 

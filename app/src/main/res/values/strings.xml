@@ -208,6 +208,7 @@
     <string name="additional_lessons_delete_series">All in the series</string>
     <string name="additional_lessons_start">Start time</string>
     <string name="additional_lessons_end">End time</string>
+    <string name="additional_lessons_end_time_error">End time must be greater than start time</string>
 
 
     <!--Attendance-->
