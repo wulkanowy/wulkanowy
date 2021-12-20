@@ -122,11 +122,10 @@ class AdditionalLessonAddPresenter @Inject constructor(
         isRepeat: Boolean
     ) {
         presenterScope.launch {
-            val student = runCatching { studentRepository.getCurrentStudent() }
-                .onFailure { errorHandler.dispatch(it) }
-                .getOrNull() ?: return@launch
-
-            val semester = runCatching { semesterRepository.getCurrentSemester(student) }
+            val semester = runCatching {
+                val student = studentRepository.getCurrentStudent()
+                semesterRepository.getCurrentSemester(student)
+            }
                 .onFailure(errorHandler::dispatch)
                 .getOrNull() ?: return@launch
 
@@ -137,7 +136,7 @@ class AdditionalLessonAddPresenter @Inject constructor(
 
             val lessonsToAdd = (0..weeks).map {
                 TimetableAdditional(
-                    studentId = student.studentId,
+                    studentId = semester.studentId,
                     diaryId = semester.diaryId,
                     start = LocalDateTime.of(date, start),
                     end = LocalDateTime.of(date, end),
