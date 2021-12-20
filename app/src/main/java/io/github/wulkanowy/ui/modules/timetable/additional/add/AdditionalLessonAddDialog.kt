@@ -122,7 +122,7 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
         dismiss()
     }
 
-    override fun showDatePickerDialog(defaultDate: LocalDate) {
+    override fun showDatePickerDialog(selectedDate: LocalDate) {
         val rangeStart = LocalDate.now().toTimestamp()
         val rangeEnd = LocalDate.now().lastSchoolDayInSchoolYear.toTimestamp()
         val constraintsBuilder = CalendarConstraints.Builder().apply {
@@ -132,7 +132,7 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
         }
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setCalendarConstraints(constraintsBuilder.build())
-            .setSelection(defaultDate.toTimestamp())
+            .setSelection(selectedDate.toTimestamp())
             .build()
 
         datePicker.addOnPositiveButtonClickListener {
@@ -146,15 +146,15 @@ class AdditionalLessonAddDialog : BaseDialogFragment<DialogAdditionalAddBinding>
         }
     }
 
-    override fun showStartTimePickerDialog(defaultTime: LocalTime) {
-        showTimePickerDialog(defaultTime) {
+    override fun showStartTimePickerDialog(selectedTime: LocalTime) {
+        showTimePickerDialog(selectedTime) {
             presenter.onStartTimeSelected(it)
             binding.additionalLessonDialogStartEdit.setText(it.toString())
         }
     }
 
-    override fun showEndTimePickerDialog(defaultTime: LocalTime) {
-        showTimePickerDialog(defaultTime) {
+    override fun showEndTimePickerDialog(selectedTime: LocalTime) {
+        showTimePickerDialog(selectedTime) {
             presenter.onEndTimeSelected(it)
             binding.additionalLessonDialogEndEdit.setText(it.toString())
         }

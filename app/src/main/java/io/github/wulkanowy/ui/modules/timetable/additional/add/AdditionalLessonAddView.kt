@@ -10,11 +10,11 @@ interface AdditionalLessonAddView : BaseView {
 
     fun closeDialog()
 
-    fun showDatePickerDialog(defaultDate: LocalDate)
+    fun showDatePickerDialog(selectedDate: LocalDate)
 
-    fun showStartTimePickerDialog(defaultTime: LocalTime)
+    fun showStartTimePickerDialog(selectedTime: LocalTime)
 
-    fun showEndTimePickerDialog(defaultTime: LocalTime)
+    fun showEndTimePickerDialog(selectedTime: LocalTime)
 
     fun showSuccessMessage()
 
