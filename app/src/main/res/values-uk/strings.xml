@@ -204,6 +204,17 @@
     <string name="additional_lessons_title">Додаткові уроки</string>
     <string name="additional_lessons_button">Показати додаткові уроки</string>
     <string name="additional_lessons_no_items">Немає інформації про додаткових уроків</string>
+    <string name="additional_lessons_add">New lesson</string>
+    <string name="additional_lessons_add_title">New additional lesson</string>
+    <string name="additional_lessons_add_success">Additional lesson added successfully</string>
+    <string name="additional_lessons_delete_success">Additional lesson deleted successfully</string>
+    <string name="additional_lessons_repeat">Repeat weekly</string>
+    <string name="additional_lessons_delete_title">Delete additional lesson</string>
+    <string name="additional_lessons_delete_one">Just this lesson</string>
+    <string name="additional_lessons_delete_series">All in the series</string>
+    <string name="additional_lessons_start">Start time</string>
+    <string name="additional_lessons_end">End time</string>
+    <string name="additional_lessons_end_time_error">End time must be greater than start time</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Підсумок відвідуваності</string>
     <string name="attendance_absence_school">Відсутність зі шкільних причин</string>
