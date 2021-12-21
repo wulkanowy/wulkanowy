@@ -206,15 +206,15 @@
     <string name="additional_lessons_no_items">Žádné informace o dalších lekcích</string>
     <string name="additional_lessons_add">Nová lekce</string>
     <string name="additional_lessons_add_title">Nová další lekce</string>
-    <string name="additional_lessons_add_success">Additional lesson added successfully</string>
-    <string name="additional_lessons_delete_success">Additional lesson deleted successfully</string>
-    <string name="additional_lessons_repeat">Repeat weekly</string>
-    <string name="additional_lessons_delete_title">Delete additional lesson</string>
+    <string name="additional_lessons_add_success">Další lekce byla úspěšně přidána</string>
+    <string name="additional_lessons_delete_success">Další lekce byla úspěšně odstraněna</string>
+    <string name="additional_lessons_repeat">Opakovat každý týden</string>
+    <string name="additional_lessons_delete_title">Odstranit další lekci</string>
     <string name="additional_lessons_delete_one">Pouze tato lekce</string>
     <string name="additional_lessons_delete_series">Všechny v sérii</string>
-    <string name="additional_lessons_start">Start time</string>
-    <string name="additional_lessons_end">End time</string>
-    <string name="additional_lessons_end_time_error">End time must be greater than start time</string>
+    <string name="additional_lessons_start">Čas zahájení</string>
+    <string name="additional_lessons_end">Čas ukončení</string>
+    <string name="additional_lessons_end_time_error">Čas ukončení musí být pozdější než čas zahájení</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Shrnutí frekvencí</string>
     <string name="attendance_absence_school">Neprítomnosť zo školských dôvodov</string>
