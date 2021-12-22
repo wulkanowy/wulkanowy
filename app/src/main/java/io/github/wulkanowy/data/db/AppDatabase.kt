@@ -1,11 +1,13 @@
 package io.github.wulkanowy.data.db
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabase.JournalMode.TRUNCATE
 import androidx.room.TypeConverters
+import io.github.wulkanowy.data.db.dao.AdminMessageDao
 import io.github.wulkanowy.data.db.dao.AttendanceDao
 import io.github.wulkanowy.data.db.dao.AttendanceSummaryDao
 import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
@@ -35,6 +37,7 @@ import io.github.wulkanowy.data.db.dao.TeacherDao
 import io.github.wulkanowy.data.db.dao.TimetableAdditionalDao
 import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.dao.TimetableHeaderDao
+import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.db.entities.Attendance
 import io.github.wulkanowy.data.db.entities.AttendanceSummary
 import io.github.wulkanowy.data.db.entities.CompletedLesson
@@ -98,6 +101,10 @@ import io.github.wulkanowy.data.db.migrations.Migration38
 import io.github.wulkanowy.data.db.migrations.Migration39
 import io.github.wulkanowy.data.db.migrations.Migration4
 import io.github.wulkanowy.data.db.migrations.Migration40
+import io.github.wulkanowy.data.db.migrations.Migration41
+import io.github.wulkanowy.data.db.migrations.Migration42
+import io.github.wulkanowy.data.db.migrations.Migration43
+import io.github.wulkanowy.data.db.migrations.Migration44
 import io.github.wulkanowy.data.db.migrations.Migration5
 import io.github.wulkanowy.data.db.migrations.Migration6
 import io.github.wulkanowy.data.db.migrations.Migration7
@@ -137,7 +144,11 @@ import javax.inject.Singleton
         StudentInfo::class,
         TimetableHeader::class,
         SchoolAnnouncement::class,
-        Notification::class
+        Notification::class,
+        AdminMessage::class
+    ],
+    autoMigrations = [
+        AutoMigration(from = 44, to = 45)
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -146,7 +157,7 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 40
+        const val VERSION_SCHEMA = 45
 
         fun getMigrations(sharedPrefProvider: SharedPrefProvider, appInfo: AppInfo) = arrayOf(
             Migration2(),
@@ -187,7 +198,11 @@ abstract class AppDatabase : RoomDatabase() {
             Migration37(),
             Migration38(),
             Migration39(),
-            Migration40()
+            Migration40(),
+            Migration41(sharedPrefProvider),
+            Migration42(),
+            Migration43(),
+            Migration44(),
         )
 
         fun newInstance(
@@ -259,4 +274,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val schoolAnnouncementDao: SchoolAnnouncementDao
 
     abstract val notificationDao: NotificationDao
+
+    abstract val adminMessagesDao: AdminMessageDao
 }

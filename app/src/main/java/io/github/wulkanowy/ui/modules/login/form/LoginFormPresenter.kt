@@ -30,7 +30,7 @@ class LoginFormPresenter @Inject constructor(
             showVersion()
 
             loginErrorHandler.onBadCredentials = {
-                setErrorPassIncorrect(it)
+                setErrorPassIncorrect(it.takeIf { !it.isNullOrBlank() })
                 showSoftKeyboard()
                 Timber.i("Entered wrong username or password")
             }
@@ -49,8 +49,11 @@ class LoginFormPresenter @Inject constructor(
         view?.apply {
             clearPassError()
             clearUsernameError()
+            clearHostError()
             if (formHostValue.contains("fakelog")) {
                 setCredentials("jan@fakelog.cf", "jan123")
+            } else if (formUsernameValue == "jan@fakelog.cf" && formPassValue == "jan123") {
+                setCredentials("", "")
             }
             updateUsernameLabel()
         }
@@ -75,7 +78,10 @@ class LoginFormPresenter @Inject constructor(
             val usernameHost = username.substringAfter("@")
 
             hosts[usernameHost]?.let {
-                view?.setHost(it)
+                view?.run {
+                    setHost(it)
+                    clearHostError()
+                }
             }
         }
     }

@@ -2,6 +2,9 @@ package io.github.wulkanowy.ui.modules.grade.details
 
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.data.enums.GradeExpandMode
+import io.github.wulkanowy.data.enums.GradeSortingMode.ALPHABETIC
+import io.github.wulkanowy.data.enums.GradeSortingMode.DATE
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -9,13 +12,12 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.grade.GradeAverageProvider
-import io.github.wulkanowy.ui.modules.grade.GradeSortingMode.ALPHABETIC
-import io.github.wulkanowy.ui.modules.grade.GradeSortingMode.DATE
 import io.github.wulkanowy.ui.modules.grade.GradeSubject
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -46,8 +48,8 @@ class GradeDetailsPresenter @Inject constructor(
     fun onParentViewLoadData(semesterId: Int, forceRefresh: Boolean) {
         currentSemesterId = semesterId
 
-        loadData(semesterId, forceRefresh)
         if (!forceRefresh) view?.showErrorView(false)
+        loadData(semesterId, forceRefresh)
     }
 
     fun onGradeItemSelected(grade: Grade, position: Int) {
@@ -113,7 +115,7 @@ class GradeDetailsPresenter @Inject constructor(
     fun onParentViewReselected() {
         view?.run {
             if (!isViewEmpty) {
-                if (preferencesRepository.isGradeExpandable) collapseAllItems()
+                if (preferencesRepository.gradeExpandMode != GradeExpandMode.ALWAYS_EXPANDED) collapseAllItems()
                 scrollToStart()
             }
         }
@@ -157,7 +159,7 @@ class GradeDetailsPresenter @Inject constructor(
                             showContent(true)
                             updateData(
                                 data = items,
-                                isGradeExpandable = preferencesRepository.isGradeExpandable,
+                                expandMode = preferencesRepository.gradeExpandMode,
                                 gradeColorTheme = preferencesRepository.gradeColorTheme
                             )
                             notifyParentDataLoaded(semesterId)
@@ -175,7 +177,7 @@ class GradeDetailsPresenter @Inject constructor(
                         showContent(items.isNotEmpty())
                         updateData(
                             data = items,
-                            isGradeExpandable = preferencesRepository.isGradeExpandable,
+                            expandMode = preferencesRepository.gradeExpandMode,
                             gradeColorTheme = preferencesRepository.gradeColorTheme
                         )
                     }
@@ -197,6 +199,9 @@ class GradeDetailsPresenter @Inject constructor(
                 enableSwipe(true)
                 notifyParentDataLoaded(semesterId)
             }
+        }.catch {
+            errorHandler.dispatch(it)
+            view?.notifyParentDataLoaded(semesterId)
         }.launch()
     }
 
@@ -213,6 +218,7 @@ class GradeDetailsPresenter @Inject constructor(
                 setErrorDetails(message)
                 showErrorView(true)
                 showEmpty(false)
+                showProgress(false)
             } else showError(message, error)
         }
     }
@@ -224,10 +230,14 @@ class GradeDetailsPresenter @Inject constructor(
                     gradesWithAverages.filter { it.grades.isNotEmpty() }
                 } else gradesWithAverages
             }
-            .let {
+            .let { gradeSubjects ->
                 when (preferencesRepository.gradeSortingMode) {
-                    DATE -> it.sortedByDescending { gradeDetailsWithAverage -> gradeDetailsWithAverage.grades.firstOrNull()?.date }
-                    ALPHABETIC -> it.sortedBy { gradeDetailsWithAverage -> gradeDetailsWithAverage.subject.lowercase() }
+                    DATE -> gradeSubjects.sortedByDescending { gradeDetailsWithAverage ->
+                        gradeDetailsWithAverage.grades.maxByOrNull { it.date }?.date
+                    }
+                    ALPHABETIC -> gradeSubjects.sortedBy { gradeDetailsWithAverage ->
+                        gradeDetailsWithAverage.subject.lowercase()
+                    }
                 }
             }
             .map { (subject, average, points, _, grades) ->
@@ -235,14 +245,24 @@ class GradeDetailsPresenter @Inject constructor(
                     .sortedByDescending { it.date }
                     .map { GradeDetailsItem(it, ViewType.ITEM) }
 
-                listOf(GradeDetailsItem(GradeDetailsHeader(
-                    subject = subject,
-                    average = average,
-                    pointsSum = points,
-                    grades = subItems
-                ).apply {
-                    newGrades = grades.filter { grade -> !grade.isRead }.size
-                }, ViewType.HEADER)) + if (preferencesRepository.isGradeExpandable) emptyList() else subItems
+                val gradeDetailsItems = listOf(
+                    GradeDetailsItem(
+                        GradeDetailsHeader(
+                            subject = subject,
+                            average = average,
+                            pointsSum = points,
+                            grades = subItems
+                        ).apply {
+                            newGrades = grades.filter { grade -> !grade.isRead }.size
+                        }, ViewType.HEADER
+                    )
+                )
+
+                if (preferencesRepository.gradeExpandMode == GradeExpandMode.ALWAYS_EXPANDED) {
+                    gradeDetailsItems + subItems
+                } else {
+                    gradeDetailsItems
+                }
             }.flatten()
     }
 

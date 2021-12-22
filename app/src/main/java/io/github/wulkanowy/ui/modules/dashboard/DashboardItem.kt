@@ -1,10 +1,12 @@
 package io.github.wulkanowy.ui.modules.dashboard
 
+import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.data.pojos.TimetableFull
 import io.github.wulkanowy.data.db.entities.Homework as EntitiesHomework
 
@@ -15,6 +17,15 @@ sealed class DashboardItem(val type: Type) {
     abstract val isLoading: Boolean
 
     abstract val isDataLoaded: Boolean
+
+    data class AdminMessages(
+        val adminMessage: AdminMessage? = null,
+        override val error: Throwable? = null,
+        override val isLoading: Boolean = false
+    ) : DashboardItem(Type.ADMIN_MESSAGE) {
+
+        override val isDataLoaded get() = adminMessage != null
+    }
 
     data class Account(
         val student: Student? = null,
@@ -42,7 +53,7 @@ sealed class DashboardItem(val type: Type) {
 
     data class Grades(
         val subjectWithGrades: Map<String, List<Grade>>? = null,
-        val gradeTheme: String? = null,
+        val gradeTheme: GradeColorTheme? = null,
         override val error: Throwable? = null,
         override val isLoading: Boolean = false
     ) : DashboardItem(Type.GRADES) {
@@ -96,6 +107,7 @@ sealed class DashboardItem(val type: Type) {
     }
 
     enum class Type {
+        ADMIN_MESSAGE,
         ACCOUNT,
         HORIZONTAL_GROUP,
         LESSONS,
@@ -108,6 +120,7 @@ sealed class DashboardItem(val type: Type) {
     }
 
     enum class Tile {
+        ADMIN_MESSAGE,
         ACCOUNT,
         LUCKY_NUMBER,
         MESSAGES,
@@ -123,6 +136,7 @@ sealed class DashboardItem(val type: Type) {
 }
 
 fun DashboardItem.Tile.toDashboardItemType() = when (this) {
+    DashboardItem.Tile.ADMIN_MESSAGE -> DashboardItem.Type.ADMIN_MESSAGE
     DashboardItem.Tile.ACCOUNT -> DashboardItem.Type.ACCOUNT
     DashboardItem.Tile.LUCKY_NUMBER -> DashboardItem.Type.HORIZONTAL_GROUP
     DashboardItem.Tile.MESSAGES -> DashboardItem.Type.HORIZONTAL_GROUP

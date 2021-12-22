@@ -56,7 +56,7 @@ class SendMessagePresenter @Inject constructor(
             }
             message?.let {
                 setSubject(when (reply) {
-                    true -> "RE: "
+                    true -> "Re: "
                     else -> "FW: "
                 } + message.subject)
                 if (preferencesRepository.fillMessageContent || reply != true) {
@@ -224,14 +224,14 @@ class SendMessagePresenter @Inject constructor(
     }
 
     fun onMessageContentChange() {
-        launch {
+        presenterScope.launch {
             messageUpdateChannel.send(Unit)
         }
     }
 
     @OptIn(FlowPreview::class)
     private fun initializeSubjectStream() {
-        launch {
+        presenterScope.launch {
             messageUpdateChannel.consumeAsFlow()
                 .debounce(250)
                 .catch { Timber.e(it) }
