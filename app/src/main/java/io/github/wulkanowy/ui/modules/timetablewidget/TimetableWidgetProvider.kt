@@ -3,10 +3,7 @@ package io.github.wulkanowy.ui.modules.timetablewidget
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_DELETED
-import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
-import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
-import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
+import android.appwidget.AppWidgetManager.*
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -25,22 +22,12 @@ import io.github.wulkanowy.services.HiltBroadcastReceiver
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.PendingIntentCompat
-import io.github.wulkanowy.utils.capitalise
-import io.github.wulkanowy.utils.createNameInitialsDrawable
-import io.github.wulkanowy.utils.getCompatColor
-import io.github.wulkanowy.utils.nextOrSameSchoolDay
-import io.github.wulkanowy.utils.nextSchoolDay
-import io.github.wulkanowy.utils.nickOrName
-import io.github.wulkanowy.utils.previousSchoolDay
-import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
-import java.time.LocalDate.now
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import javax.inject.Inject
@@ -64,21 +51,22 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
 
         private const val TIMETABLE_PENDING_INTENT_ID = 201
 
-        const val EXTRA_TOGGLED_WIDGET_ID = "extraToggledWidget"
+        private const val EXTRA_TOGGLED_WIDGET_ID = "extraToggledWidget"
 
-        const val EXTRA_BUTTON_TYPE = "extraButtonType"
+        private const val EXTRA_BUTTON_TYPE = "extraButtonType"
 
-        const val BUTTON_NEXT = "buttonNext"
+        private const val BUTTON_NEXT = "buttonNext"
 
         private const val BUTTON_PREV = "buttonPrev"
 
-        const val BUTTON_RESET = "buttonReset"
+        private const val BUTTON_RESET = "buttonReset"
 
         const val EXTRA_FROM_PROVIDER = "extraFromProvider"
 
         fun getDateWidgetKey(appWidgetId: Int) = "timetable_widget_date_$appWidgetId"
 
-        fun getLessonEndWidgetKey(appWidgetId: Int) = "timetable_widget_lesson_end_$appWidgetId"
+        fun getLastLessonEndDateTimeWidgetKey(appWidgetId: Int) =
+            "timetable_widget_last_lesson_end_date_time_$appWidgetId"
 
         fun getStudentWidgetKey(appWidgetId: Int) = "timetable_widget_student_$appWidgetId"
 
@@ -104,17 +92,8 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
             intent.getIntArrayExtra(EXTRA_APPWIDGET_IDS)?.forEach { appWidgetId ->
                 val student =
                     getStudent(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)
-                val endDate = LocalDateTime.ofEpochSecond(
-                    sharedPref.getLong(
-                        getLessonEndWidgetKey(
-                            appWidgetId
-                        ), 0
-                    ), 0, ZoneOffset.UTC
-                )
-                val date = if (endDate.toLocalDate() == now() && endDate > LocalDateTime.now())
-                    now().nextOrSameSchoolDay
-                else now().nextSchoolDay
-                updateWidget(context, appWidgetId, date, student)
+
+                updateWidget(context, appWidgetId, getWidgetDateToLoad(appWidgetId), student)
             }
         } else {
             val buttonType = intent.getStringExtra(EXTRA_BUTTON_TYPE)
@@ -125,26 +104,11 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
             )
             val savedDate =
                 LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(toggledWidgetId), 0))
-            val endDate = LocalDateTime.ofEpochSecond(
-                sharedPref.getLong(
-                    getLessonEndWidgetKey(
-                        toggledWidgetId
-                    ), 0
-                ), 0, ZoneOffset.UTC
-            )
             val date = when (buttonType) {
-                BUTTON_RESET -> {
-                    if (endDate.toLocalDate() == now() && endDate > LocalDateTime.now())
-                        now().nextOrSameSchoolDay
-                    else now().nextSchoolDay
-                }
+                BUTTON_RESET -> getWidgetDateToLoad(toggledWidgetId)
                 BUTTON_NEXT -> savedDate.nextSchoolDay
                 BUTTON_PREV -> savedDate.previousSchoolDay
-                else -> {
-                    if (endDate.toLocalDate() == now() && endDate > LocalDateTime.now())
-                        now().nextOrSameSchoolDay
-                    else now().nextSchoolDay
-                }
+                else -> getWidgetDateToLoad(toggledWidgetId)
             }
             if (!buttonType.isNullOrBlank()) analytics.logEvent(
                 "changed_timetable_widget_day",
@@ -306,5 +270,22 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
         avatarDrawable.setBounds(0, 0, canvas.width, canvas.height)
         avatarDrawable.draw(canvas)
         return avatarBitmap
+    }
+
+    private fun getWidgetDateToLoad(appWidgetId: Int): LocalDate {
+        val lastLessonEndTimestamp =
+            sharedPref.getLong(getLastLessonEndDateTimeWidgetKey(appWidgetId), 0)
+        val lastLessonEndDateTime =
+            LocalDateTime.ofEpochSecond(lastLessonEndTimestamp, 0, ZoneOffset.UTC)
+
+        val todayDate = LocalDate.now()
+        val isLastLessonEndDateNow = lastLessonEndDateTime.toLocalDate() == todayDate
+        val isLastLessonEndDateAfterNow = lastLessonEndDateTime > LocalDateTime.now()
+
+        return if (isLastLessonEndDateNow && isLastLessonEndDateAfterNow) {
+            todayDate.nextOrSameSchoolDay
+        } else {
+            todayDate.nextSchoolDay
+        }
     }
 }

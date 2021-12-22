@@ -21,7 +21,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getCurrentThemeWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getDateWidgetKey
-import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getLessonEndWidgetKey
+import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getLastLessonEndDateTimeWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getStudentWidgetKey
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toFirstResult
@@ -72,9 +72,11 @@ class TimetableWidgetFactory(
 
             updateTheme(appWidgetId)
             lessons = getLessons(date, studentId)
+
+            val lastLessonEndTimestamp = lessons.maxOf { it.end }.toEpochSecond(ZoneOffset.UTC)
             sharedPref.putLong(
-                getLessonEndWidgetKey(appWidgetId),
-                lessons.maxOf { it.end }.toEpochSecond(ZoneOffset.UTC),
+                getLastLessonEndDateTimeWidgetKey(appWidgetId),
+                lastLessonEndTimestamp,
                 true
             )
         }
