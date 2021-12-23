@@ -133,23 +133,17 @@ class GradeStatisticsPresenter @Inject constructor(
             when (it.status) {
                 Status.LOADING -> Timber.i("Loading grade stats subjects started")
                 Status.SUCCESS -> {
-                    subjects = it.data!!
-
+                    subjects = requireNotNull(it.data)
                     Timber.i("Loading grade stats subjects result: Success")
+
                     view?.run {
-                        val selected = it.data.indexOfFirst { it.name == currentSubjectName }
-                        if (selected == -1) {
-                            Timber.e(
-                                "GradeStatisticsView: selected = -1,  currentSubjectName: `%s`, data: `%s`",
-                                currentSubjectName,
-                                it.data
-                            )
-                        }
-                        view?.updateSubjects(
-                            selected,
-                            it.data.map { subject -> subject.name }.toList()
-                        )
                         showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
+                        updateSubjects(
+                            data = it.data.map { subject -> subject.name },
+                            selectedIndex = it.data.indexOfFirst { subject ->
+                                subject.name == currentSubjectName
+                            },
+                        )
                     }
                 }
                 Status.ERROR -> {
@@ -168,9 +162,11 @@ class GradeStatisticsPresenter @Inject constructor(
     ) {
         Timber.i("Loading grade stats data started")
 
-        currentSubjectName =
-            if (preferencesRepository.showAllSubjectsOnStatisticsList) "Wszystkie" else subjectName
         currentType = type
+        currentSubjectName = when {
+            preferencesRepository.showAllSubjectsOnStatisticsList -> "Wszystkie"
+            else -> subjectName
+        }
 
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
@@ -217,9 +213,9 @@ class GradeStatisticsPresenter @Inject constructor(
                             showRefresh(true)
                             showProgress(false)
                             updateData(
-                                if (isNoContent) emptyList() else it.data!!,
-                                preferencesRepository.gradeColorTheme,
-                                preferencesRepository.showAllSubjectsOnStatisticsList
+                                newItems = if (isNoContent) emptyList() else it.data!!,
+                                newTheme = preferencesRepository.gradeColorTheme,
+                                showAllSubjectsOnStatisticsList = preferencesRepository.showAllSubjectsOnStatisticsList,
                             )
                             showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
                         }
@@ -232,9 +228,9 @@ class GradeStatisticsPresenter @Inject constructor(
                         showEmpty(isNoContent)
                         showErrorView(false)
                         updateData(
-                            if (isNoContent) emptyList() else it.data,
-                            preferencesRepository.gradeColorTheme,
-                            preferencesRepository.showAllSubjectsOnStatisticsList
+                            newItems = if (isNoContent) emptyList() else it.data,
+                            newTheme = preferencesRepository.gradeColorTheme,
+                            showAllSubjectsOnStatisticsList = preferencesRepository.showAllSubjectsOnStatisticsList,
                         )
                         showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
                     }

@@ -47,9 +47,9 @@ class GradeStatisticsFragment :
         binding = FragmentGradeStatisticsBinding.bind(view)
         messageContainer = binding.gradeStatisticsRecycler
         presenter.onAttachView(
-            this,
-            savedInstanceState?.getSerializable(SAVED_CHART_TYPE) as? GradeStatisticsItem.DataType,
-            savedInstanceState?.getSerializable(SAVED_SUBJECT_NAME) as? String
+            view = this,
+            type = savedInstanceState?.getSerializable(SAVED_CHART_TYPE) as? GradeStatisticsItem.DataType,
+            subjectName = savedInstanceState?.getSerializable(SAVED_SUBJECT_NAME) as? String,
         )
     }
 
@@ -84,14 +84,12 @@ class GradeStatisticsFragment :
         }
     }
 
-    override fun updateSubjects(selected: Int, data: List<String>) {
+    override fun updateSubjects(data: List<String>, selectedIndex: Int) {
+        binding.gradeStatisticsSubjects.setSelection(selectedIndex)
         with(subjectsAdapter) {
             clear()
             addAll(data)
             notifyDataSetChanged()
-        }
-        with(binding.gradeStatisticsSubjects) {
-            setSelection(selected)
         }
     }
 
