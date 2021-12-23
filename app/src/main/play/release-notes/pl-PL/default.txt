@@ -1,10 +1,6 @@
-Wersja 1.4.0
+Wersja 1.4.4
 
-- dodaliśmy możliwość dodawania własnych zadań domowych
-- dodaliśmy kafelek z wiadomościami od twórców
-- dodaliśmy dodatkowy tryb rozwijania szczegółów ocen
-- dodaliśmy wsparcie dla Androida 12
-- ulepszyliśmy powiadomienia na Mi Bandzie
-- dokonaliśmy też kilka innych zmian i kosmetycznych poprawek poprawiających komfort używania aplikacji
+- naprawiliśmy logowanie do Gdańskiej Platformy Edukacyjnej
+- naprawiliśmy sortowanie ocen oraz ogłoszeń
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

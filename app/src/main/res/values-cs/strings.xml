@@ -253,10 +253,10 @@
         <item quantity="other">Nové zkoušky</item>
     </plurals>
     <plurals name="exam_notify_new_item_content">
-        <item quantity="one">Máte %d novou zkoušku</item>
-        <item quantity="few">Máte %d nové zkoušky</item>
-        <item quantity="many">Máte %d nových zkoušek</item>
-        <item quantity="other">Máte %d nových zkoušek</item>
+        <item quantity="one">%d nová zkouška</item>
+        <item quantity="few">%d nové zkoušky</item>
+        <item quantity="many">%d nových zkoušek</item>
+        <item quantity="other">%d nových zkoušek</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d zkouška</item>
@@ -553,18 +553,6 @@
     <string name="dashboard_timetable_first_lesson_title_soon">Brzy:</string>
     <string name="dashboard_timetable_first_lesson_title_first">První:</string>
     <string name="dashboard_timetable_first_lesson_title_now">Teď:</string>
-    <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
-        <item quantity="one">za %1$d minutu</item>
-        <item quantity="few">za %1$d minuty</item>
-        <item quantity="many">za %1$d minut</item>
-        <item quantity="other">za %1$d minut</item>
-    </plurals>
-    <plurals name="dashboard_timetable_first_lesson_time_more_minutes">
-        <item quantity="one">ještě %1$d minutu</item>
-        <item quantity="few">ještě %1$d minuty</item>
-        <item quantity="many">ještě %1$d minut</item>
-        <item quantity="other">ještě %1$d minut</item>
-    </plurals>
     <string name="dashboard_timetable_second_lesson_value_end">Konec lekcí</string>
     <string name="dashboard_timetable_second_lessons_title">Další:</string>
     <string name="dashboard_timetable_third_title">Později:</string>
@@ -683,6 +671,8 @@
     <string name="pref_notify_notifications_piggyback">Zachytit upozornění oficiální aplikací</string>
     <string name="pref_notification_piggyback_popup_title">Zachytit upozornění</string>
     <string name="pref_notification_piggyback_popup_description">S touto funkcí můžete získat náhradu push upozornění jako v oficiální aplikaci. Vše, co musíte udělat, je povolit Wulkanowému číst všechna vaše upozornění v nastaveních systému.\n\nJak to funguje?\nKdyž obdržíte oznámení v Deníčku VULCAN, Wulkanowy bude o tom informován (k tomu je to dodatečné povolení) a spustí synchronizaci, aby mohl zaslat vlastní upozornění.\n\nPOUZE PRO POKROČILÉ UŽIVATELE</string>
+    <string name="pref_notification_exact_alarm_popup_title">Upozornění o nadcházející lekci</string>
+    <string name="pref_notification_exact_alarm_popup_descriptions">Musíte povolit Wulkanovému nastavit budíky a připomenutí v nastavení vašeho systému pro použití této funkce.</string>
     <string name="pref_notification_go_to_settings">Přejít do nastavení</string>
     <string name="pref_services_header">Synchronizace</string>
     <string name="pref_services_switch">Automatická aktualizace</string>
@@ -705,6 +695,7 @@
     <string name="pref_ads_privacy_agree">Souhlasím</string>
     <string name="pref_ads_privacy_link">Ochrana osobních údajů</string>
     <string name="pref_ads_loading">Reklama se načítá</string>
+    <string name="pref_ads_once_per_visit">Děkujeme za vaši podporu, vraťte se později pro více reklam</string>
     <string name="pref_settings_advanced_title">Pokročilé</string>
     <string name="pref_settings_appearance_title">Vzhled a chování</string>
     <string name="pref_settings_notifications_title">Upozornění</string>
@@ -759,8 +750,8 @@
     <string name="error_timeout">Nelze se připojit ke deníku. Servery mohou být přetíženy. Prosím zkuste to znovu později</string>
     <string name="error_login_failed">Načítání dat se nezdařilo. Prosím zkuste to znovu později</string>
     <string name="error_password_change_required">Je vyžadována změna hesla pro deník</string>
-    <string name="error_service_unavailable">Probíhá údržba UONET+ deník. Zkuste to později znovu</string>
-    <string name="error_unknown_uonet">Neznámá chyba denika UONET+. Prosím zkuste to znovu později</string>
+    <string name="error_service_unavailable">Probíhá údržba deníku UONET+. Zkuste to později znovu</string>
+    <string name="error_unknown_uonet">Neznámá chyba deniku UONET+. Prosím zkuste to znovu později</string>
     <string name="error_unknown_app">Neznámá chyba aplikace. Prosím zkuste to znovu později</string>
     <string name="error_unknown">Vyskytla se neočekávaná chyba</string>
     <string name="error_feature_disabled">Funkce je deaktivována přes vaší školou</string>

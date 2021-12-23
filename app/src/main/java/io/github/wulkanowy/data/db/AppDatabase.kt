@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.db
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -103,6 +104,7 @@ import io.github.wulkanowy.data.db.migrations.Migration40
 import io.github.wulkanowy.data.db.migrations.Migration41
 import io.github.wulkanowy.data.db.migrations.Migration42
 import io.github.wulkanowy.data.db.migrations.Migration43
+import io.github.wulkanowy.data.db.migrations.Migration44
 import io.github.wulkanowy.data.db.migrations.Migration5
 import io.github.wulkanowy.data.db.migrations.Migration6
 import io.github.wulkanowy.data.db.migrations.Migration7
@@ -145,6 +147,9 @@ import javax.inject.Singleton
         Notification::class,
         AdminMessage::class
     ],
+    autoMigrations = [
+        AutoMigration(from = 44, to = 45)
+    ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
 )
@@ -152,7 +157,7 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 43
+        const val VERSION_SCHEMA = 45
 
         fun getMigrations(sharedPrefProvider: SharedPrefProvider, appInfo: AppInfo) = arrayOf(
             Migration2(),
@@ -196,7 +201,8 @@ abstract class AppDatabase : RoomDatabase() {
             Migration40(),
             Migration41(sharedPrefProvider),
             Migration42(),
-            Migration43()
+            Migration43(),
+            Migration44(),
         )
 
         fun newInstance(
