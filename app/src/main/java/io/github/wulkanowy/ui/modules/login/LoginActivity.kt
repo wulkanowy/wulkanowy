@@ -59,7 +59,7 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
         return true
     }
 
-    override fun showActionBar(show: Boolean) {
+    fun showActionBar(show: Boolean) {
         supportActionBar?.run { if (show) show() else hide() }
     }
 

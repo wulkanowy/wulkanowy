@@ -11,6 +11,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.FragmentLoginStudentSelectBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.login.LoginActivity
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.openEmailClient
@@ -51,6 +52,8 @@ class LoginStudentSelectFragment :
     }
 
     override fun initView() {
+        (requireActivity() as LoginActivity).showActionBar(true)
+
         loginAdapter.onClickListener = presenter::onItemSelected
 
         with(binding) {

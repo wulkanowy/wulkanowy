@@ -55,6 +55,8 @@ class LoginSymbolFragment :
     }
 
     override fun initView() {
+        (requireActivity() as LoginActivity).showActionBar(true)
+
         with(binding) {
             loginSymbolSignIn.setOnClickListener { presenter.attemptLogin(loginSymbolName.text.toString()) }
             loginSymbolFaq.setOnClickListener { presenter.onFaqClick() }
