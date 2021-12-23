@@ -42,8 +42,9 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
         presenter.onAttachView(this)
         updateHelper.checkAndInstallUpdates(this)
 
-        if (savedInstanceState != null) return
-        openFragment(LoginFormFragment.newInstance())
+        if (savedInstanceState == null) {
+            openFragment(LoginFormFragment.newInstance(), clearBackStack = true)
+        }
     }
 
     override fun initView() {
@@ -83,11 +84,11 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
         openFragment(LoginRecoverFragment.newInstance())
     }
 
-    private fun openFragment(fragment: Fragment) {
+    private fun openFragment(fragment: Fragment, clearBackStack: Boolean = false) {
         supportFragmentManager.commit {
             replace(R.id.loginContainer, fragment)
             setReorderingAllowed(true)
-            addToBackStack(fragment::class.java.name)
+            if (!clearBackStack) addToBackStack(fragment::class.java.name)
         }
     }
 
