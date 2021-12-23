@@ -127,10 +127,6 @@ class LoginSymbolFragment :
         (activity as? LoginActivity)?.navigateToStudentSelect(studentsWithSemesters)
     }
 
-    override fun navigateToSuccess(studentsWithSemesters: List<StudentWithSemesters>) {
-        (activity as? LoginActivity)?.navigateToSuccess(studentsWithSemesters)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putSerializable(SAVED_LOGIN_DATA, presenter.loginData)

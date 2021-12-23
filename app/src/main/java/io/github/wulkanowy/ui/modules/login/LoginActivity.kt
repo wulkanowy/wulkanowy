@@ -71,11 +71,6 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
         openFragment(LoginStudentSelectFragment.newInstance(studentsWithSemesters))
     }
 
-    fun navigateToSuccess(studentsWithSemesters: List<StudentWithSemesters>) {
-        // TODO: maybe move to LoginPresenter in-app registration logic?
-        openFragment(LoginStudentSelectFragment.newInstance(studentsWithSemesters))
-    }
-
     fun onAdvancedLoginClick() {
         openFragment(LoginAdvancedFragment.newInstance())
     }

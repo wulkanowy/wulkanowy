@@ -35,10 +35,8 @@ class LoginStudentSelectPresenter @Inject constructor(
             }
         }
 
-        when (students.size) {
-            1 -> registerStudents(students)
-            else -> loadData(students)
-        }
+        if (students.size == 1) registerStudents(students)
+        loadData(students)
     }
 
     fun onSignIn() {

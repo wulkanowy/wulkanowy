@@ -23,15 +23,12 @@ class LoginSymbolPresenter @Inject constructor(
 
     lateinit var loginData: LoginData
 
-    @Suppress("UNCHECKED_CAST")
     fun onAttachView(view: LoginSymbolView, loginData: LoginData) {
         super.onAttachView(view)
-        view.run {
-            initView()
-            showContact(false)
-        }
         this.loginData = loginData
         with(view) {
+            initView()
+            showContact(false)
             setLoginToHeading(loginData.login)
             clearAndFocusSymbol()
             showSoftKeyboard()
@@ -64,17 +61,17 @@ class LoginSymbolPresenter @Inject constructor(
                     showContent(false)
                 }
                 Status.SUCCESS -> {
-                    view?.run {
-                        if (it.data!!.isEmpty()) {
+                    when (it.data?.size) {
+                        0 -> {
                             Timber.i("Login with symbol result: Empty student list")
-                            setErrorSymbolIncorrect()
-                            showContact(true)
-                        } else {
-                            Timber.i("Login with symbol result: Success")
-                            when (it.data.size) {
-                                1 -> navigateToSuccess(it.data)
-                                else -> navigateToStudentSelect(it.data)
+                            view?.run {
+                                setErrorSymbolIncorrect()
+                                showContact(true)
                             }
+                        }
+                        else -> {
+                            Timber.i("Login with symbol result: Success")
+                            view?.navigateToStudentSelect(requireNotNull(it.data))
                         }
                     }
                     analytics.logEvent(

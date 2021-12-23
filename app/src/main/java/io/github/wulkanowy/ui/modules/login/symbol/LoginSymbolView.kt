@@ -29,8 +29,6 @@ interface LoginSymbolView : BaseView {
 
     fun navigateToStudentSelect(studentsWithSemesters: List<StudentWithSemesters>)
 
-    fun navigateToSuccess(studentsWithSemesters: List<StudentWithSemesters>)
-
     fun showContact(show: Boolean)
 
     fun openFaqPage()

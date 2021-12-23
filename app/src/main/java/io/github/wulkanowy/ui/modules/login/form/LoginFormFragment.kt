@@ -224,10 +224,6 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         (activity as? LoginActivity)?.navigateToStudentSelect(studentsWithSemesters)
     }
 
-    override fun navigateToSuccess(studentsWithSemesters: List<StudentWithSemesters>) {
-        (activity as? LoginActivity)?.navigateToSuccess(studentsWithSemesters)
-    }
-
     override fun openAdvancedLogin() {
         (activity as? LoginActivity)?.onAdvancedLoginClick()
     }

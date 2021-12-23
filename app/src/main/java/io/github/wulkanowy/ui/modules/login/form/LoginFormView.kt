@@ -62,8 +62,6 @@ interface LoginFormView : BaseView {
 
     fun navigateToStudentSelect(studentsWithSemesters: List<StudentWithSemesters>)
 
-    fun navigateToSuccess(studentsWithSemesters: List<StudentWithSemesters>)
-
     fun openPrivacyPolicyPage()
 
     fun showContact(show: Boolean)
