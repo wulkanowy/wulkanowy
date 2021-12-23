@@ -16,6 +16,7 @@ import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.FragmentLoginSymbolBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
+import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.openEmailClient
@@ -36,7 +37,7 @@ class LoginSymbolFragment :
     companion object {
         private const val SAVED_LOGIN_DATA = "LOGIN_DATA"
 
-        fun newInstance(loginData: Triple<String, String, String>) = LoginSymbolFragment().apply {
+        fun newInstance(loginData: LoginData) = LoginSymbolFragment().apply {
             arguments = bundleOf(SAVED_LOGIN_DATA to loginData)
         }
     }
@@ -47,7 +48,10 @@ class LoginSymbolFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginSymbolBinding.bind(view)
-        presenter.onAttachView(this, requireArguments().getSerializable(SAVED_LOGIN_DATA))
+        presenter.onAttachView(
+            view = this,
+            loginData = requireArguments().getSerializable(SAVED_LOGIN_DATA) as LoginData,
+        )
     }
 
     override fun initView() {

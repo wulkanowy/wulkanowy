@@ -11,7 +11,6 @@ import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import java.io.Serializable
 import javax.inject.Inject
 
 class LoginStudentSelectPresenter @Inject constructor(
@@ -22,11 +21,9 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     private var lastError: Throwable? = null
 
-    private var students = emptyList<StudentWithSemesters>()
-
     private val selectedStudents = mutableListOf<StudentWithSemesters>()
 
-    fun onAttachView(view: LoginStudentSelectView, students: Serializable?) {
+    fun onAttachView(view: LoginStudentSelectView, students: List<StudentWithSemesters>) {
         super.onAttachView(view)
         with(view) {
             initView()
@@ -38,10 +35,9 @@ class LoginStudentSelectPresenter @Inject constructor(
             }
         }
 
-        if (students is List<*> && students.isNotEmpty()) {
-            val studentsWithSemesters = students.filterIsInstance<StudentWithSemesters>()
-            loadData(studentsWithSemesters)
-            if (studentsWithSemesters.size == 1) registerStudents(studentsWithSemesters)
+        when (students.size) {
+            1 -> registerStudents(students)
+            else -> loadData(students)
         }
     }
 
@@ -69,7 +65,6 @@ class LoginStudentSelectPresenter @Inject constructor(
 
     private fun loadData(studentsWithSemesters: List<StudentWithSemesters>) {
         resetSelectedState()
-        this.students = studentsWithSemesters
 
         flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
             when (it.status) {

@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.login.form
 
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.ui.base.BaseView
+import io.github.wulkanowy.ui.modules.login.LoginData
 
 interface LoginFormView : BaseView {
 
@@ -57,7 +58,7 @@ interface LoginFormView : BaseView {
 
     fun showVersion()
 
-    fun navigateToSymbol(loginData: Triple<String, String, String>)
+    fun navigateToSymbol(loginData: LoginData)
 
     fun navigateToStudentSelect(studentsWithSemesters: List<StudentWithSemesters>)
 

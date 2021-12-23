@@ -63,7 +63,7 @@ class LoginActivity : BaseActivity<LoginPresenter, ActivityLoginBinding>(), Logi
         supportActionBar?.run { if (show) show() else hide() }
     }
 
-    fun navigateToSymbolFragment(loginData: Triple<String, String, String>) {
+    fun navigateToSymbolFragment(loginData: LoginData) {
         openFragment(LoginSymbolFragment.newInstance(loginData))
     }
 

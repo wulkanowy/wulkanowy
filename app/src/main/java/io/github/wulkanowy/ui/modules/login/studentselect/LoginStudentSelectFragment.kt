@@ -40,10 +40,14 @@ class LoginStudentSelectFragment :
             }
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginStudentSelectBinding.bind(view)
-        presenter.onAttachView(this, requireArguments().getSerializable(ARG_STUDENTS))
+        presenter.onAttachView(
+            view = this,
+            students = requireArguments().getSerializable(ARG_STUDENTS) as List<StudentWithSemesters>,
+        )
     }
 
     override fun initView() {

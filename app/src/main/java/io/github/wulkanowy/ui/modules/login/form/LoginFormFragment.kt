@@ -13,6 +13,7 @@ import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.FragmentLoginFormBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
+import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.openEmailClient
@@ -215,7 +216,7 @@ class LoginFormFragment : BaseFragment<FragmentLoginFormBinding>(R.layout.fragme
         )
     }
 
-    override fun navigateToSymbol(loginData: Triple<String, String, String>) {
+    override fun navigateToSymbol(loginData: LoginData) {
         (activity as? LoginActivity)?.navigateToSymbolFragment(loginData)
     }
 
