@@ -65,8 +65,8 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
 
         fun getDateWidgetKey(appWidgetId: Int) = "timetable_widget_date_$appWidgetId"
 
-        fun getLastLessonEndDateTimeWidgetKey(appWidgetId: Int) =
-            "timetable_widget_last_lesson_end_date_time_$appWidgetId"
+        fun getTodayLastLessonEndDateTimeWidgetKey(appWidgetId: Int) =
+            "timetable_widget_today_last_lesson_end_date_time_$appWidgetId"
 
         fun getStudentWidgetKey(appWidgetId: Int) = "timetable_widget_student_$appWidgetId"
 
@@ -110,10 +110,12 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
                 BUTTON_PREV -> savedDate.previousSchoolDay
                 else -> getWidgetDateToLoad(toggledWidgetId)
             }
-            if (!buttonType.isNullOrBlank()) analytics.logEvent(
-                "changed_timetable_widget_day",
-                "button" to buttonType
-            )
+            if (!buttonType.isNullOrBlank()) {
+                analytics.logEvent(
+                    "changed_timetable_widget_day",
+                    "button" to buttonType
+                )
+            }
             updateWidget(context, toggledWidgetId, date, student)
         }
     }
@@ -274,18 +276,18 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
 
     private fun getWidgetDateToLoad(appWidgetId: Int): LocalDate {
         val lastLessonEndTimestamp =
-            sharedPref.getLong(getLastLessonEndDateTimeWidgetKey(appWidgetId), 0)
+            sharedPref.getLong(getTodayLastLessonEndDateTimeWidgetKey(appWidgetId), 0)
         val lastLessonEndDateTime =
             LocalDateTime.ofEpochSecond(lastLessonEndTimestamp, 0, ZoneOffset.UTC)
 
         val todayDate = LocalDate.now()
         val isLastLessonEndDateNow = lastLessonEndDateTime.toLocalDate() == todayDate
-        val isLastLessonEndDateAfterNow = lastLessonEndDateTime > LocalDateTime.now()
+        val isLastLessonEndDateAfterNowTime = LocalDateTime.now() > lastLessonEndDateTime
 
-        return if (isLastLessonEndDateNow && isLastLessonEndDateAfterNow) {
-            todayDate.nextOrSameSchoolDay
-        } else {
+        return if (isLastLessonEndDateNow && isLastLessonEndDateAfterNowTime) {
             todayDate.nextSchoolDay
+        } else {
+            todayDate.nextOrSameSchoolDay
         }
     }
 }
