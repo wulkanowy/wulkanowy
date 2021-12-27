@@ -5,13 +5,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
+import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -32,34 +31,25 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ErrorDialog : DialogFragment() {
 
-    private lateinit var error: Throwable
-
-    private var dialogView: View? = null
-
     @Inject
     lateinit var appInfo: AppInfo
 
     companion object {
-        private const val ARGUMENT_KEY = "Data"
+        private const val ARGUMENT_KEY = "error"
 
         fun newInstance(error: Throwable) = ErrorDialog().apply {
-            arguments = Bundle().apply { putSerializable(ARGUMENT_KEY, error) }
+            arguments = bundleOf(ARGUMENT_KEY to error)
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, 0)
-        error = requireArguments().getSerializable(ARGUMENT_KEY) as Throwable
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = LayoutInflater.from(context)
+        val error = requireArguments().getSerializable(ARGUMENT_KEY) as Throwable
         val errorStacktrace = error.stackTraceToString()
-        dialogView = DialogErrorBinding.inflate(inflater).root
+        val binding = DialogErrorBinding.inflate(LayoutInflater.from(context))
+        bindErrorDialogContent(binding, error)
         val dialog = MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(R.string.all_details)
-            setView(dialogView)
+            setView(binding.root)
             setNeutralButton(R.string.about_feedback) { _, _ ->
                 openConfirmDialog { openEmailClient(errorStacktrace) }
             }
@@ -74,14 +64,8 @@ class ErrorDialog : DialogFragment() {
         return dialog
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View = requireNotNull(dialogView)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        with(DialogErrorBinding.bind(requireNotNull(dialogView))) {
+    private fun bindErrorDialogContent(binding: DialogErrorBinding, error: Throwable) {
+        return with(binding) {
             errorDialogContent.text = error.stackTraceToString()
                 .replace(": ${error.localizedMessage}", "")
             with(errorDialogHorizontalScroll) {
@@ -130,11 +114,11 @@ class ErrorDialog : DialogFragment() {
 
     private fun copyErrorToClipboard(errorStacktrace: String) {
         val clip = ClipData.newPlainText("Error details", errorStacktrace)
-        activity?.getSystemService<ClipboardManager>()?.setPrimaryClip(clip)
-        Toast.makeText(context, R.string.all_copied, LENGTH_LONG).show()
+        requireActivity().getSystemService<ClipboardManager>()?.setPrimaryClip(clip)
+        Toast.makeText(requireContext(), R.string.all_copied, LENGTH_LONG).show()
     }
 
-    private fun isErrorShouldBeReported(error: Throwable) = when (error) {
+    private fun isErrorShouldBeReported(error: Throwable): Boolean = when (error) {
         is UnknownHostException,
         is InterruptedIOException,
         is ConnectException,
@@ -144,10 +128,5 @@ class ErrorDialog : DialogFragment() {
         is FeatureDisabledException,
         is FeatureNotAvailableException -> false
         else -> true
-    }
-
-    override fun onDestroyView() {
-        dialogView = null
-        super.onDestroyView()
     }
 }
