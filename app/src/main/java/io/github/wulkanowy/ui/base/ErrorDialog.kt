@@ -44,10 +44,18 @@ class ErrorDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val error = requireArguments().getSerializable(ARGUMENT_KEY) as Throwable
-        val errorStacktrace = error.stackTraceToString()
+
         val binding = DialogErrorBinding.inflate(LayoutInflater.from(context))
-        bindErrorDialogContent(binding, error)
-        val dialog = MaterialAlertDialogBuilder(requireContext()).apply {
+        binding.bindErrorDetails(error)
+
+        return getAlertDialog(binding, error).apply {
+            enableReportButtonIfErrorIsReportable(error)
+        }
+    }
+
+    private fun getAlertDialog(binding: DialogErrorBinding, error: Throwable): AlertDialog {
+        return MaterialAlertDialogBuilder(requireContext()).apply {
+            val errorStacktrace = error.stackTraceToString()
             setTitle(R.string.all_details)
             setView(binding.root)
             setNeutralButton(R.string.about_feedback) { _, _ ->
@@ -56,16 +64,10 @@ class ErrorDialog : DialogFragment() {
             setNegativeButton(android.R.string.cancel) { _, _ -> }
             setPositiveButton(android.R.string.copy) { _, _ -> copyErrorToClipboard(errorStacktrace) }
         }.create()
-
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).isEnabled = isErrorShouldBeReported(error)
-        }
-
-        return dialog
     }
 
-    private fun bindErrorDialogContent(binding: DialogErrorBinding, error: Throwable) {
-        return with(binding) {
+    private fun DialogErrorBinding.bindErrorDetails(error: Throwable) {
+        return with(this) {
             errorDialogContent.text = error.stackTraceToString()
                 .replace(": ${error.localizedMessage}", "")
             with(errorDialogHorizontalScroll) {
@@ -75,6 +77,30 @@ class ErrorDialog : DialogFragment() {
             errorDialogErrorMessage.text = error.localizedMessage
             errorDialogErrorMessage.isGone = error.localizedMessage.isNullOrBlank()
         }
+    }
+
+    private fun AlertDialog.enableReportButtonIfErrorIsReportable(error: Throwable) {
+        setOnShowListener {
+            getButton(AlertDialog.BUTTON_NEUTRAL).isEnabled = isErrorShouldBeReported(error)
+        }
+    }
+
+    private fun isErrorShouldBeReported(error: Throwable): Boolean = when (error) {
+        is UnknownHostException,
+        is InterruptedIOException,
+        is ConnectException,
+        is StreamResetException,
+        is SocketTimeoutException,
+        is ServiceUnavailableException,
+        is FeatureDisabledException,
+        is FeatureNotAvailableException -> false
+        else -> true
+    }
+
+    private fun copyErrorToClipboard(errorStacktrace: String) {
+        val clip = ClipData.newPlainText("Error details", errorStacktrace)
+        requireActivity().getSystemService<ClipboardManager>()?.setPrimaryClip(clip)
+        Toast.makeText(requireContext(), R.string.all_copied, LENGTH_LONG).show()
     }
 
     private fun openConfirmDialog(callback: () -> Unit) {
@@ -110,23 +136,5 @@ class ErrorDialog : DialogFragment() {
 
     private fun showMessage(text: String) {
         Toast.makeText(requireContext(), text, LENGTH_LONG).show()
-    }
-
-    private fun copyErrorToClipboard(errorStacktrace: String) {
-        val clip = ClipData.newPlainText("Error details", errorStacktrace)
-        requireActivity().getSystemService<ClipboardManager>()?.setPrimaryClip(clip)
-        Toast.makeText(requireContext(), R.string.all_copied, LENGTH_LONG).show()
-    }
-
-    private fun isErrorShouldBeReported(error: Throwable): Boolean = when (error) {
-        is UnknownHostException,
-        is InterruptedIOException,
-        is ConnectException,
-        is StreamResetException,
-        is SocketTimeoutException,
-        is ServiceUnavailableException,
-        is FeatureDisabledException,
-        is FeatureNotAvailableException -> false
-        else -> true
     }
 }
