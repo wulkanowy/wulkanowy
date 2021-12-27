@@ -679,7 +679,9 @@
     <string name="pref_notify_fix_sync_issues_message">На вашем устройстве могут быть проблемы с синхронизацией данных и уведомлениями.\n\nЧтобы их исправить, вам необходимо добавить Wulkanowy в авто-старт и выключить оптимизацию/экономию батареи в настройках устройства.</string>
     <string name="pref_notify_debug_switch">Показывать дебаг-уведомления</string>
     <string name="pref_notify_disabled_summary">Синхронизация отключена</string>
+    <string name="pref_notify_notifications_piggyback_header">Official app notifications</string>
     <string name="pref_notify_notifications_piggyback">Записывать официальные уведомления</string>
+    <string name="pref_notify_notifications_piggyback_cancel_original">Remove official app notifications after capture</string>
     <string name="pref_notification_piggyback_popup_title">Показывать push-уведомления</string>
     <string name="pref_notification_piggyback_popup_description">С помощью этой функции вы можете получить замену push-уведомлений, как в официальном приложении. Все, что вам нужно сделать, это разрешить Wulkanowy получать все уведомления в настройках системы.\n\nКак это работает?\nКогда вы получаете уведомление в Dziennik VULCAN, Wulkanowy будет уведомлен (это требует дополнительных прав) и запустит синхронизацию, чтобы отправить свое уведомление.\n\nТОЛЬКО ДЛЯ ПОЛЬЗОВАТЕЛЯ</string>
     <string name="pref_notification_exact_alarm_popup_title">Показывать уведомления о будущих уроках</string>
