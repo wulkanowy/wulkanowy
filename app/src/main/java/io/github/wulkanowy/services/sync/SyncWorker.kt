@@ -79,7 +79,8 @@ class SyncWorker @AssistedInject constructor(
         errors.isNotEmpty() && inputData.getBoolean("one_time", false) -> {
             Result.failure(
                 Data.Builder()
-                    .putString("error", errors.map { it.stackTraceToString() }.toString())
+                    .putString("error_message", errors.joinToString { it.message.toString() })
+                    .putString("error_stack", errors.map { it.stackTraceToString() }.toString())
                     .build()
             )
         }
