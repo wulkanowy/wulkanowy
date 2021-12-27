@@ -5,7 +5,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.HorizontalScrollView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AlertDialog
@@ -68,14 +67,11 @@ class ErrorDialog : DialogFragment() {
 
     private fun DialogErrorBinding.bindErrorDetails(error: Throwable) {
         return with(this) {
-            errorDialogContent.text = error.stackTraceToString()
-                .replace(": ${error.localizedMessage}", "")
-            with(errorDialogHorizontalScroll) {
-                post { fullScroll(HorizontalScrollView.FOCUS_LEFT) }
-            }
             errorDialogHumanizedMessage.text = resources.getString(error)
             errorDialogErrorMessage.text = error.localizedMessage
             errorDialogErrorMessage.isGone = error.localizedMessage.isNullOrBlank()
+            errorDialogContent.text = error.stackTraceToString()
+                .replace(": ${error.localizedMessage}", "")
         }
     }
 
