@@ -21,10 +21,8 @@ fun List<SdkTimetable>.mapToEntities(semester: Semester) = map {
         studentId = semester.studentId,
         diaryId = semester.diaryId,
         number = it.number,
-        start = it.start,
-        end = it.end,
-        startZoned = it.startZoned,
-        endZoned = it.endZoned,
+        start = it.startZoned,
+        end = it.endZoned,
         date = it.date,
         subject = it.subject,
         subjectOld = it.subjectOld,
@@ -47,10 +45,8 @@ fun List<SdkTimetableAdditional>.mapToEntities(semester: Semester) = map {
         diaryId = semester.diaryId,
         subject = it.subject,
         date = it.date,
-        start = it.start,
-        end = it.end,
-        startZoned = it.startZoned,
-        endZoned = it.endZoned,
+        start = it.startZoned,
+        end = it.endZoned,
     )
 }
 

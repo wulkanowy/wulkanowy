@@ -170,8 +170,7 @@ class AppNotificationManager @Inject constructor(
             title = notificationData.title,
             content = notificationData.content,
             type = notificationType,
-            date = LocalDateTime.now(),
-            dateZoned = ZonedDateTime.now(),
+            date = ZonedDateTime.now(),
         )
 
         notificationRepository.saveNotification(notificationEntity)

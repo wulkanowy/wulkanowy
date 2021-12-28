@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 46,
-    "identityHash": "e2e6f82ef55c8c838973b832d24b6490",
+    "identityHash": "f310243440ca00cbc35e62ebaca5c7d8",
     "entities": [
       {
         "tableName": "Students",
@@ -362,7 +362,7 @@
       },
       {
         "tableName": "Timetable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `number` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `start_zoned` INTEGER NOT NULL DEFAULT 0, `end_zoned` INTEGER NOT NULL DEFAULT 0, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `subjectOld` TEXT NOT NULL, `group` TEXT NOT NULL, `room` TEXT NOT NULL, `roomOld` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacherOld` TEXT NOT NULL, `info` TEXT NOT NULL, `student_plan` INTEGER NOT NULL, `changes` INTEGER NOT NULL, `canceled` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `number` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `subjectOld` TEXT NOT NULL, `group` TEXT NOT NULL, `room` TEXT NOT NULL, `roomOld` TEXT NOT NULL, `teacher` TEXT NOT NULL, `teacherOld` TEXT NOT NULL, `info` TEXT NOT NULL, `student_plan` INTEGER NOT NULL, `changes` INTEGER NOT NULL, `canceled` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "studentId",
@@ -393,20 +393,6 @@
             "columnName": "end",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "startZoned",
-            "columnName": "start_zoned",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
-          },
-          {
-            "fieldPath": "endZoned",
-            "columnName": "end_zoned",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
           },
           {
             "fieldPath": "date",
@@ -1088,7 +1074,7 @@
       },
       {
         "tableName": "Messages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `sender_name` TEXT NOT NULL, `sender_id` INTEGER NOT NULL, `recipient_name` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `date_zoned` INTEGER NOT NULL DEFAULT 0, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `removed` INTEGER NOT NULL, `has_attachments` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `unread_by` INTEGER NOT NULL, `read_by` INTEGER NOT NULL, `content` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `sender_name` TEXT NOT NULL, `sender_id` INTEGER NOT NULL, `recipient_name` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `removed` INTEGER NOT NULL, `has_attachments` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `unread_by` INTEGER NOT NULL, `read_by` INTEGER NOT NULL, `content` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "studentId",
@@ -1137,13 +1123,6 @@
             "columnName": "date",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "dateZoned",
-            "columnName": "date_zoned",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
           },
           {
             "fieldPath": "folderId",
@@ -1731,7 +1710,7 @@
       },
       {
         "tableName": "MobileDevices",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `device_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `date` INTEGER NOT NULL, `date_zoned` INTEGER NOT NULL DEFAULT 0, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `device_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `date` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "userLoginId",
@@ -1756,13 +1735,6 @@
             "columnName": "date",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "dateZoned",
-            "columnName": "date_zoned",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
           },
           {
             "fieldPath": "id",
@@ -1894,7 +1866,7 @@
       },
       {
         "tableName": "Conferences",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `subject` TEXT NOT NULL, `agenda` TEXT NOT NULL, `present_on_conference` TEXT NOT NULL, `conference_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `date_zoned` INTEGER NOT NULL DEFAULT 0, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `subject` TEXT NOT NULL, `agenda` TEXT NOT NULL, `present_on_conference` TEXT NOT NULL, `conference_id` INTEGER NOT NULL, `date` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "studentId",
@@ -1945,13 +1917,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "dateZoned",
-            "columnName": "date_zoned",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
-          },
-          {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
@@ -1975,7 +1940,7 @@
       },
       {
         "tableName": "TimetableAdditional",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `start_zoned` INTEGER NOT NULL DEFAULT 0, `end_zoned` INTEGER NOT NULL DEFAULT 0, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `repeat_id` BLOB DEFAULT NULL, `is_added_by_user` INTEGER NOT NULL DEFAULT 0)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `repeat_id` BLOB DEFAULT NULL, `is_added_by_user` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "studentId",
@@ -2000,20 +1965,6 @@
             "columnName": "end",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "startZoned",
-            "columnName": "start_zoned",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
-          },
-          {
-            "fieldPath": "endZoned",
-            "columnName": "end_zoned",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
           },
           {
             "fieldPath": "date",
@@ -2335,7 +2286,7 @@
       },
       {
         "tableName": "Notifications",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `type` TEXT NOT NULL, `date` INTEGER NOT NULL, `date_zoned` INTEGER NOT NULL DEFAULT 0, `data` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `type` TEXT NOT NULL, `date` INTEGER NOT NULL, `data` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "studentId",
@@ -2366,13 +2317,6 @@
             "columnName": "date",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "dateZoned",
-            "columnName": "date_zoned",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
           },
           {
             "fieldPath": "data",
@@ -2480,7 +2424,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e2e6f82ef55c8c838973b832d24b6490')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f310243440ca00cbc35e62ebaca5c7d8')"
     ]
   }
 }

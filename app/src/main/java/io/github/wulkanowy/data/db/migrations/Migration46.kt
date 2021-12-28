@@ -17,61 +17,50 @@ class Migration46 : Migration(45, 46) {
     }
 
     private fun migrateConferences(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE Conferences ADD COLUMN date_zoned INTEGER NOT NULL DEFAULT 0")
-
         val cursor = database.query("SELECT * FROM Conferences")
         while (cursor.moveToNext()) {
             val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
             val timestampLocal = cursor.getLong(cursor.getColumnIndexOrThrow("date"))
             val timestampUtc = timestampLocal.timestampLocalToUTC()
 
-            database.execSQL("UPDATE Conferences SET date_zoned = $timestampUtc WHERE id = $id")
+            database.execSQL("UPDATE Conferences SET date = $timestampUtc WHERE id = $id")
         }
     }
 
     private fun migrateMessages(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE Messages ADD COLUMN date_zoned INTEGER NOT NULL DEFAULT 0")
-
         val cursor = database.query("SELECT * FROM Messages")
         while (cursor.moveToNext()) {
             val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
             val timestampLocal = cursor.getLong(cursor.getColumnIndexOrThrow("date"))
             val timestampUtc = timestampLocal.timestampLocalToUTC()
 
-            database.execSQL("UPDATE Messages SET date_zoned = $timestampUtc WHERE id = $id")
+            database.execSQL("UPDATE Messages SET date = $timestampUtc WHERE id = $id")
         }
     }
 
     private fun migrateMobileDevices(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE MobileDevices ADD COLUMN date_zoned INTEGER NOT NULL DEFAULT 0")
-
         val cursor = database.query("SELECT * FROM MobileDevices")
         while (cursor.moveToNext()) {
             val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
             val timestampLocal = cursor.getLong(cursor.getColumnIndexOrThrow("date"))
             val timestampUtc = timestampLocal.timestampLocalToUTC()
 
-            database.execSQL("UPDATE MobileDevices SET date_zoned = $timestampUtc WHERE id = $id")
+            database.execSQL("UPDATE MobileDevices SET date = $timestampUtc WHERE id = $id")
         }
     }
 
     private fun migrateNotifications(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE Notifications ADD COLUMN date_zoned INTEGER NOT NULL DEFAULT 0")
-
         val cursor = database.query("SELECT * FROM Notifications")
         while (cursor.moveToNext()) {
             val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
             val timestampLocal = cursor.getLong(cursor.getColumnIndexOrThrow("date"))
             val timestampUtc = timestampLocal.timestampLocalToUTC()
 
-            database.execSQL("UPDATE Notifications SET date_zoned = $timestampUtc WHERE id = $id")
+            database.execSQL("UPDATE Notifications SET date = $timestampUtc WHERE id = $id")
         }
     }
 
     private fun migrateTimetable(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE Timetable ADD COLUMN start_zoned INTEGER NOT NULL DEFAULT 0")
-        database.execSQL("ALTER TABLE Timetable ADD COLUMN end_zoned INTEGER NOT NULL DEFAULT 0")
-
         val cursor = database.query("SELECT * FROM Timetable")
         while (cursor.moveToNext()) {
             val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
@@ -80,14 +69,11 @@ class Migration46 : Migration(45, 46) {
             val timestampUtcStart = timestampLocalStart.timestampLocalToUTC()
             val timestampUtcEnd = timestampLocalEnd.timestampLocalToUTC()
 
-            database.execSQL("UPDATE Timetable SET start_zoned = $timestampUtcStart, end_zoned = $timestampUtcEnd WHERE id = $id")
+            database.execSQL("UPDATE Timetable SET start = $timestampUtcStart, end = $timestampUtcEnd WHERE id = $id")
         }
     }
 
     private fun migrateTimetableAdditional(database: SupportSQLiteDatabase) {
-        database.execSQL("ALTER TABLE TimetableAdditional ADD COLUMN start_zoned INTEGER NOT NULL DEFAULT 0")
-        database.execSQL("ALTER TABLE TimetableAdditional ADD COLUMN end_zoned INTEGER NOT NULL DEFAULT 0")
-
         val cursor = database.query("SELECT * FROM TimetableAdditional")
         while (cursor.moveToNext()) {
             val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
@@ -96,7 +82,7 @@ class Migration46 : Migration(45, 46) {
             val timestampUtcStart = timestampLocalStart.timestampLocalToUTC()
             val timestampUtcEnd = timestampLocalEnd.timestampLocalToUTC()
 
-            database.execSQL("UPDATE TimetableAdditional SET start_zoned = $timestampUtcStart, end_zoned = $timestampUtcEnd WHERE id = $id")
+            database.execSQL("UPDATE TimetableAdditional SET start = $timestampUtcStart, end = $timestampUtcEnd WHERE id = $id")
         }
     }
 

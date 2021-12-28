@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 @Entity(tableName = "Timetable")
@@ -19,17 +18,9 @@ data class Timetable(
 
     val number: Int,
 
-    @Deprecated("use startZoned instead")
-    val start: LocalDateTime,
+    val start: ZonedDateTime,
 
-    @Deprecated("use endZoned instead")
-    val end: LocalDateTime,
-
-    @ColumnInfo(name = "start_zoned", defaultValue = "0")
-    val startZoned: ZonedDateTime,
-
-    @ColumnInfo(name = "end_zoned", defaultValue = "0")
-    val endZoned: ZonedDateTime,
+    val end: ZonedDateTime,
 
     val date: LocalDate,
 

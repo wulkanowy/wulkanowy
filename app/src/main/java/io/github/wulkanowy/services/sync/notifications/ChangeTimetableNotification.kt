@@ -12,7 +12,7 @@ import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.getPlural
 import io.github.wulkanowy.utils.toFormattedString
 import java.time.LocalDate
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class ChangeTimetableNotification @Inject constructor(
@@ -21,7 +21,7 @@ class ChangeTimetableNotification @Inject constructor(
 ) {
 
     suspend fun notify(items: List<Timetable>, student: Student) {
-        val currentTime = LocalDateTime.now()
+        val currentTime = ZonedDateTime.now()
         val changedLessons = items.filter { (it.canceled || it.changes) && it.start > currentTime }
         val notificationDataList = changedLessons.groupBy { it.date }
             .map { (date, lessons) ->

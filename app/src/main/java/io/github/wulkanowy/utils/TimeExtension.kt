@@ -20,6 +20,8 @@ fun LocalDate.toTimestamp(tz: ZoneId = ZoneId.systemDefault()) = atStartOfDay().
 
 fun Instant.toLocalDate(tz: ZoneId = ZoneId.systemDefault()): LocalDate = atZone(tz).toLocalDate()
 
+fun ZonedDateTime.toTimestamp(): Long = toInstant().toEpochMilli()
+
 fun String.toLocalDate(format: String = DEFAULT_DATE_PATTERN): LocalDate =
     LocalDate.parse(this, DateTimeFormatter.ofPattern(format))
 
@@ -27,6 +29,9 @@ fun LocalDate.toFormattedString(pattern: String = DEFAULT_DATE_PATTERN): String 
     format(DateTimeFormatter.ofPattern(pattern))
 
 fun LocalDateTime.toFormattedString(pattern: String = DEFAULT_DATE_PATTERN): String =
+    format(DateTimeFormatter.ofPattern(pattern))
+
+fun ZonedDateTime.toFormattedString(pattern: String = DEFAULT_DATE_PATTERN): String =
     format(DateTimeFormatter.ofPattern(pattern))
 
 fun Month.getFormattedName(): String {

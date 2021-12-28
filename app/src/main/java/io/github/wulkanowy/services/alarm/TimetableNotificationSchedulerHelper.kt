@@ -25,15 +25,12 @@ import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companio
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.NOTIFICATION_TYPE_UPCOMING
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.STUDENT_ID
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.STUDENT_NAME
-import io.github.wulkanowy.utils.DispatchersProvider
-import io.github.wulkanowy.utils.PendingIntentCompat
-import io.github.wulkanowy.utils.nickOrName
-import io.github.wulkanowy.utils.toTimestamp
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalDateTime.now
+import java.time.ZonedDateTime
+import java.time.ZonedDateTime.now
 import javax.inject.Inject
 
 class TimetableNotificationSchedulerHelper @Inject constructor(
@@ -43,14 +40,14 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
     private val dispatchersProvider: DispatchersProvider,
 ) {
 
-    private fun getRequestCode(time: LocalDateTime, studentId: Int) =
-        (time.toTimestamp() * studentId).toInt()
+    private fun getRequestCode(time: ZonedDateTime, studentId: Int) =
+        (time.toInstant().toLocalDate().toTimestamp() * studentId).toInt()
 
     private fun getUpcomingLessonTime(
         index: Int,
         day: List<Timetable>,
         lesson: Timetable
-    ) = day.getOrNull(index - 1)?.end ?: lesson.start.minusMinutes(30)
+    ): ZonedDateTime = day.getOrNull(index - 1)?.end ?: lesson.start.minusMinutes(30)
 
     suspend fun cancelScheduled(lessons: List<Timetable>, student: Student) {
         val studentId = student.studentId
@@ -71,7 +68,7 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
         }
     }
 
-    private fun cancelScheduledTo(range: ClosedRange<LocalDateTime>, requestCode: Int) {
+    private fun cancelScheduledTo(range: ClosedRange<ZonedDateTime>, requestCode: Int) {
         if (now() in range) cancelNotification()
 
         alarmManager.cancel(
@@ -162,7 +159,7 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
         intent: Intent,
         studentId: Int,
         notificationType: Int,
-        time: LocalDateTime
+        time: ZonedDateTime
     ) {
         try {
             AlarmManagerCompat.setExactAndAllowWhileIdle(

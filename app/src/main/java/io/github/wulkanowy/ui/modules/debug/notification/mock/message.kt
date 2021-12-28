@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.debug.notification.mock
 
 import io.github.wulkanowy.data.db.entities.Message
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 val debugMessageItems = listOf(
@@ -25,8 +24,7 @@ private fun generateMessage(sender: String, subject: String) = Message(
     messageId = 0,
     senderId = 0,
     recipient = "",
-    date = LocalDateTime.now(),
-    dateZoned = ZonedDateTime.now(),
+    date = ZonedDateTime.now(),
     folderId = 0,
     unread = true,
     removed = false,

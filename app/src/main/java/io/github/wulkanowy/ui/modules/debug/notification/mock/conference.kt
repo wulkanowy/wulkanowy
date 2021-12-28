@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.debug.notification.mock
 
 import io.github.wulkanowy.data.db.entities.Conference
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 val debugConferenceItems = listOf(
@@ -54,7 +53,6 @@ private fun generateConference(title: String, subject: String) = Conference(
     diaryId = 0,
     agenda = "",
     conferenceId = 0,
-    date = LocalDateTime.now().plusMinutes(10),
-    dateZoned = ZonedDateTime.now().plusMinutes(10),
+    date = ZonedDateTime.now().plusMinutes(10),
     presentOnConference = "",
 )
