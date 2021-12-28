@@ -22,28 +22,10 @@ class Converters {
     }
 
     @TypeConverter
-    fun timestampToTime(value: Long?): LocalDateTime? = value?.let {
-        LocalDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC)
-    }
-
-    @TypeConverter
-    fun timeToTimestamp(date: LocalDateTime?): Long? {
-        return date?.atZone(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()
-    }
-
-    @TypeConverter
     fun instantToTimestamp(instant: Instant?): Long? = instant?.toEpochMilli()
 
     @TypeConverter
     fun timestampToInstant(timestamp: Long?): Instant? = timestamp?.let(Instant::ofEpochMilli)
-
-    @TypeConverter
-    fun zonedDateTimeToTimestamp(zonedDateTime: ZonedDateTime?): Long? =
-        zonedDateTime?.toInstant()?.toEpochMilli()
-
-    @TypeConverter
-    fun timestampToZonedDateTime(timestamp: Long?): ZonedDateTime? =
-        timestampToInstant(timestamp)?.atZone(ZoneId.systemDefault())
 
     @TypeConverter
     fun monthToInt(month: Month?) = month?.value

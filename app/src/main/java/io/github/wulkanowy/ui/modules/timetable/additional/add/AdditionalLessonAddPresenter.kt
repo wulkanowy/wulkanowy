@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.*
 import java.time.temporal.ChronoUnit
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 class AdditionalLessonAddPresenter @Inject constructor(
@@ -136,8 +136,9 @@ class AdditionalLessonAddPresenter @Inject constructor(
                 TimetableAdditional(
                     studentId = semester.studentId,
                     diaryId = semester.diaryId,
-                    start = ZonedDateTime.of(LocalDateTime.of(date, start), ZoneId.systemDefault()),
-                    end = ZonedDateTime.of(LocalDateTime.of(date, end), ZoneId.systemDefault()),
+                    // todo: check this
+                    start = LocalDateTime.of(date, start).toInstant(ZoneOffset.UTC),
+                    end = LocalDateTime.of(date, end).toInstant(ZoneOffset.UTC),
                     date = date.plusWeeks(it),
                     subject = subject
                 ).apply {

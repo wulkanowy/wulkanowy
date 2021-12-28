@@ -17,7 +17,7 @@ import io.github.wulkanowy.databinding.ItemTimetableBinding
 import io.github.wulkanowy.databinding.ItemTimetableSmallBinding
 import io.github.wulkanowy.utils.*
 import timber.log.Timber
-import java.time.ZonedDateTime
+import java.time.Instant
 import java.util.*
 import javax.inject.Inject
 import kotlin.concurrent.timer
@@ -162,7 +162,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         }
     }
 
-    private fun getPreviousLesson(position: Int): ZonedDateTime? {
+    private fun getPreviousLesson(position: Int): Instant? {
         return items.filter { it.isStudentPlan }
             .getOrNull(position - 1 - items.filterIndexed { i, item -> i < position && !item.isStudentPlan }.size)
             ?.let {

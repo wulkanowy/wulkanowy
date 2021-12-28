@@ -28,9 +28,10 @@ import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companio
 import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.time.Duration.ofMinutes
+import java.time.Instant
+import java.time.Instant.now
 import java.time.LocalDate
-import java.time.ZonedDateTime
-import java.time.ZonedDateTime.now
 import javax.inject.Inject
 
 class TimetableNotificationSchedulerHelper @Inject constructor(
@@ -40,14 +41,14 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
     private val dispatchersProvider: DispatchersProvider,
 ) {
 
-    private fun getRequestCode(time: ZonedDateTime, studentId: Int) =
-        (time.toInstant().toLocalDate().toTimestamp() * studentId).toInt()
+    private fun getRequestCode(time: Instant, studentId: Int) =
+        (time.toLocalDate().toTimestamp() * studentId).toInt()
 
     private fun getUpcomingLessonTime(
         index: Int,
         day: List<Timetable>,
         lesson: Timetable
-    ): ZonedDateTime = day.getOrNull(index - 1)?.end ?: lesson.start.minusMinutes(30)
+    ): Instant = day.getOrNull(index - 1)?.end ?: lesson.start.minus(ofMinutes(30))
 
     suspend fun cancelScheduled(lessons: List<Timetable>, student: Student) {
         val studentId = student.studentId
@@ -68,7 +69,7 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
         }
     }
 
-    private fun cancelScheduledTo(range: ClosedRange<ZonedDateTime>, requestCode: Int) {
+    private fun cancelScheduledTo(range: ClosedRange<Instant>, requestCode: Int) {
         if (now() in range) cancelNotification()
 
         alarmManager.cancel(
@@ -147,8 +148,8 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
             putExtra(STUDENT_ID, student.studentId)
             putExtra(STUDENT_NAME, student.nickOrName)
             putExtra(LESSON_ROOM, lesson.room)
-            putExtra(LESSON_START, lesson.start.toTimestamp())
-            putExtra(LESSON_END, lesson.end.toTimestamp())
+            putExtra(LESSON_START, lesson.start.toEpochMilli())
+            putExtra(LESSON_END, lesson.end.toEpochMilli())
             putExtra(LESSON_TITLE, lesson.subject)
             putExtra(LESSON_NEXT_TITLE, nextLesson?.subject)
             putExtra(LESSON_NEXT_ROOM, nextLesson?.room)
@@ -159,11 +160,11 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
         intent: Intent,
         studentId: Int,
         notificationType: Int,
-        time: ZonedDateTime
+        time: Instant
     ) {
         try {
             AlarmManagerCompat.setExactAndAllowWhileIdle(
-                alarmManager, RTC_WAKEUP, time.toTimestamp(),
+                alarmManager, RTC_WAKEUP, time.toEpochMilli(),
                 PendingIntent.getBroadcast(context, getRequestCode(time, studentId), intent.also {
                     it.putExtra(LESSON_TYPE, notificationType)
                 }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE)

@@ -37,10 +37,7 @@ import io.github.wulkanowy.utils.left
 import io.github.wulkanowy.utils.nickOrName
 import io.github.wulkanowy.utils.toFormattedString
 import timber.log.Timber
-import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZonedDateTime
+import java.time.*
 import java.util.Timer
 import javax.inject.Inject
 import kotlin.concurrent.timer
@@ -292,7 +289,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         var dateToNavigate = LocalDate.now()
 
         fun updateLessonState() {
-            val currentDateTime = ZonedDateTime.now()
+            val currentDateTime = Instant.now()
             val currentDate = LocalDate.now()
             val tomorrowDate = currentDate.plusDays(1)
 
@@ -362,7 +359,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         binding: ItemDashboardLessonsBinding,
         header: TimetableHeader? = null,
     ) {
-        val currentDateTime = ZonedDateTime.now()
+        val currentDateTime = Instant.now()
         val nextLessons = timetableToShow.filter { it.end.isAfter(currentDateTime) }
             .sortedBy { it.start }
 
@@ -387,7 +384,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
     private fun updateFirstLessonView(
         binding: ItemDashboardLessonsBinding,
         firstLesson: Timetable?,
-        currentDateTime: ZonedDateTime
+        currentDateTime: Instant
     ) {
         val context = binding.root.context
         val sansSerifFont = Typeface.create("sans-serif", Typeface.NORMAL)

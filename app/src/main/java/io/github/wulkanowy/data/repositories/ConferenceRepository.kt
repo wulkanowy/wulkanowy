@@ -10,8 +10,6 @@ import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import java.time.Instant
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,7 +29,7 @@ class ConferenceRepository @Inject constructor(
         semester: Semester,
         forceRefresh: Boolean,
         notify: Boolean = false,
-        startDate: ZonedDateTime = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC),
+        startDate: Instant = Instant.EPOCH,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {
@@ -62,7 +60,7 @@ class ConferenceRepository @Inject constructor(
         conferenceDb.loadAll(
             diaryId = semester.diaryId,
             studentId = semester.studentId,
-            startDate = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC),
+            startDate = Instant.EPOCH,
         )
 
     suspend fun updateConference(conference: List<Conference>) = conferenceDb.updateAll(conference)

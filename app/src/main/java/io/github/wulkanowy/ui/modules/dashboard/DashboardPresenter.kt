@@ -35,9 +35,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class DashboardPresenter @Inject constructor(
@@ -553,7 +552,7 @@ class DashboardPresenter @Inject constructor(
                 student = student,
                 semester = semester,
                 forceRefresh = forceRefresh,
-                startDate = ZonedDateTime.now(),
+                startDate = Instant.now(),
             )
         }.onEach {
             when (it.status) {

@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
-import java.time.ZonedDateTime
+import java.time.Instant
 
 @Entity(tableName = "Messages")
 data class Message(
@@ -29,7 +29,7 @@ data class Message(
 
     val subject: String,
 
-    val date: ZonedDateTime,
+    val date: Instant,
 
     @ColumnInfo(name = "folder_id")
     val folderId: Int,
