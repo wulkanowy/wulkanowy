@@ -2,8 +2,9 @@ package io.github.wulkanowy.data.db.migrations
 
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import io.github.wulkanowy.utils.toLocalDateTime
+import java.time.Instant
 import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class Migration46 : Migration(45, 46) {
 
@@ -17,75 +18,82 @@ class Migration46 : Migration(45, 46) {
     }
 
     private fun migrateConferences(database: SupportSQLiteDatabase) {
-        val cursor = database.query("SELECT * FROM Conferences")
-        while (cursor.moveToNext()) {
-            val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
-            val timestampLocal = cursor.getLong(cursor.getColumnIndexOrThrow("date"))
-            val timestampUtc = timestampLocal.timestampLocalToUTC()
+        database.query("SELECT * FROM Conferences").use {
+            while (it.moveToNext()) {
+                val id = it.getLong(it.getColumnIndexOrThrow("id"))
+                val timestampLocal = it.getLong(it.getColumnIndexOrThrow("date"))
+                val timestampUtc = timestampLocal.timestampLocalToUTC()
 
-            database.execSQL("UPDATE Conferences SET date = $timestampUtc WHERE id = $id")
+                database.execSQL("UPDATE Conferences SET date = $timestampUtc WHERE id = $id")
+            }
         }
     }
 
     private fun migrateMessages(database: SupportSQLiteDatabase) {
-        val cursor = database.query("SELECT * FROM Messages")
-        while (cursor.moveToNext()) {
-            val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
-            val timestampLocal = cursor.getLong(cursor.getColumnIndexOrThrow("date"))
-            val timestampUtc = timestampLocal.timestampLocalToUTC()
+        database.query("SELECT * FROM Messages").use {
+            while (it.moveToNext()) {
+                val id = it.getLong(it.getColumnIndexOrThrow("id"))
+                val timestampLocal = it.getLong(it.getColumnIndexOrThrow("date"))
+                val timestampUtc = timestampLocal.timestampLocalToUTC()
 
-            database.execSQL("UPDATE Messages SET date = $timestampUtc WHERE id = $id")
+                database.execSQL("UPDATE Messages SET date = $timestampUtc WHERE id = $id")
+            }
         }
     }
 
     private fun migrateMobileDevices(database: SupportSQLiteDatabase) {
-        val cursor = database.query("SELECT * FROM MobileDevices")
-        while (cursor.moveToNext()) {
-            val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
-            val timestampLocal = cursor.getLong(cursor.getColumnIndexOrThrow("date"))
-            val timestampUtc = timestampLocal.timestampLocalToUTC()
+        database.query("SELECT * FROM MobileDevices").use {
+            while (it.moveToNext()) {
+                val id = it.getLong(it.getColumnIndexOrThrow("id"))
+                val timestampLocal = it.getLong(it.getColumnIndexOrThrow("date"))
+                val timestampUtc = timestampLocal.timestampLocalToUTC()
 
-            database.execSQL("UPDATE MobileDevices SET date = $timestampUtc WHERE id = $id")
+                database.execSQL("UPDATE MobileDevices SET date = $timestampUtc WHERE id = $id")
+            }
         }
     }
 
     private fun migrateNotifications(database: SupportSQLiteDatabase) {
-        val cursor = database.query("SELECT * FROM Notifications")
-        while (cursor.moveToNext()) {
-            val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
-            val timestampLocal = cursor.getLong(cursor.getColumnIndexOrThrow("date"))
-            val timestampUtc = timestampLocal.timestampLocalToUTC()
+        database.query("SELECT * FROM Notifications").use {
+            while (it.moveToNext()) {
+                val id = it.getLong(it.getColumnIndexOrThrow("id"))
+                val timestampLocal = it.getLong(it.getColumnIndexOrThrow("date"))
+                val timestampUtc = timestampLocal.timestampLocalToUTC()
 
-            database.execSQL("UPDATE Notifications SET date = $timestampUtc WHERE id = $id")
+                database.execSQL("UPDATE Notifications SET date = $timestampUtc WHERE id = $id")
+            }
         }
     }
 
     private fun migrateTimetable(database: SupportSQLiteDatabase) {
-        val cursor = database.query("SELECT * FROM Timetable")
-        while (cursor.moveToNext()) {
-            val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
-            val timestampLocalStart = cursor.getLong(cursor.getColumnIndexOrThrow("start"))
-            val timestampLocalEnd = cursor.getLong(cursor.getColumnIndexOrThrow("end"))
-            val timestampUtcStart = timestampLocalStart.timestampLocalToUTC()
-            val timestampUtcEnd = timestampLocalEnd.timestampLocalToUTC()
+        database.query("SELECT * FROM Timetable").use {
+            while (it.moveToNext()) {
+                val id = it.getLong(it.getColumnIndexOrThrow("id"))
+                val timestampLocalStart = it.getLong(it.getColumnIndexOrThrow("start"))
+                val timestampLocalEnd = it.getLong(it.getColumnIndexOrThrow("end"))
+                val timestampUtcStart = timestampLocalStart.timestampLocalToUTC()
+                val timestampUtcEnd = timestampLocalEnd.timestampLocalToUTC()
 
-            database.execSQL("UPDATE Timetable SET start = $timestampUtcStart, end = $timestampUtcEnd WHERE id = $id")
+                database.execSQL("UPDATE Timetable SET start = $timestampUtcStart, end = $timestampUtcEnd WHERE id = $id")
+            }
         }
     }
 
     private fun migrateTimetableAdditional(database: SupportSQLiteDatabase) {
-        val cursor = database.query("SELECT * FROM TimetableAdditional")
-        while (cursor.moveToNext()) {
-            val id = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
-            val timestampLocalStart = cursor.getLong(cursor.getColumnIndexOrThrow("start"))
-            val timestampLocalEnd = cursor.getLong(cursor.getColumnIndexOrThrow("end"))
-            val timestampUtcStart = timestampLocalStart.timestampLocalToUTC()
-            val timestampUtcEnd = timestampLocalEnd.timestampLocalToUTC()
+        database.query("SELECT * FROM TimetableAdditional").use {
+            while (it.moveToNext()) {
+                val id = it.getLong(it.getColumnIndexOrThrow("id"))
+                val timestampLocalStart = it.getLong(it.getColumnIndexOrThrow("start"))
+                val timestampLocalEnd = it.getLong(it.getColumnIndexOrThrow("end"))
+                val timestampUtcStart = timestampLocalStart.timestampLocalToUTC()
+                val timestampUtcEnd = timestampLocalEnd.timestampLocalToUTC()
 
-            database.execSQL("UPDATE TimetableAdditional SET start = $timestampUtcStart, end = $timestampUtcEnd WHERE id = $id")
+                database.execSQL("UPDATE TimetableAdditional SET start = $timestampUtcStart, end = $timestampUtcEnd WHERE id = $id")
+            }
         }
     }
 
-    private fun Long.timestampLocalToUTC(): Long =
-        toLocalDateTime().atZone(ZoneId.of("Europe/Warsaw")).toInstant().toEpochMilli()
+    private fun Long.timestampLocalToUTC(): Long = ZonedDateTime
+        .ofInstant(Instant.ofEpochMilli(this), ZoneId.of("Europe/Warsaw"))
+        .toEpochSecond()
 }

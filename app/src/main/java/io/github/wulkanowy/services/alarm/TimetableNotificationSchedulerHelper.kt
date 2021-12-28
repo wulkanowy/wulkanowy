@@ -25,7 +25,9 @@ import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companio
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.NOTIFICATION_TYPE_UPCOMING
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.STUDENT_ID
 import io.github.wulkanowy.services.alarm.TimetableNotificationReceiver.Companion.STUDENT_NAME
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.DispatchersProvider
+import io.github.wulkanowy.utils.PendingIntentCompat
+import io.github.wulkanowy.utils.nickOrName
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.time.Duration.ofMinutes
@@ -41,8 +43,8 @@ class TimetableNotificationSchedulerHelper @Inject constructor(
     private val dispatchersProvider: DispatchersProvider,
 ) {
 
-    private fun getRequestCode(time: Instant, studentId: Int) =
-        (time.toLocalDate().toTimestamp() * studentId).toInt()
+    private fun getRequestCode(time: Instant, studentId: Int): Int =
+        (time.toEpochMilli() * studentId).toInt()
 
     private fun getUpcomingLessonTime(
         index: Int,

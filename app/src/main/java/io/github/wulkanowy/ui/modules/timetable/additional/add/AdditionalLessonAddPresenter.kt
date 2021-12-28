@@ -136,9 +136,8 @@ class AdditionalLessonAddPresenter @Inject constructor(
                 TimetableAdditional(
                     studentId = semester.studentId,
                     diaryId = semester.diaryId,
-                    // todo: check this
-                    start = LocalDateTime.of(date, start).toInstant(ZoneOffset.UTC),
-                    end = LocalDateTime.of(date, end).toInstant(ZoneOffset.UTC),
+                    start = ZonedDateTime.of(date, start, ZoneId.systemDefault()).toInstant(),
+                    end = ZonedDateTime.of(date, end, ZoneId.systemDefault()).toInstant(),
                     date = date.plusWeeks(it),
                     subject = subject
                 ).apply {

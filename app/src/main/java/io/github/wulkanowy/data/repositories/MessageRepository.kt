@@ -71,6 +71,7 @@ class MessageRepository @Inject constructor(
                 .mapToEntities(student)
         },
         saveFetchResult = { old, new ->
+            println(old + new)
             messagesDb.deleteAll(old uniqueSubtract new)
             messagesDb.insertAll((new uniqueSubtract old).onEach {
                 it.isNotified = !notify

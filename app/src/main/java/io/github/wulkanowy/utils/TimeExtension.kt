@@ -13,10 +13,8 @@ fun Long.toLocalDateTime(tz: ZoneId = ZoneId.systemDefault()): LocalDateTime {
     return LocalDateTime.ofInstant(Instant.ofEpochMilli(this), tz)
 }
 
-fun LocalDateTime.toTimestamp(tz: ZoneId = ZoneId.systemDefault()): Long =
-    atZone(tz).withZoneSameInstant(ZoneOffset.UTC).toInstant().toEpochMilli()
-
-fun LocalDate.toTimestamp(tz: ZoneId = ZoneId.systemDefault()) = atStartOfDay().toTimestamp(tz)
+fun LocalDate.toTimestamp(tz: ZoneId = ZoneId.systemDefault()) =
+    atStartOfDay().atZone(tz).withZoneSameInstant(ZoneOffset.UTC).toInstant().toEpochMilli()
 
 fun Instant.toLocalDate(tz: ZoneId = ZoneId.systemDefault()): LocalDate = atZone(tz).toLocalDate()
 
@@ -26,11 +24,10 @@ fun String.toLocalDate(format: String = DEFAULT_DATE_PATTERN): LocalDate =
 fun LocalDate.toFormattedString(pattern: String = DEFAULT_DATE_PATTERN): String =
     format(DateTimeFormatter.ofPattern(pattern))
 
-fun LocalDateTime.toFormattedString(pattern: String = DEFAULT_DATE_PATTERN): String =
-    format(DateTimeFormatter.ofPattern(pattern))
-
-fun Instant.toFormattedString(pattern: String = DEFAULT_DATE_PATTERN): String =
-    atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern(pattern))
+fun Instant.toFormattedString(
+    pattern: String = DEFAULT_DATE_PATTERN,
+    tz: ZoneId = ZoneId.systemDefault()
+): String = atZone(tz).format(DateTimeFormatter.ofPattern(pattern))
 
 fun Month.getFormattedName(): String {
     val formatter = SimpleDateFormat("LLLL", Locale.getDefault())
