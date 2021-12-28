@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import io.github.wulkanowy.services.sync.notifications.NotificationType
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @Entity(tableName = "Notifications")
 data class Notification(
@@ -18,7 +19,11 @@ data class Notification(
 
     val type: NotificationType,
 
+    @Deprecated("use dateZoned instead")
     val date: LocalDateTime,
+
+    @ColumnInfo(name = "date_zoned", defaultValue = "0")
+    val dateZoned: ZonedDateTime,
 
     val data: String? = null
 ) {

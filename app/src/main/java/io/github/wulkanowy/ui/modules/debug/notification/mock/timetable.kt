@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules.debug.notification.mock
 import io.github.wulkanowy.data.db.entities.Timetable
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import kotlin.random.Random
 
 val debugTimetableItems = listOf(
@@ -24,8 +25,10 @@ private fun generateTimetable(subject: String, room: String, roomOld: String) = 
     diaryId = 0,
     date = LocalDate.now().minusDays(Random.nextLong(0, 8)),
     number = 1,
-    start = LocalDateTime.now().plusHours(1),
-    end = LocalDateTime.now(),
+    start = LocalDateTime.now(),
+    end = LocalDateTime.now().plusHours(1),
+    startZoned = ZonedDateTime.now(),
+    endZoned = ZonedDateTime.now().plusHours(1),
     subjectOld = "",
     group = "",
     room = room,

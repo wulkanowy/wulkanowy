@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.db.entities.Student
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import io.github.wulkanowy.sdk.pojo.Message as SdkMessage
 import io.github.wulkanowy.sdk.pojo.MessageAttachment as SdkMessageAttachment
 import io.github.wulkanowy.sdk.pojo.Recipient as SdkRecipient
@@ -19,6 +20,7 @@ fun List<SdkMessage>.mapToEntities(student: Student) = map {
         recipient = it.recipients.singleOrNull()?.name ?: "Wielu adresatów",
         subject = it.subject.trim(),
         date = it.date ?: LocalDateTime.now(),
+        dateZoned = it.dateZoned ?: ZonedDateTime.now(),
         folderId = it.folderId,
         unread = it.unread ?: false,
         removed = it.removed,

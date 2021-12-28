@@ -1,34 +1,27 @@
 package io.github.wulkanowy.utils
 
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek.FRIDAY
-import java.time.DayOfWeek.MONDAY
-import java.time.DayOfWeek.SATURDAY
-import java.time.DayOfWeek.SUNDAY
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.Month
-import java.time.ZoneId
-import java.time.ZoneOffset
+import java.time.*
+import java.time.DayOfWeek.*
 import java.time.format.DateTimeFormatter
-import java.time.temporal.TemporalAdjusters.firstInMonth
-import java.time.temporal.TemporalAdjusters.next
-import java.time.temporal.TemporalAdjusters.previous
-import java.util.Locale
+import java.time.temporal.TemporalAdjusters.*
+import java.util.*
 
 private const val DEFAULT_DATE_PATTERN = "dd.MM.yyyy"
 
-fun String.toLocalDate(format: String = DEFAULT_DATE_PATTERN): LocalDate =
-    LocalDate.parse(this, DateTimeFormatter.ofPattern(format))
+fun Long.toLocalDateTime(tz: ZoneId = ZoneId.systemDefault()): LocalDateTime {
+    return LocalDateTime.ofInstant(Instant.ofEpochMilli(this), tz)
+}
 
-fun LocalDateTime.toTimestamp(tz: ZoneId = ZoneId.systemDefault()) =
+fun LocalDateTime.toTimestamp(tz: ZoneId = ZoneId.systemDefault()): Long =
     atZone(tz).withZoneSameInstant(ZoneOffset.UTC).toInstant().toEpochMilli()
 
-fun Long.toLocalDateTime(tz: ZoneId = ZoneId.systemDefault()): LocalDateTime =
-    LocalDateTime.ofInstant(Instant.ofEpochMilli(this), tz)
-
 fun LocalDate.toTimestamp(tz: ZoneId = ZoneId.systemDefault()) = atStartOfDay().toTimestamp(tz)
+
+fun Instant.toLocalDate(tz: ZoneId = ZoneId.systemDefault()): LocalDate = atZone(tz).toLocalDate()
+
+fun String.toLocalDate(format: String = DEFAULT_DATE_PATTERN): LocalDate =
+    LocalDate.parse(this, DateTimeFormatter.ofPattern(format))
 
 fun LocalDate.toFormattedString(pattern: String = DEFAULT_DATE_PATTERN): String =
     format(DateTimeFormatter.ofPattern(pattern))

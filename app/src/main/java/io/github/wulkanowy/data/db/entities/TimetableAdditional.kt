@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.UUID
 
 @Entity(tableName = "TimetableAdditional")
@@ -17,9 +18,17 @@ data class TimetableAdditional(
     @ColumnInfo(name = "diary_id")
     val diaryId: Int,
 
+    @Deprecated("use startZoned instead")
     val start: LocalDateTime,
 
+    @Deprecated("use endZoned instead")
     val end: LocalDateTime,
+
+    @ColumnInfo(name = "start_zoned", defaultValue = "0")
+    val startZoned: ZonedDateTime,
+
+    @ColumnInfo(name = "end_zoned", defaultValue = "0")
+    val endZoned: ZonedDateTime,
 
     val date: LocalDate,
 

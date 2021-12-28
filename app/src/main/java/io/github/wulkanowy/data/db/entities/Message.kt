@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @Entity(tableName = "Messages")
 data class Message(
@@ -29,7 +30,11 @@ data class Message(
 
     val subject: String,
 
+    @Deprecated("use dateZoned instead")
     val date: LocalDateTime,
+
+    @ColumnInfo(name = "date_zoned", defaultValue = "0")
+    val dateZoned: ZonedDateTime,
 
     @ColumnInfo(name = "folder_id")
     val folderId: Int,

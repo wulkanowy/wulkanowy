@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 @Entity(tableName = "Conferences")
 data class Conference(
@@ -27,7 +28,11 @@ data class Conference(
     @ColumnInfo(name = "conference_id")
     val conferenceId: Int,
 
-    val date: LocalDateTime
+    @Deprecated("use dateZoned instead")
+    val date: LocalDateTime,
+
+    @ColumnInfo(name = "date_zoned", defaultValue = "0")
+    val dateZoned: ZonedDateTime,
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
