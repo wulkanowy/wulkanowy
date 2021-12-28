@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.db.entities.TimetableHeader
+import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.databinding.ItemDashboardAccountBinding
 import io.github.wulkanowy.databinding.ItemDashboardAdminMessageBinding
 import io.github.wulkanowy.databinding.ItemDashboardAnnouncementsBinding
@@ -67,6 +69,8 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
     var onConferencesTileClickListener: () -> Unit = {}
 
     var onAdminMessageClickListener: (String?) -> Unit = {}
+
+    var onAdminMessageDismissClickListener: (AdminMessage) -> Unit = {}
 
     val items = mutableListOf<DashboardItem>()
 
@@ -259,7 +263,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         val isLoading = item.isLoading
         val dashboardGradesAdapter = gradesViewHolder.adapter.apply {
             this.items = subjectWithGrades.toList()
-            this.gradeTheme = gradeTheme.orEmpty()
+            this.gradeColorTheme = gradeTheme ?: GradeColorTheme.VULCAN
         }
 
         with(gradesViewHolder.binding) {
@@ -418,10 +422,12 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
                 isFirstTimeRangeVisible = true
                 isFirstTimeVisible = false
             } else {
-                firstTimeText = context.resources.getQuantityString(
-                    R.plurals.dashboard_timetable_first_lesson_time_in_minutes,
-                    minutesToStartLesson.toInt(),
-                    minutesToStartLesson
+                firstTimeText = context.getString(
+                    R.string.timetable_time_until,
+                    context.getString(
+                        R.string.timetable_minutes,
+                        minutesToStartLesson.toString()
+                    )
                 )
                 firstTimeRangeText = ""
 
@@ -457,10 +463,12 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
                 0
             }
 
-            firstTimeText = context.resources.getQuantityString(
-                R.plurals.dashboard_timetable_first_lesson_time_more_minutes,
-                minutesToEndLesson.toInt(),
-                minutesToEndLesson
+            firstTimeText = context.getString(
+                R.string.timetable_time_left,
+                context.getString(
+                    R.string.timetable_minutes,
+                    minutesToEndLesson.toString()
+                )
             )
             firstTimeRangeText = ""
 
@@ -727,6 +735,10 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
             dashboardAdminMessageItemDescription.text = item.content
             dashboardAdminMessageItemDescription.setTextColor(textColor)
             dashboardAdminMessageItemIcon.setColorFilter(textColor)
+            dashboardAdminMessageItemDismiss.isVisible = item.isDismissible
+            dashboardAdminMessageItemDismiss.setOnClickListener {
+                onAdminMessageDismissClickListener(item)
+            }
 
             root.setCardBackgroundColor(backgroundColor?.let { ColorStateList.valueOf(it) })
             item.destinationUrl?.let { url ->

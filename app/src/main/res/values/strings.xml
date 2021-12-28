@@ -34,7 +34,7 @@
 
     <!--Login-->
     <string name="login_header_default">Sign in with the student or parent account</string>
-    <string name="login_header_symbol">Enter the symbol from the register page</string>
+    <string name="login_header_symbol">Enter the symbol from the register page for account: &lt;b>%1$s&lt;/b></string>
     <string name="login_nickname_hint">Username</string>
     <string name="login_email_hint">Email</string>
     <string name="login_login_pesel_email_hint">Login, PESEL or e-mail</string>
@@ -71,7 +71,7 @@
     <string name="login_contact_discord">Discord</string>
     <string name="login_email_intent_title">Send email</string>
     <string name="login_email_subject" translatable="false">Zgłoszenie: Problemy z logowaniem</string>
-    <string name="login_email_text" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nDodatkowe informacje: %4$s\nOstatni błąd: %5$s\n\nOpis problemu (pełna nazwa szkoły, klasa ucznia): </string>
+    <string name="login_email_text" translatable="false">Informacje o aplikacji:\n\nUrządzenie: %1$s\nWersja SDK: %2$s\nWersja aplikacji: %3$s\nDodatkowe informacje: %4$s\nOstatni błąd: %5$s\n\nNazwa szkoły wraz z miejscowością i numer klasy: </string>
     <string name="login_recover_warning">Make sure you select the correct UONET+ register variation!</string>
     <string name="login_recover_button">I forgot my password</string>
     <string name="login_recover_title">Recover your account</string>
@@ -163,6 +163,26 @@
     <string name="timetable_now">Now: %s</string>
     <string name="timetable_next">Next: %s</string>
     <string name="timetable_later">Later: %s</string>
+    <string name="timetable_notify_lesson">%1$s lesson %2$d - %3$s</string>
+    <string name="timetable_notify_change_room">Change of room from %1$s to %2$s</string>
+    <string name="timetable_notify_change_teacher">Change of teacher from %1$s to %2$s</string>
+    <string name="timetable_notify_change_subject">Change of subject from %1$s to %2$s</string>
+    <plurals name="timetable_notify_new_items_title">
+        <item quantity="one">Timetable change</item>
+        <item quantity="other">Timetable changes</item>
+    </plurals>
+    <plurals name="timetable_notify_new_items">
+        <item quantity="one">%1$s - %2$d change in timetable</item>
+        <item quantity="other">%1$s - %2$d  changes in timetable</item>
+    </plurals>
+    <plurals name="timetable_notify_new_items_group">
+        <item quantity="one">%1$d change in timetable</item>
+        <item quantity="other">%1$d changes in timetable</item>
+    </plurals>
+    <plurals name="timetable_number_item">
+        <item quantity="one">%d change</item>
+        <item quantity="other">%d changes</item>
+    </plurals>
 
 
     <!--Completed lessons-->
@@ -178,6 +198,17 @@
     <string name="additional_lessons_title">Additional lessons</string>
     <string name="additional_lessons_button">Show additional lessons</string>
     <string name="additional_lessons_no_items">No info about additional lessons</string>
+    <string name="additional_lessons_add">New lesson</string>
+    <string name="additional_lessons_add_title">New additional lesson</string>
+    <string name="additional_lessons_add_success">Additional lesson added successfully</string>
+    <string name="additional_lessons_delete_success">Additional lesson deleted successfully</string>
+    <string name="additional_lessons_repeat">Repeat weekly</string>
+    <string name="additional_lessons_delete_title">Delete additional lesson</string>
+    <string name="additional_lessons_delete_one">Just this lesson</string>
+    <string name="additional_lessons_delete_series">All in the series</string>
+    <string name="additional_lessons_start">Start time</string>
+    <string name="additional_lessons_end">End time</string>
+    <string name="additional_lessons_end_time_error">End time must be greater than start time</string>
 
 
     <!--Attendance-->
@@ -200,6 +231,18 @@
     <string name="attendance_excuse_title">Excuse</string>
     <string name="attendance_excuse_reason" translatable="false">z powodu</string>
     <string name="attendance_excuse_formula" translatable="false">Dzień dobry,\nProszę o usprawiedliwienie mojego dziecka w dniu %s z lekcji %s%s%s.\n\nPozdrawiam.</string>
+    <plurals name="attendance_notify_new_items_title">
+        <item quantity="one">New attendance</item>
+        <item quantity="other">New attendance</item>
+    </plurals>
+    <plurals name="attendance_notify_new_items">
+        <item quantity="one">%1$d new attendance</item>
+        <item quantity="other">%1$d attendance</item>
+    </plurals>
+    <plurals name="attendance_number_item">
+        <item quantity="one">%d attendance</item>
+        <item quantity="other">%d attendance</item>
+    </plurals>
 
 
     <!--Attendance summary-->
@@ -215,8 +258,8 @@
         <item quantity="other">New exams</item>
     </plurals>
     <plurals name="exam_notify_new_item_content">
-        <item quantity="one">You received %d new exam</item>
-        <item quantity="other">You received %d new exams</item>
+        <item quantity="one">%d new exam</item>
+        <item quantity="other">%d new exams</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d exam</item>
@@ -509,14 +552,6 @@
     <string name="dashboard_timetable_first_lesson_title_soon">Soon:</string>
     <string name="dashboard_timetable_first_lesson_title_first">First:</string>
     <string name="dashboard_timetable_first_lesson_title_now">Now:</string>
-    <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
-        <item quantity="one">in %1$d minute</item>
-        <item quantity="other">in %1$d minutes</item>
-    </plurals>
-    <plurals name="dashboard_timetable_first_lesson_time_more_minutes">
-        <item quantity="one">%1$d more minute</item>
-        <item quantity="other">%1$d more minutes</item>
-    </plurals>
     <string name="dashboard_timetable_second_lesson_value_end">End of lessons</string>
     <string name="dashboard_timetable_second_lessons_title">Next:</string>
     <string name="dashboard_timetable_third_title">Later:</string>
@@ -611,13 +646,13 @@
 
 
     <!--Preferences-->
-    <string name="pref_view_header">App appearance &amp; behavior</string>
+    <string name="pref_view_header">App</string>
     <string name="pref_view_list">Default view</string>
     <string name="pref_view_grade_average_mode">Calculated average options</string>
     <string name="pref_view_grade_average_force_calc">Force average calculation by app</string>
     <string name="pref_view_present">Show presence</string>
     <string name="pref_view_app_theme">Theme</string>
-    <string name="pref_view_expand_grade">Expand grades</string>
+    <string name="pref_view_expand_grade">Grades expanding</string>
     <string name="pref_view_timetable_show_timers">Mark current lesson</string>
     <string name="pref_view_timetable_show_groups">Show groups next to subjects</string>
     <string name="pref_view_grade_statistics_list">Show chart list in class grades</string>
@@ -627,6 +662,7 @@
     <string name="pref_view_app_language">Language</string>
 
     <string name="pref_notify_header">Notifications</string>
+    <string name="pref_notify_header_other">Other</string>
     <string name="pref_notify_switch">Show notifications</string>
     <string name="pref_notify_upcoming_lessons_switch">Show upcoming lesson notifications</string>
     <string name="pref_notify_upcoming_lessons_persistent_switch">Make upcoming lesson notification persistent</string>
@@ -634,13 +670,16 @@
     <string name="pref_notify_open_system_settings">Open system notification settings</string>
     <string name="pref_notify_fix_sync_issues">Fix synchronization &amp; notifications issues</string>
     <string name="pref_notify_fix_sync_issues_message">Your device may have data synchronization issues and with notifications.\n\nTo fix them, you need to add Wulkanowy to the autostart and turn off battery optimization/saving in the phone settings.</string>
-    <string name="pref_notify_fix_sync_issues_settings_button">Go to settings</string>
     <string name="pref_notify_debug_switch">Show debug notifications</string>
     <string name="pref_notify_disabled_summary">Synchronization is disabled</string>
+    <string name="pref_notify_notifications_piggyback_header">Official app notifications</string>
     <string name="pref_notify_notifications_piggyback">Capture official app notifications</string>
+    <string name="pref_notify_notifications_piggyback_cancel_original">Remove official app notifications after capture</string>
     <string name="pref_notification_piggyback_popup_title">Capture notifications</string>
     <string name="pref_notification_piggyback_popup_description">With this feature you can gain a substitute of push notifications like in the official app. All you need to do is allow Wulkanowy to receive all notifications in your system settings.\n\nHow it works?\nWhen you get a notification in Dziennik VULCAN, Wulkanowy will be notified (that\'s what these extra permissions are for) and will trigger a sync so that can send its own notification.\n\nFOR ADVANCED USERS ONLY</string>
-    <string name="pref_notification_piggyback_popup_positive">Go to settings</string>
+    <string name="pref_notification_exact_alarm_popup_title">Upcoming lesson notifications</string>
+    <string name="pref_notification_exact_alarm_popup_descriptions">You must allow the Wulkanowy app to set alarms and reminders in your system settings to use this feature.</string>
+    <string name="pref_notification_go_to_settings">Go to settings</string>
 
     <string name="pref_services_header">Synchronization</string>
     <string name="pref_services_switch">Automatic update</string>
@@ -665,6 +704,7 @@
     <string name="pref_ads_privacy_agree">Agree</string>
     <string name="pref_ads_privacy_link">Privacy policy</string>
     <string name="pref_ads_loading">Ad is loading</string>
+    <string name="pref_ads_once_per_visit">Thank you for your support, come back later for more ads</string>
 
     <string name="pref_settings_advanced_title">Advanced</string>
     <string name="pref_settings_appearance_title">Appearance &amp; Behavior</string>
@@ -689,7 +729,7 @@
     <string name="pref_sync_category_summary">Automatic update, synchronization interval</string>
     <string name="pref_advanced_category_summary">Plus and minus values, average calculation</string>
     <string name="pref_advanced_category">Advanced</string>
-    <string name="pref_about_category_summary">App version, contributors, social portals, licenses</string>
+    <string name="pref_about_category_summary">App version, contributors, social portals</string>
     <string name="pref_ads_category_summary">Displaying advertisements, project support</string>
 
 
@@ -705,6 +745,8 @@
     <string name="channel_push">Push notifications</string>
     <string name="channel_upcoming_lessons">Upcoming lessons</string>
     <string name="channel_debug">Debug</string>
+    <string name="channel_change_timetable">Timetable change</string>
+    <string name="channel_new_attendance">New attendance</string>
 
 
     <!--Colors-->

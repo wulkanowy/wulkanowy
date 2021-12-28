@@ -47,6 +47,7 @@ class TimetableRepository @Inject constructor(
         end: LocalDate,
         forceRefresh: Boolean,
         refreshAdditional: Boolean = false,
+        notify: Boolean = false
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = { (timetable, additional, headers) ->
@@ -67,7 +68,7 @@ class TimetableRepository @Inject constructor(
             timetableFull.mapToEntities(semester)
         },
         saveFetchResult = { timetableOld, timetableNew ->
-            refreshTimetable(student, timetableOld.lessons, timetableNew.lessons)
+            refreshTimetable(student, timetableOld.lessons, timetableNew.lessons, notify)
             refreshAdditional(timetableOld.additional, timetableNew.additional)
             refreshDayHeaders(timetableOld.headers, timetableNew.headers)
 
@@ -117,13 +118,28 @@ class TimetableRepository @Inject constructor(
         }
     }
 
+    fun getTimetableFromDatabase(
+        semester: Semester,
+        from: LocalDate,
+        end: LocalDate
+    ): Flow<List<Timetable>> {
+        return timetableDb.loadAll(semester.diaryId, semester.studentId, from, end)
+    }
+
+    suspend fun updateTimetable(timetable: List<Timetable>) {
+        return timetableDb.updateAll(timetable)
+    }
+
     private suspend fun refreshTimetable(
         student: Student,
         lessonsOld: List<Timetable>,
         lessonsNew: List<Timetable>,
+        notify: Boolean
     ) {
         val lessonsToRemove = lessonsOld uniqueSubtract lessonsNew
-        val lessonsToAdd = lessonsNew uniqueSubtract lessonsOld
+        val lessonsToAdd = (lessonsNew uniqueSubtract lessonsOld).map { new ->
+            new.apply { if (notify) isNotified = false }
+        }
 
         timetableDb.deleteAll(lessonsToRemove)
         timetableDb.insertAll(lessonsToAdd)
@@ -136,7 +152,8 @@ class TimetableRepository @Inject constructor(
         old: List<TimetableAdditional>,
         new: List<TimetableAdditional>
     ) {
-        timetableAdditionalDb.deleteAll(old uniqueSubtract new)
+        val oldFiltered = old.filter { !it.isAddedByUser }
+        timetableAdditionalDb.deleteAll(oldFiltered uniqueSubtract new)
         timetableAdditionalDb.insertAll(new uniqueSubtract old)
     }
 
@@ -144,4 +161,14 @@ class TimetableRepository @Inject constructor(
         timetableHeaderDb.deleteAll(old uniqueSubtract new)
         timetableHeaderDb.insertAll(new uniqueSubtract old)
     }
+
+    suspend fun saveAdditionalList(additionalList: List<TimetableAdditional>) =
+        timetableAdditionalDb.insertAll(additionalList)
+
+    suspend fun deleteAdditional(additional: TimetableAdditional, deleteSeries: Boolean) =
+        if (deleteSeries) {
+            timetableAdditionalDb.deleteAllByRepeatId(additional.repeatId!!)
+        } else {
+            timetableAdditionalDb.deleteAll(listOf(additional))
+        }
 }

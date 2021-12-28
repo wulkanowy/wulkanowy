@@ -7,6 +7,8 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.EditorInfo.IME_NULL
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
+import androidx.core.text.parseAsHtml
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -14,6 +16,7 @@ import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.databinding.FragmentLoginSymbolBinding
 import io.github.wulkanowy.ui.base.BaseFragment
 import io.github.wulkanowy.ui.modules.login.LoginActivity
+import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.openEmailClient
@@ -34,7 +37,9 @@ class LoginSymbolFragment :
     companion object {
         private const val SAVED_LOGIN_DATA = "LOGIN_DATA"
 
-        fun newInstance() = LoginSymbolFragment()
+        fun newInstance(loginData: LoginData) = LoginSymbolFragment().apply {
+            arguments = bundleOf(SAVED_LOGIN_DATA to loginData)
+        }
     }
 
     override val symbolNameError: CharSequence?
@@ -43,10 +48,15 @@ class LoginSymbolFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLoginSymbolBinding.bind(view)
-        presenter.onAttachView(this, savedInstanceState?.getSerializable(SAVED_LOGIN_DATA))
+        presenter.onAttachView(
+            view = this,
+            loginData = requireArguments().getSerializable(SAVED_LOGIN_DATA) as LoginData,
+        )
     }
 
     override fun initView() {
+        (requireActivity() as LoginActivity).showActionBar(true)
+
         with(binding) {
             loginSymbolSignIn.setOnClickListener { presenter.attemptLogin(loginSymbolName.text.toString()) }
             loginSymbolFaq.setOnClickListener { presenter.onFaqClick() }
@@ -58,13 +68,20 @@ class LoginSymbolFragment :
                 setOnEditorActionListener { _, id, _ ->
                     if (id == IME_ACTION_DONE || id == IME_NULL) loginSymbolSignIn.callOnClick() else false
                 }
-                setAdapter(ArrayAdapter(context, android.R.layout.simple_list_item_1, resources.getStringArray(R.array.symbols_values)))
+                setAdapter(
+                    ArrayAdapter(
+                        context,
+                        android.R.layout.simple_list_item_1,
+                        resources.getStringArray(R.array.symbols_values)
+                    )
+                )
             }
         }
     }
 
-    fun onParentInitSymbolFragment(loginData: Triple<String, String, String>) {
-        presenter.onParentInitSymbolView(loginData)
+    override fun setLoginToHeading(login: String) {
+        binding.loginSymbolHeader.text =
+            getString(R.string.login_header_symbol, login).parseAsHtml()
     }
 
     override fun setErrorSymbolIncorrect() {
@@ -108,8 +125,8 @@ class LoginSymbolFragment :
         binding.loginSymbolContainer.visibility = if (show) VISIBLE else GONE
     }
 
-    override fun notifyParentAccountLogged(studentsWithSemesters: List<StudentWithSemesters>) {
-        (activity as? LoginActivity)?.onSymbolFragmentAccountLogged(studentsWithSemesters)
+    override fun navigateToStudentSelect(studentsWithSemesters: List<StudentWithSemesters>) {
+        (activity as? LoginActivity)?.navigateToStudentSelect(studentsWithSemesters)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -127,7 +144,10 @@ class LoginSymbolFragment :
     }
 
     override fun openFaqPage() {
-        context?.openInternetBrowser("https://wulkanowy.github.io/czesto-zadawane-pytania/co-to-jest-symbol", ::showMessage)
+        context?.openInternetBrowser(
+            "https://wulkanowy.github.io/czesto-zadawane-pytania/co-to-jest-symbol",
+            ::showMessage
+        )
     }
 
     override fun openEmail(host: String, lastError: String) {
@@ -135,7 +155,8 @@ class LoginSymbolFragment :
             chooserTitle = requireContext().getString(R.string.login_email_intent_title),
             email = "wulkanowyinc@gmail.com",
             subject = requireContext().getString(R.string.login_email_subject),
-            body = requireContext().getString(R.string.login_email_text,
+            body = requireContext().getString(
+                R.string.login_email_text,
                 "${appInfo.systemManufacturer} ${appInfo.systemModel}",
                 appInfo.systemVersion.toString(),
                 appInfo.versionName,
