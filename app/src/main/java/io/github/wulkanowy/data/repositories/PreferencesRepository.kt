@@ -7,9 +7,11 @@ import com.fredporciuncula.flow.preferences.FlowSharedPreferences
 import com.fredporciuncula.flow.preferences.Preference
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.enums.AppTheme
 import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.data.enums.GradeExpandMode
 import io.github.wulkanowy.data.enums.GradeSortingMode
+import io.github.wulkanowy.data.enums.TimetableMode
 import io.github.wulkanowy.sdk.toLocalDate
 import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode
@@ -73,8 +75,8 @@ class PreferencesRepository @Inject constructor(
         )
 
     val appThemeKey = context.getString(R.string.pref_key_app_theme)
-    val appTheme: String
-        get() = getString(appThemeKey, R.string.pref_default_app_theme)
+    val appTheme: AppTheme
+        get() = AppTheme.getByValue(getString(appThemeKey, R.string.pref_default_app_theme))
 
     val gradeColorTheme: GradeColorTheme
         get() = GradeColorTheme.getByValue(
@@ -132,6 +134,12 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_notification_piggyback
         )
 
+    val isNotificationPiggybackRemoveOriginalEnabled: Boolean
+        get() = getBoolean(
+            R.string.pref_key_notifications_piggyback_cancel_original,
+            R.bool.pref_default_notification_piggyback_cancel_original
+        )
+
     val isDebugNotificationEnableKey = context.getString(R.string.pref_key_notification_debug)
     val isDebugNotificationEnable: Boolean
         get() = getBoolean(isDebugNotificationEnableKey, R.bool.pref_default_notification_debug)
@@ -160,10 +168,12 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_timetable_show_groups
         )
 
-    val showWholeClassPlan: String
-        get() = getString(
-            R.string.pref_key_timetable_show_whole_class,
-            R.string.pref_default_timetable_show_whole_class
+    val showWholeClassPlan: TimetableMode
+        get() = TimetableMode.getByValue(
+            getString(
+                R.string.pref_key_timetable_show_whole_class,
+                R.string.pref_default_timetable_show_whole_class
+            )
         )
 
     val gradeSortingMode: GradeSortingMode

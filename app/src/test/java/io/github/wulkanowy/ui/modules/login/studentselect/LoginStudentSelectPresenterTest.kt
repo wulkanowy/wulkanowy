@@ -82,7 +82,7 @@ class LoginStudentSelectPresenterTest {
         every { loginStudentSelectView.showContent(any()) } just Runs
 
         presenter = LoginStudentSelectPresenter(studentRepository, errorHandler, syncManager, analytics)
-        presenter.onAttachView(loginStudentSelectView, null)
+        presenter.onAttachView(loginStudentSelectView, emptyList())
     }
 
     @Test
