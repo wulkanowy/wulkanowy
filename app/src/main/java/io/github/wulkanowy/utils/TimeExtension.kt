@@ -9,14 +9,17 @@ import java.util.*
 
 private const val DEFAULT_DATE_PATTERN = "dd.MM.yyyy"
 
-fun Long.toLocalDateTime(tz: ZoneId = ZoneId.systemDefault()): LocalDateTime {
-    return LocalDateTime.ofInstant(Instant.ofEpochMilli(this), tz)
-}
+fun LocalDate.toTimestamp(): Long = atStartOfDay()
+    .atZone(ZoneOffset.UTC)
+    .withZoneSameInstant(ZoneOffset.UTC)
+    .toInstant()
+    .toEpochMilli()
 
-fun LocalDate.toTimestamp(tz: ZoneId = ZoneId.systemDefault()) =
-    atStartOfDay().atZone(tz).withZoneSameInstant(ZoneOffset.UTC).toInstant().toEpochMilli()
+fun Long.toLocalDateTime(): LocalDateTime = LocalDateTime.ofInstant(
+    Instant.ofEpochMilli(this), ZoneOffset.UTC
+)
 
-fun Instant.toLocalDate(tz: ZoneId = ZoneId.systemDefault()): LocalDate = atZone(tz).toLocalDate()
+fun Instant.toLocalDate(): LocalDate = atZone(ZoneOffset.UTC).toLocalDate()
 
 fun String.toLocalDate(format: String = DEFAULT_DATE_PATTERN): LocalDate =
     LocalDate.parse(this, DateTimeFormatter.ofPattern(format))
