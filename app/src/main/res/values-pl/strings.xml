@@ -204,6 +204,17 @@
     <string name="additional_lessons_title">Dodatkowe lekcje</string>
     <string name="additional_lessons_button">Pokaż dodatkowe lekcje</string>
     <string name="additional_lessons_no_items">Brak informacji o dodatkowych lekcjach</string>
+    <string name="additional_lessons_add">Nowa lekcja</string>
+    <string name="additional_lessons_add_title">Nowa dodatkowa lekcja</string>
+    <string name="additional_lessons_add_success">Dodatkowa lekcja dodana pomyślnie</string>
+    <string name="additional_lessons_delete_success">Dodatkowa lekcja usunięta pomyślnie</string>
+    <string name="additional_lessons_repeat">Powtarzaj co tydzień</string>
+    <string name="additional_lessons_delete_title">Usuń dodatkową lekcję</string>
+    <string name="additional_lessons_delete_one">Tylko ta lekcja</string>
+    <string name="additional_lessons_delete_series">Wszystkie w serii</string>
+    <string name="additional_lessons_start">Godzina rozpoczęcia</string>
+    <string name="additional_lessons_end">Godzina zakończenia</string>
+    <string name="additional_lessons_end_time_error">Godzina zakończenia musi być późniejsza niż godzina rozpoczęcia</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Podsumowanie frekwencji</string>
     <string name="attendance_absence_school">Nieobecność z przyczyn szkolnych</string>
@@ -253,10 +264,10 @@
         <item quantity="other">Nowe sprawdziany</item>
     </plurals>
     <plurals name="exam_notify_new_item_content">
-        <item quantity="one">Masz %d nowy sprawdzian</item>
-        <item quantity="few">Masz %d nowe sprawdziany</item>
-        <item quantity="many">Masz %d nowych sprawdzianów</item>
-        <item quantity="other">Masz %d nowych sprawdzianów</item>
+        <item quantity="one">%d nowy sprawdzian</item>
+        <item quantity="few">%d nowe sprawdziany</item>
+        <item quantity="many">%d nowych sprawdzianów</item>
+        <item quantity="other">%d nowych sprawdzianów</item>
     </plurals>
     <plurals name="exam_number_item">
         <item quantity="one">%d sprawdzian</item>
@@ -553,18 +564,6 @@
     <string name="dashboard_timetable_first_lesson_title_soon">Wkrótce:</string>
     <string name="dashboard_timetable_first_lesson_title_first">Pierwsza:</string>
     <string name="dashboard_timetable_first_lesson_title_now">Teraz:</string>
-    <plurals name="dashboard_timetable_first_lesson_time_in_minutes">
-        <item quantity="one">za %1$d minutę</item>
-        <item quantity="few">za %1$d minuty</item>
-        <item quantity="many">za %1$d minut</item>
-        <item quantity="other">za %1$d minut</item>
-    </plurals>
-    <plurals name="dashboard_timetable_first_lesson_time_more_minutes">
-        <item quantity="one">jeszcze %1$d minuta</item>
-        <item quantity="few">jeszcze %1$d minuty</item>
-        <item quantity="many">jeszcze %1$d minut</item>
-        <item quantity="other">jeszcze %1$d minut</item>
-    </plurals>
     <string name="dashboard_timetable_second_lesson_value_end">Koniec lekcji</string>
     <string name="dashboard_timetable_second_lessons_title">Następnie:</string>
     <string name="dashboard_timetable_third_title">Później:</string>
@@ -680,7 +679,9 @@
     <string name="pref_notify_fix_sync_issues_message">Na twoim urządzeniu mogą występować problemy z synchronizacją danych i powiadomieniami.\n\nBy je naprawić, dodaj Wulkanowego do autostartu i wyłącz optymalizację/oszczędzanie baterii w ustawieniach systemowych telefonu.</string>
     <string name="pref_notify_debug_switch">Pokazuj powiadomienia debugowania</string>
     <string name="pref_notify_disabled_summary">Synchronizacja jest wyłączona</string>
+    <string name="pref_notify_notifications_piggyback_header">Powiadomienia oficjalnej aplikacji</string>
     <string name="pref_notify_notifications_piggyback">Przechwytywanie powiadomień oficjalnej aplikacji</string>
+    <string name="pref_notify_notifications_piggyback_cancel_original">Usuwaj powiadomienia oficjalnej aplikacji po przechwyceniu</string>
     <string name="pref_notification_piggyback_popup_title">Przechwytywanie powiadomień</string>
     <string name="pref_notification_piggyback_popup_description">Dzięki tej funkcji możesz uzyskać namiastkę powiadomień push, takich jak w oficjalnej aplikacji. Wszystko, co musisz zrobić, to zezwolić Wulkanowemu na odczytywanie wszystkich powiadomień w ustawieniach systemowych.\n\nJak to działa?\nKiedy otrzymasz powiadomienie w Dzienniczku VULCAN, Wulkanowy zostanie o tym powiadomiony (do tego jest to dodatkowe uprawnienie) i uruchomi synchronizację, aby mógł wysłać własne powiadomienie.\n\nWYŁĄCZNIE DLA ZAAWANSOWANYCH UŻYTKOWNIKÓW</string>
     <string name="pref_notification_exact_alarm_popup_title">Powiadomienia o nadchodzących lekcjach</string>

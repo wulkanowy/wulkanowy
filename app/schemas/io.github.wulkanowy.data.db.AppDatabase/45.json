@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 45,
-    "identityHash": "e8607b4d8ae524880afd8f8edd54b5ee",
+    "identityHash": "f310243440ca00cbc35e62ebaca5c7d8",
     "entities": [
       {
         "tableName": "Students",
@@ -170,6 +170,7 @@
               "school_id",
               "class_id"
             ],
+            "orders": [],
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Students_email_symbol_student_id_school_id_class_id` ON `${TABLE_NAME}` (`email`, `symbol`, `student_id`, `school_id`, `class_id`)"
           }
         ],
@@ -267,6 +268,7 @@
               "diary_id",
               "semester_id"
             ],
+            "orders": [],
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Semesters_student_id_diary_id_semester_id` ON `${TABLE_NAME}` (`student_id`, `diary_id`, `semester_id`)"
           }
         ],
@@ -1938,7 +1940,7 @@
       },
       {
         "tableName": "TimetableAdditional",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `date` INTEGER NOT NULL, `subject` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `repeat_id` BLOB DEFAULT NULL, `is_added_by_user` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "studentId",
@@ -1981,6 +1983,20 @@
             "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "repeatId",
+            "columnName": "repeat_id",
+            "affinity": "BLOB",
+            "notNull": false,
+            "defaultValue": "NULL"
+          },
+          {
+            "fieldPath": "isAddedByUser",
+            "columnName": "is_added_by_user",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           }
         ],
         "primaryKey": {
@@ -2270,7 +2286,7 @@
       },
       {
         "tableName": "Notifications",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `type` TEXT NOT NULL, `destination` TEXT NOT NULL, `date` INTEGER NOT NULL, `data` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `type` TEXT NOT NULL, `date` INTEGER NOT NULL, `data` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "studentId",
@@ -2293,12 +2309,6 @@
           {
             "fieldPath": "type",
             "columnName": "type",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "destination",
-            "columnName": "destination",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -2414,7 +2424,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e8607b4d8ae524880afd8f8edd54b5ee')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f310243440ca00cbc35e62ebaca5c7d8')"
     ]
   }
 }
