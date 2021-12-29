@@ -176,5 +176,6 @@ class AppNotificationManager @Inject constructor(
     }
 
     private suspend fun showStudentName() =
-        studentRepository.getSavedStudents(false).size > 1
+        studentRepository.getSavedStudents(false)
+            .distinctBy { it.student.studentName }.size > 1
 }
