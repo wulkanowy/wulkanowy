@@ -4,7 +4,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import java.time.Instant
 import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.ZoneOffset
 
 class Migration46 : Migration(45, 46) {
 
@@ -93,7 +93,10 @@ class Migration46 : Migration(45, 46) {
         }
     }
 
-    private fun Long.timestampLocalToUTC(): Long = ZonedDateTime
-        .ofInstant(Instant.ofEpochMilli(this), ZoneId.of("Europe/Warsaw"))
-        .toEpochSecond()
+    private fun Long.timestampLocalToUTC(): Long = Instant.ofEpochMilli(this)
+        .atZone(ZoneOffset.UTC)
+        .withZoneSameLocal(ZoneId.of("Europe/Warsaw"))
+        .withZoneSameInstant(ZoneId.systemDefault())
+        .toInstant()
+        .toEpochMilli()
 }
