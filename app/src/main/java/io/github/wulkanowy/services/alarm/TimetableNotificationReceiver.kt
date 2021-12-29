@@ -62,8 +62,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
         Timber.d("Receiving intent... ${intent.toUri(0)}")
 
         flowWithResource {
-            val showStudentName = studentRepository.getSavedStudents(false)
-                .distinctBy { it.student.studentName }.size > 1
+            val showStudentName = !studentRepository.isOneUniqueStudent()
             val student = studentRepository.getCurrentStudent(false)
             val studentId = intent.getIntExtra(STUDENT_ID, 0)
 
