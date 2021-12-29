@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules
 
 import android.content.Context
 import androidx.fragment.app.Fragment
+import io.github.wulkanowy.data.serializers.LocalDateSerializer
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
 import io.github.wulkanowy.ui.modules.dashboard.DashboardFragment
@@ -36,7 +37,7 @@ sealed class Destination : JavaSerializable {
         GRADE(Grade),
         ATTENDANCE(Attendance),
         EXAM(Exam),
-        TIMETABLE(Timetable.TODAY),
+        TIMETABLE(Timetable()),
         HOMEWORK(Homework),
         NOTE(Note),
         CONFERENCE(Conference),
@@ -80,26 +81,16 @@ sealed class Destination : JavaSerializable {
     }
 
     @Serializable
-    data class Timetable(private val date: Long? = null) : Destination() {
-        // While this should technically be a LocalDate, it's simpler during serialization to
-        // make it a Long
+    data class Timetable(
+
+        @Serializable(with = LocalDateSerializer::class)
+        private val date: LocalDate? = null
+    ) : Destination() {
 
         override val type get() = Type.TIMETABLE
 
         override val fragment
-            get() = TimetableFragment.newInstance(date?.let { LocalDate.ofEpochDay(it) })
-
-        companion object {
-            // This is different than `withDate(LocalDate.now())` as it opens on the day
-            // of creation (of the destination), and `TODAY` opens the current day
-            // For example:
-            // - `withDate(LocalDate.now())` created on 01.01 and ran on 02.01 would open with date
-            //   01.01,
-            // - `TODAY` created on 01.01 and ran on 02.01 would open with date 02.01
-            val TODAY = Timetable(null)
-
-            fun withDate(date: LocalDate) = Timetable(date.toEpochDay())
-        }
+            get() = TimetableFragment.newInstance(date)
     }
 
     @Serializable

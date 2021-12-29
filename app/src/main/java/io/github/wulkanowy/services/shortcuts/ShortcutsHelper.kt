@@ -22,7 +22,7 @@ class ShortcutsHelper @Inject constructor(@ApplicationContext private val contex
         "grade" to Destination.Grade,
         "attendance" to Destination.Attendance,
         "exam" to Destination.Exam,
-        "timetable" to Destination.Timetable.TODAY
+        "timetable" to Destination.Timetable()
     )
 
     init {

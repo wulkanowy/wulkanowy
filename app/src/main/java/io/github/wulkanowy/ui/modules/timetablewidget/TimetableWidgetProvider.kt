@@ -174,7 +174,7 @@ class TimetableWidgetProvider : HiltBroadcastReceiver() {
         val appIntent = PendingIntent.getActivity(
             context,
             TIMETABLE_PENDING_INTENT_ID,
-            Destination.Timetable.TODAY.toStartIntent(context),
+            Destination.Timetable().toStartIntent(context),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
 

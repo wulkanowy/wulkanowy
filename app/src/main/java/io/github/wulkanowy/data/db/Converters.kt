@@ -6,14 +6,8 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.io.ByteArrayOutputStream
-import java.io.ObjectOutputStream
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.Month
-import java.time.ZoneOffset
-import java.util.Date
+import java.time.*
+import java.util.*
 
 class Converters {
 
@@ -70,13 +64,9 @@ class Converters {
     }
 
     @TypeConverter
-    fun destinationToString(destination: Destination): String {
-        return json.encodeToString(destination)
-    }
+    fun destinationToString(destination: Destination) = json.encodeToString(destination)
 
     @TypeConverter
-    fun stringToDestination(destination: String): Destination {
-        return json.decodeFromString<Destination>(destination)
-    }
+    fun stringToDestination(destination: String): Destination = json.decodeFromString(destination)
 
 }

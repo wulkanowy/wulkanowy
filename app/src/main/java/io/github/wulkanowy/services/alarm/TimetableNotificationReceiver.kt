@@ -138,7 +138,7 @@ class TimetableNotificationReceiver : HiltBroadcastReceiver() {
                     PendingIntent.getActivity(
                         context,
                         NOTIFICATION_ID,
-                        Destination.Timetable.TODAY.toStartIntent(context),
+                        Destination.Timetable().toStartIntent(context),
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
                     )
                 )

@@ -1,4 +1,4 @@
-package io.github.wulkanowy.utils
+package io.github.wulkanowy.data.serializers
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -11,6 +11,7 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalSerializationApi::class)
 object LocalDateSerializer : KSerializer<LocalDate?> {
+
     override val descriptor = PrimitiveSerialDescriptor("LocalDate", PrimitiveKind.LONG).nullable
 
     override fun serialize(encoder: Encoder, value: LocalDate?) {
@@ -22,11 +23,10 @@ object LocalDateSerializer : KSerializer<LocalDate?> {
         }
     }
 
-    override fun deserialize(decoder: Decoder): LocalDate? {
-        return if (decoder.decodeNotNullMark()) {
+    override fun deserialize(decoder: Decoder): LocalDate? =
+        if (decoder.decodeNotNullMark()) {
             LocalDate.ofEpochDay(decoder.decodeLong())
         } else {
             decoder.decodeNull()
         }
-    }
 }

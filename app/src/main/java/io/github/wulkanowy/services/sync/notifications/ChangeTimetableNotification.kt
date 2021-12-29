@@ -32,7 +32,7 @@ class ChangeTimetableNotification @Inject constructor(
                             1
                         ),
                         content = it,
-                        destination = Destination.Timetable.withDate(date)
+                        destination = Destination.Timetable(date)
                     )
                 }
             }
@@ -50,8 +50,8 @@ class ChangeTimetableNotification @Inject constructor(
                 changedLessons.size
             ),
             destination = when (lessonsByDate.size) {
-                1 -> Destination.Timetable.withDate(lessonsByDate.keys.single())
-                else -> Destination.Timetable.TODAY
+                1 -> Destination.Timetable(lessonsByDate.keys.single())
+                else -> Destination.Timetable()
             },
             type = NotificationType.CHANGE_TIMETABLE
         )
