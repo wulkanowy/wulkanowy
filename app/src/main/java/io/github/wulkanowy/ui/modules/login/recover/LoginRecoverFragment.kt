@@ -72,13 +72,13 @@ class LoginRecoverFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fixWebViewLocale()
+        restoreCorrectLocale()
         _binding = FragmentLoginRecoverBinding.bind(view)
         presenter.onAttachView(this)
     }
 
     // https://issuetracker.google.com/issues/37113860
-    private fun fixWebViewLocale() {
+    private fun restoreCorrectLocale() {
         if (preferencesRepository.appLanguage == "system") {
             lingver.setFollowSystemLocale(requireContext())
         } else {
