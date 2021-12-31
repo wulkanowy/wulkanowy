@@ -29,7 +29,6 @@ import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.time.LocalDate
-import java.time.ZoneOffset
 
 class TimetableWidgetFactory(
     private val timetableRepository: TimetableRepository,
@@ -73,13 +72,12 @@ class TimetableWidgetFactory(
             updateTheme(appWidgetId)
             lessons = getLessons(date, studentId)
 
-            if (date == LocalDate.now()) {
-                val todayLastLessonEndTimestamp =
-                    lessons.maxOf { it.end }.toEpochSecond(ZoneOffset.UTC)
+            val todayLastLessonEndTimestamp = lessons.maxOfOrNull { it.end }
+            if (date == LocalDate.now() && todayLastLessonEndTimestamp != null) {
                 sharedPref.putLong(
-                    getTodayLastLessonEndDateTimeWidgetKey(appWidgetId),
-                    todayLastLessonEndTimestamp,
-                    true
+                    key = getTodayLastLessonEndDateTimeWidgetKey(appWidgetId),
+                    value = todayLastLessonEndTimestamp.epochSecond,
+                    sync = true
                 )
             }
         }

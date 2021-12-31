@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 46,
-    "identityHash": "f310243440ca00cbc35e62ebaca5c7d8",
+    "version": 47,
+    "identityHash": "ac88c80d4bb923b22f22ce4f91521306",
     "entities": [
       {
         "tableName": "Students",
@@ -178,7 +178,7 @@
       },
       {
         "tableName": "Semesters",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `diary_name` TEXT NOT NULL, `school_year` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `semester_name` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_current` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `diary_id` INTEGER NOT NULL, `kindergarten_diary_id` INTEGER NOT NULL DEFAULT 0, `diary_name` TEXT NOT NULL, `school_year` INTEGER NOT NULL, `semester_id` INTEGER NOT NULL, `semester_name` INTEGER NOT NULL, `start` INTEGER NOT NULL, `end` INTEGER NOT NULL, `class_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_current` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "studentId",
@@ -191,6 +191,13 @@
             "columnName": "diary_id",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "kindergartenDiaryId",
+            "columnName": "kindergarten_diary_id",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "diaryName",
@@ -261,15 +268,16 @@
         },
         "indices": [
           {
-            "name": "index_Semesters_student_id_diary_id_semester_id",
+            "name": "index_Semesters_student_id_diary_id_kindergarten_diary_id_semester_id",
             "unique": true,
             "columnNames": [
               "student_id",
               "diary_id",
+              "kindergarten_diary_id",
               "semester_id"
             ],
             "orders": [],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Semesters_student_id_diary_id_semester_id` ON `${TABLE_NAME}` (`student_id`, `diary_id`, `semester_id`)"
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Semesters_student_id_diary_id_kindergarten_diary_id_semester_id` ON `${TABLE_NAME}` (`student_id`, `diary_id`, `kindergarten_diary_id`, `semester_id`)"
           }
         ],
         "foreignKeys": []
@@ -2424,7 +2432,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f310243440ca00cbc35e62ebaca5c7d8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac88c80d4bb923b22f22ce4f91521306')"
     ]
   }
 }

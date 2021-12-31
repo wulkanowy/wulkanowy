@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
-import java.time.LocalDateTime
+import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -66,8 +66,8 @@ class GradeRepository @Inject constructor(
         newDetails: List<Grade>,
         notify: Boolean
     ) {
-        val notifyBreakDate = oldGrades.maxByOrNull { it.date }
-            ?.date ?: student.registrationDate.toLocalDate()
+        val notifyBreakDate = oldGrades.maxByOrNull { it.date }?.date
+            ?: student.registrationDate.toLocalDate()
         gradeDb.deleteAll(oldGrades uniqueSubtract newDetails)
         gradeDb.insertAll((newDetails uniqueSubtract oldGrades).onEach {
             if (it.date >= notifyBreakDate) it.apply {
@@ -97,13 +97,13 @@ class GradeRepository @Inject constructor(
             }
 
             summary.predictedGradeLastChange = when {
-                oldSummary == null -> LocalDateTime.now()
-                summary.predictedGrade != oldSummary.predictedGrade -> LocalDateTime.now()
+                oldSummary == null -> Instant.now()
+                summary.predictedGrade != oldSummary.predictedGrade -> Instant.now()
                 else -> oldSummary.predictedGradeLastChange
             }
             summary.finalGradeLastChange = when {
-                oldSummary == null -> LocalDateTime.now()
-                summary.finalGrade != oldSummary.finalGrade -> LocalDateTime.now()
+                oldSummary == null -> Instant.now()
+                summary.finalGrade != oldSummary.finalGrade -> Instant.now()
                 else -> oldSummary.finalGradeLastChange
             }
         })
