@@ -40,6 +40,23 @@ fun Resources.getString(error: Throwable): String = when (error) {
     else -> R.string.error_unknown
 }.let { getString(it) }
 
+fun isErrorShouldBeReported(error: Throwable): Boolean = when (error) {
+    is UnknownHostException,
+    is SocketException,
+    is SocketTimeoutException,
+    is InterruptedIOException,
+    is ConnectException,
+    is StreamResetException,
+    is ServiceUnavailableException,
+    is FeatureDisabledException,
+    is FeatureNotAvailableException -> false
+    is SSLHandshakeException -> when {
+        isCausedByCertificateNotValidNow(error) -> false
+        else -> true
+    }
+    else -> true
+}
+
 private fun isCausedByCertificateNotValidNow(e: Throwable?): Boolean {
     var exception = e
     do {
