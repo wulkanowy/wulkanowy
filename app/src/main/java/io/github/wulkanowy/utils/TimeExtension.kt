@@ -10,9 +10,7 @@ import java.util.*
 private const val DEFAULT_DATE_PATTERN = "dd.MM.yyyy"
 
 fun LocalDate.toTimestamp(): Long = atStartOfDay()
-    .atZone(ZoneOffset.UTC)
-    .withZoneSameInstant(ZoneOffset.UTC)
-    .toInstant()
+    .toInstant(ZoneOffset.UTC)
     .toEpochMilli()
 
 fun Long.toLocalDateTime(): LocalDateTime = LocalDateTime.ofInstant(
