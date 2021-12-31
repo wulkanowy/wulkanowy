@@ -1,11 +1,15 @@
 package io.github.wulkanowy.data.db
 
 import androidx.room.TypeConverter
+import io.github.wulkanowy.utils.toTimestamp
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.time.*
+import java.time.Instant
+import java.time.LocalDate
+import java.time.Month
+import java.time.ZoneOffset
 import java.util.*
 
 class Converters {
@@ -13,13 +17,11 @@ class Converters {
     private val json = Json
 
     @TypeConverter
-    fun timestampToDate(value: Long?): LocalDate? =
+    fun timestampToLocalDate(value: Long?): LocalDate? =
         value?.let(::Date)?.toInstant()?.atZone(ZoneOffset.UTC)?.toLocalDate()
 
     @TypeConverter
-    fun dateToTimestamp(date: LocalDate?): Long? {
-        return date?.atStartOfDay()?.toInstant(ZoneOffset.UTC)?.toEpochMilli()
-    }
+    fun dateToTimestamp(date: LocalDate?): Long? = date?.toTimestamp()
 
     @TypeConverter
     fun instantToTimestamp(instant: Instant?): Long? = instant?.toEpochMilli()

@@ -165,8 +165,8 @@ class Migration13Test : AbstractMigrationTest() {
                         classId = it.getInt(7),
                         unitId = it.getInt(8),
                         schoolYear = it.getInt(9),
-                        start = Converters().timestampToDate(it.getLong(10))!!,
-                        end = Converters().timestampToDate(it.getLong(11))!!
+                        start = Converters().timestampToLocalDate(it.getLong(10))!!,
+                        end = Converters().timestampToLocalDate(it.getLong(11))!!
                     ) to (it.getInt(6) == 1))
                 } while (it.moveToNext())
             }
