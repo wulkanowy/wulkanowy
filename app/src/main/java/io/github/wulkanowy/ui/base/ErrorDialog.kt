@@ -59,7 +59,7 @@ class ErrorDialog : DialogFragment() {
 
     private fun DialogErrorBinding.bindErrorDetails(error: Throwable) {
         return with(this) {
-            errorDialogHumanizedMessage.text = resources.getString(error)
+            errorDialogHumanizedMessage.text = resources.getErrorString(error)
             errorDialogErrorMessage.text = error.localizedMessage
             errorDialogErrorMessage.isGone = error.localizedMessage.isNullOrBlank()
             errorDialogContent.text = error.stackTraceToString()
@@ -69,7 +69,7 @@ class ErrorDialog : DialogFragment() {
 
     private fun AlertDialog.enableReportButtonIfErrorIsReportable(error: Throwable) {
         setOnShowListener {
-            getButton(AlertDialog.BUTTON_NEUTRAL).isEnabled = isErrorShouldBeReported(error)
+            getButton(AlertDialog.BUTTON_NEUTRAL).isEnabled = error.isShouldBeReported()
         }
     }
 

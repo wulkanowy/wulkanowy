@@ -19,7 +19,7 @@ import java.security.cert.CertificateExpiredException
 import java.security.cert.CertificateNotYetValidException
 import javax.net.ssl.SSLHandshakeException
 
-fun Resources.getString(error: Throwable): String = when (error) {
+fun Resources.getErrorString(error: Throwable): String = when (error) {
     is UnknownHostException -> R.string.error_no_internet
     is SocketException,
     is SocketTimeoutException,
@@ -34,13 +34,13 @@ fun Resources.getString(error: Throwable): String = when (error) {
     is VulcanException -> R.string.error_unknown_uonet
     is ScrapperException -> R.string.error_unknown_app
     is SSLHandshakeException -> when {
-        isCausedByCertificateNotValidNow(error) -> R.string.error_invalid_device_datetime
+        error.isCausedByCertificateNotValidNow() -> R.string.error_invalid_device_datetime
         else -> R.string.error_timeout
     }
     else -> R.string.error_unknown
 }.let { getString(it) }
 
-fun isErrorShouldBeReported(error: Throwable): Boolean = when (error) {
+fun Throwable.isShouldBeReported(): Boolean = when (this) {
     is UnknownHostException,
     is SocketException,
     is SocketTimeoutException,
@@ -51,24 +51,24 @@ fun isErrorShouldBeReported(error: Throwable): Boolean = when (error) {
     is FeatureDisabledException,
     is FeatureNotAvailableException -> false
     is SSLHandshakeException -> when {
-        isCausedByCertificateNotValidNow(error) -> false
+        isCausedByCertificateNotValidNow() -> false
         else -> true
     }
     else -> true
 }
 
-private fun isCausedByCertificateNotValidNow(e: Throwable?): Boolean {
-    var exception = e
+private fun Throwable?.isCausedByCertificateNotValidNow(): Boolean {
+    var exception = this
     do {
-        if (isCertificateNotValidNow(exception)) return true
+        if (exception.isCertificateNotValidNow()) return true
 
         exception = exception?.cause
     } while (exception != null)
     return false
 }
 
-private fun isCertificateNotValidNow(throwable: Throwable?): Boolean {
-    val isNotYetValid = throwable is CertificateNotYetValidException
-    val isExpired = throwable is CertificateExpiredException
+private fun Throwable?.isCertificateNotValidNow(): Boolean {
+    val isNotYetValid = this is CertificateNotYetValidException
+    val isExpired = this is CertificateExpiredException
     return isNotYetValid || isExpired
 }

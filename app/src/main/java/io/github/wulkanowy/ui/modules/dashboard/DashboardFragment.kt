@@ -176,7 +176,7 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>(R.layout.fragme
     }
 
     override fun setErrorDetails(error: Throwable) {
-        binding.dashboardErrorMessage.text = requireContext().resources.getString(error)
+        binding.dashboardErrorMessage.text = requireContext().resources.getErrorString(error)
     }
 
     override fun resetView() {
