@@ -136,20 +136,27 @@ class GradeStatisticsAdapter @Inject constructor() :
         binding: ItemGradeStatisticsPieBinding,
         partials: GradePartialStatistics
     ) {
-        bindPieChart(binding, partials.subject, partials.classAverage, partials.classAmounts)
+        val studentAverage = partials.studentAverage.takeIf { it.isNotEmpty() }?.let {
+            binding.root.context.getString(R.string.grade_statistics_student_average, it)
+        }
+        bindPieChart(binding, partials.subject, partials.classAverage, studentAverage, partials.classAmounts)
     }
 
     private fun bindSemesterChart(
         binding: ItemGradeStatisticsPieBinding,
         semester: GradeSemesterStatistics
     ) {
-        bindPieChart(binding, semester.subject, semester.average, semester.amounts)
+        val studentGrade = semester.studentGrade.takeIf { it != 0 }?.let {
+            binding.root.context.getString(R.string.grade_statistics_student_grade, it.toString())
+        }
+        bindPieChart(binding, semester.subject, semester.average, studentGrade, semester.amounts)
     }
 
     private fun bindPieChart(
         binding: ItemGradeStatisticsPieBinding,
         subject: String,
         average: String,
+        studentValue: String?,
         amounts: List<Int>
     ) {
         with(binding.gradeStatisticsPieTitle) {
@@ -214,7 +221,7 @@ class GradeStatisticsAdapter @Inject constructor() :
             description.isEnabled = false
             centerText =
                 numberOfGradesString + ("\n\n" + averageString).takeIf { average.isNotBlank() }
-                    .orEmpty()
+                    .orEmpty() + studentValue?.let { "\n$it" }.orEmpty()
 
             setHoleColor(context.getThemeAttrColor(android.R.attr.windowBackground))
             setCenterTextColor(context.getThemeAttrColor(android.R.attr.textColorPrimary))
