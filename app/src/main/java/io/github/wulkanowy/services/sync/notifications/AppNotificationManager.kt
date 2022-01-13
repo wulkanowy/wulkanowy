@@ -19,7 +19,7 @@ import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.getCompatBitmap
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.nickOrName
-import java.time.LocalDateTime
+import java.time.Instant
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -58,7 +58,7 @@ class AppNotificationManager @Inject constructor(
                 NotificationCompat.BigTextStyle()
                     .bigText(notificationData.content)
                     .also { builder ->
-                        if (shouldShowStudentName()) {
+                        if (!studentRepository.isOneUniqueStudent()) {
                             builder.setSummaryText(student.nickOrName)
                         }
                     }
@@ -103,7 +103,7 @@ class AppNotificationManager @Inject constructor(
                     NotificationCompat.BigTextStyle()
                         .bigText(notificationData.content)
                         .also { builder ->
-                            if (shouldShowStudentName()) {
+                            if (!studentRepository.isOneUniqueStudent()) {
                                 builder.setSummaryText(student.nickOrName)
                             }
                         }
@@ -135,7 +135,7 @@ class AppNotificationManager @Inject constructor(
                 .setStyle(
                     NotificationCompat.InboxStyle()
                         .also { builder ->
-                            if (shouldShowStudentName()) {
+                            if (!studentRepository.isOneUniqueStudent()) {
                                 builder.setSummaryText(student.nickOrName)
                             }
                             groupNotificationData.notificationDataList.forEach {
@@ -171,12 +171,9 @@ class AppNotificationManager @Inject constructor(
             content = notificationData.content,
             destination = notificationData.destination,
             type = notificationType,
-            date = LocalDateTime.now()
+            date = Instant.now(),
         )
 
         notificationRepository.saveNotification(notificationEntity)
     }
-
-    private suspend fun shouldShowStudentName(): Boolean =
-        studentRepository.getSavedStudents(decryptPass = false).size > 1
 }
