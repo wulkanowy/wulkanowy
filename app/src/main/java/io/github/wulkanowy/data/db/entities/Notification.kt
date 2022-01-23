@@ -19,6 +19,7 @@ data class Notification(
 
     val type: NotificationType,
 
+    @ColumnInfo(defaultValue = "{\"type\":\"io.github.wulkanowy.ui.modules.Destination.Dashboard\"}")
     val destination: Destination,
 
     val date: Instant,
