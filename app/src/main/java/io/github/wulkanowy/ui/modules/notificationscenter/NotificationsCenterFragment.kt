@@ -3,27 +3,14 @@ package io.github.wulkanowy.ui.modules.notificationscenter
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Notification
 import io.github.wulkanowy.databinding.FragmentNotificationsCenterBinding
-import io.github.wulkanowy.services.sync.notifications.NotificationType
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
-import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
-import io.github.wulkanowy.ui.modules.exam.ExamFragment
-import io.github.wulkanowy.ui.modules.grade.GradeFragment
-import io.github.wulkanowy.ui.modules.homework.HomeworkFragment
-import io.github.wulkanowy.ui.modules.luckynumber.LuckyNumberFragment
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.main.MainView
-import io.github.wulkanowy.ui.modules.message.MessageFragment
-import io.github.wulkanowy.ui.modules.note.NoteFragment
-import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragment
-import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
-import io.github.wulkanowy.ui.modules.toStartIntent
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -55,9 +42,8 @@ class NotificationsCenterFragment :
     }
 
     override fun initView() {
-        notificationsCenterAdapter.onItemClickListener = { destination ->
-            val activity = requireActivity() as MainActivity
-            activity.pushView(destination.fragment)
+        notificationsCenterAdapter.onItemClickListener = { notification ->
+            (requireActivity() as MainActivity).pushView(notification.destination.fragment)
         }
 
         with(binding.notificationsCenterRecycler) {

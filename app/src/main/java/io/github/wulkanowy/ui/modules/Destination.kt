@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import io.github.wulkanowy.data.serializers.LocalDateSerializer
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
@@ -15,14 +14,12 @@ import io.github.wulkanowy.ui.modules.more.MoreFragment
 import io.github.wulkanowy.ui.modules.note.NoteFragment
 import io.github.wulkanowy.ui.modules.schoolandteachers.school.SchoolFragment
 import io.github.wulkanowy.ui.modules.schoolannouncement.SchoolAnnouncementFragment
-import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.ui.modules.timetable.TimetableFragment
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
-import java.io.Serializable as JavaSerializable
 
 @Serializable
-sealed class Destination : JavaSerializable {
+sealed class Destination private constructor() : java.io.Serializable {
 
     /*
     Type in children classes have to be as getter to avoid null in enums
@@ -157,5 +154,3 @@ sealed class Destination : JavaSerializable {
         override val fragment get() = MessageFragment.newInstance()
     }
 }
-
-fun Destination.toStartIntent(context: Context) = SplashActivity.getStartIntent(context, this)

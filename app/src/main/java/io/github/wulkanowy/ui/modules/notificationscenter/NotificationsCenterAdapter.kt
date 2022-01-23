@@ -7,15 +7,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.data.db.entities.Notification
 import io.github.wulkanowy.databinding.ItemNotificationsCenterBinding
-import io.github.wulkanowy.services.sync.notifications.NotificationType
-import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
 class NotificationsCenterAdapter @Inject constructor() :
     ListAdapter<Notification, NotificationsCenterAdapter.ViewHolder>(DiffUtilCallback()) {
 
-    var onItemClickListener: (Destination) -> Unit = {}
+    var onItemClickListener: (Notification) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         ItemNotificationsCenterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -30,7 +28,7 @@ class NotificationsCenterAdapter @Inject constructor() :
             notificationsCenterItemDate.text = item.date.toFormattedString("HH:mm, d MMM")
             notificationsCenterItemIcon.setImageResource(item.type.icon)
 
-            root.setOnClickListener { onItemClickListener(item.destination) }
+            root.setOnClickListener { onItemClickListener(item) }
         }
     }
 

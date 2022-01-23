@@ -21,7 +21,7 @@ import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.services.widgets.TimetableWidgetService
 import io.github.wulkanowy.ui.modules.Destination
-import io.github.wulkanowy.ui.modules.toStartIntent
+import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -173,7 +173,7 @@ class TimetableWidgetProvider : BroadcastReceiver() {
         val appIntent = PendingIntent.getActivity(
             context,
             TIMETABLE_PENDING_INTENT_ID,
-            Destination.Timetable().toStartIntent(context),
+            SplashActivity.getStartIntent(context, Destination.Timetable()),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntentCompat.FLAG_IMMUTABLE
         )
 
