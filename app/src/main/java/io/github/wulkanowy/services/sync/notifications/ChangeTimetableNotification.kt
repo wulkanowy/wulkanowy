@@ -49,10 +49,7 @@ class ChangeTimetableNotification @Inject constructor(
                 changedLessons.size,
                 changedLessons.size
             ),
-            destination = when (lessonsByDate.size) {
-                1 -> Destination.Timetable(lessonsByDate.keys.single())
-                else -> Destination.Timetable()
-            },
+            destination = Destination.Timetable(lessonsByDate.toSortedMap().lastKey()),
             type = NotificationType.CHANGE_TIMETABLE
         )
 
