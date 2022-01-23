@@ -23,7 +23,7 @@ import io.github.wulkanowy.databinding.ActivityMainBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.account.accountquick.AccountQuickDialog
-/import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.*
 import timber.log.Timber
 import javax.inject.Inject
 
