@@ -19,7 +19,6 @@ data class Notification(
 
     val type: NotificationType,
 
-    @ColumnInfo(defaultValue = "")
     val destination: Destination,
 
     val date: Instant,

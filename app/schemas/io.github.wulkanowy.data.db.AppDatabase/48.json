@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 48,
-    "identityHash": "82f4cde1035799afdd0d8c85b59f01cf",
+    "identityHash": "cd0cbaecabc99cd1004cdd2ba1a1b576",
     "entities": [
       {
         "tableName": "Students",
@@ -2294,7 +2294,7 @@
       },
       {
         "tableName": "Notifications",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `type` TEXT NOT NULL, `destination` TEXT NOT NULL DEFAULT '', `date` INTEGER NOT NULL, `data` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `type` TEXT NOT NULL, `destination` TEXT NOT NULL, `date` INTEGER NOT NULL, `data` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "studentId",
@@ -2324,8 +2324,7 @@
             "fieldPath": "destination",
             "columnName": "destination",
             "affinity": "TEXT",
-            "notNull": true,
-            "defaultValue": "''"
+            "notNull": true
           },
           {
             "fieldPath": "date",
@@ -2439,7 +2438,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '82f4cde1035799afdd0d8c85b59f01cf')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cd0cbaecabc99cd1004cdd2ba1a1b576')"
     ]
   }
 }

@@ -46,7 +46,6 @@ import javax.inject.Singleton
     autoMigrations = [
         AutoMigration(from = 44, to = 45),
         AutoMigration(from = 46, to = 47),
-        AutoMigration(from = 47, to = 48)
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -102,6 +101,7 @@ abstract class AppDatabase : RoomDatabase() {
             Migration43(),
             Migration44(),
             Migration46(),
+            Migration48()
         )
 
         fun newInstance(
