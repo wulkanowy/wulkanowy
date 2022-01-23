@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Singleton
 class ShortcutsHelper @Inject constructor(@ApplicationContext private val context: Context) {
 
-    // `Destination.XYZ.getStartIntent(context)` cannot be used here as shortcuts
+    // Destination cannot be used here as shortcuts
     // require their intents to only use primitive types (see PersistableBundle.isValidType).
 
     private val destinations = mapOf(
