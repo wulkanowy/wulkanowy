@@ -1,10 +1,8 @@
-Wersja 1.4.2
+Wersja 1.5.0
 
-- dodaliśmy możliwość dodawania własnych zadań domowych
-- dodaliśmy kafelek z wiadomościami od twórców
-- dodaliśmy dodatkowy tryb rozwijania szczegółów ocen
-- dodaliśmy wsparcie dla Androida 12
-- ulepszyliśmy powiadomienia na Mi Bandzie
-- dokonaliśmy też kilka innych zmian i kosmetycznych poprawek poprawiających komfort używania aplikacji
+- dodaliśmy możliwość dodawania własnych lekcji dodatkowych
+- dodaliśmy wsparcie dla różnych stref czasowych
+- dodaliśmy eksperymentalne wsparcie dla przedszkola
+- wprowadziliśmy też wiele innych mniejszych poprawek, poprawiających komfort używania aplikacji
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases
