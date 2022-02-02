@@ -4,7 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import io.github.wulkanowy.services.sync.notifications.NotificationType
-import java.time.LocalDateTime
+import io.github.wulkanowy.ui.modules.Destination
+import java.time.Instant
 
 @Entity(tableName = "Notifications")
 data class Notification(
@@ -18,7 +19,10 @@ data class Notification(
 
     val type: NotificationType,
 
-    val date: LocalDateTime,
+    @ColumnInfo(defaultValue = "{\"type\":\"io.github.wulkanowy.ui.modules.Destination.Dashboard\"}")
+    val destination: Destination,
+
+    val date: Instant,
 
     val data: String? = null
 ) {

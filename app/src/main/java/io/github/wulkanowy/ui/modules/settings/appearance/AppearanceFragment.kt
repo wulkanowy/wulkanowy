@@ -27,10 +27,6 @@ class AppearanceFragment : PreferenceFragmentCompat(),
     @Inject
     lateinit var lingver: Lingver
 
-    companion object {
-        fun newInstance() = AppearanceFragment()
-    }
-
     override val titleStringId get() = R.string.pref_settings_appearance_title
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,11 +80,11 @@ class AppearanceFragment : PreferenceFragmentCompat(),
 
     override fun onResume() {
         super.onResume()
-        preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        preferenceScreen.sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onPause() {
         super.onPause()
-        preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        preferenceScreen.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
     }
 }

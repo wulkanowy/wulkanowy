@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.databinding.FragmentGradeStatisticsBinding
 import io.github.wulkanowy.ui.base.BaseFragment
@@ -32,6 +33,7 @@ class GradeStatisticsFragment :
 
     companion object {
         private const val SAVED_CHART_TYPE = "CURRENT_TYPE"
+        private const val SAVED_SUBJECT_NAME = "SUBJECT_NAME"
 
         fun newInstance() = GradeStatisticsFragment()
     }
@@ -43,10 +45,11 @@ class GradeStatisticsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentGradeStatisticsBinding.bind(view)
-        messageContainer = binding.gradeStatisticsSwipe
+        messageContainer = binding.gradeStatisticsRecycler
         presenter.onAttachView(
-            this,
-            savedInstanceState?.getSerializable(SAVED_CHART_TYPE) as? GradeStatisticsItem.DataType
+            view = this,
+            type = savedInstanceState?.getSerializable(SAVED_CHART_TYPE) as? GradeStatisticsItem.DataType,
+            subjectName = savedInstanceState?.getSerializable(SAVED_SUBJECT_NAME) as? String,
         )
     }
 
@@ -55,6 +58,7 @@ class GradeStatisticsFragment :
 
         with(binding.gradeStatisticsRecycler) {
             layoutManager = LinearLayoutManager(requireContext())
+            statisticsAdapter.currentDataType = presenter.currentType
             adapter = statisticsAdapter
         }
 
@@ -68,7 +72,7 @@ class GradeStatisticsFragment :
         }
 
         with(binding) {
-            gradeStatisticsSubjectsContainer.setElevationCompat(requireContext().dpToPx(1f))
+            gradeStatisticsSubjectsContainer.elevation = requireContext().dpToPx(1f)
 
             gradeStatisticsSwipe.setOnRefreshListener(presenter::onSwipeRefresh)
             gradeStatisticsSwipe.setColorSchemeColors(requireContext().getThemeAttrColor(R.attr.colorPrimary))
@@ -80,7 +84,8 @@ class GradeStatisticsFragment :
         }
     }
 
-    override fun updateSubjects(data: ArrayList<String>) {
+    override fun updateSubjects(data: List<String>, selectedIndex: Int) {
+        binding.gradeStatisticsSubjects.setSelection(selectedIndex)
         with(subjectsAdapter) {
             clear()
             addAll(data)
@@ -90,12 +95,12 @@ class GradeStatisticsFragment :
 
     override fun updateData(
         newItems: List<GradeStatisticsItem>,
-        newTheme: String,
+        newTheme: GradeColorTheme,
         showAllSubjectsOnStatisticsList: Boolean
     ) {
         with(statisticsAdapter) {
             showAllSubjectsOnList = showAllSubjectsOnStatisticsList
-            theme = newTheme
+            gradeColorTheme = newTheme
             items = newItems
             notifyDataSetChanged()
         }
@@ -160,6 +165,7 @@ class GradeStatisticsFragment :
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putSerializable(SAVED_CHART_TYPE, presenter.currentType)
+        outState.putSerializable(SAVED_SUBJECT_NAME, presenter.currentSubjectName)
     }
 
     override fun onDestroyView() {

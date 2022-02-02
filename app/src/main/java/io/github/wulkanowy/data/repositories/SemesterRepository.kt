@@ -5,11 +5,7 @@ import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.DispatchersProvider
-import io.github.wulkanowy.utils.getCurrentOrLast
-import io.github.wulkanowy.utils.init
-import io.github.wulkanowy.utils.isCurrent
-import io.github.wulkanowy.utils.uniqueSubtract
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -26,7 +22,7 @@ class SemesterRepository @Inject constructor(
         student: Student,
         forceRefresh: Boolean = false,
         refreshOnNoCurrent: Boolean = false
-    ) = withContext(dispatchers.backgroundThread) {
+    ) = withContext(dispatchers.io) {
         val semesters = semesterDb.loadAll(student.studentId, student.classId)
 
         if (isShouldFetch(student, semesters, forceRefresh, refreshOnNoCurrent)) {
@@ -43,10 +39,14 @@ class SemesterRepository @Inject constructor(
     ): Boolean {
         val isNoSemesters = semesters.isEmpty()
 
-        val isRefreshOnModeChangeRequired =
-            if (Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
-                semesters.firstOrNull { it.isCurrent }?.diaryId == 0
-            } else false
+        val isRefreshOnModeChangeRequired = when {
+            Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API -> {
+                semesters.firstOrNull { it.isCurrent }?.let {
+                    0 == it.diaryId && 0 == it.kindergartenDiaryId
+                } == true
+            }
+            else -> false
+        }
 
         val isRefreshOnNoCurrentAppropriate =
             refreshOnNoCurrent && !semesters.any { semester -> semester.isCurrent }
@@ -64,7 +64,7 @@ class SemesterRepository @Inject constructor(
     }
 
     suspend fun getCurrentSemester(student: Student, forceRefresh: Boolean = false) =
-        withContext(dispatchers.backgroundThread) {
+        withContext(dispatchers.io) {
             getSemesters(student, forceRefresh).getCurrentOrLast()
         }
 }

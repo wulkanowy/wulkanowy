@@ -40,10 +40,6 @@ class NotificationsFragment : PreferenceFragmentCompat(),
     @Inject
     lateinit var appInfo: AppInfo
 
-    companion object {
-        fun newInstance() = NotificationsFragment()
-    }
-
     override val titleStringId get() = R.string.pref_settings_notifications_title
 
     override val isNotificationPermissionGranted: Boolean
@@ -55,10 +51,14 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             return appPackageName in packageNameList
         }
 
-    private val notificationSettingsContract =
+    private val notificationSettingsPiggybackContract =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            presenter.onNotificationPiggybackPermissionResult()
+        }
 
-            presenter.onNotificationPermissionResult()
+    private val notificationSettingsExactAlarmsContract =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            presenter.onNotificationExactAlarmPermissionResult()
         }
 
     override fun initView(showDebugNotificationSwitch: Boolean) {
@@ -83,10 +83,10 @@ class NotificationsFragment : PreferenceFragmentCompat(),
     }
 
     override fun onCreateRecyclerView(
-        inflater: LayoutInflater?,
-        parent: ViewGroup?,
+        inflater: LayoutInflater,
+        parent: ViewGroup,
         state: Bundle?
-    ): RecyclerView? = super.onCreateRecyclerView(inflater, parent, state)
+    ): RecyclerView = super.onCreateRecyclerView(inflater, parent, state)
         .also {
             it.itemAnimator = null
             it.layoutAnimation = null
@@ -141,7 +141,7 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             .setTitle(R.string.pref_notify_fix_sync_issues)
             .setMessage(R.string.pref_notify_fix_sync_issues_message)
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
-            .setPositiveButton(R.string.pref_notify_fix_sync_issues_settings_button) { _, _ ->
+            .setPositiveButton(R.string.pref_notify_open_system_settings) { _, _ ->
                 try {
                     AppKillerManager.doActionPowerSaving(requireContext())
                     AppKillerManager.doActionAutoStart(requireContext())
@@ -178,8 +178,8 @@ class NotificationsFragment : PreferenceFragmentCompat(),
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.pref_notification_piggyback_popup_title))
             .setMessage(getString(R.string.pref_notification_piggyback_popup_description))
-            .setPositiveButton(getString(R.string.pref_notification_piggyback_popup_positive)) { _, _ ->
-                notificationSettingsContract.launch(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+            .setPositiveButton(getString(R.string.pref_notification_go_to_settings)) { _, _ ->
+                notificationSettingsPiggybackContract.launch(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
             }
             .setNegativeButton(android.R.string.cancel) { _, _ ->
                 setNotificationPiggybackPreferenceChecked(false)
@@ -188,18 +188,37 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             .show()
     }
 
+    override fun openNotificationExactAlarmSettings() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.pref_notification_exact_alarm_popup_title))
+            .setMessage(getString(R.string.pref_notification_exact_alarm_popup_descriptions))
+            .setPositiveButton(getString(R.string.pref_notification_go_to_settings)) { _, _ ->
+                notificationSettingsExactAlarmsContract.launch(Intent("android.settings.REQUEST_SCHEDULE_EXACT_ALARM"))
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                setUpcomingLessonsNotificationPreferenceChecked(false)
+            }
+            .setOnDismissListener { setUpcomingLessonsNotificationPreferenceChecked(false) }
+            .show()
+    }
+
     override fun setNotificationPiggybackPreferenceChecked(isChecked: Boolean) {
         findPreference<SwitchPreferenceCompat>(getString(R.string.pref_key_notifications_piggyback))?.isChecked =
             isChecked
     }
 
+    override fun setUpcomingLessonsNotificationPreferenceChecked(isChecked: Boolean) {
+        findPreference<SwitchPreferenceCompat>(getString(R.string.pref_key_notifications_upcoming_lessons_enable))?.isChecked =
+            isChecked
+    }
+
     override fun onResume() {
         super.onResume()
-        preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        preferenceScreen.sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onPause() {
         super.onPause()
-        preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        preferenceScreen.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
     }
 }

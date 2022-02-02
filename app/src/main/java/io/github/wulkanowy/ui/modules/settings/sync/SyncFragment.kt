@@ -20,10 +20,6 @@ class SyncFragment : PreferenceFragmentCompat(),
     @Inject
     lateinit var presenter: SyncPresenter
 
-    companion object {
-        fun newInstance() = SyncFragment()
-    }
-
     override val titleStringId get() = R.string.pref_settings_sync_title
 
     override val syncSuccessString get() = getString(R.string.pref_services_message_sync_success)
@@ -95,16 +91,16 @@ class SyncFragment : PreferenceFragmentCompat(),
     }
 
     override fun showErrorDetailsDialog(error: Throwable) {
-        ErrorDialog.newInstance(error).show(childFragmentManager, error.toString())
+        ErrorDialog.newInstance(error).show(childFragmentManager, "error_details")
     }
 
     override fun onResume() {
         super.onResume()
-        preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        preferenceScreen.sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onPause() {
         super.onPause()
-        preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        preferenceScreen.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
     }
 }

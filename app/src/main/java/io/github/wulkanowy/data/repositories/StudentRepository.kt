@@ -66,7 +66,7 @@ class StudentRepository @Inject constructor(
             .map {
                 it.apply {
                     if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
-                        student.password = withContext(dispatchers.backgroundThread) {
+                        student.password = withContext(dispatchers.io) {
                             decrypt(student.password)
                         }
                     }
@@ -77,7 +77,7 @@ class StudentRepository @Inject constructor(
         val student = studentDb.loadById(id) ?: throw NoCurrentStudentException()
 
         if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
-            student.password = withContext(dispatchers.backgroundThread) {
+            student.password = withContext(dispatchers.io) {
                 decrypt(student.password)
             }
         }
@@ -88,7 +88,7 @@ class StudentRepository @Inject constructor(
         val student = studentDb.loadCurrent() ?: throw NoCurrentStudentException()
 
         if (decryptPass && Sdk.Mode.valueOf(student.loginMode) != Sdk.Mode.API) {
-            student.password = withContext(dispatchers.backgroundThread) {
+            student.password = withContext(dispatchers.io) {
                 decrypt(student.password)
             }
         }
@@ -101,7 +101,7 @@ class StudentRepository @Inject constructor(
             .map {
                 it.apply {
                     if (Sdk.Mode.valueOf(it.loginMode) != Sdk.Mode.API) {
-                        password = withContext(dispatchers.backgroundThread) {
+                        password = withContext(dispatchers.io) {
                             encrypt(password, context)
                         }
                     }
@@ -128,4 +128,7 @@ class StudentRepository @Inject constructor(
 
     suspend fun updateStudentNickAndAvatar(studentNickAndAvatar: StudentNickAndAvatar) =
         studentDb.update(studentNickAndAvatar)
+
+    suspend fun isOneUniqueStudent() = getSavedStudents(false)
+        .distinctBy { it.student.studentName }.size == 1
 }

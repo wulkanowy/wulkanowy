@@ -7,13 +7,8 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Absent
-import io.github.wulkanowy.utils.AutoRefreshHelper
-import io.github.wulkanowy.utils.getRefreshKey
-import io.github.wulkanowy.utils.init
-import io.github.wulkanowy.utils.monday
-import io.github.wulkanowy.utils.networkBoundResource
-import io.github.wulkanowy.utils.sunday
-import io.github.wulkanowy.utils.uniqueSubtract
+import io.github.wulkanowy.utils.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -38,6 +33,7 @@ class AttendanceRepository @Inject constructor(
         start: LocalDate,
         end: LocalDate,
         forceRefresh: Boolean,
+        notify: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         shouldFetch = {
@@ -50,18 +46,34 @@ class AttendanceRepository @Inject constructor(
             attendanceDb.loadAll(semester.diaryId, semester.studentId, start.monday, end.sunday)
         },
         fetch = {
-            sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+            sdk.init(student)
+                .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
                 .getAttendance(start.monday, end.sunday, semester.semesterId)
                 .mapToEntities(semester)
         },
         saveFetchResult = { old, new ->
             attendanceDb.deleteAll(old uniqueSubtract new)
-            attendanceDb.insertAll(new uniqueSubtract old)
+            val attendanceToAdd = (new uniqueSubtract old).map { newAttendance ->
+                newAttendance.apply { if (notify) isNotified = false }
+            }
+            attendanceDb.insertAll(attendanceToAdd)
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, semester, start, end))
         },
         filterResult = { it.filter { item -> item.date in start..end } }
     )
+
+    fun getAttendanceFromDatabase(
+        semester: Semester,
+        start: LocalDate,
+        end: LocalDate
+    ): Flow<List<Attendance>> {
+        return attendanceDb.loadAll(semester.diaryId, semester.studentId, start, end)
+    }
+
+    suspend fun updateTimetable(timetable: List<Attendance>) {
+        return attendanceDb.updateAll(timetable)
+    }
 
     suspend fun excuseForAbsence(
         student: Student, semester: Semester,
@@ -73,7 +85,8 @@ class AttendanceRepository @Inject constructor(
                 timeId = attendance.timeId
             )
         }
-        sdk.init(student).switchDiary(semester.diaryId, semester.schoolYear)
+        sdk.init(student)
+            .switchDiary(semester.diaryId, semester.kindergartenDiaryId, semester.schoolYear)
             .excuseForAbsence(items, reason)
     }
 }

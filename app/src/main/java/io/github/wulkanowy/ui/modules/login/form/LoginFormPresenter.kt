@@ -4,6 +4,7 @@ import androidx.core.net.toUri
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
@@ -30,7 +31,7 @@ class LoginFormPresenter @Inject constructor(
             showVersion()
 
             loginErrorHandler.onBadCredentials = {
-                setErrorPassIncorrect(it)
+                setErrorPassIncorrect(it.takeIf { !it.isNullOrBlank() })
                 showSoftKeyboard()
                 Timber.i("Entered wrong username or password")
             }
@@ -49,8 +50,11 @@ class LoginFormPresenter @Inject constructor(
         view?.apply {
             clearPassError()
             clearUsernameError()
+            clearHostError()
             if (formHostValue.contains("fakelog")) {
                 setCredentials("jan@fakelog.cf", "jan123")
+            } else if (formUsernameValue == "jan@fakelog.cf" && formPassValue == "jan123") {
+                setCredentials("", "")
             }
             updateUsernameLabel()
         }
@@ -75,7 +79,10 @@ class LoginFormPresenter @Inject constructor(
             val usernameHost = username.substringAfter("@")
 
             hosts[usernameHost]?.let {
-                view?.setHost(it)
+                view?.run {
+                    setHost(it)
+                    clearHostError()
+                }
             }
         }
     }
@@ -112,7 +119,10 @@ class LoginFormPresenter @Inject constructor(
                         "scrapperBaseUrl" to host,
                         "error" to "No error"
                     )
-                    view?.notifyParentAccountLogged(it.data, Triple(email, password, host))
+                    when (it.data.size) {
+                        0 -> view?.navigateToSymbol(LoginData(email, password, host))
+                        else -> view?.navigateToStudentSelect(it.data)
+                    }
                 }
                 Status.ERROR -> {
                     Timber.i("Login result: An exception occurred")

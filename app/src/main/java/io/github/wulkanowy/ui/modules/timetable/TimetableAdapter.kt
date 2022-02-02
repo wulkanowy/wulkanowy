@@ -12,17 +12,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Timetable
+import io.github.wulkanowy.data.enums.TimetableMode
 import io.github.wulkanowy.databinding.ItemTimetableBinding
 import io.github.wulkanowy.databinding.ItemTimetableSmallBinding
-import io.github.wulkanowy.utils.getThemeAttrColor
-import io.github.wulkanowy.utils.isJustFinished
-import io.github.wulkanowy.utils.isShowTimeUntil
-import io.github.wulkanowy.utils.left
-import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.until
+import io.github.wulkanowy.utils.*
 import timber.log.Timber
-import java.time.LocalDateTime
-import java.util.Timer
+import java.time.Instant
+import java.util.*
 import javax.inject.Inject
 import kotlin.concurrent.timer
 
@@ -35,7 +31,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
     var onClickListener: (Timetable) -> Unit = {}
 
-    private var showWholeClassPlan: String = "no"
+    private var showWholeClassPlan = TimetableMode.ONLY_CURRENT_GROUP
 
     private var showGroupsInPlan: Boolean = false
 
@@ -47,7 +43,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
 
     fun submitList(
         newTimetable: List<Timetable>,
-        showWholeClassPlan: String = this.showWholeClassPlan,
+        showWholeClassPlan: TimetableMode = this.showWholeClassPlan,
         showGroupsInPlan: Boolean = this.showGroupsInPlan,
         showTimers: Boolean = this.showTimers
     ) {
@@ -87,7 +83,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
     override fun getItemCount() = items.size
 
     override fun getItemViewType(position: Int) = when {
-        !items[position].isStudentPlan && showWholeClassPlan == "small" -> ViewType.ITEM_SMALL.ordinal
+        !items[position].isStudentPlan && showWholeClassPlan == TimetableMode.SMALL_OTHER_GROUP -> ViewType.ITEM_SMALL.ordinal
         else -> ViewType.ITEM_NORMAL.ordinal
     }
 
@@ -166,7 +162,7 @@ class TimetableAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         }
     }
 
-    private fun getPreviousLesson(position: Int): LocalDateTime? {
+    private fun getPreviousLesson(position: Int): Instant? {
         return items.filter { it.isStudentPlan }
             .getOrNull(position - 1 - items.filterIndexed { i, item -> i < position && !item.isStudentPlan }.size)
             ?.let {

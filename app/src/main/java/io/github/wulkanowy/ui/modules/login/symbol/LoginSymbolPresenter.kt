@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules.login.symbol
 import io.github.wulkanowy.data.Status
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
@@ -10,7 +11,6 @@ import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import java.io.Serializable
 import javax.inject.Inject
 
 class LoginSymbolPresenter @Inject constructor(
@@ -21,17 +21,17 @@ class LoginSymbolPresenter @Inject constructor(
 
     private var lastError: Throwable? = null
 
-    var loginData: Triple<String, String, String>? = null
+    lateinit var loginData: LoginData
 
-    @Suppress("UNCHECKED_CAST")
-    fun onAttachView(view: LoginSymbolView, savedLoginData: Serializable?) {
+    fun onAttachView(view: LoginSymbolView, loginData: LoginData) {
         super.onAttachView(view)
-        view.run {
+        this.loginData = loginData
+        with(view) {
             initView()
             showContact(false)
-        }
-        if (savedLoginData is Triple<*, *, *>) {
-            loginData = savedLoginData as Triple<String, String, String>
+            setLoginToHeading(loginData.login)
+            clearAndFocusSymbol()
+            showSoftKeyboard()
         }
     }
 
@@ -40,14 +40,19 @@ class LoginSymbolPresenter @Inject constructor(
     }
 
     fun attemptLogin(symbol: String) {
-        if (loginData == null) throw IllegalArgumentException("Login data is null")
-
         if (symbol.isBlank()) {
             view?.setErrorSymbolRequire()
             return
         }
 
-        flowWithResource { studentRepository.getStudentsScrapper(loginData!!.first, loginData!!.second, loginData!!.third, symbol) }.onEach {
+        flowWithResource {
+            studentRepository.getStudentsScrapper(
+                email = loginData.login,
+                password = loginData.password,
+                scrapperBaseUrl = loginData.baseUrl,
+                symbol = symbol,
+            )
+        }.onEach {
             when (it.status) {
                 Status.LOADING -> view?.run {
                     Timber.i("Login with symbol started")
@@ -56,21 +61,24 @@ class LoginSymbolPresenter @Inject constructor(
                     showContent(false)
                 }
                 Status.SUCCESS -> {
-                    view?.run {
-                        if (it.data!!.isEmpty()) {
+                    when (it.data?.size) {
+                        0 -> {
                             Timber.i("Login with symbol result: Empty student list")
-                            setErrorSymbolIncorrect()
-                            view?.showContact(true)
-                        } else {
+                            view?.run {
+                                setErrorSymbolIncorrect()
+                                showContact(true)
+                            }
+                        }
+                        else -> {
                             Timber.i("Login with symbol result: Success")
-                            notifyParentAccountLogged(it.data)
+                            view?.navigateToStudentSelect(requireNotNull(it.data))
                         }
                     }
                     analytics.logEvent(
                         "registration_symbol",
                         "success" to true,
                         "students" to it.data!!.size,
-                        "scrapperBaseUrl" to loginData?.third,
+                        "scrapperBaseUrl" to loginData.baseUrl,
                         "symbol" to symbol,
                         "error" to "No error"
                     )
@@ -81,7 +89,7 @@ class LoginSymbolPresenter @Inject constructor(
                         "registration_symbol",
                         "success" to false,
                         "students" to -1,
-                        "scrapperBaseUrl" to loginData?.third,
+                        "scrapperBaseUrl" to loginData.baseUrl,
                         "symbol" to symbol,
                         "error" to it.error!!.message.ifNullOrBlank { "No message" }
                     )
@@ -98,19 +106,11 @@ class LoginSymbolPresenter @Inject constructor(
         }.launch("login")
     }
 
-    fun onParentInitSymbolView(loginData: Triple<String, String, String>) {
-        this.loginData = loginData
-        view?.apply {
-            clearAndFocusSymbol()
-            showSoftKeyboard()
-        }
-    }
-
     fun onFaqClick() {
         view?.openFaqPage()
     }
 
     fun onEmailClick() {
-        view?.openEmail(loginData?.third.orEmpty(), lastError?.message.ifNullOrBlank { "empty" })
+        view?.openEmail(loginData.baseUrl, lastError?.message.ifNullOrBlank { "empty" })
     }
 }
