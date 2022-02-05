@@ -729,7 +729,7 @@ class DashboardPresenter @Inject constructor(
 
         if (forceRefresh) {
             onEach {
-                if (it.status == Status.SUCCESS) {
+                if (it is Resource.Success) {
                     cancelJobs(jobName)
                 }
             }.launch(jobName)
