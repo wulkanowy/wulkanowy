@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.grade.details
 
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.enums.GradeExpandMode
 import io.github.wulkanowy.data.enums.GradeSortingMode.ALPHABETIC
@@ -19,8 +18,8 @@ import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
@@ -85,7 +84,7 @@ class GradeDetailsPresenter @Inject constructor(
             gradeRepository.updateGrades(unreadGrades.map { it.apply { isRead = true } })
         }
             .logStatus("mark grades as read")
-            .withErrorHandler(errorHandler)
+            .onError(errorHandler::dispatch)
             .onSuccess {
                 loadData(currentSemesterId, false)
             }
@@ -141,7 +140,7 @@ class GradeDetailsPresenter @Inject constructor(
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }
             .logStatus("load grade details")
-            .withErrorHandler(errorHandler)
+            .onError(errorHandler::dispatch)
             .onEach {
                 view?.run {
                     enableSwipe(true)
@@ -155,7 +154,11 @@ class GradeDetailsPresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     updateNewGradesAmount(it)
                     updateMarkAsDoneButton()
-                    updateData(data = createGradeItems(it), expandMode = preferencesRepository.gradeExpandMode, preferencesRepository.gradeColorTheme)
+                    updateData(
+                        data = createGradeItems(it),
+                        expandMode = preferencesRepository.gradeExpandMode,
+                        preferencesRepository.gradeColorTheme
+                    )
                 }
             }.onSuccess {
                 analytics.logEvent(
@@ -238,7 +241,7 @@ class GradeDetailsPresenter @Inject constructor(
     private fun updateGrade(grade: Grade) {
         flowWithResource { gradeRepository.updateGrade(grade) }
             .logStatus("update grade result ${grade.id}")
-            .withErrorHandler(errorHandler)
+            .onError(errorHandler::dispatch)
             .launch("update")
     }
 }

@@ -19,10 +19,10 @@ import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -144,7 +144,9 @@ class TimetablePresenter @Inject constructor(
             timetableRepository.getTimetable(
                 student, semester, currentDate, currentDate, forceRefresh
             )
-        }.logStatus("load timetable data").withErrorHandler(errorHandler)
+        }
+            .logStatus("load timetable data")
+            .onError(errorHandler::dispatch)
             .onEach {
                 view?.run {
                     enableSwipe(true)

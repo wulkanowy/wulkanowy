@@ -8,10 +8,10 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
-import kotlinx.coroutines.flow.catch
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
+import kotlinx.coroutines.flow.catch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -58,29 +58,32 @@ class TeacherPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             teacherRepository.getTeachers(student, semester, forceRefresh)
-        }.logStatus("load teachers data").withErrorHandler(errorHandler).onSuccess {
-            view?.run {
-                updateData(it.filter { item -> item.name.isNotBlank() })
-                showContent(it.isNotEmpty())
-                showEmpty(it.isEmpty())
-                showErrorView(false)
-            }
-            analytics.logEvent(
-                "load_data",
-                "type" to "teachers",
-                "items" to it.size
-            )
-        }.afterLoading {
-            view?.run {
-                hideRefresh()
-                showProgress(false)
-                enableSwipe(true)
-                notifyParentDataLoaded()
-            }
-        }.catch {
-            errorHandler.dispatch(it)
-            view?.notifyParentDataLoaded()
-        }.launch()
+        }
+            .logStatus("load teachers data")
+            .onError(errorHandler::dispatch)
+            .onSuccess {
+                view?.run {
+                    updateData(it.filter { item -> item.name.isNotBlank() })
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    showErrorView(false)
+                }
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "teachers",
+                    "items" to it.size
+                )
+            }.afterLoading {
+                view?.run {
+                    hideRefresh()
+                    showProgress(false)
+                    enableSwipe(true)
+                    notifyParentDataLoaded()
+                }
+            }.catch {
+                errorHandler.dispatch(it)
+                view?.notifyParentDataLoaded()
+            }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

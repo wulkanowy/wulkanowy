@@ -8,9 +8,9 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.toLocalDate
-import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -73,11 +73,13 @@ class HomeworkAddPresenter @Inject constructor(
                     attachments = emptyList(),
                 ).apply { isAddedByUser = true }
             )
-        }.logStatus("homework insert").withErrorHandler(errorHandler).onSuccess {
-            view?.run {
-                showSuccessMessage()
-                closeDialog()
-            }
-        }.launch("add_homework")
+        }.logStatus("homework insert")
+            .onError(errorHandler::dispatch)
+            .onSuccess {
+                view?.run {
+                    showSuccessMessage()
+                    closeDialog()
+                }
+            }.launch("add_homework")
     }
 }

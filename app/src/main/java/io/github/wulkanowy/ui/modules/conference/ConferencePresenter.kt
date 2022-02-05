@@ -12,8 +12,8 @@ import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -72,29 +72,33 @@ class ConferencePresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             conferenceRepository.getConferences(student, semester, forceRefresh)
-        }.logStatus("load conference data").withErrorHandler(errorHandler).mapData {
-            it.sortedByDescending { conference -> conference.date }
-        }.onEach {
-            view?.run {
-                enableSwipe(true)
-                showProgress(false)
+        }
+            .logStatus("load conference data")
+            .onError(errorHandler::dispatch)
+            .mapData {
+                it.sortedByDescending { conference -> conference.date }
             }
-        }.onData {
-            view?.run {
-                showRefresh(true)
-                showErrorView(false)
-                showContent(it.isNotEmpty())
-                showEmpty(it.isEmpty())
-                updateData(it)
-            }
-        }.onSuccess {
-            analytics.logEvent(
-                "load_data",
-                "type" to "conferences",
-                "items" to it.size
-            )
-        }.afterLoading {
-            view?.showRefresh(false)
-        }.launch()
+            .onEach {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
+                }
+            }.onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    updateData(it)
+                }
+            }.onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "conferences",
+                    "items" to it.size
+                )
+            }.afterLoading {
+                view?.showRefresh(false)
+            }.launch()
     }
 }

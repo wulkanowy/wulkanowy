@@ -2,14 +2,12 @@ package io.github.wulkanowy.utils
 
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.mapData
-import io.github.wulkanowy.ui.base.ErrorHandler
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -131,14 +129,6 @@ fun <T> Flow<Resource<T>>.onError(block: (Throwable) -> Unit) = onEach {
         block(it.error)
     }
 }
-
-fun <T> Flow<Resource<T>>.withErrorHandler(handler: ErrorHandler) = onError {
-    handler.dispatch(it)
-}
-
-// TODO throw exception on Resource.Error? Otherwise potentially infinite loading for no
-//  apparent reason can occur
-suspend fun <T> Flow<Resource<T>>.toSuccess() = filterIsInstance<Resource.Success<T>>().first()
 
 suspend fun <T> Flow<Resource<T>>.toFirstResult() = filter { it !is Resource.Loading }.first()
 

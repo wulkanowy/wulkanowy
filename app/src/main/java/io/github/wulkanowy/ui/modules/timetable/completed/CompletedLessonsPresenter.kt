@@ -17,10 +17,10 @@ import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -125,30 +125,32 @@ class CompletedLessonsPresenter @Inject constructor(
                 currentDate,
                 forceRefresh
             )
-        }.logStatus("load completed lessons").withErrorHandler(errorHandler).mapData {
-            it.sortedBy { lesson -> lesson.number }
-        }.onEach {
-            view?.run {
-                enableSwipe(true)
-                showProgress(false)
-            }
-        }.onData {
-            view?.run {
-                showRefresh(true)
-                showErrorView(false)
-                showContent(it.isNotEmpty())
-                showEmpty(it.isEmpty())
-                updateData(it)
-            }
-        }.afterLoading {
-            view?.showRefresh(false)
-        }.onSuccess {
-            analytics.logEvent(
-                "load_data",
-                "type" to "completed_lessons",
-                "items" to it.size
-            )
-        }.launch()
+        }
+            .logStatus("load completed lessons")
+            .onError(errorHandler::dispatch)
+            .mapData { it.sortedBy { lesson -> lesson.number } }
+            .onEach {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
+                }
+            }.onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    updateData(it)
+                }
+            }.afterLoading {
+                view?.showRefresh(false)
+            }.onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "completed_lessons",
+                    "items" to it.size
+                )
+            }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

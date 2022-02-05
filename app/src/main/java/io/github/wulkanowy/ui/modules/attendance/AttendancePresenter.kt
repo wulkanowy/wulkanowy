@@ -21,12 +21,12 @@ import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.nextSchoolDay
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onLoading
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.previousSchoolDay
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -233,7 +233,7 @@ class AttendancePresenter @Inject constructor(
             )
         }
             .logStatus("load attendance")
-            .withErrorHandler(errorHandler)
+            .onError(errorHandler::dispatch)
             .onSuccess {
                 analytics.logEvent(
                     "load_data",

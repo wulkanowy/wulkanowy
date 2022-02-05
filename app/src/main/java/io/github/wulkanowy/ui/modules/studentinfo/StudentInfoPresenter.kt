@@ -11,8 +11,8 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.getCurrentOrLast
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -80,7 +80,9 @@ class StudentInfoPresenter @Inject constructor(
                 semester = semester,
                 forceRefresh = forceRefresh
             )
-        }.logStatus("load student info $infoType").withErrorHandler(errorHandler)
+        }
+            .logStatus("load student info $infoType")
+            .onError(errorHandler::dispatch)
             .onSuccess {
                 val isFamily = infoType == StudentInfoView.Type.FAMILY
                 val isFirstGuardianEmpty = it?.firstGuardian == null
@@ -103,12 +105,12 @@ class StudentInfoPresenter @Inject constructor(
                     }
                 }
             }.afterLoading {
-            view?.run {
-                hideRefresh()
-                showProgress(false)
-                enableSwipe(true)
-            }
-        }.launch()
+                view?.run {
+                    hideRefresh()
+                    showProgress(false)
+                    enableSwipe(true)
+                }
+            }.launch()
     }
 
     private fun showCorrectData(studentInfo: StudentInfo) {

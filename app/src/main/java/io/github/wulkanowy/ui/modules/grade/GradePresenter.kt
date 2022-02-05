@@ -9,9 +9,8 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.getCurrentOrLast
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
-import kotlinx.coroutines.delay
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -103,19 +102,23 @@ class GradePresenter @Inject constructor(
         flowWithResource {
             val student = studentRepository.getCurrentStudent()
             semesterRepository.getSemesters(student, refreshOnNoCurrent = true)
-        }.logStatus("load grade data").withErrorHandler(errorHandler).onSuccess {
-            val current = it.getCurrentOrLast()
-            selectedIndex = if (selectedIndex == 0) current.semesterName else selectedIndex
-            schoolYear = current.schoolYear
-            semesters = it.filter { semester -> semester.diaryId == current.diaryId }
-            view?.setCurrentSemesterName(current.semesterName, schoolYear)
-            view?.run {
-                Timber.i("Loading grade data: Attempt load index $currentPageIndex")
-                loadChild(currentPageIndex)
-                showErrorView(false)
-                showSemesterSwitch(true)
+        }
+            .logStatus("load grade data")
+            .onError(errorHandler::dispatch)
+            .onSuccess {
+                val current = it.getCurrentOrLast()
+                selectedIndex = if (selectedIndex == 0) current.semesterName else selectedIndex
+                schoolYear = current.schoolYear
+                semesters = it.filter { semester -> semester.diaryId == current.diaryId }
+                view?.setCurrentSemesterName(current.semesterName, schoolYear)
+                view?.run {
+                    Timber.i("Loading grade data: Attempt load index $currentPageIndex")
+                    loadChild(currentPageIndex)
+                    showErrorView(false)
+                    showSemesterSwitch(true)
+                }
             }
-        }.launch()
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

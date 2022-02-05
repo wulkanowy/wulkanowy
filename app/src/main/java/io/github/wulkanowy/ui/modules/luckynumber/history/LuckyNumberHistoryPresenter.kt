@@ -12,11 +12,11 @@ import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
 import io.github.wulkanowy.utils.isHolidays
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.monday
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.previousOrSameSchoolDay
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -65,34 +65,41 @@ class LuckyNumberHistoryPresenter @Inject constructor(
     private fun loadData() {
         flowWithResource {
             val student = studentRepository.getCurrentStudent()
-            luckyNumberRepository.getLuckyNumberHistory(student, currentDate.monday, currentDate.sunday)
-        }.logStatus("load lucky number history").withErrorHandler(errorHandler).onSuccess {
-            val first = it.first()
-            if (!first.isNullOrEmpty()) {
-                view?.apply {
-                    updateData(first)
-                    showContent(true)
-                    showEmpty(false)
-                    showErrorView(false)
+            luckyNumberRepository.getLuckyNumberHistory(
+                student,
+                currentDate.monday,
+                currentDate.sunday
+            )
+        }
+            .logStatus("load lucky number history")
+            .onError(errorHandler::dispatch)
+            .onSuccess {
+                val first = it.first()
+                if (!first.isNullOrEmpty()) {
+                    view?.apply {
+                        updateData(first)
+                        showContent(true)
+                        showEmpty(false)
+                        showErrorView(false)
+                        showProgress(false)
+                    }
+                    analytics.logEvent(
+                        "load_items",
+                        "type" to "lucky_number_history",
+                        "numbers" to it
+                    )
+                } else {
+                    view?.run {
+                        showContent(false)
+                        showEmpty(true)
+                        showErrorView(false)
+                    }
+                }
+            }.afterLoading {
+                view?.run {
                     showProgress(false)
                 }
-                analytics.logEvent(
-                    "load_items",
-                    "type" to "lucky_number_history",
-                    "numbers" to it
-                )
-            } else {
-                view?.run {
-                    showContent(false)
-                    showEmpty(true)
-                    showErrorView(false)
-                }
-            }
-        }.afterLoading {
-            view?.run {
-                showProgress(false)
-            }
-        }.launch()
+            }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
@@ -135,8 +142,10 @@ class LuckyNumberHistoryPresenter @Inject constructor(
         view?.apply {
             showPreButton(!currentDate.minusDays(7).isHolidays)
             showNextButton(!currentDate.plusDays(7).isHolidays)
-            updateNavigationWeek("${currentDate.monday.toFormattedString("dd.MM")} - " +
-                currentDate.sunday.toFormattedString("dd.MM"))
+            updateNavigationWeek(
+                "${currentDate.monday.toFormattedString("dd.MM")} - " +
+                    currentDate.sunday.toFormattedString("dd.MM")
+            )
         }
     }
 

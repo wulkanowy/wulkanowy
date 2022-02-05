@@ -12,8 +12,8 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
@@ -113,55 +113,67 @@ class MessageTabPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             messageRepository.getMessages(student, semester, folder, forceRefresh)
-        }.logStatus("load $folder message").withErrorHandler(errorHandler).onEach {
-            when (it) {
-                is Resource.Intermediate -> {
-                    if (it.data.isNotEmpty()) {
-                        view?.run {
-                            enableSwipe(true)
-                            showErrorView(false)
-                            showRefresh(true)
-                            showProgress(false)
-                            showContent(true)
-                            messages = it.data
-                            val filteredData = getFilteredData(
+        }
+            .logStatus("load $folder message")
+            .onError(errorHandler::dispatch)
+            .onEach {
+                when (it) {
+                    is Resource.Intermediate -> {
+                        if (it.data.isNotEmpty()) {
+                            view?.run {
+                                enableSwipe(true)
+                                showErrorView(false)
+                                showRefresh(true)
+                                showProgress(false)
+                                showContent(true)
+                                messages = it.data
+                                val filteredData = getFilteredData(
+                                    lastSearchQuery,
+                                    onlyUnread,
+                                    onlyWithAttachments
+                                )
+                                val messageItems = filteredData.map { message ->
+                                    MessageTabDataItem.MessageItem(message)
+                                }
+                                val messageItemsWithHeader =
+                                    listOf(MessageTabDataItem.Header) + messageItems
+
+                                updateData(
+                                    messageItemsWithHeader,
+                                    folder.id == MessageFolder.SENT.id
+                                )
+                                notifyParentDataLoaded()
+                            }
+                        }
+                    }
+                    is Resource.Success -> {
+                        messages = it.data
+                        updateData(
+                            getFilteredData(
                                 lastSearchQuery,
                                 onlyUnread,
                                 onlyWithAttachments
                             )
-                            val messageItems = filteredData.map { message ->
-                                MessageTabDataItem.MessageItem(message)
-                            }
-                            val messageItemsWithHeader =
-                                listOf(MessageTabDataItem.Header) + messageItems
-
-                            updateData(messageItemsWithHeader, folder.id == MessageFolder.SENT.id)
-                            notifyParentDataLoaded()
-                        }
+                        )
+                        analytics.logEvent(
+                            "load_data",
+                            "type" to "messages",
+                            "items" to it.data.size,
+                            "folder" to folder.name
+                        )
                     }
                 }
-                is Resource.Success -> {
-                    messages = it.data
-                    updateData(getFilteredData(lastSearchQuery, onlyUnread, onlyWithAttachments))
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "messages",
-                        "items" to it.data.size,
-                        "folder" to folder.name
-                    )
+            }.afterLoading {
+                view?.run {
+                    showRefresh(false)
+                    showProgress(false)
+                    enableSwipe(true)
+                    notifyParentDataLoaded()
                 }
-            }
-        }.afterLoading {
-            view?.run {
-                showRefresh(false)
-                showProgress(false)
-                enableSwipe(true)
-                notifyParentDataLoaded()
-            }
-        }.catch {
-            errorHandler.dispatch(it)
-            view?.notifyParentDataLoaded()
-        }.launch()
+            }.catch {
+                errorHandler.dispatch(it)
+                view?.notifyParentDataLoaded()
+            }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

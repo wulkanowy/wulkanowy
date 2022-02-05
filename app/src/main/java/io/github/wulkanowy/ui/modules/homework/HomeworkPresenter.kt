@@ -16,10 +16,10 @@ import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -115,30 +115,35 @@ class HomeworkPresenter @Inject constructor(
                 currentDate,
                 forceRefresh
             )
-        }.logStatus("loading homework").withErrorHandler(errorHandler).onSuccess {
-            analytics.logEvent(
-                "load_data",
-                "type" to "homework",
-                "items" to it.size
-            )
-        }.mapData {
-            createHomeworkItem(it)
-        }.onEach {
-            view?.run {
-                enableSwipe(true)
-                showProgress(false)
+        }
+            .logStatus("loading homework")
+            .onError(errorHandler::dispatch)
+            .onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "homework",
+                    "items" to it.size
+                )
             }
-        }.onData {
-            view?.run {
-                showRefresh(true)
-                showErrorView(false)
-                showContent(it.isNotEmpty())
-                showEmpty(it.isEmpty())
-                updateData(it)
+            .mapData {
+                createHomeworkItem(it)
             }
-        }.afterLoading {
-            view?.showRefresh(false)
-        }.launch()
+            .onEach {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
+                }
+            }.onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    updateData(it)
+                }
+            }.afterLoading {
+                view?.showRefresh(false)
+            }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

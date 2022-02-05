@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.grade.summary
 
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -13,8 +12,8 @@ import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -47,7 +46,7 @@ class GradeSummaryPresenter @Inject constructor(
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }
             .logStatus("load grade summary", showData = true)
-            .withErrorHandler(errorHandler)
+            .onError(errorHandler::dispatch)
             .onSuccess {
                 analytics.logEvent(
                     "load_data",

@@ -10,8 +10,8 @@ import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -58,27 +58,32 @@ class SchoolAnnouncementPresenter @Inject constructor(
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             schoolAnnouncementRepository.getSchoolAnnouncements(student, forceRefresh)
-        }.logStatus("load school announcement").onEach {
-            view?.run {
-                enableSwipe(true)
-                showProgress(false)
+        }
+            .logStatus("load school announcement").onEach {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
+                }
             }
-        }.onData {
-            view?.run {
-                showRefresh(true)
-                showErrorView(false)
-                showContent(it.isNotEmpty())
-                showEmpty(it.isEmpty())
-                updateData(it)
+            .onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    updateData(it)
+                }
             }
-        }.afterLoading {
-            view?.showRefresh(false)
-        }.onSuccess {
-            analytics.logEvent(
-                "load_school_announcement",
-                "items" to it.size
-            )
-        }.withErrorHandler(errorHandler).launch()
+            .afterLoading {
+                view?.showRefresh(false)
+            }
+            .onSuccess {
+                analytics.logEvent(
+                    "load_school_announcement",
+                    "items" to it.size
+                )
+            }
+            .onError(errorHandler::dispatch)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

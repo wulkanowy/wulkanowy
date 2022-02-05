@@ -8,8 +8,8 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,33 +38,35 @@ class LuckyNumberPresenter @Inject constructor(
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()
             luckyNumberRepository.getLuckyNumber(student, forceRefresh)
-        }.logStatus("load lucky number").withErrorHandler(errorHandler).onSuccess {
-            if (it != null) {
-                view?.apply {
-                    updateData(it)
-                    showContent(true)
-                    showEmpty(false)
-                    showErrorView(false)
+        }.logStatus("load lucky number")
+            .onError(errorHandler::dispatch)
+            .onSuccess {
+                if (it != null) {
+                    view?.apply {
+                        updateData(it)
+                        showContent(true)
+                        showEmpty(false)
+                        showErrorView(false)
+                    }
+                    analytics.logEvent(
+                        "load_item",
+                        "type" to "lucky_number",
+                        "number" to it.luckyNumber
+                    )
+                } else {
+                    view?.run {
+                        showContent(false)
+                        showEmpty(true)
+                        showErrorView(false)
+                    }
                 }
-                analytics.logEvent(
-                    "load_item",
-                    "type" to "lucky_number",
-                    "number" to it.luckyNumber
-                )
-            } else {
+            }.afterLoading {
                 view?.run {
-                    showContent(false)
-                    showEmpty(true)
-                    showErrorView(false)
+                    hideRefresh()
+                    showProgress(false)
+                    enableSwipe(true)
                 }
-            }
-        }.afterLoading {
-            view?.run {
-                hideRefresh()
-                showProgress(false)
-                enableSwipe(true)
-            }
-        }.launch()
+            }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

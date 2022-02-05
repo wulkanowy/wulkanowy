@@ -14,8 +14,8 @@ import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.time.Month
@@ -93,7 +93,7 @@ class AttendanceSummaryPresenter @Inject constructor(
             )
         }
             .logStatus("load attendance summary")
-            .withErrorHandler(errorHandler)
+            .onError(errorHandler::dispatch)
             .mapData(this::sortItems)
             .onEach {
                 view?.run {
@@ -141,8 +141,10 @@ class AttendanceSummaryPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             subjectRepository.getSubjects(student, semester)
-        }.logStatus("load attendance summary subjects")
-            .withErrorHandler(errorHandler).onSuccess {
+        }
+            .logStatus("load attendance summary subjects")
+            .onError(errorHandler::dispatch)
+            .onSuccess {
                 subjects = it
                 view?.run {
                     view?.updateSubjects(it.map { subject -> subject.name }.toList())

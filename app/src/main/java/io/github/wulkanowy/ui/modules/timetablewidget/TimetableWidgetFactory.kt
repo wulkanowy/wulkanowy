@@ -26,7 +26,6 @@ import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Co
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.toFirstResult
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.toSuccess
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.time.LocalDate

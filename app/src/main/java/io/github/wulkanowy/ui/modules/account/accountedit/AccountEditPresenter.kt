@@ -9,8 +9,8 @@ import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,21 +41,25 @@ class AccountEditPresenter @Inject constructor(
     private fun loadData() {
         flowWithResource {
             studentRepository.getStudentById(student.id, false).avatarColor
-        }.logStatus("load student").withErrorHandler(errorHandler).onSuccess {
-            view?.updateSelectedColorData(it.toInt())
-        }.launch("load_data")
+        }
+            .logStatus("load student")
+            .onError(errorHandler::dispatch)
+            .onSuccess { view?.updateSelectedColorData(it.toInt()) }
+            .launch("load_data")
     }
 
     fun changeStudentNickAndAvatar(nick: String, avatarColor: Int) {
         flowWithResource {
-            val studentNick =
-                StudentNickAndAvatar(nick = nick.trim(), avatarColor = avatarColor.toLong())
-                    .apply { id = student.id }
+            val studentNick = StudentNickAndAvatar(
+                nick = nick.trim(),
+                avatarColor = avatarColor.toLong()
+            ).apply { id = student.id }
+
             studentRepository.updateStudentNickAndAvatar(studentNick)
-        }.logStatus("change student nick and avatar").withErrorHandler(errorHandler)
-            .onSuccess {
-                view?.recreateMainView()
-            }
+        }
+            .logStatus("change student nick and avatar")
+            .onError(errorHandler::dispatch)
+            .onSuccess { view?.recreateMainView() }
             .afterLoading { view?.popView() }
             .launch("update_student")
     }

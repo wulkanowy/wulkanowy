@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.mobiledevice
 
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.MobileDevice
 import io.github.wulkanowy.data.repositories.MobileDeviceRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -13,8 +12,8 @@ import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -60,7 +59,9 @@ class MobileDevicePresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             mobileDeviceRepository.getDevices(student, semester, forceRefresh)
-        }.logStatus("load mobile devices data").withErrorHandler(errorHandler)
+        }
+            .logStatus("load mobile devices data")
+            .onError(errorHandler::dispatch)
             .onEach {
                 view?.run {
                     enableSwipe(true)
@@ -120,11 +121,14 @@ class MobileDevicePresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             mobileDeviceRepository.unregisterDevice(student, semester, device)
-        }.logStatus("unregister device").withErrorHandler(errorHandler).onSuccess {
-            view?.run {
-                showProgress(false)
-                enableSwipe(true)
-            }
-        }.launch("unregister")
+        }
+            .logStatus("unregister device")
+            .onError(errorHandler::dispatch)
+            .onSuccess {
+                view?.run {
+                    showProgress(false)
+                    enableSwipe(true)
+                }
+            }.launch("unregister")
     }
 }

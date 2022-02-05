@@ -24,7 +24,6 @@ import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.toFirstResult
-import io.github.wulkanowy.utils.toSuccess
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
@@ -176,7 +175,8 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
             }
 
             if (currentStudent != null) {
-                luckyNumberRepository.getLuckyNumber(currentStudent, forceRefresh = false).toFirstResult()
+                luckyNumberRepository.getLuckyNumber(currentStudent, forceRefresh = false)
+                    .toFirstResult()
             } else {
                 Resource.success<LuckyNumber?>(null)
             }

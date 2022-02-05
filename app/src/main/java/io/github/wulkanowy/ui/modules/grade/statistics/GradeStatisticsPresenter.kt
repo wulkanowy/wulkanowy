@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.grade.statistics
 
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.data.repositories.GradeStatisticsRepository
@@ -16,8 +15,8 @@ import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -128,14 +127,17 @@ class GradeStatisticsPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             subjectRepository.getSubjects(student, semester)
-        }.logStatus("load grade stats subjects").withErrorHandler(errorHandler)
+        }
+            .logStatus("load grade stats subjects")
+            .onError(errorHandler::dispatch)
             .onSuccess {
                 subjects = it
                 view?.run {
                     view?.updateSubjects(it.map { subject -> subject.name }.toList())
                     showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
                 }
-            }.launch("subjects")
+            }
+            .launch("subjects")
     }
 
     private fun loadDataByType(
@@ -183,7 +185,7 @@ class GradeStatisticsPresenter @Inject constructor(
             }
         }
             .logStatus("load grade stats data")
-            .withErrorHandler(errorHandler)
+            .onError(errorHandler::dispatch)
             .onSuccess {
                 analytics.logEvent(
                     "load_data",
@@ -204,9 +206,11 @@ class GradeStatisticsPresenter @Inject constructor(
                     showErrorView(false)
                     //showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
-                    updateData(it,
+                    updateData(
+                        it,
                         preferencesRepository.gradeColorTheme,
-                        preferencesRepository.showAllSubjectsOnStatisticsList)
+                        preferencesRepository.showAllSubjectsOnStatisticsList
+                    )
                 }
             }.afterLoading {
                 view?.run {

@@ -16,10 +16,10 @@ import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.monday
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import io.github.wulkanowy.utils.onData
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
 import io.github.wulkanowy.utils.sunday
 import io.github.wulkanowy.utils.toFormattedString
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -110,30 +110,36 @@ class ExamPresenter @Inject constructor(
                 currentDate.sunday,
                 forceRefresh
             )
-        }.logStatus("load exam data").withErrorHandler(errorHandler).mapData {
-            createExamItems(it)
-        }.onEach {
-            view?.run {
-                enableSwipe(true)
-                showProgress(false)
+        }
+            .logStatus("load exam data")
+            .onError(errorHandler::dispatch)
+            .mapData {
+                createExamItems(it)
+            }.onEach {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
+                }
             }
-        }.onData {
-            view?.run {
-                showRefresh(true)
-                showErrorView(false)
-                showContent(it.isNotEmpty())
-                showEmpty(it.isEmpty())
-                updateData(it)
+            .onData {
+                view?.run {
+                    showRefresh(true)
+                    showErrorView(false)
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
+                    updateData(it)
+                }
             }
-        }.onSuccess {
-            analytics.logEvent(
-                "load_data",
-                "type" to "exam",
-                "items" to it.size
-            )
-        }.afterLoading {
-            view?.showRefresh(false)
-        }.launch()
+            .onSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "exam",
+                    "items" to it.size
+                )
+            }
+            .afterLoading {
+                view?.showRefresh(false)
+            }.launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

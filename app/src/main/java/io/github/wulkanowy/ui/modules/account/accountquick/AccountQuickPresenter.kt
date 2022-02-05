@@ -8,8 +8,8 @@ import io.github.wulkanowy.ui.modules.account.AccountItem
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -46,7 +46,7 @@ class AccountQuickPresenter @Inject constructor(
 
         flowWithResource { studentRepository.switchStudent(studentWithSemesters) }
             .logStatus("change student")
-            .withErrorHandler(errorHandler)
+            .onError(errorHandler::dispatch)
             .onSuccess {
                 view?.recreateMainView()
             }

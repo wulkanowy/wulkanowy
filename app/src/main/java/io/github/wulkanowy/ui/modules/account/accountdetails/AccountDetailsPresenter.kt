@@ -11,8 +11,8 @@ import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
 import io.github.wulkanowy.utils.afterLoading
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.withErrorHandler
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -54,7 +54,7 @@ class AccountDetailsPresenter @Inject constructor(
     private fun loadData() {
         flowWithResource { studentRepository.getSavedStudentById(studentId ?: -1) }
             .logStatus("loading account details view")
-            .withErrorHandler(errorHandler)
+            .onError(errorHandler::dispatch)
             .onEach {
                 when (it) {
                     is Resource.Loading -> {
@@ -98,7 +98,7 @@ class AccountDetailsPresenter @Inject constructor(
 
         flowWithResource { studentRepository.switchStudent(studentWithSemesters!!) }
             .logStatus("change student")
-            .withErrorHandler(errorHandler)
+            .onError(errorHandler::dispatch)
             .onSuccess {
                 view?.recreateMainView()
             }.afterLoading {
@@ -125,8 +125,9 @@ class AccountDetailsPresenter @Inject constructor(
             }
 
             return@flowWithResource students
-        }.logStatus("logout user")
-            .withErrorHandler(errorHandler)
+        }
+            .logStatus("logout user")
+            .onError(errorHandler::dispatch)
             .onSuccess {
                 view?.run {
                     when {
@@ -145,13 +146,15 @@ class AccountDetailsPresenter @Inject constructor(
                         }
                     }
                 }
-            }.afterLoading {
+            }
+            .afterLoading {
                 if (studentWithSemesters?.student?.isCurrent == true) {
                     view?.popViewToMain()
                 } else {
                     view?.popViewToAccounts()
                 }
-            }.launch("logout")
+            }
+            .launch("logout")
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
