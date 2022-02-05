@@ -35,16 +35,22 @@ class GradeStatisticsPresenter @Inject constructor(
 
     private var currentSemesterId = 0
 
-    private var currentSubjectName: String = "Wszystkie"
+    var currentSubjectName: String = "Wszystkie"
+        private set
 
     private lateinit var lastError: Throwable
 
     var currentType: GradeStatisticsItem.DataType = GradeStatisticsItem.DataType.PARTIAL
         private set
 
-    fun onAttachView(view: GradeStatisticsView, type: GradeStatisticsItem.DataType?) {
+    fun onAttachView(
+        view: GradeStatisticsView,
+        type: GradeStatisticsItem.DataType?,
+        subjectName: String?
+    ) {
         super.onAttachView(view)
         currentType = type ?: GradeStatisticsItem.DataType.PARTIAL
+        currentSubjectName = subjectName ?: currentSubjectName
         view.initView()
         errorHandler.showErrorMessage = ::showErrorViewOnError
     }
@@ -133,8 +139,13 @@ class GradeStatisticsPresenter @Inject constructor(
             .onSuccess {
                 subjects = it
                 view?.run {
-                    view?.updateSubjects(it.map { subject -> subject.name }.toList())
                     showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
+                    updateSubjects(
+                        data = it.map { subject -> subject.name },
+                        selectedIndex = it.indexOfFirst { subject ->
+                            subject.name == currentSubjectName
+                        },
+                    )
                 }
             }
             .launch("subjects")
@@ -146,9 +157,13 @@ class GradeStatisticsPresenter @Inject constructor(
         type: GradeStatisticsItem.DataType,
         forceRefresh: Boolean = false
     ) {
-        currentSubjectName =
-            if (preferencesRepository.showAllSubjectsOnStatisticsList) "Wszystkie" else subjectName
+        Timber.i("Loading grade stats data started")
+
         currentType = type
+        currentSubjectName = when {
+            preferencesRepository.showAllSubjectsOnStatisticsList -> "Wszystkie"
+            else -> subjectName
+        }
 
         flowWithResourceIn {
             val student = studentRepository.getCurrentStudent()

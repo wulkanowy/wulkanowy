@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.afterLoading
@@ -78,7 +79,9 @@ class LoginAdvancedPresenter @Inject constructor(
             clearPassError()
             clearUsernameError()
             if (formHostValue.contains("fakelog")) {
-                setDefaultCredentials("jan@fakelog.cf", "jan123", "powiatwulkanowy", "FK100000", "999999")
+                setDefaultCredentials(
+                    "jan@fakelog.cf", "jan123", "powiatwulkanowy", "FK100000", "999999"
+                )
             }
             setSymbol(formHostSymbol)
             updateUsernameLabel()
@@ -143,7 +146,15 @@ class LoginAdvancedPresenter @Inject constructor(
                         "students" to it.data.size,
                         "error" to "No error"
                     )
-                    view?.notifyParentAccountLogged(it.data)
+                    val loginData = LoginData(
+                        login = view?.formUsernameValue.orEmpty().trim(),
+                        password = view?.formPassValue.orEmpty().trim(),
+                        baseUrl = view?.formHostValue.orEmpty().trim()
+                    )
+                    when (it.data.size) {
+                        0 -> view?.navigateToSymbol(loginData)
+                        else -> view?.navigateToStudentSelect(it.data)
+                    }
                 }
                 is Resource.Error -> {
                     analytics.logEvent(
@@ -173,8 +184,12 @@ class LoginAdvancedPresenter @Inject constructor(
 
         return when (Sdk.Mode.valueOf(view?.formLoginType.orEmpty())) {
             Sdk.Mode.API -> studentRepository.getStudentsApi(pin, symbol, token)
-            Sdk.Mode.SCRAPPER -> studentRepository.getStudentsScrapper(email, password, endpoint, symbol)
-            Sdk.Mode.HYBRID -> studentRepository.getStudentsHybrid(email, password, endpoint, symbol)
+            Sdk.Mode.SCRAPPER -> studentRepository.getStudentsScrapper(
+                email, password, endpoint, symbol
+            )
+            Sdk.Mode.HYBRID -> studentRepository.getStudentsHybrid(
+                email, password, endpoint, symbol
+            )
         }
     }
 

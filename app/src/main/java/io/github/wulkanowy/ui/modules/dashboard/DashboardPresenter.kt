@@ -8,38 +8,18 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.errorOrNull
 import io.github.wulkanowy.data.isLoading
-import io.github.wulkanowy.data.repositories.AdminMessageRepository
-import io.github.wulkanowy.data.repositories.AttendanceSummaryRepository
-import io.github.wulkanowy.data.repositories.ConferenceRepository
-import io.github.wulkanowy.data.repositories.ExamRepository
-import io.github.wulkanowy.data.repositories.GradeRepository
-import io.github.wulkanowy.data.repositories.HomeworkRepository
-import io.github.wulkanowy.data.repositories.LuckyNumberRepository
-import io.github.wulkanowy.data.repositories.MessageRepository
-import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.github.wulkanowy.data.repositories.SchoolAnnouncementRepository
-import io.github.wulkanowy.data.repositories.SemesterRepository
-import io.github.wulkanowy.data.repositories.StudentRepository
-import io.github.wulkanowy.data.repositories.TimetableRepository
+import io.github.wulkanowy.data.repositories.*
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.calculatePercentage
 import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.mapData
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 class DashboardPresenter @Inject constructor(
@@ -127,7 +107,7 @@ class DashboardPresenter @Inject constructor(
         forceRefresh: Boolean
     ) = dashboardTilesToLoad.filter { newItemToLoad ->
         dashboardLoadedTiles.none { it == newItemToLoad } || forceRefresh
-            || newItemToLoad == DashboardItem.Tile.ADMIN_MESSAGE
+                || newItemToLoad == DashboardItem.Tile.ADMIN_MESSAGE
     }
 
     private fun removeUnselectedTiles(tilesToLoad: List<DashboardItem.Tile>) {
@@ -314,7 +294,7 @@ class DashboardPresenter @Inject constructor(
                 )
                 errorHandler.dispatch(it)
             }
-            .launch("horizontal_group")
+            .launch("horizontal_group ${if (forceRefresh) "-forceRefresh" else ""}")
     }
 
     private fun loadGrades(student: Student, forceRefresh: Boolean) {
@@ -369,7 +349,7 @@ class DashboardPresenter @Inject constructor(
                     updateData(DashboardItem.Grades(error = it.error), forceRefresh)
                 }
             }
-        }.launch("dashboard_grades")
+        }.launchWithUniqueRefreshJob("dashboard_grades", forceRefresh)
     }
 
     private fun loadLessons(student: Student, forceRefresh: Boolean) {
@@ -412,7 +392,7 @@ class DashboardPresenter @Inject constructor(
                     )
                 }
             }
-        }.launch("dashboard_lessons")
+        }.launchWithUniqueRefreshJob("dashboard_lessons", forceRefresh)
     }
 
     private fun loadHomework(student: Student, forceRefresh: Boolean) {
@@ -460,7 +440,7 @@ class DashboardPresenter @Inject constructor(
                     updateData(DashboardItem.Homework(error = it.error), forceRefresh)
                 }
             }
-        }.launch("dashboard_homework")
+        }.launchWithUniqueRefreshJob("dashboard_homework", forceRefresh)
     }
 
     private fun loadSchoolAnnouncements(student: Student, forceRefresh: Boolean) {
@@ -490,7 +470,7 @@ class DashboardPresenter @Inject constructor(
                     updateData(DashboardItem.Announcements(error = it.error), forceRefresh)
                 }
             }
-        }.launch("dashboard_announcements")
+        }.launchWithUniqueRefreshJob("dashboard_announcements", forceRefresh)
     }
 
     private fun loadExams(student: Student, forceRefresh: Boolean) {
@@ -530,7 +510,7 @@ class DashboardPresenter @Inject constructor(
                         updateData(DashboardItem.Exams(error = it.error), forceRefresh)
                     }
                 }
-            }.launch("dashboard_exams")
+            }.launchWithUniqueRefreshJob("dashboard_exams", forceRefresh)
     }
 
     private fun loadConferences(student: Student, forceRefresh: Boolean) {
@@ -541,7 +521,7 @@ class DashboardPresenter @Inject constructor(
                 student = student,
                 semester = semester,
                 forceRefresh = forceRefresh,
-                startDate = LocalDateTime.now()
+                startDate = Instant.now(),
             )
         }.onEach {
             when (it) {
@@ -567,11 +547,11 @@ class DashboardPresenter @Inject constructor(
                     updateData(DashboardItem.Conferences(error = it.error), forceRefresh)
                 }
             }
-        }.launch("dashboard_conferences")
+        }.launchWithUniqueRefreshJob("dashboard_conferences", forceRefresh)
     }
 
     private fun loadAdminMessage(student: Student, forceRefresh: Boolean) {
-        flowWithResourceIn { adminMessageRepository.getAdminMessages(student, forceRefresh) }
+        flowWithResourceIn { adminMessageRepository.getAdminMessages(student) }
             .filter {
                 val data = it.dataOrNull ?: return@filter true
                 val isDismissed = data.id in preferencesRepository.dismissedAdminMessageIds
@@ -604,7 +584,7 @@ class DashboardPresenter @Inject constructor(
                     }
                 }
             }
-            .launch("dashboard_admin_messages")
+            .launchWithUniqueRefreshJob("dashboard_admin_messages", forceRefresh)
     }
 
     private fun updateData(dashboardItem: DashboardItem, forceRefresh: Boolean) {
@@ -706,7 +686,7 @@ class DashboardPresenter @Inject constructor(
             itemsLoadedList.find { it.type == DashboardItem.Type.ACCOUNT }?.error != null
         val isGeneralError =
             filteredItems.none { it.error == null } && filteredItems.isNotEmpty() || isAccountItemError
-        val errorMessage = itemsLoadedList.map { it.error?.stackTraceToString() }.toString()
+        val firstError = itemsLoadedList.mapNotNull { it.error }.firstOrNull()
 
         val filteredOriginalLoadedList =
             dashboardItemLoadedList.filterNot { it.type == DashboardItem.Type.ACCOUNT }
@@ -716,7 +696,7 @@ class DashboardPresenter @Inject constructor(
             filteredOriginalLoadedList.none { it.error == null } && filteredOriginalLoadedList.isNotEmpty() || wasAccountItemError
 
         if (isGeneralError && isItemsLoaded) {
-            lastError = Exception(errorMessage)
+            lastError = requireNotNull(firstError)
 
             view?.run {
                 showProgress(false)
@@ -724,6 +704,7 @@ class DashboardPresenter @Inject constructor(
                 if ((forceRefresh && wasGeneralError) || !forceRefresh) {
                     showContent(false)
                     showErrorView(true)
+                    setErrorDetails(lastError)
                 }
             }
         }
@@ -740,6 +721,20 @@ class DashboardPresenter @Inject constructor(
             }
 
             dashboardItemsPosition?.getOrDefault(tile.type, defaultPosition) ?: tile.type.ordinal
+        }
+    }
+
+    private fun Flow<Resource<*>>.launchWithUniqueRefreshJob(name: String, forceRefresh: Boolean) {
+        val jobName = if (forceRefresh) "$name-forceRefresh" else name
+
+        if (forceRefresh) {
+            onEach {
+                if (it.status == Status.SUCCESS) {
+                    cancelJobs(jobName)
+                }
+            }.launch(jobName)
+        } else {
+            launch(jobName)
         }
     }
 }

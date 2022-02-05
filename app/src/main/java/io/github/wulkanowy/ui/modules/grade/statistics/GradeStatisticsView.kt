@@ -12,7 +12,7 @@ interface GradeStatisticsView : BaseView {
 
     fun initView()
 
-    fun updateSubjects(data: Collection<String>)
+    fun updateSubjects(data: List<String>, selectedIndex: Int)
 
     fun updateData(
         newItems: List<GradeStatisticsItem>,

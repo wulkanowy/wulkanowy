@@ -1,6 +1,8 @@
-Wersja 1.4.3
+Wersja 1.5.0
 
-Naprawiliśmy drobne problemy ze stabilnością oraz małą usterkę w wyszukiwarce wiadomości.
-Wszystko po to, aby jeszcze bardziej podnieść komfort z używania aplikacji!
+- dodaliśmy możliwość dodawania własnych lekcji dodatkowych
+- dodaliśmy wsparcie dla różnych stref czasowych
+- dodaliśmy eksperymentalne wsparcie dla przedszkola
+- wprowadziliśmy też wiele innych mniejszych poprawek, poprawiających komfort używania aplikacji
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

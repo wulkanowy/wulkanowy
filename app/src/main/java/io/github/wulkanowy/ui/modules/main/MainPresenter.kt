@@ -20,7 +20,8 @@ import io.github.wulkanowy.utils.logStatus
 import io.github.wulkanowy.utils.onError
 import io.github.wulkanowy.utils.onSuccess
 import timber.log.Timber
-import java.time.LocalDate
+import java.time.Duration
+import java.time.Instant
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
@@ -152,11 +153,11 @@ class MainPresenter @Inject constructor(
         prefRepository.inAppReviewCount++
 
         if (prefRepository.inAppReviewDate == null) {
-            prefRepository.inAppReviewDate = LocalDate.now()
+            prefRepository.inAppReviewDate = Instant.now()
         }
 
         if (!prefRepository.isAppReviewDone && prefRepository.inAppReviewCount >= 50 &&
-            LocalDate.now().minusDays(14).isAfter(prefRepository.inAppReviewDate)
+            Instant.now().minus(Duration.ofDays(14)).isAfter(prefRepository.inAppReviewDate)
         ) {
             view?.showInAppReview()
             prefRepository.isAppReviewDone = true

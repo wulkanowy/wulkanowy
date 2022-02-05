@@ -91,16 +91,16 @@ class SyncFragment : PreferenceFragmentCompat(),
     }
 
     override fun showErrorDetailsDialog(error: Throwable) {
-        ErrorDialog.newInstance(error).show(childFragmentManager, error.toString())
+        ErrorDialog.newInstance(error).show(childFragmentManager, "error_details")
     }
 
     override fun onResume() {
         super.onResume()
-        preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        preferenceScreen.sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
     }
 
     override fun onPause() {
         super.onPause()
-        preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        preferenceScreen.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(this)
     }
 }
