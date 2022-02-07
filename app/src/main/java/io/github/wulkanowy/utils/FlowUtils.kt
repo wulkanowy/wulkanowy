@@ -3,16 +3,7 @@ package io.github.wulkanowy.utils
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.mapData
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
@@ -27,22 +18,22 @@ inline fun <ResultType, RequestType> networkBoundResource(
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline filterResult: (ResultType) -> ResultType = { it }
 ) = flow {
-    emit(Resource.loading())
+    emit(Resource.Loading())
 
     val data = query().first()
     emitAll(if (shouldFetch(data)) {
-        if (showSavedOnLoading) emit(Resource.loading(filterResult(data)))
+        if (showSavedOnLoading) emit(Resource.Intermediate(filterResult(data)))
 
         try {
             val newData = fetch(data)
             mutex.withLock { saveFetchResult(query().first(), newData) }
-            query().map { Resource.success(filterResult(it)) }
+            query().map { Resource.Success(filterResult(it)) }
         } catch (throwable: Throwable) {
             onFetchFailed(throwable)
-            query().map { Resource.error(throwable) }
+            query().map { Resource.Error(throwable) }
         }
     } else {
-        query().map { Resource.success(filterResult(it)) }
+        query().map { Resource.Success(filterResult(it)) }
     })
 }
 
@@ -57,42 +48,42 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
     crossinline shouldFetch: (ResultType) -> Boolean = { true },
     crossinline mapResult: (ResultType) -> T
 ) = flow {
-    emit(Resource.loading())
+    emit(Resource.Loading())
 
     val data = query().first()
     emitAll(if (shouldFetch(data)) {
-        if (showSavedOnLoading) emit(Resource.loading(mapResult(data)))
+        if (showSavedOnLoading) emit(Resource.Intermediate(mapResult(data)))
 
         try {
             val newData = fetch(data)
             mutex.withLock { saveFetchResult(query().first(), newData) }
-            query().map { Resource.success(mapResult(it)) }
+            query().map { Resource.Success(mapResult(it)) }
         } catch (throwable: Throwable) {
             onFetchFailed(throwable)
-            query().map { Resource.error(throwable) }
+            query().map { Resource.Error(throwable) }
         }
     } else {
-        query().map { Resource.success(mapResult(it)) }
+        query().map { Resource.Success(mapResult(it)) }
     })
 }
 
 fun <T> flowWithResource(block: suspend () -> T) = flow {
-    emit(Resource.loading())
-    emit(Resource.success(block()))
-}.catch { emit(Resource.error(it)) }
+    emit(Resource.Loading())
+    emit(Resource.Success(block()))
+}.catch { emit(Resource.Error(it)) }
 
 @OptIn(FlowPreview::class)
 fun <T> flowWithResourceIn(block: suspend () -> Flow<Resource<T>>) = flow {
-    emit(Resource.loading())
-    emitAll(block().filter { it is Resource.Intermediate || it !is Resource.Loading})
-}.catch { emit(Resource.error(it)) }
+    emit(Resource.Loading())
+    emitAll(block().filter { it is Resource.Intermediate || it !is Resource.Loading })
+}.catch { emit(Resource.Error(it)) }
 
 fun <T> Flow<Resource<T>>.afterLoading(callback: () -> Unit) = onEach {
     if (it !is Resource.Loading) callback()
 }
 
 fun <T> Flow<Resource<T>>.logStatus(name: String, showData: Boolean = false) = onEach {
-    val desc = when(it) {
+    val desc = when (it) {
         is Resource.Loading -> "started"
         is Resource.Intermediate -> "intermediate data received" + if (showData) " (data: `${it.data}`)" else ""
         is Resource.Success -> "success" + if (showData) " (data: `${it.data}`)" else ""

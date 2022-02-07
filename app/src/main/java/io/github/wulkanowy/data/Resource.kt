@@ -1,15 +1,6 @@
 package io.github.wulkanowy.data
 
 sealed class Resource<T> {
-    companion object {
-        fun <T> success(data: T): Resource<T> = Success(data)
-
-        fun <T> error(error: Throwable): Resource<T> = Error(error)
-
-        fun <T> loading(): Resource<T> = Loading()
-
-        fun <T> loading(data: T): Resource<T> = Intermediate(data)
-    }
 
     open class Loading<T> : Resource<T>() {
         val dataOrNull: T?
@@ -47,8 +38,8 @@ val <T> Resource<T>.isLoading: Boolean
     }
 
 fun <T, U> Resource<T>.mapData(block: (T) -> U) = when (this) {
-    is Resource.Success -> Resource.success(block(this.data))
+    is Resource.Success -> Resource.Success(block(this.data))
     is Resource.Intermediate -> Resource.Intermediate(block(this.data))
-    is Resource.Loading -> Resource.loading()
-    is Resource.Error -> Resource.error(this.error)
+    is Resource.Loading -> Resource.Loading()
+    is Resource.Error -> Resource.Error(this.error)
 }

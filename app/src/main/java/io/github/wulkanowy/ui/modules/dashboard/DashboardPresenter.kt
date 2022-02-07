@@ -228,7 +228,7 @@ class DashboardPresenter @Inject constructor(
             val semester = semesterRepository.getCurrentSemester(student)
             val selectedTiles = preferencesRepository.selectedDashboardTiles
 
-            val flowSuccess = flowOf(Resource.success(null))
+            val flowSuccess = flowOf(Resource.Success(null))
             val luckyNumberFlow = luckyNumberRepository.getLuckyNumber(student, forceRefresh)
                 .mapData {
                     it ?: LuckyNumber(0, LocalDate.now(), 0)

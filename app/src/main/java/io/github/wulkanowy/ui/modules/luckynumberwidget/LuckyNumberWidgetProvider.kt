@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.RemoteViews
+import com.google.android.datatransport.runtime.Destination
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.Resource
@@ -20,7 +21,6 @@ import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.exceptions.NoCurrentStudentException
 import io.github.wulkanowy.data.repositories.LuckyNumberRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
-import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.toFirstResult
@@ -178,13 +178,13 @@ class LuckyNumberWidgetProvider : AppWidgetProvider() {
                 luckyNumberRepository.getLuckyNumber(currentStudent, forceRefresh = false)
                     .toFirstResult()
             } else {
-                Resource.success<LuckyNumber?>(null)
+                Resource.Success<LuckyNumber?>(null)
             }
         } catch (e: Exception) {
             if (e.cause !is NoCurrentStudentException) {
                 Timber.e(e, "An error has occurred in lucky number provider")
             }
-            Resource.error(e)
+            Resource.Error(e)
         }
     }
 
