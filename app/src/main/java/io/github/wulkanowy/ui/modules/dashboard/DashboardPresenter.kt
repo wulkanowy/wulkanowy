@@ -7,13 +7,12 @@ import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.errorOrNull
-import io.github.wulkanowy.data.isLoading
 import io.github.wulkanowy.data.repositories.*
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.calculatePercentage
 import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.mapData
+import io.github.wulkanowy.utils.mapResourceData
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -230,7 +229,7 @@ class DashboardPresenter @Inject constructor(
 
             val flowSuccess = flowOf(Resource.Success(null))
             val luckyNumberFlow = luckyNumberRepository.getLuckyNumber(student, forceRefresh)
-                .mapData {
+                .mapResourceData {
                     it ?: LuckyNumber(0, LocalDate.now(), 0)
                 }
                 .takeIf { DashboardItem.Tile.LUCKY_NUMBER in selectedTiles } ?: flowSuccess
@@ -257,7 +256,7 @@ class DashboardPresenter @Inject constructor(
                 ) { luckyNumberResource, messageResource, attendanceResource ->
                     val resList = listOf(luckyNumberResource, messageResource, attendanceResource)
                     resList.firstNotNullOfOrNull { it.errorOrNull }?.let { throw it }
-                    val isLoading = resList.any { it.isLoading }
+                    val isLoading = resList.any { it is Resource.Loading }
 
                     val luckyNumber = luckyNumberResource.dataOrNull?.luckyNumber
                     val messageCount = messageResource.dataOrNull?.count { it.unread }
@@ -302,7 +301,7 @@ class DashboardPresenter @Inject constructor(
             val semester = semesterRepository.getCurrentSemester(student)
 
             gradeRepository.getGrades(student, semester, forceRefresh)
-        }.mapData { data ->
+        }.mapResourceData { data ->
             val filteredSubjectWithGrades = data.first
                 .filter { it.date >= LocalDate.now().minusDays(7) }
                 .groupBy { it.subject }
@@ -407,7 +406,7 @@ class DashboardPresenter @Inject constructor(
                 end = date,
                 forceRefresh = forceRefresh
             )
-        }.mapData { homework ->
+        }.mapResourceData { homework ->
             val currentDate = LocalDate.now()
 
             val filteredHomework = homework.filter {
@@ -485,7 +484,7 @@ class DashboardPresenter @Inject constructor(
                 forceRefresh = forceRefresh
             )
         }
-            .mapData { exams -> exams.sortedBy { exam -> exam.date } }
+            .mapResourceData { exams -> exams.sortedBy { exam -> exam.date } }
             .onEach {
                 when (it) {
                     is Resource.Loading -> {

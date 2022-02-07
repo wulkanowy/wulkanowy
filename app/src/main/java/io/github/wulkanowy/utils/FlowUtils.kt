@@ -92,36 +92,38 @@ fun <T> Flow<Resource<T>>.logStatus(name: String, showData: Boolean = false) = o
     Timber.i("$name: $desc")
 }
 
-fun <T, U> Flow<Resource<T>>.mapData(block: (T) -> U) = map {
+fun <T, U> Flow<Resource<T>>.mapResourceData(block: (T) -> U) = map {
     it.mapData(block)
 }
 
-fun <T> Flow<Resource<T>>.onData(block: (T) -> Unit) = onEach {
-    it.mapData { data ->
-        block(data)
-        data
+fun <T> Flow<Resource<T>>.onResourceData(block: (T) -> Unit) = onEach {
+    if (it is Resource.Success) {
+        block(it.data)
+    } else if (it is Resource.Intermediate) {
+        block(it.data)
     }
 }
 
-fun <T> Flow<Resource<T>>.onLoading(block: suspend () -> Unit) = onEach {
+fun <T> Flow<Resource<T>>.onResourceLoading(block: suspend () -> Unit) = onEach {
     if (it is Resource.Loading) {
         block()
     }
 }
 
-fun <T> Flow<Resource<T>>.onSuccess(block: suspend (T) -> Unit) = onEach {
+fun <T> Flow<Resource<T>>.onResourceSuccess(block: suspend (T) -> Unit) = onEach {
     if (it is Resource.Success) {
         block(it.data)
     }
 }
 
-fun <T> Flow<Resource<T>>.onError(block: (Throwable) -> Unit) = onEach {
+fun <T> Flow<Resource<T>>.onResourceError(block: (Throwable) -> Unit) = onEach {
     if (it is Resource.Error) {
         block(it.error)
     }
 }
 
-suspend fun <T> Flow<Resource<T>>.toFirstResult() = filter { it !is Resource.Loading }.first()
+suspend fun <T> Flow<Resource<T>>.toFirstResult() =
+    filter { it !is Resource.Loading }.first()
 
 suspend fun <T> Flow<Resource<T>>.waitForResult() =
     takeWhile { it is Resource.Loading }.collect()

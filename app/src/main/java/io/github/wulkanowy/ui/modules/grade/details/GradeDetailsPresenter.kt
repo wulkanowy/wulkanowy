@@ -12,14 +12,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.grade.GradeAverageProvider
 import io.github.wulkanowy.ui.modules.grade.GradeSubject
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.onData
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
@@ -84,8 +77,8 @@ class GradeDetailsPresenter @Inject constructor(
             gradeRepository.updateGrades(unreadGrades.map { it.apply { isRead = true } })
         }
             .logStatus("mark grades as read")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 loadData(currentSemesterId, false)
             }
             .launch("mark")
@@ -140,13 +133,13 @@ class GradeDetailsPresenter @Inject constructor(
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }
             .logStatus("load grade details")
-            .onError(errorHandler::dispatch)
+            .onResourceError(errorHandler::dispatch)
             .onEach {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
                 }
-            }.onData {
+            }.onResourceData {
                 view?.run {
                     showRefresh(true)
                     showErrorView(false)
@@ -160,7 +153,7 @@ class GradeDetailsPresenter @Inject constructor(
                         preferencesRepository.gradeColorTheme
                     )
                 }
-            }.onSuccess {
+            }.onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "grade_details",
@@ -241,7 +234,7 @@ class GradeDetailsPresenter @Inject constructor(
     private fun updateGrade(grade: Grade) {
         flowWithResource { gradeRepository.updateGrade(grade) }
             .logStatus("update grade result ${grade.id}")
-            .onError(errorHandler::dispatch)
+            .onResourceError(errorHandler::dispatch)
             .launch("update")
     }
 }

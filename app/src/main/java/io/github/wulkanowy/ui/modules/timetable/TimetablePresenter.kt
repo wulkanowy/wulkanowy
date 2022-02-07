@@ -9,28 +9,13 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.TimetableRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.capitalise
-import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
-import io.github.wulkanowy.utils.isHolidays
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.nextOrSameSchoolDay
-import io.github.wulkanowy.utils.nextSchoolDay
-import io.github.wulkanowy.utils.onData
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.previousSchoolDay
-import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.time.LocalDate
-import java.time.LocalDate.now
-import java.time.LocalDate.of
-import java.time.LocalDate.ofEpochDay
+import java.time.LocalDate.*
 import javax.inject.Inject
 
 class TimetablePresenter @Inject constructor(
@@ -146,13 +131,13 @@ class TimetablePresenter @Inject constructor(
             )
         }
             .logStatus("load timetable data")
-            .onError(errorHandler::dispatch)
+            .onResourceError(errorHandler::dispatch)
             .onEach {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
                 }
-            }.onData {
+            }.onResourceData {
                 view?.run {
                     showRefresh(true)
                     showErrorView(false)
@@ -163,7 +148,7 @@ class TimetablePresenter @Inject constructor(
                 }
             }.afterLoading {
                 view?.showRefresh(false)
-            }.onSuccess {
+            }.onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "timetable",

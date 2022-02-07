@@ -6,11 +6,7 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -37,8 +33,8 @@ class HomeworkDetailsPresenter @Inject constructor(
     fun deleteHomework(homework: Homework) {
         flowWithResource { homeworkRepository.deleteHomework(homework) }
             .logStatus("homework delete")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 view?.run {
                     showMessage(homeworkDeleteSuccess)
                     closeDialog()
@@ -49,8 +45,8 @@ class HomeworkDetailsPresenter @Inject constructor(
     fun toggleDone(homework: Homework) {
         flowWithResource { homeworkRepository.toggleDone(homework) }
             .logStatus("homework details update")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 view?.updateMarkAsDoneLabel(homework.isDone)
                 analytics.logEvent("homework_mark_as_done")
             }

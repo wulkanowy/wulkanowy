@@ -5,12 +5,7 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.catch
 import timber.log.Timber
 import javax.inject.Inject
@@ -72,8 +67,8 @@ class SchoolPresenter @Inject constructor(
             schoolRepository.getSchoolInfo(student, semester, forceRefresh)
         }
             .logStatus("load school info")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 if (it != null) {
                     view?.run {
                         address = it.address.ifBlank { null }

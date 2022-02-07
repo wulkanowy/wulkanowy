@@ -6,20 +6,7 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
-import io.github.wulkanowy.utils.isHolidays
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.mapData
-import io.github.wulkanowy.utils.monday
-import io.github.wulkanowy.utils.nextOrSameSchoolDay
-import io.github.wulkanowy.utils.onData
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.sunday
-import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -112,8 +99,8 @@ class ExamPresenter @Inject constructor(
             )
         }
             .logStatus("load exam data")
-            .onError(errorHandler::dispatch)
-            .mapData {
+            .onResourceError(errorHandler::dispatch)
+            .mapResourceData {
                 createExamItems(it)
             }.onEach {
                 view?.run {
@@ -121,7 +108,7 @@ class ExamPresenter @Inject constructor(
                     showProgress(false)
                 }
             }
-            .onData {
+            .onResourceData {
                 view?.run {
                     showRefresh(true)
                     showErrorView(false)
@@ -130,7 +117,7 @@ class ExamPresenter @Inject constructor(
                     updateData(it)
                 }
             }
-            .onSuccess {
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "exam",

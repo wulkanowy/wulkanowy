@@ -133,8 +133,8 @@ class AdditionalLessonsPresenter @Inject constructor(
             timetableRepository.getTimetable(student, semester, date, date, forceRefresh, true)
         }
             .logStatus("load additional lessons")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 view?.apply {
                     updateData(it.additional.sortedBy { item -> item.start })
                     showEmpty(it.additional.isEmpty())

@@ -8,20 +8,10 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import timber.log.Timber
@@ -115,7 +105,7 @@ class MessageTabPresenter @Inject constructor(
             messageRepository.getMessages(student, semester, folder, forceRefresh)
         }
             .logStatus("load $folder message")
-            .onError(errorHandler::dispatch)
+            .onResourceError(errorHandler::dispatch)
             .onEach {
                 when (it) {
                     is Resource.Intermediate -> {

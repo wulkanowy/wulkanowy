@@ -9,24 +9,7 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.capitalise
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
-import io.github.wulkanowy.utils.isExcusableOrNotExcused
-import io.github.wulkanowy.utils.isHolidays
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.mapData
-import io.github.wulkanowy.utils.nextSchoolDay
-import io.github.wulkanowy.utils.onData
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onLoading
-import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.previousOrSameSchoolDay
-import io.github.wulkanowy.utils.previousSchoolDay
-import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -233,22 +216,22 @@ class AttendancePresenter @Inject constructor(
             )
         }
             .logStatus("load attendance")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "attendance",
                     "items" to it.size
                 )
-            }.mapData {
+            }.mapResourceData {
                 if (prefRepository.isShowPresent) {
                     it
                 } else {
                     it.filter { item -> !item.presence }
                 }.sortedBy { item -> item.number }
-            }.onLoading {
+            }.onResourceLoading {
                 view?.showExcuseButton(false)
-            }.onData {
+            }.onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showRefresh(true)
@@ -258,7 +241,7 @@ class AttendancePresenter @Inject constructor(
                     showContent(it.isNotEmpty())
                     updateData(it)
                 }
-            }.onSuccess {
+            }.onResourceSuccess {
                 isVulcanExcusedFunctionEnabled = it.any { item -> item.excusable }
                 val anyExcusables = it.any { it.isExcusableOrNotExcused }
                 view?.showExcuseButton(anyExcusables && (isParent || isVulcanExcusedFunctionEnabled))

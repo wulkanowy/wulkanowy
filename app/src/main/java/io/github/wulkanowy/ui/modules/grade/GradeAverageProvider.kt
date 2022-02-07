@@ -12,13 +12,11 @@ import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.ALL_YEAR
-import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.BOTH_SEMESTERS
-import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.ONE_SEMESTER
+import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.*
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
 import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.mapData
+import io.github.wulkanowy.utils.mapResourceData
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -170,7 +168,7 @@ class GradeAverageProvider @Inject constructor(
         val isGradeAverageForceCalc = preferencesRepository.gradeAverageForceCalc
 
         return gradeRepository.getGrades(student, semester, forceRefresh = forceRefresh)
-            .mapData { res ->
+            .mapResourceData { res ->
                 val (details, summaries) = res
                 val isAnyAverage = summaries.any { it.average != .0 }
                 val allGrades = details.groupBy { it.subject }

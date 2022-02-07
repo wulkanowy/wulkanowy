@@ -14,11 +14,7 @@ import io.github.wulkanowy.ui.modules.grade.GradeView
 import io.github.wulkanowy.ui.modules.message.MessageView
 import io.github.wulkanowy.ui.modules.schoolandteachers.SchoolAndTeachersView
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.*
 import timber.log.Timber
 import java.time.Duration
 import java.time.Instant
@@ -78,8 +74,8 @@ class MainPresenter @Inject constructor(
 
         flowWithResource { studentRepository.getSavedStudents(false) }
             .logStatus("load student avatar")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 studentsWitSemesters = it
                 showCurrentStudentAvatar()
             }.launch("avatar")

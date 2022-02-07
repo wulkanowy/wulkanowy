@@ -5,13 +5,7 @@ import io.github.wulkanowy.data.repositories.SchoolAnnouncementRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.onData
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -65,7 +59,7 @@ class SchoolAnnouncementPresenter @Inject constructor(
                     showProgress(false)
                 }
             }
-            .onData {
+            .onResourceData {
                 view?.run {
                     showRefresh(true)
                     showErrorView(false)
@@ -77,13 +71,13 @@ class SchoolAnnouncementPresenter @Inject constructor(
             .afterLoading {
                 view?.showRefresh(false)
             }
-            .onSuccess {
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_school_announcement",
                     "items" to it.size
                 )
             }
-            .onError(errorHandler::dispatch)
+            .onResourceError(errorHandler::dispatch)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

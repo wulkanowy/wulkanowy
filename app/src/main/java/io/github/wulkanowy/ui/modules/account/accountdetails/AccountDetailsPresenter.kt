@@ -8,11 +8,7 @@ import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -54,7 +50,7 @@ class AccountDetailsPresenter @Inject constructor(
     private fun loadData() {
         flowWithResource { studentRepository.getSavedStudentById(studentId ?: -1) }
             .logStatus("loading account details view")
-            .onError(errorHandler::dispatch)
+            .onResourceError(errorHandler::dispatch)
             .onEach {
                 when (it) {
                     is Resource.Loading -> {
@@ -98,8 +94,8 @@ class AccountDetailsPresenter @Inject constructor(
 
         flowWithResource { studentRepository.switchStudent(studentWithSemesters!!) }
             .logStatus("change student")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 view?.recreateMainView()
             }.afterLoading {
                 view?.popViewToMain()
@@ -127,8 +123,8 @@ class AccountDetailsPresenter @Inject constructor(
             return@flowWithResource students
         }
             .logStatus("logout user")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 view?.run {
                     when {
                         it.isEmpty() -> {

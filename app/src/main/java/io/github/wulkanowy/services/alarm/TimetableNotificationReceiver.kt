@@ -18,8 +18,7 @@ import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.getCompatColor
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.toLocalDateTime
+import io.github.wulkanowy.utils.onResourceError
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.launchIn
@@ -69,7 +68,7 @@ class TimetableNotificationReceiver : BroadcastReceiver() {
             } else {
                 Timber.d("Notification studentId($studentId) differs from current(${student.studentId})")
             }
-        }.onError {
+        }.onResourceError {
             Timber.e(it)
         }.launchIn(GlobalScope)
     }

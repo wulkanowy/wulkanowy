@@ -2,13 +2,7 @@ package io.github.wulkanowy.data
 
 sealed class Resource<T> {
 
-    open class Loading<T> : Resource<T>() {
-        val dataOrNull: T?
-            get() = when (this) {
-                is Intermediate -> data
-                else -> null
-            }
-    }
+    open class Loading<T> : Resource<T>()
 
     data class Intermediate<T>(val data: T) : Loading<T>()
 
@@ -29,12 +23,6 @@ val <T> Resource<T>.errorOrNull: Throwable?
     get() = when (this) {
         is Resource.Error -> this.error
         else -> null
-    }
-
-val <T> Resource<T>.isLoading: Boolean
-    get() = when (this) {
-        is Resource.Loading -> true
-        else -> false
     }
 
 fun <T, U> Resource<T>.mapData(block: (T) -> U) = when (this) {

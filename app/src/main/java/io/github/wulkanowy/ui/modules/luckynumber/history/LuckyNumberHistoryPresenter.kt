@@ -5,18 +5,7 @@ import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.getLastSchoolDayIfHoliday
-import io.github.wulkanowy.utils.isHolidays
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.monday
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
-import io.github.wulkanowy.utils.previousOrSameSchoolDay
-import io.github.wulkanowy.utils.sunday
-import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -72,8 +61,8 @@ class LuckyNumberHistoryPresenter @Inject constructor(
             )
         }
             .logStatus("load lucky number history")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 val first = it.first()
                 if (!first.isNullOrEmpty()) {
                     view?.apply {

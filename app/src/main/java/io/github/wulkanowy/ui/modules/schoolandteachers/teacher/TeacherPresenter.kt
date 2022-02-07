@@ -5,12 +5,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.TeacherRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.catch
 import timber.log.Timber
 import javax.inject.Inject
@@ -60,8 +55,8 @@ class TeacherPresenter @Inject constructor(
             teacherRepository.getTeachers(student, semester, forceRefresh)
         }
             .logStatus("load teachers data")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 view?.run {
                     updateData(it.filter { item -> item.name.isNotBlank() })
                     showContent(it.isNotEmpty())

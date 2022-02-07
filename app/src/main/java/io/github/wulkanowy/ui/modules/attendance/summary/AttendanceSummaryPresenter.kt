@@ -8,14 +8,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.repositories.SubjectRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.mapData
-import io.github.wulkanowy.utils.onData
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.time.Month
@@ -93,15 +86,15 @@ class AttendanceSummaryPresenter @Inject constructor(
             )
         }
             .logStatus("load attendance summary")
-            .onError(errorHandler::dispatch)
-            .mapData(this::sortItems)
+            .onResourceError(errorHandler::dispatch)
+            .mapResourceData(this::sortItems)
             .onEach {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
                 }
             }
-            .onData {
+            .onResourceData {
                 view?.run {
                     showRefresh(true)
                     showErrorView(false)
@@ -109,7 +102,7 @@ class AttendanceSummaryPresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     updateDataSet(it)
                 }
-            }.onSuccess {
+            }.onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "attendance_summary",
@@ -143,8 +136,8 @@ class AttendanceSummaryPresenter @Inject constructor(
             subjectRepository.getSubjects(student, semester)
         }
             .logStatus("load attendance summary subjects")
-            .onError(errorHandler::dispatch)
-            .onSuccess {
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess {
                 subjects = it
                 view?.run {
                     view?.updateSubjects(it.map { subject -> subject.name }.toList())

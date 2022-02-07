@@ -6,8 +6,8 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.onError
-import io.github.wulkanowy.utils.onSuccess
+import io.github.wulkanowy.utils.onResourceError
+import io.github.wulkanowy.utils.onResourceSuccess
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,8 +35,8 @@ class AccountPresenter @Inject constructor(
     private fun loadData() {
         flowWithResource { studentRepository.getSavedStudents(false) }
             .logStatus("load account data")
-            .onError(errorHandler::dispatch)
-            .onSuccess { view?.updateData(createAccountItems(it)) }
+            .onResourceError(errorHandler::dispatch)
+            .onResourceSuccess { view?.updateData(createAccountItems(it)) }
             .launch("load")
     }
 
