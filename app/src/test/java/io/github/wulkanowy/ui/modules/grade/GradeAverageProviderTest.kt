@@ -172,9 +172,9 @@ class GradeAverageProviderTest {
         every { preferencesRepository.gradeAverageMode } returns GradeAverageMode.ONE_SEMESTER
         coEvery { semesterRepository.getSemesters(student) } returns semesters
         coEvery { gradeRepository.getGrades(student, semesters[2], true) } returns flow {
-            emit(Resource.loading())
-            emit(Resource.loading(secondGradeWithModifier to secondSummariesWithModifier))
-            emit(Resource.success(secondGradeWithModifier to secondSummariesWithModifier))
+            emit(Resource.Loading())
+            emit(Resource.Intermediate(secondGradeWithModifier to secondSummariesWithModifier))
+            emit(Resource.Success(secondGradeWithModifier to secondSummariesWithModifier))
         }
 
         val items = runBlocking { gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId, true).toList() }
@@ -203,13 +203,13 @@ class GradeAverageProviderTest {
 
         coEvery { semesterRepository.getSemesters(student) } returns semesters
         coEvery { gradeRepository.getGrades(student, semesters[2], false) } returns flow {
-            emit(Resource.loading())
+            emit(Resource.Loading())
             delay(1000)
-            emit(Resource.success(secondGradeWithModifier to secondSummariesWithModifier))
+            emit(Resource.Success(secondGradeWithModifier to secondSummariesWithModifier))
         }
         coEvery { gradeRepository.getGrades(student, semesters[1], false) } returns flow {
-            emit(Resource.loading())
-            emit(Resource.success(secondGradeWithModifier to secondSummariesWithModifier))
+            emit(Resource.Loading())
+            emit(Resource.Success(secondGradeWithModifier to secondSummariesWithModifier))
         }
 
         val items = runBlocking { gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId, false).toList() }
@@ -386,9 +386,9 @@ class GradeAverageProviderTest {
         every { preferencesRepository.gradeAverageMode } returns GradeAverageMode.ALL_YEAR
         coEvery { semesterRepository.getSemesters(student) } returns semesters
         coEvery { gradeRepository.getGrades(student, semesters[1], true) } returns flow {
-            emit(Resource.loading())
-            emit(Resource.loading(firstGrades to firstSummaries))
-            emit(Resource.success(firstGrades to firstSummaries))
+            emit(Resource.Loading())
+            emit(Resource.Intermediate(firstGrades to firstSummaries))
+            emit(Resource.Success(firstGrades to firstSummaries))
         }
 
         val items = runBlocking { gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[1].semesterId, true).toList() }
@@ -442,26 +442,42 @@ class GradeAverageProviderTest {
         every { preferencesRepository.isOptionalArithmeticAverage } returns false
         every { preferencesRepository.gradeAverageForceCalc } returns false
         coEvery { gradeRepository.getGrades(student, semesters[1], true) } returns flow {
-            emit(Resource.loading())
-            emit(Resource.loading(firstGrades to listOf(
-                getSummary(22, "Matematyka", 3.0),
-                getSummary(22, "Fizyka", 3.5)
-            )))
-            emit(Resource.success(firstGrades to listOf(
-                getSummary(22, "Matematyka", 3.0),
-                getSummary(22, "Fizyka", 3.5)
-            )))
+            emit(Resource.Loading())
+            emit(
+                Resource.Intermediate(
+                    firstGrades to listOf(
+                        getSummary(22, "Matematyka", 3.0),
+                        getSummary(22, "Fizyka", 3.5)
+                    )
+                )
+            )
+            emit(
+                Resource.Success(
+                    firstGrades to listOf(
+                        getSummary(22, "Matematyka", 3.0),
+                        getSummary(22, "Fizyka", 3.5)
+                    )
+                )
+            )
         }
         coEvery { gradeRepository.getGrades(student, semesters[2], true) } returns flow {
-            emit(Resource.loading())
-            emit(Resource.loading(secondGrades to listOf(
-                getSummary(22, "Matematyka", 3.5),
-                getSummary(22, "Fizyka", 4.0)
-            )))
-            emit(Resource.success(secondGrades to listOf(
-                getSummary(22, "Matematyka", 3.5),
-                getSummary(22, "Fizyka", 4.0)
-            )))
+            emit(Resource.Loading())
+            emit(
+                Resource.Intermediate(
+                    secondGrades to listOf(
+                        getSummary(22, "Matematyka", 3.5),
+                        getSummary(22, "Fizyka", 4.0)
+                    )
+                )
+            )
+            emit(
+                Resource.Success(
+                    secondGrades to listOf(
+                        getSummary(22, "Matematyka", 3.5),
+                        getSummary(22, "Fizyka", 4.0)
+                    )
+                )
+            )
         }
 
         val items = runBlocking { gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId, true).toList() }
@@ -568,20 +584,28 @@ class GradeAverageProviderTest {
         every { preferencesRepository.gradeAverageMode } returns GradeAverageMode.ALL_YEAR
         coEvery { semesterRepository.getSemesters(student) } returns semesters
         coEvery { gradeRepository.getGrades(student, semesters[1], true) } returns flow {
-            emit(Resource.loading())
-            emit(Resource.loading(firstGrades to firstSummaries))
-            emit(Resource.success(firstGrades to firstSummaries))
+            emit(Resource.Loading())
+            emit(Resource.Intermediate(firstGrades to firstSummaries))
+            emit(Resource.Success(firstGrades to firstSummaries))
         }
         coEvery { gradeRepository.getGrades(student, semesters[2], true) } returns flow {
-            emit(Resource.loading())
-            emit(Resource.loading(secondGrades to listOf(
-                getSummary(22, "Matematyka", 1.1),
-                getSummary(22, "Fizyka", 7.26)
-            )))
-            emit(Resource.success(secondGrades to listOf(
-                getSummary(22, "Matematyka", 1.1),
-                getSummary(22, "Fizyka", 7.26)
-            )))
+            emit(Resource.Loading())
+            emit(
+                Resource.Intermediate(
+                    secondGrades to listOf(
+                        getSummary(22, "Matematyka", 1.1),
+                        getSummary(22, "Fizyka", 7.26)
+                    )
+                )
+            )
+            emit(
+                Resource.Success(
+                    secondGrades to listOf(
+                        getSummary(22, "Matematyka", 1.1),
+                        getSummary(22, "Fizyka", 7.26)
+                    )
+                )
+            )
         }
 
         val items = runBlocking { gradeAverageProvider.getGradesDetailsWithAverage(student, semesters[2].semesterId, true).toList() }
