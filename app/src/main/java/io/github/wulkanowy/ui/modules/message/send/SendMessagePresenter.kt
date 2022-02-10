@@ -156,7 +156,7 @@ class SendMessagePresenter @Inject constructor(
                     errorHandler.dispatch(it.error)
                 }
             }
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.run { showProgress(false) }
             }.launch()
     }

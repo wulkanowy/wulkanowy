@@ -77,13 +77,14 @@ class ExamPresenter @Inject constructor(
         flow {
             val student = studentRepository.getCurrentStudent()
             emit(semesterRepository.getCurrentSemester(student))
-        }.catch {
-            Timber.i("Loading semester result: An exception occurred")
-        }.onEach {
-            baseDate = baseDate.getLastSchoolDayIfHoliday(it.schoolYear)
-            currentDate = baseDate
-            reloadNavigation()
-        }.launch("holidays")
+        }
+            .catch { Timber.i("Loading semester result: An exception occurred") }
+            .onEach {
+                baseDate = baseDate.getLastSchoolDayIfHoliday(it.schoolYear)
+                currentDate = baseDate
+                reloadNavigation()
+            }
+            .launch("holidays")
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
@@ -99,10 +100,8 @@ class ExamPresenter @Inject constructor(
             )
         }
             .logResourceStatus("load exam data")
-            .onResourceError(errorHandler::dispatch)
-            .mapResourceData {
-                createExamItems(it)
-            }.onEach {
+            .mapResourceData { createExamItems(it) }
+            .onEach {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
@@ -124,9 +123,9 @@ class ExamPresenter @Inject constructor(
                     "items" to it.size
                 )
             }
-            .onResourceFinally {
-                view?.showRefresh(false)
-            }.launch()
+            .onResourceError(errorHandler::dispatch)
+            .onResourceNotLoading { view?.showRefresh(false) }
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
@@ -169,7 +168,7 @@ class ExamPresenter @Inject constructor(
             showNextButton(!currentDate.plusDays(7).isHolidays)
             updateNavigationWeek(
                 "${currentDate.monday.toFormattedString("dd.MM")} - " +
-                    currentDate.sunday.toFormattedString("dd.MM")
+                        currentDate.sunday.toFormattedString("dd.MM")
             )
         }
     }

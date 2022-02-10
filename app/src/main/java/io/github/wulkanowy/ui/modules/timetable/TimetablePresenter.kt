@@ -146,7 +146,7 @@ class TimetablePresenter @Inject constructor(
                     updateData(it.lessons)
                     setDayHeaderMessage(it.headers.singleOrNull { header -> header.date == currentDate }?.content)
                 }
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.showRefresh(false)
             }.onResourceSuccess {
                 analytics.logEvent(

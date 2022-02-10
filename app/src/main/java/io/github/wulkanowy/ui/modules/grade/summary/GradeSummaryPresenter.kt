@@ -46,14 +46,15 @@ class GradeSummaryPresenter @Inject constructor(
                     "type" to "grade_summary",
                     "items" to it.size
                 )
-            }.mapResourceData {
-                createGradeSummaryItems(it)
-            }.onEach {
+            }
+            .mapResourceData { createGradeSummaryItems(it) }
+            .onEach {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
                 }
-            }.onResourceData {
+            }
+            .onResourceData {
                 view?.run {
                     showRefresh(true)
                     showErrorView(false)
@@ -61,18 +62,21 @@ class GradeSummaryPresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     updateData(it)
                 }
-            }.onResourceSuccess {
+            }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "conferences",
                     "items" to it.size
                 )
-            }.onResourceFinally {
+            }
+            .onResourceNotLoading {
                 view?.run {
                     showRefresh(false)
                     notifyParentDataLoaded(semesterId)
                 }
-            }.launch()
+            }
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
@@ -139,9 +143,9 @@ class GradeSummaryPresenter @Inject constructor(
     private fun checkEmpty(gradeSummary: GradeSubject): Boolean {
         return gradeSummary.run {
             summary.finalGrade.isBlank()
-                && summary.predictedGrade.isBlank()
-                && average == .0
-                && points.isBlank()
+                    && summary.predictedGrade.isBlank()
+                    && average == .0
+                    && points.isBlank()
         }
     }
 }

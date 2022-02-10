@@ -85,7 +85,7 @@ class SchoolPresenter @Inject constructor(
                     showEmpty(isViewEmpty)
                     showErrorView(false)
                 }
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.run {
                     hideRefresh()
                     showProgress(false)

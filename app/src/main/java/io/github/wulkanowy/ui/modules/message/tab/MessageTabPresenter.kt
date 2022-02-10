@@ -155,7 +155,7 @@ class MessageTabPresenter @Inject constructor(
                     else -> {}
                 }
             }
-            .onResourceFinally {
+            .onResourceNotLoading {
                 view?.run {
                     showRefresh(false)
                     showProgress(false)

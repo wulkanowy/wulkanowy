@@ -79,7 +79,7 @@ class MessagePreviewPresenter @Inject constructor(
                 retryCallback = { onMessageLoadRetry(message) }
                 errorHandler.dispatch(it)
             }
-            .onResourceFinally { view?.showProgress(false) }
+            .onResourceNotLoading { view?.showProgress(false) }
             .launch()
     }
 

@@ -146,7 +146,7 @@ class AdditionalLessonsPresenter @Inject constructor(
                     "type" to "additional_lessons",
                     "items" to it.additional.size
                 )
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.run {
                     hideRefresh()
                     showProgress(false)

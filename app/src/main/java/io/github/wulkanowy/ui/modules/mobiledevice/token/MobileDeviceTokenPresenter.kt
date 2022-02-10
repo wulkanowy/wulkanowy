@@ -46,7 +46,7 @@ class MobileDeviceTokenPresenter @Inject constructor(
                 view?.closeDialog()
                 errorHandler.dispatch(it)
             }
-            .onResourceFinally { view?.hideLoading() }
+            .onResourceNotLoading { view?.hideLoading() }
             .launch()
     }
 }

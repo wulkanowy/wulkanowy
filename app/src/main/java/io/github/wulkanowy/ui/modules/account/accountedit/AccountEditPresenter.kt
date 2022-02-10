@@ -34,9 +34,7 @@ class AccountEditPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        resourceFlow {
-            studentRepository.getStudentById(student.id, false).avatarColor
-        }
+        resourceFlow { studentRepository.getStudentById(student.id, false).avatarColor }
             .logResourceStatus("load student")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess { view?.updateSelectedColorData(it.toInt()) }
@@ -55,7 +53,7 @@ class AccountEditPresenter @Inject constructor(
             .logResourceStatus("change student nick and avatar")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess { view?.recreateMainView() }
-            .onResourceFinally { view?.popView() }
+            .onResourceNotLoading { view?.popView() }
             .launch("update_student")
     }
 }

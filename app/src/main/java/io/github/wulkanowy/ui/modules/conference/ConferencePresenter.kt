@@ -68,15 +68,14 @@ class ConferencePresenter @Inject constructor(
         }
             .logResourceStatus("load conference data")
             .onResourceError(errorHandler::dispatch)
-            .mapResourceData {
-                it.sortedByDescending { conference -> conference.date }
-            }
+            .mapResourceData { it.sortedByDescending { conference -> conference.date } }
             .onEach {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
                 }
-            }.onResourceData {
+            }
+            .onResourceData {
                 view?.run {
                     showRefresh(true)
                     showErrorView(false)
@@ -84,14 +83,15 @@ class ConferencePresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     updateData(it)
                 }
-            }.onResourceSuccess {
+            }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "conferences",
                     "items" to it.size
                 )
-            }.onResourceFinally {
-                view?.showRefresh(false)
-            }.launch()
+            }
+            .onResourceNotLoading { view?.showRefresh(false) }
+            .launch()
     }
 }

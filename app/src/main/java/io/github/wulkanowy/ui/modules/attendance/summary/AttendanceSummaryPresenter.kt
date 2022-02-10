@@ -109,7 +109,7 @@ class AttendanceSummaryPresenter @Inject constructor(
                     "items" to it.size,
                     "item_id" to subjectId
                 )
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.showRefresh(false)
             }.launch()
     }

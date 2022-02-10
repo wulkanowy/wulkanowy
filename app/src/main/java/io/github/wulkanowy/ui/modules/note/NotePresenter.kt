@@ -71,7 +71,7 @@ class NotePresenter @Inject constructor(
                     updateData(it)
                 }
             }
-            .onResourceFinally {
+            .onResourceNotLoading {
                 view?.showRefresh(false)
             }
             .onResourceSuccess {

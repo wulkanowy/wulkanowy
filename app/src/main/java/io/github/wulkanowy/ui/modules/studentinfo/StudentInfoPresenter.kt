@@ -98,7 +98,7 @@ class StudentInfoPresenter @Inject constructor(
                         showErrorView(false)
                     }
                 }
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.run {
                     hideRefresh()
                     showProgress(false)

@@ -43,12 +43,13 @@ class LuckyNumberHistoryPresenter @Inject constructor(
         flow {
             val student = studentRepository.getCurrentStudent()
             emit(semesterRepository.getCurrentSemester(student))
-        }.catch {
-            Timber.i("Loading semester result: An exception occurred")
-        }.onEach {
-            currentDate = currentDate.getLastSchoolDayIfHoliday(it.schoolYear)
-            reloadNavigation()
-        }.launch("holidays")
+        }
+            .catch { Timber.i("Loading semester result: An exception occurred") }
+            .onEach {
+                currentDate = currentDate.getLastSchoolDayIfHoliday(it.schoolYear)
+                reloadNavigation()
+            }
+            .launch("holidays")
     }
 
     private fun loadData() {
@@ -84,7 +85,7 @@ class LuckyNumberHistoryPresenter @Inject constructor(
                         showErrorView(false)
                     }
                 }
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.run {
                     showProgress(false)
                 }
@@ -133,7 +134,7 @@ class LuckyNumberHistoryPresenter @Inject constructor(
             showNextButton(!currentDate.plusDays(7).isHolidays)
             updateNavigationWeek(
                 "${currentDate.monday.toFormattedString("dd.MM")} - " +
-                    currentDate.sunday.toFormattedString("dd.MM")
+                        currentDate.sunday.toFormattedString("dd.MM")
             )
         }
     }

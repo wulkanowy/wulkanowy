@@ -74,7 +74,7 @@ class MobileDevicePresenter @Inject constructor(
                     "type" to "devices",
                     "items" to it.size
                 )
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.showRefresh(false)
             }.launch()
     }

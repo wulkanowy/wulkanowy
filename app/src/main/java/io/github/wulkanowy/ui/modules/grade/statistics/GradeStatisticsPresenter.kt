@@ -216,7 +216,7 @@ class GradeStatisticsPresenter @Inject constructor(
                         preferencesRepository.showAllSubjectsOnStatisticsList
                     )
                 }
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.run {
                     showRefresh(false)
                     notifyParentDataLoaded(semesterId)

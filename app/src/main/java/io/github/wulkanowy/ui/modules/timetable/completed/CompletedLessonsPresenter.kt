@@ -128,7 +128,7 @@ class CompletedLessonsPresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     updateData(it)
                 }
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.showRefresh(false)
             }.onResourceSuccess {
                 analytics.logEvent(

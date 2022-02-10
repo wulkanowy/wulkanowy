@@ -245,7 +245,7 @@ class AttendancePresenter @Inject constructor(
                 isVulcanExcusedFunctionEnabled = it.any { item -> item.excusable }
                 val anyExcusables = it.any { it.isExcusableOrNotExcused }
                 view?.showExcuseButton(anyExcusables && (isParent || isVulcanExcusedFunctionEnabled))
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.run {
                     showRefresh(false)
                     showProgress(false)

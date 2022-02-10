@@ -33,7 +33,8 @@ class LuckyNumberPresenter @Inject constructor(
         flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             luckyNumberRepository.getLuckyNumber(student, forceRefresh)
-        }.logResourceStatus("load lucky number")
+        }
+            .logResourceStatus("load lucky number")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 if (it != null) {
@@ -55,13 +56,15 @@ class LuckyNumberPresenter @Inject constructor(
                         showErrorView(false)
                     }
                 }
-            }.onResourceFinally {
+            }
+            .onResourceNotLoading {
                 view?.run {
                     hideRefresh()
                     showProgress(false)
                     enableSwipe(true)
                 }
-            }.launch()
+            }
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

@@ -159,7 +159,7 @@ class GradeDetailsPresenter @Inject constructor(
                     "type" to "grade_details",
                     "items" to it.size
                 )
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.run {
                     showRefresh(false)
                     notifyParentDataLoaded(semesterId)

@@ -7,7 +7,7 @@ import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.ifNullOrBlank
-import io.github.wulkanowy.utils.onResourceFinally
+import io.github.wulkanowy.utils.onResourceNotLoading
 import io.github.wulkanowy.utils.resourceFlow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -98,7 +98,7 @@ class LoginSymbolPresenter @Inject constructor(
                     view?.showContact(true)
                 }
             }
-        }.onResourceFinally {
+        }.onResourceNotLoading {
             view?.apply {
                 showProgress(false)
                 showContent(true)

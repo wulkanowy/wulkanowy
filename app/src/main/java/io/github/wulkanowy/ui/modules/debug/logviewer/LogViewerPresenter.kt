@@ -23,19 +23,21 @@ class LogViewerPresenter @Inject constructor(
     }
 
     fun onShareLogsSelected(): Boolean {
-        resourceFlow { loggerRepository.getLogFiles() }.onEach {
-            when (it) {
-                is Resource.Loading -> Timber.d("Loading logs files started")
-                is Resource.Success -> {
-                    Timber.i("Loading logs files result: ${it.data.joinToString { file -> file.name }}")
-                    view?.shareLogs(it.data)
-                }
-                is Resource.Error -> {
-                    Timber.i("Loading logs files result: An exception occurred")
-                    errorHandler.dispatch(it.error)
+        resourceFlow { loggerRepository.getLogFiles() }
+            .onEach {
+                when (it) {
+                    is Resource.Loading -> Timber.d("Loading logs files started")
+                    is Resource.Success -> {
+                        Timber.i("Loading logs files result: ${it.data.joinToString { file -> file.name }}")
+                        view?.shareLogs(it.data)
+                    }
+                    is Resource.Error -> {
+                        Timber.i("Loading logs files result: An exception occurred")
+                        errorHandler.dispatch(it.error)
+                    }
                 }
             }
-        }.launch("share")
+            .launch("share")
         return true
     }
 
@@ -44,18 +46,20 @@ class LogViewerPresenter @Inject constructor(
     }
 
     private fun loadLogFile() {
-        resourceFlow { loggerRepository.getLastLogLines() }.onEach {
-            when (it) {
-                is Resource.Loading -> Timber.d("Loading last log file started")
-                is Resource.Success -> {
-                    Timber.i("Loading last log file result: load ${it.data.size} lines")
-                    view?.setLines(it.data)
-                }
-                is Resource.Error -> {
-                    Timber.i("Loading last log file result: An exception occurred")
-                    errorHandler.dispatch(it.error)
+        resourceFlow { loggerRepository.getLastLogLines() }
+            .onEach {
+                when (it) {
+                    is Resource.Loading -> Timber.d("Loading last log file started")
+                    is Resource.Success -> {
+                        Timber.i("Loading last log file result: load ${it.data.size} lines")
+                        view?.setLines(it.data)
+                    }
+                    is Resource.Error -> {
+                        Timber.i("Loading last log file result: An exception occurred")
+                        errorHandler.dispatch(it.error)
+                    }
                 }
             }
-        }.launch("file")
+            .launch("file")
     }
 }

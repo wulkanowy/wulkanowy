@@ -133,7 +133,7 @@ class LoginFormPresenter @Inject constructor(
                     view?.showContact(true)
                 }
             }
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.apply {
                     showProgress(false)
                     showContent(true)

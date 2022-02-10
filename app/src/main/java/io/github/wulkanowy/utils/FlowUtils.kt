@@ -118,7 +118,7 @@ fun <T> Flow<Resource<T>>.onResourceError(block: (Throwable) -> Unit) = onEach {
     }
 }
 
-fun <T> Flow<Resource<T>>.onResourceFinally(block: () -> Unit) = onEach {
+fun <T> Flow<Resource<T>>.onResourceNotLoading(block: () -> Unit) = onEach {
     if (it !is Resource.Loading) {
         block()
     }

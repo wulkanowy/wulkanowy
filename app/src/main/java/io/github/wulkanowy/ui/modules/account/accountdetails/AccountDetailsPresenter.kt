@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.account.accountdetails
 
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
 import io.github.wulkanowy.data.repositories.StudentRepository
@@ -9,7 +8,6 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.studentinfo.StudentInfoView
 import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -51,27 +49,22 @@ class AccountDetailsPresenter @Inject constructor(
         resourceFlow { studentRepository.getSavedStudentById(studentId ?: -1) }
             .logResourceStatus("loading account details view")
             .onResourceError(errorHandler::dispatch)
-            .onEach {
-                when (it) {
-                    is Resource.Loading -> {
-                        view?.run {
-                            showProgress(true)
-                            showContent(false)
-                        }
-                    }
-                    is Resource.Success -> {
-                        studentWithSemesters = it.data
-                        view?.run {
-                            showAccountData(studentWithSemesters!!.student)
-                            enableSelectStudentButton(!studentWithSemesters!!.student.isCurrent)
-                            showContent(true)
-                            showErrorView(false)
-                        }
-                    }
-                    else -> Unit
+            .onResourceLoading {
+                view?.run {
+                    showProgress(true)
+                    showContent(false)
                 }
             }
-            .onResourceFinally { view?.showProgress(false) }
+            .onResourceSuccess {
+                studentWithSemesters = it
+                view?.run {
+                    showAccountData(studentWithSemesters!!.student)
+                    enableSelectStudentButton(!studentWithSemesters!!.student.isCurrent)
+                    showContent(true)
+                    showErrorView(false)
+                }
+            }
+            .onResourceNotLoading { view?.showProgress(false) }
             .launch()
     }
 
@@ -95,11 +88,9 @@ class AccountDetailsPresenter @Inject constructor(
         resourceFlow { studentRepository.switchStudent(studentWithSemesters!!) }
             .logResourceStatus("change student")
             .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
-                view?.recreateMainView()
-            }.onResourceFinally {
-                view?.popViewToMain()
-            }.launch("switch")
+            .onResourceSuccess { view?.recreateMainView() }
+            .onResourceNotLoading { view?.popViewToMain() }
+            .launch("switch")
     }
 
     fun onRemoveSelected() {
@@ -143,7 +134,7 @@ class AccountDetailsPresenter @Inject constructor(
                     }
                 }
             }
-            .onResourceFinally {
+            .onResourceNotLoading {
                 if (studentWithSemesters?.student?.isCurrent == true) {
                     view?.popViewToMain()
                 } else {

@@ -6,7 +6,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.ifNullOrBlank
-import io.github.wulkanowy.utils.onResourceFinally
+import io.github.wulkanowy.utils.onResourceNotLoading
 import io.github.wulkanowy.utils.resourceFlow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -141,7 +141,7 @@ class LoginRecoverPresenter @Inject constructor(
                     )
                 }
             }
-        }.onResourceFinally {
+        }.onResourceNotLoading {
             view?.showProgress(false)
         }.launch("verified")
     }

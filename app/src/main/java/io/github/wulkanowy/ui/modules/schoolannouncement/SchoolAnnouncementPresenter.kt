@@ -68,7 +68,7 @@ class SchoolAnnouncementPresenter @Inject constructor(
                     updateData(it)
                 }
             }
-            .onResourceFinally {
+            .onResourceNotLoading {
                 view?.showRefresh(false)
             }
             .onResourceSuccess {

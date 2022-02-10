@@ -301,54 +301,57 @@ class DashboardPresenter @Inject constructor(
             val semester = semesterRepository.getCurrentSemester(student)
 
             gradeRepository.getGrades(student, semester, forceRefresh)
-        }.mapResourceData { data ->
-            val filteredSubjectWithGrades = data.first
-                .filter { it.date >= LocalDate.now().minusDays(7) }
-                .groupBy { it.subject }
-                .mapValues { entry ->
-                    entry.value
-                        .take(5)
-                        .sortedByDescending { it.date }
-                }
-                .toList()
-                .sortedByDescending { (_, grades) -> grades[0].date }
-                .toMap()
+        }
+            .mapResourceData { data ->
+                val filteredSubjectWithGrades = data.first
+                    .filter { it.date >= LocalDate.now().minusDays(7) }
+                    .groupBy { it.subject }
+                    .mapValues { entry ->
+                        entry.value
+                            .take(5)
+                            .sortedByDescending { it.date }
+                    }
+                    .toList()
+                    .sortedByDescending { (_, grades) -> grades[0].date }
+                    .toMap()
 
-            filteredSubjectWithGrades
-        }.onEach {
-            when (it) {
-                is Resource.Loading -> {
-                    Timber.i("Loading dashboard grades data started")
-                    if (forceRefresh) return@onEach
-                    updateData(
-                        DashboardItem.Grades(
-                            subjectWithGrades = it.dataOrNull,
-                            gradeTheme = preferencesRepository.gradeColorTheme,
-                            isLoading = true
-                        ), forceRefresh
-                    )
+                filteredSubjectWithGrades
+            }
+            .onEach {
+                when (it) {
+                    is Resource.Loading -> {
+                        Timber.i("Loading dashboard grades data started")
+                        if (forceRefresh) return@onEach
+                        updateData(
+                            DashboardItem.Grades(
+                                subjectWithGrades = it.dataOrNull,
+                                gradeTheme = preferencesRepository.gradeColorTheme,
+                                isLoading = true
+                            ), forceRefresh
+                        )
 
-                    if (!it.dataOrNull.isNullOrEmpty()) {
-                        firstLoadedItemList += DashboardItem.Type.GRADES
+                        if (!it.dataOrNull.isNullOrEmpty()) {
+                            firstLoadedItemList += DashboardItem.Type.GRADES
+                        }
+                    }
+                    is Resource.Success -> {
+                        Timber.i("Loading dashboard grades result: Success")
+                        updateData(
+                            DashboardItem.Grades(
+                                subjectWithGrades = it.data,
+                                gradeTheme = preferencesRepository.gradeColorTheme
+                            ),
+                            forceRefresh
+                        )
+                    }
+                    is Resource.Error -> {
+                        Timber.i("Loading dashboard grades result: An exception occurred")
+                        errorHandler.dispatch(it.error)
+                        updateData(DashboardItem.Grades(error = it.error), forceRefresh)
                     }
                 }
-                is Resource.Success -> {
-                    Timber.i("Loading dashboard grades result: Success")
-                    updateData(
-                        DashboardItem.Grades(
-                            subjectWithGrades = it.data,
-                            gradeTheme = preferencesRepository.gradeColorTheme
-                        ),
-                        forceRefresh
-                    )
-                }
-                is Resource.Error -> {
-                    Timber.i("Loading dashboard grades result: An exception occurred")
-                    errorHandler.dispatch(it.error)
-                    updateData(DashboardItem.Grades(error = it.error), forceRefresh)
-                }
             }
-        }.launchWithUniqueRefreshJob("dashboard_grades", forceRefresh)
+            .launchWithUniqueRefreshJob("dashboard_grades", forceRefresh)
     }
 
     private fun loadLessons(student: Student, forceRefresh: Boolean) {

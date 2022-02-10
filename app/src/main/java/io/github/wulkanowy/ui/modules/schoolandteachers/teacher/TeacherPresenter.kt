@@ -68,7 +68,7 @@ class TeacherPresenter @Inject constructor(
                     "type" to "teachers",
                     "items" to it.size
                 )
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.run {
                     hideRefresh()
                     showProgress(false)

@@ -161,7 +161,7 @@ class LoginAdvancedPresenter @Inject constructor(
                         loginErrorHandler.dispatch(it.error)
                     }
                 }
-            }.onResourceFinally {
+            }.onResourceNotLoading {
                 view?.apply {
                     showProgress(false)
                     showContent(true)
