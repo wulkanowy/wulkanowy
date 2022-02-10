@@ -4,23 +4,13 @@ import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.pojos.MessageDraft
-import io.github.wulkanowy.data.repositories.MessageRepository
-import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.github.wulkanowy.data.repositories.RecipientRepository
-import io.github.wulkanowy.data.repositories.ReportingUnitRepository
-import io.github.wulkanowy.data.repositories.SemesterRepository
-import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.repositories.*
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.toFormattedString
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.onEach
@@ -112,7 +102,7 @@ class SendMessagePresenter @Inject constructor(
     }
 
     private fun loadData(message: Message?, reply: Boolean?) {
-        flowWithResource {
+        resourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             val unit = reportingUnitRepository.getReportingUnit(student, semester.unitId)
@@ -126,14 +116,20 @@ class SendMessagePresenter @Inject constructor(
 
             Timber.i("Loading message recipients started")
             val messageRecipients = when {
-                message != null && reply == true -> recipientRepository.getMessageRecipients(student, message)
+                message != null && reply == true -> recipientRepository.getMessageRecipients(
+                    student,
+                    message
+                )
                 else -> emptyList()
             }.let { createChips(it) }
-            Timber.i("Loaded message recipients to reply result: Success, fetched %d recipients", messageRecipients.size)
+            Timber.i(
+                "Loaded message recipients to reply result: Success, fetched %d recipients",
+                messageRecipients.size
+            )
 
             Triple(unit, recipients, messageRecipients)
         }
-            .logStatus("load recipients")
+            .logResourceStatus("load recipients")
             .onEach {
             when (it) {
                 is Resource.Loading -> view?.run {
@@ -160,16 +156,16 @@ class SendMessagePresenter @Inject constructor(
                     errorHandler.dispatch(it.error)
                 }
             }
-        }.afterLoading {
-            view?.run { showProgress(false) }
-        }.launch()
+            }.onResourceFinally {
+                view?.run { showProgress(false) }
+            }.launch()
     }
 
     private fun sendMessage(subject: String, content: String, recipients: List<Recipient>) {
-        flowWithResource {
+        resourceFlow {
             val student = studentRepository.getCurrentStudent()
             messageRepository.sendMessage(student, subject, content, recipients)
-        }.logStatus("sending message").onEach {
+        }.logResourceStatus("sending message").onEach {
             when (it) {
                 is Resource.Loading -> view?.run {
                     showSoftInput(false)

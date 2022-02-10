@@ -99,12 +99,12 @@ class MessageTabPresenter @Inject constructor(
     ) {
         Timber.i("Loading $folder message data started")
 
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             messageRepository.getMessages(student, semester, folder, forceRefresh)
         }
-            .logStatus("load $folder message")
+            .logResourceStatus("load $folder message")
             .onResourceError(errorHandler::dispatch)
             .onEach {
                 when (it) {
@@ -152,18 +152,22 @@ class MessageTabPresenter @Inject constructor(
                             "folder" to folder.name
                         )
                     }
+                    else -> {}
                 }
-            }.afterLoading {
+            }
+            .onResourceFinally {
                 view?.run {
                     showRefresh(false)
                     showProgress(false)
                     enableSwipe(true)
                     notifyParentDataLoaded()
                 }
-            }.catch {
+            }
+            .catch {
                 errorHandler.dispatch(it)
                 view?.notifyParentDataLoaded()
-            }.launch()
+            }
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

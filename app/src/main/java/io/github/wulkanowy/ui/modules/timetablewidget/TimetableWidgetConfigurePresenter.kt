@@ -8,7 +8,7 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getStudentWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getThemeWidgetKey
-import io.github.wulkanowy.utils.flowWithResource
+import io.github.wulkanowy.utils.resourceFlow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -56,7 +56,7 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
     }
 
     private fun loadData() {
-        flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
+        resourceFlow { studentRepository.getSavedStudents(false) }.onEach {
             when (it) {
                 is Resource.Loading -> Timber.d("Timetable widget configure students data load")
                 is Resource.Success -> {

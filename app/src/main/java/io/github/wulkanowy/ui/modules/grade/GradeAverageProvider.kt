@@ -15,7 +15,7 @@ import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.*
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
-import io.github.wulkanowy.utils.flowWithResourceIn
+import io.github.wulkanowy.utils.flatResourceFlow
 import io.github.wulkanowy.utils.mapResourceData
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -37,7 +37,7 @@ class GradeAverageProvider @Inject constructor(
     private val isOptionalArithmeticAverage get() = preferencesRepository.isOptionalArithmeticAverage
 
     fun getGradesDetailsWithAverage(student: Student, semesterId: Int, forceRefresh: Boolean) =
-        flowWithResourceIn {
+        flatResourceFlow {
             val semesters = semesterRepository.getSemesters(student)
 
             when (preferencesRepository.gradeAverageMode) {

@@ -67,29 +67,25 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
     })
 }
 
-fun <T> flowWithResource(block: suspend () -> T) = flow {
+fun <T> resourceFlow(block: suspend () -> T) = flow {
     emit(Resource.Loading())
     emit(Resource.Success(block()))
 }.catch { emit(Resource.Error(it)) }
 
 @OptIn(FlowPreview::class)
-fun <T> flowWithResourceIn(block: suspend () -> Flow<Resource<T>>) = flow {
+fun <T> flatResourceFlow(block: suspend () -> Flow<Resource<T>>) = flow {
     emit(Resource.Loading())
     emitAll(block().filter { it is Resource.Intermediate || it !is Resource.Loading })
 }.catch { emit(Resource.Error(it)) }
 
-fun <T> Flow<Resource<T>>.afterLoading(callback: () -> Unit) = onEach {
-    if (it !is Resource.Loading) callback()
-}
-
-fun <T> Flow<Resource<T>>.logStatus(name: String, showData: Boolean = false) = onEach {
-    val desc = when (it) {
+fun <T> Flow<Resource<T>>.logResourceStatus(name: String, showData: Boolean = false) = onEach {
+    val description = when (it) {
         is Resource.Loading -> "started"
         is Resource.Intermediate -> "intermediate data received" + if (showData) " (data: `${it.data}`)" else ""
         is Resource.Success -> "success" + if (showData) " (data: `${it.data}`)" else ""
         is Resource.Error -> "exception occurred: ${it.error}"
     }
-    Timber.i("$name: $desc")
+    Timber.i("$name: $description")
 }
 
 fun <T, U> Flow<Resource<T>>.mapResourceData(block: (T) -> U) = map {
@@ -119,6 +115,12 @@ fun <T> Flow<Resource<T>>.onResourceSuccess(block: suspend (T) -> Unit) = onEach
 fun <T> Flow<Resource<T>>.onResourceError(block: (Throwable) -> Unit) = onEach {
     if (it is Resource.Error) {
         block(it.error)
+    }
+}
+
+fun <T> Flow<Resource<T>>.onResourceFinally(block: () -> Unit) = onEach {
+    if (it !is Resource.Loading) {
+        block()
     }
 }
 

@@ -94,11 +94,11 @@ class GradePresenter @Inject constructor(
     }
 
     private fun loadData() {
-        flowWithResource {
+        resourceFlow {
             val student = studentRepository.getCurrentStudent()
             semesterRepository.getSemesters(student, refreshOnNoCurrent = true)
         }
-            .logStatus("load grade data")
+            .logResourceStatus("load grade data")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 val current = it.getCurrentOrLast()

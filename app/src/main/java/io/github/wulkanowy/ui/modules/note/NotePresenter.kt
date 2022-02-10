@@ -48,12 +48,12 @@ class NotePresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             noteRepository.getNotes(student, semester, forceRefresh)
         }
-            .logStatus("load note data")
+            .logResourceStatus("load note data")
             .onResourceError(errorHandler::dispatch)
             .mapResourceData {
                 it.sortedByDescending { note -> note.date }
@@ -71,7 +71,7 @@ class NotePresenter @Inject constructor(
                     updateData(it)
                 }
             }
-            .afterLoading {
+            .onResourceFinally {
                 view?.showRefresh(false)
             }
             .onResourceSuccess {
@@ -107,7 +107,7 @@ class NotePresenter @Inject constructor(
     }
 
     private fun updateNote(note: Note) {
-        flowWithResource { noteRepository.updateNote(note) }
+        resourceFlow { noteRepository.updateNote(note) }
             .onEach {
                 when (it) {
                     is Resource.Loading -> Timber.i("Attempt to update note ${note.id}")

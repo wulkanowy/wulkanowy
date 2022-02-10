@@ -67,7 +67,7 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     fun onMarkAsReadSelected(): Boolean {
-        flowWithResource {
+        resourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semesters = semesterRepository.getSemesters(student)
             val semester = semesters.first { item -> item.semesterId == currentSemesterId }
@@ -76,7 +76,7 @@ class GradeDetailsPresenter @Inject constructor(
             Timber.i("Mark as read ${unreadGrades.size} grades")
             gradeRepository.updateGrades(unreadGrades.map { it.apply { isRead = true } })
         }
-            .logStatus("mark grades as read")
+            .logResourceStatus("mark grades as read")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 loadData(currentSemesterId, false)
@@ -128,11 +128,11 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     private fun loadData(semesterId: Int, forceRefresh: Boolean) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }
-            .logStatus("load grade details")
+            .logResourceStatus("load grade details")
             .onResourceError(errorHandler::dispatch)
             .onEach {
                 view?.run {
@@ -159,7 +159,7 @@ class GradeDetailsPresenter @Inject constructor(
                     "type" to "grade_details",
                     "items" to it.size
                 )
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.run {
                     showRefresh(false)
                     notifyParentDataLoaded(semesterId)
@@ -232,8 +232,8 @@ class GradeDetailsPresenter @Inject constructor(
     }
 
     private fun updateGrade(grade: Grade) {
-        flowWithResource { gradeRepository.updateGrade(grade) }
-            .logStatus("update grade result ${grade.id}")
+        resourceFlow { gradeRepository.updateGrade(grade) }
+            .logResourceStatus("update grade result ${grade.id}")
             .onResourceError(errorHandler::dispatch)
             .launch("update")
     }

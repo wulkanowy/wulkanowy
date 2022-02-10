@@ -202,7 +202,7 @@ class AttendancePresenter @Inject constructor(
 
         var isParent = false
 
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             isParent = student.isParent
 
@@ -215,7 +215,7 @@ class AttendancePresenter @Inject constructor(
                 forceRefresh
             )
         }
-            .logStatus("load attendance")
+            .logResourceStatus("load attendance")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 analytics.logEvent(
@@ -245,7 +245,7 @@ class AttendancePresenter @Inject constructor(
                 isVulcanExcusedFunctionEnabled = it.any { item -> item.excusable }
                 val anyExcusables = it.any { it.isExcusableOrNotExcused }
                 view?.showExcuseButton(anyExcusables && (isParent || isVulcanExcusedFunctionEnabled))
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.run {
                     showRefresh(false)
                     showProgress(false)
@@ -255,7 +255,7 @@ class AttendancePresenter @Inject constructor(
     }
 
     private fun excuseAbsence(reason: String?, toExcuseList: List<Attendance>) {
-        flowWithResource {
+        resourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             attendanceRepository.excuseForAbsence(student, semester, toExcuseList, reason)

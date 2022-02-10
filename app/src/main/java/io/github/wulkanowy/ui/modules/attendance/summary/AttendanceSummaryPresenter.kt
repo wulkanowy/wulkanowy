@@ -74,7 +74,7 @@ class AttendanceSummaryPresenter @Inject constructor(
     private fun loadData(subjectId: Int, forceRefresh: Boolean = false) {
         currentSubjectId = subjectId
 
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
 
@@ -85,7 +85,7 @@ class AttendanceSummaryPresenter @Inject constructor(
                 forceRefresh = forceRefresh
             )
         }
-            .logStatus("load attendance summary")
+            .logResourceStatus("load attendance summary")
             .onResourceError(errorHandler::dispatch)
             .mapResourceData(this::sortItems)
             .onEach {
@@ -109,7 +109,7 @@ class AttendanceSummaryPresenter @Inject constructor(
                     "items" to it.size,
                     "item_id" to subjectId
                 )
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.showRefresh(false)
             }.launch()
     }
@@ -130,12 +130,12 @@ class AttendanceSummaryPresenter @Inject constructor(
     }
 
     private fun loadSubjects() {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             subjectRepository.getSubjects(student, semester)
         }
-            .logStatus("load attendance summary subjects")
+            .logResourceStatus("load attendance summary subjects")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 subjects = it

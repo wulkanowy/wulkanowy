@@ -61,12 +61,12 @@ class ConferencePresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             conferenceRepository.getConferences(student, semester, forceRefresh)
         }
-            .logStatus("load conference data")
+            .logResourceStatus("load conference data")
             .onResourceError(errorHandler::dispatch)
             .mapResourceData {
                 it.sortedByDescending { conference -> conference.date }
@@ -90,7 +90,7 @@ class ConferencePresenter @Inject constructor(
                     "type" to "conferences",
                     "items" to it.size
                 )
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.showRefresh(false)
             }.launch()
     }

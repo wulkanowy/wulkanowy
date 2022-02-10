@@ -118,12 +118,12 @@ class GradeStatisticsPresenter @Inject constructor(
     }
 
     private fun loadSubjects() {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             subjectRepository.getSubjects(student, semester)
         }
-            .logStatus("load grade stats subjects")
+            .logResourceStatus("load grade stats subjects")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 subjects = it
@@ -154,7 +154,7 @@ class GradeStatisticsPresenter @Inject constructor(
             else -> subjectName
         }
 
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semesters = semesterRepository.getSemesters(student)
             val semester = semesters.first { item -> item.semesterId == semesterId }
@@ -188,7 +188,7 @@ class GradeStatisticsPresenter @Inject constructor(
                 }
             }
         }
-            .logStatus("load grade stats data")
+            .logResourceStatus("load grade stats data")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 analytics.logEvent(
@@ -216,7 +216,7 @@ class GradeStatisticsPresenter @Inject constructor(
                         preferencesRepository.showAllSubjectsOnStatisticsList
                     )
                 }
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.run {
                     showRefresh(false)
                     notifyParentDataLoaded(semesterId)

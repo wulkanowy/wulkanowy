@@ -2,12 +2,8 @@ package io.github.wulkanowy.ui.base
 
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.repositories.StudentRepository
-import io.github.wulkanowy.utils.flowWithResource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelChildren
+import io.github.wulkanowy.utils.resourceFlow
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -37,7 +33,7 @@ open class BasePresenter<T : BaseView>(
     }
 
     fun onExpiredLoginSelected() {
-        flowWithResource {
+        resourceFlow {
             val student = studentRepository.getCurrentStudent(false)
             studentRepository.logoutStudent(student)
 

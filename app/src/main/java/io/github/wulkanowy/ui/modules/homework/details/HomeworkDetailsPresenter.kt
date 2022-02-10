@@ -31,8 +31,8 @@ class HomeworkDetailsPresenter @Inject constructor(
     }
 
     fun deleteHomework(homework: Homework) {
-        flowWithResource { homeworkRepository.deleteHomework(homework) }
-            .logStatus("homework delete")
+        resourceFlow { homeworkRepository.deleteHomework(homework) }
+            .logResourceStatus("homework delete")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.run {
@@ -43,8 +43,8 @@ class HomeworkDetailsPresenter @Inject constructor(
     }
 
     fun toggleDone(homework: Homework) {
-        flowWithResource { homeworkRepository.toggleDone(homework) }
-            .logStatus("homework details update")
+        resourceFlow { homeworkRepository.toggleDone(homework) }
+            .logResourceStatus("homework details update")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.updateMarkAsDoneLabel(homework.isDone)

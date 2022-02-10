@@ -48,12 +48,12 @@ class MobileDevicePresenter @Inject constructor(
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading mobile devices data started")
 
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             mobileDeviceRepository.getDevices(student, semester, forceRefresh)
         }
-            .logStatus("load mobile devices data")
+            .logResourceStatus("load mobile devices data")
             .onResourceError(errorHandler::dispatch)
             .onEach {
                 view?.run {
@@ -74,7 +74,7 @@ class MobileDevicePresenter @Inject constructor(
                     "type" to "devices",
                     "items" to it.size
                 )
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.showRefresh(false)
             }.launch()
     }
@@ -110,12 +110,12 @@ class MobileDevicePresenter @Inject constructor(
     }
 
     fun onUnregisterConfirmed(device: MobileDevice) {
-        flowWithResource {
+        resourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             mobileDeviceRepository.unregisterDevice(student, semester, device)
         }
-            .logStatus("unregister device")
+            .logResourceStatus("unregister device")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.run {

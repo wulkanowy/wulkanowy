@@ -101,7 +101,7 @@ class CompletedLessonsPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             completedLessonsRepository.getCompletedLessons(
@@ -112,7 +112,7 @@ class CompletedLessonsPresenter @Inject constructor(
                 forceRefresh
             )
         }
-            .logStatus("load completed lessons")
+            .logResourceStatus("load completed lessons")
             .onResourceError(errorHandler::dispatch)
             .mapResourceData { it.sortedBy { lesson -> lesson.number } }
             .onEach {
@@ -128,7 +128,7 @@ class CompletedLessonsPresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     updateData(it)
                 }
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.showRefresh(false)
             }.onResourceSuccess {
                 analytics.logEvent(

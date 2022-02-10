@@ -34,17 +34,17 @@ class AccountEditPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        flowWithResource {
+        resourceFlow {
             studentRepository.getStudentById(student.id, false).avatarColor
         }
-            .logStatus("load student")
+            .logResourceStatus("load student")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess { view?.updateSelectedColorData(it.toInt()) }
             .launch("load_data")
     }
 
     fun changeStudentNickAndAvatar(nick: String, avatarColor: Int) {
-        flowWithResource {
+        resourceFlow {
             val studentNick = StudentNickAndAvatar(
                 nick = nick.trim(),
                 avatarColor = avatarColor.toLong()
@@ -52,10 +52,10 @@ class AccountEditPresenter @Inject constructor(
 
             studentRepository.updateStudentNickAndAvatar(studentNick)
         }
-            .logStatus("change student nick and avatar")
+            .logResourceStatus("change student nick and avatar")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess { view?.recreateMainView() }
-            .afterLoading { view?.popView() }
+            .onResourceFinally { view?.popView() }
             .launch("update_student")
     }
 }

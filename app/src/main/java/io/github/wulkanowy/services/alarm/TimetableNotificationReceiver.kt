@@ -16,9 +16,9 @@ import io.github.wulkanowy.services.sync.channels.UpcomingLessonsChannel.Compani
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.PendingIntentCompat
-import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.onResourceError
+import io.github.wulkanowy.utils.resourceFlow
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.launchIn
@@ -58,7 +58,7 @@ class TimetableNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Timber.d("Receiving intent... ${intent.toUri(0)}")
 
-        flowWithResource {
+        resourceFlow {
             val showStudentName = !studentRepository.isOneUniqueStudent()
             val student = studentRepository.getCurrentStudent(false)
             val studentId = intent.getIntExtra(STUDENT_ID, 0)

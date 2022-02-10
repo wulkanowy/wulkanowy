@@ -34,11 +34,11 @@ class GradeSummaryPresenter @Inject constructor(
     }
 
     private fun loadData(semesterId: Int, forceRefresh: Boolean) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }
-            .logStatus("load grade summary", showData = true)
+            .logResourceStatus("load grade summary", showData = true)
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 analytics.logEvent(
@@ -67,7 +67,7 @@ class GradeSummaryPresenter @Inject constructor(
                     "type" to "conferences",
                     "items" to it.size
                 )
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.run {
                     showRefresh(false)
                     notifyParentDataLoaded(semesterId)

@@ -40,13 +40,13 @@ class AccountQuickPresenter @Inject constructor(
             return
         }
 
-        flowWithResource { studentRepository.switchStudent(studentWithSemesters) }
-            .logStatus("change student")
+        resourceFlow { studentRepository.switchStudent(studentWithSemesters) }
+            .logResourceStatus("change student")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.recreateMainView()
             }
-            .afterLoading { view?.popView() }
+            .onResourceFinally { view?.popView() }
             .launch("switch")
     }
 

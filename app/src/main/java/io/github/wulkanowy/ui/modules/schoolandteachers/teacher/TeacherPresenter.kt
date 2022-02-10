@@ -49,12 +49,12 @@ class TeacherPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             teacherRepository.getTeachers(student, semester, forceRefresh)
         }
-            .logStatus("load teachers data")
+            .logResourceStatus("load teachers data")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.run {
@@ -68,7 +68,7 @@ class TeacherPresenter @Inject constructor(
                     "type" to "teachers",
                     "items" to it.size
                 )
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.run {
                     hideRefresh()
                     showProgress(false)

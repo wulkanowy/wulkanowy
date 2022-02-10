@@ -7,11 +7,7 @@ import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.ifNullOrBlank
-import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -130,18 +126,18 @@ class LoginAdvancedPresenter @Inject constructor(
     fun onSignInClick() {
         if (!validateCredentials()) return
 
-        flowWithResource { getStudentsAppropriatesToLoginType() }
-            .logStatus("login")
+        resourceFlow { getStudentsAppropriatesToLoginType() }
+            .logResourceStatus("login")
             .onEach {
-            when (it) {
-                is Resource.Loading -> view?.run {
-                    hideSoftKeyboard()
-                    showProgress(true)
-                    showContent(false)
-                }
-                is Resource.Success -> {
-                    analytics.logEvent(
-                        "registration_form",
+                when (it) {
+                    is Resource.Loading -> view?.run {
+                        hideSoftKeyboard()
+                        showProgress(true)
+                        showContent(false)
+                    }
+                    is Resource.Success -> {
+                        analytics.logEvent(
+                            "registration_form",
                         "success" to true,
                         "students" to it.data.size,
                         "error" to "No error"
@@ -155,22 +151,22 @@ class LoginAdvancedPresenter @Inject constructor(
                         0 -> view?.navigateToSymbol(loginData)
                         else -> view?.navigateToStudentSelect(it.data)
                     }
+                    }
+                    is Resource.Error -> {
+                        analytics.logEvent(
+                            "registration_form",
+                            "success" to false, "students" to -1,
+                            "error" to it.error.message.ifNullOrBlank { "No message" }
+                        )
+                        loginErrorHandler.dispatch(it.error)
+                    }
                 }
-                is Resource.Error -> {
-                    analytics.logEvent(
-                        "registration_form",
-                        "success" to false, "students" to -1,
-                        "error" to it.error.message.ifNullOrBlank { "No message" }
-                    )
-                    loginErrorHandler.dispatch(it.error)
+            }.onResourceFinally {
+                view?.apply {
+                    showProgress(false)
+                    showContent(true)
                 }
-            }
-        }.afterLoading {
-            view?.apply {
-                showProgress(false)
-                showContent(true)
-            }
-        }.launch("login")
+            }.launch("login")
     }
 
     private suspend fun getStudentsAppropriatesToLoginType(): List<StudentWithSemesters> {

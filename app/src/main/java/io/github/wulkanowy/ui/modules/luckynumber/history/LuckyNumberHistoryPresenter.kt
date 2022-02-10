@@ -52,7 +52,7 @@ class LuckyNumberHistoryPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        flowWithResource {
+        resourceFlow {
             val student = studentRepository.getCurrentStudent()
             luckyNumberRepository.getLuckyNumberHistory(
                 student,
@@ -60,7 +60,7 @@ class LuckyNumberHistoryPresenter @Inject constructor(
                 currentDate.sunday
             )
         }
-            .logStatus("load lucky number history")
+            .logResourceStatus("load lucky number history")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 val first = it.first()
@@ -84,7 +84,7 @@ class LuckyNumberHistoryPresenter @Inject constructor(
                         showErrorView(false)
                     }
                 }
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.run {
                     showProgress(false)
                 }

@@ -8,9 +8,9 @@ import io.github.wulkanowy.services.sync.SyncManager
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
-import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.logResourceStatus
+import io.github.wulkanowy.utils.resourceFlow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -67,7 +67,7 @@ class LoginStudentSelectPresenter @Inject constructor(
     private fun loadData(studentsWithSemesters: List<StudentWithSemesters>) {
         resetSelectedState()
 
-        flowWithResource { studentRepository.getSavedStudents(false) }.onEach {
+        resourceFlow { studentRepository.getSavedStudents(false) }.onEach {
             when (it) {
                 is Resource.Loading -> Timber.d("Login student select students load started")
                 is Resource.Success -> view?.updateData(studentsWithSemesters.map { studentWithSemesters ->
@@ -90,8 +90,8 @@ class LoginStudentSelectPresenter @Inject constructor(
     }
 
     private fun registerStudents(studentsWithSemesters: List<StudentWithSemesters>) {
-        flowWithResource { studentRepository.saveStudents(studentsWithSemesters) }
-            .logStatus("registration")
+        resourceFlow { studentRepository.saveStudents(studentsWithSemesters) }
+            .logResourceStatus("registration")
             .onEach {
                 when (it) {
                     is Resource.Loading -> view?.run {

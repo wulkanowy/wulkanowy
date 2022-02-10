@@ -5,9 +5,9 @@ import io.github.wulkanowy.data.repositories.RecoverRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
+import io.github.wulkanowy.utils.onResourceFinally
+import io.github.wulkanowy.utils.resourceFlow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -57,7 +57,11 @@ class LoginRecoverPresenter @Inject constructor(
 
         if (!validateInput(username, host)) return
 
-        flowWithResource { recoverRepository.getReCaptchaSiteKey(host, symbol.ifBlank { "Default" }) }.onEach {
+        resourceFlow {
+            recoverRepository.getReCaptchaSiteKey(
+                host,
+                symbol.ifBlank { "Default" })
+        }.onEach {
             when (it) {
                 is Resource.Loading -> view?.run {
                     hideSoftKeyboard()
@@ -101,7 +105,14 @@ class LoginRecoverPresenter @Inject constructor(
         val host = view?.recoverHostValue.orEmpty()
         val symbol = view?.formHostSymbol.ifNullOrBlank { "Default" }
 
-        flowWithResource { recoverRepository.sendRecoverRequest(host, symbol, username, reCaptchaResponse) }.onEach {
+        resourceFlow {
+            recoverRepository.sendRecoverRequest(
+                host,
+                symbol,
+                username,
+                reCaptchaResponse
+            )
+        }.onEach {
             when (it) {
                 is Resource.Loading -> view?.run {
                     showProgress(true)
@@ -130,7 +141,7 @@ class LoginRecoverPresenter @Inject constructor(
                     )
                 }
             }
-        }.afterLoading {
+        }.onResourceFinally {
             view?.showProgress(false)
         }.launch("verified")
     }

@@ -67,7 +67,7 @@ class StudentInfoPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val semester = studentWithSemesters.semesters.getCurrentOrLast()
             studentInfoRepository.getStudentInfo(
                 student = studentWithSemesters.student,
@@ -75,7 +75,7 @@ class StudentInfoPresenter @Inject constructor(
                 forceRefresh = forceRefresh
             )
         }
-            .logStatus("load student info $infoType")
+            .logResourceStatus("load student info $infoType")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 val isFamily = infoType == StudentInfoView.Type.FAMILY
@@ -98,7 +98,7 @@ class StudentInfoPresenter @Inject constructor(
                         showErrorView(false)
                     }
                 }
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.run {
                     hideRefresh()
                     showProgress(false)

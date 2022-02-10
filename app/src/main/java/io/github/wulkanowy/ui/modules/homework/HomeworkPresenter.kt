@@ -92,7 +92,7 @@ class HomeworkPresenter @Inject constructor(
     private fun loadData(forceRefresh: Boolean = false) {
         Timber.i("Loading homework data started")
 
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             homeworkRepository.getHomework(
@@ -103,7 +103,7 @@ class HomeworkPresenter @Inject constructor(
                 forceRefresh
             )
         }
-            .logStatus("loading homework")
+            .logResourceStatus("loading homework")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 analytics.logEvent(
@@ -128,7 +128,7 @@ class HomeworkPresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     updateData(it)
                 }
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.showRefresh(false)
             }.launch()
     }

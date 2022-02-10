@@ -49,11 +49,11 @@ class SchoolAnnouncementPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             schoolAnnouncementRepository.getSchoolAnnouncements(student, forceRefresh)
         }
-            .logStatus("load school announcement").onEach {
+            .logResourceStatus("load school announcement").onEach {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
@@ -68,7 +68,7 @@ class SchoolAnnouncementPresenter @Inject constructor(
                     updateData(it)
                 }
             }
-            .afterLoading {
+            .onResourceFinally {
                 view?.showRefresh(false)
             }
             .onResourceSuccess {

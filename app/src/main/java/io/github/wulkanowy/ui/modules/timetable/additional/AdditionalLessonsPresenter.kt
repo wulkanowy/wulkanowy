@@ -127,12 +127,12 @@ class AdditionalLessonsPresenter @Inject constructor(
     private fun loadData(date: LocalDate, forceRefresh: Boolean = false) {
         currentDate = date
 
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             timetableRepository.getTimetable(student, semester, date, date, forceRefresh, true)
         }
-            .logStatus("load additional lessons")
+            .logResourceStatus("load additional lessons")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.apply {
@@ -146,7 +146,7 @@ class AdditionalLessonsPresenter @Inject constructor(
                     "type" to "additional_lessons",
                     "items" to it.additional.size
                 )
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.run {
                     hideRefresh()
                     showProgress(false)

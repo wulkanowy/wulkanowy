@@ -87,7 +87,7 @@ class ExamPresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             examRepository.getExams(
@@ -98,7 +98,7 @@ class ExamPresenter @Inject constructor(
                 forceRefresh
             )
         }
-            .logStatus("load exam data")
+            .logResourceStatus("load exam data")
             .onResourceError(errorHandler::dispatch)
             .mapResourceData {
                 createExamItems(it)
@@ -124,7 +124,7 @@ class ExamPresenter @Inject constructor(
                     "items" to it.size
                 )
             }
-            .afterLoading {
+            .onResourceFinally {
                 view?.showRefresh(false)
             }.launch()
     }

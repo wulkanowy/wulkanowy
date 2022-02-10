@@ -6,11 +6,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.ifNullOrBlank
-import io.github.wulkanowy.utils.logStatus
+import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.net.URL
@@ -96,7 +92,7 @@ class LoginFormPresenter @Inject constructor(
 
         if (!validateCredentials(email, password, host)) return
 
-        flowWithResource {
+        resourceFlow {
             studentRepository.getStudentsScrapper(
                 email = email,
                 password = password,
@@ -104,7 +100,7 @@ class LoginFormPresenter @Inject constructor(
                 symbol = symbol
             )
         }
-            .logStatus("login")
+            .logResourceStatus("login")
             .onEach {
             when (it) {
                 is Resource.Loading -> view?.run {
@@ -137,12 +133,12 @@ class LoginFormPresenter @Inject constructor(
                     view?.showContact(true)
                 }
             }
-        }.afterLoading {
-            view?.apply {
-                showProgress(false)
-                showContent(true)
-            }
-        }.launch("login")
+            }.onResourceFinally {
+                view?.apply {
+                    showProgress(false)
+                    showContent(true)
+                }
+            }.launch("login")
     }
 
     fun onFaqClick() {

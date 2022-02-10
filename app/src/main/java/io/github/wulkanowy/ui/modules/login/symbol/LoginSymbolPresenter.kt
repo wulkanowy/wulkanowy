@@ -6,9 +6,9 @@ import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
 import io.github.wulkanowy.utils.ifNullOrBlank
+import io.github.wulkanowy.utils.onResourceFinally
+import io.github.wulkanowy.utils.resourceFlow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
@@ -45,7 +45,7 @@ class LoginSymbolPresenter @Inject constructor(
             return
         }
 
-        flowWithResource {
+        resourceFlow {
             studentRepository.getStudentsScrapper(
                 email = loginData.login,
                 password = loginData.password,
@@ -98,7 +98,7 @@ class LoginSymbolPresenter @Inject constructor(
                     view?.showContact(true)
                 }
             }
-        }.afterLoading {
+        }.onResourceFinally {
             view?.apply {
                 showProgress(false)
                 showContent(true)

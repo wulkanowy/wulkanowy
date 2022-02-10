@@ -11,7 +11,7 @@ import io.github.wulkanowy.data.repositories.*
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.calculatePercentage
-import io.github.wulkanowy.utils.flowWithResourceIn
+import io.github.wulkanowy.utils.flatResourceFlow
 import io.github.wulkanowy.utils.mapResourceData
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import kotlinx.coroutines.flow.*
@@ -297,7 +297,7 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadGrades(student: Student, forceRefresh: Boolean) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val semester = semesterRepository.getCurrentSemester(student)
 
             gradeRepository.getGrades(student, semester, forceRefresh)
@@ -352,7 +352,7 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadLessons(student: Student, forceRefresh: Boolean) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val semester = semesterRepository.getCurrentSemester(student)
             val date = LocalDate.now().nextOrSameSchoolDay
 
@@ -395,7 +395,7 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadHomework(student: Student, forceRefresh: Boolean) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val semester = semesterRepository.getCurrentSemester(student)
             val date = LocalDate.now().nextOrSameSchoolDay
 
@@ -443,7 +443,7 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadSchoolAnnouncements(student: Student, forceRefresh: Boolean) {
-        flowWithResourceIn {
+        flatResourceFlow {
             schoolAnnouncementRepository.getSchoolAnnouncements(student, forceRefresh)
         }.onEach {
             when (it) {
@@ -473,7 +473,7 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadExams(student: Student, forceRefresh: Boolean) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val semester = semesterRepository.getCurrentSemester(student)
 
             examRepository.getExams(
@@ -513,7 +513,7 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadConferences(student: Student, forceRefresh: Boolean) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val semester = semesterRepository.getCurrentSemester(student)
 
             conferenceRepository.getConferences(
@@ -550,7 +550,7 @@ class DashboardPresenter @Inject constructor(
     }
 
     private fun loadAdminMessage(student: Student, forceRefresh: Boolean) {
-        flowWithResourceIn { adminMessageRepository.getAdminMessages(student) }
+        flatResourceFlow { adminMessageRepository.getAdminMessages(student) }
             .filter {
                 val data = it.dataOrNull ?: return@filter true
                 val isDismissed = data.id in preferencesRepository.dismissedAdminMessageIds

@@ -48,8 +48,8 @@ class AccountDetailsPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        flowWithResource { studentRepository.getSavedStudentById(studentId ?: -1) }
-            .logStatus("loading account details view")
+        resourceFlow { studentRepository.getSavedStudentById(studentId ?: -1) }
+            .logResourceStatus("loading account details view")
             .onResourceError(errorHandler::dispatch)
             .onEach {
                 when (it) {
@@ -71,7 +71,7 @@ class AccountDetailsPresenter @Inject constructor(
                     else -> Unit
                 }
             }
-            .afterLoading { view?.showProgress(false) }
+            .onResourceFinally { view?.showProgress(false) }
             .launch()
     }
 
@@ -92,12 +92,12 @@ class AccountDetailsPresenter @Inject constructor(
 
         Timber.i("Select student ${studentWithSemesters!!.student.id}")
 
-        flowWithResource { studentRepository.switchStudent(studentWithSemesters!!) }
-            .logStatus("change student")
+        resourceFlow { studentRepository.switchStudent(studentWithSemesters!!) }
+            .logResourceStatus("change student")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.recreateMainView()
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.popViewToMain()
             }.launch("switch")
     }
@@ -110,7 +110,7 @@ class AccountDetailsPresenter @Inject constructor(
     fun onLogoutConfirm() {
         if (studentWithSemesters == null) return
 
-        flowWithResource {
+        resourceFlow {
             val studentToLogout = studentWithSemesters!!.student
 
             studentRepository.logoutStudent(studentToLogout)
@@ -120,9 +120,9 @@ class AccountDetailsPresenter @Inject constructor(
                 studentRepository.switchStudent(students[0])
             }
 
-            return@flowWithResource students
+            return@resourceFlow students
         }
-            .logStatus("logout user")
+            .logResourceStatus("logout user")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.run {
@@ -143,7 +143,7 @@ class AccountDetailsPresenter @Inject constructor(
                     }
                 }
             }
-            .afterLoading {
+            .onResourceFinally {
                 if (studentWithSemesters?.student?.isCurrent == true) {
                     view?.popViewToMain()
                 } else {

@@ -52,7 +52,7 @@ class HomeworkAddPresenter @Inject constructor(
     }
 
     private fun saveHomework(subject: String, teacher: String, date: LocalDate, content: String) {
-        flowWithResource {
+        resourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             val entryDate = LocalDate.now()
@@ -69,7 +69,7 @@ class HomeworkAddPresenter @Inject constructor(
                     attachments = emptyList(),
                 ).apply { isAddedByUser = true }
             )
-        }.logStatus("homework insert")
+        }.logResourceStatus("homework insert")
             .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.run {

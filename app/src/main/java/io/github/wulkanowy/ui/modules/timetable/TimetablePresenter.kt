@@ -123,14 +123,14 @@ class TimetablePresenter @Inject constructor(
     }
 
     private fun loadData(forceRefresh: Boolean = false) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             timetableRepository.getTimetable(
                 student, semester, currentDate, currentDate, forceRefresh
             )
         }
-            .logStatus("load timetable data")
+            .logResourceStatus("load timetable data")
             .onResourceError(errorHandler::dispatch)
             .onEach {
                 view?.run {
@@ -146,7 +146,7 @@ class TimetablePresenter @Inject constructor(
                     updateData(it.lessons)
                     setDayHeaderMessage(it.headers.singleOrNull { header -> header.date == currentDate }?.content)
                 }
-            }.afterLoading {
+            }.onResourceFinally {
                 view?.showRefresh(false)
             }.onResourceSuccess {
                 analytics.logEvent(

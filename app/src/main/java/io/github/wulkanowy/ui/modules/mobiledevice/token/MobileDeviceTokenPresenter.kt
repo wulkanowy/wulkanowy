@@ -1,16 +1,11 @@
 package io.github.wulkanowy.ui.modules.mobiledevice.token
 
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.repositories.MobileDeviceRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.logStatus
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,29 +25,28 @@ class MobileDeviceTokenPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        flowWithResource {
+        resourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             mobileDeviceRepository.getToken(student, semester)
-        }.logStatus("load mobile device registration").onEach {
-            when (it) {
-                is Resource.Success -> {
-                    view?.run {
-                        updateData(it.data)
-                        showContent()
-                    }
-                    analytics.logEvent(
-                        "device_register",
-                        "symbol" to it.data.token.substring(0, 3)
-                    )
+        }
+            .logResourceStatus("load mobile device registration")
+            .onResourceSuccess {
+                view?.run {
+                    updateData(it)
+                    showContent()
                 }
-                is Resource.Error -> {
-                    view?.closeDialog()
-                    errorHandler.dispatch(it.error)
-                }
+
+                analytics.logEvent(
+                    "device_register",
+                    "symbol" to it.token.substring(0, 3)
+                )
             }
-        }.afterLoading {
-            view?.hideLoading()
-        }.launch()
+            .onResourceError {
+                view?.closeDialog()
+                errorHandler.dispatch(it)
+            }
+            .onResourceFinally { view?.hideLoading() }
+            .launch()
     }
 }

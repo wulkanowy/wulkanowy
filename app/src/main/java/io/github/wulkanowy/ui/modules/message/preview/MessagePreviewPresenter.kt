@@ -1,7 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.preview
 
 import android.annotation.SuppressLint
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.enums.MessageFolder
@@ -9,13 +8,9 @@ import io.github.wulkanowy.data.repositories.MessageRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResource
-import io.github.wulkanowy.utils.flowWithResourceIn
-import io.github.wulkanowy.utils.logStatus
-import io.github.wulkanowy.utils.toFormattedString
-import kotlinx.coroutines.flow.onEach
+import io.github.wulkanowy.utils.*
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class MessagePreviewPresenter @Inject constructor(
@@ -54,41 +49,38 @@ class MessagePreviewPresenter @Inject constructor(
     }
 
     private fun loadData(message: Message) {
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getStudentById(message.studentId)
             messageRepository.getMessage(student, message, true)
-        }.logStatus("message ${message.messageId} preview").onEach {
-            when (it) {
-                is Resource.Success -> {
-                    val data = it.data
-                    if (data != null) {
-                        this@MessagePreviewPresenter.message = data.message
-                        this@MessagePreviewPresenter.attachments = data.attachments
-                        view?.apply {
-                            setMessageWithAttachment(data)
-                            showContent(true)
-                            initOptions()
-                        }
-                        analytics.logEvent(
-                            "load_item",
-                            "type" to "message_preview",
-                            "length" to data.message.content.length
-                        )
-                    } else {
-                        view?.run {
-                            showMessage(messageNotExists)
-                            popView()
-                        }
+        }
+            .logResourceStatus("message ${message.messageId} preview")
+            .onResourceSuccess {
+                if (it != null) {
+                    this@MessagePreviewPresenter.message = it.message
+                    this@MessagePreviewPresenter.attachments = it.attachments
+                    view?.apply {
+                        setMessageWithAttachment(it)
+                        showContent(true)
+                        initOptions()
+                    }
+                    analytics.logEvent(
+                        "load_item",
+                        "type" to "message_preview",
+                        "length" to it.message.content.length
+                    )
+                } else {
+                    view?.run {
+                        showMessage(messageNotExists)
+                        popView()
                     }
                 }
-                is Resource.Error -> {
-                    retryCallback = { onMessageLoadRetry(message) }
-                    errorHandler.dispatch(it.error)
-                }
             }
-        }.afterLoading {
-            view?.showProgress(false)
-        }.launch()
+            .onResourceError {
+                retryCallback = { onMessageLoadRetry(message) }
+                errorHandler.dispatch(it)
+            }
+            .onResourceFinally { view?.showProgress(false) }
+            .launch()
     }
 
     fun onReply(): Boolean {
@@ -174,25 +166,26 @@ class MessagePreviewPresenter @Inject constructor(
             showErrorView(false)
         }
 
-        flowWithResource {
-            val student = studentRepository.getCurrentStudent()
-            messageRepository.deleteMessage(student, message!!)
-        }.logStatus("message ${message?.id} delete").onEach {
-            when (it) {
-                is Resource.Success -> {
+        Timber.i("Delete message ${message?.id}")
+
+        presenterScope.launch {
+            runCatching {
+                val student = studentRepository.getCurrentStudent()
+                messageRepository.deleteMessage(student, message!!)
+            }
+                .onFailure {
+                    retryCallback = { onMessageDelete() }
+                    errorHandler.dispatch(it)
+                }
+                .onSuccess {
                     view?.run {
                         showMessage(deleteMessageSuccessString)
                         popView()
                     }
                 }
-                is Resource.Error -> {
-                    retryCallback = { onMessageDelete() }
-                    errorHandler.dispatch(it.error)
-                }
-            }
-        }.afterLoading {
+
             view?.showProgress(false)
-        }.launch("delete")
+        }
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
