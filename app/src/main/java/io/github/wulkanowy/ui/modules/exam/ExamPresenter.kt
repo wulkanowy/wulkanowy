@@ -92,23 +92,19 @@ class ExamPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             examRepository.getExams(
-                student,
-                semester,
-                currentDate.monday,
-                currentDate.sunday,
-                forceRefresh
+                student = student,
+                semester = semester,
+                start = currentDate.monday,
+                end = currentDate.sunday,
+                forceRefresh = forceRefresh
             )
         }
             .logResourceStatus("load exam data")
             .mapResourceData { createExamItems(it) }
-            .onEach {
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }
-            .onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())

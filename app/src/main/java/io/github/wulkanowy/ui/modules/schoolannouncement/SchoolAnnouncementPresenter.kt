@@ -6,7 +6,6 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -53,14 +52,11 @@ class SchoolAnnouncementPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             schoolAnnouncementRepository.getSchoolAnnouncements(student, forceRefresh)
         }
-            .logResourceStatus("load school announcement").onEach {
+            .logResourceStatus("load school announcement")
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }
-            .onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
@@ -68,9 +64,7 @@ class SchoolAnnouncementPresenter @Inject constructor(
                     updateData(it)
                 }
             }
-            .onResourceNotLoading {
-                view?.showRefresh(false)
-            }
+            .onResourceNotLoading { view?.showRefresh(false) }
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_school_announcement",
@@ -78,6 +72,7 @@ class SchoolAnnouncementPresenter @Inject constructor(
                 )
             }
             .onResourceError(errorHandler::dispatch)
+            .launch("load_data")
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

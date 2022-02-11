@@ -9,7 +9,6 @@ import io.github.wulkanowy.data.repositories.SubjectRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.time.Month
 import javax.inject.Inject
@@ -86,16 +85,11 @@ class AttendanceSummaryPresenter @Inject constructor(
             )
         }
             .logResourceStatus("load attendance summary")
-            .onResourceError(errorHandler::dispatch)
             .mapResourceData(this::sortItems)
-            .onEach {
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }
-            .onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
@@ -109,9 +103,10 @@ class AttendanceSummaryPresenter @Inject constructor(
                     "items" to it.size,
                     "item_id" to subjectId
                 )
-            }.onResourceNotLoading {
-                view?.showRefresh(false)
-            }.launch()
+            }
+            .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceError(errorHandler::dispatch)
+            .launch()
     }
 
     private fun sortItems(items: List<AttendanceSummary>) = items.sortedByDescending { item ->

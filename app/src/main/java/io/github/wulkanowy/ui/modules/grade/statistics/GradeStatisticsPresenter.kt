@@ -6,7 +6,6 @@ import io.github.wulkanowy.data.repositories.*
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -189,31 +188,29 @@ class GradeStatisticsPresenter @Inject constructor(
             }
         }
             .logResourceStatus("load grade stats data")
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "grade_statistics",
                     "items" to it.size
                 )
-            }.mapResourceData {
+            }
+            .mapResourceData {
                 val isNoContent = checkIsNoContent(it, type)
                 if (isNoContent) emptyList() else it
-            }.onEach {
+            }
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }.onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     //showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
                     updateData(
-                        it,
-                        preferencesRepository.gradeColorTheme,
-                        preferencesRepository.showAllSubjectsOnStatisticsList
+                        newItems = it,
+                        newTheme = preferencesRepository.gradeColorTheme,
+                        showAllSubjectsOnStatisticsList = preferencesRepository.showAllSubjectsOnStatisticsList
                     )
                 }
             }.onResourceNotLoading {
@@ -221,7 +218,9 @@ class GradeStatisticsPresenter @Inject constructor(
                     showRefresh(false)
                     notifyParentDataLoaded(semesterId)
                 }
-            }.launch("load")
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch("load")
     }
 
     private fun checkIsNoContent(
@@ -236,7 +235,8 @@ class GradeStatisticsPresenter @Inject constructor(
                 items.firstOrNull()?.partial?.classAmounts.orEmpty().sum() == 0
             }
             GradeStatisticsItem.DataType.POINTS -> {
-                items.firstOrNull()?.points?.let { points -> points.student == .0 && points.others == .0 } ?: false
+                items.firstOrNull()?.points?.let { points -> points.student == .0 && points.others == .0 }
+                    ?: false
             }
         }
     }

@@ -105,38 +105,36 @@ class CompletedLessonsPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             completedLessonsRepository.getCompletedLessons(
-                student,
-                semester,
-                currentDate,
-                currentDate,
-                forceRefresh
+                student = student,
+                semester = semester,
+                start = currentDate,
+                end = currentDate,
+                forceRefresh = forceRefresh
             )
         }
             .logResourceStatus("load completed lessons")
             .onResourceError(errorHandler::dispatch)
             .mapResourceData { it.sortedBy { lesson -> lesson.number } }
-            .onEach {
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }.onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
                     updateData(it)
                 }
-            }.onResourceNotLoading {
-                view?.showRefresh(false)
-            }.onResourceSuccess {
+            }
+            .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "completed_lessons",
                     "items" to it.size
                 )
-            }.launch()
+            }
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

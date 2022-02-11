@@ -55,15 +55,11 @@ class NotePresenter @Inject constructor(
         }
             .logResourceStatus("load note data")
             .onResourceError(errorHandler::dispatch)
-            .mapResourceData {
-                it.sortedByDescending { note -> note.date }
-            }.onEach {
+            .mapResourceData { it.sortedByDescending { note -> note.date } }
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }.onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
@@ -71,16 +67,15 @@ class NotePresenter @Inject constructor(
                     updateData(it)
                 }
             }
-            .onResourceNotLoading {
-                view?.showRefresh(false)
-            }
+            .onResourceNotLoading { view?.showRefresh(false) }
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "note",
                     "items" to it.size
                 )
-            }.launch()
+            }
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

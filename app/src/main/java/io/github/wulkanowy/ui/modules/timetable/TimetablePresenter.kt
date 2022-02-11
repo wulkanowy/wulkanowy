@@ -127,18 +127,18 @@ class TimetablePresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             timetableRepository.getTimetable(
-                student, semester, currentDate, currentDate, forceRefresh
+                student = student,
+                semester = semester,
+                start = currentDate,
+                end = currentDate,
+                forceRefresh = forceRefresh
             )
         }
             .logResourceStatus("load timetable data")
-            .onResourceError(errorHandler::dispatch)
-            .onEach {
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }.onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     showContent(it.lessons.isNotEmpty())
@@ -146,15 +146,17 @@ class TimetablePresenter @Inject constructor(
                     updateData(it.lessons)
                     setDayHeaderMessage(it.headers.singleOrNull { header -> header.date == currentDate }?.content)
                 }
-            }.onResourceNotLoading {
-                view?.showRefresh(false)
-            }.onResourceSuccess {
+            }
+            .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "timetable",
                     "items" to it.lessons.size
                 )
-            }.launch()
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch()
     }
 
     private fun updateData(lessons: List<Timetable>) {

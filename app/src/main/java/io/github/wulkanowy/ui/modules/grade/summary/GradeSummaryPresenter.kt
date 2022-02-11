@@ -7,7 +7,6 @@ import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.ui.modules.grade.GradeAverageProvider
 import io.github.wulkanowy.ui.modules.grade.GradeSubject
 import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,7 +38,6 @@ class GradeSummaryPresenter @Inject constructor(
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }
             .logResourceStatus("load grade summary", showData = true)
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
@@ -48,14 +46,10 @@ class GradeSummaryPresenter @Inject constructor(
                 )
             }
             .mapResourceData { createGradeSummaryItems(it) }
-            .onEach {
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }
-            .onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
@@ -76,6 +70,7 @@ class GradeSummaryPresenter @Inject constructor(
                     notifyParentDataLoaded(semesterId)
                 }
             }
+            .onResourceError(errorHandler::dispatch)
             .launch()
     }
 

@@ -97,15 +97,14 @@ class HomeworkPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             homeworkRepository.getHomework(
-                student,
-                semester,
-                currentDate,
-                currentDate,
-                forceRefresh
+                student = student,
+                semester = semester,
+                start = currentDate,
+                end = currentDate,
+                forceRefresh = forceRefresh
             )
         }
             .logResourceStatus("loading homework")
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
@@ -113,25 +112,21 @@ class HomeworkPresenter @Inject constructor(
                     "items" to it.size
                 )
             }
-            .mapResourceData {
-                createHomeworkItem(it)
-            }
-            .onEach {
+            .mapResourceData { createHomeworkItem(it) }
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }.onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
                     updateData(it)
                 }
-            }.onResourceNotLoading {
-                view?.showRefresh(false)
-            }.launch()
+            }
+            .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceError(errorHandler::dispatch)
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

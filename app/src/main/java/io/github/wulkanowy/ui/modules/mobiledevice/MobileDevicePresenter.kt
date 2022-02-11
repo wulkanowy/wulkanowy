@@ -7,7 +7,6 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -55,28 +54,26 @@ class MobileDevicePresenter @Inject constructor(
         }
             .logResourceStatus("load mobile devices data")
             .onResourceError(errorHandler::dispatch)
-            .onEach {
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }.onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
                     updateData(it)
                 }
-            }.onResourceSuccess {
+            }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "devices",
                     "items" to it.size
                 )
-            }.onResourceNotLoading {
-                view?.showRefresh(false)
-            }.launch()
+            }
+            .onResourceNotLoading { view?.showRefresh(false) }
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

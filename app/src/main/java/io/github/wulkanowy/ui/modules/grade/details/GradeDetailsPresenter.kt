@@ -15,7 +15,6 @@ import io.github.wulkanowy.ui.modules.grade.GradeSubject
 import io.github.wulkanowy.utils.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -133,14 +132,10 @@ class GradeDetailsPresenter @Inject constructor(
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }
             .logResourceStatus("load grade details")
-            .onResourceError(errorHandler::dispatch)
-            .onEach {
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                }
-            }.onResourceData {
-                view?.run {
                     showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
@@ -153,21 +148,26 @@ class GradeDetailsPresenter @Inject constructor(
                         preferencesRepository.gradeColorTheme
                     )
                 }
-            }.onResourceSuccess {
+            }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "grade_details",
                     "items" to it.size
                 )
-            }.onResourceNotLoading {
+            }
+            .onResourceNotLoading {
                 view?.run {
                     showRefresh(false)
                     notifyParentDataLoaded(semesterId)
                 }
-            }.catch {
+            }
+            .catch {
                 errorHandler.dispatch(it)
                 view?.notifyParentDataLoaded(semesterId)
-            }.launch()
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch()
     }
 
     private fun updateNewGradesAmount(grades: List<GradeSubject>) {
