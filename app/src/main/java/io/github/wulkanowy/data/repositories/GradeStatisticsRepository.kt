@@ -107,11 +107,12 @@ class GradeStatisticsRepository @Inject constructor(
         mapResult = { items ->
             val itemsWithAverage = items.map { item ->
                 item.copy().apply {
-                    average = if (item.amounts.isNotEmpty()) {
-                        item.amounts.mapIndexed { gradeValue, amount ->
+                    val denominator = item.amounts.sum()
+                    classAverage = if (denominator == 0) "" else {
+                        (item.amounts.mapIndexed { gradeValue, amount ->
                             (gradeValue + 1) * amount
-                        }.average().asAverageString()
-                    } else ""
+                        }.sum().toDouble() / denominator).asAverageString()
+                    }
                 }
             }
             when (subjectName) {
@@ -123,7 +124,10 @@ class GradeStatisticsRepository @Inject constructor(
                         amounts = itemsWithAverage.map { it.amounts }.sumGradeAmounts(),
                         studentGrade = 0,
                     ).apply {
-                        average = itemsWithAverage.map { it.average }.getSummaryAverage()
+                        classAverage = itemsWithAverage.map { it.classAverage }.getSummaryAverage()
+                        studentAverage = items
+                            .mapNotNull { summary -> summary.studentGrade.takeIf { it != 0 } }
+                            .average().asAverageString()
                     }
                     listOf(summaryItem) + itemsWithAverage
                 }

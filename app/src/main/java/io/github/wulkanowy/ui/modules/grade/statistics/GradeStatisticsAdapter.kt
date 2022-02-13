@@ -9,12 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.GradePartialStatistics
@@ -139,17 +134,40 @@ class GradeStatisticsAdapter @Inject constructor() :
         val studentAverage = partials.studentAverage.takeIf { it.isNotEmpty() }?.let {
             binding.root.context.getString(R.string.grade_statistics_student_average, it)
         }
-        bindPieChart(binding, partials.subject, partials.classAverage, studentAverage, partials.classAmounts)
+        bindPieChart(
+            binding = binding,
+            subject = partials.subject,
+            average = partials.classAverage,
+            studentValue = studentAverage,
+            amounts = partials.classAmounts
+        )
     }
 
     private fun bindSemesterChart(
         binding: ItemGradeStatisticsPieBinding,
         semester: GradeSemesterStatistics
     ) {
-        val studentGrade = semester.studentGrade.takeIf { it != 0 }?.let {
-            binding.root.context.getString(R.string.grade_statistics_student_grade, it.toString())
+        val studentAverage = semester.studentAverage.takeIf { it.isNotBlank() }
+        val studentGrade = semester.studentGrade.takeIf { it != 0 }
+
+        val studentValue = when {
+            studentAverage != null -> binding.root.context.getString(
+                R.string.grade_statistics_student_average,
+                studentAverage
+            )
+            studentGrade != null -> binding.root.context.getString(
+                R.string.grade_statistics_student_grade,
+                studentGrade.toString()
+            )
+            else -> null
         }
-        bindPieChart(binding, semester.subject, semester.average, studentGrade, semester.amounts)
+        bindPieChart(
+            binding = binding,
+            subject = semester.subject,
+            average = semester.classAverage,
+            studentValue = studentValue,
+            amounts = semester.amounts
+        )
     }
 
     private fun bindPieChart(
