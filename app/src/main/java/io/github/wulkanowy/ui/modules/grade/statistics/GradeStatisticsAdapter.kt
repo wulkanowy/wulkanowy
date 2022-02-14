@@ -233,7 +233,7 @@ class GradeStatisticsAdapter @Inject constructor() :
             val numberOfGradesString = amounts.fold(0) { acc, it -> acc + it }
                 .let { resources.getQuantityString(R.plurals.grade_number_item, it, it) }
             val averageString =
-                binding.root.context.getString(R.string.grade_statistics_average, average)
+                binding.root.context.getString(R.string.grade_statistics_class_average, average)
 
             minAngleForSlices = 25f
             description.isEnabled = false
