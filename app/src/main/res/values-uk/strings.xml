@@ -55,7 +55,7 @@
     <string name="login_invalid_symbol">Неправильний симбвол</string>
     <string name="login_incorrect_symbol">Студента не знайдено Перевірте символ та обраний варіант реєстру UONET+</string>
     <string name="login_duplicate_student">Даного учня вже авторизовано</string>
-    <string name="login_symbol_helper">Символ можна знайти на сторінці реєстру в &#160; <b> Учень </b> → &#160; <b> Мобільний доступ </b> → &#160; <b> Додайте мобільне приладдя </b>.\n\nПереконайтесь, що ви встановили відповідний варіант реєстру в полі <b> UONET + варіант реєстрації </b> на попередньому екрані. На даний момент Wulkanowy не виявляє учнів дошкільних закладів</string>
+    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the previous screen</string>
     <string name="login_select_student">Виберіть учнів для авторизації в додатку</string>
     <string name="login_advanced">Інші варіанти</string>
     <string name="login_advanced_warning_mobile_api">У цьому режимі не працюють: щасливий номер, статистика класу по оцінкам, статистика відвідуваності і уроків, інформація про школу і список зареєстрованних пристроїв</string>
