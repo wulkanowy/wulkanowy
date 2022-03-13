@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.timetable
 
-import android.annotation.SuppressLint
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.enums.TimetableMode
 import io.github.wulkanowy.data.repositories.PreferencesRepository
@@ -17,6 +16,7 @@ import timber.log.Timber
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDate.*
+import java.util.*
 import javax.inject.Inject
 import kotlin.concurrent.timer
 
