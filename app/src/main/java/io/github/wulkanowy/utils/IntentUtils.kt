@@ -6,7 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.CalendarContract
 import io.github.wulkanowy.BuildConfig
-import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 fun Context.openInternetBrowser(uri: String, onActivityNotFound: (uri: String) -> Unit = {}) {
     Intent.parseUri(uri, 0).let {
@@ -45,15 +46,18 @@ fun Context.openEmailClient(
 fun Context.openCalendarEventAdd(
     title: String,
     description: String,
-    start: LocalDate,
-    end: LocalDate? = null,
+    start: LocalDateTime,
+    end: LocalDateTime? = null,
     isAllDay: Boolean = false,
     onActivityNotFound: (uri: String?) -> Unit = {},
 ) {
+    val beginTime = start.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    val endTime = end?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
+
     val intent = Intent(Intent.ACTION_INSERT)
         .setData(CalendarContract.Events.CONTENT_URI)
-        .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, start.toTimestamp())
-        .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end?.toTimestamp())
+        .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime)
+        .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime)
         .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, isAllDay)
         .putExtra(CalendarContract.Events.TITLE, title)
         .putExtra(CalendarContract.Events.DESCRIPTION, description)

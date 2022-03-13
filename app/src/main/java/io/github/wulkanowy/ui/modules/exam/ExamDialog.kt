@@ -11,6 +11,7 @@ import io.github.wulkanowy.databinding.DialogExamBinding
 import io.github.wulkanowy.utils.lifecycleAwareVariable
 import io.github.wulkanowy.utils.openCalendarEventAdd
 import io.github.wulkanowy.utils.toFormattedString
+import java.time.LocalTime
 
 class ExamDialog : DialogFragment() {
 
@@ -58,8 +59,8 @@ class ExamDialog : DialogFragment() {
                 requireContext().openCalendarEventAdd(
                     title = "${exam.subject} - ${exam.type}",
                     description = exam.description,
-                    start = exam.date,
-                    isAllDay = true,
+                    start = exam.date.atTime(LocalTime.of(8, 0)),
+                    end = exam.date.atTime(LocalTime.of(8, 45)),
                 )
             }
         }
