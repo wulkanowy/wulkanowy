@@ -144,20 +144,20 @@ class GradeAverageProvider @Inject constructor(
         isGradeAverageForceCalc: Boolean,
         secondSemesterSubject: GradeSubject,
         firstSemesterSubject: GradeSubject?
-    ): Double {
+    ): Double = if (!isAnyVulcanAverage || isGradeAverageForceCalc) {
         val divider = if (secondSemesterSubject.grades.any { it.weightValue > .0 }) 2 else 1
 
-        return if (!isAnyVulcanAverage || isGradeAverageForceCalc) {
-            val secondSemesterAverage =
-                secondSemesterSubject.grades.updateModifiers(student)
-                    .calcAverage(isOptionalArithmeticAverage)
-            val firstSemesterAverage = firstSemesterSubject?.grades?.updateModifiers(student)
-                ?.calcAverage(isOptionalArithmeticAverage) ?: secondSemesterAverage
+        val secondSemesterAverage = secondSemesterSubject.grades.updateModifiers(student)
+            .calcAverage(isOptionalArithmeticAverage)
+        val firstSemesterAverage = firstSemesterSubject?.grades?.updateModifiers(student)
+            ?.calcAverage(isOptionalArithmeticAverage) ?: secondSemesterAverage
 
-            (secondSemesterAverage + firstSemesterAverage) / divider
-        } else {
-            (secondSemesterSubject.average + (firstSemesterSubject?.average ?: secondSemesterSubject.average)) / divider
-        }
+        (secondSemesterAverage + firstSemesterAverage) / divider
+    } else {
+        val divider = if (secondSemesterSubject.average > 0) 2 else 1
+
+        (secondSemesterSubject.average + (firstSemesterSubject?.average
+            ?: secondSemesterSubject.average)) / divider
     }
 
     private fun getGradeSubjects(

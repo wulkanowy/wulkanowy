@@ -14,9 +14,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDate.*
 import javax.inject.Inject
+import kotlin.concurrent.timer
 
 class TimetablePresenter @Inject constructor(
     errorHandler: ErrorHandler,
@@ -33,6 +35,8 @@ class TimetablePresenter @Inject constructor(
         private set
 
     private lateinit var lastError: Throwable
+
+    private var tickTimer: Timer? = null
 
     fun onAttachView(view: TimetableView, date: Long?) {
         super.onAttachView(view)
@@ -92,11 +96,6 @@ class TimetablePresenter @Inject constructor(
                 }
             } else view.popView()
         }
-    }
-
-    fun onTimetableItemSelected(lesson: Timetable) {
-        Timber.i("Select timetable item ${lesson.id}")
-        view?.showTimetableDialog(lesson)
     }
 
     fun onAdditionalLessonsSwitchSelected(): Boolean {
@@ -160,17 +159,62 @@ class TimetablePresenter @Inject constructor(
     }
 
     private fun updateData(lessons: List<Timetable>) {
-        view?.updateData(
-            showWholeClassPlanType = prefRepository.showWholeClassPlan,
-            showGroupsInPlanType = prefRepository.showGroupsInPlan,
-            showTimetableTimers = prefRepository.showTimetableTimers,
-            data = createItems(lessons)
+        tickTimer?.cancel()
+
+        if (!prefRepository.showTimetableTimers) {
+            view?.updateData(createItems(lessons))
+        } else {
+            tickTimer = timer(period = 2_000) {
+                view?.updateData(createItems(lessons))
+            }
+        }
+    }
+
+    private fun createItems(items: List<Timetable>): List<TimetableItem> {
+        val filteredItems = items
+            .filter {
+                if (prefRepository.showWholeClassPlan == TimetableMode.ONLY_CURRENT_GROUP) {
+                    it.isStudentPlan
+                } else true
+            }.sortedWith(
+                compareBy({ item -> item.number }, { item -> !item.isStudentPlan })
+            )
+
+        return filteredItems.mapIndexed { i, it ->
+            if (it.isStudentPlan) TimetableItem.Normal(
+                lesson = it,
+                showGroupsInPlan = prefRepository.showGroupsInPlan,
+                timeLeft = filteredItems.getTimeLeftForLesson(it, i),
+                onClick = ::onTimetableItemSelected
+            ) else TimetableItem.Small(
+                lesson = it,
+                onClick = ::onTimetableItemSelected
+            )
+        }
+    }
+
+    private fun List<Timetable>.getTimeLeftForLesson(lesson: Timetable, index: Int): TimeLeft {
+        val isShowTimeUntil = lesson.isShowTimeUntil(getPreviousLesson(index))
+        return TimeLeft(
+            until = lesson.until.plusMinutes(1).takeIf { isShowTimeUntil },
+            left = lesson.left?.plusMinutes(1),
+            isJustFinished = lesson.isJustFinished,
         )
     }
 
-    private fun createItems(items: List<Timetable>) = items.filter { item ->
-        if (prefRepository.showWholeClassPlan == TimetableMode.ONLY_CURRENT_GROUP) item.isStudentPlan else true
-    }.sortedWith(compareBy({ item -> item.number }, { item -> !item.isStudentPlan }))
+    private fun List<Timetable>.getPreviousLesson(position: Int): Instant? {
+        return filter { it.isStudentPlan }
+            .getOrNull(position - 1 - filterIndexed { i, item -> i < position && !item.isStudentPlan }.size)
+            ?.let {
+                if (!it.canceled && it.isStudentPlan) it.end
+                else null
+            }
+    }
+
+    private fun onTimetableItemSelected(lesson: Timetable) {
+        Timber.i("Select timetable item ${lesson.id}")
+        view?.showTimetableDialog(lesson)
+    }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
         view?.run {
@@ -198,12 +242,17 @@ class TimetablePresenter @Inject constructor(
         }
     }
 
-    @SuppressLint("DefaultLocale")
     private fun reloadNavigation() {
         view?.apply {
             showPreButton(!currentDate.minusDays(1).isHolidays)
             showNextButton(!currentDate.plusDays(1).isHolidays)
             updateNavigationDay(currentDate.toFormattedString("EEEE, dd.MM").capitalise())
         }
+    }
+
+    override fun onDetachView() {
+        tickTimer?.cancel()
+        tickTimer = null
+        super.onDetachView()
     }
 }
