@@ -649,6 +649,7 @@
     <string name="all_copied">Skopírované</string>
     <string name="all_undo">Vrátiť</string>
     <string name="all_change">Zmeniť</string>
+    <string name="all_add_to_calendar">Add to calendar</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Žiadne lekcie</string>
     <string name="widget_timetable_theme_title">Vybrať motív</string>
