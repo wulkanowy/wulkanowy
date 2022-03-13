@@ -55,7 +55,7 @@
     <string name="login_invalid_symbol">Ungültige symbol</string>
     <string name="login_incorrect_symbol">Schüler nicht gefunden. Überprüfen Sie das Symbol und die gewählte Variation des UONET+ Registers</string>
     <string name="login_duplicate_student">Ausgewählter Student ist bereits angemeldet.</string>
-    <string name="login_symbol_helper">Das Symbol kann auf der Registerseite in&#160;<b>Uczeń</b>→&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>gefunden werden.\n\nStellen Sie sicher, dass Sie die entsprechende Registervariante im Feld <b>UONET+ Registervariante</b> auf dem vorherigen Bildschirm festgelegt haben. Wulkanowy erkennt zur Zeit keine Vorschulstudenten</string>
+    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the previous screen</string>
     <string name="login_select_student">Wählen Sie die Studenten aus, die sich bei der Anwendung anmelden sollen</string>
     <string name="login_advanced">Andere Optionen</string>
     <string name="login_advanced_warning_mobile_api">In diesem Modus funktioniert eine Glücknummer, eine Klassenstatistik, eine Zusammenfassung der Anwesenheit, eine Entschuldigung für die Abwesenheit, abgeschlossene Lektionen, Schulinformationen und eine Vorschau der Liste der registrierten Geräte nicht</string>
