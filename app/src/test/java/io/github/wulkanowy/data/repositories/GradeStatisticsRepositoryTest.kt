@@ -83,11 +83,11 @@ class GradeStatisticsRepositoryTest {
                 forceRefresh = true,
             ).toFirstResult()
         }
-        val items = res.data.orEmpty()
+        val items = res.dataOrNull.orEmpty()
 
         // verify
-        assertEquals(null, res.error)
-        assertEquals(2 + 1, res.data?.size)
+        assertEquals(null, res.errorOrNull)
+        assertEquals(2 + 1, res.dataOrNull?.size)
         assertEquals("", items[0].partial?.studentAverage)
         assertEquals("", items[1].partial?.studentAverage)
         assertEquals("", items[2].partial?.studentAverage)
@@ -121,7 +121,7 @@ class GradeStatisticsRepositoryTest {
                 forceRefresh = true,
             ).toFirstResult()
         }
-        val items = res.data.orEmpty()
+        val items = res.dataOrNull.orEmpty()
 
         // verify
         assertEquals(null, res.errorOrNull)

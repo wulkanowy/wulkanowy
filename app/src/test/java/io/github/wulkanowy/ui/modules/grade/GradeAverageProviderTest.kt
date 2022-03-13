@@ -1121,9 +1121,9 @@ class GradeAverageProviderTest {
         every { preferencesRepository.isOptionalArithmeticAverage } returns false
 
         coEvery { gradeRepository.getGrades(student, semesters[1], true) } returns
-                flowWithResource { firstGrades to firstSummaries }
+                resourceFlow { firstGrades to firstSummaries }
         coEvery { gradeRepository.getGrades(student, semesters[2], true) } returns
-                flowWithResource { listOf<Grade>() to firstSummaries }
+            resourceFlow { listOf<Grade>() to firstSummaries }
 
         val items = runBlocking {
             gradeAverageProvider.getGradesDetailsWithAverage(
