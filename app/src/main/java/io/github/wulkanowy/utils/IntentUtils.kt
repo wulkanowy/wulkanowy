@@ -4,7 +4,9 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.CalendarContract
 import io.github.wulkanowy.BuildConfig
+import java.time.LocalDate
 
 fun Context.openInternetBrowser(uri: String, onActivityNotFound: (uri: String) -> Unit = {}) {
     Intent.parseUri(uri, 0).let {
@@ -38,6 +40,30 @@ fun Context.openEmailClient(
     if (intent.resolveActivity(packageManager) != null) {
         startActivity(Intent.createChooser(intent, chooserTitle))
     } else onActivityNotFound()
+}
+
+fun Context.openCalendarEventAdd(
+    title: String,
+    description: String,
+    start: LocalDate,
+    end: LocalDate? = null,
+    isAllDay: Boolean = false,
+    onActivityNotFound: (uri: String?) -> Unit = {},
+) {
+    val intent = Intent(Intent.ACTION_INSERT)
+        .setData(CalendarContract.Events.CONTENT_URI)
+        .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, start.toTimestamp())
+        .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end?.toTimestamp())
+        .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, isAllDay)
+        .putExtra(CalendarContract.Events.TITLE, title)
+        .putExtra(CalendarContract.Events.DESCRIPTION, description)
+        .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
+
+    try {
+        startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        onActivityNotFound(intent.dataString)
+    }
 }
 
 fun Context.openNavigation(location: String) {
