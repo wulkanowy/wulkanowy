@@ -55,7 +55,7 @@
     <string name="login_invalid_symbol">Неправильный символ</string>
     <string name="login_incorrect_symbol">Студент не найден. Подтвердите символ и выбранный вариант регистра UONET+</string>
     <string name="login_duplicate_student">Данный ученик уже авторизован</string>
-    <string name="login_symbol_helper">Этот символ можно найти на странице регистрации в &#160;<b>Ученик</b> → &#160;<b>Телефонный доступ</b> → &#160;<b> Зарегистрируйте мобильное устройство</b>.\n\nУбедитесь, что вы установили соответствующий вариант регистра в поле <b>Разновидностью бревна UONET+</b> на предыдущем экране. Вулкановый на данный момент не обнаруживает дошкольников</string>
+    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the previous screen</string>
     <string name="login_select_student">Выберите учеников для авторизации в приложении</string>
     <string name="login_advanced">Другие варианты</string>
     <string name="login_advanced_warning_mobile_api">В этом режиме не работают: счастливый номер, статистика класса по оценкам, статистика посещаемости и уроков, информация о школе и список зарегистрированных устройств</string>
