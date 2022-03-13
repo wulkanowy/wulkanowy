@@ -55,30 +55,35 @@ class TeacherPresenter @Inject constructor(
             teacherRepository.getTeachers(student, semester, forceRefresh)
         }
             .logResourceStatus("load teachers data")
-            .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
+            .onResourceData {
                 view?.run {
                     updateData(it.filter { item -> item.name.isNotBlank() })
                     showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
                     showErrorView(false)
                 }
+            }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "teachers",
                     "items" to it.size
                 )
-            }.onResourceNotLoading {
+            }
+            .onResourceNotLoading {
                 view?.run {
                     hideRefresh()
                     showProgress(false)
                     enableSwipe(true)
                     notifyParentDataLoaded()
                 }
-            }.catch {
+            }
+            .onResourceError(errorHandler::dispatch)
+            .catch {
                 errorHandler.dispatch(it)
                 view?.notifyParentDataLoaded()
-            }.launch()
+            }
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

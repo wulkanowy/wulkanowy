@@ -74,11 +74,12 @@ class MainPresenter @Inject constructor(
 
         resourceFlow { studentRepository.getSavedStudents(false) }
             .logResourceStatus("load student avatar")
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 studentsWitSemesters = it
                 showCurrentStudentAvatar()
-            }.launch("avatar")
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch("avatar")
     }
 
     fun onViewChange(destinationView: BaseView) {

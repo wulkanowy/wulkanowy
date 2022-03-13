@@ -123,8 +123,7 @@ class GradeStatisticsPresenter @Inject constructor(
             subjectRepository.getSubjects(student, semester)
         }
             .logResourceStatus("load grade stats subjects")
-            .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
+            .onResourceData {
                 subjects = it
                 view?.run {
                     showSubjects(!preferencesRepository.showAllSubjectsOnStatisticsList)
@@ -136,6 +135,7 @@ class GradeStatisticsPresenter @Inject constructor(
                     )
                 }
             }
+            .onResourceError(errorHandler::dispatch)
             .launch("subjects")
     }
 
@@ -188,24 +188,16 @@ class GradeStatisticsPresenter @Inject constructor(
             }
         }
             .logResourceStatus("load grade stats data")
-            .onResourceSuccess {
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "grade_statistics",
-                    "items" to it.size
-                )
-            }
             .mapResourceData {
                 val isNoContent = checkIsNoContent(it, type)
                 if (isNoContent) emptyList() else it
-            }
-            .onResourceData {
+            }.onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
                     showRefresh(true)
                     showErrorView(false)
-                    //showContent(it.isNotEmpty())
+                    //showContent(it.isNotEmpty()) // todo
                     showEmpty(it.isEmpty())
                     updateData(
                         newItems = it,
@@ -213,6 +205,12 @@ class GradeStatisticsPresenter @Inject constructor(
                         showAllSubjectsOnStatisticsList = preferencesRepository.showAllSubjectsOnStatisticsList
                     )
                 }
+            }.onResourceSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "grade_statistics",
+                    "items" to it.size
+                )
             }.onResourceNotLoading {
                 view?.run {
                     showRefresh(false)

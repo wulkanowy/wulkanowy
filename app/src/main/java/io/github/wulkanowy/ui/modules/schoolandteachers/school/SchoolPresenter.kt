@@ -67,8 +67,7 @@ class SchoolPresenter @Inject constructor(
             schoolRepository.getSchoolInfo(student, semester, forceRefresh)
         }
             .logResourceStatus("load school info")
-            .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
+            .onResourceData {
                 if (it != null) {
                     view?.run {
                         address = it.address.ifBlank { null }
@@ -78,24 +77,32 @@ class SchoolPresenter @Inject constructor(
                         showEmpty(false)
                         showErrorView(false)
                     }
-                    analytics.logEvent("load_item", "type" to "school")
                 } else view?.run {
                     Timber.i("Loading school result: No school info found")
                     showContent(!isViewEmpty)
                     showEmpty(isViewEmpty)
                     showErrorView(false)
                 }
-            }.onResourceNotLoading {
+            }
+            .onResourceSuccess {
+                if (it != null) {
+                    analytics.logEvent("load_item", "type" to "school")
+                }
+            }
+            .onResourceNotLoading {
                 view?.run {
                     hideRefresh()
                     showProgress(false)
                     enableSwipe(true)
                     notifyParentDataLoaded()
                 }
-            }.catch {
+            }
+            .onResourceError(errorHandler::dispatch)
+            .catch {
                 errorHandler.dispatch(it)
                 view?.notifyParentDataLoaded()
-            }.launch()
+            }
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

@@ -33,23 +33,24 @@ class HomeworkDetailsPresenter @Inject constructor(
     fun deleteHomework(homework: Homework) {
         resourceFlow { homeworkRepository.deleteHomework(homework) }
             .logResourceStatus("homework delete")
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.run {
                     showMessage(homeworkDeleteSuccess)
                     closeDialog()
                 }
-            }.launch("delete")
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch("delete")
     }
 
     fun toggleDone(homework: Homework) {
         resourceFlow { homeworkRepository.toggleDone(homework) }
             .logResourceStatus("homework details update")
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.updateMarkAsDoneLabel(homework.isDone)
                 analytics.logEvent("homework_mark_as_done")
             }
+            .onResourceError(errorHandler::dispatch)
             .launch("toggle")
     }
 }

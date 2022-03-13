@@ -302,8 +302,8 @@ class DashboardPresenter @Inject constructor(
 
             gradeRepository.getGrades(student, semester, forceRefresh)
         }
-            .mapResourceData { data ->
-                val filteredSubjectWithGrades = data.first
+            .mapResourceData { (details, _) ->
+                val filteredSubjectWithGrades = details
                     .filter { it.date >= LocalDate.now().minusDays(7) }
                     .groupBy { it.subject }
                     .mapValues { entry ->
@@ -557,7 +557,7 @@ class DashboardPresenter @Inject constructor(
             .filter {
                 val data = it.dataOrNull ?: return@filter true
                 val isDismissed = data.id in preferencesRepository.dismissedAdminMessageIds
-                return@filter !isDismissed
+                !isDismissed
             }
             .onEach {
                 when (it) {

@@ -54,7 +54,7 @@ class MessagePreviewPresenter @Inject constructor(
             messageRepository.getMessage(student, message, true)
         }
             .logResourceStatus("message ${message.messageId} preview")
-            .onResourceSuccess {
+            .onResourceData {
                 if (it != null) {
                     this@MessagePreviewPresenter.message = it.message
                     this@MessagePreviewPresenter.attachments = it.attachments
@@ -63,11 +63,6 @@ class MessagePreviewPresenter @Inject constructor(
                         showContent(true)
                         initOptions()
                     }
-                    analytics.logEvent(
-                        "load_item",
-                        "type" to "message_preview",
-                        "length" to it.message.content.length
-                    )
                 } else {
                     view?.run {
                         showMessage(messageNotExists)
@@ -75,11 +70,20 @@ class MessagePreviewPresenter @Inject constructor(
                     }
                 }
             }
+            .onResourceSuccess {
+                if (it != null) {
+                    analytics.logEvent(
+                        "load_item",
+                        "type" to "message_preview",
+                        "length" to it.message.content.length
+                    )
+                }
+            }
+            .onResourceNotLoading { view?.showProgress(false) }
             .onResourceError {
                 retryCallback = { onMessageLoadRetry(message) }
                 errorHandler.dispatch(it)
             }
-            .onResourceNotLoading { view?.showProgress(false) }
             .launch()
     }
 

@@ -76,10 +76,10 @@ class GradeDetailsPresenter @Inject constructor(
             gradeRepository.updateGrades(unreadGrades.map { it.apply { isRead = true } })
         }
             .logResourceStatus("mark grades as read")
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 loadData(currentSemesterId, false)
             }
+            .onResourceError(errorHandler::dispatch)
             .launch("mark")
         return true
     }

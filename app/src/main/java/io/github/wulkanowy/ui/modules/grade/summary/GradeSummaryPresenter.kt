@@ -38,13 +38,6 @@ class GradeSummaryPresenter @Inject constructor(
             averageProvider.getGradesDetailsWithAverage(student, semesterId, forceRefresh)
         }
             .logResourceStatus("load grade summary", showData = true)
-            .onResourceSuccess {
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "grade_summary",
-                    "items" to it.size
-                )
-            }
             .mapResourceData { createGradeSummaryItems(it) }
             .onResourceData {
                 view?.run {
@@ -60,7 +53,7 @@ class GradeSummaryPresenter @Inject constructor(
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
-                    "type" to "conferences",
+                    "type" to "grade_summary",
                     "items" to it.size
                 )
             }

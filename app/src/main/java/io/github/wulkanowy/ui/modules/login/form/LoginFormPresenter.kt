@@ -1,13 +1,11 @@
 package io.github.wulkanowy.ui.modules.login.form
 
 import androidx.core.net.toUri
-import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.modules.login.LoginData
 import io.github.wulkanowy.ui.modules.login.LoginErrorHandler
 import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.net.URL
 import javax.inject.Inject
@@ -72,7 +70,7 @@ class LoginFormPresenter @Inject constructor(
 
         val username = view?.formUsernameValue.orEmpty().trim()
         if ("@" in username && "@vulcan" !in username) {
-            val hosts = view?.getHostsValues().orEmpty().map { it.toUri().host to it }.toMap()
+            val hosts = view?.getHostsValues().orEmpty().associateBy { it.toUri().host }
             val usernameHost = username.substringAfter("@")
 
             hosts[usernameHost]?.let {
@@ -101,44 +99,45 @@ class LoginFormPresenter @Inject constructor(
             )
         }
             .logResourceStatus("login")
-            .onEach {
-            when (it) {
-                is Resource.Loading -> view?.run {
+            .onResourceLoading {
+                view?.run {
                     hideSoftKeyboard()
                     showProgress(true)
                     showContent(false)
                 }
-                is Resource.Success -> {
-                    analytics.logEvent(
-                        "registration_form",
-                        "success" to true,
-                        "students" to it.data.size,
-                        "scrapperBaseUrl" to host,
-                        "error" to "No error"
-                    )
-                    when (it.data.size) {
-                        0 -> view?.navigateToSymbol(LoginData(email, password, host))
-                        else -> view?.navigateToStudentSelect(it.data)
-                    }
-                }
-                is Resource.Error -> {
-                    analytics.logEvent(
-                        "registration_form",
-                        "success" to false,
-                        "students" to -1,
-                        "scrapperBaseUrl" to host,
-                        "error" to it.error.message.ifNullOrBlank { "No message" })
-                    loginErrorHandler.dispatch(it.error)
-                    lastError = it.error
-                    view?.showContact(true)
-                }
             }
-            }.onResourceNotLoading {
+            .onResourceSuccess {
+                when (it.size) {
+                    0 -> view?.navigateToSymbol(LoginData(email, password, host))
+                    else -> view?.navigateToStudentSelect(it)
+                }
+                analytics.logEvent(
+                    "registration_form",
+                    "success" to true,
+                    "students" to it.size,
+                    "scrapperBaseUrl" to host,
+                    "error" to "No error"
+                )
+            }
+            .onResourceNotLoading {
                 view?.apply {
                     showProgress(false)
                     showContent(true)
                 }
-            }.launch("login")
+            }
+            .onResourceError {
+                loginErrorHandler.dispatch(it)
+                lastError = it
+                view?.showContact(true)
+                analytics.logEvent(
+                    "registration_form",
+                    "success" to false,
+                    "students" to -1,
+                    "scrapperBaseUrl" to host,
+                    "error" to it.message.ifNullOrBlank { "No message" }
+                )
+            }
+            .launch("login")
     }
 
     fun onFaqClick() {

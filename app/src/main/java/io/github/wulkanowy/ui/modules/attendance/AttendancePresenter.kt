@@ -216,21 +216,14 @@ class AttendancePresenter @Inject constructor(
             )
         }
             .logResourceStatus("load attendance")
-            .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "attendance",
-                    "items" to it.size
-                )
+            .onResourceLoading {
+                view?.showExcuseButton(false)
             }.mapResourceData {
                 if (prefRepository.isShowPresent) {
                     it
                 } else {
                     it.filter { item -> !item.presence }
                 }.sortedBy { item -> item.number }
-            }.onResourceLoading {
-                view?.showExcuseButton(false)
             }.onResourceData {
                 view?.run {
                     enableSwipe(true)
@@ -245,13 +238,21 @@ class AttendancePresenter @Inject constructor(
                 isVulcanExcusedFunctionEnabled = it.any { item -> item.excusable }
                 val anyExcusables = it.any { it.isExcusableOrNotExcused }
                 view?.showExcuseButton(anyExcusables && (isParent || isVulcanExcusedFunctionEnabled))
+
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "attendance",
+                    "items" to it.size
+                )
             }.onResourceNotLoading {
                 view?.run {
                     showRefresh(false)
                     showProgress(false)
                     enableSwipe(true)
                 }
-            }.launch()
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch()
     }
 
     private fun excuseAbsence(reason: String?, toExcuseList: List<Attendance>) {

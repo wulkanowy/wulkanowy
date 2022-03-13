@@ -105,13 +105,6 @@ class HomeworkPresenter @Inject constructor(
             )
         }
             .logResourceStatus("loading homework")
-            .onResourceSuccess {
-                analytics.logEvent(
-                    "load_data",
-                    "type" to "homework",
-                    "items" to it.size
-                )
-            }
             .mapResourceData { createHomeworkItem(it) }
             .onResourceData {
                 view?.run {
@@ -123,6 +116,13 @@ class HomeworkPresenter @Inject constructor(
                     showEmpty(it.isEmpty())
                     updateData(it)
                 }
+            }
+            .onResourceSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "homework",
+                    "items" to it.size
+                )
             }
             .onResourceNotLoading { view?.showRefresh(false) }
             .onResourceError(errorHandler::dispatch)

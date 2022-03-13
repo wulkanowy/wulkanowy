@@ -62,9 +62,8 @@ class LuckyNumberHistoryPresenter @Inject constructor(
             )
         }
             .logResourceStatus("load lucky number history")
-            .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
-                val first = it.first()
+            .onResourceData {
+                val first = it.first() // todo
                 if (!first.isNullOrEmpty()) {
                     view?.apply {
                         updateData(first)
@@ -73,11 +72,6 @@ class LuckyNumberHistoryPresenter @Inject constructor(
                         showErrorView(false)
                         showProgress(false)
                     }
-                    analytics.logEvent(
-                        "load_items",
-                        "type" to "lucky_number_history",
-                        "numbers" to it
-                    )
                 } else {
                     view?.run {
                         showContent(false)
@@ -85,11 +79,16 @@ class LuckyNumberHistoryPresenter @Inject constructor(
                         showErrorView(false)
                     }
                 }
-            }.onResourceNotLoading {
-                view?.run {
-                    showProgress(false)
-                }
-            }.launch()
+            }
+            .onResourceSuccess {
+                analytics.logEvent(
+                    "load_items",
+                    "type" to "lucky_number_history",
+                )
+            }
+            .onResourceNotLoading { view?.showProgress(false) }
+            .onResourceError(errorHandler::dispatch)
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
@@ -134,7 +133,7 @@ class LuckyNumberHistoryPresenter @Inject constructor(
             showNextButton(!currentDate.plusDays(7).isHolidays)
             updateNavigationWeek(
                 "${currentDate.monday.toFormattedString("dd.MM")} - " +
-                        currentDate.sunday.toFormattedString("dd.MM")
+                    currentDate.sunday.toFormattedString("dd.MM")
             )
         }
     }

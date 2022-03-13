@@ -105,7 +105,6 @@ class MessageTabPresenter @Inject constructor(
             messageRepository.getMessages(student, semester, folder, forceRefresh)
         }
             .logResourceStatus("load $folder message")
-            .onResourceError(errorHandler::dispatch)
             .onEach {
                 when (it) {
                     is Resource.Intermediate -> {
@@ -163,6 +162,7 @@ class MessageTabPresenter @Inject constructor(
                     notifyParentDataLoaded()
                 }
             }
+            .onResourceError(errorHandler::dispatch)
             .catch {
                 errorHandler.dispatch(it)
                 view?.notifyParentDataLoaded()

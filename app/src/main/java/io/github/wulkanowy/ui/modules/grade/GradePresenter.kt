@@ -99,8 +99,7 @@ class GradePresenter @Inject constructor(
             semesterRepository.getSemesters(student, refreshOnNoCurrent = true)
         }
             .logResourceStatus("load grade data")
-            .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
+            .onResourceData {
                 val current = it.getCurrentOrLast()
                 selectedIndex = if (selectedIndex == 0) current.semesterName else selectedIndex
                 schoolYear = current.schoolYear
@@ -113,6 +112,7 @@ class GradePresenter @Inject constructor(
                     showSemesterSwitch(true)
                 }
             }
+            .onResourceError(errorHandler::dispatch)
             .launch()
     }
 

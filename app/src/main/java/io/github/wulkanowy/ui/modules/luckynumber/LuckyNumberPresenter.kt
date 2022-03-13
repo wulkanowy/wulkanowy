@@ -35,8 +35,7 @@ class LuckyNumberPresenter @Inject constructor(
             luckyNumberRepository.getLuckyNumber(student, forceRefresh)
         }
             .logResourceStatus("load lucky number")
-            .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
+            .onResourceData {
                 if (it != null) {
                     view?.apply {
                         updateData(it)
@@ -44,17 +43,21 @@ class LuckyNumberPresenter @Inject constructor(
                         showEmpty(false)
                         showErrorView(false)
                     }
-                    analytics.logEvent(
-                        "load_item",
-                        "type" to "lucky_number",
-                        "number" to it.luckyNumber
-                    )
                 } else {
                     view?.run {
                         showContent(false)
                         showEmpty(true)
                         showErrorView(false)
                     }
+                }
+            }
+            .onResourceSuccess {
+                if (it != null) {
+                    analytics.logEvent(
+                        "load_item",
+                        "type" to "lucky_number",
+                        "number" to it.luckyNumber
+                    )
                 }
             }
             .onResourceNotLoading {
@@ -64,6 +67,7 @@ class LuckyNumberPresenter @Inject constructor(
                     enableSwipe(true)
                 }
             }
+            .onResourceError(errorHandler::dispatch)
             .launch()
     }
 

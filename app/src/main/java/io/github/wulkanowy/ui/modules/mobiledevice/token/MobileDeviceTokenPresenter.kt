@@ -31,22 +31,23 @@ class MobileDeviceTokenPresenter @Inject constructor(
             mobileDeviceRepository.getToken(student, semester)
         }
             .logResourceStatus("load mobile device registration")
-            .onResourceSuccess {
+            .onResourceData {
                 view?.run {
                     updateData(it)
                     showContent()
                 }
-
+            }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "device_register",
                     "symbol" to it.token.substring(0, 3)
                 )
             }
+            .onResourceNotLoading { view?.hideLoading() }
             .onResourceError {
                 view?.closeDialog()
                 errorHandler.dispatch(it)
             }
-            .onResourceNotLoading { view?.hideLoading() }
             .launch()
     }
 }

@@ -64,13 +64,13 @@ class SchoolAnnouncementPresenter @Inject constructor(
                     updateData(it)
                 }
             }
-            .onResourceNotLoading { view?.showRefresh(false) }
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_school_announcement",
                     "items" to it.size
                 )
             }
+            .onResourceNotLoading { view?.showRefresh(false) }
             .onResourceError(errorHandler::dispatch)
             .launch("load_data")
     }

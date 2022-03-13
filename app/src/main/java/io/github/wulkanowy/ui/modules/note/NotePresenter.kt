@@ -54,7 +54,6 @@ class NotePresenter @Inject constructor(
             noteRepository.getNotes(student, semester, forceRefresh)
         }
             .logResourceStatus("load note data")
-            .onResourceError(errorHandler::dispatch)
             .mapResourceData { it.sortedByDescending { note -> note.date } }
             .onResourceData {
                 view?.run {
@@ -67,7 +66,6 @@ class NotePresenter @Inject constructor(
                     updateData(it)
                 }
             }
-            .onResourceNotLoading { view?.showRefresh(false) }
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
@@ -75,6 +73,8 @@ class NotePresenter @Inject constructor(
                     "items" to it.size
                 )
             }
+            .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceError(errorHandler::dispatch)
             .launch()
     }
 

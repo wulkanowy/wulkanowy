@@ -53,7 +53,6 @@ class MobileDevicePresenter @Inject constructor(
             mobileDeviceRepository.getDevices(student, semester, forceRefresh)
         }
             .logResourceStatus("load mobile devices data")
-            .onResourceError(errorHandler::dispatch)
             .onResourceData {
                 view?.run {
                     enableSwipe(true)
@@ -73,6 +72,7 @@ class MobileDevicePresenter @Inject constructor(
                 )
             }
             .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceError(errorHandler::dispatch)
             .launch()
     }
 
@@ -113,12 +113,13 @@ class MobileDevicePresenter @Inject constructor(
             mobileDeviceRepository.unregisterDevice(student, semester, device)
         }
             .logResourceStatus("unregister device")
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.run {
                     showProgress(false)
                     enableSwipe(true)
                 }
-            }.launch("unregister")
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch("unregister")
     }
 }

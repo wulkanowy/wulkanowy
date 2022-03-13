@@ -76,8 +76,7 @@ class StudentInfoPresenter @Inject constructor(
             )
         }
             .logResourceStatus("load student info $infoType")
-            .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
+            .onResourceData {
                 val isFamily = infoType == StudentInfoView.Type.FAMILY
                 val isFirstGuardianEmpty = it?.firstGuardian == null
                 val isSecondGuardianEmpty = it?.secondGuardian == null
@@ -89,7 +88,6 @@ class StudentInfoPresenter @Inject constructor(
                         showEmpty(false)
                         showErrorView(false)
                     }
-                    analytics.logEvent("load_item", "type" to "student_info")
                 } else {
                     Timber.i("Loading student info $infoType result: No student or family info found")
                     view?.run {
@@ -98,13 +96,21 @@ class StudentInfoPresenter @Inject constructor(
                         showErrorView(false)
                     }
                 }
-            }.onResourceNotLoading {
+            }
+            .onResourceSuccess {
+                if (it != null) {
+                    analytics.logEvent("load_item", "type" to "student_info")
+                }
+            }
+            .onResourceNotLoading {
                 view?.run {
                     hideRefresh()
                     showProgress(false)
                     enableSwipe(true)
                 }
-            }.launch()
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch()
     }
 
     private fun showCorrectData(studentInfo: StudentInfo) {

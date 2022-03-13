@@ -131,13 +131,14 @@ class AttendanceSummaryPresenter @Inject constructor(
             subjectRepository.getSubjects(student, semester)
         }
             .logResourceStatus("load attendance summary subjects")
-            .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
+            .onResourceData {
                 subjects = it
                 view?.run {
                     view?.updateSubjects(it.map { subject -> subject.name }.toList())
                     showSubjects(true)
                 }
-            }.launch("subjects")
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch("subjects")
     }
 }

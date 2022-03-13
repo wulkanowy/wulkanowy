@@ -113,7 +113,6 @@ class CompletedLessonsPresenter @Inject constructor(
             )
         }
             .logResourceStatus("load completed lessons")
-            .onResourceError(errorHandler::dispatch)
             .mapResourceData { it.sortedBy { lesson -> lesson.number } }
             .onResourceData {
                 view?.run {
@@ -126,7 +125,6 @@ class CompletedLessonsPresenter @Inject constructor(
                     updateData(it)
                 }
             }
-            .onResourceNotLoading { view?.showRefresh(false) }
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
@@ -134,6 +132,8 @@ class CompletedLessonsPresenter @Inject constructor(
                     "items" to it.size
                 )
             }
+            .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceError(errorHandler::dispatch)
             .launch()
     }
 

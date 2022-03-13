@@ -5,10 +5,7 @@ import io.github.wulkanowy.data.repositories.AppCreatorRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.onResourceError
-import io.github.wulkanowy.utils.onResourceLoading
-import io.github.wulkanowy.utils.onResourceSuccess
-import io.github.wulkanowy.utils.resourceFlow
+import io.github.wulkanowy.utils.*
 import javax.inject.Inject
 
 class ContributorPresenter @Inject constructor(
@@ -33,14 +30,10 @@ class ContributorPresenter @Inject constructor(
 
     private fun loadData() {
         resourceFlow { appCreatorRepository.getAppCreators() }
-            .onResourceSuccess {
-                view?.run {
-                    showProgress(false)
-                    updateData(it)
-                }
-            }
-            .onResourceError { errorHandler.dispatch(it) }
             .onResourceLoading { view?.showProgress(true) }
+            .onResourceSuccess { view?.updateData(it) }
+            .onResourceNotLoading { view?.showProgress(false) }
+            .onResourceError { errorHandler.dispatch(it) }
             .launch()
     }
 }

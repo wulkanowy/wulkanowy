@@ -133,26 +133,30 @@ class AdditionalLessonsPresenter @Inject constructor(
             timetableRepository.getTimetable(student, semester, date, date, forceRefresh, true)
         }
             .logResourceStatus("load additional lessons")
-            .onResourceError(errorHandler::dispatch)
-            .onResourceSuccess {
+            .onResourceData {
                 view?.apply {
                     updateData(it.additional.sortedBy { item -> item.start })
                     showEmpty(it.additional.isEmpty())
                     showErrorView(false)
                     showContent(it.additional.isNotEmpty())
                 }
+            }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "additional_lessons",
                     "items" to it.additional.size
                 )
-            }.onResourceNotLoading {
+            }
+            .onResourceNotLoading {
                 view?.run {
                     hideRefresh()
                     showProgress(false)
                     enableSwipe(true)
                 }
-            }.launch()
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

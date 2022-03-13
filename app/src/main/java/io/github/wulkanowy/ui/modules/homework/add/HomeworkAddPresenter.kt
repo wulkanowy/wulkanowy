@@ -69,13 +69,15 @@ class HomeworkAddPresenter @Inject constructor(
                     attachments = emptyList(),
                 ).apply { isAddedByUser = true }
             )
-        }.logResourceStatus("homework insert")
-            .onResourceError(errorHandler::dispatch)
+        }
+            .logResourceStatus("homework insert")
             .onResourceSuccess {
                 view?.run {
                     showSuccessMessage()
                     closeDialog()
                 }
-            }.launch("add_homework")
+            }
+            .onResourceError(errorHandler::dispatch)
+            .launch("add_homework")
     }
 }

@@ -146,7 +146,6 @@ class TimetablePresenter @Inject constructor(
                     setDayHeaderMessage(it.headers.singleOrNull { header -> header.date == currentDate }?.content)
                 }
             }
-            .onResourceNotLoading { view?.showRefresh(false) }
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
@@ -154,6 +153,7 @@ class TimetablePresenter @Inject constructor(
                     "items" to it.lessons.size
                 )
             }
+            .onResourceNotLoading { view?.showRefresh(false) }
             .onResourceError(errorHandler::dispatch)
             .launch()
     }

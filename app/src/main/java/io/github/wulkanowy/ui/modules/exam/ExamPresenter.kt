@@ -119,8 +119,8 @@ class ExamPresenter @Inject constructor(
                     "items" to it.size
                 )
             }
-            .onResourceError(errorHandler::dispatch)
             .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceError(errorHandler::dispatch)
             .launch()
     }
 

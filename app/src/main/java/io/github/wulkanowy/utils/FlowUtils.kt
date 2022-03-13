@@ -2,7 +2,6 @@ package io.github.wulkanowy.utils
 
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.mapData
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -72,7 +71,6 @@ fun <T> resourceFlow(block: suspend () -> T) = flow {
     emit(Resource.Success(block()))
 }.catch { emit(Resource.Error(it)) }
 
-@OptIn(FlowPreview::class)
 fun <T> flatResourceFlow(block: suspend () -> Flow<Resource<T>>) = flow {
     emit(Resource.Loading())
     emitAll(block().filter { it is Resource.Intermediate || it !is Resource.Loading })
@@ -92,11 +90,12 @@ fun <T, U> Flow<Resource<T>>.mapResourceData(block: (T) -> U) = map {
     it.mapData(block)
 }
 
-fun <T> Flow<Resource<T>>.onResourceData(block: (T) -> Unit) = onEach {
-    if (it is Resource.Success) {
-        block(it.data)
-    } else if (it is Resource.Intermediate) {
-        block(it.data)
+fun <T> Flow<Resource<T>>.onResourceData(block: suspend (T) -> Unit) = onEach {
+    when (it) {
+        is Resource.Success -> block(it.data)
+        is Resource.Intermediate -> block(it.data)
+        is Resource.Error,
+        is Resource.Loading -> Unit
     }
 }
 
