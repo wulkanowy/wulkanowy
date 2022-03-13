@@ -563,6 +563,7 @@
     <string name="all_copied">Kopiert</string>
     <string name="all_undo">lösen</string>
     <string name="all_change">Ändern</string>
+    <string name="all_add_to_calendar">Add to calendar</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Keine Lektionen</string>
     <string name="widget_timetable_theme_title">Thema wählen</string>
