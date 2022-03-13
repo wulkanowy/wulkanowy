@@ -649,6 +649,7 @@
     <string name="all_copied">Skopiowano</string>
     <string name="all_undo">Cofnij</string>
     <string name="all_change">Zmień</string>
+    <string name="all_add_to_calendar">Add to calendar</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Brak lekcji</string>
     <string name="widget_timetable_theme_title">Wybierz motyw</string>
