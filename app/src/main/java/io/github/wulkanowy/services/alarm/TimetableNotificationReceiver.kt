@@ -10,15 +10,15 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.onResourceError
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.services.sync.channels.UpcomingLessonsChannel.Companion.CHANNEL_ID
 import io.github.wulkanowy.ui.modules.Destination
 import io.github.wulkanowy.ui.modules.splash.SplashActivity
 import io.github.wulkanowy.utils.PendingIntentCompat
 import io.github.wulkanowy.utils.getCompatColor
-import io.github.wulkanowy.utils.onResourceError
-import io.github.wulkanowy.utils.resourceFlow
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.launchIn
@@ -68,9 +68,9 @@ class TimetableNotificationReceiver : BroadcastReceiver() {
             } else {
                 Timber.d("Notification studentId($studentId) differs from current(${student.studentId})")
             }
-        }.onResourceError {
-            Timber.e(it)
-        }.launchIn(GlobalScope)
+        }
+            .onResourceError { Timber.e(it) }
+            .launchIn(GlobalScope)
     }
 
     private fun prepareNotification(context: Context, intent: Intent, showStudentName: Boolean) {

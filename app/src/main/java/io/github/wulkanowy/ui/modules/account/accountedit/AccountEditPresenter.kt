@@ -1,11 +1,12 @@
 package io.github.wulkanowy.ui.modules.account.accountedit
 
+import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.db.entities.StudentNickAndAvatar
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.AppInfo
 import timber.log.Timber
 import javax.inject.Inject
 

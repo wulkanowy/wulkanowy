@@ -5,6 +5,7 @@ import io.github.wulkanowy.data.db.dao.TimetableDao
 import io.github.wulkanowy.data.db.dao.TimetableHeaderDao
 import io.github.wulkanowy.data.db.entities.*
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.data.pojos.TimetableFull
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.services.alarm.TimetableNotificationSchedulerHelper

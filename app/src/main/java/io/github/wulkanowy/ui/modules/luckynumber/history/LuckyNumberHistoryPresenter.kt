@@ -6,10 +6,7 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.*
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
@@ -53,20 +50,20 @@ class LuckyNumberHistoryPresenter @Inject constructor(
     }
 
     private fun loadData() {
-        resourceFlow {
+        flow {
             val student = studentRepository.getCurrentStudent()
-            luckyNumberRepository.getLuckyNumberHistory(
-                student,
-                currentDate.monday,
-                currentDate.sunday
+            emitAll(
+                luckyNumberRepository.getLuckyNumberHistory(
+                    student = student,
+                    start = currentDate.monday,
+                    end = currentDate.sunday
+                )
             )
         }
-            .logResourceStatus("load lucky number history")
-            .onResourceData {
-                val first = it.first() // todo
-                if (!first.isNullOrEmpty()) {
+            .onEach {
+                if (!it.isNullOrEmpty()) {
                     view?.apply {
-                        updateData(first)
+                        updateData(it)
                         showContent(true)
                         showEmpty(false)
                         showErrorView(false)
@@ -77,18 +74,17 @@ class LuckyNumberHistoryPresenter @Inject constructor(
                         showContent(false)
                         showEmpty(true)
                         showErrorView(false)
+                        showProgress(false)
                     }
                 }
-            }
-            .onResourceSuccess {
+
                 analytics.logEvent(
                     "load_items",
                     "type" to "lucky_number_history",
                 )
             }
-            .onResourceNotLoading { view?.showProgress(false) }
-            .onResourceError(errorHandler::dispatch)
-            .launch()
+            .catch { errorHandler.dispatch(it) }
+            .launchIn(presenterScope)
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {

@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.timetable
 
+import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Timetable
 import io.github.wulkanowy.data.enums.TimetableMode
 import io.github.wulkanowy.data.repositories.PreferencesRepository

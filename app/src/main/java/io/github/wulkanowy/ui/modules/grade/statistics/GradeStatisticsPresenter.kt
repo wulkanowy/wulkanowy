@@ -1,11 +1,12 @@
 package io.github.wulkanowy.ui.modules.grade.statistics
 
+import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Subject
 import io.github.wulkanowy.data.pojos.GradeStatisticsItem
 import io.github.wulkanowy.data.repositories.*
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.AnalyticsHelper
 import timber.log.Timber
 import javax.inject.Inject
 

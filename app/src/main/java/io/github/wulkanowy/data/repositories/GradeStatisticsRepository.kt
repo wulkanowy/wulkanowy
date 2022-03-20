@@ -11,8 +11,12 @@ import io.github.wulkanowy.data.mappers.mapPartialToStatisticItems
 import io.github.wulkanowy.data.mappers.mapPointsToStatisticsItems
 import io.github.wulkanowy.data.mappers.mapSemesterToStatisticItems
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.sdk.Sdk
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.AutoRefreshHelper
+import io.github.wulkanowy.utils.getRefreshKey
+import io.github.wulkanowy.utils.init
+import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.sync.Mutex
 import java.util.*
 import javax.inject.Inject

@@ -1,13 +1,13 @@
 package io.github.wulkanowy.ui.modules.account
 
 import io.github.wulkanowy.data.db.entities.StudentWithSemesters
+import io.github.wulkanowy.data.logResourceStatus
+import io.github.wulkanowy.data.onResourceError
+import io.github.wulkanowy.data.onResourceSuccess
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.logResourceStatus
-import io.github.wulkanowy.utils.onResourceError
-import io.github.wulkanowy.utils.onResourceSuccess
-import io.github.wulkanowy.utils.resourceFlow
 import timber.log.Timber
 import javax.inject.Inject
 

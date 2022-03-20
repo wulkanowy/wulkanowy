@@ -3,8 +3,8 @@ package io.github.wulkanowy.data.repositories
 import io.github.wulkanowy.data.api.AdminMessageService
 import io.github.wulkanowy.data.db.dao.AdminMessageDao
 import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.utils.AppInfo
-import io.github.wulkanowy.utils.networkBoundResource
 import kotlinx.coroutines.sync.Mutex
 import javax.inject.Inject
 import javax.inject.Singleton

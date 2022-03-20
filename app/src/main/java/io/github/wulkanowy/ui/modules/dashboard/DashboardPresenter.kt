@@ -1,18 +1,14 @@
 package io.github.wulkanowy.ui.modules.dashboard
 
-import io.github.wulkanowy.data.Resource
-import io.github.wulkanowy.data.dataOrNull
+import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.AdminMessage
 import io.github.wulkanowy.data.db.entities.LuckyNumber
 import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.enums.MessageFolder
-import io.github.wulkanowy.data.errorOrNull
 import io.github.wulkanowy.data.repositories.*
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.calculatePercentage
-import io.github.wulkanowy.utils.flatResourceFlow
-import io.github.wulkanowy.utils.mapResourceData
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -106,7 +102,7 @@ class DashboardPresenter @Inject constructor(
         forceRefresh: Boolean
     ) = dashboardTilesToLoad.filter { newItemToLoad ->
         dashboardLoadedTiles.none { it == newItemToLoad } || forceRefresh
-                || newItemToLoad == DashboardItem.Tile.ADMIN_MESSAGE
+            || newItemToLoad == DashboardItem.Tile.ADMIN_MESSAGE
     }
 
     private fun removeUnselectedTiles(tilesToLoad: List<DashboardItem.Tile>) {

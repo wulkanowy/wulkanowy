@@ -3,9 +3,9 @@ package io.github.wulkanowy.ui.modules.debug.logviewer
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.repositories.LoggerRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
-import io.github.wulkanowy.utils.resourceFlow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject

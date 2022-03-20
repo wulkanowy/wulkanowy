@@ -1,13 +1,13 @@
 package io.github.wulkanowy.ui.modules.login.recover
 
 import io.github.wulkanowy.data.Resource
+import io.github.wulkanowy.data.onResourceNotLoading
 import io.github.wulkanowy.data.repositories.RecoverRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.ifNullOrBlank
-import io.github.wulkanowy.utils.onResourceNotLoading
-import io.github.wulkanowy.utils.resourceFlow
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject

@@ -1,13 +1,10 @@
 package io.github.wulkanowy.ui.modules.grade
 
-import io.github.wulkanowy.data.Resource
-import io.github.wulkanowy.data.dataOrNull
+import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.db.entities.Semester
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.data.errorOrNull
-import io.github.wulkanowy.data.mapData
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
@@ -15,8 +12,6 @@ import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.ui.modules.grade.GradeAverageMode.*
 import io.github.wulkanowy.utils.calcAverage
 import io.github.wulkanowy.utils.changeModifier
-import io.github.wulkanowy.utils.flatResourceFlow
-import io.github.wulkanowy.utils.mapResourceData
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
