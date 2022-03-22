@@ -192,13 +192,12 @@ class GradeStatisticsPresenter @Inject constructor(
             .mapResourceData {
                 val isNoContent = checkIsNoContent(it, type)
                 if (isNoContent) emptyList() else it
-            }.onResourceData {
+            }
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                    showRefresh(true)
                     showErrorView(false)
-                    //showContent(it.isNotEmpty()) // todo
                     showEmpty(it.isEmpty())
                     updateData(
                         newItems = it,
@@ -206,13 +205,16 @@ class GradeStatisticsPresenter @Inject constructor(
                         showAllSubjectsOnStatisticsList = preferencesRepository.showAllSubjectsOnStatisticsList
                     )
                 }
-            }.onResourceSuccess {
+            }
+            .onResourceIntermediate { view?.showRefresh(true) }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "grade_statistics",
                     "items" to it.size
                 )
-            }.onResourceNotLoading {
+            }
+            .onResourceNotLoading {
                 view?.run {
                     showRefresh(false)
                     notifyParentDataLoaded(semesterId)

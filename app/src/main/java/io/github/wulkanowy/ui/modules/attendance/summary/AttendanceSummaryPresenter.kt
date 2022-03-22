@@ -91,13 +91,14 @@ class AttendanceSummaryPresenter @Inject constructor(
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                    showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
                     updateDataSet(it)
                 }
-            }.onResourceSuccess {
+            }
+            .onResourceIntermediate { view?.showRefresh(true) }
+            .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
                     "type" to "attendance_summary",

@@ -218,23 +218,26 @@ class AttendancePresenter @Inject constructor(
             .logResourceStatus("load attendance")
             .onResourceLoading {
                 view?.showExcuseButton(false)
-            }.mapResourceData {
+            }
+            .mapResourceData {
                 if (prefRepository.isShowPresent) {
                     it
                 } else {
                     it.filter { item -> !item.presence }
                 }.sortedBy { item -> item.number }
-            }.onResourceData {
+            }
+            .onResourceData {
                 view?.run {
                     enableSwipe(true)
-                    showRefresh(true)
                     showProgress(false)
                     showErrorView(false)
                     showEmpty(it.isEmpty())
                     showContent(it.isNotEmpty())
                     updateData(it)
                 }
-            }.onResourceSuccess {
+            }
+            .onResourceIntermediate { view?.showRefresh(true) }
+            .onResourceSuccess {
                 isVulcanExcusedFunctionEnabled = it.any { item -> item.excusable }
                 val anyExcusables = it.any { it.isExcusableOrNotExcused }
                 view?.showExcuseButton(anyExcusables && (isParent || isVulcanExcusedFunctionEnabled))
@@ -244,7 +247,8 @@ class AttendancePresenter @Inject constructor(
                     "type" to "attendance",
                     "items" to it.size
                 )
-            }.onResourceNotLoading {
+            }
+            .onResourceNotLoading {
                 view?.run {
                     showRefresh(false)
                     showProgress(false)

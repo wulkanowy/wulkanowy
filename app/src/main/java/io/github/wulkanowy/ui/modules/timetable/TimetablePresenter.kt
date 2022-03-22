@@ -139,7 +139,6 @@ class TimetablePresenter @Inject constructor(
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                    showRefresh(true)
                     showErrorView(false)
                     showContent(it.lessons.isNotEmpty())
                     showEmpty(it.lessons.isEmpty())
@@ -147,6 +146,7 @@ class TimetablePresenter @Inject constructor(
                     setDayHeaderMessage(it.headers.singleOrNull { header -> header.date == currentDate }?.content)
                 }
             }
+            .onResourceIntermediate { view?.showRefresh(true) }
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",

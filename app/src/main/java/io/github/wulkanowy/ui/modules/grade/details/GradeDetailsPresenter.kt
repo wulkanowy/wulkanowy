@@ -77,9 +77,7 @@ class GradeDetailsPresenter @Inject constructor(
             gradeRepository.updateGrades(unreadGrades.map { it.apply { isRead = true } })
         }
             .logResourceStatus("mark grades as read")
-            .onResourceSuccess {
-                loadData(currentSemesterId, false)
-            }
+            .onResourceSuccess { loadData(currentSemesterId, false) }
             .onResourceError(errorHandler::dispatch)
             .launch("mark")
         return true
@@ -137,7 +135,6 @@ class GradeDetailsPresenter @Inject constructor(
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                    showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
@@ -150,6 +147,7 @@ class GradeDetailsPresenter @Inject constructor(
                     )
                 }
             }
+            .onResourceIntermediate { view?.showRefresh(true) }
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",

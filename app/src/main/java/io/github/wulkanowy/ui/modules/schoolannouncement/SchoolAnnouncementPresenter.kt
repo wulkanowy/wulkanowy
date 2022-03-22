@@ -58,7 +58,6 @@ class SchoolAnnouncementPresenter @Inject constructor(
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                    showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
@@ -71,6 +70,7 @@ class SchoolAnnouncementPresenter @Inject constructor(
                     "items" to it.size
                 )
             }
+            .onResourceIntermediate { view?.showRefresh(true) }
             .onResourceNotLoading { view?.showRefresh(false) }
             .onResourceError(errorHandler::dispatch)
             .launch("load_data")

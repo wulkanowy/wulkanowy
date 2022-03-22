@@ -76,6 +76,12 @@ fun <T> Flow<Resource<T>>.onResourceLoading(block: suspend () -> Unit) = onEach 
     }
 }
 
+fun <T> Flow<Resource<T>>.onResourceIntermediate(block: suspend () -> Unit) = onEach {
+    if (it is Resource.Intermediate) {
+        block()
+    }
+}
+
 fun <T> Flow<Resource<T>>.onResourceSuccess(block: suspend (T) -> Unit) = onEach {
     if (it is Resource.Success) {
         block(it.data)

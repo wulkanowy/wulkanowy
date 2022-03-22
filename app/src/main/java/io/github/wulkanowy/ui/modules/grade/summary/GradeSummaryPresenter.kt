@@ -44,13 +44,13 @@ class GradeSummaryPresenter @Inject constructor(
                 view?.run {
                     enableSwipe(true)
                     showProgress(false)
-                    showRefresh(true)
                     showErrorView(false)
                     showContent(it.isNotEmpty())
                     showEmpty(it.isEmpty())
                     updateData(it)
                 }
             }
+            .onResourceIntermediate { view?.showRefresh(true) }
             .onResourceSuccess {
                 analytics.logEvent(
                     "load_data",
