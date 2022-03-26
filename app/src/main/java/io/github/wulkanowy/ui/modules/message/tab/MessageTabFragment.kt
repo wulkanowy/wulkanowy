@@ -22,6 +22,7 @@ import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.hideSoftInput
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -211,6 +212,10 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         (parentFragment as? MessageFragment)?.onChildFragmentLoaded()
     }
 
+    override fun notifyParentShowActionMode(show: Boolean) {
+        (parentFragment as? MessageFragment)?.onChildFragmentShowActionMode(show)
+    }
+
     fun onParentLoadData(forceRefresh: Boolean) {
         presenter.onParentViewLoadData(forceRefresh)
     }
@@ -232,6 +237,10 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         } else {
             actionMode?.finish()
         }
+    }
+
+    override fun hideKeyboard() {
+        activity?.hideSoftInput()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

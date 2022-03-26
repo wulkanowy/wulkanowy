@@ -39,5 +39,9 @@ interface MessageTabView : BaseView {
 
     fun notifyParentDataLoaded()
 
+    fun notifyParentShowActionMode(show: Boolean)
+
+    fun hideKeyboard()
+
     fun showActionMode(show: Boolean)
 }

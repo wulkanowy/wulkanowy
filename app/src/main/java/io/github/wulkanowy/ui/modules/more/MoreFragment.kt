@@ -91,7 +91,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>(R.layout.fragment_more), 
 
     override fun onFragmentChanged() {
         (parentFragmentManager.fragments.find { it is MessageFragment } as MessageFragment?)
-            ?.notifyChildrenFinishActionMode()
+            ?.onFragmentChanged()
     }
 
     override fun updateData(data: List<Pair<String, Drawable?>>) {

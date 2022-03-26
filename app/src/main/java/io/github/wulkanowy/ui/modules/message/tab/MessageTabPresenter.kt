@@ -39,7 +39,7 @@ class MessageTabPresenter @Inject constructor(
 
     private val searchChannel = Channel<String>()
 
-    private val messagesToDelete = mutableListOf<Message>()
+    private val messagesToDelete = mutableSetOf<Message>()
 
     private var onlyUnread: Boolean? = false
 
@@ -57,14 +57,14 @@ class MessageTabPresenter @Inject constructor(
 
     fun onSwipeRefresh() {
         Timber.i("Force refreshing the $folder message")
-        view?.run { loadData(true, onlyUnread == true, onlyWithAttachments) }
+        view?.run { loadData(true) }
     }
 
     fun onRetry() {
         view?.run {
             showErrorView(false)
             showProgress(true)
-            loadData(true, onlyUnread == true, onlyWithAttachments)
+            loadData(true)
         }
     }
 
@@ -73,7 +73,7 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onParentViewLoadData(forceRefresh: Boolean) {
-        loadData(forceRefresh, onlyUnread == true, onlyWithAttachments)
+        loadData(forceRefresh)
     }
 
     fun onParentFinishActionMode() {
@@ -83,22 +83,25 @@ class MessageTabPresenter @Inject constructor(
     fun onDestroyActionMode() {
         isActionMode = false
         messagesToDelete.clear()
-        updateDataInView(messages)
+        updateDataInView()
 
         view?.run {
             enableSwipe(true)
             notifyParentShowNewMessage(true)
+            notifyParentShowActionMode(false)
         }
     }
 
     fun onPrepareActionMode(): Boolean {
         isActionMode = true
         messagesToDelete.clear()
-        updateDataInView(messages)
+        updateDataInView()
 
         view?.apply {
             enableSwipe(false)
             notifyParentShowNewMessage(false)
+            notifyParentShowActionMode(true)
+            hideKeyboard()
         }
         return true
     }
@@ -129,14 +132,16 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onActionModeSelectCheckAll() {
-        val isAllSelected = messagesToDelete.containsAll(messages)
+        val messagesToSelect =
+            getFilteredData(lastSearchQuery, onlyUnread == true, onlyWithAttachments)
+        val isAllSelected = messagesToDelete.containsAll(messagesToSelect)
 
         if (isAllSelected) {
             messagesToDelete.clear()
             view?.showActionMode(false)
         } else {
-            messagesToDelete.addAll(messages)
-            updateDataInView(messages)
+            messagesToDelete.addAll(messagesToSelect)
+            updateDataInView()
         }
 
         view?.run {
@@ -152,7 +157,7 @@ class MessageTabPresenter @Inject constructor(
             messagesToDelete.add(messageItem.message)
 
             view?.updateActionModeTitle(messagesToDelete.size)
-            updateDataInView(messages)
+            updateDataInView()
         }
     }
 
@@ -175,33 +180,32 @@ class MessageTabPresenter @Inject constructor(
                 view?.showActionMode(false)
             }
 
+            val filteredData =
+                getFilteredData(lastSearchQuery, onlyUnread == true, onlyWithAttachments)
+
             view?.run {
                 updateActionModeTitle(messagesToDelete.size)
-                updateSelectAllMenu(messagesToDelete.containsAll(messages))
+                updateSelectAllMenu(messagesToDelete.containsAll(filteredData))
             }
-            updateDataInView(messages)
+            updateDataInView()
         }
     }
 
     fun onUnreadFilterSelected(isChecked: Boolean) {
         view?.run {
             onlyUnread = isChecked
-            loadData(false, onlyUnread == true, onlyWithAttachments)
+            loadData(false)
         }
     }
 
     fun onAttachmentsFilterSelected(isChecked: Boolean) {
         view?.run {
             onlyWithAttachments = isChecked
-            loadData(false, onlyUnread == true, onlyWithAttachments)
+            loadData(false)
         }
     }
 
-    private fun loadData(
-        forceRefresh: Boolean,
-        onlyUnread: Boolean,
-        onlyWithAttachments: Boolean
-    ) {
+    private fun loadData(forceRefresh: Boolean) {
         Timber.i("Loading $folder message data started")
 
         flowWithResourceIn {
@@ -222,12 +226,7 @@ class MessageTabPresenter @Inject constructor(
 
                         messages = it.data
 
-                        val filteredData = getFilteredData(
-                            query = lastSearchQuery,
-                            onlyUnread = onlyUnread,
-                            onlyWithAttachments = onlyWithAttachments
-                        )
-                        updateDataInView(filteredData)
+                        updateDataInView()
 
                         view?.notifyParentDataLoaded()
                     }
@@ -242,13 +241,7 @@ class MessageTabPresenter @Inject constructor(
                         showErrorView(false)
                     }
 
-                    updateDataInView(
-                        getFilteredData(
-                            lastSearchQuery,
-                            onlyUnread,
-                            onlyWithAttachments
-                        )
-                    )
+                    updateDataInView()
 
                     analytics.logEvent(
                         "load_data",
@@ -316,7 +309,7 @@ class MessageTabPresenter @Inject constructor(
                         showErrorView(false)
                     }
 
-                    updateDataInView(it)
+                    updateDataInView()
                     view?.resetListPosition()
                 }
         }
@@ -350,7 +343,9 @@ class MessageTabPresenter @Inject constructor(
         }
     }
 
-    private fun updateDataInView(data: List<Message>) {
+    private fun updateDataInView() {
+        val data = getFilteredData(lastSearchQuery, onlyUnread == true, onlyWithAttachments)
+
         val list = buildList {
             if (!isActionMode) {
                 add(
@@ -395,8 +390,8 @@ class MessageTabPresenter @Inject constructor(
 
 
         return (subjectRatio.toDouble().pow(2)
-                + senderOrRecipientRatio.toDouble().pow(2)
-                + dateRatio.toDouble().pow(2) * 2
-                ).toInt()
+            + senderOrRecipientRatio.toDouble().pow(2)
+            + dateRatio.toDouble().pow(2) * 2
+            ).toInt()
     }
 }
