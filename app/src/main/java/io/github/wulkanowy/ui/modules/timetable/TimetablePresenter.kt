@@ -131,7 +131,8 @@ class TimetablePresenter @Inject constructor(
                 semester = semester,
                 start = currentDate,
                 end = currentDate,
-                forceRefresh = forceRefresh
+                forceRefresh = forceRefresh,
+                timetableType = TimetableRepository.TimetableType.NORMAL
             )
         }
             .logResourceStatus("load timetable data")
@@ -154,7 +155,13 @@ class TimetablePresenter @Inject constructor(
                     "items" to it.lessons.size
                 )
             }
-            .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceNotLoading {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
+                    showRefresh(false)
+                }
+            }
             .onResourceError(errorHandler::dispatch)
             .launch()
     }

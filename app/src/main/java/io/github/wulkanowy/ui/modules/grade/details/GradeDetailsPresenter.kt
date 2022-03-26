@@ -157,7 +157,9 @@ class GradeDetailsPresenter @Inject constructor(
             }
             .onResourceNotLoading {
                 view?.run {
+                    enableSwipe(true)
                     showRefresh(false)
+                    showProgress(false)
                     notifyParentDataLoaded(semesterId)
                 }
             }

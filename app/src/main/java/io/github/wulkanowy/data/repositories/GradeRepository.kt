@@ -37,6 +37,7 @@ class GradeRepository @Inject constructor(
         notify: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it.first.isEmpty() },
         shouldFetch = { (details, summaries) ->
             val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(cacheKey, semester))
             details.isEmpty() || summaries.isEmpty() || forceRefresh || isExpired

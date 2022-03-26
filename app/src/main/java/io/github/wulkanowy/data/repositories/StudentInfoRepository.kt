@@ -25,6 +25,7 @@ class StudentInfoRepository @Inject constructor(
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it == null },
         shouldFetch = { it == null || forceRefresh },
         query = { studentInfoDao.loadStudentInfo(student.studentId) },
         fetch = {

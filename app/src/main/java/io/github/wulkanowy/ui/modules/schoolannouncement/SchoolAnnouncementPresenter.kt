@@ -71,7 +71,13 @@ class SchoolAnnouncementPresenter @Inject constructor(
                 )
             }
             .onResourceIntermediate { view?.showRefresh(true) }
-            .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceNotLoading {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
+                    showRefresh(false)
+                }
+            }
             .onResourceError(errorHandler::dispatch)
             .launch("load_data")
     }

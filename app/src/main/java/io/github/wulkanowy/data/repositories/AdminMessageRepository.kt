@@ -19,6 +19,7 @@ class AdminMessageRepository @Inject constructor(
 
     suspend fun getAdminMessages(student: Student) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it == null },
         query = { adminMessageDao.loadAll() },
         fetch = { adminMessageService.getAdminMessages() },
         shouldFetch = { true },

@@ -30,6 +30,7 @@ class SchoolRepository @Inject constructor(
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it == null },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(
                 key = getRefreshKey(cacheKey, student)

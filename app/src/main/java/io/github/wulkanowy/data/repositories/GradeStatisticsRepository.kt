@@ -46,6 +46,7 @@ class GradeStatisticsRepository @Inject constructor(
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = partialMutex,
+        isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(
                 key = getRefreshKey(partialCacheKey, semester)
@@ -90,6 +91,7 @@ class GradeStatisticsRepository @Inject constructor(
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = semesterMutex,
+        isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(
                 key = getRefreshKey(semesterCacheKey, semester)
@@ -147,6 +149,7 @@ class GradeStatisticsRepository @Inject constructor(
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = pointsMutex,
+        isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(pointsCacheKey, semester))
             it.isEmpty() || forceRefresh || isExpired

@@ -29,6 +29,7 @@ class LuckyNumberRepository @Inject constructor(
         notify: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it == null },
         shouldFetch = { it == null || forceRefresh },
         query = { luckyNumberDb.load(student.studentId, now()) },
         fetch = {

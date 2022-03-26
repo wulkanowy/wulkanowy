@@ -76,9 +76,9 @@ fun <T> Flow<Resource<T>>.onResourceLoading(block: suspend () -> Unit) = onEach 
     }
 }
 
-fun <T> Flow<Resource<T>>.onResourceIntermediate(block: suspend () -> Unit) = onEach {
+fun <T> Flow<Resource<T>>.onResourceIntermediate(block: suspend (T) -> Unit) = onEach {
     if (it is Resource.Intermediate) {
-        block()
+        block(it.data)
     }
 }
 
@@ -107,6 +107,7 @@ suspend fun <T> Flow<Resource<T>>.waitForResult() = takeWhile { it is Resource.L
 inline fun <ResultType, RequestType> networkBoundResource(
     mutex: Mutex = Mutex(),
     showSavedOnLoading: Boolean = true,
+    crossinline isResultEmpty: (ResultType) -> Boolean,
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend (ResultType) -> RequestType,
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
@@ -118,7 +119,11 @@ inline fun <ResultType, RequestType> networkBoundResource(
 
     val data = query().first()
     emitAll(if (shouldFetch(data)) {
-        if (showSavedOnLoading) emit(Resource.Intermediate(filterResult(data)))
+        val filteredResult = filterResult(data)
+
+        if (showSavedOnLoading && !isResultEmpty(filteredResult)) {
+            emit(Resource.Intermediate(filteredResult))
+        }
 
         try {
             val newData = fetch(data)
@@ -137,6 +142,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
 inline fun <ResultType, RequestType, T> networkBoundResource(
     mutex: Mutex = Mutex(),
     showSavedOnLoading: Boolean = true,
+    crossinline isResultEmpty: (T) -> Boolean,
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend (ResultType) -> RequestType,
     crossinline saveFetchResult: suspend (old: ResultType, new: RequestType) -> Unit,
@@ -148,8 +154,11 @@ inline fun <ResultType, RequestType, T> networkBoundResource(
 
     val data = query().first()
     emitAll(if (shouldFetch(data)) {
-        if (showSavedOnLoading) emit(Resource.Intermediate(mapResult(data)))
+        val mappedResult = mapResult(data)
 
+        if (showSavedOnLoading && !isResultEmpty(mappedResult)) {
+            emit(Resource.Intermediate(mappedResult))
+        }
         try {
             val newData = fetch(data)
             mutex.withLock { saveFetchResult(query().first(), newData) }

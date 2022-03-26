@@ -31,6 +31,7 @@ class NoteRepository @Inject constructor(
         notify: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(
                 getRefreshKey(cacheKey, semester)

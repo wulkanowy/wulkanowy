@@ -31,6 +31,7 @@ class SubjectRepository @Inject constructor(
         forceRefresh: Boolean = false,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(cacheKey, semester))
             it.isEmpty() || forceRefresh || isExpired

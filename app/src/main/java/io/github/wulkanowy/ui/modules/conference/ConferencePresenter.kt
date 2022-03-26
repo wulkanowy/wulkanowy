@@ -86,7 +86,13 @@ class ConferencePresenter @Inject constructor(
                     "items" to it.size
                 )
             }
-            .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceNotLoading {
+                view?.run {
+                    enableSwipe(true)
+                    showProgress(false)
+                    showRefresh(false)
+                }
+            }
             .onResourceError(errorHandler::dispatch)
             .launch()
     }

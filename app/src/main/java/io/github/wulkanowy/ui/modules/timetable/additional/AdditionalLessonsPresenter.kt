@@ -131,7 +131,15 @@ class AdditionalLessonsPresenter @Inject constructor(
         flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
-            timetableRepository.getTimetable(student, semester, date, date, forceRefresh, true)
+            timetableRepository.getTimetable(
+                student = student,
+                semester = semester,
+                start = date,
+                end = date,
+                forceRefresh = forceRefresh,
+                refreshAdditional = true,
+                timetableType = TimetableRepository.TimetableType.ADDITIONAL
+            )
         }
             .logResourceStatus("load additional lessons")
             .onResourceData {

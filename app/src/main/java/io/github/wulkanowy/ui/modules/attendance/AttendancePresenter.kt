@@ -208,11 +208,11 @@ class AttendancePresenter @Inject constructor(
 
             val semester = semesterRepository.getCurrentSemester(student)
             attendanceRepository.getAttendance(
-                student,
-                semester,
-                currentDate,
-                currentDate,
-                forceRefresh
+                student = student,
+                semester = semester,
+                start = currentDate,
+                end = currentDate,
+                forceRefresh = forceRefresh
             )
         }
             .logResourceStatus("load attendance")

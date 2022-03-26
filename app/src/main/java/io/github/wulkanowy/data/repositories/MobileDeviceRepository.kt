@@ -34,6 +34,7 @@ class MobileDeviceRepository @Inject constructor(
         forceRefresh: Boolean,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(cacheKey, student))
             it.isEmpty() || forceRefresh || isExpired

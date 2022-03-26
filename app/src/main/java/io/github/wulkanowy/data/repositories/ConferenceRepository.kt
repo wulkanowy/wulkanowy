@@ -36,6 +36,7 @@ class ConferenceRepository @Inject constructor(
         startDate: Instant = Instant.EPOCH,
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(cacheKey, semester))
             it.isEmpty() || forceRefresh || isExpired

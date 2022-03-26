@@ -31,6 +31,10 @@ class TimetableRepository @Inject constructor(
 
     private val cacheKey = "timetable"
 
+    enum class TimetableType {
+        NORMAL, ADDITIONAL
+    }
+
     fun getTimetable(
         student: Student,
         semester: Semester,
@@ -38,9 +42,17 @@ class TimetableRepository @Inject constructor(
         end: LocalDate,
         forceRefresh: Boolean,
         refreshAdditional: Boolean = false,
-        notify: Boolean = false
+        notify: Boolean = false,
+        timetableType: TimetableType = TimetableType.NORMAL
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
+        isResultEmpty = {
+            if (timetableType == TimetableType.NORMAL) {
+                it.lessons.isEmpty()
+            } else {
+                it.additional.isEmpty()
+            }
+        },
         shouldFetch = { (timetable, additional, headers) ->
             val refreshKey = getRefreshKey(cacheKey, semester, start, end)
             val isExpired = refreshHelper.shouldBeRefreshed(refreshKey)

@@ -106,7 +106,13 @@ class AttendanceSummaryPresenter @Inject constructor(
                     "item_id" to subjectId
                 )
             }
-            .onResourceNotLoading { view?.showRefresh(false) }
+            .onResourceNotLoading {
+                view?.run {
+                    showProgress(false)
+                    showRefresh(false)
+                    enableSwipe(true)
+                }
+            }
             .onResourceError(errorHandler::dispatch)
             .launch()
     }
