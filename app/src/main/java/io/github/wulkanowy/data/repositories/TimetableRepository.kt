@@ -47,10 +47,9 @@ class TimetableRepository @Inject constructor(
     ) = networkBoundResource(
         mutex = saveFetchResultMutex,
         isResultEmpty = {
-            if (timetableType == TimetableType.NORMAL) {
-                it.lessons.isEmpty()
-            } else {
-                it.additional.isEmpty()
+            when (timetableType) {
+                TimetableType.NORMAL -> it.lessons.isEmpty()
+                TimetableType.ADDITIONAL -> it.additional.isEmpty()
             }
         },
         shouldFetch = { (timetable, additional, headers) ->

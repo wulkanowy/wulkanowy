@@ -35,8 +35,8 @@ class AccountPresenter @Inject constructor(
     private fun loadData() {
         resourceFlow { studentRepository.getSavedStudents(false) }
             .logResourceStatus("load account data")
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess { view?.updateData(createAccountItems(it)) }
+            .onResourceError(errorHandler::dispatch)
             .launch("load")
     }
 

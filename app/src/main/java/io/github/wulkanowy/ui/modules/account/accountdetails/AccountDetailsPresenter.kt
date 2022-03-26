@@ -48,7 +48,6 @@ class AccountDetailsPresenter @Inject constructor(
     private fun loadData() {
         resourceFlow { studentRepository.getSavedStudentById(studentId ?: -1) }
             .logResourceStatus("loading account details view")
-            .onResourceError(errorHandler::dispatch)
             .onResourceLoading {
                 view?.run {
                     showProgress(true)
@@ -65,6 +64,7 @@ class AccountDetailsPresenter @Inject constructor(
                 }
             }
             .onResourceNotLoading { view?.showProgress(false) }
+            .onResourceError(errorHandler::dispatch)
             .launch()
     }
 
@@ -87,9 +87,9 @@ class AccountDetailsPresenter @Inject constructor(
 
         resourceFlow { studentRepository.switchStudent(studentWithSemesters!!) }
             .logResourceStatus("change student")
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess { view?.recreateMainView() }
             .onResourceNotLoading { view?.popViewToMain() }
+            .onResourceError(errorHandler::dispatch)
             .launch("switch")
     }
 
@@ -111,10 +111,9 @@ class AccountDetailsPresenter @Inject constructor(
                 studentRepository.switchStudent(students[0])
             }
 
-            return@resourceFlow students
+            students
         }
             .logResourceStatus("logout user")
-            .onResourceError(errorHandler::dispatch)
             .onResourceSuccess {
                 view?.run {
                     when {
@@ -141,6 +140,7 @@ class AccountDetailsPresenter @Inject constructor(
                     view?.popViewToAccounts()
                 }
             }
+            .onResourceError(errorHandler::dispatch)
             .launch("logout")
     }
 
