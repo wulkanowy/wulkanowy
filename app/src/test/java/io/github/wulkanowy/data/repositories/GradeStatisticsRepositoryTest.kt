@@ -6,13 +6,13 @@ import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradeSemesterStatisticsDao
 import io.github.wulkanowy.data.errorOrNull
 import io.github.wulkanowy.data.mappers.mapToEntities
+import io.github.wulkanowy.data.toFirstResult
 import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.GradeStatisticsItem
 import io.github.wulkanowy.sdk.pojo.GradeStatisticsSubject
 import io.github.wulkanowy.utils.AutoRefreshHelper
-import io.github.wulkanowy.utils.toFirstResult
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.SpyK

@@ -8,10 +8,10 @@ import io.github.wulkanowy.data.db.entities.Student
 import io.github.wulkanowy.data.repositories.GradeRepository
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.SemesterRepository
+import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.getSemesterEntity
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.Status
-import io.github.wulkanowy.utils.resourceFlow
 import io.github.wulkanowy.utils.status
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
