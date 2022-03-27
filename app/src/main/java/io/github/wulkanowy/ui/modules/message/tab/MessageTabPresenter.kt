@@ -1,6 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
-import io.github.wulkanowy.data.Status
+import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.repositories.MessageRepository
@@ -9,8 +9,6 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
 import io.github.wulkanowy.utils.AnalyticsHelper
-import io.github.wulkanowy.utils.afterLoading
-import io.github.wulkanowy.utils.flowWithResourceIn
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
@@ -203,64 +201,67 @@ class MessageTabPresenter @Inject constructor(
     private fun loadData(forceRefresh: Boolean) {
         Timber.i("Loading $folder message data started")
 
-        flowWithResourceIn {
+        flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val semester = semesterRepository.getCurrentSemester(student)
             messageRepository.getMessages(student, semester, folder, forceRefresh)
-        }.onEach {
-            when (it.status) {
-                Status.LOADING -> {
-                    if (!it.data.isNullOrEmpty()) {
-                        view?.run {
-                            enableSwipe(true)
-                            showErrorView(false)
-                            showRefresh(true)
-                            showProgress(false)
-                            showContent(true)
-                        }
+        }
+            .logResourceStatus("load $folder message")
+            .onEach {
+                when (it) {
+                    is Resource.Intermediate -> {
+                        if (it.data.isNotEmpty()) {
+                            view?.run {
+                                enableSwipe(true)
+                                showErrorView(false)
+                                showRefresh(true)
+                                showProgress(false)
+                                showContent(true)
+                            }
 
                         messages = it.data
 
-                        updateDataInView()
-
-                        view?.notifyParentDataLoaded()
+                                updateData(
+                                    messageItemsWithHeader,
+                                    folder.id == MessageFolder.SENT.id
+                                )
+                                notifyParentDataLoaded()
+                            }
+                        }
                     }
-                }
-                Status.SUCCESS -> {
-                    Timber.i("Loading $folder message result: Success")
-                    messages = it.data!!
-
-                    view?.run {
-                        showEmpty(it.data.isEmpty())
-                        showContent(true)
-                        showErrorView(false)
+                    is Resource.Success -> {
+                        messages = it.data
+                        updateData(
+                            getFilteredData(
+                                lastSearchQuery,
+                                onlyUnread,
+                                onlyWithAttachments
+                            )
+                        )
+                        analytics.logEvent(
+                            "load_data",
+                            "type" to "messages",
+                            "items" to it.data.size,
+                            "folder" to folder.name
+                        )
                     }
-
-                    updateDataInView()
-
-                    analytics.logEvent(
-                        "load_data",
-                        "type" to "messages",
-                        "items" to it.data.size,
-                        "folder" to folder.name
-                    )
-                }
-                Status.ERROR -> {
-                    Timber.i("Loading $folder message result: An exception occurred")
-                    errorHandler.dispatch(it.error!!)
+                    else -> {}
                 }
             }
-        }.afterLoading {
-            view?.run {
-                showRefresh(false)
-                showProgress(false)
-                enableSwipe(true)
-                notifyParentDataLoaded()
+            .onResourceNotLoading {
+                view?.run {
+                    showRefresh(false)
+                    showProgress(false)
+                    enableSwipe(true)
+                    notifyParentDataLoaded()
+                }
             }
-        }.catch {
-            errorHandler.dispatch(it)
-            view?.notifyParentDataLoaded()
-        }.launch()
+            .onResourceError(errorHandler::dispatch)
+            .catch {
+                errorHandler.dispatch(it)
+                view?.notifyParentDataLoaded()
+            }
+            .launch()
     }
 
     private fun showErrorViewOnError(message: String, error: Throwable) {
