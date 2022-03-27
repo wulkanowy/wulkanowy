@@ -12,7 +12,10 @@ import io.github.wulkanowy.utils.AnalyticsHelper
 import io.github.wulkanowy.utils.toFormattedString
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import timber.log.Timber
@@ -207,46 +210,26 @@ class MessageTabPresenter @Inject constructor(
             messageRepository.getMessages(student, semester, folder, forceRefresh)
         }
             .logResourceStatus("load $folder message")
-            .onEach {
-                when (it) {
-                    is Resource.Intermediate -> {
-                        if (it.data.isNotEmpty()) {
-                            view?.run {
-                                enableSwipe(true)
-                                showErrorView(false)
-                                showRefresh(true)
-                                showProgress(false)
-                                showContent(true)
-                            }
-
-                        messages = it.data
-
-                                updateData(
-                                    messageItemsWithHeader,
-                                    folder.id == MessageFolder.SENT.id
-                                )
-                                notifyParentDataLoaded()
-                            }
-                        }
-                    }
-                    is Resource.Success -> {
-                        messages = it.data
-                        updateData(
-                            getFilteredData(
-                                lastSearchQuery,
-                                onlyUnread,
-                                onlyWithAttachments
-                            )
-                        )
-                        analytics.logEvent(
-                            "load_data",
-                            "type" to "messages",
-                            "items" to it.data.size,
-                            "folder" to folder.name
-                        )
-                    }
-                    else -> {}
+            .onResourceData {
+                view?.run {
+                    enableSwipe(true)
+                    showErrorView(false)
+                    showProgress(false)
+                    showContent(it.isNotEmpty())
+                    showEmpty(it.isEmpty())
                 }
+
+                messages = it
+                updateDataInView()
+            }
+            .onResourceIntermediate { view?.showRefresh(true) }
+            .onResourceSuccess {
+                analytics.logEvent(
+                    "load_data",
+                    "type" to "messages",
+                    "items" to it.size,
+                    "folder" to folder.name
+                )
             }
             .onResourceNotLoading {
                 view?.run {
