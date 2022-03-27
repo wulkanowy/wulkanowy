@@ -9,7 +9,6 @@ import android.view.View.*
 import android.widget.CompoundButton
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -110,7 +109,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
             layoutManager = LinearLayoutManager(context)
             adapter = messageTabAdapter
             addItemDecoration(DividerItemDecoration(context, false))
-            (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+            itemAnimator = null
         }
 
         with(binding) {

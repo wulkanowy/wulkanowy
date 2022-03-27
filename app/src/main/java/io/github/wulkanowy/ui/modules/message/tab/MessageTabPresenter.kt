@@ -123,11 +123,6 @@ class MessageTabPresenter @Inject constructor(
             }
                 .onFailure(errorHandler::dispatch)
                 .onSuccess { view?.showMessagesDeleted() }
-
-            view?.run {
-                showProgress(false)
-                showContent(true)
-            }
         }
     }
 
