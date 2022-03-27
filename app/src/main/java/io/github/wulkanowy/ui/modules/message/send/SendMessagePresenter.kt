@@ -50,10 +50,12 @@ class SendMessagePresenter @Inject constructor(
                 setContent(it)
             }
             message?.let {
-                setSubject(when (reply) {
-                    true -> "Re: "
-                    else -> "FW: "
-                } + message.subject)
+                setSubject(
+                    when (reply) {
+                        true -> "Re: "
+                        else -> "FW: "
+                    } + message.subject
+                )
                 if (preferencesRepository.fillMessageContent || reply != true) {
                     setContent(
                         when (reply) {
@@ -62,7 +64,8 @@ class SendMessagePresenter @Inject constructor(
                         } + when (message.sender.isNotEmpty()) {
                             true -> "Od: ${message.sender}\n"
                             false -> "Do: ${message.recipient}\n"
-                        } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}")
+                        } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}"
+                    )
                 }
             }
         }
@@ -135,31 +138,31 @@ class SendMessagePresenter @Inject constructor(
         }
             .logResourceStatus("load recipients")
             .onEach {
-            when (it) {
-                is Resource.Loading -> view?.run {
-                    showProgress(true)
-                    showContent(false)
-                }
-                is Resource.Success -> it.data.let { (reportingUnit, recipientChips, selectedRecipientChips) ->
-                    view?.run {
-                        if (reportingUnit != null) {
-                            setReportingUnit(reportingUnit)
-                            setRecipients(recipientChips)
-                            if (selectedRecipientChips.isNotEmpty()) setSelectedRecipients(
-                                selectedRecipientChips
-                            )
-                            showContent(true)
-                        } else {
-                            Timber.i("Loading recipients result: Can't find the reporting unit")
-                            view?.showEmpty(true)
+                when (it) {
+                    is Resource.Loading -> view?.run {
+                        showProgress(true)
+                        showContent(false)
+                    }
+                    is Resource.Success -> it.data.let { (reportingUnit, recipientChips, selectedRecipientChips) ->
+                        view?.run {
+                            if (reportingUnit != null) {
+                                setReportingUnit(reportingUnit)
+                                setRecipients(recipientChips)
+                                if (selectedRecipientChips.isNotEmpty()) setSelectedRecipients(
+                                    selectedRecipientChips
+                                )
+                                showContent(true)
+                            } else {
+                                Timber.i("Loading recipients result: Can't find the reporting unit")
+                                view?.showEmpty(true)
+                            }
                         }
                     }
+                    is Resource.Error -> {
+                        view?.showContent(true)
+                        errorHandler.dispatch(it.error)
+                    }
                 }
-                is Resource.Error -> {
-                    view?.showContent(true)
-                    errorHandler.dispatch(it.error)
-                }
-            }
             }.onResourceNotLoading {
                 view?.run { showProgress(false) }
             }.launch()
@@ -259,7 +262,8 @@ class SendMessagePresenter @Inject constructor(
     }
 
     fun getRecipientsNames(): String {
-        return messageRepository.draftMessage?.recipients.orEmpty().joinToString { it.recipient.name }
+        return messageRepository.draftMessage?.recipients.orEmpty()
+            .joinToString { it.recipient.name }
     }
 
     fun clearDraft() {
@@ -267,6 +271,7 @@ class SendMessagePresenter @Inject constructor(
         Timber.i("Draft cleared!")
     }
 
-    fun getMessageBackupContent(recipients: String) = if (recipients.isEmpty()) view?.getMessageBackupDialogString()
+    fun getMessageBackupContent(recipients: String) =
+        if (recipients.isEmpty()) view?.getMessageBackupDialogString()
         else view?.getMessageBackupDialogStringWithRecipients(recipients)
 }

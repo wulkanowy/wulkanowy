@@ -50,16 +50,16 @@ class MessagePreviewPresenter @Inject constructor(
         view?.showErrorDetailsDialog(lastError)
     }
 
-    private fun loadData(message: Message) {
+    private fun loadData(messageToLoad: Message) {
         flatResourceFlow {
-            val student = studentRepository.getStudentById(message.studentId)
-            messageRepository.getMessage(student, message, true)
+            val student = studentRepository.getStudentById(messageToLoad.studentId)
+            messageRepository.getMessage(student, messageToLoad, true)
         }
-            .logResourceStatus("message ${message.messageId} preview")
+            .logResourceStatus("message ${messageToLoad.messageId} preview")
             .onResourceData {
                 if (it != null) {
-                    this@MessagePreviewPresenter.message = it.message
-                    this@MessagePreviewPresenter.attachments = it.attachments
+                    message = it.message
+                    attachments = it.attachments
                     view?.apply {
                         setMessageWithAttachment(it)
                         showContent(true)
@@ -83,7 +83,7 @@ class MessagePreviewPresenter @Inject constructor(
             }
             .onResourceNotLoading { view?.showProgress(false) }
             .onResourceError {
-                retryCallback = { onMessageLoadRetry(message) }
+                retryCallback = { onMessageLoadRetry(messageToLoad) }
                 errorHandler.dispatch(it)
             }
             .launch()
