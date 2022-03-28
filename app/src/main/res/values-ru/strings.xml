@@ -285,11 +285,12 @@
     <string name="message_no_items">Нет сообщений</string>
     <string name="message_from">От:</string>
     <string name="message_to">Кому:</string>
-    <string name="message_date">Дата: %s</string>
+    <string name="message_date">Date: %1$s</string>
     <string name="message_reply">Ответ</string>
     <string name="message_forward">Переслать</string>
-    <string name="message_delete">Удалить</string>
-    <string name="message_move_to_bin">Перенести в корзину</string>
+    <string name="message_select_all">Select all</string>
+    <string name="message_unselect_all">Unselect all</string>
+    <string name="message_move_to_trash">Move to trash</string>
     <string name="message_delete_forever">Удалить навсегда</string>
     <string name="message_delete_success">Сообщение успешно удалено</string>
     <string name="message_share">Поделиться</string>
@@ -305,10 +306,10 @@
     <string name="message_read">Чтение: %s</string>
     <string name="message_read_by">Прочитано: %1$d из %2$d человек</string>
     <plurals name="message_number_item">
-        <item quantity="one">%d сообщение</item>
-        <item quantity="few">%d сообщения</item>
-        <item quantity="many">%d сообщений</item>
-        <item quantity="other">%d сообщений</item>
+        <item quantity="one">%1$d message</item>
+        <item quantity="few">%1$d messages</item>
+        <item quantity="many">%1$d messages</item>
+        <item quantity="other">%1$d messages</item>
     </plurals>
     <plurals name="message_new_items">
         <item quantity="one">Новое сообщение</item>
@@ -324,6 +325,13 @@
         <item quantity="many">Вы получили %1$d новых сообщений</item>
         <item quantity="other">Вы получили %1$d новых сообщений</item>
     </plurals>
+    <plurals name="message_selected_messages_count">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="few">%1$d selected</item>
+        <item quantity="many">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+    <string name="message_messages_deleted">Messages deleted</string>
     <!--Note-->
     <string name="note_no_items">Нет информации о заметках</string>
     <string name="note_points">Баллы</string>
