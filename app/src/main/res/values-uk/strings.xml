@@ -285,11 +285,12 @@
     <string name="message_no_items">Нема повідомлень</string>
     <string name="message_from">Від:</string>
     <string name="message_to">Кому:</string>
-    <string name="message_date">Дата: %s</string>
+    <string name="message_date">Date: %1$s</string>
     <string name="message_reply">Відповісти</string>
     <string name="message_forward">Переслати</string>
-    <string name="message_delete">Видалити</string>
-    <string name="message_move_to_bin">Перемістити у кошик</string>
+    <string name="message_select_all">Select all</string>
+    <string name="message_unselect_all">Unselect all</string>
+    <string name="message_move_to_trash">Move to trash</string>
     <string name="message_delete_forever">Видалити назавжди</string>
     <string name="message_delete_success">Повідомлення було успішно видалено</string>
     <string name="message_share">Поділіться</string>
@@ -305,10 +306,10 @@
     <string name="message_read">Читання: %s</string>
     <string name="message_read_by">Прочитанно:%1$d через %2$d людей</string>
     <plurals name="message_number_item">
-        <item quantity="one">%d повідомлення</item>
-        <item quantity="few">%d повідомлення</item>
-        <item quantity="many">%d повідомлень</item>
-        <item quantity="other">%d повідомлень</item>
+        <item quantity="one">%1$d message</item>
+        <item quantity="few">%1$d messages</item>
+        <item quantity="many">%1$d messages</item>
+        <item quantity="other">%1$d messages</item>
     </plurals>
     <plurals name="message_new_items">
         <item quantity="one">Нове повідомлення</item>
@@ -324,6 +325,13 @@
         <item quantity="many">Ви отримали %1$d нових повідомлень</item>
         <item quantity="other">Ви отримали %1$d нових повідомлень</item>
     </plurals>
+    <plurals name="message_selected_messages_count">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="few">%1$d selected</item>
+        <item quantity="many">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+    <string name="message_messages_deleted">Messages deleted</string>
     <!--Note-->
     <string name="note_no_items">Брак інформації о зауваженнях</string>
     <string name="note_points">Бали</string>
