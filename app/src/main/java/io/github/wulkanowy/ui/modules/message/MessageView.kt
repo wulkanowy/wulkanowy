@@ -14,6 +14,8 @@ interface MessageView : BaseView {
 
     fun showNesMessage(show: Boolean)
 
+    fun showTabLayout(show: Boolean)
+
     fun notifyChildLoadData(index: Int, forceRefresh: Boolean)
 
     fun notifyChildrenFinishActionMode()

@@ -9,7 +9,7 @@ import android.view.View.*
 import android.widget.CompoundButton
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -21,7 +21,9 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
+import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
+import io.github.wulkanowy.utils.hideSoftInput
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -109,7 +111,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
             layoutManager = LinearLayoutManager(context)
             adapter = messageTabAdapter
             addItemDecoration(DividerItemDecoration(context, false))
-            (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+            itemAnimator = null
         }
 
         with(binding) {
@@ -211,6 +213,10 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         (parentFragment as? MessageFragment)?.onChildFragmentLoaded()
     }
 
+    override fun notifyParentShowActionMode(show: Boolean) {
+        (parentFragment as? MessageFragment)?.onChildFragmentShowActionMode(show)
+    }
+
     fun onParentLoadData(forceRefresh: Boolean) {
         presenter.onParentViewLoadData(forceRefresh)
     }
@@ -232,6 +238,16 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         } else {
             actionMode?.finish()
         }
+    }
+
+    override fun showRecyclerBottomPadding(show: Boolean) {
+        binding.messageTabRecycler.updatePadding(
+            bottom = if (show) requireContext().dpToPx(64f).toInt() else 0
+        )
+    }
+
+    override fun hideKeyboard() {
+        activity?.hideSoftInput()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

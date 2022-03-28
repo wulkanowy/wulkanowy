@@ -35,6 +35,10 @@ class MessagePresenter @Inject constructor(
         view?.notifyChildLoadData(index, forceRefresh)
     }
 
+    fun onFragmentChanged() {
+        view?.notifyChildrenFinishActionMode()
+    }
+
     fun onChildViewLoaded() {
         view?.apply {
             showContent(true)
@@ -44,6 +48,10 @@ class MessagePresenter @Inject constructor(
 
     fun onChildViewShowNewMessage(show: Boolean) {
         view?.showNesMessage(show)
+    }
+
+    fun onChildViewShowActionMode(show: Boolean) {
+        view?.showTabLayout(!show)
     }
 
     fun onSendMessageButtonClicked() {

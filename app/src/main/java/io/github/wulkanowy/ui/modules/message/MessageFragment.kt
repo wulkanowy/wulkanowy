@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -96,12 +100,31 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
         }
     }
 
+    override fun showTabLayout(show: Boolean) {
+        binding.messageTabLayout.isVisible = show
+
+        with(binding.messageViewPager) {
+            isUserInputEnabled = show
+            updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                updateMargins(top = if (show) requireContext().dpToPx(48f).toInt() else 0)
+            }
+        }
+    }
+
+    fun onChildFragmentShowActionMode(show: Boolean) {
+        presenter.onChildViewShowActionMode(show)
+    }
+
     fun onChildFragmentLoaded() {
         presenter.onChildViewLoaded()
     }
 
     fun onChildFragmentShowNewMessage(show: Boolean) {
         presenter.onChildViewShowNewMessage(show)
+    }
+
+    fun onFragmentChanged() {
+        presenter.onFragmentChanged()
     }
 
     override fun notifyChildLoadData(index: Int, forceRefresh: Boolean) {
