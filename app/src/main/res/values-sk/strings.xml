@@ -285,11 +285,12 @@
     <string name="message_no_items">Žiadne správy</string>
     <string name="message_from">Od:</string>
     <string name="message_to">Komu:</string>
-    <string name="message_date">Dátum: %s</string>
+    <string name="message_date">Date: %1$s</string>
     <string name="message_reply">Odpoveď</string>
     <string name="message_forward">Poslať ďalej</string>
-    <string name="message_delete">Odstrániť</string>
-    <string name="message_move_to_bin">Presunúť do koša</string>
+    <string name="message_select_all">Select all</string>
+    <string name="message_unselect_all">Unselect all</string>
+    <string name="message_move_to_trash">Move to trash</string>
     <string name="message_delete_forever">Odstrániť natrvalo</string>
     <string name="message_delete_success">Správa bola úspešne odstránená</string>
     <string name="message_share">Zdieľať</string>
@@ -305,10 +306,10 @@
     <string name="message_read">Prečítaná: %s</string>
     <string name="message_read_by">Prečítaná cez: %1$d z %2$d osôb</string>
     <plurals name="message_number_item">
-        <item quantity="one">%d správa</item>
-        <item quantity="few">%d správy</item>
-        <item quantity="many">%d správ</item>
-        <item quantity="other">%d správ</item>
+        <item quantity="one">%1$d message</item>
+        <item quantity="few">%1$d messages</item>
+        <item quantity="many">%1$d messages</item>
+        <item quantity="other">%1$d messages</item>
     </plurals>
     <plurals name="message_new_items">
         <item quantity="one">Nová správa</item>
@@ -324,6 +325,13 @@
         <item quantity="many">Máte %1$d nových správ</item>
         <item quantity="other">Máte %1$d nových správ</item>
     </plurals>
+    <plurals name="message_selected_messages_count">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="few">%1$d selected</item>
+        <item quantity="many">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+    <string name="message_messages_deleted">Messages deleted</string>
     <!--Note-->
     <string name="note_no_items">Žiadne informácie o poznámkach</string>
     <string name="note_points">Body</string>
