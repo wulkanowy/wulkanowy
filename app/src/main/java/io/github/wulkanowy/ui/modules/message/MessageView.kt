@@ -12,7 +12,7 @@ interface MessageView : BaseView {
 
     fun showProgress(show: Boolean)
 
-    fun showNesMessage(show: Boolean)
+    fun showNewMessage(show: Boolean)
 
     fun showTabLayout(show: Boolean)
 

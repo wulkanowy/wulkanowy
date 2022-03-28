@@ -94,7 +94,7 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>(R.layout.fragment_m
         binding.messageProgress.visibility = if (show) VISIBLE else INVISIBLE
     }
 
-    override fun showNesMessage(show: Boolean) {
+    override fun showNewMessage(show: Boolean) {
         binding.openSendMessageButton.run {
             if (show) show() else hide()
         }

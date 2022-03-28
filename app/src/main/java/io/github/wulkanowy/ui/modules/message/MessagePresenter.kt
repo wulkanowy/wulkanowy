@@ -47,7 +47,7 @@ class MessagePresenter @Inject constructor(
     }
 
     fun onChildViewShowNewMessage(show: Boolean) {
-        view?.showNesMessage(show)
+        view?.showNewMessage(show)
     }
 
     fun onChildViewShowActionMode(show: Boolean) {
