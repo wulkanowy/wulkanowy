@@ -285,12 +285,12 @@
     <string name="message_no_items">Žádné zprávy</string>
     <string name="message_from">Od:</string>
     <string name="message_to">Komu:</string>
-    <string name="message_date">Date: %1$s</string>
+    <string name="message_date">Datum: %1$s</string>
     <string name="message_reply">Odpověď</string>
     <string name="message_forward">Poslat dále</string>
     <string name="message_select_all">Select all</string>
     <string name="message_unselect_all">Unselect all</string>
-    <string name="message_move_to_trash">Move to trash</string>
+    <string name="message_move_to_trash">Přesunout do koše</string>
     <string name="message_delete_forever">Odstranit natrvalo</string>
     <string name="message_delete_success">Zpráva byla úspěšně odstraněna</string>
     <string name="message_share">Sdílet</string>
@@ -306,10 +306,10 @@
     <string name="message_read">Přečtena: %s</string>
     <string name="message_read_by">Přečtena přes: %1$d z %2$d osob</string>
     <plurals name="message_number_item">
-        <item quantity="one">%1$d message</item>
-        <item quantity="few">%1$d messages</item>
-        <item quantity="many">%1$d messages</item>
-        <item quantity="other">%1$d messages</item>
+        <item quantity="one">%1$d zpráva</item>
+        <item quantity="few">%1$d zprávy</item>
+        <item quantity="many">%1$d zpráv</item>
+        <item quantity="other">%1$d zpráv</item>
     </plurals>
     <plurals name="message_new_items">
         <item quantity="one">Nová zpráva</item>
