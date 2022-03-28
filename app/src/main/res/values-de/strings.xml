@@ -251,11 +251,12 @@
     <string name="message_no_items">Keine Nachrichten</string>
     <string name="message_from">Von:</string>
     <string name="message_to">An:</string>
-    <string name="message_date">Datum: %s</string>
+    <string name="message_date">Date: %1$s</string>
     <string name="message_reply">Antwort</string>
     <string name="message_forward">Weiterleiten</string>
-    <string name="message_delete">Löschen</string>
-    <string name="message_move_to_bin">In den Korb wandern</string>
+    <string name="message_select_all">Select all</string>
+    <string name="message_unselect_all">Unselect all</string>
+    <string name="message_move_to_trash">Move to trash</string>
     <string name="message_delete_forever">Dauerhaft löschen</string>
     <string name="message_delete_success">Nachricht erfolgreich gelöscht</string>
     <string name="message_share">Teilen</string>
@@ -271,8 +272,8 @@
     <string name="message_read">Lesen: %s</string>
     <string name="message_read_by">Lesen von: %1$d von %2$d Personen</string>
     <plurals name="message_number_item">
-        <item quantity="one">%d nachricht</item>
-        <item quantity="other">%d nachrichten</item>
+        <item quantity="one">%1$d message</item>
+        <item quantity="other">%1$d messages</item>
     </plurals>
     <plurals name="message_new_items">
         <item quantity="one">Neu nachricht</item>
@@ -284,6 +285,11 @@
         <item quantity="one">Du hast %1$d nachricht bekommen</item>
         <item quantity="other">Du hast %1$d nachrichten bekommen</item>
     </plurals>
+    <plurals name="message_selected_messages_count">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+    <string name="message_messages_deleted">Messages deleted</string>
     <!--Note-->
     <string name="note_no_items">Keine Informationen über Eintragen</string>
     <string name="note_points">Punkte</string>
