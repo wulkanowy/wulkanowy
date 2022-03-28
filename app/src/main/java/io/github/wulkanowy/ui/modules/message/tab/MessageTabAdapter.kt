@@ -74,6 +74,8 @@ class MessageTabAdapter @Inject constructor() :
                 chipUnread.isChecked = item.onlyUnread
                 chipUnread.setOnCheckedChangeListener(onHeaderClickListener)
             }
+            chipUnread.isEnabled = item.isEnabled
+            chipAttachments.isEnabled = item.isEnabled
             chipAttachments.isChecked = item.onlyWithAttachments
             chipAttachments.setOnCheckedChangeListener(onHeaderClickListener)
         }

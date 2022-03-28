@@ -12,7 +12,8 @@ sealed class MessageTabDataItem(val viewType: MessageItemViewType) {
 
     data class FilterHeader(
         val onlyUnread: Boolean?,
-        val onlyWithAttachments: Boolean
+        val onlyWithAttachments: Boolean,
+        val isEnabled: Boolean
     ) : MessageTabDataItem(MessageItemViewType.FILTERS)
 }
 

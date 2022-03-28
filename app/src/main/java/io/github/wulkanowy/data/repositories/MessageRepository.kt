@@ -17,7 +17,10 @@ import io.github.wulkanowy.data.pojos.MessageDraft
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Folder
 import io.github.wulkanowy.sdk.pojo.SentMessage
-import io.github.wulkanowy.utils.*
+import io.github.wulkanowy.utils.AutoRefreshHelper
+import io.github.wulkanowy.utils.getRefreshKey
+import io.github.wulkanowy.utils.init
+import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.serialization.decodeFromString
@@ -100,7 +103,7 @@ class MessageRepository @Inject constructor(
         message: Message,
         markAsRead: Boolean = false,
     ): Flow<Resource<MessageWithAttachment?>> = networkBoundResource(
-        isResultEmpty = { it == null },
+        isResultEmpty = { it?.message?.content.isNullOrBlank() },
         shouldFetch = {
             checkNotNull(it) { "This message no longer exist!" }
             Timber.d("Message content in db empty: ${it.message.content.isEmpty()}")

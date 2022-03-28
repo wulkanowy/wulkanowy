@@ -322,14 +322,13 @@ class MessageTabPresenter @Inject constructor(
         val data = getFilteredData()
 
         val list = buildList {
-            if (!isActionMode) {
-                add(
-                    MessageTabDataItem.FilterHeader(
-                        onlyUnread = onlyUnread.takeIf { folder != MessageFolder.SENT },
-                        onlyWithAttachments = onlyWithAttachments
-                    )
+            add(
+                MessageTabDataItem.FilterHeader(
+                    onlyUnread = onlyUnread.takeIf { folder != MessageFolder.SENT },
+                    onlyWithAttachments = onlyWithAttachments,
+                    isEnabled = !isActionMode
                 )
-            }
+            )
 
             addAll(data.map { message ->
                 MessageTabDataItem.MessageItem(
