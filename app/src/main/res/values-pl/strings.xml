@@ -285,12 +285,12 @@
     <string name="message_no_items">Brak wiadomości</string>
     <string name="message_from">Od:</string>
     <string name="message_to">Do:</string>
-    <string name="message_date">Date: %1$s</string>
+    <string name="message_date">Data: %1$s</string>
     <string name="message_reply">Odpowiedz</string>
     <string name="message_forward">Prześlij dalej</string>
-    <string name="message_select_all">Select all</string>
-    <string name="message_unselect_all">Unselect all</string>
-    <string name="message_move_to_trash">Move to trash</string>
+    <string name="message_select_all">Zaznacz wszystkie</string>
+    <string name="message_unselect_all">Odznacz wszystkie</string>
+    <string name="message_move_to_trash">Przenieś do kosza</string>
     <string name="message_delete_forever">Usuń trwale</string>
     <string name="message_delete_success">Wiadomość usunięta pomyślnie</string>
     <string name="message_share">Udostępnij</string>
@@ -306,10 +306,10 @@
     <string name="message_read">Przeczytana: %s</string>
     <string name="message_read_by">Przeczytana przez: %1$d z %2$d osób</string>
     <plurals name="message_number_item">
-        <item quantity="one">%1$d message</item>
-        <item quantity="few">%1$d messages</item>
-        <item quantity="many">%1$d messages</item>
-        <item quantity="other">%1$d messages</item>
+        <item quantity="one">%1$d wiadomość</item>
+        <item quantity="few">%1$d wiadomości</item>
+        <item quantity="many">%1$d wiadomości</item>
+        <item quantity="other">%1$d wiadomości</item>
     </plurals>
     <plurals name="message_new_items">
         <item quantity="one">Nowa wiadomość</item>
@@ -326,12 +326,12 @@
         <item quantity="other">Masz %1$d nowych wiadomości</item>
     </plurals>
     <plurals name="message_selected_messages_count">
-        <item quantity="one">%1$d selected</item>
-        <item quantity="few">%1$d selected</item>
-        <item quantity="many">%1$d selected</item>
-        <item quantity="other">%1$d selected</item>
+        <item quantity="one">%1$d wybrana</item>
+        <item quantity="few">%1$d wybrane</item>
+        <item quantity="many">%1$d wybranych</item>
+        <item quantity="other">%1$d wybranych</item>
     </plurals>
-    <string name="message_messages_deleted">Messages deleted</string>
+    <string name="message_messages_deleted">Wiadomości usunięte</string>
     <!--Note-->
     <string name="note_no_items">Brak informacji o uwagach</string>
     <string name="note_points">Punkty</string>
