@@ -280,10 +280,9 @@
     <string name="message_date">Date: %1$s</string>
     <string name="message_reply">Reply</string>
     <string name="message_forward">Forward</string>
-    <string name="message_delete">Delete</string>
     <string name="message_select_all">Select all</string>
     <string name="message_unselect_all">Unselect all</string>
-    <string name="message_move_to_bin">Move to trash</string>
+    <string name="message_move_to_trash">Move to trash</string>
     <string name="message_delete_forever">Delete permanently</string>
     <string name="message_delete_success">Message deleted successfully</string>
     <string name="message_share">Share</string>
