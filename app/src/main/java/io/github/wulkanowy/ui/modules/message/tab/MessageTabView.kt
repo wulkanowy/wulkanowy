@@ -44,4 +44,6 @@ interface MessageTabView : BaseView {
     fun hideKeyboard()
 
     fun showActionMode(show: Boolean)
+
+    fun showRecyclerBottomPadding(show: Boolean)
 }

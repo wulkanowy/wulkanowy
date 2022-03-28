@@ -28,7 +28,10 @@ class MessageTabAdapter @Inject constructor() :
     private var items = mutableListOf<MessageTabDataItem>()
 
     fun submitData(data: List<MessageTabDataItem>) {
-        if (items.size != data.size) onChangesDetectedListener()
+        val originalMessagesSize = items.count { it.viewType == MessageItemViewType.MESSAGE }
+        val newMessagesSize = data.count { it.viewType == MessageItemViewType.MESSAGE }
+
+        if (originalMessagesSize != newMessagesSize) onChangesDetectedListener()
 
         val diffResult = DiffUtil.calculateDiff(MessageTabDiffUtil(items, data))
         items = data.toMutableList()

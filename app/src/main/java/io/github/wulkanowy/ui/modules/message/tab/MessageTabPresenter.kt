@@ -90,6 +90,7 @@ class MessageTabPresenter @Inject constructor(
             enableSwipe(true)
             notifyParentShowNewMessage(true)
             notifyParentShowActionMode(false)
+            showRecyclerBottomPadding(true)
         }
     }
 
@@ -102,6 +103,7 @@ class MessageTabPresenter @Inject constructor(
             enableSwipe(false)
             notifyParentShowNewMessage(false)
             notifyParentShowActionMode(true)
+            showRecyclerBottomPadding(false)
             hideKeyboard()
         }
         return true
@@ -128,8 +130,7 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onActionModeSelectCheckAll() {
-        val messagesToSelect =
-            getFilteredData(lastSearchQuery, onlyUnread == true, onlyWithAttachments)
+        val messagesToSelect = getFilteredData()
         val isAllSelected = messagesToDelete.containsAll(messagesToSelect)
 
         if (isAllSelected) {
@@ -176,8 +177,7 @@ class MessageTabPresenter @Inject constructor(
                 view?.showActionMode(false)
             }
 
-            val filteredData =
-                getFilteredData(lastSearchQuery, onlyUnread == true, onlyWithAttachments)
+            val filteredData = getFilteredData()
 
             view?.run {
                 updateActionModeTitle(messagesToDelete.size)
@@ -211,15 +211,18 @@ class MessageTabPresenter @Inject constructor(
         }
             .logResourceStatus("load $folder message")
             .onResourceData {
+                messages = it
+
+                val filteredData = getFilteredData()
+
                 view?.run {
                     enableSwipe(true)
                     showErrorView(false)
                     showProgress(false)
-                    showContent(it.isNotEmpty())
-                    showEmpty(it.isEmpty())
+                    showContent(true)
+                    showEmpty(filteredData.isEmpty())
                 }
 
-                messages = it
                 updateDataInView()
             }
             .onResourceIntermediate { view?.showRefresh(true) }
@@ -273,10 +276,7 @@ class MessageTabPresenter @Inject constructor(
                 .map { query ->
                     lastSearchQuery = query
 
-                    val isOnlyUnread = onlyUnread == true
-                    val isOnlyWithAttachments = onlyWithAttachments
-
-                    getFilteredData(query, isOnlyUnread, isOnlyWithAttachments)
+                    getFilteredData()
                 }
                 .catch { Timber.e(it) }
                 .collect {
@@ -294,28 +294,24 @@ class MessageTabPresenter @Inject constructor(
         }
     }
 
-    private fun getFilteredData(
-        query: String,
-        onlyUnread: Boolean = false,
-        onlyWithAttachments: Boolean = false
-    ): List<Message> {
-        if (query.trim().isEmpty()) {
+    private fun getFilteredData(): List<Message> {
+        if (lastSearchQuery.trim().isEmpty()) {
             val sortedMessages = messages.sortedByDescending { it.date }
             return when {
-                onlyUnread && onlyWithAttachments -> sortedMessages.filter { it.unread == onlyUnread && it.hasAttachments == onlyWithAttachments }
-                onlyUnread -> sortedMessages.filter { it.unread == onlyUnread }
+                (onlyUnread == true) && onlyWithAttachments -> sortedMessages.filter { it.unread == onlyUnread && it.hasAttachments == onlyWithAttachments }
+                (onlyUnread == true) -> sortedMessages.filter { it.unread == onlyUnread }
                 onlyWithAttachments -> sortedMessages.filter { it.hasAttachments == onlyWithAttachments }
                 else -> sortedMessages
             }
         } else {
             val sortedMessages = messages
-                .map { it to calculateMatchRatio(it, query) }
+                .map { it to calculateMatchRatio(it, lastSearchQuery) }
                 .sortedWith(compareBy<Pair<Message, Int>> { -it.second }.thenByDescending { it.first.date })
                 .filter { it.second > 6000 }
                 .map { it.first }
             return when {
-                onlyUnread && onlyWithAttachments -> sortedMessages.filter { it.unread == onlyUnread && it.hasAttachments == onlyWithAttachments }
-                onlyUnread -> sortedMessages.filter { it.unread == onlyUnread }
+                (onlyUnread == true) && onlyWithAttachments -> sortedMessages.filter { it.unread == onlyUnread && it.hasAttachments == onlyWithAttachments }
+                (onlyUnread == true) -> sortedMessages.filter { it.unread == onlyUnread }
                 onlyWithAttachments -> sortedMessages.filter { it.hasAttachments == onlyWithAttachments }
                 else -> sortedMessages
             }
@@ -323,7 +319,7 @@ class MessageTabPresenter @Inject constructor(
     }
 
     private fun updateDataInView() {
-        val data = getFilteredData(lastSearchQuery, onlyUnread == true, onlyWithAttachments)
+        val data = getFilteredData()
 
         val list = buildList {
             if (!isActionMode) {
