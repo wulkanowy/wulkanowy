@@ -55,7 +55,7 @@
     <string name="login_invalid_symbol">Неправильный символ</string>
     <string name="login_incorrect_symbol">Студент не найден. Подтвердите символ и выбранный вариант регистра UONET+</string>
     <string name="login_duplicate_student">Данный ученик уже авторизован</string>
-    <string name="login_symbol_helper">The symbol can be found on the register page in&#160;<b>Uczeń</b> →&#160;<b>Dostęp Mobilny</b> →&#160;<b>Zarejestruj urządzenie mobilne</b>.\n\nMake sure that you have set the appropriate register variant in the <b>UONET+ register variant</b> field on the previous screen</string>
+    <string name="login_symbol_helper">Этот символ можно найти на странице регистрации в &#160;<b>Ученик</b> → &#160;<b>Телефонный доступ</b> → &#160;<b> Зарегистрируйте мобильное устройство</b>.\n\nУбедитесь, что вы установили соответствующий вариант регистра в поле <b>Разновидностью бревна UONET+</b> на предыдущем экране. Вулкановый на данный момент не обнаруживает дошкольников</string>
     <string name="login_select_student">Выберите учеников для авторизации в приложении</string>
     <string name="login_advanced">Другие варианты</string>
     <string name="login_advanced_warning_mobile_api">В этом режиме не работают: счастливый номер, статистика класса по оценкам, статистика посещаемости и уроков, информация о школе и список зарегистрированных устройств</string>
@@ -285,12 +285,12 @@
     <string name="message_no_items">Нет сообщений</string>
     <string name="message_from">От:</string>
     <string name="message_to">Кому:</string>
-    <string name="message_date">Date: %1$s</string>
+    <string name="message_date">Дата: %1$s</string>
     <string name="message_reply">Ответ</string>
     <string name="message_forward">Переслать</string>
-    <string name="message_select_all">Select all</string>
-    <string name="message_unselect_all">Unselect all</string>
-    <string name="message_move_to_trash">Move to trash</string>
+    <string name="message_select_all">Выбрать всё</string>
+    <string name="message_unselect_all">Снять выбор</string>
+    <string name="message_move_to_trash">Перенести в корзину</string>
     <string name="message_delete_forever">Удалить навсегда</string>
     <string name="message_delete_success">Сообщение успешно удалено</string>
     <string name="message_share">Поделиться</string>
@@ -306,10 +306,10 @@
     <string name="message_read">Чтение: %s</string>
     <string name="message_read_by">Прочитано: %1$d из %2$d человек</string>
     <plurals name="message_number_item">
-        <item quantity="one">%1$d message</item>
-        <item quantity="few">%1$d messages</item>
-        <item quantity="many">%1$d messages</item>
-        <item quantity="other">%1$d messages</item>
+        <item quantity="one">%1$d сообщение</item>
+        <item quantity="few">%1$d сообщений</item>
+        <item quantity="many">%1$d сообщений</item>
+        <item quantity="other">%1$d сообщений</item>
     </plurals>
     <plurals name="message_new_items">
         <item quantity="one">Новое сообщение</item>
@@ -326,12 +326,12 @@
         <item quantity="other">Вы получили %1$d новых сообщений</item>
     </plurals>
     <plurals name="message_selected_messages_count">
-        <item quantity="one">%1$d selected</item>
-        <item quantity="few">%1$d selected</item>
-        <item quantity="many">%1$d selected</item>
-        <item quantity="other">%1$d selected</item>
+        <item quantity="one">%1$d выбрано</item>
+        <item quantity="few">%1$d выбрано</item>
+        <item quantity="many">%1$d выбрано</item>
+        <item quantity="other">%1$d выбрано</item>
     </plurals>
-    <string name="message_messages_deleted">Messages deleted</string>
+    <string name="message_messages_deleted">Сообщение удалено</string>
     <!--Note-->
     <string name="note_no_items">Нет информации о заметках</string>
     <string name="note_points">Баллы</string>
@@ -657,7 +657,7 @@
     <string name="all_copied">Скопировано</string>
     <string name="all_undo">Отменить</string>
     <string name="all_change">Изменить</string>
-    <string name="all_add_to_calendar">Add to calendar</string>
+    <string name="all_add_to_calendar">Добавить в календарь</string>
     <!--Timetable Widget-->
     <string name="widget_timetable_no_items">Нет уроков</string>
     <string name="widget_timetable_theme_title">Выбрать тему</string>
