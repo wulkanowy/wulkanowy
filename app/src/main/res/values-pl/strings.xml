@@ -331,7 +331,7 @@
         <item quantity="many">%1$d wybranych</item>
         <item quantity="other">%1$d wybranych</item>
     </plurals>
-    <string name="message_messages_deleted">Wiadomości usunięte</string>
+    <string name="message_messages_deleted">Wiadomości zostały usunięte</string>
     <!--Note-->
     <string name="note_no_items">Brak informacji o uwagach</string>
     <string name="note_points">Punkty</string>
