@@ -288,9 +288,9 @@
     <string name="message_date">Dátum: %1$s</string>
     <string name="message_reply">Odpoveď</string>
     <string name="message_forward">Poslať ďalej</string>
-    <string name="message_select_all">Select all</string>
-    <string name="message_unselect_all">Unselect all</string>
-    <string name="message_move_to_trash">Move to trash</string>
+    <string name="message_select_all">Vybrať všetko</string>
+    <string name="message_unselect_all">Odznačiť všetko</string>
+    <string name="message_move_to_trash">Presunúť do koša</string>
     <string name="message_delete_forever">Odstrániť natrvalo</string>
     <string name="message_delete_success">Správa bola úspešne odstránená</string>
     <string name="message_share">Zdieľať</string>
@@ -326,12 +326,12 @@
         <item quantity="other">Máte %1$d nových správ</item>
     </plurals>
     <plurals name="message_selected_messages_count">
-        <item quantity="one">%1$d selected</item>
-        <item quantity="few">%1$d selected</item>
-        <item quantity="many">%1$d selected</item>
-        <item quantity="other">%1$d selected</item>
+        <item quantity="one">%1$d vybraná</item>
+        <item quantity="few">%1$d vybrané</item>
+        <item quantity="many">%1$d vybraných</item>
+        <item quantity="other">%1$d vybraných</item>
     </plurals>
-    <string name="message_messages_deleted">Messages deleted</string>
+    <string name="message_messages_deleted">Správy odstránené</string>
     <!--Note-->
     <string name="note_no_items">Žiadne informácie o poznámkach</string>
     <string name="note_points">Body</string>
