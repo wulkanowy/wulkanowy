@@ -288,8 +288,8 @@
     <string name="message_date">Datum: %1$s</string>
     <string name="message_reply">Odpověď</string>
     <string name="message_forward">Poslat dále</string>
-    <string name="message_select_all">Select all</string>
-    <string name="message_unselect_all">Unselect all</string>
+    <string name="message_select_all">Vybrat vše</string>
+    <string name="message_unselect_all">Odznačit vše</string>
     <string name="message_move_to_trash">Přesunout do koše</string>
     <string name="message_delete_forever">Odstranit natrvalo</string>
     <string name="message_delete_success">Zpráva byla úspěšně odstraněna</string>
@@ -326,10 +326,10 @@
         <item quantity="other">Máte %1$d nových zpráv</item>
     </plurals>
     <plurals name="message_selected_messages_count">
-        <item quantity="one">%1$d selected</item>
-        <item quantity="few">%1$d selected</item>
-        <item quantity="many">%1$d selected</item>
-        <item quantity="other">%1$d selected</item>
+        <item quantity="one">%1$d vybraná</item>
+        <item quantity="few">%1$d vybrané</item>
+        <item quantity="many">%1$d vybraných</item>
+        <item quantity="other">%1$d vybraných</item>
     </plurals>
     <string name="message_messages_deleted">Messages deleted</string>
     <!--Note-->
