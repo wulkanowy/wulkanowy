@@ -21,14 +21,6 @@ class AdsPresenter @Inject constructor(
     }
 
     fun onWatchSingleAdSelected() {
-        view?.showPrivacyPolicyDialog()
-    }
-
-    fun onPrivacySelected() {
-        view?.openPrivacyPolicy()
-    }
-
-    fun onAgreedPrivacy() {
         view?.showLoadingSupportAd(true)
         presenterScope.launch {
             runCatching { adsHelper.getSupportAd() }
@@ -40,5 +32,19 @@ class AdsPresenter @Inject constructor(
                 showWatchAdOncePerVisit(true)
             }
         }
+    }
+
+    fun onConsentSelected(isChecked: Boolean) {
+        if (isChecked) {
+            view?.showPrivacyPolicyDialog()
+        }
+    }
+
+    fun onPrivacySelected() {
+        view?.openPrivacyPolicy()
+    }
+
+    fun onAgreedPrivacy() {
+
     }
 }

@@ -2,12 +2,14 @@ package io.github.wulkanowy.ui.modules.settings.ads
 
 import android.os.Bundle
 import android.view.View
+import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.databinding.DialogAdsConsentBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.ui.base.ErrorDialog
 import io.github.wulkanowy.ui.modules.main.MainView
@@ -36,6 +38,17 @@ class AdsFragment : PreferenceFragmentCompat(), MainView.TitledView, AdsView {
             presenter.onWatchSingleAdSelected()
             true
         }
+
+        findPreference<Preference>(getString(R.string.pref_key_ads_privacy_policy))?.setOnPreferenceClickListener {
+            presenter.onPrivacySelected()
+            true
+        }
+
+        findPreference<CheckBoxPreference>(getString(R.string.pref_key_ads_consent_data_processing))
+            ?.setOnPreferenceChangeListener { _, newValue ->
+                presenter.onConsentSelected(newValue as Boolean)
+                true
+            }
     }
 
     override fun showAd(ad: RewardedInterstitialAd) {
@@ -45,12 +58,16 @@ class AdsFragment : PreferenceFragmentCompat(), MainView.TitledView, AdsView {
     }
 
     override fun showPrivacyPolicyDialog() {
+        val dialogAdsConsentBinding = DialogAdsConsentBinding.inflate(layoutInflater)
+
+        dialogAdsConsentBinding.adsConsentOver.setOnCheckedChangeListener { _, isChecked ->
+            dialogAdsConsentBinding.adsConsentPersonalised.isEnabled = isChecked
+        }
+
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.pref_ads_privacy_title))
             .setMessage(getString(R.string.pref_ads_privacy_description))
-            .setPositiveButton(getString(R.string.pref_ads_privacy_agree)) { _, _ -> presenter.onAgreedPrivacy() }
-            .setNegativeButton(android.R.string.cancel) { _, _ -> }
-            .setNeutralButton(getString(R.string.pref_ads_privacy_link)) { _, _ -> presenter.onPrivacySelected() }
+            .setView(dialogAdsConsentBinding.root)
             .show()
     }
 

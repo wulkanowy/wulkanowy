@@ -271,7 +271,11 @@ class PreferencesRepository @Inject constructor(
 
     var isAppReviewDone: Boolean
         get() = sharedPref.getBoolean(PREF_KEY_IN_APP_REVIEW_DONE, false)
-        set(value) = sharedPref.edit().putBoolean(PREF_KEY_IN_APP_REVIEW_DONE, value).apply()
+        set(value) = sharedPref.edit { putBoolean(PREF_KEY_IN_APP_REVIEW_DONE, value) }
+
+    var isAppSupportShown: Boolean
+        get() = sharedPref.getBoolean(PREF_KEY_APP_SUPPORT_SHOWN, false)
+        set(value) = sharedPref.edit { putBoolean(PREF_KEY_APP_SUPPORT_SHOWN, value) }
 
     private fun getLong(id: Int, default: Int) = getLong(context.getString(id), default)
 
@@ -300,6 +304,8 @@ class PreferencesRepository @Inject constructor(
         private const val PREF_KEY_IN_APP_REVIEW_DATE = "in_app_review_date"
 
         private const val PREF_KEY_IN_APP_REVIEW_DONE = "in_app_review_done"
+
+        private const val PREF_KEY_APP_SUPPORT_SHOWN = "app_support_shown"
 
         private const val PREF_KEY_ADMIN_DISMISSED_MESSAGE_IDS = "admin_message_dismissed_ids"
     }
