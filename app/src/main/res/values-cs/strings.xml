@@ -219,7 +219,7 @@
     <string name="additional_lessons_end_time_error">Čas ukončení musí být pozdější než čas zahájení</string>
     <!--Attendance-->
     <string name="attendance_summary_button">Shrnutí frekvencí</string>
-    <string name="attendance_absence_school">Neprítomnosť zo školských dôvodov</string>
+    <string name="attendance_absence_school">Nepřítomnost ze školních důvodů</string>
     <string name="attendance_absence_excused">Omluvená nepřítomnost</string>
     <string name="attendance_absence_unexcused">Neomluvená nepřítomnost</string>
     <string name="attendance_exemption">Osvobození</string>
