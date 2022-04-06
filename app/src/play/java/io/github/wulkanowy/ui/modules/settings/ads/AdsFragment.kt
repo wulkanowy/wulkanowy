@@ -5,6 +5,7 @@ import android.view.View
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,15 +61,48 @@ class AdsFragment : PreferenceFragmentCompat(), MainView.TitledView, AdsView {
     override fun showPrivacyPolicyDialog() {
         val dialogAdsConsentBinding = DialogAdsConsentBinding.inflate(layoutInflater)
 
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Can we use your data to display ads?")
+            .setMessage("You can change your choice anytime in the app settings. We may use your data to display ads tailored to you or, using less of your data, display non-personalized ads. Please see our Privacy Policy for details")
+            .setView(dialogAdsConsentBinding.root)
+            .setOnCancelListener { presenter.onPrivacyDialogCanceled() }
+            .show()
+
         dialogAdsConsentBinding.adsConsentOver.setOnCheckedChangeListener { _, isChecked ->
             dialogAdsConsentBinding.adsConsentPersonalised.isEnabled = isChecked
         }
 
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.pref_ads_privacy_title))
-            .setMessage(getString(R.string.pref_ads_privacy_description))
-            .setView(dialogAdsConsentBinding.root)
-            .show()
+        dialogAdsConsentBinding.adsConsentPersonalised.setOnClickListener {
+            presenter.onPersonalizedAgree()
+            dialog.dismiss()
+        }
+
+        dialogAdsConsentBinding.adsConsentNonPersonalised.setOnClickListener {
+            presenter.onNonPersonalizedAgree()
+            dialog.dismiss()
+        }
+
+        dialogAdsConsentBinding.adsConsentPrivacy.setOnClickListener { presenter.onPrivacySelected() }
+        dialogAdsConsentBinding.adsConsentCancel.setOnClickListener { dialog.cancel() }
+    }
+
+    override fun showProcessingDataSummary(isPersonalized: Boolean?) {
+        val summaryText = isPersonalized?.let {
+            if (it) "Personalized ads" else "Non-personalized ads"
+        }
+
+        findPreference<CheckBoxPreference>(getString(R.string.pref_key_ads_consent_data_processing))
+            ?.summary = summaryText
+    }
+
+    override fun setCheckedProcessingData(checked: Boolean) {
+        findPreference<CheckBoxPreference>(getString(R.string.pref_key_ads_consent_data_processing))
+            ?.isChecked = checked
+    }
+
+    override fun setCheckedAdsEnabled(checked: Boolean) {
+        findPreference<SwitchPreferenceCompat>(getString(R.string.pref_key_ads_enabled))
+            ?.isChecked = checked
     }
 
     override fun openPrivacyPolicy() {

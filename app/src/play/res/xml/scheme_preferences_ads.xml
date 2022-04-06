@@ -9,10 +9,10 @@
             app:singleLineTitle="false"
             app:title="Privacy Policy" />
         <CheckBoxPreference
+            app:defaultValue="@bool/pref_default_ads_consent_data_processing"
             app:iconSpaceReserved="false"
             app:key="@string/pref_key_ads_consent_data_processing"
             app:singleLineTitle="false"
-            app:summary="Personalised ads"
             app:title="Consent to processing of data related to ads" />
     </PreferenceCategory>
     <PreferenceCategory

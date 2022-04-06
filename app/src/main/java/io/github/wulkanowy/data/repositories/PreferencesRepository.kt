@@ -200,6 +200,12 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_optional_arithmetic_average
         )
 
+    val isAgreeToProcessData: Boolean
+        get() = getBoolean(
+            R.string.pref_key_ads_consent_data_processing,
+            R.bool.pref_default_ads_consent_data_processing
+        )
+
     var lasSyncDate: Instant?
         get() = getLong(R.string.pref_key_last_sync_date, R.string.pref_default_last_sync_date)
             .takeIf { it != 0L }?.let(Instant::ofEpochMilli)
@@ -277,6 +283,10 @@ class PreferencesRepository @Inject constructor(
         get() = sharedPref.getBoolean(PREF_KEY_APP_SUPPORT_SHOWN, false)
         set(value) = sharedPref.edit { putBoolean(PREF_KEY_APP_SUPPORT_SHOWN, value) }
 
+    var isPersonalizedAdsEnabled: Boolean
+        get() = sharedPref.getBoolean(PREF_KEY_PERSONALIZED_ADS_ENABLED, false)
+        set(value) = sharedPref.edit { putBoolean(PREF_KEY_PERSONALIZED_ADS_ENABLED, value) }
+
     private fun getLong(id: Int, default: Int) = getLong(context.getString(id), default)
 
     private fun getLong(id: String, default: Int) =
@@ -306,6 +316,8 @@ class PreferencesRepository @Inject constructor(
         private const val PREF_KEY_IN_APP_REVIEW_DONE = "in_app_review_done"
 
         private const val PREF_KEY_APP_SUPPORT_SHOWN = "app_support_shown"
+
+        private const val PREF_KEY_PERSONALIZED_ADS_ENABLED = "personalized_ads_enabled"
 
         private const val PREF_KEY_ADMIN_DISMISSED_MESSAGE_IDS = "admin_message_dismissed_ids"
     }
