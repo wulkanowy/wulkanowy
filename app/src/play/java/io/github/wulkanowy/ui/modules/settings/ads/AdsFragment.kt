@@ -62,8 +62,8 @@ class AdsFragment : PreferenceFragmentCompat(), MainView.TitledView, AdsView {
         val dialogAdsConsentBinding = DialogAdsConsentBinding.inflate(layoutInflater)
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Can we use your data to display ads?")
-            .setMessage("You can change your choice anytime in the app settings. We may use your data to display ads tailored to you or, using less of your data, display non-personalized ads. Please see our Privacy Policy for details")
+            .setTitle(R.string.pref_ads_consent_title)
+            .setMessage(R.string.pref_ads_consent_description)
             .setView(dialogAdsConsentBinding.root)
             .setOnCancelListener { presenter.onPrivacyDialogCanceled() }
             .show()
