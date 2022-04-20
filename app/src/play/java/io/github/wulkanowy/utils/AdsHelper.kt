@@ -2,10 +2,9 @@ package io.github.wulkanowy.utils
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import com.google.ads.mediation.admob.AdMobAdapter
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -41,4 +40,33 @@ class AdsHelper @Inject constructor(@ApplicationContext private val context: Con
                 })
         }
     }
+
+    suspend fun getDashboardTileAdBanner(): AdBanner {
+        MobileAds.initialize(context)
+
+        val extra = Bundle().apply { putString("npa", "1") }
+        val adRequest = AdRequest.Builder()
+            .addNetworkExtrasBundle(AdMobAdapter::class.java, extra)
+            .build()
+
+        return suspendCoroutine {
+            val adView = AdView(context).apply {
+                adSize = AdSize.BANNER
+                adUnitId = BuildConfig.DASHBOARD_TILE_AD_ID
+                adListener = object : AdListener() {
+                    override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                        it.resumeWithException(IllegalArgumentException(loadAdError.message))
+                    }
+
+                    override fun onAdLoaded() {
+                        it.resume(AdBanner(this@apply))
+                    }
+                }
+            }
+
+            adView.loadAd(adRequest)
+        }
+    }
 }
+
+data class AdBanner(val view: View)

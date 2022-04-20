@@ -1,11 +1,6 @@
 package io.github.wulkanowy.ui.modules.dashboard
 
-import io.github.wulkanowy.data.db.entities.AdminMessage
-import io.github.wulkanowy.data.db.entities.Conference
-import io.github.wulkanowy.data.db.entities.Exam
-import io.github.wulkanowy.data.db.entities.Grade
-import io.github.wulkanowy.data.db.entities.SchoolAnnouncement
-import io.github.wulkanowy.data.db.entities.Student
+import io.github.wulkanowy.data.db.entities.*
 import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.data.pojos.TimetableFull
 import io.github.wulkanowy.data.db.entities.Homework as EntitiesHomework
@@ -104,6 +99,14 @@ sealed class DashboardItem(val type: Type) {
     ) : DashboardItem(Type.CONFERENCES) {
 
         override val isDataLoaded get() = conferences != null
+    }
+
+    data class Ads(
+        override val error: Throwable?,
+        override val isLoading: Boolean
+    ) : DashboardItem(Type.ADS) {
+
+        override val isDataLoaded get() = true
     }
 
     enum class Type {
