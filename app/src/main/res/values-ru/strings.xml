@@ -15,10 +15,10 @@
     <string name="notification_debug_title">Отладка уведомления</string>
     <string name="contributors_title">Разработчики</string>
     <string name="license_title">Лицензии</string>
-    <string name="message_title">Сообщения</string>
-    <string name="send_message_title">Новое сообщение</string>
+    <string name="message_title">Письма</string>
+    <string name="send_message_title">Написать</string>
     <string name="add_homework_title">Новая домашняя работа</string>
-    <string name="note_title">Предупреждения и свершения</string>
+    <string name="note_title">Замечания и свершения</string>
     <string name="homework_title">Домашние задания</string>
     <string name="account_title">Менеджер аккаунтов</string>
     <string name="account_quick_title">Выбор учетной записи</string>
