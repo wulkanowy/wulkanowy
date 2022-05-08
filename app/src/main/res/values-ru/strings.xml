@@ -12,12 +12,12 @@
     <string name="about_title">О приложении</string>
     <string name="logviewer_title">Просмотр журнала</string>
     <string name="debug_title">Отладка</string>
-    <string name="notification_debug_title">Отладка уведомления</string>
+    <string name="notification_debug_title">Отладка уведомлений</string>
     <string name="contributors_title">Разработчики</string>
     <string name="license_title">Лицензии</string>
     <string name="message_title">Письма</string>
     <string name="send_message_title">Написать</string>
-    <string name="add_homework_title">Новая домашняя работа</string>
+    <string name="add_homework_title">Новое домашнее задание</string>
     <string name="note_title">Замечания и свершения</string>
     <string name="homework_title">Домашние задания</string>
     <string name="account_title">Изменить аккаунты</string>
@@ -148,10 +148,10 @@
         <item quantity="other">Вы получили %1$d ожидаемых оценок</item>
     </plurals>
     <plurals name="grade_notify_new_items_final">
-        <item quantity="one">Вы получили %1$d итоговою оценку</item>
+        <item quantity="one">Вы получили %1$d итоговую оценку</item>
         <item quantity="few">Вы получили %1$d итоговых оценки</item>
         <item quantity="many">Вы получили %1$d итоговых оценок</item>
-        <item quantity="other">Вы получили %1$d финальные оценки</item>
+        <item quantity="other">Вы получили %1$d итоговые оценки</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Урок</string>
@@ -169,36 +169,36 @@
     <string name="timetable_next">Следующий: %s</string>
     <string name="timetable_later">Позже: %s</string>
     <string name="timetable_notify_lesson">%1$s урок %2$d - %3$s</string>
-    <string name="timetable_notify_change_room">Изменить комнату с %1$s на %2$s</string>
-    <string name="timetable_notify_change_teacher">Изменить учителя с %1$s на %2$s</string>
-    <string name="timetable_notify_change_subject">Изменить тему с %1$s на %2$s</string>
+    <string name="timetable_notify_change_room">Аудитория изменена с %1$s на %2$s</string>
+    <string name="timetable_notify_change_teacher">Учитель изменён с %1$s на %2$s</string>
+    <string name="timetable_notify_change_subject">Тема изменена с %1$s на %2$s</string>
     <plurals name="timetable_notify_new_items_title">
         <item quantity="one">Изменение расписания</item>
-        <item quantity="few">Изменение расписания</item>
-        <item quantity="many">Изменение расписания</item>
-        <item quantity="other">Изменение расписания</item>
+        <item quantity="few">Изменения расписания</item>
+        <item quantity="many">Изменения расписания</item>
+        <item quantity="other">Изменения расписания</item>
     </plurals>
     <plurals name="timetable_notify_new_items">
-        <item quantity="one">%1$s - %2$d изменений в расписании</item>
-        <item quantity="few">%1$s - %2$d изменений в расписании</item>
+        <item quantity="one">%1$s - %2$d изменение в расписании</item>
+        <item quantity="few">%1$s - %2$d изменения в расписании</item>
         <item quantity="many">%1$s - %2$d изменений в расписании</item>
-        <item quantity="other">%1$s - %2$d  изменений в расписании</item>
+        <item quantity="other">%1$s - %2$d изменений в расписании</item>
     </plurals>
     <plurals name="timetable_notify_new_items_group">
-        <item quantity="one">%1$d - изменений в расписании</item>
-        <item quantity="few">%1$d изменение в расписании</item>
-        <item quantity="many">%1$d изменение в расписании</item>
+        <item quantity="one">%1$d изменение в расписании</item>
+        <item quantity="few">%1$d изменения в расписании</item>
+        <item quantity="many">%1$d изменений в расписании</item>
         <item quantity="other">%1$d изменений в расписании</item>
     </plurals>
     <plurals name="timetable_number_item">
         <item quantity="one">%d изменение</item>
-        <item quantity="few">%d изменение</item>
-        <item quantity="many">%d изменение</item>
+        <item quantity="few">%d изменения</item>
+        <item quantity="many">%d изменений</item>
         <item quantity="other">%d изменений</item>
     </plurals>
     <!--Completed lessons-->
     <string name="completed_lessons_title">Проведённые уроки</string>
-    <string name="completed_lessons_button">Просмотреть проведённые уроки</string>
+    <string name="completed_lessons_button">Показать проведённые уроки</string>
     <string name="completed_lessons_no_items">Нет информации о проведённых уроках</string>
     <string name="completed_lessons_topic">Тема</string>
     <string name="completed_lessons_absence">Отсутствие</string>
