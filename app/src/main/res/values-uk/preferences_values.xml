@@ -47,7 +47,7 @@
     </string-array>
     <string-array name="grade_average_mode_entries">
         <item>Середні оцінки тільки від обраного семестру</item>
-        <item>Середнє значення для обох семестів</item>
+        <item>Середнє значення для обох семестрів</item>
         <item>Середнє оцінювання за весь рік</item>
     </string-array>
     <string-array name="dashboard_tile_entries">
