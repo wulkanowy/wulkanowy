@@ -243,10 +243,10 @@
         <item quantity="other">Нова відвідуваність</item>
     </plurals>
     <plurals name="attendance_notify_new_items">
-        <item quantity="one">%1$d новий відвідувач</item>
-        <item quantity="few">%1$d новий відвідувач</item>
-        <item quantity="many">%1$d новий відвідувач</item>
-        <item quantity="other">%1$d відвідування</item>
+        <item quantity="one">%1$d нова відвідуваність</item>
+        <item quantity="few">%1$d нові відвідуваністi</item>
+        <item quantity="many">%1$d нових відвідуваностей</item>
+        <item quantity="other">%1$d нових відвідуваностей</item>
     </plurals>
     <plurals name="attendance_number_item">
         <item quantity="one">%d відвідування</item>
@@ -672,7 +672,7 @@
     <string name="pref_view_grade_average_force_calc">Примусово розрахувати середню оцінку через додаток</string>
     <string name="pref_view_present">Показати присутність</string>
     <string name="pref_view_app_theme">Тема</string>
-    <string name="pref_view_expand_grade">Розширення оцінок</string>
+    <string name="pref_view_expand_grade">Розгортання оцінок</string>
     <string name="pref_view_timetable_show_timers">Позначити поточний урок</string>
     <string name="pref_view_timetable_show_groups">Показувати групи поруч з темами</string>
     <string name="pref_view_grade_statistics_list">Показувати діаграми в оцінках класу</string>
