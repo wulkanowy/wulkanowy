@@ -199,7 +199,7 @@
     <!--Completed lessons-->
     <string name="completed_lessons_title">Уроки, що відбулися</string>
     <string name="completed_lessons_button">Показати завершені уроки</string>
-    <string name="completed_lessons_no_items">Немає інформації о завершенних уроках</string>
+    <string name="completed_lessons_no_items">Немає інформації про завершенні уроки</string>
     <string name="completed_lessons_topic">Тема</string>
     <string name="completed_lessons_absence">Відсутність</string>
     <string name="completed_lessons_resources">Ресурси</string>
@@ -210,11 +210,11 @@
     <string name="additional_lessons_add">Новий урок</string>
     <string name="additional_lessons_add_title">Новий додатковий урок</string>
     <string name="additional_lessons_add_success">Додатковий урок успішно додано</string>
-    <string name="additional_lessons_delete_success">Успішно видалено додаткове заняття</string>
+    <string name="additional_lessons_delete_success">Успішно видалено додатковий урок</string>
     <string name="additional_lessons_repeat">Повторювати щотижня</string>
     <string name="additional_lessons_delete_title">Видалити додатковий урок</string>
     <string name="additional_lessons_delete_one">Тільки цей урок</string>
-    <string name="additional_lessons_delete_series">Все в серії</string>
+    <string name="additional_lessons_delete_series">Всі в серії</string>
     <string name="additional_lessons_start">Час початку</string>
     <string name="additional_lessons_end">Час завершення</string>
     <string name="additional_lessons_end_time_error">Час завершення має бути більшим, ніж час початку</string>
@@ -222,10 +222,10 @@
     <string name="attendance_summary_button">Підсумок відвідуваності</string>
     <string name="attendance_absence_school">Відсутність зі шкільних причин</string>
     <string name="attendance_absence_excused">Відсутність з поважних причин</string>
-    <string name="attendance_absence_unexcused">Відсутність з не поважних причин</string>
+    <string name="attendance_absence_unexcused">Відсутність без поважних причин</string>
     <string name="attendance_exemption">Звільнення</string>
     <string name="attendance_excused_lateness">Спізнення з поважних причин</string>
-    <string name="attendance_unexcused_lateness">Спізнення з не поважних причин</string>
+    <string name="attendance_unexcused_lateness">Спізнення без поважних причин</string>
     <string name="attendance_present">Присутність</string>
     <string name="attendance_deleted">Вилучено</string>
     <string name="attendance_unknown">Невідомо</string>
@@ -237,22 +237,22 @@
     <string name="attendance_excuse_no_selection">Оберіть хоча б одну відсутність</string>
     <string name="attendance_excuse_title">Змінити статус</string>
     <plurals name="attendance_notify_new_items_title">
-        <item quantity="one">Нова відвідуваність</item>
-        <item quantity="few">Нова відвідуваність</item>
-        <item quantity="many">Нова відвідуваність</item>
-        <item quantity="other">Нова відвідуваність</item>
+        <item quantity="one">Новий запис відвідуваності</item>
+        <item quantity="few">Нові записи відвідуваності</item>
+        <item quantity="many">Нові записи відвідуваності</item>
+        <item quantity="other">Нові записи відвідуваності</item>
     </plurals>
     <plurals name="attendance_notify_new_items">
-        <item quantity="one">%1$d нова відвідуваність</item>
-        <item quantity="few">%1$d нові відвідуваністi</item>
-        <item quantity="many">%1$d нових відвідуваностей</item>
-        <item quantity="other">%1$d нових відвідуваностей</item>
+        <item quantity="one">%1$d запис відвідуваності</item>
+        <item quantity="few">%1$d записи відвідуваності</item>
+        <item quantity="many">%1$d записів відвідуваності</item>
+        <item quantity="other">%1$d записів відвідуваності</item>
     </plurals>
     <plurals name="attendance_number_item">
-        <item quantity="one">%d відвідування</item>
-        <item quantity="few">%d відвідування</item>
-        <item quantity="many">%d відвідування</item>
-        <item quantity="other">%d відвідування</item>
+        <item quantity="one">%d запис відвідуваності</item>
+        <item quantity="few">%d записи відвідуваності</item>
+        <item quantity="many">%d записів відвідуваності</item>
+        <item quantity="other">%d записів відвідуваності</item>
     </plurals>
     <!--Attendance summary-->
     <string name="attendance_summary_total">Загальна</string>
@@ -261,78 +261,78 @@
     <string name="exam_type">Тип</string>
     <string name="exam_entry_date">Дата запису</string>
     <plurals name="exam_notify_new_item_title">
-        <item quantity="one">Новий іспит</item>
-        <item quantity="few">Новий іспит</item>
-        <item quantity="many">Новий іспит</item>
-        <item quantity="other">Нові іспити</item>
+        <item quantity="one">Новий тест</item>
+        <item quantity="few">Нові тести</item>
+        <item quantity="many">Нові тести</item>
+        <item quantity="other">Нові тести</item>
     </plurals>
     <plurals name="exam_notify_new_item_content">
-        <item quantity="one">%d новий екзамен</item>
-        <item quantity="few">%d новий екзамен</item>
-        <item quantity="many">%d новий екзамен</item>
-        <item quantity="other">%d нових іспитів</item>
+        <item quantity="one">%d новий тест</item>
+        <item quantity="few">%d нових тести</item>
+        <item quantity="many">%d нових тестів</item>
+        <item quantity="other">%d нових тестів</item>
     </plurals>
     <plurals name="exam_number_item">
-        <item quantity="one">%d екзамен</item>
-        <item quantity="few">%d екзамен</item>
-        <item quantity="many">%d екзамен</item>
-        <item quantity="other">%d іспити</item>
+        <item quantity="one">%d тест</item>
+        <item quantity="few">%d тести</item>
+        <item quantity="many">%d тести</item>
+        <item quantity="other">%d тести</item>
     </plurals>
     <!--Message-->
     <string name="message_inbox">Отримані</string>
     <string name="message_sent">Відправлені</string>
     <string name="message_trash">Кошик</string>
     <string name="message_no_subject">(брак теми)</string>
-    <string name="message_no_items">Немає повідомлень</string>
+    <string name="message_no_items">Немає листів</string>
     <string name="message_from">Від:</string>
     <string name="message_to">Кому:</string>
     <string name="message_date">Дата: %1$s</string>
     <string name="message_reply">Відповісти</string>
     <string name="message_forward">Переслати</string>
-    <string name="message_select_all">Вибрати все</string>
+    <string name="message_select_all">Вибрати всі</string>
     <string name="message_unselect_all">Відмінити вибір</string>
     <string name="message_move_to_trash">Перемістити до кошика</string>
     <string name="message_delete_forever">Видалити назавжди</string>
-    <string name="message_delete_success">Повідомлення було успішно видалено</string>
+    <string name="message_delete_success">Лист було успішно видалено</string>
     <string name="message_share">Поділитись</string>
     <string name="message_print">Друк</string>
     <string name="message_subject">Тема</string>
     <string name="message_content">Зміст</string>
-    <string name="message_send_successful">Повідомлення було успішно відправлено</string>
-    <string name="message_not_exists">Такого повідомлення не існує</string>
+    <string name="message_send_successful">Лист було успішно відправлено</string>
+    <string name="message_not_exists">Такого листа не існує</string>
     <string name="message_required_recipients">Необхідно обрати принаймні 1 адресата</string>
-    <string name="message_content_min_length">Зміст повідомлення повинен складатися принаймні з 3 знаків</string>
+    <string name="message_content_min_length">Зміст листа повинен складатися принаймні з 3 знаків</string>
     <string name="message_chip_only_unread">Лише непрочитані</string>
     <string name="message_chip_only_with_attachments">Тільки з вкладеннями</string>
-    <string name="message_read">Читання: %s</string>
-    <string name="message_read_by">Прочитанно:%1$d через %2$d людей</string>
+    <string name="message_read">Прочитаний: %s</string>
+    <string name="message_read_by">Прочитаний: %1$d з %2$d осіб</string>
     <plurals name="message_number_item">
-        <item quantity="one">%1$d повідомлення</item>
-        <item quantity="few">%1$d повідомлень</item>
-        <item quantity="many">%1$d повідомлень</item>
-        <item quantity="other">%1$d повідомлень</item>
+        <item quantity="one">%1$d лист</item>
+        <item quantity="few">%1$d листи</item>
+        <item quantity="many">%1$d листів</item>
+        <item quantity="other">%1$d листів</item>
     </plurals>
     <plurals name="message_new_items">
-        <item quantity="one">Нове повідомлення</item>
-        <item quantity="few">Нові повідомлення</item>
-        <item quantity="many">Нові повідомлення</item>
-        <item quantity="other">Нові повідомлення</item>
+        <item quantity="one">Новий лист</item>
+        <item quantity="few">Нові листи</item>
+        <item quantity="many">Нові листи</item>
+        <item quantity="other">Нові листи</item>
     </plurals>
-    <string name="message_restore_dialog">Ви хочете відновити повідомлення в чернетці?</string>
-    <string name="message_restore_dialog_with_recipients">Ви хочете відновити чернетку повідомлення з отримувачами: %s?</string>
+    <string name="message_restore_dialog">Ви хочете відновити чорновик листа?</string>
+    <string name="message_restore_dialog_with_recipients">Ви хочете відновити чорновик листа з отримувачами: %s?</string>
     <plurals name="message_notify_new_items">
-        <item quantity="one">Ви отримали %1$d нове повідомлення</item>
-        <item quantity="few">Ви отримали %1$d нових повідомлення</item>
-        <item quantity="many">Ви отримали %1$d нових повідомлень</item>
-        <item quantity="other">Ви отримали %1$d нових повідомлень</item>
+        <item quantity="one">Ви отримали %1$d лист</item>
+        <item quantity="few">Ви отримали %1$d листи</item>
+        <item quantity="many">Ви отримали %1$d листів</item>
+        <item quantity="other">Ви отримали %1$d листів</item>
     </plurals>
     <plurals name="message_selected_messages_count">
         <item quantity="one">%1$d вибрано</item>
-        <item quantity="few">вибрано %1$d</item>
-        <item quantity="many">вибрано %1$d</item>
+        <item quantity="few">%1$d вибрано</item>
+        <item quantity="many">%1$d вибрано</item>
         <item quantity="other">%1$d вибрано</item>
     </plurals>
-    <string name="message_messages_deleted">Повідомлення видалені</string>
+    <string name="message_messages_deleted">Листи видалені</string>
     <!--Note-->
     <string name="note_no_items">Немає інформації о зауваженнях</string>
     <string name="note_points">Бали</string>
@@ -343,16 +343,16 @@
         <item quantity="other">%d зауважень</item>
     </plurals>
     <plurals name="note_new_items">
-        <item quantity="one">Нова нотатка</item>
-        <item quantity="few">Нові нотатки</item>
-        <item quantity="many">Нових нотаток</item>
-        <item quantity="other">Нових нотаток</item>
+        <item quantity="one">Нове зауваження</item>
+        <item quantity="few">Нові зауваження</item>
+        <item quantity="many">Нові зауваження</item>
+        <item quantity="other">Нові зауваження</item>
     </plurals>
     <plurals name="note_notify_new_items">
-        <item quantity="one">%1$d нове зауваження</item>
-        <item quantity="few">%1$d нових зауваження</item>
-        <item quantity="many">%1$d нових зауважень</item>
-        <item quantity="other">%1$d нових зауважень</item>
+        <item quantity="one">Ви отримали %1$d зауваження</item>
+        <item quantity="few">Ви отримали %1$d зауваження</item>
+        <item quantity="many">Ви отримали %1$d зауважень</item>
+        <item quantity="other">Ви отримали %1$d зауважень</item>
     </plurals>
     <!--Praise-->
     <plurals name="praise_number_item">
@@ -368,49 +368,49 @@
         <item quantity="other">Нові похвали</item>
     </plurals>
     <plurals name="praise_notify_new_items">
-        <item quantity="one">Ви отримали %1$d нову похвалу</item>
-        <item quantity="few">Ви отримали %1$d нові похвали</item>
-        <item quantity="many">Ви отримали %1$d нових похвал</item>
-        <item quantity="other">Ви отримали %1$d нових похвал</item>
+        <item quantity="one">Ви отримали %1$d похвалу</item>
+        <item quantity="few">Ви отримали %1$d похвали</item>
+        <item quantity="many">Ви отримали %1$d похвал</item>
+        <item quantity="other">Ви отримали %1$d похвал</item>
     </plurals>
     <!--Neutral notes-->
     <plurals name="neutral_note_number_item">
-        <item quantity="one">%d нейтральна примітка</item>
-        <item quantity="few">%d нейтральні примітки</item>
-        <item quantity="many">%d нейтральних приміток</item>
-        <item quantity="other">%d нейтральних приміток</item>
+        <item quantity="one">%d нейтральний запис</item>
+        <item quantity="few">%d нейтральні записи</item>
+        <item quantity="many">%d нейтральних записів</item>
+        <item quantity="other">%d нейтральних записів</item>
     </plurals>
     <plurals name="neutral_note_new_items">
-        <item quantity="one">Нова нейтральна примітка</item>
-        <item quantity="few">Нових нейтральних приміток</item>
-        <item quantity="many">Нових нейтральних приміток</item>
-        <item quantity="other">Нові примітки</item>
+        <item quantity="one">Новий нейтральний запис</item>
+        <item quantity="few">Нові нейтральні записи</item>
+        <item quantity="many">Нові нейтральні записи</item>
+        <item quantity="other">Нові нейтральні записи</item>
     </plurals>
     <plurals name="neutral_note_notify_new_items">
-        <item quantity="one">Ви отримали %1$d нову нейтральну примітку</item>
-        <item quantity="few">Ви отримали %1$d нових нейтральних приміток</item>
-        <item quantity="many">Ви отримали %1$d нових нейтральних приміток</item>
-        <item quantity="other">Ви отримали %1$d нових нейтральних приміток</item>
+        <item quantity="one">Ви отримали %1$d нейтральний запис</item>
+        <item quantity="few">Ви отримали %1$d нейтральні записи</item>
+        <item quantity="many">Ви отримали %1$d нейтральних записів</item>
+        <item quantity="other">Ви отримали %1$d нейтральних записів</item>
     </plurals>
     <!--Homework-->
-    <string name="homework_no_items">Брак домашніх завдань</string>
-    <string name="homework_mark_as_done">Позначити як зроблене</string>
-    <string name="homework_mark_as_undone">Позначити як не зроблене</string>
-    <string name="homework_add">Додати домашню роботу</string>
-    <string name="homework_add_success">Домашню роботу додано успішно</string>
-    <string name="homework_delete_success">Домашню роботу видалено успішно</string>
-    <string name="homework_attachments">Додатки</string>
+    <string name="homework_no_items">Немає домашніх завдань</string>
+    <string name="homework_mark_as_done">Зроблено</string>
+    <string name="homework_mark_as_undone">Не зроблено</string>
+    <string name="homework_add">Додати домашнє завдання</string>
+    <string name="homework_add_success">Домашнє завдання додано успішно</string>
+    <string name="homework_delete_success">Домашнє завдання видалено успішно</string>
+    <string name="homework_attachments">Вкладення</string>
     <plurals name="homework_notify_new_item_title">
-        <item quantity="one">Нова домашня робота</item>
-        <item quantity="few">Нових домашніх завдань</item>
-        <item quantity="many">Нових домашніх завдань</item>
-        <item quantity="other">Нових домашніх завдань</item>
+        <item quantity="one">Нове домашнє завдання</item>
+        <item quantity="few">Нові домашні завдання</item>
+        <item quantity="many">Нові домашні завдання</item>
+        <item quantity="other">Нові домашні завдання</item>
     </plurals>
     <plurals name="homework_notify_new_item_content">
-        <item quantity="one">Ви отримали %d нове домашнє завдання</item>
-        <item quantity="few">Ви отримали %d нові домашні завдання</item>
-        <item quantity="many">Ви отримали %d нові домашні завдання</item>
-        <item quantity="other">Ви отримали %d нові домашні завдання</item>
+        <item quantity="one">Ви отримали %d домашнє завдання</item>
+        <item quantity="few">Ви отримали %d домашні завдання</item>
+        <item quantity="many">Ви отримали %d домашніх завдань</item>
+        <item quantity="other">Ви отримали %d домашніх завдань</item>
     </plurals>
     <plurals name="homework_number_item">
         <item quantity="one">%d домашнє завдання</item>
@@ -441,14 +441,14 @@
     <string name="schoolandteachers_title">Школа та вчителі</string>
     <!--School-->
     <string name="school_title">Школа</string>
-    <string name="school_no_info">Брак інформації про школу</string>
+    <string name="school_no_info">Немає інформації про школу</string>
     <string name="school_name">Назва школи</string>
     <string name="school_address">Адреса школи</string>
     <string name="school_telephone">Телефон</string>
     <string name="school_headmaster">Директор</string>
-    <string name="school_pedagogue">Викладач</string>
+    <string name="school_pedagogue">Педагог</string>
     <string name="school_address_button">Показати на мапі</string>
-    <string name="school_telephone_button">Зателефонувати</string>
+    <string name="school_telephone_button">Задзвонити</string>
     <!--Teacher-->
     <string name="teachers_title">Вчителі</string>
     <string name="teacher_no_items">Немає інформацій про вчителів</string>
@@ -457,45 +457,45 @@
     <string name="conferences_title">Зустрічі</string>
     <string name="conference_no_items">Немає інформації про зустрічі</string>
     <plurals name="conference_number_item">
-        <item quantity="one">%d конференція</item>
-        <item quantity="few">%d конференція</item>
-        <item quantity="many">%d конференція</item>
-        <item quantity="other">%d конференцій</item>
+        <item quantity="one">%d зустріч</item>
+        <item quantity="few">%d зустрічі</item>
+        <item quantity="many">%d зустрічей</item>
+        <item quantity="other">%d зустрічей</item>
     </plurals>
     <plurals name="conference_notify_new_item_title">
-        <item quantity="one">Нова конференція</item>
-        <item quantity="few">Нова конференція</item>
-        <item quantity="many">Нова конференція</item>
-        <item quantity="other">Нові конференції</item>
+        <item quantity="one">Нова зустріч</item>
+        <item quantity="few">Нові зустрічі</item>
+        <item quantity="many">Нові зустрічі</item>
+        <item quantity="other">Нові зустрічі</item>
     </plurals>
     <plurals name="conference_notify_new_items">
-        <item quantity="one">У вас є %1$d нова конференція</item>
-        <item quantity="few">У вас є %1$d нова конференція</item>
-        <item quantity="many">У вас є %1$d нова конференція</item>
-        <item quantity="other">У вас є %1$d нових конференцій</item>
+        <item quantity="one">У вас є %1$d нова зустріч</item>
+        <item quantity="few">У вас є %1$d нові зустрічі</item>
+        <item quantity="many">У вас є %1$d нових зустрічей</item>
+        <item quantity="other">У вас є %1$d нових зустрічей</item>
     </plurals>
-    <string name="conferences_present">Присутність на конференції</string>
+    <string name="conferences_present">Присутність на зустрічі</string>
     <string name="conference_agenda">Порядок денний</string>
     <!--Director information-->
     <string name="school_announcement_title">Оголошення школи</string>
-    <string name="school_announcement_no_items">Жодних навчальних оголошень</string>
+    <string name="school_announcement_no_items">Немає шкільних оголошень</string>
     <plurals name="school_announcement_number_item">
-        <item quantity="one">%d оголошення про школу</item>
-        <item quantity="few">%d оголошення про школу</item>
-        <item quantity="many">%d оголошення про школу</item>
-        <item quantity="other">Оголошення нової школи</item>
+        <item quantity="one">%d шкільне оголошення</item>
+        <item quantity="few">%d шкільних оголошення</item>
+        <item quantity="many">%d шкільних оголошень</item>
+        <item quantity="other">%d шкільних оголошень</item>
     </plurals>
     <plurals name="school_announcement_notify_new_item_title">
-        <item quantity="one">Оголошення нової школи</item>
-        <item quantity="few">Оголошення нової школи</item>
+        <item quantity="one">Нове шкільне оголошення</item>
+        <item quantity="few">Нові шкільні оголошення</item>
         <item quantity="many">Нові шкільні оголошення</item>
         <item quantity="other">Нові шкільні оголошення</item>
     </plurals>
     <plurals name="school_announcement_notify_new_items">
-        <item quantity="one">У вас є %1$d нове оголошення про школу</item>
-        <item quantity="few">У вас є %1$d нове оголошення про школу</item>
-        <item quantity="many">У вас є %1$d нове оголошення про школу</item>
-        <item quantity="other">У вас є %1$d нових оголошень про школи</item>
+        <item quantity="one">У вас є %1$d нове шкільне оголошення</item>
+        <item quantity="few">У вас є %1$d нових шкільних оголошення</item>
+        <item quantity="many">У вас є %1$d нових шкільних оголошень</item>
+        <item quantity="other">У вас є %1$d нових шкільних оголошень</item>
     </plurals>
     <!--Account-->
     <string name="account_add_new">Додати обліковий запис</string>
@@ -503,28 +503,28 @@
     <string name="account_confirm">Ви впевнені, що хочете вийти з цього облікового запису?</string>
     <string name="account_logout_student">Вийти з облікового запису учня</string>
     <string name="account_type_student">Обліковий запис учня</string>
-    <string name="account_type_parent">Обліковий запис батьків</string>
-    <string name="account_details_edit">Редагувати дані</string>
-    <string name="account_quick_manager">Менеджер облікових записів</string>
-    <string name="account_select_student">Виберіть учня</string>
+    <string name="account_type_parent">Обліковий запис батька</string>
+    <string name="account_details_edit">Змінити дані</string>
+    <string name="account_quick_manager">Змінити облікові записи</string>
+    <string name="account_select_student">Вибрати учня</string>
     <string name="account_family">Сім\'я</string>
     <string name="account_contact">Контакт</string>
     <string name="account_address">Деталі проживання</string>
-    <string name="account_personal_data">Особиста інформація</string>
+    <string name="account_personal_data">Персональні дані</string>
     <!--About-->
     <string name="about_version">Версія додатка</string>
     <string name="about_contributor">Розробники</string>
-    <string name="about_contributor_summary">Список розробників \"Wulkanowy\"</string>
+    <string name="about_contributor_summary">Список розробників додатку</string>
     <string name="about_feedback">Виникла помилка?</string>
     <string name="about_feedback_summary">Повідомити о помилці за допомогою e-mail</string>
     <string name="about_faq">FAQ</string>
-    <string name="about_faq_summary">Запитання, які часто задають</string>
+    <string name="about_faq_summary">Найбільш поширенні питання</string>
     <string name="about_discord">Сервер Discord</string>
-    <string name="about_discord_summary">Приєднатися до спільноти додатка</string>
-    <string name="about_facebook">Фан-сторінка Facebook</string>
+    <string name="about_discord_summary">Приєднуйтеся до спільноти додатка</string>
+    <string name="about_facebook">Сторінка у Facebook</string>
     <string name="about_twitter">Сторінка у Twitter</string>
     <string name="about_twitter_summary">Стежте за нами у Твіттері</string>
-    <string name="about_facebook_summary">Вподобайте нашу фан сторінку у Facebook</string>
+    <string name="about_facebook_summary">Вподобайте нас у Facebook</string>
     <string name="about_privacy">Політика конфіденційності</string>
     <string name="about_privacy_summary">Правила зберігання особистих даних</string>
     <string name="about_system">Налаштування системи</string>
@@ -532,7 +532,7 @@
     <string name="about_homepage">Домашня сторінка</string>
     <string name="about_homepage_summary">Відвідайте наш сайт і допоможіть в розробці додатку</string>
     <string name="about_licenses">Ліцензії</string>
-    <string name="about_licenses_summary">Ліцензії використовних бібліотек</string>
+    <string name="about_licenses_summary">Ліцензії використаних бібліотек</string>
     <!--Licenses-->
     <string name="license_dialog_title">Ліцензія</string>
     <!--Contributor-->
@@ -544,12 +544,12 @@
     <string name="student_info_second_name">Друге ім\'я</string>
     <string name="student_info_gender">Стать</string>
     <string name="student_info_polish_citizenship">Польське громадянство</string>
-    <string name="student_info_family_name">Прізвище</string>
+    <string name="student_info_family_name">Дошлюбне прізвище</string>
     <string name="student_info_parents_name">Імена батька і матері</string>
-    <string name="student_info_phone">Номер телефону</string>
+    <string name="student_info_phone">Стаціонарний телефон</string>
     <string name="student_info_cellphone">Мобільний телефон</string>
-    <string name="student_info_email">Електронна пошта</string>
-    <string name="student_info_address">Місця проживання</string>
+    <string name="student_info_email">E-mail</string>
+    <string name="student_info_address">Місце проживання</string>
     <string name="student_info_registered_address">Адреса реєстрації</string>
     <string name="student_info_correspondence_address">Адреса для кореспонденції</string>
     <string name="student_info_full_name">Прізвище та ім\'я</string>
@@ -559,7 +559,7 @@
     <string name="student_info_male">Чоловіча</string>
     <string name="student_info_female">Жіноча</string>
     <string name="student_info_last_name">Прізвище</string>
-    <string name="student_info_guardian">Охоронець</string>
+    <string name="student_info_guardian">Опікун</string>
     <!--Account edit-->
     <string name="account_edit_nick_hint">Псевдонім</string>
     <string name="account_edit_header">Додати псевдонім</string>
@@ -573,61 +573,61 @@
     <string name="dashboard_timetable_title_today_and_tomorrow">(Сьогодні та завтра)</string>
     <string name="dashboard_timetable_first_lesson_title_moment">Через мить:</string>
     <string name="dashboard_timetable_first_lesson_title_soon">Незабаром:</string>
-    <string name="dashboard_timetable_first_lesson_title_first">Перше:</string>
+    <string name="dashboard_timetable_first_lesson_title_first">Перший:</string>
     <string name="dashboard_timetable_first_lesson_title_now">Зараз:</string>
     <string name="dashboard_timetable_second_lesson_value_end">Кінець уроків</string>
     <string name="dashboard_timetable_second_lessons_title">Далі:</string>
     <string name="dashboard_timetable_third_title">Пізніше:</string>
     <plurals name="dashboard_timetable_third_value">
-        <item quantity="one">%1$d більше уроку</item>
-        <item quantity="few">%1$d більше уроків</item>
-        <item quantity="many">%1$d більше уроків</item>
-        <item quantity="other">%1$d більше уроків</item>
+        <item quantity="one">ще %1$d урок</item>
+        <item quantity="few">ще %1$d уроки</item>
+        <item quantity="many">ще %1$d уроків</item>
+        <item quantity="other">ще %1$d уроків</item>
     </plurals>
     <string name="dashboard_timetable_third_time">до %1$s</string>
     <string name="dashboard_timetable_no_lessons">Немає майбутніх уроків</string>
     <string name="dashboard_timetable_error">Сталася помилка під час завантаження уроків</string>
-    <string name="dashboard_homework_title">Домашня робота</string>
+    <string name="dashboard_homework_title">Домашнє завдання</string>
     <string name="dashboard_homework_no_homework">Немає домашнього завдання для виконання</string>
-    <string name="dashboard_homework_error">Помилка при завантаженні домашньої роботи</string>
+    <string name="dashboard_homework_error">Помилка при завантаженні домашніх завдань</string>
     <plurals name="dashboard_homework_more">
-        <item quantity="one"> %1$d більше домашнього завдання</item>
-        <item quantity="few">%1$d більше домашніх завданнь</item>
-        <item quantity="many">%1$d більше домашніх завданнь</item>
-        <item quantity="other">%1$d більше домашніх завдань</item>
+        <item quantity="one">ще %1$d домашнє завдання</item>
+        <item quantity="few">ще %1$d домашніх завдання</item>
+        <item quantity="many">ще %1$d домашніх завдань</item>
+        <item quantity="other">ще %1$d домашніх завдань</item>
     </plurals>
     <string name="dashboard_homework_time">до %1$s</string>
-    <string name="dashboard_grade_title">Останні оцінки</string>
+    <string name="dashboard_grade_title">Остатні оцінки</string>
     <string name="dashboard_grade_no_grade">Немає нових оцінок</string>
-    <string name="dashboard_grade_error">Помилка при завантаженні класів</string>
-    <string name="dashboard_announcements_title">Оголошення школи</string>
+    <string name="dashboard_grade_error">Помилка при завантаженні оцінок</string>
+    <string name="dashboard_announcements_title">Шкільні оголошення</string>
     <string name="dashboard_announcements_no_announcements">Немає поточних оголошень</string>
     <string name="dashboard_announcements_error">Помилка при завантаженні анонсів</string>
     <plurals name="dashboard_announcements_more">
-        <item quantity="one">%1$d оголошення</item>
-        <item quantity="few">%1$d більше оголошень</item>
-        <item quantity="many">%1$d більше оголошень</item>
-        <item quantity="other">%1$d більше оголошень</item>
+        <item quantity="one">ще %1$d оголошення</item>
+        <item quantity="few">ще %1$d оголошення</item>
+        <item quantity="many">ще %1$d оголошень</item>
+        <item quantity="other">ще %1$d оголошень</item>
     </plurals>
     <string name="dashboard_exams_title">Тести</string>
     <string name="dashboard_exams_no_exams">Немає майбутніх тестів</string>
     <string name="dashboard_exams_error">Помилка при завантаженні тестів</string>
     <plurals name="dashboard_exams_more">
-        <item quantity="one">%1$d ще тест</item>
-        <item quantity="few">%1$d ще тестів</item>
-        <item quantity="many">%1$d ще тестів</item>
-        <item quantity="other">%1$d ще тестів</item>
+        <item quantity="one">ще %1$d тест</item>
+        <item quantity="few">ще %1$d тести</item>
+        <item quantity="many">ще %1$d тестів</item>
+        <item quantity="other">ще %1$d тестів</item>
     </plurals>
-    <string name="dashboard_conferences_title">Конференції</string>
-    <string name="dashboard_conferences_no_conferences">Немає майбутніх конференцій</string>
-    <string name="dashboard_conferences_error">Помилка при завантаженні конференцій</string>
+    <string name="dashboard_conferences_title">Зустрічі</string>
+    <string name="dashboard_conferences_no_conferences">Немає майбутніх зустрічей</string>
+    <string name="dashboard_conferences_error">Помилка при завантаженні зустрічей</string>
     <plurals name="dashboard_conference_more">
-        <item quantity="one">Ще %1$d конференція</item>
-        <item quantity="few">Ще %1$d конференції</item>
-        <item quantity="many">Ще %1$d конференцій</item>
-        <item quantity="other">%1$d більше конференцій</item>
+        <item quantity="one">ще %1$d зустріч</item>
+        <item quantity="few">ще %1$d зустрічі</item>
+        <item quantity="many">ще %1$d зустрічей</item>
+        <item quantity="other">ще %1$d зустрічей</item>
     </plurals>
-    <string name="dashboard_horizontal_group_error">Помилка при завантаженні даних</string>
+    <string name="dashboard_horizontal_group_error">Виникла помилка при завантаженні даних</string>
     <string name="dashboard_horizontal_group_no_data">Нічого</string>
     <!--Error dialog-->
     <string name="dialog_error_check_update">Перевірити наявність оновлень</string>
