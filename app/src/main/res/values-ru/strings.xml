@@ -701,7 +701,7 @@
     <string name="pref_notification_go_to_settings">Перейти к настройкам</string>
     <string name="pref_services_header">Синхронизация</string>
     <string name="pref_services_switch">Автоматическая синхронизация</string>
-    <string name="pref_services_suspended">Приостановить синхронизацию во время каникул</string>
+    <string name="pref_services_suspended">Приостановлена во время каникул</string>
     <string name="pref_services_interval">Интервал синхронизации</string>
     <string name="pref_services_wifi">Только через Wi-Fi</string>
     <string name="pref_services_force_sync">Синхронизировать</string>
