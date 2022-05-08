@@ -136,22 +136,22 @@
         <item quantity="other">Нові підсумкові оцінки</item>
     </plurals>
     <plurals name="grade_notify_new_items">
-        <item quantity="one">Ви отримали %1$d оцінку</item>
-        <item quantity="few">Ви отримали %1$d оцінки</item>
-        <item quantity="many">Ви отримали %1$d оцінок</item>
-        <item quantity="other">Ви отримали %1$d оцінок</item>
+        <item quantity="one">Ви отримали %1$d нову оцінку</item>
+        <item quantity="few">Ви отримали %1$d нові оцінки</item>
+        <item quantity="many">Ви отримали %1$d нових оцінок</item>
+        <item quantity="other">Ви отримали %1$d нових оцінок</item>
     </plurals>
     <plurals name="grade_notify_new_items_predicted">
-        <item quantity="one">Ви отримали %1$d передбачувану оцінку</item>
-        <item quantity="few">Ви отримали %1$d передбачувані оцінку</item>
-        <item quantity="many">Ви отримали %1$d передбачуваних оцінку</item>
-        <item quantity="other">Ви отримали %1$d передбачуваних оцінку</item>
+        <item quantity="one">Ви отримали %1$d нову передбачувану оцінку</item>
+        <item quantity="few">Ви отримали %1$d нові передбачувані оцінкі</item>
+        <item quantity="many">Ви отримали %1$d нових передбачуваних оцінок</item>
+        <item quantity="other">Ви отримали %1$d нових передбачуваних оцінок</item>
     </plurals>
     <plurals name="grade_notify_new_items_final">
-        <item quantity="one">Ви отримали %1$d підсумкову оцінку</item>
-        <item quantity="few">Ви отримали %1$d підсумкові оцінки</item>
-        <item quantity="many">Ви отримали %1$d підсумкових оцінок</item>
-        <item quantity="other">Ви отримали %1$d підсумкових оцінок</item>
+        <item quantity="one">Ви отримали %1$d нову підсумкову оцінку</item>
+        <item quantity="few">Ви отримали %1$d нові підсумкові оцінки</item>
+        <item quantity="many">Ви отримали %1$d нових підсумкових оцінок</item>
+        <item quantity="other">Ви отримали %1$d нових підсумкових оцінок</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Урок</string>
@@ -243,10 +243,10 @@
         <item quantity="other">Нові записи відвідуваності</item>
     </plurals>
     <plurals name="attendance_notify_new_items">
-        <item quantity="one">%1$d запис відвідуваності</item>
-        <item quantity="few">%1$d записи відвідуваності</item>
-        <item quantity="many">%1$d записів відвідуваності</item>
-        <item quantity="other">%1$d записів відвідуваності</item>
+        <item quantity="one">%1$d новий запис відвідуваності</item>
+        <item quantity="few">%1$d нові записи відвідуваності</item>
+        <item quantity="many">%1$d нові записи відвідуваності</item>
+        <item quantity="other">%1$d нові записи відвідуваності</item>
     </plurals>
     <plurals name="attendance_number_item">
         <item quantity="one">%d запис відвідуваності</item>
@@ -321,10 +321,10 @@
     <string name="message_restore_dialog">Ви хочете відновити чорновик листа?</string>
     <string name="message_restore_dialog_with_recipients">Ви хочете відновити чорновик листа з отримувачами: %s?</string>
     <plurals name="message_notify_new_items">
-        <item quantity="one">Ви отримали %1$d лист</item>
-        <item quantity="few">Ви отримали %1$d листи</item>
-        <item quantity="many">Ви отримали %1$d листів</item>
-        <item quantity="other">Ви отримали %1$d листів</item>
+        <item quantity="one">Ви отримали %1$d новий лист</item>
+        <item quantity="few">Ви отримали %1$d нові листи</item>
+        <item quantity="many">Ви отримали %1$d нових листів</item>
+        <item quantity="other">Ви отримали %1$d нових листів</item>
     </plurals>
     <plurals name="message_selected_messages_count">
         <item quantity="one">%1$d вибрано</item>
@@ -349,10 +349,10 @@
         <item quantity="other">Нові зауваження</item>
     </plurals>
     <plurals name="note_notify_new_items">
-        <item quantity="one">Ви отримали %1$d зауваження</item>
-        <item quantity="few">Ви отримали %1$d зауваження</item>
-        <item quantity="many">Ви отримали %1$d зауважень</item>
-        <item quantity="other">Ви отримали %1$d зауважень</item>
+        <item quantity="one">Ви отримали %1$d нове зауваження</item>
+        <item quantity="few">Ви отримали %1$d нові зауваження</item>
+        <item quantity="many">Ви отримали %1$d нових зауважень</item>
+        <item quantity="other">Ви отримали %1$d нових зауважень</item>
     </plurals>
     <!--Praise-->
     <plurals name="praise_number_item">
@@ -368,10 +368,10 @@
         <item quantity="other">Нові похвали</item>
     </plurals>
     <plurals name="praise_notify_new_items">
-        <item quantity="one">Ви отримали %1$d похвалу</item>
-        <item quantity="few">Ви отримали %1$d похвали</item>
-        <item quantity="many">Ви отримали %1$d похвал</item>
-        <item quantity="other">Ви отримали %1$d похвал</item>
+        <item quantity="one">Ви отримали %1$d нову похвалу</item>
+        <item quantity="few">Ви отримали %1$d нові похвали</item>
+        <item quantity="many">Ви отримали %1$d нових похвал</item>
+        <item quantity="other">Ви отримали %1$d нових похвал</item>
     </plurals>
     <!--Neutral notes-->
     <plurals name="neutral_note_number_item">
@@ -387,10 +387,10 @@
         <item quantity="other">Нові нейтральні записи</item>
     </plurals>
     <plurals name="neutral_note_notify_new_items">
-        <item quantity="one">Ви отримали %1$d нейтральний запис</item>
-        <item quantity="few">Ви отримали %1$d нейтральні записи</item>
-        <item quantity="many">Ви отримали %1$d нейтральних записів</item>
-        <item quantity="other">Ви отримали %1$d нейтральних записів</item>
+        <item quantity="one">Ви отримали %1$d новий нейтральний запис</item>
+        <item quantity="few">Ви отримали %1$d нові нейтральні записи</item>
+        <item quantity="many">Ви отримали %1$d нових нейтральних записів</item>
+        <item quantity="other">Ви отримали %1$d нових нейтральних записів</item>
     </plurals>
     <!--Homework-->
     <string name="homework_no_items">Немає домашніх завдань</string>
@@ -493,7 +493,7 @@
     </plurals>
     <plurals name="school_announcement_notify_new_items">
         <item quantity="one">У вас є %1$d нове шкільне оголошення</item>
-        <item quantity="few">У вас є %1$d нових шкільних оголошення</item>
+        <item quantity="few">У вас є %1$d нові шкільні оголошення</item>
         <item quantity="many">У вас є %1$d нових шкільних оголошень</item>
         <item quantity="other">У вас є %1$d нових шкільних оголошень</item>
     </plurals>
@@ -660,17 +660,17 @@
     <string name="all_change">Змінити</string>
     <string name="all_add_to_calendar">Додати у календар</string>
     <!--Timetable Widget-->
-    <string name="widget_timetable_no_items">Брак уроків</string>
+    <string name="widget_timetable_no_items">Немаэ уроків</string>
     <string name="widget_timetable_theme_title">Увібрати тему</string>
     <string name="widget_timetable_theme_light">Яскрава</string>
     <string name="widget_timetable_theme_dark">Темна</string>
     <string name="widget_timetable_theme_system">Тема системи</string>
     <!--Preferences-->
-    <string name="pref_view_header">Додатки</string>
+    <string name="pref_view_header">Додаток</string>
     <string name="pref_view_list">Вікно за замовчуванням</string>
-    <string name="pref_view_grade_average_mode">Розрахункові середні параметри</string>
-    <string name="pref_view_grade_average_force_calc">Примусово розрахувати середню оцінку через додаток</string>
-    <string name="pref_view_present">Показати присутність</string>
+    <string name="pref_view_grade_average_mode">Параметри розраховування середніх оцінок</string>
+    <string name="pref_view_grade_average_force_calc">Примусово розраховувати середню оцінку через додаток</string>
+    <string name="pref_view_present">Показувати присутність</string>
     <string name="pref_view_app_theme">Тема</string>
     <string name="pref_view_expand_grade">Розгортання оцінок</string>
     <string name="pref_view_timetable_show_timers">Позначити поточний урок</string>
@@ -685,19 +685,19 @@
     <string name="pref_notify_switch">Показувати повідомлення</string>
     <string name="pref_notify_upcoming_lessons_switch">Показувати повідомлення о наступних уроках</string>
     <string name="pref_notify_upcoming_lessons_persistent_switch">Зробити сповіщення майбутнього уроку нестійкими</string>
-    <string name="pref_notify_upcoming_lessons_persistent_summary">Вимкнути коли сповіщення не показуються у відстежувачі/темпі</string>
+    <string name="pref_notify_upcoming_lessons_persistent_summary">Вимкніть, якщо сповіщення не показуються на розумному годиннику</string>
     <string name="pref_notify_open_system_settings">Відкрити налаштування сповіщень системи</string>
     <string name="pref_notify_fix_sync_issues">Виправити помилки з синхронізацією і повідомленнями</string>
     <string name="pref_notify_fix_sync_issues_message">На вашому пристрої можуть бути помилки з синхронізацією і повідомленнями\n\nЩоб виправити іх, вам необхідно додати Wulkanowy в авто-старт і вимкнути оптимізацію/экономію батареї в налаштуваннях пристрою.</string>
     <string name="pref_notify_debug_switch">Показувати дебаг-повідомлення</string>
     <string name="pref_notify_disabled_summary">Синхронізація вимкнена</string>
-    <string name="pref_notify_notifications_piggyback_header">Офіційні сповіщення додатків</string>
-    <string name="pref_notify_notifications_piggyback">Захоплювати офіційні сповіщення програм</string>
-    <string name="pref_notify_notifications_piggyback_cancel_original">Видалити офіційні сповіщення програм після захоплення</string>
+    <string name="pref_notify_notifications_piggyback_header">Сповіщення офіційного додатку</string>
+    <string name="pref_notify_notifications_piggyback">Захоплювати сповіщення офіційного додатку</string>
+    <string name="pref_notify_notifications_piggyback_cancel_original">Видалити сповіщення офіційного додатку після захоплення</string>
     <string name="pref_notification_piggyback_popup_title">Захоплювати сповіщення</string>
-    <string name="pref_notification_piggyback_popup_description">За допомогою цієї функції ви можете отримати заміну push -повідомлень, як у офіційному додатку. Все, що вам потрібно зробити, це дозволити Wulkanowy отримувати всі сповіщення у налаштуваннях вашої системи. \ N \ nЯк це працює? \ NКоли ви отримаєте сповіщення у Dziennik VULCAN, Wulkanowy отримає сповіщення (для цього призначені ці додаткові дозволи) і запустить синхронізація, яка може надсилати власне сповіщення. \ n \ n ТІЛЬКИ ДЛЯ РОЗШИРЕНИХ КОРИСТУВАЧІВ</string>
+    <string name="pref_notification_piggyback_popup_description">За допомогою цієї функції ви можете отримати аналог повідомлень з офіційного додатку. Все, що вам потрібно зробити, це дозволити Wulkanowy отримувати всі сповіщення у налаштуваннях вашої системи.\n\nЯк це працює?\nКоли ви отримаєте сповіщення у Dziennik VULCAN, Wulkanowy отримає сповіщення (для цього призначені ці додаткові дозволи) і запустить синхронізацію, щоб надіслати своє власне повідомлення.\n\nТІЛЬКИ ДЛЯ ПРОСУНУТИХ КОРИСТУВАЧІВ</string>
     <string name="pref_notification_exact_alarm_popup_title">Показувати повідомлення о наступних уроках</string>
-    <string name="pref_notification_exact_alarm_popup_descriptions">Ви повинні дозволити Wulkanowy встановити будильник та нагадування у налаштуваннях вашої системи для використання цієї функції.</string>
+    <string name="pref_notification_exact_alarm_popup_descriptions">Ви повинні дозволити Wulkanowy встановлювати будильник та нагадування у налаштуваннях вашої системи для використання цієї функції.</string>
     <string name="pref_notification_go_to_settings">Перейти до налаштувань</string>
     <string name="pref_services_header">Синхронізація</string>
     <string name="pref_services_switch">Автоматичне оновлення</string>
@@ -707,12 +707,12 @@
     <string name="pref_services_force_sync">Синхронізувати</string>
     <string name="pref_services_message_sync_success">Синхронізовано!</string>
     <string name="pref_services_message_sync_failed">Синхронізація не вдалася</string>
-    <string name="pref_services_sync_in_progress">Триває синхронізація</string>
+    <string name="pref_services_sync_in_progress">Синхронізація...</string>
     <string name="pref_services_last_full_sync_date">Остання синхронізація: %s</string>
     <string name="pref_other_grade_modifier_plus">Вартість плюсу</string>
     <string name="pref_other_grade_modifier_minus">Вартість мінуса</string>
     <string name="pref_other_fill_message_content">Відповісти з історією повідомлень</string>
-    <string name="pref_other_optional_arithmetic_average">Вилічи середню аритметичну, якщо оцінка немає ваги</string>
+    <string name="pref_other_optional_arithmetic_average">Вилічити середню аритметичну, якщо оцінка немає вартості</string>
     <string name="pref_ads_support_category_name">Підтримка</string>
     <string name="pref_ads_support">Подивіться одну рекламу для підтримки проєкту</string>
     <string name="pref_ads_privacy_title">Згода в обробці даних</string>
@@ -720,44 +720,44 @@
     <string name="pref_ads_privacy_agree">Погоджуюсь</string>
     <string name="pref_ads_privacy_link">Політика конфіденційності</string>
     <string name="pref_ads_loading">Реклама завантажується</string>
-    <string name="pref_ads_once_per_visit">Дякуємо за вашу підтримку, повертайтеся пізніше для більшої кількості оголошень</string>
+    <string name="pref_ads_once_per_visit">Дякуємо за вашу підтримку, повертайтеся пізніше для більшої кількості реклам</string>
     <string name="pref_settings_advanced_title">Додатково</string>
-    <string name="pref_settings_appearance_title">Вигляд &amp; Поведінка</string>
+    <string name="pref_settings_appearance_title">Вигляд та поведінка</string>
     <string name="pref_settings_notifications_title">Сповіщення</string>
     <string name="pref_settings_sync_title">Синхронізація</string>
     <string name="pref_settings_ads_title">Реклама</string>
     <string name="pref_grades_appearance_header">Оцінки</string>
-    <string name="pref_dashboard_appearance_header">Дошка</string>
+    <string name="pref_dashboard_appearance_header">Головна</string>
     <string name="pref_dashboard_appearance_tiles_title">Видимість плиток</string>
     <string name="pref_attendance_appearance_view">Відвідуваність</string>
     <string name="pref_timetable_appearance_view">Розклад</string>
     <string name="pref_grades_advanced_header">Оцінки</string>
-    <string name="pref_counted_average_advanced_header">Вичислена середня</string>
+    <string name="pref_counted_average_advanced_header">Розрахована середня оцінка</string>
     <string name="pref_messages_advanced_header">Повідомлення</string>
-    <string name="pref_appearance_category">Вигляд &amp; Поведінка</string>
-    <string name="pref_appearance_category_summary">Мови, теми, тема сортування</string>
-    <string name="pref_notifications_category_summary">Сповіщення додатку, виправити проблеми</string>
+    <string name="pref_appearance_category">Вигляд та поведінка</string>
+    <string name="pref_appearance_category_summary">Мова, тема, сортування предметів</string>
+    <string name="pref_notifications_category_summary">Налаштуванная сповіщень додатку</string>
     <string name="pref_notifications_category">Сповіщення</string>
     <string name="pref_sync_category">Синхронізація</string>
-    <string name="pref_sync_category_summary">Автоматичне оновлення, інтервал синхронізації</string>
-    <string name="pref_advanced_category_summary">Плюс і мінус значення, розрахування середньої</string>
+    <string name="pref_sync_category_summary">Автоматичне оновлення та його інтервал</string>
+    <string name="pref_advanced_category_summary">Вартість плюса та мінуса, розраховування середньої</string>
     <string name="pref_advanced_category">Додатково</string>
     <string name="pref_about_category_summary">Версія додатку, учасники, соціальні портали</string>
-    <string name="pref_ads_category_summary">Показування реклами, підтримка проєктів</string>
+    <string name="pref_ads_category_summary">Показування реклами, підтримка проєкту</string>
     <!--Notification Channels-->
     <string name="channel_new_grades">Нові оцінки</string>
-    <string name="channel_new_homework">Нова домашня робота</string>
-    <string name="channel_new_conference">Нові конференції</string>
+    <string name="channel_new_homework">Нові домашні завдання</string>
+    <string name="channel_new_conference">Нові зустрічі</string>
     <string name="channel_new_exam">Нові тести</string>
     <string name="channel_lucky_number">Щасливий номер</string>
     <string name="channel_new_message">Нові повідомлення</string>
-    <string name="channel_new_notes">Нові записи</string>
+    <string name="channel_new_notes">Нові зауваження</string>
     <string name="channel_new_school_announcement">Нові шкільні оголошення</string>
-    <string name="channel_push">Показувати push-сповіщення</string>
+    <string name="channel_push">Показувати сповіщення від розробників</string>
     <string name="channel_upcoming_lessons">Наступні уроки</string>
     <string name="channel_debug">Відладка</string>
-    <string name="channel_change_timetable">Зміна у розкладі</string>
-    <string name="channel_new_attendance">Нова відвідуваність</string>
+    <string name="channel_change_timetable">Зміни у розкладі</string>
+    <string name="channel_new_attendance">Нові записи відвідуваності</string>
     <!--Colors-->
     <string name="all_black">Чорний</string>
     <string name="all_red">Червоний</string>
@@ -773,14 +773,14 @@
     <!--Errors-->
     <string name="error_no_internet">Немає з\'єднання з інтернетом</string>
     <string name="error_invalid_device_datetime">Сталася помилка. Перевірте годинник пристрою</string>
-    <string name="error_timeout">Помилка підключення до реєстрації. Сервери можуть бути перевантажені. Будь ласка спробуйте пізніше</string>
-    <string name="error_login_failed">Помилка завантаження даних. Будь ласка спробуйте пізніше</string>
-    <string name="error_password_change_required">Необхідна зміна пароля реєстрації</string>
-    <string name="error_service_unavailable">Технічна перерва в журналі UONET + продовжується. Спробуйте пізніше</string>
-    <string name="error_unknown_uonet">Невідома помилка реєстру UONET+. Спробуйте ще раз пізніше</string>
-    <string name="error_unknown_app">Невідома помилка програми. Будь ласка спробуйте пізніше</string>
+    <string name="error_timeout">Помилка підключення до щоденнику. Сервери можуть бути перевантажені, спробуйте пізніше</string>
+    <string name="error_login_failed">Помилка завантаження даних, спробуйте пізніше</string>
+    <string name="error_password_change_required">Необхідна зміна пароля щоденника</string>
+    <string name="error_service_unavailable">UONET+ проводить технічне осблуговування, спробуйте пізніше</string>
+    <string name="error_unknown_uonet">Невідома помилка щоденника UONET+, спробуйте пізніше</string>
+    <string name="error_unknown_app">Невідома помилка програми, спробуйте пізніше</string>
     <string name="error_unknown">Відбулася несподівана помилка</string>
-    <string name="error_feature_disabled">Функція вимкнена твоєю школою</string>
-    <string name="error_feature_not_available">Функція недоступна. Увійдіть в режим, крім Мобільного API</string>
-    <string name="error_field_required">Це поле обов\'язкове для заповнення</string>
+    <string name="error_feature_disabled">Функція вимкнена вашою школою</string>
+    <string name="error_feature_not_available">Функція недоступна в режимі Mobile API. Увійдіть в інший режим</string>
+    <string name="error_field_required">Це поле обовʼязкове</string>
 </resources>
