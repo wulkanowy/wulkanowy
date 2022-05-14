@@ -8,6 +8,7 @@ import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.repositories.*
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.utils.AdsHelper
 import io.github.wulkanowy.utils.calculatePercentage
 import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import kotlinx.coroutines.flow.*
@@ -31,7 +32,8 @@ class DashboardPresenter @Inject constructor(
     private val conferenceRepository: ConferenceRepository,
     private val preferencesRepository: PreferencesRepository,
     private val schoolAnnouncementRepository: SchoolAnnouncementRepository,
-    private val adminMessageRepository: AdminMessageRepository
+    private val adminMessageRepository: AdminMessageRepository,
+    private val adsHelper: AdsHelper
 ) : BasePresenter<DashboardView>(errorHandler, studentRepository) {
 
     private val dashboardItemLoadedList = mutableListOf<DashboardItem>()
