@@ -230,6 +230,7 @@ class PreferencesRepository @Inject constructor(
                 set.map { DashboardItem.Tile.valueOf(it) }
                     .plus(DashboardItem.Tile.ACCOUNT)
                     .plus(DashboardItem.Tile.ADMIN_MESSAGE)
+                    .plus(DashboardItem.Tile.ADS)
                     .toSet()
             }
 
@@ -238,6 +239,7 @@ class PreferencesRepository @Inject constructor(
             .map { DashboardItem.Tile.valueOf(it) }
             .plus(DashboardItem.Tile.ACCOUNT)
             .plus(DashboardItem.Tile.ADMIN_MESSAGE)
+            .plus(DashboardItem.Tile.ADS)
             .toSet()
         set(value) {
             val filteredValue = value.filterNot { it == DashboardItem.Tile.ACCOUNT }

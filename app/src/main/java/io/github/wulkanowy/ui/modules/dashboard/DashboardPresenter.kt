@@ -168,7 +168,7 @@ class DashboardPresenter @Inject constructor(
                     DashboardItem.Type.CONFERENCES -> {
                         loadConferences(student, forceRefresh)
                     }
-                    DashboardItem.Type.ADS -> TODO()
+                    DashboardItem.Type.ADS -> loadAds(forceRefresh)
                     DashboardItem.Type.ADMIN_MESSAGE -> loadAdminMessage(student, forceRefresh)
                 }
             }
@@ -595,6 +595,17 @@ class DashboardPresenter @Inject constructor(
                 }
             }
             .launchWithUniqueRefreshJob("dashboard_admin_messages", forceRefresh)
+    }
+
+    private fun loadAds(forceRefresh: Boolean) {
+        presenterScope.launch {
+            val dashboardAdItem =
+                runCatching { DashboardItem.Ads(adsHelper.getDashboardTileAdBanner(view!!.tileWidth)) }
+                    .onFailure { errorHandler.dispatch(it) }
+                    .getOrElse { DashboardItem.Ads(error = it) }
+
+            updateData(dashboardAdItem, forceRefresh)
+        }
     }
 
     private fun updateData(dashboardItem: DashboardItem, forceRefresh: Boolean) {

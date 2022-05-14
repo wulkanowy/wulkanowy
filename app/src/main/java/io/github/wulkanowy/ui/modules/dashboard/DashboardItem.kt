@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules.dashboard
 import io.github.wulkanowy.data.db.entities.*
 import io.github.wulkanowy.data.enums.GradeColorTheme
 import io.github.wulkanowy.data.pojos.TimetableFull
+import io.github.wulkanowy.utils.AdBanner
 import io.github.wulkanowy.data.db.entities.Homework as EntitiesHomework
 
 sealed class DashboardItem(val type: Type) {
@@ -102,11 +103,12 @@ sealed class DashboardItem(val type: Type) {
     }
 
     data class Ads(
-        override val error: Throwable?,
-        override val isLoading: Boolean
+        val adBanner: AdBanner? = null,
+        override val error: Throwable? = null,
+        override val isLoading: Boolean = false
     ) : DashboardItem(Type.ADS) {
 
-        override val isDataLoaded get() = true
+        override val isDataLoaded get() = adBanner != null
     }
 
     enum class Type {

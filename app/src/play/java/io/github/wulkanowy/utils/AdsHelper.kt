@@ -14,6 +14,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+
 class AdsHelper @Inject constructor(@ApplicationContext private val context: Context) {
 
     suspend fun getSupportAd(): RewardedInterstitialAd? {
@@ -41,7 +42,7 @@ class AdsHelper @Inject constructor(@ApplicationContext private val context: Con
         }
     }
 
-    suspend fun getDashboardTileAdBanner(): AdBanner {
+    suspend fun getDashboardTileAdBanner(width: Int): AdBanner {
         MobileAds.initialize(context)
 
         val extra = Bundle().apply { putString("npa", "1") }
@@ -51,7 +52,7 @@ class AdsHelper @Inject constructor(@ApplicationContext private val context: Con
 
         return suspendCoroutine {
             val adView = AdView(context).apply {
-                adSize = AdSize.BANNER
+                adSize = AdSize.getPortraitAnchoredAdaptiveBannerAdSize(context, width)
                 adUnitId = BuildConfig.DASHBOARD_TILE_AD_ID
                 adListener = object : AdListener() {
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
