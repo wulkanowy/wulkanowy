@@ -7,10 +7,13 @@ import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getDateWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getStudentWidgetKey
 import io.github.wulkanowy.ui.modules.timetablewidget.TimetableWidgetProvider.Companion.getThemeWidgetKey
+import io.github.wulkanowy.utils.nextOrSameSchoolDay
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.time.LocalDate
 import javax.inject.Inject
 
 class TimetableWidgetConfigurePresenter @Inject constructor(
@@ -82,6 +85,7 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
 
         appWidgetId?.let { id ->
             sharedPref.putLong(getStudentWidgetKey(id), student.id)
+            sharedPref.putLong(getDateWidgetKey(id), LocalDate.now().nextOrSameSchoolDay.toEpochDay())
             view?.run {
                 updateTimetableWidget(id)
                 setSuccessResult(id)
