@@ -92,7 +92,10 @@ class TimetableWidgetProvider : BroadcastReceiver() {
                 val student =
                     getStudent(sharedPref.getLong(getStudentWidgetKey(appWidgetId), 0), appWidgetId)
 
-                updateWidget(context, appWidgetId, getWidgetDateToLoad(appWidgetId), student)
+                val savedDate =
+                    LocalDate.ofEpochDay(sharedPref.getLong(getDateWidgetKey(appWidgetId), 0))
+
+                updateWidget(context, appWidgetId, savedDate, student)
             }
         } else {
             val buttonType = intent.getStringExtra(EXTRA_BUTTON_TYPE)
