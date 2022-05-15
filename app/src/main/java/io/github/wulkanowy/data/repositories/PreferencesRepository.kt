@@ -228,18 +228,14 @@ class PreferencesRepository @Inject constructor(
         get() = selectedDashboardTilesPreference.asFlow()
             .map { set ->
                 set.map { DashboardItem.Tile.valueOf(it) }
-                    .plus(DashboardItem.Tile.ACCOUNT)
-                    .plus(DashboardItem.Tile.ADS)
-                    .plus(DashboardItem.Tile.ADMIN_MESSAGE)
+                    .plus(listOf(DashboardItem.Tile.ACCOUNT, DashboardItem.Tile.ADMIN_MESSAGE))
                     .toSet()
             }
 
     var selectedDashboardTiles: Set<DashboardItem.Tile>
         get() = selectedDashboardTilesPreference.get()
             .map { DashboardItem.Tile.valueOf(it) }
-            .plus(DashboardItem.Tile.ACCOUNT)
-            .plus(DashboardItem.Tile.ADS)
-            .plus(DashboardItem.Tile.ADMIN_MESSAGE)
+            .plus(listOf(DashboardItem.Tile.ACCOUNT, DashboardItem.Tile.ADMIN_MESSAGE))
             .toSet()
         set(value) {
             val filteredValue = value.filterNot { it == DashboardItem.Tile.ACCOUNT }

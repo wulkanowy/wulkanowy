@@ -4,6 +4,7 @@ import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
+import io.github.wulkanowy.ui.modules.dashboard.DashboardItem
 import io.github.wulkanowy.utils.AdsHelper
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -42,6 +43,7 @@ class AdsPresenter @Inject constructor(
         } else {
             view?.showProcessingDataSummary(null)
             view?.setCheckedAdsEnabled(false)
+            onAddEnabled(false)
         }
     }
 
@@ -65,5 +67,14 @@ class AdsPresenter @Inject constructor(
 
         view?.setCheckedProcessingData(true)
         view?.showProcessingDataSummary(true)
+    }
+
+    fun onAddEnabled(isEnabled: Boolean) {
+        if (isEnabled) {
+            preferencesRepository.selectedDashboardTiles += DashboardItem.Tile.ADS
+        } else {
+            preferencesRepository.selectedDashboardTiles -= DashboardItem.Tile.ADS
+
+        }
     }
 }

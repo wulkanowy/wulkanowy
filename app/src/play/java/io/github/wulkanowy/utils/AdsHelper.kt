@@ -9,18 +9,24 @@ import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.BuildConfig
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 
-class AdsHelper @Inject constructor(@ApplicationContext private val context: Context) {
+class AdsHelper @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val preferencesRepository: PreferencesRepository
+) {
+
+    private val isNpaEnabled get() = if (preferencesRepository.isPersonalizedAdsEnabled) "0" else "1"
 
     suspend fun getSupportAd(): RewardedInterstitialAd? {
         MobileAds.initialize(context)
 
-        val extra = Bundle().apply { putString("npa", "1") }
+        val extra = Bundle().apply { putString("npa", isNpaEnabled) }
         val adRequest = AdRequest.Builder()
             .addNetworkExtrasBundle(AdMobAdapter::class.java, extra)
             .build()
@@ -45,7 +51,7 @@ class AdsHelper @Inject constructor(@ApplicationContext private val context: Con
     suspend fun getDashboardTileAdBanner(width: Int): AdBanner {
         MobileAds.initialize(context)
 
-        val extra = Bundle().apply { putString("npa", "1") }
+        val extra = Bundle().apply { putString("npa", isNpaEnabled) }
         val adRequest = AdRequest.Builder()
             .addNetworkExtrasBundle(AdMobAdapter::class.java, extra)
             .build()

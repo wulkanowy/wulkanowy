@@ -599,7 +599,9 @@ class DashboardPresenter @Inject constructor(
 
     private fun loadAds(forceRefresh: Boolean) {
         presenterScope.launch {
-            updateData(DashboardItem.Ads(), forceRefresh)
+            if (!forceRefresh) {
+                updateData(DashboardItem.Ads(), forceRefresh)
+            }
 
             val dashboardAdItem =
                 runCatching {
