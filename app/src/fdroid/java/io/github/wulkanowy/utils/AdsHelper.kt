@@ -8,8 +8,8 @@ import javax.inject.Inject
 @Suppress("unused")
 class AdsHelper @Inject constructor(@ApplicationContext private val context: Context) {
 
-    @Suppress("RedundantSuspendModifier")
-    suspend fun getDashboardTileAdBanner(): AdBanner {
+    @Suppress("RedundantSuspendModifier", "UNUSED_PARAMETER")
+    suspend fun getDashboardTileAdBanner(width: Int): AdBanner {
         throw IllegalStateException("Can't get ad banner (F-droid)")
     }
 }

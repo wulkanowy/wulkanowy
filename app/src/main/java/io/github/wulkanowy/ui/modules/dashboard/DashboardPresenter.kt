@@ -599,8 +599,12 @@ class DashboardPresenter @Inject constructor(
 
     private fun loadAds(forceRefresh: Boolean) {
         presenterScope.launch {
+            updateData(DashboardItem.Ads(), forceRefresh)
+
             val dashboardAdItem =
-                runCatching { DashboardItem.Ads(adsHelper.getDashboardTileAdBanner(view!!.tileWidth)) }
+                runCatching {
+                    DashboardItem.Ads(adsHelper.getDashboardTileAdBanner(view!!.tileWidth))
+                }
                     .onFailure { errorHandler.dispatch(it) }
                     .getOrElse { DashboardItem.Ads(error = it) }
 
@@ -629,6 +633,18 @@ class DashboardPresenter @Inject constructor(
             } else {
                 dashboardItemsToLoad = dashboardItemsToLoad + DashboardItem.Type.ADMIN_MESSAGE
                 dashboardTileLoadedList = dashboardTileLoadedList + DashboardItem.Tile.ADMIN_MESSAGE
+            }
+        }
+
+        if (dashboardItem is DashboardItem.Ads) {
+            if (!dashboardItem.isDataLoaded) {
+                dashboardItemsToLoad = dashboardItemsToLoad - DashboardItem.Type.ADS
+                dashboardTileLoadedList = dashboardTileLoadedList - DashboardItem.Tile.ADS
+
+                dashboardItemLoadedList.removeAll { it.type == DashboardItem.Type.ADS }
+            } else {
+                dashboardItemsToLoad = dashboardItemsToLoad + DashboardItem.Type.ADS
+                dashboardTileLoadedList = dashboardTileLoadedList + DashboardItem.Tile.ADS
             }
         }
 
