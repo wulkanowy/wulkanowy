@@ -21,6 +21,11 @@ class AdsPresenter @Inject constructor(
         super.onAttachView(view)
         view.initView()
         Timber.i("Settings ads view was initialized")
+
+        view.showProcessingDataSummary(
+            preferencesRepository.isPersonalizedAdsEnabled.takeIf {
+                preferencesRepository.isAgreeToProcessData
+            })
     }
 
     fun onWatchSingleAdSelected() {
@@ -56,7 +61,9 @@ class AdsPresenter @Inject constructor(
     }
 
     fun onNonPersonalizedAgree() {
-        preferencesRepository.isPersonalizedAdsEnabled = true
+        preferencesRepository.isPersonalizedAdsEnabled = false
+
+        adsHelper.initialize()
 
         view?.setCheckedProcessingData(true)
         view?.showProcessingDataSummary(false)
@@ -64,6 +71,8 @@ class AdsPresenter @Inject constructor(
 
     fun onPersonalizedAgree() {
         preferencesRepository.isPersonalizedAdsEnabled = true
+
+        adsHelper.initialize()
 
         view?.setCheckedProcessingData(true)
         view?.showProcessingDataSummary(true)
@@ -74,7 +83,6 @@ class AdsPresenter @Inject constructor(
             preferencesRepository.selectedDashboardTiles += DashboardItem.Tile.ADS
         } else {
             preferencesRepository.selectedDashboardTiles -= DashboardItem.Tile.ADS
-
         }
     }
 }

@@ -21,14 +21,20 @@ class AdsHelper @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) {
 
-    private val isNpaEnabled get() = if (preferencesRepository.isPersonalizedAdsEnabled) "0" else "1"
+    fun initialize() {
+        if (preferencesRepository.isAgreeToProcessData) {
+            MobileAds.initialize(context)
+        }
+    }
 
     suspend fun getSupportAd(): RewardedInterstitialAd? {
-        MobileAds.initialize(context)
-
-        val extra = Bundle().apply { putString("npa", isNpaEnabled) }
+        val extra = Bundle().apply { putString("npa", "1") }
         val adRequest = AdRequest.Builder()
-            .addNetworkExtrasBundle(AdMobAdapter::class.java, extra)
+            .apply {
+                if (!preferencesRepository.isPersonalizedAdsEnabled) {
+                    addNetworkExtrasBundle(AdMobAdapter::class.java, extra)
+                }
+            }
             .build()
 
         return suspendCoroutine {
@@ -49,11 +55,13 @@ class AdsHelper @Inject constructor(
     }
 
     suspend fun getDashboardTileAdBanner(width: Int): AdBanner {
-        MobileAds.initialize(context)
-
-        val extra = Bundle().apply { putString("npa", isNpaEnabled) }
+        val extra = Bundle().apply { putString("npa", "1") }
         val adRequest = AdRequest.Builder()
-            .addNetworkExtrasBundle(AdMobAdapter::class.java, extra)
+            .apply {
+                if (!preferencesRepository.isPersonalizedAdsEnabled) {
+                    addNetworkExtrasBundle(AdMobAdapter::class.java, extra)
+                }
+            }
             .build()
 
         return suspendCoroutine {

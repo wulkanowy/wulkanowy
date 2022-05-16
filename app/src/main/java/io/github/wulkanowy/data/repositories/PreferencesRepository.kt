@@ -200,12 +200,6 @@ class PreferencesRepository @Inject constructor(
             R.bool.pref_default_optional_arithmetic_average
         )
 
-    val isAgreeToProcessData: Boolean
-        get() = getBoolean(
-            R.string.pref_key_ads_consent_data_processing,
-            R.bool.pref_default_ads_consent_data_processing
-        )
-
     var lasSyncDate: Instant?
         get() = getLong(R.string.pref_key_last_sync_date, R.string.pref_default_last_sync_date)
             .takeIf { it != 0L }?.let(Instant::ofEpochMilli)
@@ -281,9 +275,27 @@ class PreferencesRepository @Inject constructor(
         get() = sharedPref.getBoolean(PREF_KEY_APP_SUPPORT_SHOWN, false)
         set(value) = sharedPref.edit { putBoolean(PREF_KEY_APP_SUPPORT_SHOWN, value) }
 
+    var isAgreeToProcessData: Boolean
+        get() = getBoolean(
+            R.string.pref_key_ads_consent_data_processing,
+            R.bool.pref_default_ads_consent_data_processing
+        )
+        set(value) = sharedPref.edit {
+            putBoolean(context.getString(R.string.pref_key_ads_consent_data_processing), value)
+        }
+
     var isPersonalizedAdsEnabled: Boolean
         get() = sharedPref.getBoolean(PREF_KEY_PERSONALIZED_ADS_ENABLED, false)
         set(value) = sharedPref.edit { putBoolean(PREF_KEY_PERSONALIZED_ADS_ENABLED, value) }
+
+    var isAdsEnabled: Boolean
+        get() = getBoolean(
+            R.string.pref_key_ads_enabled,
+            R.bool.pref_default_ads_enabled
+        )
+        set(value) = sharedPref.edit {
+            putBoolean(context.getString(R.string.pref_key_ads_enabled), value)
+        }
 
     private fun getLong(id: Int, default: Int) = getLong(context.getString(id), default)
 

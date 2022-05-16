@@ -41,7 +41,11 @@ interface MainView : BaseView {
 
     fun showInAppReview()
 
-    fun showAddSupport()
+    fun showAppSupport()
+
+    fun showPrivacyPolicyDialog()
+
+    fun openPrivacyPolicy()
 
     fun openMoreDestination(destination: Destination)
 

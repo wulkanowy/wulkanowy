@@ -93,7 +93,7 @@ class AdsFragment : PreferenceFragmentCompat(), MainView.TitledView, AdsView {
 
     override fun showProcessingDataSummary(isPersonalized: Boolean?) {
         val summaryText = isPersonalized?.let {
-            if (it) "Personalized ads" else "Non-personalized ads"
+            getString(if (it) R.string.pref_ads_summary_personalized else R.string.pref_ads_summary_non_personalized)
         }
 
         findPreference<CheckBoxPreference>(getString(R.string.pref_key_ads_consent_data_processing))

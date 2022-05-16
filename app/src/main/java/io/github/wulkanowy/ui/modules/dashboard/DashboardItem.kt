@@ -116,12 +116,12 @@ sealed class DashboardItem(val type: Type) {
         ACCOUNT,
         HORIZONTAL_GROUP,
         LESSONS,
+        ADS,
         GRADES,
         HOMEWORK,
         ANNOUNCEMENTS,
         EXAMS,
         CONFERENCES,
-        ADS
     }
 
     enum class Tile {
@@ -131,12 +131,12 @@ sealed class DashboardItem(val type: Type) {
         MESSAGES,
         ATTENDANCE,
         LESSONS,
+        ADS,
         GRADES,
         HOMEWORK,
         ANNOUNCEMENTS,
         EXAMS,
         CONFERENCES,
-        ADS
     }
 }
 
