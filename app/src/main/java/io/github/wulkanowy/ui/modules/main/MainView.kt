@@ -41,6 +41,8 @@ interface MainView : BaseView {
 
     fun showInAppReview()
 
+    fun showAddSupport()
+
     fun openMoreDestination(destination: Destination)
 
     interface MainChildView {

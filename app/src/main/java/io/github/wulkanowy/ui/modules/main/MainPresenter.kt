@@ -71,6 +71,10 @@ class MainPresenter @Inject constructor(
 
         syncManager.startPeriodicSyncWorker()
 
+        if (!prefRepository.isAppSupportShown) {
+            view.showAddSupport()
+        }
+
         analytics.logEvent("app_open", "destination" to initDestination.toString())
         Timber.i("Main view was initialized with $initDestination")
     }

@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.elevation.ElevationOverlayProvider
 import com.ncapdevi.fragnav.FragNavController
 import com.ncapdevi.fragnav.FragNavController.Companion.HIDE
@@ -285,6 +286,15 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     override fun showInAppReview() {
         inAppReviewHelper.showInAppReview(this)
+    }
+
+    override fun showAddSupport() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Wsparcie aplikacji")
+            .setMessage("Jeśli aplikacja ci się podoba możesz wesprzeć nas poprzez włączenie małych reklam. Są one całkowicie opcjonalne i możesz je w każdej chwili wyłączyć w ustawieniach aplikacji. Będziemy bardzo wdzięczni za wsparcie.")
+            .setPositiveButton("Włącz reklamy") { _, _ -> }
+            .setNegativeButton("Anuluj") { _, _ -> }
+            .show()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
