@@ -58,4 +58,6 @@ interface MainView : BaseView {
             get() = ""
             set(_) {}
     }
+
+    interface NoStudentAvatar
 }

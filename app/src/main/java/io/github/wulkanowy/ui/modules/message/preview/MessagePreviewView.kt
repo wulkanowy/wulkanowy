@@ -3,8 +3,9 @@ package io.github.wulkanowy.ui.modules.message.preview
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageWithAttachment
 import io.github.wulkanowy.ui.base.BaseView
+import io.github.wulkanowy.ui.modules.main.MainView
 
-interface MessagePreviewView : BaseView {
+interface MessagePreviewView : BaseView, MainView.NoStudentAvatar {
 
     val deleteMessageSuccessString: String
 
