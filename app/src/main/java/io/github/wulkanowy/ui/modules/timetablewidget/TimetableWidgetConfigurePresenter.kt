@@ -85,7 +85,10 @@ class TimetableWidgetConfigurePresenter @Inject constructor(
 
         appWidgetId?.let { id ->
             sharedPref.putLong(getStudentWidgetKey(id), student.id)
-            sharedPref.putLong(getDateWidgetKey(id), LocalDate.now().nextOrSameSchoolDay.toEpochDay())
+            val dateKey = getDateWidgetKey(id)
+            if (sharedPref.getLong(dateKey, 0) == 0L) {
+                sharedPref.putLong(dateKey, LocalDate.now().nextOrSameSchoolDay.toEpochDay())
+            }
             view?.run {
                 updateTimetableWidget(id)
                 setSuccessResult(id)
