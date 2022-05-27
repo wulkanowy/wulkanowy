@@ -108,18 +108,11 @@ class MainActivity : BaseActivity<MainPresenter, ActivityMainBinding>(), MainVie
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.action_menu_main, menu)
-        accountMenu = menu.findItem(R.id.mainMenuAccount)?.also {
-            showStudentAvatar().let { show ->
-                it.isVisible = show
-                it.isEnabled = show
-            }
-        }
+        accountMenu = menu.findItem(R.id.mainMenuAccount)
 
         presenter.onActionMenuCreated()
         return true
     }
-
-    private fun showStudentAvatar() = navController.currentFrag as? MainView.NoStudentAvatar == null
 
     override fun initView(startMenuIndex: Int, rootDestinations: List<Destination>) {
         initializeToolbar()

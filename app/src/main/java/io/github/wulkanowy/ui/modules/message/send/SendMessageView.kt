@@ -2,9 +2,8 @@ package io.github.wulkanowy.ui.modules.message.send
 
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.ui.base.BaseView
-import io.github.wulkanowy.ui.modules.main.MainView
 
-interface SendMessageView : BaseView, MainView.NoStudentAvatar {
+interface SendMessageView : BaseView {
     val isDropdownListVisible: Boolean
 
     var formRecipientsData: List<RecipientChipItem>
