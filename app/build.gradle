@@ -15,6 +15,7 @@ apply from: 'sonarqube.gradle'
 apply from: 'hooks.gradle'
 
 android {
+    namespace 'io.github.wulkanowy'
     compileSdkVersion 31
 
     defaultConfig {
@@ -139,8 +140,10 @@ android {
     }
 
     packagingOptions {
-        exclude 'META-INF/library_release.kotlin_module'
-        exclude 'META-INF/library-core_release.kotlin_module'
+        resources {
+            excludes += ['META-INF/library_release.kotlin_module',
+                         'META-INF/library-core_release.kotlin_module']
+        }
     }
 
     aboutLibraries {
@@ -201,7 +204,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
-    implementation "com.google.android.material:material:1.5.0"
+    implementation "com.google.android.material:material:1.6.0"
     implementation "com.github.wulkanowy:material-chips-input:2.3.1"
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
     implementation 'com.github.lopspower:CircularImageView:4.2.0'
