@@ -607,7 +607,7 @@ class DashboardPresenter @Inject constructor(
                 runCatching {
                     DashboardItem.Ads(adsHelper.getDashboardTileAdBanner(view!!.tileWidth))
                 }
-                    .onFailure { errorHandler.dispatch(it) }
+                    .onFailure { Timber.e(it) }
                     .getOrElse { DashboardItem.Ads(error = it) }
 
             updateData(dashboardAdItem, forceRefresh)
