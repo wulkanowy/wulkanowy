@@ -233,6 +233,7 @@ class PreferencesRepository @Inject constructor(
             .toSet()
         set(value) {
             val filteredValue = value.filterNot { it == DashboardItem.Tile.ACCOUNT }
+                .plus(listOfNotNull(DashboardItem.Tile.ADS.takeIf { isAdsEnabled }))
                 .map { it.name }
                 .toSet()
 
