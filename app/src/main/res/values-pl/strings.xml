@@ -77,6 +77,9 @@
     <string name="main_log_in">Zaloguj się</string>
     <string name="main_session_expired">Sesja wygasła</string>
     <string name="main_session_relogin">Sesja wygasła, zaloguj się ponownie</string>
+    <string name="main_support_title">Application support</string>
+    <string name="main_support_description">Do you like this app? Support its development by enabling non-invasive ads that you can disable at any time</string>
+    <string name="main_support_positive">Enable ads</string>
     <!--Grade-->
     <string name="grade_header">Ocena</string>
     <string name="grade_semester">Semestr %d</string>
@@ -721,6 +724,10 @@
     <string name="pref_ads_privacy_link">Polityka prywatności</string>
     <string name="pref_ads_loading">Ładowanie reklamy</string>
     <string name="pref_ads_once_per_visit">Dziękujemy za wsparcie, wróć później po więcej reklam</string>
+    <string name="pref_ads_consent_title">Can we use your data to display ads?</string>
+    <string name="pref_ads_consent_description">You can change your choice anytime in the app settings. We may use your data to display ads tailored to you or, using less of your data, display non-personalized ads. Please see our Privacy Policy for details</string>
+    <string name="pref_ads_summary_personalized">Personalized ads</string>
+    <string name="pref_ads_summary_non_personalized">Non-personalized ads</string>
     <string name="pref_settings_advanced_title">Zaawansowane</string>
     <string name="pref_settings_appearance_title">Wygląd i zachowanie</string>
     <string name="pref_settings_notifications_title">Powiadomienia</string>
