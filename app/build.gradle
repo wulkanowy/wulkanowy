@@ -43,6 +43,7 @@ android {
         }
 
         buildConfigField "String", "SINGLE_SUPPORT_AD_ID", "null"
+        buildConfigField "String", "DASHBOARD_TILE_AD_ID", "null"
 
         if (System.env.SET_BUILD_TIMESTAMP) {
             buildConfigField "long", "BUILD_TIMESTAMP", String.valueOf(System.currentTimeMillis())
@@ -99,6 +100,8 @@ android {
                     admob_project_id: System.getenv("ADMOB_PROJECT_ID") ?: "ca-app-pub-3940256099942544~3347511713"
             ]
             buildConfigField "String", "SINGLE_SUPPORT_AD_ID", "\"${System.getenv("SINGLE_SUPPORT_AD_ID") ?: "ca-app-pub-3940256099942544/5354046379"}\""
+            buildConfigField "String", "DASHBOARD_TILE_AD_ID", "\"${System.getenv("DASHBOARD_TILE_AD_ID") ?: "ca-app-pub-3940256099942544/6300978111"}\""
+
         }
 
         fdroid {
@@ -177,7 +180,7 @@ ext {
     room = "2.4.2"
     chucker = "3.5.2"
     mockk = "1.12.4"
-    coroutines = "1.6.2"
+    coroutines = "1.6.3"
 }
 
 dependencies {
@@ -193,7 +196,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.4.0"
     implementation "androidx.appcompat:appcompat:1.4.2"
     implementation "androidx.fragment:fragment-ktx:1.4.1"
-    implementation "androidx.annotation:annotation:1.3.0"
+    implementation "androidx.annotation:annotation:1.4.0"
 
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation "androidx.recyclerview:recyclerview:1.2.1"
