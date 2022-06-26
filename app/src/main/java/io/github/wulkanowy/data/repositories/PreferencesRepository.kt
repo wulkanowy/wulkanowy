@@ -232,8 +232,9 @@ class PreferencesRepository @Inject constructor(
             .plus(listOf(DashboardItem.Tile.ACCOUNT, DashboardItem.Tile.ADMIN_MESSAGE))
             .toSet()
         set(value) {
-            val filteredValue = value.filterNot { it == DashboardItem.Tile.ACCOUNT }
-                .plus(listOfNotNull(DashboardItem.Tile.ADS.takeIf { isAdsEnabled }))
+            val filteredValue = value.filterNot {
+                it == DashboardItem.Tile.ACCOUNT || it == DashboardItem.Tile.ADMIN_MESSAGE
+            }
                 .map { it.name }
                 .toSet()
 
@@ -288,6 +289,11 @@ class PreferencesRepository @Inject constructor(
     var isPersonalizedAdsEnabled: Boolean
         get() = sharedPref.getBoolean(PREF_KEY_PERSONALIZED_ADS_ENABLED, false)
         set(value) = sharedPref.edit { putBoolean(PREF_KEY_PERSONALIZED_ADS_ENABLED, value) }
+
+    val isAdsEnabledFlow = flowSharedPref.getBoolean(
+        context.getString(R.string.pref_key_ads_enabled),
+        context.resources.getBoolean(R.bool.pref_default_ads_enabled)
+    ).asFlow()
 
     var isAdsEnabled: Boolean
         get() = getBoolean(

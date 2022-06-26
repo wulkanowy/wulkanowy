@@ -58,6 +58,13 @@ class DashboardPresenter @Inject constructor(
         }
 
         preferencesRepository.selectedDashboardTilesFlow
+            .combine(preferencesRepository.isAdsEnabledFlow) { tiles, isAdsEnabled ->
+                if (isAdsEnabled) {
+                    tiles + DashboardItem.Tile.ADS
+                } else {
+                    tiles
+                }
+            }
             .onEach { loadData(tilesToLoad = it) }
             .launch("dashboard_pref")
     }
