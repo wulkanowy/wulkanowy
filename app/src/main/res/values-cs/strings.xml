@@ -77,9 +77,9 @@
     <string name="main_log_in">Přihlásit se</string>
     <string name="main_session_expired">Relace vypršela</string>
     <string name="main_session_relogin">Relace vypršela. Přihlaste se prosím znovu</string>
-    <string name="main_support_title">Application support</string>
-    <string name="main_support_description">Do you like this app? Support its development by enabling non-invasive ads that you can disable at any time</string>
-    <string name="main_support_positive">Enable ads</string>
+    <string name="main_support_title">Podpora aplikace</string>
+    <string name="main_support_description">Líbí se Vám tato aplikace? Podpořte její vývoj tím, že povolíte neinvazivní reklamy, které můžete kdykoliv vypnout</string>
+    <string name="main_support_positive">Zapnout reklamy</string>
     <!--Grade-->
     <string name="grade_header">Známka</string>
     <string name="grade_semester">Semestr %d</string>
@@ -97,7 +97,7 @@
     <string name="grade_summary_predicted_grade">Předpokládaná známka</string>
     <string name="grade_summary_calculated_average">Vypočítaný průměr</string>
     <string name="grade_summary_calculated_average_help_dialog_title">Jak funguje vypočítaný průměr?</string>
-    <string name="grade_summary_calculated_average_help_dialog_message">The Calculated Average is the arithmetic average calculated from the subjects averages. It allows you to know the approximate final average. It is calculated in a way selected by the user in the application settings. It is recommended that you choose the appropriate option. This is because the calculation of school averages differs. Additionally, if your school reports the average of the subjects on the Vulcan page, the application downloads them and does not calculate these averages. This can be changed by forcing the calculation of the average in the application settings.\n\n<b>Average of grades only from selected semester</b>:\n1. Calculating the weighted average for each subject in a given semester\n2.Adding calculated averages\n3. Calculation of the arithmetic average of the summed averages\n\n<b>Average of averages from both semesters</b>:\n1.Calculating the weighted average for each subject in semester 1 and 2\n2. Calculating the arithmetic average of the calculated averages for semesters 1 and 2 for each subject.\n3. Adding calculated averages\n4. Calculation of the arithmetic average of the summed averages\n\n<b>Average of grades from the whole year:</b>\n1. Calculating weighted average over the year for each subject. The final average in the 1st semester is irrelevant.\n2. Adding calculated averages\n3. Calculating the arithmetic average of summed averages</string>
+    <string name="grade_summary_calculated_average_help_dialog_message">Vypočítaný průměr je aritmetický průměr vypočítaný z průměrů předmětů. Umožňuje vám to znát přibližný konečný průměr. Vypočítává se způsobem zvoleným uživatelem v nastavení aplikaci. Doporučuje se vybrat příslušnou možnost. Důvodem je rozdílný výpočet školních průměrů. Pokud vaše škola navíc uvádí průměr předmětů na stránce deníku Vulcan, aplikace si je stáhne a tyto průměry nepočítá. To lze změnit vynucením výpočtu průměru v nastavení aplikaci.\n\n<b>Průměr známek pouze z vybraného semestru</b>:\n1. Výpočet váženého průměru pro každý předmět v daném semestru\n2. Sčítání vypočítaných průměrů\n3. Výpočet aritmetického průměru součtených průměrů\n\n<b>Průměr průměrů z obou semestrů</b>:\n1. Výpočet váženého průměru pro každý předmět v semestru 1 a 2\n2. Výpočet aritmetického průměru vypočítaných průměrů za semestry 1 a 2 pro každý předmět.\n3. Sčítání vypočítaných průměrů\n4. Výpočet aritmetického průměru sečtených průměrů\n\n<b>Průměr známek z celého roku:</b>\n1. Výpočet váženého průměru za rok pro každý předmět. Konečný průměr v 1. semestru je nepodstatný.\n2. Sčítání vypočítaných průměrů\n3. Výpočet aritmetického průměru součtených průměrů</string>
     <string name="grade_summary_final_average_help_dialog_title">Jak funguje konečný průměr?</string>
     <string name="grade_summary_final_average_help_dialog_message">Konečný průměr je aritmetický průměr vypočítaný ze všech aktuálně dostupných konečných známek v daném semestru.\n\nSchéma výpočtu se skládá z následujících kroků:\n1. Sčítání konečných známek zadaných učiteli\n2. Děleno počtem předmětů, pro které už byly uděleny známky</string>
     <string name="grade_summary_final_average">Konečný průměr</string>
@@ -724,10 +724,10 @@
     <string name="pref_ads_privacy_link">Ochrana osobních údajů</string>
     <string name="pref_ads_loading">Reklama se načítá</string>
     <string name="pref_ads_once_per_visit">Děkujeme za vaši podporu, vraťte se později pro více reklam</string>
-    <string name="pref_ads_consent_title">Can we use your data to display ads?</string>
-    <string name="pref_ads_consent_description">You can change your choice anytime in the app settings. We may use your data to display ads tailored to you or, using less of your data, display non-personalized ads. Please see our Privacy Policy for details</string>
-    <string name="pref_ads_summary_personalized">Personalized ads</string>
-    <string name="pref_ads_summary_non_personalized">Non-personalized ads</string>
+    <string name="pref_ads_consent_title">Můžeme použít Vaše data k zobrazení reklam?</string>
+    <string name="pref_ads_consent_description">Volbu můžete kdykoliv změnit v nastavení aplikace. Můžeme použít Vaše data k zobrazení reklam šitých pro vás nebo pomocí méně vašich dat zobrazovat nepřizpůsobené reklamy. Podrobnosti naleznete v našich Zásadách ochrany osobních údajů</string>
+    <string name="pref_ads_summary_personalized">Přizpůsobené reklamy</string>
+    <string name="pref_ads_summary_non_personalized">Nepřizpůsobené reklamy</string>
     <string name="pref_settings_advanced_title">Pokročilé</string>
     <string name="pref_settings_appearance_title">Vzhled a chování</string>
     <string name="pref_settings_notifications_title">Oznámení</string>
