@@ -77,9 +77,9 @@
     <string name="main_log_in">Zaloguj się</string>
     <string name="main_session_expired">Sesja wygasła</string>
     <string name="main_session_relogin">Sesja wygasła, zaloguj się ponownie</string>
-    <string name="main_support_title">Application support</string>
-    <string name="main_support_description">Do you like this app? Support its development by enabling non-invasive ads that you can disable at any time</string>
-    <string name="main_support_positive">Enable ads</string>
+    <string name="main_support_title">Wparcie aplikacji</string>
+    <string name="main_support_description">Podoba Ci się ta aplikacja? Wspieraj jej rozwój poprzez włączenie nieinwazyjnych reklam, które możesz wyłączyć w dowolnym momencie</string>
+    <string name="main_support_positive">Włącz reklamy</string>
     <!--Grade-->
     <string name="grade_header">Ocena</string>
     <string name="grade_semester">Semestr %d</string>
@@ -97,7 +97,7 @@
     <string name="grade_summary_predicted_grade">Przewidywana ocena</string>
     <string name="grade_summary_calculated_average">Obliczona średnia</string>
     <string name="grade_summary_calculated_average_help_dialog_title">Jak działa obliczona średnia?</string>
-    <string name="grade_summary_calculated_average_help_dialog_message">The Calculated Average is the arithmetic average calculated from the subjects averages. It allows you to know the approximate final average. It is calculated in a way selected by the user in the application settings. It is recommended that you choose the appropriate option. This is because the calculation of school averages differs. Additionally, if your school reports the average of the subjects on the Vulcan page, the application downloads them and does not calculate these averages. This can be changed by forcing the calculation of the average in the application settings.\n\n<b>Average of grades only from selected semester</b>:\n1. Calculating the weighted average for each subject in a given semester\n2.Adding calculated averages\n3. Calculation of the arithmetic average of the summed averages\n\n<b>Average of averages from both semesters</b>:\n1.Calculating the weighted average for each subject in semester 1 and 2\n2. Calculating the arithmetic average of the calculated averages for semesters 1 and 2 for each subject.\n3. Adding calculated averages\n4. Calculation of the arithmetic average of the summed averages\n\n<b>Average of grades from the whole year:</b>\n1. Calculating weighted average over the year for each subject. The final average in the 1st semester is irrelevant.\n2. Adding calculated averages\n3. Calculating the arithmetic average of summed averages</string>
+    <string name="grade_summary_calculated_average_help_dialog_message">Obliczona średnia jest średnią arytmetyczną obliczoną ze średnich przedmiotów. Pozwala ona na poznanie przybliżonej średniej końcowej. Jest obliczana w sposób wybrany przez użytkownika w ustawieniach aplikacji. Zaleca się wybranie odpowiedniej opcji. Dzieje się tak dlatego, że obliczanie średnich w szkołach różni się. Dodatkowo, jeśli twoja szkoła ma włączone średnie przedmiotów na stronie dziennika Vulcan, aplikacja pobiera je i ich nie oblicza. Można to zmienić, wymuszając obliczanie średniej w ustawieniach aplikacji.\n\n<b>Średnia ocen tylko z wybranego semestru</b>:\n1. Obliczanie średniej arytmetycznej każdego przedmiotu w danym semestrze\n2. Zsumowanie obliczonych średnich\n3. Obliczanie średniej arytmetycznej zsumowanych średnich\n\n<b>Średnia ze średnich z obu semestrów</b>:\n1.Obliczanie średniej arytmetycznej każdego przedmiotu w semestrze 1 i 2\n2. Obliczanie średniej arytmetycznej obliczonych średnich w semestrze 1 i 2 każdego przedmiotu.\n3. Zsumowanie obliczonych średnich\n4. Obliczanie średniej arytmetycznej zsumowanych średnich\n\n<b>Średnia wszystkich ocen z całego roku:</b>\n1. Obliczanie średniej arytmetycznej z każdego przedmiotu w ciągu całego roku. Końcowa ocena w 1 semestrze jest bez znaczenia.\n2. Zsumowanie obliczonych średnich\n3. Obliczanie średniej arytmetycznej z zsumowanych średnich</string>
     <string name="grade_summary_final_average_help_dialog_title">Jak działa końcowa średnia?</string>
     <string name="grade_summary_final_average_help_dialog_message">Średnią końcową jest średnia arytmetyczna obliczona na podstawie wszystkich obecnie dostępnych ocen końcowych w danym semestrze.\n\nSchemat obliczeń składa się z następujących kroków:\n1. Sumowanie końcowych ocen wpisanych przez nauczycieli\n2. Dzielenie przez liczbę przedmiotów, z których oceny zostały już wystawione</string>
     <string name="grade_summary_final_average">Końcowa średnia</string>
@@ -724,10 +724,10 @@
     <string name="pref_ads_privacy_link">Polityka prywatności</string>
     <string name="pref_ads_loading">Ładowanie reklamy</string>
     <string name="pref_ads_once_per_visit">Dziękujemy za wsparcie, wróć później po więcej reklam</string>
-    <string name="pref_ads_consent_title">Can we use your data to display ads?</string>
-    <string name="pref_ads_consent_description">You can change your choice anytime in the app settings. We may use your data to display ads tailored to you or, using less of your data, display non-personalized ads. Please see our Privacy Policy for details</string>
-    <string name="pref_ads_summary_personalized">Personalized ads</string>
-    <string name="pref_ads_summary_non_personalized">Non-personalized ads</string>
+    <string name="pref_ads_consent_title">Czy możemy używać Twoich danych do wyświetlania reklam?</string>
+    <string name="pref_ads_consent_description">Możesz zmienić swój wybór w dowolnym momencie w ustawieniach aplikacji. Możemy wykorzystać Twoje dane do wyświetlania reklam dostosowanych do Ciebie lub, przy użyciu mniejszej ilości danych, wyświetlić niepersonalizowane reklamy. Zobacz naszą Politykę Prywatności, aby uzyskać więcej informacji</string>
+    <string name="pref_ads_summary_personalized">Spersonalizowane reklamy</string>
+    <string name="pref_ads_summary_non_personalized">Niespersonalizowane reklamy</string>
     <string name="pref_settings_advanced_title">Zaawansowane</string>
     <string name="pref_settings_appearance_title">Wygląd i zachowanie</string>
     <string name="pref_settings_notifications_title">Powiadomienia</string>
