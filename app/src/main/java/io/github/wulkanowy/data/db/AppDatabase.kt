@@ -102,7 +102,7 @@ abstract class AppDatabase : RoomDatabase() {
             Migration43(),
             Migration44(),
             Migration46(),
-            Migration49()
+            Migration49(),
             Migration50()
         )
 

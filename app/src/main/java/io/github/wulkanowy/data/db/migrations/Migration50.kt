@@ -3,7 +3,7 @@ package io.github.wulkanowy.data.db.migrations
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-class Migration50 : Migration(48, 49) {
+class Migration50 : Migration(49, 50) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("DROP TABLE IF EXISTS MobileDevices")
