@@ -10,7 +10,7 @@ on:
 jobs:
 
   tests-fdroid:
-      name: Unit tests
+      name: F-Droid
       runs-on: ubuntu-latest
       timeout-minutes: 10
       steps:
@@ -36,7 +36,7 @@ jobs:
               flags: unit
 
   tests-play:
-      name: Unit tests
+      name: Play
       runs-on: ubuntu-latest
       timeout-minutes: 10
       steps:
@@ -62,7 +62,7 @@ jobs:
               flags: unit
 
   tests-hms:
-      name: Unit tests
+      name: HMS
       runs-on: ubuntu-latest
       timeout-minutes: 10
       steps:

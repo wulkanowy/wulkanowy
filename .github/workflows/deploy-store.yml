@@ -1,4 +1,4 @@
-name: Deploy to app stores
+name: Deploy release
 
 on:
   release:
@@ -7,7 +7,7 @@ on:
 jobs:
 
   deploy-google-play:
-    name: Deploy to google play
+    name: Google Play
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: google-play
@@ -42,7 +42,7 @@ jobs:
         run: ./gradlew publishPlayReleaseApps -PenableFirebase --stacktrace;
 
   deploy-app-gallery:
-    name: Deploy to AppGallery
+    name: AppGallery
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: app-gallery
