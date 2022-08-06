@@ -8,7 +8,8 @@ on:
     branches: [ master, develop ]
 
 jobs:
-  unit-tests:
+
+  tests-fdroid:
       name: Unit tests
       runs-on: ubuntu-latest
       timeout-minutes: 10
@@ -29,6 +30,58 @@ jobs:
         - name: Unit tests
           run: |
             ./gradlew testFdroidDebugUnitTest --stacktrace
+            ./gradlew jacocoTestReport --stacktrace
+        - uses: codecov/codecov-action@v3
+          with:
+              flags: unit
+
+  tests-play:
+      name: Unit tests
+      runs-on: ubuntu-latest
+      timeout-minutes: 10
+      steps:
+        - uses: fkirc/skip-duplicate-actions@master
+        - uses: actions/checkout@v3
+        - uses: gradle/wrapper-validation-action@v1
+        - uses: actions/setup-java@v2
+          with:
+            distribution: 'zulu'
+            java-version: 11
+        - uses: actions/cache@v3
+          with:
+            path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+            key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
+        - name: Unit tests
+          run: |
+            ./gradlew testPlayDebugUnitTest --stacktrace
+            ./gradlew jacocoTestReport --stacktrace
+        - uses: codecov/codecov-action@v3
+          with:
+              flags: unit
+
+  tests-hms:
+      name: Unit tests
+      runs-on: ubuntu-latest
+      timeout-minutes: 10
+      steps:
+        - uses: fkirc/skip-duplicate-actions@master
+        - uses: actions/checkout@v3
+        - uses: gradle/wrapper-validation-action@v1
+        - uses: actions/setup-java@v2
+          with:
+            distribution: 'zulu'
+            java-version: 11
+        - uses: actions/cache@v3
+          with:
+            path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+            key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}
+        - name: Unit tests
+          run: |
+            ./gradlew testHmsDebugUnitTest --stacktrace
             ./gradlew jacocoTestReport --stacktrace
         - uses: codecov/codecov-action@v3
           with:
