@@ -2,15 +2,15 @@ package io.github.wulkanowy.data.mappers
 
 import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.db.entities.Student
-import io.github.wulkanowy.sdk.pojo.ReportingUnit as SdkReportingUnit
+import io.github.wulkanowy.sdk.pojo.Mailbox as SdkMailbox
 
-fun List<SdkReportingUnit>.mapToEntities(student: Student) = map {
+fun List<SdkMailbox>.mapToEntities(student: Student) = map {
     ReportingUnit(
         studentId = student.id.toInt(),
-        unitId = it.id,
-        roles = it.roles,
-        senderId = it.senderId,
-        senderName = it.senderName,
-        shortName = it.short
+        unitId = 0, //it.id,
+        roles = listOf(), //it.roles,
+        senderId = 0,//it.senderId,
+        senderName = it.globalKey,//it.senderName,
+        shortName = "",//it.short
     )
 }

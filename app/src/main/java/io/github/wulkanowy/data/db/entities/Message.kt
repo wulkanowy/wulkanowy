@@ -16,7 +16,7 @@ data class Message(
     val realId: Int,
 
     @ColumnInfo(name = "message_id")
-    val messageId: Int,
+    val messageId: String,
 
     @ColumnInfo(name = "sender_name")
     val sender: String,

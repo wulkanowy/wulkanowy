@@ -16,7 +16,6 @@ import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.data.pojos.MessageDraft
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Folder
-import io.github.wulkanowy.sdk.pojo.SentMessage
 import io.github.wulkanowy.utils.AutoRefreshHelper
 import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
@@ -27,7 +26,6 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import timber.log.Timber
-import java.time.LocalDateTime.now
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -64,8 +62,7 @@ class MessageRepository @Inject constructor(
         },
         query = { messagesDb.loadAll(student.id.toInt(), folder.id) },
         fetch = {
-            sdk.init(student).getMessages(Folder.valueOf(folder.name), now().minusMonths(3), now())
-                .mapToEntities(student)
+            sdk.init(student).getMessages(Folder.valueOf(folder.name)).mapToEntities(student)
         },
         saveFetchResult = { old, new ->
             messagesDb.deleteAll(old uniqueSubtract new)
@@ -113,9 +110,6 @@ class MessageRepository @Inject constructor(
         fetch = {
             sdk.init(student).getMessageDetails(
                 messageId = it!!.message.messageId,
-                folderId = message.folderId,
-                read = markAsRead,
-                id = message.realId
             ).let { details ->
                 details.content to details.attachments.mapToEntities()
             }
@@ -145,7 +139,7 @@ class MessageRepository @Inject constructor(
         subject: String,
         content: String,
         recipients: List<Recipient>,
-    ): SentMessage = sdk.init(student).sendMessage(
+    ) = sdk.init(student).sendMessage(
         subject = subject,
         content = content,
         recipients = recipients.mapFromEntities()
@@ -153,10 +147,9 @@ class MessageRepository @Inject constructor(
 
     suspend fun deleteMessages(student: Student, messages: List<Message>) {
         val folderId = messages.first().folderId
-        val isDeleted = sdk.init(student)
-            .deleteMessages(messages = messages.map { it.messageId }, folderId = folderId)
+        sdk.init(student).deleteMessages(messages = messages.map { it.messageId })
 
-        if (folderId != MessageFolder.TRASHED.id && isDeleted) {
+        if (folderId != MessageFolder.TRASHED.id) {
             val deletedMessages = messages.map {
                 it.copy(folderId = MessageFolder.TRASHED.id)
                     .apply {

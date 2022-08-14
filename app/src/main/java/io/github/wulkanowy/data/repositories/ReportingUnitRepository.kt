@@ -22,7 +22,7 @@ class ReportingUnitRepository @Inject constructor(
     private val cacheKey = "reporting_unit"
 
     suspend fun refreshReportingUnits(student: Student) {
-        val new = sdk.init(student).getReportingUnits().mapToEntities(student)
+        val new = sdk.init(student).getMailboxes().mapToEntities(student)
         val old = reportingUnitDb.load(student.id.toInt())
 
         reportingUnitDb.deleteAll(old.uniqueSubtract(new))

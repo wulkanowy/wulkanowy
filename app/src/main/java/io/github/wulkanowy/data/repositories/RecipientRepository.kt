@@ -24,7 +24,7 @@ class RecipientRepository @Inject constructor(
     private val cacheKey = "recipient"
 
     suspend fun refreshRecipients(student: Student, unit: ReportingUnit, role: Int) {
-        val new = sdk.init(student).getRecipients(unit.unitId, role).mapToEntities(unit.studentId)
+        val new = sdk.init(student).getRecipients(unit.senderName).mapToEntities(unit.studentId)
         val old = recipientDb.loadAll(unit.studentId, unit.unitId, role)
 
         recipientDb.deleteAll(old uniqueSubtract new)
@@ -44,7 +44,7 @@ class RecipientRepository @Inject constructor(
     }
 
     suspend fun getMessageRecipients(student: Student, message: Message): List<Recipient> {
-        return sdk.init(student).getMessageRecipients(message.messageId, message.senderId)
+        return sdk.init(student).getMessageRecipients(message.realId, message.senderId) // todo
             .mapToEntities(student.studentId)
     }
 }

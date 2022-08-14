@@ -13,7 +13,7 @@ fun List<SdkMessage>.mapToEntities(student: Student) = map {
     Message(
         studentId = student.id,
         realId = it.id ?: 0,
-        messageId = it.messageId ?: 0,
+        messageId = it.messageId!!,
         sender = it.sender?.name.orEmpty(),
         senderId = it.sender?.loginId ?: 0,
         recipient = it.recipients.singleOrNull()?.name ?: "Wielu adresatów",
@@ -21,20 +21,20 @@ fun List<SdkMessage>.mapToEntities(student: Student) = map {
         date = it.dateZoned?.toInstant() ?: Instant.now(),
         folderId = it.folderId,
         unread = it.unread ?: false,
-        removed = it.removed,
+        removed = false, //todo
         hasAttachments = it.hasAttachments
     ).apply {
         content = it.content.orEmpty()
-        unreadBy = it.unreadBy ?: 0
-        readBy = it.readBy ?: 0
+//        unreadBy = it.unreadBy ?: 0
+//        readBy = it.readBy ?: 0
     }
 }
 
 fun List<SdkMessageAttachment>.mapToEntities() = map {
     MessageAttachment(
-        realId = it.id,
-        messageId = it.messageId,
-        oneDriveId = it.oneDriveId,
+        realId = it.url.hashCode(),
+        messageId = 0,//it.messageId,
+        oneDriveId = "",
         url = it.url,
         filename = it.filename
     )
@@ -42,12 +42,7 @@ fun List<SdkMessageAttachment>.mapToEntities() = map {
 
 fun List<Recipient>.mapFromEntities() = map {
     SdkRecipient(
-        id = it.realId,
         name = it.realName,
-        loginId = it.loginId,
-        reportingUnitId = it.unitId,
-        role = it.role,
-        hash = it.hash,
-        shortName = it.name
+        mailboxGlobalKey = it.hash,
     )
 }
