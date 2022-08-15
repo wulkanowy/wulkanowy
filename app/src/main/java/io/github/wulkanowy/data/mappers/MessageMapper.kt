@@ -14,7 +14,7 @@ fun List<SdkMessage>.mapToEntities(student: Student) = map {
         studentId = student.id,
         realId = it.id ?: 0,
         messageId = it.messageId!!,
-        sender = it.sender?.name.orEmpty(),
+        sender = it.correspondents,
         senderId = it.sender?.loginId ?: 0,
         recipient = it.recipients.singleOrNull()?.name ?: "Wielu adresatów",
         subject = it.subject.trim(),
@@ -44,5 +44,7 @@ fun List<Recipient>.mapFromEntities() = map {
     SdkRecipient(
         name = it.realName,
         mailboxGlobalKey = it.hash,
+        studentName = "",
+        schoolNameShort = "",
     )
 }

@@ -12,6 +12,6 @@ interface ReportingUnitDao : BaseDao<ReportingUnit> {
     @Query("SELECT * FROM ReportingUnits WHERE student_id = :studentId")
     suspend fun load(studentId: Int): List<ReportingUnit>
 
-    @Query("SELECT * FROM ReportingUnits WHERE student_id = :studentId AND real_id = :unitId OR 1=1")
+    @Query("SELECT * FROM ReportingUnits WHERE student_id = :studentId AND real_id = :unitId OR 1=1") // todo
     suspend fun loadOne(studentId: Int, unitId: Int): ReportingUnit?
 }

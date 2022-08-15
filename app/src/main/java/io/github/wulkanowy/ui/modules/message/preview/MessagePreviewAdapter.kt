@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_COMPACT
+import androidx.core.text.parseAsHtml
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Message
@@ -95,7 +97,7 @@ class MessagePreviewAdapter @Inject constructor() :
                 message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")
             )
             messagePreviewRead.text = readText
-            messagePreviewContent.text = message.content
+            messagePreviewContent.text = message.content.parseAsHtml(FROM_HTML_MODE_COMPACT)
             messagePreviewFromSender.text = message.sender
             messagePreviewToRecipient.text = message.recipient
         }

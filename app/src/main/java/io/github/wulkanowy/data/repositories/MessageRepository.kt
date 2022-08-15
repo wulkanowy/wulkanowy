@@ -139,11 +139,15 @@ class MessageRepository @Inject constructor(
         subject: String,
         content: String,
         recipients: List<Recipient>,
-    ) = sdk.init(student).sendMessage(
-        subject = subject,
-        content = content,
-        recipients = recipients.mapFromEntities()
-    )
+        mailboxId: String,
+    ) {
+        sdk.init(student).sendMessage(
+            subject = subject,
+            content = content,
+            recipients = recipients.mapFromEntities(),
+            mailboxId = mailboxId,
+        )
+    }
 
     suspend fun deleteMessages(student: Student, messages: List<Message>) {
         val folderId = messages.first().folderId

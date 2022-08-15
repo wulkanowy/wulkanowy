@@ -171,7 +171,9 @@ class SendMessagePresenter @Inject constructor(
     private fun sendMessage(subject: String, content: String, recipients: List<Recipient>) {
         resourceFlow {
             val student = studentRepository.getCurrentStudent()
-            messageRepository.sendMessage(student, subject, content, recipients)
+            val semester = semesterRepository.getCurrentSemester(student)
+            val unit = reportingUnitRepository.getReportingUnit(student, semester.unitId)
+            messageRepository.sendMessage(student, subject, content, recipients, unit?.senderName.orEmpty())
         }.logResourceStatus("sending message").onEach {
             when (it) {
                 is Resource.Loading -> view?.run {
