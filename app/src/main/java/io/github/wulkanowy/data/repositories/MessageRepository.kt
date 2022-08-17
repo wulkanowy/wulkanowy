@@ -47,7 +47,7 @@ class MessageRepository @Inject constructor(
     @Suppress("UNUSED_PARAMETER")
     fun getMessages(
         student: Student,
-        semester: Semester,
+        mailbox: Mailbox,
         folder: MessageFolder,
         forceRefresh: Boolean,
         notify: Boolean = false,
@@ -60,40 +60,19 @@ class MessageRepository @Inject constructor(
             )
             it.isEmpty() || forceRefresh || isExpired
         },
-        query = { messagesDb.loadAll(student.id.toInt(), folder.id) },
+        query = { messagesDb.loadAll(mailbox.globalKey, folder.id) },
         fetch = {
-            sdk.init(student).getMessages(Folder.valueOf(folder.name)).mapToEntities(student)
+            sdk.init(student).getMessages(Folder.valueOf(folder.name)).mapToEntities(mailbox)
         },
         saveFetchResult = { old, new ->
             messagesDb.deleteAll(old uniqueSubtract new)
             messagesDb.insertAll((new uniqueSubtract old).onEach {
                 it.isNotified = !notify
             })
-            messagesDb.updateAll(getMessagesWithReadByChange(old, new, !notify))
 
             refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student, folder))
         }
     )
-
-    private fun getMessagesWithReadByChange(
-        old: List<Message>,
-        new: List<Message>,
-        setNotified: Boolean
-    ): List<Message> {
-        val oldMeta = old.map { Triple(it, it.readBy, it.unreadBy) }
-        val newMeta = new.map { Triple(it, it.readBy, it.unreadBy) }
-
-        val updatedItems = newMeta uniqueSubtract oldMeta
-
-        return updatedItems.map {
-            val oldItem = old.find { item -> item.messageId == it.first.messageId }
-            it.first.apply {
-                id = oldItem?.id ?: 0
-                isNotified = oldItem?.isNotified ?: setNotified
-                content = oldItem?.content.orEmpty()
-            }
-        }
-    }
 
     fun getMessage(
         student: Student,
@@ -106,28 +85,31 @@ class MessageRepository @Inject constructor(
             Timber.d("Message content in db empty: ${it.message.content.isEmpty()}")
             it.message.unread || it.message.content.isEmpty()
         },
-        query = { messagesDb.loadMessageWithAttachment(student.id.toInt(), message.messageId) },
+        query = { messagesDb.loadMessageWithAttachment(message.messageGlobalKey) },
         fetch = {
             sdk.init(student).getMessageDetails(
-                messageId = it!!.message.messageId,
+                messageKey = it!!.message.messageGlobalKey,
             ).let { details ->
-                details.content to details.attachments.mapToEntities()
+                details.content to details.attachments.mapToEntities(message.messageGlobalKey)
             }
         },
         saveFetchResult = { old, (downloadedMessage, attachments) ->
             checkNotNull(old) { "Fetched message no longer exist!" }
-            messagesDb.updateAll(listOf(old.message.apply {
-                id = old.message.id
-                unread = !markAsRead
-                content = content.ifBlank { downloadedMessage }
-            }))
+            messagesDb.updateAll(
+                listOf(old.message.copy(
+                    messageGlobalKey = old.message.messageGlobalKey,
+                ).apply {
+                    unread = !markAsRead
+                    content = content.ifBlank { downloadedMessage }
+                })
+            )
             messageAttachmentDao.insertAttachments(attachments)
             Timber.d("Message ${message.messageId} with blank content: ${old.message.content.isBlank()}, marked as read")
         }
     )
 
-    fun getMessagesFromDatabase(student: Student): Flow<List<Message>> {
-        return messagesDb.loadAll(student.id.toInt(), RECEIVED.id)
+    fun getMessagesFromDatabase(mailbox: Mailbox): Flow<List<Message>> {
+        return messagesDb.loadAll(mailbox.globalKey, RECEIVED.id)
     }
 
     suspend fun updateMessages(messages: List<Message>) {
@@ -151,13 +133,13 @@ class MessageRepository @Inject constructor(
 
     suspend fun deleteMessages(student: Student, messages: List<Message>) {
         val folderId = messages.first().folderId
-        sdk.init(student).deleteMessages(messages = messages.map { it.messageId })
+        sdk.init(student).deleteMessages(messages = messages.map { it.messageGlobalKey })
 
         if (folderId != MessageFolder.TRASHED.id) {
             val deletedMessages = messages.map {
                 it.copy(folderId = MessageFolder.TRASHED.id)
+                    .copy(messageGlobalKey = it.messageGlobalKey)
                     .apply {
-                        id = it.id
                         content = it.content
                     }
             }

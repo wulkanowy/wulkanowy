@@ -110,7 +110,6 @@ internal class DataModule {
     fun provideSharedPref(@ApplicationContext context: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Singleton
     @Provides
     fun provideFlowSharedPref(sharedPreferences: SharedPreferences) =
@@ -197,7 +196,7 @@ internal class DataModule {
 
     @Singleton
     @Provides
-    fun provideReportingUnitDao(database: AppDatabase) = database.reportingUnitDao
+    fun provideMailboxesDao(database: AppDatabase) = database.mailboxDao
 
     @Singleton
     @Provides

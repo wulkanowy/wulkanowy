@@ -77,15 +77,15 @@ class MessagePreviewAdapter @Inject constructor() :
     @SuppressLint("SetTextI18n")
     private fun bindMessage(holder: MessageViewHolder, message: Message) {
         val context = holder.binding.root.context
-        val recipientCount = message.unreadBy + message.readBy
+//        val recipientCount = message.unreadBy + message.readBy // todo
 
         val readText = when {
-            recipientCount > 1 -> {
-                context.getString(R.string.message_read_by, message.readBy, recipientCount)
-            }
-            message.readBy == 1 -> {
-                context.getString(R.string.message_read, context.getString(R.string.all_yes))
-            }
+//            recipientCount > 1 -> {
+//                context.getString(R.string.message_read_by, message.readBy, recipientCount)
+//            }
+//            message.rea == 1 -> {
+//                context.getString(R.string.message_read, context.getString(R.string.all_yes))
+//            }
             else -> context.getString(R.string.message_read, context.getString(R.string.all_no))
         }
 
@@ -98,8 +98,8 @@ class MessagePreviewAdapter @Inject constructor() :
             )
             messagePreviewRead.text = readText
             messagePreviewContent.text = message.content.parseAsHtml(FROM_HTML_MODE_COMPACT)
-            messagePreviewFromSender.text = message.sender
-            messagePreviewToRecipient.text = message.recipient
+            messagePreviewFromSender.text = message.correspondents // todo
+            messagePreviewToRecipient.text = message.correspondents // todo
         }
     }
 

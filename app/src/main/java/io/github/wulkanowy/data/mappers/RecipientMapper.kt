@@ -1,17 +1,16 @@
 package io.github.wulkanowy.data.mappers
 
+import io.github.wulkanowy.data.db.entities.MailboxType
 import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.sdk.pojo.Recipient as SdkRecipient
 
-fun List<SdkRecipient>.mapToEntities(userLoginId: Int) = map {
+fun List<SdkRecipient>.mapToEntities(studentMailboxGlobalKey: String) = map {
     Recipient(
-        studentId = userLoginId,
-        realId = it.mailboxGlobalKey,
-        realName = it.name,
+        mailboxGlobalKey = it.mailboxGlobalKey,
+        fullName = it.name, // todo: add field in sdk
         name = it.name,
-        hash = "",//it.hash,
-        loginId = 0,//it.loginId,
-        role = 2, //it.role,
-        unitId = 0, //it.reportingUnitId ?: 0
+        studentMailboxGlobalKey = studentMailboxGlobalKey,
+        schoolShortName = it.schoolNameShort,
+        type = MailboxType.EMPLOYEE, // todo
     )
 }

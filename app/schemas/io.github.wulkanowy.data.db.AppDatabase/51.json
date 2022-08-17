@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 50,
-    "identityHash": "87455aae2b15baa976386c833afa9cd9",
+    "version": 51,
+    "identityHash": "5efb6863fc55f8faf64a47b00c629755",
     "entities": [
       {
         "tableName": "Students",
@@ -1082,18 +1082,18 @@
       },
       {
         "tableName": "Messages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `sender_name` TEXT NOT NULL, `sender_id` INTEGER NOT NULL, `recipient_name` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `removed` INTEGER NOT NULL, `has_attachments` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `unread_by` INTEGER NOT NULL, `read_by` INTEGER NOT NULL, `content` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`message_global_key` TEXT NOT NULL, `mailbox_key` TEXT NOT NULL, `message_id` INTEGER NOT NULL, `correspondents` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `has_attachments` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL, `content` TEXT NOT NULL, PRIMARY KEY(`message_global_key`))",
         "fields": [
           {
-            "fieldPath": "studentId",
-            "columnName": "student_id",
-            "affinity": "INTEGER",
+            "fieldPath": "messageGlobalKey",
+            "columnName": "message_global_key",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "realId",
-            "columnName": "real_id",
-            "affinity": "INTEGER",
+            "fieldPath": "mailboxKey",
+            "columnName": "mailbox_key",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -1103,20 +1103,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "sender",
-            "columnName": "sender_name",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "senderId",
-            "columnName": "sender_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "recipient",
-            "columnName": "recipient_name",
+            "fieldPath": "correspondents",
+            "columnName": "correspondents",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1145,38 +1133,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "removed",
-            "columnName": "removed",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
             "fieldPath": "hasAttachments",
             "columnName": "has_attachments",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
             "fieldPath": "isNotified",
             "columnName": "is_notified",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "unreadBy",
-            "columnName": "unread_by",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "readBy",
-            "columnName": "read_by",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -1189,16 +1153,16 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "message_global_key"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "MessageAttachments",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`real_id` INTEGER NOT NULL, `message_id` INTEGER NOT NULL, `one_drive_id` TEXT NOT NULL, `url` TEXT NOT NULL, `filename` TEXT NOT NULL, PRIMARY KEY(`real_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`real_id` INTEGER NOT NULL, `message_global_key` TEXT NOT NULL, `url` TEXT NOT NULL, `filename` TEXT NOT NULL, PRIMARY KEY(`real_id`))",
         "fields": [
           {
             "fieldPath": "realId",
@@ -1207,14 +1171,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "messageId",
-            "columnName": "message_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "oneDriveId",
-            "columnName": "one_drive_id",
+            "fieldPath": "messageGlobalKey",
+            "columnName": "message_global_key",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1593,74 +1551,68 @@
         "foreignKeys": []
       },
       {
-        "tableName": "ReportingUnits",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `real_id` INTEGER NOT NULL, `short` TEXT NOT NULL, `sender_id` INTEGER NOT NULL, `sender_name` TEXT NOT NULL, `roles` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "tableName": "Mailboxes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`globalKey` TEXT NOT NULL, `userName` TEXT NOT NULL, `userLoginId` INTEGER NOT NULL, `studentName` TEXT NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY(`globalKey`))",
         "fields": [
           {
-            "fieldPath": "studentId",
-            "columnName": "student_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "unitId",
-            "columnName": "real_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "shortName",
-            "columnName": "short",
+            "fieldPath": "globalKey",
+            "columnName": "globalKey",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "senderId",
-            "columnName": "sender_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "senderName",
-            "columnName": "sender_name",
+            "fieldPath": "userName",
+            "columnName": "userName",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "roles",
-            "columnName": "roles",
+            "fieldPath": "userLoginId",
+            "columnName": "userLoginId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "studentName",
+            "columnName": "studentName",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "globalKey"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "Recipients",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`student_id` INTEGER NOT NULL, `real_id` TEXT NOT NULL, `name` TEXT NOT NULL, `real_name` TEXT NOT NULL, `login_id` INTEGER NOT NULL, `unit_id` INTEGER NOT NULL, `role` INTEGER NOT NULL, `hash` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mailboxGlobalKey` TEXT NOT NULL, `studentMailboxGlobalKey` TEXT NOT NULL, `fullName` TEXT NOT NULL, `name` TEXT NOT NULL, `schoolShortName` TEXT NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY(`mailboxGlobalKey`))",
         "fields": [
           {
-            "fieldPath": "studentId",
-            "columnName": "student_id",
-            "affinity": "INTEGER",
+            "fieldPath": "mailboxGlobalKey",
+            "columnName": "mailboxGlobalKey",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "realId",
-            "columnName": "real_id",
+            "fieldPath": "studentMailboxGlobalKey",
+            "columnName": "studentMailboxGlobalKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullName",
+            "columnName": "fullName",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1671,47 +1623,23 @@
             "notNull": true
           },
           {
-            "fieldPath": "realName",
-            "columnName": "real_name",
+            "fieldPath": "schoolShortName",
+            "columnName": "schoolShortName",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "loginId",
-            "columnName": "login_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "unitId",
-            "columnName": "unit_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "role",
-            "columnName": "role",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "hash",
-            "columnName": "hash",
+            "fieldPath": "type",
+            "columnName": "type",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
             "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "mailboxGlobalKey"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -2439,7 +2367,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '87455aae2b15baa976386c833afa9cd9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5efb6863fc55f8faf64a47b00c629755')"
     ]
   }
 }

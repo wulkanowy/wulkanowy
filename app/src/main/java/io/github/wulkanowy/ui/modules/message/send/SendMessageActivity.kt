@@ -13,11 +13,12 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
+import androidx.core.text.parseAsHtml
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
-import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.databinding.ActivitySendMessageBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.utils.dpToPx
@@ -75,14 +76,16 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
     @Suppress("UNCHECKED_CAST")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(ActivitySendMessageBinding.inflate(layoutInflater).apply { binding = this }.root)
+        setContentView(
+            ActivitySendMessageBinding.inflate(layoutInflater).apply { binding = this }.root
+        )
         setSupportActionBar(binding.sendMessageToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         messageContainer = binding.sendMessageContainer
 
         formRecipientsData = binding.sendMessageTo.addedChipItems as List<RecipientChipItem>
         formSubjectValue = binding.sendMessageSubject.text.toString()
-        formContentValue = binding.sendMessageMessageContent.text.toString()
+        formContentValue = binding.sendMessageMessageContent.text.toString().parseAsHtml().toString()
 
         presenter.onAttachView(
             view = this,
@@ -110,7 +113,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
     }
 
     private fun onMessageContentChange(text: CharSequence?) {
-        formContentValue = text.toString()
+        formContentValue = text.toString().parseAsHtml().toString()
         presenter.onMessageContentChange()
     }
 
@@ -132,8 +135,9 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
         return presenter.onUpNavigate()
     }
 
-    override fun setReportingUnit(unit: ReportingUnit) {
-        binding.sendMessageFrom.text = unit.senderName
+    @SuppressLint("SetTextI18n")
+    override fun setMailbox(mailbox: Mailbox) {
+        binding.sendMessageFrom.text = "${mailbox.userName} (${mailbox.globalKey})"
     }
 
     override fun setRecipients(recipients: List<RecipientChipItem>) {
@@ -165,7 +169,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
     }
 
     override fun setContent(content: String) {
-        binding.sendMessageMessageContent.setText(content)
+        binding.sendMessageMessageContent.setText(content.parseAsHtml())
     }
 
     override fun showMessage(text: String) {

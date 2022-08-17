@@ -90,9 +90,9 @@ class MessageTabAdapter @Inject constructor() :
 
             messageItemAuthor.run {
                 text = if (message.folderId == MessageFolder.SENT.id) {
-                    message.recipient
+                    message.correspondents // todo
                 } else {
-                    message.sender
+                    message.correspondents // todo
                 }
                 setTypeface(null, style)
             }
@@ -145,7 +145,7 @@ class MessageTabAdapter @Inject constructor() :
             val newItem = new[newItemPosition]
 
             return if (oldItem is MessageTabDataItem.MessageItem && newItem is MessageTabDataItem.MessageItem) {
-                oldItem.message.id == newItem.message.id
+                oldItem.message.messageGlobalKey == newItem.message.messageGlobalKey
             } else {
                 oldItem.viewType == newItem.viewType
             }

@@ -1,7 +1,6 @@
 package io.github.wulkanowy.data.repositories
 
 import io.github.wulkanowy.data.db.dao.RecipientDao
-import io.github.wulkanowy.data.db.entities.ReportingUnit
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.getStudentEntity
 import io.github.wulkanowy.sdk.Sdk

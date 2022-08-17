@@ -52,7 +52,7 @@ class MessagePreviewPresenter @Inject constructor(
 
     private fun loadData(messageToLoad: Message) {
         flatResourceFlow {
-            val student = studentRepository.getStudentById(messageToLoad.studentId)
+            val student = studentRepository.getCurrentStudent()
             messageRepository.getMessage(student, messageToLoad, true)
         }
             .logResourceStatus("message ${messageToLoad.messageId} preview")
@@ -106,9 +106,9 @@ class MessagePreviewPresenter @Inject constructor(
     fun onShare(): Boolean {
         message?.let {
             var text =
-                "Temat: ${it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() }}\n" + when (it.sender.isNotEmpty()) {
-                    true -> "Od: ${it.sender}\n"
-                    false -> "Do: ${it.recipient}\n"
+                "Temat: ${it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() }}\n" + when (it.correspondents.isNotEmpty()) { // todo
+                    true -> "Od: ${it.correspondents}\n" // todo
+                    false -> "Do: ${it.correspondents}\n" // todo
                 } + "Data: ${it.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${it.content}"
 
             attachments?.let { attachments ->
@@ -135,8 +135,8 @@ class MessagePreviewPresenter @Inject constructor(
         message?.let {
             val dateString = it.date.toFormattedString("yyyy-MM-dd HH:mm:ss")
             val infoContent = "<div><h4>Data wysłania</h4>$dateString</div>" + when {
-                it.sender.isNotEmpty() -> "<div><h4>Od</h4>${it.sender}</div>"
-                else -> "<div><h4>Do</h4>${it.recipient}</div>"
+                it.correspondents.isNotEmpty() -> "<div><h4>Od</h4>${it.correspondents}</div>"
+                else -> "<div><h4>Do</h4>${it.correspondents}</div>"
             }
 
             val messageContent = "<p>${it.content}</p>"
@@ -144,8 +144,8 @@ class MessagePreviewPresenter @Inject constructor(
                 .replace(Regex("[\\n\\r]"), "<br>")
 
             val jobName = "Wiadomość " + when {
-                it.sender.isNotEmpty() -> "od ${it.sender}"
-                else -> "do ${it.recipient}"
+                it.correspondents.isNotEmpty() -> "od ${it.correspondents}"
+                else -> "do ${it.correspondents}"
             } + " $dateString: ${it.subject.ifBlank { view?.messageNoSubjectString.orEmpty() }} | Wulkanowy"
 
             view?.apply {
@@ -172,7 +172,7 @@ class MessagePreviewPresenter @Inject constructor(
             showErrorView(false)
         }
 
-        Timber.i("Delete message ${message?.id}")
+        Timber.i("Delete message ${message?.messageGlobalKey}")
 
         presenterScope.launch {
             runCatching {
