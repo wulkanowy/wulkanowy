@@ -52,20 +52,21 @@ class SendMessagePresenter @Inject constructor(
             message?.let {
                 setSubject(
                     when (reply) {
-                        true -> "Re: "
+                        true -> "RE: "
                         else -> "FW: "
                     } + message.subject
                 )
                 if (preferencesRepository.fillMessageContent || reply != true) {
-                    setContent(
-                        when (reply) {
-                            true -> "\n\n"
-                            else -> ""
-                        } + when (message.correspondents.isNotEmpty()) { // todo: w
-                            true -> "Od: ${message.correspondents}\n" // todo: t
-                            false -> "Do: ${message.correspondents}\n" // todo: f
-                        } + "Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}\n\n${message.content}"
-                    )
+                    setContent(buildString {
+                        if (reply == true) {
+                            append("<br><br>")
+                        }
+
+                        append("Od: ${message.sender}<br>")
+                        append("Do: ${message.recipients}<br>")
+                        append("Data: ${message.date.toFormattedString("yyyy-MM-dd HH:mm:ss")}<br><br>")
+                        append(message.content)
+                    })
                 }
             }
         }
