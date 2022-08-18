@@ -7,8 +7,6 @@ import java.io.Serializable
 @kotlinx.serialization.Serializable
 @Entity(tableName = "Recipients")
 data class Recipient(
-
-    @PrimaryKey
     val mailboxGlobalKey: String,
     val studentMailboxGlobalKey: String,
     val fullName: String,
@@ -16,5 +14,9 @@ data class Recipient(
     val schoolShortName: String,
     val type: MailboxType,
 ) : Serializable {
+
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
+
     override fun toString() = name
 }
