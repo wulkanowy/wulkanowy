@@ -82,28 +82,29 @@ class MessageRepository @Inject constructor(
         isResultEmpty = { it?.message?.content.isNullOrBlank() },
         shouldFetch = {
             checkNotNull(it) { "This message no longer exist!" }
-            Timber.d("Message content in db empty: ${it.message.content.isEmpty()}")
-            it.message.unread || it.message.content.isEmpty()
+            Timber.d("Message content in db empty: ${it.message.content.isBlank()}")
+            it.message.unread || it.message.content.isBlank()
         },
         query = { messagesDb.loadMessageWithAttachment(message.messageGlobalKey) },
         fetch = {
-            sdk.init(student).getMessageDetails(
-                messageKey = it!!.message.messageGlobalKey,
-            ).let { details ->
-                details.content to details.attachments.mapToEntities(message.messageGlobalKey)
-            }
+            sdk.init(student).getMessageDetails(it!!.message.messageGlobalKey)
         },
-        saveFetchResult = { old, (downloadedMessage, attachments) ->
+        saveFetchResult = { old, new ->
             checkNotNull(old) { "Fetched message no longer exist!" }
             messagesDb.updateAll(
                 listOf(old.message.copy(
                     messageGlobalKey = old.message.messageGlobalKey,
                 ).apply {
                     unread = !markAsRead
-                    content = content.ifBlank { downloadedMessage }
+                    sender = new.sender
+                    recipients = new.recipients.firstOrNull() ?: "Wielu adresoatów"
+                    content = content.ifBlank { new.content }
                 })
             )
-            messageAttachmentDao.insertAttachments(attachments)
+            messageAttachmentDao.insertAttachments(
+                items = new.attachments.mapToEntities(message.messageGlobalKey),
+            )
+
             Timber.d("Message ${message.messageId} with blank content: ${old.message.content.isBlank()}, marked as read")
         }
     )

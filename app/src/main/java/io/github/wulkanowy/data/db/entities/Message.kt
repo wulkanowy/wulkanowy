@@ -38,4 +38,6 @@ data class Message(
     var isNotified: Boolean = true
 
     var content: String = ""
+    var sender: String? = null
+    var recipients: String? = null
 }
