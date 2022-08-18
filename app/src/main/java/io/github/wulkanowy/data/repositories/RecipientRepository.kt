@@ -45,12 +45,22 @@ class RecipientRepository @Inject constructor(
         } else cached
     }
 
-    suspend fun getMessageRecipients(
+    suspend fun getMessageSender(
         student: Student,
         mailbox: Mailbox,
         message: Message
     ): List<Recipient> = sdk.init(student)
         .getMessageReplayDetails(message.messageGlobalKey)
-        .recipients // todo: are you sure?
-        .mapToEntities(mailbox.globalKey)
+        .let {
+            listOf(
+                Recipient(
+                    mailboxGlobalKey = it.senderMailboxId,
+                    fullName = it.senderMailboxName,
+                    name = it.senderMailboxName,
+                    studentMailboxGlobalKey = mailbox.globalKey,
+                    schoolShortName = "",
+                    type = MailboxType.EMPLOYEE, // todo
+                )
+            )
+        }
 }

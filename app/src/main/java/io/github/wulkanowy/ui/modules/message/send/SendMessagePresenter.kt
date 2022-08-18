@@ -126,7 +126,7 @@ class SendMessagePresenter @Inject constructor(
 
             Timber.i("Loading message recipients started")
             val messageRecipients = when {
-                message != null && reply == true -> recipientRepository.getMessageRecipients(
+                message != null && reply == true -> recipientRepository.getMessageSender(
                     student = student,
                     message = message,
                     mailbox = mailbox,
