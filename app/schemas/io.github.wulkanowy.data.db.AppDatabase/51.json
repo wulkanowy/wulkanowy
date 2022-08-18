@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 51,
-    "identityHash": "36c9122ed8b4a049e3ed404089a0e251",
+    "identityHash": "6c6c818ac1130e5a2fdf93bd078964bf",
     "entities": [
       {
         "tableName": "Students",
@@ -1082,7 +1082,7 @@
       },
       {
         "tableName": "Messages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`message_global_key` TEXT NOT NULL, `mailbox_key` TEXT NOT NULL, `message_id` INTEGER NOT NULL, `correspondents` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `has_attachments` INTEGER NOT NULL, `is_notified` INTEGER NOT NULL, `content` TEXT NOT NULL, `sender` TEXT, `recipients` TEXT, PRIMARY KEY(`message_global_key`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`message_global_key` TEXT NOT NULL, `mailbox_key` TEXT NOT NULL, `message_id` INTEGER NOT NULL, `correspondents` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `has_attachments` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `content` TEXT NOT NULL, `sender` TEXT, `recipients` TEXT)",
         "fields": [
           {
             "fieldPath": "messageGlobalKey",
@@ -1139,6 +1139,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "isNotified",
             "columnName": "is_notified",
             "affinity": "INTEGER",
@@ -1165,9 +1171,9 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "message_global_key"
+            "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -2385,7 +2391,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '36c9122ed8b4a049e3ed404089a0e251')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6c6c818ac1130e5a2fdf93bd078964bf')"
     ]
   }
 }

@@ -92,9 +92,8 @@ class MessageRepository @Inject constructor(
         saveFetchResult = { old, new ->
             checkNotNull(old) { "Fetched message no longer exist!" }
             messagesDb.updateAll(
-                listOf(old.message.copy(
-                    messageGlobalKey = old.message.messageGlobalKey,
-                ).apply {
+                listOf(old.message.apply {
+                    id = message.id
                     unread = !markAsRead
                     sender = new.sender
                     recipients = new.recipients.firstOrNull() ?: "Wielu adresoatów"
@@ -139,9 +138,11 @@ class MessageRepository @Inject constructor(
         if (folderId != MessageFolder.TRASHED.id) {
             val deletedMessages = messages.map {
                 it.copy(folderId = MessageFolder.TRASHED.id)
-                    .copy(messageGlobalKey = it.messageGlobalKey)
                     .apply {
+                        id = it.id
                         content = it.content
+                        sender = it.sender
+                        recipients = it.recipients
                     }
             }
 

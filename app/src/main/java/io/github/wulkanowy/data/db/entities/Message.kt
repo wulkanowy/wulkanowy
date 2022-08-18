@@ -9,7 +9,6 @@ import java.time.Instant
 @Entity(tableName = "Messages")
 data class Message(
 
-    @PrimaryKey
     @ColumnInfo(name = "message_global_key")
     val messageGlobalKey: String,
 
@@ -33,6 +32,9 @@ data class Message(
     @ColumnInfo(name = "has_attachments")
     val hasAttachments: Boolean
 ) : Serializable {
+
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
 
     @ColumnInfo(name = "is_notified")
     var isNotified: Boolean = true
