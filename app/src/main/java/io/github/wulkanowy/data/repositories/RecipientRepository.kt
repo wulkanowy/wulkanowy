@@ -51,16 +51,7 @@ class RecipientRepository @Inject constructor(
         message: Message
     ): List<Recipient> = sdk.init(student)
         .getMessageReplayDetails(message.messageGlobalKey)
-        .let {
-            listOf(
-                Recipient(
-                    mailboxGlobalKey = it.senderMailboxId,
-                    fullName = it.senderMailboxName,
-                    name = it.senderMailboxName,
-                    studentMailboxGlobalKey = mailbox.globalKey,
-                    schoolShortName = "",
-                    type = MailboxType.EMPLOYEE, // todo
-                )
-            )
-        }
+        .sender
+        .let(::listOf)
+        .mapToEntities(mailbox.globalKey)
 }

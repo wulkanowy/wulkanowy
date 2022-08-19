@@ -8,7 +8,8 @@ import io.github.wulkanowy.sdk.pojo.Mailbox as SdkMailbox
 fun List<SdkMailbox>.mapToEntities(student: Student) = map {
     Mailbox(
         globalKey = it.globalKey,
-        userName = it.name,
+        fullName = it.fullName,
+        userName = it.userName,
         userLoginId = student.userLoginId,
         studentName = it.studentName,
         type = MailboxType.STUDENT // todo: add mailbox type in SDK

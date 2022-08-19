@@ -122,7 +122,8 @@ class MessageTabPresenter @Inject constructor(
 
             runCatching {
                 val student = studentRepository.getCurrentStudent(true)
-                messageRepository.deleteMessages(student, messageList)
+                val mailbox = mailboxRepository.getMailbox(student)
+                messageRepository.deleteMessages(student, mailbox, messageList)
             }
                 .onFailure(errorHandler::dispatch)
                 .onSuccess { view?.showMessagesDeleted() }
@@ -345,10 +346,9 @@ class MessageTabPresenter @Inject constructor(
     private fun calculateMatchRatio(message: Message, query: String): Int {
         val subjectRatio = FuzzySearch.tokenSortPartialRatio(query.lowercase(), message.subject)
 
-        val senderOrRecipientRatio = FuzzySearch.tokenSortPartialRatio(
+        val correspondentsRatio = FuzzySearch.tokenSortPartialRatio(
             query.lowercase(),
-            if (message.correspondents.isNotEmpty()) message.correspondents.lowercase() // todo
-            else message.correspondents.lowercase() // todo
+            message.correspondents
         )
 
         val dateRatio = listOf(
@@ -364,7 +364,7 @@ class MessageTabPresenter @Inject constructor(
 
 
         return (subjectRatio.toDouble().pow(2)
-            + senderOrRecipientRatio.toDouble().pow(2)
+            + correspondentsRatio.toDouble().pow(2)
             + dateRatio.toDouble().pow(2) * 2
             ).toInt()
     }

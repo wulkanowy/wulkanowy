@@ -10,7 +10,7 @@ data class Recipient(
     val mailboxGlobalKey: String,
     val studentMailboxGlobalKey: String,
     val fullName: String,
-    val name: String,
+    val name: String, // todo: rename to userName
     val schoolShortName: String,
     val type: MailboxType,
 ) : Serializable {

@@ -8,6 +8,7 @@ data class Mailbox(
 
     @PrimaryKey
     val globalKey: String,
+    val fullName: String,
     val userName: String,
     val userLoginId: Int,
     val studentName: String,

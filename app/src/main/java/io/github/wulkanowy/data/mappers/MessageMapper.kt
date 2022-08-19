@@ -32,9 +32,10 @@ fun List<SdkMessageAttachment>.mapToEntities(messageGlobalKey: String) = map {
 
 fun List<Recipient>.mapFromEntities() = map {
     SdkRecipient(
-        name = it.name,
+        fullName = it.name,
+        userName = it.name,
+        studentName = "", // todo
         mailboxGlobalKey = it.mailboxGlobalKey,
-        studentName = "",
         schoolNameShort = it.schoolShortName,
     )
 }

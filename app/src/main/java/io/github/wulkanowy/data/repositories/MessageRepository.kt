@@ -10,6 +10,7 @@ import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.entities.*
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.enums.MessageFolder.RECEIVED
+import io.github.wulkanowy.data.enums.MessageFolder.TRASHED
 import io.github.wulkanowy.data.mappers.mapFromEntities
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
@@ -21,6 +22,7 @@ import io.github.wulkanowy.utils.getRefreshKey
 import io.github.wulkanowy.utils.init
 import io.github.wulkanowy.utils.uniqueSubtract
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -131,13 +133,13 @@ class MessageRepository @Inject constructor(
         )
     }
 
-    suspend fun deleteMessages(student: Student, messages: List<Message>) {
+    suspend fun deleteMessages(student: Student, mailbox: Mailbox, messages: List<Message>) {
         val folderId = messages.first().folderId
         sdk.init(student).deleteMessages(messages = messages.map { it.messageGlobalKey })
 
-        if (folderId != MessageFolder.TRASHED.id) {
+        if (folderId != TRASHED.id) {
             val deletedMessages = messages.map {
-                it.copy(folderId = MessageFolder.TRASHED.id)
+                it.copy(folderId = TRASHED.id)
                     .apply {
                         id = it.id
                         content = it.content
@@ -148,10 +150,18 @@ class MessageRepository @Inject constructor(
 
             messagesDb.updateAll(deletedMessages)
         } else messagesDb.deleteAll(messages)
+
+        getMessages(
+            student = student,
+            mailbox = mailbox,
+            folder = TRASHED,
+            forceRefresh = true,
+        ).first()
     }
 
-    suspend fun deleteMessage(student: Student, message: Message) =
-        deleteMessages(student, listOf(message))
+    suspend fun deleteMessage(student: Student, mailbox: Mailbox, message: Message) {
+        deleteMessages(student, mailbox, listOf(message))
+    }
 
     var draftMessage: MessageDraft?
         get() = sharedPrefProvider.getString(context.getString(R.string.pref_key_message_send_draft))

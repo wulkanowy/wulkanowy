@@ -135,9 +135,8 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
         return presenter.onUpNavigate()
     }
 
-    @SuppressLint("SetTextI18n")
     override fun setMailbox(mailbox: Mailbox) {
-        binding.sendMessageFrom.text = "${mailbox.userName} (${mailbox.globalKey})"
+        binding.sendMessageFrom.text = mailbox.fullName
     }
 
     override fun setRecipients(recipients: List<RecipientChipItem>) {

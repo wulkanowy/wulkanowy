@@ -6,6 +6,7 @@ import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.enums.MessageFolder
+import io.github.wulkanowy.data.repositories.MailboxRepository
 import io.github.wulkanowy.data.repositories.MessageRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -20,6 +21,7 @@ class MessagePreviewPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val messageRepository: MessageRepository,
+    private val mailboxRepository: MailboxRepository,
     private val analytics: AnalyticsHelper
 ) : BasePresenter<MessagePreviewView>(errorHandler, studentRepository) {
 
@@ -184,8 +186,9 @@ class MessagePreviewPresenter @Inject constructor(
 
         presenterScope.launch {
             runCatching {
-                val student = studentRepository.getCurrentStudent()
-                messageRepository.deleteMessage(student, message!!)
+                val student = studentRepository.getCurrentStudent(decryptPass = true)
+                val mailbox = mailboxRepository.getMailbox(student)
+                messageRepository.deleteMessage(student, mailbox, message!!)
             }
                 .onFailure {
                     retryCallback = { onMessageDelete() }
