@@ -8,7 +8,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.databinding.ItemMessageBinding
 import io.github.wulkanowy.databinding.ItemMessageChipsBinding
 import io.github.wulkanowy.utils.toFormattedString
@@ -88,12 +87,8 @@ class MessageTabAdapter @Inject constructor() :
         with(holder.binding) {
             val style = if (message.unread) Typeface.BOLD else Typeface.NORMAL
 
-            messageItemAuthor.run {
-                text = if (message.folderId == MessageFolder.SENT.id) {
-                    message.correspondents // todo
-                } else {
-                    message.correspondents // todo
-                }
+            with(messageItemAuthor) {
+                text = message.correspondents
                 setTypeface(null, style)
             }
             messageItemSubject.run {

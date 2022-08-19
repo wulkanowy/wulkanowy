@@ -8,9 +8,9 @@ fun List<SdkRecipient>.mapToEntities(studentMailboxGlobalKey: String) = map {
     Recipient(
         mailboxGlobalKey = it.mailboxGlobalKey,
         fullName = it.fullName,
-        name = it.userName,
+        userName = it.userName,
         studentMailboxGlobalKey = studentMailboxGlobalKey,
         schoolShortName = it.schoolNameShort,
-        type = MailboxType.EMPLOYEE, // todo
+        type = MailboxType.valueOf(it.type.name),
     )
 }

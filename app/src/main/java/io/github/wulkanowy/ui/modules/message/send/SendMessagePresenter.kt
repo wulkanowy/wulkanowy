@@ -209,7 +209,7 @@ class SendMessagePresenter @Inject constructor(
     private fun createChips(recipients: List<Recipient>): List<RecipientChipItem> {
         return recipients.map {
             RecipientChipItem(
-                title = it.name,
+                title = it.userName,
                 summary = "${it.type} (${it.schoolShortName})",
                 recipient = it
             )
@@ -253,7 +253,7 @@ class SendMessagePresenter @Inject constructor(
 
     fun getRecipientsNames(): String {
         return messageRepository.draftMessage?.recipients.orEmpty()
-            .joinToString { it.recipient.name }
+            .joinToString { it.recipient.userName }
     }
 
     fun clearDraft() {

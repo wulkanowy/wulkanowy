@@ -12,6 +12,6 @@ fun List<SdkMailbox>.mapToEntities(student: Student) = map {
         userName = it.userName,
         userLoginId = student.userLoginId,
         studentName = it.studentName,
-        type = MailboxType.STUDENT // todo: add mailbox type in SDK
+        type = MailboxType.valueOf(it.type.name),
     )
 }

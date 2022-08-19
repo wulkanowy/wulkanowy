@@ -1,6 +1,7 @@
 package io.github.wulkanowy.data.mappers
 
 import io.github.wulkanowy.data.db.entities.*
+import io.github.wulkanowy.sdk.pojo.MailboxType
 import io.github.wulkanowy.sdk.pojo.Message as SdkMessage
 import io.github.wulkanowy.sdk.pojo.MessageAttachment as SdkMessageAttachment
 import io.github.wulkanowy.sdk.pojo.Recipient as SdkRecipient
@@ -32,10 +33,11 @@ fun List<SdkMessageAttachment>.mapToEntities(messageGlobalKey: String) = map {
 
 fun List<Recipient>.mapFromEntities() = map {
     SdkRecipient(
-        fullName = it.name,
-        userName = it.name,
-        studentName = "", // todo
+        fullName = it.fullName,
+        userName = it.userName,
+        studentName = it.userName,
         mailboxGlobalKey = it.mailboxGlobalKey,
         schoolNameShort = it.schoolShortName,
+        type = MailboxType.valueOf(it.type.name),
     )
 }

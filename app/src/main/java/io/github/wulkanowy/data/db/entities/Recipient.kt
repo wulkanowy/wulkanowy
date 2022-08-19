@@ -10,7 +10,7 @@ data class Recipient(
     val mailboxGlobalKey: String,
     val studentMailboxGlobalKey: String,
     val fullName: String,
-    val name: String, // todo: rename to userName
+    val userName: String,
     val schoolShortName: String,
     val type: MailboxType,
 ) : Serializable {
@@ -18,5 +18,5 @@ data class Recipient(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
-    override fun toString() = name
+    override fun toString() = userName
 }
