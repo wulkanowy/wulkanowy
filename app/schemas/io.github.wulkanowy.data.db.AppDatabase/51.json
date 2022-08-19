@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 51,
-    "identityHash": "75e8e0cbac91de640ea9fa531092d839",
+    "identityHash": "4a30263ec98183b62f6b59d37aed1a52",
     "entities": [
       {
         "tableName": "Students",
@@ -1620,7 +1620,7 @@
       },
       {
         "tableName": "Recipients",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mailboxGlobalKey` TEXT NOT NULL, `studentMailboxGlobalKey` TEXT NOT NULL, `fullName` TEXT NOT NULL, `name` TEXT NOT NULL, `schoolShortName` TEXT NOT NULL, `type` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mailboxGlobalKey` TEXT NOT NULL, `studentMailboxGlobalKey` TEXT NOT NULL, `fullName` TEXT NOT NULL, `userName` TEXT NOT NULL, `schoolShortName` TEXT NOT NULL, `type` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "mailboxGlobalKey",
@@ -1641,8 +1641,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "name",
-            "columnName": "name",
+            "fieldPath": "userName",
+            "columnName": "userName",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -2397,7 +2397,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '75e8e0cbac91de640ea9fa531092d839')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4a30263ec98183b62f6b59d37aed1a52')"
     ]
   }
 }

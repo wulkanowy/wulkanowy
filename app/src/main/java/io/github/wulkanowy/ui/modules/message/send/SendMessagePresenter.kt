@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.send
 
+import androidx.core.text.parseAsHtml
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.entities.MailboxType
 import io.github.wulkanowy.data.db.entities.Message

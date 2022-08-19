@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.text.Spanned
 import android.view.Menu
 import android.view.MenuItem
 import android.view.TouchDelegate
@@ -14,6 +15,7 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.core.text.parseAsHtml
+import androidx.core.text.toHtml
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -113,7 +115,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
     }
 
     private fun onMessageContentChange(text: CharSequence?) {
-        formContentValue = text.toString().parseAsHtml().toString()
+        formContentValue = (text as Spanned).toHtml()
         presenter.onMessageContentChange()
     }
 
