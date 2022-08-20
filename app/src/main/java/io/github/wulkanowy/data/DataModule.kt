@@ -19,7 +19,6 @@ import io.github.wulkanowy.data.db.SharedPrefProvider
 import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.utils.AppInfo
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
