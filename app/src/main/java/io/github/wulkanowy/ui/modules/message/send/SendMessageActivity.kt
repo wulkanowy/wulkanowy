@@ -19,7 +19,6 @@ import androidx.core.text.toHtml
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
-import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.databinding.ActivitySendMessageBinding
 import io.github.wulkanowy.ui.base.BaseActivity
@@ -75,6 +74,18 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
     override val messageSuccess: String
         get() = getString(R.string.message_send_successful)
 
+    override val mailboxStudent: String
+        get() = getString(R.string.message_mailbox_type_student)
+
+    override val mailboxParent: String
+        get() = getString(R.string.message_mailbox_type_parent)
+
+    override val mailboxGuardian: String
+        get() = getString(R.string.message_mailbox_type_guardian)
+
+    override val mailboxEmployee: String
+        get() = getString(R.string.message_mailbox_type_employee)
+
     @Suppress("UNCHECKED_CAST")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +98,8 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
 
         formRecipientsData = binding.sendMessageTo.addedChipItems as List<RecipientChipItem>
         formSubjectValue = binding.sendMessageSubject.text.toString()
-        formContentValue = binding.sendMessageMessageContent.text.toString().parseAsHtml().toString()
+        formContentValue =
+            binding.sendMessageMessageContent.text.toString().parseAsHtml().toString()
 
         presenter.onAttachView(
             view = this,
@@ -137,8 +149,8 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
         return presenter.onUpNavigate()
     }
 
-    override fun setMailbox(mailbox: Mailbox) {
-        binding.sendMessageFrom.text = mailbox.fullName
+    override fun setMailbox(mailbox: String) {
+        binding.sendMessageFrom.text = mailbox
     }
 
     override fun setRecipients(recipients: List<RecipientChipItem>) {

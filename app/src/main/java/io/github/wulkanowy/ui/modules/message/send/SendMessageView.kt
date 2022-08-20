@@ -18,9 +18,17 @@ interface SendMessageView : BaseView {
 
     val messageSuccess: String
 
+    val mailboxStudent: String
+
+    val mailboxParent: String
+
+    val mailboxGuardian: String
+
+    val mailboxEmployee: String
+
     fun initView()
 
-    fun setMailbox(mailbox: Mailbox)
+    fun setMailbox(mailbox: String)
 
     fun setRecipients(recipients: List<RecipientChipItem>)
 

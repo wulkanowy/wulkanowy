@@ -12,12 +12,14 @@ data class Mailbox(
     val userName: String,
     val userLoginId: Int,
     val studentName: String,
+    val schoolNameShort: String,
     val type: MailboxType,
 )
 
 enum class MailboxType {
     STUDENT,
     PARENT,
+    GUARDIAN,
     EMPLOYEE,
     UNKNOWN,
 }

@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.message.send
 
 import io.github.wulkanowy.data.Resource
+import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.MailboxType
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.Recipient
@@ -147,9 +148,9 @@ class SendMessagePresenter @Inject constructor(
                         showProgress(true)
                         showContent(false)
                     }
-                    is Resource.Success -> it.data.let { (reportingUnit, recipientChips, selectedRecipientChips) ->
+                    is Resource.Success -> it.data.let { (mailbox, recipientChips, selectedRecipientChips) ->
                         view?.run {
-                            setMailbox(reportingUnit)
+                            setMailbox(getMailboxName(mailbox))
                             setRecipients(recipientChips)
                             if (selectedRecipientChips.isNotEmpty()) setSelectedRecipients(
                                 selectedRecipientChips
@@ -210,10 +211,39 @@ class SendMessagePresenter @Inject constructor(
         return recipients.map {
             RecipientChipItem(
                 title = it.userName,
-                summary = "${it.type} (${it.schoolShortName})",
+                summary = buildString {
+                    getMailboxType(it.type)?.let(::append)
+                    if (isNotBlank()) append(" ")
+
+                    append("(${it.schoolShortName})")
+                },
                 recipient = it
             )
         }
+    }
+
+    private fun getMailboxName(mailbox: Mailbox): String {
+        return buildString {
+            append(mailbox.userName)
+            append(" - ")
+            append(getMailboxType(mailbox.type))
+
+            if (mailbox.type == MailboxType.PARENT) {
+                append(" - ")
+                append(mailbox.studentName)
+            }
+
+            append(" - ")
+            append("(${mailbox.schoolNameShort})")
+        }
+    }
+
+    private fun getMailboxType(type: MailboxType): String? = when (type) {
+        MailboxType.STUDENT -> view?.mailboxStudent
+        MailboxType.PARENT -> view?.mailboxParent
+        MailboxType.GUARDIAN -> view?.mailboxGuardian
+        MailboxType.EMPLOYEE -> view?.mailboxEmployee
+        MailboxType.UNKNOWN -> null
     }
 
     fun onMessageContentChange() {
