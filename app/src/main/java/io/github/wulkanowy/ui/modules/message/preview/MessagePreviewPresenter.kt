@@ -178,7 +178,7 @@ class MessagePreviewPresenter @Inject constructor(
         view?.run {
             showContent(false)
             showProgress(true)
-            showOptions(false)
+            showOptions(show = false, isReplayable = false)
             showErrorView(false)
         }
 
@@ -222,7 +222,10 @@ class MessagePreviewPresenter @Inject constructor(
 
     private fun initOptions() {
         view?.apply {
-            showOptions(message != null)
+            showOptions(
+                show = message != null,
+                isReplayable = message?.folderId != MessageFolder.SENT.id,
+            )
             message?.let {
                 when (it.folderId == MessageFolder.TRASHED.id) {
                     true -> setDeletedOptionsLabels()
