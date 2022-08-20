@@ -134,10 +134,13 @@ class MessageRepository @Inject constructor(
     }
 
     suspend fun deleteMessages(student: Student, mailbox: Mailbox, messages: List<Message>) {
-        val folderId = messages.first().folderId
-        sdk.init(student).deleteMessages(messages = messages.map { it.messageGlobalKey })
+        val firstMessage = messages.first()
+        sdk.init(student).deleteMessages(
+            messages = messages.map { it.messageGlobalKey },
+            removeForever = firstMessage.folderId == TRASHED.id,
+        )
 
-        if (folderId != TRASHED.id) {
+        if (firstMessage.folderId != TRASHED.id) {
             val deletedMessages = messages.map {
                 it.copy(folderId = TRASHED.id)
                     .apply {
