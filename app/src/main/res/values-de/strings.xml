@@ -263,6 +263,10 @@
     <string name="message_move_to_trash">In Papierkorb verschieben</string>
     <string name="message_delete_forever">Dauerhaft löschen</string>
     <string name="message_delete_success">Nachricht erfolgreich gelöscht</string>
+    <string name="message_mailbox_type_student">student</string>
+    <string name="message_mailbox_type_parent">parent</string>
+    <string name="message_mailbox_type_guardian">guardian</string>
+    <string name="message_mailbox_type_employee">employee</string>
     <string name="message_share">Teilen</string>
     <string name="message_print">Drucken</string>
     <string name="message_subject">Thema</string>
@@ -274,7 +278,6 @@
     <string name="message_chip_only_unread">Nur ungelesen</string>
     <string name="message_chip_only_with_attachments">Nur mit Anhängen</string>
     <string name="message_read">Lesen: %s</string>
-    <string name="message_read_by">Lesen von: %1$d von %2$d Personen</string>
     <plurals name="message_number_item">
         <item quantity="one">%1$d Nachricht</item>
         <item quantity="other">%1$d Nachrichten</item>
