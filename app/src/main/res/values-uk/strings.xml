@@ -297,6 +297,10 @@
     <string name="message_move_to_trash">Перемістити до кошика</string>
     <string name="message_delete_forever">Видалити назавжди</string>
     <string name="message_delete_success">Лист було успішно видалено</string>
+    <string name="message_mailbox_type_student">student</string>
+    <string name="message_mailbox_type_parent">parent</string>
+    <string name="message_mailbox_type_guardian">guardian</string>
+    <string name="message_mailbox_type_employee">employee</string>
     <string name="message_share">Поділитись</string>
     <string name="message_print">Друк</string>
     <string name="message_subject">Тема</string>
@@ -308,7 +312,6 @@
     <string name="message_chip_only_unread">Лише непрочитані</string>
     <string name="message_chip_only_with_attachments">Тільки з вкладеннями</string>
     <string name="message_read">Прочитаний: %s</string>
-    <string name="message_read_by">Прочитаний: %1$d з %2$d осіб</string>
     <plurals name="message_number_item">
         <item quantity="one">%1$d лист</item>
         <item quantity="few">%1$d листи</item>
