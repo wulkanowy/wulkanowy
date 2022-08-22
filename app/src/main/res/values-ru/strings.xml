@@ -297,6 +297,10 @@
     <string name="message_move_to_trash">Перенести в корзину</string>
     <string name="message_delete_forever">Удалить навсегда</string>
     <string name="message_delete_success">Письмо успешно удалено</string>
+    <string name="message_mailbox_type_student">student</string>
+    <string name="message_mailbox_type_parent">parent</string>
+    <string name="message_mailbox_type_guardian">guardian</string>
+    <string name="message_mailbox_type_employee">employee</string>
     <string name="message_share">Поделиться</string>
     <string name="message_print">Печать</string>
     <string name="message_subject">Тема</string>
@@ -308,7 +312,6 @@
     <string name="message_chip_only_unread">Только непрочитанные</string>
     <string name="message_chip_only_with_attachments">Только с вложениями</string>
     <string name="message_read">Прочитано: %s</string>
-    <string name="message_read_by">Прочитано: %1$d из %2$d человек</string>
     <plurals name="message_number_item">
         <item quantity="one">%1$d сообщение</item>
         <item quantity="few">%1$d сообщения</item>
