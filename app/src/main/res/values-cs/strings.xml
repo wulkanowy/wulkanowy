@@ -297,6 +297,10 @@
     <string name="message_move_to_trash">Přesunout do koše</string>
     <string name="message_delete_forever">Odstranit natrvalo</string>
     <string name="message_delete_success">Zpráva byla úspěšně odstraněna</string>
+    <string name="message_mailbox_type_student">student</string>
+    <string name="message_mailbox_type_parent">parent</string>
+    <string name="message_mailbox_type_guardian">guardian</string>
+    <string name="message_mailbox_type_employee">employee</string>
     <string name="message_share">Sdílet</string>
     <string name="message_print">Vytisknout</string>
     <string name="message_subject">Předmět</string>
@@ -308,7 +312,6 @@
     <string name="message_chip_only_unread">Pouze nepřečtené</string>
     <string name="message_chip_only_with_attachments">Pouze s přílohami</string>
     <string name="message_read">Přečtena: %s</string>
-    <string name="message_read_by">Přečtena přes: %1$d z %2$d osob</string>
     <plurals name="message_number_item">
         <item quantity="one">%1$d zpráva</item>
         <item quantity="few">%1$d zprávy</item>
