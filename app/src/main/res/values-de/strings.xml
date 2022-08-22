@@ -77,7 +77,7 @@
     <string name="main_log_in">Anmelden</string>
     <string name="main_session_expired">Die Sitzung ist abgelaufen</string>
     <string name="main_session_relogin">Die Sitzung ist abgelaufen, bitte loggen Sie sich erneut ein</string>
-    <string name="main_support_title">Application support</string>
+    <string name="main_support_title">Anwendungsunterstützung</string>
     <string name="main_support_description">Do you like this app? Support its development by enabling non-invasive ads that you can disable at any time</string>
     <string name="main_support_positive">Enable ads</string>
     <!--Grade-->
