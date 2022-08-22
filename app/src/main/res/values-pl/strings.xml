@@ -297,6 +297,10 @@
     <string name="message_move_to_trash">Przenieś do kosza</string>
     <string name="message_delete_forever">Usuń trwale</string>
     <string name="message_delete_success">Wiadomość usunięta pomyślnie</string>
+    <string name="message_mailbox_type_student">student</string>
+    <string name="message_mailbox_type_parent">parent</string>
+    <string name="message_mailbox_type_guardian">guardian</string>
+    <string name="message_mailbox_type_employee">employee</string>
     <string name="message_share">Udostępnij</string>
     <string name="message_print">Drukuj</string>
     <string name="message_subject">Temat</string>
@@ -308,7 +312,6 @@
     <string name="message_chip_only_unread">Tylko nieprzeczytane</string>
     <string name="message_chip_only_with_attachments">Tylko z załącznikami</string>
     <string name="message_read">Przeczytana: %s</string>
-    <string name="message_read_by">Przeczytana przez: %1$d z %2$d osób</string>
     <plurals name="message_number_item">
         <item quantity="one">%1$d wiadomość</item>
         <item quantity="few">%1$d wiadomości</item>
