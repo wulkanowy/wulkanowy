@@ -297,10 +297,10 @@
     <string name="message_move_to_trash">Přesunout do koše</string>
     <string name="message_delete_forever">Odstranit natrvalo</string>
     <string name="message_delete_success">Zpráva byla úspěšně odstraněna</string>
-    <string name="message_mailbox_type_student">student</string>
-    <string name="message_mailbox_type_parent">parent</string>
-    <string name="message_mailbox_type_guardian">guardian</string>
-    <string name="message_mailbox_type_employee">employee</string>
+    <string name="message_mailbox_type_student">žák</string>
+    <string name="message_mailbox_type_parent">rodič</string>
+    <string name="message_mailbox_type_guardian">opatrovník</string>
+    <string name="message_mailbox_type_employee">pracovník</string>
     <string name="message_share">Sdílet</string>
     <string name="message_print">Vytisknout</string>
     <string name="message_subject">Předmět</string>
