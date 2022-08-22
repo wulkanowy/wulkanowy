@@ -720,8 +720,8 @@
     <string name="pref_other_fill_message_content">Відповісти з історією повідомлень</string>
     <string name="pref_other_optional_arithmetic_average">Вилічити середню аритметичну, якщо оцінка немає вартості</string>
     <string name="pref_ads_support_category_name">Підтримка</string>
-    <string name="pref_ads_agreements">Privacy Policy</string>
-    <string name="pref_ads_privacy_policy">Agreements</string>
+    <string name="pref_ads_privacy_policy">Privacy Policy</string>
+    <string name="pref_ads_agreements">Agreements</string>
     <string name="pref_ads_consent">Consent to processing of data related to ads</string>
     <string name="pref_ads_show_in_app">Show ads in app</string>
     <string name="pref_ads_support">Подивіться одну рекламу для підтримки проєкту</string>
