@@ -720,8 +720,8 @@
     <string name="pref_other_fill_message_content">Odpovědět s historií zpráv</string>
     <string name="pref_other_optional_arithmetic_average">Vypočítat aritmetický průměr, pokud žádná známka nemá váhu</string>
     <string name="pref_ads_support_category_name">Podpora</string>
-    <string name="pref_ads_privacy_policy">Privacy Policy</string>
-    <string name="pref_ads_agreements">Agreements</string>
+    <string name="pref_ads_privacy_policy">Ochrana osobních údajů</string>
+    <string name="pref_ads_agreements">Souhlasy</string>
     <string name="pref_ads_consent">Souhlas se zpracováním údajů souvisejících s reklamami</string>
     <string name="pref_ads_show_in_app">Zobrazit reklamy v aplikaci</string>
     <string name="pref_ads_support">Podívejte se na jednu reklamu pro podporu projektu</string>
