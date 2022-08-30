@@ -720,8 +720,8 @@
     <string name="pref_other_fill_message_content">Odpowiadaj z historią wiadomości</string>
     <string name="pref_other_optional_arithmetic_average">Licz średnią arytmetyczną, gdy żadna ocena nie ma wagi</string>
     <string name="pref_ads_support_category_name">Wsparcie</string>
-    <string name="pref_ads_privacy_policy">Privacy Policy</string>
-    <string name="pref_ads_agreements">Agreements</string>
+    <string name="pref_ads_privacy_policy">Polityka prywatności</string>
+    <string name="pref_ads_agreements">Zgody</string>
     <string name="pref_ads_consent">Zgoda na przetwarzanie danych związanych z reklamami</string>
     <string name="pref_ads_show_in_app">Pokazuj reklamy w aplikacji</string>
     <string name="pref_ads_support">Obejrzyj pojedynczą reklamę, aby wesprzeć projekt</string>
