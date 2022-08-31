@@ -101,7 +101,7 @@ class MessageRepository @Inject constructor(
                     id = message.id
                     unread = !markAsRead
                     sender = new.sender
-                    recipients = new.recipients.firstOrNull() ?: "Wielu adresoatów"
+                    recipients = new.recipients.singleOrNull() ?: "Wielu adresatów"
                     content = content.ifBlank { new.content }
                 })
             )
