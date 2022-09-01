@@ -105,6 +105,20 @@ class MailboxRepositoryTest {
         systemUnderTest.getMailbox(student)
     }
 
+    @Test
+    fun `get mailbox for student with uppercase name`() = runTest {
+        val student = getStudentEntity(
+            userName = "Mochoń Julia",
+            studentName = "KLAUDIA MOCHOŃ",
+        )
+        val expectedMailbox = getMailboxEntity("Klaudia Mochoń")
+        coEvery { mailboxDao.loadAll(any()) } returns listOf(
+            expectedMailbox,
+        )
+
+        assertEquals(expectedMailbox, systemUnderTest.getMailbox(student))
+    }
+
     private fun getMailboxEntity(
         studentName: String,
     ) = Mailbox(

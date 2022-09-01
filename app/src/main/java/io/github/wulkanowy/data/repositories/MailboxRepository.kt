@@ -58,7 +58,9 @@ class MailboxRepository @Inject constructor(
     }
 
     private fun String.normalizeStudentName(): String {
-        return trim()
+        return trim().split(" ").joinToString(" ") { part ->
+            part.lowercase().replaceFirstChar { it.uppercase() }
+        }
     }
 
     private fun String.getUnauthorizedVersion(): String {
