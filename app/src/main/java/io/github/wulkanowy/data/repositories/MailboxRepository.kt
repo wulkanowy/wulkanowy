@@ -53,7 +53,9 @@ class MailboxRepository @Inject constructor(
         return find {
             it.studentName.normalizeStudentName() == normalizedStudentName
         } ?: singleOrNull {
-            it.studentName.normalizeStudentName().getUnauthorizedVersion() == normalizedStudentName
+            it.studentName.getFirstAndLastPart() == normalizedStudentName.getFirstAndLastPart()
+        } ?: singleOrNull {
+            it.studentName.getUnauthorizedVersion() == normalizedStudentName
         }
     }
 
@@ -63,8 +65,17 @@ class MailboxRepository @Inject constructor(
         }
     }
 
+    private fun String.getFirstAndLastPart(): String {
+        val parts = normalizeStudentName().split(" ")
+
+        val endParts = parts.filterIndexed { i, _ ->
+            i == 0 || parts.size == i - 1
+        }
+        return endParts.joinToString(" ")
+    }
+
     private fun String.getUnauthorizedVersion(): String {
-        return split(" ")
+        return normalizeStudentName().split(" ")
             .joinToString(" ") {
                 it.first() + "*".repeat(it.length - 1)
             }
