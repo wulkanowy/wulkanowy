@@ -77,15 +77,29 @@ class MailboxRepositoryTest {
         assertEquals(expectedMailbox, selectedMailbox)
     }
 
-    @Test(expected = IllegalArgumentException::class)
-    fun `get mailbox for student with strange name`() = runTest {
+    @Test
+    fun `get mailbox for unique non-authorized student`() = runTest {
         val student = getStudentEntity(
             userName = "Stanisław Kowalski",
-            studentName = "J**** K*****",
+            studentName = "J** K*******",
         )
         val expectedMailbox = getMailboxEntity("Jan Kowalski")
         coEvery { mailboxDao.loadAll(any()) } returns listOf(
             expectedMailbox,
+        )
+
+        assertEquals(expectedMailbox, systemUnderTest.getMailbox(student))
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `get mailbox for not-unique non-authorized student`() = runTest {
+        val student = getStudentEntity(
+            userName = "Stanisław Kowalski",
+            studentName = "J** K*******",
+        )
+        coEvery { mailboxDao.loadAll(any()) } returns listOf(
+            getMailboxEntity("Jan Kowalski"),
+            getMailboxEntity("Jan Kurowski"),
         )
 
         systemUnderTest.getMailbox(student)

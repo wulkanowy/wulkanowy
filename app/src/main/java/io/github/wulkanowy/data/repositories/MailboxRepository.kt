@@ -47,7 +47,24 @@ class MailboxRepository @Inject constructor(
         } else mailbox
     }
 
-    private fun List<Mailbox>.filterByStudent(student: Student): Mailbox? = find {
-        it.studentName.trim() == student.studentName.trim()
+    private fun List<Mailbox>.filterByStudent(student: Student): Mailbox? {
+        val normalizedStudentName = student.studentName.normalizeStudentName()
+
+        return find {
+            it.studentName.normalizeStudentName() == normalizedStudentName
+        } ?: singleOrNull {
+            it.studentName.normalizeStudentName().getUnauthorizedVersion() == normalizedStudentName
+        }
+    }
+
+    private fun String.normalizeStudentName(): String {
+        return trim()
+    }
+
+    private fun String.getUnauthorizedVersion(): String {
+        return split(" ")
+            .joinToString(" ") {
+                it.first() + "*".repeat(it.length - 1)
+            }
     }
 }
