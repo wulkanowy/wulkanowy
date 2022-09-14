@@ -176,7 +176,7 @@ class GradeStatisticsRepository @Inject constructor(
 
     private fun List<String>.getSummaryAverage(): String {
         val averages = mapNotNull {
-            it.replace(",", ".").toDoubleOrNull()
+            it.replace(",", ".").toDoubleOrNull()?.takeUnless { it == 0.0 }
         }
 
         return averages.average()
