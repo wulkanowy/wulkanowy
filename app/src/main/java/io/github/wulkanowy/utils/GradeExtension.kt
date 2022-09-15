@@ -4,6 +4,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
 import io.github.wulkanowy.data.db.entities.GradeSummary
 import io.github.wulkanowy.data.enums.GradeColorTheme
+import io.github.wulkanowy.sdk.scrapper.grades.getGradeValueWithModifier
 import io.github.wulkanowy.sdk.scrapper.grades.isGradeValid
 
 fun List<Grade>.calcAverage(isOptionalArithmeticAverage: Boolean): Double {
@@ -21,19 +22,18 @@ fun List<Grade>.calcAverage(isOptionalArithmeticAverage: Boolean): Double {
 
 fun List<GradeSummary>.calcFinalAverage(plusModifier: Double, minusModifier: Double) = asSequence()
     .mapNotNull {
-        if (it.finalGrade.matches("[0-6][+-]?".toRegex())) {
-            when {
-                it.finalGrade.endsWith('+') -> {
-                    it.finalGrade.removeSuffix("+").toDouble() + plusModifier
-                }
-                it.finalGrade.endsWith('-') -> {
-                    it.finalGrade.removeSuffix("-").toDouble() - minusModifier
-                }
-                else -> {
-                    it.finalGrade.toDouble()
-                }
+        getGradeValueWithModifier(it.finalGrade)
+            .takeUnless { (grade, _) -> grade == 0 }
+            ?.run {
+                copy(
+                    second = when {
+                        second > 0 -> plusModifier
+                        second < 0 -> -minusModifier
+                        else -> 0.0
+                    }
+                )
             }
-        } else null
+            ?.let { (grade, modifier) -> grade.toDouble() + modifier }
     }
     .average()
     .let { if (it.isNaN()) 0.0 else it }
