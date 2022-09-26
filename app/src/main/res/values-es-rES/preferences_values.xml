@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="app_theme_entries" tools:ignore="InconsistentArrays">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Black (AMOLED)</item>
+        <item>Ligero</item>
+        <item>Oscuro</item>
+        <item>Negro (AMOLED)</item>
     </string-array>
     <string-array name="app_language_entries">
-        <item>System language</item>
+        <item>Lenguaje del sistema</item>
         <item>Polski</item>
         <item>English</item>
         <item>Pусский</item>
@@ -16,13 +16,13 @@
         <item>Slovenčina</item>
     </string-array>
     <string-array name="services_interval_entries">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>2 hours</item>
-        <item>6 hours</item>
-        <item>12 hours</item>
-        <item>24 hours</item>
+        <item>15 minutos</item>
+        <item>30 minutos</item>
+        <item>1 hora</item>
+        <item>2 horas</item>
+        <item>6 horas</item>
+        <item>12 horas</item>
+        <item>24 horas</item>
     </string-array>
     <string-array name="grade_modifier_entries">
         <item>0,00</item>
@@ -32,8 +32,8 @@
         <item>0,75</item>
     </string-array>
     <string-array name="grade_sorting_mode_entries">
-        <item>Alphabetically</item>
-        <item>By date</item>
+        <item>Alfabéticamente</item>
+        <item>Por fecha</item>
         <item>By average</item>
     </string-array>
     <string-array name="grade_color_scheme_entries">
