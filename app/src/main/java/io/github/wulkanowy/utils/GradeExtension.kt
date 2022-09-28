@@ -21,19 +21,15 @@ fun List<Grade>.calcAverage(isOptionalArithmeticAverage: Boolean): Double {
 }
 
 fun List<GradeSummary>.calcFinalAverage(plusModifier: Double, minusModifier: Double) = asSequence()
-    .mapNotNull {
-        getGradeValueWithModifier(it.finalGrade)
-            .takeUnless { (grade, _) -> grade == 0 }
-            ?.run {
-                copy(
-                    second = when {
-                        second > 0 -> plusModifier
-                        second < 0 -> -minusModifier
-                        else -> 0.0
-                    }
-                )
-            }
-            ?.let { (grade, modifier) -> grade.toDouble() + modifier }
+    .mapNotNull { summary ->
+        val (gradeValue, gradeModifier) = getGradeValueWithModifier(summary.finalGrade)
+        if (gradeValue == null || gradeModifier == null) return@mapNotNull null
+
+        when {
+            gradeModifier > 0 -> gradeValue + plusModifier
+            gradeModifier < 0 -> gradeValue - minusModifier
+            else -> gradeValue + 0.0
+        }
     }
     .average()
     .let { if (it.isNaN()) 0.0 else it }
