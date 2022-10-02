@@ -3,7 +3,6 @@ package io.github.wulkanowy.ui.modules.message.tab
 import io.github.wulkanowy.data.*
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.enums.MessageFolder
-import io.github.wulkanowy.data.repositories.MailboxRepository
 import io.github.wulkanowy.data.repositories.MessageRepository
 import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.ui.base.BasePresenter
@@ -26,7 +25,6 @@ class MessageTabPresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val messageRepository: MessageRepository,
-    private val mailboxRepository: MailboxRepository,
     private val analytics: AnalyticsHelper
 ) : BasePresenter<MessageTabView>(errorHandler, studentRepository) {
 
@@ -122,7 +120,7 @@ class MessageTabPresenter @Inject constructor(
 
             runCatching {
                 val student = studentRepository.getCurrentStudent(true)
-                val mailbox = mailboxRepository.getMailbox(student)
+                val mailbox = messageRepository.getMailbox(student)
                 messageRepository.deleteMessages(student, mailbox, messageList)
             }
                 .onFailure(errorHandler::dispatch)
@@ -207,7 +205,7 @@ class MessageTabPresenter @Inject constructor(
 
         flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
-            val mailbox = mailboxRepository.getMailbox(student)
+            val mailbox = messageRepository.getMailbox(student)
             messageRepository.getMessages(student, mailbox, folder, forceRefresh)
         }
             .logResourceStatus("load $folder message")

@@ -5,6 +5,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.Resource
 import io.github.wulkanowy.data.db.SharedPrefProvider
+import io.github.wulkanowy.data.db.dao.MailboxDao
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.entities.*
@@ -15,6 +16,7 @@ import io.github.wulkanowy.data.mappers.mapFromEntities
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.data.pojos.MessageDraft
+import io.github.wulkanowy.domain.messages.GetMailboxByStudentUseCase
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Folder
 import io.github.wulkanowy.utils.AutoRefreshHelper
@@ -40,11 +42,16 @@ class MessageRepository @Inject constructor(
     private val refreshHelper: AutoRefreshHelper,
     private val sharedPrefProvider: SharedPrefProvider,
     private val json: Json,
+
+
+    private val mailboxDao: MailboxDao,
+    private val getMailboxByStudentUseCase: GetMailboxByStudentUseCase,
 ) {
 
     private val saveFetchResultMutex = Mutex()
 
-    private val cacheKey = "message"
+    private val messagesCacheKey = "message"
+    private val mailboxCacheKey = "mailboxes"
 
     @Suppress("UNUSED_PARAMETER")
     fun getMessages(
@@ -58,7 +65,7 @@ class MessageRepository @Inject constructor(
         isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(
-                key = getRefreshKey(cacheKey, student, folder)
+                key = getRefreshKey(messagesCacheKey, student, folder)
             )
             it.isEmpty() || forceRefresh || isExpired
         },
@@ -75,7 +82,7 @@ class MessageRepository @Inject constructor(
                 it.isNotified = !notify
             })
 
-            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(cacheKey, student, folder))
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(messagesCacheKey, student, folder))
         }
     )
 
@@ -167,6 +174,33 @@ class MessageRepository @Inject constructor(
 
     suspend fun deleteMessage(student: Student, mailbox: Mailbox, message: Message) {
         deleteMessages(student, mailbox, listOf(message))
+    }
+
+    suspend fun refreshMailboxes(student: Student) {
+        val new = sdk.init(student).getMailboxes().mapToEntities(student)
+        val old = mailboxDao.loadAll(student.userLoginId)
+
+        mailboxDao.deleteAll(old uniqueSubtract new)
+        mailboxDao.insertAll(new uniqueSubtract old)
+
+        refreshHelper.updateLastRefreshTimestamp(getRefreshKey(mailboxCacheKey, student))
+    }
+
+    suspend fun getMailbox(student: Student): Mailbox {
+        val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(mailboxCacheKey, student))
+        val mailboxes = mailboxDao.loadAll(student.userLoginId)
+        val mailbox = getMailboxByStudentUseCase(student)
+
+        return if (isExpired || mailbox == null) {
+            refreshMailboxes(student)
+            val newMailbox = getMailboxByStudentUseCase(student)
+
+            requireNotNull(newMailbox) {
+                "Mailbox for ${student.userName} - ${student.studentName} not found! Saved mailboxes: $mailboxes"
+            }
+
+            newMailbox
+        } else mailbox
     }
 
     var draftMessage: MessageDraft?

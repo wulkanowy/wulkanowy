@@ -8,7 +8,10 @@ import io.github.wulkanowy.data.db.entities.Recipient
 import io.github.wulkanowy.data.logResourceStatus
 import io.github.wulkanowy.data.onResourceNotLoading
 import io.github.wulkanowy.data.pojos.MessageDraft
-import io.github.wulkanowy.data.repositories.*
+import io.github.wulkanowy.data.repositories.MessageRepository
+import io.github.wulkanowy.data.repositories.PreferencesRepository
+import io.github.wulkanowy.data.repositories.RecipientRepository
+import io.github.wulkanowy.data.repositories.StudentRepository
 import io.github.wulkanowy.data.resourceFlow
 import io.github.wulkanowy.ui.base.BasePresenter
 import io.github.wulkanowy.ui.base.ErrorHandler
@@ -28,7 +31,6 @@ class SendMessagePresenter @Inject constructor(
     errorHandler: ErrorHandler,
     studentRepository: StudentRepository,
     private val messageRepository: MessageRepository,
-    private val mailboxRepository: MailboxRepository,
     private val recipientRepository: RecipientRepository,
     private val preferencesRepository: PreferencesRepository,
     private val analytics: AnalyticsHelper
@@ -113,7 +115,7 @@ class SendMessagePresenter @Inject constructor(
     private fun loadData(message: Message?, reply: Boolean?) {
         resourceFlow {
             val student = studentRepository.getCurrentStudent()
-            val mailbox = mailboxRepository.getMailbox(student)
+            val mailbox = messageRepository.getMailbox(student)
 
             Timber.i("Loading recipients started")
             val recipients = createChips(
@@ -171,7 +173,7 @@ class SendMessagePresenter @Inject constructor(
     private fun sendMessage(subject: String, content: String, recipients: List<Recipient>) {
         resourceFlow {
             val student = studentRepository.getCurrentStudent()
-            val mailbox = mailboxRepository.getMailbox(student)
+            val mailbox = messageRepository.getMailbox(student)
             messageRepository.sendMessage(
                 student = student,
                 subject = subject,
