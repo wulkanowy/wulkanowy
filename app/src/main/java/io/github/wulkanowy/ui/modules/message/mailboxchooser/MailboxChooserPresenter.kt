@@ -1,0 +1,26 @@
+package io.github.wulkanowy.ui.modules.message.mailboxchooser
+
+import io.github.wulkanowy.data.db.entities.Mailbox
+import io.github.wulkanowy.data.repositories.StudentRepository
+import io.github.wulkanowy.ui.base.BasePresenter
+import io.github.wulkanowy.ui.base.ErrorHandler
+import timber.log.Timber
+import javax.inject.Inject
+
+class MailboxChooserPresenter @Inject constructor(
+    errorHandler: ErrorHandler,
+    studentRepository: StudentRepository
+) : BasePresenter<MailboxChooserView>(errorHandler, studentRepository) {
+
+    fun onAttachView(view: MailboxChooserView, mailboxes: List<Mailbox>) {
+        super.onAttachView(view)
+
+        view.initView()
+        Timber.i("Mailbox chooser view was initialized")
+        view.submitData(mailboxes)
+    }
+
+    fun onMailboxSelect(item: Mailbox) {
+        // todo
+    }
+}

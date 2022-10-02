@@ -198,6 +198,16 @@ class MessageRepository @Inject constructor(
         refreshHelper.updateLastRefreshTimestamp(getRefreshKey(mailboxCacheKey, student))
     }
 
+    suspend fun getMailboxes(student: Student): List<Mailbox> {
+        val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(mailboxCacheKey, student))
+        val mailboxes = mailboxDao.loadAll(student.userLoginId)
+
+        return if (isExpired || mailboxes.isEmpty()) {
+            refreshMailboxes(student)
+            mailboxDao.loadAll(student.userLoginId)
+        } else mailboxes
+    }
+
     suspend fun getMailbox(student: Student): Mailbox? {
         val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(mailboxCacheKey, student))
         val mailbox = getMailboxByStudentUseCase(student)

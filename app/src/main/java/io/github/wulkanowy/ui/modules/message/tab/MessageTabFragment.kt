@@ -13,12 +13,15 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.databinding.FragmentMessageTabBinding
 import io.github.wulkanowy.ui.base.BaseFragment
+import io.github.wulkanowy.ui.modules.homework.details.HomeworkDetailsDialog
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
+import io.github.wulkanowy.ui.modules.message.mailboxchooser.MailboxChooserDialog
 import io.github.wulkanowy.ui.modules.message.preview.MessagePreviewFragment
 import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.dpToPx
@@ -245,6 +248,10 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
         binding.messageTabRecycler.updatePadding(
             bottom = if (show) requireContext().dpToPx(64f).toInt() else 0
         )
+    }
+
+    override fun showMailboxChooser(mailboxes: List<Mailbox>) {
+        (activity as? MainActivity)?.showDialogFragment(MailboxChooserDialog.newInstance(mailboxes))
     }
 
     override fun hideKeyboard() {

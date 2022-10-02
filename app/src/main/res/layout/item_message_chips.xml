@@ -24,7 +24,7 @@
             style="@style/Widget.MaterialComponents.Chip.Action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/messages_chip_all_mailboxes" />
+            android:text="@string/message_chip_all_mailboxes" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_unread"

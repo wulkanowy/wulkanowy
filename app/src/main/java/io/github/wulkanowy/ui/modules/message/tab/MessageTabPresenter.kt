@@ -35,6 +35,7 @@ class MessageTabPresenter @Inject constructor(
 
     private var lastSearchQuery = ""
 
+    private var mailboxes: List<Mailbox> = emptyList()
     private var selectedMailbox: Mailbox? = null
 
     private var messages = emptyList<Message>()
@@ -204,7 +205,7 @@ class MessageTabPresenter @Inject constructor(
     }
 
     fun onMailboxFilterSelected() {
-        // todo
+        view?.showMailboxChooser(mailboxes)
     }
 
     private fun loadData(forceRefresh: Boolean) {
@@ -213,6 +214,7 @@ class MessageTabPresenter @Inject constructor(
         flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val mailbox = messageRepository.getMailbox(student)
+            mailboxes = messageRepository.getMailboxes(student)
             selectedMailbox = mailbox // todo
             messageRepository.getMessages(student, mailbox, folder, forceRefresh)
         }
