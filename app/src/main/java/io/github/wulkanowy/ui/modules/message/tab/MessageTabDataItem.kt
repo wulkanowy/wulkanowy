@@ -1,5 +1,6 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
+import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 
 sealed class MessageTabDataItem(val viewType: MessageItemViewType) {
@@ -11,6 +12,7 @@ sealed class MessageTabDataItem(val viewType: MessageItemViewType) {
     ) : MessageTabDataItem(MessageItemViewType.MESSAGE)
 
     data class FilterHeader(
+        val selectedMailbox: Mailbox?,
         val onlyUnread: Boolean?,
         val onlyWithAttachments: Boolean,
         val isEnabled: Boolean

@@ -104,6 +104,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
             onItemClickListener = presenter::onMessageItemSelected
             onLongItemClickListener = presenter::onMessageItemLongSelected
             onHeaderClickListener = ::onChipChecked
+            onMailboxClickListener = presenter::onMailboxFilterSelected
             onChangesDetectedListener = ::resetListPosition
         }
 

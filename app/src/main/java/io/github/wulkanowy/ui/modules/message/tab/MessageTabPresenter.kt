@@ -1,6 +1,7 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
 import io.github.wulkanowy.data.*
+import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.data.repositories.MessageRepository
@@ -33,6 +34,8 @@ class MessageTabPresenter @Inject constructor(
     private lateinit var lastError: Throwable
 
     private var lastSearchQuery = ""
+
+    private var selectedMailbox: Mailbox? = null
 
     private var messages = emptyList<Message>()
 
@@ -200,12 +203,17 @@ class MessageTabPresenter @Inject constructor(
         }
     }
 
+    fun onMailboxFilterSelected() {
+        // todo
+    }
+
     private fun loadData(forceRefresh: Boolean) {
         Timber.i("Loading $folder message data started")
 
         flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
             val mailbox = messageRepository.getMailbox(student)
+            selectedMailbox = mailbox // todo
             messageRepository.getMessages(student, mailbox, folder, forceRefresh)
         }
             .logResourceStatus("load $folder message")
@@ -325,7 +333,8 @@ class MessageTabPresenter @Inject constructor(
                 MessageTabDataItem.FilterHeader(
                     onlyUnread = onlyUnread.takeIf { folder != MessageFolder.SENT },
                     onlyWithAttachments = onlyWithAttachments,
-                    isEnabled = !isActionMode
+                    isEnabled = !isActionMode,
+                    selectedMailbox = selectedMailbox,
                 )
             )
 
