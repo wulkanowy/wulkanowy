@@ -115,7 +115,7 @@ class SendMessagePresenter @Inject constructor(
     private fun loadData(message: Message?, reply: Boolean?) {
         resourceFlow {
             val student = studentRepository.getCurrentStudent()
-            val mailbox = messageRepository.getMailbox(student)
+            val mailbox = messageRepository.getMailbox(student)!! // todo
 
             Timber.i("Loading recipients started")
             val recipients = createChips(
@@ -173,7 +173,7 @@ class SendMessagePresenter @Inject constructor(
     private fun sendMessage(subject: String, content: String, recipients: List<Recipient>) {
         resourceFlow {
             val student = studentRepository.getCurrentStudent()
-            val mailbox = messageRepository.getMailbox(student)
+            val mailbox = messageRepository.getMailbox(student)!! // todo: must be selected
             messageRepository.sendMessage(
                 student = student,
                 subject = subject,

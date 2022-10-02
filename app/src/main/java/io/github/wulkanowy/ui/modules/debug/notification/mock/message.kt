@@ -19,6 +19,7 @@ val debugMessageItems = listOf(
 private fun generateMessage(sender: String, subject: String) = Message(
     subject = subject,
     messageId = 123,
+    userLoginId = -1,
     date = Instant.now(),
     folderId = 0,
     unread = true,

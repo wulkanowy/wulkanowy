@@ -17,6 +17,8 @@ class RecipientWork @Inject constructor(
 
         val mailbox = messageRepository.getMailbox(student)
 
-        recipientRepository.refreshRecipients(student, mailbox, MailboxType.EMPLOYEE)
+        if (mailbox != null) {
+            recipientRepository.refreshRecipients(student, mailbox, MailboxType.EMPLOYEE)
+        }
     }
 }

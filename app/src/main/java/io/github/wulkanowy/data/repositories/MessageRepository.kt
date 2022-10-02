@@ -56,7 +56,7 @@ class MessageRepository @Inject constructor(
     @Suppress("UNUSED_PARAMETER")
     fun getMessages(
         student: Student,
-        mailbox: Mailbox,
+        mailbox: Mailbox?,
         folder: MessageFolder,
         forceRefresh: Boolean,
         notify: Boolean = false,
@@ -69,12 +69,16 @@ class MessageRepository @Inject constructor(
             )
             it.isEmpty() || forceRefresh || isExpired
         },
-        query = { messagesDb.loadAll(mailbox.globalKey, folder.id) },
+        query = {
+            if (mailbox == null) {
+                messagesDb.loadAll(student.userLoginId, folder.id)
+            } else messagesDb.loadAll(mailbox.globalKey, folder.id)
+        },
         fetch = {
             sdk.init(student).getMessages(
                 folder = Folder.valueOf(folder.name),
-                mailboxKey = mailbox.globalKey,
-            ).mapToEntities(mailbox)
+                mailboxKey = mailbox?.globalKey,
+            ).mapToEntities(student, mailbox, mailboxDao.loadAll(student.userLoginId))
         },
         saveFetchResult = { old, new ->
             messagesDb.deleteAll(old uniqueSubtract new)
@@ -82,7 +86,9 @@ class MessageRepository @Inject constructor(
                 it.isNotified = !notify
             })
 
-            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(messagesCacheKey, student, folder))
+            refreshHelper.updateLastRefreshTimestamp(
+                getRefreshKey(messagesCacheKey, student, folder)
+            )
         }
     )
 
@@ -97,14 +103,18 @@ class MessageRepository @Inject constructor(
             Timber.d("Message content in db empty: ${it.message.content.isBlank()}")
             it.message.unread || it.message.content.isBlank()
         },
-        query = { messagesDb.loadMessageWithAttachment(message.messageGlobalKey) },
+        query = {
+            messagesDb.loadMessageWithAttachment(message.messageGlobalKey)
+        },
         fetch = {
             sdk.init(student).getMessageDetails(it!!.message.messageGlobalKey, markAsRead)
         },
         saveFetchResult = { old, new ->
             checkNotNull(old) { "Fetched message no longer exist!" }
             messagesDb.updateAll(
-                listOf(old.message.apply {
+                listOf(old.message.copy(
+                    userLoginId = student.userLoginId,
+                ).apply {
                     id = message.id
                     unread = !markAsRead
                     sender = new.sender
@@ -120,8 +130,10 @@ class MessageRepository @Inject constructor(
         }
     )
 
-    fun getMessagesFromDatabase(mailbox: Mailbox): Flow<List<Message>> {
-        return messagesDb.loadAll(mailbox.globalKey, RECEIVED.id)
+    fun getMessagesFromDatabase(student: Student, mailbox: Mailbox?): Flow<List<Message>> {
+        return if (mailbox == null) {
+            messagesDb.loadAll(student.userLoginId, RECEIVED.id)
+        } else messagesDb.loadAll(mailbox.globalKey, RECEIVED.id)
     }
 
     suspend fun updateMessages(messages: List<Message>) {
@@ -143,7 +155,7 @@ class MessageRepository @Inject constructor(
         )
     }
 
-    suspend fun deleteMessages(student: Student, mailbox: Mailbox, messages: List<Message>) {
+    suspend fun deleteMessages(student: Student, mailbox: Mailbox?, messages: List<Message>) {
         val firstMessage = messages.first()
         sdk.init(student).deleteMessages(
             messages = messages.map { it.messageGlobalKey },
@@ -186,20 +198,13 @@ class MessageRepository @Inject constructor(
         refreshHelper.updateLastRefreshTimestamp(getRefreshKey(mailboxCacheKey, student))
     }
 
-    suspend fun getMailbox(student: Student): Mailbox {
+    suspend fun getMailbox(student: Student): Mailbox? {
         val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(mailboxCacheKey, student))
-        val mailboxes = mailboxDao.loadAll(student.userLoginId)
         val mailbox = getMailboxByStudentUseCase(student)
 
         return if (isExpired || mailbox == null) {
             refreshMailboxes(student)
-            val newMailbox = getMailboxByStudentUseCase(student)
-
-            requireNotNull(newMailbox) {
-                "Mailbox for ${student.userName} - ${student.studentName} not found! Saved mailboxes: $mailboxes"
-            }
-
-            newMailbox
+            getMailboxByStudentUseCase(student)
         } else mailbox
     }
 

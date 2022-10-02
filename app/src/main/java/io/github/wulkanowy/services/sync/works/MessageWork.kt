@@ -24,7 +24,7 @@ class MessageWork @Inject constructor(
             notify = notify
         ).waitForResult()
 
-        messageRepository.getMessagesFromDatabase(mailbox).first()
+        messageRepository.getMessagesFromDatabase(student, mailbox).first()
             .filter { !it.isNotified && it.unread }.let {
                 if (it.isNotEmpty()) newMessageNotification.notify(it, student)
                 messageRepository.updateMessages(it.onEach { message -> message.isNotified = true })

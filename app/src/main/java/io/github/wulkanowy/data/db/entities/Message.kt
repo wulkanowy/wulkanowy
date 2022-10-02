@@ -9,6 +9,9 @@ import java.time.Instant
 @Entity(tableName = "Messages")
 data class Message(
 
+    @ColumnInfo(name = "user_login_id", defaultValue = "-1")
+    val userLoginId: Int,
+
     @ColumnInfo(name = "message_global_key")
     val messageGlobalKey: String,
 
