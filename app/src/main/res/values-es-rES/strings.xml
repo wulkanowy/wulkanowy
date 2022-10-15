@@ -131,32 +131,32 @@
         <item quantity="other">New final grades</item>
     </plurals>
     <plurals name="grade_notify_new_items">
-        <item quantity="one">You received %1$d grade</item>
-        <item quantity="other">You received %1$d grades</item>
+        <item quantity="one">Has recibido %1$d grado</item>
+        <item quantity="other">Has recibido %1$d calificaciones</item>
     </plurals>
     <plurals name="grade_notify_new_items_predicted">
-        <item quantity="one">You received %1$d predicted grade</item>
-        <item quantity="other">You received %1$d predicted grades</item>
+        <item quantity="one">Has recibido %1$d grado previsto</item>
+        <item quantity="other">Has recibido %1$d notas predecidas</item>
     </plurals>
     <plurals name="grade_notify_new_items_final">
-        <item quantity="one">You received %1$d final grade</item>
+        <item quantity="one">Has recibido %1$d nota final</item>
         <item quantity="other">You received %1$d final grades</item>
     </plurals>
     <!--Timetable-->
-    <string name="timetable_lesson">Lesson</string>
-    <string name="timetable_room">Room</string>
-    <string name="timetable_group">Group</string>
-    <string name="timetable_time">Hours</string>
-    <string name="timetable_changes">Changes</string>
-    <string name="timetable_no_items">No lessons this day</string>
-    <string name="timetable_minutes">%s min</string>
-    <string name="timetable_seconds">%s sec</string>
-    <string name="timetable_time_left">%1$s left</string>
-    <string name="timetable_time_until">in %1$s</string>
-    <string name="timetable_finished">Finished</string>
-    <string name="timetable_now">Now: %s</string>
-    <string name="timetable_next">Next: %s</string>
-    <string name="timetable_later">Later: %s</string>
+    <string name="timetable_lesson">Lecciones</string>
+    <string name="timetable_room">Sala</string>
+    <string name="timetable_group">Grupo</string>
+    <string name="timetable_time">Horas</string>
+    <string name="timetable_changes">Cambios</string>
+    <string name="timetable_no_items">No hay lecciones hoy</string>
+    <string name="timetable_minutes">%s minutos</string>
+    <string name="timetable_seconds">%s seg</string>
+    <string name="timetable_time_left">%1$s restante</string>
+    <string name="timetable_time_until">en %1$s</string>
+    <string name="timetable_finished">Finalizado</string>
+    <string name="timetable_now">Ahora: %s</string>
+    <string name="timetable_next">Siguiente: %s</string>
+    <string name="timetable_later">Más tarde: %s</string>
     <string name="timetable_notify_lesson">%1$s lesson %2$d - %3$s</string>
     <string name="timetable_notify_change_room">Change of room from %1$s to %2$s</string>
     <string name="timetable_notify_change_teacher">Change of teacher from %1$s to %2$s</string>
