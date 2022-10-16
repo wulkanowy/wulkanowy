@@ -9,6 +9,7 @@ import android.view.View.*
 import android.widget.CompoundButton
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,12 +41,8 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
         const val MESSAGE_TAB_FOLDER_ID = "message_tab_folder_id"
 
-        fun newInstance(folder: MessageFolder): MessageTabFragment {
-            return MessageTabFragment().apply {
-                arguments = Bundle().apply {
-                    putString(MESSAGE_TAB_FOLDER_ID, folder.name)
-                }
-            }
+        fun newInstance(folder: MessageFolder) = MessageTabFragment().apply {
+            arguments = bundleOf(MESSAGE_TAB_FOLDER_ID to folder.name)
         }
     }
 

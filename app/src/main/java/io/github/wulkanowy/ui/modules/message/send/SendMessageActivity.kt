@@ -24,6 +24,7 @@ import io.github.wulkanowy.databinding.ActivitySendMessageBinding
 import io.github.wulkanowy.ui.base.BaseActivity
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.hideSoftInput
+import io.github.wulkanowy.utils.nullableSerializable
 import io.github.wulkanowy.utils.showSoftInput
 import javax.inject.Inject
 
@@ -103,9 +104,9 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
 
         presenter.onAttachView(
             view = this,
-            reason = intent.getSerializableExtra(EXTRA_REASON) as? String,
-            message = intent.getSerializableExtra(EXTRA_MESSAGE) as? Message,
-            reply = intent.getSerializableExtra(EXTRA_REPLY) as? Boolean
+            reason = intent.nullableSerializable(EXTRA_REASON),
+            message = intent.nullableSerializable(EXTRA_MESSAGE),
+            reply = intent.nullableSerializable(EXTRA_REPLY)
         )
     }
 

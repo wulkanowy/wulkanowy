@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AlertDialog
@@ -34,9 +33,9 @@ class ErrorDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val error = requireArguments().getSerializable(ARGUMENT_KEY) as Throwable
+        val error = requireArguments().serializable<Throwable>(ARGUMENT_KEY)
 
-        val binding = DialogErrorBinding.inflate(LayoutInflater.from(context))
+        val binding = DialogErrorBinding.inflate(layoutInflater)
         binding.bindErrorDetails(error)
 
         return getAlertDialog(binding, error).apply {

@@ -16,6 +16,7 @@ import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.utils.AppInfo
 import io.github.wulkanowy.utils.openEmailClient
 import io.github.wulkanowy.utils.openInternetBrowser
+import io.github.wulkanowy.utils.serializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -47,7 +48,7 @@ class LoginStudentSelectFragment :
         binding = FragmentLoginStudentSelectBinding.bind(view)
         presenter.onAttachView(
             view = this,
-            students = requireArguments().getSerializable(ARG_STUDENTS) as List<StudentWithSemesters>,
+            students = requireArguments().serializable(ARG_STUDENTS),
         )
     }
 
