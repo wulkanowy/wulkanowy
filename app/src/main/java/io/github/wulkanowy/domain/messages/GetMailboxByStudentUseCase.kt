@@ -10,7 +10,7 @@ class GetMailboxByStudentUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(student: Student): Mailbox? {
-        return mailboxDao.loadAll(student.userLoginId)
+        return mailboxDao.loadAll(student.email)
             .filterByStudent(student)
     }
 

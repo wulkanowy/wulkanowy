@@ -42,8 +42,6 @@ class MessageRepository @Inject constructor(
     private val refreshHelper: AutoRefreshHelper,
     private val sharedPrefProvider: SharedPrefProvider,
     private val json: Json,
-
-
     private val mailboxDao: MailboxDao,
     private val getMailboxByStudentUseCase: GetMailboxByStudentUseCase,
 ) {
@@ -53,7 +51,6 @@ class MessageRepository @Inject constructor(
     private val messagesCacheKey = "message"
     private val mailboxCacheKey = "mailboxes"
 
-    @Suppress("UNUSED_PARAMETER")
     fun getMessages(
         student: Student,
         mailbox: Mailbox?,
@@ -71,14 +68,14 @@ class MessageRepository @Inject constructor(
         },
         query = {
             if (mailbox == null) {
-                messagesDb.loadAll(student.userLoginId, folder.id)
+                messagesDb.loadAll(folder.id, student.email)
             } else messagesDb.loadAll(mailbox.globalKey, folder.id)
         },
         fetch = {
             sdk.init(student).getMessages(
                 folder = Folder.valueOf(folder.name),
                 mailboxKey = mailbox?.globalKey,
-            ).mapToEntities(student, mailbox, mailboxDao.loadAll(student.userLoginId))
+            ).mapToEntities(student, mailbox, mailboxDao.loadAll(student.email))
         },
         saveFetchResult = { old, new ->
             messagesDb.deleteAll(old uniqueSubtract new)
@@ -112,9 +109,7 @@ class MessageRepository @Inject constructor(
         saveFetchResult = { old, new ->
             checkNotNull(old) { "Fetched message no longer exist!" }
             messagesDb.updateAll(
-                listOf(old.message.copy(
-                    userLoginId = student.userLoginId,
-                ).apply {
+                listOf(old.message.apply {
                     id = message.id
                     unread = !markAsRead
                     sender = new.sender
@@ -132,7 +127,7 @@ class MessageRepository @Inject constructor(
 
     fun getMessagesFromDatabase(student: Student, mailbox: Mailbox?): Flow<List<Message>> {
         return if (mailbox == null) {
-            messagesDb.loadAll(student.userLoginId, RECEIVED.id)
+            messagesDb.loadAll(RECEIVED.id, student.email)
         } else messagesDb.loadAll(mailbox.globalKey, RECEIVED.id)
     }
 
@@ -190,7 +185,7 @@ class MessageRepository @Inject constructor(
 
     suspend fun refreshMailboxes(student: Student) {
         val new = sdk.init(student).getMailboxes().mapToEntities(student)
-        val old = mailboxDao.loadAll(student.userLoginId)
+        val old = mailboxDao.loadAll(student.email)
 
         mailboxDao.deleteAll(old uniqueSubtract new)
         mailboxDao.insertAll(new uniqueSubtract old)
@@ -200,11 +195,11 @@ class MessageRepository @Inject constructor(
 
     suspend fun getMailboxes(student: Student): List<Mailbox> {
         val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(mailboxCacheKey, student))
-        val mailboxes = mailboxDao.loadAll(student.userLoginId)
+        val mailboxes = mailboxDao.loadAll(student.email)
 
         return if (isExpired || mailboxes.isEmpty()) {
             refreshMailboxes(student)
-            mailboxDao.loadAll(student.userLoginId)
+            mailboxDao.loadAll(student.email)
         } else mailboxes
     }
 

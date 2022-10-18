@@ -13,7 +13,7 @@ data class Mailbox(
     val globalKey: String,
     val fullName: String,
     val userName: String,
-    val userLoginId: Int,
+    val email: String,
     val studentName: String,
     val schoolNameShort: String,
     val type: MailboxType,

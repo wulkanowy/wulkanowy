@@ -9,6 +9,6 @@ import javax.inject.Singleton
 @Dao
 interface MailboxDao : BaseDao<Mailbox> {
 
-    @Query("SELECT * FROM Mailboxes WHERE userLoginId = :userLoginId ")
-    suspend fun loadAll(userLoginId: Int): List<Mailbox>
+    @Query("SELECT * FROM Mailboxes WHERE email = :email")
+    suspend fun loadAll(email: String): List<Mailbox>
 }

@@ -17,6 +17,6 @@ interface MessagesDao : BaseDao<Message> {
     @Query("SELECT * FROM Messages WHERE mailbox_key = :mailboxKey AND folder_id = :folder ORDER BY date DESC")
     fun loadAll(mailboxKey: String, folder: Int): Flow<List<Message>>
 
-    @Query("SELECT * FROM Messages WHERE user_login_id = :userLoginId AND folder_id = :folder ORDER BY date DESC")
-    fun loadAll(userLoginId: Int, folder: Int): Flow<List<Message>>
+    @Query("SELECT * FROM Messages WHERE email = :email AND folder_id = :folder ORDER BY date DESC")
+    fun loadAll(folder: Int, email: String): Flow<List<Message>>
 }

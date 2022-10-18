@@ -213,10 +213,13 @@ class MessageTabPresenter @Inject constructor(
 
         flatResourceFlow {
             val student = studentRepository.getCurrentStudent()
-            val mailbox = messageRepository.getMailbox(student)
-            mailboxes = messageRepository.getMailboxes(student)
-            selectedMailbox = mailbox // todo
-            messageRepository.getMessages(student, mailbox, folder, forceRefresh)
+
+            if (selectedMailbox == null && mailboxes.isEmpty()) {
+                selectedMailbox = messageRepository.getMailbox(student)
+                mailboxes = messageRepository.getMailboxes(student)
+            }
+
+            messageRepository.getMessages(student, selectedMailbox, folder, forceRefresh)
         }
             .logResourceStatus("load $folder message")
             .onResourceData {

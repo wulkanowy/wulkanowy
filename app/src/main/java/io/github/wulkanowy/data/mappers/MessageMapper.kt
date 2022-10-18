@@ -12,7 +12,7 @@ fun List<SdkMessage>.mapToEntities(student: Student, mailbox: Mailbox?, allMailb
         mailboxKey = mailbox?.globalKey ?: allMailboxes.find { box ->
             box.fullName == it.mailbox
         }?.globalKey!!,
-        userLoginId = student.userLoginId,
+        email = student.email,
         messageId = it.id,
         correspondents = it.correspondents,
         subject = it.subject.trim(),
