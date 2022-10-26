@@ -23,7 +23,6 @@ class CrashLogExceptionTree : FormatterPriorityTree(Log.ERROR, ExceptionFilter) 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         if (skipLog(priority, tag, message, t)) return
 
-        connectCrash.setCustomKey("priority", priority)
         if (t != null) {
             connectCrash.recordException(t)
         } else {
