@@ -341,7 +341,7 @@ class PreferencesRepository @Inject constructor(
         sharedPref.getBoolean(id, context.resources.getBoolean(default))
 
     private companion object {
-        private const val PREF_KEY_INSTALLATION_ID = "instalation_id"
+        private const val PREF_KEY_INSTALLATION_ID = "installation_id"
         private const val PREF_KEY_DASHBOARD_ITEMS_POSITION = "dashboard_items_position"
         private const val PREF_KEY_IN_APP_REVIEW_COUNT = "in_app_review_count"
         private const val PREF_KEY_IN_APP_REVIEW_DATE = "in_app_review_date"
