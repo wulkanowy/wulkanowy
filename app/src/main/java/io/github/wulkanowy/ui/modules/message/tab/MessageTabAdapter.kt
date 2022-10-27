@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.ItemMessageBinding
 import io.github.wulkanowy.databinding.ItemMessageChipsBinding
-import io.github.wulkanowy.utils.toFormattedString
+import org.ocpsoft.prettytime.PrettyTime
 import javax.inject.Inject
 
 class MessageTabAdapter @Inject constructor() :
@@ -25,6 +25,8 @@ class MessageTabAdapter @Inject constructor() :
     var onChangesDetectedListener = {}
 
     private var items = mutableListOf<MessageTabDataItem>()
+
+    private val prettyTime = PrettyTime()
 
     fun submitData(data: List<MessageTabDataItem>) {
         val originalMessagesSize = items.count { it.viewType == MessageItemViewType.MESSAGE }
@@ -91,12 +93,12 @@ class MessageTabAdapter @Inject constructor() :
                 text = message.correspondents
                 setTypeface(null, style)
             }
-            messageItemSubject.run {
+            with(messageItemSubject) {
                 text = message.subject.ifBlank { context.getString(R.string.message_no_subject) }
                 setTypeface(null, style)
             }
             with(messageItemDate) {
-                text = message.date.toFormattedString()
+                text = prettyTime.format(message.date)
                 setTypeface(null, style)
             }
             messageItemAttachmentIcon.isVisible = message.hasAttachments
