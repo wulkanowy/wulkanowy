@@ -13,7 +13,7 @@ import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.ItemMessageBinding
 import io.github.wulkanowy.databinding.ItemMessageChipsBinding
 import io.github.wulkanowy.utils.getThemeAttrColor
-import org.ocpsoft.prettytime.PrettyTime
+import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
 
 class MessageTabAdapter @Inject constructor() :
@@ -28,8 +28,6 @@ class MessageTabAdapter @Inject constructor() :
     var onChangesDetectedListener = {}
 
     private var items = mutableListOf<MessageTabDataItem>()
-
-    private val prettyTime = PrettyTime()
 
     fun submitData(data: List<MessageTabDataItem>) {
         val originalMessagesSize = items.count { it.viewType == MessageItemViewType.MESSAGE }
@@ -110,7 +108,7 @@ class MessageTabAdapter @Inject constructor() :
                 typeface = currentFont
             }
             with(messageItemDate) {
-                text = prettyTime.format(message.date)
+                text = message.date.toFormattedString()
                 setTextColor(currentTextColor)
                 typeface = currentFont
             }
