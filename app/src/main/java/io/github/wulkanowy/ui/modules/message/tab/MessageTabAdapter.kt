@@ -95,11 +95,12 @@ class MessageTabAdapter @Inject constructor() :
                 text = message.subject.ifBlank { context.getString(R.string.message_no_subject) }
                 setTypeface(null, style)
             }
-            messageItemDate.run {
+            with(messageItemDate) {
                 text = message.date.toFormattedString()
                 setTypeface(null, style)
             }
             messageItemAttachmentIcon.isVisible = message.hasAttachments
+            messageItemUnreadIndicator.isVisible = message.unread
 
             root.setOnClickListener {
                 holder.bindingAdapterPosition.let {
@@ -111,7 +112,7 @@ class MessageTabAdapter @Inject constructor() :
 
             root.setOnLongClickListener {
                 onLongItemClickListener(item)
-                return@setOnLongClickListener true
+                true
             }
 
             with(messageItemCheckbox) {
