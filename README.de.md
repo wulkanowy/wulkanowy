@@ -2,6 +2,10 @@
 
 [English version of README](README.en.md)
 
+[Česká verze README](README.cs.md)
+
+[Slovenská verzia README](README.sk.md)
+
 # Wulkanowy
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wulkanowy/wulkanowy/Tests/develop?style=flat-square)](https://github.com/wulkanowy/wulkanowy/actions)
@@ -9,6 +13,7 @@
 [![Discord](https://img.shields.io/discord/390889354199040011.svg?style=flat-square)](https://discord.gg/vccAQBr)
 [![F-Droid](https://img.shields.io/f-droid/v/io.github.wulkanowy.svg?style=flat-square)](https://f-droid.org/packages/io.github.wulkanowy/)
 [![Last release](https://img.shields.io/github/release/wulkanowy/wulkanowy.svg?logo=github&style=flat-square)](https://github.com/wulkanowy/wulkanowy/releases)
+[![Crowdin](https://badges.crowdin.net/wulkanowy2/localized.svg)](https://translate.wulkanowy.net.pl)
 
 Inoffizieller Android VULCAN UONET+ Registrierungsclient für Schüler und ihre Eltern
 

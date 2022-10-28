@@ -1,9 +1,7 @@
-Wersja 1.7.1
+Wersja 1.7.5
 
-- naprawiliśmy logowanie do aplikacji
-- dodaliśmy wsparcie nowego modułu Wiadomości Plus
-- dodaliśmy nową możliwość wsparcia naszego projektu przez opcjonalne reklamy
-- dodaliśmy sortowanie po średniej
-- naprawiliśmy też kilka usterek wpływających na komfort używania aplikacji
+- naprawiliśmy kilka błędów w obsłudze nowego modułu wiadomości
+- naprawiliśmy wyświetlanie napisu "Brak ocen", jesli uczeń nie zdobył w danym semestrze jeszcze żadnych ocen
+- naprawiliśmy logowanie do aplikacji rodzicom będącym jednocześnie nauczycielami
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases
