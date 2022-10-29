@@ -1,10 +1,4 @@
-[English version of README](README.en.md)
-
-[Deutsche Version von README](README.de.md)
-
-[Polska wersja README](README.md)
-
-[Slovenská verzia README](README.sk.md)
+Česká verze / [Deutsche Version](README.de.md) / [English version](README.en.md) / [Polska wersja](README.md) / [Slovenská verzia](README.sk.md)
 
 # Wulkanowy
 
