@@ -52,7 +52,7 @@ Aktuální verzi si můžete stáhnout z Google Play, F-Droid nebo Huawei AppGal
 
 Můžete si také stáhnout [vývojovou verzi](https://wulkanowy.github.io/#download), která zahrnuje nové funkce připravované pro příští vydání
 
-## Postaveno s
+## Postaveno s pomocí
 
 
 * [Wulkanowy SDK](https://github.com/wulkanowy/sdk)
