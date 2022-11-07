@@ -190,14 +190,14 @@ dependencies {
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.8'
 
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
 
     implementation "androidx.core:core-ktx:1.9.0"
     implementation 'androidx.core:core-splashscreen:1.0.0'
     implementation "androidx.activity:activity-ktx:1.6.0"
     implementation "androidx.appcompat:appcompat:1.5.1"
-    implementation "androidx.fragment:fragment-ktx:1.5.3"
+    implementation "androidx.fragment:fragment-ktx:1.5.4"
     implementation "androidx.annotation:annotation:1.5.0"
 
     implementation "androidx.preference:preference-ktx:1.2.0"
@@ -206,10 +206,10 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.2.0"
-    implementation "com.google.android.material:material:1.6.1"
+    implementation "com.google.android.material:material:1.7.0"
     implementation "com.github.wulkanowy:material-chips-input:2.3.1"
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
-    implementation 'com.github.lopspower:CircularImageView:4.2.0'
+    implementation 'com.github.lopspower:CircularImageView:4.3.0'
 
     implementation "androidx.work:work-runtime-ktx:$work_manager"
     playImplementation "androidx.work:work-gcm:$work_manager"
@@ -241,7 +241,7 @@ dependencies {
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
     implementation 'com.fredporciuncula:flow-preferences:1.8.0'
 
-    playImplementation platform('com.google.firebase:firebase-bom:30.5.0')
+    playImplementation platform('com.google.firebase:firebase-bom:31.0.2')
     playImplementation 'com.google.firebase:firebase-analytics-ktx'
     playImplementation 'com.google.firebase:firebase-messaging:'
     playImplementation 'com.google.firebase:firebase-crashlytics:'
@@ -250,7 +250,7 @@ dependencies {
     playImplementation 'com.google.android.gms:play-services-ads:21.3.0'
 
     hmsImplementation 'com.huawei.hms:hianalytics:6.8.0.300'
-    hmsImplementation 'com.huawei.agconnect:agconnect-crash:1.7.2.300'
+    hmsImplementation 'com.huawei.agconnect:agconnect-crash:1.7.3.300'
 
     releaseImplementation "com.github.ChuckerTeam.Chucker:library-no-op:$chucker"
 

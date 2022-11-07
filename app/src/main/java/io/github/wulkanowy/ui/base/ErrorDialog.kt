@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.repositories.PreferencesRepository
 import io.github.wulkanowy.databinding.DialogErrorBinding
 import io.github.wulkanowy.utils.*
 import javax.inject.Inject
@@ -23,6 +24,9 @@ class ErrorDialog : DialogFragment() {
 
     @Inject
     lateinit var appInfo: AppInfo
+
+    @Inject
+    lateinit var preferencesRepository: PreferencesRepository
 
     companion object {
         private const val ARGUMENT_KEY = "error"
@@ -98,7 +102,8 @@ class ErrorDialog : DialogFragment() {
                 R.string.about_feedback_template,
                 "${appInfo.systemManufacturer} ${appInfo.systemModel}",
                 appInfo.systemVersion.toString(),
-                "${appInfo.versionName}-${appInfo.buildFlavor}"
+                "${appInfo.versionName}-${appInfo.buildFlavor}",
+                preferencesRepository.installationId,
             ) + "\n" + content,
             onActivityNotFound = {
                 requireContext().openInternetBrowser(
