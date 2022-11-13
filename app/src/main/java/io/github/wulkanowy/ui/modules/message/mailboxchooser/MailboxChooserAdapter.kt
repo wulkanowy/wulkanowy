@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Mailbox
+import io.github.wulkanowy.data.db.entities.MailboxType
 import io.github.wulkanowy.databinding.ItemMailboxChooserBinding
 import javax.inject.Inject
 
@@ -37,11 +39,23 @@ class MailboxChooserAdapter @Inject constructor(
                     }
                     append(item.userName)
                 }
-                mailboxItemSchool.text = item.schoolNameShort
+                mailboxItemSchool.text = buildString {
+                    append(item.schoolNameShort)
+                    append(" - ")
+                    append(getMailboxType(item.type))
+                }
 
                 root.setOnClickListener { onClickListener(item) }
             }
         }
+
+        private fun getMailboxType(type: MailboxType): String = when (type) {
+            MailboxType.STUDENT -> R.string.message_mailbox_type_student
+            MailboxType.PARENT -> R.string.message_mailbox_type_parent
+            MailboxType.GUARDIAN -> R.string.message_mailbox_type_guardian
+            MailboxType.EMPLOYEE -> R.string.message_mailbox_type_employee
+            MailboxType.UNKNOWN -> null
+        }.let { it?.let { it1 -> binding.root.resources.getString(it1) }.orEmpty() }
     }
 
     companion object {

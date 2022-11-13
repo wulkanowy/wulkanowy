@@ -6,5 +6,6 @@ import io.github.wulkanowy.ui.base.BaseView
 interface MailboxChooserView : BaseView {
 
     fun initView()
+
     fun submitData(items: List<Mailbox>)
 }

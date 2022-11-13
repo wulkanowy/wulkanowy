@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.os.bundleOf
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.databinding.DialogMailboxChooserBinding
@@ -25,8 +25,7 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
         private const val ARGUMENT_KEY = "selected_mailbox"
 
         fun newInstance(mailboxes: List<Mailbox>) = MailboxChooserDialog().apply {
-            arguments =
-                Bundle().apply { putParcelableArray(ARGUMENT_KEY, mailboxes.toTypedArray()) }
+            arguments = bundleOf(ARGUMENT_KEY to mailboxes.toTypedArray())
         }
     }
 
@@ -45,16 +44,14 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         presenter.onAttachView(
             view = this,
-            mailboxes = (requireArguments().getParcelableArrayList<Mailbox>(ARGUMENT_KEY)).orEmpty(),
+            mailboxes = requireArguments().getParcelableArray(ARGUMENT_KEY).orEmpty()
+                .toList() as List<Mailbox>,
         )
     }
 
     override fun initView() {
-        with(binding.accountQuickDialogRecycler) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = mailboxAdapter.apply {
-                onClickListener = presenter::onMailboxSelect
-            }
+        binding.accountQuickDialogRecycler.adapter = mailboxAdapter.apply {
+            onClickListener = presenter::onMailboxSelect
         }
     }
 
