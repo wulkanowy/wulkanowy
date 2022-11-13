@@ -10,6 +10,7 @@ import android.widget.CompoundButton
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.updatePadding
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
@@ -18,7 +19,6 @@ import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.enums.MessageFolder
 import io.github.wulkanowy.databinding.FragmentMessageTabBinding
 import io.github.wulkanowy.ui.base.BaseFragment
-import io.github.wulkanowy.ui.modules.homework.details.HomeworkDetailsDialog
 import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.MessageFragment
 import io.github.wulkanowy.ui.modules.message.mailboxchooser.MailboxChooserDialog
@@ -126,6 +126,12 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
             )
             messageTabErrorRetry.setOnClickListener { presenter.onRetry() }
             messageTabErrorDetails.setOnClickListener { presenter.onDetailsClick() }
+        }
+
+        setFragmentResultListener(requireArguments().getString(MESSAGE_TAB_FOLDER_ID)!!) { _, bundle ->
+            presenter.onMailboxSelected(
+                mailbox = bundle.getSerializable(MailboxChooserDialog.ARGUMENT_KEY) as Mailbox,
+            )
         }
     }
 
@@ -251,7 +257,12 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
     }
 
     override fun showMailboxChooser(mailboxes: List<Mailbox>) {
-        (activity as? MainActivity)?.showDialogFragment(MailboxChooserDialog.newInstance(mailboxes))
+        (activity as? MainActivity)?.showDialogFragment(
+            MailboxChooserDialog.newInstance(
+                mailboxes = mailboxes,
+                folder = requireArguments().getString(MESSAGE_TAB_FOLDER_ID)!!,
+            )
+        )
     }
 
     override fun hideKeyboard() {

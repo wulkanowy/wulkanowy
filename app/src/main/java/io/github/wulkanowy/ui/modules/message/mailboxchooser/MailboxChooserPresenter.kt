@@ -21,6 +21,6 @@ class MailboxChooserPresenter @Inject constructor(
     }
 
     fun onMailboxSelect(item: Mailbox) {
-        // todo
+        view?.onMailboxSelected(item)
     }
 }

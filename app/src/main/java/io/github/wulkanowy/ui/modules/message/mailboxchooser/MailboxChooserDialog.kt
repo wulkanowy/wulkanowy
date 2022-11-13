@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.databinding.DialogMailboxChooserBinding
@@ -22,10 +23,14 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
 
     companion object {
 
-        private const val ARGUMENT_KEY = "selected_mailbox"
+        const val LISTENER_KEY = "mailbox_selected"
+        const val ARGUMENT_KEY = "selected_mailbox"
 
-        fun newInstance(mailboxes: List<Mailbox>) = MailboxChooserDialog().apply {
-            arguments = bundleOf(ARGUMENT_KEY to mailboxes.toTypedArray())
+        fun newInstance(mailboxes: List<Mailbox>, folder: String) = MailboxChooserDialog().apply {
+            arguments = bundleOf(
+                ARGUMENT_KEY to mailboxes.toTypedArray(),
+                LISTENER_KEY to folder,
+            )
         }
     }
 
@@ -57,5 +62,13 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
 
     override fun submitData(items: List<Mailbox>) {
         mailboxAdapter.submitList(items)
+    }
+
+    override fun onMailboxSelected(item: Mailbox) {
+        setFragmentResult(
+            requestKey = requireArguments().getString(LISTENER_KEY).orEmpty(),
+            result = bundleOf(ARGUMENT_KEY to item),
+        )
+        dismiss()
     }
 }

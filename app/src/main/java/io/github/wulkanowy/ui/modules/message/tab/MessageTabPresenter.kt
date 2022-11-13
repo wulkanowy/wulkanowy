@@ -208,6 +208,11 @@ class MessageTabPresenter @Inject constructor(
         view?.showMailboxChooser(mailboxes)
     }
 
+    fun onMailboxSelected(mailbox: Mailbox) {
+        selectedMailbox = mailbox
+        loadData(false)
+    }
+
     private fun loadData(forceRefresh: Boolean) {
         Timber.i("Loading $folder message data started")
 

@@ -8,4 +8,6 @@ interface MailboxChooserView : BaseView {
     fun initView()
 
     fun submitData(items: List<Mailbox>)
+
+    fun onMailboxSelected(item: Mailbox)
 }
