@@ -9,7 +9,7 @@ import java.time.Instant
 @Entity(tableName = "Messages")
 data class Message(
 
-    @ColumnInfo(name = "email", defaultValue = "")
+    @ColumnInfo(name = "email")
     val email: String,
 
     @ColumnInfo(name = "message_global_key")
