@@ -22,7 +22,6 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
     lateinit var mailboxAdapter: MailboxChooserAdapter
 
     companion object {
-
         const val LISTENER_KEY = "mailbox_selected"
         const val ARGUMENT_KEY = "selected_mailbox"
 

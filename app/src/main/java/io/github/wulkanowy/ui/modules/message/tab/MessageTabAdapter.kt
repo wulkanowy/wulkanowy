@@ -71,16 +71,8 @@ class MessageTabAdapter @Inject constructor() :
         val item = items[position] as MessageTabDataItem.FilterHeader
 
         with(holder.binding) {
-            chipMailbox.text = item.selectedMailbox?.let {
-                buildString {
-                    if (it.studentName.isNotBlank() && it.studentName != it.userName) {
-                        append(it.studentName)
-                        append(" - ")
-                    }
-                    append(it.userName)
-                }
-            }
-                ?: root.context.getString(R.string.message_chip_all_mailboxes)
+            chipMailbox.text =
+                item.selectedMailbox ?: root.context.getString(R.string.message_chip_all_mailboxes)
             chipMailbox.setOnClickListener { onMailboxClickListener() }
 
             if (item.onlyUnread == null) {

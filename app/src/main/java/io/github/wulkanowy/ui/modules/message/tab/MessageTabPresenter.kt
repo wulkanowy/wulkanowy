@@ -344,7 +344,15 @@ class MessageTabPresenter @Inject constructor(
                     onlyUnread = onlyUnread.takeIf { folder != MessageFolder.SENT },
                     onlyWithAttachments = onlyWithAttachments,
                     isEnabled = !isActionMode,
-                    selectedMailbox = selectedMailbox,
+                    selectedMailbox = selectedMailbox?.let {
+                        buildString {
+                            if (it.studentName.isNotBlank() && it.studentName != it.userName) {
+                                append(it.studentName)
+                                append(" - ")
+                            }
+                            append(it.userName)
+                        }
+                    },
                 )
             )
 
