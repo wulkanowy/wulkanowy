@@ -11,9 +11,13 @@ data class Mailbox(
 
     @PrimaryKey
     val globalKey: String,
+
+    val email: String,
+    val symbol: String,
+    val schoolId: String,
+
     val fullName: String,
     val userName: String,
-    val email: String,
     val studentName: String,
     val schoolNameShort: String,
     val type: MailboxType,

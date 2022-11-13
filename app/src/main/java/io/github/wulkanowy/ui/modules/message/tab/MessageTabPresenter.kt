@@ -124,8 +124,7 @@ class MessageTabPresenter @Inject constructor(
 
             runCatching {
                 val student = studentRepository.getCurrentStudent(true)
-                val mailbox = messageRepository.getMailbox(student)
-                messageRepository.deleteMessages(student, mailbox, messageList)
+                messageRepository.deleteMessages(student, selectedMailbox, messageList)
             }
                 .onFailure(errorHandler::dispatch)
                 .onSuccess { view?.showMessagesDeleted() }
@@ -220,8 +219,9 @@ class MessageTabPresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
 
             if (selectedMailbox == null && mailboxes.isEmpty()) {
-                selectedMailbox = messageRepository.getMailbox(student)
-                mailboxes = messageRepository.getMailboxes(student)
+                selectedMailbox = messageRepository.getMailboxByStudent(student)
+                mailboxes = messageRepository.getMailboxes(student, forceRefresh).toFirstResult()
+                    .dataOrNull.orEmpty()
             }
 
             messageRepository.getMessages(student, selectedMailbox, folder, forceRefresh)

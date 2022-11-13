@@ -15,7 +15,7 @@ class MessageWork @Inject constructor(
 ) : Work {
 
     override suspend fun doWork(student: Student, semester: Semester, notify: Boolean) {
-        val mailbox = messageRepository.getMailbox(student)
+        val mailbox = messageRepository.getMailboxByStudent(student)
         messageRepository.getMessages(
             student = student,
             mailbox = mailbox,

@@ -16,6 +16,7 @@ import io.github.wulkanowy.data.mappers.mapFromEntities
 import io.github.wulkanowy.data.mappers.mapToEntities
 import io.github.wulkanowy.data.networkBoundResource
 import io.github.wulkanowy.data.pojos.MessageDraft
+import io.github.wulkanowy.data.toFirstResult
 import io.github.wulkanowy.domain.messages.GetMailboxByStudentUseCase
 import io.github.wulkanowy.sdk.Sdk
 import io.github.wulkanowy.sdk.pojo.Folder
@@ -183,32 +184,30 @@ class MessageRepository @Inject constructor(
         deleteMessages(student, mailbox, listOf(message))
     }
 
-    suspend fun refreshMailboxes(student: Student) {
-        val new = sdk.init(student).getMailboxes().mapToEntities(student)
-        val old = mailboxDao.loadAll(student.email)
+    suspend fun getMailboxes(student: Student, forceRefresh: Boolean) = networkBoundResource(
+        mutex = saveFetchResultMutex,
+        isResultEmpty = { it.isEmpty() },
+        shouldFetch = {
+            val isExpired = refreshHelper.shouldBeRefreshed(
+                key = getRefreshKey(mailboxCacheKey, student),
+            )
+            it.isEmpty() || isExpired || forceRefresh
+        },
+        query = { mailboxDao.loadAll(student.email, student.symbol, student.schoolSymbol) },
+        fetch = { sdk.init(student).getMailboxes().mapToEntities(student) },
+        saveFetchResult = { old, new ->
+            mailboxDao.deleteAll(old uniqueSubtract new)
+            mailboxDao.insertAll(new uniqueSubtract old)
 
-        mailboxDao.deleteAll(old uniqueSubtract new)
-        mailboxDao.insertAll(new uniqueSubtract old)
+            refreshHelper.updateLastRefreshTimestamp(getRefreshKey(mailboxCacheKey, student))
+        }
+    )
 
-        refreshHelper.updateLastRefreshTimestamp(getRefreshKey(mailboxCacheKey, student))
-    }
-
-    suspend fun getMailboxes(student: Student): List<Mailbox> {
-        val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(mailboxCacheKey, student))
-        val mailboxes = mailboxDao.loadAll(student.email)
-
-        return if (isExpired || mailboxes.isEmpty()) {
-            refreshMailboxes(student)
-            mailboxDao.loadAll(student.email)
-        } else mailboxes
-    }
-
-    suspend fun getMailbox(student: Student): Mailbox? {
-        val isExpired = refreshHelper.shouldBeRefreshed(getRefreshKey(mailboxCacheKey, student))
+    suspend fun getMailboxByStudent(student: Student): Mailbox? {
         val mailbox = getMailboxByStudentUseCase(student)
 
-        return if (isExpired || mailbox == null) {
-            refreshMailboxes(student)
+        return if (mailbox == null) {
+            getMailboxes(student, forceRefresh = true).toFirstResult()
             getMailboxByStudentUseCase(student)
         } else mailbox
     }

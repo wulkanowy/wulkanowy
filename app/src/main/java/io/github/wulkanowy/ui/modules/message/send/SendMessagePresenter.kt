@@ -133,8 +133,9 @@ class SendMessagePresenter @Inject constructor(
             val student = studentRepository.getCurrentStudent()
 
             if (selectedMailbox == null && mailboxes.isEmpty()) {
-                selectedMailbox = messageRepository.getMailbox(student)
-                mailboxes = messageRepository.getMailboxes(student)
+                selectedMailbox = messageRepository.getMailboxByStudent(student)
+                mailboxes = messageRepository.getMailboxes(student, false).toFirstResult()
+                    .dataOrNull.orEmpty()
             }
 
             Timber.i("Loading recipients started")

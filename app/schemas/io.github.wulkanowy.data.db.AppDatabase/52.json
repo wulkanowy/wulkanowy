@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 52,
-    "identityHash": "e38136525ea22543e910391efbb0145b",
+    "identityHash": "61528608f44a4c72e5f15fe6ad0bd579",
     "entities": [
       {
         "tableName": "Students",
@@ -1577,11 +1577,29 @@
       },
       {
         "tableName": "Mailboxes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`globalKey` TEXT NOT NULL, `fullName` TEXT NOT NULL, `userName` TEXT NOT NULL, `email` TEXT NOT NULL, `studentName` TEXT NOT NULL, `schoolNameShort` TEXT NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY(`globalKey`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`globalKey` TEXT NOT NULL, `email` TEXT NOT NULL, `symbol` TEXT NOT NULL, `schoolId` TEXT NOT NULL, `fullName` TEXT NOT NULL, `userName` TEXT NOT NULL, `studentName` TEXT NOT NULL, `schoolNameShort` TEXT NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY(`globalKey`))",
         "fields": [
           {
             "fieldPath": "globalKey",
             "columnName": "globalKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "symbol",
+            "columnName": "symbol",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "schoolId",
+            "columnName": "schoolId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1594,12 +1612,6 @@
           {
             "fieldPath": "userName",
             "columnName": "userName",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "email",
-            "columnName": "email",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -2410,7 +2422,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e38136525ea22543e910391efbb0145b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '61528608f44a4c72e5f15fe6ad0bd579')"
     ]
   }
 }
