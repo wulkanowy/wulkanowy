@@ -63,7 +63,7 @@ class MessageRepository @Inject constructor(
         isResultEmpty = { it.isEmpty() },
         shouldFetch = {
             val isExpired = refreshHelper.shouldBeRefreshed(
-                key = getRefreshKey(messagesCacheKey, student, folder)
+                key = getRefreshKey(messagesCacheKey, mailbox, folder)
             )
             it.isEmpty() || forceRefresh || isExpired
         },
@@ -85,7 +85,7 @@ class MessageRepository @Inject constructor(
             })
 
             refreshHelper.updateLastRefreshTimestamp(
-                getRefreshKey(messagesCacheKey, student, folder)
+                getRefreshKey(messagesCacheKey, mailbox, folder)
             )
         }
     )
