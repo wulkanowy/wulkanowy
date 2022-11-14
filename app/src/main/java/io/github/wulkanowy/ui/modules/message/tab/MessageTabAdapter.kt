@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.R
 import io.github.wulkanowy.databinding.ItemMessageBinding
 import io.github.wulkanowy.databinding.ItemMessageChipsBinding
+import io.github.wulkanowy.utils.getCompatColor
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.toFormattedString
 import javax.inject.Inject
@@ -71,8 +72,18 @@ class MessageTabAdapter @Inject constructor() :
         val item = items[position] as MessageTabDataItem.FilterHeader
 
         with(holder.binding) {
-            chipMailbox.text =
-                item.selectedMailbox ?: root.context.getString(R.string.message_chip_all_mailboxes)
+            chipMailbox.text = item.selectedMailbox
+                ?: root.context.getString(R.string.message_chip_all_mailboxes)
+            chipMailbox.chipBackgroundColor = ColorStateList.valueOf(
+                if (item.selectedMailbox == null) {
+                    root.context.getCompatColor(R.color.mtrl_choice_chip_background_color)
+                } else root.context.getThemeAttrColor(android.R.attr.colorPrimary, 64)
+            )
+            chipMailbox.setTextColor(
+                if (item.selectedMailbox == null) {
+                    root.context.getThemeAttrColor(android.R.attr.textColorPrimary)
+                } else root.context.getThemeAttrColor(android.R.attr.colorPrimary)
+            )
             chipMailbox.setOnClickListener { onMailboxClickListener() }
 
             if (item.onlyUnread == null) {

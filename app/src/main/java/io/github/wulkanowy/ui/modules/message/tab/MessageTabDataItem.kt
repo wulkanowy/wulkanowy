@@ -1,6 +1,5 @@
 package io.github.wulkanowy.ui.modules.message.tab
 
-import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 
 sealed class MessageTabDataItem(val viewType: MessageItemViewType) {
