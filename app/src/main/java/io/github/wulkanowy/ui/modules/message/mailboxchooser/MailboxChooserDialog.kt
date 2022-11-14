@@ -59,11 +59,11 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
         }
     }
 
-    override fun submitData(items: List<Mailbox>) {
+    override fun submitData(items: List<MailboxChooserItem>) {
         mailboxAdapter.submitList(items)
     }
 
-    override fun onMailboxSelected(item: Mailbox) {
+    override fun onMailboxSelected(item: Mailbox?) {
         setFragmentResult(
             requestKey = requireArguments().getString(LISTENER_KEY).orEmpty(),
             result = bundleOf(ARGUMENT_KEY to item),

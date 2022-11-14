@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.message.mailboxchooser
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil.ItemCallback
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +13,9 @@ import io.github.wulkanowy.databinding.ItemMailboxChooserBinding
 import javax.inject.Inject
 
 class MailboxChooserAdapter @Inject constructor(
-) : ListAdapter<Mailbox, MailboxChooserAdapter.ItemViewHolder>(differ) {
+) : ListAdapter<MailboxChooserItem, MailboxChooserAdapter.ItemViewHolder>(differ) {
 
-    lateinit var onClickListener: (Mailbox) -> Unit
+    lateinit var onClickListener: (Mailbox?) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemMailboxChooserBinding.inflate(
@@ -30,23 +31,29 @@ class MailboxChooserAdapter @Inject constructor(
         private val binding: ItemMailboxChooserBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Mailbox) {
+        fun bind(item: MailboxChooserItem) {
             with(binding) {
-                mailboxItemName.text = buildString {
-                    if (item.studentName.isNotBlank() && item.studentName != item.userName) {
-                        append(item.studentName)
-                        append(" - ")
-                    }
-                    append(item.userName)
-                }
-                mailboxItemSchool.text = buildString {
-                    append(item.schoolNameShort)
-                    append(" - ")
-                    append(getMailboxType(item.type))
-                }
+                mailboxItemName.text = item.mailbox?.getFirstLine()
+                    ?: root.resources.getString(R.string.message_chip_all_mailboxes)
+                mailboxItemSchool.text = item.mailbox?.getSecondLine()
+                mailboxItemSchool.isVisible = !item.isAll
 
-                root.setOnClickListener { onClickListener(item) }
+                root.setOnClickListener { onClickListener(item.mailbox) }
             }
+        }
+
+        private fun Mailbox.getFirstLine() = buildString {
+            if (studentName.isNotBlank() && studentName != userName) {
+                append(studentName)
+                append(" - ")
+            }
+            append(userName)
+        }
+
+        private fun Mailbox.getSecondLine() = buildString {
+            append(schoolNameShort)
+            append(" - ")
+            append(getMailboxType(type))
         }
 
         private fun getMailboxType(type: MailboxType): String = when (type) {
@@ -59,12 +66,18 @@ class MailboxChooserAdapter @Inject constructor(
     }
 
     companion object {
-        private val differ = object : ItemCallback<Mailbox>() {
-            override fun areItemsTheSame(oldItem: Mailbox, newItem: Mailbox): Boolean {
-                return oldItem.globalKey == newItem.globalKey
+        private val differ = object : ItemCallback<MailboxChooserItem>() {
+            override fun areItemsTheSame(
+                oldItem: MailboxChooserItem,
+                newItem: MailboxChooserItem
+            ): Boolean {
+                return oldItem.mailbox?.globalKey == newItem.mailbox?.globalKey
             }
 
-            override fun areContentsTheSame(oldItem: Mailbox, newItem: Mailbox): Boolean {
+            override fun areContentsTheSame(
+                oldItem: MailboxChooserItem,
+                newItem: MailboxChooserItem
+            ): Boolean {
                 return oldItem == newItem
             }
         }

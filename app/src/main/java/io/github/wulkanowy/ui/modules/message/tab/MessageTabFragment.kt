@@ -130,7 +130,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
         setFragmentResultListener(requireArguments().getString(MESSAGE_TAB_FOLDER_ID)!!) { _, bundle ->
             presenter.onMailboxSelected(
-                mailbox = bundle.getSerializable(MailboxChooserDialog.ARGUMENT_KEY) as Mailbox,
+                mailbox = bundle.getSerializable(MailboxChooserDialog.ARGUMENT_KEY) as? Mailbox,
             )
         }
     }

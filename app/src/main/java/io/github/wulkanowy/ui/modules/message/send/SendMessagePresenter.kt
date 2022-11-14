@@ -122,7 +122,7 @@ class SendMessagePresenter @Inject constructor(
         view?.showMailboxChooser(mailboxes)
     }
 
-    fun onMailboxSelected(mailbox: Mailbox) {
+    fun onMailboxSelected(mailbox: Mailbox?) {
         selectedMailbox = mailbox
 
         loadData(message, isReplay)

@@ -207,7 +207,7 @@ class MessageTabPresenter @Inject constructor(
         view?.showMailboxChooser(mailboxes)
     }
 
-    fun onMailboxSelected(mailbox: Mailbox) {
+    fun onMailboxSelected(mailbox: Mailbox?) {
         selectedMailbox = mailbox
         loadData(false)
     }

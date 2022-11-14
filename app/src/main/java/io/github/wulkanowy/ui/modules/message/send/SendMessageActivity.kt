@@ -23,11 +23,9 @@ import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.databinding.ActivitySendMessageBinding
 import io.github.wulkanowy.ui.base.BaseActivity
-import io.github.wulkanowy.ui.modules.main.MainActivity
 import io.github.wulkanowy.ui.modules.message.mailboxchooser.MailboxChooserDialog
 import io.github.wulkanowy.ui.modules.message.mailboxchooser.MailboxChooserDialog.Companion.ARGUMENT_KEY
 import io.github.wulkanowy.ui.modules.message.mailboxchooser.MailboxChooserDialog.Companion.LISTENER_KEY
-import io.github.wulkanowy.ui.modules.message.tab.MessageTabFragment
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.showSoftInput
@@ -115,7 +113,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
             reply = intent.getSerializableExtra(EXTRA_REPLY) as? Boolean
         )
         supportFragmentManager.setFragmentResultListener(LISTENER_KEY, this) { _, bundle ->
-            presenter.onMailboxSelected(bundle.getSerializable(ARGUMENT_KEY) as Mailbox)
+            presenter.onMailboxSelected(bundle.getSerializable(ARGUMENT_KEY) as? Mailbox)
         }
     }
 

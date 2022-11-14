@@ -17,10 +17,17 @@ class MailboxChooserPresenter @Inject constructor(
 
         view.initView()
         Timber.i("Mailbox chooser view was initialized")
-        view.submitData(mailboxes)
+        view.submitData(getMailboxItems(mailboxes))
     }
 
-    fun onMailboxSelect(item: Mailbox) {
+    private fun getMailboxItems(mailboxes: List<Mailbox>): List<MailboxChooserItem> = buildList {
+        add(MailboxChooserItem(isAll = true))
+        addAll(mailboxes.map {
+            MailboxChooserItem(it, isAll = false)
+        })
+    }
+
+    fun onMailboxSelect(item: Mailbox?) {
         view?.onMailboxSelected(item)
     }
 }
