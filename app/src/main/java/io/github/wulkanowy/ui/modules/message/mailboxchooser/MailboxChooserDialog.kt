@@ -23,14 +23,17 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
 
     companion object {
         const val LISTENER_KEY = "mailbox_selected"
-        const val ARGUMENT_KEY = "selected_mailbox"
+        const val MAILBOX_KEY = "selected_mailbox"
+        const val REQUIRED_KEY = "is_mailbox_required"
 
-        fun newInstance(mailboxes: List<Mailbox>, folder: String) = MailboxChooserDialog().apply {
-            arguments = bundleOf(
-                ARGUMENT_KEY to mailboxes.toTypedArray(),
-                LISTENER_KEY to folder,
-            )
-        }
+        fun newInstance(mailboxes: List<Mailbox>, isMailboxRequired: Boolean, folder: String) =
+            MailboxChooserDialog().apply {
+                arguments = bundleOf(
+                    MAILBOX_KEY to mailboxes.toTypedArray(),
+                    REQUIRED_KEY to isMailboxRequired,
+                    LISTENER_KEY to folder,
+                )
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +51,8 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         presenter.onAttachView(
             view = this,
-            mailboxes = requireArguments().getParcelableArray(ARGUMENT_KEY).orEmpty()
+            requireMailbox = requireArguments().getBoolean(REQUIRED_KEY, false),
+            mailboxes = requireArguments().getParcelableArray(MAILBOX_KEY).orEmpty()
                 .toList() as List<Mailbox>,
         )
     }
@@ -66,7 +70,7 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
     override fun onMailboxSelected(item: Mailbox?) {
         setFragmentResult(
             requestKey = requireArguments().getString(LISTENER_KEY).orEmpty(),
-            result = bundleOf(ARGUMENT_KEY to item),
+            result = bundleOf(MAILBOX_KEY to item),
         )
         dismiss()
     }

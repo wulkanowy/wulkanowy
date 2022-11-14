@@ -12,16 +12,21 @@ class MailboxChooserPresenter @Inject constructor(
     studentRepository: StudentRepository
 ) : BasePresenter<MailboxChooserView>(errorHandler, studentRepository) {
 
-    fun onAttachView(view: MailboxChooserView, mailboxes: List<Mailbox>) {
+    fun onAttachView(view: MailboxChooserView, mailboxes: List<Mailbox>, requireMailbox: Boolean) {
         super.onAttachView(view)
 
         view.initView()
         Timber.i("Mailbox chooser view was initialized")
-        view.submitData(getMailboxItems(mailboxes))
+        view.submitData(getMailboxItems(mailboxes, requireMailbox))
     }
 
-    private fun getMailboxItems(mailboxes: List<Mailbox>): List<MailboxChooserItem> = buildList {
-        add(MailboxChooserItem(isAll = true))
+    private fun getMailboxItems(
+        mailboxes: List<Mailbox>,
+        requireMailbox: Boolean,
+    ): List<MailboxChooserItem> = buildList {
+        if (!requireMailbox) {
+            add(MailboxChooserItem(isAll = true))
+        }
         addAll(mailboxes.map {
             MailboxChooserItem(it, isAll = false)
         })
