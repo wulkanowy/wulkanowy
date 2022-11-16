@@ -58,9 +58,7 @@ class MailboxChooserDialog : BaseDialogFragment<DialogMailboxChooserBinding>(), 
     }
 
     override fun initView() {
-        binding.accountQuickDialogRecycler.adapter = mailboxAdapter.apply {
-            onClickListener = presenter::onMailboxSelect
-        }
+        binding.accountQuickDialogRecycler.adapter = mailboxAdapter
     }
 
     override fun submitData(items: List<MailboxChooserItem>) {

@@ -12,10 +12,8 @@ import io.github.wulkanowy.data.db.entities.MailboxType
 import io.github.wulkanowy.databinding.ItemMailboxChooserBinding
 import javax.inject.Inject
 
-class MailboxChooserAdapter @Inject constructor(
-) : ListAdapter<MailboxChooserItem, MailboxChooserAdapter.ItemViewHolder>(differ) {
-
-    lateinit var onClickListener: (Mailbox?) -> Unit
+class MailboxChooserAdapter @Inject constructor() :
+    ListAdapter<MailboxChooserItem, MailboxChooserAdapter.ItemViewHolder>(differ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemMailboxChooserBinding.inflate(
@@ -27,7 +25,7 @@ class MailboxChooserAdapter @Inject constructor(
         holder.bind(getItem(position))
     }
 
-    inner class ItemViewHolder(
+    class ItemViewHolder(
         private val binding: ItemMailboxChooserBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -38,7 +36,7 @@ class MailboxChooserAdapter @Inject constructor(
                 mailboxItemSchool.text = item.mailbox?.getSecondLine()
                 mailboxItemSchool.isVisible = !item.isAll
 
-                root.setOnClickListener { onClickListener(item.mailbox) }
+                root.setOnClickListener { item.onClickListener(item.mailbox) }
             }
         }
 

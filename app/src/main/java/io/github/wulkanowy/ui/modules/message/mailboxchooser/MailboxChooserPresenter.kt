@@ -25,10 +25,10 @@ class MailboxChooserPresenter @Inject constructor(
         requireMailbox: Boolean,
     ): List<MailboxChooserItem> = buildList {
         if (!requireMailbox) {
-            add(MailboxChooserItem(isAll = true))
+            add(MailboxChooserItem(isAll = true, onClickListener = ::onMailboxSelect))
         }
         addAll(mailboxes.map {
-            MailboxChooserItem(it, isAll = false)
+            MailboxChooserItem(mailbox = it, isAll = false, onClickListener = ::onMailboxSelect)
         })
     }
 
