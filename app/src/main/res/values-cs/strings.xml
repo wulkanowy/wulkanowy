@@ -738,7 +738,7 @@
     <string name="pref_ads_consent_description">Volbu můžete kdykoliv změnit v nastavení aplikace. Můžeme použít Vaše data k zobrazení reklam šitých pro vás nebo pomocí méně vašich dat zobrazovat nepřizpůsobené reklamy. Podrobnosti naleznete v našich Zásadách ochrany osobních údajů</string>
     <string name="pref_ads_summary_personalized">Přizpůsobené reklamy</string>
     <string name="pref_ads_summary_non_personalized">Nepřizpůsobené reklamy</string>
-    <string name="pref_ads_over_18_years_old">Mám ukončené 18 let</string>
+    <string name="pref_ads_over_18_years_old">I am over 18 years old</string>
     <string name="pref_ads_option_personalized">Ano, přizpůsobené reklamy</string>
     <string name="pref_ads_option_non_personalized">Ano, nepřizpůsobené reklamy</string>
     <string name="pref_settings_advanced_title">Pokročilé</string>
