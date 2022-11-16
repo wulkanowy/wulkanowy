@@ -309,6 +309,7 @@
     <string name="message_not_exists">Такого листа не існує</string>
     <string name="message_required_recipients">Необхідно обрати принаймні 1 адресата</string>
     <string name="message_content_min_length">Зміст листа повинен складатися принаймні з 3 знаків</string>
+    <string name="message_chip_all_mailboxes">Wszystkie skrzynki</string>
     <string name="message_chip_only_unread">Лише непрочитані</string>
     <string name="message_chip_only_with_attachments">Тільки з вкладеннями</string>
     <string name="message_read">Прочитаний: %s</string>
@@ -340,6 +341,7 @@
         <item quantity="other">%1$d вибрано</item>
     </plurals>
     <string name="message_messages_deleted">Листи видалені</string>
+    <string name="message_mailbox_chooser_title">Choose mailbox</string>
     <!--Note-->
     <string name="note_no_items">Немає інформації о зауваженнях</string>
     <string name="note_points">Бали</string>
