@@ -13,7 +13,7 @@ import io.github.wulkanowy.databinding.ItemMailboxChooserBinding
 import javax.inject.Inject
 
 class MailboxChooserAdapter @Inject constructor() :
-    ListAdapter<MailboxChooserItem, MailboxChooserAdapter.ItemViewHolder>(differ) {
+    ListAdapter<MailboxChooserItem, MailboxChooserAdapter.ItemViewHolder>(Differ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         ItemMailboxChooserBinding.inflate(
@@ -63,21 +63,19 @@ class MailboxChooserAdapter @Inject constructor() :
         }.let { it?.let { it1 -> binding.root.resources.getString(it1) }.orEmpty() }
     }
 
-    companion object {
-        private val differ = object : ItemCallback<MailboxChooserItem>() {
-            override fun areItemsTheSame(
-                oldItem: MailboxChooserItem,
-                newItem: MailboxChooserItem
-            ): Boolean {
-                return oldItem.mailbox?.globalKey == newItem.mailbox?.globalKey
-            }
+    private object Differ : ItemCallback<MailboxChooserItem>() {
+        override fun areItemsTheSame(
+            oldItem: MailboxChooserItem,
+            newItem: MailboxChooserItem
+        ): Boolean {
+            return oldItem.mailbox?.globalKey == newItem.mailbox?.globalKey
+        }
 
-            override fun areContentsTheSame(
-                oldItem: MailboxChooserItem,
-                newItem: MailboxChooserItem
-            ): Boolean {
-                return oldItem == newItem
-            }
+        override fun areContentsTheSame(
+            oldItem: MailboxChooserItem,
+            newItem: MailboxChooserItem
+        ): Boolean {
+            return oldItem == newItem
         }
     }
 }
