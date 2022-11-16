@@ -275,7 +275,7 @@
     <string name="message_not_exists">Nachricht nicht vorhanden</string>
     <string name="message_required_recipients">Sie müssen mindestens 1 Empfänger auswählen.</string>
     <string name="message_content_min_length">Der Inhalt der Nachricht muss mindestens 3 Zeichen lang sein.</string>
-    <string name="message_chip_all_mailboxes">Wszystkie skrzynki</string>
+    <string name="message_chip_all_mailboxes">All mailboxes</string>
     <string name="message_chip_only_unread">Nur ungelesen</string>
     <string name="message_chip_only_with_attachments">Nur mit Anhängen</string>
     <string name="message_read">Lesen: %s</string>
