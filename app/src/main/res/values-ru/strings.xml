@@ -309,7 +309,7 @@
     <string name="message_not_exists">Письма не существует</string>
     <string name="message_required_recipients">Вы должны выбрать как минимум одного получателя</string>
     <string name="message_content_min_length">Текст сообщения должен содержать как минимум 3 знака</string>
-    <string name="message_chip_all_mailboxes">Wszystkie skrzynki</string>
+    <string name="message_chip_all_mailboxes">All mailboxes</string>
     <string name="message_chip_only_unread">Только непрочитанные</string>
     <string name="message_chip_only_with_attachments">Только с вложениями</string>
     <string name="message_read">Прочитано: %s</string>
