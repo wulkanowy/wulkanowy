@@ -3,7 +3,7 @@ package io.github.wulkanowy.data.db.migrations
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-class Migration52 : Migration(51, 52) {
+class Migration53 : Migration(52, 53) {
 
     override fun migrate(database: SupportSQLiteDatabase) {
         createMailboxTable(database)
@@ -43,9 +43,11 @@ class Migration52 : Migration(51, 52) {
                     `date` INTEGER NOT NULL,
                     `folder_id` INTEGER NOT NULL,
                     `unread` INTEGER NOT NULL,
+                    `read_by` INTEGER,
+                    `unread_by` INTEGER,
                     `has_attachments` INTEGER NOT NULL,
-                    `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    `is_notified` INTEGER NOT NULL,
+                    `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                    `is_notified` INTEGER NOT NULL, 
                     `content` TEXT NOT NULL,
                     `sender` TEXT,
                     `recipients` TEXT

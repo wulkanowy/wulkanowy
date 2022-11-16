@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 52,
-    "identityHash": "8742176f26afcc81279d4a073dca2949",
+    "version": 53,
+    "identityHash": "1dc96a366125ec9f8567da87cdc9c863",
     "entities": [
       {
         "tableName": "Students",
@@ -1082,8 +1082,14 @@
       },
       {
         "tableName": "Messages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`message_global_key` TEXT NOT NULL, `mailbox_key` TEXT NOT NULL, `message_id` INTEGER NOT NULL, `correspondents` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `read_by` INTEGER, `unread_by` INTEGER, `has_attachments` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `content` TEXT NOT NULL, `sender` TEXT, `recipients` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`email` TEXT NOT NULL, `message_global_key` TEXT NOT NULL, `mailbox_key` TEXT NOT NULL, `message_id` INTEGER NOT NULL, `correspondents` TEXT NOT NULL, `subject` TEXT NOT NULL, `date` INTEGER NOT NULL, `folder_id` INTEGER NOT NULL, `unread` INTEGER NOT NULL, `read_by` INTEGER, `unread_by` INTEGER, `has_attachments` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `is_notified` INTEGER NOT NULL, `content` TEXT NOT NULL, `sender` TEXT, `recipients` TEXT)",
         "fields": [
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
           {
             "fieldPath": "messageGlobalKey",
             "columnName": "message_global_key",
@@ -1582,11 +1588,29 @@
       },
       {
         "tableName": "Mailboxes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`globalKey` TEXT NOT NULL, `fullName` TEXT NOT NULL, `userName` TEXT NOT NULL, `userLoginId` INTEGER NOT NULL, `studentName` TEXT NOT NULL, `schoolNameShort` TEXT NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY(`globalKey`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`globalKey` TEXT NOT NULL, `email` TEXT NOT NULL, `symbol` TEXT NOT NULL, `schoolId` TEXT NOT NULL, `fullName` TEXT NOT NULL, `userName` TEXT NOT NULL, `studentName` TEXT NOT NULL, `schoolNameShort` TEXT NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY(`globalKey`))",
         "fields": [
           {
             "fieldPath": "globalKey",
             "columnName": "globalKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "symbol",
+            "columnName": "symbol",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "schoolId",
+            "columnName": "schoolId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -1600,12 +1624,6 @@
             "fieldPath": "userName",
             "columnName": "userName",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "userLoginId",
-            "columnName": "userLoginId",
-            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -2415,7 +2433,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8742176f26afcc81279d4a073dca2949')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1dc96a366125ec9f8567da87cdc9c863')"
     ]
   }
 }

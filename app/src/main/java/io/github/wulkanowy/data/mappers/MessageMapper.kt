@@ -19,7 +19,9 @@ fun List<SdkMessage>.mapToEntities(student: Student, mailbox: Mailbox?, allMailb
         date = it.dateZoned.toInstant(),
         folderId = it.folderId,
         unread = it.unread,
-        hasAttachments = it.hasAttachments
+        unreadBy = it.unreadBy,
+        readBy = it.readBy,
+        hasAttachments = it.hasAttachments,
     ).apply {
         content = it.content.orEmpty()
     }
