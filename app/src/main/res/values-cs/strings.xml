@@ -309,7 +309,7 @@
     <string name="message_not_exists">Zpráva neexistuje</string>
     <string name="message_required_recipients">Musíte vybrat alespoň 1 příjemce</string>
     <string name="message_content_min_length">Obsah zprávy musí mít alespoň 3 znaky</string>
-    <string name="message_chip_all_mailboxes">Wszystkie skrzynki</string>
+    <string name="message_chip_all_mailboxes">All mailboxes</string>
     <string name="message_chip_only_unread">Pouze nepřečtené</string>
     <string name="message_chip_only_with_attachments">Pouze s přílohami</string>
     <string name="message_read">Přečtena: %s</string>
