@@ -2,16 +2,24 @@ package io.github.wulkanowy.data.mappers
 
 import io.github.wulkanowy.data.db.entities.*
 import io.github.wulkanowy.sdk.pojo.MailboxType
+import timber.log.Timber
 import io.github.wulkanowy.sdk.pojo.Message as SdkMessage
 import io.github.wulkanowy.sdk.pojo.MessageAttachment as SdkMessageAttachment
 import io.github.wulkanowy.sdk.pojo.Recipient as SdkRecipient
 
-fun List<SdkMessage>.mapToEntities(student: Student, mailbox: Mailbox?, allMailboxes: List<Mailbox>) = map {
+fun List<SdkMessage>.mapToEntities(
+    student: Student,
+    mailbox: Mailbox?,
+    allMailboxes: List<Mailbox>
+): List<Message> = map {
     Message(
         messageGlobalKey = it.globalKey,
         mailboxKey = mailbox?.globalKey ?: allMailboxes.find { box ->
             box.fullName == it.mailbox
-        }?.globalKey!!,
+        }?.globalKey ?: let { _ ->
+            Timber.e("Messages cannot be matched to the mailbox! ${it.mailbox} !in $allMailboxes")
+            "unknown"
+        },
         email = student.email,
         messageId = it.id,
         correspondents = it.correspondents,
