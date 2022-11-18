@@ -37,6 +37,7 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginEnd="16dp"
                 app:tint="?colorOnSurface"
                 tools:ignore="ContentDescription" />
 
@@ -89,6 +90,7 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginEnd="16dp"
                 app:tint="?colorOnSurface"
                 tools:ignore="ContentDescription" />
 
@@ -106,7 +108,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/dashboard_horizontal_group_item_message_icon"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="16" />
+                tools:text="16"
+                tools:visibility="gone" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -145,6 +148,7 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginEnd="16dp"
                 app:tint="?colorOnSurface"
                 tools:ignore="ContentDescription" />
 
