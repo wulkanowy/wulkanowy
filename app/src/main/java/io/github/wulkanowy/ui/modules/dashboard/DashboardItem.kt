@@ -44,7 +44,10 @@ sealed class DashboardItem(val type: Type) {
             val data: T?,
             val error: Boolean,
             val isLoading: Boolean,
-        )
+        ) {
+            val isHidden: Boolean
+                get() = data == null && !error && !isLoading
+        }
 
         override val isDataLoaded
             get() = unreadMessagesCount?.isLoading == false || attendancePercentage?.isLoading == false || luckyNumber?.isLoading == false

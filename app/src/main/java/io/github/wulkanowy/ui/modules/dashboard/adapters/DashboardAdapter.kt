@@ -171,81 +171,121 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         position: Int
     ) {
         val item = items[position] as DashboardItem.HorizontalGroup
-        // todo: show errors differently
-        val unreadMessagesCount = item.unreadMessagesCount?.data
-        val attendancePercentage = item.attendancePercentage?.data
-        val luckyNumber = item.luckyNumber?.data
-        val error = item.error
-        val isLoading = item.isLoading
-        val binding = horizontalGroupViewHolder.binding
-        val context = binding.root.context
         val isLoadingVisible =
-            (isLoading && !item.isDataLoaded) || (isLoading && !item.isFullDataLoaded)
+            (item.isLoading && !item.isDataLoaded) || (item.isLoading && !item.isFullDataLoaded)
+        val isWideErrorShow = isLoadingVisible || item.error != null
+
+        with(horizontalGroupViewHolder.binding) {
+            dashboardHorizontalGroupItemInfoContainer.isVisible = isWideErrorShow
+            dashboardHorizontalGroupItemInfoProgress.isVisible = isLoadingVisible
+            dashboardHorizontalGroupItemInfoErrorText.isVisible = item.error != null
+
+            bindLuckyNumber(item, isWideErrorShow)
+            bindMessages(item, isWideErrorShow)
+            bindAttendance(item, isWideErrorShow)
+        }
+    }
+
+    private fun ItemDashboardHorizontalGroupBinding.bindLuckyNumber(
+        item: DashboardItem.HorizontalGroup,
+        isWideErrorShow: Boolean
+    ) {
+        dashboardHorizontalGroupItemLuckyIcon.setTint(
+            root.context.getThemeAttrColor(
+                if (item.luckyNumber?.error == true) {
+                    R.attr.colorPrimary
+                } else R.attr.colorOnSurface
+            )
+        )
+        with(dashboardHorizontalGroupItemLuckyValue) {
+            isVisible = item.luckyNumber?.error != true
+            text = if (item.luckyNumber?.data == 0) {
+                context.getString(R.string.dashboard_horizontal_group_no_data)
+            } else item.luckyNumber?.data?.toString()
+        }
+
+        with(dashboardHorizontalGroupItemLuckyContainer) {
+            isVisible = item.luckyNumber?.isHidden == false && !isWideErrorShow
+            setOnClickListener { onLuckyNumberTileClickListener() }
+
+            val isAttendanceHidden = item.attendancePercentage?.data == null
+            val isMessagesHidden = item.unreadMessagesCount?.data == null
+            val isLuckyNumberHidden = item.luckyNumber?.data == null
+
+            updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                updateMarginsRelative(
+                    end = if (isAttendanceHidden && isMessagesHidden && !isLuckyNumberHidden) {
+                        0
+                    } else context.dpToPx(8f).toInt()
+                )
+            }
+        }
+    }
+
+    private fun ItemDashboardHorizontalGroupBinding.bindMessages(
+        item: DashboardItem.HorizontalGroup,
+        isWideErrorShow: Boolean
+    ) {
+        dashboardHorizontalGroupItemMessageIcon.setTint(
+            root.context.getThemeAttrColor(
+                if (item.unreadMessagesCount?.error == true) {
+                    R.attr.colorPrimary
+                } else R.attr.colorOnSurface
+            )
+        )
+        with(dashboardHorizontalGroupItemMessageValue) {
+            isVisible = item.unreadMessagesCount?.error != true
+            text = item.unreadMessagesCount?.data.toString()
+        }
+        with(dashboardHorizontalGroupItemMessageContainer) {
+            isVisible = item.unreadMessagesCount?.isHidden == false && !isWideErrorShow
+            setOnClickListener { onMessageTileClickListener() }
+        }
+    }
+
+    private fun ItemDashboardHorizontalGroupBinding.bindAttendance(
+        item: DashboardItem.HorizontalGroup,
+        isWideErrorShow: Boolean
+    ) {
+        val attendancePercentage = item.attendancePercentage?.data
         val attendanceColor = when {
             attendancePercentage == null || attendancePercentage == .0 -> {
-                context.getThemeAttrColor(R.attr.colorOnSurface)
+                root.context.getThemeAttrColor(R.attr.colorOnSurface)
             }
             attendancePercentage <= ATTENDANCE_SECOND_WARNING_THRESHOLD -> {
-                context.getThemeAttrColor(R.attr.colorPrimary)
+                root.context.getThemeAttrColor(R.attr.colorPrimary)
             }
             attendancePercentage <= ATTENDANCE_FIRST_WARNING_THRESHOLD -> {
-                context.getThemeAttrColor(R.attr.colorTimetableChange)
+                root.context.getThemeAttrColor(R.attr.colorTimetableChange)
             }
-            else -> context.getThemeAttrColor(R.attr.colorOnSurface)
+            else -> root.context.getThemeAttrColor(R.attr.colorOnSurface)
         }
         val attendanceString = if (attendancePercentage == null || attendancePercentage == .0) {
-            context.getString(R.string.dashboard_horizontal_group_no_data)
+            root.context.getString(R.string.dashboard_horizontal_group_no_data)
         } else {
             "%.2f%%".format(attendancePercentage)
         }
-
-        with(binding.dashboardHorizontalGroupItemAttendanceValue) {
+        dashboardHorizontalGroupItemAttendanceIcon.setTint(
+            root.context.getThemeAttrColor(
+                if (item.attendancePercentage?.error == true) {
+                    R.attr.colorPrimary
+                } else R.attr.colorOnSurface
+            )
+        )
+        with(dashboardHorizontalGroupItemAttendanceValue) {
+            isVisible = item.attendancePercentage?.error != true
             text = attendanceString
             setTextColor(attendanceColor)
         }
-
-        with(binding) {
-            dashboardHorizontalGroupItemMessageValue.text = unreadMessagesCount.toString()
-            dashboardHorizontalGroupItemLuckyValue.text = if (luckyNumber == 0) {
-                context.getString(R.string.dashboard_horizontal_group_no_data)
-            } else luckyNumber?.toString()
-
-            dashboardHorizontalGroupItemInfoContainer.isVisible = error != null || isLoadingVisible
-            dashboardHorizontalGroupItemInfoProgress.isVisible = isLoadingVisible
-            dashboardHorizontalGroupItemInfoErrorText.isVisible = error != null
-
-            with(dashboardHorizontalGroupItemLuckyContainer) {
-                isVisible = luckyNumber != null && luckyNumber != -1 && !isLoadingVisible
-                setOnClickListener { onLuckyNumberTileClickListener() }
-
-                updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    updateMarginsRelative(
-                        end = if (attendancePercentage == null && unreadMessagesCount == null && luckyNumber != null) {
-                            0
-                        } else {
-                            context.dpToPx(8f).toInt()
-                        }
-                    )
+        with(dashboardHorizontalGroupItemAttendanceContainer) {
+            isVisible = item.attendancePercentage?.isHidden == false && !isWideErrorShow
+            setOnClickListener { onAttendanceTileClickListener() }
+            updateLayoutParams<ConstraintLayout.LayoutParams> {
+                matchConstraintPercentWidth = when {
+                    item.luckyNumber?.isHidden == true && item.unreadMessagesCount?.isHidden == true -> 1.0f
+                    item.luckyNumber?.isHidden == true || item.unreadMessagesCount?.isHidden == true -> 0.5f
+                    else -> 0.4f
                 }
-            }
-
-            with(dashboardHorizontalGroupItemAttendanceContainer) {
-                isVisible =
-                    attendancePercentage != null && attendancePercentage != -1.0 && !isLoadingVisible
-                updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    matchConstraintPercentWidth = when {
-                        luckyNumber == null && unreadMessagesCount == null -> 1.0f
-                        luckyNumber == null || unreadMessagesCount == null -> 0.5f
-                        else -> 0.4f
-                    }
-                }
-                setOnClickListener { onAttendanceTileClickListener() }
-            }
-
-            with(dashboardHorizontalGroupItemMessageContainer) {
-                isVisible =
-                    unreadMessagesCount != null && unreadMessagesCount != -1 && !isLoadingVisible
-                setOnClickListener { onMessageTileClickListener() }
             }
         }
     }
