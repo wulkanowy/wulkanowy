@@ -171,9 +171,10 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         position: Int
     ) {
         val item = items[position] as DashboardItem.HorizontalGroup
-        val unreadMessagesCount = item.unreadMessagesCount
-        val attendancePercentage = item.attendancePercentage
-        val luckyNumber = item.luckyNumber
+        // todo: show errors differently
+        val unreadMessagesCount = item.unreadMessagesCount?.data
+        val attendancePercentage = item.attendancePercentage?.data
+        val luckyNumber = item.luckyNumber?.data
         val error = item.error
         val isLoading = item.isLoading
         val binding = horizontalGroupViewHolder.binding
