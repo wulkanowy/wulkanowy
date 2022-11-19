@@ -2,6 +2,7 @@ package io.github.wulkanowy.ui.modules.settings.notifications
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
@@ -38,13 +40,25 @@ class NotificationsFragment : PreferenceFragmentCompat(),
 
     override val titleStringId get() = R.string.pref_settings_notifications_title
 
+    private val notificationsPermission = "android.permission.POST_NOTIFICATIONS"
+
     override val isNotificationPermissionGranted: Boolean
+        get() = ContextCompat.checkSelfPermission(
+            requireContext(), notificationsPermission
+        ) == PackageManager.PERMISSION_GRANTED
+
+    override val isNotificationPiggybackPermissionGranted: Boolean
         get() {
             val packageNameList =
                 NotificationManagerCompat.getEnabledListenerPackages(requireContext())
             val appPackageName = requireContext().packageName
 
             return appPackageName in packageNameList
+        }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            presenter.onNotificationsPermissionResult()
         }
 
     private val notificationSettingsPiggybackContract =
@@ -156,7 +170,25 @@ class NotificationsFragment : PreferenceFragmentCompat(),
         requireActivity().openNotificationSettings()
     }
 
-    override fun openNotificationPermissionDialog() {
+    override fun requestNotificationPermissions() {
+        requestPermissionLauncher.launch(notificationsPermission)
+    }
+
+    override fun openNotificationsPermissionDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.notifications_header_title)
+            .setMessage(R.string.notifications_header_description)
+            .setPositiveButton(R.string.pref_notification_go_to_settings) { _, _ ->
+                requireActivity().openNotificationSettings()
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                setNotificationPreferencesChecked(false)
+            }
+            .setOnDismissListener { setNotificationPreferencesChecked(false) }
+            .show()
+    }
+
+    override fun openNotificationPiggyBackPermissionDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.pref_notification_piggyback_popup_title))
             .setMessage(getString(R.string.pref_notification_piggyback_popup_description))
@@ -182,6 +214,11 @@ class NotificationsFragment : PreferenceFragmentCompat(),
             }
             .setOnDismissListener { setUpcomingLessonsNotificationPreferenceChecked(false) }
             .show()
+    }
+
+    override fun setNotificationPreferencesChecked(isChecked: Boolean) {
+        findPreference<SwitchPreferenceCompat>(getString(R.string.pref_key_notifications_enable))?.isChecked =
+            isChecked
     }
 
     override fun setNotificationPiggybackPreferenceChecked(isChecked: Boolean) {
