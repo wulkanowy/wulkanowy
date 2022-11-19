@@ -58,7 +58,9 @@ class NotificationsFragment : PreferenceFragmentCompat(),
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            presenter.onNotificationsPermissionResult()
+            if (it) {
+                presenter.onNotificationsPermissionResult()
+            } else openNotificationsPermissionDialog()
         }
 
     private val notificationSettingsPiggybackContract =
