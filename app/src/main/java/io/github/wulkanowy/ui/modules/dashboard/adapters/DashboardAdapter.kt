@@ -190,27 +190,20 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         item: DashboardItem.HorizontalGroup,
         isWideErrorShow: Boolean
     ) {
-        dashboardHorizontalGroupItemLuckyIcon.setTint(
-            root.context.getThemeAttrColor(
-                if (item.luckyNumber?.error == true) {
-                    R.attr.colorPrimary
-                } else R.attr.colorOnSurface
-            )
-        )
         with(dashboardHorizontalGroupItemLuckyValue) {
             isVisible = item.luckyNumber?.error != true
             text = if (item.luckyNumber?.data == 0) {
                 context.getString(R.string.dashboard_horizontal_group_no_data)
             } else item.luckyNumber?.data?.toString()
         }
-
+        dashboardHorizontalGroupItemLuckyError.isVisible = item.luckyNumber?.error == true
         with(dashboardHorizontalGroupItemLuckyContainer) {
             isVisible = item.luckyNumber?.isHidden == false && !isWideErrorShow
             setOnClickListener { onLuckyNumberTileClickListener() }
 
-            val isAttendanceHidden = item.attendancePercentage?.data == null
-            val isMessagesHidden = item.unreadMessagesCount?.data == null
-            val isLuckyNumberHidden = item.luckyNumber?.data == null
+            val isAttendanceHidden = item.attendancePercentage?.isHidden == true
+            val isMessagesHidden = item.unreadMessagesCount?.isHidden == true
+            val isLuckyNumberHidden = item.luckyNumber?.isHidden == true
 
             updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 updateMarginsRelative(
@@ -226,13 +219,7 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         item: DashboardItem.HorizontalGroup,
         isWideErrorShow: Boolean
     ) {
-        dashboardHorizontalGroupItemMessageIcon.setTint(
-            root.context.getThemeAttrColor(
-                if (item.unreadMessagesCount?.error == true) {
-                    R.attr.colorPrimary
-                } else R.attr.colorOnSurface
-            )
-        )
+        dashboardHorizontalGroupItemMessageError.isVisible = item.unreadMessagesCount?.error == true
         with(dashboardHorizontalGroupItemMessageValue) {
             isVisible = item.unreadMessagesCount?.error != true
             text = item.unreadMessagesCount?.data.toString()
@@ -265,13 +252,9 @@ class DashboardAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView
         } else {
             "%.2f%%".format(attendancePercentage)
         }
-        dashboardHorizontalGroupItemAttendanceIcon.setTint(
-            root.context.getThemeAttrColor(
-                if (item.attendancePercentage?.error == true) {
-                    R.attr.colorPrimary
-                } else R.attr.colorOnSurface
-            )
-        )
+
+        dashboardHorizontalGroupItemAttendanceError.isVisible =
+            item.attendancePercentage?.error == true
         with(dashboardHorizontalGroupItemAttendanceValue) {
             isVisible = item.attendancePercentage?.error != true
             text = attendanceString

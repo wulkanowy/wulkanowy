@@ -41,6 +41,21 @@
                 app:tint="?colorOnSurface"
                 tools:ignore="ContentDescription" />
 
+            <ImageView
+                android:id="@+id/dashboard_horizontal_group_item_lucky_error"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="-4dp"
+                android:layout_marginBottom="-4dp"
+                android:background="@drawable/ic_circle"
+                android:backgroundTint="?attr/colorSurface"
+                android:contentDescription="@string/error_unknown"
+                android:src="@drawable/ic_error_filled"
+                app:layout_constraintBottom_toBottomOf="@id/dashboard_horizontal_group_item_lucky_icon"
+                app:layout_constraintEnd_toEndOf="@id/dashboard_horizontal_group_item_lucky_icon"
+                app:tint="?colorError"
+                tools:visibility="visible" />
+
             <TextView
                 android:id="@+id/dashboard_horizontal_group_item_lucky_value"
                 android:layout_width="wrap_content"
@@ -94,6 +109,21 @@
                 app:tint="?colorOnSurface"
                 tools:ignore="ContentDescription" />
 
+            <ImageView
+                android:id="@+id/dashboard_horizontal_group_item_message_error"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="-4dp"
+                android:layout_marginBottom="-4dp"
+                android:background="@drawable/ic_circle"
+                android:backgroundTint="?attr/colorSurface"
+                android:contentDescription="@string/error_unknown"
+                android:src="@drawable/ic_error_filled"
+                app:layout_constraintBottom_toBottomOf="@id/dashboard_horizontal_group_item_message_icon"
+                app:layout_constraintEnd_toEndOf="@id/dashboard_horizontal_group_item_message_icon"
+                app:tint="?colorError"
+                tools:visibility="visible" />
+
             <TextView
                 android:id="@+id/dashboard_horizontal_group_item_message_value"
                 android:layout_width="wrap_content"
@@ -109,7 +139,7 @@
                 app:layout_constraintStart_toEndOf="@id/dashboard_horizontal_group_item_message_icon"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="16"
-                tools:visibility="gone" />
+                tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -151,6 +181,21 @@
                 app:layout_goneMarginEnd="16dp"
                 app:tint="?colorOnSurface"
                 tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/dashboard_horizontal_group_item_attendance_error"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="-4dp"
+                android:layout_marginBottom="-4dp"
+                android:background="@drawable/ic_circle"
+                android:backgroundTint="?attr/colorSurface"
+                android:contentDescription="@string/error_unknown"
+                android:src="@drawable/ic_error_filled"
+                app:layout_constraintBottom_toBottomOf="@id/dashboard_horizontal_group_item_attendance_icon"
+                app:layout_constraintEnd_toEndOf="@id/dashboard_horizontal_group_item_attendance_icon"
+                app:tint="?colorError"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/dashboard_horizontal_group_item_attendance_value"
