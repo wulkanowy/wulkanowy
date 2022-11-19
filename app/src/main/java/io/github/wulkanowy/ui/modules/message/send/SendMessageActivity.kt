@@ -19,9 +19,13 @@ import androidx.core.text.toHtml
 import androidx.core.widget.doOnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.wulkanowy.R
+import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.databinding.ActivitySendMessageBinding
 import io.github.wulkanowy.ui.base.BaseActivity
+import io.github.wulkanowy.ui.modules.message.mailboxchooser.MailboxChooserDialog
+import io.github.wulkanowy.ui.modules.message.mailboxchooser.MailboxChooserDialog.Companion.MAILBOX_KEY
+import io.github.wulkanowy.ui.modules.message.mailboxchooser.MailboxChooserDialog.Companion.LISTENER_KEY
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.hideSoftInput
 import io.github.wulkanowy.utils.nullableSerializable
@@ -101,6 +105,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
         formSubjectValue = binding.sendMessageSubject.text.toString()
         formContentValue =
             binding.sendMessageMessageContent.text.toString().parseAsHtml().toString()
+        binding.sendMessageFrom.setOnClickListener { presenter.onOpenMailboxChooser() }
 
         presenter.onAttachView(
             view = this,
@@ -108,6 +113,9 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
             message = intent.nullableSerializable(EXTRA_MESSAGE),
             reply = intent.nullableSerializable(EXTRA_REPLY)
         )
+        supportFragmentManager.setFragmentResultListener(LISTENER_KEY, this) { _, bundle ->
+            presenter.onMailboxSelected(bundle.getSerializable(MAILBOX_KEY) as? Mailbox)
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -204,6 +212,14 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
                 scrollTo(0, binding.sendMessageTo.bottom - dpToPx(53f).toInt())
             }
         }
+    }
+
+    override fun showMailboxChooser(mailboxes: List<Mailbox>) {
+        MailboxChooserDialog.newInstance(
+            mailboxes = mailboxes,
+            isMailboxRequired = true,
+            folder = LISTENER_KEY,
+        ).show(supportFragmentManager, "chooser")
     }
 
     override fun popView() {
