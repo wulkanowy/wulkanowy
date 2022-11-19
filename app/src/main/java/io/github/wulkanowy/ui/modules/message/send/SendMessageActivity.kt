@@ -114,7 +114,7 @@ class SendMessageActivity : BaseActivity<SendMessagePresenter, ActivitySendMessa
             reply = intent.nullableSerializable(EXTRA_REPLY)
         )
         supportFragmentManager.setFragmentResultListener(LISTENER_KEY, this) { _, bundle ->
-            presenter.onMailboxSelected(bundle.getSerializable(MAILBOX_KEY) as? Mailbox)
+            presenter.onMailboxSelected(bundle.nullableSerializable(MAILBOX_KEY))
         }
     }
 

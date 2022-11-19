@@ -28,6 +28,7 @@ import io.github.wulkanowy.ui.widgets.DividerItemDecoration
 import io.github.wulkanowy.utils.dpToPx
 import io.github.wulkanowy.utils.getThemeAttrColor
 import io.github.wulkanowy.utils.hideSoftInput
+import io.github.wulkanowy.utils.nullableSerializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -127,7 +128,7 @@ class MessageTabFragment : BaseFragment<FragmentMessageTabBinding>(R.layout.frag
 
         setFragmentResultListener(requireArguments().getString(MESSAGE_TAB_FOLDER_ID)!!) { _, bundle ->
             presenter.onMailboxSelected(
-                mailbox = bundle.getSerializable(MailboxChooserDialog.MAILBOX_KEY) as? Mailbox,
+                mailbox = bundle.nullableSerializable(MailboxChooserDialog.MAILBOX_KEY),
             )
         }
     }
