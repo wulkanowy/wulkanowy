@@ -5,7 +5,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 
-sealed class Resource<T> {
+sealed class Resource<out T> {
 
     open class Loading<T> : Resource<T>()
 
@@ -57,8 +57,13 @@ fun <T> Flow<Resource<T>>.logResourceStatus(name: String, showData: Boolean = fa
     Timber.i("$name: $description")
 }
 
-fun <T, U> Flow<Resource<T>>.mapResourceData(block: (T) -> U) = map {
-    it.mapData(block)
+fun <T, U> Flow<Resource<T>>.mapResourceData(block: suspend (T) -> U) = map {
+    when (it) {
+        is Resource.Success -> Resource.Success(block(it.data))
+        is Resource.Intermediate -> Resource.Intermediate(block(it.data))
+        is Resource.Loading -> Resource.Loading()
+        is Resource.Error -> Resource.Error(it.error)
+    }
 }
 
 fun <T> Flow<Resource<T>>.onResourceData(block: suspend (T) -> Unit) = onEach {
@@ -88,13 +93,13 @@ fun <T> Flow<Resource<T>>.onResourceSuccess(block: suspend (T) -> Unit) = onEach
     }
 }
 
-fun <T> Flow<Resource<T>>.onResourceError(block: (Throwable) -> Unit) = onEach {
+fun <T> Flow<Resource<T>>.onResourceError(block: suspend (Throwable) -> Unit) = onEach {
     if (it is Resource.Error) {
         block(it.error)
     }
 }
 
-fun <T> Flow<Resource<T>>.onResourceNotLoading(block: () -> Unit) = onEach {
+fun <T> Flow<Resource<T>>.onResourceNotLoading(block: suspend () -> Unit) = onEach {
     if (it !is Resource.Loading) {
         block()
     }
